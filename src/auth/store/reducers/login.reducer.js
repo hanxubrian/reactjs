@@ -1,4 +1,5 @@
 import * as Actions from '../actions';
+import {CLOSE_ALERT_DIALOG} from "../actions";
 
 export const initialState = {
     IsSuccess: false,
@@ -7,14 +8,18 @@ export const initialState = {
     defaultRegionId: -1,
     all_regions: [],
     token: undefined,
-    bShown: false
+    bLoginStart: false,
+    bAlertShown: false,
+    message: ''
 };
 
 const login = function (state = initialState, action) {
     console.log('action type', action.type);
     switch ( action.type )
     {
-       case Actions.LOGIN_SUCCESS:
+        case Actions.LOGIN_START:
+            return {...state, bLoginStart: action.payload};
+        case Actions.LOGIN_SUCCESS:
         {
             const userState = {IsSuccess: action.payload.IsSuccess,
                 UserId: action.payload.Data.id,
@@ -22,7 +27,7 @@ const login = function (state = initialState, action) {
                 token: action.payload.Data.Token,
                 all_regions: action.payload.Data.Regions,
                 defaultRegionId: action.payload.Data.DefaultRegionId,
-                bShown: true
+                bLoginStart: false
             };
             console.log(userState);
 
@@ -40,8 +45,16 @@ const login = function (state = initialState, action) {
         case Actions.LOGIN_ERROR:
         {
             return {
-                success: false,
-                error  : action.payload
+                ...initialState,
+                bLoginStart  : false,
+                bAlertShown: true,
+                message: action.payload
+            };
+        }
+        case Actions.CLOSE_ALERT_DIALOG:
+        {
+            return {
+                ...initialState,
             };
         }
         default:

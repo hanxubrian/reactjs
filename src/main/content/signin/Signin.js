@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles/index';
-import {Button, Card, CardContent, Checkbox, Divider, FormControl, FormControlLabel, TextField, Typography} from '@material-ui/core';
+import {Button, Card, CardContent, Checkbox, Divider, FormControl, FormControlLabel, TextField, Typography, CircularProgress} from '@material-ui/core';
+import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import classNames from 'classnames';
 import {Link} from 'react-router-dom';
 import _ from '@lodash';
@@ -20,6 +21,21 @@ const styles = theme => ({
         width   : '100%',
         maxWidth: 384,
         // background: '#424242'
+    },
+    progress: {
+        margin: theme.spacing.unit * 2,
+    },
+    overlay:{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: 'rgba(0,0,0, .6)',
+        zIndex: 1000,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex'
     }
 });
 
@@ -27,13 +43,16 @@ class Signin extends Component {
     state = {
         email   : '',
         password: '',
-        remember: true
+        remember: true,
+        alertOpen: false
     };
     componentWillReceiveProps(nextProps) {
         if(nextProps.login.IsSuccess){
             this.props.history.push('/example');
         }
-
+        if(nextProps.login.bAlertShown) {
+            this.setState({alertOpen: true})
+        }
     }
 
     handleChange = (event) => {
@@ -48,6 +67,12 @@ class Signin extends Component {
         );
     }
 
+    handleClose = () => {
+        this.setState({ alertOpen: false });
+        this.props.closeAlertDialog();
+    };
+
+
     onLogin(){
         const {email, password} = this.state;
         this.props.signinUser(email, password);
@@ -59,6 +84,31 @@ class Signin extends Component {
 
         return (
             <div className={classNames(classes.root, "flex flex-col flex-auto flex-no-shrink items-center justify-center p-32")}>
+
+                {this.props.login.bLoginStart && (
+                    <div className={classes.overlay}>
+                        <CircularProgress className={classes.progress} color="secondary"  />
+                    </div>
+                )}
+
+                    <Dialog
+                        open={this.state.alertOpen}
+                        onClose={this.handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Signin Failure"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                {this.props.login.message}
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleClose} color="secondary" autoFocus>
+                                Close
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
 
                 <div className="flex flex-col items-center justify-center w-full">
 
@@ -82,9 +132,10 @@ class Signin extends Component {
                                         name="email"
                                         value={email}
                                         onChange={this.handleChange}
-                                        variant="outlined"
+                                        // variant="outlined"
                                         required
                                         fullWidth
+                                        margin="normal"
                                     />
 
                                     <TextField
@@ -94,9 +145,10 @@ class Signin extends Component {
                                         name="password"
                                         value={password}
                                         onChange={this.handleChange}
-                                        variant="outlined"
+                                        // variant="outlined"
                                         required
                                         fullWidth
+                                        margin="normal"
                                     />
 
                                     <div className="flex items-center justify-between">
@@ -122,7 +174,7 @@ class Signin extends Component {
                                             disabled={!this.canBeSubmitted()}
                                             onClick={this.onLogin.bind(this)}
                                     >
-                                        LOGIN
+                                        SIGNIN
                                     </Button>
 
                                 </form>
@@ -144,7 +196,8 @@ class Signin extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        signinUser: Actions.signinUser
+        signinUser: Actions.submitSignIn,
+        closeAlertDialog: Actions.closeDialog
     }, dispatch);
 }
 
