@@ -17,9 +17,11 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import * as Actions from 'auth/store/actions';
+
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
+
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
@@ -123,14 +125,14 @@ class PrimarySearchAppBar extends React.Component {
     };
 
     state = {
-        region : '',
+        region : -1,
         open: false
     };
 
     handleChange = event => {
         this.setState({[event.target.name]: event.target.value});
         this.props.setRegionId(event.target.value);
-
+        localStorage.setItem('jk_DefaultRegionId',event.target.value);
     };
 
     handleClose = () => {
@@ -141,8 +143,16 @@ class PrimarySearchAppBar extends React.Component {
         this.setState({open: true});
     };
 
+    componentDidMount() {
+        if(this.props.login.IsSuccess){
+            console.log('toolbar0', this.props.login);
+            this.setState({region: this.props.login.defaultRegionId})
+        }
+
+    }
     componentWillReceiveProps(nextProps) {
         if(nextProps.login.IsSuccess){
+            console.log('toolbar', nextProps.login);
             this.setState({region: nextProps.login.defaultRegionId})
         }
     }
@@ -240,7 +250,7 @@ class PrimarySearchAppBar extends React.Component {
                                     open={this.state.open}
                                     onClose={this.handleClose}
                                     onOpen={this.handleOpen}
-                                    value={this.state.region}
+                                    value={parseInt(this.state.region)}
                                     onChange={this.handleChange}
                                     inputProps={{
                                         name: 'region',

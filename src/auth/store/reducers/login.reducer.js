@@ -29,13 +29,23 @@ const login = function (state = initialState, action) {
                 defaultRegionId: action.payload.Data.DefaultRegionId,
                 bLoginStart: false
             };
-            console.log(userState);
-
             return {
                 ...initialState,
                 ...userState
             };
         }
+        case Actions.INITIALIZE_FROM_LOCAL:
+            const userState = {IsSuccess: action.payload.IsSuccess,
+                UserId: action.payload.id,
+                apiKey: action.payload.apiKey,
+                token: action.payload.token,
+                all_regions: action.payload.all_regions,
+                defaultRegionId: action.payload.defaultRegionId,
+            };
+            return {
+                ...initialState,
+                ...userState
+            };
         case Actions.CHANGE_REGION_ID:
             return {
                 ...state,
@@ -52,6 +62,7 @@ const login = function (state = initialState, action) {
             };
         }
         case Actions.CLOSE_ALERT_DIALOG:
+        case Actions.SEND_LOGOUT:
         {
             return {
                 ...initialState,

@@ -9,23 +9,7 @@ const axios_instance = axios.create({
 const BASE_API_URL='http://fmsapi.ecom.bid';
 
 class authService {
-
-    authSignin =  async (email, password)=>{
-        const loginData = {
-            'username': email,
-            'password': password
-        };
-
-        let res = await axios_instance.post(`${BASE_API_URL}/v1/authentication/login`, loginData);
-        try {
-            return await res.data;
-        } catch(error){
-            console.log('api result failure:', res);
-            return await res.data;
-        }
-    };
-
-    authSignin1 =  (email, password) => {
+    authSignin =  (email, password) => {
         const loginData = {
             'username': email,
             'password': password
@@ -45,6 +29,42 @@ class authService {
     };
 
     setSession = (authResult) => {
+        if(authResult.IsSuccess){
+            let expiresAt = JSON.stringify((30*24*3600 * 1000) + new Date().getTime());
+            localStorage.setItem('jk_ApiKey', authResult.Data.ApiKey);
+            localStorage.setItem('jk_DefaultRegionId', authResult.Data.DefaultRegionId);
+            localStorage.setItem('jk_Token', authResult.Data.Token);
+            localStorage.setItem('jk_user_id', authResult.Data.id);
+            localStorage.setItem('jk_expires_at', expiresAt);
+            localStorage.setItem('jk_regions', JSON.stringify(authResult.Data.Regions));
+        }
+    };
+
+    logout() {
+        localStorage.removeItem('jk_ApiKey');
+        localStorage.removeItem('jk_DefaultRegionId');
+        localStorage.removeItem('jk_Token');
+        localStorage.removeItem('jk_user_id');
+        localStorage.removeItem('jk_regions');
+        localStorage.removeItem('jk_expires_at');
+    };
+
+    isAuthenticated = () => {
+        let expiresAt = JSON.parse(localStorage.getItem('jk_expires_at'));
+        const isNotExpired = new Date().getTime() < expiresAt;
+
+        if ( isNotExpired )
+        {
+            return true;
+        }
+        else
+        {
+            this.logout();
+            return false;
+        }
+    };
+
+    getUserInfoFromStorage() {
 
     }
 }

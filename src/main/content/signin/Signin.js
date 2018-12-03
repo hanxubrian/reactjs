@@ -10,7 +10,7 @@ import * as Actions from 'auth/store/actions';
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
 import connect from 'react-redux/es/connect/connect';
-
+import authService from '../../../services'
 
 const styles = theme => ({
     root: {
@@ -46,6 +46,13 @@ class Signin extends Component {
         remember: true,
         alertOpen: false
     };
+
+    componentWillMount(){
+        if(authService.isAuthenticated()){
+            this.props.initializeFromLocalStorage();
+            this.props.history.push('/example');
+        }
+    }
     componentWillReceiveProps(nextProps) {
         if(nextProps.login.IsSuccess){
             this.props.history.push('/example');
@@ -197,7 +204,8 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         signinUser: Actions.submitSignIn,
-        closeAlertDialog: Actions.closeDialog
+        closeAlertDialog: Actions.closeDialog,
+        initializeFromLocalStorage: Actions.initializeFromLocalStorage
     }, dispatch);
 }
 
