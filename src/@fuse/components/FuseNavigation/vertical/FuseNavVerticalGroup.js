@@ -42,7 +42,7 @@ function FuseNavVerticalGroup({classes, item, nestedLevel, userRole, active})
 
             <ListSubheader disableSticky={true} className={classNames(classes.item, listItemPadding, "list-subheader flex items-center")}>
                 <span className="list-subheader-text uppercase text-12">
-                    {/*{item.title}*/}
+                    {item.title}
                 </span>
             </ListSubheader>
 

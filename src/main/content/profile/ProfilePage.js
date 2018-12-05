@@ -5,7 +5,6 @@ import {Avatar, Button, Tab, Tabs, Typography} from '@material-ui/core';
 import TimelineTab from 'main/content/profile/tabs/TimelineTab';
 import PhotosVideosTab from 'main/content/profile/tabs/PhotosVideosTab';
 import AboutTab from 'main/content/profile/tabs/AboutTab';
-import SettingsPanel from 'main/content/profile/tabs/SettingsPanel';
 
 const styles = theme => ({
     layoutRoot   : {},
@@ -96,10 +95,6 @@ class ProfilePage extends Component {
                             classes={{
                                 root: classes.tabRoot
                             }} label="Photos & Videos"/>
-                        <Tab
-                            classes={{
-                                root: classes.tabRoot
-                            }} label="Settings Panel"/>
                     </Tabs>
                 }
                 content={
@@ -113,9 +108,6 @@ class ProfilePage extends Component {
                         )}
                         {value === 2 && (
                             <PhotosVideosTab/>
-                        )}
-                        {value === 3 && (
-                            <SettingsPanel/>
                         )}
                     </div>
                 }

@@ -38,7 +38,61 @@ export const fuseNavigationConfig = [
                 'icon' : 'person',
                 'url'  : '/profile'
             },
-
+        ]
+    },
+    {
+        'id'      : 'accounting',
+        'title'   : 'Accounting',
+        'type'    : 'group',
+        'icon'    : 'person',
+        'children': [
+            {
+                'id': 'home',
+                'title': 'Home',
+                'type' : 'item',
+                'icon' : 'whatshot',
+                'url'  : '/apps/home',
+            },
+            {
+                'id': 'franchisee-payable',
+                'title': 'Franchisee Payable',
+                'type'    : 'collapse',
+                'icon'    : 'view_quilt',
+                'children': [
+                    {
+                        'id': 'billing',
+                        'title': 'Billing',
+                        'type'    : 'collapse',
+                        'icon'    : 'view_quilt',
+                        'children': [
+                            {
+                                'id': 'fran-billing-list',
+                                'title': 'Fran Billing List',
+                                'type' : 'item',
+                                'url'  : '/ui/page-layouts/carded/full-width'
+                            },
+                            {
+                                'id': 'fran-Billing-run',
+                                'title': 'Fran Billing Run',
+                                'type' : 'item',
+                                'url'  : '/ui/page-layouts/carded/full-width'
+                            },
+                            {
+                                'id': 'franchisee-due',
+                                'title': 'Franchisee Due',
+                                'type' : 'item',
+                                'url'  : '/ui/page-layouts/carded/full-width'
+                            },
+                            {
+                                'id': 'franchisee-report',
+                                'title': 'Franchisee Report',
+                                'type' : 'item',
+                                'url'  : '/ui/page-layouts/carded/full-width'
+                            }
+                        ]
+                    },
+                ]
+            }
         ]
     }
 ];
