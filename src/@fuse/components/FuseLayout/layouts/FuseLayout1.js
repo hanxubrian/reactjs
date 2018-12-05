@@ -61,7 +61,7 @@ const styles = theme => ({
             '& $wrapper'       : {},
             '& $contentWrapper': {},
             '& $content'       : {}
-        }
+        },
     },
     wrapper            : {
         display : 'flex',
@@ -95,7 +95,8 @@ const styles = theme => ({
         backgroundImage: 'url("../../assets/images/backgrounds/sidebar-bg-dark.jpg")',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover'
+        backgroundSize: 'cover',
+
     },
     navbarPaperWrapper : {},
     navbar             : {
@@ -111,7 +112,10 @@ const styles = theme => ({
             duration: theme.transitions.duration.shorter
         }),
         boxShadow    : theme.shadows[3],
-        background: 'rgba(48,48,48,.9)'
+        background: 'rgba(48,48,48,.9)',
+        '& .showInitial': {
+            display: 'none'
+        }
     },
     navbarButton       : {
         '&.right': {
@@ -138,11 +142,14 @@ const styles = theme => ({
         width   : 64,
         minWidth: 64,
         top     : 0,
-        bottom  : 0
+        bottom  : 0,
     },
     navbarFoldedOpen   : {
         width   : navbarWidth,
-        minWidth: navbarWidth
+        minWidth: navbarWidth,
+        '& .navBarShownClosed':{
+            display: 'none'
+        }
     },
     navbarFoldedClose  : {
         '& $navbarHeader'     : {
@@ -155,9 +162,11 @@ const styles = theme => ({
             },
             '& .react-badge': {
                 opacity: 0
-            }
+            },
         },
-
+        '& .navBarShownClosed':{
+            display: 'block'
+        },
         '& .logo-icon-large': {
             opacity: 0
         },
@@ -209,13 +218,13 @@ const styles = theme => ({
         flex         : '0 1 auto',
         flexDirection: 'row',
         height       : 64,
-        minHeight    : 64
+        minHeight    : 64,
     },
     navbarHeader       : {
         display: 'flex',
         flex   : '1 0 auto',
         padding: '0 8px 0 16px',
-        justifyContent: 'center'
+        // justifyContent: 'center'
     },
     navbarContent      : {
         overflowX                   : 'hidden',
@@ -249,6 +258,7 @@ const styles = theme => ({
 class FuseLayout1 extends Component {
 
     handleToggleFolded = () => {
+        console.log('fired handleToggleFolded');
         this.props.setDefaultSettings(_.set({}, 'layout.config.navbar.folded', !this.props.settings.layout.config.navbar.folded));
     };
 
@@ -265,6 +275,12 @@ class FuseLayout1 extends Component {
                 elevation={0}
                 className={classes.navbarHeaderWrapper}
             >
+                <Hidden mdDown>
+                    <IconButton className="navBarShownClosed showInitial" onClick={this.handleToggleFolded} color="inherit">
+                        <Icon>menu</Icon>
+                    </IconButton>
+                </Hidden>
+
                 <div className={classes.navbarHeader}>
                     {navbarHeader}
                 </div>

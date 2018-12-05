@@ -2,6 +2,7 @@ import React from 'react';
 import {withStyles} from '@material-ui/core/styles/index';
 import {withRouter} from 'react-router-dom';
 import classNames from 'classnames';
+import Typography from "@material-ui/core/Typography/Typography";
 
 const styles = theme => ({
     root      : {
@@ -38,8 +39,8 @@ function MainNavbarHeader({classes})
     return (
         <div className={classes.root}>
             <div className={classNames(classes.logo, "flex items-center")}>
-                <img className={classNames(classes.logoIcon, "logo-icon")} src="assets/images/logos/logo.png" alt="logo"/>
-                <img className={classNames(classes.logoIconText, "logo-icon ml-24")} src="assets/images/logos/logo-text-white.png" alt="logo"/>
+                {/*<img className={classNames(classes.logoIcon, "logo-icon")} src="assets/images/logos/logo.png" alt="logo"/>*/}
+                <Typography className="text-24 ml-8 font-light logo-text" color="inherit">JaniKing Apps</Typography>
             </div>
         </div>
     );
