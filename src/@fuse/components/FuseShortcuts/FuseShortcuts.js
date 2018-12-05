@@ -214,6 +214,7 @@ function mapDispatchToProps(dispatch)
 
 function mapStateToProps({fuse, auth})
 {
+    console.log('shortcuts=', auth.user.data);
     return {
         navigation: fuse.navigation,
         shortcuts : auth.user.data.shortcuts

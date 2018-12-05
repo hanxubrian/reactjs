@@ -1,12 +1,17 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import {FusePageSimple, DemoContent} from '@fuse';
+import authService from '../../../services';
 
 const styles = theme => ({
     layoutRoot: {}
 });
 
 class Example extends Component {
+    componentWillMount() {
+        if(!authService.isAuthenticated())
+            this.props.history.push('/auth/signin/');
+    }
 
     render()
     {

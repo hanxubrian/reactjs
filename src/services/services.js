@@ -63,10 +63,6 @@ class authService {
             return false;
         }
     };
-
-    getUserInfoFromStorage() {
-
-    }
 }
 
 const instance = new authService();
