@@ -22,7 +22,6 @@ import jssExtend from 'jss-extend'
 import QuickPanel from 'main/quickPanel/QuickPanel';
 import ChatPanel from 'main/chatPanel/ChatPanel';
 import store from 'store';
-import SettingsPanel from 'main/SettingsPanel';
 import {Auth} from 'auth';
 
 const jss = create({
@@ -60,10 +59,7 @@ ReactDOM.render(
                                         <QuickPanel/>
                                     </React.Fragment>
                                 }
-                                contentWrapper={
-                                    <SettingsPanel/>
-                                }
-                            >
+                             >
                             </FuseLayout>
                         </FuseTheme>
                     </FuseAuthorization>
