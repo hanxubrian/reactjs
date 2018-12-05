@@ -22,18 +22,10 @@ class Example extends Component {
                     root: classes.layoutRoot
                 }}
                 content={
-                    <div className="spinner-wrapper">
-                        <div className="spinner">
-                            <div className="inner">
-                                <div className="gap"/>
-                                <div className="left">
-                                    <div className="half-circle"/>
-                                </div>
-                                <div className="right">
-                                    <div className="half-circle"/>
-                                </div>
-                            </div>
-                        </div>
+                    <div className="p-24">
+                        <h4>Content</h4>
+                        <br/>
+                        <DemoContent/>
                     </div>
                 }
             />

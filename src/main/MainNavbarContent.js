@@ -47,10 +47,7 @@ class MainNavbar extends Component{
     constructor(props)
     {
         super(props);
-
-
     }
-
 
     UserHeader()
     {
@@ -87,13 +84,11 @@ class MainNavbar extends Component{
 
         return (
             <div className={classNames(classes.logofull, "flex items-center")}>
-                <img className={classNames(classes.logoIconText, "logo-icon")} src="assets/images/logos/logo-full.png" alt="logo"/>
+                <img className={classNames(classes.logoIconText, "logo-icon-large")} src="assets/images/logos/logo-full.png" alt="logo"/>
                 <Typography>{region_name}</Typography>
             </div>
         )
     };
-
-
 
     render(){
         const {classes, navigation, layoutStyle} = this.props;

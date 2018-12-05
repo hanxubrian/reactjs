@@ -145,7 +145,7 @@ const styles = theme => ({
         minWidth: navbarWidth
     },
     navbarFoldedClose  : {
-        '& $navbarHeader'                       : {
+        '& $navbarHeader'     : {
             '& .logo-icon'  : {
                 width : 32,
                 height: 32
@@ -157,6 +157,11 @@ const styles = theme => ({
                 opacity: 0
             }
         },
+
+        '& .logo-icon-large': {
+            opacity: 0
+        },
+
         '& .list-item-text, & .arrow-icon'      : {
             opacity: 0
         },
@@ -263,11 +268,11 @@ class FuseLayout1 extends Component {
                 <div className={classes.navbarHeader}>
                     {navbarHeader}
                 </div>
-                {/*<Hidden mdDown>*/}
-                    {/*<IconButton onClick={this.handleToggleFolded} color="inherit">*/}
-                        {/*<Icon>menu</Icon>*/}
-                    {/*</IconButton>*/}
-                {/*</Hidden>*/}
+                <Hidden mdDown>
+                    <IconButton onClick={this.handleToggleFolded} color="inherit">
+                        <Icon>menu</Icon>
+                    </IconButton>
+                </Hidden>
                 <Hidden lgUp>
                     <IconButton onClick={navbarCloseMobile} color="inherit">
                         <Icon>menu</Icon>
