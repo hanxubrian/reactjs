@@ -38,7 +38,15 @@ const styles = theme => ({
     logofull:{
         justifyContent: 'center',
         flexDirection: 'column'
-    }
+    },
+    logoIcon  : {
+        width     : 32,
+        height    : 32,
+        transition: theme.transitions.create(['width', 'height'], {
+            duration: theme.transitions.duration.shortest,
+            easing  : theme.transitions.easing.easeInOut
+        })
+    },
 });
 
 
@@ -84,6 +92,7 @@ class MainNavbar extends Component{
 
         return (
             <div className={classNames(classes.logofull, "flex items-center")}>
+                <img className={classNames(classes.logoIcon, "logo-icon-1 mt-8 showInitial navBarShownClosed")} src="assets/images/logos/logo.png" alt="logo"/>
                 <img className={classNames(classes.logoIconText, "logo-icon-large")} src="assets/images/logos/logo-full.png" alt="logo"/>
                 <Typography>{region_name}</Typography>
             </div>
