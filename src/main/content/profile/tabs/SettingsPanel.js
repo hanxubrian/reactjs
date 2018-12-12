@@ -13,16 +13,16 @@ class SettingsPanel extends Component {
     {
         return (
             <React.Fragment>
-                    <FuseScrollbars className="p-24 sm:p-32">
-                        <IconButton className="fixed pin-t pin-r z-10" onClick={this.handleClose}>
-                            <Icon>close</Icon>
-                        </IconButton>
+                <FuseScrollbars className="p-24 sm:p-32 xs:p-12">
+                    <IconButton className="fixed pin-t pin-r z-10" onClick={this.handleClose}>
+                        <Icon>close</Icon>
+                    </IconButton>
 
-                        <Typography className="mb-32" variant="h6">Theme Settings</Typography>
+                    <Typography className="mb-32" variant="h6">Theme Settings</Typography>
 
-                        <FuseSettings/>
+                    <FuseSettings/>
 
-                    </FuseScrollbars>
+                </FuseScrollbars>
 
             </React.Fragment>
         );

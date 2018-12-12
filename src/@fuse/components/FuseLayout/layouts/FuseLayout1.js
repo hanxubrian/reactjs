@@ -168,7 +168,8 @@ const styles = theme => ({
             display: 'block'
         },
         '& .logo-icon-large': {
-            opacity: 0
+            opacity: 0,
+            height:0
         },
 
         '& .list-item-text, & .arrow-icon'      : {

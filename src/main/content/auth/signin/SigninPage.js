@@ -7,10 +7,11 @@ import {Link} from 'react-router-dom';
 import _ from '@lodash';
 import {FuseAnimate} from '@fuse';
 import * as Actions from 'auth/store/actions';
+import * as NavigationActions from '../../../../store/actions/fuse/navigation.actions'
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
 import connect from 'react-redux/es/connect/connect';
-import authService from '../../../../services'
+import authService from 'services/auth'
 
 const styles = theme => ({
     root: {
@@ -55,6 +56,7 @@ class SigninPage extends Component {
     }
     componentWillReceiveProps(nextProps) {
         if(nextProps.login.IsSuccess){
+            // this.props.loadAccountMenu(nextProps.login.);
             this.props.history.push('/example');
         }
         if(nextProps.login.bAlertShown) {
@@ -205,15 +207,19 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         signinUser: Actions.submitSignIn,
         closeAlertDialog: Actions.closeDialog,
-        initializeFromLocalStorage: Actions.initializeFromLocalStorage
+        initializeFromLocalStorage: Actions.initializeFromLocalStorage,
+        loadAccountMenu: NavigationActions.add_auth_navigation
     }, dispatch);
 }
 
-function mapStateToProps({auth})
+function mapStateToProps({auth,fuse})
 {
+    console.log('navigation=', fuse.navigation);
+    console.log('auth=', auth);
     return {
-        login: auth.login,
-    }
+        login       :      auth.login,
+        accountmenu :      fuse.navigation
+        }
 }
 
 export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(SigninPage)));

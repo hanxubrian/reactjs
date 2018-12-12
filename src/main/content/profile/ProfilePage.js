@@ -5,7 +5,7 @@ import {Avatar, Button, Tab, Tabs, Typography} from '@material-ui/core';
 import TimelineTab from 'main/content/profile/tabs/TimelineTab';
 import PhotosVideosTab from 'main/content/profile/tabs/PhotosVideosTab';
 import AboutTab from 'main/content/profile/tabs/AboutTab';
-import SettingsPanel from 'main/content/profile/tabs/SettingsPanel';
+import SettingsPanel from "main/content/profile/tabs/SettingsPanel";
 
 const styles = theme => ({
     layoutRoot   : {},

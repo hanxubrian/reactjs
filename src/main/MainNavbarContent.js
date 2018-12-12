@@ -94,7 +94,7 @@ class MainNavbar extends Component{
             <div className={classNames(classes.logofull, "flex items-center")}>
                 <img className={classNames(classes.logoIcon, "logo-icon-1 mt-8 showInitial navBarShownClosed")} src="assets/images/logos/logo.png" alt="logo"/>
                 <img className={classNames(classes.logoIconText, "logo-icon-large")} src="assets/images/logos/logo-full.png" alt="logo"/>
-                <Typography>{region_name}</Typography>
+                <Typography className="logo-icon-large">{region_name}</Typography>
             </div>
         )
     };

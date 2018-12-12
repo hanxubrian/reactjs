@@ -1,14 +1,17 @@
 // import {authSignin} from "../../../services/services";
-import authService from '../../../services';
+import authService from 'services/auth';
+import menuService from '../../../services/menu';
 import React from "react";
+import {ADD_AUTH_NAVIGATION} from "../../../store/actions/fuse";
 
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-export const SEND_LOGOUT = 'SEND_LOGOUT';
+export const USER_LOGGED_OUT = 'USER_LOGGED_OUT';
 export const CHANGE_REGION_ID = 'CHANGE_REGION_ID';
 export const LOGIN_START = 'LOGIN_START';
 export const CLOSE_ALERT_DIALOG = 'CLOSE_ALERT_DIALOG';
-export const INITIALIZE_FROM_LOCAL = 'INITIALZE_FROM_LOCAL';
+export const INITIALIZE_FROM_LOCAL = 'INITIALIZE_FROM_LOCAL';
+export const LOADED_MENU = 'LOADED_MENU';
 
 export function submitSignIn(email, password)  {
     return (dispatch) => {
@@ -19,14 +22,20 @@ export function submitSignIn(email, password)  {
         (async () => {
             let res = await authService.authSignin(email, password);
             if (res.IsSuccess) {
+
+                let navigations = await menuService.loadAccountMenu();
                 dispatch({
                     type: LOGIN_SUCCESS,
                     payload: res
                 });
+                dispatch({
+                    type: ADD_AUTH_NAVIGATION,
+                    payload: navigations.MenuOptions
+                });
             } else {
                 dispatch({
                     type: LOGIN_ERROR,
-                    payload: res.Message
+                    payload: res.message
                 })
             }
         })();
@@ -42,11 +51,31 @@ export function changeRegionId (id){
     }
 }
 
-export function signOut () {
+export function loadedMenu (){
+    return (dispatch) => {
+        (async () => {
+                let navigations = await menuService.loadAccountMenu();
+                dispatch({
+                    type: ADD_AUTH_NAVIGATION,
+                    payload: navigations.MenuOptions
+                });
+
+            dispatch({
+                type: LOADED_MENU,
+                payload: true
+            });
+
+        })();
+    }
+
+}
+
+
+export function logoutUser () {
     authService.logout();
     return (dispatch) => {
         dispatch({
-            type: SEND_LOGOUT
+            type: USER_LOGGED_OUT
         });
     }
 }
@@ -70,10 +99,6 @@ export function initializeFromLocalStorage() {
         defaultRegionId: localStorage.getItem('jk_DefaultRegionId'),
         bLoginStart: false
     };
-
-
-    console.log('localData=', localData)
-
 
     return (dispatch) => {
         dispatch({

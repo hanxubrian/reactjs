@@ -122,12 +122,12 @@ class FuseShortcuts extends Component {
                     className="hidden md:flex md-flex-1"
                 >
                     {shortcutItems.map(item => item && (
-                        <Link to={item.url} key={item.id} className={classes.item}>
-                            <Tooltip title={item.title} placement="bottom">
+                        <Link to={item.url} key={item.id} className={classes.Item}>
+                            <Tooltip title={item.Title} placement="bottom">
                                 <IconButton className="w-40 h-40 p-0">
-                                    {item.icon ?
+                                    {item.Icon ?
                                         (
-                                            <Icon>{item.icon}</Icon>
+                                            <Icon>{item.Icon}</Icon>
                                         ) :
                                         (
                                             <span className="text-20 font-bold uppercase">{item.title[0]}</span>
@@ -214,7 +214,6 @@ function mapDispatchToProps(dispatch)
 
 function mapStateToProps({fuse, auth})
 {
-    console.log('shortcuts=', auth.user.data);
     return {
         navigation: fuse.navigation,
         shortcuts : auth.user.data.shortcuts

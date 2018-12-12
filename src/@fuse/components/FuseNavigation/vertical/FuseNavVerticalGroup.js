@@ -42,26 +42,26 @@ function FuseNavVerticalGroup({classes, item, nestedLevel, userRole, active})
 
             <ListSubheader disableSticky={true} className={classNames(classes.item, listItemPadding, "list-subheader flex items-center")}>
                 <span className="list-subheader-text uppercase text-12">
-                    {/*{item.title}*/}
+                    {item.Title}
                 </span>
             </ListSubheader>
 
-            {item.children && (
+            {item.Children && (
                 <React.Fragment>
                     {
-                        item.children.map((item) => (
+                        item.Children.map((item) => (
 
                             <React.Fragment key={item.id}>
 
-                                {item.type === 'group' && (
+                                {item.Type === 'group' && (
                                     <NavVerticalGroup item={item} nestedLevel={nestedLevel} active={active}/>
                                 )}
 
-                                {item.type === 'collapse' && (
+                                {item.Type === 'collapse' && (
                                     <FuseNavVerticalCollapse item={item} nestedLevel={nestedLevel} active={active}/>
                                 )}
 
-                                {item.type === 'item' && (
+                                {item.Type === 'item' && (
                                     <FuseNavVerticalItem item={item} nestedLevel={nestedLevel} active={active}/>
                                 )}
 

@@ -9,14 +9,17 @@ import classNames from 'classnames';
 import {Avatar, Button, Icon, IconButton, ListItemIcon, ListItemText, Popover, MenuItem, Typography, Hidden} from '@material-ui/core';
 
 import * as quickPanelActions from 'main/quickPanel/store/actions';
-import * as authActions from 'auth/store/actions';
+import * as authActions from '../auth/store/actions/login.actions';
 import * as chatPanelActions from 'main/chatPanel/store/actions';
 
 import {FuseShortcuts, FuseAnimate, FuseSearch} from '@fuse';
 import {Link} from 'react-router-dom';
-
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+
+import authService from 'services/auth'
+import menuService from 'services/menu';
+import * as Actions from 'auth/store/actions';
 
 const styles = theme => ({
     root     : {
@@ -28,6 +31,13 @@ const styles = theme => ({
         width          : 1,
         height         : 64,
         backgroundColor: theme.palette.divider
+    },
+    formControl:{
+        '& .region-select': {
+            minWidth: "150px",
+            paddingRight: "15px",
+            marginTop: "15px"
+        }
     }
 });
 
@@ -37,6 +47,15 @@ class MainToolbar extends Component {
         region : -1,
         open: false
     };
+
+    constructor(props){
+        super(props);
+        if(authService.isAuthenticated()){
+            this.props.initializeFromLocalStorage();
+            this.props.history.push('/example');
+        }
+
+    }
 
     userMenuClick = event => {
         this.setState({userMenu: event.currentTarget});
@@ -62,13 +81,20 @@ class MainToolbar extends Component {
 
     componentDidMount() {
         if(this.props.login.IsSuccess){
-            this.setState({region: this.props.login.defaultRegionId})
+            this.setState({region: this.props.login.defaultRegionId});
+
+            if(!this.props.login.bLoadedMenu) {
+                this.props.loadedMenu();
+            }
         }
 
     }
     componentWillReceiveProps(nextProps) {
         if(nextProps.login.IsSuccess){
-            this.setState({region: nextProps.login.defaultRegionId})
+            this.setState({region: nextProps.login.defaultRegionId});
+            if(!this.props.login.bLoadedMenu) {
+                this.props.loadedMenu();
+            }
         }
     }
 
@@ -116,6 +142,7 @@ class MainToolbar extends Component {
                             <FormControl className={classes.formControl}>
                                 {/*<InputLabel htmlFor="demo-controlled-open-select">Age</InputLabel>*/}
                                 <Select
+                                    className="region-select"
                                     open={this.state.open}
                                     onClose={this.handleClose}
                                     onOpen={this.handleOpen}
@@ -153,17 +180,29 @@ class MainToolbar extends Component {
                     >
                         {user.role === 'guest' ? (
                             <React.Fragment>
-                                <MenuItem component={Link} to="/login">
+                                {/*<MenuItem component={Link} to="/auth/signin/">*/}
+                                    {/*<ListItemIcon>*/}
+                                        {/*<Icon>lock</Icon>*/}
+                                    {/*</ListItemIcon>*/}
+                                    {/*<ListItemText className="pl-0" primary="SignIn"/>*/}
+                                {/*</MenuItem>*/}
+                                {/*<MenuItem component={Link} to="/register">*/}
+                                    {/*<ListItemIcon>*/}
+                                        {/*<Icon>person_add</Icon>*/}
+                                    {/*</ListItemIcon>*/}
+                                    {/*<ListItemText className="pl-0" primary="Register"/>*/}
+                                {/*</MenuItem>*/}
+                                <MenuItem
+                                    onClick={() => {
+                                        this.props.logout();
+                                        this.userMenuClose();
+                                        this.props.history.push('/auth/signin');
+                                    }}
+                                >
                                     <ListItemIcon>
-                                        <Icon>lock</Icon>
+                                        <Icon>input</Icon>
                                     </ListItemIcon>
-                                    <ListItemText className="pl-0" primary="Login"/>
-                                </MenuItem>
-                                <MenuItem component={Link} to="/register">
-                                    <ListItemIcon>
-                                        <Icon>person_add</Icon>
-                                    </ListItemIcon>
-                                    <ListItemText className="pl-0" primary="Register"/>
+                                    <ListItemText className="pl-0" primary="SignOut"/>
                                 </MenuItem>
                             </React.Fragment>
                         ) : (
@@ -223,7 +262,10 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         toggleQuickPanel: quickPanelActions.toggleQuickPanel,
         logout          : authActions.logoutUser,
-        openChatPanel   : chatPanelActions.openChatPanel
+        setRegionId     : authActions.changeRegionId,
+        openChatPanel   : chatPanelActions.openChatPanel,
+        initializeFromLocalStorage: Actions.initializeFromLocalStorage,
+        loadedMenu: authActions.loadedMenu
     }, dispatch);
 }
 

@@ -10,11 +10,11 @@ export const initialState = {
     token: undefined,
     bLoginStart: false,
     bAlertShown: false,
-    message: ''
+    message: '',
+    bLoadedMenu: false
 };
 
 const login = function (state = initialState, action) {
-    console.log('action type', action.type);
     switch ( action.type )
     {
         case Actions.LOGIN_START:
@@ -22,11 +22,11 @@ const login = function (state = initialState, action) {
         case Actions.LOGIN_SUCCESS:
         {
             const userState = {IsSuccess: action.payload.IsSuccess,
-                UserId: action.payload.Data.id,
-                apiKey: action.payload.Data.ApiKey,
-                token: action.payload.Data.Token,
-                all_regions: action.payload.Data.Regions,
-                defaultRegionId: action.payload.Data.DefaultRegionId,
+                UserId: action.payload.id,
+                apiKey: action.payload.ApiKey,
+                token: action.payload.Token,
+                all_regions: action.payload.Regions,
+                defaultRegionId: action.payload.DefaultRegionId,
                 bLoginStart: false
             };
             return {
@@ -61,8 +61,15 @@ const login = function (state = initialState, action) {
                 message: action.payload
             };
         }
+        case Actions.LOADED_MENU:
+        {
+            return {
+                ...state,
+                bLoadedMenu: true
+            };
+        }
         case Actions.CLOSE_ALERT_DIALOG:
-        case Actions.SEND_LOGOUT:
+        case Actions.USER_LOGGED_OUT:
         {
             return {
                 ...initialState,

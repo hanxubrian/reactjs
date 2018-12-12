@@ -21,6 +21,7 @@ class FuseNavigation extends Component {
     render()
     {
         const {navigation, layout, active} = this.props;
+        console.log('nav', navigation);
 
         const verticalNav = (
             <List className="whitespace-no-wrap">
@@ -29,19 +30,19 @@ class FuseNavigation extends Component {
 
                         <React.Fragment key={item.id}>
 
-                            {item.type === 'group' && (
+                            {item.Type === 'group' && (
                                 <FuseNavVerticalGroup item={item} nestedLevel={0} active={active}/>
                             )}
 
-                            {item.type === 'collapse' && (
+                            {item.Type === 'collapse' && (
                                 <FuseNavVerticalCollapse item={item} nestedLevel={0} active={active}/>
                             )}
 
-                            {item.type === 'item' && (
+                            {item.Type === 'item' && (
                                 <FuseNavVerticalItem item={item} nestedLevel={0} active={active}/>
                             )}
 
-                            {item.type === 'divider' && (
+                            {item.Type === 'divider' && (
                                 <Divider className="my-16"/>
                             )}
                         </React.Fragment>
@@ -57,19 +58,19 @@ class FuseNavigation extends Component {
 
                         <React.Fragment key={item.id}>
 
-                            {item.type === 'group' && (
+                            {item.Type === 'group' && (
                                 <FuseNavHorizontalGroup item={item} nestedLevel={0}/>
                             )}
 
-                            {item.type === 'collapse' && (
+                            {item.Type === 'collapse' && (
                                 <FuseNavHorizontalCollapse item={item} nestedLevel={0}/>
                             )}
 
-                            {item.type === 'item' && (
+                            {item.Type === 'item' && (
                                 <FuseNavHorizontalItem item={item} nestedLevel={0}/>
                             )}
 
-                            {item.type === 'divider' && (
+                            {item.Type === 'divider' && (
                                 <Divider className="my-16"/>
                             )}
                         </React.Fragment>

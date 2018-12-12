@@ -13,8 +13,8 @@ const propTypes = {
     item: PropTypes.shape(
         {
             id   : PropTypes.string.isRequired,
-            title: PropTypes.string,
-            icon : PropTypes.string,
+            Title: PropTypes.string,
+            Icon : PropTypes.string,
             url  : PropTypes.string
         })
 };
@@ -70,10 +70,10 @@ function FuseNavVerticalItem({item, classes, nestedLevel, userRole, navbarCloseM
             onClick={navbarCloseMobile}
             exact={item.exact}
         >
-            {item.icon && (
-                <Icon className="list-item-icon text-16 flex-no-shrink" color="action">{item.icon}</Icon>
+            {item.Icon && (
+                <Icon className="list-item-icon text-16 flex-no-shrink" color="action">{item.Icon}</Icon>
             )}
-            <ListItemText className="list-item-text" primary={item.title} classes={{primary: 'text-14 list-item-text-primary'}}/>
+            <ListItemText className="list-item-text" primary={item.Title} classes={{primary: 'text-14 list-item-text-primary'}}/>
             {item.badge && (
                 <FuseNavBadge badge={item.badge}/>
             )}

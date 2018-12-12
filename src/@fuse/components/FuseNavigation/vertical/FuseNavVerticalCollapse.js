@@ -13,9 +13,9 @@ const propTypes = {
     item: PropTypes.shape(
         {
             id      : PropTypes.string.isRequired,
-            title   : PropTypes.string,
-            icon    : PropTypes.string,
-            children: PropTypes.array
+            Title   : PropTypes.string,
+            Icon    : PropTypes.string,
+            Children: PropTypes.array
         })
 };
 
@@ -47,22 +47,22 @@ function needsToBeOpened(props)
 
 function isUrlInChildren(parent, url)
 {
-    if ( !parent.children )
+    if ( !parent.Children )
     {
         return false;
     }
 
-    for ( let i = 0; i < parent.children.length; i++ )
+    for ( let i = 0; i < parent.Children.length; i++ )
     {
-        if ( parent.children[i].children )
+        if ( parent.Children[i].Children )
         {
-            if ( isUrlInChildren(parent.children[i], url) )
+            if ( isUrlInChildren(parent.Children[i], url) )
             {
                 return true;
             }
         }
 
-        if ( parent.children[i].url === url || url.includes(parent.children[i].url) )
+        if ( parent.Children[i].url === url || url.includes(parent.Children[i].url) )
         {
             return true;
         }
@@ -113,10 +113,10 @@ class FuseNavVerticalCollapse extends Component {
                     className={classNames(classes.item, listItemPadding, 'list-item', active)}
                     onClick={this.handleClick}
                 >
-                    {item.icon && (
-                        <Icon color="action" className="text-16 flex-no-shrink">{item.icon}</Icon>
+                    {item.Icon && (
+                        <Icon color="action" className="text-16 flex-no-shrink">{item.Icon}</Icon>
                     )}
-                    <ListItemText className="list-item-text" primary={item.title} classes={{primary: 'text-14'}}/>
+                    <ListItemText className="list-item-text" primary={item.Title} classes={{primary: 'text-14'}}/>
                     {item.badge && (
                         <FuseNavBadge className="mr-4" badge={item.badge}/>
                     )}
@@ -127,22 +127,22 @@ class FuseNavVerticalCollapse extends Component {
                     </IconButton>
                 </ListItem>
 
-                {item.children && (
+                {item.Children && (
                     <Collapse in={this.state.open} className="collapse-children">
                         {
-                            item.children.map((item) => (
+                            item.Children.map((item) => (
 
-                                <React.Fragment key={item.id}>
+                                <React.Fragment key={item.id+"-"+item.Id}>
 
-                                    {item.type === 'group' && (
+                                    {item.Type === 'group' && (
                                         <FuseNavVerticalGroup item={item} nestedLevel={nestedLevel + 1} active={active}/>
                                     )}
 
-                                    {item.type === 'collapse' && (
+                                    {item.Type === 'collapse' && (
                                         <NavVerticalCollapse item={item} nestedLevel={nestedLevel + 1} active={active}/>
                                     )}
 
-                                    {item.type === 'item' && (
+                                    {item.Type === 'item' && (
                                         <FuseNavVerticalItem item={item} nestedLevel={nestedLevel + 1} active={active}/>
                                     )}
 

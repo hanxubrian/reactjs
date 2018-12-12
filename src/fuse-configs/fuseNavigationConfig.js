@@ -1,29 +1,29 @@
 export const fuseNavigationConfig = [
     {
         'id'      : 'applications',
-        'title'   : 'Applications',
-        'type'    : 'group',
-        'icon'    : 'apps',
-        'children': [
+        'Title'   : 'Applications',
+        'Type'    : 'group',
+        'Icon'    : 'apps',
+        'Children': [
             {
                 'id'   : 'example-component',
-                'title': 'Example',
-                'type' : 'item',
-                'icon' : 'whatshot',
+                'Title': 'Example',
+                'Type' : 'item',
+                'Icon' : 'whatshot',
                 'url'  : '/example'
             },
             {
                 'id'   : 'calendar',
-                'title': 'Calendar',
-                'type' : 'item',
-                'icon' : 'today',
+                'Title': 'Calendar',
+                'Type' : 'item',
+                'Icon' : 'today',
                 'url'  : '/apps/calendar'
             },
             {
                 'id'   : 'mail',
-                'title': 'Mail',
-                'type' : 'item',
-                'icon' : 'email',
+                'Title': 'Mail',
+                'Type' : 'item',
+                'Icon' : 'email',
                 'url'  : '/apps/mail',
                 'badge': {
                     'title': 25,
@@ -33,12 +33,11 @@ export const fuseNavigationConfig = [
             },
             {
                 'id'   : 'profile',
-                'title': 'Profile',
-                'type' : 'item',
-                'icon' : 'person',
+                'Title': 'Profile',
+                'Type' : 'item',
+                'Icon' : 'person',
                 'url'  : '/profile'
             },
-
         ]
-    }
+    },
 ];

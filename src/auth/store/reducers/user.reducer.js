@@ -16,7 +16,6 @@ const initialState = {
 };
 
 const user = function (state = initialState, action) {
-    console.log('user action',action.type);
     switch ( action.type )
     {
         case Actions.SET_USER_DATA:
