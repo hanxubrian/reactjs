@@ -6,7 +6,7 @@ const axios_instance = axios.create({
 });
 
 
-const BASE_API_URL='http://localhost:11939';
+const BASE_API_URL='http://fmsapi.ecom.bid';
 
 class authService {
     authSignin =  (email, password) => {
