@@ -122,7 +122,7 @@ class FuseShortcuts extends Component {
                     className="hidden md:flex md-flex-1"
                 >
                     {shortcutItems.map(item => item && (
-                        <Link to={item.url} key={item.id} className={classes.Item}>
+                        <Link to={item.url} key={item.MenuId} className={classes.Item}>
                             <Tooltip title={item.Title} placement="bottom">
                                 <IconButton className="w-40 h-40 p-0">
                                     {item.Icon ?

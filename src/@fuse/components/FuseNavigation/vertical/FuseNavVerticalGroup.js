@@ -51,7 +51,7 @@ function FuseNavVerticalGroup({classes, item, nestedLevel, userRole, active})
                     {
                         item.Children.map((item) => (
 
-                            <React.Fragment key={item.id}>
+                            <React.Fragment key={item.MenuId}>
 
                                 {item.Type === 'group' && (
                                     <NavVerticalGroup item={item} nestedLevel={nestedLevel} active={active}/>

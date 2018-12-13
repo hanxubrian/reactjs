@@ -2,7 +2,8 @@ import * as Actions from '../../actions/fuse/index';
 
 const initialState = {
     foldedOpen: false,
-    mobileOpen: false
+    mobileOpen: false,
+    iframeURL: ''
 };
 
 const navbar = function (state = initialState, action) {
@@ -48,6 +49,14 @@ const navbar = function (state = initialState, action) {
             return {
                 ...state,
                 mobileOpen: false
+            }
+        }
+
+        case Actions.SELECT_IFRAME:
+        {
+            return {
+                ...state,
+                iframeURL: action.payload
             }
         }
         default:

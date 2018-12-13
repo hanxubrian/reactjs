@@ -1,18 +1,13 @@
 export const fuseNavigationConfig = [
     {
+        MenuId    : 1,
         'id'      : 'applications',
         'Title'   : 'Applications',
         'Type'    : 'group',
         'Icon'    : 'apps',
         'Children': [
             {
-                'id'   : 'example-component',
-                'Title': 'Example',
-                'Type' : 'item',
-                'Icon' : 'whatshot',
-                'url'  : '/example'
-            },
-            {
+                MenuId    : 11,
                 'id'   : 'calendar',
                 'Title': 'Calendar',
                 'Type' : 'item',
@@ -20,6 +15,7 @@ export const fuseNavigationConfig = [
                 'url'  : '/apps/calendar'
             },
             {
+                MenuId    : 12,
                 'id'   : 'mail',
                 'Title': 'Mail',
                 'Type' : 'item',
@@ -32,6 +28,7 @@ export const fuseNavigationConfig = [
                 }
             },
             {
+                MenuId    : 13,
                 'id'   : 'profile',
                 'Title': 'Profile',
                 'Type' : 'item',

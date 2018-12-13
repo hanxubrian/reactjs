@@ -52,7 +52,7 @@ class MainToolbar extends Component {
         super(props);
         if(authService.isAuthenticated()){
             this.props.initializeFromLocalStorage();
-            this.props.history.push('/example');
+            // this.props.history.push('/profile');
         }
 
     }
@@ -90,7 +90,7 @@ class MainToolbar extends Component {
 
     }
     componentWillReceiveProps(nextProps) {
-        if(nextProps.login.IsSuccess){
+        if(nextProps.login.IsSuccess && !nextProps.login.bLoadedMenu){
             this.setState({region: nextProps.login.defaultRegionId});
             if(!this.props.login.bLoadedMenu) {
                 this.props.loadedMenu();

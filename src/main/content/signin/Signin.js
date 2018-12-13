@@ -48,15 +48,15 @@ class Signin extends Component {
     };
 
     componentWillMount(){
-        if(authService.isAuthenticated()){
+        if(authService.isAuthenticated() && !this.props.login.bLoadedMenu){
             this.props.initializeFromLocalStorage();
-            this.props.history.push('/example');
+            this.props.history.push('/profile');
         }
     }
     componentWillReceiveProps(nextProps) {
-        if(nextProps.login.IsSuccess){
-            this.props.history.push('/example');
-        }
+        // if(nextProps.login.IsSuccess ){
+            // this.props.history.push('/profile');
+        // }
         if(nextProps.login.bAlertShown) {
             this.setState({alertOpen: true})
         }

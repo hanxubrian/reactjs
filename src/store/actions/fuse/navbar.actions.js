@@ -4,6 +4,15 @@ export const TOGGLE_FOLDED_NAVBAR = '[NAVBAR] TOGGLE FOLDED';
 export const TOGGLE_MOBILE_NAVBAR = '[NAVBAR] TOGGLE MOBILE';
 export const OPEN_MOBILE_NAVBAR = '[NAVBAR] OPEN MOBILE';
 export const CLOSE_MOBILE_NAVBAR = '[NAVBAR] CLOSE MOBILE';
+export const SELECT_IFRAME = '[NAVBAR] SELECT IFRAME';
+
+export function selectIframe(url)
+{
+    return {
+        type: SELECT_IFRAME,
+        payload: url
+    }
+}
 
 export function navbarToggleFolded()
 {

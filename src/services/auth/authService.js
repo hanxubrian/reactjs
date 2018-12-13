@@ -6,7 +6,7 @@ const axios_instance = axios.create({
 });
 
 
-const BASE_API_URL='http://api.fmsplus.jkdev.com';
+const BASE_API_URL='https://apifmsplus.jkdev.com';
 
 class authService {
     authSignin =  (email, password) => {

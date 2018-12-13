@@ -6,8 +6,8 @@ const axios_instance = axios.create({
 });
 
 
-const BASE_API_URL='http://api.fmsplus.jkdev.com';
-// const BASE_API_URL='http://localhost:11939';
+// const BASE_API_URL='http://api.fmsplus.jkdev.com';
+const BASE_API_URL='https://apifmsplus.jkdev.com';
 
 class menuService {
     loadAccountMenu =  () => {
@@ -23,8 +23,6 @@ class menuService {
                 })
         });
     };
-
-
 }
 
 const instance = new menuService();

@@ -39,10 +39,12 @@ const styles = theme => ({
         }
     }
 });
-
+let currUrl = '';
 function needsToBeOpened(props)
 {
-    return props.location && isUrlInChildren(props.item, props.location.pathname)
+    // console.log('pathname=',props.location.search);
+    currUrl = props.location.search;
+    return props.location && isUrlInChildren(props.item, props.location.pathname);
 }
 
 function isUrlInChildren(parent, url)
@@ -61,9 +63,11 @@ function isUrlInChildren(parent, url)
                 return true;
             }
         }
-
-        if ( parent.Children[i].url === url || url.includes(parent.Children[i].url) )
+        if (  (("/"+parent.Children[i].id) === url || url.includes(parent.Children[i].url)) && currUrl==='')
         {
+            return true;
+        }
+        if (("?id="+parent.Children[i].MenuId)===currUrl){
             return true;
         }
     }
@@ -99,6 +103,8 @@ class FuseNavVerticalCollapse extends Component {
     render()
     {
         const {item, nestedLevel, classes, userRole, active} = this.props;
+
+
         if ( item.auth && (!item.auth.includes(userRole) || (userRole !== 'guest' && item.auth.length === 1 && item.auth.includes('guest'))) )
         {
             return null;
@@ -132,7 +138,7 @@ class FuseNavVerticalCollapse extends Component {
                         {
                             item.Children.map((item) => (
 
-                                <React.Fragment key={item.id+"-"+item.Id}>
+                                <React.Fragment key={item.MenuId}>
 
                                     {item.Type === 'group' && (
                                         <FuseNavVerticalGroup item={item} nestedLevel={nestedLevel + 1} active={active}/>
@@ -143,7 +149,7 @@ class FuseNavVerticalCollapse extends Component {
                                     )}
 
                                     {item.Type === 'item' && (
-                                        <FuseNavVerticalItem item={item} nestedLevel={nestedLevel + 1} active={active}/>
+                                        <FuseNavVerticalItem item={item} nestedLevel={nestedLevel + 1} cur_path={this.props.location} active={active}/>
                                     )}
 
                                 </React.Fragment>

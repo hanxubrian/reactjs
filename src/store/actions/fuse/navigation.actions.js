@@ -3,6 +3,7 @@ export const SET_NAVIGATION = '[NAVIGATION] SET NAVIGATION';
 export const RESET_NAVIGATION = '[NAVIGATION] RESET NAVIGATION';
 export const ADD_AUTH_NAVIGATION = '[NAVIGATION] ADD AUTH NAVIGATION';
 
+
 export function getNavigation()
 {
     return {
@@ -31,3 +32,4 @@ export function resetNavigation()
         type: RESET_NAVIGATION
     }
 }
+
