@@ -35,7 +35,7 @@ export function submitSignIn(email, password)  {
             } else {
                 dispatch({
                     type: LOGIN_ERROR,
-                    payload: res.message
+                    payload: res.response.data.Message
                 })
             }
         })();

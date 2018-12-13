@@ -25,6 +25,9 @@ class authService {
                         reject(res.data);
                     }
                 })
+                .catch(error=>{
+                    resolve(error);
+                })
         });
     };
 
