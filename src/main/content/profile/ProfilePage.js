@@ -86,12 +86,12 @@ class ProfilePage extends Component {
                         <Tab
                             classes={{
                                 root: classes.tabRoot
-                            }}
-                            label="Timeline"/>
+                            }} label="About"/>
                         <Tab
                             classes={{
                                 root: classes.tabRoot
-                            }} label="About"/>
+                            }}
+                            label="Timeline"/>
                         <Tab
                             classes={{
                                 root: classes.tabRoot
@@ -104,12 +104,12 @@ class ProfilePage extends Component {
                 }
                 content={
                     <div className="p-16 sm:p-24">
-                        {value === 0 &&
+                        {value === 0 && (
+                            <AboutTab/>
+                        )}
+                        {value === 1 &&
                         (
                             <TimelineTab/>
-                        )}
-                        {value === 1 && (
-                            <AboutTab/>
                         )}
                         {value === 2 && (
                             <PhotosVideosTab/>

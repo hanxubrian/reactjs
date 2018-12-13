@@ -185,7 +185,7 @@ class AboutTab extends Component {
                             <AppBar position="static" elevation={0}>
                                 <Toolbar className="pl-16 pr-8">
                                     <Typography variant="subtitle1" color="inherit" className="flex-1">
-                                        Friends
+                                        My Team
                                     </Typography>
                                     <Button className="normal-case" color="inherit" size="small">See 454 more</Button>
                                 </Toolbar>
@@ -203,7 +203,7 @@ class AboutTab extends Component {
                             <AppBar position="static" elevation={0}>
                                 <Toolbar className="pl-16 pr-8">
                                     <Typography variant="subtitle1" color="inherit" className="flex-1">
-                                        Joined Groups
+                                        Groups
                                     </Typography>
                                     <Button className="normal-case" color="inherit" size="small">See 6 more</Button>
                                 </Toolbar>
