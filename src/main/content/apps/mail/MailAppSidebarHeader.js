@@ -22,16 +22,6 @@ class MailAppSidebarHeader extends Component {
     state = {
         selectedAccount: 'creapond'
     };
-
-    onAccountChange = (ev) => {
-        this.setState({selectedAccount: ev.target.value});
-    };
-
-    accounts = {
-        'creapond'    : 'johndoe@creapond.com',
-        'withinpixels': 'johndoe@withinpixels.com'
-    };
-
     render()
     {
         const {classes} = this.props;
@@ -47,29 +37,6 @@ class MailAppSidebarHeader extends Component {
                         <span className={classes.logoText}>Mailbox</span>
                     </FuseAnimate>
                 </div>
-                <FuseAnimate animation="transition.slideUpIn" delay={300}>
-                    <TextField
-                        id="account-selection"
-                        select
-                        label={this.state.selectedAccount}
-                        className={classes.accountSelect}
-                        value={this.state.selectedAccount}
-                        onChange={this.onAccountChange}
-                        SelectProps={{
-                            MenuProps: {
-                                className: classes.accountSelectMenu
-                            }
-                        }}
-                        placeholder="Select Account"
-                        margin="normal"
-                    >
-                        {Object.keys(this.accounts).map((key, value) => (
-                            <MenuItem key={key} value={key}>
-                                {this.accounts[key]}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                </FuseAnimate>
             </div>
         );
     }
