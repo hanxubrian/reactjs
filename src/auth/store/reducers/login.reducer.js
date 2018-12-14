@@ -11,7 +11,10 @@ export const initialState = {
     bLoginStart: false,
     bAlertShown: false,
     message: '',
-    bLoadedMenu: false
+    bLoadedMenu: false,
+    firstName: '',
+    lastName: '',
+    role: []
 };
 
 const login = function (state = initialState, action) {
@@ -27,7 +30,10 @@ const login = function (state = initialState, action) {
                 token: action.payload.Token,
                 all_regions: action.payload.Regions,
                 defaultRegionId: action.payload.DefaultRegionId,
-                bLoginStart: false
+                bLoginStart: false,
+                firstName: action.payload.FirstName,
+                lastName: action.payload.LastName,
+                role: action.payload.Roles[0].RoleName
             };
             return {
                 ...initialState,
@@ -41,6 +47,9 @@ const login = function (state = initialState, action) {
                 token: action.payload.token,
                 all_regions: action.payload.all_regions,
                 defaultRegionId: action.payload.defaultRegionId,
+                firstName: action.payload.firstName,
+                lastName: action.payload.lastName,
+                role: action.payload.role
             };
             return {
                 ...initialState,

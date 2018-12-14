@@ -97,7 +97,10 @@ export function initializeFromLocalStorage() {
         token: localStorage.getItem('jk_Token'),
         all_regions: JSON.parse(localStorage.getItem('jk_regions')),
         defaultRegionId: localStorage.getItem('jk_DefaultRegionId'),
-        bLoginStart: false
+        bLoginStart: false,
+        firstName:localStorage.getItem('jk_firstname'),
+        lastName:localStorage.getItem('jk_lastname'),
+        role: localStorage.getItem('jk_role')
     };
 
     return (dispatch) => {

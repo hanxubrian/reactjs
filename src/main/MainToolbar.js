@@ -52,7 +52,6 @@ class MainToolbar extends Component {
         super(props);
         if(authService.isAuthenticated()){
             this.props.initializeFromLocalStorage();
-            // this.props.history.push('/profile');
         }
 
     }
@@ -86,6 +85,7 @@ class MainToolbar extends Component {
             if(!this.props.login.bLoadedMenu) {
                 this.props.loadedMenu();
             }
+            console.log('login---',this.props.login.role[0].RoleName);
         }
 
     }
@@ -127,10 +127,10 @@ class MainToolbar extends Component {
 
                             <div className="hidden md:flex flex-col ml-12 items-start">
                                 <Typography component="span" className="normal-case font-600 flex">
-                                    {user.data.displayName}
+                                    {this.props.login.firstName}&nbsp;&nbsp;{this.props.login.lastName}
                                 </Typography>
                                 <Typography className="text-11 capitalize" color="textSecondary">
-                                    {user.role}
+                                    {this.props.login.role}
                                 </Typography>
                             </div>
 
@@ -140,7 +140,6 @@ class MainToolbar extends Component {
                     {this.props.login.IsSuccess && (
                         <form autoComplete="off">
                             <FormControl className={classes.formControl}>
-                                {/*<InputLabel htmlFor="demo-controlled-open-select">Age</InputLabel>*/}
                                 <Select
                                     className="region-select"
                                     open={this.state.open}
@@ -180,18 +179,6 @@ class MainToolbar extends Component {
                     >
                         {user.role === 'guest' ? (
                             <React.Fragment>
-                                {/*<MenuItem component={Link} to="/auth/signin/">*/}
-                                    {/*<ListItemIcon>*/}
-                                        {/*<Icon>lock</Icon>*/}
-                                    {/*</ListItemIcon>*/}
-                                    {/*<ListItemText className="pl-0" primary="SignIn"/>*/}
-                                {/*</MenuItem>*/}
-                                {/*<MenuItem component={Link} to="/register">*/}
-                                    {/*<ListItemIcon>*/}
-                                        {/*<Icon>person_add</Icon>*/}
-                                    {/*</ListItemIcon>*/}
-                                    {/*<ListItemText className="pl-0" primary="Register"/>*/}
-                                {/*</MenuItem>*/}
                                 <MenuItem
                                     onClick={() => {
                                         this.props.logout();
@@ -245,12 +232,6 @@ class MainToolbar extends Component {
                             <Icon>chat</Icon>
                         </IconButton>
                     </Hidden>
-
-                    {/*<div className={classes.separator}/>*/}
-
-                    {/*<IconButton className="w-64 h-64" onClick={() => toggleQuickPanel(true)}>*/}
-                    {/*<Icon>format_list_bulleted</Icon>*/}
-                    {/*</IconButton>*/}
                 </div>
             </div>
         );

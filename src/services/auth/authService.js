@@ -40,6 +40,9 @@ class authService {
             localStorage.setItem('jk_user_id', authResult.id);
             localStorage.setItem('jk_expires_at', expiresAt);
             localStorage.setItem('jk_regions', JSON.stringify(authResult.Regions));
+            localStorage.setItem('jk_firstname', authResult.FirstName);
+            localStorage.setItem('jk_lastname', authResult.LastName);
+            localStorage.setItem('jk_role', authResult.Roles[0].RoleName);
         }
     };
 
@@ -50,6 +53,9 @@ class authService {
         localStorage.removeItem('jk_user_id');
         localStorage.removeItem('jk_regions');
         localStorage.removeItem('jk_expires_at');
+        localStorage.removeItem('jk_firstname');
+        localStorage.removeItem('jk_lastname');
+        localStorage.removeItem('jk_role');
     };
 
     isAuthenticated = () => {
