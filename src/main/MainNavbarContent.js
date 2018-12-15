@@ -37,7 +37,8 @@ const styles = theme => ({
     },
     logofull:{
         justifyContent: 'center',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        height: 152
     },
     logoIcon  : {
         width     : 32,

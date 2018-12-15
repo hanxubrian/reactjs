@@ -13,8 +13,8 @@ const styles = theme => ({
         padding: 0
     },
     layoutHeader : {
-        height                        : 320,
-        minHeight                     : 320,
+        height                        : 150,
+        minHeight                     : 150,
         background                    : "url('/assets/images/backgrounds/dark-material-bg.jpg') no-repeat",
         backgroundSize                : 'cover',
         color                         : '#fff',

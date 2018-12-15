@@ -48,8 +48,9 @@ function FuseNavHorizontalItem({item, classes, nestedLevel, userRole, navbarClos
     {
         return null;
     }
-
+    console.log('item',item);
     return (
+
         <ListItem
             button
             component={NavLink}
