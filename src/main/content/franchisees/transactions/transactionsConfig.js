@@ -1,6 +1,6 @@
 import {FuseLoadable} from '@fuse';
 
-export const InvoiceListConfig = {
+export const TransactionsConfig = {
     settings: {
         layout: {
             config: {}
@@ -8,9 +8,9 @@ export const InvoiceListConfig = {
     },
     routes  : [
         {
-            path     : '/invoice-list',
+            path     : '/franchisees/transactions',
             component: FuseLoadable({
-                loader: () => import('./InvoiceList')
+                loader: () => import('./transactions')
             })
         }
     ]

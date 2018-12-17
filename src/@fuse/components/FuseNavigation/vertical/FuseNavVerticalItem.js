@@ -69,24 +69,21 @@ class FuseNavVerticalItem extends Component
         }
         let paddingValue = 40 + (nestedLevel * 16);
         const listItemPadding = nestedLevel > 0 ? 'pl-' + (paddingValue > 80 ? 80 : paddingValue) : 'pl-24';
-        let active1 = '';
 
-        let browserList = '';
-        if (item.BrowserRouter && item.BrowserRouter.length)
-            browserList = item.BrowserRouter[0];
-
-        // if (browserList!=='')
-        //     active1 = item.Slug === `${cur_path.pathname}` ? 'active':'';
+        let url = item.url;
+        if(item.MenuId>40) {
+            url = `/${item.Slug}`;
+        }
 
         return (
 
             <ListItem
                 button
                 component={NavLink}
-                to={item.url}
+                to={url}
                 activeClassName="active"
-                className={classNames(classes.item, listItemPadding, 'list-item', active1)}
-                onClick={() => this.handleClick(navbarCloseMobile, browserList)}
+                className={classNames(classes.item, listItemPadding, 'list-item', active)}
+                onClick={() => this.handleClick(navbarCloseMobile, item.IframeUrl)}
                 exact={item.exact}
             >
                 {item.Icon && (

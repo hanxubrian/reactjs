@@ -9,7 +9,7 @@ const styles = theme => ({
     }
 });
 
-class BillRun extends Component {
+class Customers extends Component {
 
     render()
     {
@@ -17,7 +17,6 @@ class BillRun extends Component {
 
         console.log('props=', this.props);
         return (
-            //<iframe src="https://fmsplus.jkdev.com/franchisees" className={classes.iframe}></iframe>
             <iframe src={iframeURL} className={classes.iframe}></iframe>
         );
     }
@@ -31,4 +30,4 @@ function mapStateToProps({auth, fuse})
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, null)(BillRun)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, null)(Customers)));

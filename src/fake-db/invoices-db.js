@@ -66,7 +66,7 @@ const invoicesDB = {
     ]
 };
 
-mock.onGet('/api/invoices/get-invoice').reply((config) => {
+mock.onGet('/api/regions/get-invoice').reply((config) => {
     const id = config.params.id;
     const response = invoicesDB.invoices.find((invoice) => invoice.id === id);
     return [200, response];

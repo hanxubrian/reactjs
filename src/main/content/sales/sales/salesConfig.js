@@ -1,6 +1,6 @@
 import {FuseLoadable} from '@fuse';
 
-export const BillRunConfig = {
+export const SalesConfig = {
     settings: {
         layout: {
             config: {}
@@ -8,9 +8,9 @@ export const BillRunConfig = {
     },
     routes  : [
         {
-            path     : '/bill-run',
+            path     : '/sales/dashboard',
             component: FuseLoadable({
-                loader: () => import('./BillRun')
+                loader: () => import('./sales')
             })
         }
     ]

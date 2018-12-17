@@ -63,7 +63,7 @@ function isUrlInChildren(parent, url)
                 return true;
             }
         }
-        if (  ("/"+parent.Children[i].id) === url || url.includes(parent.Children[i].url))
+        if (  ("/"+parent.Children[i].Slug) === url || url.includes(parent.Children[i].url))
         {
             return true;
         }
