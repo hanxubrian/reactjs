@@ -1,22 +1,30 @@
 export const fuseNavigationConfig = [
     {
-        MenuId    : 1,
-        'id'      : 'applications',
+        'MenuId'    : 1,
+        'Slug'      : 'applications',
         'Title'   : 'Applications',
         'Type'    : 'group',
         'Icon'    : 'apps',
         'Children': [
             {
-                MenuId    : 11,
-                'id'   : 'calendar',
+                'MenuId'    : 13,
+                'Slug'   : 'profile',
+                'Title': 'Profile',
+                'Type' : 'item',
+                'Icon' : 'person',
+                'url'  : '/profile'
+            },
+            {
+                'MenuId'    : 11,
+                'Slug'   : 'calendar',
                 'Title': 'Calendar',
                 'Type' : 'item',
                 'Icon' : 'today',
                 'url'  : '/apps/calendar'
             },
             {
-                MenuId    : 12,
-                'id'   : 'mail',
+                'MenuId'    : 12,
+                'Slug'   : 'mail',
                 'Title': 'Mail',
                 'Type' : 'item',
                 'Icon' : 'email',
@@ -26,15 +34,7 @@ export const fuseNavigationConfig = [
                     'bg'   : '#F44336',
                     'fg'   : '#FFFFFF'
                 }
-            },
-            {
-                MenuId    : 13,
-                'id'   : 'profile',
-                'Title': 'Profile',
-                'Type' : 'item',
-                'Icon' : 'person',
-                'url'  : '/profile'
-            },
+            }
         ]
     },
 ];

@@ -36,7 +36,12 @@ const styles = theme => ({
         '& .region-select': {
             minWidth: "150px",
             paddingRight: "15px",
-            marginTop: "15px"
+            marginTop: "15px",
+        },
+        '& .region-select:before': {
+            borderBottom: "solid 0px transparent !important"
+        },'.MuiInput-underline-538:after': {
+            borderBottom: "solid 0px transparent !important"
         }
     }
 });

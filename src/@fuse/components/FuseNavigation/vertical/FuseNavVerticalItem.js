@@ -12,7 +12,7 @@ import * as Actions from 'store/actions';
 const propTypes = {
     item: PropTypes.shape(
         {
-            id   : PropTypes.string.isRequired,
+            Slug   : PropTypes.string.isRequired,
             Title: PropTypes.string,
             Icon : PropTypes.string,
             url  : PropTypes.string
@@ -75,21 +75,15 @@ class FuseNavVerticalItem extends Component
         if (item.BrowserRouter && item.BrowserRouter.length)
             browserList = item.BrowserRouter[0];
 
-
-        let url = item.url;
-        if(item.MenuId>40) {
-            url = `/bill-run?id=${item.MenuId}`;
-        }
-
-        if (browserList!=='')
-            active1 = url === `${cur_path.pathname}${cur_path.search}` ? 'active':'';
+        // if (browserList!=='')
+        //     active1 = item.Slug === `${cur_path.pathname}` ? 'active':'';
 
         return (
 
             <ListItem
                 button
                 component={NavLink}
-                to={url}
+                to={item.url}
                 activeClassName="active"
                 className={classNames(classes.item, listItemPadding, 'list-item', active1)}
                 onClick={() => this.handleClick(navbarCloseMobile, browserList)}

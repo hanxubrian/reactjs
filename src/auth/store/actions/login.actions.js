@@ -24,13 +24,14 @@ export function submitSignIn(email, password)  {
             if (res.IsSuccess) {
 
                 let navigations = await menuService.loadAccountMenu();
+                console.log('load_nav = ' , navigations);
                 dispatch({
                     type: LOGIN_SUCCESS,
                     payload: res
                 });
                 dispatch({
                     type: ADD_AUTH_NAVIGATION,
-                    payload: navigations.MenuOptions
+                    payload: navigations
                 });
             } else {
                 dispatch({
@@ -57,7 +58,7 @@ export function loadedMenu (){
                 let navigations = await menuService.loadAccountMenu();
                 dispatch({
                     type: ADD_AUTH_NAVIGATION,
-                    payload: navigations.MenuOptions
+                    payload: navigations
                 });
 
             dispatch({

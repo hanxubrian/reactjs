@@ -12,7 +12,7 @@ import {connect} from 'react-redux';
 const propTypes = {
     item: PropTypes.shape(
         {
-            id      : PropTypes.string.isRequired,
+            Slug      : PropTypes.string.isRequired,
             Title   : PropTypes.string,
             Icon    : PropTypes.string,
             Children: PropTypes.array
@@ -63,11 +63,8 @@ function isUrlInChildren(parent, url)
                 return true;
             }
         }
-        if (  (("/"+parent.Children[i].id) === url || url.includes(parent.Children[i].url)) && currUrl==='')
+        if (  ("/"+parent.Children[i].id) === url || url.includes(parent.Children[i].url))
         {
-            return true;
-        }
-        if (("?id="+parent.Children[i].MenuId)===currUrl){
             return true;
         }
     }

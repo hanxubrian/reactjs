@@ -1,11 +1,16 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux';
+import {withRouter} from 'react-router-dom';
+
 import {FusePageSimple, FuseAnimate} from '@fuse';
 import {Avatar, Button, Tab, Tabs, Typography} from '@material-ui/core';
 import TimelineTab from 'main/content/profile/tabs/TimelineTab';
 import PhotosVideosTab from 'main/content/profile/tabs/PhotosVideosTab';
 import AboutTab from 'main/content/profile/tabs/AboutTab';
 import SettingsPanel from "main/content/profile/tabs/SettingsPanel";
+
 
 const styles = theme => ({
     layoutRoot   : {},
@@ -61,7 +66,7 @@ class ProfilePage extends Component {
                                 <Avatar className="w-96 h-96" src="assets/images/avatars/Velazquez.jpg"/>
                             </FuseAnimate>
                             <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                <Typography className="md:ml-24" variant="h4" color="inherit">John Doe</Typography>
+                                <Typography className="md:ml-24" variant="h4" color="inherit">{this.props.login.firstName}&nbsp;&nbsp;{this.props.login.lastName}</Typography>
                             </FuseAnimate>
                         </div>
 
@@ -124,4 +129,10 @@ class ProfilePage extends Component {
     };
 }
 
-export default withStyles(styles, {withTheme: true})(ProfilePage);
+function mapStateToProps({auth})
+{
+    return {
+       login: auth.login
+    }
+}
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps)(ProfilePage)));

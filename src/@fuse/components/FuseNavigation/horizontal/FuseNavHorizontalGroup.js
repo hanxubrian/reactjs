@@ -105,7 +105,7 @@ class FuseNavHorizontalGroup extends Component {
                                             <ul className={classNames(classes.children, "pl-0")}>
                                                 {
                                                     item.children.map((item) => (
-                                                        <React.Fragment key={item.id}>
+                                                        <React.Fragment key={item.Slug}>
 
                                                             {item.type === 'group' && (
                                                                 <NavHorizontalGroup item={item} nestedLevel={nestedLevel}/>

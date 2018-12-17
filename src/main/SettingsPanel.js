@@ -5,7 +5,7 @@ import {red} from '@material-ui/core/colors';
 
 function Transition(props)
 {
-    return <Slide direction="left" {...props} />;
+    return <Slide direction="top" {...props} />;
 }
 
 const styles = theme => ({

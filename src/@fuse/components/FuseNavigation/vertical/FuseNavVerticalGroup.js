@@ -10,7 +10,7 @@ import {connect} from 'react-redux';
 const propTypes = {
     item: PropTypes.shape(
         {
-            id      : PropTypes.string.isRequired,
+            Slug      : PropTypes.string.isRequired,
             title   : PropTypes.string,
             children: PropTypes.array
         })

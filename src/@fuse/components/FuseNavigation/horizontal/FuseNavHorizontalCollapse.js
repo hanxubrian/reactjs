@@ -112,7 +112,7 @@ class FuseNavHorizontalCollapse extends Component {
                                                     {
                                                         item.children.map((item) => (
 
-                                                            <React.Fragment key={item.id}>
+                                                            <React.Fragment key={item.Slug}>
 
                                                                 {item.type === 'group' && (
                                                                     <FuseNavHorizontalGroup item={item} nestedLevel={nestedLevel + 1}/>

@@ -27,7 +27,7 @@ class FuseNavigation extends Component {
                 {
                     navigation.map((item) => (
 
-                        <React.Fragment key={item.id}>
+                        <React.Fragment key={item.Slug}>
 
                             {item.Type === 'group' && (
                                 <FuseNavVerticalGroup item={item} nestedLevel={0} active={active}/>
@@ -55,7 +55,7 @@ class FuseNavigation extends Component {
                 {
                     navigation.map((item) => (
 
-                        <React.Fragment key={item.id}>
+                        <React.Fragment key={item.Slug}>
 
                             {item.Type === 'group' && (
                                 <FuseNavHorizontalGroup item={item} nestedLevel={0}/>
