@@ -1,4 +1,6 @@
 import * as Actions from '../actions';
+import storage from 'redux-persist/lib/storage';
+import { persistReducer } from 'redux-persist';
 
 const initialState = {
     success: false,
@@ -32,4 +34,9 @@ const register = function (state = initialState, action) {
     }
 };
 
-export default register;
+const persistConfig = {
+    key: 'register',
+    storage: storage
+};
+export default persistReducer(persistConfig, register);
+// export default register;

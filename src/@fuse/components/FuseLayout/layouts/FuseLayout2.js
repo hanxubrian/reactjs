@@ -125,7 +125,7 @@ class FuseLayout2 extends Component {
     render()
     {
         const {classes, toolbar, footer, navbarHeader, navbarContent, settings, navbar, navbarOpenMobile, navbarCloseMobile, children, leftSidePanel, rightSidePanel, contentWrapper} = this.props;
-        // console.warn('FuseLayout:: rendered');
+        console.warn('FuseLayout:: rendered', this.props);
         const layoutConfig = settings.layout.config;
 
         const navbarHeaderTemplate = (
@@ -275,9 +275,9 @@ class FuseLayout2 extends Component {
                     {contentWrapper}
                 </div>
 
-                {layoutConfig.rightSidePanel.display && (
-                    rightSidePanel
-                )}
+                {/*{layoutConfig.rightSidePanel.display && (*/}
+                {rightSidePanel}
+                {/*)}*/}
 
                 <FuseMessage/>
             </div>

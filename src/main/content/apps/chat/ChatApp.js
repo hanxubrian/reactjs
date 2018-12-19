@@ -271,4 +271,4 @@ function mapStateToProps({chatApp})
     }
 }
 
-export default withReducer('chatApp', reducer)(withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(ChatApp)));
+export default (withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(ChatApp)));

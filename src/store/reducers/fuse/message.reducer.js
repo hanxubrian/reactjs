@@ -1,4 +1,6 @@
 import * as Actions from '../../actions/fuse/index';
+import storage from 'redux-persist/lib/storage';
+import { persistReducer } from 'redux-persist';
 
 const initialState = {
     state  : null,
@@ -40,4 +42,9 @@ const message = function (state = initialState, action) {
     }
 };
 
-export default message;
+const persistConfig = {
+    key: 'message',
+    storage: storage
+};
+export default persistReducer(persistConfig, message);
+// export default message;

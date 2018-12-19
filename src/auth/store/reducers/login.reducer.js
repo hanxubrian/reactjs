@@ -1,5 +1,7 @@
 import * as Actions from '../actions';
 import {CLOSE_ALERT_DIALOG} from "../actions";
+import storage from 'redux-persist/lib/storage';
+import { persistReducer } from 'redux-persist';
 
 export const initialState = {
     IsSuccess: false,
@@ -91,4 +93,10 @@ const login = function (state = initialState, action) {
     }
 };
 
-export default login;
+const persistConfig = {
+    key: 'login',
+    storage: storage,
+    blacklist: ['bLoginStart','regionId']
+};
+export default persistReducer(persistConfig, login);
+// export default login;

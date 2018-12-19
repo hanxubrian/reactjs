@@ -55,10 +55,6 @@ class MainToolbar extends Component {
 
     constructor(props){
         super(props);
-        if(authService.isAuthenticated()){
-            this.props.initializeFromLocalStorage();
-        }
-
     }
 
     userMenuClick = event => {
@@ -86,20 +82,12 @@ class MainToolbar extends Component {
     componentDidMount() {
         if(this.props.login.IsSuccess){
             this.setState({region: this.props.login.defaultRegionId});
-
-            if(!this.props.login.bLoadedMenu) {
-                this.props.loadedMenu();
-            }
-            console.log('login---',this.props.login.role[0].RoleName);
         }
 
     }
     componentWillReceiveProps(nextProps) {
         if(nextProps.login.IsSuccess && !nextProps.login.bLoadedMenu){
             this.setState({region: nextProps.login.defaultRegionId});
-            if(!this.props.login.bLoadedMenu) {
-                this.props.loadedMenu();
-            }
         }
     }
 
@@ -250,7 +238,6 @@ function mapDispatchToProps(dispatch)
         logout          : authActions.logoutUser,
         setRegionId     : authActions.changeRegionId,
         openChatPanel   : chatPanelActions.openChatPanel,
-        initializeFromLocalStorage: Actions.initializeFromLocalStorage,
         loadedMenu: authActions.loadedMenu
     }, dispatch);
 }

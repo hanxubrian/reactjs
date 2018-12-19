@@ -1,8 +1,10 @@
+import storage from 'redux-persist/lib/storage';
+import { persistReducer } from 'redux-persist';
 import * as Actions from '../../actions/fuse/index';
+import  * as UserActions from '../../../auth/store/actions';
 import {fuseNavigationConfig} from 'fuse-configs/fuseNavigationConfig';
 
 const initialState = fuseNavigationConfig;
-// const initialState1 = [];
 
 const navigation = function (state = initialState, action) {
     switch ( action.type )
@@ -22,6 +24,7 @@ const navigation = function (state = initialState, action) {
             ];
         }
         case Actions.RESET_NAVIGATION:
+        case UserActions.USER_LOGGED_OUT:
         {
             console.log('pass2');
             return [
@@ -42,4 +45,10 @@ const navigation = function (state = initialState, action) {
     }
 };
 
+
+const persistConfig = {
+    key: 'navigation',
+    storage: storage,
+};
 export default navigation;
+// export default persistReducer(persistConfig, navigation);

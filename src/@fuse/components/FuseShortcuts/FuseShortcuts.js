@@ -70,9 +70,9 @@ class FuseShortcuts extends Component {
         this.setState({searchResults: null});
     };
 
-    toggleInShortcuts = (id) => {
+    toggleInShortcuts = (slug) => {
         let shortcuts = [...this.props.shortcuts];
-        shortcuts = shortcuts.includes(id) ? shortcuts.filter(_id => id !== _id) : [...shortcuts, id];
+        shortcuts = shortcuts.includes(slug) ? shortcuts.filter(_id => slug !== _id) : [...shortcuts, slug];
         this.props.updateUserShortcuts(shortcuts);
     };
 
@@ -194,9 +194,9 @@ class FuseShortcuts extends Component {
 
                     {searchText.length === 0 && shortcutItems.map(item => item && (
                         <ShortcutMenuItem
-                            key={item.id}
+                            key={item.MenuId}
                             item={item}
-                            onToggle={() => this.toggleInShortcuts(item.id)}
+                            onToggle={() => this.toggleInShortcuts(item.MenuId)}
                         />
                     ))}
                 </Menu>

@@ -62,7 +62,7 @@ class FuseNavVerticalItem extends Component
     }
 
     render() {
-        const {item, classes, nestedLevel, userRole, navbarCloseMobile, active, cur_path} = this.props;
+        const {item, classes, nestedLevel, userRole, navbarCloseMobile, active} = this.props;
 
         if (item.auth && (!item.auth.includes(userRole) || (userRole !== 'guest' && item.auth.length === 1 && item.auth.includes('guest')))) {
             return null;

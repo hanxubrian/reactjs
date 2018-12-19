@@ -1,4 +1,3 @@
-// import {authSignin} from "../../../services/services";
 import authService from 'services/auth';
 import menuService from '../../../services/menu';
 import React from "react";
@@ -85,29 +84,6 @@ export function closeDialog() {
     return (dispatch) => {
         dispatch({
             type: CLOSE_ALERT_DIALOG
-        });
-    }
-}
-
-
-export function initializeFromLocalStorage() {
-    let localData = {
-        IsSuccess: true,
-        UserId: localStorage.getItem('jk_user_id'),
-        apiKey: localStorage.getItem('jk_ApiKey'),
-        token: localStorage.getItem('jk_Token'),
-        all_regions: JSON.parse(localStorage.getItem('jk_regions')),
-        defaultRegionId: localStorage.getItem('jk_DefaultRegionId'),
-        bLoginStart: false,
-        firstName:localStorage.getItem('jk_firstname'),
-        lastName:localStorage.getItem('jk_lastname'),
-        role: localStorage.getItem('jk_role')
-    };
-
-    return (dispatch) => {
-        dispatch({
-            type: INITIALIZE_FROM_LOCAL,
-            payload: localData
         });
     }
 }

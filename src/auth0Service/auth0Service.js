@@ -90,26 +90,6 @@ class auth0Service {
         localStorage.removeItem('auth0.ssodata');
     };
 
-    isAuthenticated = () => {
-        if ( !this.lock )
-        {
-            return false;
-        }
-        // Check whether the current time is past the
-        // access token's expiry time
-        let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
-        const isNotExpired = new Date().getTime() < expiresAt;
-        if ( isNotExpired )
-        {
-            return true;
-        }
-        else
-        {
-            this.logout();
-            return false;
-        }
-    };
-
     getUserData = () => {
         return new Promise((resolve, reject) => {
 

@@ -15,6 +15,7 @@
         "firebase": "5.5.9",
         "formsy-react": "1.1.5",
         "google-map-react": "1.1.1",
+        "jsonwebtoken": "8.4.0",
         "jss-extend": "6.2.0",
         "jwt-decode": "2.2.0",
         "keycode": "2.2.0",
@@ -49,10 +50,12 @@
         "react-table": "6.8.6",
         "react-text-mask": "5.4.3",
         "redux": "4.0.1",
+        "redux-persist": "^5.10.0",
+        "redux-logger": "^3.0.6",
+        "redux-promise": "^0.6.0",
         "redux-thunk": "2.3.0",
         "typeface-muli": "0.0.54",
-        "velocity-react": "1.4.1",
-        "jsonwebtoken": "8.4.0"
+        "velocity-react": "1.4.1"
     },
     "scripts": {
         "start": "yarn run build-css-helpers && cross-env NODE_PATH=src react-scripts start",

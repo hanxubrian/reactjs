@@ -1,8 +1,10 @@
 import * as reduxModule from 'redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import {applyMiddleware, compose, createStore} from 'redux';
 import createReducer from 'store/reducers';
-import thunk from 'redux-thunk';
-
+import storage from 'redux-persist/lib/storage';
+import middleware from './store/middleware';
 /*
 Fix for Firefox redux dev tools extension
 https://github.com/zalmoxisus/redux-devtools-instrument/pull/19#issuecomment-400637274
@@ -18,11 +20,19 @@ const composeEnhancers =
         }) : compose;
 
 const enhancer = composeEnhancers(
-    applyMiddleware(thunk)
+    applyMiddleware(...middleware)
 );
 
-const store = createStore(createReducer(), enhancer);
+const persistConfig = {
+    key: 'janiking_web',
+    storage: storage,
+    stateReconciler: autoMergeLevel2 // see "Merge Process" section for details.
+};
 
+const pReducer = persistReducer(persistConfig, createReducer());
+
+export const store =  createStore(pReducer, enhancer);
+export const persistor = persistStore(store);
 store.asyncReducers = {};
 
 export const injectReducer = (key, reducer) => {
@@ -31,8 +41,7 @@ export const injectReducer = (key, reducer) => {
         return;
     }
     store.asyncReducers[key] = reducer;
-    store.replaceReducer(createReducer(store.asyncReducers));
+    // store.replaceReducer(createReducer(store.asyncReducers));
+    store.replaceReducer(persistReducer({key: key,storage: storage,}, store.asyncReducers));
     return store;
 };
-
-export default store;

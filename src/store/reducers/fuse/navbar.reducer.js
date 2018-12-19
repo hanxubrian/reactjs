@@ -1,4 +1,6 @@
 import * as Actions from '../../actions/fuse/index';
+import storage from 'redux-persist/lib/storage';
+import { persistReducer } from 'redux-persist';
 
 const initialState = {
     foldedOpen: false,
@@ -65,5 +67,8 @@ const navbar = function (state = initialState, action) {
         }
     }
 };
-
-export default navbar;
+const persistConfig = {
+    key: 'navbar',
+    storage: storage
+};
+export default persistReducer(persistConfig, navbar);

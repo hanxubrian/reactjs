@@ -1,4 +1,6 @@
 import * as Actions from '../actions';
+import storage from 'redux-persist/lib/storage';
+import { persistReducer } from 'redux-persist';
 
 const initialState = {
     role: 'guest',
@@ -42,4 +44,10 @@ const user = function (state = initialState, action) {
     }
 };
 
-export default user;
+const persistConfig = {
+    key: 'user',
+    storage: storage,
+    blacklist: ['bLoginStart','regionId']
+};
+export default persistReducer(persistConfig, user);
+// export default user;

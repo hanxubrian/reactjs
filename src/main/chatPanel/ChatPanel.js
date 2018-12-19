@@ -93,6 +93,8 @@ class ChatPanel extends Component {
 
         const selectedContact = contacts.find(_contact => _contact.id === selectedContactId);
 
+        console.log('chat=', this.props);
+
         return (
             <div className={classes.root}>
                 <ClickAwayListener onClickAway={() => state && closeChatPanel()}>
@@ -152,4 +154,4 @@ function mapStateToProps({chatPanel})
     }
 }
 
-export default withReducer('chatPanel', reducer)(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ChatPanel)));
+export default (withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ChatPanel)));

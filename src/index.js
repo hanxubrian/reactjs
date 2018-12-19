@@ -21,7 +21,9 @@ import MainFooter from './main/MainFooter';
 import jssExtend from 'jss-extend'
 import QuickPanel from 'main/quickPanel/QuickPanel';
 import ChatPanel from 'main/chatPanel/ChatPanel';
-import store from 'store';
+import { PersistGate } from 'redux-persist/lib/integration/react'
+import {persistor, store} from "./store";
+
 import SettingsPanel from 'main/SettingsPanel';
 import {Auth} from 'auth';
 
@@ -36,6 +38,7 @@ const generateClassName = createGenerateClassName();
 ReactDOM.render(
     <JssProvider jss={jss} generateClassName={generateClassName}>
         <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
             <Auth>
                 <Router history={history}>
                     <FuseAuthorization routes={routes}>
@@ -69,6 +72,7 @@ ReactDOM.render(
                     </FuseAuthorization>
                 </Router>
             </Auth>
+            </PersistGate>
         </Provider>
     </JssProvider>
     , document.getElementById('root'));

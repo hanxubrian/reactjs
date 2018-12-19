@@ -192,7 +192,7 @@ class FuseUtils {
     static findById(o, id)
     {
         //Early return
-        if ( o.id === id )
+        if ( o.Slug === id )
         {
             return o;
         }
@@ -216,19 +216,19 @@ class FuseUtils {
         flatNavigation = flatNavigation ? flatNavigation : [];
         for ( const navItem of navigationItems )
         {
-            if ( navItem.type === 'subheader' )
+            if ( navItem.Type === 'subheader' )
             {
                 continue;
             }
 
-            if ( navItem.type === 'item' )
+            if ( navItem.Type === 'item' )
             {
                 flatNavigation.push({
-                    id   : navItem.id,
-                    title: navItem.title,
-                    type : navItem.type,
-                    icon : navItem.icon || false,
-                    url  : navItem.url
+                    MenuId   : navItem.MenuId,
+                    Title: navItem.Title,
+                    Type : navItem.Type,
+                    Icon : navItem.Icon || false,
+                    Slug  : navItem.Slug
                 });
 
                 continue;

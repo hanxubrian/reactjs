@@ -28,17 +28,6 @@ class authService {
         });
     };
 
-    setSession = (authResult) => {
-        if(authResult.IsSuccess){
-            let expiresAt = JSON.stringify((30*24*3600 * 1000) + new Date().getTime());
-            localStorage.setItem('jk_ApiKey', authResult.ApiKey);
-            localStorage.setItem('jk_DefaultRegionId', authResult.DefaultRegionId);
-            localStorage.setItem('jk_Token', authResult.Token);
-            localStorage.setItem('jk_user_id', authResult.id);
-            localStorage.setItem('jk_expires_at', expiresAt);
-            localStorage.setItem('jk_regions', JSON.stringify(authResult.Regions));
-        }
-    };
 
     logout() {
         localStorage.removeItem('jk_ApiKey');
@@ -49,20 +38,6 @@ class authService {
         localStorage.removeItem('jk_expires_at');
     };
 
-    isAuthenticated = () => {
-        let expiresAt = JSON.parse(localStorage.getItem('jk_expires_at'));
-        const isNotExpired = new Date().getTime() < expiresAt;
-
-        if ( isNotExpired )
-        {
-            return true;
-        }
-        else
-        {
-            this.logout();
-            return false;
-        }
-    };
 }
 
 const instance = new authService();

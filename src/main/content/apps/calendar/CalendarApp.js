@@ -13,7 +13,7 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import {FuseAnimate} from '@fuse';
 import withReducer from 'store/withReducer';
-import reducer from './store/reducers';
+import reducer from './store/reducers/events.reducer';
 
 const localizer = BigCalendar.momentLocalizer(moment);
 
@@ -253,9 +253,10 @@ function mapDispatchToProps(dispatch)
 
 function mapStateToProps({calendarApp})
 {
+    console.log('calendar=', calendarApp);
     return {
         events: calendarApp.events.entities
     }
 }
 
-export default withReducer('calendarApp', reducer)(withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(CalendarApp)));
+export default (withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(CalendarApp)));

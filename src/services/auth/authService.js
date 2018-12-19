@@ -1,4 +1,6 @@
 import axios from 'axios';
+import {USER_LOGGED_OUT} from "../../auth/store/actions";
+// export const USER_LOGGED_OUT = 'USER_LOGGED_OUT';
 
 const axios_instance = axios.create({
     headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
@@ -18,7 +20,7 @@ class authService {
             axios_instance.post(`${BASE_API_URL}/api/authentication/login`, loginData)
                 .then( res => {
                     if(res.status===200) {
-                        this.setSession(res.data);
+                        // this.setSession(res.data);
                         resolve(res.data);
                     }
                     else if(res.status!==200){
@@ -31,46 +33,15 @@ class authService {
         });
     };
 
-    setSession = (authResult) => {
-        if(authResult.IsSuccess){
-            let expiresAt = JSON.stringify((30*24*3600 * 1000) + new Date().getTime());
-            localStorage.setItem('jk_ApiKey', authResult.ApiKey);
-            localStorage.setItem('jk_DefaultRegionId', authResult.DefaultRegionId);
-            localStorage.setItem('jk_Token', authResult.Token);
-            localStorage.setItem('jk_user_id', authResult.id);
-            localStorage.setItem('jk_expires_at', expiresAt);
-            localStorage.setItem('jk_regions', JSON.stringify(authResult.Regions));
-            localStorage.setItem('jk_firstname', authResult.FirstName);
-            localStorage.setItem('jk_lastname', authResult.LastName);
-            localStorage.setItem('jk_role', authResult.Roles[0].RoleName);
-        }
-    };
-
     logout() {
-        localStorage.removeItem('jk_ApiKey');
-        localStorage.removeItem('jk_DefaultRegionId');
-        localStorage.removeItem('jk_Token');
-        localStorage.removeItem('jk_user_id');
-        localStorage.removeItem('jk_regions');
-        localStorage.removeItem('jk_expires_at');
-        localStorage.removeItem('jk_firstname');
-        localStorage.removeItem('jk_lastname');
-        localStorage.removeItem('jk_role');
-    };
 
-    isAuthenticated = () => {
-        let expiresAt = JSON.parse(localStorage.getItem('jk_expires_at'));
-        const isNotExpired = new Date().getTime() < expiresAt;
+        return (dispatch) => {
+            dispatch({
+                type: USER_LOGGED_OUT,
+            });
 
-        if ( isNotExpired )
-        {
-            return true;
         }
-        else
-        {
-            this.logout();
-            return false;
-        }
+
     };
 }
 

@@ -78,4 +78,4 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-export default withReducer('mailApp', reducer)(withStyles(styles, {withTheme: true})(connect(null, mapDispatchToProps)(MailApp)));
+export default (withStyles(styles, {withTheme: true})(connect(null, mapDispatchToProps)(MailApp)));

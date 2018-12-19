@@ -3,6 +3,9 @@ import _ from '@lodash';
 import FuseDefaultSettings from '@fuse/FuseDefaultSettings';
 import FuseLayouts from '@fuse/components/FuseLayout/FuseLayouts';
 
+import storage from 'redux-persist/lib/storage';
+import { persistReducer } from 'redux-persist';
+
 const initialState = {
     defaults: _.merge({}, FuseDefaultSettings),
     current : _.merge({}, FuseDefaultSettings)
@@ -41,4 +44,10 @@ const settings = function (state = initialState, action) {
     }
 };
 
-export default settings;
+
+const persistConfig = {
+    key: 'settings',
+    storage: storage
+};
+export default persistReducer(persistConfig, settings);
+

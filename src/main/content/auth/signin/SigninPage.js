@@ -20,8 +20,7 @@ const styles = theme => ({
     },
     card: {
         width   : '100%',
-        maxWidth: 384,
-        // background: '#424242'
+        maxWidth: 384
     },
     progress: {
         margin: theme.spacing.unit * 2,
@@ -48,15 +47,8 @@ class SigninPage extends Component {
         alertOpen: false
     };
 
-    componentWillMount(){
-        if(authService.isAuthenticated() && !this.props.login.bLoadedMenu){
-            this.props.initializeFromLocalStorage();
-            this.props.history.push('/profile');
-        }
-    }
     componentWillReceiveProps(nextProps) {
         if(nextProps.login.IsSuccess){
-            // this.props.loadAccountMenu(nextProps.login.);
             this.props.history.push('/profile');
         }
         if(nextProps.login.bAlertShown) {
@@ -207,7 +199,7 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         signinUser: Actions.submitSignIn,
         closeAlertDialog: Actions.closeDialog,
-        initializeFromLocalStorage: Actions.initializeFromLocalStorage,
+        // initializeFromLocalStorage: Actions.initializeFromLocalStorage,
         loadAccountMenu: NavigationActions.add_auth_navigation
     }, dispatch);
 }

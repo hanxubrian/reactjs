@@ -1,4 +1,6 @@
 import * as Actions from '../../actions/fuse/index';
+import storage from 'redux-persist/lib/storage';
+import { persistReducer } from 'redux-persist';
 
 const initialState = {
     state  : false,
@@ -35,4 +37,10 @@ const dialog = function (state = initialState, action) {
     }
 };
 
-export default dialog;
+const persistConfig = {
+    key: 'dialog',
+    storage: storage,
+    blacklist: ['bLoginStart','regionId']
+};
+export default persistReducer(persistConfig, dialog);
+// export default dialog;

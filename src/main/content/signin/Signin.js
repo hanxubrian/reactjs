@@ -47,12 +47,6 @@ class Signin extends Component {
         alertOpen: false
     };
 
-    componentWillMount(){
-        if(authService.isAuthenticated() && !this.props.login.bLoadedMenu){
-            this.props.initializeFromLocalStorage();
-            this.props.history.push('/profile');
-        }
-    }
     componentWillReceiveProps(nextProps) {
         // if(nextProps.login.IsSuccess ){
             // this.props.history.push('/profile');
@@ -205,7 +199,7 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         signinUser: Actions.submitSignIn,
         closeAlertDialog: Actions.closeDialog,
-        initializeFromLocalStorage: Actions.initializeFromLocalStorage
+        // initializeFromLocalStorage: Actions.initializeFromLocalStorage
     }, dispatch);
 }
 

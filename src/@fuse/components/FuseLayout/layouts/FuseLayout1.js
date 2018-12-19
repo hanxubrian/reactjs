@@ -528,7 +528,7 @@ class FuseLayout1 extends Component {
                         </div>
 
                         {layoutConfig.rightSidePanel.display && (
-                            rightSidePanel
+                         rightSidePanel
                         )}
 
                         <FuseMessage/>

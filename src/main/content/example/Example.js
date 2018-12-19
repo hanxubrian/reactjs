@@ -8,10 +8,6 @@ const styles = theme => ({
 });
 
 class Example extends Component {
-    componentWillMount() {
-        if(!authService.isAuthenticated())
-            this.props.history.push('/auth/signin/');
-    }
 
     render()
     {
