@@ -101,4 +101,4 @@ function mapStateToProps({contactsApp})
     }
 }
 
-export default withReducer('contactsApp', reducer)(withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(ContactsApp))));
+export default (withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(ContactsApp))));
