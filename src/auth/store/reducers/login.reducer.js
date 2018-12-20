@@ -16,7 +16,9 @@ export const initialState = {
     bLoadedMenu: false,
     firstName: '',
     lastName: '',
-    role: []
+    role: [],
+    Username: '',
+    Phone: ''
 };
 
 const login = function (state = initialState, action) {
@@ -35,7 +37,9 @@ const login = function (state = initialState, action) {
                 bLoginStart: false,
                 firstName: action.payload.FirstName,
                 lastName: action.payload.LastName,
-                role: action.payload.Roles[0].RoleName
+                role: action.payload.Roles[0].RoleName,
+                Username: action.payload.Username,
+                Phone: action.payload.Phone
             };
             return {
                 ...initialState,

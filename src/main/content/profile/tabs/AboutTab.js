@@ -4,6 +4,8 @@ import axios from 'axios/index';
 import {Avatar, AppBar, Button, Card, CardContent, Icon, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, Toolbar, Typography} from '@material-ui/core';
 import classNames from 'classnames';
 import {FuseAnimateGroup} from '@fuse';
+import connect from "react-redux/es/connect/connect";
+import {withRouter} from 'react-router-dom';
 
 const styles = theme => ({
     root: {}
@@ -25,10 +27,26 @@ class AboutTab extends Component {
             this.setState(res.data);
         });
     }
+    RegionHeader(){
+        const {classes} = this.props;
+        let region_name = '';
+        if(this.props.login.IsSuccess){
+            this.props.login.all_regions.forEach(region=>{
+                if(parseInt(this.props.login.defaultRegionId) === region.RegionId) {
+                    region_name = region.Displayname;
+                    return false;
+                }
+            })
+        }
+
+        return (
+           <Typography className="logo-icon-large">{region_name}</Typography>
+        )
+    };
 
     render()
     {
-        const {classes} = this.props;
+        const {classes ,login} = this.props;
         const {general, work, contact, groups, friends} = this.state;
 
         return (
@@ -52,24 +70,18 @@ class AboutTab extends Component {
 
                                 <CardContent>
                                     <div className="mb-24">
-                                        <Typography className="font-bold mb-4 text-15">Gender</Typography>
-                                        <Typography>{general.gender}</Typography>
+                                        <Typography className="font-bold mb-4 text-15">Email</Typography>
+                                        <Typography>{this.props.login.Username}</Typography>
                                     </div>
 
                                     <div className="mb-24">
-                                        <Typography className="font-bold mb-4 text-15">Birthday</Typography>
-                                        <Typography>{general.birthday}</Typography>
+                                        <Typography className="font-bold mb-4 text-15">Phone</Typography>
+                                        <Typography>{this.props.login.Phone}</Typography>
                                     </div>
 
                                     <div className="mb-24">
-                                        <Typography className="font-bold mb-4 text-15">Locations</Typography>
-
-                                        {general.locations.map((location) => (
-                                            <div className="flex items-center" key={location}>
-                                                <Typography>{location}</Typography>
-                                                <Icon className="text-16 ml-4" color="action">location_on</Icon>
-                                            </div>
-                                        ))}
+                                        <Typography className="font-bold mb-4 text-15">Region</Typography>
+                                        <Typography>{this.RegionHeader()}</Typography>
                                     </div>
 
                                     <div className="mb-24">
@@ -244,4 +256,12 @@ class AboutTab extends Component {
     }
 }
 
-export default withStyles(styles, {withTheme: true})(AboutTab);
+function mapStateToProps({auth})
+{
+    return {
+        login: auth.login
+    }
+}
+
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps)(AboutTab)));
+// export default withStyles(styles, {withTheme: true})(AboutTab);

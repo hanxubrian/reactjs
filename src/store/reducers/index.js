@@ -11,11 +11,11 @@ const createReducer = (asyncReducers) =>
     combineReducers({
         auth,
         fuse,
+        contactsApp,
         quickPanel,
         calendarApp,
         mailApp,
         chatPanel,
-        contactsApp,
         ...asyncReducers
     });
 
