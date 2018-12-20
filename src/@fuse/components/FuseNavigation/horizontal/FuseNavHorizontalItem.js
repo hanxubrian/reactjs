@@ -12,9 +12,9 @@ import * as Actions from 'store/actions';
 const propTypes = {
     item: PropTypes.shape(
         {
-            id   : PropTypes.string.isRequired,
-            title: PropTypes.string,
-            icon : PropTypes.string,
+            Slug   : PropTypes.string.isRequired,
+            Title: PropTypes.string,
+            Icon : PropTypes.string,
             url  : PropTypes.string
         })
 };
@@ -49,21 +49,27 @@ function FuseNavHorizontalItem({item, classes, nestedLevel, userRole, navbarClos
         return null;
     }
     console.log('item',item);
+
+    let url = item.url;
+    if(item.MenuId>40) {
+        url = `/${item.Slug}`;
+    }
+
     return (
 
         <ListItem
             button
             component={NavLink}
-            to={item.url}
+            to={url}
             activeClassName="active"
             className={classNames(classes.root)}
             onClick={navbarCloseMobile}
             exact={item.exact}
         >
-            {item.icon && (
-                <Icon className="list-item-icon text-16 flex-no-shrink" color="action">{item.icon}</Icon>
+            {item.Icon && (
+                <Icon className="list-item-icon text-16 flex-no-shrink" color="action">{item.Icon}</Icon>
             )}
-            <ListItemText className="list-item-text pr-0" primary={item.title} classes={{primary: 'text-14 list-item-text-primary'}}/>
+            <ListItemText className="list-item-text pr-0" primary={item.Title} classes={{primary: 'text-14 list-item-text-primary'}}/>
             {item.badge && (
                 <FuseNavBadge className="ml-8" badge={item.badge}/>
             )}

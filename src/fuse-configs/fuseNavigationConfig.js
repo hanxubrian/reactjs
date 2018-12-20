@@ -23,6 +23,14 @@ export const fuseNavigationConfig = [
                 'url'  : '/apps/calendar'
             },
             {
+                'MenuId'   : 14,
+                'Slug'   : 'contacts',
+                'Title': 'Contacts',
+                'Type' : 'item',
+                'Icon' : 'account_box',
+                'url'  : '/apps/contacts'
+            },
+            {
                 'MenuId'    : 12,
                 'Slug'   : 'mail',
                 'Title': 'Mail',

@@ -5,6 +5,7 @@ import quickPanel from 'main/quickPanel/store/reducers';
 import calendarApp from '../../main/content/apps/calendar/store/reducers/';
 import mailApp from '../../main/content/apps/mail/store/reducers/';
 import chatPanel from '../../main/chatPanel/store/reducers/';
+import contactsApp from '../../main/content/apps/contacts/store/reducers/';
 
 const createReducer = (asyncReducers) =>
     combineReducers({
@@ -14,6 +15,7 @@ const createReducer = (asyncReducers) =>
         calendarApp,
         mailApp,
         chatPanel,
+        contactsApp,
         ...asyncReducers
     });
 

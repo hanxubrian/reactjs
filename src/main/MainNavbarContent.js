@@ -35,11 +35,14 @@ const styles = theme => ({
         width: 184,
         height: 131
     },
-    logofull:{
-        justifyContent: 'center',
-        flexDirection: 'column',
-        height: 152
-    },
+        logofull:{
+            justifyContent: 'center',
+            flexDirection: 'column',
+            height: 152,
+            '& .logo-icon-large':{
+                color: 'white!important'
+            }
+        },
     logoIcon  : {
         width     : 32,
         height    : 32,

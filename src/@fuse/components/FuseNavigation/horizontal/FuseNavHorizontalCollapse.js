@@ -17,10 +17,10 @@ import * as ReactDOM from 'react-dom';
 const propTypes = {
     item: PropTypes.shape(
         {
-            id      : PropTypes.string.isRequired,
-            title   : PropTypes.string,
-            icon    : PropTypes.string,
-            children: PropTypes.array
+            Slug      : PropTypes.string.isRequired,
+            Title   : PropTypes.string,
+            Icon    : PropTypes.string,
+            Children: PropTypes.array
         })
 };
 
@@ -80,10 +80,10 @@ class FuseNavHorizontalCollapse extends Component {
                                     aria-owns={open ? 'menu-list-grow' : null}
                                     aria-haspopup="true"
                                 >
-                                    {item.icon && (
-                                        <Icon color="action" className="text-16 flex-no-shrink">{item.icon}</Icon>
+                                    {item.Icon && (
+                                        <Icon color="action" className="text-16 flex-no-shrink">{item.Icon}</Icon>
                                     )}
-                                    <ListItemText className="list-item-text pr-0" primary={item.title} classes={{primary: 'text-14'}}/>
+                                    <ListItemText className="list-item-text pr-0" primary={item.Title} classes={{primary: 'text-14'}}/>
                                     {item.badge && (
                                         <FuseNavBadge className="ml-8 mr-4" badge={item.badge}/>
                                     )}

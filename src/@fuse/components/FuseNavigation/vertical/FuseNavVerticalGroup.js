@@ -23,7 +23,10 @@ const styles = theme => ({
         height      : 40,
         width       : 'calc(100% - 16px)',
         borderRadius: '0 20px 20px 0',
-        paddingRight: 12
+        paddingRight: 12,
+        '& .list-subheader-text': {
+            color: 'white'
+        }
     }
 });
 

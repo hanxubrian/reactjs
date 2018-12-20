@@ -43,9 +43,12 @@ const styles = theme => ({
             width       : '100%',
             borderRadius: '0'
         },
-        '& .list-item-icon'        : {},
-        '& .list-item-text'        : {},
-        color                      : 'inherit!important',
+        '& .list-item-icon'        : {color:'white!important'},
+        '& .list-item-text'        : {color:'white!important'},
+        '& .list-item-text-primary': {
+            color: 'white!important'
+        },
+        color                      : 'white!important',
         textDecoration             : 'none!important'
     }
 });
@@ -74,28 +77,31 @@ class FuseNavVerticalItem extends Component
         if(item.MenuId>40) {
             url = `/${item.Slug}`;
         }
+        if(item.Slug === 'calendar' || item.Slug === 'contacts' || item.Slug === 'mail' || item.Slug === 'profile' )
+            return null;
 
         return (
 
-            <ListItem
-                button
-                component={NavLink}
-                to={url}
-                activeClassName="active"
-                className={classNames(classes.item, listItemPadding, 'list-item', active)}
-                onClick={() => this.handleClick(navbarCloseMobile, item.IframeUrl)}
-                exact={item.exact}
-            >
-                {item.Icon && (
-                    <Icon className="list-item-icon text-16 flex-no-shrink" color="action">{item.Icon}</Icon>
-                )}
-                <ListItemText className="list-item-text" primary={item.Title}
-                              classes={{primary: 'text-14 list-item-text-primary'}}/>
-                {item.badge && (
-                    <FuseNavBadge badge={item.badge}/>
-                )}
-            </ListItem>
-        );
+                 <ListItem
+                     button
+                     component={NavLink}
+                     to={url}
+                     activeClassName="active"
+                     className={classNames(classes.item, listItemPadding, 'list-item', active)}
+                     onClick={() => this.handleClick(navbarCloseMobile, item.IframeUrl)}
+                     exact={item.exact}
+                 >
+                     {item.Icon && (
+                         <Icon className="list-item-icon text-16 flex-no-shrink" color="action">{item.Icon}</Icon>
+                     )}
+                     <ListItemText className="list-item-text" primary={item.Title}
+                                   classes={{primary: 'text-14 list-item-text-primary'}}/>
+                     {item.badge && (
+                         <FuseNavBadge badge={item.badge}/>
+                     )}
+                 </ListItem>
+             );
+
     }
 }
 

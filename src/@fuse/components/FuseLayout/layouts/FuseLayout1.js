@@ -165,7 +165,10 @@ const styles = theme => ({
             },
         },
         '& .navBarShownClosed':{
-            display: 'block'
+            display: 'block',
+        },
+        '& .hamburgerNav':{
+           marginLeft: '8px'
         },
         '& .logo-icon-large': {
             opacity: 0,
@@ -277,7 +280,7 @@ class FuseLayout1 extends Component {
                 className={classes.navbarHeaderWrapper}
             >
                 <Hidden mdDown>
-                    <IconButton className="navBarShownClosed showInitial" onClick={this.handleToggleFolded} color="inherit">
+                    <IconButton className="hamburgerNav navBarShownClosed showInitial" onClick={this.handleToggleFolded} color="inherit">
                         <Icon>menu</Icon>
                     </IconButton>
                 </Hidden>

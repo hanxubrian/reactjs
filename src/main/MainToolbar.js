@@ -172,18 +172,24 @@ class MainToolbar extends Component {
                     >
                         {user.role === 'guest' ? (
                             <React.Fragment>
-                                <MenuItem
-                                    onClick={() => {
-                                        this.props.logout();
-                                        this.userMenuClose();
-                                        this.props.history.push('/auth/signin');
-                                    }}
-                                >
-                                    <ListItemIcon>
-                                        <Icon>input</Icon>
-                                    </ListItemIcon>
-                                    <ListItemText className="pl-0" primary="SignOut"/>
-                                </MenuItem>
+                            <MenuItem component={Link} to="/pages/profile" onClick={this.userMenuClose}>
+                               <ListItemIcon>
+                                   <Icon>account_circle</Icon>
+                               </ListItemIcon>
+                               <ListItemText className="pl-0" primary="My Profile"/>
+                            </MenuItem>
+                            <MenuItem
+                            onClick={() => {
+                            this.props.logout();
+                            this.userMenuClose();
+                            this.props.history.push('/auth/signin');
+                        }}
+                            >
+                            <ListItemIcon>
+                            <Icon>input</Icon>
+                            </ListItemIcon>
+                            <ListItemText className="pl-0" primary="SignOut"/>
+                            </MenuItem>
                             </React.Fragment>
                         ) : (
                             <React.Fragment>

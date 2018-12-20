@@ -1,9 +1,9 @@
 import {CalendarAppConfig} from './calendar/CalendarAppConfig';
-import {ChatAppConfig} from "./chat/ChatAppConfig";
 import {MailAppConfig} from "./mail/MailAppConfig";
+import {ContactsAppConfig} from "./contacts/ContactsAppConfig";
 
 export const appsConfigs = [
     CalendarAppConfig,
-    ChatAppConfig,
-    MailAppConfig
+    MailAppConfig,
+    ContactsAppConfig
 ];

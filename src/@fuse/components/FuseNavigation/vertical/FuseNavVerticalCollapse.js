@@ -36,7 +36,12 @@ const styles = theme => ({
         '&.square'  : {
             width       : '100%',
             borderRadius: '0'
-        }
+        },
+        '& .material-icons'        : {color:'white!important'},
+        '& .list-item-text span'        : {color:'white!important'},
+        '& .list-item-text-primary': {
+            color: 'white!important'
+        },
     }
 });
 let currUrl = '';

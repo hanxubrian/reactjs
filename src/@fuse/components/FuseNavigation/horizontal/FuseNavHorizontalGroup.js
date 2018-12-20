@@ -16,7 +16,7 @@ import * as ReactDOM from 'react-dom';
 const propTypes = {
     item: PropTypes.shape(
         {
-            id      : PropTypes.string.isRequired,
+            Slug      : PropTypes.string.isRequired,
             title   : PropTypes.string,
             children: PropTypes.array
         })
@@ -75,10 +75,10 @@ class FuseNavHorizontalGroup extends Component {
                                 aria-owns={open ? 'menu-list-grow' : null}
                                 aria-haspopup="true"
                             >
-                                {item.icon && (
-                                    <Icon color="action" className="text-16 flex-no-shrink">{item.icon}</Icon>
+                                {item.Icon && (
+                                    <Icon color="action" className="text-16 flex-no-shrink">{item.Icon}</Icon>
                                 )}
-                                <ListItemText className="list-item-text pr-0" primary={item.title} classes={{primary: 'text-14'}}/>
+                                <ListItemText className="list-item-text pr-0" primary={item.Title} classes={{primary: 'text-14'}}/>
                                 {nestedLevel > 0 && (
                                     <IconButton disableRipple className="w-16 h-16 ml-4 p-0">
                                         <Icon className="text-16 arrow-icon">keyboard_arrow_right</Icon>
