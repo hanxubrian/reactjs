@@ -4,11 +4,15 @@ import { persistReducer } from 'redux-persist';
 
 const initialState = {
     invoicesDB: null,
-    bLoadedInvoices: false
+    bLoadedInvoices: false,
+    bOpenedSummaryPanel: true,
+    bOpenedFilterPanel: true,
+    transactionStatus:{checkedPaid: true,checkedPP: true, checkedComplete: true, checkedOpen: true }
 };
 
 
 const invoices = function(state = initialState, action) {
+    console.log('action=', action.payload);
     switch ( action.type )
     {
         case Actions.GET_ALL_INVOICES:
@@ -17,6 +21,35 @@ const invoices = function(state = initialState, action) {
                 ...initialState,
                 invoicesDB: action.payload, bLoadedInvoices: true
             };
+        }
+        case Actions.OPEN_SUMMARY_PANEL:
+        {
+            return {
+                ...state, bOpenedSummaryPanel: true
+            }
+        }
+        case Actions.CLOSE_SUMMARY_PANEL:
+        {
+            return {
+                ...state, bOpenedSummaryPanel: false
+            }
+        }
+        case Actions.OPEN_FILTER_PANEL:
+        {
+            return {
+                ...state, bOpenedFilterPanel: true
+            }
+        }
+        case Actions.CLOSE_FILTER_PANEL:
+        {
+            return {
+                ...state, bOpenedFilterPanel: false
+            }
+        }
+        case Actions.TOGGLE_FILTER_STATUS:{
+            return {
+                ...state, transactionStatus:{...state.transactionStatus,...action.payload}
+            }
         }
         default:
         {

@@ -1,7 +1,6 @@
 import mock from "./mock";
 import _ from "lodash";
 
-
 let invoicesDb = {
     "IsSuccess": true,
     "MessageCode": 0,

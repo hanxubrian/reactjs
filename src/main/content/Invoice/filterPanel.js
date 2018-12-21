@@ -1,0 +1,252 @@
+import React, {Component} from 'react';
+import {AppBar, Toolbar, Icon, IconButton, ClickAwayListener, Paper, Avatar, Typography, withStyles} from '@material-ui/core';
+import keycode from 'keycode';
+
+//Material UI core
+import Switch from '@material-ui/core/Switch';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+
+
+import * as Actions from './../../../store/actions';
+
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import classNames from 'classnames';
+import FuseHighlight from "../../../@fuse/components/FuseHighlight/FuseHighlight";
+
+const styles = theme => ({
+    root : {
+        width                         : 50,
+        maxWidth                      : 50,
+        minWidth                      : 50,
+        [theme.breakpoints.down('md')]: {
+            width   : 0,
+            maxWidth: 0,
+            minWidth: 0
+        }
+    },
+    panel: {
+        position                      : 'absolute',
+        width                         : 300,
+        backgroundColor               : theme.palette.background.paper,
+        boxShadow                     : theme.shadows[3],
+        top                           : 0,
+        height                        : '100%',
+        minHeight                     : '100%',
+        bottom                        : 0,
+        left                         :  -300,
+        margin                        : 0,
+        zIndex                        : 1000,
+        transform                     : 'translate3d(50px,0,0)',
+        overflow                      : 'hidden',
+        [theme.breakpoints.down('md')]: {
+            transform : 'translate3d(360px,0,0)',
+            boxShadow : 'none',
+            '&.opened': {
+                boxShadow: theme.shadows[5]
+            }
+        },
+        transition                    : theme.transitions.create(['transform'], {
+            easing  : theme.transitions.easing.easeInOut,
+            duration: theme.transitions.duration.standard
+        }),
+        '&.opened'                    : {
+            transform: 'translateX(300px)'
+        }
+    }
+});
+
+class FilterPanel extends Component {
+
+    state = {
+        checkedPaid: true,
+        checkedPP: true,
+        checkedComplete: true,
+        checkedOpen: true,
+        invoiceDate:''
+    };
+
+    componentDidMount()
+    {
+    }
+
+    componentWillMount(){
+        this.setState({checkedPaid: this.props.transactionStatus.checkedPaid,
+            checkedPP: this.props.transactionStatus.checkedPP,
+            checkedComplete: this.props.transactionStatus.checkedComplete});
+    }
+
+    componentDidUpdate(prevProps)
+    {
+        if ( this.props.state !== prevProps.state )
+        {
+            if ( this.props.state )
+            {
+                document.addEventListener("keydown", this.handleDocumentKeyDown);
+            }
+            else
+            {
+                document.removeEventListener('keydown', this.handleDocumentKeyDown);
+            }
+        }
+    }
+
+    componentWillUnmount()
+    {
+        document.removeEventListener('keydown', this.handleDocumentKeyDown);
+    }
+
+    handleDocumentKeyDown = event => {
+        if ( keycode(event) === 'esc' )
+        {
+            this.props.closeFilterPanel();
+        }
+    };
+
+    handleChange = name => event => {
+        this.setState({ [name]: event.target.checked });
+        this.props.toggleStatus(name, event.target.checked)
+    };
+
+    handleChange1 = event => {
+        this.setState({[event.target.name]: event.target.value});
+    };
+    render()
+    {
+        const {classes, openFilterPanel, closeFilterPanel, filterState} = this.props;
+
+        return (
+            <div className={classes.root}>
+                {/*<ClickAwayListener onClickAway={() => filterState && closeFilterPanel()}>*/}
+                    <div className={classNames(classes.panel, {'opened': filterState}, "flex flex-col")}>
+                        <AppBar position="static" elevation={1}>
+                            <Toolbar className="pl-12 pr-8">
+                                <div className="flex flex-1 items-center">
+                                    {(filterState) && (
+                                        <React.Fragment>
+                                            <IconButton color="inherit" onClick={closeFilterPanel}>
+                                                <Icon className="text-24" >close</Icon>
+                                            </IconButton>
+
+                                        </React.Fragment>
+                                    )}
+                                    <h2 style={{marginRight: 10}}>Invoice Filter</h2>
+                                </div>
+                                {(!filterState) && (
+                                    <IconButton onClick={()=>openFilterPanel()} color="inherit">
+                                        <Icon>arrow_forward</Icon>
+                                    </IconButton>
+                                )}
+                            </Toolbar>
+                        </AppBar>
+                        {filterState && (
+                            <Paper className="flex flex-1 flex-col min-h-px p-20">
+                                <div >
+                                <h3>Filter by Date</h3>
+                                <FormControl className={classes.formControl} style={{width: 250}}>
+                                    <InputLabel htmlFor="age-simple">Invoice Date</InputLabel>
+                                    <Select
+                                        value={this.state.invoiceDate}
+                                        onChange={this.handleChange1}
+                                        inputProps={{
+                                            name: 'invoiceDate',
+                                            id  : 'invoice_date'
+                                        }}
+                                    >
+                                        <MenuItem value="">
+                                            <em>None</em>
+                                        </MenuItem>
+                                        <MenuItem value={1}>This Week</MenuItem>
+                                        <MenuItem value={2}>This Week-to-date</MenuItem>
+                                        <MenuItem value={3}>This Month</MenuItem>
+                                        <MenuItem value={4}>This Month-to-date</MenuItem>
+                                        <MenuItem value={5}>This Quarter</MenuItem>
+                                        <MenuItem value={6}>This Quarter-to-Date</MenuItem>
+                                        <MenuItem value={7}>This Fiscal Year</MenuItem>
+                                        <MenuItem value={8}>This Fiscal Year-to-date</MenuItem>
+                                        <MenuItem value={9}>Today</MenuItem>
+                                        <MenuItem value={10}>Yesterday</MenuItem>
+                                        <MenuItem value={11}>This Month</MenuItem>
+                                        <MenuItem value={12}>Last Quarter</MenuItem>
+                                        <MenuItem value={13}>Last Year</MenuItem>
+                                        <MenuItem value={14}>Custom Date</MenuItem>
+                                        <MenuItem value={15}>Period</MenuItem>
+                                    </Select>
+                                </FormControl>
+                                </div>
+
+                                <div style={{marginTop: 50, display: 'flex', flexDirection: 'column'}}>
+                                <h3>Transaction Statuses</h3>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            checked={this.state.checkedPaid}
+                                            onChange={this.handleChange('checkedPaid')}
+                                            value="checkedPaid"
+                                        />
+                                    }
+                                    label="Paid"
+                                />
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            checked={this.state.checkedPP}
+                                            onChange={this.handleChange('checkedPP')}
+                                            value="checkedPP"
+                                        />
+                                    }
+                                    label="Paid Partial"
+                                />
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            checked={this.state.checkedComplete}
+                                            onChange={this.handleChange('checkedComplete')}
+                                            value="checkedComplete"
+                                        />
+                                    }
+                                    label="Completed"
+                                />
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            checked={this.state.checkedOpen}
+                                            onChange={this.handleChange('checkedOpen')}
+                                            value="checkedOpen"
+                                        />
+                                    }
+                                    label="Open"
+                                />
+                                </div>
+                            </Paper>
+                        )}
+                    </div>
+                {/*</ClickAwayListener>*/}
+            </div>
+        );
+    }
+}
+
+function mapDispatchToProps(dispatch)
+{
+    return bindActionCreators({
+        openFilterPanel: Actions.openFilterPanel,
+        closeFilterPanel: Actions.closeFilterPanel,
+        toggleStatus: Actions.toggleStatus
+    }, dispatch);
+}
+
+function mapStateToProps({invoices})
+{
+    return {
+        filterState: invoices.bOpenedFilterPanel,
+        transactionStatus: invoices.transactionStatus
+    }
+}
+
+export default (withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(FilterPanel)));
