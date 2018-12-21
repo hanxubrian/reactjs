@@ -6,32 +6,32 @@ const chatDb = {
     contacts: [
         {
             'id'    : '5725a680b3249760ea21de52',
-            'name'  : 'Alice Freeman',
-            'avatar': 'assets/images/avatars/alice.jpg',
+            'name'  : 'Ted',
+            'avatar': 'assets/images/avatars/ted.png',
             'status': 'online',
             'mood'  : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
             'unread': '2'
         },
         {
             'id'    : '5725a680606588342058356d',
-            'name'  : 'Arnold',
-            'avatar': 'assets/images/avatars/Arnold.jpg',
+            'name'  : 'Elena',
+            'avatar': 'assets/images/avatars/elena.png',
             'status': 'do-not-disturb',
             'mood'  : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
             'unread': '3'
         },
         {
             'id'    : '5725a68009e20d0a9e9acf2a',
-            'name'  : 'Barrera',
-            'avatar': 'assets/images/avatars/Barrera.jpg',
+            'name'  : 'German',
+            'avatar': 'assets/images/avatars/german.png',
             'status': 'do-not-disturb',
             'mood'  : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
             'unread': '1'
         },
         {
             'id'    : '5725a6809fdd915739187ed5',
-            'name'  : 'Blair',
-            'avatar': 'assets/images/avatars/Blair.jpg',
+            'name'  : 'Kevin',
+            'avatar': 'assets/images/avatars/kevin.png',
             'status': 'offline',
             'mood'  : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...'
         }
