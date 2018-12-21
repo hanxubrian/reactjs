@@ -88,7 +88,7 @@ class InvoicePage extends Component {
         const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
         const keys=['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
 
-        let temp0 = this.props.invoices;
+        let temp0 = this.props.invoices.Data;
 
         temp1 = keys.map((key, index)=> {
 
@@ -291,7 +291,7 @@ function mapDispatchToProps(dispatch)
 function mapStateToProps({invoices})
 {
     return {
-        invoices: invoices.invoicesDB.Data,
+        invoices: invoices.invoicesDB,
         bLoadedInvoices: invoices.bLoadedInvoices,
         transactionStatus: invoices.transactionStatus
     }
