@@ -180,7 +180,7 @@ class InvoicePage extends Component {
         const { classes } = this.props;
         return (
 
-            <div className="flex relative">
+            <div className="flex relative" style={{overflowX:'hidden'}}>
                 <FilterPanel/>
                 <div className="flex-1 flex-col">
                     <TextField

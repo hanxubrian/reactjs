@@ -230,6 +230,7 @@ class SummaryPanel extends Component {
                                 </IconButton>
                             </Toolbar>
                         </AppBar>
+                        {summaryState && (
                         <Paper className="flex flex-1 flex-col min-h-px" style={{alignItems: 'center', flexDirection:'column'}}>
                             <Card className={classes.card} >
                                 <CardContent>
@@ -258,6 +259,7 @@ class SummaryPanel extends Component {
                                 </div>
                             </Card>
                         </Paper>
+                        )}
                     </div>
                 </ClickAwayListener>
             </div>
