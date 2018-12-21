@@ -42,9 +42,9 @@ const styles = theme => ({
 });
 
 class InvoicePage extends Component {
-    temp = [];
     state = {
-        s: ''
+        s: '',
+        temp: []
     };
 
     constructor(props){
@@ -52,12 +52,29 @@ class InvoicePage extends Component {
 
         if(!props.bLoadedInvoices)
             props.getInvoices();
+
+        this.escFunction = this.escFunction.bind(this);
     }
     componentWillMount(){
-        this.temp = this.props.invoices.Data;
-        console.log('temp=', this.temp)
+        this.setState({temp: this.props.invoices.Data});
+        console.log('temp=', this.state.temp)
     }
 
+    componentDidMount(){
+        document.addEventListener("keydown", this.escFunction, false);
+    }
+
+    componentWillUnmount(){
+        document.removeEventListener("keydown", this.escFunction, false);
+    }
+
+    escFunction(event){
+        if(event.keyCode === 27) {
+            this.setState({s: ''});
+            this.setState({temp:this.props.invoices.Data});
+            console.log('fired');
+        }
+    }
     search(val) {
         const temp = this.props.invoices.Data.filter( d => {
             return d.InvoiceId.toString().indexOf(val) !== -1 || !val ||
@@ -75,11 +92,12 @@ class InvoicePage extends Component {
                 d.TransactionStatus.toLowerCase().indexOf(val) !== -1
         });
 
-        this.temp = temp;
+        this.setState({temp: temp});
     }
 
     handleChange = prop => event => {
         this.setState({ [prop]: event.target.value });
+
         if(prop==='s') {
             console.log('sss=', event.target.value);
             this.search(event.target.value.toLowerCase());
@@ -107,7 +125,7 @@ class InvoicePage extends Component {
                 />
                 {this.props.invoices && (
                     <ReactTable
-                        data={this.temp}
+                        data={this.state.temp}
                         columns={[
                             {
                                 Header: "Invoice",
@@ -181,7 +199,7 @@ class InvoicePage extends Component {
                                 ]
                             }
                         ]}
-                        defaultPageSize={20}
+                        defaultPageSize={18}
                         className="-striped -highlight"
                     />
                 )}
