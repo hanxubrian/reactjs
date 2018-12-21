@@ -207,7 +207,8 @@ class SummaryPanel extends Component {
                     percentage: 2.05
                 }
             },
-        }
+        };
+
         return (
             <div className={classes.root}>
                 <ClickAwayListener onClickAway={() => summaryState && closeSummaryPanel()}>
@@ -230,7 +231,7 @@ class SummaryPanel extends Component {
                                 </IconButton>
                             </Toolbar>
                         </AppBar>
-                        {summaryState && (
+                        {summaryState && this.props.invoices && (
                         <Paper className="flex flex-1 flex-col min-h-px" style={{alignItems: 'center', flexDirection:'column'}}>
                             <Card className={classes.card} >
                                 <CardContent>

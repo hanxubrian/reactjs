@@ -1,4 +1,5 @@
-import * as Actions from "../actions/invoice.actions";
+import * as Actions from "../actions/";
+import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 
@@ -26,6 +27,12 @@ const invoices = function(state = initialState, action) {
         {
             return {
                 ...state, bOpenedSummaryPanel: true
+            }
+        }
+        case UserActions.USER_LOGGED_OUT:
+        {
+            return {
+                ...initialState
             }
         }
         case Actions.CLOSE_SUMMARY_PANEL:

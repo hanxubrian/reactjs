@@ -77,18 +77,17 @@ class InvoicePage extends Component {
         this.getInvoicesFromStatus(this.props.transactionStatus)
 
     }
-    componentWillUpdate(){
 
-    }
-
-    getInvoicesFromStatus =(newprops) =>{
+    getInvoicesFromStatus =(newprops, rawData=this.props.invoices) =>{
         let temp=[];
         let all_temp=[];
         let temp1=[];
         const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
         const keys=['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
 
-        let temp0 = this.props.invoices.Data;
+        if(rawData===null) return;
+
+        let temp0 = rawData.Data;
 
         temp1 = keys.map((key, index)=> {
 
@@ -126,6 +125,12 @@ class InvoicePage extends Component {
 
         if(bChanged)
             this.getInvoicesFromStatus(nextProps.transactionStatus);
+
+        if(nextProps.invoices){
+            console.log('loaded', this.props.bLoadedInvoices);
+            console.log('loaded', nextProps.invoices);
+            this.getInvoicesFromStatus(nextProps.transactionStatus, nextProps.invoices);
+        }
     }
 
     componentDidMount(){
@@ -156,7 +161,6 @@ class InvoicePage extends Component {
                 d.CustomerId.toString().indexOf(val) !== -1 ||
                 d.CustomerNo.toString().indexOf(val) !== -1 ||
                 d.TransactionStatusListId.toString().indexOf(val) !== -1
-            // d.TransactionStatus.toLowerCase().indexOf(val) !== -1
         });
 
         this.setState({temp: temp});
@@ -173,10 +177,6 @@ class InvoicePage extends Component {
 
     render()
     {
-        let data;
-        if(this.props.invoices){
-            data = this.props.invoices.Data;
-        }
         const { classes } = this.props;
         return (
 
@@ -269,7 +269,7 @@ class InvoicePage extends Component {
                                     ]
                                 }
                             ]}
-                            defaultPageSize={18}
+                            defaultPageSize={20}
                             className="-striped -highlight"
                         />
                     )}
