@@ -3,11 +3,11 @@ import {AppBar, Toolbar, Icon, IconButton, ClickAwayListener, Paper, Avatar, Typ
 import keycode from 'keycode';
 import PropTypes from 'prop-types';
 import {FuseAnimate} from '@fuse';
+
+
 //Material UI core
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import * as Actions from './../../../store/actions';
 import Widget8 from './widget8';
 
@@ -127,8 +127,7 @@ class SummaryPanel extends Component {
 
     render()
     {
-        const {classes, widgets,openSummaryPanel, closeSummaryPanel, summaryState} = this.props;
-        const { value } = this.state;
+        const {classes, openSummaryPanel, closeSummaryPanel, summaryState} = this.props;
 
         let widgets_data ={
             widget8: {

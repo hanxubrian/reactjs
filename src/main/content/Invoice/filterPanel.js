@@ -4,20 +4,17 @@ import keycode from 'keycode';
 
 //Material UI core
 import Switch from '@material-ui/core/Switch';
-import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 
-
 import * as Actions from './../../../store/actions';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import classNames from 'classnames';
-import FuseHighlight from "../../../@fuse/components/FuseHighlight/FuseHighlight";
 
 const styles = theme => ({
     root : {

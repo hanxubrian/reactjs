@@ -4,8 +4,6 @@ import _ from 'lodash';
 
 // core components
 import TextField from "@material-ui/core/TextField";
-import MenuItem from '@material-ui/core/MenuItem';
-
 
 
 import {bindActionCreators} from "redux";
@@ -29,7 +27,6 @@ const styles = theme => ({
     card: {
         width   : '100%',
         maxWidth: 384,
-        // background: '#424242'
     },
     progress: {
         margin: theme.spacing.unit * 2,
@@ -127,8 +124,6 @@ class InvoicePage extends Component {
             this.getInvoicesFromStatus(nextProps.transactionStatus);
 
         if(nextProps.invoices){
-            console.log('loaded', this.props.bLoadedInvoices);
-            console.log('loaded', nextProps.invoices);
             this.getInvoicesFromStatus(nextProps.transactionStatus, nextProps.invoices);
         }
     }
@@ -151,8 +146,6 @@ class InvoicePage extends Component {
         const temp = this.props.invoices.Data.filter( d => {
             return d.InvoiceId.toString().indexOf(val) !== -1 || !val ||
                 d.InvoiceNo.indexOf(val) !== -1 ||
-                // d.InvoiceDate.indexOf(val) !== -1 ||
-                // d.DueDate.indexOf(val) !== -1 ||
                 d.InvoiceAmount.toString().indexOf(val) !== -1 ||
                 d.InvoiceTotal.toString().indexOf(val) !== -1 ||
                 d.InvoiceTax.toString().indexOf(val) !== -1 ||
@@ -170,7 +163,6 @@ class InvoicePage extends Component {
         this.setState({ [prop]: event.target.value });
 
         if(prop==='s') {
-            console.log('sss=', event.target.value);
             this.search(event.target.value.toLowerCase());
         }
     };
