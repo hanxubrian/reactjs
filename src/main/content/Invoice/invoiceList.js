@@ -191,6 +191,9 @@ class InvoicePage extends Component {
         }
     };
 
+    toggleLeftSidebar = () => {
+    };
+
     render()
     {
         const { classes } = this.props;
@@ -202,14 +205,14 @@ class InvoicePage extends Component {
                 header={
                     <div className="flex flex-col flex-1">
                         <div className="flex items-center pl-12 lg:pl-24 p-24">
-                            <Hidden lgUp>
+                            {/*<Hidden lgUp>*/}
                                 <IconButton
                                     onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
                                     aria-label="open left sidebar"
                                 >
                                     <Icon>menu</Icon>
                                 </IconButton>
-                            </Hidden>
+                            {/*</Hidden>*/}
                             <div className="flex-1"><h4>Header</h4></div>
                         </div>
                     </div>
@@ -224,11 +227,9 @@ class InvoicePage extends Component {
                     <div className="p-24"><h4>Sidebar Header</h4></div>
                 }
                 leftSidebarContent={
-                    <div className="p-24">
-                        <h4>Sidebar Content</h4>
-                        <br/>
-                    </div>
+                    <FilterPanel/>
                 }
+                leftSidebarVariant="temporary"
                 rightSidebarHeader={
                     <div className="p-24"><h4>Sidebar Header</h4></div>
                 }

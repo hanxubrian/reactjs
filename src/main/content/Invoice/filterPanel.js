@@ -118,34 +118,14 @@ class FilterPanel extends Component {
         const {classes, openFilterPanel, closeFilterPanel, filterState} = this.props;
 
         return (
-            <div className={classes.root}>
+            <div>
                 {/*<ClickAwayListener onClickAway={() => filterState && closeFilterPanel()}>*/}
-                    <div className={classNames(classes.panel, {'opened': filterState}, "flex flex-col")}>
-                        <AppBar position="static" elevation={1}>
-                            <Toolbar className="pl-12 pr-8">
-                                <div className="flex flex-1 items-center">
-                                    {(filterState) && (
-                                        <React.Fragment>
-                                            <IconButton color="inherit" onClick={closeFilterPanel}>
-                                                <Icon className="text-24" >close</Icon>
-                                            </IconButton>
-
-                                        </React.Fragment>
-                                    )}
-                                    <h2 style={{marginRight: 10}}>Invoice Filter</h2>
-                                </div>
-                                {(!filterState) && (
-                                    <IconButton onClick={()=>openFilterPanel()} color="inherit">
-                                        <Icon>arrow_forward</Icon>
-                                    </IconButton>
-                                )}
-                            </Toolbar>
-                        </AppBar>
+                    <div className={classNames("flex flex-col")}>
                         {filterState && (
                             <Paper className="flex flex-1 flex-col min-h-px p-20">
                                 <div >
                                 <h3>Filter by Date</h3>
-                                <FormControl className={classes.formControl} style={{width: 250}}>
+                                <FormControl className={classes.formControl} style={{width: 200}}>
                                     <InputLabel htmlFor="age-simple">Invoice Date</InputLabel>
                                     <Select
                                         value={this.state.invoiceDate}
