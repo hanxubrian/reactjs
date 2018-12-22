@@ -198,7 +198,7 @@ class InvoicePage extends Component {
 
     render()
     {
-        const { classes,openFilterPanel, closeFilterPanel, toggleFilterPanel, filterState } = this.props;
+        const { classes,toggleFilterPanel, toggleSummaryPanel, filterState } = this.props;
         return (
             <FusePageCustom
                 classes={{
@@ -347,9 +347,8 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         getInvoices: Actions.getInvoices,
-        openFilterPanel: Actions.openFilterPanel,
-        closeFilterPanel: Actions.closeFilterPanel,
         toggleFilterPanel: Actions.toggleFilterPanel,
+        toggleSummaryPanel: Actions.toggleSummaryPanel,
     }, dispatch);
 }
 

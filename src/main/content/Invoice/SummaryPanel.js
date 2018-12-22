@@ -217,8 +217,6 @@ class SummaryPanel extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        openSummaryPanel: Actions.openSummaryPanel,
-        closeSummaryPanel: Actions.closeSummaryPanel,
     }, dispatch);
 }
 

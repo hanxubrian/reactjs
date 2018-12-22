@@ -1,8 +1,7 @@
 import axios from "axios";
 
 export const GET_ALL_INVOICES = "[INVOICES] GETS ALL";
-export const OPEN_SUMMARY_PANEL = "[INVOICES] OPEN SUMMARY PANEL";
-export const CLOSE_SUMMARY_PANEL = "[INVOICES] CLOSE SUMMARY PANEL";
+export const TOGGLE_SUMMARY_PANEL = "[INVOICES] TOGGLE SUMMARY PANEL";
 export const TOGGLE_FILTER_STATUS = "[INVOICES] TOGGLE FILTER STATUS";
 export const TOGGLE_FILTER_PANEL = "[INVOICES] TOGGLE FILTER PANEL";
 
@@ -19,21 +18,15 @@ export function getInvoices() {
     };
 }
 
-export function openSummaryPanel(){
-    return {
-        type: OPEN_SUMMARY_PANEL
-    }
-}
-export function closeSummaryPanel(){
-    return {
-        type: CLOSE_SUMMARY_PANEL
-    }
-}
-
-
 export function toggleFilterPanel(){
     return {
         type: TOGGLE_FILTER_PANEL
+    }
+}
+
+export function toggleSummaryPanel(){
+    return {
+        type: TOGGLE_SUMMARY_PANEL
     }
 }
 

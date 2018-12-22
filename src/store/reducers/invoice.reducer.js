@@ -23,33 +23,27 @@ const invoices = function(state = initialState, action) {
                 invoicesDB: action.payload, bLoadedInvoices: true
             };
         }
-        case Actions.OPEN_SUMMARY_PANEL:
-        {
-            return {
-                ...state, bOpenedSummaryPanel: true
-            }
-        }
-        case UserActions.USER_LOGGED_OUT:
-        {
-            return {
-                ...initialState
-            }
-        }
-        case Actions.CLOSE_SUMMARY_PANEL:
-        {
-            return {
-                ...state, bOpenedSummaryPanel: false
-            }
-        }
         case Actions.TOGGLE_FILTER_PANEL:
         {
             return {
                 ...state, bOpenedFilterPanel: !state.bOpenedFilterPanel
             }
         }
+        case Actions.TOGGLE_SUMMARY_PANEL:
+        {
+            return {
+                ...state, bOpenedSummaryPanel: !state.bOpenedSummaryPanel
+            }
+        }
         case Actions.TOGGLE_FILTER_STATUS:{
             return {
                 ...state, transactionStatus:{...state.transactionStatus,...action.payload}
+            }
+        }
+        case UserActions.USER_LOGGED_OUT:
+        {
+            return {
+                ...initialState
             }
         }
         default:
