@@ -186,7 +186,8 @@ class InvoicePage extends Component {
 
     toggleLeftSidebar = () => {
     };
-
+    toggleRightSidebar = () => {
+    };
     render()
     {
         const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState } = this.props;
@@ -201,24 +202,42 @@ class InvoicePage extends Component {
                 header={
                     <div className="flex flex-row flex-1 justify-between">
                         <div className="flex items-center pl-12 lg:pl-24 p-24">
-                            {/*<Hidden lgUp>*/}
-                            <IconButton
-                                onClick={(ev) => toggleFilterPanel()}
-                                aria-label="toggle filter panel"
-                            >
-                                <Icon>menu</Icon>
-                            </IconButton>
-                            {/*</Hidden>*/}
+                            <Hidden smDown>
+                                <IconButton
+                                    onClick={(ev) => toggleFilterPanel()}
+                                    aria-label="toggle filter panel"
+                                >
+                                    <Icon>menu</Icon>
+                                </IconButton>
+                            </Hidden>
+                            <Hidden smUp>
+                                <IconButton
+                                    onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
+                                    aria-label="toggle filter panel"
+                                >
+                                    <Icon>menu</Icon>
+                                </IconButton>
+                            </Hidden>
                             <div className="flex-1"><h4>Filter</h4></div>
                         </div>
                         <div className="flex items-center pr-12 lg:pr-24 p-24">
                             <div className="flex-1"><h4>Summary</h4></div>
-                            <IconButton
-                                onClick={(ev) => toggleSummaryPanel()}
-                                aria-label="toggle summary panel"
-                            >
-                                <Icon>menu</Icon>
-                            </IconButton>
+                            <Hidden smDown>
+                                <IconButton
+                                    onClick={(ev) => toggleSummaryPanel()}
+                                    aria-label="toggle summary panel"
+                                >
+                                    <Icon>menu</Icon>
+                                </IconButton>
+                            </Hidden>
+                            <Hidden smUp>
+                                <IconButton
+                                    onClick={(ev) => this.pageLayout.toggleRightSidebar()}
+                                    aria-label="toggle summary panel"
+                                >
+                                    <Icon>menu</Icon>
+                                </IconButton>
+                            </Hidden>
                         </div>
                     </div>
                 }
