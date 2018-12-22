@@ -30,7 +30,9 @@ const styles = theme => ({
         background    : "url('/assets/images/backgrounds/signin-bg.jpg') no-repeat",
         backgroundSize: 'cover'
     },
-    layoutRoot: {},
+    layoutRoot: {
+        flexDirection: 'row'
+    },
     card: {
         width   : '100%',
         maxWidth: 384,
@@ -203,7 +205,7 @@ class InvoicePage extends Component {
                     root: classes.layoutRoot
                 }}
                 header={
-                    <div className="flex flex-col flex-1">
+                    <div className="flex flex-row flex-1 justify-between">
                         <div className="flex items-center pl-12 lg:pl-24 p-24">
                             {/*<Hidden lgUp>*/}
                                 <IconButton
@@ -215,12 +217,108 @@ class InvoicePage extends Component {
                             {/*</Hidden>*/}
                             <div className="flex-1"><h4>Header</h4></div>
                         </div>
+                        <div className="flex items-center pr-12 lg:pr-24 p-24">
+                                <IconButton
+                                    onClick={(ev) => this.pageLayout.toggleRightSidebar()}
+                                    aria-label="open left sidebar"
+                                >
+                                    <Icon>menu</Icon>
+                                </IconButton>
+                        </div>
                     </div>
                 }
                 content={
-                    <div className="p-24">
-                        <h4>Content</h4>
-                        <br/>
+                    <div className="flex-1 flex-col">
+                        <TextField
+                            id="search-box"
+                            label="Search"
+                            className={classes.searchBox}
+                            value={this.state.s}
+                            onChange={this.handleChange('s')}
+                            margin="normal"
+                            style={{marginLeft: 20}}
+
+                        />
+                        {this.props.invoices && (
+                            <ReactTable
+                                data={this.state.temp}
+                                columns={[
+                                    {
+                                        Header: "Invoice",
+                                        columns: [
+                                            {
+                                                Header  : "No",
+                                                accessor: "InvoiceNo",
+                                                filterAll: true
+                                            },
+                                            {
+                                                Header  : "Id",
+                                                accessor: "InvoiceId"
+                                            },
+                                            {
+                                                Header  : "Date",
+                                                id: "InvoiceDate",
+                                                accessor: d=>moment(d.InvoiceDate).format('YYYY-MM-DD')
+                                            },
+                                            {
+                                                Header  : "Due Date",
+                                                id: "DueDate",
+                                                accessor: d=>moment(d.DueDate).format('YYYY-MM-DD')
+                                            },
+                                            {
+                                                Header  : "Amount",
+                                                accessor: "InvoiceAmount",
+                                            },
+                                            {
+                                                Header  : "Tax",
+                                                accessor: "InvoiceTax",
+                                            },
+                                            {
+                                                Header  : "Total",
+                                                accessor: "InvoiceTotal",
+                                            },
+                                            {
+                                                Header  : "Description",
+                                                accessor: "InvoiceDescription",
+                                            },
+                                        ]
+                                    },
+                                    {
+                                        Header: "Customer",
+                                        columns: [
+                                            {
+                                                Header  : "No",
+                                                accessor: "CustomerNo",
+                                            },
+                                            {
+                                                Header  : "Id",
+                                                accessor: "CustomerId",
+                                            },
+                                            {
+                                                Header  : "Name",
+                                                accessor: "CustomerName",
+                                            },
+                                        ]
+
+                                    },
+                                    {
+                                        Header: "Transaction Status",
+                                        columns:[
+                                            {
+                                                Header  : "List Id",
+                                                accessor: "TransactionStatusListId",
+                                            },
+                                            {
+                                                Header  : "Status",
+                                                accessor: "TransactionStatus",
+                                            },
+                                        ]
+                                    }
+                                ]}
+                                defaultPageSize={20}
+                                className="-striped -highlight"
+                            />
+                        )}
                     </div>
                 }
                 leftSidebarHeader={
@@ -239,6 +337,7 @@ class InvoicePage extends Component {
                         <br/>
                     </div>
                 }
+                rightSidebarVariant="temporary"
                 onRef={instance => {
                     this.pageLayout = instance;
                 }}
