@@ -92,39 +92,6 @@ class SummaryPanel extends Component {
         value: 0,
     };
 
-    componentDidMount()
-    {
-    }
-    handleChange = (event, value) => {
-        this.setState({ value });
-    };
-    componentDidUpdate(prevProps)
-    {
-        if ( this.props.state !== prevProps.state )
-        {
-            if ( this.props.state )
-            {
-                document.addEventListener("keydown", this.handleDocumentKeyDown);
-            }
-            else
-            {
-                document.removeEventListener('keydown', this.handleDocumentKeyDown);
-            }
-        }
-    }
-
-    componentWillUnmount()
-    {
-        document.removeEventListener('keydown', this.handleDocumentKeyDown);
-    }
-
-    handleDocumentKeyDown = event => {
-        if ( keycode(event) === 'esc' )
-        {
-            this.props.closeSummaryPanel();
-        }
-    };
-
     render()
     {
         const {classes, openSummaryPanel, closeSummaryPanel, summaryState} = this.props;
@@ -210,9 +177,8 @@ class SummaryPanel extends Component {
 
         return (
             <div>
-                <ClickAwayListener onClickAway={() => summaryState && closeSummaryPanel()}>
-                    <div className={classNames("flex flex-col p-16")}>
-                        {this.props.invoices && (
+                <div className={classNames("flex flex-col p-16")}>
+                    {this.props.invoices && (
                         <Paper className="flex flex-1 flex-col min-h-px" style={{alignItems: 'center', flexDirection:'column'}}>
                             <Card className={classes.card} >
                                 <CardContent>
@@ -227,7 +193,7 @@ class SummaryPanel extends Component {
                                 </CardContent>
                             </Card>
                             <Card className={classes.card} >
-                                 <div className="mb-32 w-full sm:w-1/2 md:w-full">
+                                <div className="mb-32 w-full sm:w-1/2 md:w-full">
 
                                     <FuseAnimate delay={600}>
                                         <div className="px-16 pb-8 text-18 font-300">
@@ -241,9 +207,8 @@ class SummaryPanel extends Component {
                                 </div>
                             </Card>
                         </Paper>
-                        )}
-                    </div>
-                </ClickAwayListener>
+                    )}
+                </div>
             </div>
         );
     }
