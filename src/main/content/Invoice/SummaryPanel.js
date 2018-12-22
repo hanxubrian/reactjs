@@ -179,7 +179,7 @@ class SummaryPanel extends Component {
             <div>
                 <div className={classNames("flex flex-col p-16")}>
                     {this.props.invoices && (
-                        <Paper className="flex flex-1 flex-col min-h-px" style={{alignItems: 'center', flexDirection:'column'}}>
+                        <Paper className="flex flex-1 flex-col min-h-px shadow-none" style={{alignItems: 'center', flexDirection:'column'}}>
                             <Card className={classes.card} >
                                 <CardContent>
                                     <h2>Sales</h2>
