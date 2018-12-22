@@ -198,7 +198,7 @@ class InvoicePage extends Component {
 
     render()
     {
-        const { classes,toggleFilterPanel, toggleSummaryPanel, filterState } = this.props;
+        const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState } = this.props;
         return (
             <FusePageCustom
                 classes={{
@@ -210,7 +210,7 @@ class InvoicePage extends Component {
                             {/*<Hidden lgUp>*/}
                             <IconButton
                                 onClick={(ev) => toggleFilterPanel()}
-                                aria-label="toggle filete panel"
+                                aria-label="toggle filter panel"
                             >
                                 <Icon>menu</Icon>
                             </IconButton>
@@ -220,8 +220,8 @@ class InvoicePage extends Component {
                         <div className="flex items-center pr-12 lg:pr-24 p-24">
                             <div className="flex-1"><h4>Summary</h4></div>
                             <IconButton
-                                onClick={(ev) => this.pageLayout.toggleRightSidebar()}
-                                aria-label="open left sidebar"
+                                onClick={(ev) => toggleSummaryPanel()}
+                                aria-label="toggle summary panel"
                             >
                                 <Icon>menu</Icon>
                             </IconButton>
@@ -323,16 +323,16 @@ class InvoicePage extends Component {
                     </div>
                 }
                 leftSidebarHeader={
-                    filterState? <div className="p-24"><h4>Filter Header</h4></div>: ''
+                    filterState ? <div className="p-24"><h4>Filter Header</h4></div>: ''
                 }
                 leftSidebarContent={
-                    filterState? <FilterPanel/>:''
+                    filterState ? <FilterPanel/>:''
                 }
                 rightSidebarHeader={
-                    <div className="p-24"><h4>Summary Header</h4></div>
+                    summaryState ? <div className="p-24"><h4>Summary Header</h4></div>:''
                 }
                 rightSidebarContent={
-                    <SummaryPanel/>
+                    summaryState ? <SummaryPanel/> : ''
                 }
                 onRef={instance => {
                     this.pageLayout = instance;
@@ -359,6 +359,7 @@ function mapStateToProps({invoices})
         bLoadedInvoices: invoices.bLoadedInvoices,
         transactionStatus: invoices.transactionStatus,
         filterState: invoices.bOpenedFilterPanel,
+        summaryState: invoices.bOpenedSummaryPanel,
     }
 }
 
