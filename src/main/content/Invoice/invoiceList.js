@@ -20,6 +20,7 @@ import FilterPanel from './filterPanel';
 
 import moment from 'moment'
 import checkboxHOC from "react-table/lib/hoc/selectTable";
+import classNames from 'classnames';
 
 const CheckboxTable = checkboxHOC(ReactTable);
 
@@ -40,18 +41,6 @@ const styles = theme => ({
     progress: {
         margin: theme.spacing.unit * 2,
     },
-    overlay:{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        backgroundColor: 'rgba(0,0,0, .6)',
-        zIndex: 1000,
-        alignItems: 'center',
-        justifyContent: 'center',
-        display: 'flex'
-    },
     layoutHeader       : {
         height   : headerHeight,
         minHeight: headerHeight
@@ -61,7 +50,9 @@ const styles = theme => ({
     },
     layoutSidebarHeader: {
         height   : headerHeight,
-        minHeight: headerHeight
+        minHeight: headerHeight,
+        display: 'flex',
+        alignItems: 'center'
     },
     addButton          : {
         position: 'absolute',
@@ -326,13 +317,13 @@ class InvoicePage extends Component {
                     </div>
                 }
                 leftSidebarHeader={
-                    filterState ? <div className="p-24"><h4>Filter Header</h4></div>: ''
+                    filterState ? <div className="p-24"><h4>Filter Panel</h4></div>: ''
                 }
                 leftSidebarContent={
                     filterState ? <FilterPanel/>:''
                 }
                 rightSidebarHeader={
-                    summaryState ? <div className="p-24"><h4>Summary Header</h4></div>:''
+                    summaryState ? <div className="p-24"><h4>Summary Panel</h4></div>:''
                 }
                 rightSidebarContent={
                     summaryState ? <SummaryPanel/> : ''
