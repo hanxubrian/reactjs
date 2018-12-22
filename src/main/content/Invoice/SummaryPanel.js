@@ -94,7 +94,7 @@ class SummaryPanel extends Component {
 
     render()
     {
-        const {classes, openSummaryPanel, closeSummaryPanel, summaryState} = this.props;
+        const {classes} = this.props;
 
         let widgets_data ={
             widget8: {
@@ -223,7 +223,6 @@ function mapDispatchToProps(dispatch)
 function mapStateToProps({invoices})
 {
     return {
-        summaryState: invoices.bOpenedSummaryPanel,
         invoices: invoices.invoicesDB
     }
 }

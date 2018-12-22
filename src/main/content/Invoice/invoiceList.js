@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 // core components
 import TextField from "@material-ui/core/TextField";
-import {Hidden, Icon, IconButton} from '@material-ui/core';
+import {Hidden, Icon, IconButton, Fab} from '@material-ui/core';
 
 // theme components
 import {FusePageCustom, FuseAnimate} from '@fuse';
@@ -200,44 +200,53 @@ class InvoicePage extends Component {
                     header: classes.layoutHeader
                 }}
                 header={
-                    <div className="flex flex-row flex-1 justify-between">
-                        <div className="flex items-center pl-12 lg:pl-24 p-24">
-                            <Hidden smDown>
-                                <IconButton
-                                    onClick={(ev) => toggleFilterPanel()}
-                                    aria-label="toggle filter panel"
-                                >
-                                    <Icon>menu</Icon>
-                                </IconButton>
-                            </Hidden>
-                            <Hidden smUp>
-                                <IconButton
-                                    onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
-                                    aria-label="toggle filter panel"
-                                >
-                                    <Icon>menu</Icon>
-                                </IconButton>
-                            </Hidden>
-                            <div className="flex-1"><h4>Filter</h4></div>
+                    <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
+                        <div className="flex flex-row flex-1 justify-between">
+                            <div className="flex items-center pl-12 lg:pl-24 p-24">
+                                <Hidden smDown>
+                                    <IconButton
+                                        onClick={(ev) => toggleFilterPanel()}
+                                        aria-label="toggle filter panel"
+                                    >
+                                        <Icon>menu</Icon>
+                                    </IconButton>
+                                </Hidden>
+                                <Hidden smUp>
+                                    <IconButton
+                                        onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
+                                        aria-label="toggle filter panel"
+                                    >
+                                        <Icon>menu</Icon>
+                                    </IconButton>
+                                </Hidden>
+                                <div className="flex-1"><h4>Filter</h4></div>
+                            </div>
+                            <div className="flex items-center pr-12 lg:pr-24 p-24">
+                                <div className="flex-1"><h4>Summary</h4></div>
+                                <Hidden smDown>
+                                    <IconButton
+                                        onClick={(ev) => toggleSummaryPanel()}
+                                        aria-label="toggle summary panel"
+                                    >
+                                        <Icon>menu</Icon>
+                                    </IconButton>
+                                </Hidden>
+                                <Hidden smUp>
+                                    <IconButton
+                                        onClick={(ev) => this.pageLayout.toggleRightSidebar()}
+                                        aria-label="toggle summary panel"
+                                    >
+                                        <Icon>menu</Icon>
+                                    </IconButton>
+                                </Hidden>
+                            </div>
                         </div>
-                        <div className="flex items-center pr-12 lg:pr-24 p-24">
-                            <div className="flex-1"><h4>Summary</h4></div>
-                            <Hidden smDown>
-                                <IconButton
-                                    onClick={(ev) => toggleSummaryPanel()}
-                                    aria-label="toggle summary panel"
-                                >
-                                    <Icon>menu</Icon>
-                                </IconButton>
-                            </Hidden>
-                            <Hidden smUp>
-                                <IconButton
-                                    onClick={(ev) => this.pageLayout.toggleRightSidebar()}
-                                    aria-label="toggle summary panel"
-                                >
-                                    <Icon>menu</Icon>
-                                </IconButton>
-                            </Hidden>
+                        <div className="flex flex-none items-end">
+                            <FuseAnimate animation="transition.expandIn" delay={600}>
+                                <Fab color="secondary" aria-label="add" className={classes.addButton}>
+                                    <Icon>add</Icon>
+                                </Fab>
+                            </FuseAnimate>
                         </div>
                     </div>
                 }
