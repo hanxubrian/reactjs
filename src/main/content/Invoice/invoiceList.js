@@ -4,6 +4,10 @@ import _ from 'lodash';
 
 // core components
 import TextField from "@material-ui/core/TextField";
+import {Hidden, Icon, IconButton} from '@material-ui/core';
+
+// theme components
+import {FusePageSimple, FuseAnimate} from '@fuse';
 
 
 import {bindActionCreators} from "redux";
@@ -19,11 +23,14 @@ import checkboxHOC from "react-table/lib/hoc/selectTable";
 
 const CheckboxTable = checkboxHOC(ReactTable);
 
+const headerHeight = 160;
+
 const styles = theme => ({
     root: {
         background    : "url('/assets/images/backgrounds/signin-bg.jpg') no-repeat",
         backgroundSize: 'cover'
     },
+    layoutRoot: {},
     card: {
         width   : '100%',
         maxWidth: 384,
@@ -42,6 +49,23 @@ const styles = theme => ({
         alignItems: 'center',
         justifyContent: 'center',
         display: 'flex'
+    },
+    layoutHeader       : {
+        height   : headerHeight,
+        minHeight: headerHeight
+    },
+    layoutRightSidebar : {
+        width: 320
+    },
+    layoutSidebarHeader: {
+        height   : headerHeight,
+        minHeight: headerHeight
+    },
+    addButton          : {
+        position: 'absolute',
+        bottom  : -28,
+        left    : 16,
+        zIndex  : 999
     }
 });
 
@@ -171,104 +195,54 @@ class InvoicePage extends Component {
     {
         const { classes } = this.props;
         return (
-
-            <div className="flex relative" style={{overflowX:'hidden'}}>
-                <FilterPanel/>
-                <div className="flex-1 flex-col">
-                    <TextField
-                        id="search-box"
-                        label="Search"
-                        className={classes.searchBox}
-                        value={this.state.s}
-                        onChange={this.handleChange('s')}
-                        margin="normal"
-                        style={{marginLeft: 20}}
-
-                    />
-                    {this.props.invoices && (
-                        <ReactTable
-                            data={this.state.temp}
-                            columns={[
-                                {
-                                    Header: "Invoice",
-                                    columns: [
-                                        {
-                                            Header  : "No",
-                                            accessor: "InvoiceNo",
-                                            filterAll: true
-                                        },
-                                        {
-                                            Header  : "Id",
-                                            accessor: "InvoiceId"
-                                        },
-                                        {
-                                            Header  : "Date",
-                                            id: "InvoiceDate",
-                                            accessor: d=>moment(d.InvoiceDate).format('YYYY-MM-DD')
-                                        },
-                                        {
-                                            Header  : "Due Date",
-                                            id: "DueDate",
-                                            accessor: d=>moment(d.DueDate).format('YYYY-MM-DD')
-                                        },
-                                        {
-                                            Header  : "Amount",
-                                            accessor: "InvoiceAmount",
-                                        },
-                                        {
-                                            Header  : "Tax",
-                                            accessor: "InvoiceTax",
-                                        },
-                                        {
-                                            Header  : "Total",
-                                            accessor: "InvoiceTotal",
-                                        },
-                                        {
-                                            Header  : "Description",
-                                            accessor: "InvoiceDescription",
-                                        },
-                                    ]
-                                },
-                                {
-                                    Header: "Customer",
-                                    columns: [
-                                        {
-                                            Header  : "No",
-                                            accessor: "CustomerNo",
-                                        },
-                                        {
-                                            Header  : "Id",
-                                            accessor: "CustomerId",
-                                        },
-                                        {
-                                            Header  : "Name",
-                                            accessor: "CustomerName",
-                                        },
-                                    ]
-
-                                },
-                                {
-                                    Header: "Transaction Status",
-                                    columns:[
-                                        {
-                                            Header  : "List Id",
-                                            accessor: "TransactionStatusListId",
-                                        },
-                                        {
-                                            Header  : "Status",
-                                            accessor: "TransactionStatus",
-                                        },
-                                    ]
-                                }
-                            ]}
-                            defaultPageSize={20}
-                            className="-striped -highlight"
-                        />
-                    )}
-                </div>
-                <SummaryPanel/>
-
-            </div>
+            <FusePageSimple
+                classes={{
+                    root: classes.layoutRoot
+                }}
+                header={
+                    <div className="flex flex-col flex-1">
+                        <div className="flex items-center pl-12 lg:pl-24 p-24">
+                            <Hidden lgUp>
+                                <IconButton
+                                    onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
+                                    aria-label="open left sidebar"
+                                >
+                                    <Icon>menu</Icon>
+                                </IconButton>
+                            </Hidden>
+                            <div className="flex-1"><h4>Header</h4></div>
+                        </div>
+                    </div>
+                }
+                content={
+                    <div className="p-24">
+                        <h4>Content</h4>
+                        <br/>
+                    </div>
+                }
+                leftSidebarHeader={
+                    <div className="p-24"><h4>Sidebar Header</h4></div>
+                }
+                leftSidebarContent={
+                    <div className="p-24">
+                        <h4>Sidebar Content</h4>
+                        <br/>
+                    </div>
+                }
+                rightSidebarHeader={
+                    <div className="p-24"><h4>Sidebar Header</h4></div>
+                }
+                rightSidebarContent={
+                    <div className="p-24">
+                        <h4>Sidebar Content</h4>
+                        <br/>
+                    </div>
+                }
+                onRef={instance => {
+                    this.pageLayout = instance;
+                }}
+            >
+            </FusePageSimple>
         );
     }
 }
