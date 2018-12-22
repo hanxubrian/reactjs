@@ -209,28 +209,10 @@ class SummaryPanel extends Component {
         };
 
         return (
-            <div className={classes.root}>
+            <div>
                 <ClickAwayListener onClickAway={() => summaryState && closeSummaryPanel()}>
-                    <div className={classNames(classes.panel, {'opened': summaryState}, "flex flex-col")}>
-                        <AppBar position="static" elevation={1}>
-                            <Toolbar className="pl-12 pr-8">
-                                <div className="flex flex-1 items-center" style={{marginLeft: "-1rem"}}>
-                                    {(!summaryState) && (
-                                        <React.Fragment>
-                                            <IconButton color="inherit" onClick={openSummaryPanel}>
-                                                <Icon className="text-24" >filter</Icon>
-                                            </IconButton>
-
-                                        </React.Fragment>
-                                    )}
-                                </div>
-                                <h2 style={{marginRight: 10}}>Invoice Summary</h2>
-                                <IconButton onClick={()=>closeSummaryPanel()} color="inherit">
-                                    <Icon>close</Icon>
-                                </IconButton>
-                            </Toolbar>
-                        </AppBar>
-                        {summaryState && this.props.invoices && (
+                    <div className={classNames("flex flex-col p-16")}>
+                        {this.props.invoices && (
                         <Paper className="flex flex-1 flex-col min-h-px" style={{alignItems: 'center', flexDirection:'column'}}>
                             <Card className={classes.card} >
                                 <CardContent>

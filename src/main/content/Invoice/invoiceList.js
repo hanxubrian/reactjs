@@ -208,22 +208,23 @@ class InvoicePage extends Component {
                     <div className="flex flex-row flex-1 justify-between">
                         <div className="flex items-center pl-12 lg:pl-24 p-24">
                             {/*<Hidden lgUp>*/}
-                                <IconButton
-                                    onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
-                                    aria-label="open left sidebar"
-                                >
-                                    <Icon>menu</Icon>
-                                </IconButton>
+                            <IconButton
+                                onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
+                                aria-label="open left sidebar"
+                            >
+                                <Icon>menu</Icon>
+                            </IconButton>
                             {/*</Hidden>*/}
-                            <div className="flex-1"><h4>Header</h4></div>
+                            <div className="flex-1"><h4>Filter</h4></div>
                         </div>
                         <div className="flex items-center pr-12 lg:pr-24 p-24">
-                                <IconButton
-                                    onClick={(ev) => this.pageLayout.toggleRightSidebar()}
-                                    aria-label="open left sidebar"
-                                >
-                                    <Icon>menu</Icon>
-                                </IconButton>
+                            <div className="flex-1"><h4>Summary</h4></div>
+                            <IconButton
+                                onClick={(ev) => this.pageLayout.toggleRightSidebar()}
+                                aria-label="open left sidebar"
+                            >
+                                <Icon>menu</Icon>
+                            </IconButton>
                         </div>
                     </div>
                 }
@@ -332,10 +333,7 @@ class InvoicePage extends Component {
                     <div className="p-24"><h4>Sidebar Header</h4></div>
                 }
                 rightSidebarContent={
-                    <div className="p-24">
-                        <h4>Sidebar Content</h4>
-                        <br/>
-                    </div>
+                    <SummaryPanel/>
                 }
                 rightSidebarVariant="temporary"
                 onRef={instance => {
