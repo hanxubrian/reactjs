@@ -4,27 +4,26 @@ import keycode from 'keycode';
 
 //Material UI core
 import Switch from '@material-ui/core/Switch';
+import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 
+
 import * as Actions from './../../../store/actions';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import classNames from 'classnames';
+import FuseHighlight from "../../../@fuse/components/FuseHighlight/FuseHighlight";
 
 const styles = theme => ({
     root : {
-        width                         : 50,
-        maxWidth                      : 50,
-        minWidth                      : 50,
-        [theme.breakpoints.down('md')]: {
-            width   : 0,
-            maxWidth: 0,
-            minWidth: 0
+        display: 'none',
+        '&.open':{
+            display: 'block'
         }
     },
     panel: {
@@ -118,112 +117,110 @@ class FilterPanel extends Component {
         const {classes, openFilterPanel, closeFilterPanel, filterState} = this.props;
 
         return (
-            <div>
-                {/*<ClickAwayListener onClickAway={() => filterState && closeFilterPanel()}>*/}
-                    <div className={classNames("flex flex-col")}>
-                        {filterState && (
-                            <Paper className="flex flex-1 flex-col min-h-px p-20">
-                                <div >
-                                <h3>Filter by Date</h3>
-                                <FormControl className={classes.formControl} style={{width: 200}}>
-                                    <InputLabel htmlFor="age-simple">Invoice Date</InputLabel>
-                                    <Select
-                                        value={this.state.invoiceDate}
-                                        onChange={this.handleChange1}
-                                        inputProps={{
-                                            name: 'invoiceDate',
-                                            id  : 'invoice_date'
-                                        }}
-                                    >
-                                        <MenuItem value="">
-                                            <em>None</em>
-                                        </MenuItem>
-                                        <MenuItem value={1}>This Week</MenuItem>
-                                        <MenuItem value={2}>This Week-to-date</MenuItem>
-                                        <MenuItem value={3}>This Month</MenuItem>
-                                        <MenuItem value={4}>This Month-to-date</MenuItem>
-                                        <MenuItem value={5}>This Quarter</MenuItem>
-                                        <MenuItem value={6}>This Quarter-to-Date</MenuItem>
-                                        <MenuItem value={7}>This Fiscal Year</MenuItem>
-                                        <MenuItem value={8}>This Fiscal Year-to-date</MenuItem>
-                                        <MenuItem value={9}>Today</MenuItem>
-                                        <MenuItem value={10}>Yesterday</MenuItem>
-                                        <MenuItem value={11}>This Month</MenuItem>
-                                        <MenuItem value={12}>Last Quarter</MenuItem>
-                                        <MenuItem value={13}>Last Year</MenuItem>
-                                        <MenuItem value={14}>Custom Date</MenuItem>
-                                        <MenuItem value={15}>Period</MenuItem>
-                                    </Select>
-                                </FormControl>
-                                </div>
+            <div className={classNames(classes.root, {'open': filterState})}>
+            {/*<ClickAwayListener onClickAway={() => filterState && closeFilterPanel()}>*/}
+                <div className={classNames("flex flex-col")}>
+                <Paper className="flex flex-1 flex-col min-h-px p-20">
+                <div >
+                <h3>Filter by Date</h3>
+                <FormControl className={classes.formControl} style={{width: 200}}>
+                <InputLabel htmlFor="age-simple">Invoice Date</InputLabel>
+                <Select
+                value={this.state.invoiceDate}
+                onChange={this.handleChange1}
+                inputProps={{
+                    name: 'invoiceDate',
+                    id  : 'invoice_date'
+                }}
+                >
+                <MenuItem value="">
+                <em>None</em>
+                </MenuItem>
+                <MenuItem value={1}>This Week</MenuItem>
+                <MenuItem value={2}>This Week-to-date</MenuItem>
+                <MenuItem value={3}>This Month</MenuItem>
+                <MenuItem value={4}>This Month-to-date</MenuItem>
+                <MenuItem value={5}>This Quarter</MenuItem>
+                <MenuItem value={6}>This Quarter-to-Date</MenuItem>
+                <MenuItem value={7}>This Fiscal Year</MenuItem>
+                <MenuItem value={8}>This Fiscal Year-to-date</MenuItem>
+                <MenuItem value={9}>Today</MenuItem>
+                <MenuItem value={10}>Yesterday</MenuItem>
+                <MenuItem value={11}>This Month</MenuItem>
+                <MenuItem value={12}>Last Quarter</MenuItem>
+                <MenuItem value={13}>Last Year</MenuItem>
+                <MenuItem value={14}>Custom Date</MenuItem>
+                <MenuItem value={15}>Period</MenuItem>
+                </Select>
+                </FormControl>
+                </div>
 
-                                <div style={{marginTop: 50, display: 'flex', flexDirection: 'column'}}>
-                                <h3>Transaction Statuses</h3>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={this.state.checkedPaid}
-                                            onChange={this.handleChange('checkedPaid')}
-                                            value="checkedPaid"
-                                        />
-                                    }
-                                    label="Paid"
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={this.state.checkedPP}
-                                            onChange={this.handleChange('checkedPP')}
-                                            value="checkedPP"
-                                        />
-                                    }
-                                    label="Paid Partial"
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={this.state.checkedComplete}
-                                            onChange={this.handleChange('checkedComplete')}
-                                            value="checkedComplete"
-                                        />
-                                    }
-                                    label="Completed"
-                                />
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={this.state.checkedOpen}
-                                            onChange={this.handleChange('checkedOpen')}
-                                            value="checkedOpen"
-                                        />
-                                    }
-                                    label="Open"
-                                />
-                                </div>
-                            </Paper>
-                        )}
-                    </div>
-                {/*</ClickAwayListener>*/}
-            </div>
-        );
-    }
+                <div style={{marginTop: 50, display: 'flex', flexDirection: 'column'}}>
+                <h3>Transaction Statuses</h3>
+                <FormControlLabel
+                control={
+                    <Switch
+                        checked={this.state.checkedPaid}
+                        onChange={this.handleChange('checkedPaid')}
+                        value="checkedPaid"
+                    />
+                }
+                label="Paid"
+                />
+                <FormControlLabel
+                control={
+                    <Switch
+                        checked={this.state.checkedPP}
+                        onChange={this.handleChange('checkedPP')}
+                        value="checkedPP"
+                    />
+                }
+                label="Paid Partial"
+                />
+                <FormControlLabel
+                control={
+                    <Switch
+                        checked={this.state.checkedComplete}
+                        onChange={this.handleChange('checkedComplete')}
+                        value="checkedComplete"
+                    />
+                }
+                label="Completed"
+                />
+                <FormControlLabel
+                control={
+                    <Switch
+                        checked={this.state.checkedOpen}
+                        onChange={this.handleChange('checkedOpen')}
+                        value="checkedOpen"
+                    />
+                }
+                label="Open"
+                />
+                </div>
+                </Paper>
+                </div>
+            {/*</ClickAwayListener>*/}
+                </div>
+                );
+            }
 }
 
-function mapDispatchToProps(dispatch)
-{
-    return bindActionCreators({
+    function mapDispatchToProps(dispatch)
+    {
+        return bindActionCreators({
         openFilterPanel: Actions.openFilterPanel,
         closeFilterPanel: Actions.closeFilterPanel,
         toggleStatus: Actions.toggleStatus
     }, dispatch);
-}
+    }
 
-function mapStateToProps({invoices})
-{
-    return {
+    function mapStateToProps({invoices})
+    {
+        return {
         filterState: invoices.bOpenedFilterPanel,
         transactionStatus: invoices.transactionStatus
     }
-}
+    }
 
-export default (withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(FilterPanel)));
+    export default (withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(FilterPanel)));

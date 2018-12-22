@@ -47,6 +47,12 @@ const invoices = function(state = initialState, action) {
                 ...state, bOpenedFilterPanel: true
             }
         }
+        case Actions.TOGGLE_FILTER_PANEL:
+        {
+            return {
+                ...state, bOpenedFilterPanel: !state.bOpenedFilterPanel
+            }
+        }
         case Actions.CLOSE_FILTER_PANEL:
         {
             return {

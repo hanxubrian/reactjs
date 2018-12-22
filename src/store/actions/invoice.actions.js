@@ -6,6 +6,7 @@ export const CLOSE_SUMMARY_PANEL = "[INVOICES] CLOSE SUMMARY PANEL";
 export const OPEN_FILTER_PANEL = "[INVOICES] OPEN FILTER PANEL";
 export const CLOSE_FILTER_PANEL = "[INVOICES] CLOSE FILTER PANEL";
 export const TOGGLE_FILTER_STATUS = "[INVOICES] TOGGLE FILTER STATUS";
+export const TOGGLE_FILTER_PANEL = "[INVOICES] TOGGLE FILTER PANEL";
 
 export function getInvoices() {
     return dispatch => {
@@ -34,6 +35,12 @@ export function closeSummaryPanel(){
 export function openFilterPanel(){
     return {
         type: OPEN_FILTER_PANEL
+    }
+}
+
+export function toggleFilterPanel(){
+    return {
+        type: TOGGLE_FILTER_PANEL
     }
 }
 export function closeFilterPanel(){

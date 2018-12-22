@@ -7,7 +7,7 @@ import TextField from "@material-ui/core/TextField";
 import {Hidden, Icon, IconButton} from '@material-ui/core';
 
 // theme components
-import {FusePageSimple, FuseAnimate} from '@fuse';
+import {FusePageCustom, FuseAnimate} from '@fuse';
 
 
 import {bindActionCreators} from "redux";
@@ -198,9 +198,9 @@ class InvoicePage extends Component {
 
     render()
     {
-        const { classes } = this.props;
+        const { classes,openFilterPanel, closeFilterPanel, toggleFilterPanel, filterState } = this.props;
         return (
-            <FusePageSimple
+            <FusePageCustom
                 classes={{
                     root: classes.layoutRoot
                 }}
@@ -209,8 +209,8 @@ class InvoicePage extends Component {
                         <div className="flex items-center pl-12 lg:pl-24 p-24">
                             {/*<Hidden lgUp>*/}
                             <IconButton
-                                onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
-                                aria-label="open left sidebar"
+                                onClick={(ev) => toggleFilterPanel()}
+                                aria-label="toggle filete panel"
                             >
                                 <Icon>menu</Icon>
                             </IconButton>
@@ -323,24 +323,22 @@ class InvoicePage extends Component {
                     </div>
                 }
                 leftSidebarHeader={
-                    <div className="p-24"><h4>Sidebar Header</h4></div>
+                    filterState? <div className="p-24"><h4>Filter Header</h4></div>: ''
                 }
                 leftSidebarContent={
-                    <FilterPanel/>
+                    filterState? <FilterPanel/>:''
                 }
-                leftSidebarVariant="temporary"
                 rightSidebarHeader={
-                    <div className="p-24"><h4>Sidebar Header</h4></div>
+                    <div className="p-24"><h4>Summary Header</h4></div>
                 }
                 rightSidebarContent={
                     <SummaryPanel/>
                 }
-                rightSidebarVariant="temporary"
                 onRef={instance => {
                     this.pageLayout = instance;
                 }}
             >
-            </FusePageSimple>
+            </FusePageCustom>
         );
     }
 }
@@ -349,6 +347,9 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         getInvoices: Actions.getInvoices,
+        openFilterPanel: Actions.openFilterPanel,
+        closeFilterPanel: Actions.closeFilterPanel,
+        toggleFilterPanel: Actions.toggleFilterPanel,
     }, dispatch);
 }
 
@@ -357,7 +358,8 @@ function mapStateToProps({invoices})
     return {
         invoices: invoices.invoicesDB,
         bLoadedInvoices: invoices.bLoadedInvoices,
-        transactionStatus: invoices.transactionStatus
+        transactionStatus: invoices.transactionStatus,
+        filterState: invoices.bOpenedFilterPanel,
     }
 }
 
