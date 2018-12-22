@@ -23,7 +23,7 @@ import checkboxHOC from "react-table/lib/hoc/selectTable";
 
 const CheckboxTable = checkboxHOC(ReactTable);
 
-const headerHeight = 160;
+const headerHeight = 100;
 
 const styles = theme => ({
     root: {
@@ -57,7 +57,7 @@ const styles = theme => ({
         minHeight: headerHeight
     },
     layoutRightSidebar : {
-        width: 320
+        width: 300
     },
     layoutSidebarHeader: {
         height   : headerHeight,
@@ -202,7 +202,10 @@ class InvoicePage extends Component {
         return (
             <FusePageCustom
                 classes={{
-                    root: classes.layoutRoot
+                    root: classes.layoutRoot,
+                    rightSidebar : classes.layoutRightSidebar,
+                    sidebarHeader: classes.layoutSidebarHeader,
+                    header: classes.layoutHeader
                 }}
                 header={
                     <div className="flex flex-row flex-1 justify-between">
