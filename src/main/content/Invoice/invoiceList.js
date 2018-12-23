@@ -304,6 +304,7 @@ class InvoicePage extends Component {
         }
         if (window.confirm("Do you really want to remove the selected invoice(s)")) {
             this.props.deleteInvoicesAction(this.state.selection, this.props.invoices);
+            this.setState({selection: [], selectAll: false})
         }
     };
 
