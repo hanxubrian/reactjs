@@ -302,7 +302,9 @@ class InvoicePage extends Component {
             alert("Please choose invoice(s) to delete");
             return;
         }
-        this.props.deleteInvoicesAction(this.state.selection, this.props.invoices);
+        if (window.confirm("Do you really want to remove the selected invoice(s)")) {
+            this.props.deleteInvoicesAction(this.state.selection, this.props.invoices);
+        }
     };
 
     render()
