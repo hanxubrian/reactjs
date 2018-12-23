@@ -121,9 +121,9 @@ class FilterPanel extends Component {
                 <div className={classNames("flex flex-col")}>
                     <Paper className="flex flex-1 flex-col min-h-px p-20">
                         <div >
-                            <h3>Filter by Date</h3>
+                            <h3 className="mb-20">Filter by Date</h3>
                             <FormControl className={classes.formControl} style={{width: 200}}>
-                                <InputLabel htmlFor="age-simple">Invoice Date</InputLabel>
+                                {/*<InputLabel htmlFor="age-simple">Invoice Date</InputLabel>*/}
                                 <Select
                                     value={this.state.invoiceDate}
                                     onChange={this.handleChange1}

@@ -203,7 +203,7 @@ class InvoicePage extends Component {
                 header={
                     <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
                         <div className="flex flex-row flex-1 justify-between">
-                            <div className="flex items-center pl-12 lg:pl-24 p-24">
+                            <div className="flex items-center pl-0 lg:pl-0 p-24">
                                 <Hidden smDown>
                                     <IconButton
                                         onClick={(ev) => toggleFilterPanel()}
@@ -222,7 +222,7 @@ class InvoicePage extends Component {
                                 </Hidden>
                                 <div className="flex-1"><h4>Filter</h4></div>
                             </div>
-                            <div className="flex items-center pr-12 lg:pr-24 p-24">
+                            <div className="flex items-center pr-0 lg:pr-0 p-24">
                                 <div className="flex-1"><h4>Summary</h4></div>
                                 <Hidden smDown>
                                     <IconButton
@@ -341,6 +341,7 @@ class InvoicePage extends Component {
                                 ]}
                                 defaultPageSize={20}
                                 className="-striped -highlight"
+                                style={{fontSize: 12}}
                             />
                         )}
                     </div>
