@@ -78,6 +78,12 @@ const styles = theme => ({
         height         : '100%',
         backgroundColor: theme.palette.divider
     },
+    search: {
+        width: 360,
+        [theme.breakpoints.down('sm')]: {
+            width: '100%'
+        }
+    }
 });
 const defaultProps = {
     trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
@@ -248,183 +254,18 @@ class InvoicePage extends Component {
                                 </Hidden>
                                 {/*<div className="flex-1"><h4>Filter</h4></div>*/}
                             </div>
-                            <div className="flex items-center pr-0 lg:pr-0 p-24">
+                            <div className="flex items-center pr-0 lg:pr-12 p-24">
                                 {/*<div className="flex-1"><h4>Summary</h4></div>*/}
                                 {/*<FuseSearch/>*/}
-                                <Paper className={"flex items-center h-44 w-full"} elevation={1}>
+                                <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
                                     <Input
                                         placeholder="Search..."
-                                        className=
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                            "pl-16"
+                                        className={classNames(classes.search, 'pl-16')}
+                                        // className="pl-16"
                                         disableUnderline
                                         fullWidth
+                                        value={this.state.s}
+                                        onChange={this.handleChange('s')}
                                         inputProps={{
                                             'aria-label': 'Search'
                                         }}
@@ -436,6 +277,7 @@ class InvoicePage extends Component {
                                     <IconButton
                                         onClick={(ev) => toggleSummaryPanel()}
                                         aria-label="toggle summary panel"
+                                        className="pr-0"
                                     >
                                         { !summaryState && (
                                             <Icon>insert_chart</Icon>
@@ -466,19 +308,64 @@ class InvoicePage extends Component {
                 }
                 content={
                     <div className="flex-1 flex-col">
-                        <TextField
-                            id="search-box"
-                            label="Search"
-                            className={classes.searchBox}
-                            value={this.state.s}
-                            onChange={this.handleChange('s')}
-                            margin="normal"
-                            style={{marginLeft: 20}}
-
-                        />
                         {this.props.invoices && (
                             <ReactTable
                                 data={this.state.temp}
+                                getTheadGroupProps={(state, rowInfo, column, instance) =>{
+                                    return {
+                                        style:{
+                                            padding: "10px 10px",
+                                            fontSize: 14,
+                                            fontWeight: 700
+                                        }
+                                    }
+                                }}
+                                getTheadThProps={(state, rowInfo, column, instance) =>{
+                                    let width=80;
+                                    if (column.id==='InvoiceDescription') width= 250;
+                                    if (column.id==='CustomerName') width= 190;
+                                    return {
+                                        style:{
+                                            minWidth: width,
+                                            width: width
+                                        }
+                                    }
+                                }}
+                                getTheadProps={(state, rowInfo, column, instance) =>{
+                                    return {
+                                        style:{
+                                            padding: "10px 10px",
+                                            fontSize: 13,
+                                        }
+                                    }
+                                }}
+                                getTrProps={(state, rowInfo, column, instance) =>{
+                                    return {
+                                        style:{
+                                            padding: "8px 10px",
+                                            fontSize: 12,
+                                            textAlign: 'center'
+                                        }
+                                    }
+                                }}
+                                getTdProps={(state, rowInfo, column, instance) =>{
+                                    let direction = 'column';
+                                    if (column.Header==='Description' ) direction = 'row';
+                                    if (column.Header==='Name' ) {direction = 'row'; }
+
+                                    let width=80;
+                                    if (column.id==='InvoiceDescription') width= 250;
+                                    if (column.id==='CustomerName') width= 190;
+                                    console.log( column);
+                                    return {
+                                        style:{
+                                            textAlign: 'center',
+                                            flexDirection: direction,
+                                            minWidth: width,
+                                            width: width
+                                        }
+                                    }
+                                }}
                                 columns={[
                                     {
                                         Header: "Invoice",
