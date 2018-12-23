@@ -61,7 +61,10 @@ const styles = theme => ({
         bottom  : -28,
         left    : 16,
         zIndex  : 999,
-        backgroundColor: theme.palette.primary.dark
+        backgroundColor: theme.palette.primary.light,
+        '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+        }
     }
 });
 
