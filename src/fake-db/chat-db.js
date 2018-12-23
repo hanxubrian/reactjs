@@ -24,7 +24,8 @@ const chatDb = {
             'id'    : '5725a68009e20d0a9e9acf2a',
             'name'  : 'German',
             'avatar': 'assets/images/avatars/german.png',
-            'status': 'do-not-disturb',
+            // 'status': 'do-not-disturb',
+            'status': 'online',
             'mood'  : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
             'unread': '1'
         },

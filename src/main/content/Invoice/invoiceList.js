@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 // core components
 import TextField from "@material-ui/core/TextField";
-import {Hidden, Icon, IconButton, Fab, Tooltip} from '@material-ui/core';
+import {Hidden, Icon, IconButton, Fab, Input, Paper,} from '@material-ui/core';
 
 // theme components
 import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
@@ -79,6 +79,9 @@ const styles = theme => ({
         backgroundColor: theme.palette.divider
     },
 });
+const defaultProps = {
+    trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
+};
 
 class InvoicePage extends Component {
     state = {
@@ -110,7 +113,7 @@ class InvoicePage extends Component {
 
     }
 
-    getInvoicesFromStatus =(newprops, rawData=this.props.invoices) =>{
+    getInvoicesFromStatus =(newprops=this.props.transactionStatus, rawData=this.props.invoices) =>{
         let temp=[];
         let all_temp=[];
         let temp1=[];
@@ -174,11 +177,11 @@ class InvoicePage extends Component {
     escFunction(event){
         if(event.keyCode === 27) {
             this.setState({s: ''});
-            this.setState({temp: this.props.invoices.Data});
+            this.getInvoicesFromStatus();
         }
     }
     search(val) {
-        const temp = this.props.invoices.Data.filter( d => {
+        const temp = this.state.temp.filter( d => {
             return d.InvoiceId.toString().indexOf(val) !== -1 || !val ||
                 d.InvoiceNo.indexOf(val) !== -1 ||
                 d.InvoiceAmount.toString().indexOf(val) !== -1 ||
@@ -227,7 +230,7 @@ class InvoicePage extends Component {
                                         aria-label="toggle filter panel"
                                     >
                                         { !filterState && (
-                                        <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
+                                            <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
                                         )}
                                         {filterState && (
                                             <Icon>close</Icon>
@@ -247,7 +250,187 @@ class InvoicePage extends Component {
                             </div>
                             <div className="flex items-center pr-0 lg:pr-0 p-24">
                                 {/*<div className="flex-1"><h4>Summary</h4></div>*/}
-                                <FuseSearch/>
+                                {/*<FuseSearch/>*/}
+                                <Paper className={"flex items-center h-44 w-full"} elevation={1}>
+                                    <Input
+                                        placeholder="Search..."
+                                        className=
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                            "pl-16"
+                                        disableUnderline
+                                        fullWidth
+                                        inputProps={{
+                                            'aria-label': 'Search'
+                                        }}
+                                    />
+                                    <Icon color="action" className="mr-16">search</Icon>
+                                </Paper>
                                 <div className={classes.separator}/>
                                 <Hidden smDown>
                                     <IconButton
@@ -255,7 +438,7 @@ class InvoicePage extends Component {
                                         aria-label="toggle summary panel"
                                     >
                                         { !summaryState && (
-                                        <Icon>insert_chart</Icon>
+                                            <Icon>insert_chart</Icon>
                                         )}
                                         {summaryState && (
                                             <Icon>close</Icon>
