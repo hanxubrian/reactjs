@@ -58,7 +58,8 @@ const styles = theme => ({
         position: 'absolute',
         bottom  : -28,
         left    : 16,
-        zIndex  : 999
+        zIndex  : 999,
+        backgroundColor: theme.palette.primary.main
     }
 });
 
