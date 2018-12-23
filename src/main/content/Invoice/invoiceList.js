@@ -555,7 +555,16 @@ class InvoicePage extends Component {
                     filterState ? <FilterPanel/>:''
                 }
                 rightSidebarHeader={
-                    summaryState ? <div className="p-24"><h4>Summary Panel</h4></div>:''
+                    summaryState ? <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0"><h4 style={{marginBlockStart: '1em'}}>Summary Panel</h4><FuseAnimate animation="transition.expandIn" delay={200}>
+                        <div>
+                        <IconButton>
+                            <Icon>delete</Icon>
+                        </IconButton>
+                        <IconButton>
+                            <Icon>more_vert</Icon>
+                        </IconButton>
+                        </div>
+                    </FuseAnimate></div>:''
                 }
                 rightSidebarContent={
                     summaryState ? <SummaryPanel/> : ''
