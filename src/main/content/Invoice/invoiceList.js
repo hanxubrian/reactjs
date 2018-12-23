@@ -226,7 +226,12 @@ class InvoicePage extends Component {
                                         onClick={(ev) => toggleFilterPanel()}
                                         aria-label="toggle filter panel"
                                     >
+                                        { !filterState && (
                                         <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
+                                        )}
+                                        {filterState && (
+                                            <Icon>close</Icon>
+                                        )}
                                     </IconButton>
                                 </Hidden>
                                 <Hidden smUp>
@@ -249,7 +254,12 @@ class InvoicePage extends Component {
                                         onClick={(ev) => toggleSummaryPanel()}
                                         aria-label="toggle summary panel"
                                     >
+                                        { !summaryState && (
                                         <Icon>insert_chart</Icon>
+                                        )}
+                                        {summaryState && (
+                                            <Icon>close</Icon>
+                                        )}
                                     </IconButton>
                                 </Hidden>
                                 <Hidden smUp>
