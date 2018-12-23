@@ -127,7 +127,7 @@ function updateLightDarkThemes(val)
                     light: '#5fa2ec',
                     main : '#3c93ec',
                     dark : '#2275ec'
-                }
+                },
             }, ...mustHaveOptions}))
     }
 }

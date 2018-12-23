@@ -75,6 +75,16 @@ const styles = theme => ({
             backgroundColor: theme.palette.primary.dark,
         }
     },
+    removeButton          : {
+        position: 'absolute',
+        bottom  : -28,
+        right    : 16,
+        zIndex  : 999,
+        backgroundColor: theme.palette.secondary.light,
+        '&:hover': {
+            backgroundColor: theme.palette.secondary.dark,
+        }
+    },
     imageIcon:{
         width: 24,
         height: 24
@@ -313,7 +323,7 @@ class InvoicePage extends Component {
         const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteInvoicesAction} = this.props;
         const { toggleSelection, toggleAll, isSelected, logSelection} = this;
 
-        const { data, columns, selectAll } = this.state;
+        const { data, columns, selectAll, selection } = this.state;
         let checkboxProps={};
         logSelection();
 
@@ -428,6 +438,13 @@ class InvoicePage extends Component {
                                     <Icon>add</Icon>
                                 </Fab>
                             </FuseAnimate>
+                            { selection.length>0 && (
+                            <FuseAnimate animation="transition.expandIn" delay={600}>
+                                <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => alert('ok')}>
+                                    <Icon>delete</Icon>
+                                </Fab>
+                            </FuseAnimate>
+                            )}
                         </div>
                     </div>
                 }
@@ -569,12 +586,12 @@ class InvoicePage extends Component {
                 rightSidebarHeader={
                     summaryState ? <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0"><h4 style={{marginBlockStart: '1em'}}>Summary Panel</h4><FuseAnimate animation="transition.expandIn" delay={200}>
                         <div>
-                        <IconButton onClick={()=>this.removeInvoices()}>
-                            <Icon>delete</Icon>
-                        </IconButton>
-                        <IconButton>
-                            <Icon>more_vert</Icon>
-                        </IconButton>
+                            <IconButton onClick={()=>this.removeInvoices()}>
+                                <Icon>delete</Icon>
+                            </IconButton>
+                            <IconButton>
+                                <Icon>more_vert</Icon>
+                            </IconButton>
                         </div>
                     </FuseAnimate></div>:''
                 }
