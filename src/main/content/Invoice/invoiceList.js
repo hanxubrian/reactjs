@@ -148,7 +148,7 @@ class InvoicePage extends Component {
 
           The HOC provides a method call 'getWrappedInstance' to get a ref to the wrapped
           ReactTable and then get the internal state and the 'sortedData'.
-          That can then be iterrated to get all the currently visible records and set
+          That can then be iterated to get all the currently visible records and set
           the selection state.
         */
         const selectAll = this.state.selectAll ? false : true;
@@ -159,8 +159,14 @@ class InvoicePage extends Component {
             // the 'sortedData' property contains the currently accessible records based on the filter and sort
             const currentRecords = wrappedInstance.getResolvedState().sortedData;
             // we just push all the IDs onto the selection array
+            console.log('toggle=', wrappedInstance.getResolvedState());
+            let page = wrappedInstance.getResolvedState().page;
+            let pageSize = wrappedInstance.getResolvedState().pageSize;
+            let start_index = page * pageSize;
+            let end_index = start_index+pageSize;
             currentRecords.forEach(item => {
-                selection.push(item._original.InvoiceId);
+                if(item._index>=start_index && item._index<end_index)
+                    selection.push(item._original.InvoiceId);
             });
         }
         this.setState({ selectAll, selection });
@@ -308,7 +314,6 @@ class InvoicePage extends Component {
                 selectType: "checkbox",
                 keyField: 'InvoiceId',
                 getTrProps: (s, r) => {
-                    console.log('row=', r)
                     // someone asked for an example of a background color change
                     // here it is...
                     if(r!==undefined) {
@@ -316,7 +321,7 @@ class InvoicePage extends Component {
                         return {
                             style: {
                                 backgroundColor: selected ? "lightpink" : "inherit",
-                                padding: 10
+                                padding: "5px 10px"
                             }
                         };
                     } else {
