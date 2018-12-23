@@ -297,6 +297,14 @@ class InvoicePage extends Component {
         }
     };
 
+    removeInvoices = ()=> {
+        if(this.state.selection.length==0){
+            alert("Please choose invoice(s) to delete");
+            return;
+        }
+        this.props.deleteInvoicesAction(this.state.selection, this.props.invoices);
+    };
+
     render()
     {
         const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteInvoicesAction} = this.props;
@@ -558,7 +566,7 @@ class InvoicePage extends Component {
                 rightSidebarHeader={
                     summaryState ? <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0"><h4 style={{marginBlockStart: '1em'}}>Summary Panel</h4><FuseAnimate animation="transition.expandIn" delay={200}>
                         <div>
-                        <IconButton onClick={(ev)=>deleteInvoicesAction(this.state.selection, this.props.invoices)}>
+                        <IconButton onClick={()=>this.removeInvoices()}>
                             <Icon>delete</Icon>
                         </IconButton>
                         <IconButton>
