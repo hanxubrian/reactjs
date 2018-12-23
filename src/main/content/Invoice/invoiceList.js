@@ -4,10 +4,10 @@ import _ from 'lodash';
 
 // core components
 import TextField from "@material-ui/core/TextField";
-import {Hidden, Icon, IconButton, Fab} from '@material-ui/core';
+import {Hidden, Icon, IconButton, Fab, Tooltip} from '@material-ui/core';
 
 // theme components
-import {FusePageCustom, FuseAnimate} from '@fuse';
+import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
 
 
 import {bindActionCreators} from "redux";
@@ -29,10 +29,13 @@ const headerHeight = 100;
 const styles = theme => ({
     root: {
         background    : "url('/assets/images/backgrounds/signin-bg.jpg') no-repeat",
-        backgroundSize: 'cover'
+        backgroundSize: 'cover',
     },
     layoutRoot: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        '& .z-9999':{
+            height: 64
+        }
     },
     card: {
         width   : '100%',
@@ -67,9 +70,14 @@ const styles = theme => ({
         }
     },
     imageIcon:{
-        width: 28,
-        height: 28
-    }
+        width: 24,
+        height: 24
+    },
+    separator: {
+        width          : 1,
+        height         : '100%',
+        backgroundColor: theme.palette.divider
+    },
 });
 
 class InvoicePage extends Component {
@@ -230,16 +238,18 @@ class InvoicePage extends Component {
                                         {/*<Icon>menu</Icon>*/}
                                     </IconButton>
                                 </Hidden>
-                                <div className="flex-1"><h4>Filter</h4></div>
+                                {/*<div className="flex-1"><h4>Filter</h4></div>*/}
                             </div>
                             <div className="flex items-center pr-0 lg:pr-0 p-24">
-                                <div className="flex-1"><h4>Summary</h4></div>
+                                {/*<div className="flex-1"><h4>Summary</h4></div>*/}
+                                <FuseSearch/>
+                                <div className={classes.separator}/>
                                 <Hidden smDown>
                                     <IconButton
                                         onClick={(ev) => toggleSummaryPanel()}
                                         aria-label="toggle summary panel"
                                     >
-                                        <Icon>menu</Icon>
+                                        <Icon>insert_chart</Icon>
                                     </IconButton>
                                 </Hidden>
                                 <Hidden smUp>
@@ -247,7 +257,7 @@ class InvoicePage extends Component {
                                         onClick={(ev) => this.pageLayout.toggleRightSidebar()}
                                         aria-label="toggle summary panel"
                                     >
-                                        <Icon>menu</Icon>
+                                        <Icon>insert_chart</Icon>
                                     </IconButton>
                                 </Hidden>
                             </div>
