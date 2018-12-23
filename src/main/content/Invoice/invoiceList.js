@@ -65,6 +65,10 @@ const styles = theme => ({
         '&:hover': {
             backgroundColor: theme.palette.primary.dark,
         }
+    },
+    imageIcon:{
+        width: 28,
+        height: 28
     }
 });
 
@@ -214,7 +218,7 @@ class InvoicePage extends Component {
                                         onClick={(ev) => toggleFilterPanel()}
                                         aria-label="toggle filter panel"
                                     >
-                                        <Icon>menu</Icon>
+                                        <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
                                     </IconButton>
                                 </Hidden>
                                 <Hidden smUp>
@@ -222,7 +226,8 @@ class InvoicePage extends Component {
                                         onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
                                         aria-label="toggle filter panel"
                                     >
-                                        <Icon>menu</Icon>
+                                        <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
+                                        {/*<Icon>menu</Icon>*/}
                                     </IconButton>
                                 </Hidden>
                                 <div className="flex-1"><h4>Filter</h4></div>
@@ -249,7 +254,7 @@ class InvoicePage extends Component {
                         </div>
                         <div className="flex flex-none items-end">
                             <FuseAnimate animation="transition.expandIn" delay={600}>
-                                <Fab color="secondary" aria-label="add" className={classes.addButton}>
+                                <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
                                     <Icon>add</Icon>
                                 </Fab>
                             </FuseAnimate>
