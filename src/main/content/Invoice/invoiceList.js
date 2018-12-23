@@ -440,7 +440,7 @@ class InvoicePage extends Component {
                             </FuseAnimate>
                             { selection.length>0 && (
                             <FuseAnimate animation="transition.expandIn" delay={600}>
-                                <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => alert('ok')}>
+                                <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeInvoices()}>
                                     <Icon>delete</Icon>
                                 </Fab>
                             </FuseAnimate>
