@@ -320,7 +320,7 @@ class InvoicePage extends Component {
                         const selected = this.isSelected(r.original.InvoiceId);
                         return {
                             style: {
-                                backgroundColor: selected ? "lightpink" : "inherit",
+                                backgroundColor: selected ? "lightpink" : "",
                                 padding: "5px 10px"
                             }
                         };

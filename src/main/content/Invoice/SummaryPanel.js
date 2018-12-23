@@ -181,23 +181,23 @@ class SummaryPanel extends Component {
                     {this.props.invoices && (
                         <Paper className="flex flex-1 flex-col min-h-px shadow-none" style={{alignItems: 'center', flexDirection:'column'}}>
                             <Card className={classes.card} >
-                                <CardContent>
+                                <CardContent style={{color: 'white'}}>
                                     <h2>Sales</h2>
-                                    <Typography className={classes.pos} color="textSecondary">
+                                    <Typography className={classes.pos} style={{color: 'white'}}>
                                         Lifetime sum of your sale
                                     </Typography>
-                                    <Typography variant="h5" component="h2">
+                                    <Typography variant="h5" component="h2" style={{color: 'white'}}>
                                         {this.props.invoices.headerData.totalInvoice}
                                     </Typography>
 
                                 </CardContent>
                             </Card>
                             <Card className={classes.card} >
-                                <div className="mb-32 w-full sm:w-1/2 md:w-full">
+                                <div className="mb-32 w-full sm:w-1/2 md:w-full pt-24">
 
                                     <FuseAnimate delay={600}>
-                                        <div className="px-16 pb-8 text-18 font-300">
-                                            How are your sales?
+                                        <div className="px-16 pb-8 text-18 font-300" >
+                                            <h2 style={{color: 'white'}}>How are your sales?</h2>
                                         </div>
                                     </FuseAnimate>
 
