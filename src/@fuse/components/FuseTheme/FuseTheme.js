@@ -118,15 +118,15 @@ function updateLightDarkThemes(val)
         mainThemeLight: createMuiTheme(_.merge({}, defaultOptions, theme, {palette: {
             type: 'light',
                 primary  : {
-                    light       : '#87efff',
+                    light       : '#5fa2ec',
                     main        : '#3c93ec',
-                    dark        : '#008cb7',
+                    dark        : '#2275ec',
                     contrastText: '#fff'
                 },
                 secondary: {
-                    light: '#ffff83',
+                    light: '#5fa2ec',
                     main : '#3c93ec',
-                    dark : '#9db516'
+                    dark : '#2275ec'
                 }
             }, ...mustHaveOptions}))
     }

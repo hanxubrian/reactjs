@@ -43,7 +43,8 @@ const styles = theme => ({
     },
     layoutHeader       : {
         height   : headerHeight,
-        minHeight: headerHeight
+        minHeight: headerHeight,
+        backgroundColor: theme.palette.secondary.main
     },
     layoutRightSidebar : {
         width: 300
@@ -52,14 +53,15 @@ const styles = theme => ({
         height   : headerHeight,
         minHeight: headerHeight,
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: theme.palette.secondary.main
     },
     addButton          : {
         position: 'absolute',
         bottom  : -28,
         left    : 16,
         zIndex  : 999,
-        backgroundColor: theme.palette.primary.main
+        backgroundColor: theme.palette.primary.dark
     }
 });
 
