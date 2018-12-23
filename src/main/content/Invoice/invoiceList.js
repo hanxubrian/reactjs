@@ -1,10 +1,7 @@
 import React, {Component} from 'react';
-import ReactTable from "react-table";
-import _ from 'lodash';
 
 // core components
-import TextField from "@material-ui/core/TextField";
-import {Hidden, Icon, IconButton, Fab, Input, Paper,} from '@material-ui/core';
+import {Hidden, Icon, IconButton, Fab, Input, Paper,TextField} from '@material-ui/core';
 
 // theme components
 import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
@@ -13,18 +10,27 @@ import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
 import {bindActionCreators} from "redux";
 import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
+
+// for store
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
 import SummaryPanel from './SummaryPanel';
 import FilterPanel from './filterPanel';
 
+// third party
 import moment from 'moment'
 import checkboxHOC from "react-table/lib/hoc/selectTable";
+import Chance from "chance";
+import ReactTable from "react-table";
+import _ from 'lodash';
+
+
 import classNames from 'classnames';
 
-const CheckboxTable = checkboxHOC(ReactTable);
-
 const headerHeight = 100;
+
+const CheckboxTable = checkboxHOC(ReactTable);
+const chance = new Chance();
 
 const styles = theme => ({
     root: {
@@ -97,6 +103,80 @@ class InvoicePage extends Component {
         checkedPP: true,
         checkedComplete: true,
         checkedOpen: true,
+        selection: [],
+        selectAll: false
+    };
+
+    toggleSelection = (key, shift, row) => {
+        /*
+          https://react-table.js.org/#/story/select-table-hoc
+          Implementation of how to manage the selection state is up to the developer.
+          This implementation uses an array stored in the component state.
+          Other implementations could use object keys, a Javascript Set, or Redux... etc.
+        */
+        // start off with the existing state
+        let selection = [...this.state.selection];
+        const keyIndex = selection.indexOf(key);
+        // check to see if the key exists
+        if (keyIndex >= 0) {
+            // it does exist so we will remove it using destructing
+            selection = [
+                ...selection.slice(0, keyIndex),
+                ...selection.slice(keyIndex + 1)
+            ];
+        } else {
+            // it does not exist so add it
+            selection.push(key);
+        }
+        // update the state
+        this.setState({ selection });
+    };
+
+    toggleAll = () => {
+        /*
+          'toggleAll' is a tricky concept with any filterable table
+          do you just select ALL the records that are in your data?
+          OR
+          do you only select ALL the records that are in the current filtered data?
+
+          The latter makes more sense because 'selection' is a visual thing for the user.
+          This is especially true if you are going to implement a set of external functions
+          that act on the selected information (you would not want to DELETE the wrong thing!).
+
+          So, to that end, access to the internals of ReactTable are required to get what is
+          currently visible in the table (either on the current page or any other page).
+
+          The HOC provides a method call 'getWrappedInstance' to get a ref to the wrapped
+          ReactTable and then get the internal state and the 'sortedData'.
+          That can then be iterrated to get all the currently visible records and set
+          the selection state.
+        */
+        const selectAll = this.state.selectAll ? false : true;
+        const selection = [];
+        if (selectAll) {
+            // we need to get at the internals of ReactTable
+            const wrappedInstance = this.checkboxTable.getWrappedInstance();
+            // the 'sortedData' property contains the currently accessible records based on the filter and sort
+            const currentRecords = wrappedInstance.getResolvedState().sortedData;
+            // we just push all the IDs onto the selection array
+            currentRecords.forEach(item => {
+                selection.push(item._original.InvoiceId);
+            });
+        }
+        this.setState({ selectAll, selection });
+    };
+
+    isSelected = key => {
+        /*
+          Instead of passing our external selection state we provide an 'isSelected'
+          callback and detect the selection state ourselves. This allows any implementation
+          for selection (either an array, object keys, or even a Javascript Set object).
+        */
+        return this.state.selection.includes(key);
+    };
+
+    logSelection = () => {
+        console.log("selection:", this.state.selection);
     };
 
     constructor(props){
@@ -211,13 +291,41 @@ class InvoicePage extends Component {
         }
     };
 
-    toggleLeftSidebar = () => {
-    };
-    toggleRightSidebar = () => {
-    };
     render()
     {
-        const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState } = this.props;
+        const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState} = this.props;
+        const { toggleSelection, toggleAll, isSelected, logSelection} = this;
+
+        const { data, columns, selectAll } = this.state;
+        let checkboxProps={};
+
+        if (this.props.invoices) {
+            checkboxProps = {
+                selectAll,
+                isSelected,
+                toggleSelection,
+                toggleAll,
+                selectType: "checkbox",
+                keyField: 'InvoiceId',
+                getTrProps: (s, r) => {
+                    console.log('row=', r)
+                    // someone asked for an example of a background color change
+                    // here it is...
+                    if(r!==undefined) {
+                        const selected = this.isSelected(r.original.InvoiceId);
+                        return {
+                            style: {
+                                backgroundColor: selected ? "lightpink" : "inherit",
+                                padding: 10
+                            }
+                        };
+                    } else {
+                        return {}
+                    }
+                }
+            };
+        }
+
         return (
             <FusePageCustom
                 classes={{
@@ -277,7 +385,7 @@ class InvoicePage extends Component {
                                     <IconButton
                                         onClick={(ev) => toggleSummaryPanel()}
                                         aria-label="toggle summary panel"
-                                        className="pr-0"
+                                        style={{marginRight: -12}}
                                     >
                                         { !summaryState && (
                                             <Icon>insert_chart</Icon>
@@ -308,9 +416,10 @@ class InvoicePage extends Component {
                 }
                 content={
                     <div className="flex-1 flex-col">
-                        {this.props.invoices && (
-                            <ReactTable
+                        {this.state.temp && (
+                            <CheckboxTable
                                 data={this.state.temp}
+                                ref={r => (this.checkboxTable = r)}
                                 getTheadGroupProps={(state, rowInfo, column, instance) =>{
                                     return {
                                         style:{
@@ -326,8 +435,9 @@ class InvoicePage extends Component {
                                     if (column.id==='CustomerName') width= 190;
                                     return {
                                         style:{
-                                            minWidth: width,
-                                            width: width
+                                            // minWidth: width,
+                                            // width: width,
+                                            fontSize: 12,
                                         }
                                     }
                                 }}
@@ -339,15 +449,6 @@ class InvoicePage extends Component {
                                         }
                                     }
                                 }}
-                                getTrProps={(state, rowInfo, column, instance) =>{
-                                    return {
-                                        style:{
-                                            padding: "8px 10px",
-                                            fontSize: 12,
-                                            textAlign: 'center'
-                                        }
-                                    }
-                                }}
                                 getTdProps={(state, rowInfo, column, instance) =>{
                                     let direction = 'column';
                                     if (column.Header==='Description' ) direction = 'row';
@@ -356,13 +457,13 @@ class InvoicePage extends Component {
                                     let width=80;
                                     if (column.id==='InvoiceDescription') width= 250;
                                     if (column.id==='CustomerName') width= 190;
-                                    console.log( column);
                                     return {
                                         style:{
                                             textAlign: 'center',
                                             flexDirection: direction,
-                                            minWidth: width,
-                                            width: width
+                                            // minWidth: width,
+                                            // width: width,
+                                            fontSize: 12,
                                         }
                                     }
                                 }}
@@ -374,10 +475,6 @@ class InvoicePage extends Component {
                                                 Header  : "No",
                                                 accessor: "InvoiceNo",
                                                 filterAll: true
-                                            },
-                                            {
-                                                Header  : "Id",
-                                                accessor: "InvoiceId"
                                             },
                                             {
                                                 Header  : "Date",
@@ -441,7 +538,7 @@ class InvoicePage extends Component {
                                 ]}
                                 defaultPageSize={20}
                                 className="-striped -highlight"
-                                style={{fontSize: 12}}
+                                {...checkboxProps}
                             />
                         )}
                     </div>
