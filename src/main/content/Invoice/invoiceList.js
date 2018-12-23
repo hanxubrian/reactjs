@@ -299,11 +299,12 @@ class InvoicePage extends Component {
 
     render()
     {
-        const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState} = this.props;
+        const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteInvoicesAction} = this.props;
         const { toggleSelection, toggleAll, isSelected, logSelection} = this;
 
         const { data, columns, selectAll } = this.state;
         let checkboxProps={};
+        logSelection();
 
         if (this.props.invoices) {
             checkboxProps = {
@@ -557,7 +558,7 @@ class InvoicePage extends Component {
                 rightSidebarHeader={
                     summaryState ? <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0"><h4 style={{marginBlockStart: '1em'}}>Summary Panel</h4><FuseAnimate animation="transition.expandIn" delay={200}>
                         <div>
-                        <IconButton>
+                        <IconButton onClick={(ev)=>deleteInvoicesAction(this.state.selection, this.props.invoices)}>
                             <Icon>delete</Icon>
                         </IconButton>
                         <IconButton>
@@ -584,6 +585,7 @@ function mapDispatchToProps(dispatch)
         getInvoices: Actions.getInvoices,
         toggleFilterPanel: Actions.toggleFilterPanel,
         toggleSummaryPanel: Actions.toggleSummaryPanel,
+        deleteInvoicesAction: Actions.deleteInvoices
     }, dispatch);
 }
 

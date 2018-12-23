@@ -40,6 +40,11 @@ const invoices = function(state = initialState, action) {
                 ...state, transactionStatus:{...state.transactionStatus,...action.payload}
             }
         }
+        case Actions.DELETE_SELECTED_INVOICES:
+        {
+            return {...state, invoicesDB: action.payload}
+
+        }
         case UserActions.USER_LOGGED_OUT:
         {
             return {
