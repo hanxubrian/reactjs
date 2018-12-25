@@ -42,15 +42,7 @@ export const fuseNavigationConfig = [
                     'bg'   : '#F44336',
                     'fg'   : '#FFFFFF'
                 }
-            },
-            {
-                'MenuId'    : 18,
-                'Slug'   : 'invoice',
-                'Title': 'Invoice',
-                'Type' : 'item',
-                'Icon' : 'receipt',
-                'url'  : '/invoices/dashboard'
-            },
+            }
         ]
     },
 ];
