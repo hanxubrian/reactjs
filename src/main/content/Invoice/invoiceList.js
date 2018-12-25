@@ -41,6 +41,9 @@ const styles = theme => ({
         flexDirection: 'row',
         '& .z-9999':{
             height: 64
+        },
+        '& .-pageSizeOptions': {
+            display: 'none'
         }
     },
     card: {
@@ -570,7 +573,7 @@ class InvoicePage extends Component {
                                         ]
                                     }
                                 ]}
-                                defaultPageSize={20}
+                                defaultPageSize={100}
                                 className="-striped -highlight"
                                 {...checkboxProps}
                             />
