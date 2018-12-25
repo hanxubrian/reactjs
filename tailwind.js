@@ -503,7 +503,7 @@ module.exports = {
     | Here is where you define your width utility sizes. These can be
     | percentage based, pixels, rems, or any other units. By default
     | we provide a sensible rem based numeric scale, a percentage
-    | based fraction scale, plus some other common use-cases. You
+    | based fraction scale, plus some other common use-invoice. You
     | can, of course, modify these values as needed.
     |
     |
@@ -590,7 +590,7 @@ module.exports = {
     | Here is where you define your height utility sizes. These can be
     | percentage based, pixels, rems, or any other units. By default
     | we provide a sensible rem based numeric scale plus some other
-    | common use-cases. You can, of course, modify these values as
+    | common use-invoice. You can, of course, modify these values as
     | needed.
     |
     | Class name: .h-{size}
@@ -650,7 +650,7 @@ module.exports = {
     |
     | Here is where you define your minimum width utility sizes. These can
     | be percentage based, pixels, rems, or any other units. We provide a
-    | couple common use-cases by default. You can, of course, modify
+    | couple common use-invoice by default. You can, of course, modify
     | these values as needed.
     |
     | Class name: .min-w-{size}
@@ -731,7 +731,7 @@ module.exports = {
     |
     | Here is where you define your minimum height utility sizes. These can
     | be percentage based, pixels, rems, or any other units. We provide a
-    | few common use-cases by default. You can, of course, modify these
+    | few common use-invoice by default. You can, of course, modify these
     | values as needed.
     |
     | Class name: .min-h-{size}
@@ -853,7 +853,7 @@ module.exports = {
     |
     | Here is where you define your maximum height utility sizes. These can
     | be percentage based, pixels, rems, or any other units. We provide a
-    | couple common use-cases by default. You can, of course, modify
+    | couple common use-invoice by default. You can, of course, modify
     | these values as needed.
     |
     | Class name: .max-h-{size}
@@ -912,7 +912,7 @@ module.exports = {
     | Here is where you define your padding utility sizes. These can be
     | percentage based, pixels, rems, or any other units. By default we
     | provide a sensible rem based numeric scale plus a couple other
-    | common use-cases like "1px". You can, of course, modify these
+    | common use-invoice like "1px". You can, of course, modify these
     | values as needed.
     |
     | Class name: .p{side?}-{size}
@@ -963,7 +963,7 @@ module.exports = {
     | Here is where you define your margin utility sizes. These can be
     | percentage based, pixels, rems, or any other units. By default we
     | provide a sensible rem based numeric scale plus a couple other
-    | common use-cases like "1px". You can, of course, modify these
+    | common use-invoice like "1px". You can, of course, modify these
     | values as needed.
     |
     | Class name: .m{side?}-{size}

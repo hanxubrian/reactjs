@@ -20,6 +20,8 @@ import {CustomerServiceCallListConfig} from "./customer-service/call-list/call-l
 import {PlansConfig} from "./comissions/plans/plansConfig";
 import {ComissionsConfig} from "./comissions/comissions/comissionsConfig";
 import {InvoiceConfig} from "./Invoice/invoiceConfig";
+import {AccountsReceivableConfig} from "./accounts-receivable/accounts-receivable/accounts-receivableConfig";
+import {BillRunConfig} from "./accounts-receivable/bill-run/bill-runConfig";
 
 export const pagesConfigs = [
     SigninPageConfig,
@@ -43,5 +45,7 @@ export const pagesConfigs = [
     CustomerServicesConfig,
     PlansConfig,
     ComissionsConfig,
-    InvoiceConfig
+    InvoiceConfig,
+    AccountsReceivableConfig,
+    BillRunConfig
 ];

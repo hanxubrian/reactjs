@@ -1,6 +1,6 @@
 import {FuseLoadable} from '@fuse';
 
-export const CustomerServicesConfig = {
+export const BillRunConfig = {
     settings: {
         layout: {
             config: {}
@@ -8,9 +8,9 @@ export const CustomerServicesConfig = {
     },
     routes  : [
         {
-            path     : '/bill-run/dashboard',
+            path     : '/accounts-receivable/bill-run',
             component: FuseLoadable({
-                loader: () => import('./customer-services')
+                loader: () => import('./bill-run')
             })
         }
     ]

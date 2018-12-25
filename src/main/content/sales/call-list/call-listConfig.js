@@ -8,7 +8,7 @@ export const CallListConfig = {
     },
     routes  : [
         {
-            path     : '/sales/call-list',
+            path     : '/sales/accounts-receivable',
             component: FuseLoadable({
                 loader: () => import('./call-list')
             })
