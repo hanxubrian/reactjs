@@ -17,7 +17,7 @@ const propTypes = {
     item: PropTypes.shape(
         {
             Slug      : PropTypes.string.isRequired,
-            title   : PropTypes.string,
+            Title   : PropTypes.string,
             children: PropTypes.array
         })
 };
@@ -101,21 +101,21 @@ class FuseNavHorizontalGroup extends Component {
                                         onMouseEnter={() => this.handleToggle(true)}
                                         onMouseLeave={() => this.handleToggle(false)}
                                     >
-                                        {item.children && (
+                                        {item.Children && (
                                             <ul className={classNames(classes.children, "pl-0")}>
                                                 {
-                                                    item.children.map((item) => (
+                                                    item.Children.map((item) => (
                                                         <React.Fragment key={item.Slug}>
 
-                                                            {item.type === 'group' && (
+                                                            {item.Type === 'group' && (
                                                                 <NavHorizontalGroup item={item} nestedLevel={nestedLevel}/>
                                                             )}
 
-                                                            {item.type === 'collapse' && (
+                                                            {item.Type === 'collapse' && (
                                                                 <FuseNavHorizontalCollapse item={item} nestedLevel={nestedLevel}/>
                                                             )}
 
-                                                            {item.type === 'item' && (
+                                                            {item.Type === 'item' && (
                                                                 <FuseNavHorizontalItem item={item} nestedLevel={nestedLevel}/>
                                                             )}
                                                         </React.Fragment>

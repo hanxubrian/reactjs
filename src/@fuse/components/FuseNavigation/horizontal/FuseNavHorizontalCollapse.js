@@ -29,7 +29,7 @@ const defaultProps = {};
 const styles = theme => ({
     root       : {},
     button     : {
-        minHeight: 48,
+        minHeight: 58,
         '&.open' : {
             backgroundColor: 'rgba(0,0,0,.08)'
         }
@@ -107,22 +107,22 @@ class FuseNavHorizontalCollapse extends Component {
                                             onMouseEnter={() => this.handleToggle(true)}
                                             onMouseLeave={() => this.handleToggle(false)}
                                         >
-                                            {item.children && (
+                                            {item.Children && (
                                                 <ul className={classNames(classes.children, "pl-0")}>
                                                     {
-                                                        item.children.map((item) => (
+                                                        item.Children.map((item) => (
 
                                                             <React.Fragment key={item.Slug}>
 
-                                                                {item.type === 'group' && (
+                                                                {item.Type === 'group' && (
                                                                     <FuseNavHorizontalGroup item={item} nestedLevel={nestedLevel + 1}/>
                                                                 )}
 
-                                                                {item.type === 'collapse' && (
+                                                                {item.Type === 'collapse' && (
                                                                     <NavHorizontalCollapse item={item} nestedLevel={nestedLevel + 1}/>
                                                                 )}
 
-                                                                {item.type === 'item' && (
+                                                                {item.Type === 'item' && (
                                                                     <FuseNavHorizontalItem item={item} nestedLevel={nestedLevel + 1}/>
                                                                 )}
 

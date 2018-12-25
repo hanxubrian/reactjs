@@ -55,14 +55,14 @@ class FuseNavigation extends Component {
                 {
                     navigation.map((item) => (
 
-                        <React.Fragment key={item.Slug}>
+                        <React.Fragment key={item.MenuId}>
 
                             {item.Type === 'group' && (
                                 <FuseNavHorizontalGroup item={item} nestedLevel={0}/>
                             )}
 
                             {item.Type === 'collapse' && (
-                                <FuseNavHorizontalCollapse item={item} nestedLevel={0}/>
+                                <FuseNavHorizontalGroup item={item} nestedLevel={0}/>
                             )}
 
                             {item.Type === 'item' && (

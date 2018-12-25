@@ -81,7 +81,7 @@ class AboutTab extends Component {
 
                                     <div className="mb-24">
                                         <Typography className="font-bold mb-4 text-15">Region</Typography>
-                                        <Typography>{this.RegionHeader()}</Typography>
+                                        <Typography component={'span'}>{this.RegionHeader()}</Typography>
                                     </div>
 
                                     <div className="mb-24">
