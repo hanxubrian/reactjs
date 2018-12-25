@@ -22,6 +22,7 @@ import moment from 'moment'
 import checkboxHOC from "react-table/lib/hoc/selectTable";
 import Chance from "chance";
 import ReactTable from "react-table";
+import "react-table/react-table.css";
 import _ from 'lodash';
 
 
@@ -67,8 +68,17 @@ const styles = theme => ({
         },
         '& .openSummary':{
             width: 300
+        },
+        '& .ReactTable .rt-tbody': {
+            overflowY: 'scroll',
+            overflowX: 'unset'
+        },
+        '& .ReactTable .rt-thead': {
+            overflowY: 'scroll'
+        },
+        '& .ReactTable .rt-tr-group':{
+          flex: '0 0 auto'
         }
-
     },
     card: {
         width   : '100%',
@@ -302,7 +312,7 @@ class InvoicePage extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.invoices!==null)
+        if(this.props.invoices===null && nextProps.invoices!==null)
             this.getInvoicesFromStatus(nextProps.invoices);
     }
 
@@ -533,14 +543,16 @@ class InvoicePage extends Component {
                                 getTheadThProps={(state, rowInfo, column, instance) =>{
                                     let thClass='';
                                     let width=80;
-                                    if (column.id==='InvoiceDescription') width= 250;
-                                    if (column.id==='CustomerName') width= 190;
+                                    if (column.id==='InvoiceDescription') width= 360;
+                                    if (column.id==='CustomerName') width= 240;
+                                    if (column.id==='_selector') width= 40;
                                     if (column.id==='InvoiceNo' ||column.id==='CustomerNo'||column.id==='InvoiceBalanceAmount'||
                                         column.id==='InvoiceDate' || column.id==='TransactionStatus') thClass = classNames(classes.tableThEven);
                                     return {
                                         style:{
-                                            // minWidth: width,
-                                            // width: width,
+                                            minWidth: width,
+                                            width: width,
+                                            flex: `${width} 0 auto!important`,
                                             fontSize: 12,
                                             padding: "10px 10px",
                                         },
@@ -557,14 +569,15 @@ class InvoicePage extends Component {
                                 }}
                                 getTdProps={(state, rowInfo, column, instance) =>{
                                     let direction = 'column';
-                                    let bkColor='';
                                     if (column.Header==='Description' ) direction = 'row';
                                     if (column.id==='CustomerName' ) {direction = 'row'; }
 
-                                    let width=80;
+                                    let width = 80;
                                     let tdClass='';
-                                    if (column.id==='InvoiceDescription') width= 250;
-                                    if (column.id==='CustomerName') width= 190;
+                                    let bMax = false;
+                                    if (column.id==='InvoiceDescription') width= 360;
+                                    if (column.id==='CustomerName') width= 240;
+                                    if (column.id==='_selector') width= 40;
                                     if (column.id==='InvoiceNo' ||column.id==='CustomerNo'||column.id==='InvoiceBalanceAmount'||
                                         column.id==='InvoiceDate' || column.id==='TransactionStatus') tdClass = classNames(classes.tableTdEven);
 
@@ -572,57 +585,64 @@ class InvoicePage extends Component {
                                         style:{
                                             textAlign: 'center',
                                             flexDirection: direction,
-                                            // minWidth: width,
-                                            // width: width,
+                                            minWidth: width,
+                                            width: width,
                                             fontSize: 12,
                                             padding: "10px 10px",
                                         },
                                         className: tdClass
                                     }
                                 }}
-                                columns={[
-                                    {
-                                        Header  : "Invoice #",
-                                        accessor: "InvoiceNo",
-                                        filterAll: true
-                                    },
-                                    {
-                                        Header  : "Description",
-                                        accessor: "InvoiceDescription",
-                                    },
-                                    {
-                                        Header  : "Customer #",
-                                        accessor: "CustomerNo",
-                                    },
-                                    {
-                                        Header  : "Customer Name",
-                                        accessor: "CustomerName",
-                                    },
-                                    {
-                                        Header  : "Balance",
-                                        accessor: "InvoiceBalanceAmount",
-                                    },
-                                    {
-                                        Header  : "Total",
-                                        accessor: "InvoiceTotal",
-                                    },
-                                    {
-                                        Header  : "Invoice Date",
-                                        id: "InvoiceDate",
-                                        accessor: d=>moment(d.InvoiceDate).format('YYYY-MM-DD')
-                                    },
-                                    {
-                                        Header  : "Due Date",
-                                        id: "DueDate",
-                                        accessor: d=>moment(d.DueDate).format('YYYY-MM-DD')
-                                    },
-                                    {
-                                        Header  : "Status",
-                                        accessor: "TransactionStatus",
-                                    },
+                                columns={[{
+                                    Header: "Invoices",
+                                    columns: [
+                                        {
+                                            Header: "Invoice #",
+                                            accessor: "InvoiceNo",
+                                            filterAll: true
+                                        },
+                                        {
+                                            Header: "Description",
+                                            accessor: "InvoiceDescription",
+                                        },
+                                        {
+                                            Header: "Customer #",
+                                            accessor: "CustomerNo",
+                                        },
+                                        {
+                                            Header: "Customer Name",
+                                            accessor: "CustomerName",
+                                        },
+                                        {
+                                            Header: "Balance",
+                                            accessor: "InvoiceBalanceAmount",
+                                        },
+                                        {
+                                            Header: "Total",
+                                            accessor: "InvoiceTotal",
+                                        },
+                                        {
+                                            Header: "Invoice Date",
+                                            id: "InvoiceDate",
+                                            accessor: d => moment(d.InvoiceDate).format('YYYY-MM-DD')
+                                        },
+                                        {
+                                            Header: "Due Date",
+                                            id: "DueDate",
+                                            accessor: d => moment(d.DueDate).format('YYYY-MM-DD')
+                                        },
+                                        {
+                                            Header: "Status",
+                                            accessor: "TransactionStatus",
+                                        },
+                                    ]
+                                }
                                 ]}
                                 defaultPageSize={100}
                                 className={classNames( "-striped -highlight")}
+                                style={{
+                                    height: 600,
+                                }}
                                 {...checkboxProps}
                             />
                         )}
