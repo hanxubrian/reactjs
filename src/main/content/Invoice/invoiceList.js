@@ -48,7 +48,7 @@ const styles = theme => ({
     },
     layoutRoot: {
         flexDirection: 'row',
-        '& .z-9999':{
+        '& .z-9999': {
             height: 64
         },
         '& .-pageSizeOptions': {
@@ -57,6 +57,10 @@ const styles = theme => ({
         '& .ReactTable .rt-noData': {
             top: '150px',
             border: '1px solid coral'
+        },
+        '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
+            background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
+            color: 'white!important'
         }
     },
     card: {
@@ -116,13 +120,15 @@ const styles = theme => ({
             width: '100%'
         }
     },
+    tableTheadEven:{
+        backgroundColor: 'rgba(' + hexToRgb(theme.palette.primary.main).r + ',' + hexToRgb(theme.palette.primary.main).g + ',' + hexToRgb(theme.palette.primary.main).b +', .2)'
+    },
     tableThEven:{
         backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b +', .3)'
     },
     tableTdEven:{
         backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b +', .1)'
     }
-
 });
 const defaultProps = {
     trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
@@ -261,7 +267,7 @@ class InvoicePage extends Component {
             this.getInvoicesFromStatus();
 
         if(prevProps===null && this.props.invoices!==null){
-             this.getInvoicesFromStatus();
+            this.getInvoicesFromStatus();
         }
     }
 
@@ -486,6 +492,7 @@ class InvoicePage extends Component {
                         {this.state.temp && (
                             <CheckboxTable
                                 data={this.state.temp}
+                                minRows = {0}
                                 ref={r => (this.checkboxTable = r)}
                                 getTheadGroupProps={(state, rowInfo, column, instance) =>{
                                     return {
@@ -517,7 +524,8 @@ class InvoicePage extends Component {
                                     return {
                                         style:{
                                             fontSize: 13,
-                                        }
+                                        },
+                                        className: classes.tableTheadEven
                                     }
                                 }}
                                 getTdProps={(state, rowInfo, column, instance) =>{
