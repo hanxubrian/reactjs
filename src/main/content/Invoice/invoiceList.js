@@ -61,7 +61,14 @@ const styles = theme => ({
         '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
             background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
             color: 'white!important'
+        },
+        '& .openFilter':{
+            width: 'inherit'
+        },
+        '& .openSummary':{
+            width: 300
         }
+
     },
     card: {
         width   : '100%',
@@ -76,14 +83,23 @@ const styles = theme => ({
         backgroundColor: theme.palette.secondary.main
     },
     layoutRightSidebar : {
-        width: 300
+        width: 0,
+        [theme.breakpoints.down('sm')]: {
+            width: 'inherit'
+        }
+    },
+    layoutLeftSidebar : {
+        width: 0,
+        [theme.breakpoints.down('sm')]: {
+            width: 'inherit'
+        }
     },
     layoutSidebarHeader: {
         height   : headerHeight,
         minHeight: headerHeight,
         display: 'flex',
         alignItems: 'center',
-        backgroundColor: theme.palette.secondary.main
+        backgroundColor: theme.palette.secondary.main,
     },
     addButton          : {
         position: 'absolute',
@@ -411,7 +427,8 @@ class InvoicePage extends Component {
             <FusePageCustom
                 classes={{
                     root: classes.layoutRoot,
-                    rightSidebar : classes.layoutRightSidebar,
+                    rightSidebar : classNames(classes.layoutRightSidebar, {'openSummary': summaryState}),
+                    leftSidebar : classNames(classes.layoutLeftSidebar, {'openFilter': filterState}),
                     sidebarHeader: classes.layoutSidebarHeader,
                     header: classes.layoutHeader
                 }}
@@ -640,7 +657,7 @@ class InvoicePage extends Component {
                     </div>
                 }
                 leftSidebarHeader={
-                    filterState ? <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0">
+                    <div className={classNames("flex flex-row w-full h-full justify-between p-24 align-middle pr-0", {'filteropen': filterState})}>
                         <h4 style={{marginBlockStart: '1em'}}>Filter Panel</h4>
                         <FuseAnimate animation="transition.expandIn" delay={200}>
                             <div>
@@ -651,13 +668,13 @@ class InvoicePage extends Component {
                                 </Hidden>
                             </div>
                         </FuseAnimate>
-                    </div>: ''
+                    </div>
                 }
                 leftSidebarContent={
-                    filterState ? <FilterPanel/>:''
+                   <FilterPanel/>
                 }
                 rightSidebarHeader={
-                    summaryState ? <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0">
+                    <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0">
                         <h4 style={{marginBlockStart: '1em'}}>Summary Panel</h4>
                         <FuseAnimate animation="transition.expandIn" delay={200}>
                             <div>
@@ -670,10 +687,10 @@ class InvoicePage extends Component {
                                     </IconButton>
                                 </Hidden>
                             </div>
-                        </FuseAnimate></div>:''
+                        </FuseAnimate></div>
                 }
                 rightSidebarContent={
-                    summaryState ? <SummaryPanel/> : ''
+                    <SummaryPanel/>
                 }
                 onRef={instance => {
                     this.pageLayout = instance;

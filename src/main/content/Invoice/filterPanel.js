@@ -21,10 +21,6 @@ import FuseHighlight from "../../../@fuse/components/FuseHighlight/FuseHighlight
 
 const styles = theme => ({
     root : {
-        display: 'none',
-        '&.open':{
-            display: 'block'
-        }
     },
     panel: {
         position                      : 'absolute',
@@ -47,11 +43,11 @@ const styles = theme => ({
                 boxShadow: theme.shadows[5]
             }
         },
-        transition                    : theme.transitions.create(['transform'], {
+        transition  : theme.transitions.create(['transform'], {
             easing  : theme.transitions.easing.easeInOut,
             duration: theme.transitions.duration.standard
         }),
-        '&.opened'                    : {
+        '&.opened1'                    : {
             transform: 'translateX(300px)'
         }
     }
@@ -117,7 +113,7 @@ class FilterPanel extends Component {
         const {classes, filterState} = this.props;
 
         return (
-            <div className={classNames(classes.root, {'open': filterState})}>
+            <div className={classNames(classes.root)}>
                 <div className={classNames("flex flex-col")}>
                     <Paper className="flex flex-1 flex-col min-h-px p-20">
                         <div >
