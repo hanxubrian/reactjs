@@ -559,7 +559,7 @@ class InvoicePage extends Component {
                                     let direction = 'column';
                                     let bkColor='';
                                     if (column.Header==='Description' ) direction = 'row';
-                                    if (column.Header==='Name' ) {direction = 'row'; }
+                                    if (column.id==='CustomerName' ) {direction = 'row'; }
 
                                     let width=80;
                                     let tdClass='';
@@ -595,7 +595,7 @@ class InvoicePage extends Component {
                                         accessor: "CustomerNo",
                                     },
                                     {
-                                        Header  : "Name",
+                                        Header  : "Customer Name",
                                         accessor: "CustomerName",
                                     },
                                     {
@@ -607,7 +607,7 @@ class InvoicePage extends Component {
                                         accessor: "InvoiceTotal",
                                     },
                                     {
-                                        Header  : "Date",
+                                        Header  : "Invoice Date",
                                         id: "InvoiceDate",
                                         accessor: d=>moment(d.InvoiceDate).format('YYYY-MM-DD')
                                     },
