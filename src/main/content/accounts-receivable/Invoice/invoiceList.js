@@ -535,8 +535,8 @@ class InvoicePage extends Component {
                                     let width=80;
                                     if (column.id==='InvoiceDescription') width= 250;
                                     if (column.id==='CustomerName') width= 190;
-                                    if (column.id==='InvoiceNo' ||column.id==='DueDate'||column.id==='InvoiceTax'||
-                                        column.id==='InvoiceDescription' || column.id==='CustomerId' || column.id==='TransactionStatusListId') thClass = classNames(classes.tableThEven);
+                                    if (column.id==='InvoiceNo' ||column.id==='CustomerNo'||column.id==='InvoiceBalanceAmount'||
+                                        column.id==='InvoiceDate' || column.id==='TransactionStatus') thClass = classNames(classes.tableThEven);
                                     return {
                                         style:{
                                             // minWidth: width,
@@ -565,8 +565,8 @@ class InvoicePage extends Component {
                                     let tdClass='';
                                     if (column.id==='InvoiceDescription') width= 250;
                                     if (column.id==='CustomerName') width= 190;
-                                    if (column.id==='InvoiceNo' ||column.id==='DueDate'||column.id==='InvoiceTax'||
-                                        column.id==='InvoiceDescription' || column.id==='CustomerId' || column.id==='TransactionStatusListId') tdClass = classNames(classes.tableTdEven);
+                                    if (column.id==='InvoiceNo' ||column.id==='CustomerNo'||column.id==='InvoiceBalanceAmount'||
+                                        column.id==='InvoiceDate' || column.id==='TransactionStatus') tdClass = classNames(classes.tableTdEven);
 
                                     return {
                                         style:{
@@ -582,72 +582,44 @@ class InvoicePage extends Component {
                                 }}
                                 columns={[
                                     {
-                                        Header: "Invoice",
-                                        columns: [
-                                            {
-                                                Header  : "No",
-                                                accessor: "InvoiceNo",
-                                                filterAll: true
-                                            },
-                                            {
-                                                Header  : "Date",
-                                                id: "InvoiceDate",
-                                                accessor: d=>moment(d.InvoiceDate).format('YYYY-MM-DD')
-                                            },
-                                            {
-                                                Header  : "Due Date",
-                                                id: "DueDate",
-                                                accessor: d=>moment(d.DueDate).format('YYYY-MM-DD')
-                                            },
-                                            {
-                                                Header  : "Amount",
-                                                accessor: "InvoiceAmount",
-                                            },
-                                            {
-                                                Header  : "Tax",
-                                                accessor: "InvoiceTax",
-                                            },
-                                            {
-                                                Header  : "Total",
-                                                accessor: "InvoiceTotal",
-                                            },
-                                            {
-                                                Header  : "Description",
-                                                accessor: "InvoiceDescription",
-                                            },
-                                        ]
+                                        Header  : "Invoice #",
+                                        accessor: "InvoiceNo",
+                                        filterAll: true
                                     },
                                     {
-                                        Header: "Customer",
-                                        columns: [
-                                            {
-                                                Header  : "No",
-                                                accessor: "CustomerNo",
-                                            },
-                                            {
-                                                Header  : "Id",
-                                                accessor: "CustomerId",
-                                            },
-                                            {
-                                                Header  : "Name",
-                                                accessor: "CustomerName",
-                                            },
-                                        ]
-
+                                        Header  : "Description",
+                                        accessor: "InvoiceDescription",
                                     },
                                     {
-                                        Header: "Transaction Status",
-                                        columns:[
-                                            {
-                                                Header  : "List Id",
-                                                accessor: "TransactionStatusListId",
-                                            },
-                                            {
-                                                Header  : "Status",
-                                                accessor: "TransactionStatus",
-                                            },
-                                        ]
-                                    }
+                                        Header  : "Customer #",
+                                        accessor: "CustomerNo",
+                                    },
+                                    {
+                                        Header  : "Name",
+                                        accessor: "CustomerName",
+                                    },
+                                    {
+                                        Header  : "Balance",
+                                        accessor: "InvoiceBalanceAmount",
+                                    },
+                                    {
+                                        Header  : "Total",
+                                        accessor: "InvoiceTotal",
+                                    },
+                                    {
+                                        Header  : "Date",
+                                        id: "InvoiceDate",
+                                        accessor: d=>moment(d.InvoiceDate).format('YYYY-MM-DD')
+                                    },
+                                    {
+                                        Header  : "Due Date",
+                                        id: "DueDate",
+                                        accessor: d=>moment(d.DueDate).format('YYYY-MM-DD')
+                                    },
+                                    {
+                                        Header  : "Status",
+                                        accessor: "TransactionStatus",
+                                    },
                                 ]}
                                 defaultPageSize={100}
                                 className={classNames( "-striped -highlight")}
@@ -671,7 +643,7 @@ class InvoicePage extends Component {
                     </div>
                 }
                 leftSidebarContent={
-                   <FilterPanel/>
+                    <FilterPanel/>
                 }
                 rightSidebarHeader={
                     <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0">
