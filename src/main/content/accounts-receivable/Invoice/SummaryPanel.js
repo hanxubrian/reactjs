@@ -8,7 +8,7 @@ import {FuseAnimate} from '@fuse';
 //Material UI core
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import * as Actions from './../../../store/actions';
+import * as Actions from 'store/actions';
 import Widget8 from './widget8';
 
 import {bindActionCreators} from 'redux';

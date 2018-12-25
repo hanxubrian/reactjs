@@ -19,9 +19,9 @@ import {CasesConfig} from "./customer-service/cases/casesConfig";
 import {CustomerServiceCallListConfig} from "./customer-service/call-list/call-listConfig";
 import {PlansConfig} from "./comissions/plans/plansConfig";
 import {ComissionsConfig} from "./comissions/comissions/comissionsConfig";
-import {InvoiceConfig} from "./Invoice/invoiceConfig";
 import {AccountsReceivableConfig} from "./accounts-receivable/accounts-receivable/accounts-receivableConfig";
 import {BillRunConfig} from "./accounts-receivable/bill-run/bill-runConfig";
+import {InvoiceConfig} from "./accounts-receivable/Invoice/invoiceConfig";
 
 export const pagesConfigs = [
     SigninPageConfig,

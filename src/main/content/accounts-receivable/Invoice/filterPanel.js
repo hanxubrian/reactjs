@@ -12,12 +12,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 
 
-import * as Actions from './../../../store/actions';
+import * as Actions from 'store/actions';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import classNames from 'classnames';
-import FuseHighlight from "../../../@fuse/components/FuseHighlight/FuseHighlight";
 
 const styles = theme => ({
     root : {
