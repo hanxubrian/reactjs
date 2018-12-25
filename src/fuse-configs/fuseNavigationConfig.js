@@ -1,10 +1,5 @@
 export const fuseNavigationConfig = [
     {
-        'MenuId'    : 1,
-        'Slug'      : 'applications',
-        'Title'   : 'Applications',
-        'Type'    : 'group',
-        'Icon'    : 'apps',
         'Children': [
             {
                 'MenuId'    : 13,
