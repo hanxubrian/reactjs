@@ -32,6 +32,15 @@ const headerHeight = 100;
 const CheckboxTable = checkboxHOC(ReactTable);
 const chance = new Chance();
 
+const hexToRgb = (hex) =>{
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+
 const styles = theme => ({
     root: {
         background    : "url('/assets/images/backgrounds/signin-bg.jpg') no-repeat",
@@ -106,11 +115,19 @@ const styles = theme => ({
         [theme.breakpoints.down('sm')]: {
             width: '100%'
         }
+    },
+    tableThEven:{
+        backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b +', .3)'
+    },
+    tableTdEven:{
+        backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b +', .1)'
     }
+
 });
 const defaultProps = {
     trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
 };
+
 
 class InvoicePage extends Component {
     state = {
@@ -364,7 +381,7 @@ class InvoicePage extends Component {
                         return {
                             style: {
                                 backgroundColor: selected ? "lightpink" : "",
-                                padding: "5px 10px"
+                                // padding: "5px 10px"
                             }
                         };
                     } else {
@@ -480,33 +497,42 @@ class InvoicePage extends Component {
                                     }
                                 }}
                                 getTheadThProps={(state, rowInfo, column, instance) =>{
+                                    let thClass='';
                                     let width=80;
                                     if (column.id==='InvoiceDescription') width= 250;
                                     if (column.id==='CustomerName') width= 190;
+                                    if (column.id==='InvoiceNo' ||column.id==='DueDate'||column.id==='InvoiceTax'||
+                                        column.id==='InvoiceDescription' || column.id==='CustomerId' || column.id==='TransactionStatusListId') thClass = classNames(classes.tableThEven);
                                     return {
                                         style:{
                                             // minWidth: width,
                                             // width: width,
                                             fontSize: 12,
-                                        }
+                                            padding: "10px 10px",
+                                        },
+                                        className: thClass
                                     }
                                 }}
                                 getTheadProps={(state, rowInfo, column, instance) =>{
                                     return {
                                         style:{
-                                            padding: "10px 10px",
                                             fontSize: 13,
                                         }
                                     }
                                 }}
                                 getTdProps={(state, rowInfo, column, instance) =>{
                                     let direction = 'column';
+                                    let bkColor='';
                                     if (column.Header==='Description' ) direction = 'row';
                                     if (column.Header==='Name' ) {direction = 'row'; }
 
                                     let width=80;
+                                    let tdClass='';
                                     if (column.id==='InvoiceDescription') width= 250;
                                     if (column.id==='CustomerName') width= 190;
+                                    if (column.id==='InvoiceNo' ||column.id==='DueDate'||column.id==='InvoiceTax'||
+                                        column.id==='InvoiceDescription' || column.id==='CustomerId' || column.id==='TransactionStatusListId') tdClass = classNames(classes.tableTdEven);
+
                                     return {
                                         style:{
                                             textAlign: 'center',
@@ -514,7 +540,9 @@ class InvoicePage extends Component {
                                             // minWidth: width,
                                             // width: width,
                                             fontSize: 12,
-                                        }
+                                            padding: "10px 10px",
+                                        },
+                                        className: tdClass
                                     }
                                 }}
                                 columns={[
@@ -587,7 +615,7 @@ class InvoicePage extends Component {
                                     }
                                 ]}
                                 defaultPageSize={100}
-                                className="-striped -highlight"
+                                className={classNames( "-striped -highlight")}
                                 {...checkboxProps}
                             />
                         )}
