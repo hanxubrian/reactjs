@@ -117,7 +117,8 @@ class InvoicePage extends Component {
         checkedComplete: true,
         checkedOpen: true,
         selection: [],
-        selectAll: false
+        selectAll: false,
+        regionId: 0
     };
 
     toggleSelection = (key, shift, row) => {
@@ -208,17 +209,52 @@ class InvoicePage extends Component {
         this.escFunction = this.escFunction.bind(this);
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot){
+        let bChanged = false;
+        if(this.props.transactionStatus.checkedPaid !== prevProps.transactionStatus.checkedPaid) {
+            this.setState({checkedPaid: !this.state.checkedPaid});
+            bChanged = true;
+        }
+
+        if(this.props.transactionStatus.checkedPP !== prevProps.transactionStatus.checkedPP) {
+            this.setState({checkedPP: !this.state.checkedPP});
+            bChanged = true;
+        }
+
+        if(this.props.transactionStatus.checkedComplete !== prevProps.transactionStatus.checkedComplete) {
+            this.setState({checkedComplete: !this.state.checkedComplete});
+            bChanged = true;
+        }
+
+        if(this.props.transactionStatus.checkedOpen !== prevProps.transactionStatus.checkedOpen) {
+            this.setState({checkedOpen: !this.state.checkedOpen});
+            bChanged = true;
+        }
+
+        if(this.props.regionId !== prevProps.regionId) {
+            this.setState({regionId: prevProps.regionId});
+            bChanged = true;
+        }
+
+        if(bChanged)
+            this.getInvoicesFromStatus();
+
+        if(prevProps===null && this.props.invoices!==null){
+             this.getInvoicesFromStatus();
+        }
+    }
+
     componentWillMount(){
         this.setState({checkedPaid: this.props.transactionStatus.checkedPaid});
         this.setState({checkedPP: this.props.transactionStatus.checkedPP});
         this.setState({checkedComplete: this.props.transactionStatus.checkedComplete});
         this.setState({checkedOpen: this.props.transactionStatus.checkedOpen});
 
-        this.getInvoicesFromStatus(this.props.transactionStatus)
+        this.getInvoicesFromStatus()
 
     }
 
-    getInvoicesFromStatus =(newprops=this.props.transactionStatus, rawData=this.props.invoices) =>{
+    getInvoicesFromStatus =(rawData=this.props.invoices) =>{
         let temp=[];
         let all_temp=[];
         let temp1=[];
@@ -231,45 +267,18 @@ class InvoicePage extends Component {
 
         temp1 = keys.map((key, index)=> {
 
-            if(newprops[key]){
+            if(this.props.transactionStatus[key]){
                 temp = temp0.filter(d => {
-                    return d.TransactionStatus.toLowerCase() === statusStrings[index]
+                    if(this.props.regionId===0)
+                        return d.TransactionStatus.toLowerCase() === statusStrings[index]
+                    else
+                        return d.TransactionStatus.toLowerCase() === statusStrings[index] && d.RegionId === this.props.regionId
                 });
             }
             all_temp =_.uniq([...all_temp, ...temp]);
         });
         this.setState({temp: all_temp})
     };
-
-    componentWillReceiveProps(nextProps){
-        let bChanged = false;
-        if(this.props.transactionStatus.checkedPaid !== nextProps.transactionStatus.checkedPaid) {
-            this.setState({checkedPaid: !this.state.checkedPaid});
-            bChanged = true;
-        }
-
-        if(this.props.transactionStatus.checkedPP !== nextProps.transactionStatus.checkedPP) {
-            this.setState({checkedPP: !this.state.checkedPP});
-            bChanged = true;
-        }
-
-        if(this.props.transactionStatus.checkedComplete !== nextProps.transactionStatus.checkedComplete) {
-            this.setState({checkedComplete: !this.state.checkedComplete});
-            bChanged = true;
-        }
-
-        if(this.props.transactionStatus.checkedOpen !== nextProps.transactionStatus.checkedOpen) {
-            this.setState({checkedOpen: !this.state.checkedOpen});
-            bChanged = true;
-        }
-
-        if(bChanged)
-            this.getInvoicesFromStatus(nextProps.transactionStatus);
-
-        if(nextProps.invoices){
-            this.getInvoicesFromStatus(nextProps.transactionStatus, nextProps.invoices);
-        }
-    }
 
     componentDidMount(){
         document.addEventListener("keydown", this.escFunction, false);
@@ -326,7 +335,7 @@ class InvoicePage extends Component {
         const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteInvoicesAction} = this.props;
         const { toggleSelection, toggleAll, isSelected, logSelection} = this;
 
-        const { data, columns, selectAll, selection } = this.state;
+        const { selectAll, selection } = this.state;
         let checkboxProps={};
         logSelection();
 
@@ -630,7 +639,7 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({invoices})
+function mapStateToProps({invoices, auth})
 {
     return {
         invoices: invoices.invoicesDB,
@@ -638,6 +647,7 @@ function mapStateToProps({invoices})
         transactionStatus: invoices.transactionStatus,
         filterState: invoices.bOpenedFilterPanel,
         summaryState: invoices.bOpenedSummaryPanel,
+        regionId: auth.login.defaultRegionId
     }
 }
 

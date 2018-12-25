@@ -103,4 +103,3 @@ const persistConfig = {
     blacklist: ['bLoginStart','regionId']
 };
 export default persistReducer(persistConfig, login);
-// export default login;
