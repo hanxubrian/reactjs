@@ -44,6 +44,10 @@ const styles = theme => ({
         },
         '& .-pageSizeOptions': {
             display: 'none'
+        },
+        '& .ReactTable .rt-noData': {
+            top: '150px',
+            border: '1px solid coral'
         }
     },
     card: {
@@ -251,8 +255,13 @@ class InvoicePage extends Component {
         this.setState({checkedOpen: this.props.transactionStatus.checkedOpen});
 
         this.getInvoicesFromStatus()
-
     }
+
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.invoices!==null)
+            this.getInvoicesFromStatus(nextProps.invoices);
+    }
+
 
     getInvoicesFromStatus =(rawData=this.props.invoices) =>{
         let temp=[];
