@@ -368,19 +368,16 @@ class InvoicePage extends Component {
                     <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
                         <div className="flex flex-row flex-1 justify-between">
                             <div className="flex items-center pl-0 lg:pl-0 p-24">
-                                <Hidden smDown>
-                                    <IconButton
-                                        onClick={(ev) => toggleFilterPanel()}
-                                        aria-label="toggle filter panel"
-                                    >
-                                        { !filterState && (
+                                { !filterState && (
+                                    <Hidden smDown>
+                                        <IconButton
+                                            onClick={(ev) => toggleFilterPanel()}
+                                            aria-label="toggle filter panel"
+                                        >
                                             <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
-                                        )}
-                                        {filterState && (
-                                            <Icon>close</Icon>
-                                        )}
-                                    </IconButton>
-                                </Hidden>
+                                        </IconButton>
+                                    </Hidden>
+                                )}
                                 <Hidden smUp>
                                     <IconButton
                                         onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
@@ -390,11 +387,8 @@ class InvoicePage extends Component {
                                         {/*<Icon>menu</Icon>*/}
                                     </IconButton>
                                 </Hidden>
-                                {/*<div className="flex-1"><h4>Filter</h4></div>*/}
                             </div>
                             <div className="flex items-center pr-0 lg:pr-12 p-24">
-                                {/*<div className="flex-1"><h4>Summary</h4></div>*/}
-                                {/*<FuseSearch/>*/}
                                 <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
                                     <Input
                                         placeholder="Search..."
@@ -410,21 +404,22 @@ class InvoicePage extends Component {
                                     />
                                     <Icon color="action" className="mr-16">search</Icon>
                                 </Paper>
-                                <div className={classes.separator}/>
-                                <Hidden smDown>
-                                    <IconButton
-                                        onClick={(ev) => toggleSummaryPanel()}
-                                        aria-label="toggle summary panel"
-                                        style={{marginRight: -12}}
-                                    >
-                                        { !summaryState && (
+                                {/*<div className={classes.separator}/>*/}
+                                { !summaryState && (
+                                    <Hidden smDown>
+                                        <IconButton
+                                            onClick={(ev) => toggleSummaryPanel()}
+                                            aria-label="toggle summary panel"
+                                            style={{marginRight: -12}}
+                                        >
+
                                             <Icon>insert_chart</Icon>
-                                        )}
-                                        {summaryState && (
-                                            <Icon>close</Icon>
-                                        )}
-                                    </IconButton>
-                                </Hidden>
+                                            {/*{summaryState && (*/}
+                                            {/*<Icon>close</Icon>*/}
+                                            {/*)}*/}
+                                        </IconButton>
+                                    </Hidden>
+                                )}
                                 <Hidden smUp>
                                     <IconButton
                                         onClick={(ev) => this.pageLayout.toggleRightSidebar()}
@@ -442,11 +437,11 @@ class InvoicePage extends Component {
                                 </Fab>
                             </FuseAnimate>
                             { selection.length>0 && (
-                            <FuseAnimate animation="transition.expandIn" delay={600}>
-                                <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeInvoices()}>
-                                    <Icon>delete</Icon>
-                                </Fab>
-                            </FuseAnimate>
+                                <FuseAnimate animation="transition.expandIn" delay={600}>
+                                    <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeInvoices()}>
+                                        <Icon>delete</Icon>
+                                    </Fab>
+                                </FuseAnimate>
                             )}
                         </div>
                     </div>
@@ -581,22 +576,37 @@ class InvoicePage extends Component {
                     </div>
                 }
                 leftSidebarHeader={
-                    filterState ? <div className="p-24"><h4>Filter Panel</h4></div>: ''
+                    filterState ? <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0">
+                        <h4 style={{marginBlockStart: '1em'}}>Filter Panel</h4>
+                        <FuseAnimate animation="transition.expandIn" delay={200}>
+                            <div>
+                                <Hidden xsDown>
+                                    <IconButton onClick={(ev)=>toggleFilterPanel()}>
+                                        <Icon>close</Icon>
+                                    </IconButton>
+                                </Hidden>
+                            </div>
+                        </FuseAnimate>
+                    </div>: ''
                 }
                 leftSidebarContent={
                     filterState ? <FilterPanel/>:''
                 }
                 rightSidebarHeader={
-                    summaryState ? <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0"><h4 style={{marginBlockStart: '1em'}}>Summary Panel</h4><FuseAnimate animation="transition.expandIn" delay={200}>
-                        <div>
-                            <IconButton onClick={()=>this.removeInvoices()}>
-                                <Icon>delete</Icon>
-                            </IconButton>
-                            <IconButton>
-                                <Icon>more_vert</Icon>
-                            </IconButton>
-                        </div>
-                    </FuseAnimate></div>:''
+                    summaryState ? <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0">
+                        <h4 style={{marginBlockStart: '1em'}}>Summary Panel</h4>
+                        <FuseAnimate animation="transition.expandIn" delay={200}>
+                            <div>
+                                <Hidden xsDown>
+                                    {/*<IconButton onClick={()=>this.removeInvoices()}>*/}
+                                    {/*<Icon>delete</Icon>*/}
+                                    {/*</IconButton>*/}
+                                    <IconButton onClick={(ev)=>toggleSummaryPanel()}>
+                                        <Icon>close</Icon>
+                                    </IconButton>
+                                </Hidden>
+                            </div>
+                        </FuseAnimate></div>:''
                 }
                 rightSidebarContent={
                     summaryState ? <SummaryPanel/> : ''
