@@ -139,6 +139,7 @@ class InvoicePage extends Component {
     state = {
         s: '',
         temp: [],
+        data: [],
         checkedPaid: true,
         checkedPP: true,
         checkedComplete: true,
@@ -266,8 +267,12 @@ class InvoicePage extends Component {
         if(bChanged)
             this.getInvoicesFromStatus();
 
-        if(prevProps===null && this.props.invoices!==null){
+        if(prevProps.invoices===null && this.props.invoices!==null){
             this.getInvoicesFromStatus();
+        }
+
+        if(prevState.s!==this.state.s) {
+            this.search(this.state.s);
         }
     }
 
@@ -309,7 +314,8 @@ class InvoicePage extends Component {
             }
             all_temp =_.uniq([...all_temp, ...temp]);
         });
-        this.setState({temp: all_temp})
+        this.setState({temp: all_temp});
+        this.setState({data: all_temp});
     };
 
     componentDidMount(){
@@ -327,7 +333,11 @@ class InvoicePage extends Component {
         }
     }
     search(val) {
-        const temp = this.state.temp.filter( d => {
+        if(val===''){
+            this.getInvoicesFromStatus();
+            return;
+        }
+        const temp = this.state.data.filter( d => {
             return d.InvoiceId.toString().indexOf(val) !== -1 || !val ||
                 d.InvoiceNo.indexOf(val) !== -1 ||
                 d.InvoiceAmount.toString().indexOf(val) !== -1 ||
@@ -347,7 +357,7 @@ class InvoicePage extends Component {
         this.setState({ [prop]: event.target.value });
 
         if(prop==='s') {
-            this.search(event.target.value.toLowerCase());
+            // this.search(event.target.value.toLowerCase());
         }
     };
 
