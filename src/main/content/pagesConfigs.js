@@ -46,6 +46,6 @@ export const pagesConfigs = [
     PlansConfig,
     ComissionsConfig,
     InvoiceConfig,
+    BillRunConfig,
     AccountsReceivableConfig,
-    BillRunConfig
 ];

@@ -13,7 +13,6 @@ const initialState = {
 
 
 const invoices = function(state = initialState, action) {
-    console.log('action=', action.payload);
     switch ( action.type )
     {
         case Actions.GET_ALL_INVOICES:

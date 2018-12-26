@@ -97,6 +97,43 @@ class BillRun extends Component {
     handleChange = prop => event => {
         this.setState({ [prop]: event.target.value });
     };
+    componentWillMount(){
+        this.getBillruns()
+    }
+    componentDidUpdate(prevProps, prevState, snapshot){
+        let bChanged = false;
+
+        if(this.props.regionId !== prevProps.regionId) {
+            this.setState({regionId: prevProps.regionId});
+            bChanged = true;
+        }
+
+        if(bChanged)
+            this.getBillruns();
+
+        if(prevProps.billruns===null && this.props.billruns!==null){
+            this.getBillruns();
+        }
+
+        if(prevState.s!==this.state.s) {
+            this.search(this.state.s);
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(this.props.billruns===null && nextProps.billruns!==null)
+            this.getBillruns(nextProps.billruns);
+        if(this.props.billruns!==nextProps.billruns)
+            this.getBillruns(nextProps.billruns);
+    }
+
+    getBillruns =(rawData=this.props.billruns) =>{
+        if(rawData===null) return;
+
+        this.setState({temp: rawData});
+        this.setState({data: rawData});
+    };
+
     render()
     {
         const {classes} = this.props;
@@ -242,8 +279,8 @@ class BillRun extends Component {
                                                 className: classNames(classes.tableTdEven, "flex items-center  justify-center")
                                             },
                                             {
-                                                Header: "Status",
-                                                accessor: "TransactionStatus",
+                                                Header: "User",
+                                                accessor: "CreateBy",
                                                 width: 110,
                                                 className: classNames(classes.tableTdEven, "flex items-center  justify-center")
                                             },
@@ -306,11 +343,11 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({billrun, auth})
+function mapStateToProps({billruns, auth})
 {
     return {
-        billruns: billrun.billrunsDB,
-        bLoadedBillruns: billrun.bLoadedBillruns,
+        billruns: billruns.billrunsDB,
+        bLoadedBillruns: billruns.bLoadedBillruns,
         regionId: auth.login.defaultRegionId
     }
 }

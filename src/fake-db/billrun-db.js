@@ -34,14 +34,14 @@ let billrunDB = [
 /**
  * Read Billrun DB
  */
-mock.onGet("/api/billrunDB/gets").reply(() => {
+mock.onGet("/api/billruns/gets").reply(() => {
     return [200, billrunDB];
 });
 
 /**
  * Add new Bill-run
  */
-mock.onPost("/api/invoices/save").reply(request => {
+mock.onPost("/api/billruns/save").reply(request => {
     const data = JSON.parse(request.data);
     let billrun = null;
 

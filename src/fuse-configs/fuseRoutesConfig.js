@@ -5,8 +5,8 @@ import {appsConfigs} from 'main/content/apps/appsConfigs';
 import {pagesConfigs} from "../main/content/pagesConfigs";
 
 const routeConfigs = [
+    ...pagesConfigs,
     ...appsConfigs,
-    ...pagesConfigs
 ];
 
 export const routes = [

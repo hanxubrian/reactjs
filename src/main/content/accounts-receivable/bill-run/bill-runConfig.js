@@ -1,4 +1,5 @@
 import {FuseLoadable} from '@fuse';
+import BillRun from './bill-run'
 
 export const BillRunConfig = {
     settings: {
@@ -9,9 +10,7 @@ export const BillRunConfig = {
     routes  : [
         {
             path     : '/accounts-receivable/bill-run',
-            component: FuseLoadable({
-                loader: () => import('./bill-run')
-            })
+            component: BillRun
         }
     ]
 };
