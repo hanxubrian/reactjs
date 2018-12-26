@@ -71,10 +71,7 @@ const styles = theme => ({
         },
         '& .ReactTable .rt-tbody': {
             overflowY: 'scroll',
-            overflowX: 'unset'
-        },
-        '& .ReactTable .rt-thead': {
-            overflowY: 'scroll'
+            overflowX: 'hidden'
         },
         '& .ReactTable .rt-tr-group':{
           flex: '0 0 auto'
@@ -542,17 +539,10 @@ class InvoicePage extends Component {
                                 }}
                                 getTheadThProps={(state, rowInfo, column, instance) =>{
                                     let thClass='';
-                                    let width=80;
-                                    if (column.id==='InvoiceDescription') width= 360;
-                                    if (column.id==='CustomerName') width= 240;
-                                    if (column.id==='_selector') width= 40;
                                     if (column.id==='InvoiceNo' ||column.id==='CustomerNo'||column.id==='InvoiceBalanceAmount'||
                                         column.id==='InvoiceDate' || column.id==='TransactionStatus') thClass = classNames(classes.tableThEven);
                                     return {
                                         style:{
-                                            minWidth: width,
-                                            width: width,
-                                            flex: `${width} 0 auto!important`,
                                             fontSize: 12,
                                             padding: "10px 10px",
                                         },
@@ -568,27 +558,22 @@ class InvoicePage extends Component {
                                     }
                                 }}
                                 getTdProps={(state, rowInfo, column, instance) =>{
-                                    let direction = 'column';
+                                    console.log('col', column)
+                                    let direction = 'row';
                                     if (column.Header==='Description' ) direction = 'row';
                                     if (column.id==='CustomerName' ) {direction = 'row'; }
 
-                                    let width = 80;
-                                    let tdClass='';
-                                    let bMax = false;
-                                    if (column.id==='InvoiceDescription') width= 360;
-                                    if (column.id==='CustomerName') width= 240;
-                                    if (column.id==='_selector') width= 40;
+                                    let tdClass='flex items-center justify-center';
+                                    // if (column.id==='_selector') width= 40;
                                     if (column.id==='InvoiceNo' ||column.id==='CustomerNo'||column.id==='InvoiceBalanceAmount'||
-                                        column.id==='InvoiceDate' || column.id==='TransactionStatus') tdClass = classNames(classes.tableTdEven);
+                                        column.id==='InvoiceDate' || column.id==='TransactionStatus') tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
 
                                     return {
                                         style:{
                                             textAlign: 'center',
                                             flexDirection: direction,
-                                            minWidth: width,
-                                            width: width,
                                             fontSize: 12,
-                                            padding: "10px 10px",
+                                            padding: "0",
                                         },
                                         className: tdClass
                                     }
@@ -599,42 +584,75 @@ class InvoicePage extends Component {
                                         {
                                             Header: "Invoice #",
                                             accessor: "InvoiceNo",
-                                            filterAll: true
+                                            filterAll: true,
+                                            width: 120
                                         },
                                         {
                                             Header: "Description",
                                             accessor: "InvoiceDescription",
+                                            width: 360
                                         },
                                         {
                                             Header: "Customer #",
                                             accessor: "CustomerNo",
+                                            width: 110
                                         },
                                         {
                                             Header: "Customer Name",
                                             accessor: "CustomerName",
+                                            width: 240
                                         },
                                         {
                                             Header: "Balance",
                                             accessor: "InvoiceBalanceAmount",
+                                            width: 110
                                         },
                                         {
                                             Header: "Total",
                                             accessor: "InvoiceTotal",
+                                            width: 110
                                         },
                                         {
                                             Header: "Invoice Date",
                                             id: "InvoiceDate",
-                                            accessor: d => moment(d.InvoiceDate).format('YYYY-MM-DD')
+                                            accessor: d => moment(d.InvoiceDate).format('YYYY-MM-DD'),
+                                            width: 110
                                         },
                                         {
                                             Header: "Due Date",
                                             id: "DueDate",
-                                            accessor: d => moment(d.DueDate).format('YYYY-MM-DD')
+                                            accessor: d => moment(d.DueDate).format('YYYY-MM-DD'),
+                                            width: 110
                                         },
                                         {
                                             Header: "Status",
                                             accessor: "TransactionStatus",
+                                            width: 120
                                         },
+                                        {
+                                            Header: "Actions",
+                                            width : 128,
+                                            Cell  : row => (
+                                                <div className="flex items-center actions">
+                                                    <IconButton
+                                                        onClick={(ev) => {
+                                                            ev.stopPropagation();
+                                                            // removeContact(row.original.id);
+                                                        }}
+                                                    >
+                                                        <Icon>delete</Icon>
+                                                    </IconButton>,
+                                                    <IconButton
+                                                        onClick={(ev) => {
+                                                            ev.stopPropagation();
+                                                            // removeContact(row.original.id);
+                                                        }}
+                                                    >
+                                                        <Icon>edit</Icon>
+                                                    </IconButton>
+                                                </div>
+                                            )
+                                        }
                                     ]
                                 }
                                 ]}
