@@ -4,7 +4,6 @@ import './todo-db';
 import './file-manager-db';
 import './contacts-db';
 import './calendar-db';
-import './invoices-db';
 import './profile-db';
 import './search-db';
 import './faq-db';
@@ -17,5 +16,7 @@ import './chat-db';
 import './e-commerce-db';
 import './scrumboard-db';
 import './academy-db';
+import './invoices-db';
+import './billrun-db';
 
 mock.onAny().passThrough();
