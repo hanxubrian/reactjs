@@ -311,6 +311,8 @@ class InvoicePage extends Component {
     componentWillReceiveProps(nextProps) {
         if(this.props.invoices===null && nextProps.invoices!==null)
             this.getInvoicesFromStatus(nextProps.invoices);
+        if(this.props.invoices!==nextProps.invoices)
+            this.getInvoicesFromStatus(nextProps.invoices);
     }
 
 
@@ -572,6 +574,18 @@ class InvoicePage extends Component {
                                         },
                                     }
                                 }}
+                                getTrProps={(state, rowInfo, column) => {
+                                    return {
+                                        className: "cursor-pointer",
+                                        onClick  : (e, handleOriginal) => {
+                                            if ( rowInfo )
+                                            {
+                                                alert('ok');
+                                                // openEditContactDialog(rowInfo.original);
+                                            }
+                                        }
+                                    }
+                                }}
                                 columns={[
                                     {
                                         Header   : (instance) => (
@@ -667,6 +681,7 @@ class InvoicePage extends Component {
                                                     <IconButton
                                                         onClick={(ev) => {
                                                             ev.stopPropagation();
+                                                            this.props.removeInvoiceAction(row.original.InvoiceId, this.props.invoices)
                                                             // removeContact(row.original.id);
                                                         }}
                                                     >
@@ -746,7 +761,8 @@ function mapDispatchToProps(dispatch)
         getInvoices: Actions.getInvoices,
         toggleFilterPanel: Actions.toggleFilterPanel,
         toggleSummaryPanel: Actions.toggleSummaryPanel,
-        deleteInvoicesAction: Actions.deleteInvoices
+        deleteInvoicesAction: Actions.deleteInvoices,
+        removeInvoiceAction: Actions.removeInvoice
     }, dispatch);
 }
 

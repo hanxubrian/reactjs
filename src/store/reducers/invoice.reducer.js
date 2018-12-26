@@ -45,6 +45,11 @@ const invoices = function(state = initialState, action) {
             return {...state, invoicesDB: action.payload}
 
         }
+        case Actions.REMOVE_SELECTED_INVOICE:
+        {
+            return {...state, invoicesDB: action.payload}
+
+        }
         case UserActions.USER_LOGGED_OUT:
         {
             return {

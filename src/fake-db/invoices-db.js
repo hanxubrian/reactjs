@@ -20692,13 +20692,23 @@ mock.onPost("/api/invoices/update").reply(request => {
 mock.onPost("/api/invoices/delete").reply(req => {
     let data = JSON.parse(req.data);
     let invoices = data.invoices;
-    console.log('ids=', data.ids);
-
     _.forEach(data.ids, function(id){
         let deleted = _.remove(invoices.Data, function(_invoice) {
             // console.log('invoice', _invoice);
             return _invoice.InvoiceId===id
         });
+    });
+
+    return [200, invoices];
+});
+
+
+mock.onPost('/api/invoices/remove').reply((req) => {
+    let data = JSON.parse(req.data);
+    console.log('id=', data.invoices);
+    let invoices = data.invoices;
+    let deleted = _.remove(invoices.Data, function(_invoice) {
+        return _invoice.InvoiceId === data.id;
     });
 
     return [200, invoices];
