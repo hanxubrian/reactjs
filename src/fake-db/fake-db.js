@@ -18,5 +18,6 @@ import './scrumboard-db';
 import './academy-db';
 import './invoices-db';
 import './billrun-db';
+import './franchisees-db';
 
 mock.onAny().passThrough();
