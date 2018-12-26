@@ -526,9 +526,10 @@ class InvoicePage extends Component {
                                     }
                                 }}
                                 getTheadThProps={(state, rowInfo, column, instance) =>{
-                                    let thClass='';
-                                    if (column.id==='InvoiceNo' ||column.id==='CustomerNo'||column.id==='InvoiceBalanceAmount'||
-                                        column.id==='InvoiceDate' || column.id==='TransactionStatus') thClass = classNames(classes.tableThEven);
+                                    let border = '1px solid rgba(255,255,255,.6)';
+                                    console.log('xxxx', column);
+                                    if(column.Header==='Actions') border = 'none';
+
                                     return {
                                         style:{
                                             fontSize: '1.6rem',
@@ -536,9 +537,8 @@ class InvoicePage extends Component {
                                             fontWeight: 400,
                                             lineHeight: 1.75,
                                             color: 'white',
-                                            borderRight: "1px solid white"
+                                            borderRight: border
                                         },
-                                        className: thClass
                                     }
                                 }}
                                 getTheadProps={(state, rowInfo, column, instance) =>{
@@ -622,7 +622,8 @@ class InvoicePage extends Component {
                                             {
                                                 Header: "Customer #",
                                                 accessor: "CustomerNo",
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+                                                width: 120
                                             },
                                             {
                                                 Header: "Customer Name",
@@ -636,7 +637,8 @@ class InvoicePage extends Component {
                                                 Cell     : row => {
                                                     return '$'+parseFloat(row.original.InvoiceBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
                                                 },
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor")
+                                                className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor"),
+                                                width: 120
                                             },
                                             {
                                                 Header: "Total",
@@ -644,24 +646,28 @@ class InvoicePage extends Component {
                                                     return '$'+parseFloat(row.original.InvoiceTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
                                                 },
                                                 accessor: "InvoiceTotal",
-                                                className: classNames("flex items-center  justify-end p-12-impor")
+                                                className: classNames("flex items-center  justify-end p-12-impor"),
+                                                width: 120
                                             },
                                             {
                                                 Header: "Invoice Date",
                                                 id: "InvoiceDate",
                                                 accessor: d => moment(d.InvoiceDate).format('MM/DD/YYYY'),
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+                                                width: 120
                                             },
                                             {
                                                 Header: "Due Date",
                                                 id: "DueDate",
                                                 accessor: d => moment(d.DueDate).format('MM/DD/YYYY'),
-                                                className: classNames("flex items-center  justify-center")
+                                                className: classNames("flex items-center  justify-center"),
+                                                width: 120
                                             },
                                             {
                                                 Header: "Status",
                                                 accessor: "TransactionStatus",
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+                                                width: 120
                                             },
                                             {
                                                 Header: "Actions",
