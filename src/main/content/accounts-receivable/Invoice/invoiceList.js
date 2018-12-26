@@ -500,7 +500,7 @@ class InvoicePage extends Component {
                     </div>
                 }
                 content={
-                    <div className="flex-1 flex-col absolute" style={{height: '100%'}}>
+                    <div className="flex-1 flex-col absolute w-full h-full">
                         {this.state.temp && (
                             <ReactTable
                                 data={this.state.temp}
