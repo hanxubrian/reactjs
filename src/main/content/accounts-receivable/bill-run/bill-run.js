@@ -13,20 +13,18 @@ class BillRun extends Component {
 
     render()
     {
-        const {classes, iframeURL} = this.props;
-
-        console.log('props=', this.props);
+        const {classes} = this.props;
         return (
-            <iframe src={iframeURL} className={classes.iframe}></iframe>
+            <div/>
         );
     }
 }
 
 
-function mapStateToProps({auth, fuse})
+function mapStateToProps({billrun})
 {
     return {
-        iframeURL: fuse.navbar.iframeURL
+
     }
 }
 

@@ -617,7 +617,7 @@ class InvoicePage extends Component {
                                             {
                                                 Header: "Customer #",
                                                 accessor: "CustomerNo",
-                                                width: 110,
+                                                width: 100,
                                                 className: classNames(classes.tableTdEven, "flex items-center  justify-center")
                                             },
                                             {
@@ -661,7 +661,7 @@ class InvoicePage extends Component {
                                             {
                                                 Header: "Status",
                                                 accessor: "TransactionStatus",
-                                                width: 120,
+                                                width: 110,
                                                 className: classNames(classes.tableTdEven, "flex items-center  justify-center")
                                             },
                                             {
@@ -701,7 +701,7 @@ class InvoicePage extends Component {
                                 defaultPageSize={100}
                                 className={classNames( "-striped -highlight")}
                                 style={{
-                                    height: 600,
+                                    height: 650,
                                 }}
                             />
                         )}

@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux';
 import fuse from './fuse';
 import invoices from './invoice.reducer';
+import billruns from './billrun.reducer';
 import auth from 'auth/store/reducers';
 import quickPanel from 'main/quickPanel/store/reducers';
 import calendarApp from '../../main/content/apps/calendar/store/reducers/';
@@ -14,6 +15,7 @@ const createReducer = (asyncReducers) =>
         auth,
         fuse,
         invoices,
+        billruns,
         quickPanel,
         calendarApp,
         mailApp,
