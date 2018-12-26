@@ -410,32 +410,6 @@ class InvoicePage extends Component {
         const { toggleSelection, toggleAll, isSelected, logSelection} = this;
 
         const { selectAll, selection } = this.state;
-        let checkboxProps={};
-        logSelection();
-
-        if (this.props.invoices) {
-            // checkboxProps = {
-            //     selectAll,
-            //     isSelected,
-            //     toggleSelection,
-            //     keyField: 'InvoiceId',
-            //     getTrProps: (s, r) => {
-            //         // someone asked for an example of a background color change
-            //         // here it is...
-            //         if(r!==undefined) {
-            //             const selected = this.isSelected(r.original.InvoiceId);
-            //             return {
-            //                 style: {
-            //                     backgroundColor: selected ? "lightpink" : "",
-            //                     // padding: "5px 10px"
-            //                 }
-            //             };
-            //         } else {
-            //             return {}
-            //         }
-            //     }
-            // };
-        }
 
         return (
             <FusePageCustom
@@ -547,7 +521,6 @@ class InvoicePage extends Component {
                                     return {
                                         style:{
                                             fontSize: 12,
-                                            padding: "10px 10px",
                                         },
                                         className: thClass
                                     }
@@ -614,92 +587,104 @@ class InvoicePage extends Component {
                                         width    : 72
                                     },
                                     {
-                                    Header: "Invoices",
-                                    columns: [
-                                        {
-                                            Header: "Invoice #",
-                                            accessor: "InvoiceNo",
-                                            filterAll: true,
-                                            width: 120,
-                                            className: classNames(classes.tableTdEven, "flex items-center  justify-center")
-                                        },
-                                        {
-                                            Header: "Description",
-                                            accessor: "InvoiceDescription",
-                                            width: 360,
-                                            className: classNames("flex items-center  justify-start p-12-impor")
-                                        },
-                                        {
-                                            Header: "Customer #",
-                                            accessor: "CustomerNo",
-                                            width: 110,
-                                            className: classNames(classes.tableTdEven, "flex items-center  justify-center")
-                                        },
-                                        {
-                                            Header: "Customer Name",
-                                            accessor: "CustomerName",
-                                            width: 240,
-                                            className: classNames("flex items-center  justify-start p-12-impor")
-                                        },
-                                        {
-                                            Header: "Balance",
-                                            accessor: "InvoiceBalanceAmount",
-                                            width: 110,
-                                            className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor")
-                                        },
-                                        {
-                                            Header: "Total",
-                                            accessor: "InvoiceTotal",
-                                            width: 110,
-                                            className: classNames("flex items-center  justify-end p-12-impor")
-                                        },
-                                        {
-                                            Header: "Invoice Date",
-                                            id: "InvoiceDate",
-                                            accessor: d => moment(d.InvoiceDate).format('MM/DD/YYYY'),
-                                            width: 110,
-                                            className: classNames(classes.tableTdEven, "flex items-center  justify-center")
-                                        },
-                                        {
-                                            Header: "Due Date",
-                                            id: "DueDate",
-                                            accessor: d => moment(d.DueDate).format('MM/DD/YYYY'),
-                                            width: 110,
-                                            className: classNames("flex items-center  justify-center")
-                                        },
-                                        {
-                                            Header: "Status",
-                                            accessor: "TransactionStatus",
-                                            width: 120,
-                                            className: classNames(classes.tableTdEven, "flex items-center  justify-center")
-                                        },
-                                        {
-                                            Header: "Actions",
-                                            width : 128,
-                                            Cell  : row => (
-                                                <div className="flex items-center actions">
-                                                    <IconButton
-                                                        onClick={(ev) => {
-                                                            ev.stopPropagation();
-                                                            this.props.removeInvoiceAction(row.original.InvoiceId, this.props.invoices)
-                                                            // removeContact(row.original.id);
-                                                        }}
-                                                    >
-                                                        <Icon>delete</Icon>
-                                                    </IconButton>,
-                                                    <IconButton
-                                                        onClick={(ev) => {
-                                                            ev.stopPropagation();
-                                                            // removeContact(row.original.id);
-                                                        }}
-                                                    >
-                                                        <Icon>edit</Icon>
-                                                    </IconButton>
-                                                </div>
-                                            )
-                                        }
-                                    ]
-                                }
+                                        Header: "Invoices",
+                                        columns: [
+                                            {
+                                                Header: "Invoice #",
+                                                accessor: "InvoiceNo",
+                                                filterAll: true,
+                                                width: 120,
+                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+                                            },
+                                            {
+                                                Header: "Description",
+                                                accessor: "InvoiceDescription",
+                                                width: 360,
+                                                className: classNames("flex items-center  justify-start p-12-impor")
+                                            },
+                                            {
+                                                Header: "Customer #",
+                                                accessor: "CustomerNo",
+                                                width: 110,
+                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+                                            },
+                                            {
+                                                Header: "Customer Name",
+                                                accessor: "CustomerName",
+                                                width: 240,
+                                                className: classNames("flex items-center  justify-start p-12-impor")
+                                            },
+                                            {
+                                                Header: "Balance",
+                                                accessor: "InvoiceBalanceAmount",
+                                                Cell     : row => {
+                                                    return '$'+parseFloat(row.original.InvoiceBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+                                                },
+                                                width: 110,
+                                                className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor")
+                                            },
+                                            {
+                                                Header: "Total",
+                                                Cell     : row => {
+                                                    return '$'+parseFloat(row.original.InvoiceTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+                                                },
+                                                accessor: "InvoiceTotal",
+                                                width: 110,
+                                                className: classNames("flex items-center  justify-end p-12-impor")
+                                            },
+                                            {
+                                                Header: "Invoice Date",
+                                                id: "InvoiceDate",
+                                                accessor: d => moment(d.InvoiceDate).format('MM/DD/YYYY'),
+                                                width: 110,
+                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+                                            },
+                                            {
+                                                Header: "Due Date",
+                                                id: "DueDate",
+                                                accessor: d => moment(d.DueDate).format('MM/DD/YYYY'),
+                                                width: 110,
+                                                className: classNames("flex items-center  justify-center")
+                                            },
+                                            {
+                                                Header: "Status",
+                                                accessor: "TransactionStatus",
+                                                width: 120,
+                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+                                            },
+                                            {
+                                                Header: "Actions",
+                                                width : 128,
+                                                Cell  : row => (
+                                                    <div className="flex items-center actions">
+                                                        <IconButton
+                                                            onClick={(ev) => {
+                                                                ev.stopPropagation();
+                                                                if (window.confirm("Do you really want to remove this invoice")) {
+                                                                    this.props.removeInvoiceAction(row.original.InvoiceId, this.props.invoices);
+                                                                    if(this.state.selection.length>0){
+                                                                        _.remove(this.state.selection, function(id) {
+                                                                            return id === row.original.InvoiceId;
+                                                                        });
+                                                                    }
+                                                                }
+                                                            }}
+                                                        >
+                                                            <Icon>delete</Icon>
+                                                        </IconButton>,
+                                                        <IconButton
+                                                            onClick={(ev) => {
+                                                                ev.stopPropagation();
+                                                                // removeContact(row.original.id);
+                                                            }}
+                                                        >
+                                                            <Icon>edit</Icon>
+                                                        </IconButton>
+                                                    </div>
+                                                )
+                                            }
+                                        ]
+                                    }
                                 ]}
                                 defaultPageSize={100}
                                 className={classNames( "-striped -highlight")}
