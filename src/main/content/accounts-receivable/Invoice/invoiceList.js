@@ -520,7 +520,7 @@ class InvoicePage extends Component {
                                         style:{
                                             padding: "10px 10px",
                                             fontSize: 18,
-                                            fontWeight: 700
+                                            fontWeight: 700,
                                         },
                                         className: classNames("flex items-center justify-start")
                                     }
@@ -535,7 +535,8 @@ class InvoicePage extends Component {
                                             fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
                                             fontWeight: 400,
                                             lineHeight: 1.75,
-                                            color: 'white'
+                                            color: 'white',
+                                            borderRight: "1px solid white"
                                         },
                                         className: thClass
                                     }
