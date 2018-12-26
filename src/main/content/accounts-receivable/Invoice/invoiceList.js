@@ -509,9 +509,20 @@ class InvoicePage extends Component {
                                     return {
                                         style:{
                                             padding: "10px 10px",
-                                            fontSize: 14,
+                                            fontSize: 16,
                                             fontWeight: 700
-                                        }
+                                        },
+
+                                    }
+                                }}
+                                getTheadGroupThProps={(state, rowInfo, column, instance) => {
+                                    return {
+                                        style:{
+                                            padding: "10px 10px",
+                                            fontSize: 18,
+                                            fontWeight: 700
+                                        },
+                                        className: classNames("flex items-center justify-start")
                                     }
                                 }}
                                 getTheadThProps={(state, rowInfo, column, instance) =>{
@@ -588,7 +599,7 @@ class InvoicePage extends Component {
                                         width    : 72
                                     },
                                     {
-                                        Header: "Invoices",
+                                        Header: "Accounts Receivable>Invoices",
                                         columns: [
                                             {
                                                 Header: "Invoice #",
