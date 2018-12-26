@@ -521,6 +521,7 @@ class InvoicePage extends Component {
                                     return {
                                         style:{
                                             fontSize: 12,
+                                            padding: "0",
                                         },
                                         className: thClass
                                     }
