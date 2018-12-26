@@ -75,6 +75,10 @@ const styles = theme => ({
         },
         '& .ReactTable .rt-tr-group':{
           flex: '0 0 auto'
+        },
+        '& .p-12-impor': {
+            paddingLeft: '1.2rem!important',
+            paddingRight: '1.2rem!important',
         }
     },
     card: {
@@ -575,7 +579,6 @@ class InvoicePage extends Component {
                                             fontSize: 12,
                                             padding: "0",
                                         },
-                                        className: tdClass
                                     }
                                 }}
                                 columns={[{
@@ -585,49 +588,58 @@ class InvoicePage extends Component {
                                             Header: "Invoice #",
                                             accessor: "InvoiceNo",
                                             filterAll: true,
-                                            width: 120
+                                            width: 120,
+                                            className: classNames(classes.tableTdEven, "flex items-center  justify-center")
                                         },
                                         {
                                             Header: "Description",
                                             accessor: "InvoiceDescription",
-                                            width: 360
+                                            width: 360,
+                                            className: classNames("flex items-center  justify-start p-12-impor")
                                         },
                                         {
                                             Header: "Customer #",
                                             accessor: "CustomerNo",
-                                            width: 110
+                                            width: 110,
+                                            className: classNames(classes.tableTdEven, "flex items-center  justify-center")
                                         },
                                         {
                                             Header: "Customer Name",
                                             accessor: "CustomerName",
-                                            width: 240
+                                            width: 240,
+                                            className: classNames("flex items-center  justify-start p-12-impor")
                                         },
                                         {
                                             Header: "Balance",
                                             accessor: "InvoiceBalanceAmount",
-                                            width: 110
+                                            width: 110,
+                                            className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor")
                                         },
                                         {
                                             Header: "Total",
                                             accessor: "InvoiceTotal",
-                                            width: 110
+                                            width: 110,
+                                            className: classNames("flex items-center  justify-end p-12-impor")
                                         },
                                         {
                                             Header: "Invoice Date",
                                             id: "InvoiceDate",
-                                            accessor: d => moment(d.InvoiceDate).format('YYYY-MM-DD'),
-                                            width: 110
+                                            accessor: d => moment(d.InvoiceDate).format('MM/DD/YYYY'),
+                                            width: 110,
+                                            className: classNames(classes.tableTdEven, "flex items-center  justify-center")
                                         },
                                         {
                                             Header: "Due Date",
                                             id: "DueDate",
-                                            accessor: d => moment(d.DueDate).format('YYYY-MM-DD'),
-                                            width: 110
+                                            accessor: d => moment(d.DueDate).format('MM/DD/YYYY'),
+                                            width: 110,
+                                            className: classNames("flex items-center  justify-center")
                                         },
                                         {
                                             Header: "Status",
                                             accessor: "TransactionStatus",
-                                            width: 120
+                                            width: 120,
+                                            className: classNames(classes.tableTdEven, "flex items-center  justify-center")
                                         },
                                         {
                                             Header: "Actions",
