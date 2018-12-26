@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 // core components
-import {Hidden, Icon, IconButton, Fab, Input, Paper,TextField} from '@material-ui/core';
+import {Hidden, Icon, IconButton, Fab, Input, Paper,TextField, Button} from '@material-ui/core';
 
 // theme components
 import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
@@ -56,6 +56,10 @@ const styles = theme => ({
             top: '150px',
             border: '1px solid coral'
         },
+        '& .ReactTable .rt-thead.-headerGroups': {
+            paddingLeft: '0!important',
+            paddingRight: '0!important'
+        },
         '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
             background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
             color: 'white!important'
@@ -72,6 +76,9 @@ const styles = theme => ({
         },
         '& .ReactTable .rt-tr-group':{
             flex: '0 0 auto'
+        },
+        '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
+            justifyContent: 'center'
         },
         '& .p-12-impor': {
             paddingLeft: '1.2rem!important',
@@ -156,6 +163,15 @@ const styles = theme => ({
     },
     tableTdEven:{
         backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b +', .1)'
+    },
+    filterPanelButton: {
+        backgroundColor: theme.palette.secondary.main,
+        minWidth: 42,
+        padding: 8,
+        justifyContent: 'center',
+        '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+        }
     }
 });
 const defaultProps = {
@@ -445,44 +461,8 @@ class InvoicePage extends Component {
                                     </IconButton>
                                 </Hidden>
                             </div>
-                            <div className="flex items-center pr-0 lg:pr-12 p-24">
-                                <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
-                                    <Input
-                                        placeholder="Search..."
-                                        className={classNames(classes.search, 'pl-16')}
-                                        // className="pl-16"
-                                        disableUnderline
-                                        fullWidth
-                                        value={this.state.s}
-                                        onChange={this.handleChange('s')}
-                                        inputProps={{
-                                            'aria-label': 'Search'
-                                        }}
-                                    />
-                                    <Icon color="action" className="mr-16">search</Icon>
-                                </Paper>
-                                { !summaryState && (
-                                    <Hidden smDown>
-                                        <IconButton
-                                            onClick={(ev) => toggleSummaryPanel()}
-                                            aria-label="toggle summary panel"
-                                            style={{marginRight: -12}}
-                                        >
-                                            <Icon>insert_chart</Icon>
-                                        </IconButton>
-                                    </Hidden>
-                                )}
-                                <Hidden smUp>
-                                    <IconButton
-                                        onClick={(ev) => this.pageLayout.toggleRightSidebar()}
-                                        aria-label="toggle summary panel"
-                                    >
-                                        <Icon>insert_chart</Icon>
-                                    </IconButton>
-                                </Hidden>
-                            </div>
                         </div>
-                        <div className="flex flex-none items-end">
+                        <div className="flex flex-none items-end" style={{display: 'none'}}>
                             <FuseAnimate animation="transition.expandIn" delay={600}>
                                 <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
                                     <Icon>add</Icon>
@@ -527,7 +507,6 @@ class InvoicePage extends Component {
                                 }}
                                 getTheadThProps={(state, rowInfo, column, instance) =>{
                                     let border = '1px solid rgba(255,255,255,.6)';
-                                    console.log('xxxx', column);
                                     if(column.Header==='Actions') border = 'none';
 
                                     return {
@@ -577,34 +556,81 @@ class InvoicePage extends Component {
                                 }}
                                 columns={[
                                     {
-                                        Header   : (instance) => (
-                                            <Checkbox
-                                                onClick={(event) => {
-                                                    event.stopPropagation();
-                                                }}
-                                                onChange={(event) => toggleAll(instance) }
-                                                checked={this.state.selectAll}
-                                                style={{color: 'white'}}
-                                                // indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
-                                            />
+                                        Header: (instance)=>(
+                                            <div className="flex items-center">
+                                                <Hidden smDown>
+                                                    <Button
+                                                        onClick={(ev) => toggleFilterPanel()}
+                                                        aria-label="toggle filter panel"
+                                                        color="secondary"
+                                                        className={classNames(classes.filterPanelButton)}
+                                                        disabled={ filterState ? true: false}
+                                                    >
+                                                        <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
+                                                    </Button>
+                                                </Hidden>
+                                                <Hidden smUp>
+                                                    <Button
+                                                        onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
+                                                        aria-label="toggle filter panel"
+                                                        className={classNames(classes.filterPanelButton)}
+                                                    >
+                                                        <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
+                                                    </Button>
+                                                </Hidden>
+                                            </div>
                                         ),
-                                        accessor : "",
-                                        Cell     : row => {
-                                            return (<Checkbox
-                                                    onClick={(event) => {
-                                                        event.stopPropagation();
-                                                    }}
-                                                    checked={isSelected(row.value.InvoiceId)}
-                                                    onChange={() => toggleSelection(row.value.InvoiceId)}
-                                                />
-                                            )
-                                        },
-                                        className: "justify-center",
-                                        sortable : false,
-                                        width    : 72
+                                        columns: [
+                                            {
+                                                Header   : (instance) => (
+                                                    <Checkbox
+                                                        onClick={(event) => {
+                                                            event.stopPropagation();
+                                                        }}
+                                                        onChange={(event) => toggleAll(instance) }
+                                                        checked={this.state.selectAll}
+                                                        style={{color: 'white'}}
+                                                        // indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
+                                                    />
+                                                ),
+                                                accessor : "",
+                                                Cell     : row => {
+                                                    return (<Checkbox
+                                                            onClick={(event) => {
+                                                                event.stopPropagation();
+                                                            }}
+                                                            checked={isSelected(row.value.InvoiceId)}
+                                                            onChange={() => toggleSelection(row.value.InvoiceId)}
+                                                        />
+                                                    )
+                                                },
+                                                className: "justify-center",
+                                                sortable : false,
+                                                width    : 72
+                                            }
+                                        ],
+                                        className: classNames("justify-center")
                                     },
                                     {
-                                        Header: "Accounts Receivable>Invoices",
+                                        Header: ()=>(
+                                            <div className="flex items-center pr-0 lg:pr-12 p-24">
+                                                <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
+                                                    <Input
+                                                        placeholder="Search..."
+                                                        className={classNames(classes.search, 'pl-16')}
+                                                        // className="pl-16"
+                                                        disableUnderline
+                                                        fullWidth
+                                                        value={this.state.s}
+                                                        onChange={this.handleChange('s')}
+                                                        inputProps={{
+                                                            'aria-label': 'Search'
+                                                        }}
+                                                    />
+                                                    <Icon color="action" className="mr-16">search</Icon>
+                                                </Paper>
+                                            </div>
+                                        ),
                                         columns: [
                                             {
                                                 Header: "Invoice #",
