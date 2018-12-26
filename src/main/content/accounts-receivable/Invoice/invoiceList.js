@@ -613,7 +613,7 @@ class InvoicePage extends Component {
                                     },
                                     {
                                         Header: ()=>(
-                                            <div className="flex items-center pr-0 lg:pr-12 p-24">
+                                            <div className="flex items-center pr-0 lg:pr-12">
                                                 <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
                                                     <Input
                                                         placeholder="Search..."
