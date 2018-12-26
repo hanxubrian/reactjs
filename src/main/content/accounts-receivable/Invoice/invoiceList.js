@@ -583,6 +583,7 @@ class InvoicePage extends Component {
                                                 }}
                                                 onChange={(event) => toggleAll(instance) }
                                                 checked={this.state.selectAll}
+                                                style={{color: 'white'}}
                                                 // indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
                                             />
                                         ),
