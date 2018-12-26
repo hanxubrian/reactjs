@@ -49,7 +49,10 @@ const styles = theme => ({
         zIndex       : 2,
         maxWidth     : '100%',
         minWidth     : 0,
-        height       : '100%'
+        height       : '100%',
+        position     : 'absolute',
+        left         :0,
+        right        :0,
     },
     header                        : {
         height         : headerHeight,

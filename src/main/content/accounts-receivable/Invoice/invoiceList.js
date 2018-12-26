@@ -109,6 +109,9 @@ const styles = theme => ({
         alignItems: 'center',
         backgroundColor: theme.palette.secondary.main,
     },
+    content:{
+      position: 'relative'
+    },
     addButton          : {
         position: 'absolute',
         bottom  : -28,
@@ -411,11 +414,12 @@ class InvoicePage extends Component {
         return (
             <FusePageCustom
                 classes={{
-                    root: classes.layoutRoot,
+                    root: classNames(classes.layoutRoot,'test123'),
                     rightSidebar : classNames(classes.layoutRightSidebar, {'openSummary': summaryState}),
                     leftSidebar : classNames(classes.layoutLeftSidebar, {'openFilter': filterState}),
                     sidebarHeader: classes.layoutSidebarHeader,
-                    header: classes.layoutHeader
+                    header: classes.layoutHeader,
+                    content: classes.content
                 }}
                 header={
                     <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
@@ -496,7 +500,7 @@ class InvoicePage extends Component {
                     </div>
                 }
                 content={
-                    <div className="flex-1 flex-col">
+                    <div className="flex-1 flex-col absolute" style={{height: '100%'}}>
                         {this.state.temp && (
                             <ReactTable
                                 data={this.state.temp}
@@ -698,7 +702,7 @@ class InvoicePage extends Component {
                                 defaultPageSize={100}
                                 className={classNames( "-striped -highlight")}
                                 style={{
-                                    height: 650,
+                                    height: '100%',
                                 }}
                             />
                         )}

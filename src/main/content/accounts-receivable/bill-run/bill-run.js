@@ -222,47 +222,17 @@ class BillRun extends Component {
                                         Header: "Accounts Receivable>Invoices",
                                         columns: [
                                             {
-                                                Header: "Invoice #",
+                                                Header: "Bill Run Batch #",
                                                 accessor: "Id",
                                                 filterAll: true,
                                                 width: 120,
                                                 className: classNames(classes.tableTdEven, "flex items-center  justify-center")
                                             },
                                             {
-                                                Header: "Description",
-                                                accessor: "InvoiceDescription",
+                                                Header: "Message",
+                                                accessor: "Message",
                                                 width: 360,
                                                 className: classNames("flex items-center  justify-start p-12-impor")
-                                            },
-                                            {
-                                                Header: "Customer #",
-                                                accessor: "CustomerNo",
-                                                width: 100,
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center")
-                                            },
-                                            {
-                                                Header: "Customer Name",
-                                                accessor: "CustomerName",
-                                                width: 240,
-                                                className: classNames("flex items-center  justify-start p-12-impor")
-                                            },
-                                            {
-                                                Header: "Balance",
-                                                accessor: "InvoiceBalanceAmount",
-                                                Cell     : row => {
-                                                    return '$'+parseFloat(row.original.InvoiceBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-                                                },
-                                                width: 110,
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor")
-                                            },
-                                            {
-                                                Header: "Total",
-                                                Cell     : row => {
-                                                    return '$'+parseFloat(row.original.InvoiceTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-                                                },
-                                                accessor: "InvoiceTotal",
-                                                width: 110,
-                                                className: classNames("flex items-center  justify-end p-12-impor")
                                             },
                                             {
                                                 Header: "Invoice Date",
@@ -270,13 +240,6 @@ class BillRun extends Component {
                                                 accessor: d => moment(d.InvoiceDate).format('MM/DD/YYYY'),
                                                 width: 110,
                                                 className: classNames(classes.tableTdEven, "flex items-center  justify-center")
-                                            },
-                                            {
-                                                Header: "Due Date",
-                                                id: "DueDate",
-                                                accessor: d => moment(d.DueDate).format('MM/DD/YYYY'),
-                                                width: 110,
-                                                className: classNames("flex items-center  justify-center")
                                             },
                                             {
                                                 Header: "Status",
