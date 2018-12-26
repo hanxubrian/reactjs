@@ -1,33 +1,426 @@
 import React, {Component} from 'react';
-import {withStyles} from '@material-ui/core/styles/index';
+
+// core components
+import {Hidden, Icon, IconButton, Fab, Input, Paper,TextField} from '@material-ui/core';
+
+// theme components
+import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
+
+
+import {bindActionCreators} from "redux";
+import {withStyles, Checkbox} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
+
+// for store
 import connect from "react-redux/es/connect/connect";
+import * as Actions from 'store/actions';
+
+// third party
+import ReactTable from "react-table";
+import "react-table/react-table.css";
+import _ from 'lodash';
+
+
+import classNames from 'classnames';
+
+const headerHeight = 100;
+
+
+const hexToRgb = (hex) =>{
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
 
 const styles = theme => ({
-    iframe:{
-        height: '1000px'
+    root: {
+        background    : "url('/assets/images/backgrounds/signin-bg.jpg') no-repeat",
+        backgroundSize: 'cover',
+    },
+    layoutRoot: {
+        flexDirection: 'row',
+        '& .z-9999': {
+            height: 64
+        },
+        '& .-pageSizeOptions': {
+            display: 'none'
+        },
+        '& .ReactTable .rt-noData': {
+            top: '150px',
+            border: '1px solid coral'
+        },
+        '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
+            background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
+            color: 'white!important'
+        },
+        '& .openFilter':{
+            width: 'inherit'
+        },
+        '& .openSummary':{
+            width: 300
+        },
+        '& .ReactTable .rt-tbody': {
+            overflowY: 'scroll',
+            overflowX: 'hidden'
+        },
+        '& .ReactTable .rt-tr-group':{
+            flex: '0 0 auto'
+        },
+        '& .p-12-impor': {
+            paddingLeft: '1.2rem!important',
+            paddingRight: '1.2rem!important',
+        }
+    },
+    card: {
+        width   : '100%',
+        maxWidth: 384,
+    },
+    progress: {
+        margin: theme.spacing.unit * 2,
+    },
+    layoutHeader       : {
+        height   : headerHeight,
+        minHeight: headerHeight,
+        backgroundColor: theme.palette.secondary.main
+    },
+    layoutRightSidebar : {
+        width: 0,
+        [theme.breakpoints.down('sm')]: {
+            width: 'inherit'
+        }
+    },
+    layoutLeftSidebar : {
+        width: 0,
+        [theme.breakpoints.down('sm')]: {
+            width: 'inherit'
+        }
+    },
+    layoutSidebarHeader: {
+        height   : headerHeight,
+        minHeight: headerHeight,
+        display: 'flex',
+        alignItems: 'center',
+        backgroundColor: theme.palette.secondary.main,
+    },
+    addButton          : {
+        position: 'absolute',
+        bottom  : -28,
+        left    : 16,
+        zIndex  : 999,
+        backgroundColor: theme.palette.primary.light,
+        '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+        }
+    },
+    removeButton          : {
+        position: 'absolute',
+        bottom  : -28,
+        right    : 16,
+        zIndex  : 999,
+        backgroundColor: theme.palette.secondary.light,
+        '&:hover': {
+            backgroundColor: theme.palette.secondary.dark,
+        }
+    },
+    imageIcon:{
+        width: 24,
+        height: 24
+    },
+    separator: {
+        width          : 1,
+        height         : '100%',
+        backgroundColor: theme.palette.divider
+    },
+    search: {
+        width: 360,
+        [theme.breakpoints.down('sm')]: {
+            width: '100%'
+        }
+    },
+    tableTheadEven:{
+        backgroundColor: 'rgba(' + hexToRgb(theme.palette.primary.main).r + ',' + hexToRgb(theme.palette.primary.main).g + ',' + hexToRgb(theme.palette.primary.main).b +', .2)'
+    },
+    tableThEven:{
+        backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b +', .3)'
+    },
+    tableTdEven:{
+        backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b +', .1)'
     }
 });
 
 class Franchisees extends Component {
+    state = {
+        temp: [],
+    };
+
+    constructor(props){
+        super(props);
+
+        if(!props.bLoadedFranchisees) {
+            props.getFranchisees();
+        }
+        this.fetchData = this.fetchData.bind(this);
+    }
+
+    componentWillMount(){
+        this.getFranchiseesFromStatus()
+    }
+
+    getFranchiseesFromStatus =(rawData=this.props.franchisees) =>{
+        if(rawData===null) return;
+
+        this.setState({temp: rawData.Data});
+        this.setState({data: rawData.Data});
+    };
+
+    fetchData(state, instance) {
+        this.setState({
+            pageSize: state.pageSize,
+            page: state.page,
+        });
+    }
 
     render()
     {
-        const {classes, iframeURL} = this.props;
-
-        console.log('props=', this.props);
+        const { classes} = this.props;
         return (
-            <iframe src={iframeURL} className={classes.iframe}></iframe>
+            <FusePageCustom
+                classes={{
+                    root: classes.layoutRoot,
+                    sidebarHeader: classes.layoutSidebarHeader,
+                    header: classes.layoutHeader
+                }}
+                header={
+                    <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
+                        <div className="flex flex-row flex-1 justify-between">
+                            <div className="flex items-center pl-0 lg:pl-0 p-24">
+
+                            </div>
+                            <div className="flex items-center pr-0 lg:pr-12 p-24">
+                                <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
+                                    <Input
+                                        placeholder="Search..."
+                                        className={classNames(classes.search, 'pl-16')}
+                                        // className="pl-16"
+                                        disableUnderline
+                                        fullWidth
+                                        value={this.state.s}
+                                        inputProps={{
+                                            'aria-label': 'Search'
+                                        }}
+                                    />
+                                    <Icon color="action" className="mr-16">search</Icon>
+                                </Paper>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+                content={
+                    <div className="flex-1 flex-col">
+                        {this.state.temp && (
+                            <ReactTable
+                                data={this.state.temp}
+                                minRows = {0}
+                                onFetchData={this.fetchData}
+                                getTheadGroupProps={(state, rowInfo, column, instance) =>{
+                                    return {
+                                        style:{
+                                            padding: "10px 10px",
+                                            fontSize: 16,
+                                            fontWeight: 700
+                                        },
+
+                                    }
+                                }}
+                                getTheadGroupThProps={(state, rowInfo, column, instance) => {
+                                    return {
+                                        style:{
+                                            padding: "10px 10px",
+                                            fontSize: 18,
+                                            fontWeight: 700
+                                        },
+                                        className: classNames("flex items-center justify-start")
+                                    }
+                                }}
+                                getTheadThProps={(state, rowInfo, column, instance) =>{
+
+                                    return {
+                                        style:{
+                                            fontSize: 12,
+                                            padding: "0",
+                                        }
+                                    }
+                                }}
+                                getTheadProps={(state, rowInfo, column, instance) =>{
+                                    return {
+                                        style:{
+                                            fontSize: 13,
+                                        },
+                                        className: classes.tableTheadEven
+                                    }
+                                }}
+                                getTdProps={(state, rowInfo, column, instance) =>{
+
+                                    return {
+                                        style:{
+                                            textAlign: 'center',
+                                            flexDirection: 'row',
+                                            fontSize: 12,
+                                            padding: "0",
+                                        },
+                                    }
+                                }}
+                                getTrProps={(state, rowInfo, column) => {
+                                    return {
+                                        className: "cursor-pointer",
+                                        onClick  : (e, handleOriginal) => {
+                                            if ( rowInfo )
+                                            {
+                                                alert('ok');
+                                                // openEditContactDialog(rowInfo.original);
+                                            }
+                                        }
+                                    }
+                                }}
+                                columns={[
+                                    {
+                                        Header   : (instance) => (
+                                            <Checkbox
+                                                onClick={(event) => {
+                                                    event.stopPropagation();
+                                                }}
+                                            />
+                                        ),
+                                        accessor : "",
+                                        Cell     : row => {
+                                            return (<Checkbox
+                                                    onClick={(event) => {
+                                                        event.stopPropagation();
+                                                    }}
+                                                />
+                                            )
+                                        },
+                                        className: "justify-center",
+                                        sortable : false,
+                                        width    : 72
+                                    },
+                                    {
+                                        Header: "Franchisees > List",
+                                        columns: [
+                                            {
+                                                Header: "Region",
+                                                accessor: "RegionName",
+                                                filterAll: true,
+                                                width: 100,
+                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+                                            },
+                                            {
+                                                Header: "Franchisees ID",
+                                                accessor: "ID",
+                                                width: 100,
+                                                className: classNames("flex items-center  p-12-impor justify-center")
+                                            },
+                                            {
+                                                Header: "Franchisees Name",
+                                                accessor: "Name",
+                                                width: 380,
+                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+                                            },
+                                            {
+                                                Header: "Full Address",
+                                                accessor: "Address",
+                                                width: 380,
+                                                className: classNames("flex items-center  justify-center p-12-impor")
+                                            },
+                                            {
+                                                Header: "Phone",
+                                                accessor: "Phone",
+                                                width: 120,
+                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center p-12-impor")
+                                            },
+                                            {
+                                                Header: "Status",
+                                                accessor: "StatusName",
+                                                width:100,
+                                                className: classNames( "flex items-center  justify-center")
+                                            },
+                                            {
+                                                Header: "Distribution Amount",
+                                                accessor: "DistributionAmount",
+                                                width: 200,
+                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+                                            },
+                                            {
+                                                Header: "Action",
+                                                width : 100,
+                                                Cell  : row => (
+                                                    <div className="flex items-center actions">
+                                                        <IconButton
+                                                            onClick={(ev) => {
+                                                                ev.stopPropagation();
+                                                                if (window.confirm("Do you really want to remove this invoice")) {
+                                                                    this.props.removeInvoiceAction(row.original.InvoiceId, this.props.invoices);
+                                                                    if(this.state.selection.length>0){
+                                                                        _.remove(this.state.selection, function(id) {
+                                                                            return id === row.original.InvoiceId;
+                                                                        });
+                                                                    }
+                                                                }
+                                                            }}
+                                                        >
+                                                            <Icon>delete</Icon>
+                                                        </IconButton>,
+                                                        <IconButton
+                                                            onClick={(ev) => {
+                                                                ev.stopPropagation();
+                                                                // removeContact(row.original.id);
+                                                            }}
+                                                        >
+                                                            <Icon>edit</Icon>
+                                                        </IconButton>
+                                                    </div>
+                                                )
+                                            }
+                                        ]
+                                    }
+                                ]}
+                                defaultPageSize={100}
+                                className={classNames( "-striped -highlight")}
+                                style={{
+                                    height: 740,
+                                }}
+                            />
+                        )}
+                    </div>
+                }
+                onRef={instance => {
+                    this.pageLayout = instance;
+                }}
+            >
+            </FusePageCustom>
         );
     }
 }
 
+function mapDispatchToProps(dispatch)
+{
+    return bindActionCreators({
+        getFranchisees: Actions.getFranchisees,
+    }, dispatch);
+}
 
-function mapStateToProps({auth, fuse})
+function mapStateToProps({franchisees,auth})
 {
     return {
-        iframeURL: fuse.navbar.iframeURL
+        franchisees: franchisees.franchiseesDB,
+        bLoadedFranchisees: franchisees.bLoadedFranchisees,
+        regionId: auth.login.defaultRegionId
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, null)(Franchisees)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(Franchisees)));
+
