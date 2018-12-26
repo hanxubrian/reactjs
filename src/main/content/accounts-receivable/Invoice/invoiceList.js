@@ -8,7 +8,7 @@ import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
 
 
 import {bindActionCreators} from "redux";
-import {withStyles} from "@material-ui/core";
+import {withStyles, Checkbox} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
 // for store
@@ -74,7 +74,7 @@ const styles = theme => ({
             overflowX: 'hidden'
         },
         '& .ReactTable .rt-tr-group':{
-          flex: '0 0 auto'
+            flex: '0 0 auto'
         },
         '& .p-12-impor': {
             paddingLeft: '1.2rem!important',
@@ -201,7 +201,7 @@ class InvoicePage extends Component {
         this.setState({ selection });
     };
 
-    toggleAll = () => {
+    toggleAll = (instance) => {
         /*
           'toggleAll' is a tricky concept with any filterable table
           do you just select ALL the records that are in your data?
@@ -223,14 +223,10 @@ class InvoicePage extends Component {
         const selectAll = this.state.selectAll ? false : true;
         const selection = [];
         if (selectAll) {
-            // we need to get at the internals of ReactTable
-            const wrappedInstance = this.checkboxTable.getWrappedInstance();
-            // the 'sortedData' property contains the currently accessible records based on the filter and sort
-            const currentRecords = wrappedInstance.getResolvedState().sortedData;
+            let currentRecords = instance.data;
             // we just push all the IDs onto the selection array
-            console.log('toggle=', wrappedInstance.getResolvedState());
-            let page = wrappedInstance.getResolvedState().page;
-            let pageSize = wrappedInstance.getResolvedState().pageSize;
+            let page = this.state.page;
+            let pageSize = this.state.pageSize;
             let start_index = page * pageSize;
             let end_index = start_index+pageSize;
             currentRecords.forEach(item => {
@@ -260,7 +256,7 @@ class InvoicePage extends Component {
         if(!props.bLoadedInvoices) {
             props.getInvoices();
         }
-
+        this.fetchData = this.fetchData.bind(this);
         this.escFunction = this.escFunction.bind(this);
     }
 
@@ -399,6 +395,13 @@ class InvoicePage extends Component {
         }
     };
 
+    fetchData(state, instance) {
+        this.setState({
+            pageSize: state.pageSize,
+            page: state.page,
+        });
+    }
+
     render()
     {
         const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteInvoicesAction} = this.props;
@@ -413,8 +416,6 @@ class InvoicePage extends Component {
                 selectAll,
                 isSelected,
                 toggleSelection,
-                toggleAll,
-                selectType: "checkbox",
                 keyField: 'InvoiceId',
                 getTrProps: (s, r) => {
                     // someone asked for an example of a background color change
@@ -491,11 +492,7 @@ class InvoicePage extends Component {
                                             aria-label="toggle summary panel"
                                             style={{marginRight: -12}}
                                         >
-
                                             <Icon>insert_chart</Icon>
-                                            {/*{summaryState && (*/}
-                                            {/*<Icon>close</Icon>*/}
-                                            {/*)}*/}
                                         </IconButton>
                                     </Hidden>
                                 )}
@@ -528,10 +525,10 @@ class InvoicePage extends Component {
                 content={
                     <div className="flex-1 flex-col">
                         {this.state.temp && (
-                            <CheckboxTable
+                            <ReactTable
                                 data={this.state.temp}
                                 minRows = {0}
-                                ref={r => (this.checkboxTable = r)}
+                                onFetchData={this.fetchData}
                                 getTheadGroupProps={(state, rowInfo, column, instance) =>{
                                     return {
                                         style:{
@@ -562,26 +559,47 @@ class InvoicePage extends Component {
                                     }
                                 }}
                                 getTdProps={(state, rowInfo, column, instance) =>{
-                                    console.log('col', column)
-                                    let direction = 'row';
-                                    if (column.Header==='Description' ) direction = 'row';
-                                    if (column.id==='CustomerName' ) {direction = 'row'; }
-
                                     let tdClass='flex items-center justify-center';
-                                    // if (column.id==='_selector') width= 40;
                                     if (column.id==='InvoiceNo' ||column.id==='CustomerNo'||column.id==='InvoiceBalanceAmount'||
                                         column.id==='InvoiceDate' || column.id==='TransactionStatus') tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
 
                                     return {
                                         style:{
                                             textAlign: 'center',
-                                            flexDirection: direction,
+                                            flexDirection: 'row',
                                             fontSize: 12,
                                             padding: "0",
                                         },
                                     }
                                 }}
-                                columns={[{
+                                columns={[
+                                    {
+                                        Header   : (instance) => (
+                                            <Checkbox
+                                                onClick={(event) => {
+                                                    event.stopPropagation();
+                                                }}
+                                                onChange={(event) => toggleAll(instance) }
+                                                // checked={selectedContactIds.length === Object.keys(contacts).length && selectedContactIds.length > 0}
+                                                // indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
+                                            />
+                                        ),
+                                        accessor : "",
+                                        Cell     : row => {
+                                            return (<Checkbox
+                                                    onClick={(event) => {
+                                                        event.stopPropagation();
+                                                    }}
+                                                    // checked={selectedContactIds.includes(row.value.id)}
+                                                    onChange={() => toggleSelection(row.value.InvoiceId)}
+                                                />
+                                            )
+                                        },
+                                        className: "justify-center",
+                                        sortable : false,
+                                        width    : 72
+                                    },
+                                    {
                                     Header: "Invoices",
                                     columns: [
                                         {
