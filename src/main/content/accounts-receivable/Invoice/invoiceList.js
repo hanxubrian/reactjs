@@ -412,27 +412,27 @@ class InvoicePage extends Component {
         logSelection();
 
         if (this.props.invoices) {
-            checkboxProps = {
-                selectAll,
-                isSelected,
-                toggleSelection,
-                keyField: 'InvoiceId',
-                getTrProps: (s, r) => {
-                    // someone asked for an example of a background color change
-                    // here it is...
-                    if(r!==undefined) {
-                        const selected = this.isSelected(r.original.InvoiceId);
-                        return {
-                            style: {
-                                backgroundColor: selected ? "lightpink" : "",
-                                // padding: "5px 10px"
-                            }
-                        };
-                    } else {
-                        return {}
-                    }
-                }
-            };
+            // checkboxProps = {
+            //     selectAll,
+            //     isSelected,
+            //     toggleSelection,
+            //     keyField: 'InvoiceId',
+            //     getTrProps: (s, r) => {
+            //         // someone asked for an example of a background color change
+            //         // here it is...
+            //         if(r!==undefined) {
+            //             const selected = this.isSelected(r.original.InvoiceId);
+            //             return {
+            //                 style: {
+            //                     backgroundColor: selected ? "lightpink" : "",
+            //                     // padding: "5px 10px"
+            //                 }
+            //             };
+            //         } else {
+            //             return {}
+            //         }
+            //     }
+            // };
         }
 
         return (
@@ -580,7 +580,7 @@ class InvoicePage extends Component {
                                                     event.stopPropagation();
                                                 }}
                                                 onChange={(event) => toggleAll(instance) }
-                                                // checked={selectedContactIds.length === Object.keys(contacts).length && selectedContactIds.length > 0}
+                                                checked={this.state.selectAll}
                                                 // indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
                                             />
                                         ),
@@ -590,7 +590,7 @@ class InvoicePage extends Component {
                                                     onClick={(event) => {
                                                         event.stopPropagation();
                                                     }}
-                                                    // checked={selectedContactIds.includes(row.value.id)}
+                                                    checked={isSelected(row.value.InvoiceId)}
                                                     onChange={() => toggleSelection(row.value.InvoiceId)}
                                                 />
                                             )
@@ -691,7 +691,6 @@ class InvoicePage extends Component {
                                 style={{
                                     height: 600,
                                 }}
-                                {...checkboxProps}
                             />
                         )}
                     </div>
