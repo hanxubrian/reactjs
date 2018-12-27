@@ -6,6 +6,8 @@ import {Hidden, Icon, IconButton, Fab, Input, Paper, TextField, Button, Typograp
 // theme components
 import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
 
+//Janiking
+import JanikingPagination from './../../../../Commons/JanikingPagination';
 
 import {bindActionCreators} from "redux";
 import {withStyles, Checkbox} from "@material-ui/core";
@@ -500,6 +502,7 @@ class Franchisees extends Component {
                                 data={this.state.temp}
                                 minRows = {0}
                                 onFetchData={this.fetchData}
+                                PaginationComponent={JanikingPagination}
                                 getTheadGroupProps={(state, rowInfo, column, instance) =>{
                                     return {
                                         style:{
@@ -754,6 +757,7 @@ class Franchisees extends Component {
                                 ]}
                                 defaultPageSize={100}
                                 className={classNames( "-striped -highlight")}
+                                totalRecords = {this.state.temp.length}
                                 style={{
                                     height: '100%',
                                 }}

@@ -8,7 +8,20 @@ const initialState = {
     bLoadedFranchisees: false,
     bOpenedSummaryPanelFranchisees: true,
     bOpenedFilterPanelFranchisees: true,
-    transactionStatusFranchisees:{checkedPaid: true,checkedPP: true, checkedComplete: true, checkedOpen: true }
+    transactionStatusFranchisees:{
+        checkedSelectAll: true,
+        checkedActive: true,
+        checkedInactive: true,
+        checkedCTDB: true,
+        checkedPendingTransfer: true,
+        checkedLegalCompliancePending: true,
+        checkedTransfer: true,
+        checkedTerminated: true,
+        checkedRejected: true,
+        checkedPending: true,
+        checkedNonRenewed: true,
+        checkedRepurchased: true
+    }
 };
 
 

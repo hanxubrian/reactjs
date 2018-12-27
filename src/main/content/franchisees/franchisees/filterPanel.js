@@ -64,7 +64,7 @@ class FilterPanel extends Component {
         transfer: true,
         rejected: true,
         legal_compliance_pending: true,
-        inactivate: true,
+        inactive: true,
         pending_transfer: true,
         select_all: true
     };
@@ -108,7 +108,7 @@ class FilterPanel extends Component {
 
     handleChange = name => event => {
         if(name==="select_all"){
-         const tempName = ['select_all','active','ctdb','none_renewed','pending','repurchased','terminated','transfer','rejected','legal_compliance_pending','pending_transfer'];
+         const tempName = ['select_all','inactive','active','ctdb','none_renewed','pending','repurchased','terminated','transfer','rejected','legal_compliance_pending','pending_transfer'];
          for(let i=0 ; i< tempName.length ; i++){
              this.setState({ [tempName[i]]: event.target.checked });
              this.props.toggleStatus(tempName[i], event.target.checked)
@@ -236,9 +236,9 @@ class FilterPanel extends Component {
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={this.state.legal_compliance_pending}
-                                        onChange={this.handleChange('legal_compliance_pending')}
-                                        value="Legal-Compliance-Pending"
+                                        checked={this.state.inactive}
+                                        onChange={this.handleChange('inactive')}
+                                        value="inactive"
                                     />
                                 }
                                 label="Inactive"
