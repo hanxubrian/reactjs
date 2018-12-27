@@ -137,6 +137,12 @@ const styles = theme => ({
             backgroundColor: theme.palette.primary.dark,
         }
     },
+    sideButton          : {
+        backgroundColor: theme.palette.primary.light,
+        '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+        }
+    },
     removeButton          : {
         position: 'absolute',
         bottom  : -28,
@@ -170,7 +176,7 @@ const styles = theme => ({
         backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b +', .3)'
     },
     tableTdEven:{
-        backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b +', .1)'
+        // backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b +', .1)'
     },
     filterPanelButton: {
         backgroundColor: theme.palette.secondary.main,
@@ -293,6 +299,7 @@ class InvoicePage extends Component {
         }
         this.fetchData = this.fetchData.bind(this);
         this.escFunction = this.escFunction.bind(this);
+        this.listenScrollEvent = this.listenScrollEvent.bind(this);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot){
@@ -379,14 +386,22 @@ class InvoicePage extends Component {
     };
 
     componentDidMount(){
+        window.addEventListener('scroll', this.listenScrollEvent);
         document.addEventListener("keydown", this.escFunction, false);
     }
 
     componentWillUnmount(){
         document.removeEventListener("keydown", this.escFunction, false);
+        window.removeEventListener('scroll', this.listenScrollEvent);
     }
 
+    listenScrollEvent(event) {
+        console.log('fired');
+        console.log(event);
+
+    }
     escFunction(event){
+        console.log('key fired');
         if(event.keyCode === 27) {
             this.setState({s: ''});
             this.getInvoicesFromStatus();
@@ -471,19 +486,21 @@ class InvoicePage extends Component {
                             </div>
                             <div className="flex flex-shrink items-center">
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <IconButton>
+                                    <Fab color="secondary" aria-label="add"
+                                         className={classNames(classes.sideButton, "mr-12")} onClick={() => alert('ok')}>
                                         <Icon>add</Icon>
-                                    </IconButton>
+                                    </Fab>
                                 </FuseAnimate>
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <IconButton>
+                                    <Fab color="secondary" aria-label="add"
+                                         className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
                                         <Icon>mail_outline</Icon>
-                                    </IconButton>
+                                    </Fab>
                                 </FuseAnimate>
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <IconButton>
+                                    <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
                                         <Icon>print</Icon>
-                                    </IconButton>
+                                    </Fab>
                                 </FuseAnimate>
                             </div>
                         </div>
