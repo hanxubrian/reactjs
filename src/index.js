@@ -27,6 +27,7 @@ import {persistor, store} from "./store";
 import SettingsPanel from 'main/SettingsPanel';
 import {Auth} from 'auth';
 
+
 const jss = create({
     ...jssPreset(),
     plugins: [...jssPreset().plugins, jssExtend()]
@@ -75,6 +76,8 @@ ReactDOM.render(
             </PersistGate>
         </Provider>
     </JssProvider>
+
     , document.getElementById('root'));
 
 registerServiceWorker();
+

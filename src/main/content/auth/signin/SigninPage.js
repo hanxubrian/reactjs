@@ -15,17 +15,17 @@ import authService from 'services/auth'
 
 const styles = theme => ({
     root: {
-        background    : "url('/assets/images/backgrounds/signin-bg.jpg') no-repeat",
+        background: "url('/assets/images/backgrounds/signin-bg.jpg') no-repeat",
         backgroundSize: 'cover'
     },
     card: {
-        width   : '100%',
+        width: '100%',
         maxWidth: 384
     },
     progress: {
         margin: theme.spacing.unit * 2,
     },
-    overlay:{
+    overlay: {
         position: 'absolute',
         top: 0,
         left: 0,
@@ -39,13 +39,29 @@ const styles = theme => ({
     }
 });
 
+const API_KEY = 2
+
 class SigninPage extends Component {
     state = {
         email   : '',
         password: '',
         remember: true,
-        alertOpen: false
+        alertOpen: false,
+        api: null,
+        background: null
     };
+
+
+    componentDidMount() {
+        fetch(`https://apifmsplus.jkdev.com/v1/apps/get?appid=${API_KEY}&env=local&device=web`)
+            .then(res => res.json())
+            .then(data => this.setState({
+                ...this.state,
+                api: data.Settings.local.devices[0].assets.loginLogo,
+                background: data.Settings.local.devices[0].assets.hloginBg
+            })
+        )
+    }
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.login.IsSuccess){
@@ -80,11 +96,36 @@ class SigninPage extends Component {
     }
     render()
     {
+       const styles = ({
+            root: {
+                background: `url(${this.state.background})`,
+                backgroundSize: 'cover'
+            },
+            card: {
+                width: '100%',
+                maxWidth: 384
+            },
+            overlay: {
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100vw',
+                height: '100vh',
+                backgroundColor: 'rgba(0,0,0, .6)',
+                zIndex: 1000,
+                alignItems: 'center',
+                justifyContent: 'center',
+                display: 'flex'
+            }
+       });
+
         const {classes} = this.props;
-        const {email, password, remember} = this.state;
+        const { email, password, remember } = this.state;
+
+        // console.log(styles.root.background)
 
         return (
-            <div className={classNames(classes.root, "flex flex-col flex-auto flex-no-shrink items-center justify-center p-32")}>
+            <div style={{ background: styles.root.background }} className={classNames(classes.root, "flex flex-col flex-auto flex-no-shrink items-center justify-center p-32")}>
 
                 {this.props.login.bLoginStart && (
                     <div className={classes.overlay}>
@@ -119,7 +160,7 @@ class SigninPage extends Component {
 
                             <CardContent className="flex flex-col items-center justify-center p-16">
 
-                                <img className="w-128 mt-16" style={{width: '280px'}} src="assets/images/logos/logo-full.png" alt="logo"/>
+                                <img className="w-128 mt-16" style={{ width: '280px' }} src={this.state.api} alt="logo"/>
 
                                 <Typography variant="h6" className="mt-16 mb-32">Sign in to your account</Typography>
 
@@ -215,4 +256,5 @@ function mapStateToProps({auth,fuse})
 }
 
 export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(SigninPage)));
+
 

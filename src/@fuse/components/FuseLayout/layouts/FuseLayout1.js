@@ -259,7 +259,22 @@ const styles = theme => ({
 
 });
 
+const API_KEY = 2
 class FuseLayout1 extends Component {
+
+    state = {
+        sidebarLeftBg: null
+    };
+
+    componentDidMount() {
+        fetch(`https://apifmsplus.jkdev.com/v1/apps/get?appid=${API_KEY}&env=local&device=web`)
+            .then(res => res.json())
+            .then(data => this.setState({
+                ...this.state,
+                sidebarLeftBg: data.Settings.local.devices[0].assets.vsidebarLeftBg
+            })
+        )
+    }
 
     handleToggleFolded = () => {
         console.log('fired handleToggleFolded');
@@ -268,6 +283,19 @@ class FuseLayout1 extends Component {
 
     render()
     {
+
+        const styles = ({
+            root                   : {
+                navbarWrapper      : {
+                    zIndex         : 4,
+                    backgroundImage: `url(${this.state.sidebarLeftBg})`,
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
+                }
+            }
+        });
+
         const {classes, toolbar, footer, navbarHeader, navbarContent, settings, navbar, navbarOpenMobile, navbarCloseMobile, navbarOpenFolded, navbarCloseFolded, children, leftSidePanel, rightSidePanel, contentWrapper} = this.props;
         // console.warn('FuseLayout:: rendered');
         const layoutConfig = settings.layout.config;
@@ -309,7 +337,7 @@ class FuseLayout1 extends Component {
 
         const navBarTemplate = (
             <MuiThemeProvider theme={FuseThemes[settings.theme.navbar]}>
-                <div id="fuse-navbar"
+                <div id="fuse-navbar" style={{ backgroundImage: styles.root.navbarWrapper.backgroundImage }}
                      className={classNames(
                          classes.navbarWrapper,
                          layoutConfig.navbar.folded && classes.navbarWrapperFolded)}
@@ -397,11 +425,13 @@ class FuseLayout1 extends Component {
                 </AppBar>
             </MuiThemeProvider>
         );
+
         switch ( layoutConfig.scroll )
         {
             case 'body':
             {
                 return (
+                    <div style={{ backgroundImage: styles.root.navbarWrapper.backgroundImage }} >
                     <div id="fuse-layout" className={classNames(classes.root, layoutConfig.mode, 'scroll-' + layoutConfig.scroll)}>
 
                         {layoutConfig.leftSidePanel.display && (
@@ -468,6 +498,7 @@ class FuseLayout1 extends Component {
                         )}
 
                         <FuseMessage/>
+                    </div>
                     </div>
                 );
             }
