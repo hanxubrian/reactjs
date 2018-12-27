@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 // core components
-import {Hidden, Icon, IconButton, Fab, Input, Paper,TextField, Button} from '@material-ui/core';
+import {Hidden, Icon, IconButton, Fab, Input, Paper, TextField, Button, Typography} from '@material-ui/core';
 
 // theme components
 import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
@@ -28,7 +28,7 @@ import _ from 'lodash';
 
 import classNames from 'classnames';
 
-const headerHeight = 100;
+const headerHeight = 80;
 
 const hexToRgb = (hex) =>{
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -459,26 +459,32 @@ class InvoicePage extends Component {
                 header={
                     <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
                         <div className="flex flex-row flex-1 justify-between">
-                            <div className="flex items-center pr-0 lg:pr-12 p-24">
-                                { !summaryState && (
-                                    <Hidden smDown>
-                                        <IconButton
-                                            onClick={(ev) => toggleSummaryPanel()}
-                                            aria-label="toggle summary panel"
-                                            style={{marginRight: -12}}
-                                        >
-                                            <Icon>insert_chart</Icon>
-                                        </IconButton>
-                                    </Hidden>
-                                )}
-                                <Hidden smUp>
-                                    <IconButton
-                                        onClick={(ev) => this.pageLayout.toggleRightSidebar()}
-                                        aria-label="toggle summary panel"
-                                    >
-                                        <Icon>insert_chart</Icon>
+                            <div className="flex flex-shrink items-center">
+                                <div className="flex items-center">
+                                    <FuseAnimate animation="transition.expandIn" delay={300}>
+                                        <Icon className="text-32 mr-12">account_box</Icon>
+                                    </FuseAnimate>
+                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                        <Typography variant="h6" className="hidden sm:flex">Accounts Receivable | Invoices</Typography>
+                                    </FuseAnimate>
+                                </div>
+                            </div>
+                            <div className="flex flex-shrink items-center">
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <IconButton>
+                                        <Icon>add</Icon>
                                     </IconButton>
-                                </Hidden>
+                                </FuseAnimate>
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <IconButton>
+                                        <Icon>mail_outline</Icon>
+                                    </IconButton>
+                                </FuseAnimate>
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <IconButton>
+                                        <Icon>print</Icon>
+                                    </IconButton>
+                                </FuseAnimate>
                             </div>
                         </div>
                         <div className="flex flex-none items-end" style={{display: 'none'}}>
@@ -791,7 +797,7 @@ class InvoicePage extends Component {
                     </div>
                 }
                 leftSidebarHeader={
-                    <div className={classNames("flex flex-row w-full h-full justify-between p-24 align-middle pr-0", {'filteropen': filterState})}>
+                    <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", {'filteropen': filterState})}>
                         <h4 style={{marginBlockStart: '1em'}}>Filter Panel</h4>
                         <FuseAnimate animation="transition.expandIn" delay={200}>
                             <div>
