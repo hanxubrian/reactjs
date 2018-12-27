@@ -12,7 +12,7 @@ let franchiseesDb = {
                 "Code": "BUF",
                 "Name": "Buffalo",
                 "LegalName": "Jani-King of Buffalo, Inc.",
-                "Francisees": [
+                "Franchisees": [
                     {
                         "ID": 12,
                         "Number": "701011",

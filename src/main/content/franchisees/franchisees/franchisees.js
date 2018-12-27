@@ -323,10 +323,10 @@ class Franchisees extends Component {
         }
 
         if(bChanged)
-            this.getInvoicesFromStatus();
+            this.getFranchiseesFromStatus();
 
-        if(prevProps.invoices===null && this.props.invoices!==null){
-            this.getInvoicesFromStatus();
+        if(prevProps.franchisees===null && this.props.franchisees!==null){
+            this.getFranchiseesFromStatus();
         }
 
         if(prevState.s!==this.state.s) {
@@ -340,33 +340,37 @@ class Franchisees extends Component {
         this.setState({checkedComplete: this.props.transactionStatusFranchisees.checkedComplete});
         this.setState({checkedOpen: this.props.transactionStatusFranchisees.checkedOpen});
 
-        this.getInvoicesFromStatus()
+        this.getFranchiseesFromStatus();
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.props.invoices===null && nextProps.invoices!==null)
-            this.getInvoicesFromStatus(nextProps.invoices);
-        if(this.props.invoices!==nextProps.invoices)
-            this.getInvoicesFromStatus(nextProps.invoices);
+        if(this.props.franchisees===null && nextProps.franchisees!==null)
+            this.getFranchiseesFromStatus(nextProps.franchisees);
+        if(this.props.franchisees!==nextProps.franchisees)
+            this.getFranchiseesFromStatus(nextProps.franchisees);
     }
 
 
-    getInvoicesFromStatus =(rawData=this.props.franchisees) =>{
+    getFranchiseesFromStatus =(rawData=this.props.franchisees) =>{
         let temp=[];
         let all_temp=[];
-        let temp1=[];
-        const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
-        const keys=['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
-
+        let temp1 = [];
         if(rawData===null) return;
-
         let temp0 = rawData.Data.Region;
-        for(var i = 0; i < temp0.length ; i++){
-            if(this.props.regionId ===temp0[i].Id){
-                all_temp = temp0[i].Franchisees;
-                console.log('temp',temp);
+        if(this.props.regionId===0 ){
+            for(var i = 0; i < temp0.length ; i++){
+                temp1 = all_temp.concat(temp0[i].Franchisees);
+                all_temp = temp1;
+            }
+        }else{
+            for(var i = 0; i < temp0.length ; i++){
+                if(this.props.regionId ===temp0[i].Id){
+                    all_temp = temp0[i].Franchisees;
+                    console.log('temp',temp);
+                }
             }
         }
+
         this.setState({temp: all_temp});
      };
 
@@ -381,12 +385,12 @@ class Franchisees extends Component {
     escFunction(event){
         if(event.keyCode === 27) {
             this.setState({s: ''});
-            this.getInvoicesFromStatus();
+            this.getFranchiseesFromStatus();
         }
     }
     search(val) {
         if(val===''){
-            this.getInvoicesFromStatus();
+            this.getFranchiseesFromStatus();
             return;
         }
         const temp = this.state.data.filter( d => {
@@ -419,7 +423,7 @@ class Franchisees extends Component {
             return;
         }
         if (window.confirm("Do you really want to remove the selected invoice(s)")) {
-            this.props.deleteInvoicesAction(this.state.selection, this.props.invoices);
+            this.props.deleteInvoicesAction(this.state.selection, this.props.franchisees);
             this.setState({selection: [], selectAll: false})
         }
     };
@@ -688,7 +692,7 @@ class Franchisees extends Component {
                                             },
                                             {
                                                 Header: "Actions",
-                                                width : 300,
+                                                width : 150,
                                                 className: classNames(classes.tableTdEven, "flex items-center  justify-center p-12-impor"),
                                                 Cell  : row => (
                                                     <div className="flex items-center actions ">
@@ -696,7 +700,7 @@ class Franchisees extends Component {
                                                             onClick={(ev) => {
                                                                 ev.stopPropagation();
                                                                 if (window.confirm("Do you really want to remove this invoice")) {
-                                                                    this.props.removeInvoiceAction(row.original.InvoiceId, this.props.invoices);
+                                                                    this.props.removeInvoiceAction(row.original.InvoiceId, this.props.franchisees);
                                                                     if(this.state.selection.length>0){
                                                                         _.remove(this.state.selection, function(id) {
                                                                             return id === row.original.InvoiceId;
