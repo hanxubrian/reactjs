@@ -18,9 +18,7 @@ import SummaryPanel from './SummaryPanel';
 import FilterPanel from './filterPanel';
 
 // third party
-import moment from 'moment'
-import checkboxHOC from "react-table/lib/hoc/selectTable";
-import Chance from "chance";
+
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import _ from 'lodash';
@@ -266,7 +264,7 @@ class Franchisees extends Component {
             let end_index = start_index+pageSize;
             currentRecords.forEach(item => {
                 if(item._index>=start_index && item._index<end_index)
-                    selection.push(item._original.InvoiceId);
+                    selection.push(item._original.ID);
             });
         }
         this.setState({ selectAll, selection });
@@ -394,18 +392,14 @@ class Franchisees extends Component {
             return;
         }
         const temp = this.state.data.filter( d => {
-            return d.InvoiceId.toString().indexOf(val) !== -1 || !val ||
-                d.InvoiceNo.indexOf(val) !== -1 ||
-                d.InvoiceAmount.toString().indexOf(val) !== -1 ||
-                d.InvoiceTotal.toString().indexOf(val) !== -1 ||
-                d.InvoiceTax.toString().indexOf(val) !== -1 ||
-                d.InvoiceDescription.toLowerCase().indexOf(val) !== -1 ||
-                d.CustomerName.toLowerCase().indexOf(val) !== -1 ||
-                d.CustomerId.toString().indexOf(val) !== -1 ||
-                d.CustomerNo.toString().indexOf(val) !== -1 ||
-                d.TransactionStatusListId.toString().indexOf(val) !== -1
+            return d.ID.indexOf(val) !== -1 || !val ||
+                d.StatusName.toString().indexOf(val) !== -1 ||
+                d.Name.toString().indexOf(val) !== -1 ||
+                d.Address1.toString().indexOf(val) !== -1 ||
+                d.DistributionAmount.toString().indexOf(val) !== -1 ||
+                d.Phone.toString().indexOf(val) !== -1
         });
-
+        console.log('searchTemp',temp);
         this.setState({temp: temp});
     }
 
@@ -417,13 +411,13 @@ class Franchisees extends Component {
         }
     };
 
-    removeInvoices = ()=> {
+    removeFranchisees = ()=> {
         if(this.state.selection.length==0){
-            alert("Please choose invoice(s) to delete");
+            alert("Please choose franchisee(s) to delete");
             return;
         }
-        if (window.confirm("Do you really want to remove the selected invoice(s)")) {
-            this.props.deleteInvoicesAction(this.state.selection, this.props.franchisees);
+        if (window.confirm("Do you really want to remove the selected franchisee(s)")) {
+            this.props.deleteFranchisees(this.state.selection, this.props.franchisees);
             this.setState({selection: [], selectAll: false})
         }
     };
@@ -437,7 +431,7 @@ class Franchisees extends Component {
 
     render()
     {
-        const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteInvoicesAction} = this.props;
+        const { classes,toggleFilterPanelFranchisees, toggleSummaryPanelFranchisees, filterStateFranchisees, summaryStateFranchisees, deleteFranchisees} = this.props;
         const { toggleSelection, toggleAll, isSelected, logSelection} = this;
 
         const { selectAll, selection } = this.state;
@@ -446,8 +440,8 @@ class Franchisees extends Component {
             <FusePageCustom
                 classes={{
                     root: classNames(classes.layoutRoot,'test123'),
-                    rightSidebar : classNames(classes.layoutRightSidebar, {'openSummary': summaryState}),
-                    leftSidebar : classNames(classes.layoutLeftSidebar, {'openFilter': filterState}),
+                    rightSidebar : classNames(classes.layoutRightSidebar, {'openSummary': summaryStateFranchisees}),
+                    leftSidebar : classNames(classes.layoutLeftSidebar, {'openFilter': filterStateFranchisees}),
                     sidebarHeader: classes.layoutSidebarHeader,
                     header: classes.layoutHeader,
                     content: classes.content
@@ -491,7 +485,7 @@ class Franchisees extends Component {
                             </FuseAnimate>
                             { selection.length>0 && (
                                 <FuseAnimate animation="transition.expandIn" delay={600}>
-                                    <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeInvoices()}>
+                                    <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeFranchisees()}>
                                         <Icon>delete</Icon>
                                     </Fab>
                                 </FuseAnimate>
@@ -581,10 +575,10 @@ class Franchisees extends Component {
                                             <div className="flex items-center">
                                                 <Hidden smDown>
                                                     <Button
-                                                        onClick={(ev) => toggleFilterPanel()}
+                                                        onClick={(ev) => toggleFilterPanelFranchisees()}
                                                         aria-label="toggle filter panel"
                                                         color="secondary"
-                                                        disabled={filterState ? true : false}
+                                                        disabled={filterStateFranchisees ? true : false}
                                                         className={classNames(classes.filterPanelButton)}
                                                     >
                                                         <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
@@ -620,8 +614,8 @@ class Franchisees extends Component {
                                                             onClick={(event) => {
                                                                 event.stopPropagation();
                                                             }}
-                                                            checked={isSelected(row.value.InvoiceId)}
-                                                            onChange={() => toggleSelection(row.value.InvoiceId)}
+                                                            checked={isSelected(row.value.ID)}
+                                                            onChange={() => toggleSelection(row.value.ID)}
                                                         />
                                                     )
                                                 },
@@ -699,11 +693,11 @@ class Franchisees extends Component {
                                                         <IconButton
                                                             onClick={(ev) => {
                                                                 ev.stopPropagation();
-                                                                if (window.confirm("Do you really want to remove this invoice")) {
-                                                                    this.props.removeInvoiceAction(row.original.InvoiceId, this.props.franchisees);
+                                                                if (window.confirm("Do you really want to remove this franchisee")) {
+                                                                    this.props.removeFranchisees(row.original.ID, this.props.franchisees);
                                                                     if(this.state.selection.length>0){
                                                                         _.remove(this.state.selection, function(id) {
-                                                                            return id === row.original.InvoiceId;
+                                                                            return id === row.original.ID;
                                                                         });
                                                                     }
                                                                 }
@@ -729,9 +723,9 @@ class Franchisees extends Component {
                                             <div className="flex items-center justify-end pr-12">
                                                 <Hidden smDown>
                                                     <Button
-                                                        onClick={(ev) => toggleSummaryPanel()}
+                                                        onClick={(ev) => toggleSummaryPanelFranchisees()}
                                                         aria-label="toggle summary panel"
-                                                        disabled={summaryState ? true : false}
+                                                        disabled={summaryStateFranchisees ? true : false}
                                                         className={classNames(classes.summaryPanelButton)}
                                                     >
                                                         <Icon>insert_chart</Icon>
@@ -768,12 +762,12 @@ class Franchisees extends Component {
                     </div>
                 }
                 leftSidebarHeader={
-                    <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", {'filteropen': filterState})}>
+                    <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", {'filteropen': filterStateFranchisees})}>
                         <h4 style={{marginBlockStart: '1em'}}>Filter Panel</h4>
                         <FuseAnimate animation="transition.expandIn" delay={200}>
                             <div>
                                 <Hidden xsDown>
-                                    <IconButton onClick={(ev)=>toggleFilterPanel()}>
+                                    <IconButton onClick={(ev)=>toggleFilterPanelFranchisees()}>
                                         <Icon>close</Icon>
                                     </IconButton>
                                 </Hidden>
@@ -790,10 +784,7 @@ class Franchisees extends Component {
                         <FuseAnimate animation="transition.expandIn" delay={200}>
                             <div>
                                 <Hidden xsDown>
-                                    {/*<IconButton onClick={()=>this.removeInvoices()}>*/}
-                                    {/*<Icon>delete</Icon>*/}
-                                    {/*</IconButton>*/}
-                                    <IconButton onClick={(ev)=>toggleSummaryPanel()}>
+                                    <IconButton onClick={(ev)=>toggleSummaryPanelFranchisees()}>
                                         <Icon>close</Icon>
                                     </IconButton>
                                 </Hidden>
