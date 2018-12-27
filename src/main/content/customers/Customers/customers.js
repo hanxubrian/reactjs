@@ -28,6 +28,9 @@ import _ from 'lodash';
 
 import classNames from 'classnames';
 
+//table pagination
+import JanikingPagination from './../../../../Commons/JanikingPagination';
+
 const headerHeight = 80;
 
 const hexToRgb = (hex) => {
@@ -510,6 +513,8 @@ class Customers extends Component {
 					<div className="flex-1 flex-col absolute w-full h-full">
 						{this.state.temp && (
 							<ReactTable
+							PaginationComponent={JanikingPagination}
+							totalRecords = {this.state.temp.length}
 								data={this.state.temp}
 								minRows={0}
 								onFetchData={this.fetchData}
@@ -688,7 +693,7 @@ class Customers extends Component {
 												// accessor: "City",
 												id: "City",
 												accessor: d => (this.capital_letter(d.City)),
-												className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+												className: classNames("flex items-center  justify-center"),
 												width: 140
 											},
 											{
