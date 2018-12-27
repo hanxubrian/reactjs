@@ -124,7 +124,7 @@ export function addInvoice(newInvoice)
     };
 }
 
-export function updateContact(invoice)
+export function updateInvoice(invoice)
 {
     return (dispatch, getState) => {
 

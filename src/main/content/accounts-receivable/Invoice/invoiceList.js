@@ -865,7 +865,9 @@ function mapDispatchToProps(dispatch)
         toggleFilterPanel: Actions.toggleFilterPanel,
         toggleSummaryPanel: Actions.toggleSummaryPanel,
         deleteInvoicesAction: Actions.deleteInvoices,
-        removeInvoiceAction: Actions.removeInvoice
+        removeInvoiceAction: Actions.removeInvoice,
+        openNewInvoiceDialog: Actions.openNewInvoiceDialog,
+        openEditInvoiceDialog: Actions.openEditInvoiceDialog
     }, dispatch);
 }
 
