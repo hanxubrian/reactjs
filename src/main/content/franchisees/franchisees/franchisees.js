@@ -648,8 +648,8 @@ class Franchisees extends Component {
                                         ),
                                         columns: [
                                             {
-                                                Header: "FRANCHISEES ID",
-                                                accessor: "ID",
+                                                Header: "NUMBER",
+                                                accessor: "Number",
                                                 filterAll: true,
                                                 width: 200,
                                                 className: classNames(classes.tableTdEven, "flex items-center  justify-center")
@@ -704,7 +704,7 @@ class Franchisees extends Component {
                                                             }}
                                                         >
                                                             <Icon>delete</Icon>
-                                                        </IconButton>,
+                                                        </IconButton>
                                                         <IconButton
                                                             onClick={(ev) => {
                                                                 ev.stopPropagation();

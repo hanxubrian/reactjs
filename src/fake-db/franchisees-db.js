@@ -47,8 +47,8 @@ let franchiseesDb = {
                         "IsTemp": 0
                     },
                     {
-                        "ID": 20,
-                        "Number": "701019",
+                        "ID": 21,
+                        "Number": "701018",
                         "Name": "THE REGNET ENTERPRISE, LLC",
                         "Address": "7 SIBLEY STREET, APT. 2, BUFFALO, NY 14220",
                         "Address1": "7 SIBLEY STREET, APT. 2",
