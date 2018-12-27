@@ -430,7 +430,19 @@ class Customers extends Component {
 			page: state.page,
 		});
 	}
+	capital_letter(str) {
+		str = str.split(" ").map(x => {
+			if (x.length > 1) {
+				return x[0].toUpperCase() + x.substr(1).toLowerCase();
+			} else if (x.length > 0) {
+				return x[0].toUpperCase();
+			} else {
 
+			}
+		});
+
+		return str.join(" ");
+	}
 	render() {
 		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteCustomersAction } = this.props;
 		const { toggleSelection, toggleAll, isSelected, logSelection } = this;
@@ -546,8 +558,11 @@ class Customers extends Component {
 								}}
 								getTdProps={(state, rowInfo, column, instance) => {
 									let tdClass = 'flex items-center justify-center';
-									if (column.id === 'CustomerNo' || column.id === 'CustomerNo' || column.id === 'CustomerBalanceAmount' ||
-										column.id === 'CustomerDate' || column.id === 'TransactionStatus') tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
+									if (column.id === 'CustomerNo' ||
+										column.id === 'Phone' ||
+										column.id === 'AccountTypeListName' ||
+										column.id === 'StatusName')
+										tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
 
 									return {
 										style: {
@@ -648,7 +663,7 @@ class Customers extends Component {
 										),
 										columns: [
 											{
-												Header: "#",
+												Header: "No",
 												accessor: "CustomerNo",
 												filterAll: true,
 												width: 100,
@@ -662,15 +677,31 @@ class Customers extends Component {
 											},
 											{
 												Header: "Address",
-												accessor: "Address",
+												// accessor: "Address",
+												id: "Address",
+												accessor: d => (this.capital_letter(d.Address)),
 												className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
 												width: 270
+											},
+											{
+												Header: "City",
+												// accessor: "City",
+												id: "City",
+												accessor: d => (this.capital_letter(d.City)),
+												className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+												width: 140
+											},
+											{
+												Header: "State",
+												accessor: "StateName",
+												className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+												width: 50
 											},
 											{
 												Header: "Phone",
 												accessor: "Phone",
 												width: 120,
-												className: classNames("flex items-center  justify-start p-12-impor")
+												className: classNames("flex items-center  justify-center p-12-impor")
 											},
 											{
 												Header: "Account Type",
@@ -678,7 +709,7 @@ class Customers extends Component {
 												// Cell: row => {
 												// 	return '$' + parseFloat(row.original.CustomerBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
 												// },
-												className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor"),
+												className: classNames(classes.tableTdEven, "flex items-center  justify-center p-12-impor"),
 												width: 150
 											},
 											{
@@ -687,15 +718,15 @@ class Customers extends Component {
 												// 	return '$' + parseFloat(row.original.CustomerTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
 												// },
 												accessor: "StatusName",
-												className: classNames("flex items-center  justify-end p-12-impor"),
+												className: classNames("flex items-center  justify-center p-12-impor"),
 												width: 120
 											},
 											{
 												Header: "Contract Amount",
-												// id: "Amount",
-												// accessor: d => moment(d.CustomerDate).format('MM/DD/YYYY'),
-												accessor: "Amount",
-												className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+												id: "Amount",
+												accessor: d => Number(d.Amount).toFixed(2),
+												// accessor: "Amount",
+												className: classNames(classes.tableTdEven, "flex items-center  justify-end"),
 												width: 150
 											},
 											// {
