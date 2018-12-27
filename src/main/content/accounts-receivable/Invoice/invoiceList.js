@@ -3,6 +3,9 @@ import React, {Component} from 'react';
 // core components
 import {Hidden, Icon, IconButton, Fab, Input, Paper, TextField, Button, Typography} from '@material-ui/core';
 
+//Janiking
+import JanikingPagination from './../../../../Commons/JanikingPagination';
+
 // theme components
 import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
 
@@ -526,6 +529,7 @@ class InvoicePage extends Component {
                             <ReactTable
                                 data={this.state.temp}
                                 minRows = {0}
+                                PaginationComponent={JanikingPagination}
                                 onFetchData={this.fetchData}
                                 getTheadGroupProps={(state, rowInfo, column, instance) =>{
                                     return {
@@ -806,6 +810,7 @@ class InvoicePage extends Component {
                                 ]}
                                 defaultPageSize={100}
                                 className={classNames( "-striped -highlight")}
+                                totalRecords = {this.state.temp.length}
                                 style={{
                                     height: '100%',
                                 }}
@@ -865,7 +870,9 @@ function mapDispatchToProps(dispatch)
         toggleFilterPanel: Actions.toggleFilterPanel,
         toggleSummaryPanel: Actions.toggleSummaryPanel,
         deleteInvoicesAction: Actions.deleteInvoices,
-        removeInvoiceAction: Actions.removeInvoice
+        removeInvoiceAction: Actions.removeInvoice,
+        openNewInvoiceDialog: Actions.openNewInvoiceDialog,
+        openEditInvoiceDialog: Actions.openEditInvoiceDialog
     }, dispatch);
 }
 
