@@ -81,7 +81,7 @@ const styles = theme => ({
         '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
             justifyContent: 'center'
         },
-        '& .ReactTable .rt-thead .rt-th:nth-child(2)': {
+        '& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
             width:'inherit!important',
             minWidth:'inherit!important',
         },
