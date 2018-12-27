@@ -53,12 +53,13 @@ const styles = theme => ({
             display: 'none'
         },
         '& .ReactTable .rt-noData': {
-            top: '150px',
+            top: '250px',
             border: '1px solid coral'
         },
         '& .ReactTable .rt-thead.-headerGroups': {
             paddingLeft: '0!important',
-            paddingRight: '0!important'
+            paddingRight: '0!important',
+            minWidth: 'inherit!important'
         },
         '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
             background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
@@ -79,6 +80,13 @@ const styles = theme => ({
         },
         '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
             justifyContent: 'center'
+        },
+        '& .ReactTable .rt-thead .rt-th:nth-child(2)': {
+            width:'inherit!important',
+            minWidth:'inherit!important',
+        },
+        '& .ReactTable .rt-thead .rt-th:last-child': {
+            justifyContent: 'flex-end'
         },
         '& .p-12-impor': {
             paddingLeft: '1.2rem!important',
@@ -168,6 +176,16 @@ const styles = theme => ({
         backgroundColor: theme.palette.secondary.main,
         minWidth: 42,
         padding: 8,
+        justifyContent: 'center',
+        '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+        }
+    },
+    summaryPanelButton: {
+        backgroundColor: theme.palette.secondary.main,
+        minWidth: 42,
+        padding: 8,
+        color: 'white',
         justifyContent: 'center',
         '&:hover': {
             backgroundColor: theme.palette.primary.dark,
@@ -441,23 +459,24 @@ class InvoicePage extends Component {
                 header={
                     <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
                         <div className="flex flex-row flex-1 justify-between">
-                            <div className="flex items-center pl-0 lg:pl-0 p-24">
-                                { !filterState && (
+                            <div className="flex items-center pr-0 lg:pr-12 p-24">
+                                { !summaryState && (
                                     <Hidden smDown>
                                         <IconButton
-                                            onClick={(ev) => toggleFilterPanel()}
-                                            aria-label="toggle filter panel"
+                                            onClick={(ev) => toggleSummaryPanel()}
+                                            aria-label="toggle summary panel"
+                                            style={{marginRight: -12}}
                                         >
-                                            <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
+                                            <Icon>insert_chart</Icon>
                                         </IconButton>
                                     </Hidden>
                                 )}
                                 <Hidden smUp>
                                     <IconButton
-                                        onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
-                                        aria-label="toggle filter panel"
+                                        onClick={(ev) => this.pageLayout.toggleRightSidebar()}
+                                        aria-label="toggle summary panel"
                                     >
-                                        <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
+                                        <Icon>insert_chart</Icon>
                                     </IconButton>
                                 </Hidden>
                             </div>
@@ -563,8 +582,8 @@ class InvoicePage extends Component {
                                                         onClick={(ev) => toggleFilterPanel()}
                                                         aria-label="toggle filter panel"
                                                         color="secondary"
+                                                        disabled={filterState ? true : false}
                                                         className={classNames(classes.filterPanelButton)}
-                                                        disabled={ filterState ? true: false}
                                                     >
                                                         <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
                                                     </Button>
@@ -724,6 +743,39 @@ class InvoicePage extends Component {
                                                             <Icon>edit</Icon>
                                                         </IconButton>
                                                     </div>
+                                                )
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        Header: (instance)=>(
+                                            <div className="flex items-center justify-end pr-12">
+                                                <Hidden smDown>
+                                                    <Button
+                                                        onClick={(ev) => toggleSummaryPanel()}
+                                                        aria-label="toggle summary panel"
+                                                        disabled={summaryState ? true : false}
+                                                        className={classNames(classes.summaryPanelButton)}
+                                                    >
+                                                        <Icon>insert_chart</Icon>
+                                                    </Button>
+                                                </Hidden>
+                                                <Hidden smUp>
+                                                    <Button
+                                                        onClick={(ev) => this.pageLayout.toggleRightSidebar()}
+                                                        aria-label="toggle summary panel"
+                                                        className={classNames(classes.summaryPanelButton)}
+                                                    >
+                                                        <Icon>insert_chart</Icon>
+                                                    </Button>
+                                                </Hidden>
+                                            </div>
+                                        ),
+                                        columns:[
+                                            {
+                                                Header: '',
+                                                cell: ()=>(
+                                                    <div className="flex w-full justify-end"/>
                                                 )
                                             }
                                         ]
