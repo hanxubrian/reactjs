@@ -9,6 +9,7 @@ import mailApp from '../../main/content/apps/mail/store/reducers/';
 import chatPanel from '../../main/chatPanel/store/reducers/';
 import contactsApp from '../../main/content/apps/contacts/store/reducers/';
 import franchisees from'./franchisees.reducer';
+import customers from './customers.reducer'
 
 
 const createReducer = (asyncReducers) =>
@@ -22,7 +23,8 @@ const createReducer = (asyncReducers) =>
         mailApp,
         chatPanel,
         contactsApp,
-        franchisees,
+		franchisees,
+		customers,
         ...asyncReducers
     });
 
