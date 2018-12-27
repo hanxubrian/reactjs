@@ -360,31 +360,14 @@ class Customers extends Component {
 
 		if (rawData === null) return;
 
+		let regions = rawData.Data.Regions.filter(x => {
+			return this.props.regionId === 0 || x.Id === this.props.regionId;
+		});
 
-		// rcc commented
-		// let temp0 = rawData.Data;
+		regions.map(x => {
+			all_temp = [...all_temp, ...x.Customers];
+		});
 
-		let temp0 = rawData.Data.Regions;
-		console.log(temp0);
-		for (var i = 0; i < temp0.length; i++) {
-			if (this.props.regionId === temp0[i].Id) {
-				all_temp = temp0[i].Customers;
-				console.log('temp', temp);
-			}
-		}
-
-		// temp1 = keys.map((key, index) => {
-
-		// 	if (this.props.transactionStatus[key]) {
-		// 		temp = temp0.filter(d => {
-		// 			if (this.props.regionId === 0)
-		// 				return d.TransactionStatus.toLowerCase() === statusStrings[index]
-		// 			else
-		// 				return d.TransactionStatus.toLowerCase() === statusStrings[index] && d.RegionId === this.props.regionId
-		// 		});
-		// 	}
-		// 	all_temp = _.uniq([...all_temp, ...temp]);
-		// });
 		this.setState({ temp: all_temp });
 		this.setState({ data: all_temp });
 	};
