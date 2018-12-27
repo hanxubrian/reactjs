@@ -8,7 +8,14 @@ const initialState = {
     bLoadedInvoices: false,
     bOpenedSummaryPanel: true,
     bOpenedFilterPanel: true,
-    transactionStatus:{checkedPaid: true,checkedPP: true, checkedComplete: true, checkedOpen: true }
+    transactionStatus:{checkedPaid: true,checkedPP: true, checkedComplete: true, checkedOpen: true },
+    invoiceDialog: {
+        type : 'new',
+        props: {
+            open: false
+        },
+        data : null
+    }
 };
 
 
@@ -54,6 +61,58 @@ const invoices = function(state = initialState, action) {
             return {
                 ...initialState
             }
+        }
+        case Actions.OPEN_NEW_INVOICE_DIALOG:
+        {
+            return {
+                ...state,
+                invoiceDialog: {
+                    type : 'new',
+                    props: {
+                        open: true
+                    },
+                    data : null
+                }
+            };
+        }
+        case Actions.CLOSE_NEW_INVOICE_DIALOG:
+        {
+            return {
+                ...state,
+                invoiceDialog: {
+                    type : 'new',
+                    props: {
+                        open: false
+                    },
+                    data : null
+                }
+            };
+        }
+        case Actions.OPEN_EDIT_INVOICE_DIALOG:
+        {
+            return {
+                ...state,
+                invoiceDialog: {
+                    type : 'edit',
+                    props: {
+                        open: true
+                    },
+                    data : action.data
+                }
+            };
+        }
+        case Actions.CLOSE_EDIT_INVOICE_DIALOG:
+        {
+            return {
+                ...state,
+                contactInvoice: {
+                    type : 'edit',
+                    props: {
+                        open: false
+                    },
+                    data : null
+                }
+            };
         }
         default:
         {

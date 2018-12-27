@@ -6,6 +6,14 @@ export const REMOVE_SELECTED_INVOICE = "[INVOICE] REMOVE SELECTED";
 export const TOGGLE_SUMMARY_PANEL = "[INVOICES] TOGGLE SUMMARY PANEL";
 export const TOGGLE_FILTER_STATUS = "[INVOICES] TOGGLE FILTER STATUS";
 export const TOGGLE_FILTER_PANEL = "[INVOICES] TOGGLE FILTER PANEL";
+// for Add/Edit
+export const OPEN_NEW_INVOICE_DIALOG = '[INVOICES APP] OPEN NEW INVOICE DIALOG';
+export const CLOSE_NEW_INVOICE_DIALOG = '[INVOICES APP] CLOSE NEW INVOICE DIALOG';
+export const OPEN_EDIT_INVOICE_DIALOG = '[INVOICES APP] OPEN EDIT INVOICE DIALOG';
+export const CLOSE_EDIT_INVOICE_DIALOG = '[INVOICES APP] CLOSE EDIT INVOICE DIALOG';
+export const ADD_INVOICE = '[INVOICES APP] ADD INVOICE';
+export const UPDATE_INVOICE = '[INVOICES APP] UPDATE INVOICE';
+
 
 export function getInvoices() {
     return dispatch => {
@@ -65,4 +73,73 @@ export function removeInvoice(key, invoices) {
     };
 }
 
+export function openNewInvoiceDialog()
+{
+    return {
+        type: OPEN_NEW_INVOICE_DIALOG
+    }
+}
 
+export function closeNewInvoiceDialog()
+{
+    return {
+        type: CLOSE_NEW_INVOICE_DIALOG
+    }
+}
+
+export function openEditInvoiceDialog(data)
+{
+    return {
+        type: OPEN_EDIT_INVOICE_DIALOG,
+        data
+    }
+}
+
+export function closeEditInvoiceDialog()
+{
+    return {
+        type: CLOSE_EDIT_INVOICE_DIALOG
+    }
+}
+
+export function addInvoice(newInvoice)
+{
+    return (dispatch, getState) => {
+
+        console.log('state', getState());
+
+        // const {routeParams} = getState().contactsApp.contacts;
+
+        const request = axios.post('/api/contacts-app/add-contact', {
+            newInvoice
+        });
+
+        return request.then((response) =>
+            Promise.all([
+                dispatch({
+                    type: ADD_INVOICE
+                })
+            ]).then(() => dispatch(getInvoices()))
+        );
+    };
+}
+
+export function updateContact(invoice)
+{
+    return (dispatch, getState) => {
+
+        // const {routeParams} = getState().contactsApp.contacts;
+
+        const request = axios.post('/api/contacts-app/update-contact', {
+            invoice
+        });
+
+        return request.then((response) =>
+            Promise.all([
+                dispatch({
+                    type: UPDATE_INVOICE
+                })
+            ]).then(() => dispatch(getInvoices()))
+        );
+    };
+}

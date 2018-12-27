@@ -756,7 +756,7 @@ class InvoicePage extends Component {
                                                             }}
                                                         >
                                                             <Icon>delete</Icon>
-                                                        </IconButton>,
+                                                        </IconButton>
                                                         <IconButton
                                                             onClick={(ev) => {
                                                                 ev.stopPropagation();
