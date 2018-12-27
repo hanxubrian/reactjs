@@ -19,5 +19,6 @@ import './academy-db';
 import './invoices-db';
 import './billrun-db';
 import './franchisees-db';
+import './customers-db';
 
 mock.onAny().passThrough();
