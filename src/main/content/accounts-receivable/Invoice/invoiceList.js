@@ -1171,6 +1171,7 @@ class InvoicePage extends Component {
                                                     name: 'service',
                                                     id  : 'service'
                                                 }}
+                                                variant="outlined"
                                             >
                                                 <MenuItem value="">
                                                     <em>Select</em>
@@ -1211,7 +1212,7 @@ class InvoicePage extends Component {
                                             }}
                                             disabled={!this.canBeSubmitted()}
                                         >
-                                            Add
+                                            Save & Close
                                         </Button>
                                     </div>
                                 </div>
