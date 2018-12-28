@@ -337,7 +337,6 @@ function escapeRegexCharacters(str) {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-
 class InvoicePage extends Component {
     state = {
         s: '',
@@ -585,9 +584,11 @@ class InvoicePage extends Component {
     componentDidMount(){
         window.addEventListener('scroll', this.listenScrollEvent);
         document.addEventListener("keydown", this.escFunction, false);
-        this.setState({
-            labelWidth: ReactDOM.findDOMNode(this.InputLabelRef).offsetWidth
-        });
+        if(this.InputLabelRef) {
+            this.setState({
+                labelWidth: ReactDOM.findDOMNode(this.InputLabelRef).offsetWidth
+            });
+        }
 
         if(this.props.customers!==null){
             let temp = [];
@@ -752,7 +753,6 @@ class InvoicePage extends Component {
                                         <Icon>print</Icon>
                                     </Fab>
                                 </FuseAnimate>
-=======
                                 { selection.length>0 && (
                                     <FuseAnimate animation="transition.expandIn" delay={600}>
                                         <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeInvoices()}>
@@ -760,7 +760,6 @@ class InvoicePage extends Component {
                                         </Fab>
                                     </FuseAnimate>
                                 )}
->>>>>>> 055a639786b05bc09a9c3f0f4a61a420af4ad700
                             </div>
                         </div>
                     }
@@ -1164,7 +1163,7 @@ class InvoicePage extends Component {
                                     </GridContainer>
                                     <Divider variant="middle" className={classNames(classes.formControl)}/>
                                     <div className="flex">
-                                        <FormControl variant="outlined" className={classes.formControl}>
+                                        <FormControl variant="outlined" className={classes.formControl} style={{marginBottom: '0!important'}}>
                                             <InputLabel
                                                 ref={ref => {
                                                     this.InputLabelRef = ref;
@@ -1212,7 +1211,7 @@ class InvoicePage extends Component {
                                                 <MenuItem value={23}>Regular Cleaning - Night</MenuItem>
                                             </Select>
                                         </FormControl>
-                                        <FormControl className={classNames(classes.formControl, "flex ml-24")}>
+                                        <FormControl className={classNames("flex ml-24")}>
                                             <RadioGroup
                                                 aria-label="Work"
                                                 name="selectedWork"
