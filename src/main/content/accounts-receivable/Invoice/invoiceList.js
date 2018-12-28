@@ -11,8 +11,8 @@ import {
     TextField,
     Button,
     Typography,
-    MenuItem,
-    Card, CardHeader, CardContent
+    MenuItem,FormControl,InputLabel, Select,
+    Card, CardHeader, CardContent, DialogContent, Divider
 } from '@material-ui/core';
 
 //Janiking
@@ -1099,6 +1099,81 @@ class InvoicePage extends Component {
 
                                         </GridContainer>
                                     )}
+
+                                    <GridContainer>
+                                        <GridItem xs={12} sm={9} md={9} className="flex flex-row">
+                                            {/*<div className="min-w-48 pt-20"><Icon color="action">description</Icon></div>*/}
+                                            <TextField
+                                                className={classes.formControl}
+                                                label="Description"
+                                                id="description"
+                                                name="InvoiceDescription"
+                                                value={this.state.InvoiceDescription}
+                                                onChange={this.handleChange}
+                                                variant="outlined"
+                                                fullWidth
+                                                multiline={true}
+                                            />
+                                        </GridItem>
+                                        <GridItem xs={12} sm={3} md={3} className="flex flex-row">
+                                            {/*<div className="min-w-48 pt-20"><Icon color="action">calendar_today</Icon></div>*/}
+                                            <TextField
+                                                className={classes.formControl}
+                                                id="InvoiceDate"
+                                                label="Invoice Date"
+                                                type="date"
+                                                name="InvoiceDate"
+                                                value={this.state.InvoiceDate}
+                                                onChange={this.handleChange}
+                                                InputLabelProps={{
+                                                    shrink: true
+                                                }}
+                                                variant="outlined"
+                                                fullWidth
+                                            />
+                                        </GridItem>
+                                    </GridContainer>
+                                    <Divider variant="middle" className={classNames(classes.formControl)}/>
+                                    <div className="flex">
+                                        <FormControl className={classes.formControl}>
+                                            <InputLabel htmlFor="service">Services</InputLabel>
+                                            <Select
+                                                value={this.state.age}
+                                                onChange={this.handleChange}
+                                                inputProps={{
+                                                    name: 'service',
+                                                    id  : 'service'
+                                                }}
+                                            >
+                                                <MenuItem value="">
+                                                    <em>Select</em>
+                                                </MenuItem>
+                                                <MenuItem value={1}>Adjust - Balance</MenuItem>
+                                                <MenuItem value={2}>Adjust - Refund</MenuItem>
+                                                <MenuItem value={3}>Adjust - WriteOff</MenuItem>
+                                                <MenuItem value={4}>Buffing</MenuItem>
+                                                <MenuItem value={5}>Carpet Clean</MenuItem>
+                                                <MenuItem value={6}>Customer Suppliers</MenuItem>
+                                                <MenuItem value={7}>Emergency Clean</MenuItem>
+                                                <MenuItem value={8}>Event Center</MenuItem>
+                                                <MenuItem value={9}>Floor Services</MenuItem>
+                                                <MenuItem value={10}>Funiture Cleaning Service</MenuItem>
+                                                <MenuItem value={11}>High Dusting</MenuItem>
+                                                <MenuItem value={12}>Hotel</MenuItem>
+                                                <MenuItem value={13}>In-House Work</MenuItem>
+                                                <MenuItem value={14}>Initial and Deep Clean</MenuItem>
+                                                <MenuItem value={15}>Initial One-Time Clean</MenuItem>
+                                                <MenuItem value={16}>Make Ready</MenuItem>
+                                                <MenuItem value={17}>Miscellaneous - Special</MenuItem>
+                                                <MenuItem value={18}>Other</MenuItem>
+                                                <MenuItem value={19}>Porter Services</MenuItem>
+                                                <MenuItem value={20}>Power Washing</MenuItem>
+                                                <MenuItem value={21}>Regular Billing</MenuItem>
+                                                <MenuItem value={22}>Regular Cleaning - Day</MenuItem>
+                                                <MenuItem value={23}>Regular Cleaning - Night</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
                                     <div className="flex">
                                         <Button
                                             variant="contained"
