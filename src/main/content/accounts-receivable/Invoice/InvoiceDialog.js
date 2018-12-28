@@ -1,12 +1,19 @@
 import React, {Component} from 'react';
+
+//Material-UI
 import {
     TextField, Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, Avatar
 } from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles/index';
+
+// store
 import {bindActionCreators} from 'redux';
 import * as Actions from './../../../../store/actions';
 import {connect} from 'react-redux';
 import _ from '@lodash';
+
+// third party
+import Autosuggest from 'react-autosuggest';
 
 const styles = theme => ({
     root       : {},
@@ -14,6 +21,7 @@ const styles = theme => ({
         marginBottom: 24
     }
 });
+
 const newInvoiceState = {
     "MasterTrxTypeListId": "",
     "RegionId": "",
@@ -47,7 +55,25 @@ const newInvoiceState = {
 };
 
 class InvoiceDialog extends Component {
-    state = {...newInvoiceState};
+    state = {
+        ...newInvoiceState,
+    };
+
+    constructor (props) {
+        super(props);
+
+    }
+
+    escapeRegexCharacters = (str) => {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    };
+
+    getSuggestions = (value) => {
+        const escapedValue = this.escapeRegexCharacters(value.trim());
+        const regex = new RegExp(escapedValue, 'i');
+
+        return this.props.customers.filter(customer => regex.test(customer.nickname) || regex.test(customer.email));
+    };
 
     componentDidUpdate(prevProps, prevState, snapshot)
     {
@@ -119,16 +145,7 @@ class InvoiceDialog extends Component {
                             {invoiceDialog.type === 'new' ? 'New Invoice' : 'Edit Invoice'}
                         </Typography>
                     </Toolbar>
-                    <div className="flex flex-col items-center justify-center pb-24">
-                        <Avatar className="w-96 h-96" alt="contact avatar" src={this.state.avatar}/>
-                        {invoiceDialog.type === 'edit' && (
-                            <Typography variant="h6" color="inherit" className="pt-8">
-                                {this.state.name}
-                            </Typography>
-                        )}
-                    </div>
                 </AppBar>
-
                 <DialogContent classes={{root: "p-24"}}>
                     <div className="flex">
                         <div className="min-w-48 pt-20">
@@ -137,13 +154,14 @@ class InvoiceDialog extends Component {
 
                         <TextField
                             className={classes.formControl}
-                            label="Name"
+                            label="Invoice For:"
                             autoFocus
-                            id="name"
-                            name="name"
-                            value={this.state.name}
+                            id="CustomerName"
+                            name="CustomerName"
+                            value={this.state.CustomerName}
                             onChange={this.handleChange}
                             variant="outlined"
+                            placeholder="Search Customer Name or Number"
                             required
                             fullWidth
                         />
@@ -352,10 +370,11 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({invoices})
+function mapStateToProps({invoices, customers})
 {
     return {
-        invoiceDialog: invoices.invoiceDialog
+        invoiceDialog: invoices.invoiceDialog,
+        customers: customers.customersDB,
     }
 }
 

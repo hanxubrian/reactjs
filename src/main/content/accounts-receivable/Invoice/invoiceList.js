@@ -303,6 +303,11 @@ class InvoicePage extends Component {
         if(!props.bLoadedInvoices) {
             props.getInvoices();
         }
+
+        if (!props.bLoadedCustomers) {
+            props.getCustomers();
+        }
+
         this.fetchData = this.fetchData.bind(this);
         this.escFunction = this.escFunction.bind(this);
         this.listenScrollEvent = this.listenScrollEvent.bind(this);
@@ -394,6 +399,16 @@ class InvoicePage extends Component {
     componentDidMount(){
         window.addEventListener('scroll', this.listenScrollEvent);
         document.addEventListener("keydown", this.escFunction, false);
+
+        if(this.props.customers!==null){
+            let temp = [];
+            let regions = this.props.customers.Data.Regions
+
+            regions.map(x => {
+                temp = [...temp, ...x.Customers];
+            });
+            this.setState({customers: temp})
+        }
     }
 
     componentWillUnmount(){
@@ -879,11 +894,12 @@ function mapDispatchToProps(dispatch)
         deleteInvoicesAction: Actions.deleteInvoices,
         removeInvoiceAction: Actions.removeInvoice,
         openNewInvoiceDialog: Actions.openNewInvoiceDialog,
-        openEditInvoiceDialog: Actions.openEditInvoiceDialog
+        openEditInvoiceDialog: Actions.openEditInvoiceDialog,
+        getCustomers: Actions.getCustomers,
     }, dispatch);
 }
 
-function mapStateToProps({invoices, auth})
+function mapStateToProps({invoices, auth, customers})
 {
     return {
         invoices: invoices.invoicesDB,
@@ -891,7 +907,9 @@ function mapStateToProps({invoices, auth})
         transactionStatus: invoices.transactionStatus,
         filterState: invoices.bOpenedFilterPanel,
         summaryState: invoices.bOpenedSummaryPanel,
-        regionId: auth.login.defaultRegionId
+        regionId: auth.login.defaultRegionId,
+        customers: customers.customersDB,
+        bLoadedCustomers: customers.bLoadedCustomers,
     }
 }
 
