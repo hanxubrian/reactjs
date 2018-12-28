@@ -169,9 +169,6 @@ const styles = theme => ({
     tableThEven:{
         backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b +', .3)'
     },
-    tableTdEven:{
-        backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b +', .1)'
-    },
     filterPanelButton: {
         backgroundColor: theme.palette.secondary.main,
         minWidth: 42,
@@ -598,7 +595,7 @@ class Franchisees extends Component {
                                 getTdProps={(state, rowInfo, column, instance) =>{
                                     let tdClass='flex items-center justify-center';
                                     if (column.id==='InvoiceNo' ||column.id==='CustomerNo'||column.id==='InvoiceBalanceAmount'||
-                                        column.id==='InvoiceDate' || column.id==='TransactionStatus') tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
+                                        column.id==='InvoiceDate' || column.id==='TransactionStatus') tdClass = classNames( "flex items-center  justify-center");
 
                                     return {
                                         style:{
@@ -704,7 +701,7 @@ class Franchisees extends Component {
                                                 accessor: "Number",
                                                 filterAll: true,
                                                 width: 200,
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+                                                className: classNames("flex items-center  justify-center")
                                             },
                                             {
                                                 Header: "FRANCHISEES NAME",
@@ -715,7 +712,7 @@ class Franchisees extends Component {
                                             {
                                                 Header: "FULL ADDRESS",
                                                 accessor: "Address",
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-start p-12-impor"),
+                                                className: classNames("flex items-center  justify-start p-12-impor"),
                                                 width: 420
                                             },
                                             {
@@ -727,7 +724,7 @@ class Franchisees extends Component {
                                             {
                                                 Header: "STATUS",
                                                 accessor: "StatusName",
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center p-12-impor"),
+                                                className: classNames("flex items-center  justify-center p-12-impor"),
                                                 width: 150
                                             },
                                             {
@@ -739,7 +736,7 @@ class Franchisees extends Component {
                                             {
                                                 Header: "Actions",
                                                 width : 150,
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center p-12-impor"),
+                                                className: classNames("flex items-center  justify-center p-12-impor"),
                                                 Cell  : row => (
                                                     <div className="flex items-center actions ">
                                                         <IconButton

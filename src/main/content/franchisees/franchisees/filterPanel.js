@@ -118,7 +118,7 @@ class FilterPanel extends Component {
                 this.setState({ ['select_all']: event.target.checked });
             }
             this.setState({ [name]: event.target.checked });
-            this.props.toggleStatus(name, event.target.checked)
+            this.props.toggleStatus(name, event.target.checked);
         }
     };
 
