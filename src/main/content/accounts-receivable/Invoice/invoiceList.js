@@ -739,7 +739,6 @@ class InvoicePage extends Component {
                                         <Icon>add</Icon>
                                     </Fab>
                                 </FuseAnimate>
-<<<<<<< HEAD
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
                                     <Fab color="primary" aria-label="add"
                                          className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
