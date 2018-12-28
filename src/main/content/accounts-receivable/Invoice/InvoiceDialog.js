@@ -188,7 +188,6 @@ class InvoiceDialog extends Component {
         return this.props.customers.filter(customer => regex.test(customer.CustomerName));
     };
 
-
     componentDidUpdate(prevProps, prevState, snapshot)
     {
         /**
@@ -348,20 +347,39 @@ class InvoiceDialog extends Component {
                         </GridContainer>
                     )}
 
-                    <div className="flex">
-                        <div className="min-w-48 pt-20">
-                        </div>
-                        <TextField
-                            className={classes.formControl}
-                            label="Last name"
-                            id="lastName"
-                            name="lastName"
-                            value={this.state.lastName}
-                            onChange={this.handleChange}
-                            variant="outlined"
-                            fullWidth
-                        />
-                    </div>
+                    <GridContainer className={classNames(classes.formControl)}>
+                        <GridItem xs={12} sm={9} md={9} className="flex flex-row">
+                            <div className="min-w-48 pt-20"><Icon color="action">description</Icon></div>
+                            <TextField
+                                className={classes.formControl}
+                                label="Description"
+                                id="description"
+                                name="InvoiceDescription"
+                                value={this.state.InvoiceDescription}
+                                onChange={this.handleChange}
+                                variant="outlined"
+                                fullWidth
+                                multiline={true}
+                            />
+                        </GridItem>
+                        <GridItem xs={12} sm={3} md={3} className="flex flex-row">
+                            <div className="min-w-48 pt-20"><Icon color="action">calendar_today</Icon></div>
+                            <TextField
+                                className={classes.formControl}
+                                id="InvoiceDate"
+                                label="Invoice Date"
+                                type="date"
+                                name="InvoiceDate"
+                                value={this.state.InvoiceDate}
+                                onChange={this.handleChange}
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </GridItem>
+                    </GridContainer>
 
                     <div className="flex">
                         <div className="min-w-48 pt-20">

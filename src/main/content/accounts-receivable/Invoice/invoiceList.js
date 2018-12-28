@@ -1,7 +1,19 @@
 import React, {Component} from 'react';
 
 // core components
-import {Hidden, Icon, IconButton, Fab, Input, Paper, TextField, Button, Typography} from '@material-ui/core';
+import {
+    Hidden,
+    Icon,
+    IconButton,
+    Fab,
+    Input,
+    Paper,
+    TextField,
+    Button,
+    Typography,
+    MenuItem,
+    Card, CardHeader, CardContent
+} from '@material-ui/core';
 
 //Janiking
 import JanikingPagination from 'Commons/JanikingPagination';
@@ -14,6 +26,10 @@ import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
 import {bindActionCreators} from "redux";
 import {withStyles, Checkbox} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
+
+//Custom components
+import GridContainer from "Commons/Grid/GridContainer";
+import GridItem from "Commons/Grid/GridItem";
 
 // for store
 import connect from "react-redux/es/connect/connect";
@@ -28,9 +44,10 @@ import Chance from "chance";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import _ from 'lodash';
-
-
+import Autosuggest from 'react-autosuggest';
 import classNames from 'classnames';
+import match from "autosuggest-highlight/match";
+import parse from "autosuggest-highlight/parse";
 
 const headerHeight = 80;
 
@@ -202,11 +219,126 @@ const styles = theme => ({
         '&:hover': {
             backgroundColor: theme.palette.primary.dark,
         }
-    }
+    },
+    container: {
+        position: 'relative',
+        width: '100%'
+    },
+    formControl: {
+        marginBottom: 24
+    },
+    suggestionsContainerOpen: {
+        position: 'absolute',
+        zIndex: 10,
+        marginTop: theme.spacing.unit,
+        left: 0,
+        right: 0,
+        maxHeight: 200,
+        overflowY: 'scroll'
+    },
+    suggestion: {
+        display: 'block',
+    },
+    suggestionsList: {
+        margin: 0,
+        padding: 0,
+        listStyleType: 'none',
+    },
+    divider: {
+        height: theme.spacing.unit * 2,
+    },
+    cardHeader       : {
+        backgroundColor: theme.palette.secondary.main,
+        padding: '10px 24px',
+        '& span': {
+            color: 'white'
+        }
+    },
 });
 const defaultProps = {
     trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
 };
+
+const newInvoiceState = {
+    "MasterTrxTypeListId": "",
+    "RegionId": "",
+    "RegionName": "",
+    "InvoiceId": "",
+    "InvoiceNo": "",
+    "InvoiceDate": "",
+    "DueDate": "",
+    "CustomerId": "",
+    "CustomerNo": "",
+    "CustomerName": "",
+    "EBill": "",
+    "PrintInvoice": "",
+    "InvoiceDescription": "",
+    "InvoiceAmount": "",
+    "InvoiceTax": "",
+    "InvoiceTotal": "",
+    "CPI": "",
+    "TransactionStatusListId": "",
+    "TransactionStatus": "",
+    "InvoiceBalanceAmount": "",
+    "InvoiceBalanceTax": "",
+    "InvoiceBalanceTotal": "",
+    "EBillText": "",
+    "PrintInvoiceText": "",
+    "IsOpen": "",
+    "ConsolidatedInvoice": "",
+    "ConsolidatedInvoiceId": "",
+    "ConsolidatedInvoiceNo": "",
+    "CreditId": "",
+};
+
+function renderInputComponent(inputProps) {
+    const { classes, inputRef = () => {}, ref, ...other } = inputProps;
+
+    return (
+        <TextField
+            fullWidth
+            variant="outlined"
+            label="Invoice For:"
+            InputProps={{
+                inputRef: node => {
+                    ref(node);
+                    inputRef(node);
+                },
+                classes: {
+                    input: classes.input,
+                },
+            }}
+            {...other}
+        />
+    );
+}
+
+function renderSuggestion(suggestion, { query, isHighlighted }) {
+    const matches = match(suggestion.CustomerName, query);
+    const parts = parse(suggestion.CustomerName, matches);
+
+    return (
+        <MenuItem selected={isHighlighted} component="div">
+            <div>
+                {parts.map((part, index) => {
+                    return part.highlight ? (
+                        <span key={String(index)} style={{ fontWeight: 700 }}>
+              {part.text}
+            </span>
+                    ) : (
+                        <strong key={String(index)} style={{ fontWeight: 300 }}>
+                            {part.text}
+                        </strong>
+                    );
+                })}
+            </div>
+        </MenuItem>
+    );
+}
+
+function escapeRegexCharacters(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
 
 class InvoicePage extends Component {
@@ -221,7 +353,43 @@ class InvoicePage extends Component {
         selection: [],
         selectAll: false,
         regionId: 0,
-        customers: []
+        customers: [],
+        ...newInvoiceState,
+        value: '',
+        suggestions: [],
+        selectedCustomer: null
+    };
+
+    onChange = (event, { newValue, method }) => {
+        this.setState({
+            value: newValue.toString()
+        });
+    };
+
+    onSuggestionsFetchRequested = ({ value }) => {
+        if(value.length<2) return;
+
+        this.setState({
+            suggestions: this.getSuggestions(value)
+        });
+    };
+
+    onSuggestionsClearRequested = () => {
+        this.setState({
+            suggestions: []
+        });
+    };
+
+    getSuggestionValue =  (suggestion) =>{
+        this.setState({selectedCustomer: suggestion});
+        return suggestion.CustomerName;
+    };
+
+    getSuggestions = (value) => {
+        const escapedValue = escapeRegexCharacters(value.trim());
+        const regex = new RegExp(escapedValue, 'i');
+
+        return this.state.customers.filter(customer => regex.test(customer.CustomerName));
     };
 
     toggleSelection = (key, shift, row) => {
@@ -296,6 +464,10 @@ class InvoicePage extends Component {
 
     logSelection = () => {
         console.log("selection:", this.state.selection);
+    };
+
+    closeComposeDialog = () => {
+        this.props.invoiceDialog.type === 'edit' ? this.props.closeEditInvoiceDialog() : this.props.closeNewInvoiceDialog();
     };
 
     constructor(props){
@@ -449,7 +621,7 @@ class InvoicePage extends Component {
         this.setState({temp: temp});
     }
 
-    handleChange = prop => event => {
+    handleChange1 = prop => event => {
         this.setState({ [prop]: event.target.value });
 
         if(prop==='s') {
@@ -457,6 +629,18 @@ class InvoicePage extends Component {
         }
     };
 
+    handleChange = (event) => {
+        this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
+    };
+
+    canBeSubmitted()
+    {
+        return true;
+        const {name} = this.state;
+        return (
+            name.length > 0
+        );
+    }
     removeInvoices = ()=> {
         if(this.state.selection.length==0){
             alert("Please choose invoice(s) to delete");
@@ -478,16 +662,24 @@ class InvoicePage extends Component {
     render()
     {
         const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteInvoicesAction,
-            openNewInvoiceDialog} = this.props;
+            openNewInvoiceDialog, invoiceDialog,addInvoice, updateInvoice, removeInvoice} = this.props;
         const { toggleSelection, toggleAll, isSelected, logSelection} = this;
+        const { selectAll, selection, value, suggestions } = this.state;
 
-        const { selectAll, selection } = this.state;
+        const autosuggestProps = {
+            renderInputComponent,
+            suggestions: suggestions,
+            onSuggestionsFetchRequested: this.onSuggestionsFetchRequested,
+            onSuggestionsClearRequested: this.onSuggestionsClearRequested,
+            getSuggestionValue: this.getSuggestionValue,
+            renderSuggestion,
+        };
 
         return (
             <React.Fragment>
                 <FusePageCustom
                     classes={{
-                        root: classNames(classes.layoutRoot,'test123'),
+                        root: classNames(classes.layoutRoot),
                         rightSidebar : classNames(classes.layoutRightSidebar, {'openSummary': summaryState}),
                         leftSidebar : classNames(classes.layoutLeftSidebar, {'openFilter': filterState}),
                         sidebarHeader: classes.layoutSidebarHeader,
@@ -545,7 +737,7 @@ class InvoicePage extends Component {
                     }
                     content={
                         <div className="flex-1 flex-col absolute w-full h-full">
-                            {this.state.temp && (
+                            {(this.state.temp && !invoiceDialog.props.open) && (
                                 <ReactTable
                                     data={this.state.temp}
                                     minRows = {0}
@@ -688,7 +880,7 @@ class InvoicePage extends Component {
                                                             disableUnderline
                                                             fullWidth
                                                             value={this.state.s}
-                                                            onChange={this.handleChange('s')}
+                                                            onChange={this.handleChange1('s')}
                                                             inputProps={{
                                                                 'aria-label': 'Search'
                                                             }}
@@ -836,6 +1028,92 @@ class InvoicePage extends Component {
                                     }}
                                 />
                             )}
+                            {(this.state.temp && invoiceDialog.props.open) && (
+                                <div className="p-24">
+                                    <div className="flex">
+                                        <Autosuggest
+                                            {...autosuggestProps}
+                                            inputProps={{
+                                                classes,
+                                                placeholder: 'Search Customer Name or Number',
+                                                value: value,
+                                                onChange: this.onChange,
+                                            }}
+                                            theme={{
+                                                container: classNames(classes.container, classes.formControl),
+                                                suggestionsContainerOpen: classes.suggestionsContainerOpen,
+                                                suggestionsList: classes.suggestionsList,
+                                                suggestion: classes.suggestion,
+                                            }}
+                                            renderSuggestionsContainer={options => (
+                                                <Paper {...options.containerProps} square>
+                                                    {options.children}
+                                                </Paper>
+                                            )}
+                                        />
+                                    </div>
+                                    {this.state.selectedCustomer && (
+                                        <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
+                                            <GridItem xs={12} sm={6} md={6} className="flex flex-row">
+                                                <Card className={classes.card}>
+                                                    <CardHeader title="Customer" className={classNames(classes.cardHeader, "flex-1")} />
+                                                    <CardContent>
+                                                        <Typography variant="subtitle1" color="inherit">
+                                                            <strong>Customer Name: {this.state.selectedCustomer.CustomerName}</strong>
+                                                        </Typography>
+                                                        <Typography variant="subtitle1" color="inherit">
+                                                            Customer No: {this.state.selectedCustomer.CustomerNo}
+                                                        </Typography>
+                                                        <Typography variant="subtitle1" color="inherit">
+                                                            Address: {this.state.selectedCustomer.Address}
+                                                        </Typography>
+                                                        <Typography variant="subtitle1" color="inherit">
+                                                            {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
+                                                        </Typography>
+                                                    </CardContent>
+
+                                                </Card>
+                                            </GridItem>
+                                            <GridItem xs={12} sm={6} md={6} className= "flex flex-row justify-end">
+                                                <div className="min-w-48 pt-20">
+                                                </div>
+                                                <Card className={classes.card}>
+                                                    <CardHeader title="Billing" className={classNames(classes.cardHeader, "flex-1")} />
+                                                    <CardContent>
+                                                        <Typography variant="subtitle1" color="inherit">
+                                                            <strong>Billing Name: {this.state.selectedCustomer.CustomerName}</strong>
+                                                        </Typography>
+                                                        <Typography variant="subtitle1" color="inherit">
+                                                            Customer No: {this.state.selectedCustomer.CustomerNo}
+                                                        </Typography>
+                                                        <Typography variant="subtitle1" color="inherit">
+                                                            Address: {this.state.selectedCustomer.Address}
+                                                        </Typography>
+                                                        <Typography variant="subtitle1" color="inherit">
+                                                            {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
+                                                        </Typography>
+                                                    </CardContent>
+
+                                                </Card>
+                                            </GridItem>
+
+                                        </GridContainer>
+                                    )}
+                                    <div className="flex">
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={() => {
+                                                // addInvoice(this.state);
+                                                this.closeComposeDialog();
+                                            }}
+                                            disabled={!this.canBeSubmitted()}
+                                        >
+                                            Add
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     }
                     leftSidebarHeader={
@@ -879,7 +1157,7 @@ class InvoicePage extends Component {
                     }}
                 >
                 </FusePageCustom>
-                <InvoiceDialog customers={this.state.customers}/>
+                {/*<InvoiceDialog customers={this.state.customers}/>*/}
             </React.Fragment>
         );
     }
@@ -895,6 +1173,8 @@ function mapDispatchToProps(dispatch)
         removeInvoiceAction: Actions.removeInvoice,
         openNewInvoiceDialog: Actions.openNewInvoiceDialog,
         openEditInvoiceDialog: Actions.openEditInvoiceDialog,
+        closeEditInvoiceDialog: Actions.closeEditInvoiceDialog,
+        closeNewInvoiceDialog : Actions.closeNewInvoiceDialog,
         getCustomers: Actions.getCustomers,
     }, dispatch);
 }
@@ -910,6 +1190,7 @@ function mapStateToProps({invoices, auth, customers})
         regionId: auth.login.defaultRegionId,
         customers: customers.customersDB,
         bLoadedCustomers: customers.bLoadedCustomers,
+        invoiceDialog: invoices.invoiceDialog
     }
 }
 
