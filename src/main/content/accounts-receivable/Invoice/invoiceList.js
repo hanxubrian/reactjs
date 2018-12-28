@@ -1,19 +1,14 @@
 import React, {Component} from 'react';
-
+import ReactDOM from 'react-dom';
 // core components
 import {
-    Hidden,
-    Icon,
-    IconButton,
-    Fab,
-    Input,
-    Paper,
-    TextField,
-    Button,
-    Typography,
-    MenuItem,FormControl,InputLabel, Select,
-    Card, CardHeader, CardContent, DialogContent, Divider
+    Hidden, Icon, IconButton, Fab, Input, Paper, TextField, Button, Typography,
+    MenuItem,FormControl,InputLabel, Select,OutlinedInput,
+    Card, CardHeader, CardContent, Divider, Radio, RadioGroup,FormControlLabel,FormLabel
 } from '@material-ui/core';
+import green from '@material-ui/core/colors/green';
+import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
+import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 
 //Janiking
 import JanikingPagination from 'Commons/JanikingPagination';
@@ -225,7 +220,8 @@ const styles = theme => ({
         width: '100%'
     },
     formControl: {
-        marginBottom: 24
+        marginBottom: 24,
+        minWidth: 200,
     },
     suggestionsContainerOpen: {
         position: 'absolute',
@@ -289,6 +285,7 @@ const newInvoiceState = {
     "ConsolidatedInvoiceId": "",
     "ConsolidatedInvoiceNo": "",
     "CreditId": "",
+    "Service":""
 };
 
 function renderInputComponent(inputProps) {
@@ -359,7 +356,9 @@ class InvoicePage extends Component {
         ...newInvoiceState,
         value: '',
         suggestions: [],
-        selectedCustomer: null
+        selectedCustomer: null,
+        labelWidth: 0,
+        selectedWork: ""
     };
 
     onChange = (event, { newValue, method }) => {
@@ -586,6 +585,9 @@ class InvoicePage extends Component {
     componentDidMount(){
         window.addEventListener('scroll', this.listenScrollEvent);
         document.addEventListener("keydown", this.escFunction, false);
+        this.setState({
+            labelWidth: ReactDOM.findDOMNode(this.InputLabelRef).offsetWidth
+        });
 
         if(this.props.customers!==null){
             let temp = [];
@@ -1162,16 +1164,25 @@ class InvoicePage extends Component {
                                     </GridContainer>
                                     <Divider variant="middle" className={classNames(classes.formControl)}/>
                                     <div className="flex">
-                                        <FormControl className={classes.formControl}>
-                                            <InputLabel htmlFor="service">Services</InputLabel>
-                                            <Select
-                                                value={this.state.age}
-                                                onChange={this.handleChange}
-                                                inputProps={{
-                                                    name: 'service',
-                                                    id  : 'service'
+                                        <FormControl variant="outlined" className={classes.formControl}>
+                                            <InputLabel
+                                                ref={ref => {
+                                                    this.InputLabelRef = ref;
                                                 }}
-                                                variant="outlined"
+                                                htmlFor="Service"
+                                            >
+                                                Services
+                                            </InputLabel>
+                                            <Select
+                                                value={this.state.Service}
+                                                onChange={this.handleChange}
+                                                input={
+                                                    <OutlinedInput
+                                                        labelWidth={this.state.labelWidth}
+                                                        name="Service"
+                                                        id="Service"
+                                                    />
+                                                }
                                             >
                                                 <MenuItem value="">
                                                     <em>Select</em>
@@ -1201,7 +1212,23 @@ class InvoicePage extends Component {
                                                 <MenuItem value={23}>Regular Cleaning - Night</MenuItem>
                                             </Select>
                                         </FormControl>
+                                        <FormControl className={classNames(classes.formControl, "flex ml-24")}>
+                                            <RadioGroup
+                                                aria-label="Work"
+                                                name="selectedWork"
+                                                className={classes.group}
+                                                value={this.state.selectedWork}
+                                                onChange={this.handleChange}
+                                                className={classNames(classes.formControl, "flex flex-row ml-24")}
+                                            >
+                                                <FormControlLabel className="ml-36 mr-48" value="additional_billing_office" control={<Radio />} label="Additional Billing Office" />
+                                                <FormControlLabel value="extrawork" control={<Radio />} label="Extra Work" />
+                                                <FormControlLabel value="regularwork" control={<Radio />} label="Regular Billing" />
+                                                <FormControlLabel value="client_supplies" control={<Radio />} label="Client Supplies" />
+                                            </RadioGroup>
+                                        </FormControl>
                                     </div>
+                                    <Divider variant="middle" className={classNames(classes.formControl)}/>
                                     <div className="flex">
                                         <Button
                                             variant="contained"
