@@ -1539,7 +1539,7 @@ let franchiseesDb = {
                         "Address1": "28 BEACON LANE",
                         "DistributionAmount": "$2,446.39",
                         "Phone": "(610) 636-5856",
-                        "StatusName": "Active",
+                        "StatusName": "CTDB",
                         "IsTemp": 0
                     },
                     {
@@ -1550,7 +1550,7 @@ let franchiseesDb = {
                         "Address1": "1548 GREGG STREET, UNIT B",
                         "DistributionAmount": "$14,055.17",
                         "Phone": "(412) 600-9699",
-                        "StatusName": "Active",
+                        "StatusName": "CTDB",
                         "IsTemp": 0
                     },
                     {
@@ -1561,7 +1561,7 @@ let franchiseesDb = {
                         "Address1": "5720 NORTH MARVINE STREET",
                         "DistributionAmount": "$601.43",
                         "Phone": "(215) 586-8602",
-                        "StatusName": "Active",
+                        "StatusName": "NonRenewed",
                         "IsTemp": 0
                     },
                     {
@@ -1583,7 +1583,7 @@ let franchiseesDb = {
                         "Address1": "93 ROSELYN STREET",
                         "DistributionAmount": "$0.00",
                         "Phone": "(215) 971-6725",
-                        "StatusName": "Active",
+                        "StatusName": "NonRenewed",
                         "IsTemp": 0
                     },
                     {
@@ -1594,7 +1594,7 @@ let franchiseesDb = {
                         "Address1": "4009 PARKSIDE CT",
                         "DistributionAmount": "$0.00",
                         "Phone": "(717) 825-0500",
-                        "StatusName": "Active",
+                        "StatusName": "Rejected",
                         "IsTemp": 0
                     },
                     {
@@ -1605,7 +1605,7 @@ let franchiseesDb = {
                         "Address1": "622 STOCKTON DRIVE",
                         "DistributionAmount": "$6,449.82",
                         "Phone": "(609) 247-9539",
-                        "StatusName": "Active",
+                        "StatusName": "PendingTransfer",
                         "IsTemp": 0
                     },
                     {
@@ -1616,7 +1616,7 @@ let franchiseesDb = {
                         "Address1": "750 ACADEMY TERRACE, APT A",
                         "DistributionAmount": "$3,159.24",
                         "Phone": "(484) 340-0549",
-                        "StatusName": "Active",
+                        "StatusName": "PendingTransfer",
                         "IsTemp": 0
                     },
                     {
@@ -1627,7 +1627,7 @@ let franchiseesDb = {
                         "Address1": "3812 EUNICE AVENUE",
                         "DistributionAmount": "$31,602.58",
                         "Phone": "(302) 268-3763",
-                        "StatusName": "Active",
+                        "StatusName": "Transfer",
                         "IsTemp": 0
                     },
                     {
@@ -1649,7 +1649,7 @@ let franchiseesDb = {
                         "Address1": "637 PENN AVENUE",
                         "DistributionAmount": "$7,067.47",
                         "Phone": "(610) 858-4408",
-                        "StatusName": "Active",
+                        "StatusName": "Terminated",
                         "IsTemp": 0
                     },
                     {
@@ -1671,7 +1671,7 @@ let franchiseesDb = {
                         "Address1": "54 LEMPA ROAD",
                         "DistributionAmount": "$4,505.93",
                         "Phone": "(215) 715-5842",
-                        "StatusName": "Active",
+                        "StatusName": "InActive",
                         "IsTemp": 0
                     },
                     {
@@ -1693,7 +1693,7 @@ let franchiseesDb = {
                         "Address1": "342 FOUNTAIN AVENUE",
                         "DistributionAmount": "$0.00",
                         "Phone": "(856) 366-7427",
-                        "StatusName": "Active",
+                        "StatusName": "LegalCompliancePending",
                         "IsTemp": 0
                     },
                     {
@@ -1704,7 +1704,7 @@ let franchiseesDb = {
                         "Address1": "591 GENERAL ARMSTRONG ROAD",
                         "DistributionAmount": "$10,752.86",
                         "Phone": "(610) 630-3856",
-                        "StatusName": "Active",
+                        "StatusName": "Pending",
                         "IsTemp": 0
                     },
                     {
@@ -1715,7 +1715,7 @@ let franchiseesDb = {
                         "Address1": "2500 EISENHOWER AVENUE",
                         "DistributionAmount": "$0.00",
                         "Phone": "",
-                        "StatusName": "Active",
+                        "StatusName": "CTDB",
                         "IsTemp": 0
                     },
                     {
@@ -1759,7 +1759,7 @@ let franchiseesDb = {
                         "Address1": "2500 EISENHOWER AVENUE",
                         "DistributionAmount": "$0.00",
                         "Phone": "",
-                        "StatusName": "Active",
+                        "StatusName": "CTDB",
                         "IsTemp": 0
                     }
                 ]

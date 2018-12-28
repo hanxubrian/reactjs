@@ -55,18 +55,18 @@ const styles = theme => ({
 class FilterPanel extends Component {
 
     state = {
-        active: true,
-        ctdb: true,
-        none_renewed: true,
-        pending: true,
-        repurchased: true,
-        terminated: true,
-        transfer: true,
-        rejected: true,
-        legal_compliance_pending: true,
-        inactive: true,
-        pending_transfer: true,
-        select_all: true
+        checkedActive: true,
+        checkedCTDB: true,
+        checkedNonRenewed: true,
+        checkedPending: true,
+        checkedRepurchased: true,
+        checkedTerminated: true,
+        checkedTransfer: true,
+        checkedRejected: true,
+        checkedLegalCompliancePending: true,
+        checkedInactive: true,
+        checkedPendingTransfer: true,
+        checkedSelectAll: true
     };
 
     componentDidMount()
@@ -74,9 +74,20 @@ class FilterPanel extends Component {
     }
 
     componentWillMount(){
-        this.setState({checkedPaid: this.props.transactionStatus.checkedPaid,
-            checkedPP: this.props.transactionStatus.checkedPP,
-            checkedComplete: this.props.transactionStatus.checkedComplete});
+        this.setState({
+            checkedSelectAll: this.props.transactionStatusFranchisees.checkedSelectAll,
+            checkedActive: this.props.transactionStatusFranchisees.checkedActive,
+            checkedInactive: this.props.transactionStatusFranchisees.checkedInactive,
+            checkedCTDB: this.props.transactionStatusFranchisees.checkedCTDB,
+            checkedPendingTransfer: this.props.transactionStatusFranchisees.checkedPendingTransfer,
+            checkedLegalCompliancePending: this.props.transactionStatusFranchisees.checkedLegalCompliancePending,
+            checkedTransfer: this.props.transactionStatusFranchisees.checkedTransfer,
+            checkedTerminated: this.props.transactionStatusFranchisees.checkedTerminated,
+            checkedRejected: this.props.transactionStatusFranchisees.checkedRejected,
+            checkedPending: this.props.transactionStatusFranchisees.checkedPending,
+            checkedNonRenewed: this.props.transactionStatusFranchisees.checkedNonRenewed,
+            checkedRepurchased: this.props.transactionStatusFranchisees.checkedRepurchased
+        });
     }
 
     componentDidUpdate(prevProps)
@@ -107,24 +118,24 @@ class FilterPanel extends Component {
     };
 
     handleChange = name => event => {
-        if(name==="select_all"){
-         const tempName = ['select_all','inactive','active','ctdb','none_renewed','pending','repurchased','terminated','transfer','rejected','legal_compliance_pending','pending_transfer'];
+        if(name==="checkedSelectAll"){
+         const tempName = ['checkedSelectAll','checkedInactive','checkedActive','checkedCTDB','checkedPendingTransfer','checkedLegalCompliancePending','checkedTransfer','checkedTerminated','checkedPending','checkedRejected','checkedNonRenewed','checkedRepurchased'];
          for(let i=0 ; i< tempName.length ; i++){
              this.setState({ [tempName[i]]: event.target.checked });
-             this.props.toggleStatus(tempName[i], event.target.checked)
+             this.props.toggleStatusFranchisees(tempName[i], event.target.checked)
          }
         }else{
-            if(this.state.select_all){
-                this.setState({ ['select_all']: event.target.checked });
+            if(this.state.checkedSelectAll){
+                this.setState({ ['checkedSelectAll']: event.target.checked });
             }
             this.setState({ [name]: event.target.checked });
-            this.props.toggleStatus(name, event.target.checked);
+            this.props.toggleStatusFranchisees(name, event.target.checked);
         }
     };
 
     render()
     {
-        const {classes, filterState} = this.props;
+        const {classes, filterStateFranchisees} = this.props;
 
         return (
             <div className={classNames(classes.root)}>
@@ -136,8 +147,8 @@ class FilterPanel extends Component {
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={this.state.select_all}
-                                        onChange={this.handleChange('select_all')}
+                                        checked={this.state.checkedSelectAll}
+                                        onChange={this.handleChange('checkedSelectAll')}
                                         value="All"
                                     />
                                 }
@@ -146,8 +157,8 @@ class FilterPanel extends Component {
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={this.state.active}
-                                        onChange={this.handleChange('active')}
+                                        checked={this.state.checkedActive}
+                                        onChange={this.handleChange('checkedActive')}
                                         value="Active"
                                     />
                                 }
@@ -156,8 +167,8 @@ class FilterPanel extends Component {
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={this.state.ctdb}
-                                        onChange={this.handleChange('ctdb')}
+                                        checked={this.state.checkedCTDB}
+                                        onChange={this.handleChange('checkedCTDB')}
                                         value="CTDB"
                                     />
                                 }
@@ -166,8 +177,8 @@ class FilterPanel extends Component {
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={this.state.none_renewed}
-                                        onChange={this.handleChange('none_renewed')}
+                                        checked={this.state.checkedNonRenewed}
+                                        onChange={this.handleChange('checkedNonRenewed')}
                                         value="Non-Renewed"
                                     />
                                 }
@@ -176,8 +187,8 @@ class FilterPanel extends Component {
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={this.state.pending}
-                                        onChange={this.handleChange('pending')}
+                                        checked={this.state.checkedPending}
+                                        onChange={this.handleChange('checkedPending')}
                                         value="Pending"
                                     />
                                 }
@@ -186,8 +197,8 @@ class FilterPanel extends Component {
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={this.state.repurchased}
-                                        onChange={this.handleChange('repurchased')}
+                                        checked={this.state.checkedRepurchased}
+                                        onChange={this.handleChange('checkedRepurchased')}
                                         value="Repurchased"
                                     />
                                 }
@@ -196,8 +207,8 @@ class FilterPanel extends Component {
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={this.state.terminated}
-                                        onChange={this.handleChange('terminated')}
+                                        checked={this.state.checkedTerminated}
+                                        onChange={this.handleChange('checkedTerminated')}
                                         value="Terminated"
                                     />
                                 }
@@ -206,8 +217,8 @@ class FilterPanel extends Component {
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={this.state.transfer}
-                                        onChange={this.handleChange('transfer')}
+                                        checked={this.state.checkedTransfer}
+                                        onChange={this.handleChange('checkedTransfer')}
                                         value="Transfer"
                                     />
                                 }
@@ -216,8 +227,8 @@ class FilterPanel extends Component {
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={this.state.rejected}
-                                        onChange={this.handleChange('rejected')}
+                                        checked={this.state.checkedRejected}
+                                        onChange={this.handleChange('checkedRejected')}
                                         value="Rejected"
                                     />
                                 }
@@ -226,8 +237,8 @@ class FilterPanel extends Component {
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={this.state.legal_compliance_pending}
-                                        onChange={this.handleChange('legal_compliance_pending')}
+                                        checked={this.state.checkedLegalCompliancePending}
+                                        onChange={this.handleChange('checkedLegalCompliancePending')}
                                         value="legal-compliance-pending"
                                     />
                                 }
@@ -236,8 +247,8 @@ class FilterPanel extends Component {
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={this.state.inactive}
-                                        onChange={this.handleChange('inactive')}
+                                        checked={this.state.checkedInactive}
+                                        onChange={this.handleChange('checkedInactive')}
                                         value="inactive"
                                     />
                                 }
@@ -246,8 +257,8 @@ class FilterPanel extends Component {
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={this.state.pending_transfer}
-                                        onChange={this.handleChange('pending_transfer')}
+                                        checked={this.state.checkedPendingTransfer}
+                                        onChange={this.handleChange('checkedPendingTransfer')}
                                         value="Pending-Transfer"
                                     />
                                 }
@@ -264,15 +275,15 @@ class FilterPanel extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        toggleStatus: Actions.toggleStatus
+        toggleStatusFranchisees: Actions.toggleStatusFranchisees
     }, dispatch);
 }
 
 function mapStateToProps({franchisees})
 {
     return {
-        filterState: franchisees.bOpenedSummaryPanelFranchisees,
-        transactionStatus: franchisees.transactionStatusFranchisees
+        filterStateFranchisees: franchisees.bOpenedSummaryPanelFranchisees,
+        transactionStatusFranchisees: franchisees.transactionStatusFranchisees
     }
 }
 

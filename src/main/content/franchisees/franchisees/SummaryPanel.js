@@ -178,7 +178,7 @@ class SummaryPanel extends Component {
         return (
             <div>
                 <div className={classNames("flex flex-col p-16")}>
-                    {this.props.invoices && (
+                    {this.props.franchisees && (
                         <Paper className="flex flex-1 flex-col min-h-px shadow-none" style={{alignItems: 'center', flexDirection:'column'}}>
                             <Card className={classes.card} >
                                 <CardContent style={{color: 'white'}}>
@@ -187,7 +187,7 @@ class SummaryPanel extends Component {
                                         Lifetime sum of your sale
                                     </Typography>
                                     <Typography variant="h5" component="h2" style={{color: 'white'}}>
-                                        {this.props.invoices.headerData.totalInvoice}
+                                        989146.99
                                     </Typography>
 
                                 </CardContent>
@@ -220,10 +220,10 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({invoices})
+function mapStateToProps({franchisees})
 {
     return {
-        invoices: invoices.invoicesDB
+        franchisees: franchisees.franchiseesDB
     }
 }
 

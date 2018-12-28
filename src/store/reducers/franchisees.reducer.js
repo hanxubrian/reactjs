@@ -41,7 +41,7 @@ const franchisees = function(state = initialState, action) {
                 ...state, bOpenedFilterPanelFranchisees: !state.bOpenedFilterPanelFranchisees
             }
         }
-        case Actions.TOGGLE_FILTER_STATUS:{
+        case Actions.TOGGLE_FILTER_STATUS_FRANCHISEES:{
             return {
                 ...state, transactionStatusFranchisees:{...state.transactionStatusFranchisees,...action.payload}
             }
