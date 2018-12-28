@@ -212,6 +212,8 @@ class InvoicePage extends Component {
         checkedPP: true,
         checkedComplete: true,
         checkedOpen: true,
+        checkedEbill: true,
+        checkedPrint: true,
         selection: [],
         selectAll: false,
         regionId: 0
@@ -324,6 +326,16 @@ class InvoicePage extends Component {
             bChanged = true;
         }
 
+        if(this.props.transactionStatus.checkedEbill !== prevProps.transactionStatus.checkedEbill) {
+            this.setState({checkedEbill: !this.state.checkedEbill});
+            bChanged = true;
+        }
+
+        if(this.props.transactionStatus.checkedPrint !== prevProps.transactionStatus.checkedPrint) {
+            this.setState({checkedPrint: !this.state.checkedPrint});
+            bChanged = true;
+        }
+
         if(this.props.regionId !== prevProps.regionId) {
             this.setState({regionId: prevProps.regionId});
             bChanged = true;
@@ -346,6 +358,8 @@ class InvoicePage extends Component {
         this.setState({checkedPP: this.props.transactionStatus.checkedPP});
         this.setState({checkedComplete: this.props.transactionStatus.checkedComplete});
         this.setState({checkedOpen: this.props.transactionStatus.checkedOpen});
+        this.setState({checkedOpen: this.props.transactionStatus.checkedEbill});
+        this.setState({checkedOpen: this.props.transactionStatus.checkedPrint});
 
         this.getInvoicesFromStatus()
     }
@@ -492,7 +506,7 @@ class InvoicePage extends Component {
                                     </Fab>
                                 </FuseAnimate>
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <Fab color="secondary" aria-label="add"
+                                    <Fab color="primary" aria-label="add"
                                          className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
                                         <Icon>mail_outline</Icon>
                                     </Fab>

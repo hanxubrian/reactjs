@@ -8,7 +8,7 @@ const axios_instance = axios.create({
 
 const userId = localStorage.getItem('jk_user_id');
 console.log('userId',userId);
-const BASE_API_URL='https://apifmsplus.jkdev.com';
+const BASE_API_URL='https://apifmsplus_c.jkdev.com';
 
 class menuService {
     loadAccountMenu =  () => {

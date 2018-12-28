@@ -8,7 +8,7 @@ const initialState = {
     bLoadedInvoices: false,
     bOpenedSummaryPanel: true,
     bOpenedFilterPanel: true,
-    transactionStatus:{checkedPaid: true,checkedPP: true, checkedComplete: true, checkedOpen: true },
+    transactionStatus:{checkedPaid: true,checkedPP: true, checkedComplete: true, checkedOpen: true, checkedEbill: true, checkedPrint: true },
     invoiceDialog: {
         type : 'new',
         props: {
