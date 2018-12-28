@@ -54,6 +54,58 @@ const customers = function(state = initialState, action) {
             return {
                 ...initialState
             }
+		}
+		case Actions.OPEN_NEW_CUSTOMER_DIALOG:
+        {
+            return {
+                ...state,
+                customerDialog: {
+                    type : 'new',
+                    props: {
+                        open: true
+                    },
+                    data : null
+                }
+            };
+        }
+        case Actions.CLOSE_NEW_CUSTOMER_DIALOG:
+        {
+            return {
+                ...state,
+                customerDialog: {
+                    type : 'new',
+                    props: {
+                        open: false
+                    },
+                    data : null
+                }
+            };
+        }
+        case Actions.OPEN_EDIT_CUSTOMER_DIALOG:
+        {
+            return {
+                ...state,
+                customerDialog: {
+                    type : 'edit',
+                    props: {
+                        open: true
+                    },
+                    data : action.data
+                }
+            };
+        }
+        case Actions.CLOSE_EDIT_CUSTOMER_DIALOG:
+        {
+            return {
+                ...state,
+                customerDialog: {
+                    type : 'edit',
+                    props: {
+                        open: false
+                    },
+                    data : null
+                }
+            };
         }
         default:
         {
