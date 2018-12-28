@@ -5,6 +5,12 @@ const axios_instance = axios.create({
     withCredentials: false
 });
 
+<<<<<<< HEAD
+
+const userId = localStorage.getItem('jk_user_id');
+console.log('userId',userId);
+=======
+>>>>>>> 055a639786b05bc09a9c3f0f4a61a420af4ad700
 const BASE_API_URL='https://apifmsplus_c.jkdev.com';
 
 class menuService {

@@ -267,7 +267,7 @@ class FuseLayout1 extends Component {
     };
 
     componentDidMount() {
-        fetch(`https://apifmsplus.jkdev.com/v1/apps/get?appid=${API_KEY}&env=local&device=web`)
+        fetch(`https://apifmsplus_c.jkdev.com/v1/apps/get?appid=${API_KEY}&env=local&device=web`)
             .then(res => res.json())
             .then(data => this.setState({
                 ...this.state,

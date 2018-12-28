@@ -11,6 +11,7 @@ const axios_instance = axios.create({
 const BASE_API_URL='https://apifmsplus_c.jkdev.com';
 
 class authService {
+
     authSignin =  (email, password) => {
         const loginData = {
             'username': email,

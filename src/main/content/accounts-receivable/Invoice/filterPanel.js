@@ -59,7 +59,9 @@ class FilterPanel extends Component {
         checkedPP: true,
         checkedComplete: true,
         checkedOpen: true,
-        invoiceDate:''
+        invoiceDate:'',
+        checkedEbill: true,
+        checkedPrint: true
     };
 
     componentDidMount()
@@ -69,7 +71,9 @@ class FilterPanel extends Component {
     componentWillMount(){
         this.setState({checkedPaid: this.props.transactionStatus.checkedPaid,
             checkedPP: this.props.transactionStatus.checkedPP,
-            checkedComplete: this.props.transactionStatus.checkedComplete});
+            checkedComplete: this.props.transactionStatus.checkedComplete,
+            checkedEbill: this.props.transactionStatus.checkedEbill,
+            checkedPrint: this.props.transactionStatus.checkedPrint});
     }
 
     componentDidUpdate(prevProps)
@@ -150,7 +154,7 @@ class FilterPanel extends Component {
                         </div>
 
                         <div style={{marginTop: 50, display: 'flex', flexDirection: 'column'}}>
-                            <h3>Transaction Statuses</h3>
+                            <h3>Invoice Status</h3>
                             <FormControlLabel
                                 control={
                                     <Switch
@@ -190,6 +194,28 @@ class FilterPanel extends Component {
                                     />
                                 }
                                 label="Open"
+                            />
+                            <br></br>
+                            <h3>Delivery Method</h3>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={this.state.checkedEbill}
+                                        onChange={this.handleChange('checkedEbill')}
+                                        value="checkedEbill"
+                                    />
+                                }
+                                label="Ebill (Email)"
+                            />
+                              <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={this.state.checkedPrint}
+                                        onChange={this.handleChange('checkedPrint')}
+                                        value="checkedPrint"
+                                    />
+                                }
+                                label="Print"
                             />
                         </div>
                     </Paper>
