@@ -2,9 +2,14 @@ import React, {Component} from 'react';
 
 //Material-UI
 import {
-    TextField, Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, Avatar, MenuItem, Paper
+    TextField, Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography,
+    Toolbar, AppBar, Avatar, MenuItem, Paper, Card, CardContent, CardHeader, CardActionArea
 } from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles/index';
+
+//Custom components
+import GridContainer from "Commons/Grid/GridContainer";
+import GridItem from "Commons/Grid/GridItem";
 
 // store
 import {bindActionCreators} from 'redux';
@@ -48,6 +53,13 @@ const styles = theme => ({
     },
     divider: {
         height: theme.spacing.unit * 2,
+    },
+    cardHeader       : {
+        backgroundColor: theme.palette.secondary.main,
+        padding: '10px 24px',
+        '& span': {
+            color: 'white'
+        }
     },
 });
 
@@ -136,7 +148,8 @@ class InvoiceDialog extends Component {
     state = {
         ...newInvoiceState,
         value: '',
-        suggestions: []
+        suggestions: [],
+        selectedCustomer: null
     };
 
     constructor (props) {
@@ -164,7 +177,7 @@ class InvoiceDialog extends Component {
     };
 
     getSuggestionValue =  (suggestion) =>{
-        this.setState({CustomerId: suggestion.CustomerId});
+        this.setState({selectedCustomer: suggestion});
         return suggestion.CustomerName;
     };
 
@@ -285,6 +298,55 @@ class InvoiceDialog extends Component {
                             )}
                         />
                     </div>
+                    {this.state.selectedCustomer && (
+                        <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
+                            <GridItem xs={12} sm={6} md={6} className="flex flex-row">
+                                <div className="min-w-48 pt-20">
+                                </div>
+                                <Card className={classes.card}>
+                                    <CardHeader title="Customer" className={classNames(classes.cardHeader, "flex-1")} />
+                                    <CardContent>
+                                        <Typography variant="subtitle1" color="inherit">
+                                            <strong>Customer Name: {this.state.selectedCustomer.CustomerName}</strong>
+                                        </Typography>
+                                        <Typography variant="subtitle1" color="inherit">
+                                            Customer No: {this.state.selectedCustomer.CustomerNo}
+                                        </Typography>
+                                        <Typography variant="subtitle1" color="inherit">
+                                            Address: {this.state.selectedCustomer.Address}
+                                        </Typography>
+                                        <Typography variant="subtitle1" color="inherit">
+                                            {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
+                                        </Typography>
+                                    </CardContent>
+
+                                </Card>
+                            </GridItem>
+                            <GridItem xs={12} sm={6} md={6} className= "flex flex-row justify-end">
+                                <div className="min-w-48 pt-20">
+                                </div>
+                                <Card className={classes.card}>
+                                    <CardHeader title="Billing" className={classNames(classes.cardHeader, "flex-1")} />
+                                    <CardContent>
+                                        <Typography variant="subtitle1" color="inherit">
+                                            <strong>Billing Name: {this.state.selectedCustomer.CustomerName}</strong>
+                                        </Typography>
+                                        <Typography variant="subtitle1" color="inherit">
+                                            Customer No: {this.state.selectedCustomer.CustomerNo}
+                                        </Typography>
+                                        <Typography variant="subtitle1" color="inherit">
+                                            Address: {this.state.selectedCustomer.Address}
+                                        </Typography>
+                                        <Typography variant="subtitle1" color="inherit">
+                                            {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
+                                        </Typography>
+                                    </CardContent>
+
+                                </Card>
+                            </GridItem>
+
+                        </GridContainer>
+                    )}
 
                     <div className="flex">
                         <div className="min-w-48 pt-20">
