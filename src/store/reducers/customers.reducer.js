@@ -6,8 +6,8 @@ import { persistReducer } from 'redux-persist';
 const initialState = {
     customersDB: null,
     bLoadedCustomers: false,
-    bOpenedSummaryPanel: true,
-    bOpenedFilterPanel: true,
+    bOpenedSummaryPanel: false,
+    bOpenedFilterPanel: false,
     transactionStatus:{checkedPaid: true,checkedPP: true, checkedComplete: true, checkedOpen: true }
 };
 
