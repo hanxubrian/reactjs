@@ -106,7 +106,6 @@ function renderInputComponent(inputProps) {
 }
 
 function renderSuggestion(suggestion, { query, isHighlighted }) {
-    console.log('suggestion=', suggestion);
     const matches = match(suggestion.CustomerName, query);
     const parts = parse(suggestion.CustomerName, matches);
 
@@ -151,6 +150,7 @@ class InvoiceDialog extends Component {
     };
 
     onSuggestionsFetchRequested = ({ value }) => {
+        if(value.length<2) return;
 
         this.setState({
             suggestions: this.getSuggestions(value)
