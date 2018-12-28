@@ -28,6 +28,11 @@ import _ from 'lodash';
 
 import classNames from 'classnames';
 
+//table pagination
+import JanikingPagination from './../../../../Commons/JanikingPagination';
+
+import CustomerDialog from './CustomerDialog';
+
 const headerHeight = 80;
 
 const hexToRgb = (hex) => {
@@ -91,6 +96,10 @@ const styles = theme => ({
 		'& .p-12-impor': {
 			paddingLeft: '1.2rem!important',
 			paddingRight: '1.2rem!important',
+		},
+		'& .wordwrap': {
+			whiteSpace: 'pre-line !important',
+			wordWrap: 'break-word',
 		}
 	},
 	card: {
@@ -430,405 +439,446 @@ class Customers extends Component {
 			page: state.page,
 		});
 	}
+	capital_letter(str) {
+		str = str.split(" ").map(x => {
+			if (x.length > 1) {
+				return x[0].toUpperCase() + x.substr(1).toLowerCase();
+			} else if (x.length > 0) {
+				return x[0].toUpperCase();
+			} else {
 
+			}
+		});
+
+		return str.join(" ");
+	}
 	render() {
 		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteCustomersAction } = this.props;
+
 		const { toggleSelection, toggleAll, isSelected, logSelection } = this;
 
 		const { selectAll, selection } = this.state;
 
+		const { openNewCustomerDialog } = this.props;
 		return (
-			<FusePageCustom
-				classes={{
-					root: classNames(classes.layoutRoot, 'test123'),
-					rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': summaryState }),
-					leftSidebar: classNames(classes.layoutLeftSidebar, { 'openFilter': filterState }),
-					sidebarHeader: classes.layoutSidebarHeader,
-					header: classes.layoutHeader,
-					content: classes.content
-				}}
-				header={
-					<div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
-						<div className="flex flex-row flex-1 justify-between">
-							<div className="flex flex-shrink items-center">
-								<div className="flex items-center">
+			<React.Fragment >
+				<FusePageCustom
+					classes={{
+						root: classNames(classes.layoutRoot, 'test123'),
+						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': summaryState }),
+						leftSidebar: classNames(classes.layoutLeftSidebar, { 'openFilter': filterState }),
+						sidebarHeader: classes.layoutSidebarHeader,
+						header: classes.layoutHeader,
+						content: classes.content
+					}}
+					header={
+						<div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
+							<div className="flex flex-row flex-1 justify-between">
+								<div className="flex flex-shrink items-center">
+									<div className="flex items-center">
+										<FuseAnimate animation="transition.expandIn" delay={300}>
+											<Icon className="text-32 mr-12">account_box</Icon>
+										</FuseAnimate>
+										<FuseAnimate animation="transition.slideLeftIn" delay={300}>
+											<Typography variant="h6" className="hidden sm:flex">Customers | Customers</Typography>
+										</FuseAnimate>
+									</div>
+								</div>
+								<div className="flex flex-shrink items-center">
 									<FuseAnimate animation="transition.expandIn" delay={300}>
-										<Icon className="text-32 mr-12">account_box</Icon>
+										<IconButton onClick={openNewCustomerDialog}>
+											<Icon>add</Icon>
+										</IconButton>
 									</FuseAnimate>
-									<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-										<Typography variant="h6" className="hidden sm:flex">Customers | Customers</Typography>
+									<FuseAnimate animation="transition.expandIn" delay={300}>
+										<IconButton>
+											<Icon>mail_outline</Icon>
+										</IconButton>
+									</FuseAnimate>
+									<FuseAnimate animation="transition.expandIn" delay={300}>
+										<IconButton>
+											<Icon>print</Icon>
+										</IconButton>
 									</FuseAnimate>
 								</div>
 							</div>
-							<div className="flex flex-shrink items-center">
-								<FuseAnimate animation="transition.expandIn" delay={300}>
-									<IconButton>
-										<Icon>add</Icon>
-									</IconButton>
-								</FuseAnimate>
-								<FuseAnimate animation="transition.expandIn" delay={300}>
-									<IconButton>
-										<Icon>mail_outline</Icon>
-									</IconButton>
-								</FuseAnimate>
-								<FuseAnimate animation="transition.expandIn" delay={300}>
-									<IconButton>
-										<Icon>print</Icon>
-									</IconButton>
-								</FuseAnimate>
-							</div>
-						</div>
-						<div className="flex flex-none items-end" style={{ display: 'none' }}>
-							<FuseAnimate animation="transition.expandIn" delay={600}>
-								<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
-									<Icon>add</Icon>
-								</Fab>
-							</FuseAnimate>
-							{selection.length > 0 && (
+							<div className="flex flex-none items-end" style={{ display: 'none' }}>
 								<FuseAnimate animation="transition.expandIn" delay={600}>
-									<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeCustomers()}>
-										<Icon>delete</Icon>
+									<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
+										<Icon>add</Icon>
 									</Fab>
 								</FuseAnimate>
-							)}
+								{selection.length > 0 && (
+									<FuseAnimate animation="transition.expandIn" delay={600}>
+										<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeCustomers()}>
+											<Icon>delete</Icon>
+										</Fab>
+									</FuseAnimate>
+								)}
+							</div>
 						</div>
-					</div>
-				}
-				content={
-					<div className="flex-1 flex-col absolute w-full h-full">
-						{this.state.temp && (
-							<ReactTable
-								data={this.state.temp}
-								minRows={0}
-								onFetchData={this.fetchData}
-								getTheadGroupProps={(state, rowInfo, column, instance) => {
-									return {
-										style: {
-											padding: "10px 10px",
-											fontSize: 16,
-											fontWeight: 700
-										},
+					}
+					content={
+						<div className="flex-1 flex-col absolute w-full h-full">
+							{this.state.temp && (
+								<ReactTable
+									PaginationComponent={JanikingPagination}
+									totalRecords={this.state.temp.length}
+									data={this.state.temp}
+									minRows={0}
+									onFetchData={this.fetchData}
+									getTheadGroupProps={(state, rowInfo, column, instance) => {
+										return {
+											style: {
+												padding: "10px 10px",
+												fontSize: 16,
+												fontWeight: 700
+											},
 
-									}
-								}}
-								getTheadGroupThProps={(state, rowInfo, column, instance) => {
-									return {
-										style: {
-											padding: "10px 10px",
-											fontSize: 18,
-											fontWeight: 700,
-										},
-										className: classNames("flex items-center justify-start")
-									}
-								}}
-								getTheadThProps={(state, rowInfo, column, instance) => {
-									let border = '1px solid rgba(255,255,255,.6)';
-									if (column.Header === 'Actions') border = 'none';
+										}
+									}}
+									getTheadGroupThProps={(state, rowInfo, column, instance) => {
+										return {
+											style: {
+												padding: "10px 10px",
+												fontSize: 18,
+												fontWeight: 700,
+											},
+											className: classNames("flex items-center justify-start")
+										}
+									}}
+									getTheadThProps={(state, rowInfo, column, instance) => {
+										let border = '1px solid rgba(255,255,255,.2)';
+										if (column.Header === 'Actions') border = 'none';
 
-									return {
-										style: {
-											fontSize: '1.6rem',
-											fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
-											fontWeight: 400,
-											lineHeight: 1.75,
-											color: 'white',
-											borderRight: border
-										},
-									}
-								}}
-								getTheadProps={(state, rowInfo, column, instance) => {
-									return {
-										style: {
-											fontSize: 13,
-										},
-										className: classes.tableTheadRow
-									}
-								}}
-								getTdProps={(state, rowInfo, column, instance) => {
-									let tdClass = 'flex items-center justify-center';
-									if (column.id === 'CustomerNo' || column.id === 'CustomerNo' || column.id === 'CustomerBalanceAmount' ||
-										column.id === 'CustomerDate' || column.id === 'TransactionStatus') tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
+										return {
+											style: {
+												fontSize: '1.6rem',
+												fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
+												fontWeight: 400,
+												lineHeight: 1.75,
+												color: 'white',
+												borderRight: border
+											},
+										}
+									}}
+									getTheadProps={(state, rowInfo, column, instance) => {
+										return {
+											style: {
+												fontSize: 13,
+											},
+											className: classes.tableTheadRow
+										}
+									}}
+									getTdProps={(state, rowInfo, column, instance) => {
+										let tdClass = 'flex items-center justify-center';
+										if (column.id === 'CustomerNo' ||
+											column.id === 'Phone' ||
+											column.id === 'AccountTypeListName' ||
+											column.id === 'StatusName')
+											tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
 
-									return {
-										style: {
-											textAlign: 'center',
-											flexDirection: 'row',
-											fontSize: 12,
-											padding: "0",
-										},
-									}
-								}}
-								getTrProps={(state, rowInfo, column) => {
-									return {
-										className: "cursor-pointer",
-										onClick: (e, handleOriginal) => {
-											if (rowInfo) {
-												alert('ok');
-												// openEditContactDialog(rowInfo.original);
+										return {
+											style: {
+												textAlign: 'center',
+												flexDirection: 'row',
+												fontSize: 12,
+												padding: "0",
+											},
+										}
+									}}
+									getTrProps={(state, rowInfo, column) => {
+										return {
+											className: "cursor-pointer",
+											onClick: (e, handleOriginal) => {
+												if (rowInfo) {
+													alert('ok');
+													// openEditContactDialog(rowInfo.original);
+												}
 											}
 										}
-									}
-								}}
-								columns={[
-									{
-										Header: (instance) => (
-											<div className="flex items-center">
-												<Hidden smDown>
-													<Button
-														onClick={(ev) => toggleFilterPanel()}
-														aria-label="toggle filter panel"
-														color="secondary"
-														disabled={filterState ? true : false}
-														className={classNames(classes.filterPanelButton)}
-													>
-														<img className={classes.imageIcon} src="assets/images/invoices/filter.png" />
-													</Button>
-												</Hidden>
-												<Hidden smUp>
-													<Button
-														onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
-														aria-label="toggle filter panel"
-														className={classNames(classes.filterPanelButton)}
-													>
-														<img className={classes.imageIcon} src="assets/images/invoices/filter.png" />
-													</Button>
-												</Hidden>
-											</div>
-										),
-										columns: [
-											{
-												Header: (instance) => (
-													<Checkbox
-														onClick={(event) => {
-															event.stopPropagation();
-														}}
-														onChange={(event) => toggleAll(instance)}
-														checked={this.state.selectAll}
-														style={{ color: 'white' }}
-													// indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
-													/>
-												),
-												accessor: "",
-												Cell: row => {
-													return (<Checkbox
-														onClick={(event) => {
-															event.stopPropagation();
-														}}
-														checked={isSelected(row.value.CustomerId)}
-														onChange={() => toggleSelection(row.value.CustomerId)}
-													/>
-													)
+									}}
+									columns={[
+										{
+											Header: (instance) => (
+												<div className="flex items-center">
+													<Hidden smDown>
+														<Button
+															onClick={(ev) => toggleFilterPanel()}
+															aria-label="toggle filter panel"
+															color="secondary"
+															disabled={filterState ? true : false}
+															className={classNames(classes.filterPanelButton)}
+														>
+															<img className={classes.imageIcon} src="assets/images/invoices/filter.png" />
+														</Button>
+													</Hidden>
+													<Hidden smUp>
+														<Button
+															onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
+															aria-label="toggle filter panel"
+															className={classNames(classes.filterPanelButton)}
+														>
+															<img className={classes.imageIcon} src="assets/images/invoices/filter.png" />
+														</Button>
+													</Hidden>
+												</div>
+											),
+											columns: [
+												{
+													Header: (instance) => (
+														<Checkbox
+															onClick={(event) => {
+																event.stopPropagation();
+															}}
+															onChange={(event) => toggleAll(instance)}
+															checked={this.state.selectAll}
+															style={{ color: 'white' }}
+														// indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
+														/>
+													),
+													accessor: "",
+													Cell: row => {
+														return (<Checkbox
+															onClick={(event) => {
+																event.stopPropagation();
+															}}
+															checked={isSelected(row.value.CustomerId)}
+															onChange={() => toggleSelection(row.value.CustomerId)}
+														/>
+														)
+													},
+													className: "justify-center",
+													sortable: false,
+													width: 72
+												}
+											],
+											className: classNames("justify-center")
+										},
+										{
+											Header: () => (
+												<div className="flex items-center pr-0 lg:pr-12">
+													<Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
+														<Input
+															placeholder="Search..."
+															className={classNames(classes.search, 'pl-16')}
+															// className="pl-16"
+															disableUnderline
+															fullWidth
+															value={this.state.s}
+															onChange={this.handleChange('s')}
+															inputProps={{
+																'aria-label': 'Search'
+															}}
+														/>
+														<Icon color="action" className="mr-16">search</Icon>
+													</Paper>
+												</div>
+											),
+											columns: [
+												{
+													Header: "No",
+													accessor: "CustomerNo",
+													filterAll: true,
+													width: 100,
+													className: classNames("flex items-center  justify-center") //classes.tableTdEven
 												},
-												className: "justify-center",
-												sortable: false,
-												width: 72
-											}
-										],
-										className: classNames("justify-center")
-									},
-									{
-										Header: () => (
-											<div className="flex items-center pr-0 lg:pr-12">
-												<Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
-													<Input
-														placeholder="Search..."
-														className={classNames(classes.search, 'pl-16')}
-														// className="pl-16"
-														disableUnderline
-														fullWidth
-														value={this.state.s}
-														onChange={this.handleChange('s')}
-														inputProps={{
-															'aria-label': 'Search'
-														}}
-													/>
-													<Icon color="action" className="mr-16">search</Icon>
-												</Paper>
-											</div>
-										),
-										columns: [
-											{
-												Header: "#",
-												accessor: "CustomerNo",
-												filterAll: true,
-												width: 100,
-												className: classNames(classes.tableTdEven, "flex items-center  justify-center")
-											},
-											{
-												Header: "Name",
-												accessor: "CustomerName",
-												width: 270,
-												className: classNames("flex items-center  justify-start p-12-impor")
-											},
-											{
-												Header: "Address",
-												accessor: "Address",
-												className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-												width: 270
-											},
-											{
-												Header: "Phone",
-												accessor: "Phone",
-												width: 120,
-												className: classNames("flex items-center  justify-start p-12-impor")
-											},
-											{
-												Header: "Account Type",
-												accessor: "AccountTypeListName",
-												// Cell: row => {
-												// 	return '$' + parseFloat(row.original.CustomerBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+												{
+													Header: "Name",
+													accessor: "CustomerName",
+													width: 270,
+													className: classNames("flex items-center  justify-start p-12-impor")
+												},
+												{
+													Header: "Address",
+													// accessor: "Address",
+													id: "Address",
+													accessor: d => (this.capital_letter(d.Address)),
+													className: classNames("flex items-center  justify-center"),
+													width: 270
+												},
+												{
+													Header: "City",
+													// accessor: "City",
+													id: "City",
+													accessor: d => (this.capital_letter(d.City)),
+													className: classNames("flex items-center  justify-center"),
+													width: 140
+												},
+												{
+													Header: "State",
+													accessor: "StateName",
+													className: classNames("flex items-center  justify-center"),
+													width: 50
+												},
+												{
+													Header: "Phone",
+													accessor: "Phone",
+													width: 120,
+													className: classNames("flex items-center  justify-center p-12-impor")
+												},
+												{
+													Header: "Account Type",
+													accessor: "AccountTypeListName",
+													// Cell: row => {
+													// 	return '$' + parseFloat(row.original.CustomerBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+													// },
+													className: classNames("flex items-center  justify-center p-12-impor"),
+													width: 150
+												},
+												{
+													Header: "Status",
+													// Cell: row => {
+													// 	return '$' + parseFloat(row.original.CustomerTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+													// },
+													accessor: "StatusName",
+													className: classNames("flex items-center  justify-center p-12-impor"),
+													width: 120
+												},
+												{
+													Header: "Contract Amount",
+													id: "Amount",
+													// accessor: d => ('$' + Number(d.Amount).toFixed(2)),
+													accessor: d => '$' + d.Amount.toLocaleString(undefined, { minimumFractionDigits: 2 }),
+													// accessor: "Amount",
+													className: classNames("flex items-center  justify-end p-12-impor"),
+													headerClassName: "wordwrap",
+													width: 120
+												},
+												// {
+												// 	Header: "Due Date",
+												// 	id: "DueDate",
+												// 	accessor: d => moment(d.DueDate).format('MM/DD/YYYY'),
+												// 	className: classNames("flex items-center  justify-center"),
+												// 	width: 120
 												// },
-												className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor"),
-												width: 150
-											},
-											{
-												Header: "Status",
-												// Cell: row => {
-												// 	return '$' + parseFloat(row.original.CustomerTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+												// {
+												// 	Header: "Status",
+												// 	accessor: "TransactionStatus",
+												// 	className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+												// 	width: 120
 												// },
-												accessor: "StatusName",
-												className: classNames("flex items-center  justify-end p-12-impor"),
-												width: 120
-											},
-											{
-												Header: "Contract Amount",
-												// id: "Amount",
-												// accessor: d => moment(d.CustomerDate).format('MM/DD/YYYY'),
-												accessor: "Amount",
-												className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-												width: 150
-											},
-											// {
-											// 	Header: "Due Date",
-											// 	id: "DueDate",
-											// 	accessor: d => moment(d.DueDate).format('MM/DD/YYYY'),
-											// 	className: classNames("flex items-center  justify-center"),
-											// 	width: 120
-											// },
-											// {
-											// 	Header: "Status",
-											// 	accessor: "TransactionStatus",
-											// 	className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-											// 	width: 120
-											// },
-											{
-												Header: "Actions",
-												width: 128,
-												Cell: row => (
-													<div className="flex items-center actions">
-														<IconButton
-															onClick={(ev) => {
-																ev.stopPropagation();
-																if (window.confirm("Do you really want to remove this customer")) {
-																	this.props.removeCustomerAction(row.original.CustomerId, this.props.customers);
-																	if (this.state.selection.length > 0) {
-																		_.remove(this.state.selection, function (id) {
-																			return id === row.original.CustomerId;
-																		});
+												{
+													Header: "Actions",
+													width: 128,
+													Cell: row => (
+														<div className="flex items-center p-12-impor actions">
+															<IconButton
+																onClick={(ev) => {
+																	ev.stopPropagation();
+																	if (window.confirm("Do you really want to remove this customer")) {
+																		this.props.removeCustomerAction(row.original.CustomerId, this.props.customers);
+																		if (this.state.selection.length > 0) {
+																			_.remove(this.state.selection, function (id) {
+																				return id === row.original.CustomerId;
+																			});
+																		}
 																	}
-																}
-															}}
-														>
-															<Icon>delete</Icon>
-														</IconButton>
-														<IconButton
-															onClick={(ev) => {
-																ev.stopPropagation();
-																// removeContact(row.original.id);
-															}}
-														>
-															<Icon>edit</Icon>
-														</IconButton>
-													</div>
-												)
-											}
-										]
-									}
-									// ,
-									// {
-									// 	Header: (instance) => (
-									// 		<div className="flex items-center justify-end pr-12">
-									// 			<Hidden smDown>
-									// 				<Button
-									// 					onClick={(ev) => toggleSummaryPanel()}
-									// 					aria-label="toggle summary panel"
-									// 					disabled={summaryState ? true : false}
-									// 					className={classNames(classes.summaryPanelButton)}
-									// 				>
-									// 					<Icon>insert_chart</Icon>
-									// 				</Button>
-									// 			</Hidden>
-									// 			<Hidden smUp>
-									// 				<Button
-									// 					onClick={(ev) => this.pageLayout.toggleRightSidebar()}
-									// 					aria-label="toggle summary panel"
-									// 					className={classNames(classes.summaryPanelButton)}
-									// 				>
-									// 					<Icon>insert_chart</Icon>
-									// 				</Button>
-									// 			</Hidden>
-									// 		</div>
-									// 	),
-									// 	columns: [
-									// 		{
-									// 			Header: '',
-									// 			cell: () => (
-									// 				<div className="flex w-full justify-end" />
-									// 			)
-									// 		}
-									// 	]
-									// }
-								]}
-								defaultPageSize={100}
-								className={classNames("-striped -highlight")}
-								style={{
-									height: '100%',
-								}}
-							/>
-						)}
-					</div>
-				}
-				// leftSidebarHeader={
-				// 	<div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", { 'filteropen': filterState })}>
-				// 		<h4 style={{ marginBlockStart: '1em' }}>Filter Panel</h4>
-				// 		<FuseAnimate animation="transition.expandIn" delay={200}>
-				// 			<div>
-				// 				<Hidden xsDown>
-				// 					<IconButton onClick={(ev) => toggleFilterPanel()}>
-				// 						<Icon>close</Icon>
-				// 					</IconButton>
-				// 				</Hidden>
-				// 			</div>
-				// 		</FuseAnimate>
-				// 	</div>
-				// }
-				// leftSidebarContent={
-				// 	<FilterPanel />
-				// }
-				// rightSidebarHeader={
-				// 	<div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0">
-				// 		<h4 style={{ marginBlockStart: '1em' }}>Summary Panel</h4>
-				// 		<FuseAnimate animation="transition.expandIn" delay={200}>
-				// 			<div>
-				// 				<Hidden xsDown>
-				// 					{/*<IconButton onClick={()=>this.removeCustomers()}>*/}
-				// 					{/*<Icon>delete</Icon>*/}
-				// 					{/*</IconButton>*/}
-				// 					<IconButton onClick={(ev) => toggleSummaryPanel()}>
-				// 						<Icon>close</Icon>
-				// 					</IconButton>
-				// 				</Hidden>
-				// 			</div>
-				// 		</FuseAnimate></div>
-				// }
-				// rightSidebarContent={
-				// 	<SummaryPanel />
-				// }
-				onRef={instance => {
-					this.pageLayout = instance;
-				}}
-			>
-			</FusePageCustom>
+																}}
+															>
+																<Icon>delete</Icon>
+															</IconButton>
+															<IconButton
+																onClick={(ev) => {
+																	ev.stopPropagation();
+																	// removeContact(row.original.id);
+																}}
+															>
+																<Icon>edit</Icon>
+															</IconButton>
+														</div>
+													)
+												}
+											]
+										}
+										// ,
+										// {
+										// 	Header: (instance) => (
+										// 		<div className="flex items-center justify-end pr-12">
+										// 			<Hidden smDown>
+										// 				<Button
+										// 					onClick={(ev) => toggleSummaryPanel()}
+										// 					aria-label="toggle summary panel"
+										// 					disabled={summaryState ? true : false}
+										// 					className={classNames(classes.summaryPanelButton)}
+										// 				>
+										// 					<Icon>insert_chart</Icon>
+										// 				</Button>
+										// 			</Hidden>
+										// 			<Hidden smUp>
+										// 				<Button
+										// 					onClick={(ev) => this.pageLayout.toggleRightSidebar()}
+										// 					aria-label="toggle summary panel"
+										// 					className={classNames(classes.summaryPanelButton)}
+										// 				>
+										// 					<Icon>insert_chart</Icon>
+										// 				</Button>
+										// 			</Hidden>
+										// 		</div>
+										// 	),
+										// 	columns: [
+										// 		{
+										// 			Header: '',
+										// 			cell: () => (
+										// 				<div className="flex w-full justify-end" />
+										// 			)
+										// 		}
+										// 	]
+										// }
+									]}
+									defaultPageSize={100}
+									className={classNames("-striped -highlight")}
+									style={{
+										height: '100%',
+									}}
+								/>
+							)}
+						</div>
+					}
+					leftSidebarHeader={
+						<div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", { 'filteropen': filterState })}>
+							<h4 style={{ marginBlockStart: '1em' }}>Filter Panel</h4>
+							<FuseAnimate animation="transition.expandIn" delay={200}>
+								<div>
+									<Hidden xsDown>
+										<IconButton onClick={(ev) => toggleFilterPanel()}>
+											<Icon>close</Icon>
+										</IconButton>
+									</Hidden>
+								</div>
+							</FuseAnimate>
+						</div>
+					}
+					leftSidebarContent={
+						<FilterPanel />
+					}
+					rightSidebarHeader={
+						<div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0">
+							<h4 style={{ marginBlockStart: '1em' }}>Summary Panel</h4>
+							<FuseAnimate animation="transition.expandIn" delay={200}>
+								<div>
+									<Hidden xsDown>
+										{/*<IconButton onClick={()=>this.removeCustomers()}>*/}
+										{/*<Icon>delete</Icon>*/}
+										{/*</IconButton>*/}
+										<IconButton onClick={(ev) => toggleSummaryPanel()}>
+											<Icon>close</Icon>
+										</IconButton>
+									</Hidden>
+								</div>
+							</FuseAnimate></div>
+					}
+					rightSidebarContent={
+						<SummaryPanel />
+					}
+
+					onRef={instance => {
+						this.pageLayout = instance;
+					}}
+				>
+				</FusePageCustom>
+				{/* <CustomerDialog customers={this.state.customers}/> */}
+			</React.Fragment >
 		);
 	}
 }
@@ -839,7 +889,10 @@ function mapDispatchToProps(dispatch) {
 		toggleFilterPanel: Actions.toggleFilterPanel,
 		toggleSummaryPanel: Actions.toggleSummaryPanel,
 		deleteCustomersAction: Actions.deleteCustomers,
-		removeCustomerAction: Actions.removeCustomer
+		removeCustomerAction: Actions.removeCustomer,
+		openNewCustomerDialog: Actions.openNewCustomerDialog,
+        openEditCustomerDialog: Actions.openEditCustomerDialog,
+        getCustomers: Actions.getCustomers,
 	}, dispatch);
 }
 
@@ -850,7 +903,9 @@ function mapStateToProps({ customers, auth }) {
 		transactionStatus: customers.transactionStatus,
 		filterState: customers.bOpenedFilterPanel,
 		summaryState: customers.bOpenedSummaryPanel,
-		regionId: auth.login.defaultRegionId
+		regionId: auth.login.defaultRegionId,
+		customers: customers.customersDB,
+        bLoadedCustomers: customers.bLoadedCustomers,
 	}
 }
 

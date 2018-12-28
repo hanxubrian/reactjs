@@ -6,6 +6,8 @@ import {Hidden, Icon, IconButton, Fab, Input, Paper, TextField, Button, Typograp
 // theme components
 import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
 
+//Janiking
+import JanikingPagination from './../../../../Commons/JanikingPagination';
 
 import {bindActionCreators} from "redux";
 import {withStyles, Checkbox} from "@material-ui/core";
@@ -167,9 +169,6 @@ const styles = theme => ({
     tableThEven:{
         backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b +', .3)'
     },
-    tableTdEven:{
-        backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b +', .1)'
-    },
     filterPanelButton: {
         backgroundColor: theme.palette.secondary.main,
         minWidth: 42,
@@ -200,10 +199,18 @@ class Franchisees extends Component {
         s: '',
         temp: [],
         data: [],
-        checkedPaid: true,
-        checkedPP: true,
-        checkedComplete: true,
-        checkedOpen: true,
+        checkedSelectAll: true,
+        checkedActive: true,
+        checkedInactive: true,
+        checkedCTDB: true,
+        checkedPendingTransfer: true,
+        checkedLegalCompliancePending: true,
+        checkedTransfer: true,
+        checkedTerminated: true,
+        checkedRejected: true,
+        checkedPending: true,
+        checkedNonRenewed: true,
+        checkedRepurchased: true,
         selection: [],
         selectAll: false,
         regionId: 0
@@ -295,23 +302,55 @@ class Franchisees extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot){
         let bChanged = false;
-        if(this.props.transactionStatusFranchisees.checkedPaid !== prevProps.transactionStatusFranchisees.checkedPaid) {
-            this.setState({checkedPaid: !this.state.checkedPaid});
+        if(this.props.transactionStatusFranchisees.checkedSelectAll !== prevProps.transactionStatusFranchisees.checkedSelectAll) {
+            this.setState({checkedSelectAll: !this.state.checkedSelectAll});
             bChanged = true;
         }
 
-        if(this.props.transactionStatusFranchisees.checkedPP !== prevProps.transactionStatusFranchisees.checkedPP) {
-            this.setState({checkedPP: !this.state.checkedPP});
+        if(this.props.transactionStatusFranchisees.checkedActive !== prevProps.transactionStatusFranchisees.checkedActive) {
+            this.setState({checkedActive: !this.state.checkedActive});
             bChanged = true;
         }
 
-        if(this.props.transactionStatusFranchisees.checkedComplete !== prevProps.transactionStatusFranchisees.checkedComplete) {
-            this.setState({checkedComplete: !this.state.checkedComplete});
+        if(this.props.transactionStatusFranchisees.checkedInactive !== prevProps.transactionStatusFranchisees.checkedInactive) {
+            this.setState({checkedInactive: !this.state.checkedInactive});
             bChanged = true;
         }
 
-        if(this.props.transactionStatusFranchisees.checkedOpen !== prevProps.transactionStatusFranchisees.checkedOpen) {
-            this.setState({checkedOpen: !this.state.checkedOpen});
+        if(this.props.transactionStatusFranchisees.checkedCTDB !== prevProps.transactionStatusFranchisees.checkedCTDB) {
+            this.setState({checkedCTDB: !this.state.checkedCTDB});
+            bChanged = true;
+        }
+        if(this.props.transactionStatusFranchisees.checkedPendingTransfer !== prevProps.transactionStatusFranchisees.checkedPendingTransfer) {
+            this.setState({checkedPendingTransfer: !this.state.checkedPendingTransfer});
+            bChanged = true;
+        }
+        if(this.props.transactionStatusFranchisees.checkedLegalCompliancePending !== prevProps.transactionStatusFranchisees.checkedLegalCompliancePending) {
+            this.setState({checkedLegalCompliancePending: !this.state.checkedLegalCompliancePending});
+            bChanged = true;
+        }
+        if(this.props.transactionStatusFranchisees.checkedTransfer !== prevProps.transactionStatusFranchisees.checkedTransfer) {
+            this.setState({checkedTransfer: !this.state.checkedTransfer});
+            bChanged = true;
+        }
+        if(this.props.transactionStatusFranchisees.checkedTerminated !== prevProps.transactionStatusFranchisees.checkedTerminated) {
+            this.setState({checkedTerminated: !this.state.checkedTerminated});
+            bChanged = true;
+        }
+        if(this.props.transactionStatusFranchisees.checkedRejected !== prevProps.transactionStatusFranchisees.checkedRejected) {
+            this.setState({checkedRejected: !this.state.checkedRejected});
+            bChanged = true;
+        }
+        if(this.props.transactionStatusFranchisees.checkedPending !== prevProps.transactionStatusFranchisees.checkedPending) {
+            this.setState({checkedPending: !this.state.checkedPending});
+            bChanged = true;
+        }
+        if(this.props.transactionStatusFranchisees.checkedNonRenewed !== prevProps.transactionStatusFranchisees.checkedNonRenewed) {
+            this.setState({checkedNonRenewed: !this.state.checkedNonRenewed});
+            bChanged = true;
+        }
+        if(this.props.transactionStatusFranchisees.checkedRepurchased !== prevProps.transactionStatusFranchisees.checkedRepurchased) {
+            this.setState({checkedRepurchased: !this.state.checkedRepurchased});
             bChanged = true;
         }
 
@@ -333,10 +372,18 @@ class Franchisees extends Component {
     }
 
     componentWillMount(){
-        this.setState({checkedPaid: this.props.transactionStatusFranchisees.checkedPaid});
-        this.setState({checkedPP: this.props.transactionStatusFranchisees.checkedPP});
-        this.setState({checkedComplete: this.props.transactionStatusFranchisees.checkedComplete});
-        this.setState({checkedOpen: this.props.transactionStatusFranchisees.checkedOpen});
+        this.setState({checkedSelectAll: this.props.transactionStatusFranchisees.checkedSelectAll});
+        this.setState({checkedActive: this.props.transactionStatusFranchisees.checkedActive});
+        this.setState({checkedInactive: this.props.transactionStatusFranchisees.checkedInactive});
+        this.setState({checkedCTDB: this.props.transactionStatusFranchisees.checkedCTDB});
+        this.setState({checkedPendingTransfer: this.props.transactionStatusFranchisees.checkedPendingTransfer});
+        this.setState({checkedLegalCompliancePending: this.props.transactionStatusFranchisees.checkedLegalCompliancePending});
+        this.setState({checkedTransfer: this.props.transactionStatusFranchisees.checkedTransfer});
+        this.setState({checkedTerminated: this.props.transactionStatusFranchisees.checkedTerminated});
+        this.setState({checkedRejected: this.props.transactionStatusFranchisees.checkedRejected});
+        this.setState({checkedPending: this.props.transactionStatusFranchisees.checkedPending});
+        this.setState({checkedNonRenewed: this.props.transactionStatusFranchisees.checkedNonRenewed});
+        this.setState({checkedRepurchased: this.props.transactionStatusFranchisees.checkedRepurchased});
 
         this.getFranchiseesFromStatus();
     }
@@ -350,26 +397,97 @@ class Franchisees extends Component {
 
 
     getFranchiseesFromStatus =(rawData=this.props.franchisees) =>{
-        let temp=[];
+        let filterTemp=[];
+        let totalFilterTemp=[];
         let all_temp=[];
         let temp1 = [];
+        let currentStatus = this.props.transactionStatusFranchisees;
         if(rawData===null) return;
         let temp0 = rawData.Data.Region;
         if(this.props.regionId===0 ){
-            for(var i = 0; i < temp0.length ; i++){
+            for(let i = 0; i < temp0.length ; i++){
                 temp1 = all_temp.concat(temp0[i].Franchisees);
                 all_temp = temp1;
             }
         }else{
-            for(var i = 0; i < temp0.length ; i++){
+            for(let i = 0; i < temp0.length ; i++){
                 if(this.props.regionId ===temp0[i].Id){
                     all_temp = temp0[i].Franchisees;
-                    console.log('temp',temp);
                 }
             }
         }
-
-        this.setState({temp: all_temp});
+        if(all_temp.length>0){
+            for(var i = 0; i < all_temp.length ; i++){
+                if(currentStatus.checkedInactive){
+                    if(all_temp[i].StatusName ==='InActive'){
+                        filterTemp = totalFilterTemp.concat(all_temp[i]);
+                        totalFilterTemp = filterTemp;
+                    }
+                }
+                if(currentStatus.checkedActive){
+                    if(all_temp[i].StatusName==='Active'){
+                        filterTemp = totalFilterTemp.concat(all_temp[i]);
+                        totalFilterTemp = filterTemp;
+                    }
+                }
+                if(currentStatus.checkedLegalCompliancePending){
+                    if(all_temp[i].StatusName ==='LegalCompliancePending'){
+                        filterTemp = totalFilterTemp.concat(all_temp[i]);
+                        totalFilterTemp = filterTemp;
+                    }
+                }
+                if(currentStatus.checkedPending){
+                    if(all_temp[i].StatusName==='Pending'){
+                        filterTemp = totalFilterTemp.concat(all_temp[i]);
+                        totalFilterTemp = filterTemp;
+                    }
+                }
+                if(currentStatus.checkedTerminated){
+                    if(all_temp[i].StatusName==='Terminated'){
+                        filterTemp = totalFilterTemp.concat(all_temp[i]);
+                        totalFilterTemp = filterTemp;
+                    }
+                }
+                if(currentStatus.checkedTransfer){
+                    if(all_temp[i].StatusName==='Transfer'){
+                        filterTemp = totalFilterTemp.concat(all_temp[i]);
+                        totalFilterTemp = filterTemp;
+                    }
+                }
+                if(currentStatus.checkedPendingTransfer){
+                    if(all_temp[i].StatusName==='PendingTransfer'){
+                        filterTemp = totalFilterTemp.concat(all_temp[i]);
+                        totalFilterTemp = filterTemp;
+                    }
+                }
+                if(currentStatus.checkedNonRenewed){
+                    if(all_temp[i].StatusName==='NonRenewed'){
+                        filterTemp = totalFilterTemp.concat(all_temp[i]);
+                        totalFilterTemp = filterTemp;
+                    }
+                }
+                if(currentStatus.checkedRejected){
+                    if(all_temp[i].StatusName==='Rejected'){
+                        filterTemp = totalFilterTemp.concat(all_temp[i]);
+                        totalFilterTemp = filterTemp;
+                    }
+                }
+                if(currentStatus.checkedRepurchased){
+                    if(all_temp[i].StatusName==='Repurchased'){
+                        filterTemp = totalFilterTemp.concat(all_temp[i]);
+                        totalFilterTemp = filterTemp;
+                    }
+                }
+                if(currentStatus.checkedCTDB){
+                    if(all_temp[i].StatusName==='CTDB'){
+                        filterTemp = totalFilterTemp.concat(all_temp[i]);
+                        totalFilterTemp = filterTemp;
+                    }
+                }
+            }
+        }
+        this.setState({temp: totalFilterTemp});
+        this.setState({data: totalFilterTemp});
      };
 
     componentDidMount(){
@@ -392,12 +510,12 @@ class Franchisees extends Component {
             return;
         }
         const temp = this.state.data.filter( d => {
-            return d.ID.indexOf(val) !== -1 || !val ||
-                d.StatusName.toString().indexOf(val) !== -1 ||
-                d.Name.toString().indexOf(val) !== -1 ||
-                d.Address1.toString().indexOf(val) !== -1 ||
-                d.DistributionAmount.toString().indexOf(val) !== -1 ||
-                d.Phone.toString().indexOf(val) !== -1
+            return d.Number.toLowerCase().indexOf(val) !== -1 || !val ||
+                d.StatusName.toLowerCase().indexOf(val) !== -1 ||
+                d.Name.toLowerCase().indexOf(val) !== -1 ||
+                d.Address1.toLowerCase().indexOf(val) !== -1 ||
+                d.DistributionAmount.toLowerCase().indexOf(val) !== -1 ||
+                d.Phone.toLowerCase().indexOf(val) !== -1
         });
         console.log('searchTemp',temp);
         this.setState({temp: temp});
@@ -500,6 +618,7 @@ class Franchisees extends Component {
                                 data={this.state.temp}
                                 minRows = {0}
                                 onFetchData={this.fetchData}
+                                PaginationComponent={JanikingPagination}
                                 getTheadGroupProps={(state, rowInfo, column, instance) =>{
                                     return {
                                         style:{
@@ -546,7 +665,7 @@ class Franchisees extends Component {
                                 getTdProps={(state, rowInfo, column, instance) =>{
                                     let tdClass='flex items-center justify-center';
                                     if (column.id==='InvoiceNo' ||column.id==='CustomerNo'||column.id==='InvoiceBalanceAmount'||
-                                        column.id==='InvoiceDate' || column.id==='TransactionStatus') tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
+                                        column.id==='InvoiceDate' || column.id==='transactionStatusFranchisees') tdClass = classNames( "flex items-center  justify-center");
 
                                     return {
                                         style:{
@@ -648,11 +767,11 @@ class Franchisees extends Component {
                                         ),
                                         columns: [
                                             {
-                                                Header: "FRANCHISEES ID",
-                                                accessor: "ID",
+                                                Header: "NUMBER",
+                                                accessor: "Number",
                                                 filterAll: true,
                                                 width: 200,
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+                                                className: classNames("flex items-center  justify-center")
                                             },
                                             {
                                                 Header: "FRANCHISEES NAME",
@@ -663,7 +782,7 @@ class Franchisees extends Component {
                                             {
                                                 Header: "FULL ADDRESS",
                                                 accessor: "Address",
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-start p-12-impor"),
+                                                className: classNames("flex items-center  justify-start p-12-impor"),
                                                 width: 420
                                             },
                                             {
@@ -675,7 +794,7 @@ class Franchisees extends Component {
                                             {
                                                 Header: "STATUS",
                                                 accessor: "StatusName",
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center p-12-impor"),
+                                                className: classNames("flex items-center  justify-center p-12-impor"),
                                                 width: 150
                                             },
                                             {
@@ -687,7 +806,7 @@ class Franchisees extends Component {
                                             {
                                                 Header: "Actions",
                                                 width : 150,
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center p-12-impor"),
+                                                className: classNames("flex items-center  justify-center p-12-impor"),
                                                 Cell  : row => (
                                                     <div className="flex items-center actions ">
                                                         <IconButton
@@ -704,7 +823,7 @@ class Franchisees extends Component {
                                                             }}
                                                         >
                                                             <Icon>delete</Icon>
-                                                        </IconButton>,
+                                                        </IconButton>
                                                         <IconButton
                                                             onClick={(ev) => {
                                                                 ev.stopPropagation();
@@ -754,6 +873,7 @@ class Franchisees extends Component {
                                 ]}
                                 defaultPageSize={100}
                                 className={classNames( "-striped -highlight")}
+                                totalRecords = {this.state.temp.length}
                                 style={{
                                     height: '100%',
                                 }}

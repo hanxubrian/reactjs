@@ -105,7 +105,7 @@ const invoices = function(state = initialState, action) {
         {
             return {
                 ...state,
-                contactInvoice: {
+                invoiceDialog: {
                     type : 'edit',
                     props: {
                         open: false

@@ -8,7 +8,20 @@ const initialState = {
     bLoadedFranchisees: false,
     bOpenedSummaryPanelFranchisees: true,
     bOpenedFilterPanelFranchisees: true,
-    transactionStatusFranchisees:{checkedPaid: true,checkedPP: true, checkedComplete: true, checkedOpen: true }
+    transactionStatusFranchisees:{
+        checkedSelectAll: true,
+        checkedActive: true,
+        checkedInactive: true,
+        checkedCTDB: true,
+        checkedPendingTransfer: true,
+        checkedLegalCompliancePending: true,
+        checkedTransfer: true,
+        checkedTerminated: true,
+        checkedRejected: true,
+        checkedPending: true,
+        checkedNonRenewed: true,
+        checkedRepurchased: true
+    }
 };
 
 
@@ -28,7 +41,7 @@ const franchisees = function(state = initialState, action) {
                 ...state, bOpenedFilterPanelFranchisees: !state.bOpenedFilterPanelFranchisees
             }
         }
-        case Actions.TOGGLE_FILTER_STATUS:{
+        case Actions.TOGGLE_FILTER_STATUS_FRANCHISEES:{
             return {
                 ...state, transactionStatusFranchisees:{...state.transactionStatusFranchisees,...action.payload}
             }

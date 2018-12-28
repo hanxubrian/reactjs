@@ -55,11 +55,18 @@ const styles = theme => ({
 class FilterPanel extends Component {
 
     state = {
-        checkedPaid: true,
-        checkedPP: true,
-        checkedComplete: true,
-        checkedOpen: true,
-        invoiceDate:''
+        checkedActive: true,
+        checkedCTDB: true,
+        checkedNonRenewed: true,
+        checkedPending: true,
+        checkedRepurchased: true,
+        checkedTerminated: true,
+        checkedTransfer: true,
+        checkedRejected: true,
+        checkedLegalCompliancePending: true,
+        checkedInactive: true,
+        checkedPendingTransfer: true,
+        checkedSelectAll: true
     };
 
     componentDidMount()
@@ -67,9 +74,20 @@ class FilterPanel extends Component {
     }
 
     componentWillMount(){
-        this.setState({checkedPaid: this.props.transactionStatus.checkedPaid,
-            checkedPP: this.props.transactionStatus.checkedPP,
-            checkedComplete: this.props.transactionStatus.checkedComplete});
+        this.setState({
+            checkedSelectAll: this.props.transactionStatusFranchisees.checkedSelectAll,
+            checkedActive: this.props.transactionStatusFranchisees.checkedActive,
+            checkedInactive: this.props.transactionStatusFranchisees.checkedInactive,
+            checkedCTDB: this.props.transactionStatusFranchisees.checkedCTDB,
+            checkedPendingTransfer: this.props.transactionStatusFranchisees.checkedPendingTransfer,
+            checkedLegalCompliancePending: this.props.transactionStatusFranchisees.checkedLegalCompliancePending,
+            checkedTransfer: this.props.transactionStatusFranchisees.checkedTransfer,
+            checkedTerminated: this.props.transactionStatusFranchisees.checkedTerminated,
+            checkedRejected: this.props.transactionStatusFranchisees.checkedRejected,
+            checkedPending: this.props.transactionStatusFranchisees.checkedPending,
+            checkedNonRenewed: this.props.transactionStatusFranchisees.checkedNonRenewed,
+            checkedRepurchased: this.props.transactionStatusFranchisees.checkedRepurchased
+        });
     }
 
     componentDidUpdate(prevProps)
@@ -100,96 +118,151 @@ class FilterPanel extends Component {
     };
 
     handleChange = name => event => {
-        this.setState({ [name]: event.target.checked });
-        this.props.toggleStatus(name, event.target.checked)
+        if(name==="checkedSelectAll"){
+         const tempName = ['checkedSelectAll','checkedInactive','checkedActive','checkedCTDB','checkedPendingTransfer','checkedLegalCompliancePending','checkedTransfer','checkedTerminated','checkedPending','checkedRejected','checkedNonRenewed','checkedRepurchased'];
+         for(let i=0 ; i< tempName.length ; i++){
+             this.setState({ [tempName[i]]: event.target.checked });
+             this.props.toggleStatusFranchisees(tempName[i], event.target.checked)
+         }
+        }else{
+            if(this.state.checkedSelectAll){
+                this.setState({ ['checkedSelectAll']: event.target.checked });
+            }
+            this.setState({ [name]: event.target.checked });
+            this.props.toggleStatusFranchisees(name, event.target.checked);
+        }
     };
 
-    handleChange1 = event => {
-        this.setState({[event.target.name]: event.target.value});
-    };
     render()
     {
-        const {classes, filterState} = this.props;
+        const {classes, filterStateFranchisees} = this.props;
 
         return (
             <div className={classNames(classes.root)}>
                 <div className={classNames("flex flex-col")}>
                     <Paper className="flex flex-1 flex-col min-h-px p-20">
-                        <div >
-                            <h3 className="mb-20">Filter by Date</h3>
-                            <FormControl className={classes.formControl} style={{width: 200}}>
-                                {/*<InputLabel htmlFor="age-simple">Invoice Date</InputLabel>*/}
-                                <Select
-                                    value={this.state.invoiceDate}
-                                    onChange={this.handleChange1}
-                                    inputProps={{
-                                        name: 'invoiceDate',
-                                        id  : 'invoice_date'
-                                    }}
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={1}>This Week</MenuItem>
-                                    <MenuItem value={2}>This Week-to-date</MenuItem>
-                                    <MenuItem value={3}>This Month</MenuItem>
-                                    <MenuItem value={4}>This Month-to-date</MenuItem>
-                                    <MenuItem value={5}>This Quarter</MenuItem>
-                                    <MenuItem value={6}>This Quarter-to-Date</MenuItem>
-                                    <MenuItem value={7}>This Fiscal Year</MenuItem>
-                                    <MenuItem value={8}>This Fiscal Year-to-date</MenuItem>
-                                    <MenuItem value={9}>Today</MenuItem>
-                                    <MenuItem value={10}>Yesterday</MenuItem>
-                                    <MenuItem value={11}>This Month</MenuItem>
-                                    <MenuItem value={12}>Last Quarter</MenuItem>
-                                    <MenuItem value={13}>Last Year</MenuItem>
-                                    <MenuItem value={14}>Custom Date</MenuItem>
-                                    <MenuItem value={15}>Period</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </div>
 
                         <div style={{marginTop: 50, display: 'flex', flexDirection: 'column'}}>
-                            <h3>Transaction Statuses</h3>
+                            <h3>Franchisees Statuses</h3>
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={this.state.checkedPaid}
-                                        onChange={this.handleChange('checkedPaid')}
-                                        value="checkedPaid"
+                                        checked={this.state.checkedSelectAll}
+                                        onChange={this.handleChange('checkedSelectAll')}
+                                        value="All"
                                     />
                                 }
-                                label="Paid"
+                                label="All"
                             />
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={this.state.checkedPP}
-                                        onChange={this.handleChange('checkedPP')}
-                                        value="checkedPP"
+                                        checked={this.state.checkedActive}
+                                        onChange={this.handleChange('checkedActive')}
+                                        value="Active"
                                     />
                                 }
-                                label="Paid Partial"
+                                label="Active"
                             />
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={this.state.checkedComplete}
-                                        onChange={this.handleChange('checkedComplete')}
-                                        value="checkedComplete"
+                                        checked={this.state.checkedCTDB}
+                                        onChange={this.handleChange('checkedCTDB')}
+                                        value="CTDB"
                                     />
                                 }
-                                label="Completed"
+                                label="CTDB"
                             />
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={this.state.checkedOpen}
-                                        onChange={this.handleChange('checkedOpen')}
-                                        value="checkedOpen"
+                                        checked={this.state.checkedNonRenewed}
+                                        onChange={this.handleChange('checkedNonRenewed')}
+                                        value="Non-Renewed"
                                     />
                                 }
-                                label="Open"
+                                label="Non-Renewed"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={this.state.checkedPending}
+                                        onChange={this.handleChange('checkedPending')}
+                                        value="Pending"
+                                    />
+                                }
+                                label="Pending"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={this.state.checkedRepurchased}
+                                        onChange={this.handleChange('checkedRepurchased')}
+                                        value="Repurchased"
+                                    />
+                                }
+                                label="Repurchased"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={this.state.checkedTerminated}
+                                        onChange={this.handleChange('checkedTerminated')}
+                                        value="Terminated"
+                                    />
+                                }
+                                label="Terminated"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={this.state.checkedTransfer}
+                                        onChange={this.handleChange('checkedTransfer')}
+                                        value="Transfer"
+                                    />
+                                }
+                                label="Transfer"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={this.state.checkedRejected}
+                                        onChange={this.handleChange('checkedRejected')}
+                                        value="Rejected"
+                                    />
+                                }
+                                label="Rejected"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={this.state.checkedLegalCompliancePending}
+                                        onChange={this.handleChange('checkedLegalCompliancePending')}
+                                        value="legal-compliance-pending"
+                                    />
+                                }
+                                label="Legal Compliance Pending"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={this.state.checkedInactive}
+                                        onChange={this.handleChange('checkedInactive')}
+                                        value="inactive"
+                                    />
+                                }
+                                label="Inactive"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={this.state.checkedPendingTransfer}
+                                        onChange={this.handleChange('checkedPendingTransfer')}
+                                        value="Pending-Transfer"
+                                    />
+                                }
+                                label="Pending Transfer"
                             />
                         </div>
                     </Paper>
@@ -202,15 +275,15 @@ class FilterPanel extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        toggleStatus: Actions.toggleStatus
+        toggleStatusFranchisees: Actions.toggleStatusFranchisees
     }, dispatch);
 }
 
-function mapStateToProps({invoices})
+function mapStateToProps({franchisees})
 {
     return {
-        filterState: invoices.bOpenedFilterPanel,
-        transactionStatus: invoices.transactionStatus
+        filterStateFranchisees: franchisees.bOpenedSummaryPanelFranchisees,
+        transactionStatusFranchisees: franchisees.transactionStatusFranchisees
     }
 }
 

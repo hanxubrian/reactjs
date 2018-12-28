@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 // core components
-import {Hidden, Icon, IconButton, Fab, Input, Paper,TextField} from '@material-ui/core';
+import {Hidden, Icon, IconButton, Fab, Input, Paper, TextField, Typography} from '@material-ui/core';
 import {withStyles, Checkbox} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
@@ -13,6 +13,8 @@ import connect from "react-redux/es/connect/connect";
 import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
 
+//Janiking
+import JanikingPagination from 'Commons/JanikingPagination';
 
 // third party
 import moment from 'moment'
@@ -43,12 +45,23 @@ const styles = theme => ({
             display: 'none'
         },
         '& .ReactTable .rt-noData': {
-            top: '180px',
+            top: '250px',
             border: '1px solid coral'
+        },
+        '& .ReactTable .rt-thead.-headerGroups': {
+            paddingLeft: '0!important',
+            paddingRight: '0!important',
+            minWidth: 'inherit!important'
         },
         '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
             background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
             color: 'white!important'
+        },
+        '& .openFilter':{
+            width: 'inherit'
+        },
+        '& .openSummary':{
+            width: 300
         },
         '& .ReactTable .rt-tbody': {
             overflowY: 'scroll',
@@ -56,6 +69,16 @@ const styles = theme => ({
         },
         '& .ReactTable .rt-tr-group':{
             flex: '0 0 auto'
+        },
+        '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
+            justifyContent: 'center'
+        },
+        '& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
+            width:'inherit!important',
+            minWidth:'inherit!important',
+        },
+        '& .ReactTable .rt-thead .rt-th:last-child': {
+            justifyContent: 'flex-start'
         },
         '& .p-12-impor': {
             paddingLeft: '1.2rem!important',
@@ -66,6 +89,26 @@ const styles = theme => ({
         height   : headerHeight,
         minHeight: headerHeight,
         backgroundColor: theme.palette.secondary.main
+    },
+    content:{
+        position: 'relative'
+    },
+    search: {
+        width: 360,
+        [theme.breakpoints.down('sm')]: {
+            width: '100%'
+        }
+    },
+    sideButton          : {
+        backgroundColor: theme.palette.primary.light,
+        '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+        }
+    },
+    tableTheadRow:{
+        // backgroundColor: 'rgba(' + hexToRgb(theme.palette.primary.main).r + ',' + hexToRgb(theme.palette.primary.main).g + ',' + hexToRgb(theme.palette.primary.main).b +', .2)'
+        backgroundColor: theme.palette.primary.main,
+        padding: 12
     },
 });
 
@@ -116,7 +159,7 @@ class BillRun extends Component {
         }
 
         if(prevState.s!==this.state.s) {
-            this.search(this.state.s);
+            // this.search(this.state.s);
         }
     }
 
@@ -142,30 +185,43 @@ class BillRun extends Component {
             <FusePageCustom
                 classes={{
                     root: classes.layoutRoot,
-                    header: classes.layoutHeader
+                    header: classes.layoutHeader,
+                    content: classes.content
                 }}
                 header={
                     <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
                         <div className="flex flex-row flex-1 justify-between">
-                            <div className="flex items-center pr-0 lg:pr-12 p-24">
-                                <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
-                                    <Input
-                                        placeholder="Search..."
-                                        className={classNames(classes.search, 'pl-16')}
-                                        // className="pl-16"
-                                        disableUnderline
-                                        fullWidth
-                                        value={this.state.s}
-                                        onChange={this.handleChange('s')}
-                                        inputProps={{
-                                            'aria-label': 'Search'
-                                        }}
-                                    />
-                                    <Icon color="action" className="mr-16">search</Icon>
-                                </Paper>
+                            <div className="flex flex-shrink items-center">
+                                <div className="flex items-center">
+                                    <FuseAnimate animation="transition.expandIn" delay={300}>
+                                        <Icon className="text-32 mr-12">account_box</Icon>
+                                    </FuseAnimate>
+                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                        <Typography variant="h6" className="hidden sm:flex">Accounts Receivable | Bill Run</Typography>
+                                    </FuseAnimate>
+                                </div>
+                            </div>
+                            <div className="flex flex-shrink items-center">
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <Fab color="secondary" aria-label="add"
+                                         className={classNames(classes.sideButton, "mr-12")} onClick={() => alert('ok')}>
+                                        <Icon>add</Icon>
+                                    </Fab>
+                                </FuseAnimate>
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <Fab color="secondary" aria-label="add"
+                                         className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
+                                        <Icon>mail_outline</Icon>
+                                    </Fab>
+                                </FuseAnimate>
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
+                                        <Icon>print</Icon>
+                                    </Fab>
+                                </FuseAnimate>
                             </div>
                         </div>
-                        <div className="flex flex-none items-end">
+                        <div className="flex flex-none items-end" style={{display: 'none'}}>
                             <FuseAnimate animation="transition.expandIn" delay={600}>
                                 <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
                                     <Icon>add</Icon>
@@ -182,10 +238,11 @@ class BillRun extends Component {
                     </div>
                 }
                 content={
-                    <div className="flex-1 flex-col">
+                    <div className="flex-1 flex-col absolute w-full h-full">
                         {this.state.temp && (
                             <ReactTable
                                 data={this.state.temp}
+                                PaginationComponent={JanikingPagination}
                                 minRows = {0}
                                 onFetchData={this.fetchData}
                                 getTheadGroupProps={(state, rowInfo, column, instance) =>{
@@ -195,7 +252,6 @@ class BillRun extends Component {
                                             fontSize: 16,
                                             fontWeight: 700
                                         },
-
                                     }
                                 }}
                                 getTheadGroupThProps={(state, rowInfo, column, instance) => {
@@ -203,21 +259,23 @@ class BillRun extends Component {
                                         style:{
                                             padding: "10px 10px",
                                             fontSize: 18,
-                                            fontWeight: 700
+                                            fontWeight: 700,
                                         },
                                         className: classNames("flex items-center justify-start")
                                     }
                                 }}
                                 getTheadThProps={(state, rowInfo, column, instance) =>{
-                                    let thClass='';
-                                    if (column.id==='InvoiceNo' ||column.id==='CustomerNo'||column.id==='InvoiceBalanceAmount'||
-                                        column.id==='InvoiceDate' || column.id==='TransactionStatus') thClass = classNames(classes.tableThEven);
+                                    let border = '1px solid rgba(255,255,255,.6)';
+                                    if(column.Header==='Actions') border = 'none';
                                     return {
                                         style:{
-                                            fontSize: 12,
-                                            padding: "0",
+                                            fontSize: '1.6rem',
+                                            fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
+                                            fontWeight: 400,
+                                            lineHeight: 1.75,
+                                            color: 'white',
+                                            borderRight: border
                                         },
-                                        className: thClass
                                     }
                                 }}
                                 getTheadProps={(state, rowInfo, column, instance) =>{
@@ -225,7 +283,7 @@ class BillRun extends Component {
                                         style:{
                                             fontSize: 13,
                                         },
-                                        className: classes.tableTheadEven
+                                        className: classes.tableTheadRow
                                     }
                                 }}
                                 getTdProps={(state, rowInfo, column, instance) =>{
@@ -237,7 +295,7 @@ class BillRun extends Component {
                                         style:{
                                             textAlign: 'center',
                                             flexDirection: 'row',
-                                            fontSize: 12,
+                                            fontSize: 13,
                                             padding: "0",
                                         },
                                     }
@@ -256,32 +314,47 @@ class BillRun extends Component {
                                 }}
                                 columns={[
                                     {
-                                        Header: "Accounts Receivable>Invoices",
+                                        Header: ()=>(
+                                            <div className="flex items-center pr-0 lg:pr-12">
+                                                <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
+                                                    <Input
+                                                        placeholder="Search..."
+                                                        className={classNames(classes.search, 'pl-16')}
+                                                        // className="pl-16"
+                                                        disableUnderline
+                                                        fullWidth
+                                                        value={this.state.s}
+                                                        onChange={this.handleChange('s')}
+                                                        inputProps={{
+                                                            'aria-label': 'Search'
+                                                        }}
+                                                    />
+                                                    <Icon color="action" className="mr-16">search</Icon>
+                                                </Paper>
+                                            </div>
+                                        ),
                                         columns: [
                                             {
                                                 Header: "Bill Run Batch #",
                                                 accessor: "Id",
                                                 filterAll: true,
-                                                width: 120,
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center p-24")
                                             },
                                             {
                                                 Header: "Message",
                                                 accessor: "Message",
                                                 width: 360,
-                                                className: classNames("flex items-center  justify-start p-12-impor")
+                                                className: classNames("flex items-center  justify-start p-12-impor p-24")
                                             },
                                             {
                                                 Header: "Invoice Date",
                                                 id: "InvoiceDate",
                                                 accessor: d => moment(d.InvoiceDate).format('MM/DD/YYYY'),
-                                                width: 110,
                                                 className: classNames(classes.tableTdEven, "flex items-center  justify-center")
                                             },
                                             {
                                                 Header: "User",
                                                 accessor: "CreateBy",
-                                                width: 110,
                                                 className: classNames(classes.tableTdEven, "flex items-center  justify-center")
                                             },
                                             {
@@ -320,8 +393,9 @@ class BillRun extends Component {
                                 ]}
                                 defaultPageSize={100}
                                 className={classNames( "-striped -highlight")}
+                                totalRecords = {this.state.temp.length}
                                 style={{
-                                    height: 650,
+                                    height: "100%",
                                 }}
                             />
                         )}
