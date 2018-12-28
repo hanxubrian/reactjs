@@ -20,7 +20,6 @@ import classNames from 'classnames';
 
 const styles = theme => ({
     root: {
-        // height: 250,
         flexGrow: 1,
     },
     container: {
@@ -86,19 +85,7 @@ const newInvoiceState = {
 
 function renderInputComponent(inputProps) {
     const { classes, inputRef = () => {}, ref, ...other } = inputProps;
-    {/*<TextField*/}
-    {/*className={classes.formControl}*/}
-    {/*label="Invoice For:"*/}
-    {/*autoFocus*/}
-    {/*id="CustomerName"*/}
-    {/*name="CustomerName"*/}
-    {/*value={this.state.CustomerName}*/}
-    {/*onChange={this.handleChange}*/}
-    {/*variant="outlined"*/}
-    {/*placeholder="Search Customer Name or Number"*/}
-    {/*required*/}
-    {/*fullWidth*/}
-    {/*/>*/}
+
     return (
         <TextField
             fullWidth
@@ -141,10 +128,6 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
         </MenuItem>
     );
 }
-function  getSuggestionValue (suggestion) {
-    return suggestion.CustomerName;
-}
-
 
 function escapeRegexCharacters(str) {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -180,6 +163,10 @@ class InvoiceDialog extends Component {
         });
     };
 
+    getSuggestionValue =  (suggestion) =>{
+        this.setState({CustomerId: suggestion.CustomerId});
+        return suggestion.CustomerName;
+    };
 
     getSuggestions = (value) => {
         const escapedValue = escapeRegexCharacters(value.trim());
@@ -240,18 +227,13 @@ class InvoiceDialog extends Component {
     {
         const {classes, invoiceDialog, addInvoice, updateInvoice, removeInvoice} = this.props;
         const { value, suggestions } = this.state;
-        const inputProps = {
-            placeholder: "Type 'c'",
-            value,
-            onChange: this.onChange
-        };
 
         const autosuggestProps = {
             renderInputComponent,
             suggestions: suggestions,
             onSuggestionsFetchRequested: this.onSuggestionsFetchRequested,
             onSuggestionsClearRequested: this.onSuggestionsClearRequested,
-            getSuggestionValue,
+            getSuggestionValue: this.getSuggestionValue,
             renderSuggestion,
         };
 
