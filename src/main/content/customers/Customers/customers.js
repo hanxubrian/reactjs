@@ -672,7 +672,7 @@ class Customers extends Component {
 												accessor: "CustomerNo",
 												filterAll: true,
 												width: 100,
-												className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+												className: classNames("flex items-center  justify-center") //classes.tableTdEven
 											},
 											{
 												Header: "Name",
@@ -685,7 +685,7 @@ class Customers extends Component {
 												// accessor: "Address",
 												id: "Address",
 												accessor: d => (this.capital_letter(d.Address)),
-												className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+												className: classNames("flex items-center  justify-center"),
 												width: 270
 											},
 											{
@@ -699,7 +699,7 @@ class Customers extends Component {
 											{
 												Header: "State",
 												accessor: "StateName",
-												className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+												className: classNames("flex items-center  justify-center"),
 												width: 50
 											},
 											{
@@ -714,7 +714,7 @@ class Customers extends Component {
 												// Cell: row => {
 												// 	return '$' + parseFloat(row.original.CustomerBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
 												// },
-												className: classNames(classes.tableTdEven, "flex items-center  justify-center p-12-impor"),
+												className: classNames("flex items-center  justify-center p-12-impor"),
 												width: 150
 											},
 											{
@@ -729,9 +729,10 @@ class Customers extends Component {
 											{
 												Header: "Contract Amount",
 												id: "Amount",
-												accessor: d => Number(d.Amount).toFixed(2),
+												// accessor: d => ('$' + Number(d.Amount).toFixed(2)),
+												accessor: d => '$' + d.Amount.toLocaleString(undefined, {minimumFractionDigits:2}),
 												// accessor: "Amount",
-												className: classNames(classes.tableTdEven, "flex items-center  justify-end"),
+												className: classNames("flex items-center  justify-end  p-12-impor"),
 												width: 150
 											},
 											// {
@@ -751,7 +752,7 @@ class Customers extends Component {
 												Header: "Actions",
 												width: 128,
 												Cell: row => (
-													<div className="flex items-center actions">
+													<div className="flex items-center p-12-impor actions">
 														<IconButton
 															onClick={(ev) => {
 																ev.stopPropagation();
