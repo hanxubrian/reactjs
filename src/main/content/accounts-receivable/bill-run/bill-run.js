@@ -13,6 +13,8 @@ import connect from "react-redux/es/connect/connect";
 import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
 
+//Janiking
+import JanikingPagination from 'Commons/JanikingPagination';
 
 // third party
 import moment from 'moment'
@@ -240,6 +242,7 @@ class BillRun extends Component {
                         {this.state.temp && (
                             <ReactTable
                                 data={this.state.temp}
+                                PaginationComponent={JanikingPagination}
                                 minRows = {0}
                                 onFetchData={this.fetchData}
                                 getTheadGroupProps={(state, rowInfo, column, instance) =>{
@@ -390,6 +393,7 @@ class BillRun extends Component {
                                 ]}
                                 defaultPageSize={100}
                                 className={classNames( "-striped -highlight")}
+                                totalRecords = {this.state.temp.length}
                                 style={{
                                     height: "100%",
                                 }}

@@ -54,27 +54,27 @@ class InvoiceDialog extends Component {
         /**
          * After Dialog Open
          */
-        if ( !prevProps.contactDialog.props.open && this.props.contactDialog.props.open )
+        if ( !prevProps.invoiceDialog.props.open && this.props.invoiceDialog.props.open )
         {
             /**
              * Dialog type: 'edit'
              * Update State
              */
-            if ( this.props.contactDialog.type === 'edit' &&
+            if ( this.props.invoiceDialog.type === 'edit' &&
                 this.props.contactDialog.data &&
-                !_.isEqual(this.props.contactDialog.data, prevState) )
+                !_.isEqual(this.props.invoiceDialog.data, prevState) )
             {
-                this.setState({...this.props.contactDialog.data});
+                this.setState({...this.props.invoiceDialog.data});
             }
 
             /**
              * Dialog type: 'new'
              * Update State
              */
-            if ( this.props.contactDialog.type === 'new' &&
-                !_.isEqual(newContactState, prevState) )
+            if ( this.props.invoiceDialog.type === 'new' &&
+                !_.isEqual(newInvoiceState, prevState) )
             {
-                this.setState({...newContactState});
+                this.setState({...newInvoiceState});
             }
         }
     }
@@ -84,11 +84,12 @@ class InvoiceDialog extends Component {
     };
 
     closeComposeDialog = () => {
-        this.props.contactDialog.type === 'edit' ? this.props.closeEditContactDialog() : this.props.closeNewContactDialog();
+        this.props.invoiceDialog.type === 'edit' ? this.props.closeEditInvoiceDialog() : this.props.closeNewInvoiceDialog();
     };
 
     canBeSubmitted()
     {
+        return true;
         const {name} = this.state;
         return (
             name.length > 0
@@ -97,7 +98,7 @@ class InvoiceDialog extends Component {
 
     render()
     {
-        const {classes, contactDialog, addContact, updateContact, removeContact} = this.props;
+        const {classes, invoiceDialog, addInvoice, updateInvoice, removeInvoice} = this.props;
 
         return (
             <Dialog
@@ -106,21 +107,21 @@ class InvoiceDialog extends Component {
                     paper: "m-24"
                 }}
                 className={classes.root}
-                {...contactDialog.props}
+                {...invoiceDialog.props}
                 onClose={this.closeComposeDialog}
                 fullWidth
-                maxWidth="xs"
+                maxWidth="lg"
             >
 
                 <AppBar position="static" elevation={1}>
                     <Toolbar className="flex w-full">
                         <Typography variant="subtitle1" color="inherit">
-                            {contactDialog.type === 'new' ? 'New Contact' : 'Edit Contact'}
+                            {invoiceDialog.type === 'new' ? 'New Invoice' : 'Edit Invoice'}
                         </Typography>
                     </Toolbar>
                     <div className="flex flex-col items-center justify-center pb-24">
                         <Avatar className="w-96 h-96" alt="contact avatar" src={this.state.avatar}/>
-                        {contactDialog.type === 'edit' && (
+                        {invoiceDialog.type === 'edit' && (
                             <Typography variant="h6" color="inherit" className="pt-8">
                                 {this.state.name}
                             </Typography>
@@ -297,13 +298,13 @@ class InvoiceDialog extends Component {
                     </div>
                 </DialogContent>
 
-                {contactDialog.type === 'new' ? (
+                {invoiceDialog.type === 'new' ? (
                     <DialogActions className="justify-between pl-16">
                         <Button
                             variant="contained"
                             color="primary"
                             onClick={() => {
-                                addContact(this.state);
+                                addInvoice(this.state);
                                 this.closeComposeDialog();
                             }}
                             disabled={!this.canBeSubmitted()}
@@ -317,7 +318,7 @@ class InvoiceDialog extends Component {
                             variant="contained"
                             color="primary"
                             onClick={() => {
-                                updateContact(this.state);
+                                updateInvoice(this.state);
                                 this.closeComposeDialog();
                             }}
                             disabled={!this.canBeSubmitted()}
@@ -326,7 +327,7 @@ class InvoiceDialog extends Component {
                         </Button>
                         <IconButton
                             onClick={() => {
-                                removeContact(this.state.id);
+                                removeInvoice(this.state.id);
                                 this.closeComposeDialog();
                             }}
                         >
@@ -344,9 +345,10 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         closeEditInvoiceDialog: Actions.closeEditInvoiceDialog,
-        closeNewInvoice : Actions.closeNewInvoiceDialog,
+        closeNewInvoiceDialog : Actions.closeNewInvoiceDialog,
         addInvoice            : Actions.addInvoice,
         updateInvoice         : Actions.updateInvoice,
+        removeInvoice         : Actions.removeInvoice,
     }, dispatch);
 }
 

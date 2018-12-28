@@ -4,7 +4,8 @@ import React, {Component} from 'react';
 import {Hidden, Icon, IconButton, Fab, Input, Paper, TextField, Button, Typography} from '@material-ui/core';
 
 //Janiking
-import JanikingPagination from './../../../../Commons/JanikingPagination';
+import JanikingPagination from 'Commons/JanikingPagination';
+import InvoiceDialog from './InvoiceDialog';
 
 // theme components
 import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
@@ -142,6 +143,8 @@ const styles = theme => ({
     },
     sideButton          : {
         backgroundColor: theme.palette.primary.light,
+        height: 46,
+        width: 46,
         '&:hover': {
             backgroundColor: theme.palette.primary.dark,
         }
@@ -459,406 +462,410 @@ class InvoicePage extends Component {
 
     render()
     {
-        const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteInvoicesAction} = this.props;
+        const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteInvoicesAction,
+            openNewInvoiceDialog} = this.props;
         const { toggleSelection, toggleAll, isSelected, logSelection} = this;
 
         const { selectAll, selection } = this.state;
 
         return (
-            <FusePageCustom
-                classes={{
-                    root: classNames(classes.layoutRoot,'test123'),
-                    rightSidebar : classNames(classes.layoutRightSidebar, {'openSummary': summaryState}),
-                    leftSidebar : classNames(classes.layoutLeftSidebar, {'openFilter': filterState}),
-                    sidebarHeader: classes.layoutSidebarHeader,
-                    header: classes.layoutHeader,
-                    content: classes.content
-                }}
-                header={
-                    <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
-                        <div className="flex flex-row flex-1 justify-between">
-                            <div className="flex flex-shrink items-center">
-                                <div className="flex items-center">
+            <React.Fragment>
+                <FusePageCustom
+                    classes={{
+                        root: classNames(classes.layoutRoot,'test123'),
+                        rightSidebar : classNames(classes.layoutRightSidebar, {'openSummary': summaryState}),
+                        leftSidebar : classNames(classes.layoutLeftSidebar, {'openFilter': filterState}),
+                        sidebarHeader: classes.layoutSidebarHeader,
+                        header: classes.layoutHeader,
+                        content: classes.content
+                    }}
+                    header={
+                        <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
+                            <div className="flex flex-row flex-1 justify-between">
+                                <div className="flex flex-shrink items-center">
+                                    <div className="flex items-center">
+                                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                                            <Icon className="text-32 mr-12">account_box</Icon>
+                                        </FuseAnimate>
+                                        <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                            <Typography variant="h6" className="hidden sm:flex">Accounts Receivable | Invoices</Typography>
+                                        </FuseAnimate>
+                                    </div>
+                                </div>
+                                <div className="flex flex-shrink items-center">
                                     <FuseAnimate animation="transition.expandIn" delay={300}>
-                                        <Icon className="text-32 mr-12">account_box</Icon>
+                                        <Fab color="secondary" aria-label="add"
+                                             className={classNames(classes.sideButton, "mr-12")} onClick={openNewInvoiceDialog}>
+                                            <Icon>add</Icon>
+                                        </Fab>
                                     </FuseAnimate>
-                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                        <Typography variant="h6" className="hidden sm:flex">Accounts Receivable | Invoices</Typography>
+                                    <FuseAnimate animation="transition.expandIn" delay={300}>
+                                        <Fab color="secondary" aria-label="add"
+                                             className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
+                                            <Icon>mail_outline</Icon>
+                                        </Fab>
+                                    </FuseAnimate>
+                                    <FuseAnimate animation="transition.expandIn" delay={300}>
+                                        <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
+                                            <Icon>print</Icon>
+                                        </Fab>
                                     </FuseAnimate>
                                 </div>
                             </div>
-                            <div className="flex flex-shrink items-center">
-                                <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <Fab color="secondary" aria-label="add"
-                                         className={classNames(classes.sideButton, "mr-12")} onClick={() => alert('ok')}>
+                            <div className="flex flex-none items-end" style={{display: 'none'}}>
+                                <FuseAnimate animation="transition.expandIn" delay={600}>
+                                    <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
                                         <Icon>add</Icon>
                                     </Fab>
                                 </FuseAnimate>
-                                <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <Fab color="secondary" aria-label="add"
-                                         className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-                                        <Icon>mail_outline</Icon>
-                                    </Fab>
-                                </FuseAnimate>
-                                <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-                                        <Icon>print</Icon>
-                                    </Fab>
-                                </FuseAnimate>
+                                { selection.length>0 && (
+                                    <FuseAnimate animation="transition.expandIn" delay={600}>
+                                        <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeInvoices()}>
+                                            <Icon>delete</Icon>
+                                        </Fab>
+                                    </FuseAnimate>
+                                )}
                             </div>
                         </div>
-                        <div className="flex flex-none items-end" style={{display: 'none'}}>
-                            <FuseAnimate animation="transition.expandIn" delay={600}>
-                                <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
-                                    <Icon>add</Icon>
-                                </Fab>
-                            </FuseAnimate>
-                            { selection.length>0 && (
-                                <FuseAnimate animation="transition.expandIn" delay={600}>
-                                    <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeInvoices()}>
-                                        <Icon>delete</Icon>
-                                    </Fab>
-                                </FuseAnimate>
-                            )}
-                        </div>
-                    </div>
-                }
-                content={
-                    <div className="flex-1 flex-col absolute w-full h-full">
-                        {this.state.temp && (
-                            <ReactTable
-                                data={this.state.temp}
-                                minRows = {0}
-                                PaginationComponent={JanikingPagination}
-                                onFetchData={this.fetchData}
-                                getTheadGroupProps={(state, rowInfo, column, instance) =>{
-                                    return {
-                                        style:{
-                                            padding: "10px 10px",
-                                            fontSize: 16,
-                                            fontWeight: 700
-                                        },
+                    }
+                    content={
+                        <div className="flex-1 flex-col absolute w-full h-full">
+                            {this.state.temp && (
+                                <ReactTable
+                                    data={this.state.temp}
+                                    minRows = {0}
+                                    PaginationComponent={JanikingPagination}
+                                    onFetchData={this.fetchData}
+                                    getTheadGroupProps={(state, rowInfo, column, instance) =>{
+                                        return {
+                                            style:{
+                                                padding: "10px 10px",
+                                                fontSize: 16,
+                                                fontWeight: 700
+                                            },
 
-                                    }
-                                }}
-                                getTheadGroupThProps={(state, rowInfo, column, instance) => {
-                                    return {
-                                        style:{
-                                            padding: "10px 10px",
-                                            fontSize: 18,
-                                            fontWeight: 700,
-                                        },
-                                        className: classNames("flex items-center justify-start")
-                                    }
-                                }}
-                                getTheadThProps={(state, rowInfo, column, instance) =>{
-                                    let border = '1px solid rgba(255,255,255,.6)';
-                                    if(column.Header==='Actions') border = 'none';
+                                        }
+                                    }}
+                                    getTheadGroupThProps={(state, rowInfo, column, instance) => {
+                                        return {
+                                            style:{
+                                                padding: "10px 10px",
+                                                fontSize: 18,
+                                                fontWeight: 700,
+                                            },
+                                            className: classNames("flex items-center justify-start")
+                                        }
+                                    }}
+                                    getTheadThProps={(state, rowInfo, column, instance) =>{
+                                        let border = '1px solid rgba(255,255,255,.6)';
+                                        if(column.Header==='Actions') border = 'none';
 
-                                    return {
-                                        style:{
-                                            fontSize: '1.6rem',
-                                            fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
-                                            fontWeight: 400,
-                                            lineHeight: 1.75,
-                                            color: 'white',
-                                            borderRight: border
-                                        },
-                                    }
-                                }}
-                                getTheadProps={(state, rowInfo, column, instance) =>{
-                                    return {
-                                        style:{
-                                            fontSize: 13,
-                                        },
-                                        className: classes.tableTheadRow
-                                    }
-                                }}
-                                getTdProps={(state, rowInfo, column, instance) =>{
-                                    let tdClass='flex items-center justify-center';
-                                    if (column.id==='InvoiceNo' ||column.id==='CustomerNo'||column.id==='InvoiceBalanceAmount'||
-                                        column.id==='InvoiceDate' || column.id==='TransactionStatus') tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
+                                        return {
+                                            style:{
+                                                fontSize: '1.6rem',
+                                                fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
+                                                fontWeight: 400,
+                                                lineHeight: 1.75,
+                                                color: 'white',
+                                                borderRight: border
+                                            },
+                                        }
+                                    }}
+                                    getTheadProps={(state, rowInfo, column, instance) =>{
+                                        return {
+                                            style:{
+                                                fontSize: 13,
+                                            },
+                                            className: classes.tableTheadRow
+                                        }
+                                    }}
+                                    getTdProps={(state, rowInfo, column, instance) =>{
+                                        let tdClass='flex items-center justify-center';
+                                        if (column.id==='InvoiceNo' ||column.id==='CustomerNo'||column.id==='InvoiceBalanceAmount'||
+                                            column.id==='InvoiceDate' || column.id==='TransactionStatus') tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
 
-                                    return {
-                                        style:{
-                                            textAlign: 'center',
-                                            flexDirection: 'row',
-                                            fontSize: 12,
-                                            padding: "0",
-                                        },
-                                    }
-                                }}
-                                getTrProps={(state, rowInfo, column) => {
-                                    return {
-                                        className: "cursor-pointer",
-                                        onClick  : (e, handleOriginal) => {
-                                            if ( rowInfo )
-                                            {
-                                                alert('ok');
-                                                // openEditContactDialog(rowInfo.original);
+                                        return {
+                                            style:{
+                                                textAlign: 'center',
+                                                flexDirection: 'row',
+                                                fontSize: 12,
+                                                padding: "0",
+                                            },
+                                        }
+                                    }}
+                                    getTrProps={(state, rowInfo, column) => {
+                                        return {
+                                            className: "cursor-pointer",
+                                            onClick  : (e, handleOriginal) => {
+                                                if ( rowInfo )
+                                                {
+                                                    alert('ok');
+                                                    // openEditContactDialog(rowInfo.original);
+                                                }
                                             }
                                         }
-                                    }
-                                }}
-                                columns={[
-                                    {
-                                        Header: (instance)=>(
-                                            <div className="flex items-center">
-                                                <Hidden smDown>
-                                                    <Button
-                                                        onClick={(ev) => toggleFilterPanel()}
-                                                        aria-label="toggle filter panel"
-                                                        color="secondary"
-                                                        disabled={filterState ? true : false}
-                                                        className={classNames(classes.filterPanelButton)}
-                                                    >
-                                                        <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
-                                                    </Button>
-                                                </Hidden>
-                                                <Hidden smUp>
-                                                    <Button
-                                                        onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
-                                                        aria-label="toggle filter panel"
-                                                        className={classNames(classes.filterPanelButton)}
-                                                    >
-                                                        <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
-                                                    </Button>
-                                                </Hidden>
-                                            </div>
-                                        ),
-                                        columns: [
-                                            {
-                                                Header   : (instance) => (
-                                                    <Checkbox
-                                                        onClick={(event) => {
-                                                            event.stopPropagation();
-                                                        }}
-                                                        onChange={(event) => toggleAll(instance) }
-                                                        checked={this.state.selectAll}
-                                                        style={{color: 'white'}}
-                                                        // indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
-                                                    />
-                                                ),
-                                                accessor : "",
-                                                Cell     : row => {
-                                                    return (<Checkbox
+                                    }}
+                                    columns={[
+                                        {
+                                            Header: (instance)=>(
+                                                <div className="flex items-center">
+                                                    <Hidden smDown>
+                                                        <Button
+                                                            onClick={(ev) => toggleFilterPanel()}
+                                                            aria-label="toggle filter panel"
+                                                            color="secondary"
+                                                            disabled={filterState ? true : false}
+                                                            className={classNames(classes.filterPanelButton)}
+                                                        >
+                                                            <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
+                                                        </Button>
+                                                    </Hidden>
+                                                    <Hidden smUp>
+                                                        <Button
+                                                            onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
+                                                            aria-label="toggle filter panel"
+                                                            className={classNames(classes.filterPanelButton)}
+                                                        >
+                                                            <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
+                                                        </Button>
+                                                    </Hidden>
+                                                </div>
+                                            ),
+                                            columns: [
+                                                {
+                                                    Header   : (instance) => (
+                                                        <Checkbox
                                                             onClick={(event) => {
                                                                 event.stopPropagation();
                                                             }}
-                                                            checked={isSelected(row.value.InvoiceId)}
-                                                            onChange={() => toggleSelection(row.value.InvoiceId)}
+                                                            onChange={(event) => toggleAll(instance) }
+                                                            checked={this.state.selectAll}
+                                                            style={{color: 'white'}}
+                                                            // indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
                                                         />
-                                                    )
+                                                    ),
+                                                    accessor : "",
+                                                    Cell     : row => {
+                                                        return (<Checkbox
+                                                                onClick={(event) => {
+                                                                    event.stopPropagation();
+                                                                }}
+                                                                checked={isSelected(row.value.InvoiceId)}
+                                                                onChange={() => toggleSelection(row.value.InvoiceId)}
+                                                            />
+                                                        )
+                                                    },
+                                                    className: "justify-center",
+                                                    sortable : false,
+                                                    width    : 72
+                                                }
+                                            ],
+                                            className: classNames("justify-center")
+                                        },
+                                        {
+                                            Header: ()=>(
+                                                <div className="flex items-center pr-0 lg:pr-12">
+                                                    <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
+                                                        <Input
+                                                            placeholder="Search..."
+                                                            className={classNames(classes.search, 'pl-16')}
+                                                            // className="pl-16"
+                                                            disableUnderline
+                                                            fullWidth
+                                                            value={this.state.s}
+                                                            onChange={this.handleChange('s')}
+                                                            inputProps={{
+                                                                'aria-label': 'Search'
+                                                            }}
+                                                        />
+                                                        <Icon color="action" className="mr-16">search</Icon>
+                                                    </Paper>
+                                                </div>
+                                            ),
+                                            columns: [
+                                                {
+                                                    Header: "Invoice #",
+                                                    accessor: "InvoiceNo",
+                                                    filterAll: true,
+                                                    width: 120,
+                                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center")
                                                 },
-                                                className: "justify-center",
-                                                sortable : false,
-                                                width    : 72
-                                            }
-                                        ],
-                                        className: classNames("justify-center")
-                                    },
-                                    {
-                                        Header: ()=>(
-                                            <div className="flex items-center pr-0 lg:pr-12">
-                                                <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
-                                                    <Input
-                                                        placeholder="Search..."
-                                                        className={classNames(classes.search, 'pl-16')}
-                                                        // className="pl-16"
-                                                        disableUnderline
-                                                        fullWidth
-                                                        value={this.state.s}
-                                                        onChange={this.handleChange('s')}
-                                                        inputProps={{
-                                                            'aria-label': 'Search'
-                                                        }}
-                                                    />
-                                                    <Icon color="action" className="mr-16">search</Icon>
-                                                </Paper>
-                                            </div>
-                                        ),
-                                        columns: [
-                                            {
-                                                Header: "Invoice #",
-                                                accessor: "InvoiceNo",
-                                                filterAll: true,
-                                                width: 120,
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center")
-                                            },
-                                            {
-                                                Header: "Description",
-                                                accessor: "InvoiceDescription",
-                                                width: 420,
-                                                className: classNames("flex items-center  justify-start p-12-impor")
-                                            },
-                                            {
-                                                Header: "Customer #",
-                                                accessor: "CustomerNo",
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-                                                width: 120
-                                            },
-                                            {
-                                                Header: "Customer Name",
-                                                accessor: "CustomerName",
-                                                width: 280,
-                                                className: classNames("flex items-center  justify-start p-12-impor")
-                                            },
-                                            {
-                                                Header: "Balance",
-                                                accessor: "InvoiceBalanceAmount",
-                                                Cell     : row => {
-                                                    return '$'+parseFloat(row.original.InvoiceBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+                                                {
+                                                    Header: "Description",
+                                                    accessor: "InvoiceDescription",
+                                                    width: 420,
+                                                    className: classNames("flex items-center  justify-start p-12-impor")
                                                 },
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor"),
-                                                width: 120
-                                            },
-                                            {
-                                                Header: "Total",
-                                                Cell     : row => {
-                                                    return '$'+parseFloat(row.original.InvoiceTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+                                                {
+                                                    Header: "Customer #",
+                                                    accessor: "CustomerNo",
+                                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+                                                    width: 120
                                                 },
-                                                accessor: "InvoiceTotal",
-                                                className: classNames("flex items-center  justify-end p-12-impor"),
-                                                width: 120
-                                            },
-                                            {
-                                                Header: "Invoice Date",
-                                                id: "InvoiceDate",
-                                                accessor: d => moment(d.InvoiceDate).format('MM/DD/YYYY'),
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-                                                width: 120
-                                            },
-                                            {
-                                                Header: "Due Date",
-                                                id: "DueDate",
-                                                accessor: d => moment(d.DueDate).format('MM/DD/YYYY'),
-                                                className: classNames("flex items-center  justify-center"),
-                                                width: 120
-                                            },
-                                            {
-                                                Header: "Status",
-                                                accessor: "TransactionStatus",
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-                                                width: 120
-                                            },
-                                            {
-                                                Header: "Actions",
-                                                width : 128,
-                                                Cell  : row => (
-                                                    <div className="flex items-center actions">
-                                                        <IconButton
-                                                            onClick={(ev) => {
-                                                                ev.stopPropagation();
-                                                                if (window.confirm("Do you really want to remove this invoice")) {
-                                                                    this.props.removeInvoiceAction(row.original.InvoiceId, this.props.invoices);
-                                                                    if(this.state.selection.length>0){
-                                                                        _.remove(this.state.selection, function(id) {
-                                                                            return id === row.original.InvoiceId;
-                                                                        });
+                                                {
+                                                    Header: "Customer Name",
+                                                    accessor: "CustomerName",
+                                                    width: 280,
+                                                    className: classNames("flex items-center  justify-start p-12-impor")
+                                                },
+                                                {
+                                                    Header: "Balance",
+                                                    accessor: "InvoiceBalanceAmount",
+                                                    Cell     : row => {
+                                                        return '$'+parseFloat(row.original.InvoiceBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+                                                    },
+                                                    className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor"),
+                                                    width: 120
+                                                },
+                                                {
+                                                    Header: "Total",
+                                                    Cell     : row => {
+                                                        return '$'+parseFloat(row.original.InvoiceTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+                                                    },
+                                                    accessor: "InvoiceTotal",
+                                                    className: classNames("flex items-center  justify-end p-12-impor"),
+                                                    width: 120
+                                                },
+                                                {
+                                                    Header: "Invoice Date",
+                                                    id: "InvoiceDate",
+                                                    accessor: d => moment(d.InvoiceDate).format('MM/DD/YYYY'),
+                                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+                                                    width: 120
+                                                },
+                                                {
+                                                    Header: "Due Date",
+                                                    id: "DueDate",
+                                                    accessor: d => moment(d.DueDate).format('MM/DD/YYYY'),
+                                                    className: classNames("flex items-center  justify-center"),
+                                                    width: 120
+                                                },
+                                                {
+                                                    Header: "Status",
+                                                    accessor: "TransactionStatus",
+                                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+                                                    width: 120
+                                                },
+                                                {
+                                                    Header: "Actions",
+                                                    width : 128,
+                                                    Cell  : row => (
+                                                        <div className="flex items-center actions">
+                                                            <IconButton
+                                                                onClick={(ev) => {
+                                                                    ev.stopPropagation();
+                                                                    if (window.confirm("Do you really want to remove this invoice")) {
+                                                                        this.props.removeInvoiceAction(row.original.InvoiceId, this.props.invoices);
+                                                                        if(this.state.selection.length>0){
+                                                                            _.remove(this.state.selection, function(id) {
+                                                                                return id === row.original.InvoiceId;
+                                                                            });
+                                                                        }
                                                                     }
-                                                                }
-                                                            }}
+                                                                }}
+                                                            >
+                                                                <Icon>delete</Icon>
+                                                            </IconButton>
+                                                            <IconButton
+                                                                onClick={(ev) => {
+                                                                    ev.stopPropagation();
+                                                                    // removeContact(row.original.id);
+                                                                }}
+                                                            >
+                                                                <Icon>edit</Icon>
+                                                            </IconButton>
+                                                        </div>
+                                                    )
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            Header: (instance)=>(
+                                                <div className="flex items-center justify-end pr-12">
+                                                    <Hidden smDown>
+                                                        <Button
+                                                            onClick={(ev) => toggleSummaryPanel()}
+                                                            aria-label="toggle summary panel"
+                                                            disabled={summaryState ? true : false}
+                                                            className={classNames(classes.summaryPanelButton)}
                                                         >
-                                                            <Icon>delete</Icon>
-                                                        </IconButton>
-                                                        <IconButton
-                                                            onClick={(ev) => {
-                                                                ev.stopPropagation();
-                                                                // removeContact(row.original.id);
-                                                            }}
+                                                            <Icon>insert_chart</Icon>
+                                                        </Button>
+                                                    </Hidden>
+                                                    <Hidden smUp>
+                                                        <Button
+                                                            onClick={(ev) => this.pageLayout.toggleRightSidebar()}
+                                                            aria-label="toggle summary panel"
+                                                            className={classNames(classes.summaryPanelButton)}
                                                         >
-                                                            <Icon>edit</Icon>
-                                                        </IconButton>
-                                                    </div>
-                                                )
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        Header: (instance)=>(
-                                            <div className="flex items-center justify-end pr-12">
-                                                <Hidden smDown>
-                                                    <Button
-                                                        onClick={(ev) => toggleSummaryPanel()}
-                                                        aria-label="toggle summary panel"
-                                                        disabled={summaryState ? true : false}
-                                                        className={classNames(classes.summaryPanelButton)}
-                                                    >
-                                                        <Icon>insert_chart</Icon>
-                                                    </Button>
-                                                </Hidden>
-                                                <Hidden smUp>
-                                                    <Button
-                                                        onClick={(ev) => this.pageLayout.toggleRightSidebar()}
-                                                        aria-label="toggle summary panel"
-                                                        className={classNames(classes.summaryPanelButton)}
-                                                    >
-                                                        <Icon>insert_chart</Icon>
-                                                    </Button>
-                                                </Hidden>
-                                            </div>
-                                        ),
-                                        columns:[
-                                            {
-                                                Header: '',
-                                                cell: ()=>(
-                                                    <div className="flex w-full justify-end"/>
-                                                )
-                                            }
-                                        ]
-                                    }
-                                ]}
-                                defaultPageSize={100}
-                                className={classNames( "-striped -highlight")}
-                                totalRecords = {this.state.temp.length}
-                                style={{
-                                    height: '100%',
-                                }}
-                            />
-                        )}
-                    </div>
-                }
-                leftSidebarHeader={
-                    <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", {'filteropen': filterState})}>
-                        <h4 style={{marginBlockStart: '1em'}}>Filter Panel</h4>
-                        <FuseAnimate animation="transition.expandIn" delay={200}>
-                            <div>
-                                <Hidden xsDown>
-                                    <IconButton onClick={(ev)=>toggleFilterPanel()}>
-                                        <Icon>close</Icon>
-                                    </IconButton>
-                                </Hidden>
-                            </div>
-                        </FuseAnimate>
-                    </div>
-                }
-                leftSidebarContent={
-                    <FilterPanel/>
-                }
-                rightSidebarHeader={
-                    <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0">
-                        <h4 style={{marginBlockStart: '1em'}}>Summary Panel</h4>
-                        <FuseAnimate animation="transition.expandIn" delay={200}>
-                            <div>
-                                <Hidden xsDown>
-                                    {/*<IconButton onClick={()=>this.removeInvoices()}>*/}
-                                    {/*<Icon>delete</Icon>*/}
-                                    {/*</IconButton>*/}
-                                    <IconButton onClick={(ev)=>toggleSummaryPanel()}>
-                                        <Icon>close</Icon>
-                                    </IconButton>
-                                </Hidden>
-                            </div>
-                        </FuseAnimate></div>
-                }
-                rightSidebarContent={
-                    <SummaryPanel/>
-                }
-                onRef={instance => {
-                    this.pageLayout = instance;
-                }}
-            >
-            </FusePageCustom>
+                                                            <Icon>insert_chart</Icon>
+                                                        </Button>
+                                                    </Hidden>
+                                                </div>
+                                            ),
+                                            columns:[
+                                                {
+                                                    Header: '',
+                                                    cell: ()=>(
+                                                        <div className="flex w-full justify-end"/>
+                                                    )
+                                                }
+                                            ]
+                                        }
+                                    ]}
+                                    defaultPageSize={100}
+                                    className={classNames( "-striped -highlight")}
+                                    totalRecords = {this.state.temp.length}
+                                    style={{
+                                        height: '100%',
+                                    }}
+                                />
+                            )}
+                        </div>
+                    }
+                    leftSidebarHeader={
+                        <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", {'filteropen': filterState})}>
+                            <h4 style={{marginBlockStart: '1em'}}>Filter Panel</h4>
+                            <FuseAnimate animation="transition.expandIn" delay={200}>
+                                <div>
+                                    <Hidden xsDown>
+                                        <IconButton onClick={(ev)=>toggleFilterPanel()}>
+                                            <Icon>close</Icon>
+                                        </IconButton>
+                                    </Hidden>
+                                </div>
+                            </FuseAnimate>
+                        </div>
+                    }
+                    leftSidebarContent={
+                        <FilterPanel/>
+                    }
+                    rightSidebarHeader={
+                        <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0">
+                            <h4 style={{marginBlockStart: '1em'}}>Summary Panel</h4>
+                            <FuseAnimate animation="transition.expandIn" delay={200}>
+                                <div>
+                                    <Hidden xsDown>
+                                        {/*<IconButton onClick={()=>this.removeInvoices()}>*/}
+                                        {/*<Icon>delete</Icon>*/}
+                                        {/*</IconButton>*/}
+                                        <IconButton onClick={(ev)=>toggleSummaryPanel()}>
+                                            <Icon>close</Icon>
+                                        </IconButton>
+                                    </Hidden>
+                                </div>
+                            </FuseAnimate></div>
+                    }
+                    rightSidebarContent={
+                        <SummaryPanel/>
+                    }
+                    onRef={instance => {
+                        this.pageLayout = instance;
+                    }}
+                >
+                </FusePageCustom>
+                <InvoiceDialog/>
+            </React.Fragment>
         );
     }
 }
