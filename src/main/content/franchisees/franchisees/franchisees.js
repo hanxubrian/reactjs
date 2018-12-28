@@ -420,6 +420,7 @@ class Franchisees extends Component {
         }
 
         this.setState({temp: all_temp});
+        this.setState({data: all_temp});
      };
 
     componentDidMount(){
@@ -442,12 +443,12 @@ class Franchisees extends Component {
             return;
         }
         const temp = this.state.data.filter( d => {
-            return d.ID.indexOf(val) !== -1 || !val ||
-                d.StatusName.toString().indexOf(val) !== -1 ||
-                d.Name.toString().indexOf(val) !== -1 ||
-                d.Address1.toString().indexOf(val) !== -1 ||
-                d.DistributionAmount.toString().indexOf(val) !== -1 ||
-                d.Phone.toString().indexOf(val) !== -1
+            return d.Number.toLowerCase().indexOf(val) !== -1 || !val ||
+                d.StatusName.toLowerCase().indexOf(val) !== -1 ||
+                d.Name.toLowerCase().indexOf(val) !== -1 ||
+                d.Address1.toLowerCase().indexOf(val) !== -1 ||
+                d.DistributionAmount.toLowerCase().indexOf(val) !== -1 ||
+                d.Phone.toLowerCase().indexOf(val) !== -1
         });
         console.log('searchTemp',temp);
         this.setState({temp: temp});
