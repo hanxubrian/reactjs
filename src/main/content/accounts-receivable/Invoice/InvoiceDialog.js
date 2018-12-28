@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 //Material-UI
 import {
-    TextField, Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, Avatar
+    TextField, Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography, Toolbar, AppBar, Avatar, MenuItem, Paper
 } from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles/index';
 
@@ -14,12 +14,42 @@ import _ from '@lodash';
 
 // third party
 import Autosuggest from 'react-autosuggest';
+import match from 'autosuggest-highlight/match';
+import parse from 'autosuggest-highlight/parse';
+import classNames from 'classnames';
 
 const styles = theme => ({
-    root       : {},
+    root: {
+        // height: 250,
+        flexGrow: 1,
+    },
+    container: {
+        position: 'relative',
+        width: '100%'
+    },
     formControl: {
         marginBottom: 24
-    }
+    },
+    suggestionsContainerOpen: {
+        position: 'absolute',
+        zIndex: 10,
+        marginTop: theme.spacing.unit,
+        left: 0,
+        right: 0,
+        maxHeight: 200,
+        overflowY: 'scroll'
+    },
+    suggestion: {
+        display: 'block',
+    },
+    suggestionsList: {
+        margin: 0,
+        padding: 0,
+        listStyleType: 'none',
+    },
+    divider: {
+        height: theme.spacing.unit * 2,
+    },
 });
 
 const newInvoiceState = {
@@ -54,25 +84,110 @@ const newInvoiceState = {
     "CreditId": "",
 };
 
+function renderInputComponent(inputProps) {
+    const { classes, inputRef = () => {}, ref, ...other } = inputProps;
+    {/*<TextField*/}
+    {/*className={classes.formControl}*/}
+    {/*label="Invoice For:"*/}
+    {/*autoFocus*/}
+    {/*id="CustomerName"*/}
+    {/*name="CustomerName"*/}
+    {/*value={this.state.CustomerName}*/}
+    {/*onChange={this.handleChange}*/}
+    {/*variant="outlined"*/}
+    {/*placeholder="Search Customer Name or Number"*/}
+    {/*required*/}
+    {/*fullWidth*/}
+    {/*/>*/}
+    return (
+        <TextField
+            fullWidth
+            variant="outlined"
+            label="Invoice For:"
+            InputProps={{
+                inputRef: node => {
+                    ref(node);
+                    inputRef(node);
+                },
+                classes: {
+                    input: classes.input,
+                },
+            }}
+            {...other}
+        />
+    );
+}
+
+function renderSuggestion(suggestion, { query, isHighlighted }) {
+    console.log('suggestion=', suggestion);
+    const matches = match(suggestion.CustomerName, query);
+    const parts = parse(suggestion.CustomerName, matches);
+
+    return (
+        <MenuItem selected={isHighlighted} component="div">
+            <div>
+                {parts.map((part, index) => {
+                    return part.highlight ? (
+                        <span key={String(index)} style={{ fontWeight: 700 }}>
+              {part.text}
+            </span>
+                    ) : (
+                        <strong key={String(index)} style={{ fontWeight: 300 }}>
+                            {part.text}
+                        </strong>
+                    );
+                })}
+            </div>
+        </MenuItem>
+    );
+}
+function  getSuggestionValue (suggestion) {
+    return suggestion.CustomerName;
+}
+
+
+function escapeRegexCharacters(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 class InvoiceDialog extends Component {
     state = {
         ...newInvoiceState,
+        value: '',
+        suggestions: []
     };
 
     constructor (props) {
         super(props);
     }
 
-    escapeRegexCharacters = (str) => {
-        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    onChange = (event, { newValue, method }) => {
+        this.setState({
+            value: newValue.toString()
+        });
     };
+
+    onSuggestionsFetchRequested = ({ value }) => {
+
+        this.setState({
+            suggestions: this.getSuggestions(value)
+        });
+    };
+
+    onSuggestionsClearRequested = () => {
+        this.setState({
+            suggestions: []
+        });
+    };
+
 
     getSuggestions = (value) => {
-        const escapedValue = this.escapeRegexCharacters(value.trim());
+        const escapedValue = escapeRegexCharacters(value.trim());
         const regex = new RegExp(escapedValue, 'i');
 
-        return this.props.customers.filter(customer => regex.test(customer.nickname) || regex.test(customer.email));
+        return this.props.customers.filter(customer => regex.test(customer.CustomerName));
     };
+
 
     componentDidUpdate(prevProps, prevState, snapshot)
     {
@@ -124,6 +239,21 @@ class InvoiceDialog extends Component {
     render()
     {
         const {classes, invoiceDialog, addInvoice, updateInvoice, removeInvoice} = this.props;
+        const { value, suggestions } = this.state;
+        const inputProps = {
+            placeholder: "Type 'c'",
+            value,
+            onChange: this.onChange
+        };
+
+        const autosuggestProps = {
+            renderInputComponent,
+            suggestions: suggestions,
+            onSuggestionsFetchRequested: this.onSuggestionsFetchRequested,
+            onSuggestionsClearRequested: this.onSuggestionsClearRequested,
+            getSuggestionValue,
+            renderSuggestion,
+        };
 
         return (
             <Dialog
@@ -152,18 +282,25 @@ class InvoiceDialog extends Component {
                             <Icon color="action">account_circle</Icon>
                         </div>
 
-                        <TextField
-                            className={classes.formControl}
-                            label="Invoice For:"
-                            autoFocus
-                            id="CustomerName"
-                            name="CustomerName"
-                            value={this.state.CustomerName}
-                            onChange={this.handleChange}
-                            variant="outlined"
-                            placeholder="Search Customer Name or Number"
-                            required
-                            fullWidth
+                        <Autosuggest
+                            {...autosuggestProps}
+                            inputProps={{
+                                classes,
+                                placeholder: 'Search Customer Name or Number',
+                                value: value,
+                                onChange: this.onChange,
+                            }}
+                            theme={{
+                                container: classNames(classes.container, classes.formControl),
+                                suggestionsContainerOpen: classes.suggestionsContainerOpen,
+                                suggestionsList: classes.suggestionsList,
+                                suggestion: classes.suggestion,
+                            }}
+                            renderSuggestionsContainer={options => (
+                                <Paper {...options.containerProps} square>
+                                    {options.children}
+                                </Paper>
+                            )}
                         />
                     </div>
 

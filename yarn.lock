@@ -2029,7 +2029,7 @@ autoprefixer@^9.1.5:
     postcss "^7.0.2"
     postcss-value-parser "^3.2.3"
 
-autosuggest-highlight@3.1.1:
+autosuggest-highlight@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/autosuggest-highlight/-/autosuggest-highlight-3.1.1.tgz#70bb4f9125fe8a849e85f825f7bb2a1a4806743d"
   dependencies:

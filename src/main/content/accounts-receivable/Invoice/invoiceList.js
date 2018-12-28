@@ -423,7 +423,6 @@ class InvoicePage extends Component {
 
     }
     escFunction(event){
-        console.log('key fired');
         if(event.keyCode === 27) {
             this.setState({s: ''});
             this.getInvoicesFromStatus();
