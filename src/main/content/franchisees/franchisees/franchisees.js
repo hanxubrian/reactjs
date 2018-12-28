@@ -409,80 +409,14 @@ class Franchisees extends Component {
                 temp1 = all_temp.concat(temp0[i].Franchisees);
                 all_temp = temp1;
             }
-            for(let i = 0; i < all_temp.length ; i++){
-               if(currentStatus.checkedInactive){
-                   if(all_temp[i].StatusName==='InActive'){
-                       filterTemp = totalFilterTemp.concat(all_temp[i]);
-                       totalFilterTemp = filterTemp;
-                   }
-               }
-                if(currentStatus.checkedActive){
-                    if(all_temp[i].StatusName==='Active'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-                if(currentStatus.checkedLegalCompliancePending){
-                    if(all_temp[i].StatusName==='LegalCompliancePending'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-                if(currentStatus.checkedPending){
-                    if(all_temp[i].StatusName==='Pending'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-                if(currentStatus.checkedTerminated){
-                    if(all_temp[i].StatusName==='Terminated'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-                if(currentStatus.checkedTransfer){
-                    if(all_temp[i].StatusName==='Transfer'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-                if(currentStatus.checkedPendingTransfer){
-                    if(all_temp[i].StatusName==='PendingTransfer'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-                if(currentStatus.checkedNonRenewed){
-                    if(all_temp[i].StatusName==='NonRenewed'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-                if(currentStatus.checkedRejected){
-                    if(all_temp[i].StatusName==='Rejected'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-                if(currentStatus.checkedRepurchased){
-                    if(all_temp[i].StatusName==='Repurchased'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-                if(currentStatus.checkedCTDB){
-                    if(all_temp[i].StatusName==='CTDB'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-            }
         }else{
             for(let i = 0; i < temp0.length ; i++){
                 if(this.props.regionId ===temp0[i].Id){
                     all_temp = temp0[i].Franchisees;
                 }
             }
+        }
+        if(all_temp.length>0){
             for(var i = 0; i < all_temp.length ; i++){
                 if(currentStatus.checkedInactive){
                     if(all_temp[i].StatusName ==='InActive'){
