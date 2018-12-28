@@ -61,7 +61,6 @@ class InvoiceDialog extends Component {
 
     constructor (props) {
         super(props);
-
     }
 
     escapeRegexCharacters = (str) => {
@@ -141,6 +140,7 @@ class InvoiceDialog extends Component {
 
                 <AppBar position="static" elevation={1}>
                     <Toolbar className="flex w-full">
+                        <img className="mr-12" src="assets/images/invoices/invoice-icon-white.png" style={{width: 32, height: 32}}/>
                         <Typography variant="subtitle1" color="inherit">
                             {invoiceDialog.type === 'new' ? 'New Invoice' : 'Edit Invoice'}
                         </Typography>
@@ -370,11 +370,10 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({invoices, customers})
+function mapStateToProps({invoices})
 {
     return {
         invoiceDialog: invoices.invoiceDialog,
-        customers: customers.customersDB,
     }
 }
 

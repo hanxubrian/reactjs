@@ -108,7 +108,7 @@ export default class JanikingPagination extends Component {
               ) : (
                   <span className="-currentPage">{page + 1}</span>
               )}{' '}
-              {this.props.ofText} <span className="-totalPages">{pages || 1}</span><span className="pl-24"><strong>{parseInt(totalRecords).toFixed(0).replace(/\d(?=(\d{3})+\.)/g, '$&,')} Records</strong></span>
+              {this.props.ofText} <span className="-totalPages">{pages || 1}</span><span className="pl-24"><strong>{totalRecords.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} Records</strong></span>
           </span>
                     {showPageSizeOptions && (
                         <span className="select-wrap -pageSizeOptions">

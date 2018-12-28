@@ -220,7 +220,8 @@ class InvoicePage extends Component {
         checkedOpen: true,
         selection: [],
         selectAll: false,
-        regionId: 0
+        regionId: 0,
+        customers: []
     };
 
     toggleSelection = (key, shift, row) => {
@@ -879,7 +880,7 @@ class InvoicePage extends Component {
                     }}
                 >
                 </FusePageCustom>
-                <InvoiceDialog/>
+                <InvoiceDialog customers={this.state.customers}/>
             </React.Fragment>
         );
     }
