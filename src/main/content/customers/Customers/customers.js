@@ -877,7 +877,7 @@ class Customers extends Component {
 					}}
 				>
 				</FusePageCustom>
-				<CustomerDialog customers={this.state.customers}/>
+				{/* <CustomerDialog customers={this.state.customers}/> */}
 			</React.Fragment >
 		);
 	}
