@@ -1835,12 +1835,13 @@ mock.onPost("/api/franchisees/delete").reply(req => {
 mock.onPost('/api/franchisees/remove').reply((req) => {
     let data = JSON.parse(req.data);
     console.log('id=', data.franchisees);
-    let franchisees = data.franchisees;
-    let deleted = _.remove(franchisees.Data, function(_franchisees) {
-        return _franchisees.ID === data.id;
-    });
-
-    return [200, franchisees];
+    let removeFranchisees = data.franchisees;
+    for(let i = 0 ; i < (removeFranchisees.Data.Region).length ;i++ ){
+        let deleted = _.remove((removeFranchisees.Data.Region)[i].Franchisees, function(_franchisees) {
+            return _franchisees.ID === data.id;
+        });
+    }
+    return [200, removeFranchisees];
 });
 
 mock.onGet("/api/franchisees/get").reply(request => {

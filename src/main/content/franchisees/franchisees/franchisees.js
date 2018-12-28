@@ -202,10 +202,18 @@ class Franchisees extends Component {
         s: '',
         temp: [],
         data: [],
-        checkedPaid: true,
-        checkedPP: true,
-        checkedComplete: true,
-        checkedOpen: true,
+        checkedSelectAll: true,
+        checkedActive: true,
+        checkedInactive: true,
+        checkedCTDB: true,
+        checkedPendingTransfer: true,
+        checkedLegalCompliancePending: true,
+        checkedTransfer: true,
+        checkedTerminated: true,
+        checkedRejected: true,
+        checkedPending: true,
+        checkedNonRenewed: true,
+        checkedRepurchased: true,
         selection: [],
         selectAll: false,
         regionId: 0
@@ -297,23 +305,55 @@ class Franchisees extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot){
         let bChanged = false;
-        if(this.props.transactionStatusFranchisees.checkedPaid !== prevProps.transactionStatusFranchisees.checkedPaid) {
-            this.setState({checkedPaid: !this.state.checkedPaid});
+        if(this.props.transactionStatusFranchisees.checkedSelectAll !== prevProps.transactionStatusFranchisees.checkedSelectAll) {
+            this.setState({checkedSelectAll: !this.state.checkedSelectAll});
             bChanged = true;
         }
 
-        if(this.props.transactionStatusFranchisees.checkedPP !== prevProps.transactionStatusFranchisees.checkedPP) {
-            this.setState({checkedPP: !this.state.checkedPP});
+        if(this.props.transactionStatusFranchisees.checkedActive !== prevProps.transactionStatusFranchisees.checkedActive) {
+            this.setState({checkedActive: !this.state.checkedActive});
             bChanged = true;
         }
 
-        if(this.props.transactionStatusFranchisees.checkedComplete !== prevProps.transactionStatusFranchisees.checkedComplete) {
-            this.setState({checkedComplete: !this.state.checkedComplete});
+        if(this.props.transactionStatusFranchisees.checkedInactive !== prevProps.transactionStatusFranchisees.checkedInactive) {
+            this.setState({checkedInactive: !this.state.checkedInactive});
             bChanged = true;
         }
 
-        if(this.props.transactionStatusFranchisees.checkedOpen !== prevProps.transactionStatusFranchisees.checkedOpen) {
-            this.setState({checkedOpen: !this.state.checkedOpen});
+        if(this.props.transactionStatusFranchisees.checkedCTDB !== prevProps.transactionStatusFranchisees.checkedCTDB) {
+            this.setState({checkedCTDB: !this.state.checkedCTDB});
+            bChanged = true;
+        }
+        if(this.props.transactionStatusFranchisees.checkedPendingTransfer !== prevProps.transactionStatusFranchisees.checkedPendingTransfer) {
+            this.setState({checkedPendingTransfer: !this.state.checkedPendingTransfer});
+            bChanged = true;
+        }
+        if(this.props.transactionStatusFranchisees.checkedLegalCompliancePending !== prevProps.transactionStatusFranchisees.checkedLegalCompliancePending) {
+            this.setState({checkedLegalCompliancePending: !this.state.checkedLegalCompliancePending});
+            bChanged = true;
+        }
+        if(this.props.transactionStatusFranchisees.checkedTransfer !== prevProps.transactionStatusFranchisees.checkedTransfer) {
+            this.setState({checkedTransfer: !this.state.checkedTransfer});
+            bChanged = true;
+        }
+        if(this.props.transactionStatusFranchisees.checkedTerminated !== prevProps.transactionStatusFranchisees.checkedTerminated) {
+            this.setState({checkedTerminated: !this.state.checkedTerminated});
+            bChanged = true;
+        }
+        if(this.props.transactionStatusFranchisees.checkedRejected !== prevProps.transactionStatusFranchisees.checkedRejected) {
+            this.setState({checkedRejected: !this.state.checkedRejected});
+            bChanged = true;
+        }
+        if(this.props.transactionStatusFranchisees.checkedPending !== prevProps.transactionStatusFranchisees.checkedPending) {
+            this.setState({checkedPending: !this.state.checkedPending});
+            bChanged = true;
+        }
+        if(this.props.transactionStatusFranchisees.checkedNonRenewed !== prevProps.transactionStatusFranchisees.checkedNonRenewed) {
+            this.setState({checkedNonRenewed: !this.state.checkedNonRenewed});
+            bChanged = true;
+        }
+        if(this.props.transactionStatusFranchisees.checkedRepurchased !== prevProps.transactionStatusFranchisees.checkedRepurchased) {
+            this.setState({checkedRepurchased: !this.state.checkedRepurchased});
             bChanged = true;
         }
 
@@ -335,10 +375,18 @@ class Franchisees extends Component {
     }
 
     componentWillMount(){
-        this.setState({checkedPaid: this.props.transactionStatusFranchisees.checkedPaid});
-        this.setState({checkedPP: this.props.transactionStatusFranchisees.checkedPP});
-        this.setState({checkedComplete: this.props.transactionStatusFranchisees.checkedComplete});
-        this.setState({checkedOpen: this.props.transactionStatusFranchisees.checkedOpen});
+        this.setState({checkedSelectAll: this.props.transactionStatusFranchisees.checkedSelectAll});
+        this.setState({checkedActive: this.props.transactionStatusFranchisees.checkedActive});
+        this.setState({checkedInactive: this.props.transactionStatusFranchisees.checkedInactive});
+        this.setState({checkedCTDB: this.props.transactionStatusFranchisees.checkedCTDB});
+        this.setState({checkedPendingTransfer: this.props.transactionStatusFranchisees.checkedPendingTransfer});
+        this.setState({checkedLegalCompliancePending: this.props.transactionStatusFranchisees.checkedLegalCompliancePending});
+        this.setState({checkedTransfer: this.props.transactionStatusFranchisees.checkedTransfer});
+        this.setState({checkedTerminated: this.props.transactionStatusFranchisees.checkedTerminated});
+        this.setState({checkedRejected: this.props.transactionStatusFranchisees.checkedRejected});
+        this.setState({checkedPending: this.props.transactionStatusFranchisees.checkedPending});
+        this.setState({checkedNonRenewed: this.props.transactionStatusFranchisees.checkedNonRenewed});
+        this.setState({checkedRepurchased: this.props.transactionStatusFranchisees.checkedRepurchased});
 
         this.getFranchiseesFromStatus();
     }
@@ -358,12 +406,12 @@ class Franchisees extends Component {
         if(rawData===null) return;
         let temp0 = rawData.Data.Region;
         if(this.props.regionId===0 ){
-            for(var i = 0; i < temp0.length ; i++){
+            for(let i = 0; i < temp0.length ; i++){
                 temp1 = all_temp.concat(temp0[i].Franchisees);
                 all_temp = temp1;
             }
         }else{
-            for(var i = 0; i < temp0.length ; i++){
+            for(let i = 0; i < temp0.length ; i++){
                 if(this.props.regionId ===temp0[i].Id){
                     all_temp = temp0[i].Franchisees;
                     console.log('temp',temp);
