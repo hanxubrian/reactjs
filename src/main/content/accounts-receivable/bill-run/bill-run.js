@@ -101,6 +101,8 @@ const styles = theme => ({
     },
     sideButton          : {
         backgroundColor: theme.palette.primary.light,
+        height: 46,
+        width: 46,
         '&:hover': {
             backgroundColor: theme.palette.primary.dark,
         }

@@ -6,13 +6,9 @@ import {
     MenuItem,FormControl,InputLabel, Select,OutlinedInput,
     Card, CardHeader, CardContent, Divider, Radio, RadioGroup,FormControlLabel,FormLabel
 } from '@material-ui/core';
-import green from '@material-ui/core/colors/green';
-import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
-import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 
 //Janiking
 import JanikingPagination from 'Commons/JanikingPagination';
-import InvoiceDialog from './InvoiceDialog';
 
 // theme components
 import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
@@ -111,7 +107,6 @@ const styles = theme => ({
     },
     card: {
         width   : '100%',
-        maxWidth: 384,
     },
     progress: {
         margin: theme.spacing.unit * 2,
@@ -1058,28 +1053,60 @@ class InvoicePage extends Component {
                             )}
                             {(this.state.temp && invoiceDialog.props.open) && (
                                 <div className="p-24">
-                                    <div className="flex">
-                                        <Autosuggest
-                                            {...autosuggestProps}
-                                            inputProps={{
-                                                classes,
-                                                placeholder: 'Search Customer Name or Number',
-                                                value: value,
-                                                onChange: this.onChange,
-                                            }}
-                                            theme={{
-                                                container: classNames(classes.container, classes.formControl),
-                                                suggestionsContainerOpen: classes.suggestionsContainerOpen,
-                                                suggestionsList: classes.suggestionsList,
-                                                suggestion: classes.suggestion,
-                                            }}
-                                            renderSuggestionsContainer={options => (
-                                                <Paper {...options.containerProps} square>
-                                                    {options.children}
-                                                </Paper>
-                                            )}
-                                        />
-                                    </div>
+                                    <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
+                                        <GridItem xs={12} sm={8} md={8} className="flex flex-row">
+                                            <Autosuggest
+                                                {...autosuggestProps}
+                                                inputProps={{
+                                                    classes,
+                                                    placeholder: 'Search Customer Name or Number',
+                                                    value: value,
+                                                    onChange: this.onChange,
+                                                }}
+                                                theme={{
+                                                    container: classNames(classes.container),
+                                                    suggestionsContainerOpen: classes.suggestionsContainerOpen,
+                                                    suggestionsList: classes.suggestionsList,
+                                                    suggestion: classes.suggestion,
+                                                }}
+                                                renderSuggestionsContainer={options => (
+                                                    <Paper {...options.containerProps} square>
+                                                        {options.children}
+                                                    </Paper>
+                                                )}
+                                            />
+                                        </GridItem>
+                                        <GridItem xs={12} sm={2} md={2} className="flex flex-row">
+                                            <TextField
+                                                id="InvoiceDate"
+                                                label="Invoice Date"
+                                                type="date"
+                                                name="InvoiceDate"
+                                                value={this.state.InvoiceDate}
+                                                onChange={this.handleChange}
+                                                InputLabelProps={{
+                                                    shrink: true
+                                                }}
+                                                variant="outlined"
+                                                fullWidth
+                                            />
+                                        </GridItem>
+                                        <GridItem xs={12} sm={2} md={2} className="flex flex-row">
+                                            <TextField
+                                                id="DueDate"
+                                                label="Due Date"
+                                                type="date"
+                                                name="DueDate"
+                                                value={this.state.DueDate}
+                                                onChange={this.handleChange}
+                                                InputLabelProps={{
+                                                    shrink: true
+                                                }}
+                                                variant="outlined"
+                                                fullWidth
+                                            />
+                                        </GridItem>
+                                    </GridContainer>
                                     {this.state.selectedCustomer && (
                                         <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
                                             <GridItem xs={12} sm={6} md={6} className="flex flex-row">
@@ -1124,7 +1151,6 @@ class InvoicePage extends Component {
 
                                                 </Card>
                                             </GridItem>
-
                                         </GridContainer>
                                     )}
 
@@ -1143,23 +1169,7 @@ class InvoicePage extends Component {
                                                 multiline={true}
                                             />
                                         </GridItem>
-                                        <GridItem xs={12} sm={3} md={3} className="flex flex-row">
-                                            {/*<div className="min-w-48 pt-20"><Icon color="action">calendar_today</Icon></div>*/}
-                                            <TextField
-                                                className={classes.formControl}
-                                                id="InvoiceDate"
-                                                label="Invoice Date"
-                                                type="date"
-                                                name="InvoiceDate"
-                                                value={this.state.InvoiceDate}
-                                                onChange={this.handleChange}
-                                                InputLabelProps={{
-                                                    shrink: true
-                                                }}
-                                                variant="outlined"
-                                                fullWidth
-                                            />
-                                        </GridItem>
+
                                     </GridContainer>
                                     <Divider variant="middle" className={classNames(classes.formControl)}/>
                                     <div className="flex">
