@@ -40,10 +40,10 @@ class ContactDialog extends Component {
         if ( !prevProps.contactDialog.props.open && this.props.contactDialog.props.open )
         {
             /**
-             * Dialog type: 'edit'
+             * Dialog type: 'create'
              * Update State
              */
-            if ( this.props.contactDialog.type === 'edit' &&
+            if ( this.props.contactDialog.type === 'create' &&
                 this.props.contactDialog.data &&
                 !_.isEqual(this.props.contactDialog.data, prevState) )
             {
@@ -67,7 +67,7 @@ class ContactDialog extends Component {
     };
 
     closeComposeDialog = () => {
-        this.props.contactDialog.type === 'edit' ? this.props.closeEditContactDialog() : this.props.closeNewContactDialog();
+        this.props.contactDialog.type === 'create' ? this.props.closeEditContactDialog() : this.props.closeNewContactDialog();
     };
 
     canBeSubmitted()
@@ -103,7 +103,7 @@ class ContactDialog extends Component {
                     </Toolbar>
                     <div className="flex flex-col items-center justify-center pb-24">
                         <Avatar className="w-96 h-96" alt="contact avatar" src={this.state.avatar}/>
-                        {contactDialog.type === 'edit' && (
+                        {contactDialog.type === 'create' && (
                             <Typography variant="h6" color="inherit" className="pt-8">
                                 {this.state.name}
                             </Typography>

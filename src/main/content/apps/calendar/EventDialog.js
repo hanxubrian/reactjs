@@ -38,10 +38,10 @@ class EventDialog extends Component {
         if ( !prevProps.eventDialog.props.open && this.props.eventDialog.props.open )
         {
             /**
-             * Dialog type: 'edit'
+             * Dialog type: 'create'
              * Update State
              */
-            if ( this.props.eventDialog.type === 'edit' &&
+            if ( this.props.eventDialog.type === 'create' &&
                 this.props.eventDialog.data &&
                 !_.isEqual(this.props.eventDialog.data, prevState) )
             {
@@ -64,7 +64,7 @@ class EventDialog extends Component {
     };
 
     closeComposeDialog = () => {
-        this.props.eventDialog.type === 'edit' ? this.props.closeEditEventDialog() : this.props.closeNewEventDialog();
+        this.props.eventDialog.type === 'create' ? this.props.closeEditEventDialog() : this.props.closeNewEventDialog();
     };
 
     canBeSubmitted()

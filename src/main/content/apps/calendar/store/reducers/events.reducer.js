@@ -62,7 +62,7 @@ const eventsReducer = function (state = initialState, action) {
             return {
                 ...state,
                 eventDialog: {
-                    type : 'edit',
+                    type : 'create',
                     props: {
                         open: true
                     },
@@ -79,7 +79,7 @@ const eventsReducer = function (state = initialState, action) {
             return {
                 ...state,
                 eventDialog: {
-                    type : 'edit',
+                    type : 'create',
                     props: {
                         open: false
                     },

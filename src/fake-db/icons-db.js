@@ -2277,11 +2277,11 @@ const iconsDB = [
     }, {
         "order"    : 2016,
         "id"       : 728,
-        "name"     : "edit",
+        "name"     : "create",
         "prevSize" : 32,
         "code"     : 59932,
-        "ligatures": "edit",
-        "tags"     : ["edit"]
+        "ligatures": "create",
+        "tags"     : ["create"]
     }, {
         "order"    : 2017,
         "id"       : 727,

@@ -197,10 +197,10 @@ class CustomerDialog extends Component {
         if ( !prevProps.customerDialog.props.open && this.props.customerDialog.props.open )
         {
             /**
-             * Dialog type: 'edit'
+             * Dialog type: 'create'
              * Update State
              */
-            if ( this.props.customerDialog.type === 'edit' &&
+            if ( this.props.customerDialog.type === 'create' &&
                 this.props.contactDialog.data &&
                 !_.isEqual(this.props.customerDialog.data, prevState) )
             {
@@ -224,7 +224,7 @@ class CustomerDialog extends Component {
     };
 
     closeComposeDialog = () => {
-        this.props.customerDialog.type === 'edit' ? this.props.closeEditCustomerDialog() : this.props.closeNewCustomerDialog();
+        this.props.customerDialog.type === 'create' ? this.props.closeEditCustomerDialog() : this.props.closeNewCustomerDialog();
     };
 
     canBeSubmitted()

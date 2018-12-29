@@ -103,7 +103,7 @@ const contactsReducer = function (state = initialState, action) {
             return {
                 ...state,
                 contactDialog: {
-                    type : 'edit',
+                    type : 'create',
                     props: {
                         open: true
                     },
@@ -116,7 +116,7 @@ const contactsReducer = function (state = initialState, action) {
             return {
                 ...state,
                 contactDialog: {
-                    type : 'edit',
+                    type : 'create',
                     props: {
                         open: false
                     },

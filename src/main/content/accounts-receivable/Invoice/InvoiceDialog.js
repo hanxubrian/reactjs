@@ -196,10 +196,10 @@ class InvoiceDialog extends Component {
         if ( !prevProps.invoiceDialog.props.open && this.props.invoiceDialog.props.open )
         {
             /**
-             * Dialog type: 'edit'
+             * Dialog type: 'create'
              * Update State
              */
-            if ( this.props.invoiceDialog.type === 'edit' &&
+            if ( this.props.invoiceDialog.type === 'create' &&
                 this.props.contactDialog.data &&
                 !_.isEqual(this.props.invoiceDialog.data, prevState) )
             {
@@ -223,7 +223,7 @@ class InvoiceDialog extends Component {
     };
 
     closeComposeDialog = () => {
-        this.props.invoiceDialog.type === 'edit' ? this.props.closeEditInvoiceDialog() : this.props.closeNewInvoiceDialog();
+        this.props.invoiceDialog.type === 'create' ? this.props.closeEditInvoiceDialog() : this.props.closeNewInvoiceDialog();
     };
 
     canBeSubmitted()
