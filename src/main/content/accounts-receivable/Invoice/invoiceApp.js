@@ -161,9 +161,8 @@ const newInvoiceState = {
     "Service":""
 };
 
-class InvoicePage extends Component {
+class InvoiceApp extends Component {
     state = {
-        s: '',
         temp: [],
         data: [],
         checkedPaid: true,
@@ -660,5 +659,5 @@ function mapStateToProps({invoices, auth, customers})
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoicePage)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceApp)));
 

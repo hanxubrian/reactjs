@@ -5,12 +5,13 @@ import {withStyles} from '@material-ui/core/styles';
 
 //Material UI core and icons
 import {Table, TableBody, TableCell, TableHead, TableFooter, TablePagination, TableRow, TableSortLabel,
-Toolbar, Typography, Paper, Checkbox, IconButton, Tooltip
+    Toolbar, Typography, Paper, Checkbox, IconButton, Tooltip
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import {lighten} from '@material-ui/core/styles/colorManipulator';
+import connect from "react-redux/es/connect/connect";
 
 let counter = 0;
 
@@ -58,34 +59,46 @@ function getSorting(order, orderBy)
 
 const rows = [
     {
-        id            : 'name',
+        id            : 'billing',
         numeric       : false,
-        disablePadding: true,
-        label         : 'Dessert (100g serving)'
+        disablePadding: false,
+        label         : 'Billing'
     },
     {
-        id            : 'calories',
-        numeric       : true,
+        id            : 'service',
+        numeric       : false,
         disablePadding: false,
-        label         : 'Calories'
+        label         : 'Service'
     },
     {
-        id            : 'fat',
-        numeric       : true,
+        id            : 'description',
+        numeric       : false,
         disablePadding: false,
-        label         : 'Fat (g)'
+        label         : 'Description'
     },
     {
-        id            : 'carbs',
+        id            : 'quantity',
         numeric       : true,
         disablePadding: false,
-        label         : 'Carbs (g)'
+        label         : 'Quantity'
     },
     {
-        id            : 'protein',
+        id            : 'amount',
         numeric       : true,
         disablePadding: false,
-        label         : 'Protein (g)'
+        label         : 'Amount'
+    },
+    {
+        id            : 'markup',
+        numeric       : true,
+        disablePadding: false,
+        label         : 'Markup (%)'
+    },
+    {
+        id            : 'extend_amount',
+        numeric       : true,
+        disablePadding: false,
+        label         : 'Extended Amount'
     }
 ];
 
@@ -96,18 +109,11 @@ class InvoiceLineTableHead extends React.Component {
 
     render()
     {
-        const {onSelectAllClick, order, orderBy, numSelected, rowCount} = this.props;
+        const {classes, onSelectAllClick, order, orderBy, numSelected, rowCount} = this.props;
 
         return (
-            <TableHead>
+            <TableHead style={{backgroundColor: "lightgray"}}>
                 <TableRow>
-                    <TableCell padding="checkbox">
-                        <Checkbox
-                            indeterminate={numSelected > 0 && numSelected < rowCount}
-                            checked={numSelected === rowCount}
-                            onChange={onSelectAllClick}
-                        />
-                    </TableCell>
                     {rows.map(row => {
                         return (
                             <TableCell
@@ -132,11 +138,19 @@ class InvoiceLineTableHead extends React.Component {
                             </TableCell>
                         );
                     }, this)}
+                    <TableCell padding="checkbox">
+                        <Checkbox
+                            indeterminate={numSelected > 0 && numSelected < rowCount}
+                            checked={numSelected === rowCount}
+                            onChange={onSelectAllClick}
+                        />
+                    </TableCell>
                 </TableRow>
             </TableHead>
         );
     }
 }
+
 
 InvoiceLineTableHead.propTypes = {
     numSelected     : PropTypes.number.isRequired,
@@ -188,7 +202,7 @@ let InvoiceLineTableToolbar = props => {
                     </Typography>
                 ) : (
                     <Typography variant="h6" id="tableTitle">
-                        Nutrition
+                        Invoice Lines
                     </Typography>
                 )}
             </div>
@@ -222,7 +236,18 @@ InvoiceLineTableToolbar = withStyles(toolbarStyles)(InvoiceLineTableToolbar);
 const styles = theme => ({
     root        : {
         width    : '100%',
-        marginTop: theme.spacing.unit * 3
+        marginTop: theme.spacing.unit * 3,
+        head: {
+            color: 'black',
+        },
+        '& thead tr th':{
+            color: 'black!important',
+            fontWeight: 700,
+            fontSize: 14
+        },
+        InvoiceLineHeadRoot:{
+            backgroundColor: 'lightgray',
+        }
     },
     table       : {
         minWidth: 1020
@@ -330,6 +355,7 @@ class InvoiceLineTable extends React.Component {
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table} aria-labelledby="tableTitle">
                         <InvoiceLineTableHead
+                            className={classNames(classes.InvoiceLineHeadRoot)}
                             numSelected={selected.length}
                             order={order}
                             orderBy={orderBy}

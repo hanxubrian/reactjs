@@ -18,6 +18,7 @@ import {withRouter} from 'react-router-dom';
 //Custom components
 import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
+import InvoiceLineTable from "./InvoiceLine"
 
 // for store
 import {bindActionCreators} from "redux";
@@ -377,7 +378,6 @@ class InvoiceForm extends Component {
                                 multiline={true}
                             />
                         </GridItem>
-
                     </GridContainer>
                     <Divider variant="middle" className={classNames(classes.formControl)}/>
                     <div className="flex">
@@ -445,19 +445,22 @@ class InvoiceForm extends Component {
                             </RadioGroup>
                         </FormControl>
                     </div>
-                    <Divider variant="middle" className={classNames(classes.formControl)}/>
+                    <Divider variant="middle" className={classNames(classes.formControl,"w-full")}/>
                     <div className="flex">
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={() => {
-                                this.closeComposeDialog();
-                            }}
-                            disabled={!this.canBeSubmitted()}
-                        >
-                            Save & Close
-                        </Button>
+                        <InvoiceLineTable />
                     </div>
+                    {/*<div className="flex">*/}
+                        {/*<Button*/}
+                            {/*variant="contained"*/}
+                            {/*color="primary"*/}
+                            {/*onClick={() => {*/}
+                                {/*this.closeComposeDialog();*/}
+                            {/*}}*/}
+                            {/*disabled={!this.canBeSubmitted()}*/}
+                        {/*>*/}
+                            {/*Save & Close*/}
+                        {/*</Button>*/}
+                    {/*</div>*/}
                 </div>
             </FuseAnimate>
         );
