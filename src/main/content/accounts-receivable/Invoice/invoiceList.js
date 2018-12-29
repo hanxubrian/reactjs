@@ -8,9 +8,6 @@ import {
     Card, CardHeader, CardContent, Divider, Radio, RadioGroup, FormControlLabel, FormLabel, Toolbar, AppBar
 } from '@material-ui/core';
 
-//Janiking
-import JanikingPagination from 'Commons/JanikingPagination';
-
 // theme components
 import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
 
@@ -21,6 +18,7 @@ import {withRouter} from 'react-router-dom';
 import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
 import InvoiceListContent from "./InvoiceListContent"
+import InvoiceForm from "./InvoiceForm"
 
 // for store
 import {bindActionCreators} from "redux";
@@ -359,8 +357,8 @@ class InvoicePage extends Component {
         console.log("selection:", this.state.selection);
     };
 
-    closeComposeDialog = () => {
-        this.props.invoiceDialog.type === 'create' ? this.props.closeEditInvoiceDialog() : this.props.closeNewInvoiceDialog();
+    closeComposeForm = () => {
+        this.props.invoiceForm.type === 'create' ? this.props.closeEditInvoiceForm() : this.props.closeNewInvoiceForm();
     };
 
     constructor(props){
@@ -540,7 +538,7 @@ class InvoicePage extends Component {
     render()
     {
         const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteInvoicesAction,
-            openNewInvoiceDialog, closeNewInvoiceDialog, invoiceDialog, addInvoice, updateInvoice, removeInvoice} = this.props;
+            openNewInvoiceForm, closeNewInvoiceForm, invoiceForm, addInvoice, updateInvoice, removeInvoice} = this.props;
         const { toggleSelection, toggleAll, isSelected, logSelection} = this;
         const { selectAll, selection, value, suggestions } = this.state;
 
@@ -566,7 +564,7 @@ class InvoicePage extends Component {
                     }}
                     header={
                         <div className="flex w-full items-center">
-                            {(this.state.temp && !invoiceDialog.props.open) && (
+                            {(this.state.temp && !invoiceForm.props.open) && (
                                 <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
                                     <div className="flex flex-row flex-1 justify-between">
                                         <div className="flex flex-shrink items-center">
@@ -582,7 +580,7 @@ class InvoicePage extends Component {
                                         <div className="flex flex-shrink items-center">
                                             <FuseAnimate animation="transition.expandIn" delay={300}>
                                                 <Fab color="secondary" aria-label="add"
-                                                     className={classNames(classes.sideButton, "mr-12")} onClick={openNewInvoiceDialog}>
+                                                     className={classNames(classes.sideButton, "mr-12")} onClick={openNewInvoiceForm}>
                                                     <Icon>add</Icon>
                                                 </Fab>
                                             </FuseAnimate>
@@ -601,7 +599,7 @@ class InvoicePage extends Component {
                                     </div>
                                     <div className="flex flex-none items-end" style={{display: 'none'}}>
                                         <FuseAnimate animation="transition.expandIn" delay={600}>
-                                            <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
+                                            <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => openNewInvoiceForm}>
                                                 <Icon>add</Icon>
                                             </Fab>
                                         </FuseAnimate>
@@ -626,7 +624,7 @@ class InvoicePage extends Component {
                                     </div>
                                 </div>
                             )}
-                            {(this.state.temp && invoiceDialog.props.open) && (
+                            {(this.state.temp && invoiceForm.props.open) && (
                                 <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
                                     <div className="flex flex-row flex-1 justify-between">
                                         <div className="flex flex-shrink items-center">
@@ -648,7 +646,7 @@ class InvoicePage extends Component {
                                                     color="primary"
                                                     className={classNames(classes.button, "mr-12")}
                                                     onClick={() => {
-                                                        this.closeComposeDialog();
+                                                        this.closeComposeForm();
                                                     }}
                                                     disabled={!this.canBeSubmitted()}
                                                 >
@@ -661,7 +659,7 @@ class InvoicePage extends Component {
                                                     color="primary"
                                                     className={classNames(classes.button, "mr-12")}
                                                     onClick={() => {
-                                                        this.closeComposeDialog();
+                                                        this.closeComposeForm();
                                                     }}
                                                     disabled={!this.canBeSubmitted()}
                                                 >
@@ -674,7 +672,7 @@ class InvoicePage extends Component {
                                                     color="primary"
                                                     className={classes.button}
                                                     onClick={() => {
-                                                        this.closeComposeDialog();
+                                                        this.closeComposeForm();
                                                     }}
                                                     disabled={!this.canBeSubmitted()}
                                                 >
@@ -716,208 +714,11 @@ class InvoicePage extends Component {
                     }
                     content={
                         <div className="flex-1 flex-col absolute w-full h-full">
-                            {(this.state.temp && !invoiceDialog.props.open) && (
+                            {(this.state.temp && !invoiceForm.props.open) && (
                                 <InvoiceListContent data={this.state.temp}/>
                             )}
-                            {(this.state.temp && invoiceDialog.props.open) && (
-                                <div className="p-24">
-                                    <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
-                                        <GridItem xs={12} sm={8} md={8} className="flex flex-row">
-                                            <Autosuggest
-                                                {...autosuggestProps}
-                                                inputProps={{
-                                                    classes,
-                                                    placeholder: 'Search Customer Name or Number',
-                                                    value: value,
-                                                    onChange: this.onChange,
-                                                }}
-                                                theme={{
-                                                    container: classNames(classes.container),
-                                                    suggestionsContainerOpen: classes.suggestionsContainerOpen,
-                                                    suggestionsList: classes.suggestionsList,
-                                                    suggestion: classes.suggestion,
-                                                }}
-                                                renderSuggestionsContainer={options => (
-                                                    <Paper {...options.containerProps} square>
-                                                        {options.children}
-                                                    </Paper>
-                                                )}
-                                            />
-                                        </GridItem>
-                                        <GridItem xs={12} sm={2} md={2} className="flex flex-row">
-                                            <TextField
-                                                id="InvoiceDate"
-                                                label="Invoice Date"
-                                                type="date"
-                                                name="InvoiceDate"
-                                                value={this.state.InvoiceDate}
-                                                onChange={this.handleChange}
-                                                InputLabelProps={{
-                                                    shrink: true
-                                                }}
-                                                variant="outlined"
-                                                fullWidth
-                                            />
-                                        </GridItem>
-                                        <GridItem xs={12} sm={2} md={2} className="flex flex-row">
-                                            <TextField
-                                                id="DueDate"
-                                                label="Due Date"
-                                                type="date"
-                                                name="DueDate"
-                                                value={this.state.DueDate}
-                                                onChange={this.handleChange}
-                                                InputLabelProps={{
-                                                    shrink: true
-                                                }}
-                                                variant="outlined"
-                                                fullWidth
-                                            />
-                                        </GridItem>
-                                    </GridContainer>
-                                    {this.state.selectedCustomer && (
-                                        <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
-                                            <GridItem xs={12} sm={6} md={6} className="flex flex-row">
-                                                <Card className={classes.card}>
-                                                    <CardHeader title="Customer" className={classNames(classes.cardHeader, "flex-1")} />
-                                                    <CardContent>
-                                                        <Typography variant="subtitle1" color="inherit">
-                                                            <strong>Customer Name: {this.state.selectedCustomer.CustomerName}</strong>
-                                                        </Typography>
-                                                        <Typography variant="subtitle1" color="inherit">
-                                                            Customer No: {this.state.selectedCustomer.CustomerNo}
-                                                        </Typography>
-                                                        <Typography variant="subtitle1" color="inherit">
-                                                            Address: {this.state.selectedCustomer.Address}
-                                                        </Typography>
-                                                        <Typography variant="subtitle1" color="inherit">
-                                                            {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
-                                                        </Typography>
-                                                    </CardContent>
-
-                                                </Card>
-                                            </GridItem>
-                                            <GridItem xs={12} sm={6} md={6} className= "flex flex-row justify-end">
-                                                <div className="min-w-48 pt-20">
-                                                </div>
-                                                <Card className={classes.card}>
-                                                    <CardHeader title="Billing" className={classNames(classes.cardHeader, "flex-1")} />
-                                                    <CardContent>
-                                                        <Typography variant="subtitle1" color="inherit">
-                                                            <strong>Billing Name: {this.state.selectedCustomer.CustomerName}</strong>
-                                                        </Typography>
-                                                        <Typography variant="subtitle1" color="inherit">
-                                                            Customer No: {this.state.selectedCustomer.CustomerNo}
-                                                        </Typography>
-                                                        <Typography variant="subtitle1" color="inherit">
-                                                            Address: {this.state.selectedCustomer.Address}
-                                                        </Typography>
-                                                        <Typography variant="subtitle1" color="inherit">
-                                                            {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
-                                                        </Typography>
-                                                    </CardContent>
-
-                                                </Card>
-                                            </GridItem>
-                                        </GridContainer>
-                                    )}
-
-                                    <GridContainer>
-                                        <GridItem xs={12} sm={9} md={9} className="flex flex-row">
-                                            <TextField
-                                                className={classes.formControl}
-                                                label="Description"
-                                                id="description"
-                                                name="InvoiceDescription"
-                                                value={this.state.InvoiceDescription}
-                                                onChange={this.handleChange}
-                                                variant="outlined"
-                                                fullWidth
-                                                multiline={true}
-                                            />
-                                        </GridItem>
-
-                                    </GridContainer>
-                                    <Divider variant="middle" className={classNames(classes.formControl)}/>
-                                    <div className="flex">
-                                        <FormControl variant="outlined" className={classes.formControl} style={{marginBottom: '0!important'}}>
-                                            <InputLabel
-                                                ref={ref => {
-                                                    this.InputLabelRef = ref;
-                                                }}
-                                                htmlFor="Service"
-                                            >
-                                                Services
-                                            </InputLabel>
-                                            <Select
-                                                value={this.state.Service}
-                                                onChange={this.handleChange}
-                                                input={
-                                                    <OutlinedInput
-                                                        labelWidth={this.state.labelWidth}
-                                                        name="Service"
-                                                        id="Service"
-                                                    />
-                                                }
-                                            >
-                                                <MenuItem value="">
-                                                    <em>Select</em>
-                                                </MenuItem>
-                                                <MenuItem value={1}>Adjust - Balance</MenuItem>
-                                                <MenuItem value={2}>Adjust - Refund</MenuItem>
-                                                <MenuItem value={3}>Adjust - WriteOff</MenuItem>
-                                                <MenuItem value={4}>Buffing</MenuItem>
-                                                <MenuItem value={5}>Carpet Clean</MenuItem>
-                                                <MenuItem value={6}>Customer Suppliers</MenuItem>
-                                                <MenuItem value={7}>Emergency Clean</MenuItem>
-                                                <MenuItem value={8}>Event Center</MenuItem>
-                                                <MenuItem value={9}>Floor Services</MenuItem>
-                                                <MenuItem value={10}>Funiture Cleaning Service</MenuItem>
-                                                <MenuItem value={11}>High Dusting</MenuItem>
-                                                <MenuItem value={12}>Hotel</MenuItem>
-                                                <MenuItem value={13}>In-House Work</MenuItem>
-                                                <MenuItem value={14}>Initial and Deep Clean</MenuItem>
-                                                <MenuItem value={15}>Initial One-Time Clean</MenuItem>
-                                                <MenuItem value={16}>Make Ready</MenuItem>
-                                                <MenuItem value={17}>Miscellaneous - Special</MenuItem>
-                                                <MenuItem value={18}>Other</MenuItem>
-                                                <MenuItem value={19}>Porter Services</MenuItem>
-                                                <MenuItem value={20}>Power Washing</MenuItem>
-                                                <MenuItem value={21}>Regular Billing</MenuItem>
-                                                <MenuItem value={22}>Regular Cleaning - Day</MenuItem>
-                                                <MenuItem value={23}>Regular Cleaning - Night</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                        <FormControl className={classNames("flex ml-24")}>
-                                            <RadioGroup
-                                                aria-label="Work"
-                                                name="selectedWork"
-                                                className={classes.group}
-                                                value={this.state.selectedWork}
-                                                onChange={this.handleChange}
-                                                className={classNames(classes.formControl, "flex flex-row ml-24")}
-                                            >
-                                                <FormControlLabel className="ml-36 mr-48" value="additional_billing_office" control={<Radio />} label="Additional Billing Office" />
-                                                <FormControlLabel value="extrawork" control={<Radio />} label="Extra Work" />
-                                                <FormControlLabel value="regularwork" control={<Radio />} label="Regular Billing" />
-                                                <FormControlLabel value="client_supplies" control={<Radio />} label="Client Supplies" />
-                                            </RadioGroup>
-                                        </FormControl>
-                                    </div>
-                                    <Divider variant="middle" className={classNames(classes.formControl)}/>
-                                    <div className="flex">
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={() => {
-                                                this.closeComposeDialog();
-                                            }}
-                                            disabled={!this.canBeSubmitted()}
-                                        >
-                                            Save & Close
-                                        </Button>
-                                    </div>
-                                </div>
+                            {(this.state.temp && invoiceForm.props.open) && (
+                               <InvoiceForm customers={this.state.customers} selectedCustomer={this.state.selectedCustomer}/>
                             )}
                         </div>
                     }
@@ -962,7 +763,7 @@ class InvoicePage extends Component {
                     }}
                 >
                 </FusePageCustom>
-                {/*<InvoiceDialog customers={this.state.customers}/>*/}
+                {/*<invoiceForm customers={this.state.customers}/>*/}
             </React.Fragment>
         );
     }
@@ -976,10 +777,10 @@ function mapDispatchToProps(dispatch)
         toggleSummaryPanel: Actions.toggleSummaryPanel,
         deleteInvoicesAction: Actions.deleteInvoices,
         removeInvoiceAction: Actions.removeInvoice,
-        openNewInvoiceDialog: Actions.openNewInvoiceDialog,
-        openEditInvoiceDialog: Actions.openEditInvoiceDialog,
-        closeEditInvoiceDialog: Actions.closeEditInvoiceDialog,
-        closeNewInvoiceDialog : Actions.closeNewInvoiceDialog,
+        openNewInvoiceForm: Actions.openNewInvoiceForm,
+        openEditInvoiceForm: Actions.openEditInvoiceForm,
+        closeEditInvoiceForm: Actions.closeEditInvoiceForm,
+        closeNewInvoiceForm : Actions.closeNewInvoiceForm,
         getCustomers: Actions.getCustomers,
     }, dispatch);
 }
@@ -995,7 +796,7 @@ function mapStateToProps({invoices, auth, customers})
         regionId: auth.login.defaultRegionId,
         customers: customers.customersDB,
         bLoadedCustomers: customers.bLoadedCustomers,
-        invoiceDialog: invoices.invoiceDialog
+        invoiceForm: invoices.invoiceForm
     }
 }
 

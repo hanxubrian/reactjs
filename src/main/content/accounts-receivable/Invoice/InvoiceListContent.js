@@ -276,7 +276,7 @@ class InvoiceListContent extends Component {
     render()
     {
         const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteInvoicesAction,data,
-            openNewInvoiceDialog, closeNewInvoiceDialog, invoiceDialog} = this.props;
+            openNewInvoiceForm, closeNewInvoiceForm, InvoiceForm} = this.props;
         const { toggleSelection, toggleAll, isSelected} = this;
 
         return (
@@ -582,8 +582,8 @@ function mapDispatchToProps(dispatch)
         toggleSummaryPanel: Actions.toggleSummaryPanel,
         deleteInvoicesAction: Actions.deleteInvoices,
         removeInvoiceAction: Actions.removeInvoice,
-        openEditInvoiceDialog: Actions.openEditInvoiceDialog,
-        closeEditInvoiceDialog: Actions.closeEditInvoiceDialog,
+        openEditInvoiceForm: Actions.openEditInvoiceForm,
+        closeEditInvoiceForm: Actions.closeEditInvoiceForm,
     }, dispatch);
 }
 
@@ -596,7 +596,7 @@ function mapStateToProps({invoices, auth})
         filterState: invoices.bOpenedFilterPanel,
         summaryState: invoices.bOpenedSummaryPanel,
         regionId: auth.login.defaultRegionId,
-        invoiceDialog: invoices.invoiceDialog
+        InvoiceForm: invoices.InvoiceForm
     }
 }
 
