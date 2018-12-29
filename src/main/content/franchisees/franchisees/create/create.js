@@ -8,10 +8,16 @@ import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+// theme components
+import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
+import {Checkbox, Fab, Hidden, Icon, IconButton, Input} from "@material-ui/core";
+import {Link} from "react-router-dom";
+import classNames from 'classnames';
 
+const headerHeight = 80;
 const styles = theme => ({
     root            : {
-        width: '90%'
+        width: '100%'
     },
     button          : {
         marginTop  : theme.spacing.unit,
@@ -22,7 +28,12 @@ const styles = theme => ({
     },
     resetContainer  : {
         padding: theme.spacing.unit * 3
-    }
+    },
+    layoutHeader       : {
+        height   : headerHeight,
+        minHeight: headerHeight,
+        backgroundColor: theme.palette.secondary.main
+    },
 });
 
 function getSteps()
@@ -80,48 +91,100 @@ class VerticalLinearStepper extends React.Component {
         const {activeStep} = this.state;
 
         return (
-
-            <div className={classes.root}>
-                <Stepper activeStep={activeStep} orientation="vertical">
-                    {steps.map((label, index) => {
-                        return (
-                            <Step key={label}>
-                                <StepLabel>{label}</StepLabel>
-                                <StepContent>
-                                    <Typography>{getStepContent(index)}</Typography>
-                                    <div className={classes.actionsContainer}>
-                                        <div>
-                                            <Button
-                                                disabled={activeStep === 0}
-                                                onClick={this.handleBack}
-                                                className={classes.button}
-                                            >
-                                                Back
-                                            </Button>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={this.handleNext}
-                                                className={classes.button}
-                                            >
-                                                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </StepContent>
-                            </Step>
-                        );
-                    })}
-                </Stepper>
-                {activeStep === steps.length && (
-                    <Paper square elevation={0} className={classes.resetContainer}>
-                        <Typography>All steps completed - you&apos;re finished</Typography>
-                        <Button onClick={this.handleReset} className={classes.button}>
-                            Reset
-                        </Button>
-                    </Paper>
-                )}
-            </div>
+            <FusePageCustom
+                classes={{
+                    root: classNames(classes.layoutRoot),
+                    header: classes.layoutHeader,
+                    content: classes.content
+                }}
+                header={
+                    <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
+                        <div className="flex flex-row flex-1 justify-between">
+                            <div className="flex flex-shrink items-center">
+                                <div className="flex items-center">
+                                    <FuseAnimate animation="transition.expandIn" delay={300}>
+                                        <Icon className="text-32 mr-12">account_box</Icon>
+                                    </FuseAnimate>
+                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                        <Typography variant="h6" className="hidden sm:flex">Franchisees | Create</Typography>
+                                    </FuseAnimate>
+                                </div>
+                            </div>
+                            <div className="flex flex-shrink items-center">
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <IconButton component={Link} to="/franchisees/create">
+                                        <Icon>add</Icon>
+                                    </IconButton>
+                                </FuseAnimate>
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <IconButton>
+                                        <Icon>mail_outline</Icon>
+                                    </IconButton>
+                                </FuseAnimate>
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <IconButton>
+                                        <Icon>print</Icon>
+                                    </IconButton>
+                                </FuseAnimate>
+                            </div>
+                        </div>
+                        <div className="flex flex-none items-end" style={{display: 'none'}}>
+                            <FuseAnimate animation="transition.expandIn" delay={600}>
+                                <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
+                                    <Icon>add</Icon>
+                                </Fab>
+                            </FuseAnimate>
+                        </div>
+                    </div>
+                }
+                content={
+                    <div className={classes.root}>
+                        <Stepper activeStep={activeStep} orientation="vertical">
+                            {steps.map((label, index) => {
+                                return (
+                                    <Step key={label}>
+                                        <StepLabel>{label}</StepLabel>
+                                        <StepContent>
+                                            <Typography>{getStepContent(index)}</Typography>
+                                            <div className={classes.actionsContainer}>
+                                                <div>
+                                                    <Button
+                                                        disabled={activeStep === 0}
+                                                        onClick={this.handleBack}
+                                                        className={classes.button}
+                                                    >
+                                                        Back
+                                                    </Button>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        onClick={this.handleNext}
+                                                        className={classes.button}
+                                                    >
+                                                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </StepContent>
+                                    </Step>
+                                );
+                            })}
+                        </Stepper>
+                        {activeStep === steps.length && (
+                            <Paper square elevation={0} className={classes.resetContainer}>
+                                <Typography>All steps completed - you&apos;re finished</Typography>
+                                <Button onClick={this.handleReset} className={classes.button}>
+                                    Reset
+                                </Button>
+                            </Paper>
+                        )}
+                    </div>
+                }
+                onRef={instance => {
+                    this.pageLayout = instance;
+                }}
+            >
+            </FusePageCustom>
         );
     }
 }
