@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 // core components
 import {
     Hidden, Icon, IconButton, Fab, Input, Paper, TextField, Button, Typography,
-    MenuItem,FormControl,InputLabel, Select,OutlinedInput,
-    Card, CardHeader, CardContent, Divider, Radio, RadioGroup,FormControlLabel,FormLabel
+    MenuItem, FormControl, InputLabel, Select, OutlinedInput,
+    Card, CardHeader, CardContent, Divider, Radio, RadioGroup, FormControlLabel, FormLabel, Toolbar, AppBar
 } from '@material-ui/core';
 
 //Janiking
@@ -674,7 +674,7 @@ class InvoicePage extends Component {
     render()
     {
         const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteInvoicesAction,
-            openNewInvoiceDialog, invoiceDialog,addInvoice, updateInvoice, removeInvoice} = this.props;
+            openNewInvoiceDialog, closeNewInvoiceDialog, invoiceDialog, addInvoice, updateInvoice, removeInvoice} = this.props;
         const { toggleSelection, toggleAll, isSelected, logSelection} = this;
         const { selectAll, selection, value, suggestions } = this.state;
 
@@ -699,63 +699,118 @@ class InvoicePage extends Component {
                         content: classes.content
                     }}
                     header={
-                        <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
-                            <div className="flex flex-row flex-1 justify-between">
-                                <div className="flex flex-shrink items-center">
-                                    <div className="flex items-center">
+                        <div className="flex w-full items-center">
+                            {(this.state.temp && !invoiceDialog.props.open) && (
+                                <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
+                                    <div className="flex flex-row flex-1 justify-between">
+                                        <div className="flex flex-shrink items-center">
+                                            <div className="flex items-center">
+                                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                    <Icon className="text-32 mr-12">account_box</Icon>
+                                                </FuseAnimate>
+                                                <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                    <Typography variant="h6" className="hidden sm:flex">Accounts Receivable | Invoices</Typography>
+                                                </FuseAnimate>
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-shrink items-center">
+                                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                <Fab color="secondary" aria-label="add"
+                                                     className={classNames(classes.sideButton, "mr-12")} onClick={openNewInvoiceDialog}>
+                                                    <Icon>add</Icon>
+                                                </Fab>
+                                            </FuseAnimate>
+                                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                <Fab color="secondary" aria-label="add"
+                                                     className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
+                                                    <Icon>mail_outline</Icon>
+                                                </Fab>
+                                            </FuseAnimate>
+                                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
+                                                    <Icon>print</Icon>
+                                                </Fab>
+                                            </FuseAnimate>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-none items-end" style={{display: 'none'}}>
+                                        <FuseAnimate animation="transition.expandIn" delay={600}>
+                                            <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
+                                                <Icon>add</Icon>
+                                            </Fab>
+                                        </FuseAnimate>
                                         <FuseAnimate animation="transition.expandIn" delay={300}>
-                                            <Icon className="text-32 mr-12">account_box</Icon>
+                                            <Fab color="primary" aria-label="add"
+                                                 className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
+                                                <Icon>mail_outline</Icon>
+                                            </Fab>
                                         </FuseAnimate>
-                                        <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                            <Typography variant="h6" className="hidden sm:flex">Accounts Receivable | Invoices</Typography>
+                                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                                            <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
+                                                <Icon>print</Icon>
+                                            </Fab>
                                         </FuseAnimate>
+                                        { selection.length>0 && (
+                                            <FuseAnimate animation="transition.expandIn" delay={600}>
+                                                <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeInvoices()}>
+                                                    <Icon>delete</Icon>
+                                                </Fab>
+                                            </FuseAnimate>
+                                        )}
                                     </div>
                                 </div>
-                                <div className="flex flex-shrink items-center">
-                                    <FuseAnimate animation="transition.expandIn" delay={300}>
-                                        <Fab color="secondary" aria-label="add"
-                                             className={classNames(classes.sideButton, "mr-12")} onClick={openNewInvoiceDialog}>
-                                            <Icon>add</Icon>
-                                        </Fab>
-                                    </FuseAnimate>
-                                    <FuseAnimate animation="transition.expandIn" delay={300}>
-                                        <Fab color="secondary" aria-label="add"
-                                             className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-                                            <Icon>mail_outline</Icon>
-                                        </Fab>
-                                    </FuseAnimate>
-                                    <FuseAnimate animation="transition.expandIn" delay={300}>
-                                        <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-                                            <Icon>print</Icon>
-                                        </Fab>
-                                    </FuseAnimate>
+                            )}
+                            {(this.state.temp && invoiceDialog.props.open) && (
+                                <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
+                                    <div className="flex flex-row flex-1 justify-between">
+                                        <div className="flex flex-shrink items-center">
+                                            <div className="flex items-center">
+                                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                    <Toolbar className="pl-12 pr-0">
+                                                        <img className="mr-12" src="assets/images/invoices/invoice-icon-white.png" style={{width: 32, height: 32}}/>
+                                                    </Toolbar>
+                                                </FuseAnimate>
+                                                <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                    <Typography variant="h6" className="hidden sm:flex">Accounts Receivable | New Invoice</Typography>
+                                                </FuseAnimate>
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-shrink items-center">
+                                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                <Fab color="secondary" aria-label="add"
+                                                     className={classNames(classes.sideButton, "mr-12")} onClick={closeNewInvoiceDialog}>
+                                                    <Icon>close</Icon>
+                                                </Fab>
+                                            </FuseAnimate>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-none items-end" style={{display: 'none'}}>
+                                        <FuseAnimate animation="transition.expandIn" delay={600}>
+                                            <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
+                                                <Icon>add</Icon>
+                                            </Fab>
+                                        </FuseAnimate>
+                                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                                            <Fab color="primary" aria-label="add"
+                                                 className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
+                                                <Icon>mail_outline</Icon>
+                                            </Fab>
+                                        </FuseAnimate>
+                                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                                            <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
+                                                <Icon>print</Icon>
+                                            </Fab>
+                                        </FuseAnimate>
+                                        { selection.length>0 && (
+                                            <FuseAnimate animation="transition.expandIn" delay={600}>
+                                                <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeInvoices()}>
+                                                    <Icon>delete</Icon>
+                                                </Fab>
+                                            </FuseAnimate>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="flex flex-none items-end" style={{display: 'none'}}>
-                                <FuseAnimate animation="transition.expandIn" delay={600}>
-                                    <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
-                                        <Icon>add</Icon>
-                                    </Fab>
-                                </FuseAnimate>
-                                <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <Fab color="primary" aria-label="add"
-                                         className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-                                        <Icon>mail_outline</Icon>
-                                    </Fab>
-                                </FuseAnimate>
-                                <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-                                        <Icon>print</Icon>
-                                    </Fab>
-                                </FuseAnimate>
-                                { selection.length>0 && (
-                                    <FuseAnimate animation="transition.expandIn" delay={600}>
-                                        <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeInvoices()}>
-                                            <Icon>delete</Icon>
-                                        </Fab>
-                                    </FuseAnimate>
-                                )}
-                            </div>
+                            )}
                         </div>
                     }
                     content={
