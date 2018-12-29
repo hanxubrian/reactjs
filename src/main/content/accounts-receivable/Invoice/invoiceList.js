@@ -2,21 +2,15 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
 // core components
-import {
-    Hidden, Icon, IconButton, Fab, Input, Paper, TextField, Button, Typography,
-    MenuItem, FormControl, InputLabel, Select, OutlinedInput,
-    Card, CardHeader, CardContent, Divider, Radio, RadioGroup, FormControlLabel, FormLabel, Toolbar, AppBar
-} from '@material-ui/core';
+import {Hidden, Icon, IconButton, Fab, Button, Typography,Toolbar} from '@material-ui/core';
 
 // theme components
 import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
 
-import {withStyles, Checkbox} from "@material-ui/core";
+import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
 //Custom components
-import GridContainer from "Commons/Grid/GridContainer";
-import GridItem from "Commons/Grid/GridItem";
 import InvoiceListContent from "./InvoiceListContent"
 import InvoiceForm from "./InvoiceForm"
 
@@ -30,10 +24,7 @@ import FilterPanel from './filterPanel';
 // third party
 import "react-table/react-table.css";
 import _ from 'lodash';
-import Autosuggest from 'react-autosuggest';
 import classNames from 'classnames';
-import match from "autosuggest-highlight/match";
-import parse from "autosuggest-highlight/parse";
 
 const headerHeight = 80;
 
@@ -132,37 +123,10 @@ const styles = theme => ({
         marginBottom: 24,
         minWidth: 200,
     },
-    suggestionsContainerOpen: {
-        position: 'absolute',
-        zIndex: 10,
-        marginTop: theme.spacing.unit,
-        left: 0,
-        right: 0,
-        maxHeight: 200,
-        overflowY: 'scroll'
-    },
-    suggestion: {
-        display: 'block',
-    },
-    suggestionsList: {
-        margin: 0,
-        padding: 0,
-        listStyleType: 'none',
-    },
     divider: {
         height: theme.spacing.unit * 2,
     },
-    cardHeader       : {
-        backgroundColor: theme.palette.secondary.main,
-        padding: '10px 24px',
-        '& span': {
-            color: 'white'
-        }
-    },
 });
-const defaultProps = {
-    trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
-};
 
 const newInvoiceState = {
     "MasterTrxTypeListId": "",
@@ -197,55 +161,6 @@ const newInvoiceState = {
     "Service":""
 };
 
-function renderInputComponent(inputProps) {
-    const { classes, inputRef = () => {}, ref, ...other } = inputProps;
-
-    return (
-        <TextField
-            fullWidth
-            variant="outlined"
-            label="Invoice For:"
-            InputProps={{
-                inputRef: node => {
-                    ref(node);
-                    inputRef(node);
-                },
-                classes: {
-                    input: classes.input,
-                },
-            }}
-            {...other}
-        />
-    );
-}
-
-function renderSuggestion(suggestion, { query, isHighlighted }) {
-    const matches = match(suggestion.CustomerName, query);
-    const parts = parse(suggestion.CustomerName, matches);
-
-    return (
-        <MenuItem selected={isHighlighted} component="div">
-            <div>
-                {parts.map((part, index) => {
-                    return part.highlight ? (
-                        <span key={String(index)} style={{ fontWeight: 700 }}>
-              {part.text}
-            </span>
-                    ) : (
-                        <strong key={String(index)} style={{ fontWeight: 300 }}>
-                            {part.text}
-                        </strong>
-                    );
-                })}
-            </div>
-        </MenuItem>
-    );
-}
-
-function escapeRegexCharacters(str) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
 class InvoicePage extends Component {
     state = {
         s: '',
@@ -263,42 +178,7 @@ class InvoicePage extends Component {
         customers: [],
         ...newInvoiceState,
         value: '',
-        suggestions: [],
-        selectedCustomer: null,
-        labelWidth: 0,
         selectedWork: ""
-    };
-
-    onChange = (event, { newValue, method }) => {
-        this.setState({
-            value: newValue.toString()
-        });
-    };
-
-    onSuggestionsFetchRequested = ({ value }) => {
-        if(value.length<2) return;
-
-        this.setState({
-            suggestions: this.getSuggestions(value)
-        });
-    };
-
-    onSuggestionsClearRequested = () => {
-        this.setState({
-            suggestions: []
-        });
-    };
-
-    getSuggestionValue =  (suggestion) =>{
-        this.setState({selectedCustomer: suggestion});
-        return suggestion.CustomerName;
-    };
-
-    getSuggestions = (value) => {
-        const escapedValue = escapeRegexCharacters(value.trim());
-        const regex = new RegExp(escapedValue, 'i');
-
-        return this.state.customers.filter(customer => regex.test(customer.CustomerName));
     };
 
     toggleSelection = (key, shift, row) => {
@@ -372,7 +252,6 @@ class InvoicePage extends Component {
             props.getCustomers();
         }
 
-        this.fetchData = this.fetchData.bind(this);
         this.escFunction = this.escFunction.bind(this);
         this.listenScrollEvent = this.listenScrollEvent.bind(this);
     }
@@ -528,28 +407,12 @@ class InvoicePage extends Component {
         }
     };
 
-    fetchData(state, instance) {
-        this.setState({
-            pageSize: state.pageSize,
-            page: state.page,
-        });
-    }
-
     render()
     {
         const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteInvoicesAction,
             openNewInvoiceForm, closeNewInvoiceForm, invoiceForm, addInvoice, updateInvoice, removeInvoice} = this.props;
         const { toggleSelection, toggleAll, isSelected, logSelection} = this;
-        const { selectAll, selection, value, suggestions } = this.state;
-
-        const autosuggestProps = {
-            renderInputComponent,
-            suggestions: suggestions,
-            onSuggestionsFetchRequested: this.onSuggestionsFetchRequested,
-            onSuggestionsClearRequested: this.onSuggestionsClearRequested,
-            getSuggestionValue: this.getSuggestionValue,
-            renderSuggestion,
-        };
+        const { selectAll, selection } = this.state;
 
         return (
             <React.Fragment>
@@ -763,7 +626,6 @@ class InvoicePage extends Component {
                     }}
                 >
                 </FusePageCustom>
-                {/*<invoiceForm customers={this.state.customers}/>*/}
             </React.Fragment>
         );
     }
@@ -775,8 +637,6 @@ function mapDispatchToProps(dispatch)
         getInvoices: Actions.getInvoices,
         toggleFilterPanel: Actions.toggleFilterPanel,
         toggleSummaryPanel: Actions.toggleSummaryPanel,
-        deleteInvoicesAction: Actions.deleteInvoices,
-        removeInvoiceAction: Actions.removeInvoice,
         openNewInvoiceForm: Actions.openNewInvoiceForm,
         openEditInvoiceForm: Actions.openEditInvoiceForm,
         closeEditInvoiceForm: Actions.closeEditInvoiceForm,

@@ -577,7 +577,6 @@ class InvoiceListContent extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        getInvoices: Actions.getInvoices,
         toggleFilterPanel: Actions.toggleFilterPanel,
         toggleSummaryPanel: Actions.toggleSummaryPanel,
         deleteInvoicesAction: Actions.deleteInvoices,

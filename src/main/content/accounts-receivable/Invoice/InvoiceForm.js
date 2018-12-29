@@ -243,21 +243,10 @@ class InvoiceForm extends Component {
             name.length > 0
         );
     }
-    removeInvoices = ()=> {
-        if(this.state.selection.length==0){
-            alert("Please choose invoice(s) to delete");
-            return;
-        }
-        if (window.confirm("Do you really want to remove the selected invoice(s)")) {
-            this.props.deleteInvoicesAction(this.state.selection, this.props.invoices);
-            this.setState({selection: [], selectAll: false})
-        }
-    };
 
     render()
     {
-        const { classes, deleteInvoicesAction,
-            openNewInvoiceDialog, closeNewInvoiceForm, InvoiceForm, addInvoice, updateInvoice, removeInvoice} = this.props;
+        const { classes, InvoiceForm, addInvoice, updateInvoice, removeInvoice} = this.props;
         const { toggleSelection, toggleAll, isSelected, logSelection} = this;
         const { selectAll, selection, value, suggestions } = this.state;
 
@@ -271,7 +260,7 @@ class InvoiceForm extends Component {
         };
 
         return (
-            <React.Fragment>
+            <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="p-24">
                     <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={8} md={8} className="flex flex-row">
@@ -470,7 +459,7 @@ class InvoiceForm extends Component {
                         </Button>
                     </div>
                 </div>
-            </React.Fragment>
+            </FuseAnimate>
         );
     }
 }
@@ -478,8 +467,6 @@ class InvoiceForm extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        deleteInvoicesAction: Actions.deleteInvoices,
-        removeInvoiceAction: Actions.removeInvoice,
         openEditInvoiceForm: Actions.openEditInvoiceForm,
         closeEditInvoiceForm: Actions.closeEditInvoiceForm,
     }, dispatch);
