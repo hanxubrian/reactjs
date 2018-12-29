@@ -93,7 +93,7 @@ const invoices = function(state = initialState, action) {
             return {
                 ...state,
                 invoiceDialog: {
-                    type : 'edit',
+                    type : 'create',
                     props: {
                         open: true
                     },
@@ -106,7 +106,7 @@ const invoices = function(state = initialState, action) {
             return {
                 ...state,
                 invoiceDialog: {
-                    type : 'edit',
+                    type : 'create',
                     props: {
                         open: false
                     },

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 // core components
-import {Hidden, Icon, IconButton, Fab, Input, Paper, TextField, Button, Typography} from '@material-ui/core';
+import {Hidden, Icon, IconButton, Fab, Input, Paper, TextField, Button, Typography, MenuItem} from '@material-ui/core';
 
 // theme components
 import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
@@ -11,7 +11,7 @@ import JanikingPagination from './../../../../Commons/JanikingPagination';
 
 import {bindActionCreators} from "redux";
 import {withStyles, Checkbox} from "@material-ui/core";
-import {withRouter} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 
 // for store
 import connect from "react-redux/es/connect/connect";
@@ -579,7 +579,7 @@ class Franchisees extends Component {
                             </div>
                             <div className="flex flex-shrink items-center">
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <IconButton>
+                                    <IconButton component={Link} to="/franchisees/create">
                                         <Icon>add</Icon>
                                     </IconButton>
                                 </FuseAnimate>

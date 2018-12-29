@@ -86,7 +86,7 @@ const customers = function(state = initialState, action) {
             return {
                 ...state,
                 customerDialog: {
-                    type : 'edit',
+                    type : 'create',
                     props: {
                         open: true
                     },
@@ -99,7 +99,7 @@ const customers = function(state = initialState, action) {
             return {
                 ...state,
                 customerDialog: {
-                    type : 'edit',
+                    type : 'create',
                     props: {
                         open: false
                     },

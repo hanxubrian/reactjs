@@ -467,7 +467,7 @@ class InvoicePage extends Component {
     };
 
     closeComposeDialog = () => {
-        this.props.invoiceDialog.type === 'edit' ? this.props.closeEditInvoiceDialog() : this.props.closeNewInvoiceDialog();
+        this.props.invoiceDialog.type === 'create' ? this.props.closeEditInvoiceDialog() : this.props.closeNewInvoiceDialog();
     };
 
     constructor(props){
