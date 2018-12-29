@@ -38,7 +38,7 @@ const hexToRgb = (hex) =>{
 };
 
 const styles = theme => ({
-    layoutRoot: {
+    layoutTable: {
         flexDirection: 'row',
         '& .z-9999': {
             height: 64
@@ -55,7 +55,37 @@ const styles = theme => ({
         '& .p-12-impor': {
             paddingLeft: '1.2rem!important',
             paddingRight: '1.2rem!important',
-        }
+        },
+        '& .ReactTable .rt-noData': {
+            top: '250px',
+            border: '1px solid coral'
+        },
+        '& .ReactTable .rt-thead.-headerGroups': {
+            paddingLeft: '0!important',
+            paddingRight: '0!important',
+            minWidth: 'inherit!important'
+        },
+        '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
+            background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
+            color: 'white!important'
+        },
+        '& .ReactTable .rt-tbody': {
+            overflowY: 'scroll',
+            overflowX: 'hidden'
+        },
+        '& .ReactTable .rt-tr-group':{
+            flex: '0 0 auto'
+        },
+        '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
+            justifyContent: 'center'
+        },
+        '& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
+            width:'inherit!important',
+            minWidth:'inherit!important',
+        },
+        '& .ReactTable .rt-thead .rt-th:last-child': {
+            justifyContent: 'flex-end'
+        },
     },
     content:{
         position: 'relative'
@@ -250,7 +280,7 @@ class InvoiceListContent extends Component {
         const { toggleSelection, toggleAll, isSelected} = this;
 
         return (
-            <React.Fragment className={classNames(classes.layoutRoot)}>
+            <div className={classNames(classes.layoutTable, "h-full")}>
                 <ReactTable
                     data={this.state.data}
                     minRows = {0}
@@ -539,7 +569,7 @@ class InvoiceListContent extends Component {
                         height: '100%',
                     }}
                 />
-            </React.Fragment>
+            </div>
         );
     }
 }

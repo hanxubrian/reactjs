@@ -30,8 +30,6 @@ import SummaryPanel from './SummaryPanel';
 import FilterPanel from './filterPanel';
 
 // third party
-import moment from 'moment'
-import ReactTable from "react-table";
 import "react-table/react-table.css";
 import _ from 'lodash';
 import Autosuggest from 'react-autosuggest';
@@ -40,15 +38,6 @@ import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
 
 const headerHeight = 80;
-
-const hexToRgb = (hex) =>{
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-    } : null;
-};
 
 const styles = theme => ({
     root: {
@@ -60,44 +49,11 @@ const styles = theme => ({
         '& .z-9999': {
             height: 64
         },
-        '& .-pageSizeOptions': {
-            display: 'none'
-        },
-        '& .ReactTable .rt-noData': {
-            top: '250px',
-            border: '1px solid coral'
-        },
-        '& .ReactTable .rt-thead.-headerGroups': {
-            paddingLeft: '0!important',
-            paddingRight: '0!important',
-            minWidth: 'inherit!important'
-        },
-        '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
-            background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
-            color: 'white!important'
-        },
         '& .openFilter':{
             width: 'inherit'
         },
         '& .openSummary':{
             width: 300
-        },
-        '& .ReactTable .rt-tbody': {
-            overflowY: 'scroll',
-            overflowX: 'hidden'
-        },
-        '& .ReactTable .rt-tr-group':{
-            flex: '0 0 auto'
-        },
-        '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
-            justifyContent: 'center'
-        },
-        '& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
-            width:'inherit!important',
-            minWidth:'inherit!important',
-        },
-        '& .ReactTable .rt-thead .rt-th:last-child': {
-            justifyContent: 'flex-end'
         },
         '& .p-12-impor': {
             paddingLeft: '1.2rem!important',
