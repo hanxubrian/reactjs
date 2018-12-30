@@ -329,6 +329,16 @@ class InvoiceLineTable extends React.Component {
         this.setState({data: newData})
     };
 
+    componentDidMount(){
+        let id = 0;
+        const data = [...this.state.data];
+        let newData = data.map(record=>{
+            record.id = id++;
+            return record;
+        });
+        this.setState({data: newData})
+    }
+
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     AddLineData=()=>{
@@ -338,8 +348,6 @@ class InvoiceLineTable extends React.Component {
             record.id = id++;
             return record;
         });
-
-        // this.setState({data: newData})
         this.setState({data: newData})
     };
 

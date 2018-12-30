@@ -362,7 +362,7 @@ class InvoiceApp extends Component {
             regions.map(x => {
                 temp = [...temp, ...x.Customers];
             });
-            this.setState({customers: temp})
+            this.setState({customers: temp});
         }
     }
 
