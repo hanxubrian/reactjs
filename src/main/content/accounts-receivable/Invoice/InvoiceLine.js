@@ -12,18 +12,16 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import {lighten} from '@material-ui/core/styles/colorManipulator';
-import connect from "react-redux/es/connect/connect";
 import ReactDOM from "react-dom";
-import _ from "lodash";
 
 let counter = 0;
 
-function createData(billing, calories, fat, carbs, protein)
+function createData(billing, service, fat, carbs, protein)
 {
     return {
         id: counter++,
         billing,
-        calories,
+        service,
         fat,
         carbs,
         protein
@@ -245,11 +243,20 @@ const styles = theme => ({
         '& thead tr th':{
             color: 'black!important',
             fontWeight: 700,
-            fontSize: 14
+            fontSize: 14,
+            padding: "4px 24px",
+            width: 180
+        },
+        '& tbody tr td':{
+            padding: "4px 24px",
+            width: 180
         },
         InvoiceLineHeadRoot:{
             backgroundColor: 'lightgray',
-        }
+        },
+    },
+    outlined: {
+        padding: "12px 24px 12px 12px!important"
     },
     table       : {
         minWidth: 1020
@@ -265,20 +272,11 @@ class InvoiceLineTable extends React.Component {
         orderBy    : 'calories',
         selected   : [],
         data       : [
-            createData('Regular Billing', 305, 3.7, 67, 4.3),
+            createData("Regular Billing", "Adjust-Balance", 3.7, 67, 4.3),
         ],
         page       : 0,
         rowsPerPage: 5,
-        labelWidth: 0,
     };
-
-    componentDidMount(){
-        if(this.InputLabelRef) {
-            this.setState({
-                labelWidth: ReactDOM.findDOMNode(this.InputLabelRef).offsetWidth
-            });
-        }
-    }
 
     handleRequestSort = (event, property) => {
         const orderBy = property;
@@ -341,10 +339,6 @@ class InvoiceLineTable extends React.Component {
     };
 
     handleChangeBilling = (event, n) => {
-        console.log('row=>', n);
-        console.log('event.target.value=>', event.target.value);
-        console.log('event.target.name=>', event.target.name);
-
         let newData = this.state.data.map(row=>{
             let temp = row;
            if(n.id===row.id){
@@ -383,7 +377,6 @@ class InvoiceLineTable extends React.Component {
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map(n => {
                                     const isSelected = this.isSelected(n.id);
-                                    console.log('row=', n);
                                     return (
                                         <TableRow
                                             hover
@@ -394,9 +387,12 @@ class InvoiceLineTable extends React.Component {
                                             key={n.id}
                                             selected={isSelected}
                                         >
-                                            <TableCell component="th" scope="row" >
-                                                <FormControl variant="outlined" className={classes.formControl} style={{marginBottom: '0!important'}}>
+                                            <TableCell component="td" scope="row" >
+                                                <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl)} style={{marginBottom: '0!important'}}>
                                                     <Select
+                                                        classes={{
+                                                            outlined: classes.outlined
+                                                        }}
                                                         value={n.billing}
                                                         onChange={(ev)=>this.handleChangeBilling(ev, n)}
                                                         input={
@@ -417,7 +413,51 @@ class InvoiceLineTable extends React.Component {
                                                     </Select>
                                                 </FormControl>
                                             </TableCell>
-                                            <TableCell numeric>{n.calories}</TableCell>
+                                            <TableCell>
+                                                <FormControl variant="outlined" className={classes.formControl} style={{marginBottom: '0!important'}}>
+                                                    <Select
+                                                        classes={{
+                                                            outlined: classes.outlined
+                                                        }}
+                                                        value={n.service}
+                                                        onChange={(ev)=>this.handleChangeBilling(ev, n)}
+                                                        input={
+                                                            <OutlinedInput
+                                                                labelWidth={this.state.labelWidth}
+                                                                name="service"
+                                                                id="service"
+                                                            />
+                                                        }
+                                                    >
+                                                        <MenuItem value="">
+                                                            <em>Select</em>
+                                                        </MenuItem>
+                                                        <MenuItem value="Adjust-Balance">Adjust - Balance</MenuItem>
+                                                        <MenuItem value="Adjust-Refund">Adjust - Refund</MenuItem>
+                                                        <MenuItem value="Adjust-WriteOff">Adjust - WriteOff</MenuItem>
+                                                        <MenuItem value="Buffing">Buffing</MenuItem>
+                                                        <MenuItem value="Carpet Clean">Carpet Clean</MenuItem>
+                                                        <MenuItem value="Customer Suppliers">Customer Suppliers</MenuItem>
+                                                        <MenuItem value="Emergency Clean">Emergency Clean</MenuItem>
+                                                        <MenuItem value="Event Center">Event Center</MenuItem>
+                                                        <MenuItem value="Floor Services">Floor Services</MenuItem>
+                                                        <MenuItem value="Furniture Cleaning Service">Furniture Cleaning Service</MenuItem>
+                                                        <MenuItem value="High Dusting">High Dusting</MenuItem>
+                                                        <MenuItem value="Hotel">Hotel</MenuItem>
+                                                        <MenuItem value="In-House Work">In-House Work</MenuItem>
+                                                        <MenuItem value="Initial and Deep Clean">Initial and Deep Clean</MenuItem>
+                                                        <MenuItem value="Initial One-Time Clean">Initial One-Time Clean</MenuItem>
+                                                        <MenuItem value="Make Ready">Make Ready</MenuItem>
+                                                        <MenuItem value="Miscellaneous - Special">Miscellaneous - Special</MenuItem>
+                                                        <MenuItem value="Other">Other</MenuItem>
+                                                        <MenuItem value="Porter Services">Porter Services</MenuItem>
+                                                        <MenuItem value="Power Washing">Power Washing</MenuItem>
+                                                        <MenuItem value="Regular Billing">Regular Billing</MenuItem>
+                                                        <MenuItem value="Regular Cleaning - Day">Regular Cleaning - Day</MenuItem>
+                                                        <MenuItem value="Regular Cleaning - Night">Regular Cleaning - Night</MenuItem>
+                                                    </Select>
+                                                </FormControl>
+                                            </TableCell>
                                             <TableCell numeric>{n.fat}</TableCell>
                                             <TableCell numeric>{n.carbs}</TableCell>
                                             <TableCell numeric>{n.protein}</TableCell>
