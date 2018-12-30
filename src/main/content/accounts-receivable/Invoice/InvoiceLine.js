@@ -13,9 +13,12 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import {lighten} from '@material-ui/core/styles/colorManipulator';
 
+// third party
+import _ from 'lodash';
+
 let counter = 0;
 
-function createData(billing, service, description, quantity=1, amount=0, markup=0, extended=0)
+function createData(billing='Regular Billing', service='Adjust-Balance', description='description', quantity=1, amount=0, markup=0, extended=0)
 {
     return {
         id: counter++,
@@ -278,7 +281,7 @@ const styles = theme => ({
 class InvoiceLineTable extends React.Component {
     state = {
         order      : 'asc',
-        orderBy    : 'billing',
+        // orderBy    : 'billing',
         selected   : [],
         data       : [
             createData("Regular Billing", "Adjust-Balance", "Invoice",1),
@@ -325,6 +328,11 @@ class InvoiceLineTable extends React.Component {
     };
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
+
+    AddLineData=()=>{
+        const data = [...this.state.data, createData()];
+        this.setState({data})
+    };
 
     renderEditable(cellInfo, id) {
         let prefix = '';
@@ -469,7 +477,9 @@ class InvoiceLineTable extends React.Component {
                                             <TableCell numeric>{this.renderEditable(n, 'extended')}</TableCell>
                                             <TableCell padding="checkbox">
                                                 <Fab color="secondary" aria-label="add"
-                                                     className={classNames(classes.lineButton, "mr-12")}>
+                                                     className={classNames(classes.lineButton, "mr-12")}
+                                                     onClick={()=>this.AddLineData()}
+                                                >
                                                     <Icon>call_merge</Icon>
                                                 </Fab>
                                                 {this.state.data.length>1 && (
