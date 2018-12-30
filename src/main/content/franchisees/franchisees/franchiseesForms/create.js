@@ -8,10 +8,18 @@ import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import classNames from 'classnames';
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
 
 const styles = theme => ({
     root            : {
-        width: '100%'
+        width: '100%',
+        height: '100%'
     },
     button          : {
         marginTop  : theme.spacing.unit,
@@ -22,37 +30,45 @@ const styles = theme => ({
     },
     resetContainer  : {
         padding: theme.spacing.unit * 3
+    },
+    stepContainer : {
+        backgroundColor: theme.palette.main
+    },
+    cardContainer : {
+        width: '80%',
+        margin: 'auto'
+    },
+    cardHeader:{
+       backgroundColor: theme.palette.secondary.main
+    },
+    textField: {
+        width: '100%'
+    },
+    regionSelector: {
+        color: 'black'
+    },
+    cardHeading: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'white'
+    },
+    cardRegions: {
+       background: 'white',
     }
 });
 
 function getSteps()
 {
-    return ['Select campaign settings', 'Create an ad group', 'Create an ad'];
+    return ['Step 1', 'Step 2', 'Step 3'];
 }
 
-function getStepContent(step)
-{
-    switch ( step )
-    {
-        case 0:
-            return `For each ad campaign that you create, you can control how much
-              you're willing to spend on clicks and conversions, which networks
-              and geographical locations you want your ads to show on, and more.`;
-        case 1:
-            return 'An ad group contains one or more ads which target a shared set of keywords.';
-        case 2:
-            return `Try out different ad text to see what brings in the most customers,
-              and learn how to enhance your ads using features like ad extensions.
-              If you run into any problems with your ads, find out how to tell if
-              they're running and how to resolve approval issues.`;
-        default:
-            return 'Unknown step';
-    }
-}
 
 class CreateFranchiseesPage extends React.Component {
     state = {
-        activeStep: 0
+        activeStep: 0,
+        region: 2,
+        open: false
     };
 
     handleNext = () => {
@@ -72,23 +88,265 @@ class CreateFranchiseesPage extends React.Component {
             activeStep: 0
         });
     };
+    handleRegionsChange = event => {
+        this.setState({ [event.target.name]: event.target.value });
+    };
+
+    handleRegionsClose = () => {
+        this.setState({ open: false });
+    };
+
+    handleRegionsOpen = () => {
+        this.setState({ open: true });
+    };
+
 
     render()
     {
         const {classes} = this.props;
         const steps = getSteps();
         const {activeStep} = this.state;
+        const regions =[
+            {
+                value: 2,
+                label: "Buffalo"
+            },
+            {
+                value: 7,
+                label: "Detroit"
+            },
+            {
+                value: 9,
+                label: "Hartford"
+            },
+            {
+                value: 13,
+                label: "Las Vegas"
+            },
+            {
+                value: 14,
+                label: "Los Angeles/Colton"
+            },
+            {
+                value: 16,
+                label: "Miami"
+            },
+            {
+                value: 18,
+                label: "Minneapolis"
+            },
+            {
+                value: 20,
+                label: "New Jersey"
+            },
+            {
+                value: 21,
+                label: "New York"
+            },
+            {
+                value: 22,
+                label: "San Francisco/Oakland"
+            },
+            {
+                value: 23,
+                label: "Oklahoma City"
+            },
+            {
+                value: 24,
+                label: "Philadelphia"
+            },
+            {
+                value: 25,
+                label: "Sacramento"
+            },
+            {
+                value: 26,
+                label: "Washington DC"
+            },
+            {
+                value: 28,
+                label: "Jani-King Int'l, Inc."
+            },
+            {
+                value: 29,
+                label: "JANI-KING OF NEW MEXICO, INC"
+            },
+            {
+                value: 31,
+                label: "New Mexico"
+            },
+            {
+                value: 46,
+                label: "Houston"
+            },
+            {
+                value: 55,
+                label: "Pittsburgh"
+            },
+            {
+                value: 64,
+                label: "Tulsa"
+            },
+            {
+                value: 82,
+                label: "Reno"
+            }
+        ];
 
         return (
             <div className={classes.root}>
-                <Stepper activeStep={activeStep} orientation="vertical">
+                <Stepper activeStep={activeStep} orientation="vertical" className={classes.stepContainer}>
                     {steps.map((label, index) => {
                         return (
                             <Step key={label}>
-                                <StepLabel>{label}</StepLabel>
+                                <StepLabel><h2>{label}</h2></StepLabel>
                                 <StepContent>
-                                    <Typography>{getStepContent(index)}</Typography>
                                     <div className={classes.actionsContainer}>
+                                        {(activeStep === 0) && (
+                                        <Card className={classes.card}>
+                                            <form className={classes.container} noValidate autoComplete="off">
+                                            <div className={classNames(classes.cardHeader,"flex row flex-1 relative justify-between")}>
+                                                <div className={classNames("flex flex-row flex-1  p-8 sm:p-12  justify-between")}>
+                                                    <h1 className={classNames(classes.cardHeading)}>BUSINESS INFO</h1>
+                                                </div>
+                                                <div className={classNames("flex flex-row p-8 sm:p-12 justify-between justify-end")}>
+                                                    <Select
+                                                        open={this.state.open}
+                                                        onClose={this.handleRegionsClose}
+                                                        onOpen={this.handleRegionsOpen}
+                                                        value={this.state.region}
+                                                        onChange={this.handleRegionsChange}
+                                                        className={classes.cardRegions}
+                                                        inputProps={{
+                                                            name: 'Regions',
+                                                            id: 'franchiseesCreateRegionsSelector',
+                                                        }}
+                                                    >
+                                                        {regions.map(option => (
+                                                            <MenuItem key={option.value} value={option.value}>
+                                                                {option.label}
+                                                            </MenuItem>
+                                                        ))}
+                                                    </Select>
+                                                </div>
+                                            </div>
+                                               <CardContent className={classNames(classes.cardContainer)}>
+                                                   <br/>
+                                                    <Grid container spacing={24}>
+                                                        <Grid item xs>
+                                                            <TextField
+                                                                id="outlined-name"
+                                                                label="Name"
+                                                                className={classes.textField}
+                                                                margin="normal"
+                                                                variant="outlined"
+                                                                required
+                                                            />
+                                                        </Grid>
+                                                    </Grid>
+                                                   <Grid container spacing={24}>
+                                                       <Grid item xs>
+                                                           <TextField
+                                                               id="outlined-address1"
+                                                               label="Address"
+                                                               className={classes.textField}
+                                                               margin="normal"
+                                                               variant="outlined"
+                                                               required
+                                                           />
+                                                       </Grid>
+                                                       <Grid item xs>
+                                                           <TextField
+                                                               id="outlined-address2"
+                                                               className={classes.textField}
+                                                               margin="normal"
+                                                               variant="outlined"
+                                                           />
+                                                       </Grid>
+                                                   </Grid>
+                                                   <Grid container spacing={24}>
+                                                       <Grid item xs>
+                                                           <TextField
+                                                               id="outlined-city"
+                                                               label="City"
+                                                               className={classes.textField}
+                                                               margin="normal"
+                                                               variant="outlined"
+                                                               required
+                                                           />
+                                                       </Grid>
+                                                       <Grid item xs>
+                                                           <TextField
+                                                               id="outlined-state"
+                                                               label="State"
+                                                               className={classes.textField}
+                                                               margin="normal"
+                                                               variant="outlined"
+                                                               required
+                                                           />
+                                                       </Grid>
+                                                       <Grid item xs>
+                                                           <TextField
+                                                               id="outlined-zip"
+                                                               label="Zip"
+                                                               className={classes.textField}
+                                                               margin="normal"
+                                                               variant="outlined"
+                                                               required
+                                                           />
+                                                       </Grid>
+                                                   </Grid>
+                                                   <Grid container spacing={24}>
+                                                       <Grid item xs>
+                                                           <TextField
+                                                               id="outlined-phone"
+                                                               label="Phone"
+                                                               className={classes.textField}
+                                                               margin="normal"
+                                                               variant="outlined"
+                                                           />
+                                                       </Grid>
+                                                       <Grid item xs>
+                                                           <TextField
+                                                               id="outlined-email"
+                                                               label="E-mail"
+                                                               className={classes.textField}
+                                                               margin="normal"
+                                                               variant="outlined"
+                                                               required
+                                                           />
+                                                       </Grid>
+                                                   </Grid>
+                                               </CardContent>
+                                           </form>
+                                        </Card>
+                                        )}
+                                        {(activeStep === 1) && (
+                                            <Grid container spacing={24}>
+                                                <Grid item xs>
+                                                    <Paper className={classes.paper}>xs</Paper>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <Paper className={classes.paper}>xs</Paper>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <Paper className={classes.paper}>xs</Paper>
+                                                </Grid>
+                                            </Grid>
+                                        )}
+                                        {(activeStep === 2) && (
+                                            <Grid container spacing={24}>
+                                                <Grid item xs>
+                                                    <Paper className={classes.paper}>xs</Paper>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <Paper className={classes.paper}>xs</Paper>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <Paper className={classes.paper}>xs</Paper>
+                                                </Grid>
+                                            </Grid>
+                                        )}
                                         <div>
                                             <Button
                                                 disabled={activeStep === 0}
