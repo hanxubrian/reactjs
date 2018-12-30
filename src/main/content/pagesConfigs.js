@@ -22,8 +22,6 @@ import {ComissionsConfig} from "./comissions/comissions/comissionsConfig";
 import {AccountsReceivableConfig} from "./accounts-receivable/accounts-receivable/accounts-receivableConfig";
 import {BillRunConfig} from "./accounts-receivable/bill-run/bill-runConfig";
 import {InvoiceConfig} from "./accounts-receivable/Invoice/invoiceConfig";
-import {FranchiseesCreateConfig} from "./franchisees/franchisees/create/createConfig";
-
 export const pagesConfigs = [
     SigninPageConfig,
     ProfilePageConfig,
@@ -48,6 +46,5 @@ export const pagesConfigs = [
     ComissionsConfig,
     InvoiceConfig,
     BillRunConfig,
-    AccountsReceivableConfig,
-    FranchiseesCreateConfig
+    AccountsReceivableConfig
 ];

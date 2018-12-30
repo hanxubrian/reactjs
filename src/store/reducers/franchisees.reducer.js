@@ -21,6 +21,13 @@ const initialState = {
         checkedPending: true,
         checkedNonRenewed: true,
         checkedRepurchased: true
+    },
+    createFranchisees: {
+        type : 'new',
+        props: {
+            open: false
+        },
+        data : null
     }
 };
 
@@ -67,6 +74,32 @@ const franchisees = function(state = initialState, action) {
             return {
                 ...initialState
             }
+        }
+        case Actions.CREATE_FRANCHISEES_LIST:
+        {
+            return {
+                ...state,
+                createFranchisees: {
+                    type : 'new',
+                    props: {
+                        open: true
+                    },
+                    data : null
+                }
+            };
+        }
+        case Actions.CLOSE_CREATE_FRANCHISEES:
+        {
+            return {
+                ...state,
+                createFranchisees: {
+                    type : 'new',
+                    props: {
+                        open: false
+                    },
+                    data : null
+                }
+            };
         }
         default:
         {

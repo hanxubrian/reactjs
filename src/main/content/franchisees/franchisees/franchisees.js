@@ -20,13 +20,14 @@ import SummaryPanel from './SummaryPanel';
 import FilterPanel from './filterPanel';
 
 // third party
-
+import classNames from 'classnames';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import _ from 'lodash';
 
+import CreateFranchiseesPage from "./franchiseesForms/create"
 
-import classNames from 'classnames';
+
 
 const headerHeight = 80;
 
@@ -187,7 +188,15 @@ const styles = theme => ({
         '&:hover': {
             backgroundColor: theme.palette.primary.dark,
         }
-    }
+    },
+    sideButton          : {
+        backgroundColor: theme.palette.primary.light,
+        height: 46,
+        width: 46,
+        '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+        }
+    },
 });
 const defaultProps = {
     trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
@@ -549,11 +558,10 @@ class Franchisees extends Component {
 
     render()
     {
-        const { classes,toggleFilterPanelFranchisees, toggleSummaryPanelFranchisees, filterStateFranchisees, summaryStateFranchisees, deleteFranchisees} = this.props;
+        const { classes,toggleFilterPanelFranchisees,showCreteFranchisees, toggleSummaryPanelFranchisees, createFranchisees, filterStateFranchisees, summaryStateFranchisees, deleteFranchisees} = this.props;
         const { toggleSelection, toggleAll, isSelected, logSelection} = this;
 
         const { selectAll, selection } = this.state;
-
         return (
             <FusePageCustom
                 classes={{
@@ -579,19 +587,21 @@ class Franchisees extends Component {
                             </div>
                             <div className="flex flex-shrink items-center">
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <IconButton component={Link} to="/franchisees/create">
+                                    <Fab color="secondary" aria-label="add"
+                                         className={classNames(classes.sideButton, "mr-12")} onClick={showCreteFranchisees}>
                                         <Icon>add</Icon>
-                                    </IconButton>
+                                    </Fab>
                                 </FuseAnimate>
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <IconButton>
+                                    <Fab color="secondary" aria-label="add"
+                                         className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
                                         <Icon>mail_outline</Icon>
-                                    </IconButton>
+                                    </Fab>
                                 </FuseAnimate>
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <IconButton>
+                                    <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
                                         <Icon>print</Icon>
-                                    </IconButton>
+                                    </Fab>
                                 </FuseAnimate>
                             </div>
                         </div>
@@ -613,8 +623,8 @@ class Franchisees extends Component {
                 }
                 content={
                     <div className="flex-1 flex-col absolute w-full h-full">
-                        {this.state.temp && (
-                            <ReactTable
+                        {this.state.temp  && (!createFranchisees.props.open) && (
+                           <ReactTable
                                 data={this.state.temp}
                                 minRows = {0}
                                 onFetchData={this.fetchData}
@@ -879,6 +889,9 @@ class Franchisees extends Component {
                                 }}
                             />
                         )}
+                        {(this.state.temp && createFranchisees.props.open) && (
+                            <CreateFranchiseesPage/>
+                        )}
                     </div>
                 }
                 leftSidebarHeader={
@@ -930,7 +943,9 @@ function mapDispatchToProps(dispatch)
         toggleFilterPanelFranchisees: Actions.toggleFilterPanelFranchisees,
         toggleSummaryPanelFranchisees: Actions.toggleSummaryPanelFranchisees,
         deleteFranchisees: Actions.deleteFranchisees,
-        removeFranchisees: Actions.removeFranchisees
+        removeFranchisees: Actions.removeFranchisees,
+        showCreteFranchisees: Actions.showCreteFranchisees,
+        closeCreateFranchisees: Actions.closeCreateFranchisees
     }, dispatch);
 }
 
@@ -942,7 +957,8 @@ function mapStateToProps({franchisees,auth})
         transactionStatusFranchisees: franchisees.transactionStatusFranchisees,
         filterStateFranchisees: franchisees.bOpenedFilterPanelFranchisees,
         summaryStateFranchisees: franchisees.bOpenedSummaryPanelFranchisees,
-        regionId: auth.login.defaultRegionId
+        regionId: auth.login.defaultRegionId,
+        createFranchisees: franchisees.createFranchisees
     }
 }
 

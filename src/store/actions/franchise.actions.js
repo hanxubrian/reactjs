@@ -1,4 +1,5 @@
 import axios from "axios";
+import {OPEN_EDIT_INVOICE_DIALOG, OPEN_NEW_INVOICE_DIALOG} from "./invoice.actions";
 
 export const GET_ALL_FRANCHISEES = "[FRANCHISEES] GETS ALL";
 export const DELETE_SELECTED_FRANCHISEES = "[FRANCHISEES] DELETE SELECTED";
@@ -6,6 +7,9 @@ export const REMOVE_SELECTED_FRANCHISEES = "[FRANCHISEES] REMOVE SELECTED";
 export const TOGGLE_SUMMARY_PANEL_FRANCHISEES = "[FRANCHISEES] TOGGLE SUMMARY PANEL";
 export const TOGGLE_FILTER_STATUS_FRANCHISEES = "[FRANCHISEES] TOGGLE FILTER STATUS";
 export const TOGGLE_FILTER_PANEL_FRANCHISEES = "[FRANCHISEES] TOGGLE FILTER PANEL";
+export const CREATE_FRANCHISEES_LIST = "[FRANCHISEES] FRANCHISEES CREATE";
+export const CLOSE_CREATE_FRANCHISEES = "[FRANCHISEES] FRANCHISEES CLOSE";
+
 
 export function getFranchisees() {
     return dispatch => {
@@ -63,4 +67,19 @@ export function removeFranchisees(key, franchisees) {
             });
         });
     };
+}
+
+export function showCreteFranchisees()
+{
+    return {
+        type: CREATE_FRANCHISEES_LIST
+    }
+}
+
+export function closeCreateFranchisees(data)
+{
+    return {
+        type: CLOSE_CREATE_FRANCHISEES,
+        data
+    }
 }
