@@ -336,12 +336,9 @@ class InvoiceForm extends Component {
                                             {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
                                         </Typography>
                                     </CardContent>
-
                                 </Card>
                             </GridItem>
                             <GridItem xs={12} sm={6} md={6} className= "flex flex-row justify-end xs:flex-col">
-                                <div className="min-w-48 pt-20">
-                                </div>
                                 <Card className={classes.card}>
                                     <CardHeader title="Billing" className={classNames(classes.cardHeader, "flex-1")} />
                                     <CardContent>
@@ -363,38 +360,10 @@ class InvoiceForm extends Component {
                             </GridItem>
                         </GridContainer>
                     )}
-
-                    <GridContainer>
-                        <GridItem xs={12} sm={9} md={9} className="flex flex-row xs:flex-col">
-                            <TextField
-                                className={classes.formControl}
-                                label="Description"
-                                id="description"
-                                name="InvoiceDescription"
-                                value={this.state.InvoiceDescription}
-                                onChange={this.handleChange}
-                                variant="outlined"
-                                fullWidth
-                                multiline={true}
-                            />
-                        </GridItem>
-                    </GridContainer>
-                    <Divider variant="middle" className={classNames(classes.formControl)}/>
+                    <Divider variant="middle"/>
                     <div className="flex">
                         <InvoiceLineTable />
                     </div>
-                    {/*<div className="flex">*/}
-                        {/*<Button*/}
-                            {/*variant="contained"*/}
-                            {/*color="primary"*/}
-                            {/*onClick={() => {*/}
-                                {/*this.closeComposeDialog();*/}
-                            {/*}}*/}
-                            {/*disabled={!this.canBeSubmitted()}*/}
-                        {/*>*/}
-                            {/*Save & Close*/}
-                        {/*</Button>*/}
-                    {/*</div>*/}
                 </div>
             </FuseAnimate>
         );

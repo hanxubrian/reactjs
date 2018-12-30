@@ -370,6 +370,23 @@ class InvoiceLineTable extends React.Component {
             />
         );
     }
+    renderEditableMarkup(cellInfo, id) {
+        return (
+            <div
+                style={{ backgroundColor: "#fafafa", padding: 12 }}
+                contentEditable={cellInfo.billing==="Client Supplies" ? true: false}
+                suppressContentEditableWarning
+                onBlur={e => {
+                    const data = [...this.state.data];
+                    data[cellInfo.id][id] = e.target.innerHTML;
+                    this.setState({ data });
+                }}
+                dangerouslySetInnerHTML={{
+                    __html: this.state.data[cellInfo.id][id]
+                }}
+            />
+        );
+    }
 
     render()
     {
@@ -395,17 +412,8 @@ class InvoiceLineTable extends React.Component {
                             {stableSort(data, getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map(n => {
-                                    const isSelected = this.isSelected(n.id);
                                     return (
-                                        <TableRow
-                                            hover
-                                            onClick={event => this.handleClick(event, n.id)}
-                                            role="checkbox"
-                                            aria-checked={isSelected}
-                                            tabIndex={-1}
-                                            key={n.id}
-                                            selected={isSelected}
-                                        >
+                                        <TableRow hover>
                                             <TableCell component="td" scope="row" >
                                                 <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl)} style={{marginBottom: '0!important'}}>
                                                     <Select
@@ -480,10 +488,10 @@ class InvoiceLineTable extends React.Component {
                                             <TableCell>{this.renderEditable(n, 'description')}</TableCell>
                                             <TableCell numeric>{this.renderEditable(n, 'quantity')}</TableCell>
                                             <TableCell numeric>{this.renderEditable(n, 'amount')}</TableCell>
-                                            <TableCell numeric>{this.renderEditable(n, 'markup')}</TableCell>
+                                            <TableCell numeric>{this.renderEditableMarkup(n, 'markup')}</TableCell>
                                             <TableCell numeric>{this.renderEditable(n, 'extended')}</TableCell>
                                             <TableCell padding="checkbox">
-                                                <Checkbox checked={isSelected}/>
+                                                {/*<Checkbox checked={isSelected}/>*/}
                                             </TableCell>
                                         </TableRow>
                                     );
