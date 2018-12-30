@@ -363,9 +363,20 @@ class InvoiceForm extends Component {
                         </GridContainer>
                     )}
                     <Divider variant="middle"/>
-                    <div className="flex">
+                    <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col xs:mb-24">
                         <InvoiceLineTable />
-                    </div>
+                        </GridItem>
+                    </GridContainer>
+                    <Divider variant="middle"/>
+                    <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
+                        <GridItem xs={12} sm={8} md={8} className="flex flex-row xs:flex-col xs:mb-24">
+
+                        </GridItem>
+                        <GridItem xs={12} sm={4} md={4} className="flex flex-row xs:flex-col xs:mb-24">
+
+                        </GridItem>
+                    </GridContainer>
                 </div>
             </FuseAnimate>
         );

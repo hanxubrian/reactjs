@@ -266,7 +266,12 @@ const styles = theme => ({
     lineButton: {
         width: 32,
         height: 32,
-        minHeight: 32
+        minHeight: 32,
+        [theme.breakpoints.down('sm')]: {
+            width: 24,
+            height: 24,
+            minHeight: 24,
+        }
     },
     lineCancelButton:{
         width: 32,
@@ -276,6 +281,17 @@ const styles = theme => ({
         color: 'white',
         '&:hover':{
             backgroundColor: '#ff2a32',
+        },
+        [theme.breakpoints.down('sm')]: {
+            width: 24,
+            height: 24,
+            minHeight: 24,
+            padding: 0
+        }
+    },
+    tableCellAction: {
+        [theme.breakpoints.down('sm')]: {
+            padding: '0!important'
         }
     }
 });
@@ -508,8 +524,8 @@ class InvoiceLineTable extends React.Component {
                                             <TableCell numeric>{this.renderEditable(n, 'quantity')}</TableCell>
                                             <TableCell numeric>{this.renderEditable(n, 'amount')}</TableCell>
                                             <TableCell numeric>{this.renderEditableMarkup(n, 'markup')}</TableCell>
-                                            <TableCell numeric>{this.renderEditable(n, 'extended')}</TableCell>
-                                            <TableCell padding="checkbox">
+                                            <TableCell numeric>${parseFloat((n.amount*n.quantity)*(1+parseFloat(n.markup)/100)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</TableCell>
+                                            <TableCell padding="checkbox" className={classNames(classes.tableCellAction)}>
                                                 <Fab color="secondary" aria-label="add"
                                                      className={classNames(classes.lineButton, "mr-12")}
                                                      onClick={()=>this.AddLineData()}
