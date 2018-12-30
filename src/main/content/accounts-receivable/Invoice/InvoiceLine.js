@@ -6,25 +6,26 @@ import {withStyles} from '@material-ui/core/styles';
 //Material UI core and icons
 import {
     Table, TableBody, TableCell, TableHead, TableFooter, TablePagination, TableRow, TableSortLabel,
-    Toolbar, Typography, Paper, Checkbox, IconButton, Tooltip, Select, OutlinedInput, MenuItem, FormControl, InputLabel
+    Toolbar, Typography, Paper, Checkbox, IconButton, Tooltip, Select, OutlinedInput, MenuItem, FormControl
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import {lighten} from '@material-ui/core/styles/colorManipulator';
-import ReactDOM from "react-dom";
 
 let counter = 0;
 
-function createData(billing, service, fat, carbs, protein)
+function createData(billing, service, description, quantity=1, amount=0, markup=0, extended=0)
 {
     return {
         id: counter++,
         billing,
         service,
-        fat,
-        carbs,
-        protein
+        description,
+        quantity,
+        amount,
+        markup,
+        extended
     };
 }
 
@@ -269,10 +270,10 @@ const styles = theme => ({
 class InvoiceLineTable extends React.Component {
     state = {
         order      : 'asc',
-        orderBy    : 'calories',
+        orderBy    : 'billing',
         selected   : [],
         data       : [
-            createData("Regular Billing", "Adjust-Balance", 3.7, 67, 4.3),
+            createData("Regular Billing", "Adjust-Balance", "Invoice",1),
         ],
         page       : 0,
         rowsPerPage: 5,
@@ -351,6 +352,24 @@ class InvoiceLineTable extends React.Component {
     };
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
+
+    renderEditable(cellInfo, id) {
+        return (
+            <div
+                style={{ backgroundColor: "#fafafa", padding: 12 }}
+                contentEditable
+                suppressContentEditableWarning
+                onBlur={e => {
+                    const data = [...this.state.data];
+                    data[cellInfo.id][id] = e.target.innerHTML;
+                    this.setState({ data });
+                }}
+                dangerouslySetInnerHTML={{
+                    __html: this.state.data[cellInfo.id][id]
+                }}
+            />
+        );
+    }
 
     render()
     {
@@ -458,9 +477,11 @@ class InvoiceLineTable extends React.Component {
                                                     </Select>
                                                 </FormControl>
                                             </TableCell>
-                                            <TableCell numeric>{n.fat}</TableCell>
-                                            <TableCell numeric>{n.carbs}</TableCell>
-                                            <TableCell numeric>{n.protein}</TableCell>
+                                            <TableCell>{this.renderEditable(n, 'description')}</TableCell>
+                                            <TableCell numeric>{this.renderEditable(n, 'quantity')}</TableCell>
+                                            <TableCell numeric>{this.renderEditable(n, 'amount')}</TableCell>
+                                            <TableCell numeric>{this.renderEditable(n, 'markup')}</TableCell>
+                                            <TableCell numeric>{this.renderEditable(n, 'extended')}</TableCell>
                                             <TableCell padding="checkbox">
                                                 <Checkbox checked={isSelected}/>
                                             </TableCell>

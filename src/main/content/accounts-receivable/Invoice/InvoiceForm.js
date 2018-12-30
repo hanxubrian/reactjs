@@ -286,7 +286,7 @@ class InvoiceForm extends Component {
                                 )}
                             />
                         </GridItem>
-                        <GridItem xs={12} sm={2} md={2} className="flex flex-row">
+                        <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col xs:mb-24">
                             <TextField
                                 id="InvoiceDate"
                                 label="Invoice Date"
@@ -301,7 +301,7 @@ class InvoiceForm extends Component {
                                 fullWidth
                             />
                         </GridItem>
-                        <GridItem xs={12} sm={2} md={2} className="flex flex-row">
+                        <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
                             <TextField
                                 id="DueDate"
                                 label="Due Date"
@@ -319,7 +319,7 @@ class InvoiceForm extends Component {
                     </GridContainer>
                     {this.state.selectedCustomer && (
                         <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
-                            <GridItem xs={12} sm={6} md={6} className="flex flex-row">
+                            <GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col">
                                 <Card className={classes.card}>
                                     <CardHeader title="Customer" className={classNames(classes.cardHeader, "flex-1")} />
                                     <CardContent>
@@ -339,7 +339,7 @@ class InvoiceForm extends Component {
 
                                 </Card>
                             </GridItem>
-                            <GridItem xs={12} sm={6} md={6} className= "flex flex-row justify-end">
+                            <GridItem xs={12} sm={6} md={6} className= "flex flex-row justify-end xs:flex-col">
                                 <div className="min-w-48 pt-20">
                                 </div>
                                 <Card className={classes.card}>
@@ -365,7 +365,7 @@ class InvoiceForm extends Component {
                     )}
 
                     <GridContainer>
-                        <GridItem xs={12} sm={9} md={9} className="flex flex-row">
+                        <GridItem xs={12} sm={9} md={9} className="flex flex-row xs:flex-col">
                             <TextField
                                 className={classes.formControl}
                                 label="Description"
