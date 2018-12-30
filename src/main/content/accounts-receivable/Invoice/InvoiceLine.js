@@ -157,7 +157,6 @@ InvoiceLineTableHead.propTypes = {
     onRequestSort   : PropTypes.func.isRequired,
     onSelectAllClick: PropTypes.func.isRequired,
     order           : PropTypes.string.isRequired,
-    orderBy         : PropTypes.string.isRequired,
     rowCount        : PropTypes.number.isRequired
 };
 
@@ -331,7 +330,28 @@ class InvoiceLineTable extends React.Component {
 
     AddLineData=()=>{
         const data = [...this.state.data, createData()];
-        this.setState({data})
+        let id = 0;
+        let newData = data.map(record=>{
+            record.id = id++;
+            return record;
+        });
+
+        // this.setState({data: newData})
+        this.setState({data: newData})
+    };
+
+    removeLineData=(line)=>{
+        const data = [...this.state.data];
+        _.remove(data, function (row) {
+            return row.id === line.id;
+        });
+        let id = 0;
+        let newData = data.map(record=>{
+           record.id = id++;
+           return record;
+        });
+
+        this.setState({data: newData})
     };
 
     renderEditable(cellInfo, id) {
@@ -388,7 +408,6 @@ class InvoiceLineTable extends React.Component {
                             className={classNames(classes.InvoiceLineHeadRoot)}
                             numSelected={selected.length}
                             order={order}
-                            orderBy={orderBy}
                             onSelectAllClick={this.handleSelectAllClick}
                             onRequestSort={this.handleRequestSort}
                             rowCount={data.length}
@@ -484,6 +503,7 @@ class InvoiceLineTable extends React.Component {
                                                 </Fab>
                                                 {this.state.data.length>1 && (
                                                     <Fab aria-label="add"
+                                                         onClick={()=>this.removeLineData(n)}
                                                          className={classNames(classes.lineCancelButton, "mr-12")}>
                                                         <Icon>close</Icon>
                                                     </Fab>
