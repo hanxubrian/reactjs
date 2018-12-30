@@ -5,8 +5,8 @@ import {withStyles} from '@material-ui/core/styles';
 
 //Material UI core and icons
 import {
-    Table, TableBody, TableCell, TableHead, TableFooter, TablePagination, TableRow, TableSortLabel,
-    Toolbar, Typography, Paper, Checkbox, IconButton, Tooltip, Select, OutlinedInput, MenuItem, FormControl
+    Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
+    Toolbar, Typography, Paper, Checkbox, Icon, IconButton, Tooltip, Select, OutlinedInput, MenuItem, FormControl, Fab
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -139,12 +139,8 @@ class InvoiceLineTableHead extends React.Component {
                             </TableCell>
                         );
                     }, this)}
-                    <TableCell padding="checkbox">
-                        <Checkbox
-                            indeterminate={numSelected > 0 && numSelected < rowCount}
-                            checked={numSelected === rowCount}
-                            onChange={onSelectAllClick}
-                        />
+                    <TableCell padding="checkbox" style={{width: 100}}>
+                        Action
                     </TableCell>
                 </TableRow>
             </TableHead>
@@ -184,7 +180,7 @@ const toolbarStyles = theme => ({
     },
     title    : {
         flex: '0 0 auto'
-    }
+    },
 });
 
 let InvoiceLineTableToolbar = props => {
@@ -264,6 +260,18 @@ const styles = theme => ({
     },
     tableWrapper: {
         overflowX: 'auto'
+    },
+    lineButton: {
+        width: 32,
+        height: 32,
+        minHeight: 32
+    },
+    lineCancelButton:{
+        width: 32,
+        height: 32,
+        minHeight: 32,
+        backgroundColor: '#ff4850',
+        color: 'white'
     }
 });
 
@@ -276,7 +284,8 @@ class InvoiceLineTable extends React.Component {
             createData("Regular Billing", "Adjust-Balance", "Invoice",1),
         ],
         page       : 0,
-        rowsPerPage: 5,
+        rowsPerPage: 10,
+        labelWidth: 0
     };
 
     handleRequestSort = (event, property) => {
@@ -303,42 +312,6 @@ class InvoiceLineTable extends React.Component {
         this.setState({selected: []});
     };
 
-    handleClick = (event, id) => {
-        const {selected} = this.state;
-        const selectedIndex = selected.indexOf(id);
-        let newSelected = [];
-
-        if ( selectedIndex === -1 )
-        {
-            newSelected = newSelected.concat(selected, id);
-        }
-        else if ( selectedIndex === 0 )
-        {
-            newSelected = newSelected.concat(selected.slice(1));
-        }
-        else if ( selectedIndex === selected.length - 1 )
-        {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        }
-        else if ( selectedIndex > 0 )
-        {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1)
-            );
-        }
-
-        this.setState({selected: newSelected});
-    };
-
-    handleChangePage = (event, page) => {
-        this.setState({page});
-    };
-
-    handleChangeRowsPerPage = event => {
-        this.setState({rowsPerPage: event.target.value});
-    };
-
     handleChangeBilling = (event, n) => {
         let newData = this.state.data.map(row=>{
             let temp = row;
@@ -354,6 +327,11 @@ class InvoiceLineTable extends React.Component {
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     renderEditable(cellInfo, id) {
+        let prefix = '';
+        if (id==='amount' || id==='extended') prefix = "$";
+        let value= this.state.data[cellInfo.id][id];
+        if (id==='amount' || id==='extended')
+            value = parseFloat(this.state.data[cellInfo.id][id]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         return (
             <div
                 style={{ backgroundColor: "#fafafa", padding: 12 }}
@@ -361,11 +339,11 @@ class InvoiceLineTable extends React.Component {
                 suppressContentEditableWarning
                 onBlur={e => {
                     const data = [...this.state.data];
-                    data[cellInfo.id][id] = e.target.innerHTML;
+                    data[cellInfo.id][id] = (e.target.innerHTML).replace('$','').replace(',','');
                     this.setState({ data });
                 }}
                 dangerouslySetInnerHTML={{
-                    __html: this.state.data[cellInfo.id][id]
+                    __html: prefix + value
                 }}
             />
         );
@@ -396,7 +374,6 @@ class InvoiceLineTable extends React.Component {
 
         return (
             <Paper className={classes.root}>
-                <InvoiceLineTableToolbar numSelected={selected.length}/>
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table} aria-labelledby="tableTitle">
                         <InvoiceLineTableHead
@@ -413,7 +390,7 @@ class InvoiceLineTable extends React.Component {
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map(n => {
                                     return (
-                                        <TableRow hover>
+                                        <TableRow hover key={n.id}>
                                             <TableCell component="td" scope="row" >
                                                 <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl)} style={{marginBottom: '0!important'}}>
                                                     <Select
@@ -491,34 +468,28 @@ class InvoiceLineTable extends React.Component {
                                             <TableCell numeric>{this.renderEditableMarkup(n, 'markup')}</TableCell>
                                             <TableCell numeric>{this.renderEditable(n, 'extended')}</TableCell>
                                             <TableCell padding="checkbox">
-                                                {/*<Checkbox checked={isSelected}/>*/}
+                                                <Fab color="secondary" aria-label="add"
+                                                     className={classNames(classes.lineButton, "mr-12")}>
+                                                    <Icon>call_merge</Icon>
+                                                </Fab>
+                                                {this.state.data.length>1 && (
+                                                    <Fab aria-label="add"
+                                                         className={classNames(classes.lineCancelButton, "mr-12")}>
+                                                        <Icon>close</Icon>
+                                                    </Fab>
+                                                )}
                                             </TableCell>
                                         </TableRow>
                                     );
                                 })}
                             {emptyRows > 0 && (
-                                <TableRow style={{height: 49 * emptyRows}}>
-                                    <TableCell colSpan={6}/>
+                                <TableRow style={{height: 49 * emptyRows}} style={{display: 'none'}}>
+                                    <TableCell colSpan={8}/>
                                 </TableRow>
                             )}
                         </TableBody>
                     </Table>
                 </div>
-                <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={data.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    backIconButtonProps={{
-                        'aria-label': 'Previous Page'
-                    }}
-                    nextIconButtonProps={{
-                        'aria-label': 'Next Page'
-                    }}
-                    onChangePage={this.handleChangePage}
-                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                />
             </Paper>
         );
     }
