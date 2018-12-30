@@ -299,6 +299,7 @@ class InvoiceForm extends Component {
                                 }}
                                 variant="outlined"
                                 fullWidth
+                                required
                             />
                         </GridItem>
                         <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
@@ -314,6 +315,7 @@ class InvoiceForm extends Component {
                                 }}
                                 variant="outlined"
                                 fullWidth
+                                required
                             />
                         </GridItem>
                     </GridContainer>

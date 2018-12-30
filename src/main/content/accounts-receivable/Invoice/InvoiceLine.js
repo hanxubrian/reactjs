@@ -358,9 +358,12 @@ class InvoiceLineTable extends React.Component {
     };
 
     renderEditable(cellInfo, id) {
+        if (cellInfo.id>this.state.data.length-1) return;
         let prefix = '';
         if (id==='amount' || id==='extended') prefix = "$";
-        let value= this.state.data[cellInfo.id][id];
+        let value='';
+        if(this.state.data[cellInfo.id][id].length===0) return
+        value= this.state.data[cellInfo.id][id];
         if (id==='amount' || id==='extended')
             value = parseFloat(this.state.data[cellInfo.id][id]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         return (
@@ -380,6 +383,7 @@ class InvoiceLineTable extends React.Component {
         );
     }
     renderEditableMarkup(cellInfo, id) {
+        if (cellInfo.id>this.state.data.length-1) return;
         return (
             <div
                 style={{ backgroundColor: "#fafafa", padding: 12 }}
