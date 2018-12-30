@@ -248,8 +248,7 @@ class InvoiceForm extends Component {
     render()
     {
         const { classes, InvoiceForm, addInvoice, updateInvoice, removeInvoice} = this.props;
-        const { toggleSelection, toggleAll, isSelected, logSelection} = this;
-        const { selectAll, selection, value, suggestions } = this.state;
+        const { value, suggestions } = this.state;
 
         const autosuggestProps = {
             renderInputComponent,
@@ -259,6 +258,7 @@ class InvoiceForm extends Component {
             getSuggestionValue: this.getSuggestionValue,
             renderSuggestion,
         };
+        console.log('customers', this.props.customers);
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>

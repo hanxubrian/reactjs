@@ -174,7 +174,7 @@ class InvoiceApp extends Component {
         selection: [],
         selectAll: false,
         regionId: 0,
-        customers: [],
+        customers: null,
         ...newInvoiceState,
         value: '',
         selectedWork: ""
@@ -308,7 +308,7 @@ class InvoiceApp extends Component {
         this.setState({checkedOpen: this.props.transactionStatus.checkedEbill});
         this.setState({checkedOpen: this.props.transactionStatus.checkedPrint});
 
-        this.getInvoicesFromStatus()
+        this.getInvoicesFromStatus();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -316,6 +316,17 @@ class InvoiceApp extends Component {
             this.getInvoicesFromStatus(nextProps.invoices);
         if(this.props.invoices!==nextProps.invoices)
             this.getInvoicesFromStatus(nextProps.invoices);
+
+
+        if(nextProps.customers!==null && this.state.customers===null){
+            let temp = [];
+            let regions = nextProps.customers.Data.Regions
+
+            regions.map(x => {
+                temp = [...temp, ...x.Customers];
+            });
+            this.setState({customers: temp});
+        }
     }
 
 
