@@ -5,7 +5,7 @@ import {withStyles} from '@material-ui/core/styles';
 
 //Material UI core and icons
 import {
-    Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
+    Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,TableFooter,
     Toolbar, Typography, Paper, Checkbox, Icon, IconButton, Tooltip, Select, OutlinedInput, MenuItem, FormControl, Fab
 } from '@material-ui/core'
 
@@ -160,6 +160,16 @@ InvoiceLineTableHead.propTypes = {
     rowCount        : PropTypes.number.isRequired
 };
 
+class InvoiceLineTableFooter extends React.Component {
+    render()
+    {
+        return (
+            <TableFooter className={classNames("p-24")}>
+
+            </TableFooter>
+        )
+    }
+}
 const toolbarStyles = theme => ({
     root     : {
         paddingRight: theme.spacing.unit
@@ -258,7 +268,11 @@ const styles = theme => ({
         padding: "12px 24px 12px 12px!important"
     },
     table       : {
-        minWidth: 1020
+        minWidth: 1020,
+        '& .summary':{
+            fontSize: 16,
+            fontWeight: 700
+        }
     },
     tableWrapper: {
         overflowX: 'auto'
@@ -548,7 +562,24 @@ class InvoiceLineTable extends React.Component {
                                     <TableCell colSpan={8}/>
                                 </TableRow>
                             )}
+                            <TableRow>
+                                <TableCell rowSpan={3} />
+                                <TableCell className="border-0" colSpan={4}></TableCell>
+                                <TableCell className="summary" numeric>Subtotal</TableCell>
+                                <TableCell className="summary" align="right" numeric>$610.88</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell className="border-0" colSpan={4}></TableCell>
+                                <TableCell className="summary" numeric>Tax</TableCell>
+                                <TableCell className="summary" align="right" numeric>$100</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell className="border-0" colSpan={4}></TableCell>
+                                <TableCell className="summary" numeric>Grand Total</TableCell>
+                                <TableCell className="summary" align="right" numeric>$200</TableCell>
+                            </TableRow>
                         </TableBody>
+                        <InvoiceLineTableFooter/>
                     </Table>
                 </div>
             </Paper>
