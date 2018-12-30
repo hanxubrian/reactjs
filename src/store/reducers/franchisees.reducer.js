@@ -101,6 +101,32 @@ const franchisees = function(state = initialState, action) {
                 }
             };
         }
+        case Actions.OPEN_EDIT_FRANCHISEES_FORM:
+        {
+            return {
+                ...state,
+                createFranchisees: {
+                    type : 'edit',
+                    props: {
+                        open: true
+                    },
+                    data : action.data
+                }
+            };
+        }
+        case Actions.CLOSE_EDIT_FRANCHISEES_FORM:
+        {
+            return {
+                ...state,
+                createFranchisees: {
+                    type : 'edit',
+                    props: {
+                        open: false
+                    },
+                    data : null
+                }
+            };
+        }
         default:
         {
             return state;
