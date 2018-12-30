@@ -429,21 +429,21 @@ class InvoiceForm extends Component {
                                 <MenuItem value={23}>Regular Cleaning - Night</MenuItem>
                             </Select>
                         </FormControl>
-                        <FormControl className={classNames("flex ml-24")}>
-                            <RadioGroup
-                                aria-label="Work"
-                                name="selectedWork"
-                                className={classes.group}
-                                value={this.state.selectedWork}
-                                onChange={this.handleChange}
-                                className={classNames(classes.formControl, "flex flex-row ml-24")}
-                            >
-                                <FormControlLabel className="ml-36 mr-48" value="additional_billing_office" control={<Radio />} label="Additional Billing Office" />
-                                <FormControlLabel value="extrawork" control={<Radio />} label="Extra Work" />
-                                <FormControlLabel value="regularwork" control={<Radio />} label="Regular Billing" />
-                                <FormControlLabel value="client_supplies" control={<Radio />} label="Client Supplies" />
-                            </RadioGroup>
-                        </FormControl>
+                        {/*<FormControl className={classNames("flex ml-24")}>*/}
+                            {/*<RadioGroup*/}
+                                {/*aria-label="Work"*/}
+                                {/*name="selectedWork"*/}
+                                {/*className={classes.group}*/}
+                                {/*value={this.state.selectedWork}*/}
+                                {/*onChange={this.handleChange}*/}
+                                {/*className={classNames(classes.formControl, "flex flex-row ml-24")}*/}
+                            {/*>*/}
+                                {/*<FormControlLabel className="ml-36 mr-48" value="additional_billing_office" control={<Radio />} label="Additional Billing Office" />*/}
+                                {/*<FormControlLabel value="extrawork" control={<Radio />} label="Extra Work" />*/}
+                                {/*<FormControlLabel value="regularwork" control={<Radio />} label="Regular Billing" />*/}
+                                {/*<FormControlLabel value="client_supplies" control={<Radio />} label="Client Supplies" />*/}
+                            {/*</RadioGroup>*/}
+                        {/*</FormControl>*/}
                     </div>
                     <Divider variant="middle" className={classNames(classes.formControl,"w-full")}/>
                     <div className="flex">

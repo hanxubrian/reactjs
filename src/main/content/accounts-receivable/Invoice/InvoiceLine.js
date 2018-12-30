@@ -4,23 +4,25 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 
 //Material UI core and icons
-import {Table, TableBody, TableCell, TableHead, TableFooter, TablePagination, TableRow, TableSortLabel,
-    Toolbar, Typography, Paper, Checkbox, IconButton, Tooltip
+import {
+    Table, TableBody, TableCell, TableHead, TableFooter, TablePagination, TableRow, TableSortLabel,
+    Toolbar, Typography, Paper, Checkbox, IconButton, Tooltip, Select, OutlinedInput, MenuItem, FormControl, InputLabel
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import {lighten} from '@material-ui/core/styles/colorManipulator';
 import connect from "react-redux/es/connect/connect";
+import ReactDOM from "react-dom";
+import _ from "lodash";
 
 let counter = 0;
 
-function createData(name, calories, fat, carbs, protein)
+function createData(billing, calories, fat, carbs, protein)
 {
-    counter += 1;
     return {
-        id: counter,
-        name,
+        id: counter++,
+        billing,
         calories,
         fat,
         carbs,
@@ -263,23 +265,20 @@ class InvoiceLineTable extends React.Component {
         orderBy    : 'calories',
         selected   : [],
         data       : [
-            createData('Cupcake', 305, 3.7, 67, 4.3),
-            createData('Donut', 452, 25.0, 51, 4.9),
-            createData('Eclair', 262, 16.0, 24, 6.0),
-            createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-            createData('Gingerbread', 356, 16.0, 49, 3.9),
-            createData('Honeycomb', 408, 3.2, 87, 6.5),
-            createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-            createData('Jelly Bean', 375, 0.0, 94, 0.0),
-            createData('KitKat', 518, 26.0, 65, 7.0),
-            createData('Lollipop', 392, 0.2, 98, 0.0),
-            createData('Marshmallow', 318, 0, 81, 2.0),
-            createData('Nougat', 360, 19.0, 9, 37.0),
-            createData('Oreo', 437, 18.0, 63, 4.0)
+            createData('Regular Billing', 305, 3.7, 67, 4.3),
         ],
         page       : 0,
-        rowsPerPage: 5
+        rowsPerPage: 5,
+        labelWidth: 0,
     };
+
+    componentDidMount(){
+        if(this.InputLabelRef) {
+            this.setState({
+                labelWidth: ReactDOM.findDOMNode(this.InputLabelRef).offsetWidth
+            });
+        }
+    }
 
     handleRequestSort = (event, property) => {
         const orderBy = property;
@@ -341,6 +340,22 @@ class InvoiceLineTable extends React.Component {
         this.setState({rowsPerPage: event.target.value});
     };
 
+    handleChangeBilling = (event, n) => {
+        console.log('row=>', n);
+        console.log('event.target.value=>', event.target.value);
+        console.log('event.target.name=>', event.target.name);
+
+        let newData = this.state.data.map(row=>{
+            let temp = row;
+           if(n.id===row.id){
+               temp[event.target.name] = event.target.value
+           }
+           return temp;
+        });
+
+        this.setState({data: newData})
+    };
+
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     render()
@@ -368,6 +383,7 @@ class InvoiceLineTable extends React.Component {
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map(n => {
                                     const isSelected = this.isSelected(n.id);
+                                    console.log('row=', n);
                                     return (
                                         <TableRow
                                             hover
@@ -378,16 +394,36 @@ class InvoiceLineTable extends React.Component {
                                             key={n.id}
                                             selected={isSelected}
                                         >
-                                            <TableCell padding="checkbox">
-                                                <Checkbox checked={isSelected}/>
-                                            </TableCell>
-                                            <TableCell component="th" scope="row" padding="none">
-                                                {n.name}
+                                            <TableCell component="th" scope="row" >
+                                                <FormControl variant="outlined" className={classes.formControl} style={{marginBottom: '0!important'}}>
+                                                    <Select
+                                                        value={n.billing}
+                                                        onChange={(ev)=>this.handleChangeBilling(ev, n)}
+                                                        input={
+                                                            <OutlinedInput
+                                                                labelWidth={this.state.labelWidth}
+                                                                name="billing"
+                                                                id="billing"
+                                                            />
+                                                        }
+                                                    >
+                                                        <MenuItem value="">
+                                                            <em>Select</em>
+                                                        </MenuItem>
+                                                        <MenuItem value="Regular Billing">Regular Billing</MenuItem>
+                                                        <MenuItem value="Additional Billing Office">Additional Billing Office</MenuItem>
+                                                        <MenuItem value="Extra Work">Extra Work</MenuItem>
+                                                        <MenuItem value="Client Supplies">Client Supplies</MenuItem>
+                                                    </Select>
+                                                </FormControl>
                                             </TableCell>
                                             <TableCell numeric>{n.calories}</TableCell>
                                             <TableCell numeric>{n.fat}</TableCell>
                                             <TableCell numeric>{n.carbs}</TableCell>
                                             <TableCell numeric>{n.protein}</TableCell>
+                                            <TableCell padding="checkbox">
+                                                <Checkbox checked={isSelected}/>
+                                            </TableCell>
                                         </TableRow>
                                     );
                                 })}
