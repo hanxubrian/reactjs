@@ -273,7 +273,10 @@ const styles = theme => ({
         height: 32,
         minHeight: 32,
         backgroundColor: '#ff4850',
-        color: 'white'
+        color: 'white',
+        '&:hover':{
+            backgroundColor: '#ff2a32',
+        }
     }
 });
 
