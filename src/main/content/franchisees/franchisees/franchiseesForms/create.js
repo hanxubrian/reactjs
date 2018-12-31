@@ -55,6 +55,16 @@ const styles = theme => ({
     },
     cardRegions: {
        background: 'white',
+       color: 'black',
+       paddingLeft: '10px',
+       paddingRight: '10px',
+       borderRadius: '5px'
+    },
+    'cardRegions:before': {
+        borderColor: 'transparent'
+    },
+    'cardRegions:after': {
+        borderColor: 'transparent'
     }
 });
 
@@ -207,7 +217,7 @@ class CreateFranchiseesPage extends React.Component {
                                             <form className={classes.container} noValidate autoComplete="off">
                                             <div className={classNames(classes.cardHeader,"flex row flex-1 relative justify-between")}>
                                                 <div className={classNames("flex flex-row flex-1  p-8 sm:p-12  justify-between")}>
-                                                    <h1 className={classNames(classes.cardHeading)}>BUSINESS INFO</h1>
+                                                    <h1 className={classNames(classes.cardHeading)}>Business Info</h1>
                                                 </div>
                                                 <div className={classNames("flex flex-row p-8 sm:p-12 justify-between justify-end")}>
                                                     <Select
@@ -218,7 +228,7 @@ class CreateFranchiseesPage extends React.Component {
                                                         onChange={this.handleRegionsChange}
                                                         className={classes.cardRegions}
                                                         inputProps={{
-                                                            name: 'Regions',
+                                                            name: 'region',
                                                             id: 'franchiseesCreateRegionsSelector',
                                                         }}
                                                     >
