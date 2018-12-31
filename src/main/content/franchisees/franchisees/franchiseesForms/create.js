@@ -15,6 +15,11 @@ import classNames from 'classnames';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
+import {Fab, Icon} from "@material-ui/core";
+import FuseAnimate from "../../../../../@fuse/components/FuseAnimate/FuseAnimate";
+import Radio from '@material-ui/core/Radio';
+import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
+import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 
 const styles = theme => ({
     root            : {
@@ -54,18 +59,30 @@ const styles = theme => ({
         color: 'white'
     },
     cardRegions: {
-       background: 'white',
-       color: 'black',
        paddingLeft: '10px',
        paddingRight: '10px',
-       borderRadius: '5px'
+       borderRadius: '5px',
+        '& :before':{
+            borderBottom: '0px solid rgba(255, 255, 255, 0) !important'
+        },
+        '& :after': {
+            borderBottom: '0px solid rgba(255, 255, 255, 0) !important'
+        }
     },
-    'cardRegions:before': {
-        borderColor: 'transparent'
+    card: {
+        marginBottom: 50
     },
-    'cardRegions:after': {
-        borderColor: 'transparent'
-    }
+    buttonGroup: {
+        float: 'right'
+    },
+    sideButton          : {
+        backgroundColor: theme.palette.primary.light,
+        height: 46,
+        width: 46,
+        '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+        }
+    },
 });
 
 function getSteps()
@@ -78,7 +95,9 @@ class CreateFranchiseesPage extends React.Component {
     state = {
         activeStep: 0,
         region: 2,
-        open: false
+        open: false,
+        checkedEin: true,
+        selectedValue: 'ein'
     };
 
     handleNext = () => {
@@ -109,7 +128,9 @@ class CreateFranchiseesPage extends React.Component {
     handleRegionsOpen = () => {
         this.setState({ open: true });
     };
-
+    handleRadioChange = event => {
+        this.setState({ value: event.target.value });
+    };
 
     render()
     {
@@ -205,6 +226,7 @@ class CreateFranchiseesPage extends React.Component {
 
         return (
             <div className={classes.root}>
+                <form className={classes.container} noValidate autoComplete="off">
                 <Stepper activeStep={activeStep} orientation="vertical" className={classes.stepContainer}>
                     {steps.map((label, index) => {
                         return (
@@ -213,136 +235,595 @@ class CreateFranchiseesPage extends React.Component {
                                 <StepContent>
                                     <div className={classes.actionsContainer}>
                                         {(activeStep === 0) && (
-                                        <Card className={classes.card}>
-                                            <form className={classes.container} noValidate autoComplete="off">
-                                            <div className={classNames(classes.cardHeader,"flex row flex-1 relative justify-between")}>
-                                                <div className={classNames("flex flex-row flex-1  p-8 sm:p-12  justify-between")}>
-                                                    <h1 className={classNames(classes.cardHeading)}>Business Info</h1>
-                                                </div>
-                                                <div className={classNames("flex flex-row p-8 sm:p-12 justify-between justify-end")}>
-                                                    <Select
-                                                        open={this.state.open}
-                                                        onClose={this.handleRegionsClose}
-                                                        onOpen={this.handleRegionsOpen}
-                                                        value={this.state.region}
-                                                        onChange={this.handleRegionsChange}
-                                                        className={classes.cardRegions}
-                                                        inputProps={{
-                                                            name: 'region',
-                                                            id: 'franchiseesCreateRegionsSelector',
-                                                        }}
-                                                    >
-                                                        {regions.map(option => (
-                                                            <MenuItem key={option.value} value={option.value}>
-                                                                {option.label}
-                                                            </MenuItem>
-                                                        ))}
-                                                    </Select>
-                                                </div>
-                                            </div>
-                                               <CardContent className={classNames(classes.cardContainer)}>
-                                                   <br/>
-                                                    <Grid container spacing={24}>
-                                                        <Grid item xs>
-                                                            <TextField
-                                                                id="outlined-name"
-                                                                label="Name"
-                                                                className={classes.textField}
-                                                                margin="normal"
-                                                                variant="outlined"
-                                                                required
-                                                            />
+                                            <div className={classNames(classes.firstStep)}>
+                                                <Card className={classes.card}>
+                                                    <div className={classNames(classes.cardHeader,"flex row flex-1 relative justify-between")}>
+                                                        <div className={classNames("flex flex-row flex-1  p-8 sm:p-12  justify-between")}>
+                                                            <h1 className={classNames(classes.cardHeading)}>Business Info</h1>
+                                                        </div>
+                                                        <div className={classNames("flex flex-row p-8 sm:p-12 justify-between justify-end")}>
+                                                            <Select
+                                                                open={this.state.open}
+                                                                onClose={this.handleRegionsClose}
+                                                                onOpen={this.handleRegionsOpen}
+                                                                value={this.state.region}
+                                                                onChange={this.handleRegionsChange}
+                                                                className={classes.cardRegions}
+                                                                inputProps={{
+                                                                    name: 'region',
+                                                                    id: 'franchiseesCreateRegionsSelector',
+                                                                }}
+                                                            >
+                                                                {regions.map(option => (
+                                                                    <MenuItem key={option.value} value={option.value}>
+                                                                        {option.label}
+                                                                    </MenuItem>
+                                                                ))}
+                                                            </Select>
+                                                        </div>
+                                                    </div>
+                                                    <CardContent className={classNames(classes.cardContainer)}>
+                                                        <br/>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-name"
+                                                                    label="Name"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
                                                         </Grid>
-                                                    </Grid>
-                                                   <Grid container spacing={24}>
-                                                       <Grid item xs>
-                                                           <TextField
-                                                               id="outlined-address1"
-                                                               label="Address"
-                                                               className={classes.textField}
-                                                               margin="normal"
-                                                               variant="outlined"
-                                                               required
-                                                           />
-                                                       </Grid>
-                                                       <Grid item xs>
-                                                           <TextField
-                                                               id="outlined-address2"
-                                                               className={classes.textField}
-                                                               margin="normal"
-                                                               variant="outlined"
-                                                           />
-                                                       </Grid>
-                                                   </Grid>
-                                                   <Grid container spacing={24}>
-                                                       <Grid item xs>
-                                                           <TextField
-                                                               id="outlined-city"
-                                                               label="City"
-                                                               className={classes.textField}
-                                                               margin="normal"
-                                                               variant="outlined"
-                                                               required
-                                                           />
-                                                       </Grid>
-                                                       <Grid item xs>
-                                                           <TextField
-                                                               id="outlined-state"
-                                                               label="State"
-                                                               className={classes.textField}
-                                                               margin="normal"
-                                                               variant="outlined"
-                                                               required
-                                                           />
-                                                       </Grid>
-                                                       <Grid item xs>
-                                                           <TextField
-                                                               id="outlined-zip"
-                                                               label="Zip"
-                                                               className={classes.textField}
-                                                               margin="normal"
-                                                               variant="outlined"
-                                                               required
-                                                           />
-                                                       </Grid>
-                                                   </Grid>
-                                                   <Grid container spacing={24}>
-                                                       <Grid item xs>
-                                                           <TextField
-                                                               id="outlined-phone"
-                                                               label="Phone"
-                                                               className={classes.textField}
-                                                               margin="normal"
-                                                               variant="outlined"
-                                                           />
-                                                       </Grid>
-                                                       <Grid item xs>
-                                                           <TextField
-                                                               id="outlined-email"
-                                                               label="E-mail"
-                                                               className={classes.textField}
-                                                               margin="normal"
-                                                               variant="outlined"
-                                                               required
-                                                           />
-                                                       </Grid>
-                                                   </Grid>
-                                               </CardContent>
-                                           </form>
-                                        </Card>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-address1"
+                                                                    label="Address"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-address2"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-city"
+                                                                    label="City"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-state"
+                                                                    label="State"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-zip"
+                                                                    label="Zip"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-phone"
+                                                                    label="Phone"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-email"
+                                                                    label="E-mail"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                    </CardContent>
+                                                </Card>
+                                                <Card className={classes.card}>
+                                                    <div className={classNames(classes.cardHeader,"flex row flex-1 relative justify-between")}>
+                                                        <div className={classNames("flex flex-row flex-1  p-8 sm:p-12  justify-between")}>
+                                                            <h1 className={classNames(classes.cardHeading)}>Contact</h1>
+                                                        </div>
+                                                    </div>
+                                                    <CardContent className={classNames(classes.cardContainer)}>
+                                                        <br/>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-name"
+                                                                    label="Name"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-address1"
+                                                                    label="Address"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-address2"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-city"
+                                                                    label="City"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-state"
+                                                                    label="State"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-zip"
+                                                                    label="Zip"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-phone"
+                                                                    label="Phone"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-ext"
+                                                                    label="Ext"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                 <TextField
+                                                                    id="outlined-cell"
+                                                                    label="Cell"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                 />
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-cell"
+                                                                    label="E-mail"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                    </CardContent>
+                                                </Card>
+                                            </div>
                                         )}
                                         {(activeStep === 1) && (
-                                            <Grid container spacing={24}>
-                                                <Grid item xs>
-                                                    <Paper className={classes.paper}>xs</Paper>
-                                                </Grid>
-                                                <Grid item xs>
-                                                    <Paper className={classes.paper}>xs</Paper>
-                                                </Grid>
-                                                <Grid item xs>
-                                                    <Paper className={classes.paper}>xs</Paper>
-                                                </Grid>
-                                            </Grid>
+                                            <div className={classNames(classes.secondStep)}>
+                                                <Card className={classes.card}>
+                                                    <div className={classNames(classes.cardHeader,"flex row flex-1 relative justify-between")}>
+                                                        <div className={classNames("flex flex-row flex-1  p-8 sm:p-12  justify-between")}>
+                                                            <h1 className={classNames(classes.cardHeading)}>Owner</h1>
+                                                        </div>
+                                                        <div className={classNames("flex flex-row p-8 sm:p-12 justify-between justify-end")}>
+                                                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                                <Fab color="secondary" aria-label="add"
+                                                                     className={classNames(classes.sideButton, "mr-12")}>
+                                                                    <Icon>add</Icon>
+                                                                </Fab>
+                                                            </FuseAnimate>
+                                                        </div>
+                                                    </div>
+                                                    <CardContent className={classNames(classes.cardContainer)}>
+                                                        <br/>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-name"
+                                                                    label="Name"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-address1"
+                                                                    label="Address"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-address2"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-city"
+                                                                    label="City"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-state"
+                                                                    label="State"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-zip"
+                                                                    label="Zip"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-phone"
+                                                                    label="Phone"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-email"
+                                                                    label="E-mail"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                    </CardContent>
+                                                </Card>
+                                                <Card className={classes.card}>
+                                                    <div className={classNames(classes.cardHeader,"flex row flex-1 relative justify-between")}>
+                                                        <div className={classNames("flex flex-row flex-1  p-8 sm:p-12  justify-between")}>
+                                                            <h1 className={classNames(classes.cardHeading)}>Financial Section</h1>
+                                                        </div>
+                                                    </div>
+                                                    <CardContent className={classNames(classes.cardContainer)}>
+                                                        <br/>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <Grid item xs>
+                                                                    <Radio
+                                                                        checked={this.state.selectedValue === 'ein'}
+                                                                        onChange={this.handleRadioChange}
+                                                                        value="EIN"
+                                                                        name="radio-ein"
+                                                                        aria-label="EIN"
+                                                                        label="EIN"
+                                                                        labelPlacement="start"
+                                                                    />
+                                                                </Grid>
+                                                                <Grid item xs>
+                                                                    <Radio
+                                                                        checked={this.state.selectedValue === 'ssn'}
+                                                                        onChange={this.handleRadioChange}
+                                                                        value="SSN"
+                                                                        name="radio-ssn"
+                                                                        aria-label="SSN"
+                                                                        label="SSN"
+                                                                        labelPlacement="start"
+                                                                    />
+                                                                </Grid>
+                                                            </Grid>
+                                                            <Grid item xs>
+
+                                                            </Grid>
+                                                            <Grid item xs>
+
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-address1"
+                                                                    label="Address"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-address2"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-city"
+                                                                    label="City"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-state"
+                                                                    label="State"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-zip"
+                                                                    label="Zip"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-phone"
+                                                                    label="Phone"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-ext"
+                                                                    label="Ext"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-cell"
+                                                                    label="Cell"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-cell"
+                                                                    label="E-mail"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                    </CardContent>
+                                                </Card>
+                                                <Card className={classes.card}>
+                                                    <div className={classNames(classes.cardHeader,"flex row flex-1 relative justify-between")}>
+                                                        <div className={classNames("flex flex-row flex-1  p-8 sm:p-12  justify-between")}>
+                                                            <h1 className={classNames(classes.cardHeading)}>Billing Setting Section</h1>
+                                                        </div>
+                                                    </div>
+                                                    <CardContent className={classNames(classes.cardContainer)}>
+                                                        <br/>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-name"
+                                                                    label="Name"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-address1"
+                                                                    label="Address"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-address2"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-city"
+                                                                    label="City"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-state"
+                                                                    label="State"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-zip"
+                                                                    label="Zip"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={24}>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-phone"
+                                                                    label="Phone"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-ext"
+                                                                    label="Ext"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-cell"
+                                                                    label="Cell"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid>
+                                                            <Grid item xs>
+                                                                <TextField
+                                                                    id="outlined-cell"
+                                                                    label="E-mail"
+                                                                    className={classes.textField}
+                                                                    margin="normal"
+                                                                    variant="outlined"
+                                                                    required
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                    </CardContent>
+                                                </Card>
+                                            </div>
                                         )}
                                         {(activeStep === 2) && (
                                             <Grid container spacing={24}>
@@ -358,6 +839,7 @@ class CreateFranchiseesPage extends React.Component {
                                             </Grid>
                                         )}
                                         <div>
+                                        <div className={classNames(classes.buttonGroup)} >
                                             <Button
                                                 disabled={activeStep === 0}
                                                 onClick={this.handleBack}
@@ -374,9 +856,10 @@ class CreateFranchiseesPage extends React.Component {
                                                 {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                                             </Button>
                                         </div>
+                                        </div>
                                     </div>
                                 </StepContent>
-                            </Step>
+                             </Step>
                         );
                     })}
                 </Stepper>
@@ -388,6 +871,7 @@ class CreateFranchiseesPage extends React.Component {
                         </Button>
                     </Paper>
                 )}
+                </form>
             </div>
         );
     }
