@@ -118,7 +118,7 @@ const invoices = function(state = initialState, action) {
         {
             return {
                 ...state,
-                invoiceForm: {...state.invoiceForm, data: action.payload}
+                invoiceForm: {...state.invoiceForm, data: {line: action.payload}}
             }
         }
         default:
