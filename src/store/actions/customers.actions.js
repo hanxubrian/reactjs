@@ -8,10 +8,10 @@ export const TOGGLE_FILTER_STATUS = "[CUSTOMERS] TOGGLE FILTER STATUS";
 export const TOGGLE_FILTER_PANEL = "[CUSTOMERS] TOGGLE FILTER PANEL";
 
 // for Add/Edit
-export const OPEN_NEW_CUSTOMER_DIALOG = '[CUSTOMERS APP] OPEN NEW CUSTOMER DIALOG';
-export const CLOSE_NEW_CUSTOMER_DIALOG = '[CUSTOMERS APP] CLOSE NEW CUSTOMER DIALOG';
-export const OPEN_EDIT_CUSTOMER_DIALOG = '[CUSTOMERS APP] OPEN EDIT CUSTOMER DIALOG';
-export const CLOSE_EDIT_CUSTOMER_DIALOG = '[CUSTOMERS APP] CLOSE EDIT CUSTOMER DIALOG';
+export const OPEN_NEW_CUSTOMER_FORM = '[CUSTOMERS APP] OPEN NEW CUSTOMER FORM';
+export const CLOSE_NEW_CUSTOMER_FORM = '[CUSTOMERS APP] CLOSE NEW CUSTOMER FORM';
+export const OPEN_EDIT_CUSTOMER_FORM = '[CUSTOMERS APP] OPEN EDIT CUSTOMER FORM';
+export const CLOSE_EDIT_CUSTOMER_FORM = '[CUSTOMERS APP] CLOSE EDIT CUSTOMER FORM';
 export const ADD_CUSTOMER = '[CUSTOMERS APP] ADD CUSTOMER';
 export const UPDATE_CUSTOMER = '[CUSTOMERS APP] UPDATE CUSTOMER';
 
@@ -73,32 +73,32 @@ export function removeCustomer(key, customers) {
     };
 }
 
-export function openNewCustomerDialog()
+export function openNewCustomerForm()
 {
     return {
-        type: OPEN_NEW_CUSTOMER_DIALOG
+        type: OPEN_NEW_CUSTOMER_FORM
     }
 }
 
-export function closeNewCustomerDialog()
+export function closeNewCustomerForm()
 {
     return {
-        type: CLOSE_NEW_CUSTOMER_DIALOG
+        type: CLOSE_NEW_CUSTOMER_FORM
     }
 }
 
-export function openEditCustomerDialog(data)
+export function openEditCustomerForm(data)
 {
     return {
-        type: OPEN_EDIT_CUSTOMER_DIALOG,
+        type: OPEN_EDIT_CUSTOMER_FORM,
         data
     }
 }
 
-export function closeEditCustomerDialog()
+export function closeEditCustomerForm()
 {
     return {
-        type: CLOSE_EDIT_CUSTOMER_DIALOG
+        type: CLOSE_EDIT_CUSTOMER_FORM
     }
 }
 export function addCustomer(newCustomer)

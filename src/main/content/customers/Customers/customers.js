@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 // core components
-import { Hidden, Icon, IconButton, Fab, Input, Paper, TextField, Button, Typography } from '@material-ui/core';
+import { Hidden, Icon, IconButton, Fab, Input, Paper, TextField, Button, Typography, Toolbar } from '@material-ui/core';
 
 // theme components
 import { FusePageCustom, FuseAnimate, FuseSearch } from '@fuse';
@@ -31,7 +31,8 @@ import classNames from 'classnames';
 //table pagination
 import JanikingPagination from './../../../../Commons/JanikingPagination';
 
-import CustomerDialog from './CustomerDialog';
+import CustomerForm from './CustomerForm';
+import CustomerListContent from './CustomerListContent';
 
 const headerHeight = 80;
 
@@ -294,6 +295,10 @@ class Customers extends Component {
 		console.log("selection:", this.state.selection);
 	};
 
+	closeComposeForm = () => {
+		this.props.customerForm.type === 'create' ? this.props.closeEditCustomerForm() : this.props.closeNewCustomerForm();
+	};
+
 	constructor(props) {
 		super(props);
 
@@ -422,6 +427,14 @@ class Customers extends Component {
 		}
 	};
 
+	canBeSubmitted() {
+		return true;
+		const { name } = this.state;
+		return (
+			name.length > 0
+		);
+	}
+
 	removeCustomers = () => {
 		if (this.state.selection.length == 0) {
 			alert("Please choose customer(s) to delete");
@@ -439,27 +452,14 @@ class Customers extends Component {
 			page: state.page,
 		});
 	}
-	capital_letter(str) {
-		str = str.split(" ").map(x => {
-			if (x.length > 1) {
-				return x[0].toUpperCase() + x.substr(1).toLowerCase();
-			} else if (x.length > 0) {
-				return x[0].toUpperCase();
-			} else {
 
-			}
-		});
-
-		return str.join(" ");
-	}
 	render() {
-		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteCustomersAction } = this.props;
+		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteCustomersAction, openNewCustomerForm, customerForm } = this.props;
 
 		const { toggleSelection, toggleAll, isSelected, logSelection } = this;
 
 		const { selectAll, selection } = this.state;
 
-		const { openNewCustomerDialog } = this.props;
 		return (
 			<React.Fragment >
 				<FusePageCustom
@@ -472,366 +472,164 @@ class Customers extends Component {
 						content: classes.content
 					}}
 					header={
-						<div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
-							<div className="flex flex-row flex-1 justify-between">
-								<div className="flex flex-shrink items-center">
-									<div className="flex items-center">
+						<div className="flex w-full items-center">
+							{(this.state.temp && !customerForm.props.open) && (
+								<div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
+									<div className="flex flex-row flex-1 justify-between">
+										<div className="flex flex-shrink items-center">
+											<div className="flex items-center">
+												<FuseAnimate animation="transition.expandIn" delay={300}>
+													<Icon className="text-32 mr-12">account_box</Icon>
+												</FuseAnimate>
+												<FuseAnimate animation="transition.slideLeftIn" delay={300}>
+													<Typography variant="h6" className="hidden sm:flex">Customers | Customers</Typography>
+												</FuseAnimate>
+											</div>
+										</div>
+										<div className="flex flex-shrink items-center">
+											<FuseAnimate animation="transition.expandIn" delay={300}>
+												<Fab color="secondary" aria-label="add"
+													className={classNames(classes.sideButton, "mr-12")} onClick={openNewCustomerForm}>
+													<Icon>add</Icon>
+												</Fab>
+											</FuseAnimate>
+											<FuseAnimate animation="transition.expandIn" delay={300}>
+												<Fab color="secondary" aria-label="add"
+													className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
+													<Icon>mail_outline</Icon>
+												</Fab>
+											</FuseAnimate>
+											<FuseAnimate animation="transition.expandIn" delay={300}>
+												<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
+													<Icon>print</Icon>
+												</Fab>
+											</FuseAnimate>
+										</div>
+									</div>
+									<div className="flex flex-none items-end" style={{ display: 'none' }}>
+										<FuseAnimate animation="transition.expandIn" delay={600}>
+											<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => openNewCustomerForm}>
+												<Icon>add</Icon>
+											</Fab>
+										</FuseAnimate>
 										<FuseAnimate animation="transition.expandIn" delay={300}>
-											<Icon className="text-32 mr-12">account_box</Icon>
+											<Fab color="primary" aria-label="add"
+												className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
+												<Icon>mail_outline</Icon>
+											</Fab>
 										</FuseAnimate>
-										<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-											<Typography variant="h6" className="hidden sm:flex">Customers | Customers</Typography>
+										<FuseAnimate animation="transition.expandIn" delay={300}>
+											<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
+												<Icon>print</Icon>
+											</Fab>
 										</FuseAnimate>
+										{selection.length > 0 && (
+											<FuseAnimate animation="transition.expandIn" delay={600}>
+												<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeInvoices()}>
+													<Icon>delete</Icon>
+												</Fab>
+											</FuseAnimate>
+										)}
 									</div>
 								</div>
-								<div className="flex flex-shrink items-center">
-									<FuseAnimate animation="transition.expandIn" delay={300}>
-										<IconButton onClick={openNewCustomerDialog}>
-											<Icon>add</Icon>
-										</IconButton>
-									</FuseAnimate>
-									<FuseAnimate animation="transition.expandIn" delay={300}>
-										<IconButton>
-											<Icon>mail_outline</Icon>
-										</IconButton>
-									</FuseAnimate>
-									<FuseAnimate animation="transition.expandIn" delay={300}>
-										<IconButton>
-											<Icon>print</Icon>
-										</IconButton>
-									</FuseAnimate>
+							)}
+							{(this.state.temp && customerForm.props.open) && (
+								<div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
+									<div className="flex flex-row flex-1 justify-between">
+										<div className="flex flex-shrink items-center">
+											<div className="flex items-center">
+												<FuseAnimate animation="transition.expandIn" delay={300}>
+													<Toolbar className="pl-12 pr-0">
+														<img className="mr-12" src="assets/images/invoices/invoice-icon-white.png" style={{ width: 32, height: 32 }} />
+													</Toolbar>
+												</FuseAnimate>
+												<FuseAnimate animation="transition.slideLeftIn" delay={300}>
+													<Typography variant="h6" className="hidden sm:flex">Customers | New Customers</Typography>
+												</FuseAnimate>
+											</div>
+										</div>
+										<div className="flex flex-shrink items-center">
+											<FuseAnimate animation="transition.expandIn" delay={300}>
+												<Button
+													variant="contained"
+													color="primary"
+													className={classNames(classes.button, "mr-12")}
+													onClick={() => {
+														this.closeComposeForm();
+													}}
+													disabled={!this.canBeSubmitted()}
+												>
+													Discard
+													{/* Save & Close */}
+												</Button>
+											</FuseAnimate>
+											<FuseAnimate animation="transition.expandIn" delay={300}>
+												<Button
+													variant="contained"
+													color="primary"
+													className={classNames(classes.button, "mr-12")}
+													onClick={() => {
+														this.closeComposeForm();
+													}}
+													disabled={!this.canBeSubmitted()}
+												>
+													Save
+													{/* Save & Add more */}
+												</Button>
+											</FuseAnimate>
+											<FuseAnimate animation="transition.expandIn" delay={300}>
+												<Button
+													variant="contained"
+													color="primary"
+													className={classes.button}
+													onClick={() => {
+														this.closeComposeForm();
+													}}
+													disabled={!this.canBeSubmitted()}
+												>
+													Close
+                                                </Button>
+											</FuseAnimate>
+
+
+										</div>
+									</div>
+									<div className="flex flex-none items-end" style={{ display: 'none' }}>
+										<FuseAnimate animation="transition.expandIn" delay={600}>
+											<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
+												<Icon>add</Icon>
+											</Fab>
+										</FuseAnimate>
+										<FuseAnimate animation="transition.expandIn" delay={300}>
+											<Fab color="primary" aria-label="add"
+												className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
+												<Icon>mail_outline</Icon>
+											</Fab>
+										</FuseAnimate>
+										<FuseAnimate animation="transition.expandIn" delay={300}>
+											<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
+												<Icon>print</Icon>
+											</Fab>
+										</FuseAnimate>
+										{selection.length > 0 && (
+											<FuseAnimate animation="transition.expandIn" delay={600}>
+												<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeInvoices()}>
+													<Icon>delete</Icon>
+												</Fab>
+											</FuseAnimate>
+										)}
+									</div>
 								</div>
-							</div>
-							<div className="flex flex-none items-end" style={{ display: 'none' }}>
-								<FuseAnimate animation="transition.expandIn" delay={600}>
-									<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
-										<Icon>add</Icon>
-									</Fab>
-								</FuseAnimate>
-								{selection.length > 0 && (
-									<FuseAnimate animation="transition.expandIn" delay={600}>
-										<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeCustomers()}>
-											<Icon>delete</Icon>
-										</Fab>
-									</FuseAnimate>
-								)}
-							</div>
+							)}
 						</div>
 					}
 					content={
 						<div className="flex-1 flex-col absolute w-full h-full">
-							{this.state.temp && (
-								<ReactTable
-									PaginationComponent={JanikingPagination}
-									totalRecords={this.state.temp.length}
-									data={this.state.temp}
-									minRows={0}
-									onFetchData={this.fetchData}
-									getTheadGroupProps={(state, rowInfo, column, instance) => {
-										return {
-											style: {
-												padding: "10px 10px",
-												fontSize: 16,
-												fontWeight: 700
-											},
-
-										}
-									}}
-									getTheadGroupThProps={(state, rowInfo, column, instance) => {
-										return {
-											style: {
-												padding: "10px 10px",
-												fontSize: 18,
-												fontWeight: 700,
-											},
-											className: classNames("flex items-center justify-start")
-										}
-									}}
-									getTheadThProps={(state, rowInfo, column, instance) => {
-										let border = '1px solid rgba(255,255,255,.2)';
-										if (column.Header === 'Actions') border = 'none';
-
-										return {
-											style: {
-												fontSize: '1.6rem',
-												fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
-												fontWeight: 400,
-												lineHeight: 1.75,
-												color: 'white',
-												borderRight: border
-											},
-										}
-									}}
-									getTheadProps={(state, rowInfo, column, instance) => {
-										return {
-											style: {
-												fontSize: 13,
-											},
-											className: classes.tableTheadRow
-										}
-									}}
-									getTdProps={(state, rowInfo, column, instance) => {
-										let tdClass = 'flex items-center justify-center';
-										if (column.id === 'CustomerNo' ||
-											column.id === 'Phone' ||
-											column.id === 'AccountTypeListName' ||
-											column.id === 'StatusName')
-											tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
-
-										return {
-											style: {
-												textAlign: 'center',
-												flexDirection: 'row',
-												fontSize: 12,
-												padding: "0",
-											},
-										}
-									}}
-									getTrProps={(state, rowInfo, column) => {
-										return {
-											className: "cursor-pointer",
-											onClick: (e, handleOriginal) => {
-												if (rowInfo) {
-													alert('ok');
-													// openEditContactDialog(rowInfo.original);
-												}
-											}
-										}
-									}}
-									columns={[
-										{
-											Header: (instance) => (
-												<div className="flex items-center">
-													<Hidden smDown>
-														<Button
-															onClick={(ev) => toggleFilterPanel()}
-															aria-label="toggle filter panel"
-															color="secondary"
-															disabled={filterState ? true : false}
-															className={classNames(classes.filterPanelButton)}
-														>
-															<img className={classes.imageIcon} src="assets/images/invoices/filter.png" />
-														</Button>
-													</Hidden>
-													<Hidden smUp>
-														<Button
-															onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
-															aria-label="toggle filter panel"
-															className={classNames(classes.filterPanelButton)}
-														>
-															<img className={classes.imageIcon} src="assets/images/invoices/filter.png" />
-														</Button>
-													</Hidden>
-												</div>
-											),
-											columns: [
-												{
-													Header: (instance) => (
-														<Checkbox
-															onClick={(event) => {
-																event.stopPropagation();
-															}}
-															onChange={(event) => toggleAll(instance)}
-															checked={this.state.selectAll}
-															style={{ color: 'white' }}
-														// indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
-														/>
-													),
-													accessor: "",
-													Cell: row => {
-														return (<Checkbox
-															onClick={(event) => {
-																event.stopPropagation();
-															}}
-															checked={isSelected(row.value.CustomerId)}
-															onChange={() => toggleSelection(row.value.CustomerId)}
-														/>
-														)
-													},
-													className: "justify-center",
-													sortable: false,
-													width: 72
-												}
-											],
-											className: classNames("justify-center")
-										},
-										{
-											Header: () => (
-												<div className="flex items-center pr-0 lg:pr-12">
-													<Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
-														<Input
-															placeholder="Search..."
-															className={classNames(classes.search, 'pl-16')}
-															// className="pl-16"
-															disableUnderline
-															fullWidth
-															value={this.state.s}
-															onChange={this.handleChange('s')}
-															inputProps={{
-																'aria-label': 'Search'
-															}}
-														/>
-														<Icon color="action" className="mr-16">search</Icon>
-													</Paper>
-												</div>
-											),
-											columns: [
-												{
-													Header: "No",
-													accessor: "CustomerNo",
-													filterAll: true,
-													width: 100,
-													className: classNames("flex items-center  justify-center") //classes.tableTdEven
-												},
-												{
-													Header: "Name",
-													accessor: "CustomerName",
-													width: 270,
-													className: classNames("flex items-center  justify-start p-12-impor")
-												},
-												{
-													Header: "Address",
-													// accessor: "Address",
-													id: "Address",
-													accessor: d => (this.capital_letter(d.Address)),
-													className: classNames("flex items-center  justify-center"),
-													width: 270
-												},
-												{
-													Header: "City",
-													// accessor: "City",
-													id: "City",
-													accessor: d => (this.capital_letter(d.City)),
-													className: classNames("flex items-center  justify-center"),
-													width: 140
-												},
-												{
-													Header: "State",
-													accessor: "StateName",
-													className: classNames("flex items-center  justify-center"),
-													width: 50
-												},
-												{
-													Header: "Phone",
-													accessor: "Phone",
-													width: 120,
-													className: classNames("flex items-center  justify-center p-12-impor")
-												},
-												{
-													Header: "Account Type",
-													accessor: "AccountTypeListName",
-													// Cell: row => {
-													// 	return '$' + parseFloat(row.original.CustomerBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-													// },
-													className: classNames("flex items-center  justify-center p-12-impor"),
-													width: 150
-												},
-												{
-													Header: "Status",
-													// Cell: row => {
-													// 	return '$' + parseFloat(row.original.CustomerTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-													// },
-													accessor: "StatusName",
-													className: classNames("flex items-center  justify-center p-12-impor"),
-													width: 120
-												},
-												{
-													Header: "Contract Amount",
-													id: "Amount",
-													// accessor: d => ('$' + Number(d.Amount).toFixed(2)),
-													accessor: d => '$' + d.Amount.toLocaleString(undefined, { minimumFractionDigits: 2 }),
-													// accessor: "Amount",
-													className: classNames("flex items-center  justify-end p-12-impor"),
-													headerClassName: "wordwrap",
-													width: 120
-												},
-												// {
-												// 	Header: "Due Date",
-												// 	id: "DueDate",
-												// 	accessor: d => moment(d.DueDate).format('MM/DD/YYYY'),
-												// 	className: classNames("flex items-center  justify-center"),
-												// 	width: 120
-												// },
-												// {
-												// 	Header: "Status",
-												// 	accessor: "TransactionStatus",
-												// 	className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-												// 	width: 120
-												// },
-												{
-													Header: "Actions",
-													width: 128,
-													Cell: row => (
-														<div className="flex items-center p-12-impor actions">
-															<IconButton
-																onClick={(ev) => {
-																	ev.stopPropagation();
-																	if (window.confirm("Do you really want to remove this customer")) {
-																		this.props.removeCustomerAction(row.original.CustomerId, this.props.customers);
-																		if (this.state.selection.length > 0) {
-																			_.remove(this.state.selection, function (id) {
-																				return id === row.original.CustomerId;
-																			});
-																		}
-																	}
-																}}
-															>
-																<Icon>delete</Icon>
-															</IconButton>
-															<IconButton
-																onClick={(ev) => {
-																	ev.stopPropagation();
-																	// removeContact(row.original.id);
-																}}
-															>
-																<Icon>edit</Icon>
-															</IconButton>
-														</div>
-													)
-												}
-											]
-										}
-										// ,
-										// {
-										// 	Header: (instance) => (
-										// 		<div className="flex items-center justify-end pr-12">
-										// 			<Hidden smDown>
-										// 				<Button
-										// 					onClick={(ev) => toggleSummaryPanel()}
-										// 					aria-label="toggle summary panel"
-										// 					disabled={summaryState ? true : false}
-										// 					className={classNames(classes.summaryPanelButton)}
-										// 				>
-										// 					<Icon>insert_chart</Icon>
-										// 				</Button>
-										// 			</Hidden>
-										// 			<Hidden smUp>
-										// 				<Button
-										// 					onClick={(ev) => this.pageLayout.toggleRightSidebar()}
-										// 					aria-label="toggle summary panel"
-										// 					className={classNames(classes.summaryPanelButton)}
-										// 				>
-										// 					<Icon>insert_chart</Icon>
-										// 				</Button>
-										// 			</Hidden>
-										// 		</div>
-										// 	),
-										// 	columns: [
-										// 		{
-										// 			Header: '',
-										// 			cell: () => (
-										// 				<div className="flex w-full justify-end" />
-										// 			)
-										// 		}
-										// 	]
-										// }
-									]}
-									defaultPageSize={100}
-									className={classNames("-striped -highlight")}
-									style={{
-										height: '100%',
-									}}
-								/>
+							{(this.state.temp && !customerForm.props.open) && (
+								<CustomerListContent data={this.state.temp} />
+							)}
+							{(this.state.temp && customerForm.props.open) && (
+								<CustomerForm customers={this.state.customers} selectedCustomer={this.state.selectedCustomer} />
 							)}
 						</div>
 					}
@@ -890,9 +688,11 @@ function mapDispatchToProps(dispatch) {
 		toggleSummaryPanel: Actions.toggleSummaryPanel,
 		deleteCustomersAction: Actions.deleteCustomers,
 		removeCustomerAction: Actions.removeCustomer,
-		openNewCustomerDialog: Actions.openNewCustomerDialog,
-        openEditCustomerDialog: Actions.openEditCustomerDialog,
-        getCustomers: Actions.getCustomers,
+		openNewCustomerForm: Actions.openNewCustomerForm,
+		openEditCustomerForm: Actions.openEditCustomerForm,
+		closeEditCustomerForm: Actions.closeEditCustomerForm,
+		closeNewCustomerForm: Actions.closeNewCustomerForm,
+		getCustomers: Actions.getCustomers,
 	}, dispatch);
 }
 
@@ -905,7 +705,8 @@ function mapStateToProps({ customers, auth }) {
 		summaryState: customers.bOpenedSummaryPanel,
 		regionId: auth.login.defaultRegionId,
 		customers: customers.customersDB,
-        bLoadedCustomers: customers.bLoadedCustomers,
+		bLoadedCustomers: customers.bLoadedCustomers,
+		customerForm: customers.customerForm
 	}
 }
 
