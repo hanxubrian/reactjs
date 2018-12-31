@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
+import {withRouter} from 'react-router-dom';
 
 // core components
 import {
@@ -11,9 +12,8 @@ import {
 
 // theme components
 import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
-
 import {withStyles} from "@material-ui/core";
-import {withRouter} from 'react-router-dom';
+
 
 //Custom components
 import GridContainer from "Commons/Grid/GridContainer";
@@ -258,7 +258,6 @@ class InvoiceForm extends Component {
             getSuggestionValue: this.getSuggestionValue,
             renderSuggestion,
         };
-        console.log('customers', this.props.customers);
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>

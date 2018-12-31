@@ -114,6 +114,13 @@ const invoices = function(state = initialState, action) {
                 }
             };
         }
+        case Actions.UPDATE_INVOICE_LINE:
+        {
+            return {
+                ...state,
+                invoiceForm: {...state.invoiceForm, data: action.payload}
+            }
+        }
         default:
         {
             return state;

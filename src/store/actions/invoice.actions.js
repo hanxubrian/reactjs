@@ -13,6 +13,7 @@ export const OPEN_EDIT_INVOICE_FORM = '[INVOICES APP] OPEN EDIT INVOICE FORM';
 export const CLOSE_EDIT_INVOICE_FORM = '[INVOICES APP] CLOSE EDIT INVOICE FORM';
 export const ADD_INVOICE = '[INVOICES APP] ADD INVOICE';
 export const UPDATE_INVOICE = '[INVOICES APP] UPDATE INVOICE';
+export const UPDATE_INVOICE_LINE = '[INVOICES APP] UPDATE INVOICE LINE';
 
 
 export function getInvoices() {
@@ -145,3 +146,9 @@ export function updateInvoice(invoice)
     };
 }
 
+export function updateInvoiceLine(data) {
+    return {
+        type: UPDATE_INVOICE_LINE,
+        payload: data
+    }
+}

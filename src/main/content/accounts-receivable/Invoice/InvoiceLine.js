@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
+import {withRouter} from 'react-router-dom';
 
 //Material UI core and icons
 import {
@@ -15,6 +16,11 @@ import {lighten} from '@material-ui/core/styles/colorManipulator';
 
 // third party
 import _ from 'lodash';
+
+//Store
+import {bindActionCreators} from "redux";
+import connect from "react-redux/es/connect/connect";
+import * as Actions from 'store/actions';
 
 let counter = 0;
 
@@ -160,16 +166,6 @@ InvoiceLineTableHead.propTypes = {
     rowCount        : PropTypes.number.isRequired
 };
 
-class InvoiceLineTableFooter extends React.Component {
-    render()
-    {
-        return (
-            <TableFooter className={classNames("p-24")}>
-
-            </TableFooter>
-        )
-    }
-}
 const toolbarStyles = theme => ({
     root     : {
         paddingRight: theme.spacing.unit
@@ -373,6 +369,12 @@ class InvoiceLineTable extends React.Component {
         this.setState({data: newData})
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot){
+        if(prevState.data!==this.state.data){
+            this.props.updateInvoiceLine(this.state.data);
+            console.log('fired');
+        }
+    }
     getTotal = () => {
         let total = 0.0;
         const data = [...this.state.data];
@@ -381,7 +383,8 @@ class InvoiceLineTable extends React.Component {
             total += parseFloat((n.amount*n.quantity)*(1+parseFloat(n.markup)/100));
         });
 
-        this.setState({total: total});
+        this.setState({subTotal: total});
+        this.setState({total: total+this.state.tax});
     };
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
@@ -417,6 +420,7 @@ class InvoiceLineTable extends React.Component {
         let value='';
         if(this.state.data[cellInfo.id][id].length===0) return
         value= this.state.data[cellInfo.id][id];
+
         if (id==='amount' || id==='extended')
             value = parseFloat(this.state.data[cellInfo.id][id]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         return (
@@ -427,6 +431,8 @@ class InvoiceLineTable extends React.Component {
                 onBlur={e => {
                     const data = [...this.state.data];
                     data[cellInfo.id][id] = (e.target.innerHTML).replace('$','').replace(',','');
+                    if(id==='amount' || id==='markup') data[cellInfo.id][id] = parseFloat(data[cellInfo.id][id]);
+                    if(id==='quantity') data[cellInfo.id][id] = parseInt(data[cellInfo.id][id]);
                     this.setState({ data });
                     this.getTotal();
                 }}
@@ -583,7 +589,7 @@ class InvoiceLineTable extends React.Component {
                                 <TableCell rowSpan={3} />
                                 <TableCell className="border-0" colSpan={4}></TableCell>
                                 <TableCell className="summary" numeric>Subtotal</TableCell>
-                                <TableCell className="summary" align="right" numeric>${this.state.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</TableCell>
+                                <TableCell className="summary" align="right" numeric>${this.state.subTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell className="border-0" colSpan={4}></TableCell>
@@ -596,7 +602,6 @@ class InvoiceLineTable extends React.Component {
                                 <TableCell className="summary" align="right" numeric>${this.state.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</TableCell>
                             </TableRow>
                         </TableBody>
-                        <InvoiceLineTableFooter/>
                     </Table>
                 </div>
             </Paper>
@@ -608,4 +613,18 @@ InvoiceLineTable.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(InvoiceLineTable);
+function mapDispatchToProps(dispatch)
+{
+    return bindActionCreators({
+        updateInvoiceLine: Actions.updateInvoiceLine
+    }, dispatch);
+}
+
+function mapStateToProps({invoices })
+{
+    return {
+        InvoiceForm: invoices.InvoiceForm
+    }
+}
+
+export default withStyles(styles)(withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceLineTable)));
