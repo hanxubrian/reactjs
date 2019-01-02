@@ -1,29 +1,17 @@
 import React, {Component} from 'react';
 
 // core components
-import {
-    Hidden,
-    Icon,
-    IconButton,
-    Fab,
-    Input,
-    Paper,
-    TextField,
-    Button,
-    Typography,
-    MenuItem,
-    Toolbar
-} from '@material-ui/core';
+import {Hidden,Icon,IconButton,Fab,Input,Paper,Button, Typography,Toolbar} from '@material-ui/core';
 
 // theme components
-import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
+import {FusePageCustom, FuseAnimate} from '@fuse';
 
 //Janiking
 import JanikingPagination from './../../../../Commons/JanikingPagination';
 
 import {bindActionCreators} from "redux";
 import {withStyles, Checkbox} from "@material-ui/core";
-import {Link, withRouter} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 
 // for store
 import connect from "react-redux/es/connect/connect";
@@ -210,9 +198,6 @@ const styles = theme => ({
         }
     },
 });
-const defaultProps = {
-    trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
-};
 
 
 class Franchisees extends Component {
@@ -550,7 +535,7 @@ class Franchisees extends Component {
     };
 
     removeFranchisees = ()=> {
-        if(this.state.selection.length==0){
+        if(this.state.selection.length===0){
             alert("Please choose franchisee(s) to delete");
             return;
         }
@@ -570,10 +555,6 @@ class Franchisees extends Component {
     canBeSubmitted()
     {
         return true;
-        const {name} = this.state;
-        return (
-            name.length > 0
-        );
     }
     closeComposeForm = () => {
         this.props.createFranchisees.type === 'create' ? this.props.closeEditFranchisees() : this.props.closeCreateFranchisees();
@@ -582,7 +563,7 @@ class Franchisees extends Component {
 
     render()
     {
-        const { classes,toggleFilterPanelFranchisees,showCreteFranchisees, toggleSummaryPanelFranchisees, createFranchisees, filterStateFranchisees, summaryStateFranchisees, deleteFranchisees} = this.props;
+        const { classes,toggleFilterPanelFranchisees,showCreteFranchisees, toggleSummaryPanelFranchisees, createFranchisees, filterStateFranchisees, summaryStateFranchisees} = this.props;
         const { toggleSelection, toggleAll, isSelected} = this;
 
         const { selection } = this.state;
@@ -654,7 +635,7 @@ class Franchisees extends Component {
                                         <div className="flex items-center">
                                             <FuseAnimate animation="transition.expandIn" delay={300}>
                                                 <Toolbar className="pl-12 pr-0">
-                                                    <img className="mr-12" src="assets/images/invoices/invoice-icon-white.png" style={{width: 32, height: 32}}/>
+                                                    <img className="mr-12" alt="icon-white" src="assets/images/invoices/invoice-icon-white.png" style={{width: 32, height: 32}}/>
                                                 </Toolbar>
                                             </FuseAnimate>
                                             <FuseAnimate animation="transition.slideLeftIn" delay={300}>
@@ -787,10 +768,6 @@ class Franchisees extends Component {
                                     }
                                 }}
                                 getTdProps={(state, rowInfo, column, instance) =>{
-                                    let tdClass='flex items-center justify-center';
-                                    if (column.id==='InvoiceNo' ||column.id==='CustomerNo'||column.id==='InvoiceBalanceAmount'||
-                                        column.id==='InvoiceDate' || column.id==='transactionStatusFranchisees') tdClass = classNames( "flex items-center  justify-center");
-
                                     return {
                                         style:{
                                             textAlign: 'center',
@@ -824,7 +801,7 @@ class Franchisees extends Component {
                                                         disabled={filterStateFranchisees ? true : false}
                                                         className={classNames(classes.filterPanelButton)}
                                                     >
-                                                        <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
+                                                        <img className={classes.imageIcon} alt="icon-filter" src="assets/images/invoices/filter.png"/>
                                                     </Button>
                                                 </Hidden>
                                                 <Hidden smUp>
@@ -833,7 +810,7 @@ class Franchisees extends Component {
                                                         aria-label="toggle filter panel"
                                                         className={classNames(classes.filterPanelButton)}
                                                     >
-                                                        <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
+                                                        <img className={classes.imageIcon} alt="icon-filter" src="assets/images/invoices/filter.png"/>
                                                     </Button>
                                                 </Hidden>
                                             </div>
