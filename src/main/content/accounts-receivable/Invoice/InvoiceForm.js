@@ -7,9 +7,8 @@ import {
     Paper, TextField, Typography, MenuItem, Card, CardHeader, CardContent, Divider} from '@material-ui/core';
 
 // theme components
-import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
+import {FuseAnimate} from '@fuse';
 import {withStyles} from "@material-ui/core";
-
 
 //Custom components
 import GridContainer from "Commons/Grid/GridContainer";
@@ -207,10 +206,6 @@ class InvoiceForm extends Component {
         this.props.invoiceDialog.type === 'create' ? this.props.closeEditInvoiceDialog() : this.props.closeNewInvoiceDialog();
     };
 
-    constructor(props){
-        super(props);
-    }
-
     componentDidUpdate(prevProps, prevState, snapshot){
     }
 
@@ -235,15 +230,11 @@ class InvoiceForm extends Component {
     canBeSubmitted()
     {
         return true;
-        const {name} = this.state;
-        return (
-            name.length > 0
-        );
     }
 
     render()
     {
-        const { classes, InvoiceForm, addInvoice, updateInvoice, removeInvoice} = this.props;
+        const { classes} = this.props;
         const { value, suggestions } = this.state;
 
         const autosuggestProps = {

@@ -1,5 +1,4 @@
 import storage from 'redux-persist/lib/storage';
-import { persistReducer } from 'redux-persist';
 import * as Actions from '../../actions/fuse/index';
 import  * as UserActions from '../../../auth/store/actions';
 import {fuseNavigationConfig} from 'fuse-configs/fuseNavigationConfig';
@@ -45,10 +44,4 @@ const navigation = function (state = initialState, action) {
     }
 };
 
-
-const persistConfig = {
-    key: 'navigation',
-    storage: storage,
-};
 export default navigation;
-// export default persistReducer(persistConfig, navigation);
