@@ -218,6 +218,7 @@ class CustomerListContent extends Component {
     }
     search(val) {
         const temp = this.props.data.filter( d => {
+            console.log('customer=', d);
             return d.CustomerId.toString().indexOf(val) !== -1 || !val ||
                 d.CustomerNo.indexOf(val) !== -1 ||
                 d.CustomerAmount.toString().indexOf(val) !== -1 ||
@@ -272,7 +273,7 @@ class CustomerListContent extends Component {
             page: state.page,
         });
 	}
-	
+
 	capital_letter(str) {
 		str = str.split(" ").map(x => {
 			if (x.length > 1) {

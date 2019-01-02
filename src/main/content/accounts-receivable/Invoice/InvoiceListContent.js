@@ -336,7 +336,6 @@ class InvoiceListContent extends Component {
                         }
                     }}
                     getTrProps={(state, rowInfo, column) => {
-                        console.log('rowinfo=', rowInfo);
                         return {
                             className: "cursor-pointer",
                             onClick  : (e, handleOriginal) => {
