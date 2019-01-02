@@ -77,7 +77,8 @@ const styles = theme => ({
 	button: {
 		'& span': {
 			textTransform: 'none'
-		}
+		},
+		margin: theme.spacing.unit
 	},
 	card: {
 		width: '100%',
@@ -307,6 +308,78 @@ function getStepContent(customerForm, step) {
 		renderSuggestion,
 	};
 
+	const address_headers = [
+		{
+			id: 'billing',
+			numeric: false,
+			disablePadding: false,
+			label: 'Type'
+		},
+		{
+			id: 'service',
+			numeric: false,
+			disablePadding: false,
+			label: 'Address'
+		},
+		{
+			id: 'description',
+			numeric: false,
+			disablePadding: false,
+			label: 'City'
+		},
+		{
+			id: 'quantity',
+			numeric: true,
+			disablePadding: false,
+			label: 'State'
+		},
+		{
+			id: 'amount',
+			numeric: true,
+			disablePadding: false,
+			label: 'Zip / Postal'
+		}
+	];
+
+	const billing_headers = [
+		{
+			id: 'billing',
+			numeric: false,
+			disablePadding: false,
+			label: 'First'
+		},
+		{
+			id: 'service',
+			numeric: false,
+			disablePadding: false,
+			label: 'Last'
+		},
+		{
+			id: 'description',
+			numeric: false,
+			disablePadding: false,
+			label: 'Title'
+		},
+		{
+			id: 'quantity',
+			numeric: true,
+			disablePadding: false,
+			label: 'Office Phone'
+		},
+		{
+			id: 'amount',
+			numeric: true,
+			disablePadding: false,
+			label: 'Mobile Phone'
+		},
+		{
+			id: 'email',
+			numeric: true,
+			disablePadding: false,
+			label: 'Email'
+		}
+	];
+
 	switch (step) {
 		case 0:
 			// return 'Step 1: Select campaign settings...';
@@ -429,14 +502,14 @@ function getStepContent(customerForm, step) {
 					<div style={{ marginTop: '30px' }}></div>
 					<h3>Addresses</h3>
 					<div className="flex">
-						<CustomerLineTable />
+						<CustomerLineTable tableType="ADDRESS" headers={address_headers} />
 					</div>
 
 					<Divider variant="middle" />
 					<div style={{ marginTop: '30px' }}></div>
 					<h3>Contacts</h3>
 					<div className="flex">
-						<CustomerLineTable />
+						<CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} />
 					</div>
 
 					<div style={{ marginTop: '30px' }}></div>
@@ -1283,7 +1356,7 @@ class CustomerForm extends Component {
 					style={{
 						overflowY: 'scroll',
 						width: '100%',
-						height: 'calc(100% - 80px)'
+						height: 'calc(100% - 140px)'
 						// flex: '1 1 auto'
 					}}>
 
@@ -1303,22 +1376,18 @@ class CustomerForm extends Component {
 								<div>
 									{/* <Typography className={classes.instructions}>{getStepContent(this, activeStep)}</Typography> */}
 									{getStepContent(this, activeStep)}
-									<div>
+									{/* <div>
 										<Button
 											disabled={activeStep === 0}
 											onClick={this.handleBack}
 											className={classes.button}
-										>
-											Back
-                                </Button>
+										>Back</Button>
 										<Button
 											variant="contained"
 											color="primary"
 											onClick={this.handleNext}
 											className={classes.button}
-										>
-											Next
-                                </Button>
+										>Next</Button>
 										{this.isStepOptional(activeStep) &&
 											!this.state.completed.has(this.state.activeStep) && (
 												<Button
@@ -1326,26 +1395,65 @@ class CustomerForm extends Component {
 													color="primary"
 													onClick={this.handleSkip}
 													className={classes.button}
-												>
-													Skip
-                                    </Button>
+												>Skip</Button>
 											)}
 										{activeStep !== steps.length &&
 											(this.state.completed.has(this.state.activeStep) ? (
 												<Typography variant="caption" className={classes.completed}>
 													Step {activeStep + 1} already completed
-                                    </Typography>
-											) : (
+												</Typography>
+											)
+												:
+												(
 													<Button variant="contained" color="primary" onClick={this.handleComplete}>
 														{this.completedSteps() === this.totalSteps() - 1 ? 'Done' : 'Save'}
 													</Button>
 												))}
-									</div>
+									</div> */}
 								</div>
 							)}
 					</div>
 				</div>
+
+
+				<div>
+										<Button
+											disabled={activeStep === 0}
+											onClick={this.handleBack}
+											className={classes.button}
+										>Back</Button>
+										<Button
+											variant="contained"
+											color="primary"
+											onClick={this.handleNext}
+											className={classes.button}
+										> Next </Button>
+										{this.isStepOptional(activeStep) &&
+											!this.state.completed.has(this.state.activeStep) && (
+												<Button
+													variant="contained"
+													color="primary"
+													onClick={this.handleSkip}
+													className={classes.button}
+												> Skip </Button>
+											)}
+										{activeStep !== steps.length &&
+											(this.state.completed.has(this.state.activeStep) ? (
+												<Typography variant="caption" className={classes.completed}>
+													Step {activeStep + 1} already completed
+												</Typography>
+											)
+												:
+												(
+													<Button variant="contained" color="primary" onClick={this.handleComplete}>
+														{this.completedSteps() === this.totalSteps() - 1 ? ' Done ' : ' Save '}
+													</Button>
+												))}
+									</div>
+
 				{/* </FuseAnimate> */}
+
+
 			</Fragment>
 		);
 	}
