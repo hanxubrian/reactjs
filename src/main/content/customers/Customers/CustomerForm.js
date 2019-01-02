@@ -49,7 +49,8 @@ import FormLabel from '@material-ui/core/FormLabel';
 // import FormControlLabel from '@material-ui/core/FormControlLabel';
 // import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
-
+import Input from '@material-ui/core/Input';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 const styles = theme => ({
 
@@ -504,6 +505,9 @@ function getStepContent(customerForm, step) {
 								id="outlined-name"
 								label="Effective Date"
 								className={classes.textField}
+								InputLabelProps={{
+									shrink: true
+								}}
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('EffectiveDate')}
 								margin="normal"
@@ -726,6 +730,114 @@ function getStepContent(customerForm, step) {
 								))}
 							</TextField>
 						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="PONumer"
+								type="number"
+								label="PO Numer"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('PONumer')}
+								margin="normal"
+								// variant="outlined"
+								style={{ minWidth: "100px", width: "30%" }}
+							/>
+
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								type="date"
+								id="SignDate"
+								label="Sign Date *"
+								className={classes.textField}
+								InputLabelProps={{
+									shrink: true
+								}}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('SignDate')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginRight: "2%" }}
+							/>
+							<TextField
+								type="date"
+								id="StartDate"
+								label="Start Date *"
+								className={classes.textField}
+								InputLabelProps={{
+									shrink: true
+								}}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('StartDate')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginLeft: "2%" }}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								type="number"
+								id="TermMonths"
+								label="Term Months *"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('TermMonths')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginRight: "2%" }}
+							/>
+
+							<TextField
+								type="date"
+								id="ExpiratinDate"
+								label="Expiratin Date *"
+								className={classes.textField}
+								InputLabelProps={{
+									shrink: true
+								}}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('ExpiratinDate')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginLeft: "2%" }}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								type="number"
+								id="Amount"
+								label="Amount *"
+								className={classes.textField}
+								InputLabelProps={{
+									shrink: true
+								}}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('Amount')}
+								margin="normal"
+								// variant="outlined"
+								style={{ minWidth: "100px", width: "30%" }}
+								InputProps={{
+									startAdornment: <InputAdornment position="start">$</InputAdornment>
+								}}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="Description"
+								label="Description"
+								multiline
+								rowsMax="4"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('Description')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%' }}
+							/>
+						</GridItem>
+
 					</GridContainer>
 
 
@@ -736,10 +848,236 @@ function getStepContent(customerForm, step) {
 			return (
 				<Fragment>
 					<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-						<GridItem xs={12} sm={8} md={8} className="flex flex-row">
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="ServiceType"
+								label="Service Type *"
+								select
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('ServiceType')}
+								margin="normal"
+								// variant="outlined"
+								style={{ minWidth: "100px", width: "30%" }}
+							>
+								{[{ value: 0, label: "Select" }].map(option => (
+									<MenuItem key={option.value} value={option.value}>
+										{option.label}
+									</MenuItem>
+								))}
+							</TextField>
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="BillingFrequency"
+								label="Billing Frequency"
+								select
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('BillingFrequency')}
+								margin="normal"
+								// variant="outlined"
+								style={{ minWidth: "100px", width: "30%" }}
+							>
+								{[{ value: 0, label: "Monthly" }].map(option => (
+									<MenuItem key={option.value} value={option.value}>
+										{option.label}
+									</MenuItem>
+								))}
+							</TextField>
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="SquareFootage"
+								label="Square Footage"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('SquareFootage')}
+								margin="normal"
+								// variant="outlined"
+								style={{ minWidth: "100px", width: "30%" }}
+							/>
 
 						</GridItem>
 
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								type="time"
+								id="StartTime"
+								label="Start Time *"
+								className={classes.textField}
+								InputLabelProps={{
+									shrink: true
+								}}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('StartTime')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginRight: "2%" }}
+							/>
+							<TextField
+								type="time"
+								id="EndTime"
+								label="End Time *"
+								className={classes.textField}
+								InputLabelProps={{
+									shrink: true
+								}}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('EndTime')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginLeft: "2%" }}
+							/>
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								type="number"
+								id="Amount"
+								label="Amount *"
+								className={classes.textField}
+								InputLabelProps={{
+									shrink: true
+								}}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('Amount')}
+								margin="normal"
+								// variant="outlined"
+								style={{ minWidth: "100px", width: "30%" }}
+								InputProps={{
+									startAdornment: <InputAdornment position="start">$</InputAdornment>
+								}}
+							/>
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								type="number"
+								id="CleanTimes"
+								label="Clean Times *"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('CleanTimes')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginRight: "2%" }}
+							/>
+
+							<TextField
+								select
+								id="CleanFrequency"
+								label="Clean Frequency *"
+								className={classes.textField}
+								InputLabelProps={{
+									shrink: true
+								}}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('CleanFrequency')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginLeft: "2%" }}>
+								{[{ value: 0, label: "Monthly" }].map(option => (
+									<MenuItem key={option.value} value={option.value}>
+										{option.label}
+									</MenuItem>
+								))}
+							</TextField>
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<FormControlLabel
+								control={
+									<Checkbox onChange={customerForm.handleChange('weekdays')} />
+								}
+								label="Mon"
+								style={{ marginRight: "30px" }}
+								fullWidth
+							/>
+							<FormControlLabel
+								control={
+									<Checkbox onChange={customerForm.handleChange('weekdays')} />
+								}
+								label="Tue"
+								style={{ marginRight: "30px" }}
+								fullWidth
+							/>
+							<FormControlLabel
+								control={
+									<Checkbox onChange={customerForm.handleChange('weekdays')} />
+								}
+								label="Wed"
+								style={{ marginRight: "30px" }}
+								fullWidth
+							/>
+							<FormControlLabel
+								control={
+									<Checkbox onChange={customerForm.handleChange('weekdays')} />
+								}
+								label="Thu"
+								style={{ marginRight: "30px" }}
+								fullWidth
+							/>
+							<FormControlLabel
+								control={
+									<Checkbox onChange={customerForm.handleChange('weekdays')} />
+								}
+								label="Fri"
+								style={{ marginRight: "30px" }}
+								fullWidth
+							/>
+							<FormControlLabel
+								control={
+									<Checkbox onChange={customerForm.handleChange('weekdays')} />
+								}
+								label="Sat"
+								style={{ marginRight: "30px" }}
+								fullWidth
+							/>
+							<FormControlLabel
+								control={
+									<Checkbox onChange={customerForm.handleChange('weekdays')} />
+								}
+								label="Sun"
+								fullWidth
+							/>
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<FormControlLabel
+								control={
+									<Checkbox onChange={customerForm.handleChange('weekdays')} />
+								}
+								label="CPI Increase"
+								style={{ marginRight: "30px" }}
+								fullWidth
+							/>
+							<FormControlLabel
+								control={
+									<Checkbox onChange={customerForm.handleChange('weekdays')} />
+								}
+								label="Separate Invoice"
+								style={{ marginRight: "30px" }}
+								fullWidth
+							/>
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="Description"
+								label="Description"
+								multiline
+								rowsMax="4"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('Description')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%' }}
+							/>
+						</GridItem>
 					</GridContainer>
 
 				</Fragment>
