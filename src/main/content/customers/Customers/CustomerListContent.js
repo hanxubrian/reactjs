@@ -215,23 +215,61 @@ class CustomerListContent extends Component {
         if(prevState.s!==this.state.s) {
             this.search(this.state.s);
         }
-    }
-    search(val) {
-        const temp = this.props.data.filter( d => {
-            console.log('customer=', d);
-            return d.CustomerId.toString().indexOf(val) !== -1 || !val ||
-                d.CustomerNo.indexOf(val) !== -1 ||
-                d.CustomerAmount.toString().indexOf(val) !== -1 ||
-                d.CustomerTotal.toString().indexOf(val) !== -1 ||
-                d.CustomerTax.toString().indexOf(val) !== -1 ||
-                d.CustomerDescription.toLowerCase().indexOf(val) !== -1 ||
-                d.CustomerName.toLowerCase().indexOf(val) !== -1 ||
-                d.CustomerId.toString().indexOf(val) !== -1 ||
-                d.CustomerNo.toString().indexOf(val) !== -1 ||
-                d.TransactionStatusListId.toString().indexOf(val) !== -1
-        });
+	}
+	getCustomersFromStatus = (rawData = this.props.customers) => {
+		let temp = [];
+		let all_temp = [];
+		let temp1 = [];
+		const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
+		const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
 
-        this.setState({data: temp});
+		if (rawData === null) return;
+
+		let regions = rawData.Data.Regions.filter(x => {
+			return this.props.regionId === 0 || x.Id === this.props.regionId;
+		});
+
+		regions.map(x => {
+			all_temp = [...all_temp, ...x.Customers];
+		});
+
+		this.setState({ temp: all_temp });
+		this.setState({ data: all_temp });
+	};
+    search(val) {
+        // const temp = this.props.data.filter( d => {
+        //     console.log('customer=', d);
+        //     return d.CustomerId.toString().indexOf(val) !== -1 || !val ||
+        //         d.CustomerNo.indexOf(val) !== -1 ||
+        //         d.CustomerAmount.toString().indexOf(val) !== -1 ||
+        //         d.CustomerTotal.toString().indexOf(val) !== -1 ||
+        //         d.CustomerTax.toString().indexOf(val) !== -1 ||
+        //         d.CustomerDescription.toLowerCase().indexOf(val) !== -1 ||
+        //         d.CustomerName.toLowerCase().indexOf(val) !== -1 ||
+        //         d.CustomerId.toString().indexOf(val) !== -1 ||
+        //         d.CustomerNo.toString().indexOf(val) !== -1 ||
+        //         d.TransactionStatusListId.toString().indexOf(val) !== -1
+        // });
+
+		// this.setState({data: temp});
+		val = val.toLowerCase();
+
+		if (val === '') {
+			this.getCustomersFromStatus();
+			return;
+		}
+		const temp = this.state.data.filter(d => {
+			return (d.CustomerNo && d.CustomerNo.toString().toLowerCase().indexOf(val) !== -1) || !val ||
+			(d.CustomerName && d.CustomerName.toString().toLowerCase().indexOf(val) !== -1) ||
+			(d.Address && d.Address.toString().toLowerCase().indexOf(val) !== -1) ||
+			(d.Phone && d.Phone.toString().toLowerCase().indexOf(val) !== -1) ||
+			(d.AccountTypeListName && d.AccountTypeListName.toString().toLowerCase().indexOf(val) !== -1) ||
+			(d.CustomerDescription && d.CustomerDescription.toString().toLowerCase().indexOf(val) !== -1) ||
+			(d.Amount && d.Amount.toString().toLowerCase().indexOf(val) !== -1) ||
+			(d.StatusName && d.StatusName.toString().toLowerCase().indexOf(val) !== -1)
+		});
+
+		this.setState({ data: temp });
     }
 
     componentDidMount(){
