@@ -89,7 +89,9 @@ class CreateFranchiseesPage extends React.Component {
     state = {
         activeStep: 0,
         region: 2,
+        planType: 'example1',
         open: false,
+        openPlanType: false,
         value: 'ein',
         print1099: false,
         chargeBack: false,
@@ -131,7 +133,6 @@ class CreateFranchiseesPage extends React.Component {
     handleRegionsClose = () => {
         this.setState({ open: false });
     };
-
     handleRegionsOpen = () => {
         this.setState({ open: true });
     };
@@ -143,6 +144,11 @@ class CreateFranchiseesPage extends React.Component {
     };
     handleBillingCheckedChange = name => event => {
         this.setState({ [name]: event.target.checked });
+    };
+    handlePlanTypeChange = name => event => {
+        this.setState({
+            [name]: event.target.value,
+        });
     };
 
     render()
@@ -236,6 +242,21 @@ class CreateFranchiseesPage extends React.Component {
             }
         ];
 
+        const planType = [
+            {
+                value: 'example1',
+                label: 'example1'
+            },
+            {
+                value: 'example2',
+                label: 'example2'
+            },
+            {
+                value: 'example3',
+                label: 'example3'
+            }
+        ];
+
         return (
             <div className={classes.root}>
                 <br/>
@@ -275,7 +296,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="outlined-name"
                                             label="Name"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                             required
                                         />
@@ -287,7 +307,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="outlined-address1"
                                             label="Address"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                             required
                                         />
@@ -296,7 +315,6 @@ class CreateFranchiseesPage extends React.Component {
                                         <TextField
                                             id="outlined-address2"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                         />
                                     </Grid>
@@ -307,7 +325,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="outlined-city"
                                             label="City"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                             required
                                         />
@@ -317,7 +334,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="outlined-state"
                                             label="State"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                             required
                                         />
@@ -327,7 +343,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="outlined-zip"
                                             label="Zip"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                             required
                                         />
@@ -339,7 +354,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="outlined-phone"
                                             label="Phone"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                         />
                                     </Grid>
@@ -348,7 +362,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="outlined-email"
                                             label="E-mail"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                             required
                                         />
@@ -370,7 +383,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="outlined-name"
                                             label="Name"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                             required
                                         />
@@ -382,7 +394,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="outlined-address1"
                                             label="Address"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                             required
                                         />
@@ -391,7 +402,6 @@ class CreateFranchiseesPage extends React.Component {
                                         <TextField
                                             id="outlined-address2"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                         />
                                     </Grid>
@@ -402,7 +412,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="outlined-city"
                                             label="City"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                             required
                                         />
@@ -412,7 +421,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="outlined-state"
                                             label="State"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                             required
                                         />
@@ -422,7 +430,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="outlined-zip"
                                             label="Zip"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                             required
                                         />
@@ -434,7 +441,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="outlined-phone"
                                             label="Phone"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                         />
                                     </Grid>
@@ -443,7 +449,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="outlined-ext"
                                             label="Ext"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                         />
                                     </Grid>
@@ -452,18 +457,16 @@ class CreateFranchiseesPage extends React.Component {
                                             id="outlined-cell"
                                             label="Cell"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                         />
                                     </Grid>
                                 </Grid>
-                                <Grid>
+                                <Grid container spacing={24}>
                                     <Grid item xs>
                                         <TextField
                                             id="outlined-cell"
                                             label="E-mail"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                             required
                                         />
@@ -657,7 +660,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="financeEinSsn"
                                             label="EIN/SSN"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                             required
                                         />
@@ -672,7 +674,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="financeName"
                                             label="Name"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                             required
                                         />
@@ -684,7 +685,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="financeAddress"
                                             label="Address"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                             required
                                         />
@@ -696,7 +696,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="outlined-city"
                                             label="City"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                             required
                                         />
@@ -706,7 +705,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="outlined-state"
                                             label="State"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                             required
                                         />
@@ -716,7 +714,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="outlined-zip"
                                             label="Zip"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                             required
                                         />
@@ -728,7 +725,6 @@ class CreateFranchiseesPage extends React.Component {
                                             id="outlined-phone"
                                             label="1099 Name"
                                             className={classes.textField}
-                                            margin="normal"
                                             variant="outlined"
                                         />
                                     </Grid>
@@ -751,7 +747,7 @@ class CreateFranchiseesPage extends React.Component {
                             </div>
                             <CardContent className={classNames(classes.cardContainer)}>
                                 <br/>
-                                <Grid>
+                                <Grid container spacing={24}>
                                     <Grid item xs>
                                         <FormControlLabel
                                             control={
@@ -796,37 +792,148 @@ class CreateFranchiseesPage extends React.Component {
                         </div>
                         <CardContent className={classNames(classes.cardContainer)}>
                             <br/>
-                            <Grid>
+                            <Grid container spacing={24}>
                                 <Grid item xs>
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox checked={chargeBack} onChange={this.handleBillingCheckedChange('chargeBack')} value="chargeBack" />
-                                        }
-                                        label="ChargeBack"
+                                    <TextField
+                                        id="dateSign"
+                                        label="Date Sign"
+                                        type="date"
+                                        defaultValue=""
+                                        className={classes.textField}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        required
                                     />
                                 </Grid>
                                 <Grid item xs>
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox checked={bbp} onChange={this.handleBillingCheckedChange('bbp')} value="bbp" />
-                                        }
-                                        label="BBP Administration Fee"
+                                    <TextField
+                                        id="lastReNewDate"
+                                        label="Last Renew Date"
+                                        type="date"
+                                        defaultValue=""
+                                        className={classes.textField}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        required
                                     />
                                 </Grid>
                                 <Grid item xs>
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox checked={accountRebate} onChange={this.handleBillingCheckedChange('accountRebate')} value="accountRebate" />
-                                        }
-                                        label="Account Rebate"
+                                    <TextField
+                                        id="termYrs"
+                                        label="Term(Yrs)"
+                                        className={classes.textField}
+                                        variant="outlined"
+                                        required
+                                    />
+                                </Grid>
+                            </Grid>
+                            <Grid container spacing={24}>
+                                <Grid item xs>
+                                    <TextField
+                                        id="expDate"
+                                        label="Exp. Date"
+                                        type="date"
+                                        defaultValue=""
+                                        className={classes.textField}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="outlined"
+                                        required
                                     />
                                 </Grid>
                                 <Grid item xs>
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox checked={generateReport} onChange={this.handleBillingCheckedChange('generateReport')} value="generateReport" />
-                                        }
-                                        label="Generate Report"
+                                    <TextField
+                                        id="selectPlanType"
+                                        select
+                                        label="Select"
+                                        className={classes.textField}
+                                        value={this.state.planType}
+                                        onChange={this.handlePlanTypeChange('planType')}
+                                        SelectProps={{
+                                            MenuProps: {
+                                                className: classes.menu,
+                                            },
+                                        }}
+                                        variant="outlined"
+                                    >
+                                        {planType.map(option => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs>
+                                    <TextField
+                                        id="planAmount"
+                                        label="Plan Amount"
+                                        className={classes.textField}
+                                        variant="outlined"
+                                        required
+                                    />
+                                </Grid>
+                            </Grid>
+                            <Grid container spacing={24}>
+                                <Grid item xs>
+                                    <TextField
+                                        id="ibAmount"
+                                        label="IB Amount"
+                                        className={classes.textField}
+                                        variant="outlined"
+                                        required
+                                    />
+                                </Grid>
+                                <Grid item xs>
+                                    <TextField
+                                        id="downPayment"
+                                        label="Down Payment"
+                                        className={classes.textField}
+                                        variant="outlined"
+                                        required
+                                    />
+                                </Grid>
+                                <Grid item xs>
+                                    <TextField
+                                        id="interest"
+                                        label="Interest"
+                                        className={classes.textField}
+                                        variant="outlined"
+                                        required
+                                    />
+                                </Grid>
+                            </Grid>
+
+                            <Grid container spacing={24}>
+                                <Grid item xs>
+                                    <TextField
+                                        id="paymentAmount"
+                                        label="Payment Amount"
+                                        className={classes.textField}
+                                        variant="outlined"
+                                        required
+                                    />
+                                </Grid>
+                                <Grid item xs>
+                                    <TextField
+                                        id="noOfPayments"
+                                        label="No Of Payments"
+                                        className={classes.textField}
+                                        variant="outlined"
+                                        required
+                                    />
+                                </Grid>
+                                <Grid item xs>
+                                    <TextField
+                                        id="daysToFullFill"
+                                        label="Days To Fullfill"
+                                        className={classes.textField}
+                                        variant="outlined"
+                                        required
                                     />
                                 </Grid>
                             </Grid>
