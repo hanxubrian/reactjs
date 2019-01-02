@@ -16,6 +16,7 @@ import {lighten} from '@material-ui/core/styles/colorManipulator';
 
 // third party
 import _ from 'lodash';
+import Chance from "chance";
 
 //Store
 import {bindActionCreators} from "redux";
@@ -23,14 +24,17 @@ import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
 import keycode from "keycode";
 
+const chance = new Chance();
 let counter = 0;
 
-function createFranchisee(id, franchisee="", name="", amount=0) {
+function createFranchisee(parent_id,id, franchisee="Franchisee", name="Franchisee Name", amount=0) {
     return {
-        id,
+        id: parent_id,
+        fid: id,
         franchisee,
         name,
-        amount
+        amount,
+        type: 'franch'
     }
 }
 
@@ -45,21 +49,9 @@ function createData(billing='Regular Billing', service='Adjust-Balance', descrip
         amount,
         markup,
         extended,
-        franchisees: []
+        franchisees: [],
+        type: 'line'
     };
-}
-
-function desc(a, b, orderBy)
-{
-    if ( b[orderBy] < a[orderBy] )
-    {
-        return -1;
-    }
-    if ( b[orderBy] > a[orderBy] )
-    {
-        return 1;
-    }
-    return 0;
 }
 
 const rows = [
@@ -328,7 +320,46 @@ const styles = theme => ({
         [theme.breakpoints.down('sm')]: {
             padding: '0!important'
         }
-    }
+    },
+    franchisees: {
+        '& td': {
+            borderBottom: 'none',
+        },
+        '& td:nth-child(1)': {
+            width: 400
+        },
+        '& td:nth-child(3)': {
+            width: 120,
+            '& div':{
+                border: '1px solid lightgray',
+                borderRadius: '6px',
+                padding: '8px 12px'
+            }
+        },
+        '& td:nth-child(4)': {
+            width: 420,
+            '& div':{
+                border: '1px solid lightgray',
+                borderRadius: '6px',
+                padding: '8px 12px'
+            }
+        },
+        '& td:nth-child(5)': {
+            width: 100,
+            '& div':{
+                border: '1px solid lightgray',
+                borderRadius: '6px',
+                padding: '8px 12px'
+            }
+        }
+    },
+    distribution: {
+        '& span': {
+            backgroundColor: 'lightgrey',
+            padding: '8px 12px',
+            borderRadius: 20
+        }
+    },
 });
 
 class InvoiceLineTable extends React.Component {
@@ -388,10 +419,10 @@ class InvoiceLineTable extends React.Component {
     handleChangeBilling = (event, n) => {
         let newData = this.state.data.map(row=>{
             let temp = row;
-           if(n.id===row.id){
-               temp[event.target.name] = event.target.value
-           }
-           return temp;
+            if(n.id===row.id){
+                temp[event.target.name] = event.target.value
+            }
+            return temp;
         });
 
         this.setState({data: newData})
@@ -415,8 +446,6 @@ class InvoiceLineTable extends React.Component {
         }
     }
 
-    isSelected = id => this.state.selected.indexOf(id) !== -1;
-
     addLineData=()=>{
         const data = [...this.state.data, createData()];
         let id = 0;
@@ -430,7 +459,7 @@ class InvoiceLineTable extends React.Component {
 
     addFranchiseeLine = (n) =>{
         const data = [...this.state.data];
-        let fline = createFranchisee(n.franchisees.length);
+        let fline = createFranchisee(n.id, n.franchisees.length);
         n.franchisees = [...n.franchisees, fline];
 
         let newData = data.map(record=>{
@@ -448,19 +477,25 @@ class InvoiceLineTable extends React.Component {
         });
         let id = 0;
         let newData = data.map(record=>{
-           record.id = id++;
-           return record;
+            record.id = id++;
+            return record;
         });
 
         this.setState({data: newData})
+    };
+
+    removeFranch=()=>{
+
     };
 
     renderEditable(cellInfo, id) {
         if (cellInfo.id>this.state.data.length-1) return;
         let prefix = '';
         if (id==='amount' || id==='extended') prefix = "$";
+
+        if(this.state.data[cellInfo.id][id].length===0) return;
+
         let value='';
-        if(this.state.data[cellInfo.id][id].length===0) return
         value= this.state.data[cellInfo.id][id];
 
         if (id==='amount' || id==='extended')
@@ -507,6 +542,19 @@ class InvoiceLineTable extends React.Component {
         const {classes} = this.props;
         const {data, order, selected} = this.state;
 
+        let all_data = [];
+
+        data.forEach(d=>{
+            if(d.franchisees.length===0) return all_data.push(d);
+            let franchisees = d.franchisees;
+            all_data.push(d);
+            franchisees.forEach(f=>{
+                all_data.push(f);
+            });
+        });
+
+        console.log('new data=', all_data);
+
         return (
             <Paper className={classNames(classes.root)}>
                 <div className={classNames(classes.tableWrapper, "h-full")}>
@@ -520,102 +568,119 @@ class InvoiceLineTable extends React.Component {
                         />
                         <TableBody className="flex flex-col" style={{overflowY: 'scroll'}}>
                             {
-                                data.map(n => {
-                                    return (
-                                        <TableRow hover key={n.id} style={{height: 52}}>
-                                            <TableCell component="td" scope="row" >
-                                                <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl)} style={{marginBottom: '0!important'}}>
-                                                    <Select
-                                                        classes={{
-                                                            outlined: classNames(classes.outlined, classes.billing)
-                                                        }}
-                                                        value={n.billing}
-                                                        onChange={(ev)=>this.handleChangeBilling(ev, n)}
-                                                        input={
-                                                            <OutlinedInput
-                                                                labelWidth={this.state.labelWidth}
-                                                                name="billing"
-                                                                id="billing"
-                                                            />
-                                                        }
+                                all_data.map((n, index) => {
+                                    if(n.type==='line')
+                                        return (
+                                            <TableRow hover key={n.id} style={{height: 52}}>
+                                                <TableCell component="td" scope="row" >
+                                                    <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl)} style={{marginBottom: '0!important'}}>
+                                                        <Select
+                                                            classes={{
+                                                                outlined: classNames(classes.outlined, classes.billing)
+                                                            }}
+                                                            value={n.billing}
+                                                            onChange={(ev)=>this.handleChangeBilling(ev, n)}
+                                                            input={
+                                                                <OutlinedInput
+                                                                    labelWidth={this.state.labelWidth}
+                                                                    name="billing"
+                                                                    id="billing"
+                                                                />
+                                                            }
+                                                        >
+                                                            <MenuItem value="">
+                                                                <em>Select</em>
+                                                            </MenuItem>
+                                                            <MenuItem value="Regular Billing">Regular Billing</MenuItem>
+                                                            <MenuItem value="Additional Billing Office">Additional Billing Office</MenuItem>
+                                                            <MenuItem value="Extra Work">Extra Work</MenuItem>
+                                                            <MenuItem value="Client Supplies">Client Supplies</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <FormControl variant="outlined" className={classes.formControl} style={{marginBottom: '0!important'}}>
+                                                        <Select
+                                                            classes={{
+                                                                outlined: classNames(classes.outlined,classes.services)
+                                                            }}
+                                                            value={n.service}
+                                                            onChange={(ev)=>this.handleChangeBilling(ev, n)}
+                                                            input={
+                                                                <OutlinedInput
+                                                                    labelWidth={this.state.labelWidth}
+                                                                    name="service"
+                                                                    id="service"
+                                                                />
+                                                            }
+                                                        >
+                                                            <MenuItem value="">
+                                                                <em>Select</em>
+                                                            </MenuItem>
+                                                            <MenuItem value="Adjust-Balance">Adjust - Balance</MenuItem>
+                                                            <MenuItem value="Adjust-Refund">Adjust - Refund</MenuItem>
+                                                            <MenuItem value="Adjust-WriteOff">Adjust - WriteOff</MenuItem>
+                                                            <MenuItem value="Buffing">Buffing</MenuItem>
+                                                            <MenuItem value="Carpet Clean">Carpet Clean</MenuItem>
+                                                            <MenuItem value="Customer Suppliers">Customer Suppliers</MenuItem>
+                                                            <MenuItem value="Emergency Clean">Emergency Clean</MenuItem>
+                                                            <MenuItem value="Event Center">Event Center</MenuItem>
+                                                            <MenuItem value="Floor Services">Floor Services</MenuItem>
+                                                            <MenuItem value="Furniture Cleaning Service">Furniture Cleaning Service</MenuItem>
+                                                            <MenuItem value="High Dusting">High Dusting</MenuItem>
+                                                            <MenuItem value="Hotel">Hotel</MenuItem>
+                                                            <MenuItem value="In-House Work">In-House Work</MenuItem>
+                                                            <MenuItem value="Initial and Deep Clean">Initial and Deep Clean</MenuItem>
+                                                            <MenuItem value="Initial One-Time Clean">Initial One-Time Clean</MenuItem>
+                                                            <MenuItem value="Make Ready">Make Ready</MenuItem>
+                                                            <MenuItem value="Miscellaneous - Special">Miscellaneous - Special</MenuItem>
+                                                            <MenuItem value="Other">Other</MenuItem>
+                                                            <MenuItem value="Porter Services">Porter Services</MenuItem>
+                                                            <MenuItem value="Power Washing">Power Washing</MenuItem>
+                                                            <MenuItem value="Regular Billing">Regular Billing</MenuItem>
+                                                            <MenuItem value="Regular Cleaning - Day">Regular Cleaning - Day</MenuItem>
+                                                            <MenuItem value="Regular Cleaning - Night">Regular Cleaning - Night</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
+                                                </TableCell>
+                                                <TableCell classes={{root:classNames(classes.description)}}>{this.renderEditable(n, 'description')}</TableCell>
+                                                <TableCell classes={{root:classNames(classes.quantity, "mr-24 ml-24")}} numeric>{this.renderEditable(n, 'quantity')}</TableCell>
+                                                <TableCell numeric>{this.renderEditable(n, 'amount')}</TableCell>
+                                                <TableCell classes={{root:classNames(classes.quantity, "mr-24 ml-24")}} numeric>{this.renderEditableMarkup(n, 'markup')}</TableCell>
+                                                <TableCell numeric>${parseFloat((n.amount*n.quantity)*(1+parseFloat(n.markup)/100)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</TableCell>
+                                                <TableCell padding="checkbox" className={classNames(classes.tableCellAction)} numeric>
+                                                    <Fab color="secondary" aria-label="add"
+                                                         className={classNames(classes.lineButton, "mr-12")}
+                                                         onClick={()=>this.addFranchiseeLine(n)}
                                                     >
-                                                        <MenuItem value="">
-                                                            <em>Select</em>
-                                                        </MenuItem>
-                                                        <MenuItem value="Regular Billing">Regular Billing</MenuItem>
-                                                        <MenuItem value="Additional Billing Office">Additional Billing Office</MenuItem>
-                                                        <MenuItem value="Extra Work">Extra Work</MenuItem>
-                                                        <MenuItem value="Client Supplies">Client Supplies</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                            </TableCell>
-                                            <TableCell>
-                                                <FormControl variant="outlined" className={classes.formControl} style={{marginBottom: '0!important'}}>
-                                                    <Select
-                                                        classes={{
-                                                            outlined: classNames(classes.outlined,classes.services)
-                                                        }}
-                                                        value={n.service}
-                                                        onChange={(ev)=>this.handleChangeBilling(ev, n)}
-                                                        input={
-                                                            <OutlinedInput
-                                                                labelWidth={this.state.labelWidth}
-                                                                name="service"
-                                                                id="service"
-                                                            />
-                                                        }
-                                                    >
-                                                        <MenuItem value="">
-                                                            <em>Select</em>
-                                                        </MenuItem>
-                                                        <MenuItem value="Adjust-Balance">Adjust - Balance</MenuItem>
-                                                        <MenuItem value="Adjust-Refund">Adjust - Refund</MenuItem>
-                                                        <MenuItem value="Adjust-WriteOff">Adjust - WriteOff</MenuItem>
-                                                        <MenuItem value="Buffing">Buffing</MenuItem>
-                                                        <MenuItem value="Carpet Clean">Carpet Clean</MenuItem>
-                                                        <MenuItem value="Customer Suppliers">Customer Suppliers</MenuItem>
-                                                        <MenuItem value="Emergency Clean">Emergency Clean</MenuItem>
-                                                        <MenuItem value="Event Center">Event Center</MenuItem>
-                                                        <MenuItem value="Floor Services">Floor Services</MenuItem>
-                                                        <MenuItem value="Furniture Cleaning Service">Furniture Cleaning Service</MenuItem>
-                                                        <MenuItem value="High Dusting">High Dusting</MenuItem>
-                                                        <MenuItem value="Hotel">Hotel</MenuItem>
-                                                        <MenuItem value="In-House Work">In-House Work</MenuItem>
-                                                        <MenuItem value="Initial and Deep Clean">Initial and Deep Clean</MenuItem>
-                                                        <MenuItem value="Initial One-Time Clean">Initial One-Time Clean</MenuItem>
-                                                        <MenuItem value="Make Ready">Make Ready</MenuItem>
-                                                        <MenuItem value="Miscellaneous - Special">Miscellaneous - Special</MenuItem>
-                                                        <MenuItem value="Other">Other</MenuItem>
-                                                        <MenuItem value="Porter Services">Porter Services</MenuItem>
-                                                        <MenuItem value="Power Washing">Power Washing</MenuItem>
-                                                        <MenuItem value="Regular Billing">Regular Billing</MenuItem>
-                                                        <MenuItem value="Regular Cleaning - Day">Regular Cleaning - Day</MenuItem>
-                                                        <MenuItem value="Regular Cleaning - Night">Regular Cleaning - Night</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                            </TableCell>
-                                            <TableCell classes={{root:classNames(classes.description)}}>{this.renderEditable(n, 'description')}</TableCell>
-                                            <TableCell classes={{root:classNames(classes.quantity, "mr-24 ml-24")}} numeric>{this.renderEditable(n, 'quantity')}</TableCell>
-                                            <TableCell numeric>{this.renderEditable(n, 'amount')}</TableCell>
-                                            <TableCell classes={{root:classNames(classes.quantity, "mr-24 ml-24")}} numeric>{this.renderEditableMarkup(n, 'markup')}</TableCell>
-                                            <TableCell numeric>${parseFloat((n.amount*n.quantity)*(1+parseFloat(n.markup)/100)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</TableCell>
-                                            <TableCell padding="checkbox" className={classNames(classes.tableCellAction)} numeric>
-                                                <Fab color="secondary" aria-label="add"
-                                                     className={classNames(classes.lineButton, "mr-12")}
-                                                     onClick={()=>this.addFranchiseeLine(n)}
-                                                >
-                                                    <Icon>call_merge</Icon>
-                                                </Fab>
-                                                {this.state.data.length>1 && (
-                                                    <Fab aria-label="add"
-                                                         onClick={()=>this.removeLineData(n)}
-                                                         className={classNames(classes.lineCancelButton, "mr-12")}>
-                                                        <Icon>close</Icon>
+                                                        <Icon>call_merge</Icon>
                                                     </Fab>
-                                                )}
-                                            </TableCell>
-                                        </TableRow>
-                                    );
+                                                    {this.state.data.length>1 && (
+                                                        <Fab aria-label="remove"
+                                                             onClick={()=>this.removeLineData(n)}
+                                                             className={classNames(classes.lineCancelButton, "mr-12")}>
+                                                            <Icon>close</Icon>
+                                                        </Fab>
+                                                    )}
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    if(n.type==='franch')
+                                        return (
+                                            <TableRow hover key={chance.guid()} style={{height: 48}} classes={{root: classes.franchisees}}>
+                                                <TableCell rowSpan={3} />
+                                                <TableCell classes={{root:classNames(classes.distribution)}}  colSpan={2}><span>Distribution</span></TableCell>
+                                                <TableCell className="" ><div>{n.franchisee}</div></TableCell>
+                                                <TableCell className="" ><div>{n.name}</div></TableCell>
+                                                <TableCell className="" ><div>{n.amount}</div></TableCell>
+                                                <TableCell className="" >
+                                                    <Fab aria-label="remove"
+                                                         onClick={()=>this.removeFranch(n)}
+                                                         className={classNames(classes.lineCancelButton, "mr-12")} style={{width: 24, height: 24, minHeight: 24}}>
+                                                        <Icon>close</Icon>
+                                                    </Fab></TableCell>
+                                            </TableRow>
+                                        )
                                 })}
                         </TableBody>
                     </Table>
