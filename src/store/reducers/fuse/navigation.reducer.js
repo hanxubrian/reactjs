@@ -1,4 +1,3 @@
-import storage from 'redux-persist/lib/storage';
 import * as Actions from '../../actions/fuse/index';
 import  * as UserActions from '../../../auth/store/actions';
 import {fuseNavigationConfig} from 'fuse-configs/fuseNavigationConfig';

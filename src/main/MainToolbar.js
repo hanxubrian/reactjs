@@ -17,10 +17,6 @@ import {Link} from 'react-router-dom';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
-import authService from 'services/auth'
-import menuService from 'services/menu';
-import * as Actions from 'auth/store/actions';
-
 const styles = theme => ({
     root     : {
         display   : 'flex',
@@ -52,10 +48,6 @@ class MainToolbar extends Component {
         region : -1,
         open: false
     };
-
-    constructor(props){
-        super(props);
-    }
 
     userMenuClick = event => {
         this.setState({userMenu: event.currentTarget});
@@ -93,7 +85,7 @@ class MainToolbar extends Component {
 
     render()
     {
-        const {classes, toggleQuickPanel, user, logout, openChatPanel} = this.props;
+        const {classes, user, logout, openChatPanel} = this.props;
         const {userMenu} = this.state;
 
         return (
@@ -174,7 +166,7 @@ class MainToolbar extends Component {
                             <React.Fragment>
                             <MenuItem component={Link} to="/pages/profile" onClick={this.userMenuClose}>
                                <ListItemIcon>
-                                   <img src="assets/images/avatars/german.png" style={{width: 32, height: 32, borderRadius: 30}}/>
+                                   <img src="assets/images/avatars/german.png" alt="user" style={{width: 32, height: 32, borderRadius: 30}}/>
                                </ListItemIcon>
                                <ListItemText className="pl-0" primary="My Profile"/>
                             </MenuItem>

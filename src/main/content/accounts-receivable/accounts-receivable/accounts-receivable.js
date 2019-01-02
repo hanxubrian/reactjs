@@ -14,9 +14,8 @@ class AccountsReceivable extends Component {
     {
         const {classes, iframeURL} = this.props;
 
-        console.log('props=', this.props);
         return (
-           <iframe src={iframeURL} className={classes.iframe}></iframe>
+           <iframe title="Accounts Receivable" src={iframeURL} className={classes.iframe}></iframe>
         );
     }
 }
