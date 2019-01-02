@@ -14,7 +14,8 @@ const initialState = {
         props: {
             open: false
         },
-        data : null
+        data : null,
+        customer: ''
     }
 };
 

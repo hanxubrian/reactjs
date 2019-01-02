@@ -202,10 +202,6 @@ class InvoiceForm extends Component {
         return this.props.customers.filter(customer => regex.test(customer.CustomerName));
     };
 
-    closeComposeDialog = () => {
-        this.props.invoiceDialog.type === 'create' ? this.props.closeEditInvoiceDialog() : this.props.closeNewInvoiceDialog();
-    };
-
     componentDidUpdate(prevProps, prevState, snapshot){
     }
 
@@ -226,11 +222,6 @@ class InvoiceForm extends Component {
     handleChange = (event) => {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
     };
-
-    canBeSubmitted()
-    {
-        return true;
-    }
 
     render()
     {
@@ -305,24 +296,26 @@ class InvoiceForm extends Component {
                             />
                         </GridItem>
                     </GridContainer>
-                    {this.state.selectedCustomer && (
+                    {/*{this.state.selectedCustomer && (*/}
                         <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
                             <GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col">
                                 <Card className={classes.card}>
                                     <CardHeader title="Customer" className={classNames(classes.cardHeader, "flex-1")} />
                                     <CardContent>
                                         <Typography variant="subtitle1" color="inherit">
-                                            <strong>Customer Name: {this.state.selectedCustomer.CustomerName}</strong>
+                                            <strong>Customer Name: {this.state.selectedCustomer ? this.state.selectedCustomer.CustomerName:''}</strong>
                                         </Typography>
                                         <Typography variant="subtitle1" color="inherit">
-                                            Customer No: {this.state.selectedCustomer.CustomerNo}
+                                            Customer No: {this.state.selectedCustomer? this.state.selectedCustomer.CustomerNo:''}
                                         </Typography>
                                         <Typography variant="subtitle1" color="inherit">
-                                            Address: {this.state.selectedCustomer.Address}
+                                            Address: {this.state.selectedCustomer ? this.state.selectedCustomer.Address: ''}
                                         </Typography>
+                                        {this.state.selectedCustomer && (
                                         <Typography variant="subtitle1" color="inherit">
-                                            {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
+                                                {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
                                         </Typography>
+                                        )}
                                     </CardContent>
                                 </Card>
                             </GridItem>
@@ -331,23 +324,24 @@ class InvoiceForm extends Component {
                                     <CardHeader title="Billing" className={classNames(classes.cardHeader, "flex-1")} />
                                     <CardContent>
                                         <Typography variant="subtitle1" color="inherit">
-                                            <strong>Billing Name: {this.state.selectedCustomer.CustomerName}</strong>
+                                            <strong>Billing Name: {this.state.selectedCustomer ? this.state.selectedCustomer.CustomerName: ''}</strong>
                                         </Typography>
                                         <Typography variant="subtitle1" color="inherit">
-                                            Customer No: {this.state.selectedCustomer.CustomerNo}
+                                            Customer No: {this.state.selectedCustomer ? this.state.selectedCustomer.CustomerNo: ''}
                                         </Typography>
                                         <Typography variant="subtitle1" color="inherit">
-                                            Address: {this.state.selectedCustomer.Address}
+                                            Address: {this.state.selectedCustomer ? this.state.selectedCustomer.Address: ''}
                                         </Typography>
-                                        <Typography variant="subtitle1" color="inherit">
-                                            {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
-                                        </Typography>
+                                        {this.state.selectedCustomer && (
+                                            <Typography variant="subtitle1" color="inherit">
+                                                {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
+                                            </Typography>
+                                        )}
                                     </CardContent>
-
                                 </Card>
                             </GridItem>
                         </GridContainer>
-                    )}
+                    {/*)}*/}
                     <Divider variant="middle"/>
                     <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col xs:mb-24">
