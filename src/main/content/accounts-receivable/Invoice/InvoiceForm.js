@@ -202,10 +202,6 @@ class InvoiceForm extends Component {
         return this.props.customers.filter(customer => regex.test(customer.CustomerName));
     };
 
-    closeComposeDialog = () => {
-        this.props.invoiceDialog.type === 'create' ? this.props.closeEditInvoiceDialog() : this.props.closeNewInvoiceDialog();
-    };
-
     componentDidUpdate(prevProps, prevState, snapshot){
     }
 
@@ -226,11 +222,6 @@ class InvoiceForm extends Component {
     handleChange = (event) => {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
     };
-
-    canBeSubmitted()
-    {
-        return true;
-    }
 
     render()
     {

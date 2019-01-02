@@ -336,13 +336,13 @@ class InvoiceListContent extends Component {
                         }
                     }}
                     getTrProps={(state, rowInfo, column) => {
+                        console.log('rowinfo=', rowInfo);
                         return {
                             className: "cursor-pointer",
                             onClick  : (e, handleOriginal) => {
                                 if ( rowInfo )
                                 {
-                                    alert('ok');
-                                    // openEditContactDialog(rowInfo.original);
+                                    this.props.openEditInvoiceForm(rowInfo.original);
                                 }
                             }
                         }
@@ -383,7 +383,6 @@ class InvoiceListContent extends Component {
                                             onChange={(event) => toggleAll(instance) }
                                             checked={this.state.selectAll}
                                             style={{color: 'white'}}
-                                            // indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
                                         />
                                     ),
                                     accessor : "",
@@ -511,7 +510,7 @@ class InvoiceListContent extends Component {
                                             <IconButton
                                                 onClick={(ev) => {
                                                     ev.stopPropagation();
-                                                    // removeContact(row.original.id);
+                                                    this.props.openEditInvoiceForm(row.original);
                                                 }}
                                             >
                                                 <Icon>edit</Icon>
