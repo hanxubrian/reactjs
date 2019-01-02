@@ -391,7 +391,7 @@ function getStepContent(customerForm, step) {
 
 			return (
 				<Fragment>
-					<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+					{/* <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
 						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 							<TextField
 								id="Name"
@@ -504,7 +504,7 @@ function getStepContent(customerForm, step) {
 					</GridContainer>
 
 					<Divider variant="middle" />
-					<div style={{ marginTop: '30px' }}></div>
+					<div style={{ marginTop: '30px' }}></div> */}
 					<h3>Addresses</h3>
 					<div className="flex">
 						<CustomerLineTable tableType="ADDRESS" headers={address_headers} />
@@ -1158,7 +1158,8 @@ class CustomerForm extends Component {
 	};
 
 	closeComposeForm = () => {
-		this.props.customerForm.type === 'create' ? this.props.closeEditCustomerForm() : this.props.closeNewCustomerForm();
+		//this.props.customerForm.type === 'create' ? this.props.closeEditCustomerForm() : this.props.closeNewCustomerForm();
+		this.type === 'create' ? this.props.closeEditCustomerForm() : this.props.closeNewCustomerForm();
 	};
 
 	constructor(props) {
@@ -1309,8 +1310,8 @@ class CustomerForm extends Component {
 	}
 
 	handleTab = (event, activeStep) => {
-        this.setState({activeStep});
-    };
+		this.setState({ activeStep });
+	};
 	//////////////////////
 	render() {
 		const { classes, CustomerForm, addCustomer, updateCustomer, removeCustomer } = this.props;
@@ -1376,7 +1377,7 @@ class CustomerForm extends Component {
 						<Tab label="Service Settings" />
 						<Tab label="Walk-Thru" />
 						<Tab label="Account Offering" />
-						<Tab label="Documents" disabled/>
+						<Tab label="Documents" disabled />
 					</Tabs>
 				</AppBar>
 
@@ -1387,7 +1388,7 @@ class CustomerForm extends Component {
 						overflowY: 'scroll',
 						width: '100%',
 						// height: 'calc(100% - 190px)'
-						height: 'calc(100% - 64px)'
+						height: 'calc(100% - 110px)'
 						// flex: '1 1 auto'
 					}}>
 
@@ -1447,6 +1448,37 @@ class CustomerForm extends Component {
 				</div>
 
 
+				<div>
+					<FuseAnimate animation="transition.expandIn" delay={300}>
+						<Button
+							variant="contained"
+							color="primary"
+							className={classNames(classes.button, "mr-12")}
+							onClick={() => {this.closeComposeForm();}}
+							disabled={!this.canBeSubmitted()}
+						> Discard </Button>
+					</FuseAnimate>
+					<FuseAnimate animation="transition.expandIn" delay={300}>
+						<Button
+							variant="contained"
+							color="primary"
+							className={classNames(classes.button, "mr-12")}
+							onClick={() => {this.closeComposeForm();}}
+							disabled={!this.canBeSubmitted()}
+						> Save </Button>
+					</FuseAnimate>
+					<FuseAnimate animation="transition.expandIn" delay={300}>
+						<Button
+							variant="contained"
+							color="primary"
+							className={classes.button}
+							onClick={() => {
+								this.closeComposeForm();
+							}}
+							disabled={!this.canBeSubmitted()}
+						> Close </Button>
+					</FuseAnimate>
+				</div>
 				{/* <div>
 					<Button
 						disabled={activeStep === 0}
@@ -1496,6 +1528,8 @@ class CustomerForm extends Component {
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
+		openNewCustomerForm: Actions.openNewCustomerForm,
+		closeNewCustomerForm: Actions.closeNewCustomerForm,
 		openEditCustomerForm: Actions.openEditCustomerForm,
 		closeEditCustomerForm: Actions.closeEditCustomerForm,
 	}, dispatch);

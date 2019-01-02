@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Hidden, Icon, IconButton, Fab, Button, Typography, Toolbar } from '@material-ui/core';
 
 // theme components
-import { FusePageCustom, FuseAnimate} from '@fuse';
+import { FusePageCustom, FuseAnimate } from '@fuse';
 
 
 import { bindActionCreators } from "redux";
@@ -143,6 +143,14 @@ const styles = theme => ({
 		left: 16,
 		zIndex: 999,
 		backgroundColor: theme.palette.primary.light,
+		'&:hover': {
+			backgroundColor: theme.palette.primary.dark,
+		}
+	},
+	sideButton: {
+		backgroundColor: theme.palette.primary.light,
+		height: 46,
+		width: 46,
 		'&:hover': {
 			backgroundColor: theme.palette.primary.dark,
 		}
@@ -407,13 +415,13 @@ class Customers extends Component {
 		}
 		const temp = this.state.data.filter(d => {
 			return (d.CustomerNo && d.CustomerNo.toString().indexOf(val) !== -1) || !val ||
-			(d.CustomerName && d.CustomerName.toString().indexOf(val) !== -1) ||
-			(d.Address && d.Address.toString().indexOf(val) !== -1) ||
-			(d.Phone && d.Phone.toString().indexOf(val) !== -1) ||
-			(d.AccountTypeListName && d.AccountTypeListName.toString().indexOf(val) !== -1) ||
-			(d.CustomerDescription && d.CustomerDescription.toString().toLowerCase().indexOf(val) !== -1) ||
-			(d.Amount && d.Amount.toString().toLowerCase().indexOf(val) !== -1) ||
-			(d.StatusName && d.StatusName.toString().indexOf(val) !== -1)
+				(d.CustomerName && d.CustomerName.toString().indexOf(val) !== -1) ||
+				(d.Address && d.Address.toString().indexOf(val) !== -1) ||
+				(d.Phone && d.Phone.toString().indexOf(val) !== -1) ||
+				(d.AccountTypeListName && d.AccountTypeListName.toString().indexOf(val) !== -1) ||
+				(d.CustomerDescription && d.CustomerDescription.toString().toLowerCase().indexOf(val) !== -1) ||
+				(d.Amount && d.Amount.toString().toLowerCase().indexOf(val) !== -1) ||
+				(d.StatusName && d.StatusName.toString().indexOf(val) !== -1)
 		});
 
 		this.setState({ temp: temp });
@@ -488,8 +496,11 @@ class Customers extends Component {
 										</div>
 										<div className="flex flex-shrink items-center">
 											<FuseAnimate animation="transition.expandIn" delay={300}>
-												<Fab color="secondary" aria-label="add"
-													className={classNames(classes.sideButton, "mr-12")} onClick={openNewCustomerForm}>
+												<Fab
+													color="secondary"
+													aria-label="add" 
+													className={classNames(classes.sideButton, "mr-12")} 
+													onClick={openNewCustomerForm}>
 													<Icon>add</Icon>
 												</Fab>
 											</FuseAnimate>
@@ -549,7 +560,16 @@ class Customers extends Component {
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
-											<FuseAnimate animation="transition.expandIn" delay={300}>
+
+											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleFilterPanel()}>
+												<Icon>person_outline</Icon>
+											</IconButton>
+
+											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleSummaryPanel()}>
+												<Icon>check_circle</Icon>
+											</IconButton>
+
+											{/* <FuseAnimate animation="transition.expandIn" delay={300}>
 												<Button
 													variant="contained"
 													color="primary"
@@ -558,10 +578,7 @@ class Customers extends Component {
 														this.closeComposeForm();
 													}}
 													disabled={!this.canBeSubmitted()}
-												>
-													Discard
-													{/* Save & Close */}
-												</Button>
+												> Discard </Button>
 											</FuseAnimate>
 											<FuseAnimate animation="transition.expandIn" delay={300}>
 												<Button
@@ -572,10 +589,7 @@ class Customers extends Component {
 														this.closeComposeForm();
 													}}
 													disabled={!this.canBeSubmitted()}
-												>
-													Save
-													{/* Save & Add more */}
-												</Button>
+												> Save </Button>
 											</FuseAnimate>
 											<FuseAnimate animation="transition.expandIn" delay={300}>
 												<Button
@@ -586,10 +600,8 @@ class Customers extends Component {
 														this.closeComposeForm();
 													}}
 													disabled={!this.canBeSubmitted()}
-												>
-													Close
-                                                </Button>
-											</FuseAnimate>
+												> Close </Button>
+											</FuseAnimate> */}
 
 
 										</div>
@@ -635,7 +647,13 @@ class Customers extends Component {
 					}
 					leftSidebarHeader={
 						<div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", { 'filteropen': filterState })}>
-							<h4 style={{ marginBlockStart: '1em' }}>Filter Panel</h4>
+							
+								{customerForm.props.open ? (
+									<h4 style={{ marginBlockStart: '1em' }}>Customer Information</h4>
+								): (
+									<h4 style={{ marginBlockStart: '1em' }}>Filter Panel</h4>
+									)}
+							
 							<FuseAnimate animation="transition.expandIn" delay={200}>
 								<div>
 									<Hidden xsDown>
