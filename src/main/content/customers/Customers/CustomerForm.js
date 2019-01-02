@@ -57,6 +57,9 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
+import Switch from '@material-ui/core/Switch';
+
+
 const styles = theme => ({
 
 	root: {
@@ -210,7 +213,7 @@ function escapeRegexCharacters(str) {
 
 
 function getSteps() {
-	return ['Customer', 'Contract', 'Service Settings', "Documents", "Walk-Thru", "Account Offering"];
+	return ['Contact', 'Billing', 'Service Agreement', 'Service Settings', "Walk-Thru", "Account Offering", "Documents"];
 }
 
 const stateNames = [
@@ -517,7 +520,7 @@ function getStepContent(customerForm, step) {
 						<CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} />
 					</div>
 
-					<div style={{ marginTop: '30px' }}></div>
+					{/* <div style={{ marginTop: '30px' }}></div>
 					<h3>Billing Settings</h3>
 
 					<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
@@ -530,7 +533,7 @@ function getStepContent(customerForm, step) {
 								InputLabelProps={{
 									shrink: true
 								}}
-								value={customerForm.state.name}
+								value={customerForm.state.EffectiveDate}
 								onChange={customerForm.handleChange('EffectiveDate')}
 								margin="normal"
 								variant="outlined"
@@ -542,7 +545,7 @@ function getStepContent(customerForm, step) {
 								id="outlined-name"
 								label="Invoice Date"
 								className={classes.textField}
-								value={customerForm.state.name}
+								value={customerForm.state.InvoiceDate}
 								onChange={customerForm.handleChange('InvoiceDate')}
 								margin="normal"
 								variant="outlined"
@@ -554,7 +557,7 @@ function getStepContent(customerForm, step) {
 								id="outlined-name"
 								label="Term"
 								className={classes.textField}
-								value={customerForm.state.name}
+								value={customerForm.state.Term}
 								onChange={customerForm.handleChange('Term')}
 								margin="normal"
 								variant="outlined"
@@ -566,7 +569,7 @@ function getStepContent(customerForm, step) {
 								id="ARStatus"
 								label="AR Status"
 								className={classes.textField}
-								value={customerForm.state.name}
+								value={customerForm.state.ARStatus}
 								onChange={customerForm.handleChange('ARStatus')}
 								margin="normal"
 								variant="outlined"
@@ -580,7 +583,149 @@ function getStepContent(customerForm, step) {
 								multiline
 								rowsMax="4"
 								className={classes.textField}
-								value={customerForm.state.name}
+								value={customerForm.state.Notes}
+								onChange={customerForm.handleChange('Notes')}
+								margin="normal"
+								variant="outlined"
+								style={{ width: '100%' }}
+							/>
+						</GridItem>
+					</GridContainer> */}
+
+				</Fragment>
+			);
+		case 1:
+			return (
+				<Fragment>
+
+					{/* <div style={{ marginTop: '30px' }}></div> */}
+					{/* <h3>Billing Settings</h3> */}
+
+					<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								type="date"
+								id="EffectiveDate"
+								label="Effective Date"
+								className={classes.textField}
+								InputLabelProps={{
+									shrink: true
+								}}
+								value={customerForm.state.EffectiveDate}
+								onChange={customerForm.handleChange('EffectiveDate')}
+								margin="normal"
+								variant="outlined"
+								style={{ minWidth: "100px", width: "30%" }}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								type="date"
+								id="InvoiceDate"
+								label="Invoice Date"
+								className={classes.textField}
+								InputLabelProps={{
+									shrink: true
+								}}
+								value={customerForm.state.InvoiceDate}
+								onChange={customerForm.handleChange('InvoiceDate')}
+								margin="normal"
+								variant="outlined"
+								style={{ minWidth: "100px", width: "30%" }}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="BillingFrequency"
+								label="Billing Frequency"
+								select
+								className={classes.textField}
+								value={customerForm.state.BillingFrequency}
+								onChange={customerForm.handleChange('BillingFrequency')}
+								margin="normal"
+								variant="outlined"
+								style={{ minWidth: "100px", width: "30%" }}
+							>
+								{[{ value: 0, label: "Monthly" }].map(option => (
+									<MenuItem key={option.value} value={option.value}>
+										{option.label}
+									</MenuItem>
+								))}
+							</TextField>
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<div style={{ display: 'flex', flexDirection: 'row', minWidth: "100px", width: "30%" }}>
+
+								{/* <FormControlLabel
+									control={
+										<Checkbox onChange={customerForm.handleChange('gilad')} />
+									}
+									label="E-Billing"
+								/> */}
+
+								<FormControlLabel
+									control={
+										<Switch
+											checked={customerForm.state.checkedA}
+											onChange={customerForm.handleChange('checkedA')}
+											value={customerForm.state.checkedA}
+										/>
+									}
+									label="E-Billing"
+									style={{ width: '30%' }}
+								/>
+
+								<TextField
+									type="email"
+									id="Email"
+									label="Email"
+									className={classes.textField}
+									value={customerForm.state.Email}
+									onChange={customerForm.handleChange('Email')}
+									margin="normal"
+									variant="outlined"
+									style={{ width: '70%' }}
+								/>
+							</div>
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="outlined-name"
+								label="Term"
+								className={classes.textField}
+								value={customerForm.state.Term}
+								onChange={customerForm.handleChange('Term')}
+								margin="normal"
+								variant="outlined"
+								style={{ width: '100%' }}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="ARStatus"
+								label="AR Status"
+								className={classes.textField}
+								value={customerForm.state.ARStatus}
+								onChange={customerForm.handleChange('ARStatus')}
+								margin="normal"
+								variant="outlined"
+								style={{ width: '100%' }}
+							/>
+						</GridItem>
+
+
+
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="Notes"
+								label="Notes"
+								multiline
+								rowsMax="4"
+								className={classes.textField}
+								value={customerForm.state.Notes}
 								onChange={customerForm.handleChange('Notes')}
 								margin="normal"
 								variant="outlined"
@@ -591,7 +736,7 @@ function getStepContent(customerForm, step) {
 
 				</Fragment>
 			);
-		case 1:
+		case 2:
 			// return 'Step 2: What is an ad group anyways?';
 			return (
 				<Fragment>
@@ -612,7 +757,7 @@ function getStepContent(customerForm, step) {
 								id="Address"
 								label="Address *"
 								className={classes.textField}
-								value={customerForm.state.name}
+								value={customerForm.state.Address}
 								onChange={customerForm.handleChange('Address')}
 								margin="normal"
 								variant="outlined"
@@ -622,7 +767,7 @@ function getStepContent(customerForm, step) {
 								id="Address2"
 								label="Address2"
 								className={classes.textField}
-								value={customerForm.state.name}
+								value={customerForm.state.Address2}
 								onChange={customerForm.handleChange('Address2')}
 								margin="normal"
 								variant="outlined"
@@ -635,7 +780,7 @@ function getStepContent(customerForm, step) {
 								id="outlined-name"
 								label="City *"
 								className={classes.textField}
-								value={customerForm.state.name}
+								value={customerForm.state.City}
 								onChange={customerForm.handleChange('City')}
 								margin="normal"
 								variant="outlined"
@@ -646,10 +791,15 @@ function getStepContent(customerForm, step) {
 								label="State *"
 								select
 								className={classes.textField}
-								value={customerForm.state.name}
+								value={customerForm.state.State}
 								onChange={customerForm.handleChange('State')}
 								margin="normal"
 								variant="outlined"
+								SelectProps={{
+									MenuProps: {
+										className: classes.menu
+									}
+								}}
 								style={{ width: '100%', marginRight: '2%', marginLeft: '2%' }}
 							>
 								{stateNames.map(option => (
@@ -678,7 +828,7 @@ function getStepContent(customerForm, step) {
 								label="Account Type *"
 								select
 								className={classes.textField}
-								value={customerForm.state.name}
+								value={customerForm.state.AccountType}
 								onChange={customerForm.handleChange('AccountType')}
 								margin="normal"
 								variant="outlined"
@@ -698,7 +848,7 @@ function getStepContent(customerForm, step) {
 								label="Contract Type *"
 								select
 								className={classes.textField}
-								value={customerForm.state.name}
+								value={customerForm.state.ContractType}
 								onChange={customerForm.handleChange('ContractType')}
 								margin="normal"
 								variant="outlined"
@@ -718,7 +868,7 @@ function getStepContent(customerForm, step) {
 								label="Agreement Type *"
 								select
 								className={classes.textField}
-								value={customerForm.state.name}
+								value={customerForm.state.AgreementType}
 								onChange={customerForm.handleChange('AgreementType')}
 								margin="normal"
 								variant="outlined"
@@ -738,7 +888,7 @@ function getStepContent(customerForm, step) {
 								label="Acct Exec"
 								select
 								className={classes.textField}
-								value={customerForm.state.name}
+								value={customerForm.state.AcctExec}
 								onChange={customerForm.handleChange('AcctExec')}
 								margin="normal"
 								variant="outlined"
@@ -865,7 +1015,7 @@ function getStepContent(customerForm, step) {
 
 				</Fragment>
 			);
-		case 2:
+		case 3:
 			// return 'Step 3: This is the bit I really care about!';
 			return (
 				<Fragment>
@@ -876,33 +1026,13 @@ function getStepContent(customerForm, step) {
 								label="Service Type *"
 								select
 								className={classes.textField}
-								value={customerForm.state.name}
+								value={customerForm.state.ServiceType}
 								onChange={customerForm.handleChange('ServiceType')}
 								margin="normal"
 								variant="outlined"
 								style={{ minWidth: "100px", width: "30%" }}
 							>
 								{[{ value: 0, label: "Select" }].map(option => (
-									<MenuItem key={option.value} value={option.value}>
-										{option.label}
-									</MenuItem>
-								))}
-							</TextField>
-						</GridItem>
-
-						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-							<TextField
-								id="BillingFrequency"
-								label="Billing Frequency"
-								select
-								className={classes.textField}
-								value={customerForm.state.name}
-								onChange={customerForm.handleChange('BillingFrequency')}
-								margin="normal"
-								variant="outlined"
-								style={{ minWidth: "100px", width: "30%" }}
-							>
-								{[{ value: 0, label: "Monthly" }].map(option => (
 									<MenuItem key={option.value} value={option.value}>
 										{option.label}
 									</MenuItem>
@@ -996,7 +1126,7 @@ function getStepContent(customerForm, step) {
 								InputLabelProps={{
 									shrink: true
 								}}
-								value={customerForm.state.name}
+								value={customerForm.state.CleanFrequency}
 								onChange={customerForm.handleChange('CleanFrequency')}
 								margin="normal"
 								variant="outlined"
@@ -1100,6 +1230,70 @@ function getStepContent(customerForm, step) {
 								style={{ width: '100%' }}
 							/>
 						</GridItem>
+					</GridContainer>
+
+				</Fragment>
+			);
+		case 4:
+			// return 'Step 3: This is the bit I really care about!';
+			return (
+				<Fragment>
+					<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								type="date"
+								id="Date"
+								label="Date"
+								className={classes.textField}
+								InputLabelProps={{
+									shrink: true
+								}}
+								value={customerForm.state.Date}
+								onChange={customerForm.handleChange('Date')}
+								margin="normal"
+								variant="outlined"
+								fullWidth
+								style={{ width: '100%', marginRight: '2%', marginLeft: '0%' }}
+							/>
+							<TextField
+								type="date"
+								id="WalkThroughDate"
+								label="Walk Through Date"
+								className={classes.textField}
+								InputLabelProps={{
+									shrink: true
+								}}
+								value={customerForm.state.WalkThroughDate}
+								onChange={customerForm.handleChange('WalkThroughDate')}
+								margin="normal"
+								variant="outlined"
+								fullWidth
+								style={{ width: '100%', marginRight: '2%', marginLeft: '2%' }}
+							/>
+							<TextField
+								type="date"
+								id="StartDate"
+								label="Start Date"
+								className={classes.textField}
+								InputLabelProps={{
+									shrink: true
+								}}
+								value={customerForm.state.StartDate}
+								onChange={customerForm.handleChange('StartDate')}
+								margin="normal"
+								variant="outlined"
+								fullWidth
+								style={{ width: '100%', marginRight: '0%', marginLeft: '2%' }}
+							/>
+
+						</GridItem>
+
+						<GridItem>
+							<img className="mr-12" src="assets/images/customers/walk-through.jpg" style={{ width: '100%', height: 'auto' }} />
+						</GridItem>
+
 					</GridContainer>
 
 				</Fragment>
@@ -1372,12 +1566,20 @@ class CustomerForm extends Component {
 						scrollable
 						scrollButtons="auto"
 					>
-						<Tab label="Customer" />
-						<Tab label="Contract" />
-						<Tab label="Service Settings" />
-						<Tab label="Walk-Thru" />
-						<Tab label="Account Offering" />
-						<Tab label="Documents" disabled />
+						{
+							getSteps().map(
+								(x) => {
+									return (<Tab label={x} />)
+								}
+							)
+						}
+						{/* <Tab label="Customer" />
+						 <Tab label="Contract" />
+						 <Tab label="Service Settings" />
+						 <Tab label="Walk-Thru" />
+						 <Tab label="Account Offering" />
+						 <Tab label="Documents" disabled /> */}
+
 					</Tabs>
 				</AppBar>
 
@@ -1454,7 +1656,7 @@ class CustomerForm extends Component {
 							variant="contained"
 							color="primary"
 							className={classNames(classes.button, "mr-12")}
-							onClick={() => {this.closeComposeForm();}}
+							onClick={() => { this.closeComposeForm(); }}
 							disabled={!this.canBeSubmitted()}
 						> Discard </Button>
 					</FuseAnimate>
@@ -1463,7 +1665,7 @@ class CustomerForm extends Component {
 							variant="contained"
 							color="primary"
 							className={classNames(classes.button, "mr-12")}
-							onClick={() => {this.closeComposeForm();}}
+							onClick={() => { this.closeComposeForm(); }}
 							disabled={!this.canBeSubmitted()}
 						> Save </Button>
 					</FuseAnimate>
