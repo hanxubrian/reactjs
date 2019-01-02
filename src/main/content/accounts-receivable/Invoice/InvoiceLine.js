@@ -123,7 +123,7 @@ class InvoiceLineTableHead extends React.Component {
 
         return (
             <TableHead style={{backgroundColor: "lightgray"}}>
-                <TableRow>
+                <TableRow style={{backgroundColor: "lightgray"}}>
                     {rows.map(row => {
                         return (
                             <TableCell
@@ -250,12 +250,12 @@ const styles = theme => ({
             fontWeight: 700,
             fontSize: 14,
             padding: "4px 24px",
-            width: 180,
+            width: 200,
             borderRight: '1px solid darkgray'
         },
         '& tbody tr td':{
             padding: "4px 24px",
-            width: 180
+            width: 200
         },
         InvoiceLineHeadRoot:{
             backgroundColor: 'lightgray',
@@ -266,10 +266,6 @@ const styles = theme => ({
     },
     table       : {
         minWidth: 1020,
-        '& .summary':{
-            fontSize: 16,
-            fontWeight: 700
-        }
     },
     tableWrapper: {
         overflowX: 'auto'
@@ -318,9 +314,6 @@ class InvoiceLineTable extends React.Component {
         page       : 0,
         rowsPerPage: 10,
         labelWidth: 0,
-        total: 0.0,
-        subTotal: 0.0,
-        tax: 0,
     };
 
     constructor(props) {
@@ -380,20 +373,8 @@ class InvoiceLineTable extends React.Component {
     componentDidUpdate(prevProps, prevState, snapshot){
         if(prevState.data!==this.state.data){
             this.props.updateInvoiceLine(this.state.data);
-            console.log('fired');
         }
     }
-    getTotal = () => {
-        let total = 0.0;
-        const data = [...this.state.data];
-
-        data.forEach(n => {
-            total += parseFloat((n.amount*n.quantity)*(1+parseFloat(n.markup)/100));
-        });
-
-        this.setState({subTotal: total});
-        this.setState({total: total+this.state.tax});
-    };
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
@@ -442,7 +423,6 @@ class InvoiceLineTable extends React.Component {
                     if(id==='amount' || id==='markup') data[cellInfo.id][id] = parseFloat(data[cellInfo.id][id]);
                     if(id==='quantity') data[cellInfo.id][id] = parseInt(data[cellInfo.id][id]);
                     this.setState({ data });
-                    this.getTotal();
                 }}
                 dangerouslySetInnerHTML={{
                     __html: prefix + value
@@ -461,7 +441,6 @@ class InvoiceLineTable extends React.Component {
                     const data = [...this.state.data];
                     data[cellInfo.id][id] = e.target.innerHTML;
                     this.setState({ data });
-                    this.getTotal();
                 }}
                 dangerouslySetInnerHTML={{
                     __html: this.state.data[cellInfo.id][id]
@@ -479,7 +458,7 @@ class InvoiceLineTable extends React.Component {
         return (
             <Paper className={classes.root}>
                 <div className={classes.tableWrapper}>
-                    <Table className={classes.table} aria-labelledby="tableTitle">
+                    <Table className={classNames(classes.table, "flex flex-col")} aria-labelledby="tableTitle">
                         <InvoiceLineTableHead
                             className={classNames(classes.InvoiceLineHeadRoot)}
                             numSelected={selected.length}
@@ -488,7 +467,7 @@ class InvoiceLineTable extends React.Component {
                             onRequestSort={this.handleRequestSort}
                             rowCount={data.length}
                         />
-                        <TableBody>
+                        <TableBody className="flex flex-col" style={{maxHeight: 150, height: 150,overflow: 'scroll'}}>
                             {stableSort(data, getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map(n => {
@@ -593,22 +572,6 @@ class InvoiceLineTable extends React.Component {
                                     <TableCell colSpan={8}/>
                                 </TableRow>
                             )}
-                            <TableRow>
-                                <TableCell rowSpan={3} />
-                                <TableCell className="border-0" colSpan={4}></TableCell>
-                                <TableCell className="summary" numeric>Subtotal</TableCell>
-                                <TableCell className="summary" align="right" numeric>${this.state.subTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell className="border-0" colSpan={4}></TableCell>
-                                <TableCell className="summary" numeric>Tax</TableCell>
-                                <TableCell className="summary" align="right" numeric>${this.state.tax}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell className="border-0" colSpan={4}></TableCell>
-                                <TableCell className="summary" numeric>Grand Total</TableCell>
-                                <TableCell className="summary" align="right" numeric>${this.state.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</TableCell>
-                            </TableRow>
                         </TableBody>
                     </Table>
                 </div>

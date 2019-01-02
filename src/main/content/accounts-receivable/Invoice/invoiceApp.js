@@ -564,8 +564,6 @@ class InvoiceApp extends Component {
                                                     Close
                                                 </Button>
                                             </FuseAnimate>
-
-
                                         </div>
                                     </div>
                                     <div className="flex flex-none items-end" style={{display: 'none'}}>
