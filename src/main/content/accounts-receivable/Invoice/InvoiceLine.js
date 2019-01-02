@@ -24,6 +24,16 @@ import * as Actions from 'store/actions';
 import keycode from "keycode";
 
 let counter = 0;
+let fcounter = 0;
+
+function createFranchisee(id, franchisee="", name="", amount=0) {
+    return {
+        id,
+        franchisee,
+        name,
+        amount
+    }
+}
 
 function createData(billing='Regular Billing', service='Adjust-Balance', description='description', quantity=1, amount=0, markup=0, extended=0)
 {
@@ -35,7 +45,8 @@ function createData(billing='Regular Billing', service='Adjust-Balance', descrip
         quantity,
         amount,
         markup,
-        extended
+        extended,
+        franchisees: []
     };
 }
 
@@ -251,19 +262,42 @@ const styles = theme => ({
             fontWeight: 700,
             fontSize: 14,
             padding: "4px 24px",
-            width: 200,
             borderRight: '1px solid darkgray'
         },
+        '& thead tr th:nth-child(1)':{
+            width: 240
+        },
+        '& thead tr th:nth-child(2)':{
+            width: 260
+        },
+        '& thead tr th:nth-child(3)':{
+            width: 280
+        },
+        '& thead tr th:last-child':{
+            borderRight: 'none'
+        },
         '& tbody tr td':{
-            padding: "4px 24px",
-            width: 200
+            padding: "4px 12px",
+            width: 150
         },
         InvoiceLineHeadRoot:{
             backgroundColor: 'lightgray',
         },
+        selectRoot:{
+            backgroundColor: 'green'
+        }
     },
     outlined: {
         padding: "12px 24px 12px 12px!important"
+    },
+    billing:{
+        width: 180
+    },
+    services:{
+        width: 200
+    },
+    description:{
+        width: '250px!important'
     },
     table       : {
         minWidth: 1020,
@@ -330,7 +364,6 @@ class InvoiceLineTable extends React.Component {
     }
 
     addInvoiceLineFunction(event){
-        console.log('key=', keycode(event));
         if(keycode(event)==='enter' || keycode(event)==='down'){
             this.addLineData();
         }
@@ -402,8 +435,17 @@ class InvoiceLineTable extends React.Component {
     };
 
 
-    addFranchiseeLine = () =>{
+    addFranchiseeLine = (n) =>{
+        const data = [...this.state.data];
+        let fline = createFranchisee(n.franchisees.length);
+        n.franchisees = [...n.franchisees, fline];
 
+        let newData = data.map(record=>{
+            if(record.id===n.id)
+                record = n;
+            return record;
+        });
+        this.setState({data: newData})
     };
 
     removeLineData=(line)=>{
@@ -495,7 +537,7 @@ class InvoiceLineTable extends React.Component {
                                                 <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl)} style={{marginBottom: '0!important'}}>
                                                     <Select
                                                         classes={{
-                                                            outlined: classes.outlined
+                                                            outlined: classNames(classes.outlined, classes.billing)
                                                         }}
                                                         value={n.billing}
                                                         onChange={(ev)=>this.handleChangeBilling(ev, n)}
@@ -521,7 +563,7 @@ class InvoiceLineTable extends React.Component {
                                                 <FormControl variant="outlined" className={classes.formControl} style={{marginBottom: '0!important'}}>
                                                     <Select
                                                         classes={{
-                                                            outlined: classes.outlined
+                                                            outlined: classNames(classes.outlined,classes.services)
                                                         }}
                                                         value={n.service}
                                                         onChange={(ev)=>this.handleChangeBilling(ev, n)}
@@ -562,7 +604,7 @@ class InvoiceLineTable extends React.Component {
                                                     </Select>
                                                 </FormControl>
                                             </TableCell>
-                                            <TableCell>{this.renderEditable(n, 'description')}</TableCell>
+                                            <TableCell classes={{root:classNames(classes.description)}}>{this.renderEditable(n, 'description')}</TableCell>
                                             <TableCell numeric>{this.renderEditable(n, 'quantity')}</TableCell>
                                             <TableCell numeric>{this.renderEditable(n, 'amount')}</TableCell>
                                             <TableCell numeric>{this.renderEditableMarkup(n, 'markup')}</TableCell>
@@ -570,7 +612,7 @@ class InvoiceLineTable extends React.Component {
                                             <TableCell padding="checkbox" className={classNames(classes.tableCellAction)} numeric>
                                                 <Fab color="secondary" aria-label="add"
                                                      className={classNames(classes.lineButton, "mr-12")}
-                                                     onClick={()=>this.addFranchiseeLine()}
+                                                     onClick={()=>this.addFranchiseeLine(n)}
                                                 >
                                                     <Icon>call_merge</Icon>
                                                 </Fab>

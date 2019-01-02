@@ -38,7 +38,6 @@ import Autosuggest from 'react-autosuggest';
 import classNames from 'classnames';
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
-import keycode from 'keycode';
 
 const styles = theme => ({
     layoutForm: {
