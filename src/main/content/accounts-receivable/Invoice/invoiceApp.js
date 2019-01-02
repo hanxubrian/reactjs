@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
 // core components
-import {Hidden, Icon, IconButton, Fab, Button, Typography,Toolbar} from '@material-ui/core';
+import {Hidden, Icon, IconButton, Fab, Typography,Toolbar} from '@material-ui/core';
 
 // theme components
 import {FusePageCustom, FuseAnimate} from '@fuse';
@@ -406,15 +406,6 @@ class InvoiceApp extends Component {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
     };
 
-    onSaveAndAddMore=()=>{
-
-    };
-
-
-    onSaveAndClose = () => {
-
-    };
-
     canBeSubmitted()
     {
         return true;
@@ -524,47 +515,6 @@ class InvoiceApp extends Component {
                                                 </FuseAnimate>
                                             </div>
                                         </div>
-                                        <div className="flex flex-shrink items-center">
-                                            <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    className={classNames(classes.button, "mr-12")}
-                                                    onClick={() => {
-                                                        this.onSaveAndClose();
-                                                    }}
-                                                    disabled={!this.canBeSubmitted()}
-                                                >
-                                                    Save & Close
-                                                </Button>
-                                            </FuseAnimate>
-                                            <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    className={classNames(classes.button, "mr-12")}
-                                                    onClick={() => {
-                                                        this.onSaveAndAddMore();
-                                                    }}
-                                                    disabled={!this.canBeSubmitted()}
-                                                >
-                                                    Save & Add more
-                                                </Button>
-                                            </FuseAnimate>
-                                            <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    className={classes.button}
-                                                    onClick={() => {
-                                                        this.closeComposeForm();
-                                                    }}
-                                                    disabled={!this.canBeSubmitted()}
-                                                >
-                                                    Close
-                                                </Button>
-                                            </FuseAnimate>
-                                        </div>
                                     </div>
                                     <div className="flex flex-none items-end" style={{display: 'none'}}>
                                         <FuseAnimate animation="transition.expandIn" delay={600}>
@@ -659,8 +609,6 @@ function mapDispatchToProps(dispatch)
         toggleSummaryPanel: Actions.toggleSummaryPanel,
         openNewInvoiceForm: Actions.openNewInvoiceForm,
         openEditInvoiceForm: Actions.openEditInvoiceForm,
-        closeEditInvoiceForm: Actions.closeEditInvoiceForm,
-        closeNewInvoiceForm : Actions.closeNewInvoiceForm,
         getCustomers: Actions.getCustomers,
     }, dispatch);
 }

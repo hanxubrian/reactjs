@@ -13,8 +13,6 @@ import {
     CardContent,
     Divider,
     Button,
-    TableRow,
-    TableCell,
 } from '@material-ui/core';
 
 // theme components
@@ -56,7 +54,7 @@ const styles = theme => ({
         width: '100%'
     },
     formControl: {
-        marginBottom: 24,
+        marginBottom: 12,
         minWidth: 200,
     },
     textField: {
@@ -262,6 +260,18 @@ class InvoiceForm extends Component {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
     };
 
+    onSaveAndAddMore=()=>{
+
+    };
+
+    onSaveAndClose = () => {
+
+    };
+
+
+    closeComposeForm = () => {
+        this.props.invoiceForm.type === 'create' ? this.props.closeEditInvoiceForm() : this.props.closeNewInvoiceForm();
+    };
     render()
     {
         const { classes} = this.props;
@@ -279,7 +289,7 @@ class InvoiceForm extends Component {
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="h-full flex flex-col relative">
-                    <div className="flex flex-col p-24 pb-0" style={{flex: "1"}}>
+                    <div className="flex flex-col p-24 pt-12 pb-0" style={{flex: "1"}}>
                         <GridContainer className={classNames(classes.formControl)}>
                             <GridItem xs={12} sm={8} md={8} className="flex flex-row">
                                 <Autosuggest
@@ -398,9 +408,10 @@ class InvoiceForm extends Component {
                                         className={classes.textField}
                                         value={this.state.InvoiceDescription}
                                         onChange={this.handleChange}
-                                        margin="normal"
+                                        margin="dense"
                                         variant="outlined"
                                         fullWidth
+                                        multiline
                                     />
                                 </div>
                                 <div className="w-full">
@@ -411,9 +422,10 @@ class InvoiceForm extends Component {
                                         className={classes.textField}
                                         value={this.state.note}
                                         onChange={this.handleChange}
-                                        margin="normal"
+                                        margin="dense"
                                         variant="outlined"
                                         fullWidth
+                                        multiline
                                     />
                                 </div>
                             </GridItem>
@@ -435,6 +447,9 @@ class InvoiceForm extends Component {
                                     variant="contained"
                                     color="primary"
                                     className={classNames(classes.button, "mr-12")}
+                                    onClick={() => {
+                                        this.onSaveAndClose();
+                                    }}
                                 >
                                     Save & Close
                                 </Button>
@@ -444,6 +459,9 @@ class InvoiceForm extends Component {
                                     variant="contained"
                                     color="primary"
                                     className={classNames(classes.button, "mr-12")}
+                                    onClick={() => {
+                                        this.onSaveAndAddMore();
+                                    }}
                                 >
                                     Save & Add more
                                 </Button>
@@ -453,6 +471,9 @@ class InvoiceForm extends Component {
                                     variant="contained"
                                     color="primary"
                                     className={classes.button}
+                                    onClick={() => {
+                                        this.closeComposeForm();
+                                    }}
                                 >
                                     Close
                                 </Button>
@@ -470,6 +491,7 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         openEditInvoiceForm: Actions.openEditInvoiceForm,
         closeEditInvoiceForm: Actions.closeEditInvoiceForm,
+        closeNewInvoiceForm : Actions.closeNewInvoiceForm,
     }, dispatch);
 }
 

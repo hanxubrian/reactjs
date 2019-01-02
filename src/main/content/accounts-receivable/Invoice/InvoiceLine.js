@@ -241,7 +241,7 @@ InvoiceLineTableToolbar = withStyles(toolbarStyles)(InvoiceLineTableToolbar);
 const styles = theme => ({
     root        : {
         width    : '100%',
-        marginTop: theme.spacing.unit * 3,
+        marginTop: theme.spacing.unit * 2,
         head: {
             color: 'black',
         },
@@ -549,7 +549,7 @@ class InvoiceLineTable extends React.Component {
                                             <TableCell numeric>{this.renderEditable(n, 'amount')}</TableCell>
                                             <TableCell numeric>{this.renderEditableMarkup(n, 'markup')}</TableCell>
                                             <TableCell numeric>${parseFloat((n.amount*n.quantity)*(1+parseFloat(n.markup)/100)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</TableCell>
-                                            <TableCell padding="checkbox" className={classNames(classes.tableCellAction)}>
+                                            <TableCell padding="checkbox" className={classNames(classes.tableCellAction)} numeric>
                                                 <Fab color="secondary" aria-label="add"
                                                      className={classNames(classes.lineButton, "mr-12")}
                                                      onClick={()=>this.AddLineData()}
