@@ -1,20 +1,16 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 
 // core components
 import {
-    Hidden, Icon, IconButton, Fab, Input, Paper, Button
+    Hidden, Icon, IconButton, Input, Paper, Button
 } from '@material-ui/core';
 
 //Janiking
 import JanikingPagination from 'Commons/JanikingPagination';
 
-// theme components
-import {FuseAnimate} from '@fuse';
 
 import {withStyles, Checkbox} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
-
 
 // for store
 import {bindActionCreators} from "redux";
@@ -137,6 +133,7 @@ class InvoiceListContent extends Component {
         data: [],
         selection: [],
         selectAll: false,
+        selectedInvoice: null
     };
 
     onChange = (event, { newValue, method }) => {
@@ -256,7 +253,7 @@ class InvoiceListContent extends Component {
     };
 
     removeInvoices = ()=> {
-        if(this.state.selection.length==0){
+        if(this.state.selection.length===0){
             alert("Please choose invoice(s) to delete");
             return;
         }
@@ -275,8 +272,7 @@ class InvoiceListContent extends Component {
 
     render()
     {
-        const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteInvoicesAction,data,
-            openNewInvoiceForm, closeNewInvoiceForm, InvoiceForm} = this.props;
+        const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState} = this.props;
         const { toggleSelection, toggleAll, isSelected} = this;
 
         return (
@@ -329,9 +325,6 @@ class InvoiceListContent extends Component {
                         }
                     }}
                     getTdProps={(state, rowInfo, column, instance) =>{
-                        let tdClass='flex items-center justify-center';
-                        if (column.id==='InvoiceNo' ||column.id==='CustomerNo'||column.id==='InvoiceBalanceAmount'||
-                            column.id==='InvoiceDate' || column.id==='TransactionStatus') tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
 
                         return {
                             style:{
@@ -366,7 +359,7 @@ class InvoiceListContent extends Component {
                                             disabled={filterState ? true : false}
                                             className={classNames(classes.filterPanelButton)}
                                         >
-                                            <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
+                                            <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
                                         </Button>
                                     </Hidden>
                                     <Hidden smUp>
@@ -375,7 +368,7 @@ class InvoiceListContent extends Component {
                                             aria-label="toggle filter panel"
                                             className={classNames(classes.filterPanelButton)}
                                         >
-                                            <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
+                                            <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
                                         </Button>
                                     </Hidden>
                                 </div>

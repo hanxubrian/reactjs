@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {AppBar, Toolbar, Icon, IconButton, ClickAwayListener, Paper, Avatar, Typography, withStyles} from '@material-ui/core';
+import {Paper, withStyles} from '@material-ui/core';
 import keycode from 'keycode';
 
 //Material UI core

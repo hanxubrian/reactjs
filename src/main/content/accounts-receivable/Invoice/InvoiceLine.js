@@ -6,8 +6,8 @@ import {withRouter} from 'react-router-dom';
 
 //Material UI core and icons
 import {
-    Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,TableFooter,
-    Toolbar, Typography, Paper, Checkbox, Icon, IconButton, Tooltip, Select, OutlinedInput, MenuItem, FormControl, Fab
+    Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
+    Toolbar, Typography, Paper, Icon, IconButton, Tooltip, Select, OutlinedInput, MenuItem, FormControl, Fab
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -119,7 +119,7 @@ class InvoiceLineTableHead extends React.Component {
 
     render()
     {
-        const {classes, onSelectAllClick, order, orderBy, numSelected, rowCount} = this.props;
+        const {order, orderBy} = this.props;
 
         return (
             <TableHead style={{backgroundColor: "lightgray"}}>
@@ -322,6 +322,14 @@ class InvoiceLineTable extends React.Component {
         subTotal: 0.0,
         tax: 0,
     };
+
+    constructor(props) {
+        super(props);
+        console.log('prop', props);
+        // if(props.InvoiceForm.type==="new") {
+
+        // }
+    }
 
     handleRequestSort = (event, property) => {
         const orderBy = property;
@@ -581,7 +589,7 @@ class InvoiceLineTable extends React.Component {
                                     );
                                 })}
                             {emptyRows > 0 && (
-                                <TableRow style={{height: 49 * emptyRows}} style={{display: 'none'}}>
+                                <TableRow style={{height: 49 * emptyRows, display: 'none'}}>
                                     <TableCell colSpan={8}/>
                                 </TableRow>
                             )}
@@ -623,7 +631,7 @@ function mapDispatchToProps(dispatch)
 function mapStateToProps({invoices })
 {
     return {
-        InvoiceForm: invoices.InvoiceForm
+        invoiceForm: invoices.invoiceForm
     }
 }
 

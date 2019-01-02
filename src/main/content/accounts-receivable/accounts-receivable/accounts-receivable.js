@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles/index';
-import {FuseAnimate} from '@fuse';
 import connect from "react-redux/es/connect/connect";
 import {withRouter} from "react-router-dom";
 

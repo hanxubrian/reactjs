@@ -693,7 +693,6 @@ function mapDispatchToProps(dispatch) {
 		openEditCustomerForm: Actions.openEditCustomerForm,
 		closeEditCustomerForm: Actions.closeEditCustomerForm,
 		closeNewCustomerForm: Actions.closeNewCustomerForm,
-		getCustomers: Actions.getCustomers,
 	}, dispatch);
 }
 
@@ -705,8 +704,6 @@ function mapStateToProps({ customers, auth }) {
 		filterState: customers.bOpenedFilterPanel,
 		summaryState: customers.bOpenedSummaryPanel,
 		regionId: auth.login.defaultRegionId,
-		customers: customers.customersDB,
-		bLoadedCustomers: customers.bLoadedCustomers,
 		customerForm: customers.customerForm
 	}
 }

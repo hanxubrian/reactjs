@@ -4,11 +4,7 @@ import {withRouter} from 'react-router-dom';
 
 // core components
 import {
-    Paper, TextField, Button, Typography,
-    MenuItem, FormControl, InputLabel, Select, OutlinedInput,
-    Card, CardHeader, CardContent, Divider, Radio, RadioGroup, FormControlLabel
-} from '@material-ui/core';
-
+    Paper, TextField, Typography, MenuItem, Card, CardHeader, CardContent, Divider} from '@material-ui/core';
 
 // theme components
 import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
