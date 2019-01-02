@@ -52,6 +52,11 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
+
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+
 const styles = theme => ({
 
 	root: {
@@ -205,7 +210,7 @@ function escapeRegexCharacters(str) {
 
 
 function getSteps() {
-	return ['Customer Information', 'Contract', 'Service Settings'];
+	return ['Customer Information', 'Contract', 'Service Settings', "Documents", "Walk-Thru", "Account Offering"];
 }
 
 const stateNames = [
@@ -1302,6 +1307,10 @@ class CustomerForm extends Component {
 	isLastStep() {
 		return this.state.activeStep === this.totalSteps() - 1;
 	}
+
+	handleTab = (event, activeStep) => {
+        this.setState({activeStep});
+    };
 	//////////////////////
 	render() {
 		const { classes, CustomerForm, addCustomer, updateCustomer, removeCustomer } = this.props;
@@ -1327,7 +1336,7 @@ class CustomerForm extends Component {
 			// <FuseAnimate animation="transition.slideRightIn" delay={300} className={classNames(classes.layoutTable, "h-full")}>
 			// <div className="p-24 h-full">
 			<Fragment>
-				<Stepper nonLinear activeStep={activeStep}>
+				{/* <Stepper alternativeLabel nonLinear activeStep={activeStep}>
 					{steps.map((label, index) => {
 						const props = {};
 						const buttonProps = {};
@@ -1349,19 +1358,41 @@ class CustomerForm extends Component {
 							</Step>
 						);
 					})}
-				</Stepper>
+				</Stepper> */}
+
+
+
+				<AppBar position="static" color="default">
+					<Tabs
+						value={activeStep}
+						onChange={this.handleTab}
+						indicatorColor="primary"
+						textColor="primary"
+						scrollable
+						scrollButtons="auto"
+					>
+						<Tab label="Customer Information" />
+						<Tab label="Contract" />
+						<Tab label="Service Settings" />
+						<Tab label="Walk-Thru" />
+						<Tab label="Account Offering" />
+						<Tab label="Documents" disabled/>
+					</Tabs>
+				</AppBar>
+
 
 				<div
 					className={classNames(classes.layoutTable, "p-24")}
 					style={{
 						overflowY: 'scroll',
 						width: '100%',
-						height: 'calc(100% - 140px)'
+						// height: 'calc(100% - 190px)'
+						height: 'calc(100% - 64px)'
 						// flex: '1 1 auto'
 					}}>
 
 
-					<h2>{getSteps()[activeStep]}</h2>
+					<h2>{steps[activeStep]}</h2>
 					<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
 
 					<div>
@@ -1416,40 +1447,40 @@ class CustomerForm extends Component {
 				</div>
 
 
-				<div>
-										<Button
-											disabled={activeStep === 0}
-											onClick={this.handleBack}
-											className={classes.button}
-										>Back</Button>
-										<Button
-											variant="contained"
-											color="primary"
-											onClick={this.handleNext}
-											className={classes.button}
-										> Next </Button>
-										{this.isStepOptional(activeStep) &&
-											!this.state.completed.has(this.state.activeStep) && (
-												<Button
-													variant="contained"
-													color="primary"
-													onClick={this.handleSkip}
-													className={classes.button}
-												> Skip </Button>
-											)}
-										{activeStep !== steps.length &&
-											(this.state.completed.has(this.state.activeStep) ? (
-												<Typography variant="caption" className={classes.completed}>
-													Step {activeStep + 1} already completed
+				{/* <div>
+					<Button
+						disabled={activeStep === 0}
+						onClick={this.handleBack}
+						className={classes.button}
+					>Back</Button>
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={this.handleNext}
+						className={classes.button}
+					> Next </Button>
+					{this.isStepOptional(activeStep) &&
+						!this.state.completed.has(this.state.activeStep) && (
+							<Button
+								variant="contained"
+								color="primary"
+								onClick={this.handleSkip}
+								className={classes.button}
+							> Skip </Button>
+						)}
+					{activeStep !== steps.length &&
+						(this.state.completed.has(this.state.activeStep) ? (
+							<Typography variant="caption" className={classes.completed}>
+								Step {activeStep + 1} already completed
 												</Typography>
-											)
-												:
-												(
-													<Button variant="contained" color="primary" onClick={this.handleComplete}>
-														{this.completedSteps() === this.totalSteps() - 1 ? ' Done ' : ' Save '}
-													</Button>
-												))}
-									</div>
+						)
+							:
+							(
+								<Button variant="contained" color="primary" onClick={this.handleComplete}>
+									{this.completedSteps() === this.totalSteps() - 1 ? ' Done ' : ' Save '}
+								</Button>
+							))}
+				</div> */}
 
 				{/* </FuseAnimate> */}
 
