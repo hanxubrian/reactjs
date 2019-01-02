@@ -38,7 +38,6 @@ import Autosuggest from 'react-autosuggest';
 import classNames from 'classnames';
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
-import moment from 'moment'
 
 const styles = theme => ({
     layoutForm: {

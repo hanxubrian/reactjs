@@ -24,7 +24,6 @@ import * as Actions from 'store/actions';
 import keycode from "keycode";
 
 let counter = 0;
-let fcounter = 0;
 
 function createFranchisee(id, franchisee="", name="", amount=0) {
     return {
@@ -61,22 +60,6 @@ function desc(a, b, orderBy)
         return 1;
     }
     return 0;
-}
-
-function stableSort(array, cmp)
-{
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-        const order = cmp(a[0], b[0]);
-        if ( order !== 0 ) return order;
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map(el => el[0]);
-}
-
-function getSorting(order, orderBy)
-{
-    return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
 
 const rows = [
@@ -259,12 +242,12 @@ const styles = theme => ({
         '& thead tr th':{
             color: 'black!important',
             fontWeight: 700,
-            fontSize: 14,
+            fontSize: '1.1rem',
             padding: "4px 24px",
             borderRight: '1px solid darkgray'
         },
         '& thead tr th:nth-child(1)':{
-            width: 240
+            width: 250
         },
         '& thead tr th:nth-child(2)':{
             width: 260
@@ -290,10 +273,12 @@ const styles = theme => ({
         padding: "12px 24px 12px 12px!important"
     },
     billing:{
-        width: 180
+        width: 180,
+        fontSize: '1.3rem'
     },
     services:{
-        width: 200
+        width: 200,
+        fontSize: '1.3rem'
     },
     description:{
         width: '250px!important'
@@ -511,7 +496,7 @@ class InvoiceLineTable extends React.Component {
     render()
     {
         const {classes} = this.props;
-        const {data, order, orderBy, selected, rowsPerPage, page} = this.state;
+        const {data, order, selected} = this.state;
 
         return (
             <Paper className={classNames(classes.root)}>
@@ -525,9 +510,8 @@ class InvoiceLineTable extends React.Component {
                             onRequestSort={this.handleRequestSort}
                         />
                         <TableBody className="flex flex-col" style={{overflowY: 'scroll'}}>
-                            {stableSort(data, getSorting(order, orderBy))
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map(n => {
+                            {
+                                data.map(n => {
                                     return (
                                         <TableRow hover key={n.id} style={{height: 52}}>
                                             <TableCell component="td" scope="row" >
