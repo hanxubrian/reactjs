@@ -11,8 +11,6 @@ import ContactsSidebarContent from 'main/content/apps/contacts/ContactsSidebarCo
 import _ from '@lodash';
 import {Fab, Icon} from '@material-ui/core';
 import ContactDialog from 'main/content/apps/contacts/ContactDialog';
-import withReducer from 'store/withReducer';
-import reducer from './store/reducers';
 
 const styles = theme => ({
     addButton: {
