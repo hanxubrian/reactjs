@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 
 // core components
-import { Hidden, Icon, IconButton, Fab, Input, Paper, TextField, Button, Typography, Toolbar } from '@material-ui/core';
+import { Hidden, Icon, IconButton, Fab, Button, Typography, Toolbar } from '@material-ui/core';
 
 // theme components
-import { FusePageCustom, FuseAnimate, FuseSearch } from '@fuse';
+import { FusePageCustom, FuseAnimate} from '@fuse';
 
 
 import { bindActionCreators } from "redux";
-import { withStyles, Checkbox } from "@material-ui/core";
+import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 
 // for store
@@ -18,10 +18,10 @@ import SummaryPanel from './SummaryPanel';
 import FilterPanel from './filterPanel';
 
 // third party
-import moment from 'moment'
-import checkboxHOC from "react-table/lib/hoc/selectTable";
-import Chance from "chance";
-import ReactTable from "react-table";
+// import moment from 'moment'
+// import checkboxHOC from "react-table/lib/hoc/selectTable";
+// import Chance from "chance";
+// import ReactTable from "react-table";
 import "react-table/react-table.css";
 import _ from 'lodash';
 
@@ -29,7 +29,7 @@ import _ from 'lodash';
 import classNames from 'classnames';
 
 //table pagination
-import JanikingPagination from './../../../../Commons/JanikingPagination';
+// import JanikingPagination from './../../../../Commons/JanikingPagination';
 
 import CustomerForm from './CustomerForm';
 import CustomerListContent from './CustomerListContent';
@@ -406,14 +406,14 @@ class Customers extends Component {
 			return;
 		}
 		const temp = this.state.data.filter(d => {
-			return d.CustomerNo && d.CustomerNo.toString().indexOf(val) !== -1 || !val ||
-				d.CustomerName && d.CustomerName.toString().indexOf(val) !== -1 ||
-				d.Address && d.Address.toString().indexOf(val) !== -1 ||
-				d.Phone && d.Phone.toString().indexOf(val) !== -1 ||
-				d.AccountTypeListName && d.AccountTypeListName.toString().indexOf(val) !== -1 ||
-				d.CustomerDescription && d.CustomerDescription.toString().toLowerCase().indexOf(val) !== -1 ||
-				d.Amount && d.Amount.toString().toLowerCase().indexOf(val) !== -1 ||
-				d.StatusName && d.StatusName.toString().indexOf(val) !== -1
+			return (d.CustomerNo && d.CustomerNo.toString().indexOf(val) !== -1) || !val ||
+			(d.CustomerName && d.CustomerName.toString().indexOf(val) !== -1) ||
+			(d.Address && d.Address.toString().indexOf(val) !== -1) ||
+			(d.Phone && d.Phone.toString().indexOf(val) !== -1) ||
+			(d.AccountTypeListName && d.AccountTypeListName.toString().indexOf(val) !== -1) ||
+			(d.CustomerDescription && d.CustomerDescription.toString().toLowerCase().indexOf(val) !== -1) ||
+			(d.Amount && d.Amount.toString().toLowerCase().indexOf(val) !== -1) ||
+			(d.StatusName && d.StatusName.toString().indexOf(val) !== -1)
 		});
 
 		this.setState({ temp: temp });
@@ -436,7 +436,7 @@ class Customers extends Component {
 	}
 
 	removeCustomers = () => {
-		if (this.state.selection.length == 0) {
+		if (this.state.selection.length === 0) {
 			alert("Please choose customer(s) to delete");
 			return;
 		}
@@ -454,11 +454,11 @@ class Customers extends Component {
 	}
 
 	render() {
-		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteCustomersAction, openNewCustomerForm, customerForm } = this.props;
+		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, openNewCustomerForm, customerForm } = this.props;
 
-		const { toggleSelection, toggleAll, isSelected, logSelection } = this;
+		// const { toggleSelection, toggleAll, isSelected, logSelection } = this;
 
-		const { selectAll, selection } = this.state;
+		const { selection } = this.state;
 
 		return (
 			<React.Fragment >

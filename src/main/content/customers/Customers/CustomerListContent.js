@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 
 // core components
 import {
@@ -10,7 +10,7 @@ import {
 import JanikingPagination from 'Commons/JanikingPagination';
 
 // theme components
-import {FuseAnimate} from '@fuse';
+// import {FuseAnimate} from '@fuse';
 
 import {withStyles, Checkbox} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
@@ -22,7 +22,7 @@ import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
 
 // third party
-import moment from 'moment'
+// import moment from 'moment'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import _ from 'lodash';

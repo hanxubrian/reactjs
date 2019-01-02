@@ -428,7 +428,7 @@ function getStepContent(customerForm, step) {
 								label="State *"
 								select
 								className={classes.textField}
-								value={customerForm.state.name}
+								value={''}
 								onChange={customerForm.handleChange('State')}
 								margin="normal"
 								// variant="outlined"

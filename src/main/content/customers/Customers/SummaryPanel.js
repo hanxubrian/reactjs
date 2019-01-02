@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { AppBar, Toolbar, Icon, IconButton, ClickAwayListener, Paper, Avatar, Typography, withStyles } from '@material-ui/core';
-import keycode from 'keycode';
+import {Paper, Typography, withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { FuseAnimate } from '@fuse';
 
 
 //Material UI core
-import Switch from '@material-ui/core/Switch';
 import Checkbox from '@material-ui/core/Checkbox';
 import green from '@material-ui/core/colors/green';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
