@@ -25,7 +25,7 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 import _ from 'lodash';
 
-import CreateFranchiseesPage from "./franchiseesForms/create"
+import CreateFranchiseesPage from "./franchiseesForms/createForm"
 
 
 
