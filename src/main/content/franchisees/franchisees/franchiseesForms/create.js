@@ -124,7 +124,40 @@ class CreateFranchiseesPage extends React.Component {
                 "ownerPhone": "123-456-7890",
                 "ownerTitle": "Hellow World"
             }
+        ],
+        maintananceData:[
+            {
+              "maintananceName": "Acounting Fee",
+                "maintananceRate": "percentage",
+                "amount": 1.5,
+                "active":"Active"
+            },
+            {
+                "maintananceName": "Technology Fee",
+                "maintananceRate": "percentage",
+                "amount": 3,
+                "active":"Active"
+            },
+            {
+                "maintananceName": "Advertising Fee",
+                "maintananceRate": "percentage",
+                "amount": 2.5,
+                "active":"Active"
+            },
+            {
+                "maintananceName": "Royalty",
+                "maintananceRate": "percentage",
+                "amount": 2.5,
+                "active":"Active"
+            },
+            {
+                "maintananceName": "Business Protection",
+                "maintananceRate": "percentage",
+                "amount": 5.5,
+                "active":"Active"
+            }
         ]
+
     };
     handleRegionsChange = event => {
         this.setState({ [event.target.name]: event.target.value });
@@ -937,6 +970,160 @@ class CreateFranchiseesPage extends React.Component {
                                     />
                                 </Grid>
                             </Grid>
+                        </CardContent>
+                    </Card>
+                    <Card className={classes.card}>
+                        <div className={classNames(classes.cardHeader,"flex row flex-1 relative justify-between")}>
+                            <div className={classNames("flex flex-row flex-1  p-8 sm:p-12  justify-between")}>
+                                <h1 className={classNames(classes.cardHeading)}>Franchisees Fee Maintanance</h1>
+                            </div>
+                            <div className={classNames("flex flex-row p-8 sm:p-12 justify-between justify-end")}>
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <Fab color="secondary" aria-label="add"
+                                         className={classNames(classes.sideButton, "mr-12")}>
+                                        <Icon>add</Icon>
+                                    </Fab>
+                                </FuseAnimate>
+                            </div>
+                        </div>
+                        <CardContent className={classNames(classes.cardContainer)}>
+                            <br/>
+                            <ReactTable
+                                data={this.state.maintananceData}
+                                minRows = {0}
+                                getTheadGroupProps={(state, rowInfo, column, instance) =>{
+                                    return {
+                                        style:{
+                                            padding: "10px 10px",
+                                            fontSize: 16,
+                                            fontWeight: 700
+                                        },
+                                    }
+                                }}
+                                getTheadGroupThProps={(state, rowInfo, column, instance) => {
+                                    return {
+                                        style:{
+                                            padding: "10px 10px",
+                                            fontSize: 18,
+                                            fontWeight: 700,
+                                        },
+                                        className: classNames("flex items-center justify-start")
+                                    }
+                                }}
+                                getTheadThProps={(state, rowInfo, column, instance) =>{
+                                    let border = '1px solid rgba(255,255,255,.6)';
+                                    if(column.Header==='Actions') border = 'none';
+                                    return {
+                                        style:{
+                                            fontSize: '1.6rem',
+                                            fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
+                                            fontWeight: 400,
+                                            lineHeight: 1.75,
+                                            color: 'white',
+                                            borderRight: border,
+                                            backgroundColor: 'gray'
+                                        },
+                                    }
+                                }}
+                                getTheadProps={(state, rowInfo, column, instance) =>{
+                                    return {
+                                        style:{
+                                            fontSize: 13,
+                                        },
+                                        className: classes.tableTheadRow
+                                    }
+                                }}
+                                getTdProps={(state, rowInfo, column, instance) =>{
+                                    return {
+                                        style:{
+                                            textAlign: 'center',
+                                            flexDirection: 'row',
+                                            fontSize: 12,
+                                            padding: "0",
+                                        },
+                                    }
+                                }}
+                                getTrProps={(state, rowInfo, column) => {
+                                    return {
+                                        className: "cursor-pointer",
+                                        onClick  : (e, handleOriginal) => {
+                                            if ( rowInfo )
+                                            {
+                                                alert('ok');
+                                                // openEditContactDialog(rowInfo.original);
+                                            }
+                                        }
+                                    }
+                                }}
+                                columns={[
+                                    {
+                                        columns: [
+                                            {
+                                                Header: "Name",
+                                                accessor: "maintananceName",
+                                                filterAll: true,
+                                                width: 200,
+                                                className: classNames("flex items-center  justify-center")
+                                            },
+                                            {
+                                                Header: "Rate",
+                                                accessor: "maintananceRate",
+                                                width: 350,
+                                                className: classNames("flex items-center  justify-start p-12-impor")
+                                            },
+                                            {
+                                                Header: "Amount",
+                                                accessor: "amount",
+                                                className: classNames("flex items-center  justify-start p-12-impor"),
+                                                width: 420
+                                            },
+                                            {
+                                                Header: "Active",
+                                                accessor: "active",
+                                                className: classNames("flex items-center  justify-start p-12-impor"),
+                                                width: 420
+                                            },
+                                            {
+                                                Header: "Actions",
+                                                width : 150,
+                                                className: classNames("flex items-center  justify-center p-12-impor"),
+                                                Cell  : row => (
+                                                    <div className="flex items-center actions ">
+                                                        <IconButton
+                                                            onClick={(ev) => {
+                                                                ev.stopPropagation();
+                                                                if (window.confirm("Do you really want to remove this franchisee")) {
+                                                                    this.props.removeFranchisees(row.original.ID, this.props.franchisees);
+                                                                    if(this.state.selection.length>0){
+                                                                        _.remove(this.state.selection, function(id) {
+                                                                            return id === row.original.ID;
+                                                                        });
+                                                                    }
+                                                                }
+                                                            }}
+                                                        >
+                                                            <Icon>delete</Icon>
+                                                        </IconButton>
+                                                        <IconButton
+                                                            onClick={(ev) => {
+                                                                ev.stopPropagation();
+                                                                // removeContact(row.original.id);
+                                                            }}
+                                                        >
+                                                            <Icon>edit</Icon>
+                                                        </IconButton>
+                                                    </div>
+                                                )
+                                            }
+                                        ]
+                                    }
+                                ]}
+                                defaultPageSize={100}
+                                className={classNames( "-striped -highlight")}
+                                style={{
+                                    height: '100%',
+                                }}
+                            />
                         </CardContent>
                     </Card>
                 </form>
