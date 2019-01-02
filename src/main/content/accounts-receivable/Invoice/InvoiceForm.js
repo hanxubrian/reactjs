@@ -38,6 +38,7 @@ import Autosuggest from 'react-autosuggest';
 import classNames from 'classnames';
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
+import moment from 'moment'
 
 const styles = theme => ({
     layoutForm: {
@@ -148,6 +149,7 @@ function renderInputComponent(inputProps) {
                 },
             }}
             {...other}
+            required
         />
     );
 }
@@ -281,7 +283,7 @@ class InvoiceForm extends Component {
     };
 
     handleDueDateChange = date => {
-        this.setState({ DueDate: date });
+        this.setState({ DueDate: date});
     };
     handleInvoiceDateChange = date => {
         this.setState({ InvoiceDate: date });
@@ -334,6 +336,7 @@ class InvoiceForm extends Component {
                                     label="Invoice Date"
                                     name="InvoiceDate"
                                     variant="outlined"
+                                    format="dd/MM/yyyy"
                                     value={this.state.InvoiceDate}
                                     onChange={this.handleInvoiceDateChange}
                                     fullWidth
@@ -344,6 +347,7 @@ class InvoiceForm extends Component {
                                 <DatePicker
                                     margin="none"
                                     label="Due Date"
+                                    format="dd/MM/yyyy"
                                     InputLabelProps={{
                                         shrink: true
                                     }}
@@ -351,6 +355,7 @@ class InvoiceForm extends Component {
                                     variant="outlined"
                                     value={this.state.DueDate}
                                     onChange={this.handleDueDateChange}
+                                    required
                                 />
                             </GridItem>
                         </GridContainer>

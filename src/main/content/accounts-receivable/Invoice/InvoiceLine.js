@@ -175,7 +175,6 @@ InvoiceLineTableHead.propTypes = {
     onRequestSort   : PropTypes.func.isRequired,
     onSelectAllClick: PropTypes.func.isRequired,
     order           : PropTypes.string.isRequired,
-    rowCount        : PropTypes.number.isRequired
 };
 
 const toolbarStyles = theme => ({
@@ -513,7 +512,6 @@ class InvoiceLineTable extends React.Component {
     {
         const {classes} = this.props;
         const {data, order, orderBy, selected, rowsPerPage, page} = this.state;
-        const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
         return (
             <Paper className={classNames(classes.root)}>
@@ -525,7 +523,6 @@ class InvoiceLineTable extends React.Component {
                             order={order}
                             onSelectAllClick={this.handleSelectAllClick}
                             onRequestSort={this.handleRequestSort}
-                            rowCount={data.length}
                         />
                         <TableBody className="flex flex-col" style={{overflowY: 'scroll'}}>
                             {stableSort(data, getSorting(order, orderBy))
@@ -627,11 +624,6 @@ class InvoiceLineTable extends React.Component {
                                         </TableRow>
                                     );
                                 })}
-                            {emptyRows > 0 && (
-                                <TableRow style={{height: 49 * emptyRows, display: 'none'}}>
-                                    <TableCell colSpan={8}/>
-                                </TableRow>
-                            )}
                         </TableBody>
                     </Table>
                 </div>
