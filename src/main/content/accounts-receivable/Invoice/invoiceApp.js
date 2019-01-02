@@ -384,10 +384,9 @@ class InvoiceApp extends Component {
     }
 
     listenScrollEvent(event) {
-        console.log('fired');
         console.log(event);
-
     }
+
     escFunction(event){
         if(event.keyCode === 27) {
             this.setState({s: ''});
@@ -510,9 +509,20 @@ class InvoiceApp extends Component {
                                                         <img className="mr-12" src="assets/images/invoices/invoice-icon-white.png" alt="new invoice" style={{width: 32, height: 32}}/>
                                                     </Toolbar>
                                                 </FuseAnimate>
-                                                <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                                    <Typography variant="h6" className="hidden sm:flex">Accounts Receivable | New Invoice</Typography>
-                                                </FuseAnimate>
+
+                                                    {this.props.invoiceForm.type === 'edit' && (
+                                                        <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                        <Typography variant="h6" className="hidden sm:flex">Accounts
+                                                            Receivable | Edit Invoice</Typography>
+                                                        </FuseAnimate>
+                                                    )}
+                                                    {this.props.invoiceForm.type === 'new' && (
+                                                        <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                        <Typography variant="h6" className="hidden sm:flex">Accounts
+                                                            Receivable | New Invoice</Typography>
+                                                        </FuseAnimate>
+                                                    )}
+
                                             </div>
                                         </div>
                                     </div>
@@ -551,7 +561,7 @@ class InvoiceApp extends Component {
                                 <InvoiceListContent data={this.state.temp}/>
                             )}
                             {(this.state.temp && invoiceForm.props.open) && (
-                               <InvoiceForm customers={this.state.customers} selectedInvoice={this.state.selectedInvoice}/>
+                                <InvoiceForm customers={this.state.customers} selectedInvoice={this.state.selectedInvoice}/>
                             )}
                         </div>
                     }

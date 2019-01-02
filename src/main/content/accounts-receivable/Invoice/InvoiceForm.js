@@ -14,7 +14,9 @@ import {
     Divider,
     Button,
 } from '@material-ui/core';
-
+import 'date-fns'
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, TimePicker, DatePicker } from 'material-ui-pickers';
 // theme components
 import {FuseAnimate} from '@fuse';
 import {withStyles} from "@material-ui/core";
@@ -100,8 +102,8 @@ const newInvoiceState = {
     "RegionName": "",
     "InvoiceId": "",
     "InvoiceNo": "",
-    "InvoiceDate": "",
-    "DueDate": "",
+    "InvoiceDate": new Date(),
+    "DueDate": new Date(),
     "CustomerId": "",
     "CustomerNo": "",
     "CustomerName": "",
@@ -238,7 +240,6 @@ class InvoiceForm extends Component {
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.props.invoiceForm!== prevProps.invoiceForm) {
             this.getTotal();
-            console.log('fired123');
         }
     }
 
@@ -264,13 +265,23 @@ class InvoiceForm extends Component {
 
     };
 
+    onSubmitForApproval=()=>{
+
+    };
+
     onSaveAndClose = () => {
 
     };
 
-
     closeComposeForm = () => {
-        this.props.invoiceForm.type === 'create' ? this.props.closeEditInvoiceForm() : this.props.closeNewInvoiceForm();
+        this.props.invoiceForm.type === 'edit' ? this.props.closeEditInvoiceForm() : this.props.closeNewInvoiceForm();
+    };
+
+    handleDueDateChange = date => {
+        this.setState({ DueDate: date });
+    };
+    handleInvoiceDateChange = date => {
+        this.setState({ InvoiceDate: date });
     };
     render()
     {
@@ -290,6 +301,7 @@ class InvoiceForm extends Component {
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="h-full flex flex-col relative">
                     <div className="flex flex-col p-24 pt-12 pb-0" style={{flex: "1"}}>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <GridContainer className={classNames(classes.formControl)}>
                             <GridItem xs={12} sm={8} md={8} className="flex flex-row">
                                 <Autosuggest
@@ -314,38 +326,32 @@ class InvoiceForm extends Component {
                                 />
                             </GridItem>
                             <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col xs:mb-24">
-                                <TextField
-                                    id="InvoiceDate"
+                                <DatePicker
+                                    margin="none"
                                     label="Invoice Date"
-                                    type="date"
                                     name="InvoiceDate"
-                                    value={this.state.InvoiceDate}
-                                    onChange={this.handleChange}
-                                    InputLabelProps={{
-                                        shrink: true
-                                    }}
                                     variant="outlined"
+                                    value={this.state.InvoiceDate}
+                                    onChange={this.handleInvoiceDateChange}
                                     fullWidth
                                     required
                                 />
                             </GridItem>
                             <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
-                                <TextField
-                                    id="DueDate"
+                                <DatePicker
+                                    margin="none"
                                     label="Due Date"
-                                    type="date"
-                                    name="DueDate"
-                                    value={this.state.DueDate}
-                                    onChange={this.handleChange}
                                     InputLabelProps={{
                                         shrink: true
                                     }}
+                                    name="DueDate"
                                     variant="outlined"
-                                    fullWidth
-                                    required
+                                    value={this.state.DueDate}
+                                    onChange={this.handleDueDateChange}
                                 />
                             </GridItem>
                         </GridContainer>
+                        </MuiPickersUtilsProvider>
                         <GridContainer className={classNames(classes.formControl, "mb-0")}>
                             <GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col">
                                 <Card className={classes.card}>
@@ -464,6 +470,18 @@ class InvoiceForm extends Component {
                                     }}
                                 >
                                     Save & Add more
+                                </Button>
+                            </FuseAnimate>
+                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    className={classNames(classes.button, "mr-12")}
+                                    onClick={() => {
+                                        this.onSubmitForApproval();
+                                    }}
+                                >
+                                    Submit for Approval
                                 </Button>
                             </FuseAnimate>
                             <FuseAnimate animation="transition.expandIn" delay={300}>
