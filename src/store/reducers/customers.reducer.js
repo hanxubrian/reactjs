@@ -66,7 +66,7 @@ const customers = function (state = initialState, action) {
 				return {
 					...state,
 					bOpenedFilterPanel: false,
-					bOpenedSummaryPanel: false,
+					bOpenedSummaryPanel: true,
 					customerForm: {
 						type: 'new',
 						props: {
