@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import {
 	Paper, TextField, Button, Typography,
 	MenuItem, FormControl, InputLabel, Select, OutlinedInput,
-	Card, CardHeader, CardContent, Divider, Radio, RadioGroup, FormControlLabel
+	Card, CardHeader, CardContent, Divider, Radio, RadioGroup, FormControlLabel, GridList
 } from '@material-ui/core';
 
 
@@ -423,62 +423,6 @@ function getStepContent(customerForm, step) {
 								style={{ width: '100%', marginLeft: '2%' }}
 							/>
 						</GridItem>
-						{/* 					
-						<GridItem xs={12} sm={8} md={8} className="flex flex-row">
-							<Autosuggest
-								{...autosuggestProps}
-								inputProps={{
-									classes,
-									placeholder: 'Search Customer Name or Number',
-									value: value,
-									onChange: customerForm.onChange,
-								}}
-								theme={{
-									container: classNames(classes.container),
-									suggestionsContainerOpen: classes.suggestionsContainerOpen,
-									suggestionsList: classes.suggestionsList,
-									suggestion: classes.suggestion,
-								}}
-								renderSuggestionsContainer={options => (
-									<Paper {...options.containerProps} square>
-										{options.children}
-									</Paper>
-								)}
-							/>
-						</GridItem>
-						<GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col xs:mb-24">
-							<TextField
-								id="CustomerDate"
-								label="Customer Date"
-								type="date"
-								name="CustomerDate"
-								value={customerForm.state.CustomerDate}
-								onChange={customerForm.handleChange}
-								InputLabelProps={{
-									shrink: true
-								}}
-								variant="outlined"
-								fullWidth
-								required
-							/>
-						</GridItem>
-						<GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
-							<TextField
-								id="DueDate"
-								label="Due Date"
-								type="date"
-								name="DueDate"
-								value={customerForm.state.DueDate}
-								onChange={customerForm.handleChange}
-								InputLabelProps={{
-									shrink: true
-								}}
-								variant="outlined"
-								fullWidth
-								required
-							/>
-						</GridItem>
-					 */}
 					</GridContainer>
 
 					<Divider variant="middle" />
@@ -1306,140 +1250,47 @@ class CustomerForm extends Component {
 
 
 		return (
-			<FuseAnimate animation="transition.slideRightIn" delay={300}>
-				<div className="p-24">
+			// <div className={classNames(classes.layoutTable, "h-full")}></div>
+			// <FuseAnimate animation="transition.slideRightIn" delay={300} className={classNames(classes.layoutTable, "h-full")}>
+			// <div className="p-24 h-full">
+			<Fragment>
+				<Stepper nonLinear activeStep={activeStep}>
+					{steps.map((label, index) => {
+						const props = {};
+						const buttonProps = {};
+						if (this.isStepOptional(index)) {
+							buttonProps.optional = <Typography variant="caption">Optional</Typography>;
+						}
+						if (this.isStepSkipped(index)) {
+							props.completed = false;
+						}
+						return (
+							<Step key={label} {...props}>
+								<StepButton
+									onClick={this.handleStep(index)}
+									completed={this.isStepComplete(index)}
+									{...buttonProps}
+								>
+									{label}
+								</StepButton>
+							</Step>
+						);
+					})}
+				</Stepper>
+
+				<div
+					className={classNames(classes.layoutTable, "p-24")}
+					style={{
+						overflowY: 'scroll',
+						width: '100%',
+						height: 'calc(100% - 80px)'
+						// flex: '1 1 auto'
+					}}>
 
 
-					{/* <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-						<GridItem xs={12} sm={8} md={8} className="flex flex-row">
-							<Autosuggest
-								{...autosuggestProps}
-								inputProps={{
-									classes,
-									placeholder: 'Search Customer Name or Number',
-									value: value,
-									onChange: this.onChange,
-								}}
-								theme={{
-									container: classNames(classes.container),
-									suggestionsContainerOpen: classes.suggestionsContainerOpen,
-									suggestionsList: classes.suggestionsList,
-									suggestion: classes.suggestion,
-								}}
-								renderSuggestionsContainer={options => (
-									<Paper {...options.containerProps} square>
-										{options.children}
-									</Paper>
-								)}
-							/>
-						</GridItem>
-						<GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col xs:mb-24">
-							<TextField
-								id="CustomerDate"
-								label="Customer Date"
-								type="date"
-								name="CustomerDate"
-								value={this.state.CustomerDate}
-								onChange={this.handleChange}
-								InputLabelProps={{
-									shrink: true
-								}}
-								variant="outlined"
-								fullWidth
-								required
-							/>
-						</GridItem>
-						<GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
-							<TextField
-								id="DueDate"
-								label="Due Date"
-								type="date"
-								name="DueDate"
-								value={this.state.DueDate}
-								onChange={this.handleChange}
-								InputLabelProps={{
-									shrink: true
-								}}
-								variant="outlined"
-								fullWidth
-								required
-							/>
-						</GridItem>
-					</GridContainer>
-					{this.state.selectedCustomer && (
-						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-							<GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col">
-								<Card className={classes.card}>
-									<CardHeader title="Customer" className={classNames(classes.cardHeader, "flex-1")} />
-									<CardContent>
-										<Typography variant="subtitle1" color="inherit">
-											<strong>Customer Name: {this.state.selectedCustomer.CustomerName}</strong>
-										</Typography>
-										<Typography variant="subtitle1" color="inherit">
-											Customer No: {this.state.selectedCustomer.CustomerNo}
-										</Typography>
-										<Typography variant="subtitle1" color="inherit">
-											Address: {this.state.selectedCustomer.Address}
-										</Typography>
-										<Typography variant="subtitle1" color="inherit">
-											{this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
-										</Typography>
-									</CardContent>
-								</Card>
-							</GridItem>
-							<GridItem xs={12} sm={6} md={6} className="flex flex-row justify-end xs:flex-col">
-								<Card className={classes.card}>
-									<CardHeader title="Billing" className={classNames(classes.cardHeader, "flex-1")} />
-									<CardContent>
-										<Typography variant="subtitle1" color="inherit">
-											<strong>Billing Name: {this.state.selectedCustomer.CustomerName}</strong>
-										</Typography>
-										<Typography variant="subtitle1" color="inherit">
-											Customer No: {this.state.selectedCustomer.CustomerNo}
-										</Typography>
-										<Typography variant="subtitle1" color="inherit">
-											Address: {this.state.selectedCustomer.Address}
-										</Typography>
-										<Typography variant="subtitle1" color="inherit">
-											{this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
-										</Typography>
-									</CardContent>
-
-								</Card>
-							</GridItem>
-						</GridContainer>
-					)}
-					<Divider variant="middle" />
-					<div className="flex">
-						<CustomerLineTable />
-					</div> */}
-
-					<Stepper nonLinear activeStep={activeStep}>
-						{steps.map((label, index) => {
-							const props = {};
-							const buttonProps = {};
-							if (this.isStepOptional(index)) {
-								buttonProps.optional = <Typography variant="caption">Optional</Typography>;
-							}
-							if (this.isStepSkipped(index)) {
-								props.completed = false;
-							}
-							return (
-								<Step key={label} {...props}>
-									<StepButton
-										onClick={this.handleStep(index)}
-										completed={this.isStepComplete(index)}
-										{...buttonProps}
-									>
-										{label}
-									</StepButton>
-								</Step>
-							);
-						})}
-					</Stepper>
 					<h2>{getSteps()[activeStep]}</h2>
 					<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
-					<p></p>
+
 					<div>
 						{this.allStepsCompleted() ? (
 							<div>
@@ -1486,7 +1337,7 @@ class CustomerForm extends Component {
                                     </Typography>
 											) : (
 													<Button variant="contained" color="primary" onClick={this.handleComplete}>
-														{this.completedSteps() === this.totalSteps() - 1 ? 'Save' : 'Draft'}
+														{this.completedSteps() === this.totalSteps() - 1 ? 'Done' : 'Save'}
 													</Button>
 												))}
 									</div>
@@ -1494,7 +1345,8 @@ class CustomerForm extends Component {
 							)}
 					</div>
 				</div>
-			</FuseAnimate>
+				{/* </FuseAnimate> */}
+			</Fragment>
 		);
 	}
 }
