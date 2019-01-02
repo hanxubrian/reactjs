@@ -1,0 +1,68 @@
+[33mcommit 1d857b559f9ec7cdc1ddeb7b94f91d4589b8e027[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: broomspun1208 <admin@angelsolution.net>
+Date:   Sun Dec 30 16:26:35 2018 -0600
+
+    fixed inline issue
+
+[1mdiff --git a/src/main/content/accounts-receivable/Invoice/InvoiceForm.js b/src/main/content/accounts-receivable/Invoice/InvoiceForm.js[m
+[1mindex 6f719ef..dcda3d0 100644[m
+[1m--- a/src/main/content/accounts-receivable/Invoice/InvoiceForm.js[m
+[1m+++ b/src/main/content/accounts-receivable/Invoice/InvoiceForm.js[m
+[36m@@ -248,8 +248,7 @@[m [mclass InvoiceForm extends Component {[m
+     render()[m
+     {[m
+         const { classes, InvoiceForm, addInvoice, updateInvoice, removeInvoice} = this.props;[m
+[31m-        const { toggleSelection, toggleAll, isSelected, logSelection} = this;[m
+[31m-        const { selectAll, selection, value, suggestions } = this.state;[m
+[32m+[m[32m        const { value, suggestions } = this.state;[m
+ [m
+         const autosuggestProps = {[m
+             renderInputComponent,[m
+[36m@@ -259,6 +258,7 @@[m [mclass InvoiceForm extends Component {[m
+             getSuggestionValue: this.getSuggestionValue,[m
+             renderSuggestion,[m
+         };[m
+[32m+[m[32m        console.log('customers', this.props.customers);[m
+ [m
+         return ([m
+             <FuseAnimate animation="transition.slideRightIn" delay={300}>[m
+[1mdiff --git a/src/main/content/accounts-receivable/Invoice/invoiceApp.js b/src/main/content/accounts-receivable/Invoice/invoiceApp.js[m
+[1mindex 1528ef4..e0c6325 100644[m
+[1m--- a/src/main/content/accounts-receivable/Invoice/invoiceApp.js[m
+[1m+++ b/src/main/content/accounts-receivable/Invoice/invoiceApp.js[m
+[36m@@ -174,7 +174,7 @@[m [mclass InvoiceApp extends Component {[m
+         selection: [],[m
+         selectAll: false,[m
+         regionId: 0,[m
+[31m-        customers: [],[m
+[32m+[m[32m        customers: null,[m
+         ...newInvoiceState,[m
+         value: '',[m
+         selectedWork: ""[m
+[36m@@ -308,7 +308,7 @@[m [mclass InvoiceApp extends Component {[m
+         this.setState({checkedOpen: this.props.transactionStatus.checkedEbill});[m
+         this.setState({checkedOpen: this.props.transactionStatus.checkedPrint});[m
+ [m
+[31m-        this.getInvoicesFromStatus()[m
+[32m+[m[32m        this.getInvoicesFromStatus();[m
+     }[m
+ [m
+     componentWillReceiveProps(nextProps) {[m
+[36m@@ -316,6 +316,17 @@[m [mclass InvoiceApp extends Component {[m
+             this.getInvoicesFromStatus(nextProps.invoices);[m
+         if(this.props.invoices!==nextProps.invoices)[m
+             this.getInvoicesFromStatus(nextProps.invoices);[m
+[32m+[m
+[32m+[m
+[32m+[m[32m        if(nextProps.customers!==null && this.state.customers===null){[m
+[32m+[m[32m            let temp = [];[m
+[32m+[m[32m            let regions = nextProps.customers.Data.Regions[m
+[32m+[m
+[32m+[m[32m            regions.map(x => {[m
+[32m+[m[32m                temp = [...temp, ...x.Customers];[m
+[32m+[m[32m            });[m
+[32m+[m[32m            this.setState({customers: temp});[m
+[32m+[m[32m        }[m
+     }[m
+ [m
+ [m
