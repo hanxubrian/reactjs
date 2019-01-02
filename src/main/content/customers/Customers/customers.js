@@ -659,7 +659,8 @@ class Customers extends Component {
 										{/*<IconButton onClick={()=>this.removeCustomers()}>*/}
 										{/*<Icon>delete</Icon>*/}
 										{/*</IconButton>*/}
-										<IconButton onClick={(ev) => toggleSummaryPanel()}>
+										{/* <IconButton onClick={(ev) => toggleSummaryPanel()}> */}
+										<IconButton onClick={toggleSummaryPanel}>
 											<Icon>close</Icon>
 										</IconButton>
 									</Hidden>
