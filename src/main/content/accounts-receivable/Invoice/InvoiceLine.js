@@ -253,14 +253,17 @@ const styles = theme => ({
             width: 260
         },
         '& thead tr th:nth-child(3)':{
-            width: 280
+            width: 500
+        },
+        '& thead tr th:nth-child(4)':{
+            width: 60
         },
         '& thead tr th:last-child':{
             borderRight: 'none'
         },
         '& tbody tr td':{
             padding: "4px 12px",
-            width: 150
+            width: 120
         },
         InvoiceLineHeadRoot:{
             backgroundColor: 'lightgray',
@@ -281,7 +284,13 @@ const styles = theme => ({
         fontSize: '1.3rem'
     },
     description:{
-        width: '250px!important'
+        width: '520px!important'
+    },
+    quantity:{
+        '& div': {
+            width: '40px!important',
+            float: 'right'
+        }
     },
     table       : {
         minWidth: 1020,
@@ -586,9 +595,9 @@ class InvoiceLineTable extends React.Component {
                                                 </FormControl>
                                             </TableCell>
                                             <TableCell classes={{root:classNames(classes.description)}}>{this.renderEditable(n, 'description')}</TableCell>
-                                            <TableCell numeric>{this.renderEditable(n, 'quantity')}</TableCell>
+                                            <TableCell classes={{root:classNames(classes.quantity, "mr-24 ml-24")}} numeric>{this.renderEditable(n, 'quantity')}</TableCell>
                                             <TableCell numeric>{this.renderEditable(n, 'amount')}</TableCell>
-                                            <TableCell numeric>{this.renderEditableMarkup(n, 'markup')}</TableCell>
+                                            <TableCell classes={{root:classNames(classes.quantity, "mr-24 ml-24")}} numeric>{this.renderEditableMarkup(n, 'markup')}</TableCell>
                                             <TableCell numeric>${parseFloat((n.amount*n.quantity)*(1+parseFloat(n.markup)/100)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</TableCell>
                                             <TableCell padding="checkbox" className={classNames(classes.tableCellAction)} numeric>
                                                 <Fab color="secondary" aria-label="add"
