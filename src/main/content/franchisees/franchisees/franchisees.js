@@ -538,7 +538,6 @@ class Franchisees extends Component {
                 d.DistributionAmount.toLowerCase().indexOf(val) !== -1 ||
                 d.Phone.toLowerCase().indexOf(val) !== -1
         });
-        console.log('searchTemp',temp);
         this.setState({temp: temp});
     }
 
@@ -581,13 +580,12 @@ class Franchisees extends Component {
     };
 
 
-
     render()
     {
         const { classes,toggleFilterPanelFranchisees,showCreteFranchisees, toggleSummaryPanelFranchisees, createFranchisees, filterStateFranchisees, summaryStateFranchisees, deleteFranchisees} = this.props;
-        const { toggleSelection, toggleAll, isSelected, logSelection} = this;
+        const { toggleSelection, toggleAll, isSelected} = this;
 
-        const { selectAll, selection } = this.state;
+        const { selection } = this.state;
         return (
             <FusePageCustom
                 classes={{

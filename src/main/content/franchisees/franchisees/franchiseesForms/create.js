@@ -837,17 +837,50 @@ class CreateFranchiseesPage extends React.Component {
                                             </div>
                                         )}
                                         {(activeStep === 2) && (
-                                            <Grid container spacing={24}>
-                                                <Grid item xs>
-                                                    <Paper className={classes.paper}>xs</Paper>
-                                                </Grid>
-                                                <Grid item xs>
-                                                    <Paper className={classes.paper}>xs</Paper>
-                                                </Grid>
-                                                <Grid item xs>
-                                                    <Paper className={classes.paper}>xs</Paper>
-                                                </Grid>
-                                            </Grid>
+                                            <Card className={classes.card}>
+                                                <div className={classNames(classes.cardHeader,"flex row flex-1 relative justify-between")}>
+                                                    <div className={classNames("flex flex-row flex-1  p-8 sm:p-12  justify-between")}>
+                                                        <h1 className={classNames(classes.cardHeading)}>Billing Setting Section</h1>
+                                                    </div>
+                                                </div>
+                                                <CardContent className={classNames(classes.cardContainer)}>
+                                                    <br/>
+                                                    <Grid>
+                                                        <Grid item xs>
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox checked={chargeBack} onChange={this.handleBillingCheckedChange('chargeBack')} value="chargeBack" />
+                                                                }
+                                                                label="ChargeBack"
+                                                            />
+                                                        </Grid>
+                                                        <Grid item xs>
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox checked={bbp} onChange={this.handleBillingCheckedChange('bbp')} value="bbp" />
+                                                                }
+                                                                label="BBP Administration Fee"
+                                                            />
+                                                        </Grid>
+                                                        <Grid item xs>
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox checked={accountRebate} onChange={this.handleBillingCheckedChange('accountRebate')} value="accountRebate" />
+                                                                }
+                                                                label="Account Rebate"
+                                                            />
+                                                        </Grid>
+                                                        <Grid item xs>
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox checked={generateReport} onChange={this.handleBillingCheckedChange('generateReport')} value="generateReport" />
+                                                                }
+                                                                label="Generate Report"
+                                                            />
+                                                        </Grid>
+                                                    </Grid>
+                                                </CardContent>
+                                            </Card>
                                         )}
                                         <div>
                                         <div className={classNames(classes.buttonGroup)} >
