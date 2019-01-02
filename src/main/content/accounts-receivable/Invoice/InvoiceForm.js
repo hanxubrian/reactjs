@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core';
 import 'date-fns'
 import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, TimePicker, DatePicker } from 'material-ui-pickers';
+import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 // theme components
 import {FuseAnimate} from '@fuse';
 import {withStyles} from "@material-ui/core";
@@ -38,6 +38,7 @@ import Autosuggest from 'react-autosuggest';
 import classNames from 'classnames';
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
+import keycode from 'keycode';
 
 const styles = theme => ({
     layoutForm: {
@@ -247,6 +248,9 @@ class InvoiceForm extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+    }
+
+    componentWillUnmount() {
     }
 
     componentDidMount(){

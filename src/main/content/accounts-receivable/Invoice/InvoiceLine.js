@@ -21,6 +21,7 @@ import _ from 'lodash';
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
+import keycode from "keycode";
 
 let counter = 0;
 
@@ -318,12 +319,22 @@ class InvoiceLineTable extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log('prop', props);
+        this.addInvoiceLineFunction = this.addInvoiceLineFunction.bind(this);
         // if(props.InvoiceForm.type==="new") {
 
         // }
     }
 
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.addInvoiceLineFunction, false);
+    }
+
+    addInvoiceLineFunction(event){
+        console.log('key=', keycode(event));
+        if(keycode(event)==='enter' || keycode(event)==='down'){
+            this.addLineData();
+        }
+    }
     handleRequestSort = (event, property) => {
         const orderBy = property;
         let order = 'desc';
@@ -361,6 +372,8 @@ class InvoiceLineTable extends React.Component {
     };
 
     componentDidMount(){
+        document.addEventListener("keydown", this.addInvoiceLineFunction, false);
+
         let id = 0;
         const data = [...this.state.data];
         let newData = data.map(record=>{
@@ -378,7 +391,7 @@ class InvoiceLineTable extends React.Component {
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
-    AddLineData=()=>{
+    addLineData=()=>{
         const data = [...this.state.data, createData()];
         let id = 0;
         let newData = data.map(record=>{
@@ -386,6 +399,11 @@ class InvoiceLineTable extends React.Component {
             return record;
         });
         this.setState({data: newData})
+    };
+
+
+    addFranchiseeLine = () =>{
+
     };
 
     removeLineData=(line)=>{
@@ -552,7 +570,7 @@ class InvoiceLineTable extends React.Component {
                                             <TableCell padding="checkbox" className={classNames(classes.tableCellAction)} numeric>
                                                 <Fab color="secondary" aria-label="add"
                                                      className={classNames(classes.lineButton, "mr-12")}
-                                                     onClick={()=>this.AddLineData()}
+                                                     onClick={()=>this.addFranchiseeLine()}
                                                 >
                                                     <Icon>call_merge</Icon>
                                                 </Fab>
