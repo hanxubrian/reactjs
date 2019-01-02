@@ -484,8 +484,30 @@ class InvoiceLineTable extends React.Component {
         this.setState({data: newData})
     };
 
-    removeFranch=()=>{
+    removeFranch=(parent_id, child_id)=>{
+        const data = [...this.state.data];
 
+        data.forEach(d=>{
+            if(d.franchisees.length>0 && d.id===parent_id){
+                let franchisees = d.franchisees;
+                _.remove(franchisees, function (record) {
+                    return record.fid === child_id
+                })
+            }
+        });
+
+        data.forEach(d=>{
+            if(d.franchisees.length>0 && d.id===parent_id){
+                let fid=0;
+                let franchisees = d.franchisees;
+                let newData = franchisees.map(record=>{
+                    record.fid = fid++;
+                    return record;
+                });
+                d.franchisees = newData
+            }
+        })
+        this.setState({data: data});
     };
 
     renderEditable(cellInfo, id) {
@@ -672,10 +694,10 @@ class InvoiceLineTable extends React.Component {
                                                 <TableCell classes={{root:classNames(classes.distribution)}}  colSpan={2}><span>Distribution</span></TableCell>
                                                 <TableCell className="" ><div>{n.franchisee}</div></TableCell>
                                                 <TableCell className="" ><div>{n.name}</div></TableCell>
-                                                <TableCell className="" ><div>{n.amount}</div></TableCell>
+                                                <TableCell className="" numeric><div>{n.amount}</div></TableCell>
                                                 <TableCell className="" >
                                                     <Fab aria-label="remove"
-                                                         onClick={()=>this.removeFranch(n)}
+                                                         onClick={()=>this.removeFranch(n.id, n.fid)}
                                                          className={classNames(classes.lineCancelButton, "mr-12")} style={{width: 24, height: 24, minHeight: 24}}>
                                                         <Icon>close</Icon>
                                                     </Fab></TableCell>
