@@ -3,6 +3,7 @@
     "version": "1.2.8",
     "private": true,
     "dependencies": {
+        "@date-io/date-fns": "^0.0.2",
         "@material-ui/core": "3.6.0",
         "@material-ui/icons": "3.0.1",
         "auth0-lock": "11.12.1",
@@ -12,6 +13,7 @@
         "babel-polyfill": "7.0.0-beta.3",
         "chance": "^1.0.18",
         "chart.js": "2.7.3",
+        "date-fns": "2.0.0-alpha.21",
         "downshift": "3.1.5",
         "firebase": "5.5.9",
         "formsy-react": "1.1.5",
@@ -22,6 +24,7 @@
         "keycode": "2.2.0",
         "lodash": "4.17.11",
         "match-sorter": "^2.3.0",
+        "material-ui-pickers": "^2.0.5",
         "material-ui-popup-state": "1.0.1",
         "mobile-detect": "1.4.3",
         "moment": "2.22.2",

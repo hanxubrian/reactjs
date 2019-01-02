@@ -21,8 +21,18 @@ import _ from 'lodash';
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
+import keycode from "keycode";
 
 let counter = 0;
+
+function createFranchisee(id, franchisee="", name="", amount=0) {
+    return {
+        id,
+        franchisee,
+        name,
+        amount
+    }
+}
 
 function createData(billing='Regular Billing', service='Adjust-Balance', description='description', quantity=1, amount=0, markup=0, extended=0)
 {
@@ -34,7 +44,8 @@ function createData(billing='Regular Billing', service='Adjust-Balance', descrip
         quantity,
         amount,
         markup,
-        extended
+        extended,
+        franchisees: []
     };
 }
 
@@ -49,22 +60,6 @@ function desc(a, b, orderBy)
         return 1;
     }
     return 0;
-}
-
-function stableSort(array, cmp)
-{
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-        const order = cmp(a[0], b[0]);
-        if ( order !== 0 ) return order;
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map(el => el[0]);
-}
-
-function getSorting(order, orderBy)
-{
-    return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
 
 const rows = [
@@ -123,7 +118,7 @@ class InvoiceLineTableHead extends React.Component {
 
         return (
             <TableHead style={{backgroundColor: "lightgray"}}>
-                <TableRow>
+                <TableRow style={{backgroundColor: "lightgray"}}>
                     {rows.map(row => {
                         return (
                             <TableCell
@@ -163,7 +158,6 @@ InvoiceLineTableHead.propTypes = {
     onRequestSort   : PropTypes.func.isRequired,
     onSelectAllClick: PropTypes.func.isRequired,
     order           : PropTypes.string.isRequired,
-    rowCount        : PropTypes.number.isRequired
 };
 
 const toolbarStyles = theme => ({
@@ -241,35 +235,56 @@ InvoiceLineTableToolbar = withStyles(toolbarStyles)(InvoiceLineTableToolbar);
 const styles = theme => ({
     root        : {
         width    : '100%',
-        marginTop: theme.spacing.unit * 3,
+        marginTop: theme.spacing.unit * 2,
         head: {
             color: 'black',
         },
         '& thead tr th':{
             color: 'black!important',
             fontWeight: 700,
-            fontSize: 14,
+            fontSize: '1.1rem',
             padding: "4px 24px",
-            width: 180,
             borderRight: '1px solid darkgray'
         },
+        '& thead tr th:nth-child(1)':{
+            width: 250
+        },
+        '& thead tr th:nth-child(2)':{
+            width: 260
+        },
+        '& thead tr th:nth-child(3)':{
+            width: 280
+        },
+        '& thead tr th:last-child':{
+            borderRight: 'none'
+        },
         '& tbody tr td':{
-            padding: "4px 24px",
-            width: 180
+            padding: "4px 12px",
+            width: 150
         },
         InvoiceLineHeadRoot:{
             backgroundColor: 'lightgray',
         },
+        selectRoot:{
+            backgroundColor: 'green'
+        }
     },
     outlined: {
         padding: "12px 24px 12px 12px!important"
     },
+    billing:{
+        width: 180,
+        fontSize: '1.3rem'
+    },
+    services:{
+        width: 200,
+        fontSize: '1.3rem'
+    },
+    description:{
+        width: '250px!important'
+    },
     table       : {
         minWidth: 1020,
-        '& .summary':{
-            fontSize: 16,
-            fontWeight: 700
-        }
     },
     tableWrapper: {
         overflowX: 'auto'
@@ -318,19 +333,25 @@ class InvoiceLineTable extends React.Component {
         page       : 0,
         rowsPerPage: 10,
         labelWidth: 0,
-        total: 0.0,
-        subTotal: 0.0,
-        tax: 0,
     };
 
     constructor(props) {
         super(props);
-        console.log('prop', props);
+        this.addInvoiceLineFunction = this.addInvoiceLineFunction.bind(this);
         // if(props.InvoiceForm.type==="new") {
 
         // }
     }
 
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.addInvoiceLineFunction, false);
+    }
+
+    addInvoiceLineFunction(event){
+        if(keycode(event)==='enter' || keycode(event)==='down'){
+            this.addLineData();
+        }
+    }
     handleRequestSort = (event, property) => {
         const orderBy = property;
         let order = 'desc';
@@ -368,6 +389,8 @@ class InvoiceLineTable extends React.Component {
     };
 
     componentDidMount(){
+        document.addEventListener("keydown", this.addInvoiceLineFunction, false);
+
         let id = 0;
         const data = [...this.state.data];
         let newData = data.map(record=>{
@@ -380,28 +403,30 @@ class InvoiceLineTable extends React.Component {
     componentDidUpdate(prevProps, prevState, snapshot){
         if(prevState.data!==this.state.data){
             this.props.updateInvoiceLine(this.state.data);
-            console.log('fired');
         }
     }
-    getTotal = () => {
-        let total = 0.0;
-        const data = [...this.state.data];
-
-        data.forEach(n => {
-            total += parseFloat((n.amount*n.quantity)*(1+parseFloat(n.markup)/100));
-        });
-
-        this.setState({subTotal: total});
-        this.setState({total: total+this.state.tax});
-    };
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
-    AddLineData=()=>{
+    addLineData=()=>{
         const data = [...this.state.data, createData()];
         let id = 0;
         let newData = data.map(record=>{
             record.id = id++;
+            return record;
+        });
+        this.setState({data: newData})
+    };
+
+
+    addFranchiseeLine = (n) =>{
+        const data = [...this.state.data];
+        let fline = createFranchisee(n.franchisees.length);
+        n.franchisees = [...n.franchisees, fline];
+
+        let newData = data.map(record=>{
+            if(record.id===n.id)
+                record = n;
             return record;
         });
         this.setState({data: newData})
@@ -442,7 +467,6 @@ class InvoiceLineTable extends React.Component {
                     if(id==='amount' || id==='markup') data[cellInfo.id][id] = parseFloat(data[cellInfo.id][id]);
                     if(id==='quantity') data[cellInfo.id][id] = parseInt(data[cellInfo.id][id]);
                     this.setState({ data });
-                    this.getTotal();
                 }}
                 dangerouslySetInnerHTML={{
                     __html: prefix + value
@@ -461,7 +485,6 @@ class InvoiceLineTable extends React.Component {
                     const data = [...this.state.data];
                     data[cellInfo.id][id] = e.target.innerHTML;
                     this.setState({ data });
-                    this.getTotal();
                 }}
                 dangerouslySetInnerHTML={{
                     __html: this.state.data[cellInfo.id][id]
@@ -473,32 +496,29 @@ class InvoiceLineTable extends React.Component {
     render()
     {
         const {classes} = this.props;
-        const {data, order, orderBy, selected, rowsPerPage, page} = this.state;
-        const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+        const {data, order, selected} = this.state;
 
         return (
-            <Paper className={classes.root}>
-                <div className={classes.tableWrapper}>
-                    <Table className={classes.table} aria-labelledby="tableTitle">
+            <Paper className={classNames(classes.root)}>
+                <div className={classNames(classes.tableWrapper, "h-full")}>
+                    <Table className={classNames(classes.table, "flex flex-col h-full")} aria-labelledby="tableTitle">
                         <InvoiceLineTableHead
                             className={classNames(classes.InvoiceLineHeadRoot)}
                             numSelected={selected.length}
                             order={order}
                             onSelectAllClick={this.handleSelectAllClick}
                             onRequestSort={this.handleRequestSort}
-                            rowCount={data.length}
                         />
-                        <TableBody>
-                            {stableSort(data, getSorting(order, orderBy))
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map(n => {
+                        <TableBody className="flex flex-col" style={{overflowY: 'scroll'}}>
+                            {
+                                data.map(n => {
                                     return (
-                                        <TableRow hover key={n.id}>
+                                        <TableRow hover key={n.id} style={{height: 52}}>
                                             <TableCell component="td" scope="row" >
                                                 <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl)} style={{marginBottom: '0!important'}}>
                                                     <Select
                                                         classes={{
-                                                            outlined: classes.outlined
+                                                            outlined: classNames(classes.outlined, classes.billing)
                                                         }}
                                                         value={n.billing}
                                                         onChange={(ev)=>this.handleChangeBilling(ev, n)}
@@ -524,7 +544,7 @@ class InvoiceLineTable extends React.Component {
                                                 <FormControl variant="outlined" className={classes.formControl} style={{marginBottom: '0!important'}}>
                                                     <Select
                                                         classes={{
-                                                            outlined: classes.outlined
+                                                            outlined: classNames(classes.outlined,classes.services)
                                                         }}
                                                         value={n.service}
                                                         onChange={(ev)=>this.handleChangeBilling(ev, n)}
@@ -565,15 +585,15 @@ class InvoiceLineTable extends React.Component {
                                                     </Select>
                                                 </FormControl>
                                             </TableCell>
-                                            <TableCell>{this.renderEditable(n, 'description')}</TableCell>
+                                            <TableCell classes={{root:classNames(classes.description)}}>{this.renderEditable(n, 'description')}</TableCell>
                                             <TableCell numeric>{this.renderEditable(n, 'quantity')}</TableCell>
                                             <TableCell numeric>{this.renderEditable(n, 'amount')}</TableCell>
                                             <TableCell numeric>{this.renderEditableMarkup(n, 'markup')}</TableCell>
                                             <TableCell numeric>${parseFloat((n.amount*n.quantity)*(1+parseFloat(n.markup)/100)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</TableCell>
-                                            <TableCell padding="checkbox" className={classNames(classes.tableCellAction)}>
+                                            <TableCell padding="checkbox" className={classNames(classes.tableCellAction)} numeric>
                                                 <Fab color="secondary" aria-label="add"
                                                      className={classNames(classes.lineButton, "mr-12")}
-                                                     onClick={()=>this.AddLineData()}
+                                                     onClick={()=>this.addFranchiseeLine(n)}
                                                 >
                                                     <Icon>call_merge</Icon>
                                                 </Fab>
@@ -588,27 +608,6 @@ class InvoiceLineTable extends React.Component {
                                         </TableRow>
                                     );
                                 })}
-                            {emptyRows > 0 && (
-                                <TableRow style={{height: 49 * emptyRows, display: 'none'}}>
-                                    <TableCell colSpan={8}/>
-                                </TableRow>
-                            )}
-                            <TableRow>
-                                <TableCell rowSpan={3} />
-                                <TableCell className="border-0" colSpan={4}></TableCell>
-                                <TableCell className="summary" numeric>Subtotal</TableCell>
-                                <TableCell className="summary" align="right" numeric>${this.state.subTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell className="border-0" colSpan={4}></TableCell>
-                                <TableCell className="summary" numeric>Tax</TableCell>
-                                <TableCell className="summary" align="right" numeric>${this.state.tax}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell className="border-0" colSpan={4}></TableCell>
-                                <TableCell className="summary" numeric>Grand Total</TableCell>
-                                <TableCell className="summary" align="right" numeric>${this.state.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</TableCell>
-                            </TableRow>
                         </TableBody>
                     </Table>
                 </div>

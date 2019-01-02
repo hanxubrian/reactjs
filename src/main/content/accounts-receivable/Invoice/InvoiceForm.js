@@ -4,8 +4,19 @@ import {withRouter} from 'react-router-dom';
 
 // core components
 import {
-    Paper, TextField, Typography, MenuItem, Card, CardHeader, CardContent, Divider} from '@material-ui/core';
-
+    Paper,
+    TextField,
+    Typography,
+    MenuItem,
+    Card,
+    CardHeader,
+    CardContent,
+    Divider,
+    Button,
+} from '@material-ui/core';
+import 'date-fns'
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 // theme components
 import {FuseAnimate} from '@fuse';
 import {withStyles} from "@material-ui/core";
@@ -45,8 +56,16 @@ const styles = theme => ({
         width: '100%'
     },
     formControl: {
-        marginBottom: 24,
+        marginBottom: 12,
         minWidth: 200,
+    },
+    textField: {
+        marginLeft: 0,
+        marginRight: theme.spacing.unit,
+    },
+    summary: {
+        fontSize: 16,
+        fontWeight: 700
     },
     suggestionsContainerOpen: {
         position: 'absolute',
@@ -70,7 +89,7 @@ const styles = theme => ({
     },
     cardHeader       : {
         backgroundColor: theme.palette.secondary.main,
-        padding: '10px 24px',
+        padding: '8px 24px',
         '& span': {
             color: 'white'
         }
@@ -83,8 +102,8 @@ const newInvoiceState = {
     "RegionName": "",
     "InvoiceId": "",
     "InvoiceNo": "",
-    "InvoiceDate": "",
-    "DueDate": "",
+    "InvoiceDate": new Date(),
+    "DueDate": new Date(),
     "CustomerId": "",
     "CustomerNo": "",
     "CustomerName": "",
@@ -107,7 +126,8 @@ const newInvoiceState = {
     "ConsolidatedInvoiceId": "",
     "ConsolidatedInvoiceNo": "",
     "CreditId": "",
-    "Service":""
+    "Service":"",
+    "notes": ""
 };
 
 function renderInputComponent(inputProps) {
@@ -128,6 +148,7 @@ function renderInputComponent(inputProps) {
                 },
             }}
             {...other}
+            required
         />
     );
 }
@@ -167,7 +188,10 @@ class InvoiceForm extends Component {
         suggestions: [],
         selectedCustomer: null,
         labelWidth: 0,
-        selectedWork: ""
+        selectedWork: "",
+        total: 0.0,
+        subTotal: 0.0,
+        tax: 0,
     };
 
     onChange = (event, { newValue, method }) => {
@@ -190,6 +214,18 @@ class InvoiceForm extends Component {
         });
     };
 
+    getTotal = () => {
+        let total = 0.0;
+        const data = [...this.props.invoiceForm.data.line];
+
+        data.forEach(n => {
+            total += parseFloat((n.amount*n.quantity)*(1+parseFloat(n.markup)/100));
+        });
+
+        this.setState({subTotal: total});
+        this.setState({total: total+this.state.tax});
+    };
+
     getSuggestionValue =  (suggestion) =>{
         this.setState({selectedCustomer: suggestion});
         return suggestion.CustomerName;
@@ -203,12 +239,18 @@ class InvoiceForm extends Component {
     };
 
     componentDidUpdate(prevProps, prevState, snapshot){
+        if(this.props.invoiceForm!== prevProps.invoiceForm) {
+            this.getTotal();
+        }
     }
 
     componentWillMount(){
     }
 
     componentWillReceiveProps(nextProps) {
+    }
+
+    componentWillUnmount() {
     }
 
     componentDidMount(){
@@ -223,6 +265,28 @@ class InvoiceForm extends Component {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
     };
 
+    onSaveAndAddMore=()=>{
+
+    };
+
+    onSubmitForApproval=()=>{
+
+    };
+
+    onSaveAndClose = () => {
+
+    };
+
+    closeComposeForm = () => {
+        this.props.invoiceForm.type === 'edit' ? this.props.closeEditInvoiceForm() : this.props.closeNewInvoiceForm();
+    };
+
+    handleDueDateChange = date => {
+        this.setState({ DueDate: date});
+    };
+    handleInvoiceDateChange = date => {
+        this.setState({ InvoiceDate: date });
+    };
     render()
     {
         const { classes} = this.props;
@@ -239,65 +303,63 @@ class InvoiceForm extends Component {
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                <div className="p-24">
-                    <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={8} md={8} className="flex flex-row">
-                            <Autosuggest
-                                {...autosuggestProps}
-                                inputProps={{
-                                    classes,
-                                    placeholder: 'Search Customer Name or Number',
-                                    value: value,
-                                    onChange: this.onChange,
-                                }}
-                                theme={{
-                                    container: classNames(classes.container),
-                                    suggestionsContainerOpen: classes.suggestionsContainerOpen,
-                                    suggestionsList: classes.suggestionsList,
-                                    suggestion: classes.suggestion,
-                                }}
-                                renderSuggestionsContainer={options => (
-                                    <Paper {...options.containerProps} square>
-                                        {options.children}
-                                    </Paper>
-                                )}
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col xs:mb-24">
-                            <TextField
-                                id="InvoiceDate"
-                                label="Invoice Date"
-                                type="date"
-                                name="InvoiceDate"
-                                value={this.state.InvoiceDate}
-                                onChange={this.handleChange}
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                                variant="outlined"
-                                fullWidth
-                                required
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
-                            <TextField
-                                id="DueDate"
-                                label="Due Date"
-                                type="date"
-                                name="DueDate"
-                                value={this.state.DueDate}
-                                onChange={this.handleChange}
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                                variant="outlined"
-                                fullWidth
-                                required
-                            />
-                        </GridItem>
-                    </GridContainer>
-                    {/*{this.state.selectedCustomer && (*/}
-                        <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
+                <div className="h-full flex flex-col relative">
+                    <div className="flex flex-col p-24 pt-12 pb-0" style={{flex: "1"}}>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <GridContainer className={classNames(classes.formControl)}>
+                            <GridItem xs={12} sm={8} md={8} className="flex flex-row">
+                                <Autosuggest
+                                    {...autosuggestProps}
+                                    inputProps={{
+                                        classes,
+                                        placeholder: 'Search Customer Name or Number',
+                                        value: value,
+                                        onChange: this.onChange,
+                                    }}
+                                    theme={{
+                                        container: classNames(classes.container),
+                                        suggestionsContainerOpen: classes.suggestionsContainerOpen,
+                                        suggestionsList: classes.suggestionsList,
+                                        suggestion: classes.suggestion,
+                                    }}
+                                    renderSuggestionsContainer={options => (
+                                        <Paper {...options.containerProps} square>
+                                            {options.children}
+                                        </Paper>
+                                    )}
+                                />
+                            </GridItem>
+                            <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col xs:mb-24">
+                                <DatePicker
+                                    margin="none"
+                                    label="Invoice Date"
+                                    name="InvoiceDate"
+                                    variant="outlined"
+                                    format="dd/MM/yyyy"
+                                    value={this.state.InvoiceDate}
+                                    onChange={this.handleInvoiceDateChange}
+                                    fullWidth
+                                    required
+                                />
+                            </GridItem>
+                            <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                <DatePicker
+                                    margin="none"
+                                    label="Due Date"
+                                    format="dd/MM/yyyy"
+                                    InputLabelProps={{
+                                        shrink: true
+                                    }}
+                                    name="DueDate"
+                                    variant="outlined"
+                                    value={this.state.DueDate}
+                                    onChange={this.handleDueDateChange}
+                                    required
+                                />
+                            </GridItem>
+                        </GridContainer>
+                        </MuiPickersUtilsProvider>
+                        <GridContainer className={classNames(classes.formControl, "mb-0")}>
                             <GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col">
                                 <Card className={classes.card}>
                                     <CardHeader title="Customer" className={classNames(classes.cardHeader, "flex-1")} />
@@ -312,9 +374,9 @@ class InvoiceForm extends Component {
                                             Address: {this.state.selectedCustomer ? this.state.selectedCustomer.Address: ''}
                                         </Typography>
                                         {this.state.selectedCustomer && (
-                                        <Typography variant="subtitle1" color="inherit">
+                                            <Typography variant="subtitle1" color="inherit">
                                                 {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
-                                        </Typography>
+                                            </Typography>
                                         )}
                                     </CardContent>
                                 </Card>
@@ -341,22 +403,108 @@ class InvoiceForm extends Component {
                                 </Card>
                             </GridItem>
                         </GridContainer>
-                    {/*)}*/}
-                    <Divider variant="middle"/>
-                    <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col xs:mb-24">
-                        <InvoiceLineTable />
-                        </GridItem>
-                    </GridContainer>
-                    <Divider variant="middle"/>
-                    <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={8} md={8} className="flex flex-row xs:flex-col xs:mb-24">
-
-                        </GridItem>
-                        <GridItem xs={12} sm={4} md={4} className="flex flex-row xs:flex-col xs:mb-24">
-
-                        </GridItem>
-                    </GridContainer>
+                        <GridContainer className={classNames(classes.formControl)} style={{flex: "9999 1 0"}}>
+                            <GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col xs:mb-24">
+                                <InvoiceLineTable />
+                            </GridItem>
+                        </GridContainer>
+                        <Divider variant="middle"/>
+                    </div>
+                    <div className="flex flex-shrink flex-col w-full pl-24 pr-24 pt-12 pb-12">
+                        <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
+                            <GridItem xs={12} sm={9} md={9} className="flex flex-col xs:flex-col xs:mb-24">
+                                <div className="w-full">
+                                    <TextField
+                                        id="InvoiceDescription"
+                                        name="InvoiceDescription"
+                                        label="Description"
+                                        className={classes.textField}
+                                        value={this.state.InvoiceDescription}
+                                        onChange={this.handleChange}
+                                        margin="dense"
+                                        variant="outlined"
+                                        fullWidth
+                                        multiline
+                                    />
+                                </div>
+                                <div className="w-full">
+                                    <TextField
+                                        id="note"
+                                        name="note"
+                                        label="Note"
+                                        className={classes.textField}
+                                        value={this.state.note}
+                                        onChange={this.handleChange}
+                                        margin="dense"
+                                        variant="outlined"
+                                        fullWidth
+                                        multiline
+                                    />
+                                </div>
+                            </GridItem>
+                            <GridItem xs={12} sm={3} md={3} className="flex flex-col xs:flex-col xs:mb-24">
+                                <div className="w-full p-12 flex justify-end">
+                                    <span className={classes.summary}><strong>Subtotal: </strong>${this.state.subTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
+                                </div>
+                                <div className="w-full p-12 flex justify-end">
+                                    <span className={classes.summary}><strong>Tax: </strong>${this.state.tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
+                                </div>
+                                <div className="w-full p-12 flex justify-end">
+                                    <span className={classes.summary}><strong>Grand Total: </strong>${this.state.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
+                                </div>
+                            </GridItem>
+                        </GridContainer>
+                        <div className="flex flex-1 flex-row justify-end">
+                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    className={classNames(classes.button, "mr-12")}
+                                    onClick={() => {
+                                        this.onSaveAndClose();
+                                    }}
+                                >
+                                    Save & Close
+                                </Button>
+                            </FuseAnimate>
+                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    className={classNames(classes.button, "mr-12")}
+                                    onClick={() => {
+                                        this.onSaveAndAddMore();
+                                    }}
+                                >
+                                    Save & Add more
+                                </Button>
+                            </FuseAnimate>
+                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    className={classNames(classes.button, "mr-12")}
+                                    onClick={() => {
+                                        this.onSubmitForApproval();
+                                    }}
+                                >
+                                    Submit for Approval
+                                </Button>
+                            </FuseAnimate>
+                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.button}
+                                    onClick={() => {
+                                        this.closeComposeForm();
+                                    }}
+                                >
+                                    Close
+                                </Button>
+                            </FuseAnimate>
+                        </div>
+                    </div>
                 </div>
             </FuseAnimate>
         );
@@ -368,13 +516,14 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         openEditInvoiceForm: Actions.openEditInvoiceForm,
         closeEditInvoiceForm: Actions.closeEditInvoiceForm,
+        closeNewInvoiceForm : Actions.closeNewInvoiceForm,
     }, dispatch);
 }
 
 function mapStateToProps({invoices, })
 {
     return {
-        InvoiceForm: invoices.InvoiceForm
+        invoiceForm: invoices.invoiceForm
     }
 }
 

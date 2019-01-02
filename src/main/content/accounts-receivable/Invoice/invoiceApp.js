@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
 // core components
-import {Hidden, Icon, IconButton, Fab, Button, Typography,Toolbar} from '@material-ui/core';
+import {Hidden, Icon, IconButton, Fab, Typography,Toolbar} from '@material-ui/core';
 
 // theme components
 import {FusePageCustom, FuseAnimate} from '@fuse';
@@ -384,10 +384,9 @@ class InvoiceApp extends Component {
     }
 
     listenScrollEvent(event) {
-        console.log('fired');
         console.log(event);
-
     }
+
     escFunction(event){
         if(event.keyCode === 27) {
             this.setState({s: ''});
@@ -404,15 +403,6 @@ class InvoiceApp extends Component {
 
     handleChange = (event) => {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
-    };
-
-    onSaveAndAddMore=()=>{
-
-    };
-
-
-    onSaveAndClose = () => {
-
     };
 
     canBeSubmitted()
@@ -519,53 +509,21 @@ class InvoiceApp extends Component {
                                                         <img className="mr-12" src="assets/images/invoices/invoice-icon-white.png" alt="new invoice" style={{width: 32, height: 32}}/>
                                                     </Toolbar>
                                                 </FuseAnimate>
-                                                <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                                    <Typography variant="h6" className="hidden sm:flex">Accounts Receivable | New Invoice</Typography>
-                                                </FuseAnimate>
+
+                                                    {this.props.invoiceForm.type === 'edit' && (
+                                                        <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                        <Typography variant="h6" className="hidden sm:flex">Accounts
+                                                            Receivable | Edit Invoice</Typography>
+                                                        </FuseAnimate>
+                                                    )}
+                                                    {this.props.invoiceForm.type === 'new' && (
+                                                        <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                        <Typography variant="h6" className="hidden sm:flex">Accounts
+                                                            Receivable | New Invoice</Typography>
+                                                        </FuseAnimate>
+                                                    )}
+
                                             </div>
-                                        </div>
-                                        <div className="flex flex-shrink items-center">
-                                            <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    className={classNames(classes.button, "mr-12")}
-                                                    onClick={() => {
-                                                        this.onSaveAndClose();
-                                                    }}
-                                                    disabled={!this.canBeSubmitted()}
-                                                >
-                                                    Save & Close
-                                                </Button>
-                                            </FuseAnimate>
-                                            <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    className={classNames(classes.button, "mr-12")}
-                                                    onClick={() => {
-                                                        this.onSaveAndAddMore();
-                                                    }}
-                                                    disabled={!this.canBeSubmitted()}
-                                                >
-                                                    Save & Add more
-                                                </Button>
-                                            </FuseAnimate>
-                                            <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    className={classes.button}
-                                                    onClick={() => {
-                                                        this.closeComposeForm();
-                                                    }}
-                                                    disabled={!this.canBeSubmitted()}
-                                                >
-                                                    Close
-                                                </Button>
-                                            </FuseAnimate>
-
-
                                         </div>
                                     </div>
                                     <div className="flex flex-none items-end" style={{display: 'none'}}>
@@ -603,7 +561,7 @@ class InvoiceApp extends Component {
                                 <InvoiceListContent data={this.state.temp}/>
                             )}
                             {(this.state.temp && invoiceForm.props.open) && (
-                               <InvoiceForm customers={this.state.customers} selectedInvoice={this.state.selectedInvoice}/>
+                                <InvoiceForm customers={this.state.customers} selectedInvoice={this.state.selectedInvoice}/>
                             )}
                         </div>
                     }
@@ -661,8 +619,6 @@ function mapDispatchToProps(dispatch)
         toggleSummaryPanel: Actions.toggleSummaryPanel,
         openNewInvoiceForm: Actions.openNewInvoiceForm,
         openEditInvoiceForm: Actions.openEditInvoiceForm,
-        closeEditInvoiceForm: Actions.closeEditInvoiceForm,
-        closeNewInvoiceForm : Actions.closeNewInvoiceForm,
         getCustomers: Actions.getCustomers,
     }, dispatch);
 }
