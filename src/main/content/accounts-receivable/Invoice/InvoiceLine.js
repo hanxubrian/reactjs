@@ -456,9 +456,9 @@ class InvoiceLineTable extends React.Component {
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
         return (
-            <Paper className={classes.root}>
-                <div className={classes.tableWrapper}>
-                    <Table className={classNames(classes.table, "flex flex-col")} aria-labelledby="tableTitle">
+            <Paper className={classNames(classes.root)}>
+                <div className={classNames(classes.tableWrapper, "h-full")}>
+                    <Table className={classNames(classes.table, "flex flex-col h-full")} aria-labelledby="tableTitle">
                         <InvoiceLineTableHead
                             className={classNames(classes.InvoiceLineHeadRoot)}
                             numSelected={selected.length}
@@ -467,12 +467,12 @@ class InvoiceLineTable extends React.Component {
                             onRequestSort={this.handleRequestSort}
                             rowCount={data.length}
                         />
-                        <TableBody className="flex flex-col" style={{maxHeight: 150, height: 150,overflow: 'scroll'}}>
+                        <TableBody className="flex flex-col" style={{overflowY: 'scroll'}}>
                             {stableSort(data, getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map(n => {
                                     return (
-                                        <TableRow hover key={n.id}>
+                                        <TableRow hover key={n.id} style={{height: 52}}>
                                             <TableCell component="td" scope="row" >
                                                 <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl)} style={{marginBottom: '0!important'}}>
                                                     <Select

@@ -89,7 +89,7 @@ const styles = theme => ({
     },
     cardHeader       : {
         backgroundColor: theme.palette.secondary.main,
-        padding: '10px 24px',
+        padding: '8px 24px',
         '& span': {
             color: 'white'
         }
@@ -279,8 +279,8 @@ class InvoiceForm extends Component {
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="h-full flex flex-col relative">
-                    <div className="flex flex-col flex-1 p-24">
-                        <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
+                    <div className="flex flex-col p-24 pb-0" style={{flex: "1"}}>
+                        <GridContainer className={classNames(classes.formControl)}>
                             <GridItem xs={12} sm={8} md={8} className="flex flex-row">
                                 <Autosuggest
                                     {...autosuggestProps}
@@ -336,7 +336,7 @@ class InvoiceForm extends Component {
                                 />
                             </GridItem>
                         </GridContainer>
-                        <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
+                        <GridContainer className={classNames(classes.formControl, "mb-0")}>
                             <GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col">
                                 <Card className={classes.card}>
                                     <CardHeader title="Customer" className={classNames(classes.cardHeader, "flex-1")} />
@@ -380,13 +380,14 @@ class InvoiceForm extends Component {
                                 </Card>
                             </GridItem>
                         </GridContainer>
-                        <Divider variant="middle"/>
-                        <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
+                        <GridContainer className={classNames(classes.formControl)} style={{flex: "9999 1 0"}}>
                             <GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col xs:mb-24">
                                 <InvoiceLineTable />
                             </GridItem>
                         </GridContainer>
                         <Divider variant="middle"/>
+                    </div>
+                    <div className="flex flex-shrink flex-col w-full pl-24 pr-24 pt-12 pb-12">
                         <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
                             <GridItem xs={12} sm={9} md={9} className="flex flex-col xs:flex-col xs:mb-24">
                                 <div className="w-full">
@@ -428,8 +429,6 @@ class InvoiceForm extends Component {
                                 </div>
                             </GridItem>
                         </GridContainer>
-                    </div>
-                    <div className="flex flex-shrink flex-col w-full pl-24 pr-24 pt-12 pb-12">
                         <div className="flex flex-1 flex-row justify-end">
                             <FuseAnimate animation="transition.expandIn" delay={300}>
                                 <Button
