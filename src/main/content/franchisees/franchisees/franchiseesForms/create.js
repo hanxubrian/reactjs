@@ -15,7 +15,7 @@ import classNames from 'classnames';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
-import {Fab, Hidden, Icon, IconButton, Input} from "@material-ui/core";
+import {Fab, Icon, IconButton} from "@material-ui/core";
 import FuseAnimate from "../../../../../@fuse/components/FuseAnimate/FuseAnimate";
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -178,7 +178,7 @@ class CreateFranchiseesPage extends React.Component {
     {
         const {classes} = this.props;
         const steps = getSteps();
-        const {activeStep , print1099,chargeBack ,bbp, generateReport , accountRebate, data, s} = this.state;
+        const {activeStep , print1099,chargeBack ,bbp, generateReport , accountRebate} = this.state;
         const regions =[
             {
                 value: 2,
@@ -576,10 +576,6 @@ class CreateFranchiseesPage extends React.Component {
                                                                 }
                                                             }}
                                                             getTdProps={(state, rowInfo, column, instance) =>{
-                                                                let tdClass='flex items-center justify-center';
-                                                                if (column.id==='InvoiceNo' ||column.id==='CustomerNo'||column.id==='InvoiceBalanceAmount'||
-                                                                    column.id==='InvoiceDate' || column.id==='transactionStatusFranchisees') tdClass = classNames( "flex items-center  justify-center");
-
                                                                 return {
                                                                     style:{
                                                                         textAlign: 'center',
@@ -837,17 +833,50 @@ class CreateFranchiseesPage extends React.Component {
                                             </div>
                                         )}
                                         {(activeStep === 2) && (
-                                            <Grid container spacing={24}>
-                                                <Grid item xs>
-                                                    <Paper className={classes.paper}>xs</Paper>
-                                                </Grid>
-                                                <Grid item xs>
-                                                    <Paper className={classes.paper}>xs</Paper>
-                                                </Grid>
-                                                <Grid item xs>
-                                                    <Paper className={classes.paper}>xs</Paper>
-                                                </Grid>
-                                            </Grid>
+                                            <Card className={classes.card}>
+                                                <div className={classNames(classes.cardHeader,"flex row flex-1 relative justify-between")}>
+                                                    <div className={classNames("flex flex-row flex-1  p-8 sm:p-12  justify-between")}>
+                                                        <h1 className={classNames(classes.cardHeading)}>Billing Setting Section</h1>
+                                                    </div>
+                                                </div>
+                                                <CardContent className={classNames(classes.cardContainer)}>
+                                                    <br/>
+                                                    <Grid>
+                                                        <Grid item xs>
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox checked={chargeBack} onChange={this.handleBillingCheckedChange('chargeBack')} value="chargeBack" />
+                                                                }
+                                                                label="ChargeBack"
+                                                            />
+                                                        </Grid>
+                                                        <Grid item xs>
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox checked={bbp} onChange={this.handleBillingCheckedChange('bbp')} value="bbp" />
+                                                                }
+                                                                label="BBP Administration Fee"
+                                                            />
+                                                        </Grid>
+                                                        <Grid item xs>
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox checked={accountRebate} onChange={this.handleBillingCheckedChange('accountRebate')} value="accountRebate" />
+                                                                }
+                                                                label="Account Rebate"
+                                                            />
+                                                        </Grid>
+                                                        <Grid item xs>
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox checked={generateReport} onChange={this.handleBillingCheckedChange('generateReport')} value="generateReport" />
+                                                                }
+                                                                label="Generate Report"
+                                                            />
+                                                        </Grid>
+                                                    </Grid>
+                                                </CardContent>
+                                            </Card>
                                         )}
                                         <div>
                                         <div className={classNames(classes.buttonGroup)} >

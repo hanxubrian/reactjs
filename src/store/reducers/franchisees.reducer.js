@@ -6,8 +6,8 @@ import { persistReducer } from 'redux-persist';
 const initialState = {
     franchiseesDB: null,
     bLoadedFranchisees: false,
-    bOpenedSummaryPanelFranchisees: true,
-    bOpenedFilterPanelFranchisees: true,
+    bOpenedSummaryPanelFranchisees: false,
+    bOpenedFilterPanelFranchisees: false,
     transactionStatusFranchisees:{
         checkedSelectAll: true,
         checkedActive: true,
@@ -85,7 +85,9 @@ const franchisees = function(state = initialState, action) {
                         open: true
                     },
                     data : null
-                }
+                },
+                bOpenedSummaryPanelFranchisees: false,
+                bOpenedFilterPanelFranchisees: false
             };
         }
         case Actions.CLOSE_CREATE_FRANCHISEES:

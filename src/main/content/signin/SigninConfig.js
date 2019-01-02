@@ -1,5 +1,4 @@
 import Signin from './Signin';
-import {authRoles} from 'auth';
 
 export const SigninConfig = {
     settings: {

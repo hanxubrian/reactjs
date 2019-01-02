@@ -1,5 +1,4 @@
 import Signin from './SigninPage';
-import {authRoles} from 'auth';
 
 export const SigninPageConfig = {
     settings: {

@@ -12,8 +12,6 @@ import EventDialog from 'main/content/apps/calendar/EventDialog';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import {FuseAnimate} from '@fuse';
-import withReducer from 'store/withReducer';
-import reducer from './store/reducers/events.reducer';
 
 const localizer = BigCalendar.momentLocalizer(moment);
 

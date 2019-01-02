@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {AppBar, Toolbar, Icon, IconButton, ClickAwayListener, Paper, Avatar, Typography, withStyles} from '@material-ui/core';
-import keycode from 'keycode';
+import {Paper, Typography, withStyles} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import {FuseAnimate} from '@fuse';
 
@@ -8,7 +7,6 @@ import {FuseAnimate} from '@fuse';
 //Material UI core
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import * as Actions from 'store/actions';
 import Widget8 from './widget8';
 
 import {bindActionCreators} from 'redux';

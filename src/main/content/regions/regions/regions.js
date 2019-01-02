@@ -15,7 +15,7 @@ class Regions extends Component {
         const {classes, iframeURL} = this.props;
 
         return (
-            <iframe src={iframeURL} className={classes.iframe}></iframe>
+            <iframe title="Regions" src={iframeURL} className={classes.iframe}></iframe>
         );
     }
 }

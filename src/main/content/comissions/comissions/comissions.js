@@ -17,7 +17,7 @@ class Comissions extends Component {
 
         console.log('props=', this.props);
         return (
-            <iframe src={iframeURL} className={classes.iframe}></iframe>
+            <iframe title="Comissions" src={iframeURL} className={classes.iframe}></iframe>
         );
     }
 }

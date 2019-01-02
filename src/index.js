@@ -24,7 +24,6 @@ import ChatPanel from 'main/chatPanel/ChatPanel';
 import { PersistGate } from 'redux-persist/lib/integration/react'
 import {persistor, store} from "./store";
 
-import SettingsPanel from 'main/SettingsPanel';
 import {Auth} from 'auth';
 
 

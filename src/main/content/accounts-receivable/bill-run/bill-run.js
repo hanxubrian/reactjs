@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 
 // core components
-import {Hidden, Icon, IconButton, Fab, Input, Paper, TextField, Typography} from '@material-ui/core';
-import {withStyles, Checkbox} from "@material-ui/core";
+import {Icon, IconButton, Fab, Input, Paper, Typography} from '@material-ui/core';
+import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
 // theme components
-import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
+import {FusePageCustom, FuseAnimate} from '@fuse';
 
 // for store
 import connect from "react-redux/es/connect/connect";
@@ -120,7 +120,6 @@ class BillRun extends Component {
         temp: [],
         data: [],
         selection: [],
-        selectAll: false,
         regionId: 0
     };
 
@@ -182,7 +181,7 @@ class BillRun extends Component {
     render()
     {
         const {classes} = this.props;
-        const { selectAll, selection } = this.state;
+        const { selection } = this.state;
         return (
             <FusePageCustom
                 classes={{
@@ -289,10 +288,6 @@ class BillRun extends Component {
                                     }
                                 }}
                                 getTdProps={(state, rowInfo, column, instance) =>{
-                                    let tdClass='flex items-center justify-center';
-                                    if (column.id==='InvoiceNo' ||column.id==='CustomerNo'||column.id==='InvoiceBalanceAmount'||
-                                        column.id==='InvoiceDate' || column.id==='TransactionStatus') tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
-
                                     return {
                                         style:{
                                             textAlign: 'center',

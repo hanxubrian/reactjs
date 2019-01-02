@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import {Hidden, Icon, IconButton, Fab, Button, Typography,Toolbar} from '@material-ui/core';
 
 // theme components
-import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
+import {FusePageCustom, FuseAnimate} from '@fuse';
 
 import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
@@ -177,7 +177,7 @@ class InvoiceApp extends Component {
         customers: null,
         ...newInvoiceState,
         value: '',
-        selectedWork: ""
+        selectedInvoice: null
     };
 
     toggleSelection = (key, shift, row) => {
@@ -324,16 +324,15 @@ class InvoiceApp extends Component {
 
             regions.map(x => {
                 temp = [...temp, ...x.Customers];
+                return true;
             });
             this.setState({customers: temp});
         }
     }
 
-
     getInvoicesFromStatus =(rawData=this.props.invoices) =>{
         let temp=[];
         let all_temp=[];
-        let temp1=[];
         const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
         const keys=['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
 
@@ -341,7 +340,7 @@ class InvoiceApp extends Component {
 
         let temp0 = rawData.Data;
 
-        temp1 = keys.map((key, index)=> {
+        keys.map((key, index)=> {
 
             if(this.props.transactionStatus[key]){
                 temp = temp0.filter(d => {
@@ -352,6 +351,7 @@ class InvoiceApp extends Component {
                 });
             }
             all_temp =_.uniq([...all_temp, ...temp]);
+            return true;
         });
         this.setState({temp: all_temp});
         this.setState({data: all_temp});
@@ -368,10 +368,11 @@ class InvoiceApp extends Component {
 
         if(this.props.customers!==null){
             let temp = [];
-            let regions = this.props.customers.Data.Regions
+            let regions = this.props.customers.Data.Regions;
 
             regions.map(x => {
                 temp = [...temp, ...x.Customers];
+                return true;
             });
             this.setState({customers: temp});
         }
@@ -405,16 +406,21 @@ class InvoiceApp extends Component {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
     };
 
+    onSaveAndAddMore=()=>{
+
+    };
+
+
+    onSaveAndClose = () => {
+
+    };
+
     canBeSubmitted()
     {
         return true;
-        const {name} = this.state;
-        return (
-            name.length > 0
-        );
     }
     removeInvoices = ()=> {
-        if(this.state.selection.length==0){
+        if(this.state.selection.length===0){
             alert("Please choose invoice(s) to delete");
             return;
         }
@@ -426,10 +432,9 @@ class InvoiceApp extends Component {
 
     render()
     {
-        const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteInvoicesAction,
-            openNewInvoiceForm, closeNewInvoiceForm, invoiceForm, addInvoice, updateInvoice, removeInvoice} = this.props;
-        const { toggleSelection, toggleAll, isSelected, logSelection} = this;
-        const { selectAll, selection } = this.state;
+        const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState,
+            openNewInvoiceForm, invoiceForm} = this.props;
+        const { selection } = this.state;
 
         return (
             <React.Fragment>
@@ -511,7 +516,7 @@ class InvoiceApp extends Component {
                                             <div className="flex items-center">
                                                 <FuseAnimate animation="transition.expandIn" delay={300}>
                                                     <Toolbar className="pl-12 pr-0">
-                                                        <img className="mr-12" src="assets/images/invoices/invoice-icon-white.png" style={{width: 32, height: 32}}/>
+                                                        <img className="mr-12" src="assets/images/invoices/invoice-icon-white.png" alt="new invoice" style={{width: 32, height: 32}}/>
                                                     </Toolbar>
                                                 </FuseAnimate>
                                                 <FuseAnimate animation="transition.slideLeftIn" delay={300}>
@@ -526,7 +531,7 @@ class InvoiceApp extends Component {
                                                     color="primary"
                                                     className={classNames(classes.button, "mr-12")}
                                                     onClick={() => {
-                                                        this.closeComposeForm();
+                                                        this.onSaveAndClose();
                                                     }}
                                                     disabled={!this.canBeSubmitted()}
                                                 >
@@ -539,7 +544,7 @@ class InvoiceApp extends Component {
                                                     color="primary"
                                                     className={classNames(classes.button, "mr-12")}
                                                     onClick={() => {
-                                                        this.closeComposeForm();
+                                                        this.onSaveAndAddMore();
                                                     }}
                                                     disabled={!this.canBeSubmitted()}
                                                 >
@@ -598,7 +603,7 @@ class InvoiceApp extends Component {
                                 <InvoiceListContent data={this.state.temp}/>
                             )}
                             {(this.state.temp && invoiceForm.props.open) && (
-                               <InvoiceForm customers={this.state.customers} selectedCustomer={this.state.selectedCustomer}/>
+                               <InvoiceForm customers={this.state.customers} selectedInvoice={this.state.selectedInvoice}/>
                             )}
                         </div>
                     }

@@ -11,8 +11,6 @@ import MailToolbar from './mail/MailToolbar';
 import MailAppHeader from './MailAppHeader';
 import MailAppSidebarHeader from './MailAppSidebarHeader';
 import MailAppSidebarContent from './MailAppSidebarContent';
-import withReducer from 'store/withReducer';
-import reducer from './store/reducers';
 
 const styles = theme => ({});
 

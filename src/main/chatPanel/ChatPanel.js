@@ -7,8 +7,6 @@ import {connect} from 'react-redux';
 import ContactList from './ContactList';
 import Chat from './Chat';
 import classNames from 'classnames';
-import withReducer from 'store/withReducer';
-import reducer from './store/reducers';
 
 const styles = theme => ({
     root : {

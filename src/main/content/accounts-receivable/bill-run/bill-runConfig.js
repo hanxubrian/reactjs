@@ -1,4 +1,3 @@
-import {FuseLoadable} from '@fuse';
 import BillRun from './bill-run'
 
 export const BillRunConfig = {

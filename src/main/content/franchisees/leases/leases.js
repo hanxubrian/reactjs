@@ -17,7 +17,7 @@ class Leases extends Component {
 
         console.log('props=', this.props);
         return (
-            <iframe src={iframeURL} className={classes.iframe}></iframe>
+            <iframe title="iframe-leases" src={iframeURL} className={classes.iframe}></iframe>
         );
     }
 }
