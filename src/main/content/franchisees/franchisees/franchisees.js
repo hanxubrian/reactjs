@@ -644,47 +644,14 @@ class Franchisees extends Component {
                                         </div>
                                     </div>
                                     <div className="flex flex-shrink items-center">
-                                        <FuseAnimate animation="transition.expandIn" delay={300}>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                className={classNames(classes.button, "mr-12")}
-                                                onClick={() => {
-                                                    this.closeComposeForm();
-                                                }}
-                                                disabled={!this.canBeSubmitted()}
-                                            >
-                                                Save & Close
-                                            </Button>
-                                        </FuseAnimate>
-                                        <FuseAnimate animation="transition.expandIn" delay={300}>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                className={classNames(classes.button, "mr-12")}
-                                                onClick={() => {
-                                                    this.closeComposeForm();
-                                                }}
-                                                disabled={!this.canBeSubmitted()}
-                                            >
-                                                Save & Add more
-                                            </Button>
-                                        </FuseAnimate>
-                                        <FuseAnimate animation="transition.expandIn" delay={300}>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                className={classes.button}
-                                                onClick={() => {
-                                                    this.closeComposeForm();
-                                                }}
-                                                disabled={!this.canBeSubmitted()}
-                                            >
-                                                Close
-                                            </Button>
-                                        </FuseAnimate>
 
+                                        <IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleFilterPanelFranchisees()}>
+                                            <Icon>person_outline</Icon>
+                                        </IconButton>
 
+                                        <IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleSummaryPanelFranchisees()}>
+                                            <Icon>check_circle</Icon>
+                                        </IconButton>
                                     </div>
                                 </div>
                                 <div className="flex flex-none items-end" style={{display: 'none'}}>

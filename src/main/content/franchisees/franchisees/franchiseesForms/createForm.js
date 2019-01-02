@@ -3,9 +3,8 @@ import ReactDOM from 'react-dom';
 
 // core components
 import {
-    Paper, TextField, Button, Typography,
-    MenuItem, FormControl, InputLabel, Select, OutlinedInput,
-    Card, CardHeader, CardContent, Divider, Radio, RadioGroup, FormControlLabel, GridList
+    TextField, Button, Typography,
+    MenuItem,  Divider, FormControlLabel
 } from '@material-ui/core';
 
 
@@ -18,7 +17,7 @@ import { withRouter } from 'react-router-dom';
 //Custom components
 import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
-import CustomerLineTable from "./franchiseesLine"
+import FranchiseesLineTable from "./franchiseesLine"
 
 // for store
 import { bindActionCreators } from "redux";
@@ -28,37 +27,29 @@ import * as Actions from 'store/actions';
 // third party
 import "react-table/react-table.css";
 import _ from 'lodash';
-import Autosuggest from 'react-autosuggest';
 import classNames from 'classnames';
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
 
 
-
-import PropTypes from 'prop-types';
-// import { withStyles } from '@material-ui/core/styles';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepButton from '@material-ui/core/StepButton';
-// import Button from '@material-ui/core/Button';
-// import Typography from '@material-ui/core/Typography';
-
 import FormLabel from '@material-ui/core/FormLabel';
-// import FormControl from '@material-ui/core/FormControl';
-// import FormGroup from '@material-ui/core/FormGroup';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
-import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
+
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import CustomerLineTable from "../../../customers/Customers/CustomerLine";
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider,  DatePicker } from 'material-ui-pickers';
 const styles = theme => ({
 
     root: {
         width: '90%'
-    },
-    button: {
-        marginRight: theme.spacing.unit
     },
     backButton: {
         marginRight: theme.spacing.unit
@@ -118,18 +109,19 @@ const styles = theme => ({
             color: 'white'
         }
     },
+    textField: {
+        width: '100%'
+    }
 });
 
 const newCustomerState = {
     "MasterTrxTypeListId": "",
     "RegionId": "",
     "RegionName": "",
-    "CustomerId": "",
     "CustomerNo": "",
     "CustomerDate": "",
     "DueDate": "",
     "CustomerId": "",
-    "CustomerNo": "",
     "CustomerName": "",
     "EBill": "",
     "PrintCustomer": "",
@@ -205,7 +197,7 @@ function escapeRegexCharacters(str) {
 
 
 function getSteps() {
-    return ['Customer Information', 'Contract', 'Service Settings'];
+    return ["Company Information", "Owner", "Financial", "Billing Settings", "Contract", "Franchisees Fee Maintenance"];
 }
 
 const stateNames = [
@@ -296,17 +288,7 @@ const stateNames = [
 ];
 
 function getStepContent(customerForm, step) {
-    const { classes, CustomerForm, addCustomer, updateCustomer, removeCustomer } = customerForm.props;
-    const { value, suggestions } = customerForm.state;
-
-    const autosuggestProps = {
-        renderInputComponent,
-        suggestions: suggestions,
-        onSuggestionsFetchRequested: customerForm.onSuggestionsFetchRequested,
-        onSuggestionsClearRequested: customerForm.onSuggestionsClearRequested,
-        getSuggestionValue: customerForm.getSuggestionValue,
-        renderSuggestion,
-    };
+    const { classes} = customerForm.props;
 
     const address_headers = [
         {
@@ -382,721 +364,461 @@ function getStepContent(customerForm, step) {
 
     switch (step) {
         case 0:
-            // return 'Step 1: Select campaign settings...';
+
 
             return (
                 <Fragment>
+                    <h3>Business Info</h3>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
-                                id="Name"
-                                label="Name *"
-                                className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('Name')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%' }}
-                            />
-
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
                                 id="outlined-name"
-                                label="Address *"
+                                label="Name"
                                 className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('Address')}
                                 margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%' }}
+                                required
                             />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
-                                id="outlined-name"
-                                label="City *"
+                                id="outlined-address1"
+                                label="Address1"
                                 className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('City')}
                                 margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginRight: '2%' }}
+                                style={{marginRight: '1%'}}
+                                required
                             />
                             <TextField
-                                id="outlined-name"
-                                label="State *"
-                                select
-                                className={classes.textField}
-                                value={''}
-                                onChange={customerForm.handleChange('State')}
+                                id="outlined-address2"
+                                label="Address2"
                                 margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginRight: '2%', marginLeft: '2%' }}
-                            >
-                                {stateNames.map(option => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                            <TextField
-                                id="outlined-name"
-                                label="Zip *"
+                                style={{marginLeft: '1%'}}
                                 className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('Zip')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginLeft: '2%' }}
                             />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="outlined-name"
-                                label="Phone *"
-                                className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('Phone')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginRight: '2%' }}
-                            />
-                            <TextField
-                                id="outlined-name"
-                                label="Fax"
-                                className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('Fax')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginLeft: '2%' }}
-                            />
+                                <TextField
+                                    id="outlined-city"
+                                    label="City"
+                                    className={classes.textField}
+                                    margin="normal"
+                                    style={{marginRight: '1%'}}
+                                    required
+                                />
+                                <TextField
+                                    id="outlined-state"
+                                    label="State"
+                                    className={classes.textField}
+                                    margin="normal"
+                                    style={{marginLeft: '1%',marginRight: '1%'}}
+                                    required
+                                />
+                                <TextField
+                                    id="outlined-zip"
+                                    label="Zip"
+                                    className={classes.textField}
+                                    margin="normal"
+                                    style={{marginLeft: '1%'}}
+                                    required
+                                />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="outlined-name"
-                                label="Email"
-                                type="email"
-                                className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('Email')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginRight: '2%' }}
-                            />
-                            <TextField
-                                id="outlined-name"
-                                label="Website"
-                                className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('Website')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginLeft: '2%' }}
-                            />
+                                <TextField
+                                    id="outlined-phone"
+                                    label="Phone"
+                                    margin="normal"
+                                    style={{marginRight: '1%'}}
+                                    className={classes.textField}
+                                />
+                                <TextField
+                                    id="outlined-email"
+                                    label="E-mail"
+                                    margin="normal"
+                                    style={{marginLeft: '1%'}}
+                                    className={classes.textField}
+                                    required
+                                />
                         </GridItem>
                     </GridContainer>
-
-                    <Divider variant="middle" />
-                    <div style={{ marginTop: '30px' }}></div>
-                    <h3>Addresses</h3>
-                    <div className="flex">
-                        <CustomerLineTable tableType="ADDRESS" headers={address_headers} />
-                    </div>
 
                     <Divider variant="middle" />
                     <div style={{ marginTop: '30px' }}></div>
                     <h3>Contacts</h3>
-                    <div className="flex">
-                        <CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} />
-                    </div>
-
-                    <div style={{ marginTop: '30px' }}></div>
-                    <h3>Billing Settings</h3>
-
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
-                                type="date"
                                 id="outlined-name"
-                                label="Effective Date"
+                                label="Name"
                                 className={classes.textField}
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('EffectiveDate')}
                                 margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%' }}
+                                required
                             />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
-                                id="outlined-name"
-                                label="Invoice Date"
+                                id="outlined-address1"
+                                label="Address1"
                                 className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('InvoiceDate')}
                                 margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%' }}
+                                style={{marginRight:'1%'}}
+                                required
+                            />
+                            <TextField
+                                id="outlined-address2"
+                                label="Address2"
+                                className={classes.textField}
+                                style={{marginLeft: '1%'}}
+                                margin="normal"
                             />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
-                                id="outlined-name"
-                                label="Term"
+                                id="outlined-city"
+                                label="City"
                                 className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('Term')}
                                 margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%' }}
+                                style={{marginRight: '1%'}}
+                                required
+                            />
+                            <TextField
+                                id="outlined-state"
+                                label="State"
+                                className={classes.textField}
+                                margin="normal"
+                                style={{marginRight: '1%',marginLeft: '1%'}}
+                                required
+                            />
+                            <TextField
+                                id="outlined-zip"
+                                label="Zip"
+                                className={classes.textField}
+                                margin="normal"
+                                style={{marginLeft: '1%'}}
+                                required
                             />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
-                                id="ARStatus"
-                                label="AR Status"
+                                id="outlined-phone"
+                                label="Phone"
                                 className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('ARStatus')}
+                                style={{marginRight: '1%'}}
                                 margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%' }}
+                            />
+                            <TextField
+                                id="outlined-ext"
+                                label="Ext"
+                                className={classes.textField}
+                                margin="normal"
+                                style={{marginRight: '1%',marginLeft: '1%'}}
+                            />
+                            <TextField
+                                id="outlined-cell"
+                                label="Cell"
+                                className={classes.textField}
+                                style={{marginLeft: '1%'}}
+                                margin="normal"
                             />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
-                                id="Notes"
-                                label="Notes"
-                                multiline
-                                rowsMax="4"
+                                id="outlined-cell"
+                                label="E-mail"
                                 className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('Notes')}
                                 margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%' }}
+                                required
                             />
                         </GridItem>
                     </GridContainer>
-
                 </Fragment>
             );
         case 1:
-            // return 'Step 2: What is an ad group anyways?';
             return (
                 <Fragment>
-                    <FormLabel component="legend">Service Location</FormLabel>
-                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-
-                        <GridItem xs={12} sm={8} md={8} className="flex flex-row">
-                            <FormControlLabel
-                                control={
-                                    <Checkbox onChange={customerForm.handleChange('gilad')} />
-                                }
-                                label="Same as Main Address"
-                            />
-                        </GridItem>
-
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="Address"
-                                label="Address *"
-                                className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('Address')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginRight: '2%' }}
-                            />
-                            <TextField
-                                id="Address2"
-                                label="Address2"
-                                className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('Address2')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginLeft: '2%' }}
-                            />
-                        </GridItem>
-
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="outlined-name"
-                                label="City *"
-                                className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('City')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginRight: '2%' }}
-                            />
-                            <TextField
-                                id="outlined-name"
-                                label="State *"
-                                select
-                                className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('State')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginRight: '2%', marginLeft: '2%' }}
-                            >
-                                {stateNames.map(option => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                            <TextField
-                                id="outlined-name"
-                                label="Zip *"
-                                className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('Zip')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginLeft: '2%' }}
-                            />
-                        </GridItem>
-
-
-
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="AccountType"
-                                label="Account Type *"
-                                select
-                                className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('AccountType')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ minWidth: "100px", width: "30%" }}
-                            >
-                                {[{ value: 0, label: "Airline" }].map(option => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </GridItem>
-
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="ContractType"
-                                label="Contract Type *"
-                                select
-                                className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('ContractType')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ minWidth: "100px", width: "30%" }}
-                            >
-                                {[{ value: 0, label: "Recurring" }].map(option => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </GridItem>
-
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="AgreementType"
-                                label="Agreement Type *"
-                                select
-                                className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('AgreementType')}
-                                margin="normal"
-                                // variant="outlined"
-                                // style={{ minWidth: "100px", width: "30%" }}
-                                style={{ marginRight: "2%" }}
-                                fullWidth
-                            >
-                                {[{ value: 0, label: "Jani-King" }].map(option => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-
-                            <TextField
-                                id="AcctExec"
-                                label="Acct Exec"
-                                select
-                                className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('AcctExec')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ marginLeft: "2%" }}
-                                fullWidth
-                            >
-                                {[{ value: 0, label: "Stacey Jarvis" }].map(option => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </GridItem>
-
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="PONumer"
-                                type="number"
-                                label="PO Numer"
-                                className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('PONumer')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ minWidth: "100px", width: "30%" }}
-                            />
-
-                        </GridItem>
-
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                type="date"
-                                id="SignDate"
-                                label="Sign Date *"
-                                className={classes.textField}
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('SignDate')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginRight: "2%" }}
-                            />
-                            <TextField
-                                type="date"
-                                id="StartDate"
-                                label="Start Date *"
-                                className={classes.textField}
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('StartDate')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginLeft: "2%" }}
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                type="number"
-                                id="TermMonths"
-                                label="Term Months *"
-                                className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('TermMonths')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginRight: "2%" }}
-                            />
-
-                            <TextField
-                                type="date"
-                                id="ExpiratinDate"
-                                label="Expiratin Date *"
-                                className={classes.textField}
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('ExpiratinDate')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginLeft: "2%" }}
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                type="number"
-                                id="Amount"
-                                label="Amount *"
-                                className={classes.textField}
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('Amount')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ minWidth: "100px", width: "30%" }}
-                                InputProps={{
-                                    startAdornment: <InputAdornment position="start">$</InputAdornment>
-                                }}
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="Description"
-                                label="Description"
-                                multiline
-                                rowsMax="4"
-                                className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('Description')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%' }}
-                            />
-                        </GridItem>
-
-                    </GridContainer>
-
-
+                    <div style={{ marginTop: '30px' }}></div>
+                    <h3>Owner</h3>
+                    <div className="flex">
+                        <CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} />
+                    </div>
                 </Fragment>
             );
         case 2:
-            // return 'Step 3: This is the bit I really care about!';
             return (
                 <Fragment>
+                    <div style={{ marginTop: '30px' }}></div>
+                    <h3>Financial Section</h3>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="ServiceType"
-                                label="Service Type *"
-                                select
-                                className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('ServiceType')}
+                            <RadioGroup
+                                aria-label="financialRadio"
+                                name="financialRadio"
                                 margin="normal"
-                                // variant="outlined"
-                                style={{ minWidth: "100px", width: "30%" }}
+                                row
                             >
-                                {[{ value: 0, label: "Select" }].map(option => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
+                                <FormControlLabel
+                                    value="ein"
+                                    control={<Radio color="primary" />}
+                                    label="EIN"
+                                    labelPlacement="end"
+                                    margin="normal"
+                                />
+                                <FormControlLabel
+                                    value="ssn"
+                                    control={<Radio color="primary" />}
+                                    label="SSN"
+                                    labelPlacement="end"
+                                    margin="normal"
+                                />
+                            </RadioGroup>
                         </GridItem>
-
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
-                                id="BillingFrequency"
-                                label="Billing Frequency"
-                                select
+                                id="financeEinSsn"
+                                label="EIN/SSN"
                                 className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('BillingFrequency')}
                                 margin="normal"
-                                // variant="outlined"
-                                style={{ minWidth: "100px", width: "30%" }}
-                            >
-                                {[{ value: 0, label: "Monthly" }].map(option => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </GridItem>
-
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="SquareFootage"
-                                label="Square Footage"
-                                className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('SquareFootage')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ minWidth: "100px", width: "30%" }}
-                            />
-
-                        </GridItem>
-
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                type="time"
-                                id="StartTime"
-                                label="Start Time *"
-                                className={classes.textField}
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('StartTime')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginRight: "2%" }}
-                            />
-                            <TextField
-                                type="time"
-                                id="EndTime"
-                                label="End Time *"
-                                className={classes.textField}
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('EndTime')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginLeft: "2%" }}
+                                required
                             />
                         </GridItem>
-
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
-                                type="number"
-                                id="Amount"
-                                label="Amount *"
+                                id="financeName"
+                                label="Name"
                                 className={classes.textField}
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('Amount')}
                                 margin="normal"
-                                // variant="outlined"
-                                style={{ minWidth: "100px", width: "30%" }}
-                                InputProps={{
-                                    startAdornment: <InputAdornment position="start">$</InputAdornment>
-                                }}
+                                required
                             />
                         </GridItem>
-
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
-                                type="number"
-                                id="CleanTimes"
-                                label="Clean Times *"
+                                id="financeAddress"
+                                label="Address"
                                 className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('CleanTimes')}
                                 margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginRight: "2%" }}
-                            />
-
-                            <TextField
-                                select
-                                id="CleanFrequency"
-                                label="Clean Frequency *"
-                                className={classes.textField}
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('CleanFrequency')}
-                                margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%', marginLeft: "2%" }}>
-                                {[{ value: 0, label: "Monthly" }].map(option => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </GridItem>
-
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <FormControlLabel
-                                control={
-                                    <Checkbox onChange={customerForm.handleChange('weekdays')} />
-                                }
-                                label="Mon"
-                                style={{ marginRight: "30px" }}
-                                fullWidth
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox onChange={customerForm.handleChange('weekdays')} />
-                                }
-                                label="Tue"
-                                style={{ marginRight: "30px" }}
-                                fullWidth
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox onChange={customerForm.handleChange('weekdays')} />
-                                }
-                                label="Wed"
-                                style={{ marginRight: "30px" }}
-                                fullWidth
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox onChange={customerForm.handleChange('weekdays')} />
-                                }
-                                label="Thu"
-                                style={{ marginRight: "30px" }}
-                                fullWidth
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox onChange={customerForm.handleChange('weekdays')} />
-                                }
-                                label="Fri"
-                                style={{ marginRight: "30px" }}
-                                fullWidth
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox onChange={customerForm.handleChange('weekdays')} />
-                                }
-                                label="Sat"
-                                style={{ marginRight: "30px" }}
-                                fullWidth
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox onChange={customerForm.handleChange('weekdays')} />
-                                }
-                                label="Sun"
-                                fullWidth
+                                required
                             />
                         </GridItem>
-
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <FormControlLabel
-                                control={
-                                    <Checkbox onChange={customerForm.handleChange('weekdays')} />
-                                }
-                                label="CPI Increase"
-                                style={{ marginRight: "30px" }}
-                                fullWidth
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox onChange={customerForm.handleChange('weekdays')} />
-                                }
-                                label="Separate Invoice"
-                                style={{ marginRight: "30px" }}
-                                fullWidth
-                            />
-                        </GridItem>
-
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
-                                id="Description"
-                                label="Description"
-                                multiline
-                                rowsMax="4"
+                                id="outlined-city"
+                                label="City"
                                 className={classes.textField}
-                                value={customerForm.state.name}
-                                onChange={customerForm.handleChange('Description')}
                                 margin="normal"
-                                // variant="outlined"
-                                style={{ width: '100%' }}
+                                style={{marginRight:'1%'}}
+                                required
+                            />
+                            <TextField
+                                id="outlined-state"
+                                label="State"
+                                className={classes.textField}
+                                margin="normal"
+                                style={{marginRight:'1%',marginLeft:'1%'}}
+                                required
+                            />
+                            <TextField
+                                id="outlined-zip"
+                                label="Zip"
+                                className={classes.textField}
+                                margin="normal"
+                                style={{marginLeft:'1%'}}
+                                required
+                            />
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <TextField
+                                id="outlined-phone"
+                                label="1099 Name"
+                                className={classes.textField}
+                                margin="normal"
+                                style={{width:'50%'}}
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox checked={true} />
+                                }
+                                label="Print 1099"
+                                margin="normal"
                             />
                         </GridItem>
                     </GridContainer>
+                </Fragment>
+            );
+        case 3:
+            return (
+                <Fragment>
+                    <div style={{ marginTop: '30px' }}></div>
+                    <h3>Billing Setting Section</h3>
+                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <FormControlLabel
+                                control={
+                                    <Checkbox checked={true} value="chargeBack" />
+                                }
+                                label="ChargeBack"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox checked={true} value="bbp" />
+                                }
+                                label="BBP Administration Fee"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox checked={true} value="accountRebate" />
+                                }
+                                label="Account Rebate"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox checked={true} value="generateReport" />
+                                }
+                                label="Generate Report"
+                            />
+                        </GridItem>
+                    </GridContainer>
+                </Fragment>
+        );
+        case 4:
+            return (
+               <Fragment>
+                   <div style={{ marginTop: '30px' }}></div>
+                   <h3>Contract</h3>
+                   <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+                       <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                               <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                   <DatePicker
+                                       label="Date Sign"
+                                       // value={selectedDateSign}
+                                       // onChange={this.handleDateSignChange}
+                                       className={classes.textField}
+                                       margin="normal"
+                                       style={{marginRight: '1%'}}
+                                   />
+                               </MuiPickersUtilsProvider>
+                               <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                   <DatePicker
+                                       label="Latest Renew Date"
+                                       // value={selectedRenewDate}
+                                       // onChange={this.handleRenewDateChange}
+                                       className={classes.textField}
+                                       margin="normal"
+                                       style={{marginLeft: '1%', marginRight: '1%'}}
+                                   />
+                               </MuiPickersUtilsProvider>
+                               <TextField
+                                   id="termYrs"
+                                   label="Term(Yrs)"
+                                   margin="normal"
+                                   className={classes.textField}
+                                   required
+                                   style={{marginLeft: '1%'}}
+                               />
+                       </GridItem>
+                       <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                               <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                   <DatePicker
+                                       label="EXP. Date"
+                                       // value={selectedExpDate}
+                                       // onChange={this.handleExpDateChange}
+                                       className={classes.textField}
+                                       margin="normal"
+                                       style={{marginRight: '1%'}}
+                                   />
+                               </MuiPickersUtilsProvider>
+                               <TextField
+                                   id="selectPlanType"
+                                   select
+                                   label="Select"
+                                   margin="normal"
+                                   className={classes.textField}
+                                   style={{marginLeft: '1%', marginRight: '1%'}}
+                                   // value={this.state.planType}
+                                   // onChange={this.handlePlanTypeChange('planType')}
+                                   SelectProps={{
+                                       MenuProps: {
+                                           className: classes.menu,
+                                       },
+                                   }}
+                               >
+                                   {/*{planType.map(option => (*/}
+                                       {/*<MenuItem key={option.value} value={option.value}>*/}
+                                           {/*{option.label}*/}
+                                       {/*</MenuItem>*/}
+                                   {/*))}*/}
+                               </TextField>
+                               <TextField
+                                   id="planAmount"
+                                   label="Plan Amount"
+                                   className={classes.textField}
+                                   margin="normal"
+                                   style={{marginLeft: '1%'}}
+                                   required
+                               />
+                       </GridItem>
+                       <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                               <TextField
+                                   id="ibAmount"
+                                   label="IB Amount"
+                                   className={classes.textField}
+                                   margin="normal"
+                                   style={{marginRight: '1%'}}
+                                   required
+                               />
+                               <TextField
+                                   id="downPayment"
+                                   label="Down Payment"
+                                   className={classes.textField}
+                                   margin="normal"
+                                   style={{marginLeft: '1%', marginRight: '1%'}}
+                                   required
+                               />
+                               <TextField
+                                   id="interest"
+                                   label="Interest"
+                                   className={classes.textField}
+                                   style={{marginRight: '1%'}}
+                                   margin="normal"
+                                   required
+                               />
+                       </GridItem>
+                       <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                               <TextField
+                                   id="paymentAmount"
+                                   label="Payment Amount"
+                                   className={classes.textField}
+                                   margin="normal"
+                                   style={{marginRight: '1%'}}
+                                   required
+                               />
+                               <TextField
+                                   id="noOfPayments"
+                                   label="No Of Payments"
+                                   className={classes.textField}
+                                   margin="normal"
+                                   style={{marginLeft: '1%', marginRight: '1%'}}
+                                   required
+                               />
+                               <TextField
+                                   id="daysToFullFill"
+                                   label="Days To Fullfill"
+                                   className={classes.textField}
+                                   style={{marginLeft: '1%'}}
+                                   margin="normal"
+                                   required
+                               />
+                       </GridItem>
+                   </GridContainer>
+               </Fragment>
+            );
 
+        case 5:
+            return(
+                <Fragment>
+                    <div style={{ marginTop: '30px' }}></div>
+                    <h3>Franchisees Fee Maintenance</h3>
+                    <div className="flex">
+                        <CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} />
+                    </div>
                 </Fragment>
             );
         default:
@@ -1105,7 +827,7 @@ function getStepContent(customerForm, step) {
 }
 
 
-class CreateFranchiseesForm extends Component {
+class FranchiseesCreateForm extends Component {
     state = {
         customers: [],
         ...newCustomerState,
@@ -1114,10 +836,11 @@ class CreateFranchiseesForm extends Component {
         selectedCustomer: null,
         labelWidth: 0,
         selectedWork: "",
-
         activeStep: 0,
         completed: new Set(),
-        skipped: new Set()
+        skipped: new Set(),
+        print1099: false,
+        radioValue: 'ein'
     };
 
     onChange = (event, { newValue, method }) => {
@@ -1153,7 +876,7 @@ class CreateFranchiseesForm extends Component {
     };
 
     closeComposeForm = () => {
-        this.props.customerForm.type === 'create' ? this.props.closeEditCustomerForm() : this.props.closeNewCustomerForm();
+        this.type === 'create' ? this.props.closeEditFranchisees() : this.props.closeCreateFranchisees();
     };
 
     constructor(props) {
@@ -1201,95 +924,10 @@ class CreateFranchiseesForm extends Component {
         return getSteps().length;
     };
 
-    isStepOptional = step => {
-        // return step === 1;
-        return false;
-    };
-
-    handleSkip = () => {
-        const { activeStep } = this.state;
-        if (!this.isStepOptional(activeStep)) {
-            // You probably want to guard against something like this
-            // it should never occur unless someone's actively trying to break something.
-            throw new Error("You can't skip a step that isn't optional.");
-        }
-
-        this.setState(state => {
-            const skipped = new Set(state.skipped.values());
-            skipped.add(activeStep);
-            return {
-                activeStep: state.activeStep + 1,
-                skipped
-            };
-        });
-    };
-
-    handleNext = () => {
-        let activeStep;
-
-        if (this.isLastStep() && !this.allStepsCompleted()) {
-            // It's the last step, but not all steps have been completed
-            // find the first step that has been completed
-            const steps = getSteps();
-            activeStep = steps.findIndex((step, i) => !this.state.completed.has(i));
-        }
-        else {
-            activeStep = this.state.activeStep + 1;
-        }
-        this.setState({
-            activeStep
-        });
-    };
-
-    handleBack = () => {
-        this.setState(state => ({
-            activeStep: state.activeStep - 1
-        }));
-    };
-
-    handleStep = step => () => {
-        this.setState({
-            activeStep: step
-        });
-    };
-
-    handleComplete = () => {
-        // eslint-disable-next-line react/no-access-state-in-setstate
-        const completed = new Set(this.state.completed);
-        completed.add(this.state.activeStep);
-        this.setState({
-            completed
-        });
-
-        /**
-         * Sigh... it would be much nicer to replace the following if conditional with
-         * `if (!this.allStepsComplete())` however state is not set when we do this,
-         * thus we have to resort to not being very DRY.
-         */
-        if (completed.size !== this.totalSteps() - this.skippedSteps()) {
-            this.handleNext();
-        }
-    };
-
-    handleReset = () => {
-        this.setState({
-            activeStep: 0,
-            completed: new Set(),
-            skipped: new Set()
-        });
-    };
-
     skippedSteps() {
         return this.state.skipped.size;
     }
 
-    isStepSkipped(step) {
-        return this.state.skipped.has(step);
-    }
-
-    isStepComplete(step) {
-        return this.state.completed.has(step);
-    }
 
     completedSteps() {
         return this.state.completed.size;
@@ -1299,69 +937,54 @@ class CreateFranchiseesForm extends Component {
         return this.completedSteps() === this.totalSteps() - this.skippedSteps();
     }
 
-    isLastStep() {
-        return this.state.activeStep === this.totalSteps() - 1;
-    }
+    handleTab = (event, activeStep) => {
+        this.setState({ activeStep });
+    };
+    handlefinanceCheckedChange = name => event => {
+        this.setState({ [name]: event.target.checked });
+    };
+    handleRadioChange = event => {
+        this.setState({ radioValue: event.target.value });
+    };
     //////////////////////
     render() {
-        const { classes, CustomerForm, addCustomer, updateCustomer, removeCustomer } = this.props;
-        const { value, suggestions } = this.state;
+        const { classes} = this.props;
 
-        const autosuggestProps = {
-            renderInputComponent,
-            suggestions: suggestions,
-            onSuggestionsFetchRequested: this.onSuggestionsFetchRequested,
-            onSuggestionsClearRequested: this.onSuggestionsClearRequested,
-            getSuggestionValue: this.getSuggestionValue,
-            renderSuggestion,
-        };
         console.log('customers', this.props.customers);
 
-        // const {classes} = this.props;
         const steps = getSteps();
-        const { activeStep } = this.state;
+        const { activeStep, print1099, radioValue} = this.state;
 
 
         return (
-            // <div className={classNames(classes.layoutTable, "h-full")}></div>
-            // <FuseAnimate animation="transition.slideRightIn" delay={300} className={classNames(classes.layoutTable, "h-full")}>
-            // <div className="p-24 h-full">
             <Fragment>
-                <Stepper nonLinear activeStep={activeStep}>
-                    {steps.map((label, index) => {
-                        const props = {};
-                        const buttonProps = {};
-                        if (this.isStepOptional(index)) {
-                            buttonProps.optional = <Typography variant="caption">Optional</Typography>;
-                        }
-                        if (this.isStepSkipped(index)) {
-                            props.completed = false;
-                        }
-                        return (
-                            <Step key={label} {...props}>
-                                <StepButton
-                                    onClick={this.handleStep(index)}
-                                    completed={this.isStepComplete(index)}
-                                    {...buttonProps}
-                                >
-                                    {label}
-                                </StepButton>
-                            </Step>
-                        );
-                    })}
-                </Stepper>
-
+                <AppBar position="static" color="default">
+                    <Tabs
+                        value={activeStep}
+                        onChange={this.handleTab}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        scrollable
+                        scrollButtons="auto"
+                    >
+                        <Tab label="Company Information" />
+                        <Tab label="Owner" />
+                        <Tab label="Financial" />
+                        <Tab label="Billing Settings" />
+                        <Tab label="Contract" />
+                        <Tab label="Franchisees Fee Maintenance" />
+                    </Tabs>
+                </AppBar>
                 <div
                     className={classNames(classes.layoutTable, "p-24")}
                     style={{
                         overflowY: 'scroll',
                         width: '100%',
-                        height: 'calc(100% - 140px)'
-                        // flex: '1 1 auto'
+                        height: 'calc(100% - 110px)'
                     }}>
 
 
-                    <h2>{getSteps()[activeStep]}</h2>
+                    <h2>{steps[activeStep]}</h2>
                     <Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
 
                     <div>
@@ -1374,107 +997,61 @@ class CreateFranchiseesForm extends Component {
                             </div>
                         ) : (
                             <div>
-                                {/* <Typography className={classes.instructions}>{getStepContent(this, activeStep)}</Typography> */}
                                 {getStepContent(this, activeStep)}
-                                {/* <div>
-										<Button
-											disabled={activeStep === 0}
-											onClick={this.handleBack}
-											className={classes.button}
-										>Back</Button>
-										<Button
-											variant="contained"
-											color="primary"
-											onClick={this.handleNext}
-											className={classes.button}
-										>Next</Button>
-										{this.isStepOptional(activeStep) &&
-											!this.state.completed.has(this.state.activeStep) && (
-												<Button
-													variant="contained"
-													color="primary"
-													onClick={this.handleSkip}
-													className={classes.button}
-												>Skip</Button>
-											)}
-										{activeStep !== steps.length &&
-											(this.state.completed.has(this.state.activeStep) ? (
-												<Typography variant="caption" className={classes.completed}>
-													Step {activeStep + 1} already completed
-												</Typography>
-											)
-												:
-												(
-													<Button variant="contained" color="primary" onClick={this.handleComplete}>
-														{this.completedSteps() === this.totalSteps() - 1 ? 'Done' : 'Save'}
-													</Button>
-												))}
-									</div> */}
                             </div>
-                        )}
+                            )}
                     </div>
                 </div>
-
-
                 <div>
-                    <Button
-                        disabled={activeStep === 0}
-                        onClick={this.handleBack}
-                        className={classes.button}
-                    >Back</Button>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={this.handleNext}
-                        className={classes.button}
-                    > Next </Button>
-                    {this.isStepOptional(activeStep) &&
-                    !this.state.completed.has(this.state.activeStep) && (
+                    <FuseAnimate animation="transition.expandIn" delay={300}>
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={this.handleSkip}
+                            className={classNames(classes.button, "mr-12")}
+                            onClick={() => {this.closeComposeForm();}}
+                            disabled={!this.canBeSubmitted()}
+                        > Discard </Button>
+                    </FuseAnimate>
+                    <FuseAnimate animation="transition.expandIn" delay={300}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            className={classNames(classes.button, "mr-12")}
+                            onClick={() => {this.closeComposeForm();}}
+                            disabled={!this.canBeSubmitted()}
+                        > Save </Button>
+                    </FuseAnimate>
+                    <FuseAnimate animation="transition.expandIn" delay={300}>
+                        <Button
+                            variant="contained"
+                            color="primary"
                             className={classes.button}
-                        > Skip </Button>
-                    )}
-                    {activeStep !== steps.length &&
-                    (this.state.completed.has(this.state.activeStep) ? (
-                            <Typography variant="caption" className={classes.completed}>
-                                Step {activeStep + 1} already completed
-                            </Typography>
-                        )
-                        :
-                        (
-                            <Button variant="contained" color="primary" onClick={this.handleComplete}>
-                                {this.completedSteps() === this.totalSteps() - 1 ? ' Done ' : ' Save '}
-                            </Button>
-                        ))}
+                            onClick={() => {
+                                this.closeComposeForm();
+                            }}
+                            disabled={!this.canBeSubmitted()}
+                        > Close </Button>
+                    </FuseAnimate>
                 </div>
-
-                {/* </FuseAnimate> */}
-
-
             </Fragment>
         );
     }
 }
 
-// CustomerForm.propTypes = {
-// 	classes: PropTypes.object
-// };
-
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        openEditCustomerForm: Actions.openEditCustomerForm,
-        closeEditCustomerForm: Actions.closeEditCustomerForm,
+        showCreteFranchisees: Actions.showCreteFranchisees,
+        closeCreateFranchisees: Actions.closeCreateFranchisees,
+        showEditFranchisees: Actions.showCreteFranchisees,
+        closeEditFranchisees: Actions.showCreteFranchisees
     }, dispatch);
 }
 
-function mapStateToProps({ customers, }) {
+function mapStateToProps({ franchisees }) {
     return {
-        CustomerForm: customers.CustomerForm
+        franchiseesForm: franchisees.createFranchisees
     }
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(CreateFranchiseesForm)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(FranchiseesCreateForm)));
 
