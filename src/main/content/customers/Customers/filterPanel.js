@@ -212,9 +212,8 @@ class FilterPanel extends Component {
 												// value={customerForm.state.name}
 												onChange={this.handleChange('Name')}
 												margin="normal"
-												// variant="outlined"
-												style={{ width: '100%' }}
-											/>
+												variant="outlined"
+												fullWidth />
 
 										</GridItem>
 										<GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -225,9 +224,8 @@ class FilterPanel extends Component {
 												// value={customerForm.state.name}
 												onChange={this.handleChange('Address')}
 												margin="normal"
-												// variant="outlined"
-												style={{ width: '100%' }}
-											/>
+												variant="outlined"
+												fullWidth />
 										</GridItem>
 										<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 											<TextField
@@ -237,9 +235,8 @@ class FilterPanel extends Component {
 												// value={customerForm.state.name}
 												onChange={this.handleChange('City')}
 												margin="normal"
-												// variant="outlined"
-												style={{ width: '100%', marginRight: '2%' }}
-											/>
+												variant="outlined"
+												fullWidth />
 										</GridItem>
 										<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 											<TextField
@@ -250,9 +247,8 @@ class FilterPanel extends Component {
 												value={''}
 												onChange={this.handleChange('State')}
 												margin="normal"
-												// variant="outlined"
-												style={{ width: '100%', marginRight: '2%', marginLeft: '2%' }}
-											>
+												variant="outlined"
+												fullWidth											>
 												{stateNames.map(option => (
 													<MenuItem key={option.value} value={option.value}>
 														{option.label}
@@ -268,9 +264,8 @@ class FilterPanel extends Component {
 												// value={customerForm.state.name}
 												onChange={this.handleChange('Zip')}
 												margin="normal"
-												// variant="outlined"
-												style={{ width: '100%', marginLeft: '2%' }}
-											/>
+												variant="outlined"
+												fullWidth />
 										</GridItem>
 										<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 											<TextField
@@ -280,8 +275,8 @@ class FilterPanel extends Component {
 												// value={customerForm.state.name}
 												onChange={this.handleChange('Phone')}
 												margin="normal"
-												// variant="outlined"
-												style={{ width: '100%', marginRight: '2%' }}
+												variant="outlined"
+												fullWidth
 											/>
 										</GridItem>
 										<GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -292,9 +287,8 @@ class FilterPanel extends Component {
 												// value={customerForm.state.name}
 												onChange={this.handleChange('Fax')}
 												margin="normal"
-												// variant="outlined"
-												style={{ width: '100%', marginLeft: '2%' }}
-											/>
+												variant="outlined"
+												fullWidth />
 										</GridItem>
 										<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 											<TextField
@@ -305,9 +299,8 @@ class FilterPanel extends Component {
 												// value={customerForm.state.name}
 												onChange={this.handleChange('Email')}
 												margin="normal"
-												// variant="outlined"
-												style={{ width: '100%', marginRight: '2%' }}
-											/>
+												variant="outlined"
+												fullWidth />
 										</GridItem>
 										<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 											<TextField
@@ -317,9 +310,8 @@ class FilterPanel extends Component {
 												// value={customerForm.state.name}
 												onChange={this.handleChange('Website')}
 												margin="normal"
-												// variant="outlined"
-												style={{ width: '100%', marginLeft: '2%' }}
-											/>
+												variant="outlined"
+												fullWidth />
 										</GridItem>
 									</GridContainer>
 								</div>

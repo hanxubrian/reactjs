@@ -210,7 +210,7 @@ function escapeRegexCharacters(str) {
 
 
 function getSteps() {
-	return ['Customer Information', 'Contract', 'Service Settings', "Documents", "Walk-Thru", "Account Offering"];
+	return ['Customer', 'Contract', 'Service Settings', "Documents", "Walk-Thru", "Account Offering"];
 }
 
 const stateNames = [
@@ -533,7 +533,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('EffectiveDate')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%' }}
 							/>
 						</GridItem>
@@ -545,7 +545,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('InvoiceDate')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%' }}
 							/>
 						</GridItem>
@@ -557,7 +557,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('Term')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%' }}
 							/>
 						</GridItem>
@@ -569,7 +569,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('ARStatus')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%' }}
 							/>
 						</GridItem>
@@ -583,7 +583,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('Notes')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%' }}
 							/>
 						</GridItem>
@@ -615,7 +615,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('Address')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%', marginRight: '2%' }}
 							/>
 							<TextField
@@ -625,7 +625,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('Address2')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%', marginLeft: '2%' }}
 							/>
 						</GridItem>
@@ -638,7 +638,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('City')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%', marginRight: '2%' }}
 							/>
 							<TextField
@@ -649,7 +649,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('State')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%', marginRight: '2%', marginLeft: '2%' }}
 							>
 								{stateNames.map(option => (
@@ -665,7 +665,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('Zip')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%', marginLeft: '2%' }}
 							/>
 						</GridItem>
@@ -681,7 +681,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('AccountType')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ minWidth: "100px", width: "30%" }}
 							>
 								{[{ value: 0, label: "Airline" }].map(option => (
@@ -701,7 +701,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('ContractType')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ minWidth: "100px", width: "30%" }}
 							>
 								{[{ value: 0, label: "Recurring" }].map(option => (
@@ -721,7 +721,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('AgreementType')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								// style={{ minWidth: "100px", width: "30%" }}
 								style={{ marginRight: "2%" }}
 								fullWidth
@@ -741,7 +741,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('AcctExec')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ marginLeft: "2%" }}
 								fullWidth
 							>
@@ -762,7 +762,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('PONumer')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ minWidth: "100px", width: "30%" }}
 							/>
 
@@ -780,7 +780,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('SignDate')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%', marginRight: "2%" }}
 							/>
 							<TextField
@@ -794,7 +794,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('StartDate')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%', marginLeft: "2%" }}
 							/>
 						</GridItem>
@@ -807,7 +807,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('TermMonths')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%', marginRight: "2%" }}
 							/>
 
@@ -822,7 +822,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('ExpiratinDate')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%', marginLeft: "2%" }}
 							/>
 						</GridItem>
@@ -838,7 +838,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('Amount')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ minWidth: "100px", width: "30%" }}
 								InputProps={{
 									startAdornment: <InputAdornment position="start">$</InputAdornment>
@@ -855,7 +855,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('Description')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%' }}
 							/>
 						</GridItem>
@@ -879,7 +879,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('ServiceType')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ minWidth: "100px", width: "30%" }}
 							>
 								{[{ value: 0, label: "Select" }].map(option => (
@@ -899,7 +899,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('BillingFrequency')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ minWidth: "100px", width: "30%" }}
 							>
 								{[{ value: 0, label: "Monthly" }].map(option => (
@@ -918,7 +918,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('SquareFootage')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ minWidth: "100px", width: "30%" }}
 							/>
 
@@ -936,7 +936,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('StartTime')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%', marginRight: "2%" }}
 							/>
 							<TextField
@@ -950,7 +950,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('EndTime')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%', marginLeft: "2%" }}
 							/>
 						</GridItem>
@@ -967,7 +967,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('Amount')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ minWidth: "100px", width: "30%" }}
 								InputProps={{
 									startAdornment: <InputAdornment position="start">$</InputAdornment>
@@ -984,7 +984,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('CleanTimes')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%', marginRight: "2%" }}
 							/>
 
@@ -999,7 +999,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('CleanFrequency')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%', marginLeft: "2%" }}>
 								{[{ value: 0, label: "Monthly" }].map(option => (
 									<MenuItem key={option.value} value={option.value}>
@@ -1096,7 +1096,7 @@ function getStepContent(customerForm, step) {
 								value={customerForm.state.name}
 								onChange={customerForm.handleChange('Description')}
 								margin="normal"
-								// variant="outlined"
+								variant="outlined"
 								style={{ width: '100%' }}
 							/>
 						</GridItem>
@@ -1372,7 +1372,7 @@ class CustomerForm extends Component {
 						scrollable
 						scrollButtons="auto"
 					>
-						<Tab label="Customer Information" />
+						<Tab label="Customer" />
 						<Tab label="Contract" />
 						<Tab label="Service Settings" />
 						<Tab label="Walk-Thru" />
