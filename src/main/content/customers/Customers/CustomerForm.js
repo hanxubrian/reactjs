@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 
 // core components
@@ -33,7 +33,43 @@ import classNames from 'classnames';
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
 
+
+
+import PropTypes from 'prop-types';
+// import { withStyles } from '@material-ui/core/styles';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepButton from '@material-ui/core/StepButton';
+// import Button from '@material-ui/core/Button';
+// import Typography from '@material-ui/core/Typography';
+
+import FormLabel from '@material-ui/core/FormLabel';
+// import FormControl from '@material-ui/core/FormControl';
+// import FormGroup from '@material-ui/core/FormGroup';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import FormHelperText from '@material-ui/core/FormHelperText';
+import Checkbox from '@material-ui/core/Checkbox';
+
+
 const styles = theme => ({
+
+	root: {
+		width: '90%'
+	},
+	button: {
+		marginRight: theme.spacing.unit
+	},
+	backButton: {
+		marginRight: theme.spacing.unit
+	},
+	completed: {
+		display: 'inline-block'
+	},
+	instructions: {
+		marginTop: theme.spacing.unit,
+		marginBottom: theme.spacing.unit
+	},
+	//////////////////
 	layoutForm: {
 		flexDirection: 'row',
 	},
@@ -164,6 +200,556 @@ function escapeRegexCharacters(str) {
 	return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+
+
+function getSteps() {
+	return ['Customer Information', 'Contract', 'Service Settings'];
+}
+
+const stateNames = [
+	{
+		value: 2,
+		label: "Buffalo"
+	},
+	{
+		value: 7,
+		label: "Detroit"
+	},
+	{
+		value: 9,
+		label: "Hartford"
+	},
+	{
+		value: 13,
+		label: "Las Vegas"
+	},
+	{
+		value: 14,
+		label: "Los Angeles/Colton"
+	},
+	{
+		value: 16,
+		label: "Miami"
+	},
+	{
+		value: 18,
+		label: "Minneapolis"
+	},
+	{
+		value: 20,
+		label: "New Jersey"
+	},
+	{
+		value: 21,
+		label: "New York"
+	},
+	{
+		value: 22,
+		label: "San Francisco/Oakland"
+	},
+	{
+		value: 23,
+		label: "Oklahoma City"
+	},
+	{
+		value: 24,
+		label: "Philadelphia"
+	},
+	{
+		value: 25,
+		label: "Sacramento"
+	},
+	{
+		value: 26,
+		label: "Washington DC"
+	},
+	{
+		value: 28,
+		label: "Jani-King Int'l, Inc."
+	},
+	{
+		value: 29,
+		label: "JANI-KING OF NEW MEXICO, INC"
+	},
+	{
+		value: 31,
+		label: "New Mexico"
+	},
+	{
+		value: 46,
+		label: "Houston"
+	},
+	{
+		value: 55,
+		label: "Pittsburgh"
+	},
+	{
+		value: 64,
+		label: "Tulsa"
+	},
+	{
+		value: 82,
+		label: "Reno"
+	}
+];
+
+function getStepContent(customerForm, step) {
+	const { classes, CustomerForm, addCustomer, updateCustomer, removeCustomer } = customerForm.props;
+	const { value, suggestions } = customerForm.state;
+
+	const autosuggestProps = {
+		renderInputComponent,
+		suggestions: suggestions,
+		onSuggestionsFetchRequested: customerForm.onSuggestionsFetchRequested,
+		onSuggestionsClearRequested: customerForm.onSuggestionsClearRequested,
+		getSuggestionValue: customerForm.getSuggestionValue,
+		renderSuggestion,
+	};
+
+	switch (step) {
+		case 0:
+			// return 'Step 1: Select campaign settings...';
+
+			return (
+				<Fragment>
+					<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="Name"
+								label="Name *"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('Name')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%' }}
+							/>
+
+						</GridItem>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="outlined-name"
+								label="Address *"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('Address')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%' }}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="outlined-name"
+								label="City *"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('City')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginRight: '2%' }}
+							/>
+							<TextField
+								id="outlined-name"
+								label="State *"
+								select
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('State')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginRight: '2%', marginLeft: '2%' }}
+							>
+								{stateNames.map(option => (
+									<MenuItem key={option.value} value={option.value}>
+										{option.label}
+									</MenuItem>
+								))}
+							</TextField>
+							<TextField
+								id="outlined-name"
+								label="Zip *"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('Zip')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginLeft: '2%' }}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="outlined-name"
+								label="Phone *"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('Phone')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginRight: '2%' }}
+							/>
+							<TextField
+								id="outlined-name"
+								label="Fax"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('Fax')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginLeft: '2%' }}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="outlined-name"
+								label="Email"
+								type="email"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('Email')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginRight: '2%' }}
+							/>
+							<TextField
+								id="outlined-name"
+								label="Website"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('Website')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginLeft: '2%' }}
+							/>
+						</GridItem>
+						{/* 					
+						<GridItem xs={12} sm={8} md={8} className="flex flex-row">
+							<Autosuggest
+								{...autosuggestProps}
+								inputProps={{
+									classes,
+									placeholder: 'Search Customer Name or Number',
+									value: value,
+									onChange: customerForm.onChange,
+								}}
+								theme={{
+									container: classNames(classes.container),
+									suggestionsContainerOpen: classes.suggestionsContainerOpen,
+									suggestionsList: classes.suggestionsList,
+									suggestion: classes.suggestion,
+								}}
+								renderSuggestionsContainer={options => (
+									<Paper {...options.containerProps} square>
+										{options.children}
+									</Paper>
+								)}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col xs:mb-24">
+							<TextField
+								id="CustomerDate"
+								label="Customer Date"
+								type="date"
+								name="CustomerDate"
+								value={customerForm.state.CustomerDate}
+								onChange={customerForm.handleChange}
+								InputLabelProps={{
+									shrink: true
+								}}
+								variant="outlined"
+								fullWidth
+								required
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+							<TextField
+								id="DueDate"
+								label="Due Date"
+								type="date"
+								name="DueDate"
+								value={customerForm.state.DueDate}
+								onChange={customerForm.handleChange}
+								InputLabelProps={{
+									shrink: true
+								}}
+								variant="outlined"
+								fullWidth
+								required
+							/>
+						</GridItem>
+					 */}
+					</GridContainer>
+
+					<Divider variant="middle" />
+					<div style={{ marginTop: '30px' }}></div>
+					<h3>Addresses</h3>
+					<div className="flex">
+						<CustomerLineTable />
+					</div>
+
+					<Divider variant="middle" />
+					<div style={{ marginTop: '30px' }}></div>
+					<h3>Contacts</h3>
+					<div className="flex">
+						<CustomerLineTable />
+					</div>
+
+					<div style={{ marginTop: '30px' }}></div>
+					<h3>Billing Settings</h3>
+
+					<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								type="date"
+								id="outlined-name"
+								label="Effective Date"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('EffectiveDate')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%' }}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="outlined-name"
+								label="Invoice Date"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('InvoiceDate')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%' }}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="outlined-name"
+								label="Term"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('Term')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%' }}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="ARStatus"
+								label="AR Status"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('ARStatus')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%' }}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="Notes"
+								label="Notes"
+								multiline
+								rowsMax="4"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('Notes')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%' }}
+							/>
+						</GridItem>
+					</GridContainer>
+
+				</Fragment>
+			);
+		case 1:
+			// return 'Step 2: What is an ad group anyways?';
+			return (
+				<Fragment>
+					<FormLabel component="legend">Service Location</FormLabel>
+					<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+
+						<GridItem xs={12} sm={8} md={8} className="flex flex-row">
+							<FormControlLabel
+								control={
+									<Checkbox onChange={customerForm.handleChange('gilad')} />
+								}
+								label="Same as Main Address"
+							/>
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="Address"
+								label="Address *"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('Address')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginRight: '2%' }}
+							/>
+							<TextField
+								id="Address2"
+								label="Address2"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('Address2')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginLeft: '2%' }}
+							/>
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="outlined-name"
+								label="City *"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('City')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginRight: '2%' }}
+							/>
+							<TextField
+								id="outlined-name"
+								label="State *"
+								select
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('State')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginRight: '2%', marginLeft: '2%' }}
+							>
+								{stateNames.map(option => (
+									<MenuItem key={option.value} value={option.value}>
+										{option.label}
+									</MenuItem>
+								))}
+							</TextField>
+							<TextField
+								id="outlined-name"
+								label="Zip *"
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('Zip')}
+								margin="normal"
+								// variant="outlined"
+								style={{ width: '100%', marginLeft: '2%' }}
+							/>
+						</GridItem>
+
+
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="AccountType"
+								label="Account Type *"
+								select
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('AccountType')}
+								margin="normal"
+								// variant="outlined"
+								style={{ minWidth: "100px", width: "30%" }}
+							>
+								{[{ value: 0, label: "Airline" }].map(option => (
+									<MenuItem key={option.value} value={option.value}>
+										{option.label}
+									</MenuItem>
+								))}
+							</TextField>
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="ContractType"
+								label="Contract Type *"
+								select
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('ContractType')}
+								margin="normal"
+								// variant="outlined"
+								style={{ minWidth: "100px", width: "30%" }}
+							>
+								{[{ value: 0, label: "Recurring" }].map(option => (
+									<MenuItem key={option.value} value={option.value}>
+										{option.label}
+									</MenuItem>
+								))}
+							</TextField>
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="AgreementType"
+								label="Agreement Type *"
+								select
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('AgreementType')}
+								margin="normal"
+								// variant="outlined"
+								// style={{ minWidth: "100px", width: "30%" }}
+								style={{ marginRight: "2%" }}
+								fullWidth
+							>
+								{[{ value: 0, label: "Jani-King" }].map(option => (
+									<MenuItem key={option.value} value={option.value}>
+										{option.label}
+									</MenuItem>
+								))}
+							</TextField>
+
+							<TextField
+								id="AcctExec"
+								label="Acct Exec"
+								select
+								className={classes.textField}
+								value={customerForm.state.name}
+								onChange={customerForm.handleChange('AcctExec')}
+								margin="normal"
+								// variant="outlined"
+								style={{ marginLeft: "2%" }}
+								fullWidth
+							>
+								{[{ value: 0, label: "Stacey Jarvis" }].map(option => (
+									<MenuItem key={option.value} value={option.value}>
+										{option.label}
+									</MenuItem>
+								))}
+							</TextField>
+						</GridItem>
+					</GridContainer>
+
+
+				</Fragment>
+			);
+		case 2:
+			// return 'Step 3: This is the bit I really care about!';
+			return (
+				<Fragment>
+					<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+						<GridItem xs={12} sm={8} md={8} className="flex flex-row">
+
+						</GridItem>
+
+					</GridContainer>
+
+				</Fragment>
+			);
+		default:
+			return 'Unknown step';
+	}
+}
+
+
 class CustomerForm extends Component {
 	state = {
 		customers: [],
@@ -172,7 +758,11 @@ class CustomerForm extends Component {
 		suggestions: [],
 		selectedCustomer: null,
 		labelWidth: 0,
-		selectedWork: ""
+		selectedWork: "",
+
+		activeStep: 0,
+		completed: new Set(),
+		skipped: new Set()
 	};
 
 	onChange = (event, { newValue, method }) => {
@@ -236,6 +826,12 @@ class CustomerForm extends Component {
 		this.setState(_.set({ ...this.state }, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
 	};
 
+	handleChange = name => event => {
+		this.setState({
+			[name]: event.target.value
+		});
+	};
+
 	canBeSubmitted() {
 		return true;
 		const { name } = this.state;
@@ -244,6 +840,114 @@ class CustomerForm extends Component {
 		);
 	}
 
+
+	//////////////////////
+	totalSteps = () => {
+		return getSteps().length;
+	};
+
+	isStepOptional = step => {
+		// return step === 1;
+		return false;
+	};
+
+	handleSkip = () => {
+		const { activeStep } = this.state;
+		if (!this.isStepOptional(activeStep)) {
+			// You probably want to guard against something like this
+			// it should never occur unless someone's actively trying to break something.
+			throw new Error("You can't skip a step that isn't optional.");
+		}
+
+		this.setState(state => {
+			const skipped = new Set(state.skipped.values());
+			skipped.add(activeStep);
+			return {
+				activeStep: state.activeStep + 1,
+				skipped
+			};
+		});
+	};
+
+	handleNext = () => {
+		let activeStep;
+
+		if (this.isLastStep() && !this.allStepsCompleted()) {
+			// It's the last step, but not all steps have been completed
+			// find the first step that has been completed
+			const steps = getSteps();
+			activeStep = steps.findIndex((step, i) => !this.state.completed.has(i));
+		}
+		else {
+			activeStep = this.state.activeStep + 1;
+		}
+		this.setState({
+			activeStep
+		});
+	};
+
+	handleBack = () => {
+		this.setState(state => ({
+			activeStep: state.activeStep - 1
+		}));
+	};
+
+	handleStep = step => () => {
+		this.setState({
+			activeStep: step
+		});
+	};
+
+	handleComplete = () => {
+		// eslint-disable-next-line react/no-access-state-in-setstate
+		const completed = new Set(this.state.completed);
+		completed.add(this.state.activeStep);
+		this.setState({
+			completed
+		});
+
+		/**
+		 * Sigh... it would be much nicer to replace the following if conditional with
+		 * `if (!this.allStepsComplete())` however state is not set when we do this,
+		 * thus we have to resort to not being very DRY.
+		 */
+		if (completed.size !== this.totalSteps() - this.skippedSteps()) {
+			this.handleNext();
+		}
+	};
+
+	handleReset = () => {
+		this.setState({
+			activeStep: 0,
+			completed: new Set(),
+			skipped: new Set()
+		});
+	};
+
+	skippedSteps() {
+		return this.state.skipped.size;
+	}
+
+	isStepSkipped(step) {
+		return this.state.skipped.has(step);
+	}
+
+	isStepComplete(step) {
+		return this.state.completed.has(step);
+	}
+
+	completedSteps() {
+		return this.state.completed.size;
+	}
+
+	allStepsCompleted() {
+		return this.completedSteps() === this.totalSteps() - this.skippedSteps();
+	}
+
+	isLastStep() {
+		return this.state.activeStep === this.totalSteps() - 1;
+	}
+	//////////////////////
 	render() {
 		const { classes, CustomerForm, addCustomer, updateCustomer, removeCustomer } = this.props;
 		const { value, suggestions } = this.state;
@@ -258,10 +962,17 @@ class CustomerForm extends Component {
 		};
 		console.log('customers', this.props.customers);
 
+		// const {classes} = this.props;
+		const steps = getSteps();
+		const { activeStep } = this.state;
+
+
 		return (
 			<FuseAnimate animation="transition.slideRightIn" delay={300}>
 				<div className="p-24">
-					<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+
+
+					{/* <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
 						<GridItem xs={12} sm={8} md={8} className="flex flex-row">
 							<Autosuggest
 								{...autosuggestProps}
@@ -363,12 +1074,96 @@ class CustomerForm extends Component {
 					<Divider variant="middle" />
 					<div className="flex">
 						<CustomerLineTable />
+					</div> */}
+
+					<Stepper nonLinear activeStep={activeStep}>
+						{steps.map((label, index) => {
+							const props = {};
+							const buttonProps = {};
+							if (this.isStepOptional(index)) {
+								buttonProps.optional = <Typography variant="caption">Optional</Typography>;
+							}
+							if (this.isStepSkipped(index)) {
+								props.completed = false;
+							}
+							return (
+								<Step key={label} {...props}>
+									<StepButton
+										onClick={this.handleStep(index)}
+										completed={this.isStepComplete(index)}
+										{...buttonProps}
+									>
+										{label}
+									</StepButton>
+								</Step>
+							);
+						})}
+					</Stepper>
+					<h2>{getSteps()[activeStep]}</h2>
+					<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
+					<p></p>
+					<div>
+						{this.allStepsCompleted() ? (
+							<div>
+								<Typography className={classes.instructions}>
+									All steps completed - you&apos;re finished
+                            </Typography>
+								<Button onClick={this.handleReset}>Reset</Button>
+							</div>
+						) : (
+								<div>
+									{/* <Typography className={classes.instructions}>{getStepContent(this, activeStep)}</Typography> */}
+									{getStepContent(this, activeStep)}
+									<div>
+										<Button
+											disabled={activeStep === 0}
+											onClick={this.handleBack}
+											className={classes.button}
+										>
+											Back
+                                </Button>
+										<Button
+											variant="contained"
+											color="primary"
+											onClick={this.handleNext}
+											className={classes.button}
+										>
+											Next
+                                </Button>
+										{this.isStepOptional(activeStep) &&
+											!this.state.completed.has(this.state.activeStep) && (
+												<Button
+													variant="contained"
+													color="primary"
+													onClick={this.handleSkip}
+													className={classes.button}
+												>
+													Skip
+                                    </Button>
+											)}
+										{activeStep !== steps.length &&
+											(this.state.completed.has(this.state.activeStep) ? (
+												<Typography variant="caption" className={classes.completed}>
+													Step {activeStep + 1} already completed
+                                    </Typography>
+											) : (
+													<Button variant="contained" color="primary" onClick={this.handleComplete}>
+														{this.completedSteps() === this.totalSteps() - 1 ? 'Save' : 'Draft'}
+													</Button>
+												))}
+									</div>
+								</div>
+							)}
 					</div>
 				</div>
 			</FuseAnimate>
 		);
 	}
 }
+
+// CustomerForm.propTypes = {
+// 	classes: PropTypes.object
+// };
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
