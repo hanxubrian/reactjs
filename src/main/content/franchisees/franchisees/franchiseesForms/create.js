@@ -17,6 +17,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import _ from "lodash";
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, TimePicker, DatePicker } from 'material-ui-pickers';
 
 
 const styles = theme => ({
@@ -98,6 +101,9 @@ class CreateFranchiseesPage extends React.Component {
         bbp: false,
         accountRebate: false,
         generateReport: false,
+        selectedDateSign: new Date('2019-01-01T21:11:54'),
+        selectedRenewDate: new Date('2019-01-01T21:11:54'),
+        selectedExpDate: new Date('2019-01-01T21:11:54'),
         data: [
             {
                 "ownerName": "German Sosa",
@@ -183,11 +189,20 @@ class CreateFranchiseesPage extends React.Component {
             [name]: event.target.value,
         });
     };
+    handleDateSignChange = date => {
+        this.setState({ selectedDateSign: date });
+    };
+    handleRenewDateChange = date => {
+        this.setState({ selectedRenewDate: date });
+    };
+    handleExpDateChange = date => {
+        this.setState({ selectedExpDate: date });
+    };
 
     render()
     {
         const {classes} = this.props;
-        const {print1099,chargeBack ,bbp, generateReport , accountRebate} = this.state;
+        const {print1099,chargeBack ,bbp, generateReport , accountRebate, selectedDateSign, selectedExpDate, selectedRenewDate} = this.state;
         const regions =[
             {
                 value: 2,
@@ -827,32 +842,26 @@ class CreateFranchiseesPage extends React.Component {
                             <br/>
                             <Grid container spacing={24}>
                                 <Grid item xs>
-                                    <TextField
-                                        id="dateSign"
-                                        label="Date Sign"
-                                        type="date"
-                                        defaultValue=""
-                                        className={classes.textField}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        variant="outlined"
-                                        required
-                                    />
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <DatePicker
+                                            label="Date Sign"
+                                            value={selectedDateSign}
+                                            onChange={this.handleDateSignChange}
+                                            className={classes.textField}
+                                            variant="outlined"
+                                        />
+                                    </MuiPickersUtilsProvider>
                                 </Grid>
                                 <Grid item xs>
-                                    <TextField
-                                        id="lastReNewDate"
-                                        label="Last Renew Date"
-                                        type="date"
-                                        defaultValue=""
-                                        className={classes.textField}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        variant="outlined"
-                                        required
-                                    />
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <DatePicker
+                                            label="Latest Renew Date"
+                                            value={selectedRenewDate}
+                                            onChange={this.handleRenewDateChange}
+                                            className={classes.textField}
+                                            variant="outlined"
+                                        />
+                                    </MuiPickersUtilsProvider>
                                 </Grid>
                                 <Grid item xs>
                                     <TextField
@@ -866,18 +875,15 @@ class CreateFranchiseesPage extends React.Component {
                             </Grid>
                             <Grid container spacing={24}>
                                 <Grid item xs>
-                                    <TextField
-                                        id="expDate"
-                                        label="Exp. Date"
-                                        type="date"
-                                        defaultValue=""
-                                        className={classes.textField}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        variant="outlined"
-                                        required
-                                    />
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <DatePicker
+                                            label="EXP. Date"
+                                            value={selectedExpDate}
+                                            onChange={this.handleExpDateChange}
+                                            className={classes.textField}
+                                            variant="outlined"
+                                        />
+                                    </MuiPickersUtilsProvider>
                                 </Grid>
                                 <Grid item xs>
                                     <TextField
