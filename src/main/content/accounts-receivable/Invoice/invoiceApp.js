@@ -394,6 +394,13 @@ class InvoiceApp extends Component {
         }
     }
 
+    onNewInvoice=()=>{
+        if(this.props.filterState) this.props.toggleFilterPanel();
+        if(this.props.summaryState) this.props.toggleSummaryPanel();
+
+        this.props.openNewInvoiceForm();
+    };
+
     handleChange = (event) => {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
     };
@@ -453,7 +460,7 @@ class InvoiceApp extends Component {
                                         <div className="flex flex-shrink items-center">
                                             <FuseAnimate animation="transition.expandIn" delay={300}>
                                                 <Fab color="secondary" aria-label="add"
-                                                     className={classNames(classes.sideButton, "mr-12")} onClick={openNewInvoiceForm}>
+                                                     className={classNames(classes.sideButton, "mr-12")} onClick={()=>this.onNewInvoice()}>
                                                     <Icon>add</Icon>
                                                 </Fab>
                                             </FuseAnimate>
