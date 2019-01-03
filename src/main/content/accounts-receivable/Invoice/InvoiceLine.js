@@ -472,6 +472,8 @@ class InvoiceLineTable extends React.Component {
         page       : 0,
         rowsPerPage: 10,
         labelWidth: 0,
+        openSnack: false,
+        snackMessage: 'Please fill the data'
     };
 
     constructor(props) {
@@ -542,13 +544,35 @@ class InvoiceLineTable extends React.Component {
         }
     }
 
+    handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        this.setState({ openSnack: false });
+    };
+
     addLineData=()=>{
         const lineData = [...this.state.data];
         const lastRow = lineData[lineData.length-1];
-        console.log('record', lastRow);
-        if(lastRow.amount===0) alert('amount='+lastRow.amount);
-        if(lastRow.quantity===0) alert('quantity='+lastRow.quantity);
-        if(lastRow.description===' ') alert('description='+lastRow.description);
+
+        if(lastRow.quantity===0) {
+            this.setState({snackMessage: 'Please enter quantity'})
+            this.setState({openSnack: true});
+            return;
+        }
+
+        if(lastRow.amount===0) {
+            this.setState({snackMessage: 'Please enter amount'})
+            this.setState({openSnack: true});
+            return;
+        }
+
+        if(lastRow.description===' ') {
+            this.setState({snackMessage: 'Please enter description'})
+            this.setState({openSnack: true});
+            return;
+        }
 
         const data = [...this.state.data, createData()];
         let id = 0;
@@ -814,6 +838,21 @@ class InvoiceLineTable extends React.Component {
                         </TableBody>
                     </Table>
                 </div>
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={this.state.openSnack}
+                    autoHideDuration={3000}
+                    onClose={this.handleClose}
+                >
+                    <MySnackbarContentWrapper
+                        onClose={this.handleClose}
+                        variant="error"
+                        message={this.state.snackMessage}
+                    />
+                </Snackbar>
             </Paper>
         );
     }
