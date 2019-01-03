@@ -26,6 +26,7 @@ import "react-table/react-table.css";
 import _ from 'lodash';
 
 import CreateFranchiseesPage from "./franchiseesForms/createForm"
+import FusePageCustomSidebarScroll from "../../../../@fuse/components/FusePageLayouts/FusePageCustomSidebarScroll";
 
 
 
@@ -197,6 +198,11 @@ const styles = theme => ({
             backgroundColor: theme.palette.primary.dark,
         }
     },
+    elementCenter: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
 });
 
 
@@ -568,7 +574,7 @@ class Franchisees extends Component {
 
         const { selection } = this.state;
         return (
-            <FusePageCustom
+            <FusePageCustomSidebarScroll
                 classes={{
                     root: classNames(classes.layoutRoot,'test123'),
                     rightSidebar : classNames(classes.layoutRightSidebar, {'openSummary': summaryStateFranchisees}),
@@ -765,7 +771,6 @@ class Franchisees extends Component {
                                                         onClick={(ev) => toggleFilterPanelFranchisees()}
                                                         aria-label="toggle filter panel"
                                                         color="secondary"
-                                                        disabled={filterStateFranchisees ? true : false}
                                                         className={classNames(classes.filterPanelButton)}
                                                     >
                                                         <img className={classes.imageIcon} alt="icon-filter" src="assets/images/invoices/filter.png"/>
@@ -912,7 +917,6 @@ class Franchisees extends Component {
                                                     <Button
                                                         onClick={(ev) => toggleSummaryPanelFranchisees()}
                                                         aria-label="toggle summary panel"
-                                                        disabled={summaryStateFranchisees ? true : false}
                                                         className={classNames(classes.summaryPanelButton)}
                                                     >
                                                         <Icon>insert_chart</Icon>
@@ -954,16 +958,7 @@ class Franchisees extends Component {
                 }
                 leftSidebarHeader={
                     <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", {'filteropen': filterStateFranchisees})}>
-                        <h4 style={{marginBlockStart: '1em'}}>Filter Panel</h4>
-                        <FuseAnimate animation="transition.expandIn" delay={200}>
-                            <div>
-                                <Hidden xsDown>
-                                    <IconButton onClick={(ev)=>toggleFilterPanelFranchisees()}>
-                                        <Icon>close</Icon>
-                                    </IconButton>
-                                </Hidden>
-                            </div>
-                        </FuseAnimate>
+                        <h4 className={classes.elementCenter}>Filter Panel</h4>
                     </div>
                 }
                 leftSidebarContent={
@@ -971,16 +966,8 @@ class Franchisees extends Component {
                 }
                 rightSidebarHeader={
                     <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0">
-                        <h4 style={{marginBlockStart: '1em'}}>Summary Panel</h4>
-                        <FuseAnimate animation="transition.expandIn" delay={200}>
-                            <div>
-                                <Hidden xsDown>
-                                    <IconButton onClick={(ev)=>toggleSummaryPanelFranchisees()}>
-                                        <Icon>close</Icon>
-                                    </IconButton>
-                                </Hidden>
-                            </div>
-                        </FuseAnimate></div>
+                        <h4 className={classes.elementCenter}>Summary Panel</h4>
+                    </div>
                 }
                 rightSidebarContent={
                     <SummaryPanel/>
@@ -989,7 +976,7 @@ class Franchisees extends Component {
                     this.pageLayout = instance;
                 }}
             >
-            </FusePageCustom>
+            </FusePageCustomSidebarScroll>
         );
     }
 }
