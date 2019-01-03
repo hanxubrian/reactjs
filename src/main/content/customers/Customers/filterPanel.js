@@ -426,6 +426,7 @@ class FilterPanel extends Component {
 										accountStatuses.map((x, index) => {
 											if (x !== null)
 												return (<FormControlLabel
+													key={x}
 													control={<Switch checked={this.state['customerStatus' + index]} onChange={this.handleChange('customerStatus' + index)} />}
 													label={x}
 												/>)

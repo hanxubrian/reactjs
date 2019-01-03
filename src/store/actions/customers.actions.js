@@ -6,6 +6,7 @@ export const REMOVE_SELECTED_CUSTOMER = "[CUSTOMER] REMOVE SELECTED";
 export const TOGGLE_SUMMARY_PANEL = "[CUSTOMERS] TOGGLE SUMMARY PANEL";
 export const TOGGLE_FILTER_STATUS = "[CUSTOMERS] TOGGLE FILTER STATUS";
 export const TOGGLE_FILTER_PANEL = "[CUSTOMERS] TOGGLE FILTER PANEL";
+export const TOGGLE_MAP_VIEW = '[CUSTOMERS] TOGGLE MAP VIEW';
 
 // for Add/Edit
 export const OPEN_NEW_CUSTOMER_FORM = '[CUSTOMERS APP] OPEN NEW CUSTOMER FORM';
@@ -40,6 +41,11 @@ export function toggleSummaryPanel(){
     }
 }
 
+export function toggleMapView(){
+    return {
+        type: TOGGLE_MAP_VIEW
+    }
+}
 export function toggleStatus(key, status){
     return {
         type: TOGGLE_FILTER_STATUS,

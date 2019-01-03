@@ -8,14 +8,15 @@ const initialState = {
 	bLoadedCustomers: false,
 	bOpenedSummaryPanel: false,
 	bOpenedFilterPanel: false,
+	bOpenedMapView: false,
 	transactionStatus: { checkedPaid: true, checkedPP: true, checkedComplete: true, checkedOpen: true },
 	customerForm: {
-        type : 'new',
-        props: {
-            open: false
-        },
-        data : null
-    }
+		type: 'new',
+		props: {
+			open: false
+		},
+		data: null
+	}
 };
 
 
@@ -38,6 +39,12 @@ const customers = function (state = initialState, action) {
 			{
 				return {
 					...state, bOpenedSummaryPanel: !state.bOpenedSummaryPanel
+				}
+			}
+		case Actions.TOGGLE_MAP_VIEW:
+			{
+				return {
+					...state, bOpenedMapView: !state.bOpenedMapView
 				}
 			}
 		case Actions.TOGGLE_FILTER_STATUS: {

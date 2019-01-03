@@ -328,7 +328,7 @@ class CustomerListContent extends Component {
 
 	render() {
 		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteCustomersAction, data,
-			openNewCustomerForm, closeNewCustomerForm, CustomerForm } = this.props;
+			openNewCustomerForm, closeNewCustomerForm, CustomerForm, toggleMapView } = this.props;
 		const { toggleSelection, toggleAll, isSelected } = this;
 
 		return (
@@ -418,6 +418,7 @@ class CustomerListContent extends Component {
 									>
 										<img className={classes.imageIcon} src="assets/images/invoices/filter.png" />
 									</Button>
+
 									{/* <Hidden smDown>
 										<Button
 											onClick={(ev) => toggleFilterPanel()}
@@ -672,6 +673,7 @@ class CustomerListContent extends Component {
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
 		toggleFilterPanel: Actions.toggleFilterPanel,
+		toggleMapView: Actions.toggleMapView,
 		toggleSummaryPanel: Actions.toggleSummaryPanel,
 		deleteCustomersAction: Actions.deleteCustomers,
 		removeCustomerAction: Actions.removeCustomer,

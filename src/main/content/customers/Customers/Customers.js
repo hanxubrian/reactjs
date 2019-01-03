@@ -34,6 +34,18 @@ import classNames from 'classnames';
 import CustomerForm from './CustomerForm';
 import CustomerListContent from './CustomerListContent';
 
+
+
+import { Tooltip } from '@material-ui/core';
+import GoogleMap from 'google-map-react';
+
+function Marker({ text }) {
+	return (
+		<Tooltip title={text} placement="top">
+			<Icon className="text-red">place</Icon>
+		</Tooltip>
+	);
+}
 const headerHeight = 80;
 
 const hexToRgb = (hex) => {
@@ -462,7 +474,7 @@ class Customers extends Component {
 	}
 
 	render() {
-		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, openNewCustomerForm, customerForm } = this.props;
+		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, openNewCustomerForm, customerForm, mapViewState, toggleMapView } = this.props;
 
 		// const { toggleSelection, toggleAll, isSelected, logSelection } = this;
 
@@ -495,6 +507,13 @@ class Customers extends Component {
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
+											<IconButton
+												className={classNames(classes.button, "mr-12")}
+												aria-label="Add an alarm"
+												onClick={(ev) => toggleMapView()}>
+												<Icon>{mapViewState ? 'list' : 'location_on'}</Icon>
+											</IconButton>
+
 											<FuseAnimate animation="transition.expandIn" delay={300}>
 												<Fab
 													color="secondary"
@@ -641,9 +660,24 @@ class Customers extends Component {
 					}
 					content={
 						<div className="flex-1 flex-col absolute w-full h-full">
-							{(this.state.temp && !customerForm.props.open) && (
-								<CustomerListContent data={this.state.temp} />
-							)}
+							{(this.state.temp && !customerForm.props.open) && (mapViewState) && (<div className="w-full h-full">
+								<div className="w-full h-full">
+									<GoogleMap
+										bootstrapURLKeys={{
+											key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
+										}}
+										defaultZoom={12}
+										defaultCenter={[-34.397, 150.64]}
+									>
+										<Marker
+											text="Marker Text"
+											lat="-34.397"
+											lng="150.644"
+										/>
+									</GoogleMap>
+								</div>
+							</div>)}
+							{(this.state.temp && !customerForm.props.open) && (!mapViewState) && (<CustomerListContent data={this.state.temp} />)}
 							{(this.state.temp && customerForm.props.open) && (
 								<CustomerForm customers={this.state.customers} selectedCustomer={this.state.selectedCustomer} />
 							)}
@@ -713,6 +747,7 @@ function mapDispatchToProps(dispatch) {
 		getCustomers: Actions.getCustomers,
 		toggleFilterPanel: Actions.toggleFilterPanel,
 		toggleSummaryPanel: Actions.toggleSummaryPanel,
+		toggleMapView: Actions.toggleMapView,
 		deleteCustomersAction: Actions.deleteCustomers,
 		removeCustomerAction: Actions.removeCustomer,
 		openNewCustomerForm: Actions.openNewCustomerForm,
@@ -729,6 +764,7 @@ function mapStateToProps({ customers, auth }) {
 		transactionStatus: customers.transactionStatus,
 		filterState: customers.bOpenedFilterPanel,
 		summaryState: customers.bOpenedSummaryPanel,
+		mapViewState: customers.bOpenedMapView,
 		regionId: auth.login.defaultRegionId,
 		customerForm: customers.customerForm
 	}
