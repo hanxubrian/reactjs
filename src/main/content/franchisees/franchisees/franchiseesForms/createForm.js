@@ -65,248 +65,45 @@ function escapeRegexCharacters(str) {
 
 
 function getSteps() {
-    return ["Company Information", "Owner", "Financial", "Billing Settings", "Contract", "Franchisees Fee Maintenance"];
+    return ["Owner", "Financial", "Billing Settings", "Contract", "Franchisees Fee Maintenance"];
 }
 
 function getStepContent(customerForm, step) {
     const { classes} = customerForm.props;
 
-    const billing_headers = [
+    const Owner_headers = [
         {
-            id: 'billing',
+            id: 'name',
             numeric: false,
             disablePadding: false,
-            label: 'First'
+            label: 'Name'
         },
         {
-            id: 'service',
+            id: 'phone',
             numeric: false,
             disablePadding: false,
-            label: 'Last'
+            label: 'Phone'
         },
         {
-            id: 'description',
+            id: 'title',
             numeric: false,
             disablePadding: false,
             label: 'Title'
-        },
-        {
-            id: 'quantity',
-            numeric: true,
-            disablePadding: false,
-            label: 'Office Phone'
-        },
-        {
-            id: 'amount',
-            numeric: true,
-            disablePadding: false,
-            label: 'Mobile Phone'
-        },
-        {
-            id: 'email',
-            numeric: true,
-            disablePadding: false,
-            label: 'Email'
         }
     ];
 
     switch (step) {
         case 0:
-
-
-            return (
-                <Fragment>
-                    <h3>Business Info</h3>
-                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="outlined-name"
-                                label="Name"
-                                className={classes.textField}
-                                margin="dense"
-                                variant="outlined"
-                                required
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="outlined-address1"
-                                label="Address1"
-                                className={classes.textField}
-                                margin="dense"
-                                style={{marginRight: '1%'}}
-                                variant="outlined"
-                                required
-                            />
-                            <TextField
-                                id="outlined-address2"
-                                label="Address2"
-                                margin="dense"
-                                style={{marginLeft: '1%'}}
-                                variant="outlined"
-                                className={classes.textField}
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="outlined-city"
-                                label="City"
-                                className={classes.textField}
-                                margin="dense"
-                                style={{marginRight: '1%'}}
-                                variant="outlined"
-                                required
-                            />
-                            <TextField
-                                id="outlined-state"
-                                label="State"
-                                className={classes.textField}
-                                margin="dense"
-                                variant="outlined"
-                                style={{marginLeft: '1%',marginRight: '1%'}}
-                                required
-                            />
-                            <TextField
-                                id="outlined-zip"
-                                label="Zip"
-                                variant="outlined"
-                                className={classes.textField}
-                                margin="dense"
-                                style={{marginLeft: '1%'}}
-                                required
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="outlined-phone"
-                                label="Phone"
-                                variant="outlined"
-                                margin="dense"
-                                style={{marginRight: '1%'}}
-                                className={classes.textField}
-                            />
-                            <TextField
-                                id="outlined-email"
-                                label="E-mail"
-                                margin="dense"
-                                variant="outlined"
-                                style={{marginLeft: '1%'}}
-                                className={classes.textField}
-                                required
-                            />
-                        </GridItem>
-                    </GridContainer>
-                    <Divider variant="middle" style={{marginBottom: 12}}/>
-                    <h3>Contacts</h3>
-                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="outlined-name"
-                                label="Name"
-                                variant="outlined"
-                                className={classes.textField}
-                                margin="dense"
-                                required
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="outlined-address1"
-                                label="Address1"
-                                variant="outlined"
-                                className={classes.textField}
-                                margin="dense"
-                                style={{marginRight:'1%'}}
-                                required
-                            />
-                            <TextField
-                                id="outlined-address2"
-                                label="Address2"
-                                className={classes.textField}
-                                variant="outlined"
-                                style={{marginLeft: '1%'}}
-                                margin="dense"
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="outlined-city"
-                                variant="outlined"
-                                label="City"
-                                className={classes.textField}
-                                margin="dense"
-                                style={{marginRight: '1%'}}
-                                required
-                            />
-                            <TextField
-                                id="outlined-state"
-                                label="State"
-                                className={classes.textField}
-                                variant="outlined"
-                                margin="dense"
-                                style={{marginRight: '1%',marginLeft: '1%'}}
-                                required
-                            />
-                            <TextField
-                                id="outlined-zip"
-                                label="Zip"
-                                className={classes.textField}
-                                variant="outlined"
-                                margin="dense"
-                                style={{marginLeft: '1%'}}
-                                required
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="outlined-phone"
-                                label="Phone"
-                                className={classes.textField}
-                                variant="outlined"
-                                style={{marginRight: '1%'}}
-                                margin="dense"
-                            />
-                            <TextField
-                                id="outlined-ext"
-                                label="Ext"
-                                className={classes.textField}
-                                variant="outlined"
-                                margin="dense"
-                                style={{marginRight: '1%',marginLeft: '1%'}}
-                            />
-                            <TextField
-                                id="outlined-cell"
-                                label="Cell"
-                                variant="outlined"
-                                className={classes.textField}
-                                style={{marginLeft: '1%'}}
-                                margin="dense"
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="outlined-cell"
-                                variant="outlined"
-                                label="E-mail"
-                                className={classes.textField}
-                                margin="dense"
-                                required
-                            />
-                        </GridItem>
-                    </GridContainer>
-                </Fragment>
-            );
-        case 1:
             return (
                 <Fragment>
                     <div style={{ marginTop: '30px' }}></div>
                     <h3>Owner</h3>
                     <div className="flex">
-                        <FranchiseesLineTable tableType="BILLING_SETTING" headers={billing_headers} />
+                        <FranchiseesLineTable tableType="BILLING_SETTING" headers={Owner_headers} />
                     </div>
                 </Fragment>
             );
-        case 2:
+        case 1:
             return (
                 <Fragment>
                     <div style={{ marginTop: '30px' }}></div>
@@ -416,7 +213,7 @@ function getStepContent(customerForm, step) {
                     </GridContainer>
                 </Fragment>
             );
-        case 3:
+        case 2:
             return (
                 <Fragment>
                     <div style={{ marginTop: '30px' }}></div>
@@ -451,7 +248,7 @@ function getStepContent(customerForm, step) {
                     </GridContainer>
                 </Fragment>
             );
-        case 4:
+        case 3:
             return (
                 <Fragment>
                     <div style={{ marginTop: '30px' }}></div>
@@ -596,13 +393,13 @@ function getStepContent(customerForm, step) {
                 </Fragment>
             );
 
-        case 5:
+        case 4:
             return(
                 <Fragment>
                     <div style={{ marginTop: '30px' }}></div>
                     <h3>Franchisees Fee Maintenance</h3>
                     <div className="flex">
-                        <FranchiseesLineTable tableType="BILLING_SETTING" headers={billing_headers} />
+                        <FranchiseesLineTable tableType="BILLING_SETTING" headers={Owner_headers} />
                     </div>
                 </Fragment>
             );
@@ -735,7 +532,6 @@ class FranchiseesCreateForm extends Component {
                         scrollable
                         scrollButtons="auto"
                     >
-                        <Tab label="Company Information" />
                         <Tab label="Owner" />
                         <Tab label="Financial" />
                         <Tab label="Billing Settings" />
