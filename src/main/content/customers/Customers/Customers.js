@@ -122,8 +122,6 @@ const styles = theme => ({
 		}
 	},
 	layoutLeftSidebar: {
-		display: 'flex',
-		flexDirection: 'column',
 		width: 0,
 		[theme.breakpoints.down('sm')]: {
 			width: 'inherit'

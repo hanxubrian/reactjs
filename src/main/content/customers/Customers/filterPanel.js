@@ -22,7 +22,7 @@ import GridItem from "Commons/Grid/GridItem";
 
 const styles = theme => ({
 	root: {
-		
+
 	},
 	panel: {
 		position: 'absolute',
@@ -193,147 +193,163 @@ class FilterPanel extends Component {
 		this.setState({ [event.target.name]: event.target.value });
 	};
 	render() {
-		const { classes, customerForm } = this.props;
+		const { classes, customerForm, customers } = this.props;
+
+		let regionCustomers = [];
+
+		customers.Data.Regions.filter(x => {
+			return this.props.regionId === 0 || x.Id === this.props.regionId;
+		}).map(x => {
+			regionCustomers = [...regionCustomers, ...x.Customers];
+		});
+
+		let accountTypes = [...new Set(regionCustomers.map(x => x.AccountTypeListName))].sort();
+		let accountStatuses = [...new Set(regionCustomers.map(x => x.StatusName))].sort();
+
+		console.log("regions")
+		console.log(this.props.regionId)
+
+		console.log(accountStatuses)
 
 		return (
 			<div className={classNames(classes.root, "flex flex-col")}>
 				{/* <div className={classNames("flex flex-col")}> */}
 
-					<Paper className="flex flex-1 flex-col min-h-px p-20">
-						{customerForm && customerForm.props.open
-							? (
-								<div>
-									{/* <h3 className="mb-20">Customer Information</h3> */}
-									<GridContainer style={{ alignItems: 'center', width: 300 }} className={classNames(classes.formControl)}>
-										<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-											<TextField
-												id="Name"
-												label="Name *"
-												className={classes.textField}
-												// value={customerForm.state.name}
-												onChange={this.handleChange('Name')}
-												margin="normal"
-												variant="outlined"
-												fullWidth />
+				<Paper className="flex flex-1 flex-col min-h-px p-20">
+					{customerForm && customerForm.props.open
+						? (
+							<div>
+								{/* <h3 className="mb-20">Customer Information</h3> */}
+								<GridContainer style={{ alignItems: 'center', width: 300 }} className={classNames(classes.formControl)}>
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+										<TextField
+											id="Name"
+											label="Name *"
+											className={classes.textField}
+											// value={customerForm.state.name}
+											onChange={this.handleChange('Name')}
+											margin="normal"
+											variant="outlined"
+											fullWidth />
 
-										</GridItem>
-										<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-											<TextField
-												id="outlined-name"
-												label="Address *"
-												className={classes.textField}
-												// value={customerForm.state.name}
-												onChange={this.handleChange('Address')}
-												margin="normal"
-												variant="outlined"
-												fullWidth />
-										</GridItem>
-										<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-											<TextField
-												id="outlined-name"
-												label="Address2"
-												className={classes.textField}
-												// value={customerForm.state.name}
-												onChange={this.handleChange('Address2')}
-												margin="normal"
-												variant="outlined"
-												fullWidth />
-										</GridItem>
-										<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-											<TextField
-												id="outlined-name"
-												label="City *"
-												className={classes.textField}
-												// value={customerForm.state.name}
-												onChange={this.handleChange('City')}
-												margin="normal"
-												variant="outlined"
-												fullWidth />
-										</GridItem>
-										<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-											<TextField
-												id="outlined-name"
-												label="State *"
-												select
-												className={classes.textField}
-												value={this.state.State}
-												onChange={this.handleChange('State')}
-												margin="normal"
-												variant="outlined"
-												style={{ width: '40%', marginRight: '2px' }}>
-												{stateNames.map(option => (
-													<MenuItem key={option.value} value={option.value}>
-														{option.label}
-													</MenuItem>
-												))}
-											</TextField>
+									</GridItem>
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+										<TextField
+											id="outlined-name"
+											label="Address *"
+											className={classes.textField}
+											// value={customerForm.state.name}
+											onChange={this.handleChange('Address')}
+											margin="normal"
+											variant="outlined"
+											fullWidth />
+									</GridItem>
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+										<TextField
+											id="outlined-name"
+											label="Address2"
+											className={classes.textField}
+											// value={customerForm.state.name}
+											onChange={this.handleChange('Address2')}
+											margin="normal"
+											variant="outlined"
+											fullWidth />
+									</GridItem>
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+										<TextField
+											id="outlined-name"
+											label="City *"
+											className={classes.textField}
+											// value={customerForm.state.name}
+											onChange={this.handleChange('City')}
+											margin="normal"
+											variant="outlined"
+											fullWidth />
+									</GridItem>
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+										<TextField
+											id="outlined-name"
+											label="State *"
+											select
+											className={classes.textField}
+											value={this.state.State}
+											onChange={this.handleChange('State')}
+											margin="normal"
+											variant="outlined"
+											style={{ width: '40%', marginRight: '2px' }}>
+											{stateNames.map(option => (
+												<MenuItem key={option.value} value={option.value}>
+													{option.label}
+												</MenuItem>
+											))}
+										</TextField>
 
-											<TextField
-												id="outlined-name"
-												label="Zip *"
-												className={classes.textField}
-												// value={customerForm.state.name}
-												onChange={this.handleChange('Zip')}
-												margin="normal"
-												variant="outlined"
-												style={{ width: '60%', marginLeft: '2px' }} />
-										</GridItem>
+										<TextField
+											id="outlined-name"
+											label="Zip *"
+											className={classes.textField}
+											// value={customerForm.state.name}
+											onChange={this.handleChange('Zip')}
+											margin="normal"
+											variant="outlined"
+											style={{ width: '60%', marginLeft: '2px' }} />
+									</GridItem>
 
-										<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-											<TextField
-												id="outlined-name"
-												label="Phone *"
-												className={classes.textField}
-												// value={customerForm.state.name}
-												onChange={this.handleChange('Phone')}
-												margin="normal"
-												variant="outlined"
-												style={{ marginRight: '2px' }} />
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+										<TextField
+											id="outlined-name"
+											label="Phone *"
+											className={classes.textField}
+											// value={customerForm.state.name}
+											onChange={this.handleChange('Phone')}
+											margin="normal"
+											variant="outlined"
+											style={{ marginRight: '2px' }} />
 
-											<TextField
-												id="outlined-name"
-												label="Fax"
-												className={classes.textField}
-												// value={customerForm.state.name}
-												onChange={this.handleChange('Fax')}
-												margin="normal"
-												variant="outlined"
-												style={{ marginLeft: '2px' }} />
-										</GridItem>
+										<TextField
+											id="outlined-name"
+											label="Fax"
+											className={classes.textField}
+											// value={customerForm.state.name}
+											onChange={this.handleChange('Fax')}
+											margin="normal"
+											variant="outlined"
+											style={{ marginLeft: '2px' }} />
+									</GridItem>
 
-										<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-											<TextField
-												id="outlined-name"
-												label="Email"
-												type="email"
-												className={classes.textField}
-												// value={customerForm.state.name}
-												onChange={this.handleChange('Email')}
-												margin="normal"
-												variant="outlined"
-												style={{ marginRight: '2px' }} />
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+										<TextField
+											id="outlined-name"
+											label="Email"
+											type="email"
+											className={classes.textField}
+											// value={customerForm.state.name}
+											onChange={this.handleChange('Email')}
+											margin="normal"
+											variant="outlined"
+											style={{ marginRight: '2px' }} />
 
-											<TextField
-												id="outlined-name"
-												label="Website"
-												className={classes.textField}
-												// value={customerForm.state.name}
-												onChange={this.handleChange('Website')}
-												margin="normal"
-												variant="outlined"
-												style={{ marginLeft: '2px' }} />
-										</GridItem>
+										<TextField
+											id="outlined-name"
+											label="Website"
+											className={classes.textField}
+											// value={customerForm.state.name}
+											onChange={this.handleChange('Website')}
+											margin="normal"
+											variant="outlined"
+											style={{ marginLeft: '2px' }} />
+									</GridItem>
 
 
-									</GridContainer>
-								</div>
-							) :
-							(
-								<div>
-									<div>
+								</GridContainer>
+							</div>
+						) :
+						(
+							<div>
+								{/*
+									 <div>
 										<h3 className="mb-20">Filter by Date</h3>
 										<FormControl className={classes.formControl} style={{ width: 200 }}>
-											{/*<InputLabel htmlFor="age-simple">Invoice Date</InputLabel>*/}
 											<Select
 												value={this.state.invoiceDate}
 												onChange={this.handleChange1}
@@ -362,63 +378,112 @@ class FilterPanel extends Component {
 												<MenuItem value={15}>Period</MenuItem>
 											</Select>
 										</FormControl>
-									</div>
+									</div> 
+									*/}
 
-									<div style={{ marginTop: 50, display: 'flex', flexDirection: 'column' }}>
-										<h3>Customer Statuses</h3>
-										<FormControlLabel
-											control={<Switch checked={this.state.isAllCustomerStatus} onChange={this.handleChange('isAllCustomerStatus')} />}
-											label="Select All"
-										/>
-										<FormControlLabel
-											control={<Switch checked={this.state.isActiveCustomerStatus} onChange={this.handleChange('isActiveCustomerStatus')} />}
-											label="Active"
-										/>
-										<FormControlLabel
-											control={<Switch checked={this.state.isCancelledCustomerStatus} onChange={this.handleChange('isCancelledCustomerStatus')} />}
-											label="Cancelled"
-										/>
-										<FormControlLabel
-											control={<Switch checked={this.state.isSuspendedCustomerStatus} onChange={this.handleChange('isSuspendedCustomerStatus')} />}
-											label="Suspended"
-										/>
-										<FormControlLabel
-											control={<Switch checked={this.state.isPendingCustomerStatus} onChange={this.handleChange('isPendingCustomerStatus')} />}
-											label="Pending"
-										/>
-										<FormControlLabel
-											control={<Switch checked={this.state.isInactiveCustomerStatus} onChange={this.handleChange('isInactiveCustomerStatus')} />}
-											label="Inactive"
-										/>
-										<FormControlLabel
-											control={<Switch checked={this.state.isTransferredCustomerStatus} onChange={this.handleChange('isTransferredCustomerStatus')} />}
-											label="Transferred"
-										/>
-										<FormControlLabel
-											control={<Switch checked={this.state.isUnknownCustomerStatus} onChange={this.handleChange('isUnknownCustomerStatus')} />}
-											label="Unknown"
-										/>
-										<FormControlLabel
-											control={<Switch checked={this.state.isRejectedCustomerStatus} onChange={this.handleChange('isRejectedCustomerStatus')} />}
-											label="Rejected"
-										/>
-										<FormControlLabel
-											control={<Switch checked={this.state.isRegionOperationCustomerStatus} onChange={this.handleChange('isRegionOperationCustomerStatus')} />}
-											label="Region Operation"
-										/>
-										<FormControlLabel
-											control={<Switch checked={this.state.isRegionAccountingCustomerStatus} onChange={this.handleChange('isRegionAccountingCustomerStatus')} />}
-											label="Region Accounting"
-										/>
-										<FormControlLabel
-											control={<Switch checked={this.state.isVariableCustomerStatus} onChange={this.handleChange('isVariableCustomerStatus')} />}
-											label="Variable"
-										/>
-									</div>
+								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
+									<h3>Account Types</h3>
+									<FormControl className={classes.formControl} style={{ width: 200 }}>
+										<Select
+											value={-2}
+											onChange={this.handleChange1}
+											inputProps={{
+												name: 'invoiceDate',
+												id: 'invoice_date'
+											}}
+										>
+											<MenuItem value={-2}><em>All</em></MenuItem>
+											<MenuItem value={-1}><em>None</em></MenuItem>
+											{
+												accountTypes.map((x, index) => {
+													if (x !== null)
+														return (<MenuItem key={x} value={index}>{x}</MenuItem>)
+												})
+											}
+										</Select>
+									</FormControl>
 								</div>
-							)
-						}
-					</Paper>
+
+								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
+									<h3>Neweast Customers</h3>
+								</div>
+
+								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
+									<h3>National Accounts</h3>
+								</div>
+
+								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
+									<h3>Account Executive</h3>
+								</div>
+
+								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
+									<h3>Customer Status</h3>
+									<FormControlLabel
+										control={<Switch checked={this.state['customerStatus-1']} onChange={this.handleChange('customerStatus-1')} />}
+										label="Select All"
+									/>
+									{
+										accountStatuses.map((x, index) => {
+											if (x !== null)
+												return (<FormControlLabel
+													control={<Switch checked={this.state['customerStatus' + index]} onChange={this.handleChange('customerStatus' + index)} />}
+													label={x}
+												/>)
+										})
+									}
+									{/* <FormControlLabel
+										control={<Switch checked={this.state.isAllCustomerStatus} onChange={this.handleChange('isAllCustomerStatus')} />}
+										label="Select All"
+									/>
+									<FormControlLabel
+										control={<Switch checked={this.state.isActiveCustomerStatus} onChange={this.handleChange('isActiveCustomerStatus')} />}
+										label="Active"
+									/>
+									<FormControlLabel
+										control={<Switch checked={this.state.isCancelledCustomerStatus} onChange={this.handleChange('isCancelledCustomerStatus')} />}
+										label="Cancelled"
+									/>
+									<FormControlLabel
+										control={<Switch checked={this.state.isSuspendedCustomerStatus} onChange={this.handleChange('isSuspendedCustomerStatus')} />}
+										label="Suspended"
+									/>
+									<FormControlLabel
+										control={<Switch checked={this.state.isPendingCustomerStatus} onChange={this.handleChange('isPendingCustomerStatus')} />}
+										label="Pending"
+									/>
+									<FormControlLabel
+										control={<Switch checked={this.state.isInactiveCustomerStatus} onChange={this.handleChange('isInactiveCustomerStatus')} />}
+										label="Inactive"
+									/>
+									<FormControlLabel
+										control={<Switch checked={this.state.isTransferredCustomerStatus} onChange={this.handleChange('isTransferredCustomerStatus')} />}
+										label="Transferred"
+									/>
+									<FormControlLabel
+										control={<Switch checked={this.state.isUnknownCustomerStatus} onChange={this.handleChange('isUnknownCustomerStatus')} />}
+										label="Unknown"
+									/>
+									<FormControlLabel
+										control={<Switch checked={this.state.isRejectedCustomerStatus} onChange={this.handleChange('isRejectedCustomerStatus')} />}
+										label="Rejected"
+									/>
+									<FormControlLabel
+										control={<Switch checked={this.state.isRegionOperationCustomerStatus} onChange={this.handleChange('isRegionOperationCustomerStatus')} />}
+										label="Region Operation"
+									/>
+									<FormControlLabel
+										control={<Switch checked={this.state.isRegionAccountingCustomerStatus} onChange={this.handleChange('isRegionAccountingCustomerStatus')} />}
+										label="Region Accounting"
+									/>
+									<FormControlLabel
+										control={<Switch checked={this.state.isVariableCustomerStatus} onChange={this.handleChange('isVariableCustomerStatus')} />}
+										label="Variable"
+									/> */}
+								</div>
+							</div>
+						)
+					}
+				</Paper>
 				{/* </div> */}
 			</div >
 		);
@@ -431,12 +496,13 @@ function mapDispatchToProps(dispatch) {
 	}, dispatch);
 }
 
-function mapStateToProps({ customers }) {
+function mapStateToProps({ customers, auth }) {
 	return {
 		filterState: customers.bOpenedFilterPanel,
 		transactionStatus: customers.transactionStatus,
 		customers: customers.customersDB,
-		customerForm: customers.customerForm
+		customerForm: customers.customerForm,
+		regionId: auth.login.defaultRegionId,
 	}
 }
 
