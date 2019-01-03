@@ -107,7 +107,7 @@ const styles = theme => ({
     },
 });
 
-class Transactions extends Component {
+class TransactionsApp extends Component {
     state = {
         s: '',
         data: [],
@@ -149,10 +149,6 @@ class Transactions extends Component {
 
         if(prevProps.transactions===null && this.props.transactions!==null){
             this.getTransactions();
-        }
-
-        if(prevState.s!==this.state.s) {
-            // this.search(this.state.s);
         }
     }
 
@@ -261,4 +257,4 @@ function mapStateToProps({transactions, auth})
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(Transactions)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(TransactionsApp)));
