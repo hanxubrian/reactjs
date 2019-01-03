@@ -30,6 +30,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider,  DatePicker } from 'material-ui-pickers';
+import moment from "moment";
 const styles = theme => ({
 
     root: {
@@ -147,52 +148,52 @@ function getStepContent(customerForm, step) {
                             />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                <TextField
-                                    id="outlined-city"
-                                    label="City"
-                                    className={classes.textField}
-                                    margin="normal"
-                                    style={{marginRight: '1%'}}
-                                    variant="outlined"
-                                    required
-                                />
-                                <TextField
-                                    id="outlined-state"
-                                    label="State"
-                                    className={classes.textField}
-                                    margin="normal"
-                                    variant="outlined"
-                                    style={{marginLeft: '1%',marginRight: '1%'}}
-                                    required
-                                />
-                                <TextField
-                                    id="outlined-zip"
-                                    label="Zip"
-                                    variant="outlined"
-                                    className={classes.textField}
-                                    margin="normal"
-                                    style={{marginLeft: '1%'}}
-                                    required
-                                />
+                            <TextField
+                                id="outlined-city"
+                                label="City"
+                                className={classes.textField}
+                                margin="normal"
+                                style={{marginRight: '1%'}}
+                                variant="outlined"
+                                required
+                            />
+                            <TextField
+                                id="outlined-state"
+                                label="State"
+                                className={classes.textField}
+                                margin="normal"
+                                variant="outlined"
+                                style={{marginLeft: '1%',marginRight: '1%'}}
+                                required
+                            />
+                            <TextField
+                                id="outlined-zip"
+                                label="Zip"
+                                variant="outlined"
+                                className={classes.textField}
+                                margin="normal"
+                                style={{marginLeft: '1%'}}
+                                required
+                            />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                <TextField
-                                    id="outlined-phone"
-                                    label="Phone"
-                                    variant="outlined"
-                                    margin="normal"
-                                    style={{marginRight: '1%'}}
-                                    className={classes.textField}
-                                />
-                                <TextField
-                                    id="outlined-email"
-                                    label="E-mail"
-                                    margin="normal"
-                                    variant="outlined"
-                                    style={{marginLeft: '1%'}}
-                                    className={classes.textField}
-                                    required
-                                />
+                            <TextField
+                                id="outlined-phone"
+                                label="Phone"
+                                variant="outlined"
+                                margin="normal"
+                                style={{marginRight: '1%'}}
+                                className={classes.textField}
+                            />
+                            <TextField
+                                id="outlined-email"
+                                label="E-mail"
+                                margin="normal"
+                                variant="outlined"
+                                style={{marginLeft: '1%'}}
+                                className={classes.textField}
+                                required
+                            />
                         </GridItem>
                     </GridContainer>
 
@@ -451,150 +452,150 @@ function getStepContent(customerForm, step) {
                         </GridItem>
                     </GridContainer>
                 </Fragment>
-        );
+            );
         case 4:
             return (
-               <Fragment>
-                   <div style={{ marginTop: '30px' }}></div>
-                   <h3>Contract</h3>
-                   <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-                       <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                               <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                   <DatePicker
-                                       label="Date Sign"
-                                       // value={selectedDateSign}
-                                       // onChange={this.handleDateSignChange}
-                                       className={classes.textField}
-                                       margin="normal"
-                                       variant="outlined"
-                                       style={{marginRight: '1%'}}
-                                   />
-                               </MuiPickersUtilsProvider>
-                               <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                   <DatePicker
-                                       label="Latest Renew Date"
-                                       // value={selectedRenewDate}
-                                       // onChange={this.handleRenewDateChange}
-                                       className={classes.textField}
-                                       variant="outlined"
-                                       margin="normal"
-                                       style={{marginLeft: '1%', marginRight: '1%'}}
-                                   />
-                               </MuiPickersUtilsProvider>
-                               <TextField
-                                   id="termYrs"
-                                   label="Term(Yrs)"
-                                   margin="normal"
-                                   variant="outlined"
-                                   className={classes.textField}
-                                   required
-                                   style={{marginLeft: '1%'}}
-                               />
-                       </GridItem>
-                       <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                               <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                   <DatePicker
-                                       label="EXP. Date"
-                                       // value={selectedExpDate}
-                                       // onChange={this.handleExpDateChange}
-                                       className={classes.textField}
-                                       variant="outlined"
-                                       margin="normal"
-                                       style={{marginRight: '1%'}}
-                                   />
-                               </MuiPickersUtilsProvider>
-                               <TextField
-                                   id="selectPlanType"
-                                   select
-                                   label="Select"
-                                   margin="normal"
-                                   variant="outlined"
-                                   className={classes.textField}
-                                   style={{marginLeft: '1%', marginRight: '1%'}}
-                                   // value={this.state.planType}
-                                   // onChange={this.handlePlanTypeChange('planType')}
-                                   SelectProps={{
-                                       MenuProps: {
-                                           className: classes.menu,
-                                       },
-                                   }}
-                               >
-                                   {/*{planType.map(option => (*/}
-                                       {/*<MenuItem key={option.value} value={option.value}>*/}
-                                           {/*{option.label}*/}
-                                       {/*</MenuItem>*/}
-                                   {/*))}*/}
-                               </TextField>
-                               <TextField
-                                   id="planAmount"
-                                   label="Plan Amount"
-                                   className={classes.textField}
-                                   variant="outlined"
-                                   margin="normal"
-                                   style={{marginLeft: '1%'}}
-                                   required
-                               />
-                       </GridItem>
-                       <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                               <TextField
-                                   id="ibAmount"
-                                   label="IB Amount"
-                                   className={classes.textField}
-                                   margin="normal"
-                                   variant="outlined"
-                                   style={{marginRight: '1%'}}
-                                   required
-                               />
-                               <TextField
-                                   id="downPayment"
-                                   label="Down Payment"
-                                   className={classes.textField}
-                                   variant="outlined"
-                                   margin="normal"
-                                   style={{marginLeft: '1%', marginRight: '1%'}}
-                                   required
-                               />
-                               <TextField
-                                   id="interest"
-                                   label="Interest"
-                                   className={classes.textField}
-                                   variant="outlined"
-                                   style={{marginLeft: '1%'}}
-                                   margin="normal"
-                                   required
-                               />
-                       </GridItem>
-                       <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                               <TextField
-                                   id="paymentAmount"
-                                   label="Payment Amount"
-                                   className={classes.textField}
-                                   variant="outlined"
-                                   margin="normal"
-                                   style={{marginRight: '1%'}}
-                                   required
-                               />
-                               <TextField
-                                   id="noOfPayments"
-                                   label="No Of Payments"
-                                   className={classes.textField}
-                                   variant="outlined"
-                                   margin="normal"
-                                   style={{marginLeft: '1%', marginRight: '1%'}}
-                                   required
-                               />
-                               <TextField
-                                   id="daysToFullFill"
-                                   label="Days To Fullfill"
-                                   className={classes.textField}
-                                   variant="outlined"
-                                   style={{marginLeft: '1%'}}
-                                   margin="normal"
-                                   required
-                               />
-                       </GridItem>
-                   </GridContainer>
-               </Fragment>
+                <Fragment>
+                    <div style={{ marginTop: '30px' }}></div>
+                    <h3>Contract</h3>
+                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <DatePicker
+                                    label="Date Sign"
+                                    // value={selectedDateSign}
+                                    // onChange={this.handleDateSignChange}
+                                    className={classes.textField}
+                                    margin="normal"
+                                    variant="outlined"
+                                    style={{marginRight: '1%'}}
+                                />
+                            </MuiPickersUtilsProvider>
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <DatePicker
+                                    label="Latest Renew Date"
+                                    // value={selectedRenewDate}
+                                    // onChange={this.handleRenewDateChange}
+                                    className={classes.textField}
+                                    variant="outlined"
+                                    margin="normal"
+                                    style={{marginLeft: '1%', marginRight: '1%'}}
+                                />
+                            </MuiPickersUtilsProvider>
+                            <TextField
+                                id="termYrs"
+                                label="Term(Yrs)"
+                                margin="normal"
+                                variant="outlined"
+                                className={classes.textField}
+                                required
+                                style={{marginLeft: '1%'}}
+                            />
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <DatePicker
+                                    label="EXP. Date"
+                                    // value={selectedExpDate}
+                                    // onChange={this.handleExpDateChange}
+                                    className={classes.textField}
+                                    variant="outlined"
+                                    margin="normal"
+                                    style={{marginRight: '1%'}}
+                                />
+                            </MuiPickersUtilsProvider>
+                            <TextField
+                                id="selectPlanType"
+                                select
+                                label="Select"
+                                margin="normal"
+                                variant="outlined"
+                                className={classes.textField}
+                                style={{marginLeft: '1%', marginRight: '1%'}}
+                                // value={this.state.planType}
+                                // onChange={this.handlePlanTypeChange('planType')}
+                                SelectProps={{
+                                    MenuProps: {
+                                        className: classes.menu,
+                                    },
+                                }}
+                            >
+                                {/*{planType.map(option => (*/}
+                                {/*<MenuItem key={option.value} value={option.value}>*/}
+                                {/*{option.label}*/}
+                                {/*</MenuItem>*/}
+                                {/*))}*/}
+                            </TextField>
+                            <TextField
+                                id="planAmount"
+                                label="Plan Amount"
+                                className={classes.textField}
+                                variant="outlined"
+                                margin="normal"
+                                style={{marginLeft: '1%'}}
+                                required
+                            />
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <TextField
+                                id="ibAmount"
+                                label="IB Amount"
+                                className={classes.textField}
+                                margin="normal"
+                                variant="outlined"
+                                style={{marginRight: '1%'}}
+                                required
+                            />
+                            <TextField
+                                id="downPayment"
+                                label="Down Payment"
+                                className={classes.textField}
+                                variant="outlined"
+                                margin="normal"
+                                style={{marginLeft: '1%', marginRight: '1%'}}
+                                required
+                            />
+                            <TextField
+                                id="interest"
+                                label="Interest"
+                                className={classes.textField}
+                                variant="outlined"
+                                style={{marginLeft: '1%'}}
+                                margin="normal"
+                                required
+                            />
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <TextField
+                                id="paymentAmount"
+                                label="Payment Amount"
+                                className={classes.textField}
+                                variant="outlined"
+                                margin="normal"
+                                style={{marginRight: '1%'}}
+                                required
+                            />
+                            <TextField
+                                id="noOfPayments"
+                                label="No Of Payments"
+                                className={classes.textField}
+                                variant="outlined"
+                                margin="normal"
+                                style={{marginLeft: '1%', marginRight: '1%'}}
+                                required
+                            />
+                            <TextField
+                                id="daysToFullFill"
+                                label="Days To Fullfill"
+                                className={classes.textField}
+                                variant="outlined"
+                                style={{marginLeft: '1%'}}
+                                margin="normal"
+                                required
+                            />
+                        </GridItem>
+                    </GridContainer>
+                </Fragment>
             );
 
         case 5:
@@ -723,7 +724,7 @@ class FranchiseesCreateForm extends Component {
 
         const steps = getSteps();
         const { activeStep} = this.state;
-
+        const today = new Date();
 
         return (
             <Fragment>
@@ -768,39 +769,46 @@ class FranchiseesCreateForm extends Component {
                             <div>
                                 {getStepContent(this, activeStep)}
                             </div>
-                            )}
+                        )}
                     </div>
                 </div>
-                <div>
-                    <FuseAnimate animation="transition.expandIn" delay={300}>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            className={classNames(classes.button, "mr-12")}
-                            onClick={() => {this.closeComposeForm();}}
-                            disabled={!this.canBeSubmitted()}
-                        > Discard </Button>
-                    </FuseAnimate>
-                    <FuseAnimate animation="transition.expandIn" delay={300}>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            className={classNames(classes.button, "mr-12")}
-                            onClick={() => {this.closeComposeForm();}}
-                            disabled={!this.canBeSubmitted()}
-                        > Save </Button>
-                    </FuseAnimate>
-                    <FuseAnimate animation="transition.expandIn" delay={300}>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            className={classes.button}
-                            onClick={() => {
-                                this.closeComposeForm();
-                            }}
-                            disabled={!this.canBeSubmitted()}
-                        > Close </Button>
-                    </FuseAnimate>
+                <div className="flex flex-1 flex-row justify-between items-center">
+                    <div className="flex flex-row justify-start pl-24">
+                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                            <span className={classes.summary}><strong>Created By: </strong>{`${this.props.user.firstName} ${this.props.user.lastName}, ${moment(today).format('MM/DD/YYYY')}`}</span>
+                        </FuseAnimate>
+                    </div>
+                    <div className="flex flex-row flex-1 justify-end pr-24">
+                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                className={classNames(classes.button, "mr-12")}
+                                onClick={() => {this.closeComposeForm();}}
+                                disabled={!this.canBeSubmitted()}
+                            > Discard </Button>
+                        </FuseAnimate>
+                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                className={classNames(classes.button, "mr-12")}
+                                onClick={() => {this.closeComposeForm();}}
+                                disabled={!this.canBeSubmitted()}
+                            > Save </Button>
+                        </FuseAnimate>
+                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                className={classes.button}
+                                onClick={() => {
+                                    this.closeComposeForm();
+                                }}
+                                disabled={!this.canBeSubmitted()}
+                            > Close </Button>
+                        </FuseAnimate>
+                    </div>
                 </div>
             </Fragment>
         );
@@ -816,9 +824,10 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-function mapStateToProps({ franchisees }) {
+function mapStateToProps({ franchisees, auth }) {
     return {
-        franchiseesForm: franchisees.createFranchisees
+        franchiseesForm: franchisees.createFranchisees,
+        user: auth.login
     }
 }
 

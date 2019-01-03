@@ -297,7 +297,7 @@ class InvoiceForm extends Component {
         const { classes} = this.props;
         const { value, suggestions } = this.state;
 
-        const today = new Date()
+        const today = new Date();
 
         const autosuggestProps = {
             renderInputComponent,
