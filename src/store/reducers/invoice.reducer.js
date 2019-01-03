@@ -6,8 +6,8 @@ import { persistReducer } from 'redux-persist';
 const initialState = {
     invoicesDB: null,
     bLoadedInvoices: false,
-    bOpenedSummaryPanel: true,
-    bOpenedFilterPanel: true,
+    bOpenedSummaryPanel: false,
+    bOpenedFilterPanel: false,
     transactionStatus:{checkedPaid: true,checkedPP: true, checkedComplete: true, checkedOpen: true, checkedEbill: true, checkedPrint: true },
     invoiceForm: {
         type : 'new',
@@ -132,5 +132,6 @@ const invoices = function(state = initialState, action) {
 const persistConfig = {
     key: 'invoices',
     storage: storage,
+    blacklist: ['bOpenedSummaryPanel','bOpenedFilterPanel']
 };
 export default persistReducer(persistConfig, invoices);

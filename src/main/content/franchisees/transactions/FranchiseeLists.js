@@ -575,7 +575,7 @@ class TransactionsLists extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        toggleFilterPanel: Actions.toggleFilterPanel,
+        toggleFilterPanel: Actions.toggleTransactionFilterPanel,
         removeTransaction: Actions.removeTransaction
     }, dispatch);
 }
@@ -584,7 +584,7 @@ function mapStateToProps({transactions, auth})
 {
     return {
         regionId: auth.login.defaultRegionId,
-        transactions: transactions.transactionsDB
+        transactions: transactions.transactionsDB,
     }
 }
 

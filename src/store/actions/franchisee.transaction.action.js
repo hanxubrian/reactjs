@@ -2,6 +2,8 @@ import axios from "axios";
 
 export const GET_ALL_FRANCHISEE_TRANSACTIONS = "[FRANCHISEE-TRANSACTIONS] GETS ALL";
 export const REMOVE_SELECTED_FRANCHISEE_TRANSACTION = "[FRANCHISEE-TRANSACTION] REMOVE SELECTED";
+export const TOGGLE_TRANSACTION_FILTER_PANEL = "[FRANCHISEE-TRANSACTION] TOGGLE TRANSACTION FILTER PANEL";
+export const TOGGLE_TRANSACTION_FILTER_STATUS = "[FRANCHISEE-TRANSACTION] TOGGLE TRANSACTION FILTER STATUS";
 
 export function getTransactions() {
     return dispatch => {
@@ -29,4 +31,16 @@ export function removeTransaction(key, transactions) {
     };
 }
 
+export function toggleTransactionFilterPanel(){
+    return {
+        type: TOGGLE_TRANSACTION_FILTER_PANEL
+    }
+}
+
+export function toggleTransactionStatus(key, status){
+    return {
+        type: TOGGLE_TRANSACTION_FILTER_STATUS,
+        payload: {[key]: status}
+    }
+}
 

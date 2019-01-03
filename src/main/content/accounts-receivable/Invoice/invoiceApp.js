@@ -13,13 +13,13 @@ import {withRouter} from 'react-router-dom';
 //Custom components
 import InvoiceListContent from "./InvoiceListContent"
 import InvoiceForm from "./InvoiceForm"
+import SummaryPanel from './SummaryPanel';
+import FilterPanel from './filterPanel';
 
 // for store
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
-import SummaryPanel from './SummaryPanel';
-import FilterPanel from './filterPanel';
 
 // third party
 import "react-table/react-table.css";

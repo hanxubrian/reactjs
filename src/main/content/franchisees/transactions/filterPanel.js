@@ -119,15 +119,15 @@ class FilterPanel extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        toggleStatus: Actions.toggleStatus
+        toggleStatus: Actions.toggleTransactionStatus
     }, dispatch);
 }
 
-function mapStateToProps({invoices})
+function mapStateToProps({transactions})
 {
     return {
-        filterState: invoices.bOpenedFilterPanel,
-        transactionStatus: invoices.transactionStatus
+        filterState: transactions.bOpenedTransactionFilterPanel,
+        transactionStatus: transactions.transactionStatus
     }
 }
 
