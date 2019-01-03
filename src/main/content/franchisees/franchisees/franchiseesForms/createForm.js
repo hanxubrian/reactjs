@@ -24,7 +24,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import CustomerLineTable from "../../../customers/Customers/CustomerLine";
+import FranchiseesLineTable from './franchiseesLine'
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import 'date-fns';
@@ -423,7 +423,7 @@ function getStepContent(customerForm, step) {
                     <div style={{ marginTop: '30px' }}></div>
                     <h3>Owner</h3>
                     <div className="flex">
-                        <CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} />
+                        <FranchiseesLineTable tableType="BILLING_SETTING" headers={billing_headers} />
                     </div>
                 </Fragment>
             );
@@ -723,7 +723,7 @@ function getStepContent(customerForm, step) {
                     <div style={{ marginTop: '30px' }}></div>
                     <h3>Franchisees Fee Maintenance</h3>
                     <div className="flex">
-                        <CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} />
+                        <FranchiseesLineTable tableType="BILLING_SETTING" headers={billing_headers} />
                     </div>
                 </Fragment>
             );

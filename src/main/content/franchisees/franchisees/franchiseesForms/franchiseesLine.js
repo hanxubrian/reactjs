@@ -262,7 +262,7 @@ const styles = theme => ({
     }
 });
 
-class CustomerLineTable extends React.Component {
+class FranchiseesLineTable extends React.Component {
     state = {
         order: 'asc',
         // orderBy    : 'billing',
@@ -527,8 +527,8 @@ class CustomerLineTable extends React.Component {
     }
 }
 
-CustomerLineTable.propTypes = {
+FranchiseesLineTable.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(CustomerLineTable);
+export default withStyles(styles)(FranchiseesLineTable);
