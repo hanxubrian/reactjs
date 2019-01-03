@@ -90,6 +90,16 @@ const styles = theme => ({
 class SummaryPanel extends Component {
     state = {
         value: 0,
+        checkedCompanyInfo: false,
+        checkedOwner: false,
+        checkedFinancial: false,
+        checkedBilling: false,
+        checkedContract: false,
+        checkedMaintenance: false
+    };
+
+    handleValidationStatusChange = name => event => {
+        this.setState({ [name]: event.target.checked });
     };
 
     render()
@@ -187,9 +197,9 @@ class SummaryPanel extends Component {
                                         <FormControlLabel
                                             control={
                                                 <Checkbox
-                                                    checked={true}
-                                                    // onChange={this.handleChange('checkedG')}
-                                                    value="checkedG"
+                                                    checked={this.state.checkedCompanyInfo}
+                                                    onChange={this.handleValidationStatusChange('checkedCompanyInfo')}
+                                                    value="checkedCompanyInfo"
                                                     classes={{
                                                         root: classes.root,
                                                         checked: classes.checked
@@ -201,9 +211,9 @@ class SummaryPanel extends Component {
                                         <FormControlLabel
                                             control={
                                                 <Checkbox
-                                                    checked={true}
-                                                    // onChange={this.handleChange('checkedG')}
-                                                    value="checkedG"
+                                                    checked={this.state.checkedOwner}
+                                                    onChange={this.handleValidationStatusChange('checkedOwner')}
+                                                    value="checkedOwner"
                                                     classes={{
                                                         root: classes.root,
                                                         checked: classes.checked
@@ -215,9 +225,9 @@ class SummaryPanel extends Component {
                                         <FormControlLabel
                                             control={
                                                 <Checkbox
-                                                    checked={true}
-                                                    // onChange={this.handleChange('checkedG')}
-                                                    value="checkedG"
+                                                    checked={this.state.checkedFinancial}
+                                                    onChange={this.handleValidationStatusChange('checkedFinancial')}
+                                                    value="checkedFinancial"
                                                     classes={{
                                                         root: classes.root,
                                                         checked: classes.checked
@@ -229,9 +239,9 @@ class SummaryPanel extends Component {
                                         <FormControlLabel
                                             control={
                                                 <Checkbox
-                                                    checked={true}
-                                                    // onChange={this.handleChange('checkedG')}
-                                                    value="checkedG"
+                                                    checked={this.state.checkedBilling}
+                                                    onChange={this.handleValidationStatusChange('checkedBilling')}
+                                                    value="checkedBilling"
                                                     classes={{
                                                         root: classes.root,
                                                         checked: classes.checked
@@ -243,9 +253,9 @@ class SummaryPanel extends Component {
                                         <FormControlLabel
                                             control={
                                                 <Checkbox
-                                                    checked={true}
-                                                    // onChange={this.handleChange('checkedG')}
-                                                    value="checkedG"
+                                                    checked={this.state.checkedContract}
+                                                    onChange={this.handleValidationStatusChange('checkedContract')}
+                                                    value="checkedContract"
                                                     classes={{
                                                         root: classes.root,
                                                         checked: classes.checked
@@ -257,9 +267,9 @@ class SummaryPanel extends Component {
                                         <FormControlLabel
                                             control={
                                                 <Checkbox
-                                                    checked={true}
-                                                    // onChange={this.handleChange('checkedG')}
-                                                    value="checkedG"
+                                                    checked={this.state.checkedMaintenance}
+                                                    onChange={this.handleValidationStatusChange('checkedMaintenance')}
+                                                    value="checkedMaintenance"
                                                     classes={{
                                                         root: classes.root,
                                                         checked: classes.checked

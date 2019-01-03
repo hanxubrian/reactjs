@@ -595,7 +595,7 @@ class Franchisees extends Component {
                                                 <Icon className="text-32 mr-12">account_box</Icon>
                                             </FuseAnimate>
                                             <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                                <Typography variant="h6" className="hidden sm:flex">Franchisees | List</Typography>
+                                                <Typography variant="h6" className="hidden sm:flex">Franchisees | Franchisees Accounts</Typography>
                                             </FuseAnimate>
                                         </div>
                                     </div>
