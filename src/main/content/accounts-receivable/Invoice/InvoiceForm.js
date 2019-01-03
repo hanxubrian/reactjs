@@ -192,6 +192,7 @@ class InvoiceForm extends Component {
         total: 0.0,
         subTotal: 0.0,
         tax: 0,
+        markup: 0.0
     };
 
     onChange = (event, { newValue, method }) => {
@@ -215,15 +216,18 @@ class InvoiceForm extends Component {
     };
 
     getTotal = () => {
-        let total = 0.0;
+        let subTotal = 0.0;
+        let markup = 0.0;
         const data = [...this.props.invoiceForm.data.line];
 
         data.forEach(n => {
-            total += parseFloat((n.amount*n.quantity)*(1+parseFloat(n.markup)/100));
+            subTotal += parseFloat(n.amount*n.quantity);
+            markup += parseFloat(n.amount*n.quantity*parseFloat(n.markup)/100);
         });
 
-        this.setState({subTotal: total});
-        this.setState({total: total+this.state.tax});
+        this.setState({subTotal: subTotal});
+        this.setState({markup: markup});
+        this.setState({total: subTotal+this.state.tax+markup});
     };
 
     getSuggestionValue =  (suggestion) =>{
@@ -307,7 +311,7 @@ class InvoiceForm extends Component {
                     <div className="flex flex-col p-24 pt-12 pb-0" style={{flex: "1"}}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <GridContainer className={classNames(classes.formControl)}>
-                            <GridItem xs={12} sm={8} md={8} className="flex flex-row">
+                            <GridItem xs={12} sm={6} md={6} className="flex flex-row">
                                 <Autosuggest
                                     {...autosuggestProps}
                                     inputProps={{
@@ -355,6 +359,22 @@ class InvoiceForm extends Component {
                                     value={this.state.DueDate}
                                     onChange={this.handleDueDateChange}
                                     required
+                                    fullWidth
+                                />
+                            </GridItem>
+                            <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                <TextField
+                                    margin="none"
+                                    label="Invoice #"
+                                    InputLabelProps={{
+                                        shrink: true
+                                    }}
+                                    name="InvoiceNo"
+                                    variant="outlined"
+                                    value={this.state.InvoiceNo}
+                                    onChange={this.handleChange}
+                                    required
+                                    fullWidth
                                 />
                             </GridItem>
                         </GridContainer>
@@ -443,8 +463,11 @@ class InvoiceForm extends Component {
                                 </div>
                             </GridItem>
                             <GridItem xs={12} sm={3} md={3} className="flex flex-col xs:flex-col xs:mb-24">
-                                <div className="w-full p-12 flex justify-end">
+                                <div className="w-full p-12 flex justify-end pb-0">
                                     <span className={classes.summary}><strong>Subtotal: </strong>${this.state.subTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
+                                </div>
+                                <div className="w-full p-12 flex justify-end pb-0">
+                                    <span className={classes.summary}><strong>Markup Amount: </strong>${this.state.markup.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
                                 <div className="w-full p-12 flex justify-end">
                                     <span className={classes.summary}><strong>Tax: </strong>${this.state.tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>

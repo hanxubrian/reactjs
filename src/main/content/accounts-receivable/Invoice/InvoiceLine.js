@@ -278,11 +278,17 @@ const styles = theme => ({
     description:{
         width: '520px!important'
     },
+    extended:{
+        width: '170px!important'
+    },
     quantity:{
         '& div': {
             width: '40px!important',
             float: 'right'
         }
+    },
+    actionsWrap: {
+        width: '160px!important'
     },
     table       : {
         minWidth: 1020,
@@ -378,9 +384,6 @@ class InvoiceLineTable extends React.Component {
     constructor(props) {
         super(props);
         this.addInvoiceLineFunction = this.addInvoiceLineFunction.bind(this);
-        // if(props.InvoiceForm.type==="new") {
-
-        // }
     }
 
     componentWillUnmount() {
@@ -669,13 +672,19 @@ class InvoiceLineTable extends React.Component {
                                                 <TableCell classes={{root:classNames(classes.quantity, "mr-24 ml-24")}} numeric>{this.renderEditable(n, 'quantity')}</TableCell>
                                                 <TableCell numeric>{this.renderEditable(n, 'amount')}</TableCell>
                                                 <TableCell classes={{root:classNames(classes.quantity, "mr-24 ml-24")}} numeric>{this.renderEditableMarkup(n, 'markup')}</TableCell>
-                                                <TableCell numeric>${parseFloat((n.amount*n.quantity)*(1+parseFloat(n.markup)/100)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</TableCell>
-                                                <TableCell padding="checkbox" className={classNames(classes.tableCellAction)} numeric>
+                                                <TableCell classes={{root:classNames(classes.extended, "mr-24 ml-24")}}numeric>${parseFloat((n.amount*n.quantity)*(1+parseFloat(n.markup)/100)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</TableCell>
+                                                <TableCell classes={{root:classNames(classes.actionsWrap, "mr-24 ml-24")}} padding="checkbox" numeric>
                                                     <Fab color="secondary" aria-label="add"
                                                          className={classNames(classes.lineButton, "mr-12")}
                                                          onClick={()=>this.addFranchiseeLine(n)}
                                                     >
                                                         <Icon>call_merge</Icon>
+                                                    </Fab>
+                                                    <Fab color="secondary" aria-label="add"
+                                                         className={classNames(classes.lineButton, "mr-12")}
+                                                         onClick={()=>this.addLineData()}
+                                                    >
+                                                        <Icon>add</Icon>
                                                     </Fab>
                                                     {this.state.data.length>1 && (
                                                         <Fab aria-label="remove"
@@ -687,7 +696,7 @@ class InvoiceLineTable extends React.Component {
                                                 </TableCell>
                                             </TableRow>
                                         );
-                                    if(n.type==='franch')
+                                    else //franch
                                         return (
                                             <TableRow hover key={chance.guid()} style={{height: 48}} classes={{root: classes.franchisees}}>
                                                 <TableCell rowSpan={3} />
