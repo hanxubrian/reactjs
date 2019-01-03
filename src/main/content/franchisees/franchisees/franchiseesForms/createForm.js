@@ -50,7 +50,7 @@ const styles = theme => ({
         margin: theme.spacing.unit
     },
     formControl: {
-        marginBottom: 24,
+        marginBottom: 12,
         minWidth: 200,
     },
     textField: {
@@ -123,7 +123,7 @@ function getStepContent(customerForm, step) {
                                 id="outlined-name"
                                 label="Name"
                                 className={classes.textField}
-                                margin="normal"
+                                margin="dense"
                                 variant="outlined"
                                 required
                             />
@@ -133,7 +133,7 @@ function getStepContent(customerForm, step) {
                                 id="outlined-address1"
                                 label="Address1"
                                 className={classes.textField}
-                                margin="normal"
+                                margin="dense"
                                 style={{marginRight: '1%'}}
                                 variant="outlined"
                                 required
@@ -141,7 +141,7 @@ function getStepContent(customerForm, step) {
                             <TextField
                                 id="outlined-address2"
                                 label="Address2"
-                                margin="normal"
+                                margin="dense"
                                 style={{marginLeft: '1%'}}
                                 variant="outlined"
                                 className={classes.textField}
@@ -152,7 +152,7 @@ function getStepContent(customerForm, step) {
                                 id="outlined-city"
                                 label="City"
                                 className={classes.textField}
-                                margin="normal"
+                                margin="dense"
                                 style={{marginRight: '1%'}}
                                 variant="outlined"
                                 required
@@ -161,7 +161,7 @@ function getStepContent(customerForm, step) {
                                 id="outlined-state"
                                 label="State"
                                 className={classes.textField}
-                                margin="normal"
+                                margin="dense"
                                 variant="outlined"
                                 style={{marginLeft: '1%',marginRight: '1%'}}
                                 required
@@ -171,7 +171,7 @@ function getStepContent(customerForm, step) {
                                 label="Zip"
                                 variant="outlined"
                                 className={classes.textField}
-                                margin="normal"
+                                margin="dense"
                                 style={{marginLeft: '1%'}}
                                 required
                             />
@@ -181,14 +181,14 @@ function getStepContent(customerForm, step) {
                                 id="outlined-phone"
                                 label="Phone"
                                 variant="outlined"
-                                margin="normal"
+                                margin="dense"
                                 style={{marginRight: '1%'}}
                                 className={classes.textField}
                             />
                             <TextField
                                 id="outlined-email"
                                 label="E-mail"
-                                margin="normal"
+                                margin="dense"
                                 variant="outlined"
                                 style={{marginLeft: '1%'}}
                                 className={classes.textField}
@@ -196,9 +196,7 @@ function getStepContent(customerForm, step) {
                             />
                         </GridItem>
                     </GridContainer>
-
-                    <Divider variant="middle" />
-                    <div style={{ marginTop: '30px' }}></div>
+                    <Divider variant="middle" style={{marginBottom: 12}}/>
                     <h3>Contacts</h3>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -207,7 +205,7 @@ function getStepContent(customerForm, step) {
                                 label="Name"
                                 variant="outlined"
                                 className={classes.textField}
-                                margin="normal"
+                                margin="dense"
                                 required
                             />
                         </GridItem>
@@ -217,7 +215,7 @@ function getStepContent(customerForm, step) {
                                 label="Address1"
                                 variant="outlined"
                                 className={classes.textField}
-                                margin="normal"
+                                margin="dense"
                                 style={{marginRight:'1%'}}
                                 required
                             />
@@ -227,7 +225,7 @@ function getStepContent(customerForm, step) {
                                 className={classes.textField}
                                 variant="outlined"
                                 style={{marginLeft: '1%'}}
-                                margin="normal"
+                                margin="dense"
                             />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -236,7 +234,7 @@ function getStepContent(customerForm, step) {
                                 variant="outlined"
                                 label="City"
                                 className={classes.textField}
-                                margin="normal"
+                                margin="dense"
                                 style={{marginRight: '1%'}}
                                 required
                             />
@@ -245,7 +243,7 @@ function getStepContent(customerForm, step) {
                                 label="State"
                                 className={classes.textField}
                                 variant="outlined"
-                                margin="normal"
+                                margin="dense"
                                 style={{marginRight: '1%',marginLeft: '1%'}}
                                 required
                             />
@@ -254,7 +252,7 @@ function getStepContent(customerForm, step) {
                                 label="Zip"
                                 className={classes.textField}
                                 variant="outlined"
-                                margin="normal"
+                                margin="dense"
                                 style={{marginLeft: '1%'}}
                                 required
                             />
@@ -266,14 +264,14 @@ function getStepContent(customerForm, step) {
                                 className={classes.textField}
                                 variant="outlined"
                                 style={{marginRight: '1%'}}
-                                margin="normal"
+                                margin="dense"
                             />
                             <TextField
                                 id="outlined-ext"
                                 label="Ext"
                                 className={classes.textField}
                                 variant="outlined"
-                                margin="normal"
+                                margin="dense"
                                 style={{marginRight: '1%',marginLeft: '1%'}}
                             />
                             <TextField
@@ -282,7 +280,7 @@ function getStepContent(customerForm, step) {
                                 variant="outlined"
                                 className={classes.textField}
                                 style={{marginLeft: '1%'}}
-                                margin="normal"
+                                margin="dense"
                             />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -291,7 +289,7 @@ function getStepContent(customerForm, step) {
                                 variant="outlined"
                                 label="E-mail"
                                 className={classes.textField}
-                                margin="normal"
+                                margin="dense"
                                 required
                             />
                         </GridItem>
@@ -318,7 +316,7 @@ function getStepContent(customerForm, step) {
                             <RadioGroup
                                 aria-label="financialRadio"
                                 name="financialRadio"
-                                margin="normal"
+                                margin="dense"
                                 row
                             >
                                 <FormControlLabel
@@ -326,14 +324,14 @@ function getStepContent(customerForm, step) {
                                     control={<Radio color="primary" />}
                                     label="EIN"
                                     labelPlacement="end"
-                                    margin="normal"
+                                    margin="dense"
                                 />
                                 <FormControlLabel
                                     value="ssn"
                                     control={<Radio color="primary" />}
                                     label="SSN"
                                     labelPlacement="end"
-                                    margin="normal"
+                                    margin="dense"
                                 />
                             </RadioGroup>
                         </GridItem>
@@ -343,7 +341,7 @@ function getStepContent(customerForm, step) {
                                 label="EIN/SSN"
                                 variant="outlined"
                                 className={classes.textField}
-                                margin="normal"
+                                margin="dense"
                                 required
                             />
                         </GridItem>
@@ -353,7 +351,7 @@ function getStepContent(customerForm, step) {
                                 label="Name"
                                 variant="outlined"
                                 className={classes.textField}
-                                margin="normal"
+                                margin="dense"
                                 required
                             />
                         </GridItem>
@@ -363,7 +361,7 @@ function getStepContent(customerForm, step) {
                                 label="Address"
                                 variant="outlined"
                                 className={classes.textField}
-                                margin="normal"
+                                margin="dense"
                                 required
                             />
                         </GridItem>
@@ -373,7 +371,7 @@ function getStepContent(customerForm, step) {
                                 label="City"
                                 variant="outlined"
                                 className={classes.textField}
-                                margin="normal"
+                                margin="dense"
                                 style={{marginRight:'1%'}}
                                 required
                             />
@@ -382,7 +380,7 @@ function getStepContent(customerForm, step) {
                                 label="State"
                                 variant="outlined"
                                 className={classes.textField}
-                                margin="normal"
+                                margin="dense"
                                 style={{marginRight:'1%',marginLeft:'1%'}}
                                 required
                             />
@@ -391,7 +389,7 @@ function getStepContent(customerForm, step) {
                                 label="Zip"
                                 variant="outlined"
                                 className={classes.textField}
-                                margin="normal"
+                                margin="dense"
                                 style={{marginLeft:'1%'}}
                                 required
                             />
@@ -402,7 +400,7 @@ function getStepContent(customerForm, step) {
                                 variant="outlined"
                                 label="1099 Name"
                                 className={classes.textField}
-                                margin="normal"
+                                margin="dense"
                                 style={{marginRight:'1%'}}
                             />
                             <FormControlLabel
@@ -411,7 +409,7 @@ function getStepContent(customerForm, step) {
                                 }
                                 className={classes.textField}
                                 label="Print 1099"
-                                margin="normal"
+                                margin="dense"
                                 style={{marginLeft:'1%'}}
                             />
                         </GridItem>
@@ -466,7 +464,7 @@ function getStepContent(customerForm, step) {
                                     // value={selectedDateSign}
                                     // onChange={this.handleDateSignChange}
                                     className={classes.textField}
-                                    margin="normal"
+                                    margin="dense"
                                     variant="outlined"
                                     style={{marginRight: '1%'}}
                                 />
@@ -478,14 +476,14 @@ function getStepContent(customerForm, step) {
                                     // onChange={this.handleRenewDateChange}
                                     className={classes.textField}
                                     variant="outlined"
-                                    margin="normal"
+                                    margin="dense"
                                     style={{marginLeft: '1%', marginRight: '1%'}}
                                 />
                             </MuiPickersUtilsProvider>
                             <TextField
                                 id="termYrs"
                                 label="Term(Yrs)"
-                                margin="normal"
+                                margin="dense"
                                 variant="outlined"
                                 className={classes.textField}
                                 required
@@ -500,7 +498,7 @@ function getStepContent(customerForm, step) {
                                     // onChange={this.handleExpDateChange}
                                     className={classes.textField}
                                     variant="outlined"
-                                    margin="normal"
+                                    margin="dense"
                                     style={{marginRight: '1%'}}
                                 />
                             </MuiPickersUtilsProvider>
@@ -508,7 +506,7 @@ function getStepContent(customerForm, step) {
                                 id="selectPlanType"
                                 select
                                 label="Select"
-                                margin="normal"
+                                margin="dense"
                                 variant="outlined"
                                 className={classes.textField}
                                 style={{marginLeft: '1%', marginRight: '1%'}}
@@ -531,7 +529,7 @@ function getStepContent(customerForm, step) {
                                 label="Plan Amount"
                                 className={classes.textField}
                                 variant="outlined"
-                                margin="normal"
+                                margin="dense"
                                 style={{marginLeft: '1%'}}
                                 required
                             />
@@ -541,7 +539,7 @@ function getStepContent(customerForm, step) {
                                 id="ibAmount"
                                 label="IB Amount"
                                 className={classes.textField}
-                                margin="normal"
+                                margin="dense"
                                 variant="outlined"
                                 style={{marginRight: '1%'}}
                                 required
@@ -551,7 +549,7 @@ function getStepContent(customerForm, step) {
                                 label="Down Payment"
                                 className={classes.textField}
                                 variant="outlined"
-                                margin="normal"
+                                margin="dense"
                                 style={{marginLeft: '1%', marginRight: '1%'}}
                                 required
                             />
@@ -561,7 +559,7 @@ function getStepContent(customerForm, step) {
                                 className={classes.textField}
                                 variant="outlined"
                                 style={{marginLeft: '1%'}}
-                                margin="normal"
+                                margin="dense"
                                 required
                             />
                         </GridItem>
@@ -571,7 +569,7 @@ function getStepContent(customerForm, step) {
                                 label="Payment Amount"
                                 className={classes.textField}
                                 variant="outlined"
-                                margin="normal"
+                                margin="dense"
                                 style={{marginRight: '1%'}}
                                 required
                             />
@@ -580,7 +578,7 @@ function getStepContent(customerForm, step) {
                                 label="No Of Payments"
                                 className={classes.textField}
                                 variant="outlined"
-                                margin="normal"
+                                margin="dense"
                                 style={{marginLeft: '1%', marginRight: '1%'}}
                                 required
                             />
@@ -590,7 +588,7 @@ function getStepContent(customerForm, step) {
                                 className={classes.textField}
                                 variant="outlined"
                                 style={{marginLeft: '1%'}}
-                                margin="normal"
+                                margin="dense"
                                 required
                             />
                         </GridItem>
@@ -752,10 +750,8 @@ class FranchiseesCreateForm extends Component {
                         width: '100%',
                         height: 'calc(100% - 110px)'
                     }}>
-
-
                     <h2>{steps[activeStep]}</h2>
-                    <Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
+                    <Divider variant="middle" style={{ marginTop: 12, marginBottom: 12, height: 1 }} />
 
                     <div>
                         {this.allStepsCompleted() ? (
