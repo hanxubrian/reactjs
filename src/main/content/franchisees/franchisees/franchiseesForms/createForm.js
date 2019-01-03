@@ -1,24 +1,16 @@
 import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
-
 // core components
 import {
-    TextField, Button, Typography,
-    MenuItem,  Divider, FormControlLabel
+    TextField, Button, Typography,  Divider, FormControlLabel
 } from '@material-ui/core';
-
-
 // theme components
 import { FusePageCustom, FuseAnimate, FuseSearch } from '@fuse';
-
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
-
 //Custom components
 import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
-import FranchiseesLineTable from "./franchiseesLine"
-
 // for store
 import { bindActionCreators } from "redux";
 import connect from "react-redux/es/connect/connect";
@@ -28,15 +20,7 @@ import * as Actions from 'store/actions';
 import "react-table/react-table.css";
 import _ from 'lodash';
 import classNames from 'classnames';
-import match from "autosuggest-highlight/match";
-import parse from "autosuggest-highlight/parse";
-
-
-import FormLabel from '@material-ui/core/FormLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import InputAdornment from '@material-ui/core/InputAdornment';
-
-
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -51,9 +35,6 @@ const styles = theme => ({
     root: {
         width: '90%'
     },
-    backButton: {
-        marginRight: theme.spacing.unit
-    },
     completed: {
         display: 'inline-block'
     },
@@ -61,134 +42,20 @@ const styles = theme => ({
         marginTop: theme.spacing.unit,
         marginBottom: theme.spacing.unit
     },
-    //////////////////
-    layoutForm: {
-        flexDirection: 'row',
-    },
     button: {
         '& span': {
             textTransform: 'none'
         },
         margin: theme.spacing.unit
     },
-    card: {
-        width: '100%',
-    },
-    container: {
-        position: 'relative',
-        width: '100%'
-    },
     formControl: {
         marginBottom: 24,
         minWidth: 200,
-    },
-    suggestionsContainerOpen: {
-        position: 'absolute',
-        zIndex: 10,
-        marginTop: theme.spacing.unit,
-        left: 0,
-        right: 0,
-        maxHeight: 200,
-        overflowY: 'scroll'
-    },
-    suggestion: {
-        display: 'block',
-    },
-    suggestionsList: {
-        margin: 0,
-        padding: 0,
-        listStyleType: 'none',
-    },
-    divider: {
-        height: theme.spacing.unit * 2,
-    },
-    cardHeader: {
-        backgroundColor: theme.palette.secondary.main,
-        padding: '10px 24px',
-        '& span': {
-            color: 'white'
-        }
     },
     textField: {
         width: '100%'
     }
 });
-
-const newCustomerState = {
-    "MasterTrxTypeListId": "",
-    "RegionId": "",
-    "RegionName": "",
-    "CustomerNo": "",
-    "CustomerDate": "",
-    "DueDate": "",
-    "CustomerId": "",
-    "CustomerName": "",
-    "EBill": "",
-    "PrintCustomer": "",
-    "CustomerDescription": "",
-    "CustomerAmount": "",
-    "CustomerTax": "",
-    "CustomerTotal": "",
-    "CPI": "",
-    "TransactionStatusListId": "",
-    "TransactionStatus": "",
-    "CustomerBalanceAmount": "",
-    "CustomerBalanceTax": "",
-    "CustomerBalanceTotal": "",
-    "EBillText": "",
-    "PrintCustomerText": "",
-    "IsOpen": "",
-    "ConsolidatedCustomer": "",
-    "ConsolidatedCustomerId": "",
-    "ConsolidatedCustomerNo": "",
-    "CreditId": "",
-    "Service": ""
-};
-
-function renderInputComponent(inputProps) {
-    const { classes, inputRef = () => { }, ref, ...other } = inputProps;
-
-    return (
-        <TextField
-            fullWidth
-            variant="outlined"
-            label="Customer For:"
-            InputProps={{
-                inputRef: node => {
-                    ref(node);
-                    inputRef(node);
-                },
-                classes: {
-                    input: classes.input,
-                },
-            }}
-            {...other}
-        />
-    );
-}
-
-function renderSuggestion(suggestion, { query, isHighlighted }) {
-    const matches = match(suggestion.CustomerName, query);
-    const parts = parse(suggestion.CustomerName, matches);
-
-    return (
-        <MenuItem selected={isHighlighted} component="div">
-            <div>
-                {parts.map((part, index) => {
-                    return part.highlight ? (
-                        <span key={String(index)} style={{ fontWeight: 700 }}>
-							{part.text}
-						</span>
-                    ) : (
-                        <strong key={String(index)} style={{ fontWeight: 300 }}>
-                            {part.text}
-                        </strong>
-                    );
-                })}
-            </div>
-        </MenuItem>
-    );
-}
 
 function escapeRegexCharacters(str) {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -376,6 +243,7 @@ function getStepContent(customerForm, step) {
                                 label="Name"
                                 className={classes.textField}
                                 margin="normal"
+                                variant="outlined"
                                 required
                             />
                         </GridItem>
@@ -386,6 +254,7 @@ function getStepContent(customerForm, step) {
                                 className={classes.textField}
                                 margin="normal"
                                 style={{marginRight: '1%'}}
+                                variant="outlined"
                                 required
                             />
                             <TextField
@@ -393,6 +262,7 @@ function getStepContent(customerForm, step) {
                                 label="Address2"
                                 margin="normal"
                                 style={{marginLeft: '1%'}}
+                                variant="outlined"
                                 className={classes.textField}
                             />
                         </GridItem>
@@ -403,6 +273,7 @@ function getStepContent(customerForm, step) {
                                     className={classes.textField}
                                     margin="normal"
                                     style={{marginRight: '1%'}}
+                                    variant="outlined"
                                     required
                                 />
                                 <TextField
@@ -410,12 +281,14 @@ function getStepContent(customerForm, step) {
                                     label="State"
                                     className={classes.textField}
                                     margin="normal"
+                                    variant="outlined"
                                     style={{marginLeft: '1%',marginRight: '1%'}}
                                     required
                                 />
                                 <TextField
                                     id="outlined-zip"
                                     label="Zip"
+                                    variant="outlined"
                                     className={classes.textField}
                                     margin="normal"
                                     style={{marginLeft: '1%'}}
@@ -426,6 +299,7 @@ function getStepContent(customerForm, step) {
                                 <TextField
                                     id="outlined-phone"
                                     label="Phone"
+                                    variant="outlined"
                                     margin="normal"
                                     style={{marginRight: '1%'}}
                                     className={classes.textField}
@@ -434,6 +308,7 @@ function getStepContent(customerForm, step) {
                                     id="outlined-email"
                                     label="E-mail"
                                     margin="normal"
+                                    variant="outlined"
                                     style={{marginLeft: '1%'}}
                                     className={classes.textField}
                                     required
@@ -449,6 +324,7 @@ function getStepContent(customerForm, step) {
                             <TextField
                                 id="outlined-name"
                                 label="Name"
+                                variant="outlined"
                                 className={classes.textField}
                                 margin="normal"
                                 required
@@ -458,6 +334,7 @@ function getStepContent(customerForm, step) {
                             <TextField
                                 id="outlined-address1"
                                 label="Address1"
+                                variant="outlined"
                                 className={classes.textField}
                                 margin="normal"
                                 style={{marginRight:'1%'}}
@@ -467,6 +344,7 @@ function getStepContent(customerForm, step) {
                                 id="outlined-address2"
                                 label="Address2"
                                 className={classes.textField}
+                                variant="outlined"
                                 style={{marginLeft: '1%'}}
                                 margin="normal"
                             />
@@ -474,6 +352,7 @@ function getStepContent(customerForm, step) {
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
                                 id="outlined-city"
+                                variant="outlined"
                                 label="City"
                                 className={classes.textField}
                                 margin="normal"
@@ -484,6 +363,7 @@ function getStepContent(customerForm, step) {
                                 id="outlined-state"
                                 label="State"
                                 className={classes.textField}
+                                variant="outlined"
                                 margin="normal"
                                 style={{marginRight: '1%',marginLeft: '1%'}}
                                 required
@@ -492,6 +372,7 @@ function getStepContent(customerForm, step) {
                                 id="outlined-zip"
                                 label="Zip"
                                 className={classes.textField}
+                                variant="outlined"
                                 margin="normal"
                                 style={{marginLeft: '1%'}}
                                 required
@@ -502,6 +383,7 @@ function getStepContent(customerForm, step) {
                                 id="outlined-phone"
                                 label="Phone"
                                 className={classes.textField}
+                                variant="outlined"
                                 style={{marginRight: '1%'}}
                                 margin="normal"
                             />
@@ -509,12 +391,14 @@ function getStepContent(customerForm, step) {
                                 id="outlined-ext"
                                 label="Ext"
                                 className={classes.textField}
+                                variant="outlined"
                                 margin="normal"
                                 style={{marginRight: '1%',marginLeft: '1%'}}
                             />
                             <TextField
                                 id="outlined-cell"
                                 label="Cell"
+                                variant="outlined"
                                 className={classes.textField}
                                 style={{marginLeft: '1%'}}
                                 margin="normal"
@@ -523,6 +407,7 @@ function getStepContent(customerForm, step) {
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
                                 id="outlined-cell"
+                                variant="outlined"
                                 label="E-mail"
                                 className={classes.textField}
                                 margin="normal"
@@ -575,6 +460,7 @@ function getStepContent(customerForm, step) {
                             <TextField
                                 id="financeEinSsn"
                                 label="EIN/SSN"
+                                variant="outlined"
                                 className={classes.textField}
                                 margin="normal"
                                 required
@@ -584,6 +470,7 @@ function getStepContent(customerForm, step) {
                             <TextField
                                 id="financeName"
                                 label="Name"
+                                variant="outlined"
                                 className={classes.textField}
                                 margin="normal"
                                 required
@@ -593,6 +480,7 @@ function getStepContent(customerForm, step) {
                             <TextField
                                 id="financeAddress"
                                 label="Address"
+                                variant="outlined"
                                 className={classes.textField}
                                 margin="normal"
                                 required
@@ -602,6 +490,7 @@ function getStepContent(customerForm, step) {
                             <TextField
                                 id="outlined-city"
                                 label="City"
+                                variant="outlined"
                                 className={classes.textField}
                                 margin="normal"
                                 style={{marginRight:'1%'}}
@@ -610,6 +499,7 @@ function getStepContent(customerForm, step) {
                             <TextField
                                 id="outlined-state"
                                 label="State"
+                                variant="outlined"
                                 className={classes.textField}
                                 margin="normal"
                                 style={{marginRight:'1%',marginLeft:'1%'}}
@@ -618,6 +508,7 @@ function getStepContent(customerForm, step) {
                             <TextField
                                 id="outlined-zip"
                                 label="Zip"
+                                variant="outlined"
                                 className={classes.textField}
                                 margin="normal"
                                 style={{marginLeft:'1%'}}
@@ -627,17 +518,20 @@ function getStepContent(customerForm, step) {
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
                                 id="outlined-phone"
+                                variant="outlined"
                                 label="1099 Name"
                                 className={classes.textField}
                                 margin="normal"
-                                style={{width:'50%'}}
+                                style={{marginRight:'1%'}}
                             />
                             <FormControlLabel
                                 control={
                                     <Checkbox checked={true} />
                                 }
+                                className={classes.textField}
                                 label="Print 1099"
                                 margin="normal"
+                                style={{marginLeft:'1%'}}
                             />
                         </GridItem>
                     </GridContainer>
@@ -692,6 +586,7 @@ function getStepContent(customerForm, step) {
                                        // onChange={this.handleDateSignChange}
                                        className={classes.textField}
                                        margin="normal"
+                                       variant="outlined"
                                        style={{marginRight: '1%'}}
                                    />
                                </MuiPickersUtilsProvider>
@@ -701,6 +596,7 @@ function getStepContent(customerForm, step) {
                                        // value={selectedRenewDate}
                                        // onChange={this.handleRenewDateChange}
                                        className={classes.textField}
+                                       variant="outlined"
                                        margin="normal"
                                        style={{marginLeft: '1%', marginRight: '1%'}}
                                    />
@@ -709,6 +605,7 @@ function getStepContent(customerForm, step) {
                                    id="termYrs"
                                    label="Term(Yrs)"
                                    margin="normal"
+                                   variant="outlined"
                                    className={classes.textField}
                                    required
                                    style={{marginLeft: '1%'}}
@@ -721,6 +618,7 @@ function getStepContent(customerForm, step) {
                                        // value={selectedExpDate}
                                        // onChange={this.handleExpDateChange}
                                        className={classes.textField}
+                                       variant="outlined"
                                        margin="normal"
                                        style={{marginRight: '1%'}}
                                    />
@@ -730,6 +628,7 @@ function getStepContent(customerForm, step) {
                                    select
                                    label="Select"
                                    margin="normal"
+                                   variant="outlined"
                                    className={classes.textField}
                                    style={{marginLeft: '1%', marginRight: '1%'}}
                                    // value={this.state.planType}
@@ -750,6 +649,7 @@ function getStepContent(customerForm, step) {
                                    id="planAmount"
                                    label="Plan Amount"
                                    className={classes.textField}
+                                   variant="outlined"
                                    margin="normal"
                                    style={{marginLeft: '1%'}}
                                    required
@@ -761,6 +661,7 @@ function getStepContent(customerForm, step) {
                                    label="IB Amount"
                                    className={classes.textField}
                                    margin="normal"
+                                   variant="outlined"
                                    style={{marginRight: '1%'}}
                                    required
                                />
@@ -768,6 +669,7 @@ function getStepContent(customerForm, step) {
                                    id="downPayment"
                                    label="Down Payment"
                                    className={classes.textField}
+                                   variant="outlined"
                                    margin="normal"
                                    style={{marginLeft: '1%', marginRight: '1%'}}
                                    required
@@ -776,7 +678,8 @@ function getStepContent(customerForm, step) {
                                    id="interest"
                                    label="Interest"
                                    className={classes.textField}
-                                   style={{marginRight: '1%'}}
+                                   variant="outlined"
+                                   style={{marginLeft: '1%'}}
                                    margin="normal"
                                    required
                                />
@@ -786,6 +689,7 @@ function getStepContent(customerForm, step) {
                                    id="paymentAmount"
                                    label="Payment Amount"
                                    className={classes.textField}
+                                   variant="outlined"
                                    margin="normal"
                                    style={{marginRight: '1%'}}
                                    required
@@ -794,6 +698,7 @@ function getStepContent(customerForm, step) {
                                    id="noOfPayments"
                                    label="No Of Payments"
                                    className={classes.textField}
+                                   variant="outlined"
                                    margin="normal"
                                    style={{marginLeft: '1%', marginRight: '1%'}}
                                    required
@@ -802,6 +707,7 @@ function getStepContent(customerForm, step) {
                                    id="daysToFullFill"
                                    label="Days To Fullfill"
                                    className={classes.textField}
+                                   variant="outlined"
                                    style={{marginLeft: '1%'}}
                                    margin="normal"
                                    required
@@ -830,7 +736,6 @@ function getStepContent(customerForm, step) {
 class FranchiseesCreateForm extends Component {
     state = {
         customers: [],
-        ...newCustomerState,
         value: '',
         suggestions: [],
         selectedCustomer: null,
@@ -939,12 +844,6 @@ class FranchiseesCreateForm extends Component {
 
     handleTab = (event, activeStep) => {
         this.setState({ activeStep });
-    };
-    handlefinanceCheckedChange = name => event => {
-        this.setState({ [name]: event.target.checked });
-    };
-    handleRadioChange = event => {
-        this.setState({ radioValue: event.target.value });
     };
     //////////////////////
     render() {

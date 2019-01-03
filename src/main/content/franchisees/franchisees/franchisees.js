@@ -201,7 +201,8 @@ const styles = theme => ({
     elementCenter: {
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        fontSize: '2rem'
     }
 });
 
