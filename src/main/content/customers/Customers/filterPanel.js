@@ -166,6 +166,9 @@ class FilterPanel extends Component {
 		isRegionOperationCustomerStatus: true,
 		isRegionAccountingCustomerStatus: true,
 		isVariableCustomerStatus: true,
+
+		AccountTypes: -2,
+		AccountExecutive: 0,
 	};
 
 
@@ -201,10 +204,37 @@ class FilterPanel extends Component {
 		}
 	};
 
-	handleChange = name => event => {
-		this.setState({ [name]: event.target.checked });
-		this.props.toggleStatus(name, event.target.checked)
+	handleChangeChecked = name => event => {
+		if (name == "isAllCustomerStatus") {
+			this.setState({
+				isAllCustomerStatus: event.target.checked,
+				isActiveCustomerStatus: event.target.checked,
+				isCancelledCustomerStatus: event.target.checked,
+				isSuspendedCustomerStatus: event.target.checked,
+				isPendingCustomerStatus: event.target.checked,
+				isInactiveCustomerStatus: event.target.checked,
+				isTransferredCustomerStatus: event.target.checked,
+				isTransferredCustomerStatus: event.target.checked,
+				isUnknownCustomerStatus: event.target.checked,
+				isRejectedCustomerStatus: event.target.checked,
+				isRegionOperationCustomerStatus: event.target.checked,
+				isRegionOperationCustomerStatus: event.target.checked,
+				isRegionAccountingCustomerStatus: event.target.checked,
+				isVariableCustomerStatus: event.target.checked,
+			})
+		} else {
+			this.setState({ [name]: event.target.checked });
+		}
+
+		// this.props.toggleStatus(name, event.target.checked)
 	};
+
+	handleChange = name => event => {
+		this.setState({
+			[name]: event.target.value
+		});
+	};
+
 
 	handleChange1 = event => {
 		this.setState({ [event.target.name]: event.target.value });
@@ -419,8 +449,45 @@ class FilterPanel extends Component {
 									*/}
 
 								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
-									<h3>Account Types</h3>
-									<FormControl className={classes.formControl} style={{ width: 200 }}>
+									{/* <h3>Account Types</h3> */}
+
+									<TextField
+										select
+
+										id="AccountTypes"
+										label="Account Types"
+										className={classes.textField}
+										InputLabelProps={{
+											shrink: true
+										}}
+										value={this.state.AccountTypes === undefined ? 0 : this.state.AccountTypes}
+										onChange={this.handleChange('AccountTypes')}
+										margin="normal"
+										variant="outlined"
+										style={{ width: '100%' }}>
+										{/* {[{
+											value: 0, label: "All"
+										}, {
+											value: 1, label: "None"
+										}].map(option => (
+											<MenuItem key={option.value} value={option.value}>
+												{option.label}
+											</MenuItem>
+										))} */}
+
+										<MenuItem value={-2}><em>All</em></MenuItem>
+										<MenuItem value={-1}><em>None</em></MenuItem>
+										{
+											accountTypes.map((x, index) => {
+												if (x !== null)
+													return (<MenuItem key={x} value={index}>{x}</MenuItem>)
+											})
+										}
+
+									</TextField>
+
+
+									{/* <FormControl className={classes.formControl} style={{ width: 200 }}>
 										<Select
 											value={-2}
 											onChange={this.handleChange1}
@@ -438,7 +505,7 @@ class FilterPanel extends Component {
 												})
 											}
 										</Select>
-									</FormControl>
+									</FormControl> */}
 								</div>
 
 								{/* <div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
@@ -450,20 +517,51 @@ class FilterPanel extends Component {
 								</div> */}
 
 								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
-									<h3>Account Executive</h3>
-									<FormControl className={classes.formControl} style={{ width: 200 }}>
+									{/* <h3>Account Executive</h3> */}
+									{/* <FormControl className={classes.formControl} style={{ width: 200 }}>
 										<Select
-											value={-2}
-											onChange={this.handleChange1}
-											inputProps={{
-												name: 'invoiceDate',
-												id: 'invoice_date'
+											value={this.state.AccountExecutive === undefined ? "" : this.state.AccountExecutive}
+											onChange={this.handleChange('AccountExecutive')}
+											// inputProps={{
+											// 	name: 'invoiceDate',
+											// 	id: 'invoice_date'
+											// }}
+											InputLabelProps={{
+												shrink: true
 											}}
 										>
-											<MenuItem value={-2}><em>All</em></MenuItem>
-											<MenuItem value={-1}><em>None</em></MenuItem>
+											<MenuItem key={-2} value={-2}><em>All</em></MenuItem>
+											<MenuItem key={-1} value={-1}><em>None</em></MenuItem>
 										</Select>
-									</FormControl>
+									</FormControl> */}
+
+
+
+									<TextField
+										select
+
+										id="AccountExecutive"
+										label="Account Executive"
+										className={classes.textField}
+										InputLabelProps={{
+											shrink: true
+										}}
+										value={this.state.AccountExecutive === undefined ? 0 : this.state.AccountExecutive}
+										onChange={this.handleChange('AccountExecutive')}
+										margin="normal"
+										variant="outlined"
+										style={{ width: '100%' }}>
+										{[{
+											value: 0, label: "All"
+										}, {
+											value: 1, label: "None"
+										}].map(option => (
+											<MenuItem key={option.value} value={option.value}>
+												{option.label}
+											</MenuItem>
+										))}
+									</TextField>
+
 								</div>
 
 								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
@@ -483,51 +581,51 @@ class FilterPanel extends Component {
 										})
 									} */}
 									<FormControlLabel
-										control={<Switch checked={this.state.isAllCustomerStatus} onChange={this.handleChange('isAllCustomerStatus')} />}
+										control={<Switch checked={this.state.isAllCustomerStatus} onChange={this.handleChangeChecked('isAllCustomerStatus')} />}
 										label="All"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isActiveCustomerStatus} onChange={this.handleChange('isActiveCustomerStatus')} />}
+										control={<Switch checked={this.state.isActiveCustomerStatus} onChange={this.handleChangeChecked('isActiveCustomerStatus')} />}
 										label="Active"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isCancelledCustomerStatus} onChange={this.handleChange('isCancelledCustomerStatus')} />}
+										control={<Switch checked={this.state.isCancelledCustomerStatus} onChange={this.handleChangeChecked('isCancelledCustomerStatus')} />}
 										label="Cancelled"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isSuspendedCustomerStatus} onChange={this.handleChange('isSuspendedCustomerStatus')} />}
+										control={<Switch checked={this.state.isSuspendedCustomerStatus} onChange={this.handleChangeChecked('isSuspendedCustomerStatus')} />}
 										label="Suspended"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isPendingCustomerStatus} onChange={this.handleChange('isPendingCustomerStatus')} />}
+										control={<Switch checked={this.state.isPendingCustomerStatus} onChange={this.handleChangeChecked('isPendingCustomerStatus')} />}
 										label="Pending"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isInactiveCustomerStatus} onChange={this.handleChange('isInactiveCustomerStatus')} />}
+										control={<Switch checked={this.state.isInactiveCustomerStatus} onChange={this.handleChangeChecked('isInactiveCustomerStatus')} />}
 										label="Inactive"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isTransferredCustomerStatus} onChange={this.handleChange('isTransferredCustomerStatus')} />}
+										control={<Switch checked={this.state.isTransferredCustomerStatus} onChange={this.handleChangeChecked('isTransferredCustomerStatus')} />}
 										label="Transferred"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isUnknownCustomerStatus} onChange={this.handleChange('isUnknownCustomerStatus')} />}
+										control={<Switch checked={this.state.isUnknownCustomerStatus} onChange={this.handleChangeChecked('isUnknownCustomerStatus')} />}
 										label="Unknown"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isRejectedCustomerStatus} onChange={this.handleChange('isRejectedCustomerStatus')} />}
+										control={<Switch checked={this.state.isRejectedCustomerStatus} onChange={this.handleChangeChecked('isRejectedCustomerStatus')} />}
 										label="Rejected"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isRegionOperationCustomerStatus} onChange={this.handleChange('isRegionOperationCustomerStatus')} />}
+										control={<Switch checked={this.state.isRegionOperationCustomerStatus} onChange={this.handleChangeChecked('isRegionOperationCustomerStatus')} />}
 										label="Region Operation"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isRegionAccountingCustomerStatus} onChange={this.handleChange('isRegionAccountingCustomerStatus')} />}
+										control={<Switch checked={this.state.isRegionAccountingCustomerStatus} onChange={this.handleChangeChecked('isRegionAccountingCustomerStatus')} />}
 										label="Region Accounting"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isVariableCustomerStatus} onChange={this.handleChange('isVariableCustomerStatus')} />}
+										control={<Switch checked={this.state.isVariableCustomerStatus} onChange={this.handleChangeChecked('isVariableCustomerStatus')} />}
 										label="Variable"
 									/>
 								</div>
