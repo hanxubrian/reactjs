@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Hidden, Icon, IconButton, Fab, Button, Typography, Toolbar } from '@material-ui/core';
 
 // theme components
-import { FusePageCustom, FuseAnimate } from '@fuse';
+import { FusePageCustomSidebarScroll, FuseAnimate } from '@fuse';
 
 
 import { bindActionCreators } from "redux";
@@ -122,6 +122,8 @@ const styles = theme => ({
 		}
 	},
 	layoutLeftSidebar: {
+		display: 'flex',
+		flexDirection: 'column',
 		width: 0,
 		[theme.breakpoints.down('sm')]: {
 			width: 'inherit'
@@ -470,7 +472,7 @@ class Customers extends Component {
 
 		return (
 			<React.Fragment >
-				<FusePageCustom
+				<FusePageCustomSidebarScroll
 					classes={{
 						root: classNames(classes.layoutRoot, 'test123'),
 						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': summaryState }),
@@ -569,6 +571,10 @@ class Customers extends Component {
 												<Icon>check_circle</Icon>
 											</IconButton>
 
+											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
+												<Icon>close</Icon>
+											</IconButton>
+
 											{/* <FuseAnimate animation="transition.expandIn" delay={300}>
 												<Button
 													variant="contained"
@@ -647,8 +653,8 @@ class Customers extends Component {
 					}
 					leftSidebarHeader={
 						<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
-						{/* <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", { 'filteropen': filterState })}> */}
-						{/* <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0"> */}
+							{/* <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", { 'filteropen': filterState })}> */}
+							{/* <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0"> */}
 							{customerForm.props.open ? (
 								<h2 style={{ marginBlockStart: '1em' }}>Customer Information</h2>
 							) : (
@@ -697,7 +703,7 @@ class Customers extends Component {
 						this.pageLayout = instance;
 					}}
 				>
-				</FusePageCustom>
+				</FusePageCustomSidebarScroll>
 				{/* <CustomerDialog customers={this.state.customers}/> */}
 			</React.Fragment >
 		);
