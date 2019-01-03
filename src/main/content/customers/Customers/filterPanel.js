@@ -415,7 +415,7 @@ class FilterPanel extends Component {
 											<MenuItem value={-2}><em>All</em></MenuItem>
 											<MenuItem value={-1}><em>None</em></MenuItem>
 											{
-												accountTypes.forEach((x, index) => {
+												accountTypes.map((x, index) => {
 													if (x !== null)
 														return (<MenuItem key={x} value={index}>{x}</MenuItem>)
 												})
@@ -443,7 +443,7 @@ class FilterPanel extends Component {
 										label="Select All"
 									/>
 									{
-										accountStatuses.forEach((x, index) => {
+										accountStatuses.map((x, index) => {
 											if (x !== null)
 												return (<FormControlLabel
 													key={x}
