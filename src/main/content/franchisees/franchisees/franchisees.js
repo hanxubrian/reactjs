@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 
 // core components
-import {Hidden, Icon, IconButton, Fab, Input, Paper, TextField, Button, Typography} from '@material-ui/core';
+import {Hidden,Icon,IconButton,Fab,Input,Paper,Button, Typography,Toolbar} from '@material-ui/core';
 
 // theme components
-import {FusePageCustom, FuseAnimate,FuseSearch} from '@fuse';
+import {FuseAnimate} from '@fuse';
 
 //Janiking
 import JanikingPagination from './../../../../Commons/JanikingPagination';
@@ -20,13 +20,15 @@ import SummaryPanel from './SummaryPanel';
 import FilterPanel from './filterPanel';
 
 // third party
-
+import classNames from 'classnames';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import _ from 'lodash';
 
+import CreateFranchiseesPage from "./franchiseesForms/createForm"
+import FusePageCustomSidebarScroll from "../../../../@fuse/components/FusePageLayouts/FusePageCustomSidebarScroll";
 
-import classNames from 'classnames';
+
 
 const headerHeight = 80;
 
@@ -187,11 +189,22 @@ const styles = theme => ({
         '&:hover': {
             backgroundColor: theme.palette.primary.dark,
         }
+    },
+    sideButton          : {
+        backgroundColor: theme.palette.primary.light,
+        height: 46,
+        width: 46,
+        '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+        }
+    },
+    elementCenter: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: '2rem'
     }
 });
-const defaultProps = {
-    trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
-};
 
 
 class Franchisees extends Component {
@@ -488,7 +501,7 @@ class Franchisees extends Component {
         }
         this.setState({temp: totalFilterTemp});
         this.setState({data: totalFilterTemp});
-     };
+    };
 
     componentDidMount(){
         document.addEventListener("keydown", this.escFunction, false);
@@ -517,7 +530,6 @@ class Franchisees extends Component {
                 d.DistributionAmount.toLowerCase().indexOf(val) !== -1 ||
                 d.Phone.toLowerCase().indexOf(val) !== -1
         });
-        console.log('searchTemp',temp);
         this.setState({temp: temp});
     }
 
@@ -530,7 +542,7 @@ class Franchisees extends Component {
     };
 
     removeFranchisees = ()=> {
-        if(this.state.selection.length==0){
+        if(this.state.selection.length===0){
             alert("Please choose franchisee(s) to delete");
             return;
         }
@@ -547,15 +559,23 @@ class Franchisees extends Component {
         });
     }
 
+    canBeSubmitted()
+    {
+        return true;
+    }
+    closeComposeForm = () => {
+        this.props.createFranchisees.type === 'create' ? this.props.closeEditFranchisees() : this.props.closeCreateFranchisees();
+    };
+
+
     render()
     {
-        const { classes,toggleFilterPanelFranchisees, toggleSummaryPanelFranchisees, filterStateFranchisees, summaryStateFranchisees, deleteFranchisees} = this.props;
-        const { toggleSelection, toggleAll, isSelected, logSelection} = this;
+        const { classes,toggleFilterPanelFranchisees,showCreteFranchisees, toggleSummaryPanelFranchisees, createFranchisees, filterStateFranchisees, summaryStateFranchisees} = this.props;
+        const { toggleSelection, toggleAll, isSelected} = this;
 
-        const { selectAll, selection } = this.state;
-
+        const { selection } = this.state;
         return (
-            <FusePageCustom
+            <FusePageCustomSidebarScroll
                 classes={{
                     root: classNames(classes.layoutRoot,'test123'),
                     rightSidebar : classNames(classes.layoutRightSidebar, {'openSummary': summaryStateFranchisees}),
@@ -566,54 +586,113 @@ class Franchisees extends Component {
                 }}
                 header={
                     <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
-                        <div className="flex flex-row flex-1 justify-between">
-                            <div className="flex flex-shrink items-center">
-                                <div className="flex items-center">
-                                    <FuseAnimate animation="transition.expandIn" delay={300}>
-                                        <Icon className="text-32 mr-12">account_box</Icon>
+                        {this.state.temp  && (!createFranchisees.props.open) && (
+                            <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
+                                <div className="flex flex-row flex-1 justify-between">
+                                    <div className="flex flex-shrink items-center">
+                                        <div className="flex items-center">
+                                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                <Icon className="text-32 mr-12">account_box</Icon>
+                                            </FuseAnimate>
+                                            <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                <Typography variant="h6" className="hidden sm:flex">Franchisees | Franchisees Accounts</Typography>
+                                            </FuseAnimate>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-shrink items-center">
+                                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                                            <Fab color="secondary" aria-label="add"
+                                                 className={classNames(classes.sideButton, "mr-12")} onClick={showCreteFranchisees}>
+                                                <Icon>add</Icon>
+                                            </Fab>
+                                        </FuseAnimate>
+                                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                                            <Fab color="secondary" aria-label="add"
+                                                 className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
+                                                <Icon>mail_outline</Icon>
+                                            </Fab>
+                                        </FuseAnimate>
+                                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                                            <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
+                                                <Icon>print</Icon>
+                                            </Fab>
+                                        </FuseAnimate>
+                                    </div>
+                                </div>
+                                <div className="flex flex-none items-end" style={{display: 'none'}}>
+                                    <FuseAnimate animation="transition.expandIn" delay={600}>
+                                        <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
+                                            <Icon>add</Icon>
+                                        </Fab>
                                     </FuseAnimate>
-                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                        <Typography variant="h6" className="hidden sm:flex">Franchisees | List</Typography>
-                                    </FuseAnimate>
+                                    { selection.length>0 && (
+                                        <FuseAnimate animation="transition.expandIn" delay={600}>
+                                            <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeFranchisees()}>
+                                                <Icon>delete</Icon>
+                                            </Fab>
+                                        </FuseAnimate>
+                                    )}
                                 </div>
                             </div>
-                            <div className="flex flex-shrink items-center">
-                                <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <IconButton>
-                                        <Icon>add</Icon>
-                                    </IconButton>
-                                </FuseAnimate>
-                                <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <IconButton>
-                                        <Icon>mail_outline</Icon>
-                                    </IconButton>
-                                </FuseAnimate>
-                                <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <IconButton>
-                                        <Icon>print</Icon>
-                                    </IconButton>
-                                </FuseAnimate>
+                        )}
+                        {this.state.temp  && (createFranchisees.props.open) && (
+                            <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
+                                <div className="flex flex-row flex-1 justify-between">
+                                    <div className="flex flex-shrink items-center">
+                                        <div className="flex items-center">
+                                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                <Toolbar className="pl-12 pr-0">
+                                                    <img className="mr-12" alt="icon-white" src="assets/images/invoices/invoice-icon-white.png" style={{width: 32, height: 32}}/>
+                                                </Toolbar>
+                                            </FuseAnimate>
+                                            <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                <Typography variant="h6" className="hidden sm:flex">Franchisees | New Franchisees</Typography>
+                                            </FuseAnimate>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-shrink items-center">
+
+                                        <IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleFilterPanelFranchisees()}>
+                                            <Icon>person_outline</Icon>
+                                        </IconButton>
+
+                                        <IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleSummaryPanelFranchisees()}>
+                                            <Icon>check_circle</Icon>
+                                        </IconButton>
+                                    </div>
+                                </div>
+                                <div className="flex flex-none items-end" style={{display: 'none'}}>
+                                    <FuseAnimate animation="transition.expandIn" delay={600}>
+                                        <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
+                                            <Icon>add</Icon>
+                                        </Fab>
+                                    </FuseAnimate>
+                                    <FuseAnimate animation="transition.expandIn" delay={300}>
+                                        <Fab color="primary" aria-label="add"
+                                             className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
+                                            <Icon>mail_outline</Icon>
+                                        </Fab>
+                                    </FuseAnimate>
+                                    <FuseAnimate animation="transition.expandIn" delay={300}>
+                                        <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
+                                            <Icon>print</Icon>
+                                        </Fab>
+                                    </FuseAnimate>
+                                    { selection.length>0 && (
+                                        <FuseAnimate animation="transition.expandIn" delay={600}>
+                                            <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeInvoices()}>
+                                                <Icon>delete</Icon>
+                                            </Fab>
+                                        </FuseAnimate>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                        <div className="flex flex-none items-end" style={{display: 'none'}}>
-                            <FuseAnimate animation="transition.expandIn" delay={600}>
-                                <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
-                                    <Icon>add</Icon>
-                                </Fab>
-                            </FuseAnimate>
-                            { selection.length>0 && (
-                                <FuseAnimate animation="transition.expandIn" delay={600}>
-                                    <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeFranchisees()}>
-                                        <Icon>delete</Icon>
-                                    </Fab>
-                                </FuseAnimate>
-                            )}
-                        </div>
+                        )}
                     </div>
                 }
                 content={
                     <div className="flex-1 flex-col absolute w-full h-full">
-                        {this.state.temp && (
+                        {this.state.temp  && (!createFranchisees.props.open) && (
                             <ReactTable
                                 data={this.state.temp}
                                 minRows = {0}
@@ -663,10 +742,6 @@ class Franchisees extends Component {
                                     }
                                 }}
                                 getTdProps={(state, rowInfo, column, instance) =>{
-                                    let tdClass='flex items-center justify-center';
-                                    if (column.id==='InvoiceNo' ||column.id==='CustomerNo'||column.id==='InvoiceBalanceAmount'||
-                                        column.id==='InvoiceDate' || column.id==='transactionStatusFranchisees') tdClass = classNames( "flex items-center  justify-center");
-
                                     return {
                                         style:{
                                             textAlign: 'center',
@@ -697,10 +772,9 @@ class Franchisees extends Component {
                                                         onClick={(ev) => toggleFilterPanelFranchisees()}
                                                         aria-label="toggle filter panel"
                                                         color="secondary"
-                                                        disabled={filterStateFranchisees ? true : false}
                                                         className={classNames(classes.filterPanelButton)}
                                                     >
-                                                        <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
+                                                        <img className={classes.imageIcon} alt="icon-filter" src="assets/images/invoices/filter.png"/>
                                                     </Button>
                                                 </Hidden>
                                                 <Hidden smUp>
@@ -709,7 +783,7 @@ class Franchisees extends Component {
                                                         aria-label="toggle filter panel"
                                                         className={classNames(classes.filterPanelButton)}
                                                     >
-                                                        <img className={classes.imageIcon} src="assets/images/invoices/filter.png"/>
+                                                        <img className={classes.imageIcon} alt="icon-filter" src="assets/images/invoices/filter.png"/>
                                                     </Button>
                                                 </Hidden>
                                             </div>
@@ -844,7 +918,6 @@ class Franchisees extends Component {
                                                     <Button
                                                         onClick={(ev) => toggleSummaryPanelFranchisees()}
                                                         aria-label="toggle summary panel"
-                                                        disabled={summaryStateFranchisees ? true : false}
                                                         className={classNames(classes.summaryPanelButton)}
                                                     >
                                                         <Icon>insert_chart</Icon>
@@ -879,20 +952,18 @@ class Franchisees extends Component {
                                 }}
                             />
                         )}
+                        {(this.state.temp && createFranchisees.props.open) && (
+                            <CreateFranchiseesPage/>
+                        )}
                     </div>
                 }
                 leftSidebarHeader={
                     <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", {'filteropen': filterStateFranchisees})}>
-                        <h4 style={{marginBlockStart: '1em'}}>Filter Panel</h4>
-                        <FuseAnimate animation="transition.expandIn" delay={200}>
-                            <div>
-                                <Hidden xsDown>
-                                    <IconButton onClick={(ev)=>toggleFilterPanelFranchisees()}>
-                                        <Icon>close</Icon>
-                                    </IconButton>
-                                </Hidden>
-                            </div>
-                        </FuseAnimate>
+                        {createFranchisees.props.open ? (
+                            <h4 className={classes.elementCenter}>Company Information</h4>
+                        ) : (
+                            <h4 className={classes.elementCenter}>Filter Panel</h4>
+                        )}
                     </div>
                 }
                 leftSidebarContent={
@@ -900,16 +971,8 @@ class Franchisees extends Component {
                 }
                 rightSidebarHeader={
                     <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0">
-                        <h4 style={{marginBlockStart: '1em'}}>Summary Panel</h4>
-                        <FuseAnimate animation="transition.expandIn" delay={200}>
-                            <div>
-                                <Hidden xsDown>
-                                    <IconButton onClick={(ev)=>toggleSummaryPanelFranchisees()}>
-                                        <Icon>close</Icon>
-                                    </IconButton>
-                                </Hidden>
-                            </div>
-                        </FuseAnimate></div>
+                        <h4 className={classes.elementCenter}>Summary Panel</h4>
+                    </div>
                 }
                 rightSidebarContent={
                     <SummaryPanel/>
@@ -918,7 +981,7 @@ class Franchisees extends Component {
                     this.pageLayout = instance;
                 }}
             >
-            </FusePageCustom>
+            </FusePageCustomSidebarScroll>
         );
     }
 }
@@ -930,7 +993,11 @@ function mapDispatchToProps(dispatch)
         toggleFilterPanelFranchisees: Actions.toggleFilterPanelFranchisees,
         toggleSummaryPanelFranchisees: Actions.toggleSummaryPanelFranchisees,
         deleteFranchisees: Actions.deleteFranchisees,
-        removeFranchisees: Actions.removeFranchisees
+        removeFranchisees: Actions.removeFranchisees,
+        showCreteFranchisees: Actions.showCreteFranchisees,
+        closeCreateFranchisees: Actions.closeCreateFranchisees,
+        showEditFranchisees: Actions.showCreteFranchisees,
+        closeEditFranchisees: Actions.showCreteFranchisees
     }, dispatch);
 }
 
@@ -942,7 +1009,8 @@ function mapStateToProps({franchisees,auth})
         transactionStatusFranchisees: franchisees.transactionStatusFranchisees,
         filterStateFranchisees: franchisees.bOpenedFilterPanelFranchisees,
         summaryStateFranchisees: franchisees.bOpenedSummaryPanelFranchisees,
-        regionId: auth.login.defaultRegionId
+        regionId: auth.login.defaultRegionId,
+        createFranchisees: franchisees.createFranchisees
     }
 }
 

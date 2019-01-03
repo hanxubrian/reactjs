@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles/index';
-import {Button, Card, CardContent, Checkbox, Divider, FormControl, FormControlLabel, TextField, Typography, CircularProgress} from '@material-ui/core';
+import {Button, Card, CardContent, Checkbox, FormControl, FormControlLabel, TextField, Typography, CircularProgress} from '@material-ui/core';
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import classNames from 'classnames';
 import {Link} from 'react-router-dom';
@@ -11,7 +11,10 @@ import * as NavigationActions from '../../../../store/actions/fuse/navigation.ac
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
 import connect from 'react-redux/es/connect/connect';
+<<<<<<< HEAD
 
+=======
+>>>>>>> eae9cce76f66067769e8e742765f9ff54f6e8bab
 
 const styles = theme => ({
     root: {
@@ -38,8 +41,6 @@ const styles = theme => ({
         display: 'flex'
     }
 });
-
-const API_KEY = 8
 
 class SigninPage extends Component {
     state = {

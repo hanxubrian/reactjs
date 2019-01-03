@@ -9,12 +9,13 @@ const initialState = {
     bOpenedSummaryPanel: true,
     bOpenedFilterPanel: true,
     transactionStatus:{checkedPaid: true,checkedPP: true, checkedComplete: true, checkedOpen: true, checkedEbill: true, checkedPrint: true },
-    invoiceDialog: {
+    invoiceForm: {
         type : 'new',
         props: {
             open: false
         },
-        data : null
+        data : null,
+        customer: ''
     }
 };
 
@@ -62,11 +63,11 @@ const invoices = function(state = initialState, action) {
                 ...initialState
             }
         }
-        case Actions.OPEN_NEW_INVOICE_DIALOG:
+        case Actions.OPEN_NEW_INVOICE_FORM:
         {
             return {
                 ...state,
-                invoiceDialog: {
+                invoiceForm: {
                     type : 'new',
                     props: {
                         open: true
@@ -75,11 +76,11 @@ const invoices = function(state = initialState, action) {
                 }
             };
         }
-        case Actions.CLOSE_NEW_INVOICE_DIALOG:
+        case Actions.CLOSE_NEW_INVOICE_FORM:
         {
             return {
                 ...state,
-                invoiceDialog: {
+                invoiceForm: {
                     type : 'new',
                     props: {
                         open: false
@@ -88,11 +89,11 @@ const invoices = function(state = initialState, action) {
                 }
             };
         }
-        case Actions.OPEN_EDIT_INVOICE_DIALOG:
+        case Actions.OPEN_EDIT_INVOICE_FORM:
         {
             return {
                 ...state,
-                invoiceDialog: {
+                invoiceForm: {
                     type : 'edit',
                     props: {
                         open: true
@@ -101,11 +102,11 @@ const invoices = function(state = initialState, action) {
                 }
             };
         }
-        case Actions.CLOSE_EDIT_INVOICE_DIALOG:
+        case Actions.CLOSE_EDIT_INVOICE_FORM:
         {
             return {
                 ...state,
-                invoiceDialog: {
+                invoiceForm: {
                     type : 'edit',
                     props: {
                         open: false
@@ -113,6 +114,13 @@ const invoices = function(state = initialState, action) {
                     data : null
                 }
             };
+        }
+        case Actions.UPDATE_INVOICE_LINE:
+        {
+            return {
+                ...state,
+                invoiceForm: {...state.invoiceForm, data: {line: action.payload}}
+            }
         }
         default:
         {

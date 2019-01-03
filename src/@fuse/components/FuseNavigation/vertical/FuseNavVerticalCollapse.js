@@ -44,11 +44,11 @@ const styles = theme => ({
         },
     }
 });
-let currUrl = '';
+
 function needsToBeOpened(props)
 {
     // console.log('pathname=',props.location.search);
-    currUrl = props.location.search;
+    // let currUrl = props.location.search;
     return props.location && isUrlInChildren(props.item, props.location.pathname);
 }
 

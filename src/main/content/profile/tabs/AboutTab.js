@@ -28,7 +28,6 @@ class AboutTab extends Component {
         });
     }
     RegionHeader(){
-        const {classes} = this.props;
         let region_name = '';
         if(this.props.login.IsSuccess){
             this.props.login.all_regions.forEach(region=>{
@@ -46,7 +45,7 @@ class AboutTab extends Component {
 
     render()
     {
-        const {classes ,login} = this.props;
+        const {classes} = this.props;
         const {general, work, contact, groups, friends} = this.state;
 
         return (

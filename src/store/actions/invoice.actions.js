@@ -7,12 +7,13 @@ export const TOGGLE_SUMMARY_PANEL = "[INVOICES] TOGGLE SUMMARY PANEL";
 export const TOGGLE_FILTER_STATUS = "[INVOICES] TOGGLE FILTER STATUS";
 export const TOGGLE_FILTER_PANEL = "[INVOICES] TOGGLE FILTER PANEL";
 // for Add/Edit
-export const OPEN_NEW_INVOICE_DIALOG = '[INVOICES APP] OPEN NEW INVOICE DIALOG';
-export const CLOSE_NEW_INVOICE_DIALOG = '[INVOICES APP] CLOSE NEW INVOICE DIALOG';
-export const OPEN_EDIT_INVOICE_DIALOG = '[INVOICES APP] OPEN EDIT INVOICE DIALOG';
-export const CLOSE_EDIT_INVOICE_DIALOG = '[INVOICES APP] CLOSE EDIT INVOICE DIALOG';
+export const OPEN_NEW_INVOICE_FORM = '[INVOICES APP] OPEN NEW INVOICE FORM';
+export const CLOSE_NEW_INVOICE_FORM = '[INVOICES APP] CLOSE NEW INVOICE FORM';
+export const OPEN_EDIT_INVOICE_FORM = '[INVOICES APP] OPEN EDIT INVOICE FORM';
+export const CLOSE_EDIT_INVOICE_FORM = '[INVOICES APP] CLOSE EDIT INVOICE FORM';
 export const ADD_INVOICE = '[INVOICES APP] ADD INVOICE';
 export const UPDATE_INVOICE = '[INVOICES APP] UPDATE INVOICE';
+export const UPDATE_INVOICE_LINE = '[INVOICES APP] UPDATE INVOICE LINE';
 
 
 export function getInvoices() {
@@ -73,32 +74,32 @@ export function removeInvoice(key, invoices) {
     };
 }
 
-export function openNewInvoiceDialog()
+export function openNewInvoiceForm()
 {
     return {
-        type: OPEN_NEW_INVOICE_DIALOG
+        type: OPEN_NEW_INVOICE_FORM
     }
 }
 
-export function closeNewInvoiceDialog()
+export function closeNewInvoiceForm()
 {
     return {
-        type: CLOSE_NEW_INVOICE_DIALOG
+        type: CLOSE_NEW_INVOICE_FORM
     }
 }
 
-export function openEditInvoiceDialog(data)
+export function openEditInvoiceForm(data)
 {
     return {
-        type: OPEN_EDIT_INVOICE_DIALOG,
+        type: OPEN_EDIT_INVOICE_FORM,
         data
     }
 }
 
-export function closeEditInvoiceDialog()
+export function closeEditInvoiceForm()
 {
     return {
-        type: CLOSE_EDIT_INVOICE_DIALOG
+        type: CLOSE_EDIT_INVOICE_FORM
     }
 }
 
@@ -144,3 +145,9 @@ export function updateInvoice(invoice)
     };
 }
 
+export function updateInvoiceLine(data) {
+    return {
+        type: UPDATE_INVOICE_LINE,
+        payload: data
+    }
+}

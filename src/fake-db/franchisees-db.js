@@ -1822,10 +1822,10 @@ mock.onPost("/api/franchisees/delete").reply(req => {
     let data = JSON.parse(req.data);
     let franchisees = data.franchisees;
     _.forEach(data.ids, function(id){
-        let deleted = _.remove(franchisees.Data, function(_franchisees) {
-            // console.log('invoice', _invoice);
-            return _franchisees.ID===id
-        });
+        // let deleted = _.remove(franchisees.Data, function(_franchisees) {
+        //     // console.log('invoice', _invoice);
+        //     return _franchisees.ID===id
+        // });
     });
 
     return [200, franchisees];
@@ -1837,9 +1837,9 @@ mock.onPost('/api/franchisees/remove').reply((req) => {
     console.log('id=', data.franchisees);
     let removeFranchisees = data.franchisees;
     for(let i = 0 ; i < (removeFranchisees.Data.Region).length ;i++ ){
-        let deleted = _.remove((removeFranchisees.Data.Region)[i].Franchisees, function(_franchisees) {
-            return _franchisees.ID === data.id;
-        });
+        // let deleted = _.remove((removeFranchisees.Data.Region)[i].Franchisees, function(_franchisees) {
+        //     return _franchisees.ID === data.id;
+        // });
     }
     return [200, removeFranchisees];
 });

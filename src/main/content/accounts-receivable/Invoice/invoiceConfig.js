@@ -10,7 +10,7 @@ export const InvoiceConfig = {
         {
             path     : '/accounts-receivable/invoices',
             component: FuseLoadable({
-                loader: () => import('./invoiceList')
+                loader: () => import('./invoiceApp')
             })
         }
     ]

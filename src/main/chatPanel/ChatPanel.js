@@ -7,8 +7,6 @@ import {connect} from 'react-redux';
 import ContactList from './ContactList';
 import Chat from './Chat';
 import classNames from 'classnames';
-import withReducer from 'store/withReducer';
-import reducer from './store/reducers';
 
 const styles = theme => ({
     root : {
@@ -92,8 +90,6 @@ class ChatPanel extends Component {
         const {classes, openChatPanel, closeChatPanel, contacts, selectedContactId, state} = this.props;
 
         const selectedContact = contacts.find(_contact => _contact.id === selectedContactId);
-
-        console.log('chat=', this.props);
 
         return (
             <div className={classes.root}>

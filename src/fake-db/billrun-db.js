@@ -84,7 +84,7 @@ mock.onPost("/api/billruns/update").reply(request => {
 mock.onPost('/api/billruns/remove').reply((req) => {
     let data = JSON.parse(req.data);
     let billruns = data.billruns;
-    let deleted = _.remove(billruns.Data, function(_billrun) {
+    _.remove(billruns.Data, function(_billrun) {
         return _billrun.Id === data.id;
     });
 

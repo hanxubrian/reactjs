@@ -15,9 +15,8 @@ class CallList extends Component {
     {
         const {classes, iframeURL} = this.props;
 
-        console.log('props=', this.props);
         return (
-            <iframe src={iframeURL} className={classes.iframe}></iframe>
+            <iframe title="Call List" src={iframeURL} className={classes.iframe}></iframe>
         );
     }
 }

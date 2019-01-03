@@ -3,7 +3,7 @@ import FuseNavVerticalGroup from './vertical/FuseNavVerticalGroup';
 import FuseNavVerticalCollapse from './vertical/FuseNavVerticalCollapse';
 import FuseNavVerticalItem from './vertical/FuseNavVerticalItem';
 import FuseNavHorizontalGroup from './horizontal/FuseNavHorizontalGroup';
-import FuseNavHorizontalCollapse from './horizontal/FuseNavHorizontalCollapse';
+// import FuseNavHorizontalCollapse from './horizontal/FuseNavHorizontalCollapse';
 import FuseNavHorizontalItem from './horizontal/FuseNavHorizontalItem';
 import {Divider, List, Hidden} from '@material-ui/core';
 import {withRouter} from 'react-router-dom';
@@ -25,9 +25,9 @@ class FuseNavigation extends Component {
         const verticalNav = (
             <List className="whitespace-no-wrap">
                 {
-                    navigation.map((item) => (
+                    navigation.map((item, index) => (
 
-                        <React.Fragment key={item.Slug}>
+                        <React.Fragment key={index}>
 
                             {item.Type === 'group' && (
                                 <FuseNavVerticalGroup item={item} nestedLevel={0} active={active}/>
@@ -53,9 +53,9 @@ class FuseNavigation extends Component {
         const horizontalNav = (
             <List className="whitespace-no-wrap flex p-0">
                 {
-                    navigation.map((item) => (
+                    navigation.map((item, index) => (
 
-                        <React.Fragment key={item.MenuId}>
+                        <React.Fragment key={index}>
 
                             {item.Type === 'group' && (
                                 <FuseNavHorizontalGroup item={item} nestedLevel={0}/>

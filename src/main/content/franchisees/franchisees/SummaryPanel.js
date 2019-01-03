@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {AppBar, Toolbar, Icon, IconButton, ClickAwayListener, Paper, Avatar, Typography, withStyles} from '@material-ui/core';
-import keycode from 'keycode';
+import {Paper, Typography, withStyles} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import {FuseAnimate} from '@fuse';
 
@@ -8,12 +7,13 @@ import {FuseAnimate} from '@fuse';
 //Material UI core
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import * as Actions from 'store/actions';
 import Widget8 from './widget8';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import classNames from 'classnames';
+import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox/Checkbox";
 
 function TabContainer(props) {
     return (
@@ -90,11 +90,21 @@ const styles = theme => ({
 class SummaryPanel extends Component {
     state = {
         value: 0,
+        checkedCompanyInfo: false,
+        checkedOwner: false,
+        checkedFinancial: false,
+        checkedBilling: false,
+        checkedContract: false,
+        checkedMaintenance: false
+    };
+
+    handleValidationStatusChange = name => event => {
+        this.setState({ [name]: event.target.checked });
     };
 
     render()
     {
-        const {classes} = this.props;
+        const {classes, franchiseesForm} = this.props;
 
         let widgets_data ={
             widget8: {
@@ -180,32 +190,124 @@ class SummaryPanel extends Component {
                 <div className={classNames("flex flex-col p-16")}>
                     {this.props.franchisees && (
                         <Paper className="flex flex-1 flex-col min-h-px shadow-none" style={{alignItems: 'center', flexDirection:'column'}}>
-                            <Card className={classes.card} >
-                                <CardContent style={{color: 'white'}}>
-                                    <h2>Sales</h2>
-                                    <Typography className={classes.pos} style={{color: 'white'}}>
-                                        Lifetime sum of your sale
-                                    </Typography>
-                                    <Typography variant="h5" component="h2" style={{color: 'white'}}>
-                                        989146.99
-                                    </Typography>
-
-                                </CardContent>
-                            </Card>
-                            <Card className={classes.card} >
-                                <div className="mb-32 w-full sm:w-1/2 md:w-full pt-24">
-
-                                    <FuseAnimate delay={600}>
-                                        <div className="px-16 pb-8 text-18 font-300" >
-                                            <h2 style={{color: 'white'}}>How are your sales?</h2>
-                                        </div>
-                                    </FuseAnimate>
-
-                                    <div className="widget w-full p-16">
-                                        <Widget8 data={widgets_data.widget8}/>
+                            {franchiseesForm && franchiseesForm.props.open
+                                ?(
+                                    <div style={{ marginTop: 50, display: 'flex', flexDirection: 'column' }}>
+                                        <h3>Validation Status</h3>
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={this.state.checkedCompanyInfo}
+                                                    onChange={this.handleValidationStatusChange('checkedCompanyInfo')}
+                                                    value="checkedCompanyInfo"
+                                                    classes={{
+                                                        root: classes.root,
+                                                        checked: classes.checked
+                                                    }}
+                                                />
+                                            }
+                                            label="Company Information"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={this.state.checkedOwner}
+                                                    onChange={this.handleValidationStatusChange('checkedOwner')}
+                                                    value="checkedOwner"
+                                                    classes={{
+                                                        root: classes.root,
+                                                        checked: classes.checked
+                                                    }}
+                                                />
+                                            }
+                                            label="Owner"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={this.state.checkedFinancial}
+                                                    onChange={this.handleValidationStatusChange('checkedFinancial')}
+                                                    value="checkedFinancial"
+                                                    classes={{
+                                                        root: classes.root,
+                                                        checked: classes.checked
+                                                    }}
+                                                />
+                                            }
+                                            label="Financial"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={this.state.checkedBilling}
+                                                    onChange={this.handleValidationStatusChange('checkedBilling')}
+                                                    value="checkedBilling"
+                                                    classes={{
+                                                        root: classes.root,
+                                                        checked: classes.checked
+                                                    }}
+                                                />
+                                            }
+                                            label="Billing Settings"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={this.state.checkedContract}
+                                                    onChange={this.handleValidationStatusChange('checkedContract')}
+                                                    value="checkedContract"
+                                                    classes={{
+                                                        root: classes.root,
+                                                        checked: classes.checked
+                                                    }}
+                                                />
+                                            }
+                                            label="Contract"
+                                        />
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={this.state.checkedMaintenance}
+                                                    onChange={this.handleValidationStatusChange('checkedMaintenance')}
+                                                    value="checkedMaintenance"
+                                                    classes={{
+                                                        root: classes.root,
+                                                        checked: classes.checked
+                                                    }}
+                                                />
+                                            }
+                                            label="Franchisees Fee Maintenance"
+                                        />
                                     </div>
-                                </div>
-                            </Card>
+                                )
+                                :(
+                                    <div>
+                                        <Card className={classes.card} >
+                                            <CardContent style={{color: 'white'}}>
+                                                <h2>Sales</h2>
+                                                <Typography className={classes.pos} style={{color: 'white'}}>
+                                                    Lifetime sum of your sale
+                                                </Typography>
+                                                <Typography variant="h5" component="h2" style={{color: 'white'}}>
+                                                    989146.99
+                                                </Typography>
+
+                                            </CardContent>
+                                        </Card>
+                                        <Card className={classes.card} >
+                                            <div className="mb-32 w-full sm:w-1/2 md:w-full pt-24">
+                                                <FuseAnimate delay={600}>
+                                                    <div className="px-16 pb-8 text-18 font-300" >
+                                                      <h2 style={{color: 'white'}}>How are your sales?</h2>
+                                                    </div>
+                                                </FuseAnimate>
+                                                <div className="widget w-full p-16">
+                                                    <Widget8 data={widgets_data.widget8}/>
+                                                </div>
+                                            </div>
+                                        </Card>
+                                    </div>
+                                )}
                         </Paper>
                     )}
                 </div>
@@ -223,7 +325,8 @@ function mapDispatchToProps(dispatch)
 function mapStateToProps({franchisees})
 {
     return {
-        franchisees: franchisees.franchiseesDB
+        franchisees: franchisees.franchiseesDB,
+        franchiseesForm: franchisees.createFranchisees
     }
 }
 

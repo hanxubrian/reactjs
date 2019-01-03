@@ -6,8 +6,8 @@ import { persistReducer } from 'redux-persist';
 const initialState = {
     franchiseesDB: null,
     bLoadedFranchisees: false,
-    bOpenedSummaryPanelFranchisees: true,
-    bOpenedFilterPanelFranchisees: true,
+    bOpenedSummaryPanelFranchisees: false,
+    bOpenedFilterPanelFranchisees: false,
     transactionStatusFranchisees:{
         checkedSelectAll: true,
         checkedActive: true,
@@ -21,6 +21,13 @@ const initialState = {
         checkedPending: true,
         checkedNonRenewed: true,
         checkedRepurchased: true
+    },
+    createFranchisees: {
+        type : 'new',
+        props: {
+            open: false
+        },
+        data : null
     }
 };
 
@@ -67,6 +74,60 @@ const franchisees = function(state = initialState, action) {
             return {
                 ...initialState
             }
+        }
+        case Actions.CREATE_FRANCHISEES_LIST:
+        {
+            return {
+                ...state,
+                createFranchisees: {
+                    type : 'new',
+                    props: {
+                        open: true
+                    },
+                    data : null
+                },
+                bOpenedSummaryPanelFranchisees: false,
+                bOpenedFilterPanelFranchisees: false
+            };
+        }
+        case Actions.CLOSE_CREATE_FRANCHISEES:
+        {
+            return {
+                ...state,
+                createFranchisees: {
+                    type : 'new',
+                    props: {
+                        open: false
+                    },
+                    data : null
+                }
+            };
+        }
+        case Actions.OPEN_EDIT_FRANCHISEES_FORM:
+        {
+            return {
+                ...state,
+                createFranchisees: {
+                    type : 'edit',
+                    props: {
+                        open: true
+                    },
+                    data : action.data
+                }
+            };
+        }
+        case Actions.CLOSE_EDIT_FRANCHISEES_FORM:
+        {
+            return {
+                ...state,
+                createFranchisees: {
+                    type : 'edit',
+                    props: {
+                        open: false
+                    },
+                    data : null
+                }
+            };
         }
         default:
         {

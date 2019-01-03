@@ -5,12 +5,12 @@ const quickPanelDB = {
         {
             'id'    : 1,
             'title' : 'Best songs to listen while working',
-            'detail': 'Last edit: May 8th, 2015'
+            'detail': 'Last create: May 8th, 2015'
         },
         {
             'id'    : 2,
             'title' : 'Useful subreddits',
-            'detail': 'Last edit: January 12th, 2015'
+            'detail': 'Last create: January 12th, 2015'
         }
     ],
     events: [

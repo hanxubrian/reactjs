@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
-import {AppBar, Toolbar, Icon, IconButton, ClickAwayListener, Paper, Avatar, Typography, withStyles} from '@material-ui/core';
+import {Paper, withStyles} from '@material-ui/core';
 import keycode from 'keycode';
 
 //Material UI core
 import Switch from '@material-ui/core/Switch';
-import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 
@@ -113,7 +111,7 @@ class FilterPanel extends Component {
     };
     render()
     {
-        const {classes, filterState} = this.props;
+        const {classes} = this.props;
 
         return (
             <div className={classNames(classes.root)}>

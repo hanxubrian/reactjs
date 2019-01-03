@@ -12,8 +12,6 @@ import EventDialog from 'main/content/apps/calendar/EventDialog';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import {FuseAnimate} from '@fuse';
-import withReducer from 'store/withReducer';
-import reducer from './store/reducers/events.reducer';
 
 const localizer = BigCalendar.momentLocalizer(moment);
 
@@ -23,32 +21,32 @@ let allViews = Object.keys(BigCalendar.Views).map(k => BigCalendar.Views[k]);
 
 const styles = theme => ({
     root     : {
-        display                                                                                                        : 'flex',
-        position                                                                                                       : 'relative',
-        flexDirection                                                                                                  : 'column',
-        flex                                                                                                           : 1,
-        '& .rbc-header'                                                                                                : {
+        display : 'flex',
+        position : 'relative',
+        flexDirection  : 'column',
+        flex : 1,
+        '& .rbc-header' : {
             padding   : '12px 6px',
             fontWeight: 600,
             fontSize  : 14
         },
-        '& .rbc-label'                                                                                                 : {
+        '& .rbc-label' : {
             padding: '8px 6px'
         },
-        '& .rbc-today'                                                                                                 : {
+        '& .rbc-today' : {
             backgroundColor: 'transparent'
         },
-        '& .rbc-header.rbc-today, & .rbc-month-view .rbc-day-bg.rbc-today'                                             : {
+        '& .rbc-header.rbc-today, & .rbc-month-view .rbc-day-bg.rbc-today'  : {
             borderBottom: '2px solid ' + theme.palette.secondary.main + '!important'
         },
-        '& .rbc-month-view, & .rbc-time-view, & .rbc-agenda-view'                                                      : {
-            padding                       : 24,
+        '& .rbc-month-view, & .rbc-time-view, & .rbc-agenda-view'   : {
+            padding: 24,
             [theme.breakpoints.down('sm')]: {
                 padding: 16
             },
             ...theme.mixins.border(0)
         },
-        '& .rbc-agenda-view table'                                                                                     : {
+        '& .rbc-agenda-view table' : {
             ...theme.mixins.border(1),
             '& thead > tr > th': {
                 ...theme.mixins.borderBottom(0)
@@ -60,7 +58,7 @@ const styles = theme => ({
                 }
             }
         },
-        '& .rbc-time-view'                                                                                             : {
+        '& .rbc-time-view' : {
             '& .rbc-time-header' : {
                 ...theme.mixins.border(1)
             },
@@ -69,11 +67,11 @@ const styles = theme => ({
                 ...theme.mixins.border(1)
             }
         },
-        '& .rbc-month-view'                                                                                            : {
-            '& > .rbc-row'               : {
+        '& .rbc-month-view' : {
+            '& > .rbc-row': {
                 ...theme.mixins.border(1)
             },
-            '& .rbc-month-row'           : {
+            '& .rbc-month-row': {
                 ...theme.mixins.border(1),
                 borderWidth: '0 1px 1px 1px!important',
                 minHeight  : 128
@@ -88,27 +86,27 @@ const styles = theme => ({
                 ...theme.mixins.borderLeft(1)
             }
         },
-        '& .rbc-day-slot .rbc-time-slot'                                                                               : {
+        '& .rbc-day-slot .rbc-time-slot' : {
             ...theme.mixins.borderTop(1),
             opacity: 0.5
         },
-        '& .rbc-time-header > .rbc-row > * + *'                                                                        : {
+        '& .rbc-time-header > .rbc-row > * + *' : {
             ...theme.mixins.borderLeft(1)
         },
-        '& .rbc-time-content > * + * > *'                                                                              : {
+        '& .rbc-time-content > * + * > *': {
             ...theme.mixins.borderLeft(1)
         },
-        '& .rbc-day-bg + .rbc-day-bg'                                                                                  : {
+        '& .rbc-day-bg + .rbc-day-bg' : {
             ...theme.mixins.borderLeft(1)
         },
-        '& .rbc-time-header > .rbc-row:first-child'                                                                    : {
+        '& .rbc-time-header > .rbc-row:first-child' : {
             ...theme.mixins.borderBottom(1)
         },
-        '& .rbc-timeslot-group'                                                                                        : {
+        '& .rbc-timeslot-group' : {
             minHeight: 64,
             ...theme.mixins.borderBottom(1)
         },
-        '& .rbc-date-cell'                                                                                             : {
+        '& .rbc-date-cell' : {
             padding   : 8,
             fontSize  : 16,
             fontWeight: 400,
@@ -117,7 +115,7 @@ const styles = theme => ({
                 color: 'inherit'
             }
         },
-        '& .rbc-event'                                                                                                 : {
+        '& .rbc-event'  : {
             borderRadius            : 4,
             padding                 : '4px 8px',
             backgroundColor         : theme.palette.primary.dark,
@@ -131,17 +129,17 @@ const styles = theme => ({
                 boxShadow: theme.shadows[2]
             }
         },
-        '& .rbc-row-segment'                                                                                           : {
+        '& .rbc-row-segment'  : {
             padding: '0 4px 4px 4px'
         },
-        '& .rbc-off-range-bg'                                                                                          : {
+        '& .rbc-off-range-bg' : {
             backgroundColor: theme.palette.type === 'light' ? 'rgba(0,0,0,0.03)' : 'rgba(0,0,0,0.16)'
         },
-        '& .rbc-show-more'                                                                                             : {
+        '& .rbc-show-more' : {
             color     : theme.palette.secondary.main,
             background: 'transparent'
         },
-        '& .rbc-addons-dnd .rbc-addons-dnd-resizable-month-event'                                                      : {
+        '& .rbc-addons-dnd .rbc-addons-dnd-resizable-month-event' : {
             position: 'static'
         },
         '& .rbc-addons-dnd .rbc-addons-dnd-resizable-month-event .rbc-addons-dnd-resize-month-event-anchor:first-child': {

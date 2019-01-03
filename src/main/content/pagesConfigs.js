@@ -48,6 +48,10 @@ export const pagesConfigs = [
     ComissionsConfig,
     InvoiceConfig,
     BillRunConfig,
+<<<<<<< HEAD
     AccountsReceivableConfig,
     ReportsConfig
+=======
+    AccountsReceivableConfig
+>>>>>>> eae9cce76f66067769e8e742765f9ff54f6e8bab
 ];
