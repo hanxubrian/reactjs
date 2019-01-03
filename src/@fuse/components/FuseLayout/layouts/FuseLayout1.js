@@ -261,21 +261,6 @@ const styles = theme => ({
 
 const API_KEY = 2
 class FuseLayout1 extends Component {
-
-    state = {
-        sidebarLeftBg: null
-    };
-
-    componentDidMount() {
-        fetch(`https://apifmsplus_c.jkdev.com/v1/apps/get?appid=${API_KEY}&env=local&device=web`)
-            .then(res => res.json())
-            .then(data => this.setState({
-                ...this.state,
-                sidebarLeftBg: data.Settings.local.devices[0].assets.vsidebarLeftBg
-            })
-        )
-    }
-
     handleToggleFolded = () => {
         console.log('fired handleToggleFolded');
         this.props.setDefaultSettings(_.set({}, 'layout.config.navbar.folded', !this.props.settings.layout.config.navbar.folded));
@@ -288,7 +273,7 @@ class FuseLayout1 extends Component {
             root                   : {
                 navbarWrapper      : {
                     zIndex         : 4,
-                    backgroundImage: `url(${this.state.sidebarLeftBg})`,
+                    backgroundImage: `url(${this.props.app.navSideBarLeftBg})`,
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'cover',
@@ -586,12 +571,13 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({fuse})
+function mapStateToProps({auth, fuse})
 {
     return {
         defaultSettings: fuse.settings.defaults,
         settings       : fuse.settings.current,
-        navbar         : fuse.navbar
+        navbar         : fuse.navbar,
+        app            : auth.app
     }
 }
 

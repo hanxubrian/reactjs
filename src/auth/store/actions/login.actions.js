@@ -1,5 +1,6 @@
 import authService from 'services/auth';
 import menuService from '../../../services/menu';
+// import initialService from '../../../services/initial';
 import React from "react";
 import {ADD_AUTH_NAVIGATION} from "../../../store/actions/fuse";
 
@@ -11,6 +12,9 @@ export const LOGIN_START = 'LOGIN_START';
 export const CLOSE_ALERT_DIALOG = 'CLOSE_ALERT_DIALOG';
 export const INITIALIZE_FROM_LOCAL = 'INITIALIZE_FROM_LOCAL';
 export const LOADED_MENU = 'LOADED_MENU';
+// export const INITIAL_START = 'INITIAL_START';
+
+
 
 export function submitSignIn(email, password)  {
     return (dispatch) => {
@@ -87,3 +91,4 @@ export function closeDialog() {
         });
     }
 }
+

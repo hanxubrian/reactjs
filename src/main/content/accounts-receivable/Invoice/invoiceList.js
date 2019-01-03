@@ -342,6 +342,7 @@ class InvoicePage extends Component {
         s: '',
         temp: [],
         data: [],
+        eBill: [],
         checkedPaid: true,
         checkedPP: true,
         checkedComplete: true,
@@ -544,6 +545,7 @@ class InvoicePage extends Component {
         this.setState({checkedOpen: this.props.transactionStatus.checkedPrint});
 
         this.getInvoicesFromStatus()
+        this.getInvoicesFromStatus2()
     }
 
     componentWillReceiveProps(nextProps) {
@@ -580,6 +582,35 @@ class InvoicePage extends Component {
         this.setState({temp: all_temp});
         this.setState({data: all_temp});
     };
+
+    getInvoicesFromStatus2 = (rawData = this.props.invoices) => {
+        let temp=[];
+        let all_temp=[];
+        let temp1=[];
+        const statusStrings = ['ebill', 'print'];
+        const keys=['checkdEBill', 'checkedPrint'];
+
+        if(rawData===null) return;
+
+        let temp0 = rawData.Data;
+
+        temp1 = keys.map((key, index)=> {
+
+            if(this.props.transactionStatus[key]){
+
+                temp = temp0.filter(d => {
+                    if(this.props.regionId===0)
+                        return d.EBill === statusStrings[index]
+                    else
+                        return d.EBill === true
+                });
+            }
+            all_temp =_.uniq([...all_temp, ...temp]);
+        });
+        debugger
+        this.setState({eBill: all_temp});
+        this.setState({data: all_temp});
+    }
 
     componentDidMount(){
         window.addEventListener('scroll', this.listenScrollEvent);
@@ -691,7 +722,7 @@ class InvoicePage extends Component {
             getSuggestionValue: this.getSuggestionValue,
             renderSuggestion,
         };
-
+        
         return (
             <React.Fragment>
                 <FusePageCustom

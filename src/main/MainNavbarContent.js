@@ -57,21 +57,21 @@ const API_KEY = 2
 
 // function MainNavbar({classes, navigation, layoutStyle, user})
 class MainNavbar extends Component{
-    state = {
-        sidebarLogo: null,
-        sidebarIcon: null
-    };
+    // state = {
+    //     sidebarLogo: null,
+    //     sidebarIcon: null
+    // };
 
-    componentDidMount() {
-        fetch(`https://apifmsplus_c.jkdev.com/v1/apps/get?appid=${API_KEY}&env=local&device=web`)
-            .then(res => res.json())
-            .then(data => this.setState({
-                ...this.state,
-                sidebarLogo: data.Settings.local.devices[0].assets.sidebarLogo,
-                sidebarIcon: data.Settings.local.devices[0].assets.sidebarIcon
-            })
-        )
-    }
+    // componentDidMount() {
+    //     fetch(`https://apifmsplus_c.jkdev.com/v1/apps/get?appid=${API_KEY}&env=local&device=web`)
+    //         .then(res => res.json())
+    //         .then(data => this.setState({
+    //             ...this.state,
+    //             sidebarLogo: data.Settings.local.devices[0].assets.sidebarLogo,
+    //             sidebarIcon: data.Settings.local.devices[0].assets.sidebarIcon
+    //         })
+    //     )
+    // }
 
     UserHeader()
     {
@@ -108,8 +108,8 @@ class MainNavbar extends Component{
 
         return (
             <div className={classNames(classes.logofull, "flex items-center")}>
-                <img className={classNames(classes.logoIcon, "logo-icon-1 mt-8 showInitial navBarShownClosed")} src={this.state.sidebarIcon} alt="logo"/>
-                <img className={classNames(classes.logoIconText, "logo-icon-large")} src={this.state.sidebarLogo} alt="logo"/>
+                <img className={classNames(classes.logoIcon, "logo-icon-1 mt-8 showInitial navBarShownClosed")} src={this.props.app.navSideBarLeftBg} alt="logo"/>
+                <img className={classNames(classes.logoIconText, "logo-icon-large")} src={this.props.app.navSideBarLogo} alt="logo"/>
                 <Typography className="logo-icon-large">{region_name}</Typography>
             </div>
         )
@@ -151,7 +151,8 @@ function mapStateToProps({fuse, auth})
         navigation : fuse.navigation,
         layoutStyle: fuse.settings.current.layout.style,
         user       : auth.user,
-        login      : auth.login
+        login      : auth.login,
+        app        : auth.app
     }
 }
 

@@ -453,6 +453,7 @@ class Customers extends Component {
 		return str.join(" ");
 	}
 	render() {
+		console.log(this.props)
 		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteCustomersAction } = this.props;
 
 		const { toggleSelection, toggleAll, isSelected, logSelection } = this;

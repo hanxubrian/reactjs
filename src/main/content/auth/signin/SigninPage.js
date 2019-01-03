@@ -11,11 +11,11 @@ import * as NavigationActions from '../../../../store/actions/fuse/navigation.ac
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
 import connect from 'react-redux/es/connect/connect';
-import authService from 'services/auth'
+
 
 const styles = theme => ({
     root: {
-        background: "url('/assets/images/backgrounds/signin-bg.jpg') no-repeat",
+        background: "url('') no-repeat",
         backgroundSize: 'cover'
     },
     card: {
@@ -46,21 +46,17 @@ class SigninPage extends Component {
         email   : '',
         password: '',
         remember: true,
-        alertOpen: false,
-        api: null,
-        background: null
+        alertOpen: false
     };
 
 
+
     componentDidMount() {
-        fetch(`https://apifmsplus_c.jkdev.com/v1/apps/get?appid=2&env=local&device=web`)
-            .then(res => res.json())
-            .then(data => this.setState({
-                ...this.state,
-                api: data.Settings.local.devices[0].assets.loginLogo,
-                background: data.Settings.local.devices[0].assets.hloginBg
-            })
-        )
+       this.handleAppStart();
+    }
+
+    handleAppStart = () => {
+       this.props.loadHomeScreen();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -98,7 +94,7 @@ class SigninPage extends Component {
     {
        const styles = ({
             root: {
-                background: `url(${this.state.background})`,
+                background: `url(${this.props.app.loginBackground})`,
                 backgroundSize: 'cover'
             },
             card: {
@@ -123,7 +119,8 @@ class SigninPage extends Component {
         const { email, password, remember } = this.state;
 
         // console.log(styles.root.background)
-
+        // console.log(this.props.loadHomeScreen);
+        // style={{ background: this.handleAppStart }}
         return (
             <div style={{ background: styles.root.background }} className={classNames(classes.root, "flex flex-col flex-auto flex-no-shrink items-center justify-center p-32")}>
 
@@ -160,7 +157,7 @@ class SigninPage extends Component {
 
                             <CardContent className="flex flex-col items-center justify-center p-16">
 
-                                <img className="w-128 mt-16" style={{ width: '280px' }} src={this.state.api} alt="logo"/>
+                                <img className="w-128 mt-16" style={{ width: '280px' }} src={this.props.app.loginLogo} alt="logo"/>
 
                                 <Typography variant="h6" className="mt-16 mb-32">Sign in to your account</Typography>
 
@@ -241,17 +238,17 @@ function mapDispatchToProps(dispatch)
         signinUser: Actions.submitSignIn,
         closeAlertDialog: Actions.closeDialog,
         // initializeFromLocalStorage: Actions.initializeFromLocalStorage,
-        loadAccountMenu: NavigationActions.add_auth_navigation
+        loadAccountMenu: NavigationActions.add_auth_navigation,
+        loadHomeScreen: Actions.initialStart
     }, dispatch);
 }
 
 function mapStateToProps({auth,fuse})
 {
-    console.log('navigation=', fuse.navigation);
-    console.log('auth=', auth);
     return {
         login       :      auth.login,
-        accountmenu :      fuse.navigation
+        accountmenu :      fuse.navigation,
+        app         :      auth.app
         }
 }
 

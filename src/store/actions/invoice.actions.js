@@ -47,7 +47,6 @@ export function toggleStatus(key, status){
     }
 }
 
-
 export function deleteInvoices(keys, invoices) {
     return dispatch => {
         const request = axios.post("/api/invoices/delete", { ids: keys, invoices: invoices });
