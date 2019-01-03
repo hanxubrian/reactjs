@@ -496,13 +496,13 @@ class CustomerListContent extends Component {
 									Header: "No",
 									accessor: "CustomerNo",
 									filterAll: true,
-									width: 100,
+									width: 60,
 									className: classNames("flex items-center  justify-center") //classes.tableTdEven
 								},
 								{
 									Header: "Name",
 									accessor: "CustomerName",
-									width: 270,
+									width: 200,
 									className: classNames("flex items-center  justify-start p-12-impor")
 								},
 								{
@@ -510,16 +510,16 @@ class CustomerListContent extends Component {
 									// accessor: "Address",
 									id: "Address",
 									accessor: d => (this.capital_letter(d.Address)),
-									className: classNames("flex items-center  justify-center"),
-									width: 270
+									className: classNames("flex items-center  justify-start"),
+									width: 160
 								},
 								{
 									Header: "City",
 									// accessor: "City",
 									id: "City",
 									accessor: d => (this.capital_letter(d.City)),
-									className: classNames("flex items-center  justify-center"),
-									width: 140
+									className: classNames("flex items-center  justify-start"),
+									width: 90
 								},
 								{
 									Header: "State",
@@ -528,9 +528,16 @@ class CustomerListContent extends Component {
 									width: 50
 								},
 								{
+									Header: "Zip Code",
+									accessor: "PostalCode",
+									className: classNames("flex items-center  justify-center"),
+									headerClassName: "wordwrap",
+									width: 50
+								},
+								{
 									Header: "Phone",
 									accessor: "Phone",
-									width: 120,
+									width: 80,
 									className: classNames("flex items-center  justify-center p-12-impor")
 								},
 								{
@@ -549,7 +556,7 @@ class CustomerListContent extends Component {
 									// },
 									accessor: "StatusName",
 									className: classNames("flex items-center  justify-center p-12-impor"),
-									width: 120
+									width: 60
 								},
 								{
 									Header: "Contract Amount",
@@ -559,7 +566,7 @@ class CustomerListContent extends Component {
 									// accessor: "Amount",
 									className: classNames("flex items-center  justify-end p-12-impor"),
 									headerClassName: "wordwrap",
-									width: 120
+									width: 80
 								},
 								// {
 								// 	Header: "Due Date",
@@ -576,7 +583,7 @@ class CustomerListContent extends Component {
 								// },
 								{
 									Header: "Actions",
-									width: 128,
+									// width: 128,
 									Cell: row => (
 										<div className="flex items-center actions">
 											<IconButton
