@@ -167,24 +167,6 @@ class TransactionsLists extends Component {
         this.setState({ selection });
     };
 
-    toggleAll = (instance) => {
-        const selectAll = this.state.selectAll ? false : true;
-        const selection = [];
-        if (selectAll) {
-            let currentRecords = instance.data;
-            // we just push all the IDs onto the selection array
-            let page = this.state.page;
-            let pageSize = this.state.pageSize;
-            let start_index = page * pageSize;
-            let end_index = start_index+pageSize;
-            currentRecords.forEach(item => {
-                if(item._index>=start_index && item._index<end_index)
-                    selection.push(item._original.InvoiceId);
-            });
-        }
-        this.setState({ selectAll, selection });
-    };
-
     isSelected = key => {
         /*
           Instead of passing our external selection state we provide an 'isSelected'
@@ -193,11 +175,6 @@ class TransactionsLists extends Component {
         */
         return this.state.selection.includes(key);
     };
-
-    logSelection = () => {
-        console.log("selection:", this.state.selection);
-    };
-
 
     constructor(props){
         super(props);
@@ -262,7 +239,7 @@ class TransactionsLists extends Component {
     render()
     {
         const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState} = this.props;
-        const { toggleSelection, toggleAll, isSelected} = this;
+        const { toggleSelection, isSelected} = this;
 
         return (
             <div className={classNames(classes.layoutTable, "h-full")}>
@@ -372,8 +349,8 @@ class TransactionsLists extends Component {
                                                 onClick={(event) => {
                                                     event.stopPropagation();
                                                 }}
-                                                checked={isSelected(row.value.FranchiseeNo)}
-                                                onChange={() => toggleSelection(row.value.FranchiseeNo)}
+                                                checked={isSelected(row.value.key)}
+                                                onChange={() => toggleSelection(row.value.key)}
                                             />
                                         )
                                     },
@@ -429,7 +406,7 @@ class TransactionsLists extends Component {
                                     Header: "Name",
                                     accessor: "Name",
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-                                    width: 120
+                                    width: 160
                                 },
                                 {
                                     Header: "Extended Price",
@@ -520,10 +497,10 @@ class TransactionsLists extends Component {
                         },
                         {
                             Header: (instance)=>(
-                                <div className="flex items-center justify-end pr-12">
+                                <div className="flex flex-1 items-center justify-end pr-12" style={{display: 'none'}}>
                                     <Hidden smDown>
                                         <Button
-                                            onClick={(ev) => toggleSummaryPanel()}
+                                            // onClick={(ev) => toggleSummaryPanel()}
                                             aria-label="toggle summary panel"
                                             disabled={summaryState ? true : false}
                                             className={classNames(classes.summaryPanelButton)}
@@ -533,7 +510,7 @@ class TransactionsLists extends Component {
                                     </Hidden>
                                     <Hidden smUp>
                                         <Button
-                                            onClick={(ev) => this.pageLayout.toggleRightSidebar()}
+                                            // onClick={(ev) => this.pageLayout.toggleRightSidebar()}
                                             aria-label="toggle summary panel"
                                             className={classNames(classes.summaryPanelButton)}
                                         >

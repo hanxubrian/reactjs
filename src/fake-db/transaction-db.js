@@ -1,5 +1,8 @@
 import mock from "./mock";
 import _ from "lodash";
+import Chance from "chance";
+
+const chance = new Chance();
 
 let transactionDB = {
     "IsSuccess": true,
@@ -2025,7 +2028,15 @@ let transactionDB = {
             }
         ]
     }
-}
+};
+
+const FranchiseeTransactions = transactionDB.Data.FranchiseeTransactions;
+let newFranchiseeTransactions = FranchiseeTransactions.map(f=>{
+    let key = chance.guid();
+    return {key: key, ...f}
+});
+transactionDB.Data.FranchiseeTransactions = newFranchiseeTransactions;
+
 
 /**
  * Read Tranaction DB
