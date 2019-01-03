@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 // core components
-import {Icon, IconButton, Fab, Input, Paper, Typography} from '@material-ui/core';
+import {Icon, Fab, Typography} from '@material-ui/core';
 import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
@@ -13,14 +13,7 @@ import connect from "react-redux/es/connect/connect";
 import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
 
-//Janiking
-import JanikingPagination from 'Commons/JanikingPagination';
-
 // third party
-import moment from 'moment'
-import ReactTable from "react-table";
-import "react-table/react-table.css";
-import _ from 'lodash';
 import classNames from 'classnames';
 
 

@@ -18,7 +18,7 @@ export function getTransactions() {
 
 export function removeTransaction(key, transactions) {
     return dispatch => {
-        const request = axios.post("/api/transactions/remove", { id: key, invoices: transactions });
+        const request = axios.post("/api/transactions/remove", { id: key, transactions: transactions });
 
         return request.then(response => {
             return dispatch({
