@@ -365,7 +365,8 @@ const styles = theme => ({
         fontSize: '1.3rem'
     },
     description:{
-        width: '520px!important'
+        width: '520px!important',
+        flexGrow: 1.0,
     },
     markup:{
         width: '150px!important'

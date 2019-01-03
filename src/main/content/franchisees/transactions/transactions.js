@@ -12,11 +12,10 @@ const styles = theme => ({
 class Transactions extends Component {
     render()
     {
-        const {classes, iframeURL} = this.props;
+        const {classes} = this.props;
 
-        console.log('props=', this.props);
         return (
-           <iframe title="iframe-transactions" src={iframeURL} className={classes.iframe}></iframe>
+           <div>This is transaction page</div>
         );
     }
 }
