@@ -49,5 +49,7 @@ export const pagesConfigs = [
     InvoiceConfig,
     BillRunConfig,
     AccountsReceivableConfig,
-    ReportsConfig
+    ReportsConfig,
+    AccountsReceivableConfig
+
 ];
