@@ -960,7 +960,7 @@ class Franchisees extends Component {
                 leftSidebarHeader={
                     <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", {'filteropen': filterStateFranchisees})}>
                         {createFranchisees.props.open ? (
-                            <h4 className={classes.elementCenter}>Customers Information</h4>
+                            <h4 className={classes.elementCenter}>Company Information</h4>
                         ) : (
                             <h4 className={classes.elementCenter}>Filter Panel</h4>
                         )}

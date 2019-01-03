@@ -64,7 +64,8 @@ class FilterPanel extends Component {
         checkedInactive: true,
         checkedPendingTransfer: true,
         checkedSelectAll: true,
-        State: ''
+        State: '',
+        contactState: ''
     };
 
     componentDidMount()
@@ -131,10 +132,10 @@ class FilterPanel extends Component {
         }
     };
     handleStateChange = name => event => {
-        this.setState({ [name]: event.target.checked });
-        this.props.toggleStatus(name, event.target.checked)
+        this.setState({
+            [name]: event.target.value,
+        });
     };
-
 
     render()
     {
@@ -233,130 +234,246 @@ class FilterPanel extends Component {
                         {franchiseesForm && franchiseesForm.props.open
                         ?(
                            <div>
-                                    {/* <h3 className="mb-20">Customer Information</h3> */}
-                                    <GridContainer style={{ alignItems: 'center', width: 300 }} className={classNames(classes.formControl)}>
+                               <h2>Business info</h2>
+                               <GridContainer style={{ alignItems: 'center', width: 300 }} className={classNames(classes.formControl)}>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
                                                 id="Name"
-                                                label="Name *"
+                                                label="Name"
                                                 className={classes.textField}
-                                                // value={customerForm.state.name}
                                                 onChange={this.handleChange('Name')}
                                                 margin="normal"
                                                 variant="outlined"
-                                                fullWidth />
+                                                required
+                                                fullWidth
+                                            />
 
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
                                                 id="outlined-name"
-                                                label="Address *"
+                                                label="Address"
                                                 className={classes.textField}
-                                                // value={customerForm.state.name}
                                                 onChange={this.handleChange('Address')}
                                                 margin="normal"
                                                 variant="outlined"
-                                                fullWidth />
+                                                fullWidth
+                                                required
+                                            />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
                                                 id="outlined-name"
                                                 label="Address2"
                                                 className={classes.textField}
-                                                // value={customerForm.state.name}
                                                 onChange={this.handleChange('Address2')}
                                                 margin="normal"
                                                 variant="outlined"
-                                                fullWidth />
+                                                fullWidth
+                                            />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
                                                 id="outlined-name"
-                                                label="City *"
+                                                label="City"
                                                 className={classes.textField}
-                                                // value={customerForm.state.name}
-                                                onChange={this.handleChange('City')}
                                                 margin="normal"
                                                 variant="outlined"
-                                                fullWidth />
+                                                fullWidth
+                                                required
+                                            />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
                                                 id="outlined-name"
-                                                label="State *"
+                                                label="State"
                                                 select
                                                 className={classes.textField}
                                                 value={this.state.State}
-                                                onChange={this.handleChange('State')}
+                                                onChange={this.handleStateChange('State')}
                                                 margin="normal"
                                                 variant="outlined"
-                                                style={{ width: '40%', marginRight: '2px' }}>
+                                                required
+                                                fullWidth
+                                            >
                                                 {stateNames.map(option => (
                                                     <MenuItem key={option.value} value={option.value}>
                                                         {option.label}
                                                     </MenuItem>
                                                 ))}
                                             </TextField>
-
+                                        </GridItem>
+                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
                                                 id="outlined-name"
-                                                label="Zip *"
+                                                label="Zip"
                                                 className={classes.textField}
-                                                // value={customerForm.state.name}
                                                 onChange={this.handleChange('Zip')}
                                                 margin="normal"
                                                 variant="outlined"
-                                                style={{ width: '60%', marginLeft: '2px' }} />
+                                                fullWidth
+                                                required
+                                            />
                                         </GridItem>
 
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
                                                 id="outlined-name"
-                                                label="Phone *"
+                                                label="Phone"
                                                 className={classes.textField}
-                                                // value={customerForm.state.name}
                                                 onChange={this.handleChange('Phone')}
                                                 margin="normal"
                                                 variant="outlined"
-                                                style={{ marginRight: '2px' }} />
-
-                                            <TextField
-                                                id="outlined-name"
-                                                label="Fax"
-                                                className={classes.textField}
-                                                // value={customerForm.state.name}
-                                                onChange={this.handleChange('Fax')}
-                                                margin="normal"
-                                                variant="outlined"
-                                                style={{ marginLeft: '2px' }} />
+                                                fullWidth
+                                                required
+                                            />
                                         </GridItem>
-
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
                                                 id="outlined-name"
-                                                label="Email"
-                                                type="email"
+                                                label="E-mail"
                                                 className={classes.textField}
-                                                // value={customerForm.state.name}
                                                 onChange={this.handleChange('Email')}
                                                 margin="normal"
                                                 variant="outlined"
-                                                style={{ marginRight: '2px' }} />
-
+                                                fullWidth
+                                                required
+                                            />
+                                        </GridItem>
+                               </GridContainer>
+                               <br/>
+                               <h2>Contact</h2>
+                               <GridContainer style={{ alignItems: 'center', width: 300 }} className={classNames(classes.formControl)}>
+                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
-                                                id="outlined-name"
-                                                label="Website"
+                                                id="Name"
+                                                label="Name"
                                                 className={classes.textField}
-                                                // value={customerForm.state.name}
-                                                onChange={this.handleChange('Website')}
+                                                onChange={this.handleChange('Name')}
                                                 margin="normal"
                                                 variant="outlined"
-                                                style={{ marginLeft: '2px' }} />
+                                                required
+                                                fullWidth
+                                            />
+
                                         </GridItem>
+                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                            <TextField
+                                                id="outlined-name"
+                                                label="Address"
+                                                className={classes.textField}
+                                                onChange={this.handleChange('Address')}
+                                                margin="normal"
+                                                variant="outlined"
+                                                fullWidth
+                                                required
+                                            />
+                                        </GridItem>
+                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                            <TextField
+                                                id="outlined-name"
+                                                label="Address2"
+                                                className={classes.textField}
+                                                onChange={this.handleChange('Address2')}
+                                                margin="normal"
+                                                variant="outlined"
+                                                fullWidth
+                                            />
+                                        </GridItem>
+                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                            <TextField
+                                                id="outlined-name"
+                                                label="City"
+                                                className={classes.textField}
+                                                margin="normal"
+                                                variant="outlined"
+                                                fullWidth
+                                                required
+                                            />
+                                        </GridItem>
+                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                            <TextField
+                                                id="outlined-name"
+                                                label="State"
+                                                select
+                                                className={classes.textField}
+                                                value={this.state.contactState}
+                                                onChange={this.handleStateChange('contactState')}
+                                                margin="normal"
+                                                variant="outlined"
+                                                required
+                                                fullWidth
+                                            >
+                                                {stateNames.map(option => (
+                                                    <MenuItem key={option.value} value={option.value}>
+                                                        {option.label}
+                                                    </MenuItem>
+                                                ))}
+                                            </TextField>
+                                        </GridItem>
+                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                            <TextField
+                                                id="outlined-name"
+                                                label="Zip"
+                                                className={classes.textField}
+                                                onChange={this.handleChange('Zip')}
+                                                margin="normal"
+                                                variant="outlined"
+                                                fullWidth
+                                                required
+                                            />
+                                        </GridItem>
+                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                            <TextField
+                                                id="outlined-name"
+                                                label="Phone"
+                                                className={classes.textField}
+                                                onChange={this.handleChange('Phone')}
+                                                margin="normal"
+                                                variant="outlined"
+                                                fullWidth
+                                                required
+                                            />
+                                        </GridItem>
+                                       <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                           <TextField
+                                               id="contactExt"
+                                               label="Ext"
+                                               className={classes.textField}
+                                               onChange={this.handleChange('Ext')}
+                                               margin="normal"
+                                               variant="outlined"
+                                               fullWidth
+                                               required
+                                           />
+                                       </GridItem>
+                                       <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                           <TextField
+                                               id="contactCell"
+                                               label="Cell"
+                                               className={classes.textField}
+                                               onChange={this.handleChange('Cell')}
+                                               margin="normal"
+                                               variant="outlined"
+                                               fullWidth
+                                               required
+                                           />
+                                       </GridItem>
+                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                            <TextField
+                                                id="outlined-name"
+                                                label="E-mail"
+                                                className={classes.textField}
+                                                onChange={this.handleChange('Email')}
+                                                margin="normal"
+                                                variant="outlined"
+                                                fullWidth
+                                                required
+                                            />
+                                        </GridItem>
+                               </GridContainer>
 
-
-                                    </GridContainer>
-                                </div>
+                           </div>
                         ):(
                            <div style={{marginTop: 50, display: 'flex', flexDirection: 'column'}}>
                                 <h3>Franchisees Statuses</h3>
