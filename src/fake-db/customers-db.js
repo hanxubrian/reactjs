@@ -33945,10 +33945,10 @@ mock.onPost("/api/customers/delete").reply(req => {
     let data = JSON.parse(req.data);
     let customers = data.customers;
     _.forEach(data.ids, function(id){
-        let deleted = _.remove(customers.Data, function(_customer) {
-            // console.log('customer', _customer);
-            return _customer.CustomerId===id
-        });
+        // let deleted = _.remove(customers.Data, function(_customer) {
+        //     // console.log('customer', _customer);
+        //     return _customer.CustomerId===id
+        // });
     });
 
     return [200, customers];
@@ -33959,9 +33959,9 @@ mock.onPost('/api/customers/remove').reply((req) => {
     let data = JSON.parse(req.data);
     console.log('id=', data.customers);
     let customers = data.customers;
-    let deleted = _.remove(customers.Data, function(_customer) {
-        return _customer.CustomerId === data.id;
-    });
+    // let deleted = _.remove(customers.Data, function(_customer) {
+    //     return _customer.CustomerId === data.id;
+    // });
 
     return [200, customers];
 });

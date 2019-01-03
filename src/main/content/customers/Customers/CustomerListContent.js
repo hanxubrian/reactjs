@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 // import ReactDOM from 'react-dom';
 
 // core components
-import {
-	Hidden, Icon, IconButton, Fab, Input, Paper, Button
-} from '@material-ui/core';
+import { Icon, IconButton, Input, Paper, Button } from '@material-ui/core';
 
 //Janiking
 import JanikingPagination from 'Commons/JanikingPagination';
@@ -217,11 +215,11 @@ class CustomerListContent extends Component {
 		}
 	}
 	getCustomersFromStatus = (rawData = this.props.customers) => {
-		let temp = [];
+		// let temp = [];
 		let all_temp = [];
-		let temp1 = [];
-		const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
-		const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
+		// let temp1 = [];
+		// const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
+		// const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
 
 		if (rawData === null) return;
 
@@ -229,9 +227,13 @@ class CustomerListContent extends Component {
 			return this.props.regionId === 0 || x.Id === this.props.regionId;
 		});
 
-		regions.map(x => {
+		regions.forEach(x => {
 			all_temp = [...all_temp, ...x.Customers];
 		});
+
+		// regions.map(x => {
+		// 	all_temp = [...all_temp, ...x.Customers];
+		// });
 
 		this.setState({ temp: all_temp });
 		this.setState({ data: all_temp });
@@ -295,7 +297,7 @@ class CustomerListContent extends Component {
 	};
 
 	removeCustomers = () => {
-		if (this.state.selection.length == 0) {
+		if (this.state.selection.length === 0) {
 			alert("Please choose customer(s) to delete");
 			return;
 		}
@@ -319,7 +321,7 @@ class CustomerListContent extends Component {
 			} else if (x.length > 0) {
 				return x[0].toUpperCase();
 			} else {
-
+				return "";
 			}
 		});
 
@@ -327,8 +329,19 @@ class CustomerListContent extends Component {
 	}
 
 	render() {
-		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteCustomersAction, data,
-			openNewCustomerForm, closeNewCustomerForm, CustomerForm, toggleMapView } = this.props;
+		const {
+			classes,
+			toggleFilterPanel,
+			toggleSummaryPanel,
+			// filterState,
+			// summaryState,
+			// deleteCustomersAction,
+			// data,
+			// openNewCustomerForm,
+			// closeNewCustomerForm,
+			// CustomerForm,
+			// toggleMapView
+		} = this.props;
 		const { toggleSelection, toggleAll, isSelected } = this;
 
 		return (
@@ -381,9 +394,9 @@ class CustomerListContent extends Component {
 						}
 					}}
 					getTdProps={(state, rowInfo, column, instance) => {
-						let tdClass = 'flex items-center justify-center';
-						if (column.id === 'CustomerNo' || column.id === 'CustomerNo' || column.id === 'CustomerBalanceAmount' ||
-							column.id === 'CustomerDate' || column.id === 'TransactionStatus') tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
+						// let tdClass = 'flex items-center justify-center';
+						// if (column.id === 'CustomerNo' || column.id === 'CustomerNo' || column.id === 'CustomerBalanceAmount' ||
+						// 	column.id === 'CustomerDate' || column.id === 'TransactionStatus') tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
 
 						return {
 							style: {
@@ -416,7 +429,7 @@ class CustomerListContent extends Component {
 										// disabled={filterState ? true : false}
 										className={classNames(classes.filterPanelButton)}
 									>
-										<img className={classes.imageIcon} src="assets/images/invoices/filter.png" />
+										<img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" />
 									</Button>
 
 									{/* <Hidden smDown>

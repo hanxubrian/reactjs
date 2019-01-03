@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 // core components
-import { Hidden, Icon, IconButton, Fab, Button, Typography, Toolbar } from '@material-ui/core';
+import { Icon, IconButton, Fab, Typography, Toolbar } from '@material-ui/core';
 
 // theme components
 import { FusePageCustomSidebarScroll, FuseAnimate } from '@fuse';
@@ -23,7 +23,7 @@ import FilterPanel from './filterPanel';
 // import Chance from "chance";
 // import ReactTable from "react-table";
 import "react-table/react-table.css";
-import _ from 'lodash';
+// import _ from 'lodash';
 
 
 import classNames from 'classnames';
@@ -222,9 +222,9 @@ const styles = theme => ({
 		}
 	}
 });
-const defaultProps = {
-	trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
-};
+// const defaultProps = {
+// 	trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
+// };
 
 
 class Customers extends Component {
@@ -386,11 +386,11 @@ class Customers extends Component {
 
 
 	getCustomersFromStatus = (rawData = this.props.customers) => {
-		let temp = [];
+		// let temp = [];
 		let all_temp = [];
-		let temp1 = [];
-		const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
-		const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
+		// let temp1 = [];
+		// const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
+		// const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
 
 		if (rawData === null) return;
 
@@ -398,9 +398,14 @@ class Customers extends Component {
 			return this.props.regionId === 0 || x.Id === this.props.regionId;
 		});
 
-		regions.map(x => {
+		regions.forEach(x => {
 			all_temp = [...all_temp, ...x.Customers];
 		});
+
+		// regions.map(x => {
+		// 	all_temp = [...all_temp, ...x.Customers];
+		// 	return;
+		// });
 
 		this.setState({ temp: all_temp });
 		this.setState({ data: all_temp });
@@ -449,10 +454,10 @@ class Customers extends Component {
 
 	canBeSubmitted() {
 		return true;
-		const { name } = this.state;
-		return (
-			name.length > 0
-		);
+		// const { name } = this.state;
+		// return (
+		// 	name.length > 0
+		// );
 	}
 
 	removeCustomers = () => {
@@ -570,7 +575,7 @@ class Customers extends Component {
 											<div className="flex items-center">
 												<FuseAnimate animation="transition.expandIn" delay={300}>
 													<Toolbar className="pl-12 pr-0">
-														<img className="mr-12" src="assets/images/invoices/invoice-icon-white.png" style={{ width: 32, height: 32 }} />
+														<img className="mr-12" alt="" src="assets/images/invoices/invoice-icon-white.png" style={{ width: 32, height: 32 }} />
 													</Toolbar>
 												</FuseAnimate>
 												<FuseAnimate animation="transition.slideLeftIn" delay={300}>

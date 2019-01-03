@@ -6,7 +6,8 @@ import { withStyles } from '@material-ui/core/styles';
 //Material UI core and icons
 import {
 	Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
-	Toolbar, Typography, Paper, Checkbox, Icon, IconButton, Tooltip, Select, OutlinedInput, MenuItem, FormControl, Fab
+	Toolbar, Typography, Paper,
+	Icon, IconButton, Tooltip, Fab
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -55,50 +56,50 @@ function getSorting(order, orderBy) {
 	return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
 
-const rows = [
-	{
-		id: 'billing',
-		numeric: false,
-		disablePadding: false,
-		label: 'Type'
-	},
-	{
-		id: 'service',
-		numeric: false,
-		disablePadding: false,
-		label: 'Address'
-	},
-	{
-		id: 'description',
-		numeric: false,
-		disablePadding: false,
-		label: 'City'
-	},
-	{
-		id: 'quantity',
-		numeric: true,
-		disablePadding: false,
-		label: 'State'
-	},
-	{
-		id: 'amount',
-		numeric: true,
-		disablePadding: false,
-		label: 'Zip / Postal'
-	},
-	// {
-	//     id            : 'markup',
-	//     numeric       : true,
-	//     disablePadding: false,
-	//     label         : 'Markup (%)'
-	// },
-	// {
-	//     id            : 'extend_amount',
-	//     numeric       : true,
-	//     disablePadding: false,
-	//     label         : 'Extended Amount'
-	// }
-];
+// const rows = [
+// 	{
+// 		id: 'billing',
+// 		numeric: false,
+// 		disablePadding: false,
+// 		label: 'Type'
+// 	},
+// 	{
+// 		id: 'service',
+// 		numeric: false,
+// 		disablePadding: false,
+// 		label: 'Address'
+// 	},
+// 	{
+// 		id: 'description',
+// 		numeric: false,
+// 		disablePadding: false,
+// 		label: 'City'
+// 	},
+// 	{
+// 		id: 'quantity',
+// 		numeric: true,
+// 		disablePadding: false,
+// 		label: 'State'
+// 	},
+// 	{
+// 		id: 'amount',
+// 		numeric: true,
+// 		disablePadding: false,
+// 		label: 'Zip / Postal'
+// 	},
+// 	// {
+// 	//     id            : 'markup',
+// 	//     numeric       : true,
+// 	//     disablePadding: false,
+// 	//     label         : 'Markup (%)'
+// 	// },
+// 	// {
+// 	//     id            : 'extend_amount',
+// 	//     numeric       : true,
+// 	//     disablePadding: false,
+// 	//     label         : 'Extended Amount'
+// 	// }
+// ];
 
 class CustomerLineTableHead extends React.Component {
 	createSortHandler = property => event => {
@@ -106,7 +107,15 @@ class CustomerLineTableHead extends React.Component {
 	};
 
 	render() {
-		const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, headers } = this.props;
+		const {
+			// classes,
+			// onSelectAllClick,
+			order,
+			orderBy,
+			// numSelected,
+			// rowCount,
+			headers
+		} = this.props;
 		let rows = headers;
 
 		return (
@@ -503,7 +512,7 @@ class CustomerLineTable extends React.Component {
 											<TableCell numeric>{this.renderEditable(n, 'amount')}</TableCell>
 											{/* <TableCell numeric>{this.renderEditableMarkup(n, 'markup')}</TableCell>
 											<TableCell numeric>{this.renderEditable(n, 'extended')}</TableCell> */}
-											{this.props.headers.length == 6 &&
+											{this.props.headers.length === 6 &&
 												(
 													<TableCell numeric>{this.renderEditable(n, 'extended')}</TableCell>
 												)
@@ -527,7 +536,7 @@ class CustomerLineTable extends React.Component {
 									);
 								})}
 							{emptyRows > 0 && (
-								<TableRow style={{ height: 49 * emptyRows }} style={{ display: 'none' }}>
+								<TableRow style={{ height: 49 * emptyRows, display: 'none' }}>
 									<TableCell colSpan={8} />
 								</TableRow>
 							)}

@@ -3,14 +3,32 @@ import ReactDOM from 'react-dom';
 
 // core components
 import {
-	Paper, TextField, Button, Typography,
-	MenuItem, FormControl, InputLabel, Select, OutlinedInput,
-	Card, CardHeader, CardContent, Divider, Radio, RadioGroup, FormControlLabel, GridList
+	// Paper,
+	TextField,
+	Button,
+	Typography,
+	MenuItem,
+	// FormControl,
+	// InputLabel,
+	// Select,
+	// OutlinedInput,
+	// Card,
+	// CardHeader,
+	// CardContent,
+	Divider,
+	// Radio,
+	// RadioGroup,
+	FormControlLabel,
+	// GridList
 } from '@material-ui/core';
 
 
 // theme components
-import { FusePageCustom, FuseAnimate, FuseSearch } from '@fuse';
+import {
+	// FusePageCustom,
+	FuseAnimate,
+	// FuseSearch
+} from '@fuse';
 
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
@@ -28,18 +46,18 @@ import * as Actions from 'store/actions';
 // third party
 import "react-table/react-table.css";
 import _ from 'lodash';
-import Autosuggest from 'react-autosuggest';
+// import Autosuggest from 'react-autosuggest';
 import classNames from 'classnames';
-import match from "autosuggest-highlight/match";
-import parse from "autosuggest-highlight/parse";
+// import match from "autosuggest-highlight/match";
+// import parse from "autosuggest-highlight/parse";
 
 
 
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 // import { withStyles } from '@material-ui/core/styles';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepButton from '@material-ui/core/StepButton';
+// import Stepper from '@material-ui/core/Stepper';
+// import Step from '@material-ui/core/Step';
+// import StepButton from '@material-ui/core/StepButton';
 // import Button from '@material-ui/core/Button';
 // import Typography from '@material-ui/core/Typography';
 
@@ -49,7 +67,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 // import FormControlLabel from '@material-ui/core/FormControlLabel';
 // import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
-import Input from '@material-ui/core/Input';
+// import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
 
@@ -64,9 +82,6 @@ const styles = theme => ({
 
 	root: {
 		width: '90%'
-	},
-	button: {
-		marginRight: theme.spacing.unit
 	},
 	backButton: {
 		marginRight: theme.spacing.unit
@@ -83,6 +98,7 @@ const styles = theme => ({
 		flexDirection: 'row',
 	},
 	button: {
+		marginRight: theme.spacing.unit,
 		'& span': {
 			textTransform: 'none'
 		},
@@ -136,8 +152,8 @@ const newCustomerState = {
 	"CustomerNo": "",
 	"CustomerDate": "",
 	"DueDate": "",
-	"CustomerId": "",
-	"CustomerNo": "",
+	// "CustomerId": "",
+	// "CustomerNo": "",
 	"CustomerName": "",
 	"EBill": "",
 	"PrintCustomer": "",
@@ -161,50 +177,50 @@ const newCustomerState = {
 	"Service": ""
 };
 
-function renderInputComponent(inputProps) {
-	const { classes, inputRef = () => { }, ref, ...other } = inputProps;
+// function renderInputComponent(inputProps) {
+// 	const { classes, inputRef = () => { }, ref, ...other } = inputProps;
 
-	return (
-		<TextField
-			fullWidth
-			variant="outlined"
-			label="Customer For:"
-			InputProps={{
-				inputRef: node => {
-					ref(node);
-					inputRef(node);
-				},
-				classes: {
-					input: classes.input,
-				},
-			}}
-			{...other}
-		/>
-	);
-}
+// 	return (
+// 		<TextField
+// 			fullWidth
+// 			variant="outlined"
+// 			label="Customer For:"
+// 			InputProps={{
+// 				inputRef: node => {
+// 					ref(node);
+// 					inputRef(node);
+// 				},
+// 				classes: {
+// 					input: classes.input,
+// 				},
+// 			}}
+// 			{...other}
+// 		/>
+// 	);
+// }
 
-function renderSuggestion(suggestion, { query, isHighlighted }) {
-	const matches = match(suggestion.CustomerName, query);
-	const parts = parse(suggestion.CustomerName, matches);
+// function renderSuggestion(suggestion, { query, isHighlighted }) {
+// 	const matches = match(suggestion.CustomerName, query);
+// 	const parts = parse(suggestion.CustomerName, matches);
 
-	return (
-		<MenuItem selected={isHighlighted} component="div">
-			<div>
-				{parts.map((part, index) => {
-					return part.highlight ? (
-						<span key={String(index)} style={{ fontWeight: 700 }}>
-							{part.text}
-						</span>
-					) : (
-							<strong key={String(index)} style={{ fontWeight: 300 }}>
-								{part.text}
-							</strong>
-						);
-				})}
-			</div>
-		</MenuItem>
-	);
-}
+// 	return (
+// 		<MenuItem selected={isHighlighted} component="div">
+// 			<div>
+// 				{parts.map((part, index) => {
+// 					return part.highlight ? (
+// 						<span key={String(index)} style={{ fontWeight: 700 }}>
+// 							{part.text}
+// 						</span>
+// 					) : (
+// 							<strong key={String(index)} style={{ fontWeight: 300 }}>
+// 								{part.text}
+// 							</strong>
+// 						);
+// 				})}
+// 			</div>
+// 		</MenuItem>
+// 	);
+// }
 
 function escapeRegexCharacters(str) {
 	return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -304,17 +320,25 @@ const stateNames = [
 ];
 
 function getStepContent(customerForm, step) {
-	const { classes, CustomerForm, addCustomer, updateCustomer, removeCustomer } = customerForm.props;
-	const { value, suggestions } = customerForm.state;
+	const { classes,
+		// CustomerForm,
+		// addCustomer,
+		// updateCustomer,
+		// removeCustomer
+	} = customerForm.props;
+	// const {
+	// 	value,
+	// 	suggestions
+	// } = customerForm.state;
 
-	const autosuggestProps = {
-		renderInputComponent,
-		suggestions: suggestions,
-		onSuggestionsFetchRequested: customerForm.onSuggestionsFetchRequested,
-		onSuggestionsClearRequested: customerForm.onSuggestionsClearRequested,
-		getSuggestionValue: customerForm.getSuggestionValue,
-		renderSuggestion,
-	};
+	// const autosuggestProps = {
+	// 	renderInputComponent,
+	// 	suggestions: suggestions,
+	// 	onSuggestionsFetchRequested: customerForm.onSuggestionsFetchRequested,
+	// 	onSuggestionsClearRequested: customerForm.onSuggestionsClearRequested,
+	// 	getSuggestionValue: customerForm.getSuggestionValue,
+	// 	renderSuggestion,
+	// };
 
 	const address_headers = [
 		{
@@ -1286,7 +1310,7 @@ function getStepContent(customerForm, step) {
 								}
 								label="Mon"
 								style={{ marginRight: "30px" }}
-								
+
 							/>
 							<FormControlLabel
 								control={
@@ -1294,7 +1318,7 @@ function getStepContent(customerForm, step) {
 								}
 								label="Tue"
 								style={{ marginRight: "30px" }}
-								
+
 							/>
 							<FormControlLabel
 								control={
@@ -1302,7 +1326,7 @@ function getStepContent(customerForm, step) {
 								}
 								label="Wed"
 								style={{ marginRight: "30px" }}
-								
+
 							/>
 							<FormControlLabel
 								control={
@@ -1310,7 +1334,7 @@ function getStepContent(customerForm, step) {
 								}
 								label="Thu"
 								style={{ marginRight: "30px" }}
-								
+
 							/>
 							<FormControlLabel
 								control={
@@ -1318,7 +1342,7 @@ function getStepContent(customerForm, step) {
 								}
 								label="Fri"
 								style={{ marginRight: "30px" }}
-								
+
 							/>
 							<FormControlLabel
 								control={
@@ -1326,14 +1350,14 @@ function getStepContent(customerForm, step) {
 								}
 								label="Sat"
 								style={{ marginRight: "30px" }}
-								
+
 							/>
 							<FormControlLabel
 								control={
 									<Checkbox onChange={customerForm.handleChange('weekdays')} />
 								}
 								label="Sun"
-								
+
 							/>
 						</GridItem>
 
@@ -1344,7 +1368,7 @@ function getStepContent(customerForm, step) {
 								}
 								label="CPI Increase"
 								style={{ marginRight: "30px" }}
-								
+
 							/>
 							<FormControlLabel
 								control={
@@ -1352,7 +1376,7 @@ function getStepContent(customerForm, step) {
 								}
 								label="Separate Invoice"
 								style={{ marginRight: "30px" }}
-								
+
 							/>
 						</GridItem>
 
@@ -1431,7 +1455,7 @@ function getStepContent(customerForm, step) {
 						</GridItem>
 
 						<GridItem>
-							<img className="mr-12" src="assets/images/customers/walk-through.jpg" style={{ width: '100%', height: 'auto' }} />
+							<img className="mr-12" alt="" src="assets/images/customers/walk-through.jpg" style={{ width: '100%', height: 'auto' }} />
 						</GridItem>
 
 					</GridContainer>
@@ -1496,9 +1520,9 @@ class CustomerForm extends Component {
 		this.type === 'create' ? this.props.closeEditCustomerForm() : this.props.closeNewCustomerForm();
 	};
 
-	constructor(props) {
-		super(props);
-	}
+	// constructor(props) {
+	// 	super(props);
+	// }
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
 	}
@@ -1529,10 +1553,10 @@ class CustomerForm extends Component {
 
 	canBeSubmitted() {
 		return true;
-		const { name } = this.state;
-		return (
-			name.length > 0
-		);
+		// const { name } = this.state;
+		// return (
+		// 	name.length > 0
+		// );
 	}
 
 
@@ -1648,17 +1672,22 @@ class CustomerForm extends Component {
 	};
 	//////////////////////
 	render() {
-		const { classes, CustomerForm, addCustomer, updateCustomer, removeCustomer } = this.props;
-		const { value, suggestions } = this.state;
+		const { classes,
+			// CustomerForm,
+			// addCustomer,
+			// updateCustomer,
+			// removeCustomer
+		} = this.props;
+		// const { value, suggestions } = this.state;
 
-		const autosuggestProps = {
-			renderInputComponent,
-			suggestions: suggestions,
-			onSuggestionsFetchRequested: this.onSuggestionsFetchRequested,
-			onSuggestionsClearRequested: this.onSuggestionsClearRequested,
-			getSuggestionValue: this.getSuggestionValue,
-			renderSuggestion,
-		};
+		// const autosuggestProps = {
+		// 	renderInputComponent,
+		// 	suggestions: suggestions,
+		// 	onSuggestionsFetchRequested: this.onSuggestionsFetchRequested,
+		// 	onSuggestionsClearRequested: this.onSuggestionsClearRequested,
+		// 	getSuggestionValue: this.getSuggestionValue,
+		// 	renderSuggestion,
+		// };
 		console.log('customers', this.props.customers);
 
 		// const {classes} = this.props;

@@ -199,7 +199,7 @@ class FilterPanel extends Component {
 
 		customers.Data.Regions.filter(x => {
 			return this.props.regionId === 0 || x.Id === this.props.regionId;
-		}).map(x => {
+		}).forEach(x => {
 			regionCustomers = [...regionCustomers, ...x.Customers];
 		});
 
@@ -415,7 +415,7 @@ class FilterPanel extends Component {
 											<MenuItem value={-2}><em>All</em></MenuItem>
 											<MenuItem value={-1}><em>None</em></MenuItem>
 											{
-												accountTypes.map((x, index) => {
+												accountTypes.forEach((x, index) => {
 													if (x !== null)
 														return (<MenuItem key={x} value={index}>{x}</MenuItem>)
 												})
@@ -443,7 +443,7 @@ class FilterPanel extends Component {
 										label="Select All"
 									/>
 									{
-										accountStatuses.map((x, index) => {
+										accountStatuses.forEach((x, index) => {
 											if (x !== null)
 												return (<FormControlLabel
 													key={x}
