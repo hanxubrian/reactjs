@@ -340,6 +340,26 @@ class FilterPanel extends Component {
 											style={{ marginLeft: '2px' }} />
 									</GridItem>
 
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+										<TextField
+											id="AccountType"
+											label="Account Type *"
+											select
+											className={classes.textField}
+											value={this.state.AccountType}
+											onChange={this.handleChange('AccountType')}
+											margin="normal"
+											variant="outlined"
+											fullWidth
+											// style={{ minWidth: "100px", width: "30%" }}
+										>
+											{[{ value: 0, label: "Airline" }].map(option => (
+												<MenuItem key={option.value} value={option.value}>
+													{option.label}
+												</MenuItem>
+											))}
+										</TextField>
+									</GridItem>
 
 								</GridContainer>
 							</div>
