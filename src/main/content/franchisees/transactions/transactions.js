@@ -15,7 +15,7 @@ import * as Actions from 'store/actions';
 
 // third party
 import classNames from 'classnames';
-
+import TransactionLists from './FranchiseeLists';
 
 const headerHeight = 100;
 
@@ -110,7 +110,6 @@ const styles = theme => ({
 class Transactions extends Component {
     state = {
         s: '',
-        temp: [],
         data: [],
         selection: [],
         regionId: 0
@@ -167,14 +166,14 @@ class Transactions extends Component {
     getTransactions =(rawData=this.props.transactions) =>{
         if(rawData===null) return;
 
-        this.setState({temp: rawData});
-        this.setState({data: rawData});
+        this.setState({data: rawData.Data.FranchiseeTransactions});
     };
 
     render()
     {
         const {classes} = this.props;
         const { selection } = this.state;
+        console.log('state=', this.state);
         return (
             <FusePageCustom
                 classes={{
@@ -233,7 +232,9 @@ class Transactions extends Component {
                 }
                 content={
                     <div className="flex-1 flex-col absolute w-full h-full">
-
+                        {
+                            <TransactionLists data={this.state.data}/>
+                        }
                     </div>
                 }
                 onRef={instance => {
