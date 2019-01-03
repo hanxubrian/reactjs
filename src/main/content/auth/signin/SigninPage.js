@@ -11,10 +11,7 @@ import * as NavigationActions from '../../../../store/actions/fuse/navigation.ac
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
 import connect from 'react-redux/es/connect/connect';
-<<<<<<< HEAD
 
-=======
->>>>>>> eae9cce76f66067769e8e742765f9ff54f6e8bab
 
 const styles = theme => ({
     root: {
