@@ -198,6 +198,11 @@ const styles = theme => ({
             backgroundColor: theme.palette.primary.dark,
         }
     },
+    elementCenter: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
 });
 
 
@@ -953,7 +958,7 @@ class Franchisees extends Component {
                 }
                 leftSidebarHeader={
                     <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", {'filteropen': filterStateFranchisees})}>
-                        <h4 style={{marginBlockStart: '1em'}}>Filter Panel</h4>
+                        <h4 className={classes.elementCenter}>Filter Panel</h4>
                     </div>
                 }
                 leftSidebarContent={
@@ -961,7 +966,7 @@ class Franchisees extends Component {
                 }
                 rightSidebarHeader={
                     <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0">
-                        <h4 style={{marginBlockStart: '1em'}}>Summary Panel</h4>
+                        <h4 className={classes.elementCenter}>Summary Panel</h4>
                     </div>
                 }
                 rightSidebarContent={
