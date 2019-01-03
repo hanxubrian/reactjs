@@ -272,7 +272,7 @@ class FilterPanel extends Component {
 											label="State *"
 											select
 											className={classes.textField}
-											value={this.state.State}
+											value={this.state.State === undefined ? "" : this.state.State}
 											onChange={this.handleChange('State')}
 											margin="normal"
 											variant="outlined"
@@ -346,7 +346,7 @@ class FilterPanel extends Component {
 											label="Account Type *"
 											select
 											className={classes.textField}
-											value={this.state.AccountType}
+											value={this.state.AccountType === undefined ? "" : this.state.AccountType}
 											onChange={this.handleChange('AccountType')}
 											margin="normal"
 											variant="outlined"

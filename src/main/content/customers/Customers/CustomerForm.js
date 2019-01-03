@@ -653,7 +653,7 @@ function getStepContent(customerForm, step) {
 									shrink: true
 								}}
 								className={classes.textField}
-								value={customerForm.state.State}
+								value={customerForm.state.State === undefined ? "" : customerForm.state.State}
 								onChange={customerForm.handleChange('State')}
 								margin="normal"
 								variant="outlined"
@@ -708,7 +708,7 @@ function getStepContent(customerForm, step) {
 								InputLabelProps={{
 									shrink: true
 								}}
-								value={customerForm.state.InvoiceDate}
+								value={customerForm.state.InvoiceDate === undefined ? "" : customerForm.state.InvoiceDate}
 								onChange={customerForm.handleChange('InvoiceDate')}
 								margin="normal"
 								variant="outlined"
@@ -731,7 +731,7 @@ function getStepContent(customerForm, step) {
 									shrink: true
 								}}
 								className={classes.textField}
-								value={customerForm.state.BillingFrequency}
+								value={customerForm.state.BillingFrequency === undefined ? "" : customerForm.state.BillingFrequency}
 								onChange={customerForm.handleChange('BillingFrequency')}
 								margin="normal"
 								variant="outlined"
@@ -790,7 +790,7 @@ function getStepContent(customerForm, step) {
 									shrink: true
 								}}
 								className={classes.textField}
-								value={customerForm.state.Term}
+								value={customerForm.state.Term === undefined ? "" : customerForm.state.Term}
 								onChange={customerForm.handleChange('Term')}
 								margin="normal"
 								variant="outlined"
@@ -816,7 +816,7 @@ function getStepContent(customerForm, step) {
 								InputLabelProps={{
 									shrink: true
 								}}
-								value={customerForm.state.ARStatus}
+								value={customerForm.state.ARStatus === undefined ? "" : customerForm.state.ARStatus}
 								onChange={customerForm.handleChange('ARStatus')}
 								margin="normal"
 								variant="outlined"
@@ -915,7 +915,7 @@ function getStepContent(customerForm, step) {
 									shrink: true
 								}}
 								className={classes.textField}
-								value={customerForm.state.State}
+								value={customerForm.state.State === undefined ? "" : customerForm.state.State}
 								onChange={customerForm.handleChange('State')}
 								margin="normal"
 								variant="outlined"
@@ -955,7 +955,7 @@ function getStepContent(customerForm, step) {
 									shrink: true
 								}}
 								className={classes.textField}
-								value={customerForm.state.AccountType}
+								value={customerForm.state.AccountType === undefined ? "" : customerForm.state.AccountType}
 								onChange={customerForm.handleChange('AccountType')}
 								margin="normal"
 								variant="outlined"
@@ -978,7 +978,7 @@ function getStepContent(customerForm, step) {
 									shrink: true
 								}}
 								className={classes.textField}
-								value={customerForm.state.ContractType}
+								value={customerForm.state.ContractType === undefined ? "" : customerForm.state.ContractType}
 								onChange={customerForm.handleChange('ContractType')}
 								margin="normal"
 								variant="outlined"
@@ -1001,7 +1001,7 @@ function getStepContent(customerForm, step) {
 									shrink: true
 								}}
 								className={classes.textField}
-								value={customerForm.state.AgreementType}
+								value={customerForm.state.AgreementType === undefined ? "" : customerForm.state.AgreementType}
 								onChange={customerForm.handleChange('AgreementType')}
 								margin="normal"
 								variant="outlined"
@@ -1024,7 +1024,7 @@ function getStepContent(customerForm, step) {
 									shrink: true
 								}}
 								className={classes.textField}
-								value={customerForm.state.AcctExec}
+								value={customerForm.state.AcctExec === undefined ? "" : customerForm.state.AcctExec}
 								onChange={customerForm.handleChange('AcctExec')}
 								margin="normal"
 								variant="outlined"
@@ -1165,7 +1165,7 @@ function getStepContent(customerForm, step) {
 									shrink: true
 								}}
 								className={classes.textField}
-								value={customerForm.state.ServiceType}
+								value={customerForm.state.ServiceType === undefined ? "" : customerForm.state.ServiceType}
 								onChange={customerForm.handleChange('ServiceType')}
 								margin="normal"
 								variant="outlined"
@@ -1266,7 +1266,7 @@ function getStepContent(customerForm, step) {
 								InputLabelProps={{
 									shrink: true
 								}}
-								value={customerForm.state.CleanFrequency}
+								value={customerForm.state.CleanFrequency === undefined ? "" : customerForm.state.CleanFrequency}
 								onChange={customerForm.handleChange('CleanFrequency')}
 								margin="normal"
 								variant="outlined"
@@ -1286,7 +1286,7 @@ function getStepContent(customerForm, step) {
 								}
 								label="Mon"
 								style={{ marginRight: "30px" }}
-								fullWidth
+								
 							/>
 							<FormControlLabel
 								control={
@@ -1294,7 +1294,7 @@ function getStepContent(customerForm, step) {
 								}
 								label="Tue"
 								style={{ marginRight: "30px" }}
-								fullWidth
+								
 							/>
 							<FormControlLabel
 								control={
@@ -1302,7 +1302,7 @@ function getStepContent(customerForm, step) {
 								}
 								label="Wed"
 								style={{ marginRight: "30px" }}
-								fullWidth
+								
 							/>
 							<FormControlLabel
 								control={
@@ -1310,7 +1310,7 @@ function getStepContent(customerForm, step) {
 								}
 								label="Thu"
 								style={{ marginRight: "30px" }}
-								fullWidth
+								
 							/>
 							<FormControlLabel
 								control={
@@ -1318,7 +1318,7 @@ function getStepContent(customerForm, step) {
 								}
 								label="Fri"
 								style={{ marginRight: "30px" }}
-								fullWidth
+								
 							/>
 							<FormControlLabel
 								control={
@@ -1326,14 +1326,14 @@ function getStepContent(customerForm, step) {
 								}
 								label="Sat"
 								style={{ marginRight: "30px" }}
-								fullWidth
+								
 							/>
 							<FormControlLabel
 								control={
 									<Checkbox onChange={customerForm.handleChange('weekdays')} />
 								}
 								label="Sun"
-								fullWidth
+								
 							/>
 						</GridItem>
 
@@ -1344,7 +1344,7 @@ function getStepContent(customerForm, step) {
 								}
 								label="CPI Increase"
 								style={{ marginRight: "30px" }}
-								fullWidth
+								
 							/>
 							<FormControlLabel
 								control={
@@ -1352,7 +1352,7 @@ function getStepContent(customerForm, step) {
 								}
 								label="Separate Invoice"
 								style={{ marginRight: "30px" }}
-								fullWidth
+								
 							/>
 						</GridItem>
 
@@ -1709,7 +1709,7 @@ class CustomerForm extends Component {
 						{
 							getSteps().map(
 								(x) => {
-									return (<Tab label={x} />)
+									return (<Tab key={x} label={x} />)
 								}
 							)
 						}
