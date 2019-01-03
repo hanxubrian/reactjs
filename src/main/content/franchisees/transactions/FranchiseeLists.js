@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 // core components
 import {
-    Hidden, Icon, IconButton, Input, Paper, Button
+    Hidden, Icon, IconButton, Input, Paper, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
 } from '@material-ui/core';
 
 //Janiking
@@ -132,7 +132,9 @@ class TransactionsLists extends Component {
         data: [],
         selection: [],
         selectAll: false,
-        selectedInvoice: null
+        selectedInvoice: null,
+        alertOpen: false,
+        keyToBeRemoved: -1
     };
 
     onChange = (event, { newValue, method }) => {
@@ -234,6 +236,23 @@ class TransactionsLists extends Component {
         });
     }
 
+    handleClose = ()=>{
+        this.setState({alertOpen: false})
+    };
+    handleOpen = (key)=>{
+        this.setState({alertOpen: true});
+        this.setState({keyToBeRemoved: key})
+    };
+
+    removeSelectedTransaction = ()=>{
+        this.props.removeTransaction(this.state.keyToBeRemoved, this.props.transactions);
+        if(this.state.selection.length>0){
+            _.remove(this.state.selection, function(id) {
+                return id === this.state.keyToBeRemoved;
+            });
+        }
+        this.setState({alertOpen: false})
+    };
     render()
     {
         const { classes,toggleFilterPanel, filterState, summaryState} = this.props;
@@ -468,14 +487,7 @@ class TransactionsLists extends Component {
                                             <IconButton
                                                 onClick={(ev) => {
                                                     ev.stopPropagation();
-                                                    if (window.confirm("Do you really want to remove this invoice")) {
-                                                        this.props.removeTransaction(row.original.key, this.props.transactions);
-                                                        if(this.state.selection.length>0){
-                                                            _.remove(this.state.selection, function(id) {
-                                                                return id === row.original.key;
-                                                            });
-                                                        }
-                                                    }
+                                                    this.handleOpen(row.original.key);
                                                 }}
                                             >
                                                 <Icon>delete</Icon>
@@ -534,6 +546,27 @@ class TransactionsLists extends Component {
                         height: '100%',
                     }}
                 />
+                <Dialog
+                    open={this.state.alertOpen}
+                    onClose={()=>this.handleClose()}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Remove Transaction"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Do you really want to remove the selected transaction?
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={()=>this.handleClose()} color="primary">
+                            Disagree
+                        </Button>
+                        <Button onClick={()=>this.removeSelectedTransaction()} color="primary" autoFocus>
+                            Agree
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         );
     }
