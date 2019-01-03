@@ -655,7 +655,7 @@ function getStepContent(customerForm, step) {
 						</GridItem>
 
 						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-							<div style={{ display: 'flex', flexDirection: 'row', minWidth: "100px", width: "30%" }}>
+							<div style={{ display: 'flex', flexDirection: 'row', minWidth: "100px", width: "50%" }}>
 
 								{/* <FormControlLabel
 									control={
@@ -673,7 +673,7 @@ function getStepContent(customerForm, step) {
 										/>
 									}
 									label="E-Billing"
-									style={{ width: '30%' }}
+									// style={{ width: '40%' }}
 								/>
 
 								<TextField
@@ -685,7 +685,7 @@ function getStepContent(customerForm, step) {
 									onChange={customerForm.handleChange('Email')}
 									margin="normal"
 									variant="outlined"
-									style={{ width: '70%' }}
+									style={{ width: '60%' }}
 								/>
 							</div>
 						</GridItem>

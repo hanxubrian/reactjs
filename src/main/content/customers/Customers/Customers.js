@@ -646,15 +646,16 @@ class Customers extends Component {
 						</div>
 					}
 					leftSidebarHeader={
-						<div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", { 'filteropen': filterState })}>
-							
-								{customerForm.props.open ? (
-									<h4 style={{ marginBlockStart: '1em' }}>Customer Information</h4>
-								): (
-									<h4 style={{ marginBlockStart: '1em' }}>Filter Panel</h4>
-									)}
-							
-							<FuseAnimate animation="transition.expandIn" delay={200}>
+						<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
+						{/* <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", { 'filteropen': filterState })}> */}
+						{/* <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0"> */}
+							{customerForm.props.open ? (
+								<h2 style={{ marginBlockStart: '1em' }}>Customer Information</h2>
+							) : (
+									<h2 style={{ marginBlockStart: '1em' }}>Filters</h2>
+								)}
+
+							{/* <FuseAnimate animation="transition.expandIn" delay={200}>
 								<div>
 									<Hidden xsDown>
 										<IconButton onClick={(ev) => toggleFilterPanel()}>
@@ -662,28 +663,31 @@ class Customers extends Component {
 										</IconButton>
 									</Hidden>
 								</div>
-							</FuseAnimate>
+							</FuseAnimate> */}
 						</div>
 					}
 					leftSidebarContent={
 						<FilterPanel />
 					}
 					rightSidebarHeader={
-						<div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0">
-							<h4 style={{ marginBlockStart: '1em' }}>Summary Panel</h4>
-							<FuseAnimate animation="transition.expandIn" delay={200}>
-								<div>
-									<Hidden xsDown>
-										{/*<IconButton onClick={()=>this.removeCustomers()}>*/}
-										{/*<Icon>delete</Icon>*/}
-										{/*</IconButton>*/}
-										{/* <IconButton onClick={(ev) => toggleSummaryPanel()}> */}
-										<IconButton onClick={toggleSummaryPanel}>
-											<Icon>close</Icon>
-										</IconButton>
-									</Hidden>
-								</div>
-							</FuseAnimate></div>
+						/*<div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0"> */
+						<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
+							<h2 style={{ marginBlockStart: '1em' }}>Summary</h2>
+							{/* <FuseAnimate animation="transition.expandIn" delay={200}> */}
+							{/* <div> */}
+							{/* <Hidden xsDown> */}
+							{/*<IconButton onClick={()=>this.removeCustomers()}>*/}
+							{/* <Icon>delete</Icon> */}
+							{/* </IconButton> */}
+							{/* <IconButton onClick={(ev) => toggleSummaryPanel()}>  */}
+
+							{/* <IconButton onClick={toggleSummaryPanel}> */}
+							{/* <Icon>close</Icon> */}
+							{/* </IconButton> */}
+							{/* </Hidden> */}
+							{/* </div> */}
+							{/* </FuseAnimate> */}
+						</div>
 					}
 					rightSidebarContent={
 						<SummaryPanel />
