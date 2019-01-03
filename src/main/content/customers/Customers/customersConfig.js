@@ -10,7 +10,7 @@ export const CustomersConfig = {
         {
             path     : '/customers/list',
             component: FuseLoadable({
-                loader: () => import('./Customers')
+                loader: () => import('./customers')
             })
         }
     ]
