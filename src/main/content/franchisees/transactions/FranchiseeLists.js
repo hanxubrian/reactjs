@@ -18,11 +18,10 @@ import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
 
 // third party
-import moment from 'moment'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import _ from 'lodash';
 import classNames from 'classnames';
+import _ from 'lodash';
 
 const hexToRgb = (hex) =>{
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -190,22 +189,21 @@ class TransactionsLists extends Component {
             this.search(this.state.s);
         }
     }
-    search(val) {
+    search = (val)=> {
         const temp = this.props.data.filter( d => {
-            return d.InvoiceId.toString().indexOf(val) !== -1 || !val ||
-                d.InvoiceNo.indexOf(val) !== -1 ||
-                d.InvoiceAmount.toString().indexOf(val) !== -1 ||
-                d.InvoiceTotal.toString().indexOf(val) !== -1 ||
-                d.InvoiceTax.toString().indexOf(val) !== -1 ||
-                d.InvoiceDescription.toLowerCase().indexOf(val) !== -1 ||
-                d.CustomerName.toLowerCase().indexOf(val) !== -1 ||
-                d.CustomerId.toString().indexOf(val) !== -1 ||
-                d.CustomerNo.toString().indexOf(val) !== -1 ||
-                d.TransactionStatusListId.toString().indexOf(val) !== -1
+            console.log('value=', d);
+            return d.Name.indexOf(val) !== -1 || !val ||
+                d.FranchiseeNo.indexOf(val) !== -1 ||
+                // d.TrxType.toString().indexOf(val) !== -1
+                d.Number.indexOf(val) !== -1 ||
+                d.ExtendedPrice.toString().indexOf(val) !== -1 ||
+                d.Tax.toString().indexOf(val) !== -1 ||
+                d.Fees.toString().indexOf(val) !== -1 ||
+                d.TotalTrxAmount.toString().indexOf(val) !== -1
         });
 
         this.setState({data: temp});
-    }
+    };
 
     componentDidMount(){
         document.addEventListener("keydown", this.escFunction, false);
@@ -238,7 +236,7 @@ class TransactionsLists extends Component {
 
     render()
     {
-        const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState} = this.props;
+        const { classes,toggleFilterPanel, filterState, summaryState} = this.props;
         const { toggleSelection, isSelected} = this;
 
         return (
@@ -471,12 +469,12 @@ class TransactionsLists extends Component {
                                                 onClick={(ev) => {
                                                     ev.stopPropagation();
                                                     if (window.confirm("Do you really want to remove this invoice")) {
-                                                        // this.props.removeInvoiceAction(row.original.FranchiseeNo, this.props.invoices);
-                                                        // if(this.state.selection.length>0){
-                                                        //     _.remove(this.state.selection, function(id) {
-                                                        //         return id === row.original.FranchiseeNo;
-                                                        //     });
-                                                        // }
+                                                        this.props.removeTransaction(row.original.key, this.props.transactions);
+                                                        if(this.state.selection.length>0){
+                                                            _.remove(this.state.selection, function(id) {
+                                                                return id === row.original.key;
+                                                            });
+                                                        }
                                                     }
                                                 }}
                                             >
@@ -545,24 +543,15 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         toggleFilterPanel: Actions.toggleFilterPanel,
-        toggleSummaryPanel: Actions.toggleSummaryPanel,
-        deleteInvoicesAction: Actions.deleteInvoices,
-        removeInvoiceAction: Actions.removeInvoice,
-        openEditInvoiceForm: Actions.openEditInvoiceForm,
-        closeEditInvoiceForm: Actions.closeEditInvoiceForm,
+        removeTransaction: Actions.removeTransaction
     }, dispatch);
 }
 
-function mapStateToProps({invoices, auth})
+function mapStateToProps({transactions, auth})
 {
     return {
-        invoices: invoices.invoicesDB,
-        bLoadedInvoices: invoices.bLoadedInvoices,
-        transactionStatus: invoices.transactionStatus,
-        filterState: invoices.bOpenedFilterPanel,
-        summaryState: invoices.bOpenedSummaryPanel,
         regionId: auth.login.defaultRegionId,
-        InvoiceForm: invoices.InvoiceForm
+        transactions: transactions.transactionsDB
     }
 }
 

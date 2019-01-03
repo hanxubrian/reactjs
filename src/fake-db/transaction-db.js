@@ -2090,9 +2090,10 @@ mock.onPost("/api/transactions/update").reply(request => {
  */
 mock.onPost('/api/transactions/remove').reply((req) => {
     let data = JSON.parse(req.data);
+    console.log('data=', data)
     let transactions = data.transactions;
-    _.remove(transactions.Data, function(_transaction) {
-        return _transaction.Id === data.id;
+    _.remove(transactions.Data.FranchiseeTransactions, function(_transaction) {
+        return _transaction.key === data.key;
     });
 
     return [200, transactions];

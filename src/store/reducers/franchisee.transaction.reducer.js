@@ -21,7 +21,6 @@ const transactions = function(state = initialState, action) {
         case Actions.REMOVE_SELECTED_FRANCHISEE_TRANSACTION:
         {
             return {...state, transactionsDB: action.payload}
-
         }
         case UserActions.USER_LOGGED_OUT:
         {

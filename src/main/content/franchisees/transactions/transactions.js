@@ -173,7 +173,6 @@ class Transactions extends Component {
     {
         const {classes} = this.props;
         const { selection } = this.state;
-        console.log('state=', this.state);
         return (
             <FusePageCustom
                 classes={{
