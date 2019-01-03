@@ -228,18 +228,47 @@ const styles = theme => ({
 
 
 class Customers extends Component {
-	state = {
-		s: '',
-		temp: [],
-		data: [],
-		checkedPaid: true,
-		checkedPP: true,
-		checkedComplete: true,
-		checkedOpen: true,
-		selection: [],
-		selectAll: false,
-		regionId: 0
-	};
+	// state = {
+	// 	s: '',
+	// 	temp: [],
+	// 	data: [],
+	// 	checkedPaid: true,
+	// 	checkedPP: true,
+	// 	checkedComplete: true,
+	// 	checkedOpen: true,
+	// 	selection: [],
+	// 	selectAll: false,
+	// 	regionId: 0,
+
+	// 	current_lat:0,
+	// 	current_long:0,
+	// };
+
+	constructor(props) {
+		super(props);
+
+		if (!props.bLoadedCustomers) {
+			props.getCustomers();
+		}
+		this.fetchData = this.fetchData.bind(this);
+		this.escFunction = this.escFunction.bind(this);
+
+		this.state = {
+			s: '',
+			temp: [],
+			data: [],
+			checkedPaid: true,
+			checkedPP: true,
+			checkedComplete: true,
+			checkedOpen: true,
+			selection: [],
+			selectAll: false,
+			regionId: 0,
+
+			current_lat: 0,
+			current_long: 0,
+		};
+	}
 
 	toggleSelection = (key, shift, row) => {
         /*
@@ -319,15 +348,7 @@ class Customers extends Component {
 		this.props.customerForm.type === 'create' ? this.props.closeEditCustomerForm() : this.props.closeNewCustomerForm();
 	};
 
-	constructor(props) {
-		super(props);
 
-		if (!props.bLoadedCustomers) {
-			props.getCustomers();
-		}
-		this.fetchData = this.fetchData.bind(this);
-		this.escFunction = this.escFunction.bind(this);
-	}
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		let bChanged = false;
@@ -375,6 +396,8 @@ class Customers extends Component {
 		this.setState({ checkedOpen: this.props.transactionStatus.checkedOpen });
 
 		this.getCustomersFromStatus()
+
+
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -413,6 +436,7 @@ class Customers extends Component {
 
 	componentDidMount() {
 		document.addEventListener("keydown", this.escFunction, false);
+		this.getLocation();
 	}
 
 	componentWillUnmount() {
@@ -476,6 +500,19 @@ class Customers extends Component {
 			pageSize: state.pageSize,
 			page: state.page,
 		});
+	}
+	getLocation() {
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(
+				(position) => {
+					console.log(position.coords);
+					this.setState({
+						current_lat: position.coords.latitude,
+						current_long: position.coords.longitude
+					})
+				}
+			);
+		}
 	}
 
 	render() {
@@ -672,12 +709,12 @@ class Customers extends Component {
 											key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
 										}}
 										defaultZoom={12}
-										defaultCenter={[-34.397, 150.64]}
+										defaultCenter={[this.state.current_lat, this.state.current_long]}
 									>
 										<Marker
 											text="Marker Text"
-											lat="-34.397"
-											lng="150.644"
+											lat={this.state.current_lat}
+											lng={this.state.current_long}
 										/>
 									</GoogleMap>
 								</div>

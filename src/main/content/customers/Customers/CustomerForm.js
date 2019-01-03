@@ -418,120 +418,6 @@ function getStepContent(customerForm, step) {
 
 			return (
 				<Fragment>
-					{/* <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-							<TextField
-								id="Name"
-								label="Name *"
-								className={classes.textField}
-								value={customerForm.state.name}
-								onChange={customerForm.handleChange('Name')}
-								margin="normal"
-								// variant="outlined"
-								style={{ width: '100%' }}
-							/>
-
-						</GridItem>
-						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-							<TextField
-								id="outlined-name"
-								label="Address *"
-								className={classes.textField}
-								value={customerForm.state.name}
-								onChange={customerForm.handleChange('Address')}
-								margin="normal"
-								// variant="outlined"
-								style={{ width: '100%' }}
-							/>
-						</GridItem>
-						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-							<TextField
-								id="outlined-name"
-								label="City *"
-								className={classes.textField}
-								value={customerForm.state.name}
-								onChange={customerForm.handleChange('City')}
-								margin="normal"
-								// variant="outlined"
-								style={{ width: '100%', marginRight: '2%' }}
-							/>
-							<TextField
-								id="outlined-name"
-								label="State *"
-								select
-								className={classes.textField}
-								value={''}
-								onChange={customerForm.handleChange('State')}
-								margin="normal"
-								// variant="outlined"
-								style={{ width: '100%', marginRight: '2%', marginLeft: '2%' }}
-							>
-								{stateNames.map(option => (
-									<MenuItem key={option.value} value={option.value}>
-										{option.label}
-									</MenuItem>
-								))}
-							</TextField>
-							<TextField
-								id="outlined-name"
-								label="Zip *"
-								className={classes.textField}
-								value={customerForm.state.name}
-								onChange={customerForm.handleChange('Zip')}
-								margin="normal"
-								// variant="outlined"
-								style={{ width: '100%', marginLeft: '2%' }}
-							/>
-						</GridItem>
-						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-							<TextField
-								id="outlined-name"
-								label="Phone *"
-								className={classes.textField}
-								value={customerForm.state.name}
-								onChange={customerForm.handleChange('Phone')}
-								margin="normal"
-								// variant="outlined"
-								style={{ width: '100%', marginRight: '2%' }}
-							/>
-							<TextField
-								id="outlined-name"
-								label="Fax"
-								className={classes.textField}
-								value={customerForm.state.name}
-								onChange={customerForm.handleChange('Fax')}
-								margin="normal"
-								// variant="outlined"
-								style={{ width: '100%', marginLeft: '2%' }}
-							/>
-						</GridItem>
-						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-							<TextField
-								id="outlined-name"
-								label="Email"
-								type="email"
-								className={classes.textField}
-								value={customerForm.state.name}
-								onChange={customerForm.handleChange('Email')}
-								margin="normal"
-								// variant="outlined"
-								style={{ width: '100%', marginRight: '2%' }}
-							/>
-							<TextField
-								id="outlined-name"
-								label="Website"
-								className={classes.textField}
-								value={customerForm.state.name}
-								onChange={customerForm.handleChange('Website')}
-								margin="normal"
-								// variant="outlined"
-								style={{ width: '100%', marginLeft: '2%' }}
-							/>
-						</GridItem>
-					</GridContainer>
-
-					<Divider variant="middle" />
-					<div style={{ marginTop: '30px' }}></div> */}
 					<h3>Addresses</h3>
 					<div className="flex">
 						<CustomerLineTable tableType="ADDRESS" headers={address_headers} />
@@ -543,78 +429,6 @@ function getStepContent(customerForm, step) {
 					<div className="flex">
 						<CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} />
 					</div>
-
-					{/* <div style={{ marginTop: '30px' }}></div>
-					<h3>Billing Settings</h3>
-
-					<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-							<TextField
-								type="date"
-								id="outlined-name"
-								label="Effective Date"
-								className={classes.textField}
-								InputLabelProps={{
-									shrink: true
-								}}
-								value={customerForm.state.EffectiveDate}
-								onChange={customerForm.handleChange('EffectiveDate')}
-								margin="normal"
-								variant="outlined"
-								style={{ width: '100%' }}
-							/>
-						</GridItem>
-						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-							<TextField
-								id="outlined-name"
-								label="Invoice Date"
-								className={classes.textField}
-								value={customerForm.state.InvoiceDate}
-								onChange={customerForm.handleChange('InvoiceDate')}
-								margin="normal"
-								variant="outlined"
-								style={{ width: '100%' }}
-							/>
-						</GridItem>
-						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-							<TextField
-								id="outlined-name"
-								label="Term"
-								className={classes.textField}
-								value={customerForm.state.Term}
-								onChange={customerForm.handleChange('Term')}
-								margin="normal"
-								variant="outlined"
-								style={{ width: '100%' }}
-							/>
-						</GridItem>
-						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-							<TextField
-								id="ARStatus"
-								label="AR Status"
-								className={classes.textField}
-								value={customerForm.state.ARStatus}
-								onChange={customerForm.handleChange('ARStatus')}
-								margin="normal"
-								variant="outlined"
-								style={{ width: '100%' }}
-							/>
-						</GridItem>
-						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-							<TextField
-								id="Notes"
-								label="Notes"
-								multiline
-								rowsMax="4"
-								className={classes.textField}
-								value={customerForm.state.Notes}
-								onChange={customerForm.handleChange('Notes')}
-								margin="normal"
-								variant="outlined"
-								style={{ width: '100%' }}
-							/>
-						</GridItem>
-					</GridContainer> */}
 
 				</Fragment>
 			);
@@ -1453,10 +1267,263 @@ function getStepContent(customerForm, step) {
 							/>
 
 						</GridItem>
-
-						<GridItem>
-							<img className="mr-12" alt="" src="assets/images/customers/walk-through.jpg" style={{ width: '100%', height: 'auto' }} />
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="FranchiseName"
+								label="Franchise Name"
+								className={classes.textField}
+								value={customerForm.state.FranchiseName}
+								onChange={customerForm.handleChange('FranchiseName')}
+								margin="normal"
+								variant="outlined"
+								style={{ minWidth: '100px', width: '30%' }}
+							/>
 						</GridItem>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<h3 style={{ marginTop: 20 }}>Location Checklist</h3>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<FormControlLabel
+								control={<Switch checked={customerForm.state.LightSwitches} onChange={customerForm.handleChange('LightSwitches')} value={customerForm.state.LightSwitches} />}
+								label="Light Switches?"
+								style={{ width: '100%' }}
+							/>
+
+							<FormControlLabel
+								control={<Switch checked={customerForm.state.BreakersPanel} onChange={customerForm.handleChange('BreakersPanel')} value={customerForm.state.BreakersPanel} />}
+								label="Breaker's Panel?"
+								style={{ width: '100%' }}
+							/>
+
+							<FormControlLabel
+								control={<Switch checked={customerForm.state.ContactsOffice} onChange={customerForm.handleChange('ContactsOffice')} value={customerForm.state.ContactsOffice} />}
+								label="Contact's Office?"
+								style={{ width: '100%' }}
+							/>
+
+							<FormControlLabel
+								control={<Switch checked={customerForm.state.StorageAreas} onChange={customerForm.handleChange('StorageAreas')} value={customerForm.state.StorageAreas} />}
+								label="Storage Areas?"
+								style={{ width: '100%' }}
+							/>
+
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<FormControlLabel
+								control={<Switch checked={customerForm.state.WaterSource} onChange={customerForm.handleChange('WaterSource')} value={customerForm.state.WaterSource} />}
+								label="Water Source?"
+								style={{ width: '100%' }}
+							/>
+
+							<FormControlLabel
+								control={<Switch checked={customerForm.state.TrashDisposal} onChange={customerForm.handleChange('TrashDisposal')} value={customerForm.state.TrashDisposal} />}
+								label="Trash Disposal?"
+								style={{ width: '100%' }}
+							/>
+
+							<FormControlLabel
+								control={<Switch checked={customerForm.state.Recycling} onChange={customerForm.handleChange('Recycling')} value={customerForm.state.Recycling} />}
+								label="Recycling?"
+								style={{ width: '100%' }}
+							/>
+
+							<FormControlLabel
+								control={<Switch checked={customerForm.state.AccountSupplies} onChange={customerForm.handleChange('AccountSupplies')} value={customerForm.state.AccountSupplies} />}
+								label="Account Supplies?"
+								style={{ width: '100%' }}
+							/>
+
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<h3 style={{ marginTop: 20 }}>Security Checklist</h3>
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<FormControlLabel
+								control={<Switch checked={customerForm.state.KeyEntry} onChange={customerForm.handleChange('KeyEntry')} value={customerForm.state.KeyEntry} />}
+								label="Key? Entry:"
+								style={{ width: '100%' }}
+							/>
+
+							<FormControlLabel
+								control={<Switch checked={customerForm.state.AlarmSystem} onChange={customerForm.handleChange('AlarmSystem')} value={customerForm.state.AlarmSystem} />}
+								label="Alarm System"
+								style={{ width: '100%' }}
+							/>
+
+							<FormControlLabel
+								control={<Switch checked={customerForm.state.RestroomPaperDispensers} onChange={customerForm.handleChange('RestroomPaperDispensers')} value={customerForm.state.RestroomPaperDispensers} />}
+								label="Restroom Paper Dispensers?"
+								style={{ width: '100%' }}
+							/>
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="SecurityProcedures"
+								label="Security Procedures?"
+								className={classes.textField}
+								value={customerForm.state.SecurityProcedures}
+								onChange={customerForm.handleChange('SecurityProcedures')}
+								margin="normal"
+								variant="outlined"
+								style={{ width: '100%' }}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="EmergencyNamesAndTelephoneNumbers1"
+								label="Emergency Names And Telephone Numbers 1"
+								className={classes.textField}
+								value={customerForm.state.EmergencyNamesAndTelephoneNumbers1}
+								onChange={customerForm.handleChange('EmergencyNamesAndTelephoneNumbers1')}
+								margin="normal"
+								variant="outlined"
+								style={{ width: '100%' }}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="EmergencyNamesAndTelephoneNumbers2"
+								label="Emergency Names And Telephone Numbers 2"
+								className={classes.textField}
+								value={customerForm.state.EmergencyNamesAndTelephoneNumbers2}
+								onChange={customerForm.handleChange('EmergencyNamesAndTelephoneNumbers2')}
+								margin="normal"
+								variant="outlined"
+								style={{ width: '100%' }}
+							/>
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<TextField
+								id="ProblemConnernsAreasNeedingImprovment"
+								label="Problem, connerns, areas needing improvment and general comments?"
+								multiline
+								rowsMax="4"
+								className={classes.textField}
+								value={customerForm.state.ProblemConnernsAreasNeedingImprovment}
+								onChange={customerForm.handleChange('ProblemConnernsAreasNeedingImprovment')}
+								margin="normal"
+								variant="outlined"
+								style={{ width: '100%' }}
+							/>
+						</GridItem>
+
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<h3 style={{ marginTop: 20, width: '100%' }}>Paperwork Checklist</h3>
+							<h3 style={{ marginTop: 20, width: '100%' }}>Signatures</h3>
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<GridItem xs={12} sm={12} md={12} className="flex flex-col" style={{justifyContent:'space-evenly'}}>
+								<FormControlLabel
+									control={<Switch checked={customerForm.state.SignedMaintenaceAgreement} onChange={customerForm.handleChange('SignedMaintenaceAgreement')} value={customerForm.state.SignedMaintenaceAgreement} />}
+									label="1. Signed Maintenace Agreement?"
+									style={{ width: '100%' }}
+								/>
+								<FormControlLabel
+									control={<Switch checked={customerForm.state.SignedPricePage} onChange={customerForm.handleChange('SignedPricePage')} value={customerForm.state.SignedPricePage} />}
+									label="2. Signed Price Page?"
+									style={{ width: '100%' }}
+								/>
+								<FormControlLabel
+									control={<Switch checked={customerForm.state.SignedCleaningSchedule} onChange={customerForm.handleChange('SignedCleaningSchedule')} value={customerForm.state.SignedCleaningSchedule} />}
+									label="3. Signed Cleaning Schedule?"
+									style={{ width: '100%' }}
+								/>
+								<FormControlLabel
+									control={<Switch checked={customerForm.state.AnalysisOfAccount} onChange={customerForm.handleChange('AnalysisOfAccount')} value={customerForm.state.AnalysisOfAccount} />}
+									label="4. Analysis Of Account?"
+									style={{ width: '100%' }}
+								/>
+								<FormControlLabel
+									control={<Switch checked={customerForm.state.AccountBidSheet} onChange={customerForm.handleChange('AccountBidSheet')} value={customerForm.state.AccountBidSheet} />}
+									label="5. Account Bid Sheet?"
+									style={{ width: '100%' }}
+								/>
+							</GridItem>
+
+							<GridItem xs={12} sm={12} md={12} className="flex flex-col" style={{justifyContent:'space-evenly'}}>
+								<TextField
+									id="SignatureAE"
+									label="A.E."
+									className={classes.textField}
+									value={customerForm.state.SignatureAE}
+									onChange={customerForm.handleChange('SignatureAE')}
+									margin="normal"
+									variant="outlined"
+									style={{ width: '100%' }}
+								/>
+								<TextField
+									id="SignatureOPS"
+									label="OPS"
+									className={classes.textField}
+									value={customerForm.state.SignatureOPS}
+									onChange={customerForm.handleChange('SignatureOPS')}
+									margin="normal"
+									variant="outlined"
+									style={{ width: '100%' }}
+								/>
+								<TextField
+									id="SignatureRD"
+									label="R.D."
+									className={classes.textField}
+									value={customerForm.state.SignatureRD}
+									onChange={customerForm.handleChange('SignatureRD')}
+									margin="normal"
+									variant="outlined"
+									style={{ width: '100%' }}
+								/>
+								<TextField
+									id="SignatureFO"
+									label="F.O."
+									className={classes.textField}
+									value={customerForm.state.SignatureFO}
+									onChange={customerForm.handleChange('SignatureFO')}
+									margin="normal"
+									variant="outlined"
+									style={{ width: '100%' }}
+								/>
+							</GridItem>
+						</GridItem>
+
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<FormControlLabel
+								control={<Switch checked={customerForm.state.UploadedDocuments} onChange={customerForm.handleChange('UploadedDocuments')} value={customerForm.state.UploadedDocuments} />}
+								label="Uploaded Documents?"
+								style={{ width: '100%' }}
+							/>
+
+							<FormControlLabel
+								control={<Switch checked={customerForm.state.EmailedToCustomerService} onChange={customerForm.handleChange('EmailedToCustomerService')} value={customerForm.state.EmailedToCustomerService} />}
+								label="Emailed to Customer Service?"
+								style={{ width: '100%' }}
+							/>
+
+							<FormControlLabel
+								control={<Switch checked={customerForm.state.BussinessCardAttached} onChange={customerForm.handleChange('BussinessCardAttached')} value={customerForm.state.BussinessCardAttached} />}
+								label="Bussiness Card Attached?"
+								style={{ width: '100%' }}
+							/>
+						</GridItem>
+
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<FormControlLabel
+								control={<Switch checked={customerForm.state.TransactionCompletedAndSentToFranchiseAccounting} onChange={customerForm.handleChange('TransactionCompletedAndSentToFranchiseAccounting')} value={customerForm.state.TransactionCompletedAndSentToFranchiseAccounting} />}
+								label="Transaction A Completed and Sent to Franchise Accounting?"
+								style={{ width: '100%' }}
+							/>
+						</GridItem>
+						{/* <GridItem>
+							<img className="mr-12" alt="" src="assets/images/customers/walk-through.jpg" style={{ width: '100%', height: 'auto' }} />
+						</GridItem> */}
+
+
 
 					</GridContainer>
 

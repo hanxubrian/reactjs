@@ -144,13 +144,30 @@ const stateNames = [
 
 class FilterPanel extends Component {
 
+
 	state = {
 		checkedPaid: true,
 		checkedPP: true,
 		checkedComplete: true,
 		checkedOpen: true,
-		invoiceDate: ''
+		invoiceDate: '',
+
+		isAllCustomerStatus: true,
+		isActiveCustomerStatus: true,
+		isCancelledCustomerStatus: true,
+		isSuspendedCustomerStatus: true,
+		isPendingCustomerStatus: true,
+		isInactiveCustomerStatus: true,
+		isTransferredCustomerStatus: true,
+		isTransferredCustomerStatus: true,
+		isUnknownCustomerStatus: true,
+		isRejectedCustomerStatus: true,
+		isRegionOperationCustomerStatus: true,
+		isRegionOperationCustomerStatus: true,
+		isRegionAccountingCustomerStatus: true,
+		isVariableCustomerStatus: true,
 	};
+
 
 	componentDidMount() {
 	}
@@ -351,7 +368,7 @@ class FilterPanel extends Component {
 											margin="normal"
 											variant="outlined"
 											fullWidth
-											// style={{ minWidth: "100px", width: "30%" }}
+										// style={{ minWidth: "100px", width: "30%" }}
 										>
 											{[{ value: 0, label: "Airline" }].map(option => (
 												<MenuItem key={option.value} value={option.value}>
@@ -424,21 +441,34 @@ class FilterPanel extends Component {
 									</FormControl>
 								</div>
 
-								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
+								{/* <div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
 									<h3>Neweast Customers</h3>
 								</div>
 
 								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
 									<h3>National Accounts</h3>
-								</div>
+								</div> */}
 
 								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
 									<h3>Account Executive</h3>
+									<FormControl className={classes.formControl} style={{ width: 200 }}>
+										<Select
+											value={-2}
+											onChange={this.handleChange1}
+											inputProps={{
+												name: 'invoiceDate',
+												id: 'invoice_date'
+											}}
+										>
+											<MenuItem value={-2}><em>All</em></MenuItem>
+											<MenuItem value={-1}><em>None</em></MenuItem>
+										</Select>
+									</FormControl>
 								</div>
 
 								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
 									<h3>Customer Status</h3>
-									<FormControlLabel
+									{/* <FormControlLabel
 										control={<Switch checked={this.state['customerStatus-1']} onChange={this.handleChange('customerStatus-1')} />}
 										label="Select All"
 									/>
@@ -451,10 +481,10 @@ class FilterPanel extends Component {
 													label={x}
 												/>)
 										})
-									}
-									{/* <FormControlLabel
+									} */}
+									<FormControlLabel
 										control={<Switch checked={this.state.isAllCustomerStatus} onChange={this.handleChange('isAllCustomerStatus')} />}
-										label="Select All"
+										label="All"
 									/>
 									<FormControlLabel
 										control={<Switch checked={this.state.isActiveCustomerStatus} onChange={this.handleChange('isActiveCustomerStatus')} />}
@@ -499,7 +529,7 @@ class FilterPanel extends Component {
 									<FormControlLabel
 										control={<Switch checked={this.state.isVariableCustomerStatus} onChange={this.handleChange('isVariableCustomerStatus')} />}
 										label="Variable"
-									/> */}
+									/>
 								</div>
 							</div>
 						)
