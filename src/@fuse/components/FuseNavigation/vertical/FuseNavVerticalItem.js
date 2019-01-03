@@ -91,7 +91,7 @@ class FuseNavVerticalItem extends Component
                      onClick={() => this.handleClick(navbarCloseMobile, item.IframeUrl)}
                      exact={item.exact}
                  >
-                     {item.Icon && (
+                     {item.Icon && item.Icon.trim() !== "" && (
                          <Icon className="list-item-icon text-16 flex-no-shrink" color="action">{item.Icon}</Icon>
                      )}
                      <ListItemText className="list-item-text" primary={item.Title}
