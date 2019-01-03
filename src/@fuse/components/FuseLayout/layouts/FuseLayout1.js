@@ -259,7 +259,6 @@ const styles = theme => ({
 
 });
 
-const API_KEY = 2
 class FuseLayout1 extends Component {
     handleToggleFolded = () => {
         console.log('fired handleToggleFolded');

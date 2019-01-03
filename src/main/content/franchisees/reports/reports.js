@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 import connect from "react-redux/es/connect/connect";
 import classNames from 'classnames';
 // core components
-import {Grid, Hidden, Icon, IconButton, Fab, Card, CardContent, Typography, Input, Paper, TextField, Button} from '@material-ui/core';
+import {Grid, Card, CardContent, Typography, TextField} from '@material-ui/core';
 
 const styles = theme => ({
     root: {
@@ -495,8 +495,6 @@ const styles = theme => ({
 </CardContent>
 </Card>
 
-//2nd card below
-
 <Card className={classNames(classes.card, "mx-auto")}>
 <CardContent className={classNames(classes.cardContent, "p-88 print:p-0")}>
 
@@ -931,8 +929,6 @@ const styles = theme => ({
 </CardContent>
 </Card>
 
-//3rd card below
-
 <Card className={classNames(classes.card, "mx-auto")}>
 <CardContent className={classNames(classes.cardContent, "p-88 print:p-0")}>
 
@@ -1100,8 +1096,6 @@ const styles = theme => ({
 </CardContent>
 </Card>
 
-//4th card below
-
 <Card className={classNames(classes.card, "mx-auto")}>
 <CardContent className={classNames(classes.cardContent, "p-88 print:p-0")}>
 
@@ -1234,8 +1228,6 @@ const styles = theme => ({
 </CardContent>
 </Card>
 
-//5th card below
-
 <Card className={classNames(classes.card, "mx-auto")}>
 <CardContent className={classNames(classes.cardContent, "p-88 print:p-0")}>
 
@@ -1349,8 +1341,6 @@ const styles = theme => ({
     </div>
 </CardContent>
 </Card>
-
-//6th card below
 
 <Card className={classNames(classes.card, "mx-auto")}>
 <CardContent className={classNames(classes.cardContent, "p-88 print:p-0")}>
@@ -1490,8 +1480,6 @@ const styles = theme => ({
 </CardContent>
 </Card>
 
-//7th card below
-
 <Card className={classNames(classes.card, "mx-auto")}>
 <CardContent className={classNames(classes.cardContent, "p-88 print:p-0")}>
 
@@ -1614,8 +1602,6 @@ const styles = theme => ({
     </div>
 </CardContent>
 </Card>
-
-//8th card below
 
 <Card className={classNames(classes.card, "mx-auto")}>
 <CardContent className={classNames(classes.cardContent, "p-88 print:p-0")}>

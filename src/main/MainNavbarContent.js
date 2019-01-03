@@ -53,9 +53,6 @@ const styles = theme => ({
     },
 });
 
-const API_KEY = 2
-
-// function MainNavbar({classes, navigation, layoutStyle, user})
 class MainNavbar extends Component{
     // state = {
     //     sidebarLogo: null,
