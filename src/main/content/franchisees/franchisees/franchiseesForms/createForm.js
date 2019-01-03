@@ -5,7 +5,7 @@ import {
     TextField, Button, Typography,  Divider, FormControlLabel
 } from '@material-ui/core';
 // theme components
-import { FusePageCustom, FuseAnimate, FuseSearch } from '@fuse';
+import { FuseAnimate} from '@fuse';
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 //Custom components
@@ -67,128 +67,8 @@ function getSteps() {
     return ["Company Information", "Owner", "Financial", "Billing Settings", "Contract", "Franchisees Fee Maintenance"];
 }
 
-const stateNames = [
-    {
-        value: 2,
-        label: "Buffalo"
-    },
-    {
-        value: 7,
-        label: "Detroit"
-    },
-    {
-        value: 9,
-        label: "Hartford"
-    },
-    {
-        value: 13,
-        label: "Las Vegas"
-    },
-    {
-        value: 14,
-        label: "Los Angeles/Colton"
-    },
-    {
-        value: 16,
-        label: "Miami"
-    },
-    {
-        value: 18,
-        label: "Minneapolis"
-    },
-    {
-        value: 20,
-        label: "New Jersey"
-    },
-    {
-        value: 21,
-        label: "New York"
-    },
-    {
-        value: 22,
-        label: "San Francisco/Oakland"
-    },
-    {
-        value: 23,
-        label: "Oklahoma City"
-    },
-    {
-        value: 24,
-        label: "Philadelphia"
-    },
-    {
-        value: 25,
-        label: "Sacramento"
-    },
-    {
-        value: 26,
-        label: "Washington DC"
-    },
-    {
-        value: 28,
-        label: "Jani-King Int'l, Inc."
-    },
-    {
-        value: 29,
-        label: "JANI-KING OF NEW MEXICO, INC"
-    },
-    {
-        value: 31,
-        label: "New Mexico"
-    },
-    {
-        value: 46,
-        label: "Houston"
-    },
-    {
-        value: 55,
-        label: "Pittsburgh"
-    },
-    {
-        value: 64,
-        label: "Tulsa"
-    },
-    {
-        value: 82,
-        label: "Reno"
-    }
-];
-
 function getStepContent(customerForm, step) {
     const { classes} = customerForm.props;
-
-    const address_headers = [
-        {
-            id: 'billing',
-            numeric: false,
-            disablePadding: false,
-            label: 'Type'
-        },
-        {
-            id: 'service',
-            numeric: false,
-            disablePadding: false,
-            label: 'Address'
-        },
-        {
-            id: 'description',
-            numeric: false,
-            disablePadding: false,
-            label: 'City'
-        },
-        {
-            id: 'quantity',
-            numeric: true,
-            disablePadding: false,
-            label: 'State'
-        },
-        {
-            id: 'amount',
-            numeric: true,
-            disablePadding: false,
-            label: 'Zip / Postal'
-        }
-    ];
 
     const billing_headers = [
         {
@@ -784,10 +664,6 @@ class FranchiseesCreateForm extends Component {
         this.type === 'create' ? this.props.closeEditFranchisees() : this.props.closeCreateFranchisees();
     };
 
-    constructor(props) {
-        super(props);
-    }
-
     componentDidUpdate(prevProps, prevState, snapshot) {
     }
 
@@ -817,10 +693,6 @@ class FranchiseesCreateForm extends Component {
 
     canBeSubmitted() {
         return true;
-        const { name } = this.state;
-        return (
-            name.length > 0
-        );
     }
 
 
@@ -849,10 +721,8 @@ class FranchiseesCreateForm extends Component {
     render() {
         const { classes} = this.props;
 
-        console.log('customers', this.props.customers);
-
         const steps = getSteps();
-        const { activeStep, print1099, radioValue} = this.state;
+        const { activeStep} = this.state;
 
 
         return (

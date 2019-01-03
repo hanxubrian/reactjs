@@ -91,8 +91,6 @@ class ChatPanel extends Component {
 
         const selectedContact = contacts.find(_contact => _contact.id === selectedContactId);
 
-        console.log('chat=', this.props);
-
         return (
             <div className={classes.root}>
                 <ClickAwayListener onClickAway={() => state && closeChatPanel()}>

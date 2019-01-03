@@ -6,15 +6,14 @@ import keycode from 'keycode';
 //Material UI core
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
 
-
+//Store
 import * as Actions from 'store/actions';
-
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+
+//Third Party
 import classNames from 'classnames';
 
 import GridContainer from "Commons/Grid/GridContainer";
@@ -159,10 +158,8 @@ class FilterPanel extends Component {
 		isPendingCustomerStatus: true,
 		isInactiveCustomerStatus: true,
 		isTransferredCustomerStatus: true,
-		isTransferredCustomerStatus: true,
 		isUnknownCustomerStatus: true,
 		isRejectedCustomerStatus: true,
-		isRegionOperationCustomerStatus: true,
 		isRegionOperationCustomerStatus: true,
 		isRegionAccountingCustomerStatus: true,
 		isVariableCustomerStatus: true,
@@ -205,7 +202,7 @@ class FilterPanel extends Component {
 	};
 
 	handleChangeChecked = name => event => {
-		if (name == "isAllCustomerStatus") {
+		if (name === "isAllCustomerStatus") {
 			this.setState({
 				isAllCustomerStatus: event.target.checked,
 				isActiveCustomerStatus: event.target.checked,
@@ -214,10 +211,8 @@ class FilterPanel extends Component {
 				isPendingCustomerStatus: event.target.checked,
 				isInactiveCustomerStatus: event.target.checked,
 				isTransferredCustomerStatus: event.target.checked,
-				isTransferredCustomerStatus: event.target.checked,
 				isUnknownCustomerStatus: event.target.checked,
 				isRejectedCustomerStatus: event.target.checked,
-				isRegionOperationCustomerStatus: event.target.checked,
 				isRegionOperationCustomerStatus: event.target.checked,
 				isRegionAccountingCustomerStatus: event.target.checked,
 				isVariableCustomerStatus: event.target.checked,
@@ -251,12 +246,7 @@ class FilterPanel extends Component {
 		});
 
 		let accountTypes = [...new Set(regionCustomers.map(x => x.AccountTypeListName))].sort();
-		let accountStatuses = [...new Set(regionCustomers.map(x => x.StatusName))].sort();
-
-		console.log("regions")
-		console.log(this.props.regionId)
-
-		console.log(accountStatuses)
+		// let accountStatuses = [...new Set(regionCustomers.map(x => x.StatusName))].sort();
 
 		return (
 			<div className={classNames(classes.root, "flex flex-col")}>
@@ -445,7 +435,7 @@ class FilterPanel extends Component {
 												<MenuItem value={15}>Period</MenuItem>
 											</Select>
 										</FormControl>
-									</div> 
+									</div>
 									*/}
 
 								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
@@ -481,6 +471,8 @@ class FilterPanel extends Component {
 											accountTypes.map((x, index) => {
 												if (x !== null)
 													return (<MenuItem key={x} value={index}>{x}</MenuItem>)
+												else
+													return null
 											})
 										}
 

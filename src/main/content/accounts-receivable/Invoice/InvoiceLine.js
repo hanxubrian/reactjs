@@ -6,9 +6,16 @@ import {withRouter} from 'react-router-dom';
 
 //Material UI core and icons
 import {
-    Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
+    Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,Snackbar, SnackbarContent,
     Toolbar, Typography, Paper, Icon, IconButton, Tooltip, Select, OutlinedInput, MenuItem, FormControl, Fab
 } from '@material-ui/core'
+import green from '@material-ui/core/colors/green';
+import amber from '@material-ui/core/colors/amber';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
+import InfoIcon from '@material-ui/icons/Info';
+import CloseIcon from '@material-ui/icons/Close';
+import WarningIcon from '@material-ui/icons/Warning';
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -24,6 +31,81 @@ import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
 import keycode from "keycode";
 
+
+//Snackbar
+const variantIcon = {
+    success: CheckCircleIcon,
+    warning: WarningIcon,
+    error: ErrorIcon,
+    info: InfoIcon,
+};
+
+const styles1 = theme => ({
+    success: {
+        backgroundColor: green[600],
+    },
+    error: {
+        backgroundColor: theme.palette.error.dark,
+    },
+    info: {
+        backgroundColor: theme.palette.primary.dark,
+    },
+    warning: {
+        backgroundColor: amber[700],
+    },
+    icon: {
+        fontSize: 20,
+    },
+    iconVariant: {
+        opacity: 0.9,
+        marginRight: theme.spacing.unit,
+    },
+    message: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+});
+
+function MySnackbarContent(props) {
+    const { classes, className, message, onClose, variant, ...other } = props;
+    const Icon = variantIcon[variant];
+
+    return (
+        <SnackbarContent
+            className={classNames(classes[variant], className)}
+            aria-describedby="client-snackbar"
+            message={
+                <span id="client-snackbar" className={classes.message}>
+          <Icon className={classNames(classes.icon, classes.iconVariant)} />
+                    {message}
+        </span>
+            }
+            action={[
+                <IconButton
+                    key="close"
+                    aria-label="Close"
+                    color="inherit"
+                    className={classes.close}
+                    onClick={onClose}
+                >
+                    <CloseIcon className={classes.icon} />
+                </IconButton>,
+            ]}
+            {...other}
+        />
+    );
+}
+
+MySnackbarContent.propTypes = {
+    classes: PropTypes.object.isRequired,
+    className: PropTypes.string,
+    message: PropTypes.node,
+    onClose: PropTypes.func,
+    variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
+};
+
+const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
+
 const chance = new Chance();
 let counter = 0;
 
@@ -38,7 +120,7 @@ function createFranchisee(parent_id,id, franchisee="Franchisee", name="Franchise
     }
 }
 
-function createData(billing='Regular Billing', service='Adjust-Balance', description='description', quantity=1, amount=0, markup=0, extended=0)
+function createData(billing='Regular Billing', service='Adjust-Balance', description=' ', quantity=1, amount=0, markup=0, extended=0)
 {
     return {
         id: counter++,
@@ -248,7 +330,14 @@ const styles = theme => ({
             width: 500
         },
         '& thead tr th:nth-child(4)':{
-            width: 60
+            width: 80,
+            textAlign: 'center',
+            '& svg':{
+                display: 'none'
+            }
+        },
+        '& thead tr th:nth-child(5)':{
+            width: 160,
         },
         '& thead tr th:last-child':{
             borderRight: 'none'
@@ -278,13 +367,17 @@ const styles = theme => ({
     description:{
         width: '520px!important'
     },
+    markup:{
+        width: '150px!important'
+    },
     extended:{
-        width: '170px!important'
+        width: '160px!important'
     },
     quantity:{
         '& div': {
-            width: '40px!important',
-            float: 'right'
+            width: '60px!important',
+            textAlign: 'center',
+            float: 'none'
         }
     },
     actionsWrap: {
@@ -374,7 +467,7 @@ class InvoiceLineTable extends React.Component {
         // orderBy    : 'billing',
         selected   : [],
         data       : [
-            createData("Regular Billing", "Adjust-Balance", "Invoice",1),
+            createData("Regular Billing", "Adjust-Balance", " ",1),
         ],
         page       : 0,
         rowsPerPage: 10,
@@ -450,6 +543,13 @@ class InvoiceLineTable extends React.Component {
     }
 
     addLineData=()=>{
+        const lineData = [...this.state.data];
+        const lastRow = lineData[lineData.length-1];
+        console.log('record', lastRow);
+        if(lastRow.amount===0) alert('amount='+lastRow.amount);
+        if(lastRow.quantity===0) alert('quantity='+lastRow.quantity);
+        if(lastRow.description===' ') alert('description='+lastRow.description);
+
         const data = [...this.state.data, createData()];
         let id = 0;
         let newData = data.map(record=>{
@@ -527,7 +627,7 @@ class InvoiceLineTable extends React.Component {
             value = parseFloat(this.state.data[cellInfo.id][id]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         return (
             <div
-                style={{ backgroundColor: "#fafafa", padding: 12 }}
+                style={{ backgroundColor: "#fafafa", padding: 12, border: "1px solid lightgray", borderRadius: 6 }}
                 contentEditable
                 suppressContentEditableWarning
                 onBlur={e => {
@@ -577,8 +677,6 @@ class InvoiceLineTable extends React.Component {
                 all_data.push(f);
             });
         });
-
-        console.log('new data=', all_data);
 
         return (
             <Paper className={classNames(classes.root)}>
@@ -669,11 +767,11 @@ class InvoiceLineTable extends React.Component {
                                                     </FormControl>
                                                 </TableCell>
                                                 <TableCell classes={{root:classNames(classes.description)}}>{this.renderEditable(n, 'description')}</TableCell>
-                                                <TableCell classes={{root:classNames(classes.quantity, "mr-24 ml-24")}} numeric>{this.renderEditable(n, 'quantity')}</TableCell>
+                                                <TableCell classes={{root:classNames(classes.quantity, "mr-24 ml-24")}}>{this.renderEditable(n, 'quantity')}</TableCell>
                                                 <TableCell numeric>{this.renderEditable(n, 'amount')}</TableCell>
-                                                <TableCell classes={{root:classNames(classes.quantity, "mr-24 ml-24")}} numeric>{this.renderEditableMarkup(n, 'markup')}</TableCell>
-                                                <TableCell classes={{root:classNames(classes.extended, "mr-24 ml-24")}}numeric>${parseFloat((n.amount*n.quantity)*(1+parseFloat(n.markup)/100)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</TableCell>
-                                                <TableCell classes={{root:classNames(classes.actionsWrap, "mr-24 ml-24")}} padding="checkbox" numeric>
+                                                <TableCell classes={{root:classNames(classes.markup, "mr-24 ml-24")}} numeric>{this.renderEditableMarkup(n, 'markup')}</TableCell>
+                                                <TableCell classes={{root:classNames(classes.extended, "mr-24 ml-24")}} numeric>${parseFloat((n.amount*n.quantity)*(1+parseFloat(n.markup)/100)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</TableCell>
+                                                <TableCell classes={{root:classNames(classes.actionsWrap, "mr-24 ml-24")}} padding="checkbox">
                                                     <Fab color="secondary" aria-label="add"
                                                          className={classNames(classes.lineButton, "mr-12")}
                                                          onClick={()=>this.addFranchiseeLine(n)}

@@ -55,46 +55,13 @@ function getSorting(order, orderBy) {
     return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
 
-const rows = [
-    {
-        id: 'billing',
-        numeric: false,
-        disablePadding: false,
-        label: 'Type'
-    },
-    {
-        id: 'service',
-        numeric: false,
-        disablePadding: false,
-        label: 'Address'
-    },
-    {
-        id: 'description',
-        numeric: false,
-        disablePadding: false,
-        label: 'City'
-    },
-    {
-        id: 'quantity',
-        numeric: true,
-        disablePadding: false,
-        label: 'State'
-    },
-    {
-        id: 'amount',
-        numeric: true,
-        disablePadding: false,
-        label: 'Zip / Postal'
-    }
-];
-
 class CustomerLineTableHead extends React.Component {
     createSortHandler = property => event => {
         this.props.onRequestSort(event, property);
     };
 
     render() {
-        const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, headers } = this.props;
+        const { order, orderBy, headers } = this.props;
         let rows = headers;
 
         return (
@@ -394,7 +361,6 @@ class FranchiseesLineTable extends React.Component {
     render() {
         const { classes } = this.props;
         const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
-        const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
         return (
             <Paper className={classes.root}>
@@ -416,82 +382,13 @@ class FranchiseesLineTable extends React.Component {
                                     return (
                                         <TableRow hover key={n.id}>
                                             <TableCell component="td" scope="row" >
-                                                {/* <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl)} style={{ marginBottom: '0!important' }}>
-													<Select
-														classes={{
-															outlined: classes.outlined
-														}}
-														value={n.billing}
-														onChange={(ev) => this.handleChangeBilling(ev, n)}
-														input={
-															<OutlinedInput
-																labelWidth={this.state.labelWidth}
-																name="billing"
-																id="billing"
-															/>
-														}
-													>
-														<MenuItem value="">
-															<em>Select</em>
-														</MenuItem>
-														<MenuItem value="Regular Billing">Regular Billing</MenuItem>
-														<MenuItem value="Additional Billing Office">Additional Billing Office</MenuItem>
-														<MenuItem value="Extra Work">Extra Work</MenuItem>
-														<MenuItem value="Client Supplies">Client Supplies</MenuItem>
-													</Select>
-												</FormControl> */}
                                             </TableCell>
                                             <TableCell>
-                                                {/* <FormControl variant="outlined" className={classes.formControl} style={{ marginBottom: '0!important' }}>
-													<Select
-														classes={{
-															outlined: classes.outlined
-														}}
-														value={n.service}
-														onChange={(ev) => this.handleChangeBilling(ev, n)}
-														input={
-															<OutlinedInput
-																labelWidth={this.state.labelWidth}
-																name="service"
-																id="service"
-															/>
-														}
-													>
-														<MenuItem value="">
-															<em>Select</em>
-														</MenuItem>
-														<MenuItem value="Adjust-Balance">Adjust - Balance</MenuItem>
-														<MenuItem value="Adjust-Refund">Adjust - Refund</MenuItem>
-														<MenuItem value="Adjust-WriteOff">Adjust - WriteOff</MenuItem>
-														<MenuItem value="Buffing">Buffing</MenuItem>
-														<MenuItem value="Carpet Clean">Carpet Clean</MenuItem>
-														<MenuItem value="Customer Suppliers">Customer Suppliers</MenuItem>
-														<MenuItem value="Emergency Clean">Emergency Clean</MenuItem>
-														<MenuItem value="Event Center">Event Center</MenuItem>
-														<MenuItem value="Floor Services">Floor Services</MenuItem>
-														<MenuItem value="Furniture Cleaning Service">Furniture Cleaning Service</MenuItem>
-														<MenuItem value="High Dusting">High Dusting</MenuItem>
-														<MenuItem value="Hotel">Hotel</MenuItem>
-														<MenuItem value="In-House Work">In-House Work</MenuItem>
-														<MenuItem value="Initial and Deep Clean">Initial and Deep Clean</MenuItem>
-														<MenuItem value="Initial One-Time Clean">Initial One-Time Clean</MenuItem>
-														<MenuItem value="Make Ready">Make Ready</MenuItem>
-														<MenuItem value="Miscellaneous - Special">Miscellaneous - Special</MenuItem>
-														<MenuItem value="Other">Other</MenuItem>
-														<MenuItem value="Porter Services">Porter Services</MenuItem>
-														<MenuItem value="Power Washing">Power Washing</MenuItem>
-														<MenuItem value="Regular Billing">Regular Billing</MenuItem>
-														<MenuItem value="Regular Cleaning - Day">Regular Cleaning - Day</MenuItem>
-														<MenuItem value="Regular Cleaning - Night">Regular Cleaning - Night</MenuItem>
-													</Select>
-												</FormControl> */}
                                             </TableCell>
                                             <TableCell>{this.renderEditable(n, 'description')}</TableCell>
                                             <TableCell numeric>{this.renderEditable(n, 'quantity')}</TableCell>
                                             <TableCell numeric>{this.renderEditable(n, 'amount')}</TableCell>
-                                            {/* <TableCell numeric>{this.renderEditableMarkup(n, 'markup')}</TableCell>
-											<TableCell numeric>{this.renderEditable(n, 'extended')}</TableCell> */}
-                                            {this.props.headers.length == 6 &&
+                                            {this.props.headers.length === 6 &&
                                             (
                                                 <TableCell numeric>{this.renderEditable(n, 'extended')}</TableCell>
                                             )
@@ -514,11 +411,6 @@ class FranchiseesLineTable extends React.Component {
                                         </TableRow>
                                     );
                                 })}
-                            {emptyRows > 0 && (
-                                <TableRow style={{ height: 49 * emptyRows }} style={{ display: 'none' }}>
-                                    <TableCell colSpan={8} />
-                                </TableRow>
-                            )}
                         </TableBody>
                     </Table>
                 </div>

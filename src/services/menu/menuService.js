@@ -17,7 +17,6 @@ class menuService {
             axios_instance.get(`${BASE_API_URL}/v1/menu/get/?appid=2`)
                 .then( res => {
                     if(res.status===200) {
-                        console.log(res.data);
                         resolve(res.data);
                     }
                     else if(res.status!==200){

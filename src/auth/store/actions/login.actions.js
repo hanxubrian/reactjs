@@ -22,7 +22,6 @@ export function submitSignIn(email, password)  {
             if (res.IsSuccess) {
 
                 let navigations = await menuService.loadAccountMenu();
-                console.log('load_nav = ' , navigations);
                 dispatch({
                     type: LOGIN_SUCCESS,
                     payload: res

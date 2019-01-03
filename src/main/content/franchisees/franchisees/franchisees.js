@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import {Hidden,Icon,IconButton,Fab,Input,Paper,Button, Typography,Toolbar} from '@material-ui/core';
 
 // theme components
-import {FusePageCustom, FuseAnimate} from '@fuse';
+import {FuseAnimate} from '@fuse';
 
 //Janiking
 import JanikingPagination from './../../../../Commons/JanikingPagination';

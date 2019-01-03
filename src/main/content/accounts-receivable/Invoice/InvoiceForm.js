@@ -38,6 +38,7 @@ import Autosuggest from 'react-autosuggest';
 import classNames from 'classnames';
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
+import moment from 'moment'
 
 const styles = theme => ({
     layoutForm: {
@@ -296,6 +297,8 @@ class InvoiceForm extends Component {
         const { classes} = this.props;
         const { value, suggestions } = this.state;
 
+        const today = new Date()
+
         const autosuggestProps = {
             renderInputComponent,
             suggestions: suggestions,
@@ -366,6 +369,7 @@ class InvoiceForm extends Component {
                                 <TextField
                                     margin="none"
                                     label="Invoice #"
+                                    placeholder="Invoice #"
                                     InputLabelProps={{
                                         shrink: true
                                     }}
@@ -467,7 +471,7 @@ class InvoiceForm extends Component {
                                     <span className={classes.summary}><strong>Subtotal: </strong>${this.state.subTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
                                 <div className="w-full p-12 flex justify-end pb-0">
-                                    <span className={classes.summary}><strong>Markup Amount: </strong>${this.state.markup.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
+                                    <span className={classes.summary}><strong>Markup Total: </strong>${this.state.markup.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
                                 <div className="w-full p-12 flex justify-end">
                                     <span className={classes.summary}><strong>Tax: </strong>${this.state.tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
@@ -477,55 +481,62 @@ class InvoiceForm extends Component {
                                 </div>
                             </GridItem>
                         </GridContainer>
-                        <div className="flex flex-1 flex-row justify-end">
-                            <FuseAnimate animation="transition.expandIn" delay={300}>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    className={classNames(classes.button, "mr-12")}
-                                    onClick={() => {
-                                        this.onSaveAndClose();
-                                    }}
-                                >
-                                    Save & Close
-                                </Button>
-                            </FuseAnimate>
-                            <FuseAnimate animation="transition.expandIn" delay={300}>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    className={classNames(classes.button, "mr-12")}
-                                    onClick={() => {
-                                        this.onSaveAndAddMore();
-                                    }}
-                                >
-                                    Save & Add more
-                                </Button>
-                            </FuseAnimate>
-                            <FuseAnimate animation="transition.expandIn" delay={300}>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    className={classNames(classes.button, "mr-12")}
-                                    onClick={() => {
-                                        this.onSubmitForApproval();
-                                    }}
-                                >
-                                    Submit for Approval
-                                </Button>
-                            </FuseAnimate>
-                            <FuseAnimate animation="transition.expandIn" delay={300}>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    className={classes.button}
-                                    onClick={() => {
-                                        this.closeComposeForm();
-                                    }}
-                                >
-                                    Close
-                                </Button>
-                            </FuseAnimate>
+                        <div className="flex flex-1 flex-row justify-between items-center">
+                            <div className="flex flex-row justify-start">
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <span className={classes.summary}><strong>Created By: </strong>{`${this.props.user.firstName} ${this.props.user.lastName}, ${moment(today).format('MM/DD/YYYY')}`}</span>
+                                </FuseAnimate>
+                            </div>
+                            <div className="flex flex-1 flex-row justify-end">
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        className={classNames(classes.button, "mr-12")}
+                                        onClick={() => {
+                                            this.onSaveAndClose();
+                                        }}
+                                    >
+                                        Save & Close
+                                    </Button>
+                                </FuseAnimate>
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        className={classNames(classes.button, "mr-12")}
+                                        onClick={() => {
+                                            this.onSaveAndAddMore();
+                                        }}
+                                    >
+                                        Save & Add more
+                                    </Button>
+                                </FuseAnimate>
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        className={classNames(classes.button, "mr-12")}
+                                        onClick={() => {
+                                            this.onSubmitForApproval();
+                                        }}
+                                    >
+                                        Submit for Approval
+                                    </Button>
+                                </FuseAnimate>
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        className={classes.button}
+                                        onClick={() => {
+                                            this.closeComposeForm();
+                                        }}
+                                    >
+                                        Close
+                                    </Button>
+                                </FuseAnimate>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -543,10 +554,11 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({invoices, })
+function mapStateToProps({invoices, auth})
 {
     return {
-        invoiceForm: invoices.invoiceForm
+        invoiceForm: invoices.invoiceForm,
+        user: auth.login
     }
 }
 

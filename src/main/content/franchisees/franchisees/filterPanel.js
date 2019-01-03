@@ -63,7 +63,8 @@ class FilterPanel extends Component {
         checkedLegalCompliancePending: true,
         checkedInactive: true,
         checkedPendingTransfer: true,
-        checkedSelectAll: true
+        checkedSelectAll: true,
+        State: ''
     };
 
     componentDidMount()
