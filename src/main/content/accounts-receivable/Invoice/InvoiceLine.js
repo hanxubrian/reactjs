@@ -687,7 +687,7 @@ class InvoiceLineTable extends React.Component {
                                                 </TableCell>
                                             </TableRow>
                                         );
-                                    if(n.type==='franch')
+                                    else //franch
                                         return (
                                             <TableRow hover key={chance.guid()} style={{height: 48}} classes={{root: classes.franchisees}}>
                                                 <TableCell rowSpan={3} />

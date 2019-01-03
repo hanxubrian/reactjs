@@ -307,7 +307,7 @@ class InvoiceForm extends Component {
                     <div className="flex flex-col p-24 pt-12 pb-0" style={{flex: "1"}}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <GridContainer className={classNames(classes.formControl)}>
-                            <GridItem xs={12} sm={8} md={8} className="flex flex-row">
+                            <GridItem xs={12} sm={6} md={6} className="flex flex-row">
                                 <Autosuggest
                                     {...autosuggestProps}
                                     inputProps={{
@@ -355,6 +355,22 @@ class InvoiceForm extends Component {
                                     value={this.state.DueDate}
                                     onChange={this.handleDueDateChange}
                                     required
+                                    fullWidth
+                                />
+                            </GridItem>
+                            <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                <TextField
+                                    margin="none"
+                                    label="Invoice #"
+                                    InputLabelProps={{
+                                        shrink: true
+                                    }}
+                                    name="InvoiceNo"
+                                    variant="outlined"
+                                    value={this.state.InvoiceNo}
+                                    onChange={this.handleChange}
+                                    required
+                                    fullWidth
                                 />
                             </GridItem>
                         </GridContainer>
