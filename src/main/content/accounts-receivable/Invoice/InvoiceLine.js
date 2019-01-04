@@ -120,7 +120,7 @@ function createFranchisee(parent_id,id, franchisee="Franchisee", name="Franchise
     }
 }
 
-function createData(billing='Regular Billing', service='Adjust-Balance', description=' ', quantity=1, amount=0, markup=0, extended=0)
+function createData(billing='Regular Billing', service='Adjust-Balance', description=' ', quantity=0, amount=0, markup=0, extended=0)
 {
     return {
         id: counter++,
@@ -327,7 +327,10 @@ const styles = theme => ({
             width: 260
         },
         '& thead tr th:nth-child(3)':{
-            width: 500
+            width: 360
+        },
+        '& thead tr th:nth-child(8)':{
+            width: 160
         },
         '& thead tr th:nth-child(4)':{
             width: 80,
@@ -337,7 +340,10 @@ const styles = theme => ({
             }
         },
         '& thead tr th:nth-child(5)':{
-            width: 160,
+            width: 130,
+        },
+        '& thead tr th:nth-child(7)':{
+            width: 130,
         },
         '& thead tr th:last-child':{
             borderRight: 'none'
@@ -365,14 +371,14 @@ const styles = theme => ({
         fontSize: '1.3rem'
     },
     description:{
-        width: '520px!important',
+        width: '420px!important',
         flexGrow: 1.0,
     },
     markup:{
-        width: '150px!important'
+        width: '120px!important'
     },
     extended:{
-        width: '160px!important'
+        width: '120px!important'
     },
     quantity:{
         '& div': {
@@ -382,7 +388,7 @@ const styles = theme => ({
         }
     },
     actionsWrap: {
-        width: '160px!important'
+        width: '180px!important'
     },
     table       : {
         minWidth: 1020,
@@ -468,7 +474,7 @@ class InvoiceLineTable extends React.Component {
         // orderBy    : 'billing',
         selected   : [],
         data       : [
-            createData("Regular Billing", "Adjust-Balance", " ",1),
+            createData("Regular Billing", "Adjust-Balance", " ",0),
         ],
         page       : 0,
         rowsPerPage: 10,
