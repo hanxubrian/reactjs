@@ -54,6 +54,7 @@
         "react-swipeable-views": "0.13.0",
         "react-table": "6.8.6",
         "react-text-mask": "5.4.3",
+        "react-video-cover": "^1.2.2",
         "redux": "4.0.1",
         "redux-logger": "^3.0.6",
         "redux-persist": "^5.10.0",

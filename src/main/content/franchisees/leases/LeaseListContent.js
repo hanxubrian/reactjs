@@ -221,7 +221,7 @@ class LeaseListContent extends Component {
 
 		if (rawData === null) return;
 
-		let regions = rawData.Data.Regions.filter(x => {
+		let regions = rawData.Data.Region.filter(x => {
 			return this.props.regionId === 0 || x.Id === this.props.regionId;
 		});
 
@@ -606,7 +606,7 @@ class LeaseListContent extends Component {
 								// },
 								{
 									Header: "Actions",
-									// width: 128,
+									width: 128,
 									Cell: row => (
 										<div className="flex items-center actions">
 											<IconButton

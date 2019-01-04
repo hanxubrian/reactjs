@@ -11,6 +11,7 @@ import * as NavigationActions from '../../../../store/actions/fuse/navigation.ac
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
 import connect from 'react-redux/es/connect/connect';
+import VideoCover from 'react-video-cover';
 
 const styles = theme => ({
     root: {
@@ -46,10 +47,8 @@ class SigninPage extends Component {
         alertOpen: false
     };
 
-
-
     componentDidMount() {
-       this.handleAppStart();
+        this.handleAppStart();
     }
 
     handleAppStart = () => {
@@ -87,11 +86,10 @@ class SigninPage extends Component {
         const {email, password} = this.state;
         this.props.signinUser(email, password);
     }
-    render()
-    {
+    render() {
        const styles = ({
             root: {
-                background: `url(${this.props.app.loginBackground})`,
+                background:  `url(${this.props.app.loginBackground})`,
                 backgroundSize: 'cover',
                 backgroundRepeat: 'noRepeat'
             },
@@ -109,18 +107,26 @@ class SigninPage extends Component {
                 zIndex: 1000,
                 alignItems: 'center',
                 justifyContent: 'center',
-                display: 'flex'
+                display: 'flex',
+                opacity: 0.5
             }
        });
 
         const {classes} = this.props;
         const { email, password, remember } = this.state;
 
-        // console.log(styles.root.background)
-        // console.log(this.props.loadHomeScreen);
-        // style={{ background: this.handleAppStart }}
+        const videoOptions = {
+            src: this.props.app.loginVideoBackground,
+            autoPlay: true,
+            loop: true,
+            muted: true
+        }
+
         return (
             <div style={{ background: styles.root.background, backgroundSize: styles.root.backgroundSize, backgroundRepeat: styles.root.backgroundRepeat }} className={classNames(classes.root, "flex flex-col flex-auto flex-no-shrink items-center justify-center p-32")}>
+
+             <VideoCover style= {{ position: styles.overlay.position, opacity: styles.overlay.opacity }}
+                                videoOptions={videoOptions} />
 
                 {this.props.login.bLoginStart && (
                     <div className={classes.overlay}>
@@ -219,6 +225,9 @@ class SigninPage extends Component {
                                 <div className="flex flex-col items-center justify-center pt-32 pb-24">
                                     <span className="font-medium">Don't have an account?</span>
                                     <Link className="font-medium" to="/auth/register">Register a account</Link>
+                                    <br></br>
+                                    <br></br>
+                                    <span className="font-small">Copyright: {this.props.app.copyRight}</span>
                                 </div>
 
                             </CardContent>

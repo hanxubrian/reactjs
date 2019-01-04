@@ -89,7 +89,7 @@ class MainNavbar extends Component{
 
         return (
             <div className={classNames(classes.logofull, "flex items-center")}>
-                <img className={classNames(classes.logoIcon, "logo-icon-1 mt-8 showInitial navBarShownClosed")} src={this.props.app.navSideBarLeftBg} alt="logo"/>
+                <img className={classNames(classes.logoIcon, "logo-icon-1 mt-8 showInitial navBarShownClosed")} src={this.props.app.navSideBarIcon} alt="logo"/>
                 <img className={classNames(classes.logoIconText, "logo-icon-large")} src={this.props.app.navSideBarLogo} alt="logo"/>
                 <Typography className="logo-icon-large">{region_name}</Typography>
             </div>

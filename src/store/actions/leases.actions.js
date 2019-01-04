@@ -16,10 +16,36 @@ export const CLOSE_EDIT_LEASE_FORM = '[LEASES APP] CLOSE EDIT LEASE FORM';
 export const ADD_LEASE = '[LEASES APP] ADD LEASE';
 export const UPDATE_LEASE = '[LEASES APP] UPDATE LEASE';
 
-export function getLeases() {
-    return dispatch => {
-        const request = axios.get("/api/leases/gets");
+// export function getLeases() {
+//     return dispatch => {
+//         const request = axios.post("/api/leases/post");
 
+//         return request.then(response => {
+//             return dispatch({
+//                 type: GET_ALL_LEASES,
+//                 payload: response.data
+//             });
+//         });
+//     };
+// }
+
+
+const axios_instance = axios.create({
+    headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+    withCredentials: false
+});
+
+
+export function getLeases() {
+
+    const data = {
+        'RegionId': [2,24],
+        'TransactionStatusId': [21,24],
+        'SearchText': '',
+    };
+
+    return dispatch => {
+        const request = axios_instance.post("https://apifmsplus.jkdev.com/v1/franchisee/LeaseList", data);
         return request.then(response => {
             return dispatch({
                 type: GET_ALL_LEASES,
@@ -28,6 +54,18 @@ export function getLeases() {
         });
     };
 }
+
+// alternative fetch method
+// fetch('https://apifmsplus.jkdev.com/v1/franchisee/LeaseList', {
+//     method: 'POST',
+//     headers: {
+//       'Accept': 'application/json',
+//       'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify({"RegionId":[2,24], "TransactionStatusId":[21,24], "SearchText": ""})
+//   }).then(res => res.json())
+// .then(data => console.log(data))
+
 
 export function toggleFilterPanel(){
     return {

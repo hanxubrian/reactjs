@@ -246,7 +246,7 @@ class Leases extends Component {
 			current_long: 0,
 		};
     }
-    
+
     toggleSelection = (key, shift, row) => {
         /*
           https://react-table.js.org/#/story/select-table-hoc
@@ -393,7 +393,7 @@ class Leases extends Component {
 		// const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
 
 		if (rawData === null) return;
-		let regions = rawData.Data.Regions.filter(x => {
+		let regions = rawData.Data.Region.filter(x => {
 			return this.props.regionId === 24 || x.Id === this.props.regionId;
 		});
 
@@ -523,7 +523,7 @@ class Leases extends Component {
 													<Icon className="text-32 mr-12">account_box</Icon>
 												</FuseAnimate>
 												<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-													<Typography variant="h6" className="hidden sm:flex">Leases | Leases</Typography>
+													<Typography variant="h6" className="hidden sm:flex">Franchisees | Leases</Typography>
 												</FuseAnimate>
 											</div>
 										</div>

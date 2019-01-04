@@ -153,16 +153,9 @@ class FilterPanel extends Component {
 
 		isAllLeaseStatus: true,
 		isActiveLeaseStatus: true,
-		isCancelledLeaseStatus: true,
-		isSuspendedLeaseStatus: true,
-		isPendingLeaseStatus: true,
-		isInactiveLeaseStatus: true,
+		isCompleteLeaseStatus: true,
+		isStoppedLeaseStatus: true,
 		isTransferredLeaseStatus: true,
-		isUnknownLeaseStatus: true,
-		isRejectedLeaseStatus: true,
-		isRegionOperationLeaseStatus: true,
-		isRegionAccountingLeaseStatus: true,
-		isVariableLeaseStatus: true,
 
 		AccountTypes: -2,
 		AccountExecutive: 0,
@@ -206,22 +199,15 @@ class FilterPanel extends Component {
 			this.setState({
 				isAllLeaseStatus: event.target.checked,
 				isActiveLeaseStatus: event.target.checked,
-				isCancelledLeaseStatus: event.target.checked,
-				isSuspendedLeaseStatus: event.target.checked,
-				isPendingLeaseStatus: event.target.checked,
-				isInactiveLeaseStatus: event.target.checked,
-				isTransferredLeaseStatus: event.target.checked,
-				isUnknownLeaseStatus: event.target.checked,
-				isRejectedLeaseStatus: event.target.checked,
-				isRegionOperationLeaseStatus: event.target.checked,
-				isRegionAccountingLeaseStatus: event.target.checked,
-				isVariableLeaseStatus: event.target.checked,
+				isCompleteLeaseStatus: event.target.checked,
+				isStoppedLeaseStatus: event.target.checked,
+				isTransferredLeaseStatus: event.target.checked
 			})
 		} else {
 			this.setState({ [name]: event.target.checked });
 		}
 
-		// this.props.toggleStatus(name, event.target.checked)
+		this.props.toggleStatus(name, event.target.checked)
 	};
 
 	handleChange = name => event => {
@@ -403,222 +389,28 @@ class FilterPanel extends Component {
 						) :
 						(
 							<div>
-								{/*
-									 <div>
-										<h3 className="mb-20">Filter by Date</h3>
-										<FormControl className={classes.formControl} style={{ width: 200 }}>
-											<Select
-												value={this.state.invoiceDate}
-												onChange={this.handleChange1}
-												inputProps={{
-													name: 'invoiceDate',
-													id: 'invoice_date'
-												}}
-											>
-												<MenuItem value="">
-													<em>None</em>
-												</MenuItem>
-												<MenuItem value={1}>This Week</MenuItem>
-												<MenuItem value={2}>This Week-to-date</MenuItem>
-												<MenuItem value={3}>This Month</MenuItem>
-												<MenuItem value={4}>This Month-to-date</MenuItem>
-												<MenuItem value={5}>This Quarter</MenuItem>
-												<MenuItem value={6}>This Quarter-to-Date</MenuItem>
-												<MenuItem value={7}>This Fiscal Year</MenuItem>
-												<MenuItem value={8}>This Fiscal Year-to-date</MenuItem>
-												<MenuItem value={9}>Today</MenuItem>
-												<MenuItem value={10}>Yesterday</MenuItem>
-												<MenuItem value={11}>This Month</MenuItem>
-												<MenuItem value={12}>Last Quarter</MenuItem>
-												<MenuItem value={13}>Last Year</MenuItem>
-												<MenuItem value={14}>Custom Date</MenuItem>
-												<MenuItem value={15}>Period</MenuItem>
-											</Select>
-										</FormControl>
-									</div>
-									*/}
 
-								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
-									{/* <h3>Account Types</h3> */}
-
-									<TextField
-										select
-
-										id="AccountTypes"
-										label="Account Types"
-										className={classes.textField}
-										InputLabelProps={{
-											shrink: true
-										}}
-										value={this.state.AccountTypes === undefined ? 0 : this.state.AccountTypes}
-										onChange={this.handleChange('AccountTypes')}
-										margin="normal"
-										variant="outlined"
-										style={{ width: '100%' }}>
-										{/* {[{
-											value: 0, label: "All"
-										}, {
-											value: 1, label: "None"
-										}].map(option => (
-											<MenuItem key={option.value} value={option.value}>
-												{option.label}
-											</MenuItem>
-										))} */}
-
-										<MenuItem value={-2}><em>All</em></MenuItem>
-										<MenuItem value={-1}><em>None</em></MenuItem>
-										{
-											accountTypes.map((x, index) => {
-												if (x !== null)
-													return (<MenuItem key={x} value={index}>{x}</MenuItem>)
-												else
-													return null
-											})
-										}
-
-									</TextField>
-
-
-									{/* <FormControl className={classes.formControl} style={{ width: 200 }}>
-										<Select
-											value={-2}
-											onChange={this.handleChange1}
-											inputProps={{
-												name: 'invoiceDate',
-												id: 'invoice_date'
-											}}
-										>
-											<MenuItem value={-2}><em>All</em></MenuItem>
-											<MenuItem value={-1}><em>None</em></MenuItem>
-											{
-												accountTypes.map((x, index) => {
-													if (x !== null)
-														return (<MenuItem key={x} value={index}>{x}</MenuItem>)
-												})
-											}
-										</Select>
-									</FormControl> */}
-								</div>
-
-								{/* <div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
-									<h3>Neweast Customers</h3>
-								</div>
-
-								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
-									<h3>National Accounts</h3>
-								</div> */}
-
-								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
-									{/* <h3>Account Executive</h3> */}
-									{/* <FormControl className={classes.formControl} style={{ width: 200 }}>
-										<Select
-											value={this.state.AccountExecutive === undefined ? "" : this.state.AccountExecutive}
-											onChange={this.handleChange('AccountExecutive')}
-											// inputProps={{
-											// 	name: 'invoiceDate',
-											// 	id: 'invoice_date'
-											// }}
-											InputLabelProps={{
-												shrink: true
-											}}
-										>
-											<MenuItem key={-2} value={-2}><em>All</em></MenuItem>
-											<MenuItem key={-1} value={-1}><em>None</em></MenuItem>
-										</Select>
-									</FormControl> */}
-
-
-
-									<TextField
-										select
-
-										id="AccountExecutive"
-										label="Account Executive"
-										className={classes.textField}
-										InputLabelProps={{
-											shrink: true
-										}}
-										value={this.state.AccountExecutive === undefined ? 0 : this.state.AccountExecutive}
-										onChange={this.handleChange('AccountExecutive')}
-										margin="normal"
-										variant="outlined"
-										style={{ width: '100%' }}>
-										{[{
-											value: 0, label: "All"
-										}, {
-											value: 1, label: "None"
-										}].map(option => (
-											<MenuItem key={option.value} value={option.value}>
-												{option.label}
-											</MenuItem>
-										))}
-									</TextField>
-
-								</div>
-
-								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
+								<div style={{ marginTop: 50, display: 'flex', flexDirection: 'column' }}>
 									<h3>Lease Status</h3>
-									{/* <FormControlLabel
-										control={<Switch checked={this.state['customerStatus-1']} onChange={this.handleChange('customerStatus-1')} />}
+									<FormControlLabel
+										control={<Switch checked={this.state.isAllLeaseStatus} onChange={this.handleChangeChecked('isAllLeaseStatus')} value="isAllLeaseStatus"  />}
 										label="Select All"
 									/>
-									{
-										accountStatuses.map((x, index) => {
-											if (x !== null)
-												return (<FormControlLabel
-													key={x}
-													control={<Switch checked={this.state['customerStatus' + index]} onChange={this.handleChange('customerStatus' + index)} />}
-													label={x}
-												/>)
-										})
-									} */}
 									<FormControlLabel
-										control={<Switch checked={this.state.isAllLeaseStatus} onChange={this.handleChangeChecked('isAllLeaseStatus')} />}
-										label="All"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isActiveLeaseStatus} onChange={this.handleChangeChecked('isActiveLeaseStatus')} />}
+										control={<Switch checked={this.state.isActiveLeaseStatus} onChange={this.handleChangeChecked('isActiveLeaseStatus')} value="isActiveStatus" />}
 										label="Active"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isCancelledLeaseStatus} onChange={this.handleChangeChecked('isCancelledLeaseStatus')} />}
-										label="Cancelled"
+										control={<Switch checked={this.state.isCompleteLeaseStatus} onChange={this.handleChangeChecked('isCompleteLeaseStatus')} value="isCompleteStatus" />}
+										label="Complete"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isSuspendedLeaseStatus} onChange={this.handleChangeChecked('isSuspendedLeaseStatus')} />}
-										label="Suspended"
+										control={<Switch checked={this.state.isStoppedLeaseStatus} onChange={this.handleChangeChecked('isStoppedLeaseStatus')} value="isStoppedLeaseStatus" />}
+										label="Stopped"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isPendingLeaseStatus} onChange={this.handleChangeChecked('isPendingLeaseStatus')} />}
-										label="Pending"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isInactiveLeaseStatus} onChange={this.handleChangeChecked('isInactiveLeaseStatus')} />}
-										label="Inactive"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isTransferredLeaseStatus} onChange={this.handleChangeChecked('isTransferredLeaseStatus')} />}
+										control={<Switch checked={this.state.isTransferredLeaseStatus} onChange={this.handleChangeChecked('isTransferredLeaseStatus')} value="isTransferredLeaseStatus" />}
 										label="Transferred"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isUnknownLeaseStatus} onChange={this.handleChangeChecked('isUnknownLeaseStatus')} />}
-										label="Unknown"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isRejectedLeaseStatus} onChange={this.handleChangeChecked('isRejectedLeaseStatus')} />}
-										label="Rejected"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isRegionOperationLeaseStatus} onChange={this.handleChangeChecked('isRegionOperationLeaseStatus')} />}
-										label="Region Operation"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isRegionAccountingLeaseStatus} onChange={this.handleChangeChecked('isRegionAccountingLeaseStatus')} />}
-										label="Region Accounting"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isVariableLeaseStatus} onChange={this.handleChangeChecked('isVariableLeaseStatus')} />}
-										label="Variable"
 									/>
 								</div>
 							</div>

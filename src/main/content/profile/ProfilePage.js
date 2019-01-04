@@ -17,8 +17,8 @@ const styles = theme => ({
         padding: 0
     },
     layoutHeader : {
-        height                        : 150,
-        minHeight                     : 150,
+        height                        : 100,
+        minHeight                     : 100,
         background                    : "url('/assets/images/backgrounds/dark-material-bg.jpg') no-repeat",
         backgroundSize                : 'cover',
         color                         : '#fff',
@@ -28,11 +28,11 @@ const styles = theme => ({
         }
     },
     tabsRoot     : {
-        height: 64,
+        height: 50,
         width : '100%'
     },
     tabRoot      : {
-        height: 64
+        height: 50
     }
 });
 
@@ -59,7 +59,7 @@ class ProfilePage extends Component {
                     toolbar: classes.layoutToolbar
                 }}
                 header={
-                    <div className="p-24 flex flex-1 flex-col items-center justify-center md:flex-row md:items-end">
+                    <div className="p-4 flex flex-1 flex-col items-center justify-center md:flex-row md:items-end">
                         <div className="flex flex-1 flex-col items-center justify-center md:flex-row md:items-center md:justify-start">
                             <FuseAnimate animation="transition.expandIn" delay={300}>
                                 <Avatar className="w-96 h-96" src="assets/images/avatars/german.png"/>

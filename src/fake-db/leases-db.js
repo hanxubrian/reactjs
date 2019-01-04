@@ -1131,13 +1131,17 @@ mock.onGet("/api/leases/gets").reply(() => {
     return [200, leasesDb];
 });
 
+mock.onPost("/api/leases/post").reply(() => {
+    return [200, leasesDb];
+});
+
 /**
  * Add new Openinghour
  */
 mock.onPost("/api/leases/save").reply(request => {
     const data = JSON.parse(request.data);
     let lease = null;
-
+    debugger
     leasesDb = leasesDb.map(lease => {
         if (lease.id === data.id) {
             lease = data;
