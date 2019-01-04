@@ -89,7 +89,7 @@ const styles = theme => ({
 		position: 'relative'
 	},
 	search: {
-		width: 360,
+		width: '100%',
 		[theme.breakpoints.down('sm')]: {
 			width: '100%'
 		}
@@ -349,6 +349,47 @@ class CustomerListContent extends Component {
 
 		return (
 			<div className={classNames(classes.layoutTable, "h-full")}>
+				<div className="flex flex-row items-center">
+					<div className="flex items-center justify-start p-12">
+						<Button
+							onClick={(ev) => toggleFilterPanel()}
+							aria-label="toggle filter panel"
+							color="secondary"
+							// disabled={filterState ? true : false}
+							className={classNames(classes.filterPanelButton)}
+						>
+							<img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" />
+						</Button>
+					</div>
+					{/* <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}> */}
+					<Paper className={"flex items-center w-full h-44 mr-12"} elevation={1}>
+						<Input
+							placeholder="Search..."
+							className={classNames(classes.search, 'pl-16')}
+							// className="pl-16"
+							disableUnderline
+							fullWidth
+							value={this.state.s}
+							onChange={this.handleChange('s')}
+							inputProps={{
+								'aria-label': 'Search'
+							}}
+						/>
+						<Icon color="action" className="mr-16">search</Icon>
+					</Paper>
+					<div className="flex items-center justify-end p-12">
+						<Button
+							onClick={(ev) => toggleSummaryPanel()}
+							aria-label="toggle summary panel"
+							// disabled={summaryState ? true : false}
+							className={classNames(classes.summaryPanelButton)}
+						>
+							<Icon>insert_chart</Icon>
+						</Button></div>
+				</div>
+
+
+
 				<ReactTable
 					data={this.state.data}
 					minRows={0}
@@ -424,255 +465,152 @@ class CustomerListContent extends Component {
 					columns={[
 						{
 							Header: (instance) => (
-								<div className="flex items-center">
-									<Button
-										onClick={(ev) => toggleFilterPanel()}
-										aria-label="toggle filter panel"
-										color="secondary"
-										// disabled={filterState ? true : false}
-										className={classNames(classes.filterPanelButton)}
-									>
-										<img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" />
-									</Button>
-
-									{/* <Hidden smDown>
-										<Button
-											onClick={(ev) => toggleFilterPanel()}
-											aria-label="toggle filter panel"
-											color="secondary"
-											disabled={filterState ? true : false}
-											className={classNames(classes.filterPanelButton)}
-										>
-											<img className={classes.imageIcon} src="assets/images/invoices/filter.png" />
-										</Button>
-									</Hidden>
-									<Hidden smUp>
-										<Button
-											onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
-											aria-label="toggle filter panel"
-											className={classNames(classes.filterPanelButton)}
-										>
-											<img className={classes.imageIcon} src="assets/images/invoices/filter.png" />
-										</Button>
-									</Hidden> */}
-								</div>
+								<Checkbox
+									onClick={(event) => {
+										event.stopPropagation();
+									}}
+									onChange={(event) => toggleAll(instance)}
+									checked={this.state.selectAll}
+									style={{ color: 'white' }}
+								// indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
+								/>
 							),
-							columns: [
-								{
-									Header: (instance) => (
-										<Checkbox
-											onClick={(event) => {
-												event.stopPropagation();
-											}}
-											onChange={(event) => toggleAll(instance)}
-											checked={this.state.selectAll}
-											style={{ color: 'white' }}
-										// indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
-										/>
-									),
-									accessor: "",
-									Cell: row => {
-										return (<Checkbox
-											onClick={(event) => {
-												event.stopPropagation();
-											}}
-											checked={isSelected(row.value.CustomerId)}
-											onChange={() => toggleSelection(row.value.CustomerId)}
-										/>
-										)
-									},
-									className: "justify-center",
-									sortable: false,
-									width: 72
-								}
-							],
-							className: classNames("justify-center")
+							accessor: "",
+							Cell: row => {
+								return (<Checkbox
+									onClick={(event) => {
+										event.stopPropagation();
+									}}
+									checked={isSelected(row.value.CustomerId)}
+									onChange={() => toggleSelection(row.value.CustomerId)}
+								/>
+								)
+							},
+							className: "justify-center",
+							sortable: false,
+							width: 72
 						},
 						{
-							Header: () => (
-								<div className="flex items-center pr-0 lg:pr-12">
-									<Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
-										<Input
-											placeholder="Search..."
-											className={classNames(classes.search, 'pl-16')}
-											// className="pl-16"
-											disableUnderline
-											fullWidth
-											value={this.state.s}
-											onChange={this.handleChange('s')}
-											inputProps={{
-												'aria-label': 'Search'
-											}}
-										/>
-										<Icon color="action" className="mr-16">search</Icon>
-									</Paper>
-								</div>
-							),
-							columns: [
-								{
-									Header: "No",
-									accessor: "CustomerNo",
-									filterAll: true,
-									width: 60,
-									className: classNames("flex items-center  justify-center") //classes.tableTdEven
-								},
-								{
-									Header: "Name",
-									accessor: "CustomerName",
-									width: 200,
-									className: classNames("flex items-center  justify-start p-12-impor")
-								},
-								{
-									Header: "Address",
-									// accessor: "Address",
-									id: "Address",
-									accessor: d => (this.capital_letter(d.Address)),
-									className: classNames("flex items-center  justify-start"),
-									width: 160
-								},
-								{
-									Header: "City",
-									// accessor: "City",
-									id: "City",
-									accessor: d => (this.capital_letter(d.City)),
-									className: classNames("flex items-center  justify-start"),
-									width: 90
-								},
-								{
-									Header: "State",
-									accessor: "StateName",
-									className: classNames("flex items-center  justify-center"),
-									width: 50
-								},
-								{
-									Header: "Zip Code",
-									accessor: "PostalCode",
-									className: classNames("flex items-center  justify-center"),
-									headerClassName: "wordwrap",
-									width: 50
-								},
-								{
-									Header: "Phone",
-									accessor: "Phone",
-									width: 80,
-									className: classNames("flex items-center  justify-center p-12-impor")
-								},
-								{
-									Header: "Account Type",
-									accessor: "AccountTypeListName",
-									// Cell: row => {
-									// 	return '$' + parseFloat(row.original.CustomerBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-									// },
-									className: classNames("flex items-center  justify-center p-12-impor"),
-									width: 150
-								},
-								{
-									Header: "Status",
-									// Cell: row => {
-									// 	return '$' + parseFloat(row.original.CustomerTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-									// },
-									accessor: "StatusName",
-									className: classNames("flex items-center  justify-center p-12-impor"),
-									width: 60
-								},
-								{
-									Header: "Contract Amount",
-									id: "Amount",
-									// accessor: d => ('$' + Number(d.Amount).toFixed(2)),
-									accessor: d => '$' + d.Amount.toLocaleString(undefined, { minimumFractionDigits: 2 }),
-									// accessor: "Amount",
-									className: classNames("flex items-center  justify-end p-12-impor"),
-									headerClassName: "wordwrap",
-									width: 80
-								},
-								// {
-								// 	Header: "Due Date",
-								// 	id: "DueDate",
-								// 	accessor: d => moment(d.DueDate).format('MM/DD/YYYY'),
-								// 	className: classNames("flex items-center  justify-center"),
-								// 	width: 120
-								// },
-								// {
-								// 	Header: "Status",
-								// 	accessor: "TransactionStatus",
-								// 	className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-								// 	width: 120
-								// },
-								{
-									Header: "Actions",
-									// width: 128,
-									Cell: row => (
-										<div className="flex items-center actions">
-											<IconButton
-												onClick={(ev) => {
-													ev.stopPropagation();
-													if (window.confirm("Do you really want to remove this customer")) {
-														this.props.removeCustomerAction(row.original.CustomerId, this.props.customers);
-														if (this.state.selection.length > 0) {
-															_.remove(this.state.selection, function (id) {
-																return id === row.original.CustomerId;
-															});
-														}
-													}
-												}}
-											>
-												<Icon>delete</Icon>
-											</IconButton>
-											<IconButton
-												onClick={(ev) => {
-													ev.stopPropagation();
-													// removeContact(row.original.id);
-												}}
-											>
-												<Icon>edit</Icon>
-											</IconButton>
-										</div>
-									)
-								}
-							]
+							Header: "No",
+							accessor: "CustomerNo",
+							filterAll: true,
+							width: 60,
+							className: classNames("flex items-center  justify-center") //classes.tableTdEven
 						},
 						{
-							Header: (instance) => (
-								<div className="flex items-center justify-end pr-12">
-									<Button
-										onClick={(ev) => toggleSummaryPanel()}
-										aria-label="toggle summary panel"
-										// disabled={summaryState ? true : false}
-										className={classNames(classes.summaryPanelButton)}
+							Header: "Name",
+							accessor: "CustomerName",
+							width: 200,
+							className: classNames("flex items-center  justify-start p-12-impor")
+						},
+						{
+							Header: "Address",
+							// accessor: "Address",
+							id: "Address",
+							accessor: d => (this.capital_letter(d.Address)),
+							className: classNames("flex items-center  justify-start"),
+							width: 160
+						},
+						{
+							Header: "City",
+							// accessor: "City",
+							id: "City",
+							accessor: d => (this.capital_letter(d.City)),
+							className: classNames("flex items-center  justify-start"),
+							width: 90
+						},
+						{
+							Header: "State",
+							accessor: "StateName",
+							className: classNames("flex items-center  justify-center"),
+							width: 50
+						},
+						{
+							Header: "Zip Code",
+							accessor: "PostalCode",
+							className: classNames("flex items-center  justify-center"),
+							headerClassName: "wordwrap",
+							width: 50
+						},
+						{
+							Header: "Phone",
+							accessor: "Phone",
+							width: 80,
+							className: classNames("flex items-center  justify-center p-12-impor")
+						},
+						{
+							Header: "Account Type",
+							accessor: "AccountTypeListName",
+							// Cell: row => {
+							// 	return '$' + parseFloat(row.original.CustomerBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+							// },
+							className: classNames("flex items-center  justify-center p-12-impor"),
+							width: 150
+						},
+						{
+							Header: "Status",
+							// Cell: row => {
+							// 	return '$' + parseFloat(row.original.CustomerTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+							// },
+							accessor: "StatusName",
+							className: classNames("flex items-center  justify-center p-12-impor"),
+							width: 60
+						},
+						{
+							Header: "Contract Amount",
+							id: "Amount",
+							// accessor: d => ('$' + Number(d.Amount).toFixed(2)),
+							accessor: d => '$' + d.Amount.toLocaleString(undefined, { minimumFractionDigits: 2 }),
+							// accessor: "Amount",
+							className: classNames("flex items-center  justify-end p-12-impor"),
+							headerClassName: "wordwrap",
+							width: 80
+						},
+						// {
+						// 	Header: "Due Date",
+						// 	id: "DueDate",
+						// 	accessor: d => moment(d.DueDate).format('MM/DD/YYYY'),
+						// 	className: classNames("flex items-center  justify-center"),
+						// 	width: 120
+						// },
+						// {
+						// 	Header: "Status",
+						// 	accessor: "TransactionStatus",
+						// 	className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+						// 	width: 120
+						// },
+						{
+							Header: "Actions",
+							// width: 128,
+							Cell: row => (
+								<div className="flex items-center actions">
+									<IconButton
+										onClick={(ev) => {
+											ev.stopPropagation();
+											if (window.confirm("Do you really want to remove this customer")) {
+												this.props.removeCustomerAction(row.original.CustomerId, this.props.customers);
+												if (this.state.selection.length > 0) {
+													_.remove(this.state.selection, function (id) {
+														return id === row.original.CustomerId;
+													});
+												}
+											}
+										}}
 									>
-										<Icon>insert_chart</Icon>
-									</Button>
-
-									{/* <Hidden smDown>
-										<Button
-											onClick={(ev) => toggleSummaryPanel()}
-											aria-label="toggle summary panel"
-											disabled={summaryState ? true : false}
-											className={classNames(classes.summaryPanelButton)}
-										>
-											<Icon>insert_chart</Icon>
-										</Button>
-									</Hidden>
-									<Hidden smUp>
-										<Button
-											onClick={(ev) => this.pageLayout.toggleRightSidebar()}
-											aria-label="toggle summary panel"
-											className={classNames(classes.summaryPanelButton)}
-										>
-											<Icon>insert_chart</Icon>
-										</Button>
-									</Hidden> */}
+										<Icon>delete</Icon>
+									</IconButton>
+									<IconButton
+										onClick={(ev) => {
+											ev.stopPropagation();
+											// removeContact(row.original.id);
+										}}
+									>
+										<Icon>edit</Icon>
+									</IconButton>
 								</div>
-							),
-							columns: [
-								{
-									Header: '',
-									cell: () => (
-										<div className="flex w-full justify-end" />
-									)
-								}
-							]
-						}
+							)
+						},
+
 					]}
 					defaultPageSize={100}
 					className={classNames("-striped -highlight")}
