@@ -90,6 +90,33 @@ function getStepContent(customerForm, step) {
             disablePadding: false,
             label: 'Title'
         }
+	];
+	
+	const fee_maintenance_headers = [
+        {
+            id: 'name',
+            numeric: false,
+            disablePadding: false,
+            label: 'Name'
+        },
+        {
+            id: 'rate',
+            numeric: false,
+            disablePadding: false,
+            label: 'Rate'
+        },
+        {
+            id: 'value',
+            numeric: false,
+            disablePadding: false,
+            label: 'Value'
+		},
+		{
+            id: 'active',
+            numeric: false,
+            disablePadding: false,
+            label: 'Active'
+        },
     ];
 
     switch (step) {
@@ -99,7 +126,7 @@ function getStepContent(customerForm, step) {
                     {/* <div style={{ marginTop: '30px' }}></div> */}
                     {/* <h3>Owner</h3> */}
                     <div className="flex">
-                        <FranchiseesLineTable tableType="BILLING_SETTING" headers={Owner_headers} />
+                        <FranchiseesLineTable tableType="OWNER" headers={Owner_headers} />
                     </div>
                 </Fragment>
             );
@@ -399,7 +426,7 @@ function getStepContent(customerForm, step) {
                     {/* <div style={{ marginTop: '30px' }}></div> */}
                     {/* <h3>Franchisees Fee Maintenance</h3> */}
                     <div className="flex">
-                        <FranchiseesLineTable tableType="BILLING_SETTING" headers={Owner_headers} />
+                        <FranchiseesLineTable tableType="FEE_MAINTENACE" headers={fee_maintenance_headers} />
                     </div>
                 </Fragment>
             );

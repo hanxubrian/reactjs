@@ -512,7 +512,7 @@ class CustomerLineTable extends React.Component {
 											<TableCell numeric>{this.renderEditable(n, 'amount')}</TableCell>
 											{/* <TableCell numeric>{this.renderEditableMarkup(n, 'markup')}</TableCell>
 											<TableCell numeric>{this.renderEditable(n, 'extended')}</TableCell> */}
-											{this.props.headers.length === 6 &&
+											{this.props.tableType === "BILLING_SETTING" &&
 												(
 													<TableCell numeric>{this.renderEditable(n, 'extended')}</TableCell>
 												)
