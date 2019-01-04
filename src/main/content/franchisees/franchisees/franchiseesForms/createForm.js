@@ -96,8 +96,8 @@ function getStepContent(customerForm, step) {
         case 0:
             return (
                 <Fragment>
-                    <div style={{ marginTop: '30px' }}></div>
-                    <h3>Owner</h3>
+                    {/* <div style={{ marginTop: '30px' }}></div> */}
+                    {/* <h3>Owner</h3> */}
                     <div className="flex">
                         <FranchiseesLineTable tableType="BILLING_SETTING" headers={Owner_headers} />
                     </div>
@@ -106,8 +106,8 @@ function getStepContent(customerForm, step) {
         case 1:
             return (
                 <Fragment>
-                    <div style={{ marginTop: '30px' }}></div>
-                    <h3>Financial Section</h3>
+                    {/* <div style={{ marginTop: '30px' }}></div> */}
+                    {/* <h3>Financial Section</h3> */}
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <RadioGroup
@@ -216,8 +216,8 @@ function getStepContent(customerForm, step) {
         case 2:
             return (
                 <Fragment>
-                    <div style={{ marginTop: '30px' }}></div>
-                    <h3>Billing Setting Section</h3>
+                    {/* <div style={{ marginTop: '30px' }}></div> */}
+                    {/* <h3>Billing Setting Section</h3> */}
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <FormControlLabel
@@ -251,8 +251,8 @@ function getStepContent(customerForm, step) {
         case 3:
             return (
                 <Fragment>
-                    <div style={{ marginTop: '30px' }}></div>
-                    <h3>Contract</h3>
+                    {/* <div style={{ marginTop: '30px' }}></div> */}
+                    {/* <h3>Contract</h3> */}
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -396,8 +396,8 @@ function getStepContent(customerForm, step) {
         case 4:
             return(
                 <Fragment>
-                    <div style={{ marginTop: '30px' }}></div>
-                    <h3>Franchisees Fee Maintenance</h3>
+                    {/* <div style={{ marginTop: '30px' }}></div> */}
+                    {/* <h3>Franchisees Fee Maintenance</h3> */}
                     <div className="flex">
                         <FranchiseesLineTable tableType="BILLING_SETTING" headers={Owner_headers} />
                     </div>

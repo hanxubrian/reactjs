@@ -698,7 +698,7 @@ class Customers extends Component {
 
 							{(this.state.temp && !customerForm.props.open) && (<CustomerListContent data={this.state.temp} />)}
 							{(this.state.temp && customerForm.props.open) && (
-								<CustomerForm customers={this.state.customers} selectedCustomer={this.state.selectedCustomer} />
+								<CustomerForm customers={this.props.customers} franchisees={this.props.franchisees} selectedCustomer={this.state.selectedCustomer} />
 							)}
 						</div>
 					}
@@ -776,8 +776,9 @@ function mapDispatchToProps(dispatch) {
 	}, dispatch);
 }
 
-function mapStateToProps({ customers, auth }) {
+function mapStateToProps({ customers, auth,franchisees }) {
 	return {
+		franchisees: franchisees.franchiseesDB,
 		customers: customers.customersDB,
 		bLoadedCustomers: customers.bLoadedCustomers,
 		transactionStatus: customers.transactionStatus,
