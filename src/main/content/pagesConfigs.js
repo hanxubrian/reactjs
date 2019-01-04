@@ -51,5 +51,4 @@ export const pagesConfigs = [
     AccountsReceivableConfig,
     ReportsConfig,
     AccountsReceivableConfig
-
 ];

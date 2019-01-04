@@ -521,7 +521,7 @@ class Customers extends Component {
 		// const { toggleSelection, toggleAll, isSelected, logSelection } = this;
 
 		const { selection } = this.state;
-		console.log(this.state.data)
+
 		return (
 			<React.Fragment >
 				<FusePageCustomSidebarScroll

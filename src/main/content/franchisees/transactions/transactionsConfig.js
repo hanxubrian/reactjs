@@ -10,7 +10,7 @@ export const TransactionsConfig = {
         {
             path     : '/franchisees/transactions',
             component: FuseLoadable({
-                loader: () => import('./transactions')
+                loader: () => import( './transactionsApp' )
             })
         }
     ]

@@ -13,13 +13,13 @@ import {withRouter} from 'react-router-dom';
 //Custom components
 import InvoiceListContent from "./InvoiceListContent"
 import InvoiceForm from "./InvoiceForm"
+import SummaryPanel from './SummaryPanel';
+import FilterPanel from './filterPanel';
 
 // for store
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
-import SummaryPanel from './SummaryPanel';
-import FilterPanel from './filterPanel';
 
 // third party
 import "react-table/react-table.css";
@@ -178,66 +178,6 @@ class InvoiceApp extends Component {
         ...newInvoiceState,
         value: '',
         selectedInvoice: null
-    };
-
-    toggleSelection = (key, shift, row) => {
-        /*
-          https://react-table.js.org/#/story/select-table-hoc
-          Implementation of how to manage the selection state is up to the developer.
-          This implementation uses an array stored in the component state.
-          Other implementations could use object keys, a Javascript Set, or Redux... etc.
-        */
-        // start off with the existing state
-        let selection = [...this.state.selection];
-        const keyIndex = selection.indexOf(key);
-        // check to see if the key exists
-        if (keyIndex >= 0) {
-            // it does exist so we will remove it using destructing
-            selection = [
-                ...selection.slice(0, keyIndex),
-                ...selection.slice(keyIndex + 1)
-            ];
-        } else {
-            // it does not exist so add it
-            selection.push(key);
-        }
-        // update the state
-        this.setState({ selection });
-    };
-
-    toggleAll = (instance) => {
-        const selectAll = this.state.selectAll ? false : true;
-        const selection = [];
-        if (selectAll) {
-            let currentRecords = instance.data;
-            // we just push all the IDs onto the selection array
-            let page = this.state.page;
-            let pageSize = this.state.pageSize;
-            let start_index = page * pageSize;
-            let end_index = start_index+pageSize;
-            currentRecords.forEach(item => {
-                if(item._index>=start_index && item._index<end_index)
-                    selection.push(item._original.InvoiceId);
-            });
-        }
-        this.setState({ selectAll, selection });
-    };
-
-    isSelected = key => {
-        /*
-          Instead of passing our external selection state we provide an 'isSelected'
-          callback and detect the selection state ourselves. This allows any implementation
-          for selection (either an array, object keys, or even a Javascript Set object).
-        */
-        return this.state.selection.includes(key);
-    };
-
-    logSelection = () => {
-        console.log("selection:", this.state.selection);
-    };
-
-    closeComposeForm = () => {
-        this.props.invoiceForm.type === 'create' ? this.props.closeEditInvoiceForm() : this.props.closeNewInvoiceForm();
     };
 
     constructor(props){
@@ -405,10 +345,6 @@ class InvoiceApp extends Component {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
     };
 
-    canBeSubmitted()
-    {
-        return true;
-    }
     removeInvoices = ()=> {
         if(this.state.selection.length===0){
             alert("Please choose invoice(s) to delete");
@@ -588,9 +524,6 @@ class InvoiceApp extends Component {
                             <FuseAnimate animation="transition.expandIn" delay={200}>
                                 <div>
                                     <Hidden xsDown>
-                                        {/*<IconButton onClick={()=>this.removeInvoices()}>*/}
-                                        {/*<Icon>delete</Icon>*/}
-                                        {/*</IconButton>*/}
                                         <IconButton onClick={(ev)=>toggleSummaryPanel()}>
                                             <Icon>close</Icon>
                                         </IconButton>
@@ -639,4 +572,3 @@ function mapStateToProps({invoices, auth, customers})
 }
 
 export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceApp)));
-

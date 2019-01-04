@@ -15,19 +15,16 @@ import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 // third party
 import _ from 'lodash';
+import TextField from "@material-ui/core/TextField/TextField";
 
 let counter = 0;
 
-function createData(billing = 'Regular Billing', service = 'Adjust-Balance', description = 'description', quantity = 1, amount = 0, markup = 0, extended = 0) {
+function createData(name = '', phone = '', title = 'description') {
     return {
         id: counter++,
-        billing,
-        service,
-        description,
-        quantity,
-        amount,
-        markup,
-        extended
+        name,
+        phone,
+        title
     };
 }
 
@@ -232,16 +229,13 @@ const styles = theme => ({
 class FranchiseesLineTable extends React.Component {
     state = {
         order: 'asc',
-        // orderBy    : 'billing',
         selected: [],
-        data: [
-            createData("Regular Billing", "Adjust-Balance", "Customer", 1),
-        ],
         page: 0,
         rowsPerPage: 10,
         labelWidth: 0,
-        //tableType: "ADDRESS", //"BILLING_SETTING"
-        // tableType: props.tableType
+        data: [
+            createData( '', '', '')
+        ]
     };
 
     handleRequestSort = (event, property) => {
@@ -266,18 +260,6 @@ class FranchiseesLineTable extends React.Component {
         this.setState({ selected: [] });
     };
 
-    handleChangeBilling = (event, n) => {
-        let newData = this.state.data.map(row => {
-            let temp = row;
-            if (n.id === row.id) {
-                temp[event.target.name] = event.target.value
-            }
-            return temp;
-        });
-
-        this.setState({ data: newData })
-    };
-
     componentDidMount() {
         let id = 0;
         const data = [...this.state.data];
@@ -287,8 +269,6 @@ class FranchiseesLineTable extends React.Component {
         });
         this.setState({ data: newData })
     }
-
-    isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     AddLineData = () => {
         const data = [...this.state.data, createData()];
@@ -314,50 +294,6 @@ class FranchiseesLineTable extends React.Component {
         this.setState({ data: newData })
     };
 
-    renderEditable(cellInfo, id) {
-        if (cellInfo.id > this.state.data.length - 1) return;
-        let prefix = '';
-        if (id === 'amount' || id === 'extended') prefix = "$";
-        let value = '';
-        if (this.state.data[cellInfo.id][id].length === 0) return
-        value = this.state.data[cellInfo.id][id];
-        if (id === 'amount' || id === 'extended')
-            value = parseFloat(this.state.data[cellInfo.id][id]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-        return (
-            <div
-                style={{ backgroundColor: "#fafafa", padding: 12 }}
-                contentEditable
-                suppressContentEditableWarning
-                onBlur={e => {
-                    const data = [...this.state.data];
-                    data[cellInfo.id][id] = (e.target.innerHTML).replace('$', '').replace(',', '');
-                    this.setState({ data });
-                }}
-                dangerouslySetInnerHTML={{
-                    __html: prefix + value
-                }}
-            />
-        );
-    }
-    renderEditableMarkup(cellInfo, id) {
-        if (cellInfo.id > this.state.data.length - 1) return;
-        return (
-            <div
-                style={{ backgroundColor: "#fafafa", padding: 12 }}
-                contentEditable={cellInfo.billing === "Client Supplies" ? true : false}
-                suppressContentEditableWarning
-                onBlur={e => {
-                    const data = [...this.state.data];
-                    data[cellInfo.id][id] = e.target.innerHTML;
-                    this.setState({ data });
-                }}
-                dangerouslySetInnerHTML={{
-                    __html: this.state.data[cellInfo.id][id]
-                }}
-            />
-        );
-    }
-
     render() {
         const { classes } = this.props;
         const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
@@ -372,7 +308,6 @@ class FranchiseesLineTable extends React.Component {
                             order={order}
                             onSelectAllClick={this.handleSelectAllClick}
                             onRequestSort={this.handleRequestSort}
-                            rowCount={data.length}
                             headers={this.props.headers}
                         />
                         <TableBody>
@@ -382,23 +317,35 @@ class FranchiseesLineTable extends React.Component {
                                     return (
                                         <TableRow hover key={n.id}>
                                             <TableCell component="td" scope="row" >
+                                                <TextField
+                                                    id={"name"+n.id}
+                                                    className={classes.textField}
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
                                             </TableCell>
                                             <TableCell>
+                                                <TextField
+                                                    id={"phone"+n.id}
+                                                    className={classes.textField}
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
                                             </TableCell>
-                                            <TableCell>{this.renderEditable(n, 'description')}</TableCell>
-                                            <TableCell numeric>{this.renderEditable(n, 'quantity')}</TableCell>
-                                            <TableCell numeric>{this.renderEditable(n, 'amount')}</TableCell>
-                                            {this.props.headers.length === 6 &&
-                                            (
-                                                <TableCell numeric>{this.renderEditable(n, 'extended')}</TableCell>
-                                            )
-                                            }
+                                            <TableCell>
+                                                <TextField
+                                                    id={"title"+n.id}
+                                                    className={classes.textField}
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </TableCell>
                                             <TableCell padding="checkbox">
                                                 <Fab color="secondary" aria-label="add"
                                                      className={classNames(classes.lineButton, "mr-12")}
                                                      onClick={() => this.AddLineData()}
                                                 >
-                                                    <Icon>call_merge</Icon>
+                                                    <Icon>add</Icon>
                                                 </Fab>
                                                 {this.state.data.length > 1 && (
                                                     <Fab aria-label="add"
