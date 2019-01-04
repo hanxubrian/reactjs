@@ -15,7 +15,7 @@ const initialState = {
             open: false
         },
         data : null,
-        customer: ''
+        customer: null
     }
 };
 
@@ -72,7 +72,8 @@ const invoices = function(state = initialState, action) {
                     props: {
                         open: true
                     },
-                    data : null
+                    data : null,
+                    customer: null
                 }
             };
         }
@@ -85,7 +86,8 @@ const invoices = function(state = initialState, action) {
                     props: {
                         open: false
                     },
-                    data : null
+                    data : null,
+                    customer: null
                 }
             };
         }
@@ -98,7 +100,8 @@ const invoices = function(state = initialState, action) {
                     props: {
                         open: true
                     },
-                    data : action.data
+                    data : null,
+                    customer: action.data
                 }
             };
         }
@@ -111,7 +114,8 @@ const invoices = function(state = initialState, action) {
                     props: {
                         open: false
                     },
-                    data : null
+                    data : null,
+                    customer: null
                 }
             };
         }
