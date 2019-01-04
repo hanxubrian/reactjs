@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 import connect from "react-redux/es/connect/connect";
 import classNames from 'classnames';
 // core components
-import {Grid, Card, CardContent, Typography, TextField} from '@material-ui/core';
+import {Card, CardContent, Typography, TextField} from '@material-ui/core';
 
 const styles = theme => ({
     root: {
@@ -19,7 +19,7 @@ const styles = theme => ({
     }
     },
     paper: {
-      padding: theme.spacing.unit * 2,
+      padding: theme.spacing.unit * 1,
       textAlign: 'center',
       color: theme.palette.text.secondary,
     },
@@ -67,22 +67,38 @@ const styles = theme => ({
     return (
         <div className={classNames(classes.root, "p-0 sm:p-64  print:p-0")}>
             <Card className={classNames(classes.card, "mx-auto")}>
-                <CardContent className={classNames(classes.cardContent, "p-88 print:p-0")}>
-                    <Grid container direction="column" justify="center" alignItems="flex-end">
-                        <h4> Date: 11/30/2018 </h4>
-                    </Grid>
-                    <Grid container direction="column" justify="center" alignItems="flex-end">
-                        <h4> Time: 11:58:57 </h4>
-                    </Grid>
-                    <Grid container direction="row" justify="center" alignItems="center">
-                        <h4> FRANCHISEE REPORTS </h4>
-                    </Grid>
-                    <Grid container direction="row" justify="center" alignItems="center">
-                        <h4> JANI-KING OF BUFFALO, INC </h4>
-                    </Grid>
-                    <Grid container direction="row" justify="center" alignItems="center">
-                        <h4> BUSINESS FOR THE MONTH OF NOVEMBER 2018 </h4>
-                    </Grid>
+                <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
+
+                <div>
+                    <table align="center">
+                        <tbody>
+                            <tr>
+                                <td className="text-center" width='200'>
+                                        <Typography color="inherit">
+                                            <tr></tr>
+                                            <tr></tr>
+                                            <tr></tr>
+                                        </Typography>
+                                    </td>
+                                    <td className="text-center" width='500'>
+                                        <Typography color="inherit">
+                                            <tr>FRANCHISEE REPORT</tr>
+                                            <tr>JANI-KING OF BUFFALO, INC</tr>
+                                            <tr>BUSINESS FOR THE MONTH OF NOVEMBER 2018</tr>
+                                        </Typography>
+                                    </td>
+                                    <td align="left">
+                                        <Typography color="inherit">
+                                            <tr> Date: 11/30/2018 </tr>
+                                            <tr> Time: 11:58:57 </tr>
+                                            <tr><br></br></tr>
+                                        </Typography>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
             <div className="">
                 <div>
                     <table className="mb-16">
@@ -496,24 +512,36 @@ const styles = theme => ({
 </Card>
 
 <Card className={classNames(classes.card, "mx-auto")}>
-<CardContent className={classNames(classes.cardContent, "p-88 print:p-0")}>
-
-
-        <Grid container direction="column" justify="center" alignItems="flex-end">
-            <h4> Date: 11/30/2018 </h4>
-        </Grid>
-        <Grid container direction="column" justify="center" alignItems="flex-end">
-            <h4> Time: 11:58:57 </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
-            <h4> JANI-KING OF BUFFALO, INC </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
-            <h4> BUSINESS FOR THE MONTH OF NOVEMBER 2018 </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
-            <h4> Customer Transactions </h4>
-        </Grid>
+<CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
+               <div>
+                    <table align="center">
+                        <tbody>
+                            <tr>
+                                <td className="text-center" width='200'>
+                                        <Typography color="inherit">
+                                            <tr></tr>
+                                            <tr></tr>
+                                            <tr></tr>
+                                        </Typography>
+                                    </td>
+                                    <td className="text-center" width='500'>
+                                        <Typography color="inherit">
+                                            <tr>JANI-KING OF BUFFALO, INC</tr>
+                                            <tr>BUSINESS FOR THE MONTH OF NOVEMBER 2018</tr>
+                                            <tr>Customer Transactions</tr>
+                                        </Typography>
+                                    </td>
+                                    <td align="left">
+                                        <Typography color="inherit">
+                                            <tr> Date: 11/30/2018 </tr>
+                                            <tr> Time: 11:58:57 </tr>
+                                            <tr><br></br></tr>
+                                        </Typography>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
     <div className="">
         <div>
@@ -558,7 +586,7 @@ const styles = theme => ({
                     <th>
                         Invoice
                     </th>
-                    <th className="text-center">
+                    <th className="text-left">
                         Description
                     </th>
                     <th className="text-right">
@@ -930,25 +958,36 @@ const styles = theme => ({
 </Card>
 
 <Card className={classNames(classes.card, "mx-auto")}>
-<CardContent className={classNames(classes.cardContent, "p-88 print:p-0")}>
-
-
-<Grid container direction="column" justify="center" alignItems="flex-end"> 
-            <h4> Date: 11/30/2018 </h4>
-        </Grid>
-        <Grid container direction="column" justify="center" alignItems="flex-end"> 
-            <h4> Time: 11:58:57 </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center"> 
-            <h4> JANI-KING OF BUFFALO, INC </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center"> 
-            <h4> BUSINESS FOR THE MONTH OF NOVEMBER 2018 </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center"> 
-            <h4> Customer Account Totals </h4>
-        </Grid>
-
+<CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
+                 <div>
+                    <table align="center">
+                        <tbody>
+                            <tr>
+                                <td className="text-center" width='200'>
+                                        <Typography color="inherit">
+                                            <tr></tr>
+                                            <tr></tr>
+                                            <tr></tr>
+                                        </Typography>
+                                    </td>
+                                    <td className="text-center" width='500'>
+                                        <Typography color="inherit">
+                                            <tr>JANI-KING OF BUFFALO, INC</tr>
+                                            <tr>BUSINESS FOR THE MONTH OF NOVEMBER 2018</tr>
+                                            <tr>Customer Account Totals</tr>
+                                        </Typography>
+                                    </td>
+                                    <td align="left">
+                                        <Typography color="inherit">
+                                            <tr> Date: 11/30/2018 </tr>
+                                            <tr> Time: 11:58:57 </tr>
+                                            <tr><br></br></tr>
+                                        </Typography>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
     <div className="">
         <div>
             <table className="mb-16">
@@ -1035,28 +1074,28 @@ const styles = theme => ({
                         <td>
                             <Typography >011050  Buffalo Bills Training And</Typography>
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             0.00
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             0.00
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         0.00
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         0.00
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         0.00
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         0.00
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         14 of 65
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         431.07
                         </td>
                     </tr>
@@ -1065,27 +1104,27 @@ const styles = theme => ({
                         <td>
                             <Typography >Franchisee Actual Amount</Typography>
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         109,128.44
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         142,146.56
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         0.00
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         0.00
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         0.00
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         42,146.56
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         2,310.97
                         </td>
                     </tr>
@@ -1097,24 +1136,38 @@ const styles = theme => ({
 </Card>
 
 <Card className={classNames(classes.card, "mx-auto")}>
-<CardContent className={classNames(classes.cardContent, "p-88 print:p-0")}>
+<CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
 
 
-<Grid container direction="column" justify="center" alignItems="flex-end">
-            <h4> Date: 11/30/2018 </h4>
-        </Grid>
-        <Grid container direction="column" justify="center" alignItems="flex-end">
-            <h4> Time: 11:58:57 </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
-            <h4> JANI-KING OF BUFFALO, INC </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
-            <h4> BUSINESS FOR THE MONTH OF NOVEMBER 2018 </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
-            <h4> Supply Transactions </h4>
-        </Grid>
+                <div>
+                    <table align="center">
+                        <tbody>
+                            <tr>
+                                <td className="text-center" width='200'>
+                                        <Typography color="inherit">
+                                            <tr></tr>
+                                            <tr></tr>
+                                            <tr></tr>
+                                        </Typography>
+                                    </td>
+                                    <td className="text-center" width='500'>
+                                        <Typography color="inherit">
+                                            <tr>JANI-KING OF BUFFALO, INC</tr>
+                                            <tr>BUSINESS FOR THE MONTH OF NOVEMBER 2018</tr>
+                                            <tr>Supply Transactions</tr>
+                                        </Typography>
+                                    </td>
+                                    <td align="left">
+                                        <Typography color="inherit">
+                                            <tr> Date: 11/30/2018 </tr>
+                                            <tr> Time: 11:58:57 </tr>
+                                            <tr><br></br></tr>
+                                        </Typography>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
     <div className="">
         <div>
@@ -1163,19 +1216,19 @@ const styles = theme => ({
                         <td>
                             <Typography >Description</Typography>
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             Quantity
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             Unit Cost
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         Extended
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         Tax
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         Total Amt
                         </td>
                     </tr>
@@ -1184,19 +1237,19 @@ const styles = theme => ({
                         <td>
                             <Typography >UNITED RENTALS (NORTH AMERICA) - 155091239-009</Typography>
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             1
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             1,053.89
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         1,053.89
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         92.22
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         1,146.11
                         </td>
                     </tr>
@@ -1205,19 +1258,19 @@ const styles = theme => ({
                         <td>
                             <Typography >Total Supplies</Typography>
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
 
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
 
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         3,687.39
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         322.66
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                         4,010.05
                         </td>
                     </tr>
@@ -1229,24 +1282,38 @@ const styles = theme => ({
 </Card>
 
 <Card className={classNames(classes.card, "mx-auto")}>
-<CardContent className={classNames(classes.cardContent, "p-88 print:p-0")}>
+<CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
 
 
-<Grid container direction="column" justify="center" alignItems="flex-end">
-            <h4> Date: 11/30/2018 </h4>
-        </Grid>
-        <Grid container direction="column" justify="center" alignItems="flex-end">
-            <h4> Time: 11:58:57 </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
-            <h4> JANI-KING OF BUFFALO, INC </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
-            <h4> BUSINESS FOR THE MONTH OF NOVEMBER 2018 </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
-            <h4> Charge Backs </h4>
-        </Grid>
+                <div>
+                    <table align="center">
+                        <tbody>
+                            <tr>
+                                <td className="text-center" width='200'>
+                                        <Typography color="inherit">
+                                            <tr></tr>
+                                            <tr></tr>
+                                            <tr></tr>
+                                        </Typography>
+                                    </td>
+                                    <td className="text-center" width='500'>
+                                        <Typography color="inherit">
+                                            <tr>BUSINESS FOR THE MONTH OF NOVEMBER 2018</tr>
+                                            <tr>JANI-KING OF BUFFALO, INC</tr>
+                                            <tr>Charge Backs</tr>
+                                        </Typography>
+                                    </td>
+                                    <td align="left">
+                                        <Typography color="inherit">
+                                            <tr> Date: 11/30/2018 </tr>
+                                            <tr> Time: 11:58:57 </tr>
+                                            <tr><br></br></tr>
+                                        </Typography>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
     <div className="">
         <div>
@@ -1310,13 +1377,13 @@ const styles = theme => ({
                         <td>
                             <Typography >Chargeback from cust. 011056 (Buffalo Bills Llc. - Non Game)  for invoice #10180166</Typography>
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             594.75
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             0.00
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             594.75
                         </td>
                     </tr>
@@ -1325,13 +1392,13 @@ const styles = theme => ({
                         <td>
                             <Typography >Total Charge Backs</Typography>
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             4,256.83
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             0.00
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             4,256.83
                         </td>
                     </tr>
@@ -1343,24 +1410,38 @@ const styles = theme => ({
 </Card>
 
 <Card className={classNames(classes.card, "mx-auto")}>
-<CardContent className={classNames(classes.cardContent, "p-88 print:p-0")}>
+<CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
 
 
-<Grid container direction="column" justify="center" alignItems="flex-end">
-            <h4> Date: 11/30/2018 </h4>
-        </Grid>
-        <Grid container direction="column" justify="center" alignItems="flex-end">
-            <h4> Time: 11:58:57 </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
-            <h4> JANI-KING OF BUFFALO, INC </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
-            <h4> BUSINESS FOR THE MONTH OF NOVEMBER 2018 </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
-            <h4> Leases </h4>
-        </Grid>
+                <div>
+                    <table align="center">
+                        <tbody>
+                            <tr>
+                                <td className="text-center" width='200'>
+                                        <Typography color="inherit">
+                                            <tr></tr>
+                                            <tr></tr>
+                                            <tr></tr>
+                                        </Typography>
+                                    </td>
+                                    <td className="text-center" width='500'>
+                                        <Typography color="inherit">
+                                            <tr>BUSINESS FOR THE MONTH OF NOVEMBER 2018</tr>
+                                            <tr>JANI-KING OF BUFFALO, INC</tr>
+                                            <tr>Leases</tr>
+                                        </Typography>
+                                    </td>
+                                    <td align="left">
+                                        <Typography color="inherit">
+                                            <tr> Date: 11/30/2018 </tr>
+                                            <tr> Time: 11:58:57 </tr>
+                                            <tr><br></br></tr>
+                                        </Typography>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
     <div className="">
         <div>
@@ -1433,22 +1514,22 @@ const styles = theme => ({
                         <td>
                             <Typography >04/18/2018</Typography>
                         </td>
-                        <td className="text-center">
+                        <td className="text-left">
                             07-2147
                         </td>
-                        <td className="text-center">
+                        <td className="text-left">
                         17" FLOOR MACHINE  S/N 4000159976
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             9 of 16
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             56.65
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             4.96
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             61.61
                         </td>
                     </tr>
@@ -1463,13 +1544,13 @@ const styles = theme => ({
                         </td>
                         <td className="text-center">
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             121.72
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             10.66
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             132.38
                         </td>
                     </tr>
@@ -1481,24 +1562,37 @@ const styles = theme => ({
 </Card>
 
 <Card className={classNames(classes.card, "mx-auto")}>
-<CardContent className={classNames(classes.cardContent, "p-88 print:p-0")}>
+<CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
 
-
-<Grid container direction="column" justify="center" alignItems="flex-end">
-            <h4> Date: 11/30/2018 </h4>
-        </Grid>
-        <Grid container direction="column" justify="center" alignItems="flex-end">
-            <h4> Time: 11:58:57 </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
-            <h4> JANI-KING OF BUFFALO, INC </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
-            <h4> BUSINESS FOR THE MONTH OF NOVEMBER 2018 </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
-            <h4> Special Misc </h4>
-        </Grid>
+                <div>
+                    <table align="center">
+                        <tbody>
+                            <tr>
+                                <td className="text-center" width='200'>
+                                        <Typography color="inherit">
+                                            <tr></tr>
+                                            <tr></tr>
+                                            <tr></tr>
+                                        </Typography>
+                                    </td>
+                                    <td className="text-center" width='500'>
+                                        <Typography color="inherit">
+                                            <tr>JANI-KING OF BUFFALO, INC</tr>
+                                            <tr>BUSINESS FOR THE MONTH OF NOVEMBER 2018</tr>
+                                            <tr>Special Misc</tr>
+                                        </Typography>
+                                    </td>
+                                    <td align="left">
+                                        <Typography color="inherit">
+                                            <tr> Date: 11/30/2018 </tr>
+                                            <tr> Time: 11:58:57 </tr>
+                                            <tr><br></br></tr>
+                                        </Typography>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
     <div className="">
         <div>
@@ -1565,16 +1659,16 @@ const styles = theme => ({
                         <td>
                             <Typography >Misc</Typography>
                         </td>
-                        <td className="text-center">
+                        <td className="text-left">
                             CHILD SUPPORT
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             357.00
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             0.00
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             357.00
                         </td>
                     </tr>
@@ -1586,13 +1680,13 @@ const styles = theme => ({
                         <td className="text-center">
 
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             357.00
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             0.00
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             357.00
                         </td>
                     </tr>
@@ -1604,24 +1698,38 @@ const styles = theme => ({
 </Card>
 
 <Card className={classNames(classes.card, "mx-auto")}>
-<CardContent className={classNames(classes.cardContent, "p-88 print:p-0")}>
+<CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
 
 
-<Grid container direction="column" justify="center" alignItems="flex-end">
-            <h4> Date: 11/30/2018 </h4>
-        </Grid>
-        <Grid container direction="column" justify="center" alignItems="flex-end">
-            <h4> Time: 11:58:57 </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
-            <h4> JANI-KING OF BUFFALO, INC </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
-            <h4> BUSINESS FOR THE MONTH OF NOVEMBER 2018 </h4>
-        </Grid>
-        <Grid container direction="row" justify="center" alignItems="center">
-            <h4> Regular Misc </h4>
-        </Grid>
+                <div>
+                    <table align="center">
+                        <tbody>
+                            <tr>
+                                <td className="text-center" width='200'>
+                                        <Typography color="inherit">
+                                            <tr></tr>
+                                            <tr></tr>
+                                            <tr></tr>
+                                        </Typography>
+                                    </td>
+                                    <td className="text-center" width='500'>
+                                        <Typography color="inherit">
+                                            <tr>JANI-KING OF BUFFALO, INC</tr>
+                                            <tr>BUSINESS FOR THE MONTH OF NOVEMBER 2018</tr>
+                                            <tr>Regular Misc</tr>
+                                        </Typography>
+                                    </td>
+                                    <td align="left">
+                                        <Typography color="inherit">
+                                            <tr> Date: 11/30/2018 </tr>
+                                            <tr> Time: 11:58:57 </tr>
+                                            <tr><br></br></tr>
+                                        </Typography>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
     <div className="">
         <div>
@@ -1688,16 +1796,16 @@ const styles = theme => ({
                         <td>
                             <Typography >Misc</Typography>
                         </td>
-                        <td className="text-center">
+                        <td className="text-left">
                             ACCOUNT CANCELLATION FEE FOR 084069
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             50.00
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             0.00
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             50.00
                         </td>
                     </tr>
@@ -1708,13 +1816,13 @@ const styles = theme => ({
                         </td>
                         <td className="text-center">
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             50.00
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             0.00
                         </td>
-                        <td className="text-center">
+                        <td className="text-right">
                             50.00
                         </td>
                     </tr>

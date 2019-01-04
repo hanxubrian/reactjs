@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
+import React, { Component } from 'react'
 
 // core components
 import { Icon, IconButton, Input, Paper, Button } from '@material-ui/core';
@@ -127,9 +126,8 @@ const styles = theme => ({
 		width: 24
 	}
 });
-
-class CustomerListContent extends Component {
-	state = {
+class LeaseListContent extends Component {
+    state = {
 		s: '',
 		temp: [],
 		data: [],
@@ -180,7 +178,7 @@ class CustomerListContent extends Component {
 			let end_index = start_index + pageSize;
 			currentRecords.forEach(item => {
 				if (item._index >= start_index && item._index < end_index)
-					selection.push(item._original.CustomerId);
+					selection.push(item._original.LeaseId);
 			});
 		}
 		this.setState({ selectAll, selection });
@@ -214,7 +212,7 @@ class CustomerListContent extends Component {
 			this.search(this.state.s);
 		}
 	}
-	getCustomersFromStatus = (rawData = this.props.customers) => {
+	getLeasesFromStatus = (rawData = this.props.leases) => {
 		// let temp = [];
 		let all_temp = [];
 		// let temp1 = [];
@@ -228,7 +226,7 @@ class CustomerListContent extends Component {
 		});
 
 		regions.forEach(x => {
-			all_temp = [...all_temp, ...x.Customers];
+			all_temp = [...all_temp, ...x.Leases];
 		});
 
 		// regions.map(x => {
@@ -236,7 +234,7 @@ class CustomerListContent extends Component {
 		// });
 
 		this.setState({ temp: all_temp });
-		this.setState({ data: all_temp });
+        this.setState({ data: all_temp });
 	};
 	search(val) {
 		// const temp = this.props.data.filter( d => {
@@ -253,19 +251,20 @@ class CustomerListContent extends Component {
 		//         d.TransactionStatusListId.toString().indexOf(val) !== -1
 		// });
 
-		// this.setState({data: temp});
+        // this.setState({data: temp});
 		val = val.toLowerCase();
+        console.log(val)
 		if (val === '') {
-			this.getCustomersFromStatus();
+			this.getLeasesFromStatus();
 			return;
 		}
 		const temp = this.state.data.filter(d => {
-			return (d.CustomerNo && d.CustomerNo.toString().toLowerCase().indexOf(val) !== -1) || !val ||
-				(d.CustomerName && d.CustomerName.toString().toLowerCase().indexOf(val) !== -1) ||
+			return (d.LeaseNo && d.LeaseNo.toString().toLowerCase().indexOf(val) !== -1) || !val ||
+				(d.LeaseName && d.LeaseName.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.Address && d.Address.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.Phone && d.Phone.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.AccountTypeListName && d.AccountTypeListName.toString().toLowerCase().indexOf(val) !== -1) ||
-				(d.CustomerDescription && d.CustomerDescription.toString().toLowerCase().indexOf(val) !== -1) ||
+				(d.LeaseDescription && d.LeaseDescription.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.Amount && d.Amount.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.StatusName && d.StatusName.toString().toLowerCase().indexOf(val) !== -1)
 		});
@@ -295,13 +294,13 @@ class CustomerListContent extends Component {
 		this.setState({ [prop]: event.target.value });
 	};
 
-	removeCustomers = () => {
+	removeLeases = () => {
 		if (this.state.selection.length === 0) {
 			alert("Please choose customer(s) to delete");
 			return;
 		}
 		if (window.confirm("Do you really want to remove the selected customer(s)")) {
-			this.props.deleteCustomersAction(this.state.selection, this.props.customers);
+			this.props.deleteLeasesAction(this.state.selection, this.props.leases);
 			this.setState({ selection: [], selectAll: false })
 		}
 	};
@@ -328,8 +327,6 @@ class CustomerListContent extends Component {
 	}
 
 	render() {
-		console.log(this.props)
-		console.log(this.state)
 		const {
 			classes,
 			toggleFilterPanel,
@@ -345,8 +342,8 @@ class CustomerListContent extends Component {
 		} = this.props;
 		const { toggleSelection, toggleAll, isSelected } = this;
 
-		console.log(this.props)
-
+        console.log(this.state)
+        console.log(this.props)
 		return (
 			<div className={classNames(classes.layoutTable, "h-full")}>
 				<ReactTable
@@ -476,8 +473,8 @@ class CustomerListContent extends Component {
 											onClick={(event) => {
 												event.stopPropagation();
 											}}
-											checked={isSelected(row.value.CustomerId)}
-											onChange={() => toggleSelection(row.value.CustomerId)}
+											checked={isSelected(row.value.LeaseId)}
+											onChange={() => toggleSelection(row.value.LeaseId)}
 										/>
 										)
 									},
@@ -509,82 +506,91 @@ class CustomerListContent extends Component {
 								</div>
 							),
 							columns: [
+								// {
+								// 	Header: "Region",
+								// 	accessor: "RegionName",
+								// 	filterAll: true,
+								// 	width: 80,
+								// 	className: classNames("flex items-center  justify-center") //classes.tableTdEven
+								// },
 								{
-									Header: "No",
-									accessor: "CustomerNo",
-									filterAll: true,
-									width: 60,
-									className: classNames("flex items-center  justify-center") //classes.tableTdEven
-								},
-								{
-									Header: "Name",
-									accessor: "CustomerName",
+									Header: "Franchisee No.",
+									accessor: "FranchiseeNo",
 									width: 200,
-									className: classNames("flex items-center  justify-start p-12-impor")
-								},
-								{
-									Header: "Address",
-									// accessor: "Address",
-									id: "Address",
-									accessor: d => (this.capital_letter(d.Address)),
-									className: classNames("flex items-center  justify-start"),
-									width: 160
-								},
-								{
-									Header: "City",
-									// accessor: "City",
-									id: "City",
-									accessor: d => (this.capital_letter(d.City)),
-									className: classNames("flex items-center  justify-start"),
-									width: 90
-								},
-								{
-									Header: "State",
-									accessor: "StateName",
-									className: classNames("flex items-center  justify-center"),
-									width: 50
-								},
-								{
-									Header: "Zip Code",
-									accessor: "PostalCode",
-									className: classNames("flex items-center  justify-center"),
-									headerClassName: "wordwrap",
-									width: 50
-								},
-								{
-									Header: "Phone",
-									accessor: "Phone",
-									width: 80,
 									className: classNames("flex items-center  justify-center p-12-impor")
 								},
 								{
-									Header: "Account Type",
-									accessor: "AccountTypeListName",
-									// Cell: row => {
-									// 	return '$' + parseFloat(row.original.CustomerBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-									// },
-									className: classNames("flex items-center  justify-center p-12-impor"),
-									width: 150
+									Header: "Franchisee Name",
+									// accessor: "Address",
+									// id: "Address",
+                                    // accessor: d => (this.capital_letter(d.Address)),
+                                    accessor: "FranchiseeName",
+									className: classNames("flex items-center  justify-start"),
+									width: 350
 								},
+								{
+									Header: "No. Of Lease",
+									// accessor: "City",
+									// id: "City",
+									accessor: "LeaseCount",
+                                    className: classNames("flex items-center  justify-center"),
+                                    headerClassName: "wordwrap",
+									width: 100
+								},
+								{
+                                    Header: "Monthly Payment Amount",
+                                    id: "TotalMonthlyPaymentAmount",
+                                    accessor: d => '$' + d.TotalMonthlyPaymentAmount.toLocaleString(undefined, { minimumFractionDigits: 2 }),
+                                    // accessor: TotalMonthlyPaymentAmount,
+                                    className: classNames("flex items-center  justify-end"),
+                                    headerClassName: "wordwrap",
+									width: 200
+								},
+								{
+                                    Header: "Total Amount Paid",
+                                    id:  "TotalPaidAmount",
+                                    accessor: d => '$' + d.TotalPaidAmount.toLocaleString(undefined, { minimumFractionDigits: 2 }),
+									// accessor:  "TotalPaidAmount",
+									className: classNames("flex items-center  justify-end"),
+									headerClassName: "wordwrap",
+									width: 200
+								},
+								{
+                                    Header: "Total Balance",
+                                    id:  "TotalBalance",
+                                    accessor: d => '$' + d.TotalBalance.toLocaleString(undefined, { minimumFractionDigits: 2 }),
+									// accessor: "TotalBalance",
+									width: 200,
+									className: classNames("flex items-center justify-end")
+								},
+								// {
+								// 	Header: "Account Type",
+								// 	accessor: "AccountTypeListName",
+								// 	// Cell: row => {
+								// 	// 	return '$' + parseFloat(row.original.CustomerBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+								// 	// },
+								// 	className: classNames("flex items-center  justify-center p-12-impor"),
+								// 	width: 150
+								// },
 								{
 									Header: "Status",
 									// Cell: row => {
 									// 	return '$' + parseFloat(row.original.CustomerTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
 									// },
-									accessor: "StatusName",
+									accessor: "Status",
 									className: classNames("flex items-center  justify-center p-12-impor"),
-									width: 60
+									width: 150
 								},
-								{
-									Header: "Contract Amount",
-									id: "Amount",
-									// accessor: d => ('$' + Number(d.Amount).toFixed(2)),
-									accessor: d => '$' + d.Amount.toLocaleString(undefined, { minimumFractionDigits: 2 }),
-									// accessor: "Amount",
-									className: classNames("flex items-center  justify-end p-12-impor"),
-									headerClassName: "wordwrap",
-									width: 80
-								},
+								// {
+								// 	Header: "Contract Amount",
+								// 	id: "Amount",
+								// 	// accessor: d => ('$' + Number(d.Amount).toFixed(2)),
+								// 	accessor: d => '$' + d.Amount.toLocaleString(undefined, { minimumFractionDigits: 2 }),
+								// 	// accessor: "Amount",
+								// 	className: classNames("flex items-center  justify-end p-12-impor"),
+								// 	headerClassName: "wordwrap",
+								// 	width: 80
+								// },
 								// {
 								// 	Header: "Due Date",
 								// 	id: "DueDate",
@@ -606,11 +612,11 @@ class CustomerListContent extends Component {
 											<IconButton
 												onClick={(ev) => {
 													ev.stopPropagation();
-													if (window.confirm("Do you really want to remove this customer")) {
-														this.props.removeCustomerAction(row.original.CustomerId, this.props.customers);
+													if (window.confirm("Do you really want to remove this lease")) {
+														this.props.removeLeaseAction(row.original.LeaseId, this.props.leases);
 														if (this.state.selection.length > 0) {
 															_.remove(this.state.selection, function (id) {
-																return id === row.original.CustomerId;
+																return id === row.original.LeaseId;
 															});
 														}
 													}
@@ -691,24 +697,24 @@ function mapDispatchToProps(dispatch) {
 		toggleFilterPanel: Actions.toggleFilterPanel,
 		toggleMapView: Actions.toggleMapView,
 		toggleSummaryPanel: Actions.toggleSummaryPanel,
-		deleteCustomersAction: Actions.deleteCustomers,
-		removeCustomerAction: Actions.removeCustomer,
-		openEditCustomerForm: Actions.openEditCustomerForm,
-		closeEditCustomerForm: Actions.closeEditCustomerForm,
+		deleteLeasesAction: Actions.deleteLeases,
+		removeLeaseAction: Actions.removeLease,
+		openEditLeaseForm: Actions.openEditLeaseForm,
+		closeEditLeaseForm: Actions.closeEditLeaseForm,
 	}, dispatch);
 }
 
-function mapStateToProps({ customers, auth }) {
+function mapStateToProps({ leases, auth }) {
 	return {
-		customers: customers.customersDB,
-		bLoadedCustomers: customers.bLoadedCustomers,
-		transactionStatus: customers.transactionStatus,
-		filterState: customers.bOpenedFilterPanel,
-		summaryState: customers.bOpenedSummaryPanel,
+		leases: leases.leasesDB,
+		bLoadedLeases: leases.bLoadedLeases,
+		transactionStatus: leases.transactionStatus,
+		filterState: leases.bOpenedFilterPanel,
+		summaryState: leases.bOpenedSummaryPanel,
 		regionId: auth.login.defaultRegionId,
-		CustomerForm: customers.CustomerForm
+		LeaseForm: leases.LeaseForm
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(CustomerListContent)));
 
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(LeaseListContent)));

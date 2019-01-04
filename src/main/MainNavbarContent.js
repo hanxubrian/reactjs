@@ -54,22 +54,6 @@ const styles = theme => ({
 });
 
 class MainNavbar extends Component{
-    // state = {
-    //     sidebarLogo: null,
-    //     sidebarIcon: null
-    // };
-
-    // componentDidMount() {
-    //     fetch(`https://apifmsplus_c.jkdev.com/v1/apps/get?appid=${API_KEY}&env=local&device=web`)
-    //         .then(res => res.json())
-    //         .then(data => this.setState({
-    //             ...this.state,
-    //             sidebarLogo: data.Settings.local.devices[0].assets.sidebarLogo,
-    //             sidebarIcon: data.Settings.local.devices[0].assets.sidebarIcon
-    //         })
-    //     )
-    // }
-
     UserHeader()
     {
         const {classes, user} = this.props;
