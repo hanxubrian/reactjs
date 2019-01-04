@@ -255,6 +255,7 @@ class InvoiceForm extends Component {
     componentWillReceiveProps(nextProps) {
         if(nextProps.invoiceForm.customer!==null){
             this.setState({InvoiceNo: nextProps.invoiceForm.customer.InvoiceNo})
+            this.setState({value: nextProps.invoiceForm.customer.CustomerName})
         }
     }
 
