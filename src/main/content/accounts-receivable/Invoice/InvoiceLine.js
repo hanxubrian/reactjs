@@ -6,7 +6,7 @@ import {withRouter} from 'react-router-dom';
 
 //Material UI core and icons
 import {
-    Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,Snackbar, SnackbarContent,
+    Table, TableBody, TableCell, TableHead, TableRow, Snackbar, SnackbarContent,
     Toolbar, Typography, Paper, Icon, IconButton, Tooltip, Select, OutlinedInput, MenuItem, FormControl, Fab
 } from '@material-ui/core'
 import green from '@material-ui/core/colors/green';
@@ -188,8 +188,6 @@ class InvoiceLineTableHead extends React.Component {
 
     render()
     {
-        const {order, orderBy} = this.props;
-
         return (
             <TableHead style={{backgroundColor: "lightgray"}}>
                 <TableRow style={{backgroundColor: "lightgray"}}>

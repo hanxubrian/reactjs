@@ -98,7 +98,8 @@ const invoices = function(state = initialState, action) {
                     props: {
                         open: true
                     },
-                    data : action.data
+                    data : null,
+                    customer: action.data
                 }
             };
         }
