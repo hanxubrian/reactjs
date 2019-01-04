@@ -65,7 +65,7 @@ function escapeRegexCharacters(str) {
 
 
 function getSteps() {
-    return ["Owner", "Financial", "Billing Settings", "Contract", "Franchisees Fee Maintenance"];
+    return ["Owner", "Financial", "Billing Settings", "Contract", "Franchisees Fee Maintenance","Upload Required Document"];
 }
 
 function getStepContent(customerForm, step) {
@@ -403,6 +403,16 @@ function getStepContent(customerForm, step) {
                     </div>
                 </Fragment>
             );
+        case 5:
+            return(
+                <Fragment>
+                    <div style={{ marginTop: '30px' }}></div>
+                    <h3>Upload Required Document</h3>
+                    <div className="flex">
+                        <FranchiseesLineTable tableType="BILLING_SETTING" headers={Owner_headers} />
+                    </div>
+                </Fragment>
+            )
         default:
             return 'Unknown step';
     }
@@ -537,6 +547,7 @@ class FranchiseesCreateForm extends Component {
                         <Tab label="Billing Settings" />
                         <Tab label="Contract" />
                         <Tab label="Franchisees Fee Maintenance" />
+                        <Tab label="Upload Required Document" />
                     </Tabs>
                 </AppBar>
                 <div
