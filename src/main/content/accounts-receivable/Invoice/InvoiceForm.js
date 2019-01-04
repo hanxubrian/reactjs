@@ -253,6 +253,9 @@ class InvoiceForm extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        if(nextProps.invoiceForm.customer!==null){
+            this.setState({InvoiceNo: nextProps.invoiceForm.customer.InvoiceNo})
+        }
     }
 
     componentWillUnmount() {
