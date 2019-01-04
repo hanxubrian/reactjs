@@ -371,7 +371,10 @@ class InvoiceForm extends Component {
                                     label="Invoice #"
                                     placeholder="Invoice #"
                                     InputLabelProps={{
-                                        shrink: true
+                                        shrink: true,
+                                    }}
+                                    InputProps={{
+                                        readOnly: true,
                                     }}
                                     name="InvoiceNo"
                                     variant="outlined"
