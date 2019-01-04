@@ -18,7 +18,8 @@ import classNames from 'classnames';
 
 import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
-
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 const styles = theme => ({
 	root: {
 
@@ -230,7 +231,6 @@ class FilterPanel extends Component {
 		});
 	};
 
-
 	handleChange1 = event => {
 		this.setState({ [event.target.name]: event.target.value });
 	};
@@ -437,10 +437,62 @@ class FilterPanel extends Component {
 										</FormControl>
 									</div>
 									*/}
+								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
+									<h3>Location</h3>
+
+									<RadioGroup
+										aria-label="Location"
+										name="Location"
+										className={classes.group}
+										value={this.state.Location}
+										onChange={this.handleChange('Location')}
+									>
+										<FormControlLabel value="locationAll" control={<Radio />} label="All" />
+										<FormControlLabel value="locationNearBy" control={<Radio />} label="Near By" />
+										<FormControlLabel value="locationNearSpecificAddress" control={<Radio />} label="Near Specific Address" />
+
+									</RadioGroup>
+									<TextField
+										id="outlined-name"
+										label="Address or Zipcode"
+										className={classes.textField}
+										onChange={this.handleChange('SpecificAddress')}
+										margin="normal"
+										variant="outlined"
+										style={{ width: '100%' }} />
+									<TextField
+										select
+
+										id="Radius"
+										label="Radius"
+										className={classes.textField}
+										InputLabelProps={{
+											shrink: true
+										}}
+										value={this.state.Radius === undefined ? 0 : this.state.Radius}
+										onChange={this.handleChange('Radius')}
+										margin="normal"
+										variant="outlined"
+										style={{ width: '100%' }}>
+										{[
+											{ value: 0, label: "5 Miles" },
+											{ value: 1, label: "10 Miles" },
+											{ value: 2, label: "20 Miles" },
+											{ value: 3, label: "30 Miles" }
+										].map(option => (
+											<MenuItem key={option.value} value={option.value}>
+												{option.label}
+											</MenuItem>
+										))}
+									</TextField>
+								</div>
 
 								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
-									{/* <h3>Account Types</h3> */}
 
+
+
+								</div>
+								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
 									<TextField
 										select
 
@@ -477,57 +529,9 @@ class FilterPanel extends Component {
 										}
 
 									</TextField>
-
-
-									{/* <FormControl className={classes.formControl} style={{ width: 200 }}>
-										<Select
-											value={-2}
-											onChange={this.handleChange1}
-											inputProps={{
-												name: 'invoiceDate',
-												id: 'invoice_date'
-											}}
-										>
-											<MenuItem value={-2}><em>All</em></MenuItem>
-											<MenuItem value={-1}><em>None</em></MenuItem>
-											{
-												accountTypes.map((x, index) => {
-													if (x !== null)
-														return (<MenuItem key={x} value={index}>{x}</MenuItem>)
-												})
-											}
-										</Select>
-									</FormControl> */}
-								</div>
-
-								{/* <div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
-									<h3>Neweast Customers</h3>
 								</div>
 
 								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
-									<h3>National Accounts</h3>
-								</div> */}
-
-								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
-									{/* <h3>Account Executive</h3> */}
-									{/* <FormControl className={classes.formControl} style={{ width: 200 }}>
-										<Select
-											value={this.state.AccountExecutive === undefined ? "" : this.state.AccountExecutive}
-											onChange={this.handleChange('AccountExecutive')}
-											// inputProps={{
-											// 	name: 'invoiceDate',
-											// 	id: 'invoice_date'
-											// }}
-											InputLabelProps={{
-												shrink: true
-											}}
-										>
-											<MenuItem key={-2} value={-2}><em>All</em></MenuItem>
-											<MenuItem key={-1} value={-1}><em>None</em></MenuItem>
-										</Select>
-									</FormControl> */}
-
-
 
 									<TextField
 										select
@@ -558,20 +562,7 @@ class FilterPanel extends Component {
 
 								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
 									<h3>Customer Status</h3>
-									{/* <FormControlLabel
-										control={<Switch checked={this.state['customerStatus-1']} onChange={this.handleChange('customerStatus-1')} />}
-										label="Select All"
-									/>
-									{
-										accountStatuses.map((x, index) => {
-											if (x !== null)
-												return (<FormControlLabel
-													key={x}
-													control={<Switch checked={this.state['customerStatus' + index]} onChange={this.handleChange('customerStatus' + index)} />}
-													label={x}
-												/>)
-										})
-									} */}
+
 									<FormControlLabel
 										control={<Switch checked={this.state.isAllCustomerStatus} onChange={this.handleChangeChecked('isAllCustomerStatus')} />}
 										label="All"
