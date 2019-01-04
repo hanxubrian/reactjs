@@ -34,18 +34,6 @@ import classNames from 'classnames';
 import CustomerForm from './CustomerForm';
 import CustomerListContent from './CustomerListContent';
 
-
-
-import { Tooltip } from '@material-ui/core';
-import GoogleMap from 'google-map-react';
-
-function Marker({ text }) {
-	return (
-		<Tooltip title={text} placement="top">
-			<Icon className="text-red">place</Icon>
-		</Tooltip>
-	);
-}
 const headerHeight = 80;
 
 const hexToRgb = (hex) => {
@@ -436,7 +424,6 @@ class Customers extends Component {
 
 	componentDidMount() {
 		document.addEventListener("keydown", this.escFunction, false);
-		this.getLocation();
 	}
 
 	componentWillUnmount() {
@@ -500,19 +487,6 @@ class Customers extends Component {
 			pageSize: state.pageSize,
 			page: state.page,
 		});
-	}
-	getLocation() {
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(
-				(position) => {
-					console.log(position.coords);
-					this.setState({
-						current_lat: position.coords.latitude,
-						current_long: position.coords.longitude
-					})
-				}
-			);
-		}
 	}
 
 	render() {
@@ -702,7 +676,7 @@ class Customers extends Component {
 					}
 					content={
 						<div className="flex-1 flex-col absolute w-full h-full">
-							{(this.state.temp && !customerForm.props.open) && (mapViewState) && (<div className="w-full h-full">
+							{/* {(this.state.temp && !customerForm.props.open) && (mapViewState) && (<div className="w-full h-full">
 								<div className="w-full h-full">
 									<GoogleMap
 										bootstrapURLKeys={{
@@ -720,8 +694,11 @@ class Customers extends Component {
 								</div>
 							</div>)}
 							{(this.state.temp && !customerForm.props.open) && (!mapViewState) && (<CustomerListContent data={this.state.temp} />)}
+							 */}
+
+							{(this.state.temp && !customerForm.props.open) && (<CustomerListContent data={this.state.temp} />)}
 							{(this.state.temp && customerForm.props.open) && (
-								<CustomerForm customers={this.state.customers} selectedCustomer={this.state.selectedCustomer} />
+								<CustomerForm customers={this.props.customers} franchisees={this.props.franchisees} selectedCustomer={this.state.selectedCustomer} />
 							)}
 						</div>
 					}
@@ -799,8 +776,9 @@ function mapDispatchToProps(dispatch) {
 	}, dispatch);
 }
 
-function mapStateToProps({ customers, auth }) {
+function mapStateToProps({ customers, auth,franchisees }) {
 	return {
+		franchisees: franchisees.franchiseesDB,
 		customers: customers.customersDB,
 		bLoadedCustomers: customers.bLoadedCustomers,
 		transactionStatus: customers.transactionStatus,

@@ -18,8 +18,7 @@ import classNames from 'classnames';
 
 import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
+
 const styles = theme => ({
 	root: {
 
@@ -152,23 +151,21 @@ class FilterPanel extends Component {
 		checkedOpen: true,
 		invoiceDate: '',
 
-		isAllCustomerStatus: true,
-		isActiveCustomerStatus: true,
-		isCancelledCustomerStatus: true,
-		isSuspendedCustomerStatus: true,
-		isPendingCustomerStatus: true,
-		isInactiveCustomerStatus: true,
-		isTransferredCustomerStatus: true,
-		isUnknownCustomerStatus: true,
-		isRejectedCustomerStatus: true,
-		isRegionOperationCustomerStatus: true,
-		isRegionAccountingCustomerStatus: true,
-		isVariableCustomerStatus: true,
+		isAllLeaseStatus: true,
+		isActiveLeaseStatus: true,
+		isCancelledLeaseStatus: true,
+		isSuspendedLeaseStatus: true,
+		isPendingLeaseStatus: true,
+		isInactiveLeaseStatus: true,
+		isTransferredLeaseStatus: true,
+		isUnknownLeaseStatus: true,
+		isRejectedLeaseStatus: true,
+		isRegionOperationLeaseStatus: true,
+		isRegionAccountingLeaseStatus: true,
+		isVariableLeaseStatus: true,
 
 		AccountTypes: -2,
 		AccountExecutive: 0,
-
-		Location: "locationAll"
 	};
 
 
@@ -205,20 +202,20 @@ class FilterPanel extends Component {
 	};
 
 	handleChangeChecked = name => event => {
-		if (name === "isAllCustomerStatus") {
+		if (name === "isAllLeaseStatus") {
 			this.setState({
-				isAllCustomerStatus: event.target.checked,
-				isActiveCustomerStatus: event.target.checked,
-				isCancelledCustomerStatus: event.target.checked,
-				isSuspendedCustomerStatus: event.target.checked,
-				isPendingCustomerStatus: event.target.checked,
-				isInactiveCustomerStatus: event.target.checked,
-				isTransferredCustomerStatus: event.target.checked,
-				isUnknownCustomerStatus: event.target.checked,
-				isRejectedCustomerStatus: event.target.checked,
-				isRegionOperationCustomerStatus: event.target.checked,
-				isRegionAccountingCustomerStatus: event.target.checked,
-				isVariableCustomerStatus: event.target.checked,
+				isAllLeaseStatus: event.target.checked,
+				isActiveLeaseStatus: event.target.checked,
+				isCancelledLeaseStatus: event.target.checked,
+				isSuspendedLeaseStatus: event.target.checked,
+				isPendingLeaseStatus: event.target.checked,
+				isInactiveLeaseStatus: event.target.checked,
+				isTransferredLeaseStatus: event.target.checked,
+				isUnknownLeaseStatus: event.target.checked,
+				isRejectedLeaseStatus: event.target.checked,
+				isRegionOperationLeaseStatus: event.target.checked,
+				isRegionAccountingLeaseStatus: event.target.checked,
+				isVariableLeaseStatus: event.target.checked,
 			})
 		} else {
 			this.setState({ [name]: event.target.checked });
@@ -233,30 +230,30 @@ class FilterPanel extends Component {
 		});
 	};
 
+
 	handleChange1 = event => {
 		this.setState({ [event.target.name]: event.target.value });
 	};
 	render() {
-		const { classes, customerForm, customers } = this.props;
+		const { classes, leaseForm } = this.props;
 
-		let regionCustomers = [];
+		let regionLeases = [];
 
-		if (customers) { // to avoid error
-			customers.Data.Regions.filter(x => {
-				return this.props.regionId === 0 || x.Id === this.props.regionId;
-			}).forEach(x => {
-				regionCustomers = [...regionCustomers, ...x.Customers];
-			});
-		}
-		let accountTypes = [...new Set(regionCustomers.map(x => x.AccountTypeListName))].sort();
-		// let accountStatuses = [...new Set(regionCustomers.map(x => x.StatusName))].sort();
+		// leases.Data.Regions.filter(x => {
+		// 	return this.props.regionId === 0 || x.Id === this.props.regionId;
+		// }).forEach(x => {
+		// 	regionLeases = [...regionLeases, ...x.Leases];
+		// });
+
+		let accountTypes = [...new Set(regionLeases.map(x => x.AccountTypeListName))].sort();
+		// let accountStatuses = [...new Set(regionLeases.map(x => x.StatusName))].sort();
 
 		return (
 			<div className={classNames(classes.root, "flex flex-col")}>
 				{/* <div className={classNames("flex flex-col")}> */}
 
 				<Paper className="flex flex-1 flex-col min-h-px p-20">
-					{customerForm && customerForm.props.open
+					{leaseForm && leaseForm.props.open
 						? (
 							<div>
 								{/* <h3 className="mb-20">Customer Information</h3> */}
@@ -440,71 +437,10 @@ class FilterPanel extends Component {
 										</FormControl>
 									</div>
 									*/}
-								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
-									<h3>Location</h3>
-
-									<RadioGroup
-										aria-label="Location"
-										name="Location"
-										className={classes.group}
-										value={this.state.Location}
-										onChange={this.handleChange('Location')}
-									>
-										<FormControlLabel value="locationAll" control={<Radio />} label="All" />
-										<FormControlLabel value="locationNearBy" control={<Radio />} label="Near By" />
-										<FormControlLabel value="locationNearSpecificAddress" control={<Radio />} label="Near Specific Address" />
-
-									</RadioGroup>
-									<TextField
-										id="outlined-name"
-										label="Address or Zipcode"
-										className={classes.textField}
-										onChange={this.handleChange('SpecificAddress')}
-										margin="normal"
-										variant="outlined"
-										style={{ width: '100%' }} />
-									<TextField
-										select
-
-										id="Radius"
-										label="Radius"
-										className={classes.textField}
-										InputLabelProps={{
-											shrink: true
-										}}
-										value={this.state.Radius === undefined ? 0 : this.state.Radius}
-										onChange={this.handleChange('Radius')}
-										margin="normal"
-										variant="outlined"
-										style={{ width: '100%' }}>
-										{
-											// [
-											// 	{ value: 0, label: "5 Miles" },
-											// 	{ value: 1, label: "10 Miles" },
-											// 	{ value: 2, label: "20 Miles" },
-											// 	{ value: 2, label: "20 Miles" },
-											// 	{ value: 2, label: "20 Miles" },
-											// 	{ value: 2, label: "20 Miles" },
-											// 	{ value: 2, label: "20 Miles" },
-											// 	{ value: 2, label: "20 Miles" },
-											// 	{ value: 3, label: "30 Miles" }
-											// ]
-											// (new Array(15))
-											Array.apply(null, {length: 15}).map(Number.call, Number)
-												.map((val, index) => (
-													<MenuItem key={index} value={index}>
-														{(index + 1 ) * 5} Miles
-													</MenuItem>
-												))}
-									</TextField>
-								</div>
 
 								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
+									{/* <h3>Account Types</h3> */}
 
-
-
-								</div>
-								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
 									<TextField
 										select
 
@@ -541,9 +477,57 @@ class FilterPanel extends Component {
 										}
 
 									</TextField>
+
+
+									{/* <FormControl className={classes.formControl} style={{ width: 200 }}>
+										<Select
+											value={-2}
+											onChange={this.handleChange1}
+											inputProps={{
+												name: 'invoiceDate',
+												id: 'invoice_date'
+											}}
+										>
+											<MenuItem value={-2}><em>All</em></MenuItem>
+											<MenuItem value={-1}><em>None</em></MenuItem>
+											{
+												accountTypes.map((x, index) => {
+													if (x !== null)
+														return (<MenuItem key={x} value={index}>{x}</MenuItem>)
+												})
+											}
+										</Select>
+									</FormControl> */}
+								</div>
+
+								{/* <div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
+									<h3>Neweast Customers</h3>
 								</div>
 
 								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
+									<h3>National Accounts</h3>
+								</div> */}
+
+								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
+									{/* <h3>Account Executive</h3> */}
+									{/* <FormControl className={classes.formControl} style={{ width: 200 }}>
+										<Select
+											value={this.state.AccountExecutive === undefined ? "" : this.state.AccountExecutive}
+											onChange={this.handleChange('AccountExecutive')}
+											// inputProps={{
+											// 	name: 'invoiceDate',
+											// 	id: 'invoice_date'
+											// }}
+											InputLabelProps={{
+												shrink: true
+											}}
+										>
+											<MenuItem key={-2} value={-2}><em>All</em></MenuItem>
+											<MenuItem key={-1} value={-1}><em>None</em></MenuItem>
+										</Select>
+									</FormControl> */}
+
+
 
 									<TextField
 										select
@@ -573,54 +557,67 @@ class FilterPanel extends Component {
 								</div>
 
 								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
-									<h3>Customer Status</h3>
-
+									<h3>Lease Status</h3>
+									{/* <FormControlLabel
+										control={<Switch checked={this.state['customerStatus-1']} onChange={this.handleChange('customerStatus-1')} />}
+										label="Select All"
+									/>
+									{
+										accountStatuses.map((x, index) => {
+											if (x !== null)
+												return (<FormControlLabel
+													key={x}
+													control={<Switch checked={this.state['customerStatus' + index]} onChange={this.handleChange('customerStatus' + index)} />}
+													label={x}
+												/>)
+										})
+									} */}
 									<FormControlLabel
-										control={<Switch checked={this.state.isAllCustomerStatus} onChange={this.handleChangeChecked('isAllCustomerStatus')} />}
+										control={<Switch checked={this.state.isAllLeaseStatus} onChange={this.handleChangeChecked('isAllLeaseStatus')} />}
 										label="All"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isActiveCustomerStatus} onChange={this.handleChangeChecked('isActiveCustomerStatus')} />}
+										control={<Switch checked={this.state.isActiveLeaseStatus} onChange={this.handleChangeChecked('isActiveLeaseStatus')} />}
 										label="Active"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isCancelledCustomerStatus} onChange={this.handleChangeChecked('isCancelledCustomerStatus')} />}
+										control={<Switch checked={this.state.isCancelledLeaseStatus} onChange={this.handleChangeChecked('isCancelledLeaseStatus')} />}
 										label="Cancelled"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isSuspendedCustomerStatus} onChange={this.handleChangeChecked('isSuspendedCustomerStatus')} />}
+										control={<Switch checked={this.state.isSuspendedLeaseStatus} onChange={this.handleChangeChecked('isSuspendedLeaseStatus')} />}
 										label="Suspended"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isPendingCustomerStatus} onChange={this.handleChangeChecked('isPendingCustomerStatus')} />}
+										control={<Switch checked={this.state.isPendingLeaseStatus} onChange={this.handleChangeChecked('isPendingLeaseStatus')} />}
 										label="Pending"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isInactiveCustomerStatus} onChange={this.handleChangeChecked('isInactiveCustomerStatus')} />}
+										control={<Switch checked={this.state.isInactiveLeaseStatus} onChange={this.handleChangeChecked('isInactiveLeaseStatus')} />}
 										label="Inactive"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isTransferredCustomerStatus} onChange={this.handleChangeChecked('isTransferredCustomerStatus')} />}
+										control={<Switch checked={this.state.isTransferredLeaseStatus} onChange={this.handleChangeChecked('isTransferredLeaseStatus')} />}
 										label="Transferred"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isUnknownCustomerStatus} onChange={this.handleChangeChecked('isUnknownCustomerStatus')} />}
+										control={<Switch checked={this.state.isUnknownLeaseStatus} onChange={this.handleChangeChecked('isUnknownLeaseStatus')} />}
 										label="Unknown"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isRejectedCustomerStatus} onChange={this.handleChangeChecked('isRejectedCustomerStatus')} />}
+										control={<Switch checked={this.state.isRejectedLeaseStatus} onChange={this.handleChangeChecked('isRejectedLeaseStatus')} />}
 										label="Rejected"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isRegionOperationCustomerStatus} onChange={this.handleChangeChecked('isRegionOperationCustomerStatus')} />}
+										control={<Switch checked={this.state.isRegionOperationLeaseStatus} onChange={this.handleChangeChecked('isRegionOperationLeaseStatus')} />}
 										label="Region Operation"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isRegionAccountingCustomerStatus} onChange={this.handleChangeChecked('isRegionAccountingCustomerStatus')} />}
+										control={<Switch checked={this.state.isRegionAccountingLeaseStatus} onChange={this.handleChangeChecked('isRegionAccountingLeaseStatus')} />}
 										label="Region Accounting"
 									/>
 									<FormControlLabel
-										control={<Switch checked={this.state.isVariableCustomerStatus} onChange={this.handleChangeChecked('isVariableCustomerStatus')} />}
+										control={<Switch checked={this.state.isVariableLeaseStatus} onChange={this.handleChangeChecked('isVariableLeaseStatus')} />}
 										label="Variable"
 									/>
 								</div>
@@ -640,12 +637,12 @@ function mapDispatchToProps(dispatch) {
 	}, dispatch);
 }
 
-function mapStateToProps({ customers, auth }) {
+function mapStateToProps({ leases, auth }) {
 	return {
-		filterState: customers.bOpenedFilterPanel,
-		transactionStatus: customers.transactionStatus,
-		customers: customers.customersDB,
-		customerForm: customers.customerForm,
+		filterState: leases.bOpenedFilterPanel,
+		transactionStatus: leases.transactionStatus,
+		leases: leases.leasesDB,
+		leaseForm: leases.leaseForm,
 		regionId: auth.login.defaultRegionId,
 	}
 }

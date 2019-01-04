@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
 
 // core components
-import {Icon, Fab, Typography} from '@material-ui/core';
+import {Icon, Fab, Typography, Hidden, IconButton} from '@material-ui/core';
 import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
+
+//Custom Components
+import FilterPanel from './filterPanel';
 
 // theme components
 import {FusePageCustom, FuseAnimate} from '@fuse';
@@ -15,9 +18,10 @@ import * as Actions from 'store/actions';
 
 // third party
 import classNames from 'classnames';
+import TransactionLists from './FranchiseeLists';
+import _ from "lodash";
 
-
-const headerHeight = 100;
+const headerHeight = 80;
 
 const hexToRgb = (hex) =>{
     let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -83,6 +87,19 @@ const styles = theme => ({
         minHeight: headerHeight,
         backgroundColor: theme.palette.secondary.main
     },
+    layoutLeftSidebar : {
+        width: 0,
+        [theme.breakpoints.down('sm')]: {
+            width: 'inherit'
+        }
+    },
+    layoutSidebarHeader: {
+        height   : headerHeight,
+        minHeight: headerHeight,
+        display: 'flex',
+        alignItems: 'center',
+        backgroundColor: theme.palette.secondary.main,
+    },
     content:{
         position: 'relative'
     },
@@ -107,13 +124,14 @@ const styles = theme => ({
     },
 });
 
-class Transactions extends Component {
+class TransactionsApp extends Component {
     state = {
         s: '',
-        temp: [],
         data: [],
         selection: [],
-        regionId: 0
+        regionId: 0,
+        checkedCompleted: true,
+        checkedOpen: true,
     };
 
     constructor(props){
@@ -135,6 +153,8 @@ class Transactions extends Component {
         this.setState({ [prop]: event.target.value });
     };
     componentWillMount(){
+        this.setState({checkedCompleted: this.props.transactionStatus.checkedCompleted});
+        this.setState({checkedOpen: this.props.transactionStatus.checkedOpen});
         this.getTransactions()
     }
     componentDidUpdate(prevProps, prevState, snapshot){
@@ -145,43 +165,85 @@ class Transactions extends Component {
             bChanged = true;
         }
 
+        if(this.props.transactionStatus.checkedCompleted !== prevProps.transactionStatus.checkedCompleted) {
+            this.setState({checkedCompleted: !this.state.checkedCompleted});
+            bChanged = true;
+        }
+
+        if(this.props.transactionStatus.checkedOpen !== prevProps.transactionStatus.checkedOpen) {
+            this.setState({checkedOpen: !this.state.checkedOpen});
+            bChanged = true;
+        }
+
         if(bChanged)
             this.getTransactions();
 
-        if(prevProps.transactions===null && this.props.transactions!==null){
+        if(prevProps.transactions!== this.props.transactions){
             this.getTransactions();
-        }
-
-        if(prevState.s!==this.state.s) {
-            // this.search(this.state.s);
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.props.transactions===null && nextProps.transactions!==null)
-            this.getTransactions(nextProps.transactions);
         if(this.props.transactions!==nextProps.transactions)
             this.getTransactions(nextProps.transactions);
     }
 
     getTransactions =(rawData=this.props.transactions) =>{
-        if(rawData===null) return;
+        if(rawData.transactionsDB===null) return;
 
-        this.setState({temp: rawData});
-        this.setState({data: rawData});
+        let temp0 = rawData.transactionsDB.Data.FranchiseeTransactions;
+        let temp=[];
+        let all_temp=[];
+        const statusStrings = ['Open', 'Completed'];
+        const keys=['checkedOpen', 'checkedCompleted'];
+
+        keys.map((key, index)=> {
+
+            if(this.props.transactionStatus[key]){
+                temp = temp0.filter(d => {
+                    // if(this.props.regionId===0)
+                        return d.Status.toLowerCase() === statusStrings[index].toLowerCase();
+                    // else
+                    //     return d.Status.toLowerCase() === statusStrings[index] && d.RegionId === this.props.regionId
+                });
+            }
+            all_temp =_.uniq([...all_temp, ...temp]);
+            return true;
+        });
+        this.setState({temp: all_temp});
+        this.setState({data: all_temp});
     };
 
     render()
     {
-        const {classes} = this.props;
+        const {classes, filterState, toggleFilterPanel} = this.props;
         const { selection } = this.state;
         return (
             <FusePageCustom
                 classes={{
                     root: classes.layoutRoot,
                     header: classes.layoutHeader,
-                    content: classes.content
+                    content: classes.content,
+                    leftSidebar : classNames(classes.layoutLeftSidebar, {'openFilter': filterState}),
+                    sidebarHeader: classes.layoutSidebarHeader,
                 }}
+                leftSidebarHeader={
+                    <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", {'filteropen': filterState})}>
+                        <h4 style={{marginBlockStart: '1em'}}>Filter Panel</h4>
+                        <FuseAnimate animation="transition.expandIn" delay={200}>
+                            <div>
+                                <Hidden xsDown>
+                                    <IconButton onClick={(ev)=>toggleFilterPanel()}>
+                                        <Icon>close</Icon>
+                                    </IconButton>
+                                </Hidden>
+                            </div>
+                        </FuseAnimate>
+                    </div>
+                }
+                leftSidebarContent={
+                    <FilterPanel/>
+                }
                 header={
                     <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
                         <div className="flex flex-row flex-1 justify-between">
@@ -233,7 +295,9 @@ class Transactions extends Component {
                 }
                 content={
                     <div className="flex-1 flex-col absolute w-full h-full">
-
+                        {
+                            <TransactionLists data={this.state.data}/>
+                        }
                     </div>
                 }
                 onRef={instance => {
@@ -248,17 +312,20 @@ class Transactions extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        getTransactions: Actions.getTransactions
+        getTransactions: Actions.getTransactions,
+        toggleFilterPanel: Actions.toggleTransactionFilterPanel
     }, dispatch);
 }
 
 function mapStateToProps({transactions, auth})
 {
     return {
-        transactions: transactions.transactionsDB,
+        transactions: transactions,
         bLoadedTransactions: transactions.bLoadedTransactions,
+        filterState: transactions.bOpenedTransactionFilterPanel,
+        transactionStatus: transactions.transactionStatus,
         regionId: auth.login.defaultRegionId
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(Transactions)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(TransactionsApp)));

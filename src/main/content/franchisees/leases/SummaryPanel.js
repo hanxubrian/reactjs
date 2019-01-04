@@ -101,8 +101,9 @@ class SummaryPanel extends Component {
 	};
 
 	render() {
-		const { classes, customerForm } = this.props;
+		const { classes, leaseForm } = this.props;
 		// const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteCustomersAction, openNewCustomerForm, customerForm } = this.props;
+		console.log(this.props)
 		let widgets_data = {
 			widget8: {
 				datasets: [
@@ -185,10 +186,10 @@ class SummaryPanel extends Component {
 		return (
 			<div>
 				<div className={classNames("flex flex-col p-16")}>
-					{this.props.customers && (
+					{this.props.leases && (
 						<Paper className="flex flex-1 flex-col min-h-px shadow-none" style={{ alignItems: 'center', flexDirection: 'column' }}>
 
-							{customerForm && customerForm.props.open
+							{leaseForm && leaseForm.props.open
 								? (
 									<div style={{ marginTop: 50, display: 'flex', flexDirection: 'column' }}>
 										<h3>Validation Status</h3>
@@ -308,7 +309,7 @@ class SummaryPanel extends Component {
 												Lifetime sum of your sale
                                     </Typography>
 											<Typography variant="h5" component="h2" style={{ color: 'white' }}>
-												{/* {this.props.customers.headerData.totalInvoice} */}
+												{/* {this.props.leases.headerData.totalInvoice} */}
 											</Typography>
 
 										</CardContent>
@@ -342,10 +343,10 @@ function mapDispatchToProps(dispatch) {
 	}, dispatch);
 }
 
-function mapStateToProps({ customers }) {
+function mapStateToProps({ leases }) {
 	return {
-		customers: customers.customersDB,
-		customerForm: customers.customerForm
+		leases: leases.leasesDB,
+		leaseForm: leases.leaseForm
 	}
 }
 

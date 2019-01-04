@@ -92,7 +92,8 @@ class SigninPage extends Component {
        const styles = ({
             root: {
                 background: `url(${this.props.app.loginBackground})`,
-                backgroundSize: 'cover'
+                backgroundSize: 'cover',
+                backgroundRepeat: 'noRepeat'
             },
             card: {
                 width: '100%',
@@ -119,7 +120,7 @@ class SigninPage extends Component {
         // console.log(this.props.loadHomeScreen);
         // style={{ background: this.handleAppStart }}
         return (
-            <div style={{ background: styles.root.background }} className={classNames(classes.root, "flex flex-col flex-auto flex-no-shrink items-center justify-center p-32")}>
+            <div style={{ background: styles.root.background, backgroundSize: styles.root.backgroundSize, backgroundRepeat: styles.root.backgroundRepeat }} className={classNames(classes.root, "flex flex-col flex-auto flex-no-shrink items-center justify-center p-32")}>
 
                 {this.props.login.bLoginStart && (
                     <div className={classes.overlay}>

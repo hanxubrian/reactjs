@@ -101,7 +101,7 @@ function getSorting(order, orderBy) {
 // 	// }
 // ];
 
-class CustomerLineTableHead extends React.Component {
+class LeaseLineTableHead extends React.Component {
 	createSortHandler = property => event => {
 		this.props.onRequestSort(event, property);
 	};
@@ -155,7 +155,7 @@ class CustomerLineTableHead extends React.Component {
 }
 
 
-CustomerLineTableHead.propTypes = {
+LeaseLineTableHead.propTypes = {
 	numSelected: PropTypes.number.isRequired,
 	onRequestSort: PropTypes.func.isRequired,
 	onSelectAllClick: PropTypes.func.isRequired,
@@ -188,7 +188,7 @@ const toolbarStyles = theme => ({
 	},
 });
 
-let CustomerLineTableToolbar = props => {
+let LeaseLineTableToolbar = props => {
 	const { numSelected, classes } = props;
 
 	return (
@@ -204,7 +204,7 @@ let CustomerLineTableToolbar = props => {
                     </Typography>
 				) : (
 						<Typography variant="h6" id="tableTitle">
-							Customer Lines
+							Lease Lines
                     </Typography>
 					)}
 			</div>
@@ -228,12 +228,12 @@ let CustomerLineTableToolbar = props => {
 	);
 };
 
-CustomerLineTableToolbar.propTypes = {
+LeaseLineTableToolbar.propTypes = {
 	classes: PropTypes.object.isRequired,
 	numSelected: PropTypes.number.isRequired
 };
 
-CustomerLineTableToolbar = withStyles(toolbarStyles)(CustomerLineTableToolbar);
+LeaseLineTableToolbar = withStyles(toolbarStyles)(LeaseLineTableToolbar);
 
 const styles = theme => ({
 	root: {
@@ -253,7 +253,7 @@ const styles = theme => ({
 			padding: "4px 24px",
 			width: 180
 		},
-		CustomerLineHeadRoot: {
+		LeaseLineHeadRoot: {
 			backgroundColor: 'lightgray',
 		},
 	},
@@ -283,13 +283,13 @@ const styles = theme => ({
 	}
 });
 
-class CustomerLineTable extends React.Component {
+class LeaseLineTable extends React.Component {
 	state = {
 		order: 'asc',
 		// orderBy    : 'billing',
 		selected: [],
 		data: [
-			createData("Regular Billing", "Adjust-Balance", "Customer", 1),
+			createData("Regular Billing", "Adjust-Balance", "Lease", 1),
 		],
 		page: 0,
 		rowsPerPage: 10,
@@ -421,8 +421,8 @@ class CustomerLineTable extends React.Component {
 			<Paper className={classes.root}>
 				<div className={classes.tableWrapper}>
 					<Table className={classes.table} aria-labelledby="tableTitle">
-						<CustomerLineTableHead
-							className={classNames(classes.CustomerLineHeadRoot)}
+						<LeaseLineTableHead
+							className={classNames(classes.LeaseLineHeadRoot)}
 							numSelected={selected.length}
 							order={order}
 							onSelectAllClick={this.handleSelectAllClick}
@@ -486,7 +486,7 @@ class CustomerLineTable extends React.Component {
 														<MenuItem value="Adjust-WriteOff">Adjust - WriteOff</MenuItem>
 														<MenuItem value="Buffing">Buffing</MenuItem>
 														<MenuItem value="Carpet Clean">Carpet Clean</MenuItem>
-														<MenuItem value="Customer Suppliers">Customer Suppliers</MenuItem>
+														<MenuItem value="Lease Suppliers">Lease Suppliers</MenuItem>
 														<MenuItem value="Emergency Clean">Emergency Clean</MenuItem>
 														<MenuItem value="Event Center">Event Center</MenuItem>
 														<MenuItem value="Floor Services">Floor Services</MenuItem>
@@ -512,7 +512,7 @@ class CustomerLineTable extends React.Component {
 											<TableCell numeric>{this.renderEditable(n, 'amount')}</TableCell>
 											{/* <TableCell numeric>{this.renderEditableMarkup(n, 'markup')}</TableCell>
 											<TableCell numeric>{this.renderEditable(n, 'extended')}</TableCell> */}
-											{this.props.tableType === "BILLING_SETTING" &&
+											{this.props.headers.length === 6 &&
 												(
 													<TableCell numeric>{this.renderEditable(n, 'extended')}</TableCell>
 												)
@@ -548,8 +548,8 @@ class CustomerLineTable extends React.Component {
 	}
 }
 
-CustomerLineTable.propTypes = {
+LeaseLineTable.propTypes = {
 	classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(CustomerLineTable);
+export default withStyles(styles)(LeaseLineTable);

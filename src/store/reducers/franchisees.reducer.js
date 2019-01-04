@@ -87,7 +87,7 @@ const franchisees = function(state = initialState, action) {
                     data : null
                 },
                 bOpenedSummaryPanelFranchisees: false,
-                bOpenedFilterPanelFranchisees: false
+                bOpenedFilterPanelFranchisees: true
             };
         }
         case Actions.CLOSE_CREATE_FRANCHISEES:

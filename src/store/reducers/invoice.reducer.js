@@ -6,8 +6,8 @@ import { persistReducer } from 'redux-persist';
 const initialState = {
     invoicesDB: null,
     bLoadedInvoices: false,
-    bOpenedSummaryPanel: true,
-    bOpenedFilterPanel: true,
+    bOpenedSummaryPanel: false,
+    bOpenedFilterPanel: false,
     transactionStatus:{checkedPaid: true,checkedPP: true, checkedComplete: true, checkedOpen: true, checkedEbill: true, checkedPrint: true },
     invoiceForm: {
         type : 'new',
@@ -15,7 +15,7 @@ const initialState = {
             open: false
         },
         data : null,
-        customer: ''
+        customer: null
     }
 };
 
@@ -72,7 +72,8 @@ const invoices = function(state = initialState, action) {
                     props: {
                         open: true
                     },
-                    data : null
+                    data : null,
+                    customer: null
                 }
             };
         }
@@ -85,7 +86,8 @@ const invoices = function(state = initialState, action) {
                     props: {
                         open: false
                     },
-                    data : null
+                    data : null,
+                    customer: null
                 }
             };
         }
@@ -98,7 +100,8 @@ const invoices = function(state = initialState, action) {
                     props: {
                         open: true
                     },
-                    data : action.data
+                    data : null,
+                    customer: action.data
                 }
             };
         }
@@ -111,7 +114,8 @@ const invoices = function(state = initialState, action) {
                     props: {
                         open: false
                     },
-                    data : null
+                    data : null,
+                    customer: null
                 }
             };
         }
@@ -132,5 +136,6 @@ const invoices = function(state = initialState, action) {
 const persistConfig = {
     key: 'invoices',
     storage: storage,
+    blacklist: ['bOpenedSummaryPanel','bOpenedFilterPanel']
 };
 export default persistReducer(persistConfig, invoices);

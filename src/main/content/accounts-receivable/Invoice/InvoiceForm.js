@@ -253,6 +253,13 @@ class InvoiceForm extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        if(nextProps.invoiceForm.customer!==null){
+            this.setState({InvoiceNo: nextProps.invoiceForm.customer.InvoiceNo});
+            this.setState({value: nextProps.invoiceForm.customer.CustomerName});
+            this.setState({CustomerNo: nextProps.invoiceForm.customer.CustomerNo});
+            this.setState({InvoiceDate: moment(nextProps.invoiceForm.customer.InvoiceDate).format('MM/DD/YYYY')});
+            this.setState({DueDate: moment(nextProps.invoiceForm.customer.DueDate).format('MM/DD/YYYY')});
+        }
     }
 
     componentWillUnmount() {
@@ -371,7 +378,10 @@ class InvoiceForm extends Component {
                                     label="Invoice #"
                                     placeholder="Invoice #"
                                     InputLabelProps={{
-                                        shrink: true
+                                        shrink: true,
+                                    }}
+                                    InputProps={{
+                                        readOnly: true,
                                     }}
                                     name="InvoiceNo"
                                     variant="outlined"
@@ -389,10 +399,10 @@ class InvoiceForm extends Component {
                                     <CardHeader title="Customer" className={classNames(classes.cardHeader, "flex-1")} />
                                     <CardContent>
                                         <Typography variant="subtitle1" color="inherit">
-                                            <strong>Customer Name: {this.state.selectedCustomer ? this.state.selectedCustomer.CustomerName:''}</strong>
+                                            <strong>Customer Name: {this.state.selectedCustomer ? this.state.selectedCustomer.CustomerName: this.state.value}</strong>
                                         </Typography>
                                         <Typography variant="subtitle1" color="inherit">
-                                            Customer No: {this.state.selectedCustomer? this.state.selectedCustomer.CustomerNo:''}
+                                            Customer No: {this.state.selectedCustomer? this.state.selectedCustomer.CustomerNo: this.state.CustomerNo}
                                         </Typography>
                                         <Typography variant="subtitle1" color="inherit">
                                             Address: {this.state.selectedCustomer ? this.state.selectedCustomer.Address: ''}
@@ -410,10 +420,10 @@ class InvoiceForm extends Component {
                                     <CardHeader title="Billing" className={classNames(classes.cardHeader, "flex-1")} />
                                     <CardContent>
                                         <Typography variant="subtitle1" color="inherit">
-                                            <strong>Billing Name: {this.state.selectedCustomer ? this.state.selectedCustomer.CustomerName: ''}</strong>
+                                            <strong>Billing Name: {this.state.selectedCustomer ? this.state.selectedCustomer.CustomerName: this.state.value}</strong>
                                         </Typography>
                                         <Typography variant="subtitle1" color="inherit">
-                                            Customer No: {this.state.selectedCustomer ? this.state.selectedCustomer.CustomerNo: ''}
+                                            Customer No: {this.state.selectedCustomer ? this.state.selectedCustomer.CustomerNo: this.state.CustomerNo}
                                         </Typography>
                                         <Typography variant="subtitle1" color="inherit">
                                             Address: {this.state.selectedCustomer ? this.state.selectedCustomer.Address: ''}

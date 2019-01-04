@@ -6,7 +6,7 @@ import {withRouter} from 'react-router-dom';
 
 //Material UI core and icons
 import {
-    Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,Snackbar, SnackbarContent,
+    Table, TableBody, TableCell, TableHead, TableRow, Snackbar, SnackbarContent,
     Toolbar, Typography, Paper, Icon, IconButton, Tooltip, Select, OutlinedInput, MenuItem, FormControl, Fab
 } from '@material-ui/core'
 import green from '@material-ui/core/colors/green';
@@ -120,7 +120,7 @@ function createFranchisee(parent_id,id, franchisee="Franchisee", name="Franchise
     }
 }
 
-function createData(billing='Regular Billing', service='Adjust-Balance', description=' ', quantity=1, amount=0, markup=0, extended=0)
+function createData(billing='Regular Billing', service='Adjust-Balance', description=' ', quantity=' ', amount=' ', markup=0, extended=0)
 {
     return {
         id: counter++,
@@ -188,8 +188,6 @@ class InvoiceLineTableHead extends React.Component {
 
     render()
     {
-        const {order, orderBy} = this.props;
-
         return (
             <TableHead style={{backgroundColor: "lightgray"}}>
                 <TableRow style={{backgroundColor: "lightgray"}}>
@@ -199,21 +197,8 @@ class InvoiceLineTableHead extends React.Component {
                                 key={row.id}
                                 numeric={row.numeric}
                                 padding={row.disablePadding ? 'none' : 'default'}
-                                sortDirection={orderBy === row.id ? order : false}
                             >
-                                <Tooltip
-                                    title="Sort"
-                                    placement={row.numeric ? 'bottom-end' : 'bottom-start'}
-                                    enterDelay={300}
-                                >
-                                    <TableSortLabel
-                                        active={orderBy === row.id}
-                                        direction={order}
-                                        onClick={this.createSortHandler(row.id)}
-                                    >
-                                        {row.label}
-                                    </TableSortLabel>
-                                </Tooltip>
+                                {row.label}
                             </TableCell>
                         );
                     }, this)}
@@ -327,7 +312,10 @@ const styles = theme => ({
             width: 260
         },
         '& thead tr th:nth-child(3)':{
-            width: 500
+            width: 360
+        },
+        '& thead tr th:nth-child(8)':{
+            width: 160
         },
         '& thead tr th:nth-child(4)':{
             width: 80,
@@ -337,7 +325,10 @@ const styles = theme => ({
             }
         },
         '& thead tr th:nth-child(5)':{
-            width: 160,
+            width: 130,
+        },
+        '& thead tr th:nth-child(7)':{
+            width: 130,
         },
         '& thead tr th:last-child':{
             borderRight: 'none'
@@ -365,14 +356,14 @@ const styles = theme => ({
         fontSize: '1.3rem'
     },
     description:{
-        width: '520px!important',
+        width: '420px!important',
         flexGrow: 1.0,
     },
     markup:{
-        width: '150px!important'
+        width: '120px!important'
     },
     extended:{
-        width: '160px!important'
+        width: '120px!important'
     },
     quantity:{
         '& div': {
@@ -382,7 +373,7 @@ const styles = theme => ({
         }
     },
     actionsWrap: {
-        width: '160px!important'
+        width: '180px!important'
     },
     table       : {
         minWidth: 1020,
@@ -468,7 +459,7 @@ class InvoiceLineTable extends React.Component {
         // orderBy    : 'billing',
         selected   : [],
         data       : [
-            createData("Regular Billing", "Adjust-Balance", " ",1),
+            createData("Regular Billing", "Adjust-Balance", " ",' '),
         ],
         page       : 0,
         rowsPerPage: 10,
@@ -557,20 +548,20 @@ class InvoiceLineTable extends React.Component {
         const lineData = [...this.state.data];
         const lastRow = lineData[lineData.length-1];
 
-        if(lastRow.quantity===0) {
+        if(lastRow.description===' ') {
+            this.setState({snackMessage: 'Please enter description'})
+            this.setState({openSnack: true});
+            return;
+        }
+
+        if(lastRow.quantity===' ') {
             this.setState({snackMessage: 'Please enter quantity'})
             this.setState({openSnack: true});
             return;
         }
 
-        if(lastRow.amount===0) {
+        if(lastRow.amount===' ') {
             this.setState({snackMessage: 'Please enter amount'})
-            this.setState({openSnack: true});
-            return;
-        }
-
-        if(lastRow.description===' ') {
-            this.setState({snackMessage: 'Please enter description'})
             this.setState({openSnack: true});
             return;
         }
@@ -641,15 +632,20 @@ class InvoiceLineTable extends React.Component {
     renderEditable(cellInfo, id) {
         if (cellInfo.id>this.state.data.length-1) return;
         let prefix = '';
-        if (id==='amount' || id==='extended') prefix = "$";
+        if (id==='amount' || id==='extended') {
+            if(this.state.data[cellInfo.id][id]!==' ')
+            prefix = "$";
+        }
 
         if(this.state.data[cellInfo.id][id].length===0) return;
 
         let value='';
         value= this.state.data[cellInfo.id][id];
 
-        if (id==='amount' || id==='extended')
-            value = parseFloat(this.state.data[cellInfo.id][id]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        if (id==='amount' || id==='extended') {
+            if(this.state.data[cellInfo.id][id]!==' ')
+                value = parseFloat(this.state.data[cellInfo.id][id]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
         return (
             <div
                 style={{ backgroundColor: "#fafafa", padding: 12, border: "1px solid lightgray", borderRadius: 6 }}
@@ -658,8 +654,16 @@ class InvoiceLineTable extends React.Component {
                 onBlur={e => {
                     const data = [...this.state.data];
                     data[cellInfo.id][id] = (e.target.innerHTML).replace('$','').replace(',','');
-                    if(id==='amount' || id==='markup') data[cellInfo.id][id] = parseFloat(data[cellInfo.id][id]);
-                    if(id==='quantity') data[cellInfo.id][id] = parseInt(data[cellInfo.id][id]);
+
+                    if(id==='amount' || id==='markup') {
+                        if(this.state.data[cellInfo.id][id]!==' ')
+                        data[cellInfo.id][id] = parseFloat(data[cellInfo.id][id]);
+                    }
+
+                    if(id==='quantity') {
+                        if(this.state.data[cellInfo.id][id]!==' ')
+                        data[cellInfo.id][id] = parseInt(data[cellInfo.id][id]);
+                    }
                     this.setState({ data });
                 }}
                 dangerouslySetInnerHTML={{
