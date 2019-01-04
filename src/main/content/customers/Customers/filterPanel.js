@@ -167,6 +167,8 @@ class FilterPanel extends Component {
 
 		AccountTypes: -2,
 		AccountExecutive: 0,
+
+		Location: "locationAll"
 	};
 
 
@@ -475,16 +477,25 @@ class FilterPanel extends Component {
 										margin="normal"
 										variant="outlined"
 										style={{ width: '100%' }}>
-										{[
-											{ value: 0, label: "5 Miles" },
-											{ value: 1, label: "10 Miles" },
-											{ value: 2, label: "20 Miles" },
-											{ value: 3, label: "30 Miles" }
-										].map(option => (
-											<MenuItem key={option.value} value={option.value}>
-												{option.label}
-											</MenuItem>
-										))}
+										{
+											// [
+											// 	{ value: 0, label: "5 Miles" },
+											// 	{ value: 1, label: "10 Miles" },
+											// 	{ value: 2, label: "20 Miles" },
+											// 	{ value: 2, label: "20 Miles" },
+											// 	{ value: 2, label: "20 Miles" },
+											// 	{ value: 2, label: "20 Miles" },
+											// 	{ value: 2, label: "20 Miles" },
+											// 	{ value: 2, label: "20 Miles" },
+											// 	{ value: 3, label: "30 Miles" }
+											// ]
+											// (new Array(15))
+											Array.apply(null, {length: 15}).map(Number.call, Number)
+												.map((val, index) => (
+													<MenuItem key={index} value={index}>
+														{(index + 1 ) * 5} Miles
+													</MenuItem>
+												))}
 									</TextField>
 								</div>
 

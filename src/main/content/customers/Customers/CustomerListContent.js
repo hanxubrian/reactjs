@@ -572,7 +572,7 @@ class CustomerListContent extends Component {
 								width: 50
 							},
 							{
-								Header: "Zip Code",
+								Header: "Zip",
 								accessor: "PostalCode",
 								className: classNames("flex items-center  justify-center"),
 								headerClassName: "wordwrap",
