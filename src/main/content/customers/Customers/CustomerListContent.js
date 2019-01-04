@@ -26,6 +26,20 @@ import "react-table/react-table.css";
 import _ from 'lodash';
 import classNames from 'classnames';
 
+
+import { Tooltip } from '@material-ui/core';
+import GoogleMap from 'google-map-react';
+
+function Marker({ text }) {
+	return (
+		<Tooltip title={text} placement="top">
+			<Icon className="text-red">place</Icon>
+		</Tooltip>
+	);
+}
+
+
+
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 	return result ? {
@@ -275,6 +289,7 @@ class CustomerListContent extends Component {
 
 	componentDidMount() {
 		document.addEventListener("keydown", this.escFunction, false);
+		this.getLocation();
 	}
 
 	componentWillMount() {
@@ -327,6 +342,20 @@ class CustomerListContent extends Component {
 		return str.join(" ");
 	}
 
+	getLocation() {
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(
+				(position) => {
+					console.log(position.coords);
+					this.setState({
+						current_lat: position.coords.latitude,
+						current_long: position.coords.longitude
+					})
+				}
+			);
+		}
+	}
+
 	render() {
 		console.log(this.props)
 		console.log(this.state)
@@ -342,13 +371,14 @@ class CustomerListContent extends Component {
 			// closeNewCustomerForm,
 			// CustomerForm,
 			// toggleMapView
+			mapViewState
 		} = this.props;
 		const { toggleSelection, toggleAll, isSelected } = this;
-
-		console.log(this.props)
+		console.log("mapViewState")
+		console.log(this.state.mapViewState)
 
 		return (
-			<div className={classNames(classes.layoutTable, "h-full")}>
+			<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
 				<div className="flex flex-row items-center">
 					<div className="flex items-center justify-start p-12">
 						<Button
@@ -388,237 +418,252 @@ class CustomerListContent extends Component {
 						</Button></div>
 				</div>
 
+				{mapViewState && (<div className="w-full h-full">
+					<div className="w-full h-full">
+						<GoogleMap
+							bootstrapURLKeys={{
+								key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
+							}}
+							defaultZoom={12}
+							defaultCenter={[this.state.current_lat, this.state.current_long]}
+						>
+							<Marker
+								text="Marker Text"
+								lat={this.state.current_lat}
+								lng={this.state.current_long}
+							/>
+						</GoogleMap>
+					</div>
+				</div>)}
+				{!mapViewState && (
+					<ReactTable
+						data={this.state.data}
+						minRows={0}
+						PaginationComponent={JanikingPagination}
+						onFetchData={this.fetchData}
+						getTheadGroupProps={(state, rowInfo, column, instance) => {
+							return {
+								style: {
+									padding: "10px 10px",
+									fontSize: 16,
+									fontWeight: 700
+								},
+							}
+						}}
+						getTheadGroupThProps={(state, rowInfo, column, instance) => {
+							return {
+								style: {
+									padding: "10px 10px",
+									fontSize: 18,
+									fontWeight: 700,
+								},
+								className: classNames("flex items-center justify-start")
+							}
+						}}
+						getTheadThProps={(state, rowInfo, column, instance) => {
+							let border = '1px solid rgba(255,255,255,.6)';
+							if (column.Header === 'Actions') border = 'none';
 
+							return {
+								style: {
+									fontSize: '1.6rem',
+									fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
+									fontWeight: 400,
+									lineHeight: 1.75,
+									color: 'white',
+									borderRight: border
+								},
+							}
+						}}
+						getTheadProps={(state, rowInfo, column, instance) => {
+							return {
+								style: {
+									fontSize: 13,
+								},
+								className: classes.tableTheadRow
+							}
+						}}
+						getTdProps={(state, rowInfo, column, instance) => {
+							// let tdClass = 'flex items-center justify-center';
+							// if (column.id === 'CustomerNo' || column.id === 'CustomerNo' || column.id === 'CustomerBalanceAmount' ||
+							// 	column.id === 'CustomerDate' || column.id === 'TransactionStatus') tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
 
-				<ReactTable
-					data={this.state.data}
-					minRows={0}
-					PaginationComponent={JanikingPagination}
-					onFetchData={this.fetchData}
-					getTheadGroupProps={(state, rowInfo, column, instance) => {
-						return {
-							style: {
-								padding: "10px 10px",
-								fontSize: 16,
-								fontWeight: 700
-							},
-						}
-					}}
-					getTheadGroupThProps={(state, rowInfo, column, instance) => {
-						return {
-							style: {
-								padding: "10px 10px",
-								fontSize: 18,
-								fontWeight: 700,
-							},
-							className: classNames("flex items-center justify-start")
-						}
-					}}
-					getTheadThProps={(state, rowInfo, column, instance) => {
-						let border = '1px solid rgba(255,255,255,.6)';
-						if (column.Header === 'Actions') border = 'none';
-
-						return {
-							style: {
-								fontSize: '1.6rem',
-								fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
-								fontWeight: 400,
-								lineHeight: 1.75,
-								color: 'white',
-								borderRight: border
-							},
-						}
-					}}
-					getTheadProps={(state, rowInfo, column, instance) => {
-						return {
-							style: {
-								fontSize: 13,
-							},
-							className: classes.tableTheadRow
-						}
-					}}
-					getTdProps={(state, rowInfo, column, instance) => {
-						// let tdClass = 'flex items-center justify-center';
-						// if (column.id === 'CustomerNo' || column.id === 'CustomerNo' || column.id === 'CustomerBalanceAmount' ||
-						// 	column.id === 'CustomerDate' || column.id === 'TransactionStatus') tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
-
-						return {
-							style: {
-								textAlign: 'center',
-								flexDirection: 'row',
-								fontSize: 12,
-								padding: "0",
-							},
-						}
-					}}
-					getTrProps={(state, rowInfo, column) => {
-						return {
-							className: "cursor-pointer",
-							onClick: (e, handleOriginal) => {
-								if (rowInfo) {
-									alert('ok');
-									// openEditContactDialog(rowInfo.original);
+							return {
+								style: {
+									textAlign: 'center',
+									flexDirection: 'row',
+									fontSize: 12,
+									padding: "0",
+								},
+							}
+						}}
+						getTrProps={(state, rowInfo, column) => {
+							return {
+								className: "cursor-pointer",
+								onClick: (e, handleOriginal) => {
+									if (rowInfo) {
+										alert('ok');
+										// openEditContactDialog(rowInfo.original);
+									}
 								}
 							}
-						}
-					}}
-					columns={[
-						{
-							Header: (instance) => (
-								<Checkbox
-									onClick={(event) => {
-										event.stopPropagation();
-									}}
-									onChange={(event) => toggleAll(instance)}
-									checked={this.state.selectAll}
-									style={{ color: 'white' }}
-								// indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
-								/>
-							),
-							accessor: "",
-							Cell: row => {
-								return (<Checkbox
-									onClick={(event) => {
-										event.stopPropagation();
-									}}
-									checked={isSelected(row.value.CustomerId)}
-									onChange={() => toggleSelection(row.value.CustomerId)}
-								/>
+						}}
+						columns={[
+							{
+								Header: (instance) => (
+									<Checkbox
+										onClick={(event) => {
+											event.stopPropagation();
+										}}
+										onChange={(event) => toggleAll(instance)}
+										checked={this.state.selectAll}
+										style={{ color: 'white' }}
+									// indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
+									/>
+								),
+								accessor: "",
+								Cell: row => {
+									return (<Checkbox
+										onClick={(event) => {
+											event.stopPropagation();
+										}}
+										checked={isSelected(row.value.CustomerId)}
+										onChange={() => toggleSelection(row.value.CustomerId)}
+									/>
+									)
+								},
+								className: "justify-center",
+								sortable: false,
+								width: 72
+							},
+							{
+								Header: "No",
+								accessor: "CustomerNo",
+								filterAll: true,
+								width: 60,
+								className: classNames("flex items-center  justify-center") //classes.tableTdEven
+							},
+							{
+								Header: "Name",
+								accessor: "CustomerName",
+								width: 200,
+								className: classNames("flex items-center  justify-start p-12-impor")
+							},
+							{
+								Header: "Address",
+								// accessor: "Address",
+								id: "Address",
+								accessor: d => (this.capital_letter(d.Address)),
+								className: classNames("flex items-center  justify-start"),
+								width: 160
+							},
+							{
+								Header: "City",
+								// accessor: "City",
+								id: "City",
+								accessor: d => (this.capital_letter(d.City)),
+								className: classNames("flex items-center  justify-start"),
+								width: 90
+							},
+							{
+								Header: "State",
+								accessor: "StateName",
+								className: classNames("flex items-center  justify-center"),
+								width: 50
+							},
+							{
+								Header: "Zip Code",
+								accessor: "PostalCode",
+								className: classNames("flex items-center  justify-center"),
+								headerClassName: "wordwrap",
+								width: 50
+							},
+							{
+								Header: "Phone",
+								accessor: "Phone",
+								width: 80,
+								className: classNames("flex items-center  justify-center p-12-impor")
+							},
+							{
+								Header: "Account Type",
+								accessor: "AccountTypeListName",
+								// Cell: row => {
+								// 	return '$' + parseFloat(row.original.CustomerBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+								// },
+								className: classNames("flex items-center  justify-center p-12-impor"),
+								width: 150
+							},
+							{
+								Header: "Status",
+								// Cell: row => {
+								// 	return '$' + parseFloat(row.original.CustomerTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+								// },
+								accessor: "StatusName",
+								className: classNames("flex items-center  justify-center p-12-impor"),
+								width: 60
+							},
+							{
+								Header: "Contract Amount",
+								id: "Amount",
+								// accessor: d => ('$' + Number(d.Amount).toFixed(2)),
+								accessor: d => '$' + d.Amount.toLocaleString(undefined, { minimumFractionDigits: 2 }),
+								// accessor: "Amount",
+								className: classNames("flex items-center  justify-end p-12-impor"),
+								headerClassName: "wordwrap",
+								width: 80
+							},
+							// {
+							// 	Header: "Due Date",
+							// 	id: "DueDate",
+							// 	accessor: d => moment(d.DueDate).format('MM/DD/YYYY'),
+							// 	className: classNames("flex items-center  justify-center"),
+							// 	width: 120
+							// },
+							// {
+							// 	Header: "Status",
+							// 	accessor: "TransactionStatus",
+							// 	className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+							// 	width: 120
+							// },
+							{
+								Header: "Actions",
+								// width: 128,
+								Cell: row => (
+									<div className="flex items-center actions">
+										<IconButton
+											onClick={(ev) => {
+												ev.stopPropagation();
+												if (window.confirm("Do you really want to remove this customer")) {
+													this.props.removeCustomerAction(row.original.CustomerId, this.props.customers);
+													if (this.state.selection.length > 0) {
+														_.remove(this.state.selection, function (id) {
+															return id === row.original.CustomerId;
+														});
+													}
+												}
+											}}
+										>
+											<Icon>delete</Icon>
+										</IconButton>
+										<IconButton
+											onClick={(ev) => {
+												ev.stopPropagation();
+												// removeContact(row.original.id);
+											}}
+										>
+											<Icon>edit</Icon>
+										</IconButton>
+									</div>
 								)
 							},
-							className: "justify-center",
-							sortable: false,
-							width: 72
-						},
-						{
-							Header: "No",
-							accessor: "CustomerNo",
-							filterAll: true,
-							width: 60,
-							className: classNames("flex items-center  justify-center") //classes.tableTdEven
-						},
-						{
-							Header: "Name",
-							accessor: "CustomerName",
-							width: 200,
-							className: classNames("flex items-center  justify-start p-12-impor")
-						},
-						{
-							Header: "Address",
-							// accessor: "Address",
-							id: "Address",
-							accessor: d => (this.capital_letter(d.Address)),
-							className: classNames("flex items-center  justify-start"),
-							width: 160
-						},
-						{
-							Header: "City",
-							// accessor: "City",
-							id: "City",
-							accessor: d => (this.capital_letter(d.City)),
-							className: classNames("flex items-center  justify-start"),
-							width: 90
-						},
-						{
-							Header: "State",
-							accessor: "StateName",
-							className: classNames("flex items-center  justify-center"),
-							width: 50
-						},
-						{
-							Header: "Zip Code",
-							accessor: "PostalCode",
-							className: classNames("flex items-center  justify-center"),
-							headerClassName: "wordwrap",
-							width: 50
-						},
-						{
-							Header: "Phone",
-							accessor: "Phone",
-							width: 80,
-							className: classNames("flex items-center  justify-center p-12-impor")
-						},
-						{
-							Header: "Account Type",
-							accessor: "AccountTypeListName",
-							// Cell: row => {
-							// 	return '$' + parseFloat(row.original.CustomerBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-							// },
-							className: classNames("flex items-center  justify-center p-12-impor"),
-							width: 150
-						},
-						{
-							Header: "Status",
-							// Cell: row => {
-							// 	return '$' + parseFloat(row.original.CustomerTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-							// },
-							accessor: "StatusName",
-							className: classNames("flex items-center  justify-center p-12-impor"),
-							width: 60
-						},
-						{
-							Header: "Contract Amount",
-							id: "Amount",
-							// accessor: d => ('$' + Number(d.Amount).toFixed(2)),
-							accessor: d => '$' + d.Amount.toLocaleString(undefined, { minimumFractionDigits: 2 }),
-							// accessor: "Amount",
-							className: classNames("flex items-center  justify-end p-12-impor"),
-							headerClassName: "wordwrap",
-							width: 80
-						},
-						// {
-						// 	Header: "Due Date",
-						// 	id: "DueDate",
-						// 	accessor: d => moment(d.DueDate).format('MM/DD/YYYY'),
-						// 	className: classNames("flex items-center  justify-center"),
-						// 	width: 120
-						// },
-						// {
-						// 	Header: "Status",
-						// 	accessor: "TransactionStatus",
-						// 	className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-						// 	width: 120
-						// },
-						{
-							Header: "Actions",
-							// width: 128,
-							Cell: row => (
-								<div className="flex items-center actions">
-									<IconButton
-										onClick={(ev) => {
-											ev.stopPropagation();
-											if (window.confirm("Do you really want to remove this customer")) {
-												this.props.removeCustomerAction(row.original.CustomerId, this.props.customers);
-												if (this.state.selection.length > 0) {
-													_.remove(this.state.selection, function (id) {
-														return id === row.original.CustomerId;
-													});
-												}
-											}
-										}}
-									>
-										<Icon>delete</Icon>
-									</IconButton>
-									<IconButton
-										onClick={(ev) => {
-											ev.stopPropagation();
-											// removeContact(row.original.id);
-										}}
-									>
-										<Icon>edit</Icon>
-									</IconButton>
-								</div>
-							)
-						},
 
-					]}
-					defaultPageSize={100}
-					className={classNames("-striped -highlight")}
-					totalRecords={this.state.data.length}
-					style={{
-						height: '100%',
-					}}
-				/>
+						]}
+						defaultPageSize={100}
+						className={classNames("-striped -highlight")}
+						totalRecords={this.state.data.length}
+						style={{ flex: '1', }}
+					/>
+				)}
 			</div>
 		);
 	}
@@ -644,7 +689,8 @@ function mapStateToProps({ customers, auth }) {
 		filterState: customers.bOpenedFilterPanel,
 		summaryState: customers.bOpenedSummaryPanel,
 		regionId: auth.login.defaultRegionId,
-		CustomerForm: customers.CustomerForm
+		CustomerForm: customers.CustomerForm,
+		mapViewState: customers.bOpenedMapView
 	}
 }
 
