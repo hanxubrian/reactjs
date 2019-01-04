@@ -627,7 +627,7 @@ class CustomerListContent extends Component {
 							// },
 							{
 								Header: "Actions",
-								// width: 128,
+								width: 110,
 								Cell: row => (
 									<div className="flex items-center actions">
 										<IconButton
