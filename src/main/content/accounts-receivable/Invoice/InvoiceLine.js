@@ -120,7 +120,7 @@ function createFranchisee(parent_id,id, franchisee="Franchisee", name="Franchise
     }
 }
 
-function createData(billing='Regular Billing', service='Adjust-Balance', description=' ', quantity=0, amount=0, markup=0, extended=0)
+function createData(billing='Regular Billing', service='Adjust-Balance', description=' ', quantity=' ', amount=' ', markup=0, extended=0)
 {
     return {
         id: counter++,
@@ -474,7 +474,7 @@ class InvoiceLineTable extends React.Component {
         // orderBy    : 'billing',
         selected   : [],
         data       : [
-            createData("Regular Billing", "Adjust-Balance", " ",0),
+            createData("Regular Billing", "Adjust-Balance", " ",' '),
         ],
         page       : 0,
         rowsPerPage: 10,
@@ -563,20 +563,20 @@ class InvoiceLineTable extends React.Component {
         const lineData = [...this.state.data];
         const lastRow = lineData[lineData.length-1];
 
-        if(lastRow.quantity===0) {
+        if(lastRow.description===' ') {
+            this.setState({snackMessage: 'Please enter description'})
+            this.setState({openSnack: true});
+            return;
+        }
+
+        if(lastRow.quantity===' ') {
             this.setState({snackMessage: 'Please enter quantity'})
             this.setState({openSnack: true});
             return;
         }
 
-        if(lastRow.amount===0) {
+        if(lastRow.amount===' ') {
             this.setState({snackMessage: 'Please enter amount'})
-            this.setState({openSnack: true});
-            return;
-        }
-
-        if(lastRow.description===' ') {
-            this.setState({snackMessage: 'Please enter description'})
             this.setState({openSnack: true});
             return;
         }
@@ -647,15 +647,20 @@ class InvoiceLineTable extends React.Component {
     renderEditable(cellInfo, id) {
         if (cellInfo.id>this.state.data.length-1) return;
         let prefix = '';
-        if (id==='amount' || id==='extended') prefix = "$";
+        if (id==='amount' || id==='extended') {
+            if(this.state.data[cellInfo.id][id]!==' ')
+            prefix = "$";
+        }
 
         if(this.state.data[cellInfo.id][id].length===0) return;
 
         let value='';
         value= this.state.data[cellInfo.id][id];
 
-        if (id==='amount' || id==='extended')
-            value = parseFloat(this.state.data[cellInfo.id][id]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        if (id==='amount' || id==='extended') {
+            if(this.state.data[cellInfo.id][id]!==' ')
+                value = parseFloat(this.state.data[cellInfo.id][id]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
         return (
             <div
                 style={{ backgroundColor: "#fafafa", padding: 12, border: "1px solid lightgray", borderRadius: 6 }}
@@ -664,8 +669,16 @@ class InvoiceLineTable extends React.Component {
                 onBlur={e => {
                     const data = [...this.state.data];
                     data[cellInfo.id][id] = (e.target.innerHTML).replace('$','').replace(',','');
-                    if(id==='amount' || id==='markup') data[cellInfo.id][id] = parseFloat(data[cellInfo.id][id]);
-                    if(id==='quantity') data[cellInfo.id][id] = parseInt(data[cellInfo.id][id]);
+
+                    if(id==='amount' || id==='markup') {
+                        if(this.state.data[cellInfo.id][id]!==' ')
+                        data[cellInfo.id][id] = parseFloat(data[cellInfo.id][id]);
+                    }
+
+                    if(id==='quantity') {
+                        if(this.state.data[cellInfo.id][id]!==' ')
+                        data[cellInfo.id][id] = parseInt(data[cellInfo.id][id]);
+                    }
                     this.setState({ data });
                 }}
                 dangerouslySetInnerHTML={{
