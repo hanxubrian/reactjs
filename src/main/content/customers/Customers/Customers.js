@@ -607,42 +607,6 @@ class Customers extends Component {
 											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
 												<Icon>close</Icon>
 											</IconButton>
-
-											{/* <FuseAnimate animation="transition.expandIn" delay={300}>
-												<Button
-													variant="contained"
-													color="primary"
-													className={classNames(classes.button, "mr-12")}
-													onClick={() => {
-														this.closeComposeForm();
-													}}
-													disabled={!this.canBeSubmitted()}
-												> Discard </Button>
-											</FuseAnimate>
-											<FuseAnimate animation="transition.expandIn" delay={300}>
-												<Button
-													variant="contained"
-													color="primary"
-													className={classNames(classes.button, "mr-12")}
-													onClick={() => {
-														this.closeComposeForm();
-													}}
-													disabled={!this.canBeSubmitted()}
-												> Save </Button>
-											</FuseAnimate>
-											<FuseAnimate animation="transition.expandIn" delay={300}>
-												<Button
-													variant="contained"
-													color="primary"
-													className={classes.button}
-													onClick={() => {
-														this.closeComposeForm();
-													}}
-													disabled={!this.canBeSubmitted()}
-												> Close </Button>
-											</FuseAnimate> */}
-
-
 										</div>
 									</div>
 									<div className="flex flex-none items-end" style={{ display: 'none' }}>
@@ -676,26 +640,6 @@ class Customers extends Component {
 					}
 					content={
 						<div className="flex-1 flex-col absolute w-full h-full">
-							{/* {(this.state.temp && !customerForm.props.open) && (mapViewState) && (<div className="w-full h-full">
-								<div className="w-full h-full">
-									<GoogleMap
-										bootstrapURLKeys={{
-											key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
-										}}
-										defaultZoom={12}
-										defaultCenter={[this.state.current_lat, this.state.current_long]}
-									>
-										<Marker
-											text="Marker Text"
-											lat={this.state.current_lat}
-											lng={this.state.current_long}
-										/>
-									</GoogleMap>
-								</div>
-							</div>)}
-							{(this.state.temp && !customerForm.props.open) && (!mapViewState) && (<CustomerListContent data={this.state.temp} />)}
-							 */}
-
 							{(this.state.temp && !customerForm.props.open) && (<CustomerListContent data={this.state.temp} />)}
 							{(this.state.temp && customerForm.props.open) && (
 								<CustomerForm customers={this.props.customers} franchisees={this.props.franchisees} selectedCustomer={this.state.selectedCustomer} />
@@ -704,46 +648,19 @@ class Customers extends Component {
 					}
 					leftSidebarHeader={
 						<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
-							{/* <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", { 'filteropen': filterState })}> */}
-							{/* <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0"> */}
 							{customerForm.props.open ? (
 								<h2 style={{ marginBlockStart: '1em' }}>Customer Information</h2>
 							) : (
 									<h2 style={{ marginBlockStart: '1em' }}>Filters</h2>
 								)}
-
-							{/* <FuseAnimate animation="transition.expandIn" delay={200}>
-								<div>
-									<Hidden xsDown>
-										<IconButton onClick={(ev) => toggleFilterPanel()}>
-											<Icon>close</Icon>
-										</IconButton>
-									</Hidden>
-								</div>
-							</FuseAnimate> */}
 						</div>
 					}
 					leftSidebarContent={
 						<FilterPanel />
 					}
 					rightSidebarHeader={
-						/*<div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0"> */
 						<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
 							<h2 style={{ marginBlockStart: '1em' }}>Summary</h2>
-							{/* <FuseAnimate animation="transition.expandIn" delay={200}> */}
-							{/* <div> */}
-							{/* <Hidden xsDown> */}
-							{/*<IconButton onClick={()=>this.removeCustomers()}>*/}
-							{/* <Icon>delete</Icon> */}
-							{/* </IconButton> */}
-							{/* <IconButton onClick={(ev) => toggleSummaryPanel()}>  */}
-
-							{/* <IconButton onClick={toggleSummaryPanel}> */}
-							{/* <Icon>close</Icon> */}
-							{/* </IconButton> */}
-							{/* </Hidden> */}
-							{/* </div> */}
-							{/* </FuseAnimate> */}
 						</div>
 					}
 					rightSidebarContent={
@@ -755,7 +672,6 @@ class Customers extends Component {
 					}}
 				>
 				</FusePageCustomSidebarScroll>
-				{/* <CustomerDialog customers={this.state.customers}/> */}
 			</React.Fragment >
 		);
 	}

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 // import ReactDOM from 'react-dom';
 
 // core components
@@ -29,6 +29,47 @@ import classNames from 'classnames';
 
 import { Tooltip } from '@material-ui/core';
 import GoogleMap from 'google-map-react';
+
+import {
+	SelectionState,
+	PagingState,
+	IntegratedPaging,
+	IntegratedSelection,
+	SortingState,
+	IntegratedSorting,
+	EditingState,
+	GroupingState,
+	IntegratedGrouping,
+	DataTypeProvider,
+	FilteringState,
+	IntegratedFiltering,
+	SearchState,
+} from '@devexpress/dx-react-grid';
+
+import {
+	Grid,
+	Table,
+	TableHeaderRow,
+	TableSelection,
+	PagingPanel,
+	TableEditRow,
+	TableEditColumn,
+	GroupingPanel,
+	Toolbar,
+	TableGroupRow,
+	TableFilterRow,
+	SearchPanel,
+	DragDropProvider,
+
+} from '@devexpress/dx-react-grid-material-ui';
+
+import * as PropTypes from 'prop-types';
+
+import Chip from '@material-ui/core/Chip';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+
+import { fade } from '@material-ui/core/styles/colorManipulator';
 
 function Marker({ text }) {
 	return (
@@ -139,8 +180,111 @@ const styles = theme => ({
 	},
 	imageIcon: {
 		width: 24
-	}
+	},
+	tableStriped: {
+		'& tbody tr:nth-of-type(odd)': {
+			backgroundColor: 'fade(' + theme.palette.primary.main + ', 0.03)',
+		},
+		'& tbody tr:nth-of-type(even)': {
+			backgroundColor: 'fade(' + theme.palette.primary.secondary + ', 0.03)',
+		},
+	},
 });
+//
+// table content rows stle
+//
+const TableComponentBase = ({ classes, ...restProps }) => (
+	<Table.Table
+		{...restProps}
+		className={classes.tableStriped}
+	/>
+);
+export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
+//
+// table cell currency formatter
+//
+const CurrencyFormatter = ({ value }) => (<span>$ {value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
+const CurrencyTypeProvider = props => (
+	<DataTypeProvider
+		formatterComponent={CurrencyFormatter}
+		{...props}
+	/>
+);
+//
+// table cell date formatter
+//
+const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1');
+const DateTypeProvider = props => (
+	<DataTypeProvider
+		formatterComponent={DateFormatter}
+		{...props}
+	/>
+);
+//
+// table cell boolean edit formatter
+//
+const BooleanFormatter = ({ value }) => <Chip label={value ? 'Yes' : 'No'} />;
+const BooleanEditor = ({ value, onValueChange }) => (
+	<Select
+		input={<Input />}
+		value={value ? 'Yes' : 'No'}
+		onChange={event => onValueChange(event.target.value === 'Yes')}
+		style={{ width: '100%' }}
+	>
+		<MenuItem value="Yes">Yes</MenuItem>
+		<MenuItem value="No">No</MenuItem>
+	</Select>
+);
+const BooleanTypeProvider = props => (
+	<DataTypeProvider
+		formatterComponent={BooleanFormatter}
+		editorComponent={BooleanEditor}
+		{...props}
+	/>
+);
+//
+// filter icon
+//
+const FilterIcon = ({ type, ...restProps }) => {
+	return <TableFilterRow.Icon type={type} {...restProps} />;
+};
+
+//
+// amount filter editor component
+//
+const AmountEditorBase = ({ value, onValueChange, classes }) => {
+	const handleChange = (event) => {
+		const { value: targetValue } = event.target;
+		if (targetValue.trim() === '') {
+			onValueChange();
+			return;
+		}
+		onValueChange(parseFloat(targetValue));
+	};
+	return (
+		<Input
+			type="number"
+			classes={{
+				input: classes.numericInput,
+			}}
+			fullWidth
+			value={value === undefined ? '' : value}
+			inputProps={{
+				min: 0,
+				placeholder: 'Filter...',
+			}}
+			onChange={handleChange}
+		/>
+	);
+};
+AmountEditorBase.propTypes = {
+	value: PropTypes.number,
+	onValueChange: PropTypes.func.isRequired,
+	classes: PropTypes.object.isRequired,
+};
+AmountEditorBase.defaultProps = { value: undefined, };
+const AmountEditor = withStyles(styles)(AmountEditorBase);
+
 
 class CustomerListContent extends Component {
 	state = {
@@ -149,7 +293,104 @@ class CustomerListContent extends Component {
 		data: [],
 		selection: [],
 		selectAll: false,
+
+		selection: [],
+		rows: [],
+		columns: [
+			{
+				title: "No", name: "CustomerNo",
+				// getCellValue: row => (row.user ? row.user.firstName : undefined),
+			},
+			{ title: "Name", name: "CustomerName", width: 200, },
+			{ title: "Address", name: "Address", width: 160 },
+			{ title: "City", name: "City", width: 90 },
+			{ title: "State", name: "StateName", width: 50 },
+			{ title: "Zip", name: "PostalCode", width: 50 },
+			{ title: "Phone", name: "Phone", width: 80, },
+			{ title: "Account Type", name: "AccountTypeListName", width: 150 },
+			{ title: "Status", name: "StatusName", width: 60 },
+			{ title: "Contract Amount", name: "Amount", width: 80 },
+			{ title: "Actions", name: "Actions", width: 110, }
+		],
+		tableColumnExtensions: [
+			{ title: "No", name: "CustomerNo", columnName: "CustomerNo", width: 80, sortingEnabled: true, filteringEnabled: true, },
+			{ title: "Name", name: "CustomerName", columnName: "CustomerName", width: 200, wordWrapEnabled: true, sortingEnabled: true, filteringEnabled: true, },
+			{ title: "Address", name: "Address", columnName: "Address", width: 200, wordWrapEnabled: true, sortingEnabled: false, filteringEnabled: true, },
+			{ title: "City", name: "City", columnName: "City", width: 130, wordWrapEnabled: true, sortingEnabled: false, filteringEnabled: true, },
+			{ title: "State", name: "StateName", columnName: 'StateName', width: 90, align: 'center', sortingEnabled: true, filteringEnabled: true, },
+			{ title: "Zip", name: "PostalCode", columnName: "PostalCode", width: 90, sortingEnabled: false, filteringEnabled: true, },
+			{ title: "Phone", name: "Phone", columnName: "Phone", width: 100, sortingEnabled: false, filteringEnabled: true, },
+			{ title: "Account Type", name: "AccountTypeListName", columnName: "AccountTypeListName", width: 150, sortingEnabled: true, filteringEnabled: true, },
+			{ title: "Status", name: "StatusName", columnName: 'StatusName', width: 90, align: 'center', sortingEnabled: true, filteringEnabled: true, },
+			{ title: "Contract Amount", name: "Amount", columnName: 'Amount', width: 120, align: 'right', wordWrapEnabled: true, sortingEnabled: true, filteringEnabled: true, },
+			{ title: "Actions", name: "Actions", columnName: "Actions", width: 110, sortingEnabled: true, filteringEnabled: false, }
+		],
+		sorting: [
+			{ columnName: 'CustomerNo', direction: 'asc' }
+		],
+		editingColumnExtensions: [
+			// {
+			// 	columnName: 'firstName',
+			// 	createRowChange: (row, value) => ({ user: { ...row.user, firstName: value } }),
+			// },
+		],
+		currencyColumns: [
+			'Amount'
+		],
+		dateColumns: ['saleDate'],
+		groupingColumns: [
+			{ columnName: 'StateName', groupingEnabled: false },
+			{ columnName: 'AccountTypeListName', groupingEnabled: false },
+			{ columnName: 'StatusName', groupingEnabled: false },
+		],
+		grouping: [
+			// { columnName: 'AccountTypeListName' },
+		],
+		pageSize: 20,
+		pageSizes: [10, 20, 30, 50, 100],
+		amountFilterOperations: ['equal', 'notEqual', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual'],
+		// defaultFilters: [{ columnName: 'StateName', value: 'PA' }],
+		searchValue: '',
 	};
+
+	constructor(props) {
+		super(props);
+
+		this.fetchData = this.fetchData.bind(this);
+		this.escFunction = this.escFunction.bind(this);
+
+		this.changeSelection = selection => this.setState({ selection });
+		this.changeSorting = sorting => this.setState({ sorting });
+		this.commitChanges = this.commitChanges.bind(this);
+		// this.changeCurrentPage = currentPage => this.setState({ currentPage });
+		// this.changePageSize = pageSize => this.setState({ pageSize });
+		this.changeSearchValue = value => this.setState({ searchValue: value });
+		this.changeGrouping = grouping => this.setState({ grouping });
+	}
+	//
+	// to edit table cell
+	//
+	commitChanges({ added, changed, deleted }) {
+		let { rows } = this.state;
+		if (added) {
+			const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
+			rows = [
+				...rows,
+				...added.map((row, index) => ({
+					id: startingAddedId + index,
+					...row,
+				})),
+			];
+		}
+		if (changed) {
+			rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+		}
+		if (deleted) {
+			const deletedSet = new Set(deleted);
+			rows = rows.filter(row => !deletedSet.has(row.id));
+		}
+		this.setState({ rows });
+	}
 
 	onChange = (event, { newValue, method }) => {
 		this.setState({
@@ -214,15 +455,12 @@ class CustomerListContent extends Component {
 	};
 
 
-	constructor(props) {
-		super(props);
-
-		this.fetchData = this.fetchData.bind(this);
-		this.escFunction = this.escFunction.bind(this);
-	}
 	componentDidUpdate(prevProps, prevState, snapshot) {
-		if (this.props.data !== prevProps.data)
+		console.log("componentDidUpdate");
+		if (this.props.data !== prevProps.data) {
 			this.setState({ data: this.props.data });
+			this.setState({ rows: this.props.data });
+		}
 
 		if (prevState.s !== this.state.s) {
 			this.search(this.state.s);
@@ -251,6 +489,9 @@ class CustomerListContent extends Component {
 
 		this.setState({ temp: all_temp });
 		this.setState({ data: all_temp });
+
+		this.setState({ rows: all_temp });
+
 	};
 	search(val) {
 		// const temp = this.props.data.filter( d => {
@@ -285,6 +526,7 @@ class CustomerListContent extends Component {
 		});
 
 		this.setState({ data: temp });
+		this.setState({ rows: temp });
 	}
 
 	componentDidMount() {
@@ -293,6 +535,7 @@ class CustomerListContent extends Component {
 	}
 
 	componentWillMount() {
+		this.setState({ rows: this.props.data })
 		this.setState({ data: this.props.data })
 	}
 	componentWillUnmount() {
@@ -356,7 +599,214 @@ class CustomerListContent extends Component {
 		}
 	}
 
+	generateRows() {
+		console.log(this.props.data.slice(0, 15));
+		return this.props.data;
+	}
+
 	render() {
+		const {
+			classes,
+			toggleFilterPanel,
+			toggleSummaryPanel,
+			mapViewState,
+			filterState
+		} = this.props;
+
+		const {
+			rows,
+			columns,
+			selection,
+			tableColumnExtensions,
+			sorting,
+			editingColumnExtensions,
+			currencyColumns,
+			pageSize,
+			pageSizes,
+			amountFilterOperations,
+			groupingColumns,
+			// booleanColumns,
+			searchValue,
+			grouping
+		} = this.state;
+
+		return (
+			<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
+				<div className="flex flex-row items-center">
+					<div className="flex items-center justify-start p-12">
+						<Button
+							onClick={(ev) => toggleFilterPanel()}
+							aria-label="toggle filter panel"
+							color="secondary"
+							// disabled={filterState ? true : false}
+							className={classNames(classes.filterPanelButton)}
+						>
+							<img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" />
+						</Button>
+					</div>
+					{/* <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}> */}
+					<Paper className={"flex items-center w-full h-44 mr-12"} elevation={1}>
+						<Input
+							placeholder="Search..."
+							className={classNames(classes.search, 'pl-16')}
+							// className="pl-16"
+							disableUnderline
+							fullWidth
+							value={this.state.s}
+							onChange={this.handleChange('s')}
+							inputProps={{
+								'aria-label': 'Search'
+							}}
+						/>
+						<Icon color="action" className="mr-16">search</Icon>
+					</Paper>
+					<div className="flex items-center justify-end p-12">
+						<Button
+							onClick={(ev) => toggleSummaryPanel()}
+							aria-label="toggle summary panel"
+							// disabled={summaryState ? true : false}
+							className={classNames(classes.summaryPanelButton)}
+						>
+							<Icon>insert_chart</Icon>
+						</Button></div>
+				</div>
+
+				{mapViewState && (<div className="w-full h-full">
+					<div className="w-full h-full">
+						<GoogleMap
+							bootstrapURLKeys={{
+								key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
+							}}
+							defaultZoom={12}
+							defaultCenter={[this.state.current_lat, this.state.current_long]}
+						>
+							<Marker
+								text="Marker Text"
+								lat={this.state.current_lat}
+								lng={this.state.current_long}
+							/>
+						</GoogleMap>
+					</div>
+				</div>)}
+
+				{!mapViewState &&
+					(
+
+						<Paper
+							className={classNames(classes.layoutTable, "flex flex-col h-full")}
+							style={{ flex: '1', }}>
+							<span className={"p-6"}>
+								Rows Selected: {selection.length}
+							</span>
+							<Grid
+								rows={
+									// [
+									// 	{ id: 0, product: 'DevExtreme', owner: 'DevExpress' },
+									// 	{ id: 1, product: 'DevExtreme Reactive', owner: 'DevExpress' },
+									// ]
+
+
+									// Array.apply(null, { length: 100 }).map(Number.call, Number)
+									// 	.map((val, index) => (
+									// 		{ id: index, product: 'Product' + index, owner: 'owner' + index }
+									// 	))
+									rows
+								}
+								columns={columns}>
+								<PagingState
+									defaultCurrentPage={0}
+									// currentPage={currentPage}
+									// onCurrentPageChange={this.changeCurrentPage}
+									// pageSize={pageSize}
+									// onPageSizeChange={this.changePageSize}
+									defaultPageSize={20}
+								/>
+								<IntegratedPaging />
+								<PagingPanel pageSizes={pageSizes} />
+
+								<SelectionState
+									selection={selection}
+									onSelectionChange={this.changeSelection}
+								/>
+								<IntegratedSelection />
+
+								<SortingState
+									sorting={sorting}
+									onSortingChange={this.changeSorting}
+									columnExtensions={tableColumnExtensions}
+								/>
+								<IntegratedSorting />
+
+								<SearchState
+									// defaultValue="Paris"
+									value={searchValue}
+									onValueChange={this.changeSearchValue}
+								/>
+
+								<FilteringState
+									defaultFilters={[]}
+									columnExtensions={tableColumnExtensions}
+								/>
+								<IntegratedFiltering />
+
+								<EditingState
+									columnExtensions={editingColumnExtensions}
+									onCommitChanges={this.commitChanges}
+								/>
+
+
+								<DragDropProvider />
+								<GroupingState
+									grouping={grouping}
+									onGroupingChange={this.changeGrouping}
+								// defaultGrouping={[]}
+								// columnExtensions={groupingColumns}
+								/>
+								<IntegratedGrouping />
+
+								{/* <BooleanTypeProvider
+									for={booleanColumns}
+								/> */}
+
+								<CurrencyTypeProvider
+									for={currencyColumns}
+									availableFilterOperations={amountFilterOperations}
+									editorComponent={AmountEditor}
+								/>
+								{/* <DateTypeProvider
+									for={dateColumns}
+								/> */}
+
+
+								<Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} />
+								<TableHeaderRow showSortingControls />
+								{/* showGroupingControls */}
+								<TableSelection showSelectAll selectByRowClick />
+
+								<TableEditRow />
+								<TableEditColumn showAddCommand showEditCommand showDeleteCommand />
+
+								{/* <Toolbar /> */}
+								{/* <SearchPanel /> */}
+
+								{filterState && (
+									<TableFilterRow
+										showFilterSelector
+										iconComponent={FilterIcon}
+									// messages={{ month: 'Month equals' }}
+									/>
+								)}
+								<TableGroupRow />
+								{/* <GroupingPanel showSortingControls showGroupingControls /> */}
+
+							</Grid>
+						</Paper>
+					)}
+			</div>
+		)
+	}
+
+	render2() {
 		console.log(this.props)
 		console.log(this.state)
 		const {
