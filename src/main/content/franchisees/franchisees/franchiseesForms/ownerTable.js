@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 //Material UI core and icons
 import {
 	Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
-	Toolbar, Typography, Paper, Icon, IconButton, Tooltip, Fab, MenuItem
+	Toolbar, Typography, Paper, Icon, IconButton, Tooltip, Fab
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -226,7 +226,7 @@ const styles = theme => ({
 	}
 });
 
-class FranchiseesLineTable extends React.Component {
+class FranchiseesOwnerTable extends React.Component {
 	state = {
 		order: 'asc',
 		selected: [],
@@ -315,7 +315,6 @@ class FranchiseesLineTable extends React.Component {
 							{stableSort(data, getSorting(order, orderBy))
 								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 								.map(n => {
-									if (this.props.tableType === "OWNER") {
 										return (
 											<TableRow hover key={n.id} >
 												<TableCell component="td" scope="row" >
@@ -359,77 +358,6 @@ class FranchiseesLineTable extends React.Component {
 												</TableCell>
 											</TableRow>
 										)
-									} else if (this.props.tableType === "FEE_MAINTENACE") {
-										return (
-											<TableRow hover key={n.id} >
-												<TableCell component="td" scope="row" >
-													<TextField
-														select
-														value = {0}
-														id={"FEE_MAINTENACE_name" + n.id}
-														className={classes.textField}
-														variant="outlined"
-														fullWidth
-													>
-
-														{[
-															{ value: 0, label: "Select Fee" },
-															{ value: 1, label: "Accounting Fee" },
-															{ value: 2, label: "Technology Fee" },
-															{ value: 3, label: "Advertising Fee" },
-															{ value: 4, label: "Royalty" },
-															{ value: 5, label: "Additional Billing (R.O.) Commission" },
-															{ value: 6, label: "Business Protection" },
-														].map(option => (
-															<MenuItem key={option.value} value={option.value}>
-																{option.label}
-															</MenuItem>
-														))}
-													</TextField>
-												</TableCell>
-												<TableCell>
-													<TextField
-														id={"rate" + n.id}
-														className={classes.textField}
-														variant="outlined"
-														fullWidth
-													/>
-												</TableCell>
-												<TableCell>
-													<TextField
-														id={"value" + n.id}
-														className={classes.textField}
-														variant="outlined"
-														fullWidth
-													/>
-												</TableCell>
-												<TableCell>
-													<TextField
-														id={"active" + n.id}
-														className={classes.textField}
-														variant="outlined"
-														fullWidth
-													/>
-												</TableCell>
-												<TableCell padding="checkbox">
-													<Fab color="secondary" aria-label="add"
-														className={classNames(classes.lineButton, "mr-12")}
-														onClick={() => this.AddLineData()}
-													>
-														<Icon>add</Icon>
-													</Fab>
-													{this.state.data.length > 1 && (
-														<Fab aria-label="add"
-															onClick={() => this.removeLineData(n)}
-															className={classNames(classes.lineCancelButton, "mr-12")}>
-															<Icon>close</Icon>
-														</Fab>
-													)}
-												</TableCell>
-											</TableRow>
-										)
-									}
-									return;
 								}
 								)}
 						</TableBody>
@@ -440,8 +368,8 @@ class FranchiseesLineTable extends React.Component {
 	}
 }
 
-FranchiseesLineTable.propTypes = {
+FranchiseesOwnerTable.propTypes = {
 	classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(FranchiseesLineTable);
+export default withStyles(styles)(FranchiseesOwnerTable);

@@ -24,13 +24,15 @@ import Checkbox from '@material-ui/core/Checkbox';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import FranchiseesLineTable from './franchiseesLine'
+import FranchiseesOwnerTable from './ownerTable'
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider,  DatePicker } from 'material-ui-pickers';
 import moment from "moment";
+import FranchiseesDocumentUploadTable from "./documentUploadTable";
+import FranchiseesMaintenanceTable from "./maintenanceTableLine";
 const styles = theme => ({
 
     root: {
@@ -118,7 +120,44 @@ function getStepContent(customerForm, step) {
             label: 'Active'
         },
     ];
-
+    const Upload_Document_headers = [
+        {
+            id: 'doc_type',
+            numeric: false,
+            disablePadding: false,
+            label: 'Doc Type'
+        },
+        {
+            id: 'documentName',
+            numeric: false,
+            disablePadding: false,
+            label: 'Document Name'
+        },
+        {
+            id: 'browse',
+            numeric: false,
+            disablePadding: false,
+            label: 'Browse'
+        },
+        {
+            id: 'uploadDateTime',
+            numeric: false,
+            disablePadding: false,
+            label: 'Upload Date Time'
+        },
+        {
+            id: 'fileSize',
+            numeric: false,
+            disablePadding: false,
+            label: 'File Size'
+        },
+        {
+            id: 'view',
+            numeric: false,
+            disablePadding: false,
+            label: 'View'
+        }
+    ];
     switch (step) {
         case 0:
             return (
@@ -126,7 +165,7 @@ function getStepContent(customerForm, step) {
                     {/* <div style={{ marginTop: '30px' }}></div> */}
                     {/* <h3>Owner</h3> */}
                     <div className="flex">
-                        <FranchiseesLineTable tableType="OWNER" headers={Owner_headers} />
+                        <FranchiseesOwnerTable tableType="OWNER" headers={Owner_headers} />
                     </div>
                 </Fragment>
             );
@@ -426,7 +465,7 @@ function getStepContent(customerForm, step) {
                     {/* <div style={{ marginTop: '30px' }}></div> */}
                     {/* <h3>Franchisees Fee Maintenance</h3> */}
                     <div className="flex">
-                        <FranchiseesLineTable tableType="FEE_MAINTENACE" headers={fee_maintenance_headers} />
+                        <FranchiseesMaintenanceTable tableType="FEE_MAINTENACE" headers={fee_maintenance_headers} />
                     </div>
                 </Fragment>
             );
@@ -434,9 +473,8 @@ function getStepContent(customerForm, step) {
             return(
                 <Fragment>
                     <div style={{ marginTop: '30px' }}></div>
-                    <h3>Upload Required Document</h3>
                     <div className="flex">
-                        <FranchiseesLineTable tableType="BILLING_SETTING" headers={Owner_headers} />
+                        <FranchiseesDocumentUploadTable tableType="DOCUMENT_UPLOADING" headers={Upload_Document_headers} />
                     </div>
                 </Fragment>
             )
