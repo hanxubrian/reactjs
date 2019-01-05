@@ -383,21 +383,6 @@ class FranchiseesMaintenanceTable extends React.Component {
                                                             </Fab>
                                                         )}
                                                     </TableCell>
-                                                    <TableCell padding="checkbox">
-                                                        <Fab color="secondary" aria-label="add"
-                                                             className={classNames(classes.lineButton, "mr-12")}
-                                                             onClick={() => this.AddLineData()}
-                                                        >
-                                                            <Icon>add</Icon>
-                                                        </Fab>
-                                                        {this.state.data.length > 1 && (
-                                                            <Fab aria-label="add"
-                                                                 onClick={() => this.removeLineData(n)}
-                                                                 className={classNames(classes.lineCancelButton, "mr-12")}>
-                                                                <Icon>close</Icon>
-                                                            </Fab>
-                                                        )}
-                                                    </TableCell>
                                                 </TableRow>
                                    );
                                 }
