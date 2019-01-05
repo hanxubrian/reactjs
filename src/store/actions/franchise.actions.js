@@ -1,4 +1,6 @@
 import axios from "axios";
+import franchiseesService from "../../services/franchisees";
+
 
 export const GET_ALL_FRANCHISEES = "[FRANCHISEES] GETS ALL";
 export const DELETE_SELECTED_FRANCHISEES = "[FRANCHISEES] DELETE SELECTED";
@@ -13,18 +15,16 @@ export const CLOSE_EDIT_FRANCHISEES_FORM = "[FRANCHISEES] FRANCHISEES EDIT CLOSE
 export const UPDATE_FRANCHISEES = '[FRANCHISEES] UPDATE FRANCHISEES';
 export const ADD_FRANCHISEES = '[FRANCHISEES] ADD FRANCHISEES';
 
-
-export function getFranchisees() {
-    return dispatch => {
-        const request = axios.get("/api/franchisees/gets");
-
-        return request.then(response => {
-            return dispatch({
+export function getFranchisees(regionId, statusId) {
+    return (dispatch) => {
+        (async () => {
+            let franchiseesList = await franchiseesService.getFranchiseesList(regionId, statusId);
+            dispatch({
                 type: GET_ALL_FRANCHISEES,
-                payload: response.data
+                payload: franchiseesList
             });
-        });
-    };
+        })();
+    }
 }
 
 export function toggleFilterPanelFranchisees(){

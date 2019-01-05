@@ -8,6 +8,7 @@ const initialState = {
     bLoadedFranchisees: false,
     bOpenedSummaryPanelFranchisees: false,
     bOpenedFilterPanelFranchisees: false,
+    statusId: 9,
     transactionStatusFranchisees:{
         checkedSelectAll: true,
         checkedActive: true,
@@ -39,7 +40,8 @@ const franchisees = function(state = initialState, action) {
         {
             return {
                 ...initialState,
-                franchiseesDB: action.payload, bLoadedFranchisees: true
+                franchiseesDB: action.payload,
+                bLoadedFranchisees: true,
             };
         }
         case Actions.TOGGLE_FILTER_PANEL_FRANCHISEES:

@@ -226,7 +226,8 @@ class Franchisees extends Component {
         checkedRepurchased: true,
         selection: [],
         selectAll: false,
-        regionId: 0
+        regionId: 0,
+        statusId: 9
     };
 
     toggleSelection = (key, shift, row) => {
@@ -298,16 +299,16 @@ class Franchisees extends Component {
         */
         return this.state.selection.includes(key);
     };
-
-    logSelection = () => {
-        console.log("selection:", this.state.selection);
-    };
+    //
+    // logSelection = () => {
+    //     console.log("selection:", this.state.selection);
+    // };
 
     constructor(props){
         super(props);
 
         if(!props.bLoadedFranchisees) {
-            props.getFranchisees();
+            props.getFranchisees(this.props.regionId, this.props.statusId);
         }
         this.fetchData = this.fetchData.bind(this);
         this.escFunction = this.escFunction.bind(this);
@@ -410,97 +411,10 @@ class Franchisees extends Component {
 
 
     getFranchiseesFromStatus =(rawData=this.props.franchisees) =>{
-        let filterTemp=[];
-        let totalFilterTemp=[];
-        let all_temp=[];
-        let temp1 = [];
-        let currentStatus = this.props.transactionStatusFranchisees;
         if(rawData===null) return;
-        let temp0 = rawData.Data.Region;
-        if(this.props.regionId===0 ){
-            for(let i = 0; i < temp0.length ; i++){
-                temp1 = all_temp.concat(temp0[i].Franchisees);
-                all_temp = temp1;
-            }
-        }else{
-            for(let i = 0; i < temp0.length ; i++){
-                if(this.props.regionId ===temp0[i].Id){
-                    all_temp = temp0[i].Franchisees;
-                }
-            }
-        }
-        if(all_temp.length>0){
-            for(var i = 0; i < all_temp.length ; i++){
-                if(currentStatus.checkedInactive){
-                    if(all_temp[i].StatusName ==='InActive'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-                if(currentStatus.checkedActive){
-                    if(all_temp[i].StatusName==='Active'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-                if(currentStatus.checkedLegalCompliancePending){
-                    if(all_temp[i].StatusName ==='LegalCompliancePending'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-                if(currentStatus.checkedPending){
-                    if(all_temp[i].StatusName==='Pending'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-                if(currentStatus.checkedTerminated){
-                    if(all_temp[i].StatusName==='Terminated'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-                if(currentStatus.checkedTransfer){
-                    if(all_temp[i].StatusName==='Transfer'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-                if(currentStatus.checkedPendingTransfer){
-                    if(all_temp[i].StatusName==='PendingTransfer'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-                if(currentStatus.checkedNonRenewed){
-                    if(all_temp[i].StatusName==='NonRenewed'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-                if(currentStatus.checkedRejected){
-                    if(all_temp[i].StatusName==='Rejected'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-                if(currentStatus.checkedRepurchased){
-                    if(all_temp[i].StatusName==='Repurchased'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-                if(currentStatus.checkedCTDB){
-                    if(all_temp[i].StatusName==='CTDB'){
-                        filterTemp = totalFilterTemp.concat(all_temp[i]);
-                        totalFilterTemp = filterTemp;
-                    }
-                }
-            }
-        }
-        this.setState({temp: totalFilterTemp});
-        this.setState({data: totalFilterTemp});
+
+        this.setState({temp: rawData.Data.franchiseeList});
+        this.setState({data: rawData.Data.franchiseeList});
     };
 
     componentDidMount(){
@@ -1010,7 +924,8 @@ function mapStateToProps({franchisees,auth})
         filterStateFranchisees: franchisees.bOpenedFilterPanelFranchisees,
         summaryStateFranchisees: franchisees.bOpenedSummaryPanelFranchisees,
         regionId: auth.login.defaultRegionId,
-        createFranchisees: franchisees.createFranchisees
+        createFranchisees: franchisees.createFranchisees,
+        statusId: franchisees.statusId
     }
 }
 
