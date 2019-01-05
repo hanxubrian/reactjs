@@ -60,6 +60,10 @@ import {
 	TableFilterRow,
 	SearchPanel,
 	DragDropProvider,
+	TableColumnReordering,
+	TableColumnResizing,
+	ColumnChooser,
+	TableColumnVisibility,
 
 } from '@devexpress/dx-react-grid-material-ui';
 
@@ -70,6 +74,11 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import { fade } from '@material-ui/core/styles/colorManipulator';
+
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import SaveIcon from '@material-ui/icons/Save';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 function Marker({ text }) {
 	return (
@@ -284,7 +293,61 @@ AmountEditorBase.propTypes = {
 };
 AmountEditorBase.defaultProps = { value: undefined, };
 const AmountEditor = withStyles(styles)(AmountEditorBase);
+//
+// table row edit command buttons
+//
+const AddButton = ({ onExecute }) => (
+	<div style={{ textAlign: 'center' }}>
+		<Button
+			color="primary"
+			onClick={onExecute}
+			title="Create new row"
+		>
+			New
+	  </Button>
+	</div>
+);
 
+const EditButton = ({ onExecute }) => (
+	<IconButton onClick={onExecute} title="Edit row">
+		<EditIcon />
+	</IconButton>
+);
+
+const DeleteButton = ({ onExecute }) => (
+	<IconButton onClick={onExecute} title="Delete row">
+		<DeleteIcon />
+	</IconButton>
+);
+
+const CommitButton = ({ onExecute }) => (
+	<IconButton onClick={onExecute} title="Save changes">
+		<SaveIcon />
+	</IconButton>
+);
+
+const CancelButton = ({ onExecute }) => (
+	<IconButton color="secondary" onClick={onExecute} title="Cancel changes">
+		<CancelIcon />
+	</IconButton>
+);
+
+const commandComponents = {
+	add: AddButton,
+	edit: EditButton,
+	delete: DeleteButton,
+	commit: CommitButton,
+	cancel: CancelButton,
+};
+
+const Command = ({ id, onExecute }) => {
+	const CommandButton = commandComponents[id];
+	return (
+		<CommandButton
+			onExecute={onExecute}
+		/>
+	);
+};
 
 class CustomerListContent extends Component {
 	state = {
@@ -310,7 +373,7 @@ class CustomerListContent extends Component {
 			{ title: "Account Type", name: "AccountTypeListName", width: 150 },
 			{ title: "Status", name: "StatusName", width: 60 },
 			{ title: "Contract Amount", name: "Amount", width: 80 },
-			{ title: "Actions", name: "Actions", width: 110, }
+			// { title: "Actions", name: "Actions", width: 110, }
 		],
 		tableColumnExtensions: [
 			{ title: "No", name: "CustomerNo", columnName: "CustomerNo", width: 80, sortingEnabled: true, filteringEnabled: true, },
@@ -323,7 +386,7 @@ class CustomerListContent extends Component {
 			{ title: "Account Type", name: "AccountTypeListName", columnName: "AccountTypeListName", width: 150, sortingEnabled: true, filteringEnabled: true, },
 			{ title: "Status", name: "StatusName", columnName: 'StatusName', width: 90, align: 'center', sortingEnabled: true, filteringEnabled: true, },
 			{ title: "Contract Amount", name: "Amount", columnName: 'Amount', width: 120, align: 'right', wordWrapEnabled: true, sortingEnabled: true, filteringEnabled: true, },
-			{ title: "Actions", name: "Actions", columnName: "Actions", width: 110, sortingEnabled: true, filteringEnabled: false, }
+			// { title: "Actions", name: "Actions", columnName: "Actions", width: 110, sortingEnabled: true, filteringEnabled: false, }
 		],
 		sorting: [
 			{ columnName: 'CustomerNo', direction: 'asc' }
@@ -721,14 +784,17 @@ class CustomerListContent extends Component {
 									// onPageSizeChange={this.changePageSize}
 									defaultPageSize={20}
 								/>
-								<IntegratedPaging />
+
 								<PagingPanel pageSizes={pageSizes} />
 
 								<SelectionState
 									selection={selection}
 									onSelectionChange={this.changeSelection}
 								/>
+								{/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
 								<IntegratedSelection />
+								<IntegratedPaging />
+
 
 								<SortingState
 									sorting={sorting}
@@ -779,15 +845,30 @@ class CustomerListContent extends Component {
 
 
 								<Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} />
+								<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
 								<TableHeaderRow showSortingControls />
 								{/* showGroupingControls */}
-								<TableSelection showSelectAll selectByRowClick />
+								<TableSelection showSelectAll selectByRowClick highlightRow />
 
 								<TableEditRow />
-								<TableEditColumn showAddCommand showEditCommand showDeleteCommand />
+								<TableEditColumn
+									showAddCommand
+									showEditCommand
+									showDeleteCommand
+									commandComponent={Command}
+								/>
 
-								{/* <Toolbar /> */}
+								<TableColumnReordering
+									defaultOrder={tableColumnExtensions.map(x => x.columnName)}
+								/>
+								{/* Column Visibility */}
+								<TableColumnVisibility
+									defaultHiddenColumnNames={[]}
+								/>
+								<Toolbar />
 								{/* <SearchPanel /> */}
+								{/* Column Visibility */}
+								<ColumnChooser />
 
 								{filterState && (
 									<TableFilterRow
