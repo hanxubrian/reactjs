@@ -1,6 +1,5 @@
-import authService from 'services/auth';
-import menuService from '../../../services/menu';
-// import initialService from '../../../services/initial';
+import {authService} from 'services';
+import {menuService} from 'services';
 import {ADD_AUTH_NAVIGATION} from "../../../store/actions/fuse";
 
 export const LOGIN_ERROR = 'LOGIN_ERROR';

@@ -1,4 +1,4 @@
-import initialService from '../../../services/initial';
+import {initialService} from '../../../services/';
 
 export const INITIAL_START = 'INITIAL_START';
 
@@ -10,7 +10,6 @@ export function initialStart(data)
             payload: initialService.loadHomeScreen()
         });
         let navigations = initialService.loadHomeScreen();
-        console.log('load_home = ' , navigations);
     }
 }
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import franchiseesService from "../../services/franchisees";
+import {franchiseesService} from "services";
 
 
 export const GET_ALL_FRANCHISEES = "[FRANCHISEES] GETS ALL";
