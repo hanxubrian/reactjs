@@ -61,7 +61,7 @@ const styles = theme => ({
     }
 });
 
-class Reports extends Component {
+class Report extends Component {
 
     render()
     {
@@ -1849,4 +1849,4 @@ function mapStateToProps({auth, fuse})
 }
 
 
-export default  withStyles(styles)(withRouter(connect(mapStateToProps, null)(Reports)));
+export default  withStyles(styles)(withRouter(connect(mapStateToProps, null)(Report)));

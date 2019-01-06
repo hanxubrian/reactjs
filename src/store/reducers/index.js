@@ -10,6 +10,7 @@ import chatPanel from '../../main/chatPanel/store/reducers/';
 import contactsApp from '../../main/content/apps/contacts/store/reducers/';
 import franchisees from'./franchisees.reducer';
 import transactions from'./franchisee.transaction.reducer';
+import franchiseeReports from'./franchisee.reports.reducer';
 import customers from './customers.reducer'
 import leases from './leases.reducer'
 
@@ -29,6 +30,7 @@ const createReducer = (asyncReducers) =>
         leases,
         transactions,
 		customers,
+        franchiseeReports,
         ...asyncReducers
     });
 

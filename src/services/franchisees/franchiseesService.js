@@ -1,5 +1,4 @@
 import axios from 'axios';
-// export const USER_LOGGED_OUT = 'USER_LOGGED_OUT';
 
 const axios_instance = axios.create({
     headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
@@ -10,6 +9,15 @@ const BASE_API_URL='https://apifmsplus.jkdev.com';
 const BASE_MONGO_API_URL='https://apifmsplusplus_mongo.jkdev.com';
 
 class franchiseesService {
+    /**
+     * @param RegionId
+     * @param StatusId
+     * @param Location
+     * @param Latitude
+     * @param Longitude
+     * @param SearchText
+     * @returns {Promise<any>}
+     */
     getFranchiseesList =  (RegionId ,StatusId, Location, Latitude, Longitude, SearchText) => {
         const data = {
             "RegionId": [RegionId],
@@ -34,12 +42,20 @@ class franchiseesService {
                 })
         });
     };
-    getFranchiseesReportsList = (regionId=2, year="2017", month="1") => {
+
+    /**
+     * @param regionId
+     * @param year
+     * @param month
+     * @returns {Promise<any>}
+     */
+    getFranchiseesReportsList = (regionId, year, month) => {
         return new Promise((resolve, reject) => {
-            axios_instance.get(`${BASE_MONGO_API_URL}/api/franchisee/getfranchiseereports`,
+            axios_instance.get(`${BASE_MONGO_API_URL}/api/franchisee/GetFranchisees`,
                 { params: {regionId, year, month}}
             )
                 .then( res => {
+                    console.log('reports API result=', res);
                     if(res.status===200) {
                         resolve(res.data);
                     }

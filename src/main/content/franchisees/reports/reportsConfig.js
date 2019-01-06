@@ -8,9 +8,15 @@ export const ReportsConfig = {
     },
     routes  : [
         {
+            path     : '/franchisees/reports/:regionId/:MM/:Year/:FrnachiseeNo',
+            component: FuseLoadable({
+                loader: () => import('./report')
+            })
+        },
+        {
             path     : '/franchisees/reports',
             component: FuseLoadable({
-                loader: () => import('./reports')
+                loader: () => import('./reportsApp')
             })
         }
     ]
