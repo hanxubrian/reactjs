@@ -9,9 +9,17 @@ const axios_instance = axios.create({
 const BASE_API_URL='https://apifmsplus.jkdev.com';
 
 class franchiseesService {
-    getFranchiseesList =  (regionId ,statusId) => {
+    getFranchiseesList =  (RegionId ,StatusId, Location, Latitude, Longitude, SearchText) => {
+        const data = {
+            "RegionId": [RegionId],
+            "TransactionStatusId": [StatusId],
+            "Location": Location,
+            "Latitude": Latitude,
+            "Longitude": Longitude,
+            "SearchText": SearchText
+        };
         return new Promise((resolve, reject) => {
-            axios_instance.get(`${BASE_API_URL}/v1/Franchisee/FranchiseeList/Get?StatusId=${statusId}&RegionId=${regionId}`)
+            axios_instance.post(`${BASE_API_URL}/v1/franchisee/franchiseeList`,data)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);

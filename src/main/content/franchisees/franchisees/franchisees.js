@@ -308,7 +308,7 @@ class Franchisees extends Component {
         super(props);
 
         if(!props.bLoadedFranchisees) {
-            props.getFranchisees(this.props.regionId, this.props.statusId);
+            props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
         }
         this.fetchData = this.fetchData.bind(this);
         this.escFunction = this.escFunction.bind(this);
@@ -370,6 +370,7 @@ class Franchisees extends Component {
 
         if(this.props.regionId !== prevProps.regionId) {
             this.setState({regionId: prevProps.regionId});
+            this.props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
             bChanged = true;
         }
 
@@ -411,10 +412,13 @@ class Franchisees extends Component {
 
 
     getFranchiseesFromStatus =(rawData=this.props.franchisees) =>{
-        if(rawData===null) return;
+        let data = [];
+        if(rawData===null || rawData.Data.Region.length===0) return;
 
-        this.setState({temp: rawData.Data.franchiseeList});
-        this.setState({data: rawData.Data.franchiseeList});
+        data = rawData.Data.Region[0].FranchiseeList;
+
+        this.setState({temp: data});
+        this.setState({data: data});
     };
 
     componentDidMount(){
@@ -925,7 +929,11 @@ function mapStateToProps({franchisees,auth})
         summaryStateFranchisees: franchisees.bOpenedSummaryPanelFranchisees,
         regionId: auth.login.defaultRegionId,
         createFranchisees: franchisees.createFranchisees,
-        statusId: franchisees.statusId
+        statusId: franchisees.statusId,
+        Longitude: franchisees.Longitude,
+        Latitude: franchisees.Latitude,
+        Location: franchisees.Location,
+        SearchText: franchisees.SearchText
     }
 }
 

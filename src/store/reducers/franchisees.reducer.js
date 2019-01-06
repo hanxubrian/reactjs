@@ -8,7 +8,11 @@ const initialState = {
     bLoadedFranchisees: false,
     bOpenedSummaryPanelFranchisees: false,
     bOpenedFilterPanelFranchisees: false,
-    statusId: 9,
+    statusId: 0,
+    Location: "nearby",
+    Longitude: "",
+    Latitude: "",
+    SearchText: "",
     transactionStatusFranchisees:{
         checkedSelectAll: true,
         checkedActive: true,
