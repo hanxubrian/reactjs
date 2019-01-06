@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 // core components
-import {Hidden,Icon,IconButton,Fab,Input,Paper,Button, Typography,Toolbar} from '@material-ui/core';
+import {Hidden, Icon, IconButton, Fab, Input, Paper, Button, Typography, Toolbar, Tooltip} from '@material-ui/core';
 
 // theme components
 import {FuseAnimate} from '@fuse';
@@ -27,8 +27,15 @@ import _ from 'lodash';
 
 import CreateFranchiseesPage from "./franchiseesForms/createForm"
 import FusePageCustomSidebarScroll from "../../../../@fuse/components/FusePageLayouts/FusePageCustomSidebarScroll";
+import GoogleMap from 'google-map-react';
 
-
+function Marker({ text }) {
+    return (
+        <Tooltip title={text} placement="top">
+            <Icon className="text-red">place</Icon>
+        </Tooltip>
+    );
+}
 
 const headerHeight = 80;
 
@@ -165,7 +172,6 @@ const styles = theme => ({
         }
     },
     tableTheadRow:{
-        // backgroundColor: 'rgba(' + hexToRgb(theme.palette.primary.main).r + ',' + hexToRgb(theme.palette.primary.main).g + ',' + hexToRgb(theme.palette.primary.main).b +', .2)'
         backgroundColor: theme.palette.primary.main
     },
     tableThEven:{
@@ -227,58 +233,30 @@ class Franchisees extends Component {
         selection: [],
         selectAll: false,
         regionId: 0,
-        statusId: 9
+        statusId: 9,
+        current_lat: 0,
+        current_long: 0,
     };
 
     toggleSelection = (key, shift, row) => {
-        /*
-          https://react-table.js.org/#/story/select-table-hoc
-          Implementation of how to manage the selection state is up to the developer.
-          This implementation uses an array stored in the component state.
-          Other implementations could use object keys, a Javascript Set, or Redux... etc.
-        */
-        // start off with the existing state
         let selection = [...this.state.selection];
         const keyIndex = selection.indexOf(key);
-        // check to see if the key exists
         if (keyIndex >= 0) {
-            // it does exist so we will remove it using destructing
             selection = [
                 ...selection.slice(0, keyIndex),
                 ...selection.slice(keyIndex + 1)
             ];
         } else {
-            // it does not exist so add it
             selection.push(key);
         }
-        // update the state
         this.setState({ selection });
     };
 
     toggleAll = (instance) => {
-        /*
-          'toggleAll' is a tricky concept with any filterable table
-          do you just select ALL the records that are in your data?
-          OR
-          do you only select ALL the records that are in the current filtered data?
-
-          The latter makes more sense because 'selection' is a visual thing for the user.
-          This is especially true if you are going to implement a set of external functions
-          that act on the selected information (you would not want to DELETE the wrong thing!).
-
-          So, to that end, access to the internals of ReactTable are required to get what is
-          currently visible in the table (either on the current page or any other page).
-
-          The HOC provides a method call 'getWrappedInstance' to get a ref to the wrapped
-          ReactTable and then get the internal state and the 'sortedData'.
-          That can then be iterated to get all the currently visible records and set
-          the selection state.
-        */
         const selectAll = this.state.selectAll ? false : true;
         const selection = [];
         if (selectAll) {
             let currentRecords = instance.data;
-            // we just push all the IDs onto the selection array
             let page = this.state.page;
             let pageSize = this.state.pageSize;
             let start_index = page * pageSize;
@@ -292,17 +270,8 @@ class Franchisees extends Component {
     };
 
     isSelected = key => {
-        /*
-          Instead of passing our external selection state we provide an 'isSelected'
-          callback and detect the selection state ourselves. This allows any implementation
-          for selection (either an array, object keys, or even a Javascript Set object).
-        */
         return this.state.selection.includes(key);
     };
-    //
-    // logSelection = () => {
-    //     console.log("selection:", this.state.selection);
-    // };
 
     constructor(props){
         super(props);
@@ -431,6 +400,7 @@ class Franchisees extends Component {
 
     componentDidMount(){
         document.addEventListener("keydown", this.escFunction, false);
+        this.getLocation();
     }
 
     componentWillUnmount(){
@@ -492,11 +462,23 @@ class Franchisees extends Component {
     closeComposeForm = () => {
         this.props.createFranchisees.type === 'create' ? this.props.closeEditFranchisees() : this.props.closeCreateFranchisees();
     };
-
+    getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    console.log(position.coords);
+                    this.setState({
+                        current_lat: position.coords.latitude,
+                        current_long: position.coords.longitude
+                    })
+                }
+            );
+        }
+    }
 
     render()
     {
-        const { classes,toggleFilterPanelFranchisees,showCreteFranchisees, toggleSummaryPanelFranchisees, createFranchisees, filterStateFranchisees, summaryStateFranchisees} = this.props;
+        const { classes,toggleFilterPanelFranchisees,showCreteFranchisees, toggleSummaryPanelFranchisees, createFranchisees, filterStateFranchisees, summaryStateFranchisees, toggleFranchiseeMapView, mapViewState} = this.props;
         const { toggleSelection, toggleAll, isSelected} = this;
 
         const { selection } = this.state;
@@ -526,9 +508,19 @@ class Franchisees extends Component {
                                         </div>
                                     </div>
                                     <div className="flex flex-shrink items-center">
+                                        <IconButton
+                                            className={classNames(classes.button, "mr-12")}
+                                            aria-label="Add an alarm"
+                                            onClick={(ev) => toggleFranchiseeMapView()}>
+                                            <Icon>{mapViewState ? 'list' : 'location_on'}</Icon>
+                                        </IconButton>
+
                                         <FuseAnimate animation="transition.expandIn" delay={300}>
-                                            <Fab color="secondary" aria-label="add"
-                                                 className={classNames(classes.sideButton, "mr-12")} onClick={showCreteFranchisees}>
+                                            <Fab
+                                                color="secondary"
+                                                aria-label="add"
+                                                className={classNames(classes.sideButton, "mr-12")}
+                                                onClick={showCreteFranchisees}>
                                                 <Icon>add</Icon>
                                             </Fab>
                                         </FuseAnimate>
@@ -618,7 +610,26 @@ class Franchisees extends Component {
                 }
                 content={
                     <div className="flex-1 flex-col absolute w-full h-full">
-                        {this.state.temp  && (!createFranchisees.props.open) && (
+                        {this.state.temp  && (!createFranchisees.props.open) && mapViewState && (
+                            <div className="w-full h-full">
+                                <div className="w-full h-full">
+                                    <GoogleMap
+                                        bootstrapURLKeys={{
+                                            key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
+                                        }}
+                                        defaultZoom={12}
+                                        defaultCenter={[this.state.current_lat, this.state.current_long]}
+                                    >
+                                        <Marker
+                                            text="Marker Text"
+                                            lat={this.state.current_lat}
+                                            lng={this.state.current_long}
+                                        />
+                                    </GoogleMap>
+                                </div>
+                            </div>
+                        )}
+                        {this.state.temp  && (!createFranchisees.props.open) && !mapViewState && (
                             <ReactTable
                                 data={this.state.temp}
                                 minRows = {0}
@@ -923,7 +934,8 @@ function mapDispatchToProps(dispatch)
         showCreteFranchisees: Actions.showCreteFranchisees,
         closeCreateFranchisees: Actions.closeCreateFranchisees,
         showEditFranchisees: Actions.showCreteFranchisees,
-        closeEditFranchisees: Actions.showCreteFranchisees
+        closeEditFranchisees: Actions.showCreteFranchisees,
+        toggleFranchiseeMapView: Actions.toggleFranchiseeMapView
     }, dispatch);
 }
 
@@ -941,7 +953,8 @@ function mapStateToProps({franchisees,auth})
         Longitude: franchisees.Longitude,
         Latitude: franchisees.Latitude,
         Location: franchisees.Location,
-        SearchText: franchisees.SearchText
+        SearchText: franchisees.SearchText,
+        mapViewState: franchisees.bOpenedMapView
     }
 }
 
