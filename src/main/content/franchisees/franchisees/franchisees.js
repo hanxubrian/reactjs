@@ -413,10 +413,18 @@ class Franchisees extends Component {
 
     getFranchiseesFromStatus =(rawData=this.props.franchisees) =>{
         let data = [];
-        if(rawData===null || rawData.Data.Region.length===0) return;
-
-        data = rawData.Data.Region[0].FranchiseeList;
-
+        let tempData = [];
+        if(rawData===null || rawData.Data.Region.length===0){
+            data = [];
+            this.setState({temp: data});
+            this.setState({data: data});
+            return;
+        }else{
+            for(let i= 0 ; i < rawData.Data.Region.length ; i++){
+                tempData = rawData.Data.Region[i].FranchiseeList;
+                data = data.concat(tempData);
+            }
+        }
         this.setState({temp: data});
         this.setState({data: data});
     };
