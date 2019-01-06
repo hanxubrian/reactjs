@@ -79,6 +79,8 @@
         "@devexpress/dx-react-core": "1.10.0",
         "@devexpress/dx-react-grid": "1.10.0",
         "@devexpress/dx-react-grid-material-ui": "1.10.0",
+        "@pusher/chatkit-client": "^1.2.2",
+        "@pusher/chatkit-server": "^1.0.4",
         "autoprefixer": "9.3.1",
         "cross-env": "5.2.0",
         "js-beautify": "1.8.8",
