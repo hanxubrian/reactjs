@@ -7,6 +7,7 @@ const axios_instance = axios.create({
 });
 
 const BASE_API_URL='https://apifmsplus.jkdev.com';
+const BASE_MONGO_API_URL='https://apifmsplusplus_mongo.jkdev.com';
 
 class franchiseesService {
     getFranchiseesList =  (RegionId ,StatusId, Location, Latitude, Longitude, SearchText) => {
@@ -28,8 +29,29 @@ class franchiseesService {
                         reject(res.data);
                     }
                 })
+                .catch(error=>{
+                    resolve(error);
+                })
         });
     };
+    getFranchiseesReportsList = (regionId=2, year="2017", month="1") => {
+        return new Promise((resolve, reject) => {
+            axios_instance.get(`${BASE_MONGO_API_URL}/api/franchisee/getfranchiseereports`,
+                { params: {regionId, year, month}}
+            )
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    }
 }
 
 const instance = new franchiseesService();
