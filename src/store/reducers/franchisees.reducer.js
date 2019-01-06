@@ -8,6 +8,7 @@ const initialState = {
     bLoadedFranchisees: false,
     bOpenedSummaryPanelFranchisees: false,
     bOpenedFilterPanelFranchisees: false,
+    bOpenedMapView: false,
     statusId: 0,
     Location: "nearby",
     Longitude: "",
@@ -134,6 +135,12 @@ const franchisees = function(state = initialState, action) {
                     data : null
                 }
             };
+        }
+        case Actions.TOGGLE_FRANCHISEE_MAP_VIEW:
+        {
+            return {
+                ...state, bOpenedMapView: !state.bOpenedMapView
+            }
         }
         default:
         {
