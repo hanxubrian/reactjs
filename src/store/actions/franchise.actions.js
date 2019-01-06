@@ -142,12 +142,10 @@ export function updateFranchisees(franchisees)
         );
     };
 }
-<<<<<<< HEAD
-=======
 
 export function toggleFranchiseeMapView(){
     return {
         type: TOGGLE_FRANCHISEE_MAP_VIEW
     }
 }
->>>>>>> e06b59184752af1b067285253c8dd5bd08cb276b
+
