@@ -15,7 +15,6 @@ import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import GridContainer from "../../../../Commons/Grid/GridContainer";
 import GridItem from "../../../../Commons/Grid/GridItem";
 import FormControl from "@material-ui/core/FormControl/FormControl";
-import FormLabel from "@material-ui/core/FormLabel/FormLabel";
 import RadioGroup from "@material-ui/core/RadioGroup/RadioGroup";
 import Radio from "@material-ui/core/Radio/Radio";
 
@@ -494,6 +493,7 @@ class FilterPanel extends Component {
                                        <FormControlLabel value="all" control={<Radio />} label="All" />
                                        <FormControlLabel value="nearby" control={<Radio />} label="Near By" />
                                        <FormControlLabel value="nearSpecificAddress" control={<Radio />} label="Near Specific Address" />
+                                       <FormControlLabel value="radius" control={<Radio />} label="Radius" />
                                    </RadioGroup>
                                 </FormControl>
                                 <br/>
@@ -639,7 +639,8 @@ function mapStateToProps({franchisees})
     return {
         filterStateFranchisees: franchisees.bOpenedSummaryPanelFranchisees,
         transactionStatusFranchisees: franchisees.transactionStatusFranchisees,
-        franchiseesForm: franchisees.createFranchisees
+        franchiseesForm: franchisees.createFranchisees,
+        Location: franchisees.Location
     }
 }
 

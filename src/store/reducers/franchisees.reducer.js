@@ -10,7 +10,7 @@ const initialState = {
     bOpenedFilterPanelFranchisees: false,
     bOpenedMapView: false,
     statusId: 0,
-    Location: "nearby",
+    Location: "all",
     Longitude: "",
     Latitude: "",
     SearchText: "",
