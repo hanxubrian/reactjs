@@ -349,7 +349,7 @@ class InvoiceForm extends Component {
                                     label="Invoice Date"
                                     name="InvoiceDate"
                                     variant="outlined"
-                                    format="dd/MM/yyyy"
+                                    format="MM/dd/yyyy"
                                     value={this.state.InvoiceDate}
                                     onChange={this.handleInvoiceDateChange}
                                     fullWidth
@@ -360,7 +360,7 @@ class InvoiceForm extends Component {
                                 <DatePicker
                                     margin="none"
                                     label="Due Date"
-                                    format="dd/MM/yyyy"
+                                    format="MM/dd/yyyy"
                                     InputLabelProps={{
                                         shrink: true
                                     }}

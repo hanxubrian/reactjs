@@ -100,7 +100,7 @@ class FilterPanel extends Component {
                                 label="Period"
                                 name="InvoiceDate"
                                 variant="outlined"
-                                format="dd/MM/yyyy"
+                                format="MM/dd/yyyy"
                                 value={this.state.reportDate}
                                 onChange={this.handleInvoiceDateChange}
                                 fullWidth

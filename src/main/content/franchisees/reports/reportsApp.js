@@ -151,7 +151,7 @@ class ReportsApp extends Component {
     constructor(props){
         super(props);
         let year = moment(this.props.reportDate).year();
-        let month = moment(this.props.reportDate).month();
+        let month = parseInt(moment(this.props.reportDate).month())+1;
         if(!props.bLoadedFranchiseeReports) {
             props.getReports(props.regionId, year, month);
         }
@@ -172,7 +172,7 @@ class ReportsApp extends Component {
     }
     componentDidUpdate(prevProps, prevState, snapshot){
         let year = moment(this.props.reportDate).year();
-        let month = moment(this.props.reportDate).month();
+        let month = parseInt(moment(this.props.reportDate).month())+1;
 
         if(this.props.regionId !== prevProps.regionId) {
             this.props.getReports(this.props.regionId, year, month);
@@ -196,8 +196,10 @@ class ReportsApp extends Component {
         if(rawData===null) return;
 
         let temp0 = rawData.Data.Region[0].FranchiseeReports;
+        let year = moment(this.props.reportDate).year();
+        let month = parseInt(moment(this.props.reportDate).month())+1;
 
-        this.setState({headerTitle: `${rawData.Data.Region[0].Name} Region Franchisee Reports for ${this.state.month}/${this.state.year} Period`})
+        this.setState({headerTitle: `${rawData.Data.Region[0].Name} Region Franchisee Reports for ${month}/${year} Period`})
         this.setState({data: rawData.Data.Region[0]});
     };
 
