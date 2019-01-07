@@ -13,6 +13,7 @@ import transactions from'./franchisee.transaction.reducer';
 import franchiseeReports from'./franchisee.reports.reducer';
 import customers from './customers.reducer'
 import leases from './leases.reducer'
+import leads from './leads.reducer'
 
 
 const createReducer = (asyncReducers) =>
@@ -31,6 +32,7 @@ const createReducer = (asyncReducers) =>
         transactions,
 		customers,
         franchiseeReports,
+        leads,
         ...asyncReducers
     });
 

@@ -10,7 +10,7 @@ export const LeadsConfig = {
         {
             path     : '/sales/leads',
             component: FuseLoadable({
-                loader: () => import('./leads')
+                loader: () => import('./Leads')
             })
         }
     ]

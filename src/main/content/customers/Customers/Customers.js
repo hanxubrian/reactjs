@@ -417,7 +417,6 @@ class Customers extends Component {
 		// 	all_temp = [...all_temp, ...x.Customers];
 		// 	return;
 		// });
-
 		this.setState({ temp: all_temp });
 		this.setState({ data: all_temp });
 	};
