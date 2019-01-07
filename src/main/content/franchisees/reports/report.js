@@ -8,6 +8,9 @@ import classNames from 'classnames';
 import {Card, CardContent, Typography, TextField} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles/index';
 
+//Theme component
+import FuseUtils from '@fuse/FuseUtils';
+
 //Store
 import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
@@ -73,12 +76,109 @@ class Report extends Component {
          */
         this.props.getReport(this.props.match.params);
     }
+
+    renderHeader = ()=>{
+        const { all_regions} = this.props;
+        const {month, year, regionid} = this.props.match.params;
+
+        const months = ["January","February","March","April","May","June","July",
+            "August","September","October","November","December"];
+
+        let region_name = '';
+
+        all_regions.forEach(r=>{
+            if(r.RegionId===parseInt(regionid)) {
+                region_name = r.Displayname;
+                return false
+            }
+        });
+        return (
+            <tr>
+                <td className="text-center" width='200'>
+                    <Typography color="inherit">
+                    </Typography>
+                </td>
+                <td className="text-center" width='500'>
+                    <Typography color="inherit">FRANCHISEE REPORT</Typography>
+                    <Typography color="inherit">
+                        {region_name}
+                    </Typography>
+                    <Typography color="inherit">
+                        BUSINESS FOR THE MONTH OF {months[parseInt(month)-1]} {year}
+                    </Typography>
+
+                </td>
+                <td align="left">
+                    <Typography color="inherit">Date: 11/30/2018 </Typography>
+                    <Typography>Time: 11:58:57</Typography>
+                    <Typography><br/></Typography>
+                </td>
+            </tr>
+        )
+    };
     render()
     {
-        const { classes, franchiseeReport } = this.props;
-        console.log('ppp=', franchiseeReport);
-        if(franchiseeReport===null)
+        const { classes, franchiseeReport, all_regions} = this.props;
+        console.log('ppp=', this.props.match.params);
+
+        if(franchiseeReport===null || all_regions.length===0)
             return (<div/>);
+
+        const {DLR_CODE, SUMMARY_PAGE, CUS_TRXS, CUST_ACCT_TOTALS, SUPPLY_TRXS, LEASE_PAYMENTS,REG_MISC, CHARGEBACKS }  = franchiseeReport.Data;
+
+        const aBillings = [SUMMARY_PAGE[0]['ACTUAL BILLING'][0],SUMMARY_PAGE[0].ADTL_BILL_FRAN[0],
+            SUMMARY_PAGE[0].CLIENT_SUPPLIES[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE[0],SUMMARY_PAGE[0].SUBTOTAL[0],
+            SUMMARY_PAGE[0].CLIENT_SALES_TAX[0],SUMMARY_PAGE[0].TOTAL_MON_REV[0]];
+
+        const aDeductions0= [SUMMARY_PAGE[0].ROYALTY[0], SUMMARY_PAGE[0].ACCT_FEE[0],SUMMARY_PAGE[0].TECH_FEE[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE_COMM[0],SUMMARY_PAGE[0].FRAN_NOTE_PYMT[0]];
+        const aDeductions1 = [ "FRANCHISE NOTE PAYMENT2", "FINDERS_FEES", "FRANCHISE_SUPPLIES", "REGULAR_MISC", "SUBTOTAL_REG_DEDS",
+            "ADVERTISING_FEE", "TOTAL_LEASES", "BUSINESS_PROT", "BPP_ADMIN", "CLIENT_SALES_TAX_BOT", "CHARGEBACKS", "PAGERS",
+            "PAGERS2", "SPECIAL_MISC", "SUBTOTAL_SPEC_DEDS", "TOTAL_DEDS", "DUE_FRAN", "ACCT_FEE_REB_CUR", "ACCT_FEE_REB_BAL"];
+
+        let ct_amount = 0.0, ct_tax = 0.0, ct_total = 0.0;
+        let cb_amount = 0.0, cb_tax = 0.0, cb_total = 0.0;
+        let lp_amount = 0.0, lp_tax = 0.0, lp_total = 0.0;
+        let sm_amount = 0.0, sm_tax = 0.0, sm_total = 0.0;
+        let st_extended = 0.0, st_tax = 0.0, st_total = 0.0;
+        let cat_billing = 0.0, cat_month = 0.0, cat_addtl = 0.0, cat_cs = 0.0, cat_ofc = 0.0, cat_fee = 0.0;
+
+        CUS_TRXS.forEach(ct=>{
+            ct_amount += parseFloat(ct.TRX_AMT);
+            ct_tax += parseFloat(ct.TRX_TAX);
+            ct_total += parseFloat(ct.TRX_TOT);
+        });
+        LEASE_PAYMENTS.forEach(lp=>{
+            lp_amount += parseFloat(lp.PYMNT_AMT);
+            lp_tax += parseFloat(lp.PYMNT_TAX);
+            lp_total += parseFloat(lp.PYMNT_TOT);
+        });
+
+        CHARGEBACKS.forEach(st=>{
+            cb_amount += parseFloat(st.TRX_AMT);
+            cb_tax += parseFloat(st.TRX_TAX);
+            cb_total += parseFloat(st.TRX_TOT);
+        });
+
+        REG_MISC.forEach(sm=>{
+            sm_amount += parseFloat(sm.TRX_AMT);
+            sm_tax += parseFloat(sm.TRX_TAX);
+            sm_total += parseFloat(sm.TRX_TOT);
+        });
+
+        SUPPLY_TRXS.forEach(st=>{
+            st_extended += parseFloat(st.EXTENDED);
+            st_tax += parseFloat(st.TRX_TAX);
+            st_total += parseFloat(st.TRX_TOT);
+        });
+
+        CUST_ACCT_TOTALS.forEach(cat=>{
+            cat_billing += parseFloat(cat.CONT_BILL);
+            cat_month += parseFloat(cat.CUR_MONTH);
+            cat_addtl += parseFloat(cat.ADTL_B_FRN);
+            cat_cs += parseFloat(cat.CLIENT_SUP);
+            cat_ofc += parseFloat(cat.ADTL_B_OFC);
+            cat_fee += parseFloat(cat.FF_PYMNT);
+        });
 
         return (
             <div className={classNames(classes.root, "p-0 sm:p-64  print:p-0")}>
@@ -88,29 +188,7 @@ class Report extends Component {
                         <div>
                             <table align="center">
                                 <tbody>
-                                <tr>
-                                    <td className="text-center" width='200'>
-                                        <Typography color="inherit">
-                                            <tr></tr>
-                                            <tr></tr>
-                                            <tr></tr>
-                                        </Typography>
-                                    </td>
-                                    <td className="text-center" width='500'>
-                                        <Typography color="inherit">
-                                            <tr>FRANCHISEE REPORT</tr>
-                                            <tr>JANI-KING OF BUFFALO, INC</tr>
-                                            <tr>BUSINESS FOR THE MONTH OF NOVEMBER 2018</tr>
-                                        </Typography>
-                                    </td>
-                                    <td align="left">
-                                        <Typography color="inherit">
-                                            <tr> Date: 11/30/2018 </tr>
-                                            <tr> Time: 11:58:57 </tr>
-                                            <tr><br></br></tr>
-                                        </Typography>
-                                    </td>
-                                </tr>
+                                {this.renderHeader()}
                                 </tbody>
                             </table>
                         </div>
@@ -121,46 +199,34 @@ class Report extends Component {
                                     <tbody>
                                     <tr>
                                         <td className="pb-4">
-                                            <Typography color="inherit">
-                                                <tr>Franchisee</tr>
-                                                <tr>Code</tr>
-                                            </Typography>
+                                            <Typography color="inherit">Franchisee</Typography>
+                                            <Typography color="inherit">Code</Typography>
                                         </td>
                                         <td className="pb-4">
-                                            <Typography color="inherit">
-                                                <tr><br></br></tr>
-                                                <tr>Name</tr>
-                                            </Typography>
+                                            <Typography color="inherit"><br/></Typography>
+                                            <Typography color="inherit">Name</Typography>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td className="pr-16">
-                                            <Typography color="inherit">
-                                                <tr>701011</tr>
-                                                <tr><br></br></tr>
-                                                <tr><br></br></tr>
-                                            </Typography>
+                                            <Typography color="inherit">{DLR_CODE}</Typography>
+                                            <Typography color="inherit"><br/></Typography>
+                                            <Typography color="inherit"><br/></Typography>
                                         </td>
                                         <td className="text-left">
-                                            <Typography color="inherit">
-                                                <tr>KMBURNS, LLC</tr>
-                                                <tr>58 SUMMERDALE ROAD</tr>
-                                                <tr>ANGOLA, NY  14006</tr>
-                                            </Typography>
+                                            <Typography color="inherit">{SUMMARY_PAGE[0].FRAN_NAME}</Typography>
+                                            <Typography color="inherit">{SUMMARY_PAGE[0].FRAN_ADDRESS}</Typography>
+                                            <Typography color="inherit">{SUMMARY_PAGE[0].FRAN_CITY} {SUMMARY_PAGE[0].FRAN_STATE},{SUMMARY_PAGE[0].FRAN_ZIP}</Typography>
                                         </td>
                                         <td className="text-left" width='310'>
-                                            <Typography color="inherit">
-                                                <tr><br></br></tr>
-                                                <tr><br></br></tr>
-                                                <tr><br></br></tr>
-                                            </Typography>
+                                            <Typography color="inherit"><br/></Typography>
+                                            <Typography color="inherit"><br/></Typography>
+                                            <Typography color="inherit"><br/></Typography>
                                         </td>
                                         <td className="text-left">
-                                            <Typography color="inherit">
-                                                <tr>Plan Type: A</tr>
-                                                <tr>Sign Date: 07/15/1997</tr>
-                                                <tr>Contact: KEVIN BURNS</tr>
-                                            </Typography>
+                                            <Typography color="inherit">Plan Type: {SUMMARY_PAGE[0].PLAN_TYPE}</Typography>
+                                            <Typography color="inherit">Plan Type: {SUMMARY_PAGE[0].DATE_SIGN}</Typography>
+                                            <Typography color="inherit">Plan Type: {SUMMARY_PAGE[0].CONTACT}</Typography>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -172,315 +238,66 @@ class Report extends Component {
                                     <thead>
                                     <tr>
                                         <th>
-                                            <h2>TOTAL CONTRACT BILLING:</h2>
+                                            <h2>{SUMMARY_PAGE[0].TOTAL_CONTRACT_BILLING[0].LABEL}:</h2>
                                         </th>
                                         <th className="text-right">
-                                            109,128.44
+                                            ${parseFloat(SUMMARY_PAGE[0].TOTAL_CONTRACT_BILLING[0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
                                         </th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Actual Billing</Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            142,146.56
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Additional Billing By Franchisee</Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Client Supplies </Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Additional Billing By Office</Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">SUBTOTAL</Typography>
-                                        </td>
-                                        <td>
-                                            <br></br>
-                                        </td>
-                                        <td className="text-right">
-                                            142,146.56
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Client Sales Tax</Typography>
-                                        </td>
-                                        <td>
-                                            <br></br>
-                                        </td>
-                                        <td className="text-right">
-                                            12,437.84
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Total Monthly Revenue</Typography>
-                                        </td>
-                                        <td>
-                                            <br></br>
-                                        </td>
-                                        <td className="text-right">
-                                            <br></br>
-                                        </td>
-                                        <td className="text-right">
-                                            <br></br>
-                                        </td>
-                                        <td className="text-right">
-                                            154,584.40
-                                        </td>
-                                    </tr>
+                                    { aBillings.map((b, index)=>{
+                                            return (
+                                                <tr key={index}>
+                                                    <td>
+                                                        <Typography variant="subtitle1">{b.LABEL}</Typography>
+                                                    </td>
+                                                    <td className="text-right">
+                                                        ${parseFloat(b.AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }
+                                    )}
                                     </tbody>
                                 </table>
 
                                 <table className="simple invoice-table">
                                     <thead>
                                     <tr>
-                                        <th>
-                                            <h2>FRANCHISEE DEDUCTIONS:</h2>
-                                        </th>
+                                        <th><h2>FRANCHISEE DEDUCTIONS:</h2></th>
                                         <th className="text-right">
                                             {/* UNIT */}
                                         </th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Royalty</Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            14,214.66
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Accounting Fee</Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            4,264.40
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Techonology Fee </Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            3,553.66
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Additional Billing By Office Comm</Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Franchise Note Payment</Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Franchise Note Payment #2</Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Finders Fees (See Customer Account)</Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            2,310.97
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Franchisee Supplies</Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            4,015.05
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Regular Miscellaneous</Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">SUBTOTAL - Regular Deductions</Typography>
-                                        </td>
-                                        <td>
-                                            <br></br>
-                                        </td>
-                                        <td className="text-right">
-                                            28,353.74
-                                        </td>
-                                        <td className="text-right">
-                                            <br></br>
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Advertising Fee</Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            2,132.20
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Total Leases (see Leases)</Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Business Protection Plan </Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            9,594.89
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">BPP Admin Fee </Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            14.00
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Client Sales Tax </Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            12,437.84
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Charge Backs </Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            4,256.83
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Pagers:</Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Pagers2:</Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1"> Special Miscellaneous </Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">SUBTOTAL - Special Deductions </Typography>
-                                        </td>
-                                        <td>
-                                            <br></br>
-                                        </td>
-                                        <td className="text-right">
-                                            28,435.76
-                                        </td>
-                                        <td className="text-right">
-                                            <br></br>
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography variant="subtitle1">Total Deductions </Typography>
-                                        </td>
-                                        <td>
-                                            <br></br>
-                                        </td>
-                                        <td className="text-right">
-                                            <br></br>
-                                        </td>
-                                        <td className="text-right">
-                                            <br></br>
-                                        </td>
-                                        <td className="text-right">
-                                            56,789.50
-                                        </td>
-                                    </tr>
+                                    { aDeductions0.map((b, index)=>{
+                                            return (
+                                                <tr key={index}>
+                                                    <td>
+                                                        <Typography variant="subtitle1">{b.LABEL}</Typography>
+                                                    </td>
+                                                    <td className="text-right">
+                                                        ${parseFloat(b.AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }
+                                    )}
+                                    { aDeductions1.map((b, index)=>{
+                                            return (
+                                                <tr key={index}>
+                                                    <td>
+                                                        <Typography variant="subtitle1">{b}</Typography>
+                                                    </td>
+                                                    <td className="text-right">
+                                                        ${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }
+                                    )}
                                     </tbody>
                                 </table>
                                 <table className="simple invoice-table">
@@ -527,34 +344,12 @@ class Report extends Component {
                     </CardContent>
                 </Card>
 
-                <Card className={classNames(classes.card, "mx-auto")}>
+                <Card className={classNames(classes.card, "mx-auto mt-64")}>
                     <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                         <div>
                             <table align="center">
                                 <tbody>
-                                <tr>
-                                    <td className="text-center" width='200'>
-                                        <Typography color="inherit">
-                                            <tr></tr>
-                                            <tr></tr>
-                                            <tr></tr>
-                                        </Typography>
-                                    </td>
-                                    <td className="text-center" width='500'>
-                                        <Typography color="inherit">
-                                            <tr>JANI-KING OF BUFFALO, INC</tr>
-                                            <tr>BUSINESS FOR THE MONTH OF NOVEMBER 2018</tr>
-                                            <tr>Customer Transactions</tr>
-                                        </Typography>
-                                    </td>
-                                    <td align="left">
-                                        <Typography color="inherit">
-                                            <tr> Date: 11/30/2018 </tr>
-                                            <tr> Time: 11:58:57 </tr>
-                                            <tr><br></br></tr>
-                                        </Typography>
-                                    </td>
-                                </tr>
+                                {this.renderHeader()}
                                 </tbody>
                             </table>
                         </div>
@@ -579,12 +374,12 @@ class Report extends Component {
                                     <tr>
                                         <td className="pr-16">
                                             <Typography color="textSecondary">
-                                                701011
+                                                {DLR_CODE}
                                             </Typography>
                                         </td>
                                         <td>
                                             <Typography color="inherit">
-                                                KMBURNS, LLC
+                                                {SUMMARY_PAGE[0].FRAN_NAME}
                                             </Typography>
                                         </td>
                                     </tr>
@@ -614,340 +409,28 @@ class Report extends Component {
                                     </thead>
                                     <tbody>
                                     <tr >
-                                        <td>
-                                            <Typography >Customer</Typography>
-                                        </td>
-                                        <td>
-                                            I/C
-                                        </td>
-                                        <td className="text-right">
-                                        </td>
-                                        <td className="text-right">
-                                            Inv Amt
-                                        </td>
-                                        <td className="text-right">
-                                            Inv Tax
-                                        </td>
-                                        <td className="text-right">
-                                            Total
-                                        </td>
+                                        <td><Typography >Customer</Typography></td>
+                                        <td>I/C</td>
+                                        <td className="text-right"></td>
+                                        <td className="text-right">Inv Amt</td>
+                                        <td className="text-right">Inv Tax</td>
+                                        <td className="text-right">Total</td>
                                     </tr>
 
-                                    <tr >
-                                        <td>
-                                            <Typography >011050  Buffalo Bills Training And</Typography>
-                                        </td>
-                                        <td>
-                                            11180000
-                                        </td>
-                                        <td className="text-left">
-                                            Monthly Contract Billing Amount For November
-                                        </td>
-                                        <td className="text-right">
-                                            28,671.77
-                                        </td>
-                                        <td className="text-right">
-                                            2,508.78
-                                        </td>
-                                        <td className="text-right">
-                                            31,180.55
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >011050  Buffalo Bills Training And</Typography>
-                                        </td>
-                                        <td>
-                                            11180000
-                                        </td>
-                                        <td className="text-left">
-                                            Monthly Contract Billing Amount For November
-                                        </td>
-                                        <td className="text-right">
-                                            28,671.77
-                                        </td>
-                                        <td className="text-right">
-                                            2,508.78
-                                        </td>
-                                        <td className="text-right">
-                                            31,180.55
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >011050  Buffalo Bills Training And</Typography>
-                                        </td>
-                                        <td>
-                                            11180000
-                                        </td>
-                                        <td className="text-left">
-                                            Monthly Contract Billing Amount For November
-                                        </td>
-                                        <td className="text-right">
-                                            28,671.77
-                                        </td>
-                                        <td className="text-right">
-                                            2,508.78
-                                        </td>
-                                        <td className="text-right">
-                                            31,180.55
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >011050  Buffalo Bills Training And</Typography>
-                                        </td>
-                                        <td>
-                                            11180000
-                                        </td>
-                                        <td className="text-left">
-                                            Monthly Contract Billing Amount For November
-                                        </td>
-                                        <td className="text-right">
-                                            28,671.77
-                                        </td>
-                                        <td className="text-right">
-                                            2,508.78
-                                        </td>
-                                        <td className="text-right">
-                                            31,180.55
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >011050  Buffalo Bills Training And</Typography>
-                                        </td>
-                                        <td>
-                                            11180000
-                                        </td>
-                                        <td className="text-left">
-                                            Monthly Contract Billing Amount For November
-                                        </td>
-                                        <td className="text-right">
-                                            28,671.77
-                                        </td>
-                                        <td className="text-right">
-                                            2,508.78
-                                        </td>
-                                        <td className="text-right">
-                                            31,180.55
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >011050  Buffalo Bills Training And</Typography>
-                                        </td>
-                                        <td>
-                                            11180000
-                                        </td>
-                                        <td className="text-left">
-                                            Monthly Contract Billing Amount For November
-                                        </td>
-                                        <td className="text-right">
-                                            28,671.77
-                                        </td>
-                                        <td className="text-right">
-                                            2,508.78
-                                        </td>
-                                        <td className="text-right">
-                                            31,180.55
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >011050  Buffalo Bills Training And</Typography>
-                                        </td>
-                                        <td>
-                                            11180000
-                                        </td>
-                                        <td className="text-left">
-                                            Monthly Contract Billing Amount For November
-                                        </td>
-                                        <td className="text-right">
-                                            28,671.77
-                                        </td>
-                                        <td className="text-right">
-                                            2,508.78
-                                        </td>
-                                        <td className="text-right">
-                                            31,180.55
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >011050  Buffalo Bills Training And</Typography>
-                                        </td>
-                                        <td>
-                                            11180000
-                                        </td>
-                                        <td className="text-left">
-                                            Monthly Contract Billing Amount For November
-                                        </td>
-                                        <td className="text-right">
-                                            28,671.77
-                                        </td>
-                                        <td className="text-right">
-                                            2,508.78
-                                        </td>
-                                        <td className="text-right">
-                                            31,180.55
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >011050  Buffalo Bills Training And</Typography>
-                                        </td>
-                                        <td>
-                                            11180000
-                                        </td>
-                                        <td className="text-left">
-                                            Monthly Contract Billing Amount For November
-                                        </td>
-                                        <td className="text-right">
-                                            28,671.77
-                                        </td>
-                                        <td className="text-right">
-                                            2,508.78
-                                        </td>
-                                        <td className="text-right">
-                                            31,180.55
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >011050  Buffalo Bills Training And</Typography>
-                                        </td>
-                                        <td>
-                                            11180000
-                                        </td>
-                                        <td className="text-left">
-                                            Monthly Contract Billing Amount For November
-                                        </td>
-                                        <td className="text-right">
-                                            28,671.77
-                                        </td>
-                                        <td className="text-right">
-                                            2,508.78
-                                        </td>
-                                        <td className="text-right">
-                                            31,180.55
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >011050  Buffalo Bills Training And</Typography>
-                                        </td>
-                                        <td>
-                                            11180000
-                                        </td>
-                                        <td className="text-left">
-                                            Monthly Contract Billing Amount For November
-                                        </td>
-                                        <td className="text-right">
-                                            28,671.77
-                                        </td>
-                                        <td className="text-right">
-                                            2,508.78
-                                        </td>
-                                        <td className="text-right">
-                                            31,180.55
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >011050  Buffalo Bills Training And</Typography>
-                                        </td>
-                                        <td>
-                                            11180000
-                                        </td>
-                                        <td className="text-left">
-                                            Monthly Contract Billing Amount For November
-                                        </td>
-                                        <td className="text-right">
-                                            28,671.77
-                                        </td>
-                                        <td className="text-right">
-                                            2,508.78
-                                        </td>
-                                        <td className="text-right">
-                                            31,180.55
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >011050  Buffalo Bills Training And</Typography>
-                                        </td>
-                                        <td>
-                                            11180000
-                                        </td>
-                                        <td className="text-left">
-                                            Monthly Contract Billing Amount For November
-                                        </td>
-                                        <td className="text-right">
-                                            28,671.77
-                                        </td>
-                                        <td className="text-right">
-                                            2,508.78
-                                        </td>
-                                        <td className="text-right">
-                                            31,180.55
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >011050  Buffalo Bills Training And</Typography>
-                                        </td>
-                                        <td>
-                                            11180000
-                                        </td>
-                                        <td className="text-left">
-                                            Monthly Contract Billing Amount For November
-                                        </td>
-                                        <td className="text-right">
-                                            28,671.77
-                                        </td>
-                                        <td className="text-right">
-                                            2,508.78
-                                        </td>
-                                        <td className="text-right">
-                                            31,180.55
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >011050  Buffalo Bills Training And</Typography>
-                                        </td>
-                                        <td>
-                                            11180000
-                                        </td>
-                                        <td className="text-left">
-                                            Monthly Contract Billing Amount For November
-                                        </td>
-                                        <td className="text-right">
-                                            28,671.77
-                                        </td>
-                                        <td className="text-right">
-                                            2,508.78
-                                        </td>
-                                        <td className="text-right">
-                                            31,180.55
-                                        </td>
-                                    </tr>
-
+                                    {CUS_TRXS.map((ct, index)=>{
+                                        return (
+                                            <tr key={index}>
+                                            <td>
+                                                <Typography >{ct.CUST_NO} {FuseUtils.capital_letter(ct.CUS_NAME)}</Typography>
+                                            </td>
+                                            <td>{ct.INV_NO}</td>
+                                            <td className="text-left">{FuseUtils.capital_letter(ct.DESCR)}</td>
+                                            <td className="text-right">${parseFloat(ct.TRX_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td className="text-right">${parseFloat(ct.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td className="text-right">${parseFloat(ct.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        </tr>
+                                        )
+                                    })}
                                     <tr >
                                         <td>
                                             <Typography >Totals for this Franchise</Typography>
@@ -956,15 +439,9 @@ class Report extends Component {
                                         </td>
                                         <td className="text-left">
                                         </td>
-                                        <td className="text-right">
-                                            142,146.56
-                                        </td>
-                                        <td className="text-right">
-                                            12,437.84
-                                        </td>
-                                        <td className="text-right">
-                                            154,584.40
-                                        </td>
+                                        <td className="text-right">${ct_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        <td className="text-right">${ct_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        <td className="text-right">${ct_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -973,34 +450,12 @@ class Report extends Component {
                     </CardContent>
                 </Card>
 
-                <Card className={classNames(classes.card, "mx-auto")}>
+                <Card className={classNames(classes.card, "mx-auto mt-64")}>
                     <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                         <div>
                             <table align="center">
                                 <tbody>
-                                <tr>
-                                    <td className="text-center" width='200'>
-                                        <Typography color="inherit">
-                                            <tr></tr>
-                                            <tr></tr>
-                                            <tr></tr>
-                                        </Typography>
-                                    </td>
-                                    <td className="text-center" width='500'>
-                                        <Typography color="inherit">
-                                            <tr>JANI-KING OF BUFFALO, INC</tr>
-                                            <tr>BUSINESS FOR THE MONTH OF NOVEMBER 2018</tr>
-                                            <tr>Customer Account Totals</tr>
-                                        </Typography>
-                                    </td>
-                                    <td align="left">
-                                        <Typography color="inherit">
-                                            <tr> Date: 11/30/2018 </tr>
-                                            <tr> Time: 11:58:57 </tr>
-                                            <tr><br></br></tr>
-                                        </Typography>
-                                    </td>
-                                </tr>
+                                {this.renderHeader()}
                                 </tbody>
                             </table>
                         </div>
@@ -1024,12 +479,12 @@ class Report extends Component {
                                     <tr>
                                         <td className="pr-16">
                                             <Typography color="textSecondary">
-                                                701011
+                                                {DLR_CODE}
                                             </Typography>
                                         </td>
                                         <td>
                                             <Typography color="inherit">
-                                                KMBURNS, LLC
+                                                {SUMMARY_PAGE[0].FRAN_NAME}
                                             </Typography>
                                         </td>
                                     </tr>
@@ -1085,64 +540,35 @@ class Report extends Component {
                                             Finders Fee
                                         </td>
                                     </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >011050  Buffalo Bills Training And</Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                        <td className="text-right">
-                                            14 of 65
-                                        </td>
-                                        <td className="text-right">
-                                            431.07
-                                        </td>
-                                    </tr>
-
+                                    {CUST_ACCT_TOTALS.map((ct, index)=>{
+                                        return (
+                                            <tr key={index}>
+                                                <td>
+                                                    <Typography >{ct.CUST_NO} {FuseUtils.capital_letter(ct.CUS_NAME)}</Typography>
+                                                </td>
+                                                <td className="text-right">${parseFloat(ct.CONT_BILL).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right">${parseFloat(ct.CUR_MONTH).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right">${parseFloat(ct.ADTL_B_FRN).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right">${parseFloat(ct.CLIENT_SUP).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right">${parseFloat(ct.ADTL_B_OFC).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td></td>
+                                                <td className="text-right">{ct.FF_NBR}</td>
+                                                <td className="text-right">${parseFloat(ct.FF_PYMNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            </tr>
+                                        )
+                                    })}
                                     <tr >
                                         <td>
                                             <Typography >Franchisee Actual Amount</Typography>
                                         </td>
-                                        <td className="text-right">
-                                            109,128.44
-                                        </td>
-                                        <td className="text-right">
-                                            142,146.56
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                        <td className="text-right">
-                                            42,146.56
-                                        </td>
-                                        <td className="text-right">
-                                        </td>
-                                        <td className="text-right">
-                                            2,310.97
-                                        </td>
+                                        <td className="text-right">${cat_billing.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        <td className="text-right">${cat_month.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        <td className="text-right">${cat_addtl.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        <td className="text-right">${cat_cs.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        <td className="text-right">${cat_ofc.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        <td className="text-right"></td>
+                                        <td className="text-right"></td>
+                                        <td className="text-right">${cat_fee.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -1151,36 +577,12 @@ class Report extends Component {
                     </CardContent>
                 </Card>
 
-                <Card className={classNames(classes.card, "mx-auto")}>
+                <Card className={classNames(classes.card, "mx-auto mt-64")}>
                     <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
-
-
                         <div>
                             <table align="center">
                                 <tbody>
-                                <tr>
-                                    <td className="text-center" width='200'>
-                                        <Typography color="inherit">
-                                            <tr></tr>
-                                            <tr></tr>
-                                            <tr></tr>
-                                        </Typography>
-                                    </td>
-                                    <td className="text-center" width='500'>
-                                        <Typography color="inherit">
-                                            <tr>JANI-KING OF BUFFALO, INC</tr>
-                                            <tr>BUSINESS FOR THE MONTH OF NOVEMBER 2018</tr>
-                                            <tr>Supply Transactions</tr>
-                                        </Typography>
-                                    </td>
-                                    <td align="left">
-                                        <Typography color="inherit">
-                                            <tr> Date: 11/30/2018 </tr>
-                                            <tr> Time: 11:58:57 </tr>
-                                            <tr><br></br></tr>
-                                        </Typography>
-                                    </td>
-                                </tr>
+                                {this.renderHeader()}
                                 </tbody>
                             </table>
                         </div>
@@ -1205,12 +607,12 @@ class Report extends Component {
                                     <tr>
                                         <td className="pr-16">
                                             <Typography color="textSecondary">
-                                                701011
+                                                {DLR_CODE}
                                             </Typography>
                                         </td>
                                         <td>
                                             <Typography color="inherit">
-                                                KMBURNS, LLC
+                                                {SUMMARY_PAGE[0].FRAN_NAME}
                                             </Typography>
                                         </td>
                                     </tr>
@@ -1248,47 +650,27 @@ class Report extends Component {
                                             Total Amt
                                         </td>
                                     </tr>
-
+                                    {SUPPLY_TRXS.map((st, index)=>{
+                                        return (
+                                            <tr key={index}>
+                                                <td>
+                                                    <Typography >{FuseUtils.capital_letter(st.DESCR)}</Typography>
+                                                </td>
+                                                <td className="text-right">{st.QUANTITY}</td>
+                                                <td className="text-right">${parseFloat(st["UNIT COST"]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right">${parseFloat(st.EXTENDED).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right">${parseFloat(st.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right">${parseFloat(st.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            </tr>
+                                        )
+                                    })}
                                     <tr >
-                                        <td>
-                                            <Typography >UNITED RENTALS (NORTH AMERICA) - 155091239-009</Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            1
-                                        </td>
-                                        <td className="text-right">
-                                            1,053.89
-                                        </td>
-                                        <td className="text-right">
-                                            1,053.89
-                                        </td>
-                                        <td className="text-right">
-                                            92.22
-                                        </td>
-                                        <td className="text-right">
-                                            1,146.11
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >Total Supplies</Typography>
-                                        </td>
-                                        <td className="text-right">
-
-                                        </td>
-                                        <td className="text-right">
-
-                                        </td>
-                                        <td className="text-right">
-                                            3,687.39
-                                        </td>
-                                        <td className="text-right">
-                                            322.66
-                                        </td>
-                                        <td className="text-right">
-                                            4,010.05
-                                        </td>
+                                        <td><Typography >Total Supplies</Typography></td>
+                                        <td className="text-right"></td>
+                                        <td className="text-right"></td>
+                                        <td className="text-right">${st_extended.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        <td className="text-right">${st_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        <td className="text-right">${st_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -1297,36 +679,12 @@ class Report extends Component {
                     </CardContent>
                 </Card>
 
-                <Card className={classNames(classes.card, "mx-auto")}>
+                <Card className={classNames(classes.card, "mx-auto mt-64")}>
                     <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
-
-
                         <div>
                             <table align="center">
                                 <tbody>
-                                <tr>
-                                    <td className="text-center" width='200'>
-                                        <Typography color="inherit">
-                                            <tr></tr>
-                                            <tr></tr>
-                                            <tr></tr>
-                                        </Typography>
-                                    </td>
-                                    <td className="text-center" width='500'>
-                                        <Typography color="inherit">
-                                            <tr>BUSINESS FOR THE MONTH OF NOVEMBER 2018</tr>
-                                            <tr>JANI-KING OF BUFFALO, INC</tr>
-                                            <tr>Charge Backs</tr>
-                                        </Typography>
-                                    </td>
-                                    <td align="left">
-                                        <Typography color="inherit">
-                                            <tr> Date: 11/30/2018 </tr>
-                                            <tr> Time: 11:58:57 </tr>
-                                            <tr><br></br></tr>
-                                        </Typography>
-                                    </td>
-                                </tr>
+                                {this.renderHeader()}
                                 </tbody>
                             </table>
                         </div>
@@ -1351,12 +709,12 @@ class Report extends Component {
                                     <tr>
                                         <td className="pr-16">
                                             <Typography color="textSecondary">
-                                                701011
+                                                {DLR_CODE}
                                             </Typography>
                                         </td>
                                         <td>
                                             <Typography color="inherit">
-                                                KMBURNS, LLC
+                                                {SUMMARY_PAGE[0].FRAN_NAME}
                                             </Typography>
                                         </td>
                                     </tr>
@@ -1389,34 +747,26 @@ class Report extends Component {
                                         </td>
                                     </tr>
 
-                                    <tr >
-                                        <td>
-                                            <Typography >Chargeback from cust. 011056 (Buffalo Bills Llc. - Non Game)  for invoice #10180166</Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            594.75
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                        <td className="text-right">
-                                            594.75
-                                        </td>
-                                    </tr>
 
+                                    {CHARGEBACKS.map((cb, index)=>{
+                                        return (
+                                            <tr key={index} >
+                                                <td>
+                                                    <Typography >{FuseUtils.capital_letter(cb.DESCR)}</Typography>
+                                                </td>
+                                                <td className="text-right">${parseFloat(cb.TRX_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right">${parseFloat(cb.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right">${parseFloat(cb.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            </tr>
+                                        )
+                                    })}
                                     <tr >
                                         <td>
                                             <Typography >Total Charge Backs</Typography>
                                         </td>
-                                        <td className="text-right">
-                                            4,256.83
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                        <td className="text-right">
-                                            4,256.83
-                                        </td>
+                                        <td className="text-right">${cb_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        <td className="text-right">${cb_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        <td className="text-right">${cb_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -1425,36 +775,12 @@ class Report extends Component {
                     </CardContent>
                 </Card>
 
-                <Card className={classNames(classes.card, "mx-auto")}>
+                <Card className={classNames(classes.card, "mx-auto mt-64")}>
                     <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
-
-
                         <div>
                             <table align="center">
                                 <tbody>
-                                <tr>
-                                    <td className="text-center" width='200'>
-                                        <Typography color="inherit">
-                                            <tr></tr>
-                                            <tr></tr>
-                                            <tr></tr>
-                                        </Typography>
-                                    </td>
-                                    <td className="text-center" width='500'>
-                                        <Typography color="inherit">
-                                            <tr>BUSINESS FOR THE MONTH OF NOVEMBER 2018</tr>
-                                            <tr>JANI-KING OF BUFFALO, INC</tr>
-                                            <tr>Leases</tr>
-                                        </Typography>
-                                    </td>
-                                    <td align="left">
-                                        <Typography color="inherit">
-                                            <tr> Date: 11/30/2018 </tr>
-                                            <tr> Time: 11:58:57 </tr>
-                                            <tr><br></br></tr>
-                                        </Typography>
-                                    </td>
-                                </tr>
+                                {this.renderHeader()}
                                 </tbody>
                             </table>
                         </div>
@@ -1479,12 +805,12 @@ class Report extends Component {
                                     <tr>
                                         <td className="pr-16">
                                             <Typography color="textSecondary">
-                                                701011
+                                                {DLR_CODE}
                                             </Typography>
                                         </td>
                                         <td>
                                             <Typography color="inherit">
-                                                KMBURNS, LLC
+                                                {SUMMARY_PAGE[0].FRAN_NAME}
                                             </Typography>
                                         </td>
                                     </tr>
@@ -1525,31 +851,22 @@ class Report extends Component {
                                             Total
                                         </td>
                                     </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >04/18/2018</Typography>
-                                        </td>
-                                        <td className="text-left">
-                                            07-2147
-                                        </td>
-                                        <td className="text-left">
-                                            17" FLOOR MACHINE  S/N 4000159976
-                                        </td>
-                                        <td className="text-right">
-                                            9 of 16
-                                        </td>
-                                        <td className="text-right">
-                                            56.65
-                                        </td>
-                                        <td className="text-right">
-                                            4.96
-                                        </td>
-                                        <td className="text-right">
-                                            61.61
-                                        </td>
-                                    </tr>
-
+                                    {LEASE_PAYMENTS.map((lp, index)=> {
+                                        return (
+                                            <tr key={index}>
+                                                <td>
+                                                    <Typography>{lp.LEASE_DATE}</Typography>
+                                                </td>
+                                                <td className="text-left">{lp.LEASE_NO}</td>
+                                                <td className="text-left">{FuseUtils.capital_letter(lp.DESCR)}</td>
+                                                <td className="text-right">{lp.PYMNT_NUM}</td>
+                                                <td className="text-right">${parseFloat(lp.PYMNT_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right">${parseFloat(lp.PYMNT_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right">${parseFloat(lp.PYMNT_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            </tr>
+                                        )
+                                    })
+                                    }
                                     <tr >
                                         <td>
                                             <Typography >Lease Totals</Typography>
@@ -1560,15 +877,9 @@ class Report extends Component {
                                         </td>
                                         <td className="text-center">
                                         </td>
-                                        <td className="text-right">
-                                            121.72
-                                        </td>
-                                        <td className="text-right">
-                                            10.66
-                                        </td>
-                                        <td className="text-right">
-                                            132.38
-                                        </td>
+                                        <td className="text-right">${lp_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        <td className="text-right">${lp_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        <td className="text-right">${lp_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -1577,35 +888,13 @@ class Report extends Component {
                     </CardContent>
                 </Card>
 
-                <Card className={classNames(classes.card, "mx-auto")}>
+                <Card className={classNames(classes.card, "mx-auto mt-64")}>
                     <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
 
                         <div>
                             <table align="center">
                                 <tbody>
-                                <tr>
-                                    <td className="text-center" width='200'>
-                                        <Typography color="inherit">
-                                            <tr></tr>
-                                            <tr></tr>
-                                            <tr></tr>
-                                        </Typography>
-                                    </td>
-                                    <td className="text-center" width='500'>
-                                        <Typography color="inherit">
-                                            <tr>JANI-KING OF BUFFALO, INC</tr>
-                                            <tr>BUSINESS FOR THE MONTH OF NOVEMBER 2018</tr>
-                                            <tr>Special Misc</tr>
-                                        </Typography>
-                                    </td>
-                                    <td align="left">
-                                        <Typography color="inherit">
-                                            <tr> Date: 11/30/2018 </tr>
-                                            <tr> Time: 11:58:57 </tr>
-                                            <tr><br></br></tr>
-                                        </Typography>
-                                    </td>
-                                </tr>
+                                {this.renderHeader()}
                                 </tbody>
                             </table>
                         </div>
@@ -1630,149 +919,12 @@ class Report extends Component {
                                     <tr>
                                         <td className="pr-16">
                                             <Typography color="textSecondary">
-                                                701011
+                                                {DLR_CODE}
                                             </Typography>
                                         </td>
                                         <td>
                                             <Typography color="inherit">
-                                                KMBURNS, LLC
-                                            </Typography>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div className="mt-64">
-                                <table className="simple invoice-table">
-                                    <thead>
-                                    <tr>
-                                        <th>
-                                            <h2>Special Misc</h2>
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr >
-                                        <td>
-                                            <Typography >Type</Typography>
-                                        </td>
-                                        <td className="text-center">
-                                            Description
-                                        </td>
-                                        <td className="text-center">
-                                            Tax Amt
-                                        </td>
-                                        <td className="text-center">
-                                            Tax
-                                        </td>
-                                        <td className="text-center">
-                                            Total Amt
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >Misc</Typography>
-                                        </td>
-                                        <td className="text-left">
-                                            CHILD SUPPORT
-                                        </td>
-                                        <td className="text-right">
-                                            357.00
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                        <td className="text-right">
-                                            357.00
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >Total Special</Typography>
-                                        </td>
-                                        <td className="text-center">
-
-                                        </td>
-                                        <td className="text-right">
-                                            357.00
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                        <td className="text-right">
-                                            357.00
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <Card className={classNames(classes.card, "mx-auto")}>
-                    <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
-
-
-                        <div>
-                            <table align="center">
-                                <tbody>
-                                <tr>
-                                    <td className="text-center" width='200'>
-                                        <Typography color="inherit">
-                                            <tr></tr>
-                                            <tr></tr>
-                                            <tr></tr>
-                                        </Typography>
-                                    </td>
-                                    <td className="text-center" width='500'>
-                                        <Typography color="inherit">
-                                            <tr>JANI-KING OF BUFFALO, INC</tr>
-                                            <tr>BUSINESS FOR THE MONTH OF NOVEMBER 2018</tr>
-                                            <tr>Regular Misc</tr>
-                                        </Typography>
-                                    </td>
-                                    <td align="left">
-                                        <Typography color="inherit">
-                                            <tr> Date: 11/30/2018 </tr>
-                                            <tr> Time: 11:58:57 </tr>
-                                            <tr><br></br></tr>
-                                        </Typography>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div className="">
-                            <div>
-                                <table className="mb-16">
-                                    <tbody>
-                                    <tr>
-                                        <td className="pr-16 pb-4">
-                                            <Typography className="font-light" variant="h6" color="textSecondary">
-                                                Franchisee Code
-                                            </Typography>
-                                        </td>
-                                        <td className="pb-4">
-                                            <Typography className="font-light" variant="h6" color="inherit">
-                                                Name
-                                            </Typography>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td className="pr-16">
-                                            <Typography color="textSecondary">
-                                                701011
-                                            </Typography>
-                                        </td>
-                                        <td>
-                                            <Typography color="inherit">
-                                                KMBURNS, LLC
+                                                {SUMMARY_PAGE[0].FRAN_NAME}
                                             </Typography>
                                         </td>
                                     </tr>
@@ -1807,40 +959,25 @@ class Report extends Component {
                                             Total Amt
                                         </td>
                                     </tr>
-
+                                    {REG_MISC.map((sm, index)=>{
+                                        return (
+                                            <tr key={index} >
+                                                <td>{sm.TYPE}</td>
+                                                <td>
+                                                    <Typography >{FuseUtils.capital_letter(sm.DESCR)}</Typography>
+                                                </td>
+                                                <td className="text-right">{parseFloat(sm.TRX_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right">{parseFloat(sm.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right">{parseFloat(sm.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            </tr>
+                                        )
+                                    })}
                                     <tr >
-                                        <td>
-                                            <Typography >Misc</Typography>
-                                        </td>
-                                        <td className="text-left">
-                                            ACCOUNT CANCELLATION FEE FOR 084069
-                                        </td>
-                                        <td className="text-right">
-                                            50.00
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                        <td className="text-right">
-                                            50.00
-                                        </td>
-                                    </tr>
-
-                                    <tr >
-                                        <td>
-                                            <Typography >Total Regular</Typography>
-                                        </td>
-                                        <td className="text-center">
-                                        </td>
-                                        <td className="text-right">
-                                            50.00
-                                        </td>
-                                        <td className="text-right">
-                                            0.00
-                                        </td>
-                                        <td className="text-right">
-                                            50.00
-                                        </td>
+                                        <td><Typography >Total Special</Typography></td>
+                                        <td className="text-center"></td>
+                                        <td className="text-right">{sm_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        <td className="text-right">{sm_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        <td className="text-right">{sm_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -1848,7 +985,6 @@ class Report extends Component {
                         </div>
                     </CardContent>
                 </Card>
-
             </div>
         )
     }
@@ -1863,7 +999,8 @@ function mapDispatchToProps(dispatch)
 function mapStateToProps({auth, franchiseeReports})
 {
     return {
-        franchiseeReport: franchiseeReports.franchiseeReport
+        franchiseeReport: franchiseeReports.franchiseeReport,
+        all_regions: auth.login.all_regions
     }
 }
 
