@@ -166,7 +166,7 @@ const styles = theme => ({
         backgroundColor: theme.palette.divider
     },
     search: {
-        width: 360,
+        width: '100%',
         [theme.breakpoints.down('sm')]: {
             width: '100%'
         }
@@ -508,13 +508,13 @@ class Franchisees extends Component {
                                         </div>
                                     </div>
                                     <div className="flex flex-shrink items-center">
-                                        <IconButton
-                                            className={classNames(classes.button, "mr-12")}
-                                            aria-label="Add an alarm"
-                                            onClick={(ev) => toggleFranchiseeMapView()}>
-                                            <Icon>{mapViewState ? 'list' : 'location_on'}</Icon>
-                                        </IconButton>
-
+                                        { selection.length>0 && (
+                                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                <Fab color="secondary" aria-label="delete" className={classNames(classes.sideButton, "mr-12")} onClick={()=>this.removeFranchisees()}>
+                                                    <Icon>delete</Icon>
+                                                </Fab>
+                                            </FuseAnimate>
+                                        )}
                                         <FuseAnimate animation="transition.expandIn" delay={300}>
                                             <Fab
                                                 color="secondary"
@@ -537,20 +537,6 @@ class Franchisees extends Component {
                                         </FuseAnimate>
                                     </div>
                                 </div>
-                                <div className="flex flex-none items-end" style={{display: 'none'}}>
-                                    <FuseAnimate animation="transition.expandIn" delay={600}>
-                                        <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
-                                            <Icon>add</Icon>
-                                        </Fab>
-                                    </FuseAnimate>
-                                    { selection.length>0 && (
-                                        <FuseAnimate animation="transition.expandIn" delay={600}>
-                                            <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeFranchisees()}>
-                                                <Icon>delete</Icon>
-                                            </Fab>
-                                        </FuseAnimate>
-                                    )}
-                                </div>
                             </div>
                         )}
                         {this.state.temp  && (createFranchisees.props.open) && (
@@ -569,7 +555,6 @@ class Franchisees extends Component {
                                         </div>
                                     </div>
                                     <div className="flex flex-shrink items-center">
-
                                         <IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleFilterPanelFranchisees()}>
                                             <Icon>person_outline</Icon>
                                         </IconButton>
@@ -579,31 +564,6 @@ class Franchisees extends Component {
                                         </IconButton>
                                     </div>
                                 </div>
-                                <div className="flex flex-none items-end" style={{display: 'none'}}>
-                                    <FuseAnimate animation="transition.expandIn" delay={600}>
-                                        <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
-                                            <Icon>add</Icon>
-                                        </Fab>
-                                    </FuseAnimate>
-                                    <FuseAnimate animation="transition.expandIn" delay={300}>
-                                        <Fab color="primary" aria-label="add"
-                                             className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-                                            <Icon>mail_outline</Icon>
-                                        </Fab>
-                                    </FuseAnimate>
-                                    <FuseAnimate animation="transition.expandIn" delay={300}>
-                                        <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-                                            <Icon>print</Icon>
-                                        </Fab>
-                                    </FuseAnimate>
-                                    { selection.length>0 && (
-                                        <FuseAnimate animation="transition.expandIn" delay={600}>
-                                            <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeInvoices()}>
-                                                <Icon>delete</Icon>
-                                            </Fab>
-                                        </FuseAnimate>
-                                    )}
-                                </div>
                             </div>
                         )}
                     </div>
@@ -611,283 +571,349 @@ class Franchisees extends Component {
                 content={
                     <div className="flex-1 flex-col absolute w-full h-full">
                         {this.state.temp  && (!createFranchisees.props.open) && mapViewState && (
-                            <div className="w-full h-full">
+                            <div className={classNames(classes.franchiseeListContent, "flex flex-col h-full")}>
+                                <div className="flex flex-row items-center p-12">
+                                    <div className="flex items-center justify-start">
+                                        <Hidden smDown>
+                                            <Button
+                                                onClick={(ev) => toggleFilterPanelFranchisees()}
+                                                aria-label="toggle filter panel"
+                                                color="secondary"
+                                                className={classNames(classes.filterPanelButton)}
+                                            >
+                                                <img className={classes.imageIcon} alt="icon-filter" src="assets/images/invoices/filter.png"/>
+                                            </Button>
+                                        </Hidden>
+                                        <Hidden smUp>
+                                            <Button
+                                                onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
+                                                aria-label="toggle filter panel"
+                                                className={classNames(classes.filterPanelButton)}
+                                            >
+                                                <img className={classes.imageIcon} alt="icon-filter" src="assets/images/invoices/filter.png"/>
+                                            </Button>
+                                        </Hidden>
+                                    </div>
+                                    <div className="flex items-center w-full h-44 mr-12 ml-12">
+                                        <Paper className={"flex items-center h-44 w-full xs:mr-0"}>
+                                            <Input
+                                                placeholder="Search..."
+                                                className={classNames(classes.search, 'pl-16')}
+                                                disableUnderline
+                                                fullWidth
+                                                value={this.state.s}
+                                                onChange={this.handleChange('s')}
+                                                inputProps={{
+                                                    'aria-label': 'Search'
+                                                }}
+                                            />
+                                            <Icon color="action" className="flex justify-center mr-12">search</Icon>
+                                        </Paper>
+                                    </div>
+                                    <div className="flex items-center justify-end">
+                                        <IconButton
+                                            className={classNames(classes.summaryPanelButton, "mr-12")}
+                                            aria-label="Add an alarm"
+                                            onClick={(ev) => toggleFranchiseeMapView()}>
+                                            <Icon>{mapViewState ? 'list' : 'location_on'}</Icon>
+                                        </IconButton>
+                                    </div>
+                                    <div className="flex items-center justify-end">
+                                        <Hidden smDown>
+                                            <Button
+                                                onClick={(ev) => toggleSummaryPanelFranchisees()}
+                                                aria-label="toggle summary panel"
+                                                className={classNames(classes.summaryPanelButton)}
+                                            >
+                                                <Icon>insert_chart</Icon>
+                                            </Button>
+                                        </Hidden>
+                                        <Hidden smUp>
+                                            <Button
+                                                onClick={(ev) => this.pageLayout.toggleRightSidebar()}
+                                                aria-label="toggle summary panel"
+                                                className={classNames(classes.summaryPanelButton)}
+                                            >
+                                                <Icon>insert_chart</Icon>
+                                            </Button>
+                                        </Hidden>
+                                    </div>
+                                </div>
                                 <div className="w-full h-full">
-                                    <GoogleMap
-                                        bootstrapURLKeys={{
-                                            key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
-                                        }}
-                                        defaultZoom={12}
-                                        defaultCenter={[this.state.current_lat, this.state.current_long]}
-                                    >
-                                        <Marker
-                                            text="Marker Text"
-                                            lat={this.state.current_lat}
-                                            lng={this.state.current_long}
-                                        />
-                                    </GoogleMap>
+                                    <div className="w-full h-full">
+                                        <GoogleMap
+                                            bootstrapURLKeys={{
+                                                key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
+                                            }}
+                                            defaultZoom={12}
+                                            defaultCenter={[this.state.current_lat, this.state.current_long]}
+                                        >
+                                            <Marker
+                                                text="Marker Text"
+                                                lat={this.state.current_lat}
+                                                lng={this.state.current_long}
+                                            />
+                                        </GoogleMap>
+                                    </div>
                                 </div>
                             </div>
                         )}
                         {this.state.temp  && (!createFranchisees.props.open) && !mapViewState && (
-                            <ReactTable
-                                data={this.state.temp}
-                                minRows = {0}
-                                onFetchData={this.fetchData}
-                                PaginationComponent={JanikingPagination}
-                                getTheadGroupProps={(state, rowInfo, column, instance) =>{
-                                    return {
-                                        style:{
-                                            padding: "10px 10px",
-                                            fontSize: 16,
-                                            fontWeight: 700
-                                        },
+                            <div className={classNames(classes.franchiseeListContent, "flex flex-col h-full")}>
+                               <div className="flex flex-row items-center p-12">
+                                    <div className="flex items-center justify-start">
+                                        <Hidden smDown>
+                                            <Button
+                                                onClick={(ev) => toggleFilterPanelFranchisees()}
+                                                aria-label="toggle filter panel"
+                                                color="secondary"
+                                                className={classNames(classes.filterPanelButton)}
+                                            >
+                                                <img className={classes.imageIcon} alt="icon-filter" src="assets/images/invoices/filter.png"/>
+                                            </Button>
+                                        </Hidden>
+                                        <Hidden smUp>
+                                            <Button
+                                                onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
+                                                aria-label="toggle filter panel"
+                                                className={classNames(classes.filterPanelButton)}
+                                            >
+                                                <img className={classes.imageIcon} alt="icon-filter" src="assets/images/invoices/filter.png"/>
+                                            </Button>
+                                        </Hidden>
+                                    </div>
+                                    <div className="flex items-center w-full h-44 mr-12 ml-12">
+                                        <Paper className={"flex items-center h-44 w-full xs:mr-0"}>
+                                            <Input
+                                                placeholder="Search..."
+                                                className={classNames(classes.search, 'pl-16')}
+                                                disableUnderline
+                                                fullWidth
+                                                value={this.state.s}
+                                                onChange={this.handleChange('s')}
+                                                inputProps={{
+                                                    'aria-label': 'Search'
+                                                }}
+                                            />
+                                            <Icon color="action" className="flex justify-center mr-12">search</Icon>
+                                        </Paper>
+                                    </div>
+                                    <div className="flex items-center justify-end">
+                                        <IconButton
+                                            className={classNames(classes.summaryPanelButton, "mr-12")}
+                                            aria-label="Add an alarm"
+                                            onClick={(ev) => toggleFranchiseeMapView()}>
+                                            <Icon>{mapViewState ? 'list' : 'location_on'}</Icon>
+                                        </IconButton>
+                                    </div>
+                                    <div className="flex items-center justify-end">
+                                        <Hidden smDown>
+                                            <Button
+                                                onClick={(ev) => toggleSummaryPanelFranchisees()}
+                                                aria-label="toggle summary panel"
+                                                className={classNames(classes.summaryPanelButton)}
+                                            >
+                                                <Icon>insert_chart</Icon>
+                                            </Button>
+                                        </Hidden>
+                                        <Hidden smUp>
+                                            <Button
+                                                onClick={(ev) => this.pageLayout.toggleRightSidebar()}
+                                                aria-label="toggle summary panel"
+                                                className={classNames(classes.summaryPanelButton)}
+                                            >
+                                                <Icon>insert_chart</Icon>
+                                            </Button>
+                                        </Hidden>
+                                    </div>
+                               </div>
+                               <ReactTable
+                                    data={this.state.temp}
+                                    minRows = {0}
+                                    onFetchData={this.fetchData}
+                                    PaginationComponent={JanikingPagination}
+                                    // getTheadGroupProps={(state, rowInfo, column, instance) =>{
+                                    //     return {
+                                    //         style:{
+                                    //             padding: "10px 10px",
+                                    //             fontSize: 16,
+                                    //             fontWeight: 700
+                                    //         },
+                                    //
+                                    //     }
+                                    // }}
+                                    // getTheadGroupThProps={(state, rowInfo, column, instance) => {
+                                    //     return {
+                                    //         style:{
+                                    //             padding: "10px 10px",
+                                    //             fontSize: 18,
+                                    //             fontWeight: 700,
+                                    //         },
+                                    //         className: classNames("flex items-center justify-start")
+                                    //     }
+                                    // }}
+                                    getTheadThProps={(state, rowInfo, column, instance) =>{
+                                        let border = '1px solid rgba(255,255,255,.6)';
+                                        if(column.Header==='Actions') border = 'none';
 
-                                    }
-                                }}
-                                getTheadGroupThProps={(state, rowInfo, column, instance) => {
-                                    return {
-                                        style:{
-                                            padding: "10px 10px",
-                                            fontSize: 18,
-                                            fontWeight: 700,
-                                        },
-                                        className: classNames("flex items-center justify-start")
-                                    }
-                                }}
-                                getTheadThProps={(state, rowInfo, column, instance) =>{
-                                    let border = '1px solid rgba(255,255,255,.6)';
-                                    if(column.Header==='Actions') border = 'none';
-
-                                    return {
-                                        style:{
-                                            fontSize: '1.6rem',
-                                            fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
-                                            fontWeight: 400,
-                                            lineHeight: 1.75,
-                                            color: 'white',
-                                            borderRight: border
-                                        },
-                                    }
-                                }}
-                                getTheadProps={(state, rowInfo, column, instance) =>{
-                                    return {
-                                        style:{
-                                            fontSize: 13,
-                                        },
-                                        className: classes.tableTheadRow
-                                    }
-                                }}
-                                getTdProps={(state, rowInfo, column, instance) =>{
-                                    return {
-                                        style:{
-                                            textAlign: 'center',
-                                            flexDirection: 'row',
-                                            fontSize: 12,
-                                            padding: "0",
-                                        },
-                                    }
-                                }}
-                                getTrProps={(state, rowInfo, column) => {
-                                    return {
-                                        className: "cursor-pointer",
-                                        onClick  : (e, handleOriginal) => {
-                                            if ( rowInfo )
-                                            {
-                                                alert('ok');
-                                                // openEditContactDialog(rowInfo.original);
+                                        return {
+                                            style:{
+                                                fontSize: '1.6rem',
+                                                fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
+                                                fontWeight: 400,
+                                                lineHeight: 1.75,
+                                                color: 'white',
+                                                borderRight: border
+                                            },
+                                        }
+                                    }}
+                                    getTheadProps={(state, rowInfo, column, instance) =>{
+                                        return {
+                                            style:{
+                                                fontSize: 13,
+                                            },
+                                            className: classes.tableTheadRow
+                                        }
+                                    }}
+                                    getTdProps={(state, rowInfo, column, instance) =>{
+                                        return {
+                                            style:{
+                                                textAlign: 'center',
+                                                flexDirection: 'row',
+                                                fontSize: 12,
+                                                padding: "0",
+                                            },
+                                        }
+                                    }}
+                                    getTrProps={(state, rowInfo, column) => {
+                                        return {
+                                            className: "cursor-pointer",
+                                            onClick  : (e, handleOriginal) => {
+                                                if ( rowInfo )
+                                                {
+                                                    alert('ok');
+                                                    // openEditContactDialog(rowInfo.original);
+                                                }
                                             }
                                         }
-                                    }
-                                }}
-                                columns={[
-                                    {
-                                        Header: (instance)=>(
-                                            <div className="flex items-center">
-                                                <Hidden smDown>
-                                                    <Button
-                                                        onClick={(ev) => toggleFilterPanelFranchisees()}
-                                                        aria-label="toggle filter panel"
-                                                        color="secondary"
-                                                        className={classNames(classes.filterPanelButton)}
-                                                    >
-                                                        <img className={classes.imageIcon} alt="icon-filter" src="assets/images/invoices/filter.png"/>
-                                                    </Button>
-                                                </Hidden>
-                                                <Hidden smUp>
-                                                    <Button
-                                                        onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
-                                                        aria-label="toggle filter panel"
-                                                        className={classNames(classes.filterPanelButton)}
-                                                    >
-                                                        <img className={classes.imageIcon} alt="icon-filter" src="assets/images/invoices/filter.png"/>
-                                                    </Button>
-                                                </Hidden>
-                                            </div>
-                                        ),
-                                        columns: [
-                                            {
-                                                Header   : (instance) => (
-                                                    <Checkbox
-                                                        onClick={(event) => {
-                                                            event.stopPropagation();
-                                                        }}
-                                                        onChange={(event) => toggleAll(instance) }
-                                                        checked={this.state.selectAll}
-                                                        style={{color: 'white'}}
-                                                        // indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
-                                                    />
-                                                ),
-                                                accessor : "",
-                                                Cell     : row => {
-                                                    return (<Checkbox
+                                    }}
+                                    columns={[
+                                        {
+
+                                            columns: [
+                                                {
+                                                    Header   : (instance) => (
+                                                        <Checkbox
                                                             onClick={(event) => {
                                                                 event.stopPropagation();
                                                             }}
-                                                            checked={isSelected(row.value.ID)}
-                                                            onChange={() => toggleSelection(row.value.ID)}
+                                                            onChange={(event) => toggleAll(instance) }
+                                                            checked={this.state.selectAll}
+                                                            style={{color: 'white'}}
+                                                            // indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
                                                         />
-                                                    )
+                                                    ),
+                                                    accessor : "",
+                                                    Cell     : row => {
+                                                        return (<Checkbox
+                                                                onClick={(event) => {
+                                                                    event.stopPropagation();
+                                                                }}
+                                                                checked={isSelected(row.value.ID)}
+                                                                onChange={() => toggleSelection(row.value.ID)}
+                                                            />
+                                                        )
+                                                    },
+                                                    className: "justify-center",
+                                                    sortable : false,
+                                                    width    : 72
+                                                }
+                                            ],
+                                            className: classNames("justify-center")
+                                        },
+                                        {
+                                            columns: [
+                                                {
+                                                    Header: "NUMBER",
+                                                    accessor: "Number",
+                                                    filterAll: true,
+                                                    width: 200,
+                                                    className: classNames("flex items-center  justify-center")
                                                 },
-                                                className: "justify-center",
-                                                sortable : false,
-                                                width    : 72
-                                            }
-                                        ],
-                                        className: classNames("justify-center")
-                                    },
-                                    {
-                                        Header: ()=>(
-                                            <div className="flex items-center pr-0 lg:pr-12">
-                                                <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
-                                                    <Input
-                                                        placeholder="Search..."
-                                                        className={classNames(classes.search, 'pl-16')}
-                                                        // className="pl-16"
-                                                        disableUnderline
-                                                        fullWidth
-                                                        value={this.state.s}
-                                                        onChange={this.handleChange('s')}
-                                                        inputProps={{
-                                                            'aria-label': 'Search'
-                                                        }}
-                                                    />
-                                                    <Icon color="action" className="mr-16">search</Icon>
-                                                </Paper>
-                                            </div>
-                                        ),
-                                        columns: [
-                                            {
-                                                Header: "NUMBER",
-                                                accessor: "Number",
-                                                filterAll: true,
-                                                width: 200,
-                                                className: classNames("flex items-center  justify-center")
-                                            },
-                                            {
-                                                Header: "FRANCHISEES NAME",
-                                                accessor: "Name",
-                                                width: 350,
-                                                className: classNames("flex items-center  justify-start p-12-impor")
-                                            },
-                                            {
-                                                Header: "FULL ADDRESS",
-                                                accessor: "Address",
-                                                className: classNames("flex items-center  justify-start p-12-impor"),
-                                                width: 420
-                                            },
-                                            {
-                                                Header: "PHONE",
-                                                accessor: "Phone",
-                                                width: 200,
-                                                className: classNames("flex items-center  justify-center p-12-impor")
-                                            },
-                                            {
-                                                Header: "STATUS",
-                                                accessor: "StatusName",
-                                                className: classNames("flex items-center  justify-center p-12-impor"),
-                                                width: 150
-                                            },
-                                            {
-                                                Header: "DISTRIBUTION AMOUNT",
-                                                accessor: "DistributionAmount",
-                                                className: classNames("flex items-center  justify-end p-12-impor"),
-                                                width: 200
-                                            },
-                                            {
-                                                Header: "Actions",
-                                                width : 150,
-                                                className: classNames("flex items-center  justify-center p-12-impor"),
-                                                Cell  : row => (
-                                                    <div className="flex items-center actions ">
-                                                        <IconButton
-                                                            onClick={(ev) => {
-                                                                ev.stopPropagation();
-                                                                if (window.confirm("Do you really want to remove this franchisee")) {
-                                                                    this.props.removeFranchisees(row.original.ID, this.props.franchisees);
-                                                                    if(this.state.selection.length>0){
-                                                                        _.remove(this.state.selection, function(id) {
-                                                                            return id === row.original.ID;
-                                                                        });
+                                                {
+                                                    Header: "FRANCHISEES NAME",
+                                                    accessor: "Name",
+                                                    width: 350,
+                                                    className: classNames("flex items-center  justify-start p-12-impor")
+                                                },
+                                                {
+                                                    Header: "FULL ADDRESS",
+                                                    accessor: "Address",
+                                                    className: classNames("flex items-center  justify-start p-12-impor"),
+                                                    width: 420
+                                                },
+                                                {
+                                                    Header: "PHONE",
+                                                    accessor: "Phone",
+                                                    width: 200,
+                                                    className: classNames("flex items-center  justify-center p-12-impor")
+                                                },
+                                                {
+                                                    Header: "STATUS",
+                                                    accessor: "StatusName",
+                                                    className: classNames("flex items-center  justify-center p-12-impor"),
+                                                    width: 150
+                                                },
+                                                {
+                                                    Header: "DISTRIBUTION AMOUNT",
+                                                    accessor: "DistributionAmount",
+                                                    className: classNames("flex items-center  justify-end p-12-impor"),
+                                                    width: 200
+                                                },
+                                                {
+                                                    Header: "Actions",
+                                                    width : 150,
+                                                    className: classNames("flex items-center  justify-center p-12-impor"),
+                                                    Cell  : row => (
+                                                        <div className="flex items-center actions ">
+                                                            <IconButton
+                                                                onClick={(ev) => {
+                                                                    ev.stopPropagation();
+                                                                    if (window.confirm("Do you really want to remove this franchisee")) {
+                                                                        this.props.removeFranchisees(row.original.ID, this.props.franchisees);
+                                                                        if(this.state.selection.length>0){
+                                                                            _.remove(this.state.selection, function(id) {
+                                                                                return id === row.original.ID;
+                                                                            });
+                                                                        }
                                                                     }
-                                                                }
-                                                            }}
-                                                        >
-                                                            <Icon>delete</Icon>
-                                                        </IconButton>
-                                                        <IconButton
-                                                            onClick={(ev) => {
-                                                                ev.stopPropagation();
-                                                                // removeContact(row.original.id);
-                                                            }}
-                                                        >
-                                                            <Icon>edit</Icon>
-                                                        </IconButton>
-                                                    </div>
-                                                )
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        Header: (instance)=>(
-                                            <div className="flex items-center justify-end pr-12">
-                                                <Hidden smDown>
-                                                    <Button
-                                                        onClick={(ev) => toggleSummaryPanelFranchisees()}
-                                                        aria-label="toggle summary panel"
-                                                        className={classNames(classes.summaryPanelButton)}
-                                                    >
-                                                        <Icon>insert_chart</Icon>
-                                                    </Button>
-                                                </Hidden>
-                                                <Hidden smUp>
-                                                    <Button
-                                                        onClick={(ev) => this.pageLayout.toggleRightSidebar()}
-                                                        aria-label="toggle summary panel"
-                                                        className={classNames(classes.summaryPanelButton)}
-                                                    >
-                                                        <Icon>insert_chart</Icon>
-                                                    </Button>
-                                                </Hidden>
-                                            </div>
-                                        ),
-                                        columns:[
-                                            {
-                                                Header: '',
-                                                cell: ()=>(
-                                                    <div className="flex w-full justify-end"/>
-                                                )
-                                            }
-                                        ]
-                                    }
-                                ]}
-                                defaultPageSize={100}
-                                className={classNames( "-striped -highlight")}
-                                totalRecords = {this.state.temp.length}
-                                style={{
-                                    height: '100%',
-                                }}
-                            />
+                                                                }}
+                                                            >
+                                                                <Icon>delete</Icon>
+                                                            </IconButton>
+                                                            <IconButton
+                                                                onClick={(ev) => {
+                                                                    ev.stopPropagation();
+                                                                    // removeContact(row.original.id);
+                                                                }}
+                                                            >
+                                                                <Icon>edit</Icon>
+                                                            </IconButton>
+                                                        </div>
+                                                    )
+                                                }
+                                            ]
+                                        }
+                                    ]}
+                                    defaultPageSize={100}
+                                    className={classNames( "-striped -highlight")}
+                                    totalRecords = {this.state.temp.length}
+                                    style={{
+                                        height: '100%',
+                                    }}
+                                />
+                            </div>
+
                         )}
                         {(this.state.temp && createFranchisees.props.open) && (
                             <CreateFranchiseesPage/>
