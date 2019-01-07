@@ -3,6 +3,7 @@ import * as UserActions from "../../auth/store/actions/";
 
 const initialState = {
     franchiseeReports: null,
+    franchiseeReport: null,
     bLoadedFranchiseeReports: false,
     bOpenedFilterPanelFranchiseeReports: false,
     FranchiseesReportForm: {
@@ -25,6 +26,13 @@ const franchiseeReports = function(state = initialState, action) {
                 franchiseeReports: action.payload,
                 bLoadedFranchiseeReports: true,
             };
+        }
+        case Actions.GET_FRANCHISEE_REPORT_DETAIL:
+        {
+            return {
+                ...state,
+                franchiseeReport: action.payload,
+            }
         }
         case Actions.TOGGLE_FRANCHISEES_REPORTS_FILTER_PANEL:
         {

@@ -8,6 +8,10 @@ import classNames from 'classnames';
 import {Card, CardContent, Typography, TextField} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles/index';
 
+//Store
+import {bindActionCreators} from "redux";
+import * as Actions from 'store/actions';
+
 const styles = theme => ({
     root: {
         flexGrow: 1,
@@ -62,10 +66,20 @@ const styles = theme => ({
 });
 
 class Report extends Component {
-
+    componentDidMount()
+    {
+        /**
+         * Get the Report Data
+         */
+        this.props.getReport(this.props.match.params);
+    }
     render()
     {
-        const { classes } = this.props;
+        const { classes, franchiseeReport } = this.props;
+        console.log('ppp=', franchiseeReport);
+        if(franchiseeReport===null)
+            return (<div/>);
+
         return (
             <div className={classNames(classes.root, "p-0 sm:p-64  print:p-0")}>
                 <Card className={classNames(classes.card, "mx-auto")}>
@@ -1839,14 +1853,19 @@ class Report extends Component {
         )
     }
 }
+function mapDispatchToProps(dispatch)
+{
+    return bindActionCreators({
+        getReport: Actions.getReport,
+    }, dispatch);
+}
 
-
-function mapStateToProps({auth, fuse})
+function mapStateToProps({auth, franchiseeReports})
 {
     return {
-        iframeURL: fuse.navbar.iframeURL
+        franchiseeReport: franchiseeReports.franchiseeReport
     }
 }
 
 
-export default  withStyles(styles)(withRouter(connect(mapStateToProps, null)(Report)));
+export default  withStyles(styles)(withRouter(connect(mapStateToProps, mapDispatchToProps)(Report)));

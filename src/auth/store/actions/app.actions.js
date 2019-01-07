@@ -9,7 +9,6 @@ export function initialStart(data)
             type: INITIAL_START,
             payload: initialService.loadHomeScreen()
         });
-        let navigations = initialService.loadHomeScreen();
     }
 }
 

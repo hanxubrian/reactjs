@@ -199,8 +199,7 @@ class ReportsApp extends Component {
         let temp0 = rawData.Data.Region[0].FranchiseeReports;
 
         this.setState({headerTitle: `${rawData.Data.Region[0].Name} Region Franchisee Reports for ${this.state.month}/${this.state.year} Period`})
-        this.setState({temp: temp0});
-        this.setState({data: temp0});
+        this.setState({data: rawData.Data.Region[0]});
     };
 
     toggleLeftSidebar = () => {

@@ -8,7 +8,7 @@ export const ReportsConfig = {
     },
     routes  : [
         {
-            path     : '/franchisees/reports/:regionId/:MM/:Year/:FrnachiseeNo',
+            path     : '/franchisees/reports/:regionid/:year/:month/:franchiseenumber',
             component: FuseLoadable({
                 loader: () => import('./report')
             })

@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 
-// core components
-import {
-    Hidden, Icon, IconButton, Input, Paper, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-    AppBar, Toolbar, Typography
-} from '@material-ui/core';
+// Material-UI core components
+import {Icon, IconButton} from '@material-ui/core';
 
 //Janiking
 import JanikingPagination from 'Commons/JanikingPagination';
@@ -71,7 +69,7 @@ const styles = theme => ({
             justifyContent: 'center'
         },
         '& .rt-thead.-headerGroups': {
-          display: 'none'
+            display: 'none'
         },
         '& .ReactTable .rt-thead .rt-th:last-child': {
             justifyContent: 'flex-end'
@@ -116,7 +114,9 @@ class ReportLists extends Component {
         selection: [],
         selectAll: false,
         alertOpen: false,
-        keyToBeRemoved: -1
+        keyToBeRemoved: -1,
+        month: '01',
+        year: '2017'
     };
 
     onChange = (event, { newValue, method }) => {
@@ -214,32 +214,21 @@ class ReportLists extends Component {
         });
     }
 
-    handleClose = ()=>{
-        this.setState({alertOpen: false})
-    };
     handleOpen = (key)=>{
         this.setState({alertOpen: true});
         this.setState({keyToBeRemoved: key})
     };
 
-    removeSelectedTransaction = ()=>{
-        this.props.removeTransaction(this.state.keyToBeRemoved, this.props.transactions);
-        if(this.state.selection.length>0){
-            _.remove(this.state.selection, function(id) {
-                return id === this.state.keyToBeRemoved;
-            });
-        }
-        this.setState({alertOpen: false})
-    };
     render()
     {
         const { classes} = this.props;
         const { toggleSelection, isSelected} = this;
+        const { data, year, month } = this.state;
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
                 <ReactTable
-                    data={this.state.data}
+                    data={data.FranchiseeReports}
                     minRows = {0}
                     PaginationComponent={JanikingPagination}
                     onFetchData={this.fetchData}
@@ -277,14 +266,11 @@ class ReportLists extends Component {
                             },
                         }
                     }}
-                    getTrProps={(state, rowInfo, column) => {
+                    getTrProps={(state, row, column) => {
                         return {
                             className: "cursor-pointer",
                             onClick  : (e, handleOriginal) => {
-                                if ( rowInfo )
-                                {
-                                    // this.props.openEditInvoiceForm(rowInfo.original);
-                                }
+                                this.props.history.push(`/franchisees/reports/${data.RegionId}/${row.original.BillYear}/${row.original.BillMonth}/${row.original.FranchiseeNo}`);
                             }
                         }
                     }}
@@ -358,10 +344,8 @@ class ReportLists extends Component {
                                     Cell  : row => (
                                         <div className="flex items-center actions pl-24">
                                             <IconButton
-                                                onClick={(ev) => {
-                                                    ev.stopPropagation();
-                                                    this.handleOpen(row.original.key);
-                                                }}
+                                                to = {`/franchisees/reports/${data.RegionId}/${year}/${month}/${row.original.FranchiseeNo}`}
+                                                component={Link}
                                             >
                                                 <Icon>visibility</Icon>
                                             </IconButton>
@@ -383,32 +367,11 @@ class ReportLists extends Component {
                     ]}
                     defaultPageSize={100}
                     className={classNames( "-striped -highlight")}
-                    totalRecords = {this.state.data.length}
+                    totalRecords = {data.FranchiseeReports.length}
                     style={{
                         height: '100%',
                     }}
                 />
-                <Dialog
-                    open={this.state.alertOpen}
-                    onClose={()=>this.handleClose()}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <DialogTitle id="alert-dialog-title">{"Remove Transaction"}</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            Do you really want to remove the selected transaction?
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={()=>this.handleClose()} color="primary">
-                            Disagree
-                        </Button>
-                        <Button onClick={()=>this.removeSelectedTransaction()} color="primary" autoFocus>
-                            Agree
-                        </Button>
-                    </DialogActions>
-                </Dialog>
             </div>
         );
     }
@@ -418,7 +381,6 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         toggleFilterPanel: Actions.toggleReportsFilterPanel,
-        // removeTransaction: Actions.removeTransaction
     }, dispatch);
 }
 
