@@ -153,11 +153,13 @@ class Report extends Component {
             lp_total += parseFloat(lp.PYMNT_TOT);
         });
 
-        CHARGEBACKS.forEach(st=>{
-            cb_amount += parseFloat(st.TRX_AMT);
-            cb_tax += parseFloat(st.TRX_TAX);
-            cb_total += parseFloat(st.TRX_TOT);
-        });
+        if(CHARGEBACKS!==null) {
+            CHARGEBACKS.forEach(st => {
+                cb_amount += parseFloat(st.TRX_AMT);
+                cb_tax += parseFloat(st.TRX_TAX);
+                cb_total += parseFloat(st.TRX_TOT);
+            });
+        }
 
         if(REG_MISC!==null ) {
             REG_MISC.forEach(sm => {
@@ -681,101 +683,103 @@ class Report extends Component {
                     </CardContent>
                 </Card>
 
-                <Card className={classNames(classes.card, "mx-auto mt-64")}>
-                    <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
-                        <div>
-                            <table align="center">
-                                <tbody>
-                                {this.renderHeader()}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div className="">
+                {CHARGEBACKS!==null && (
+                    <Card className={classNames(classes.card, "mx-auto mt-64")}>
+                        <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                             <div>
-                                <table className="mb-16">
+                                <table align="center">
                                     <tbody>
-                                    <tr>
-                                        <td className="pr-16 pb-4">
-                                            <Typography className="font-light" variant="h6" color="textSecondary">
-                                                Franchisee Code
-                                            </Typography>
-                                        </td>
-                                        <td className="pb-4">
-                                            <Typography className="font-light" variant="h6" color="inherit">
-                                                Name
-                                            </Typography>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td className="pr-16">
-                                            <Typography color="textSecondary">
-                                                {DLR_CODE}
-                                            </Typography>
-                                        </td>
-                                        <td>
-                                            <Typography color="inherit">
-                                                {SUMMARY_PAGE[0].FRAN_NAME}
-                                            </Typography>
-                                        </td>
-                                    </tr>
+                                    {this.renderHeader()}
                                     </tbody>
                                 </table>
                             </div>
 
-                            <div className="mt-64">
-                                <table className="simple invoice-table">
-                                    <thead>
-                                    <tr>
-                                        <th>
-                                            <h2>Charge Backs</h2>
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr >
-                                        <td>
-                                            <Typography >Description</Typography>
-                                        </td>
-                                        <td className="text-center">
-                                            Tax Amt
-                                        </td>
-                                        <td className="text-center">
-                                            Tax
-                                        </td>
-                                        <td className="text-center">
-                                            Total Amt
-                                        </td>
-                                    </tr>
+                            <div className="">
+                                <div>
+                                    <table className="mb-16">
+                                        <tbody>
+                                        <tr>
+                                            <td className="pr-16 pb-4">
+                                                <Typography className="font-light" variant="h6" color="textSecondary">
+                                                    Franchisee Code
+                                                </Typography>
+                                            </td>
+                                            <td className="pb-4">
+                                                <Typography className="font-light" variant="h6" color="inherit">
+                                                    Name
+                                                </Typography>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td className="pr-16">
+                                                <Typography color="textSecondary">
+                                                    {DLR_CODE}
+                                                </Typography>
+                                            </td>
+                                            <td>
+                                                <Typography color="inherit">
+                                                    {SUMMARY_PAGE[0].FRAN_NAME}
+                                                </Typography>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div className="mt-64">
+                                    <table className="simple invoice-table">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                <h2>Charge Backs</h2>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr >
+                                            <td>
+                                                <Typography >Description</Typography>
+                                            </td>
+                                            <td className="text-center">
+                                                Tax Amt
+                                            </td>
+                                            <td className="text-center">
+                                                Tax
+                                            </td>
+                                            <td className="text-center">
+                                                Total Amt
+                                            </td>
+                                        </tr>
 
 
-                                    {CHARGEBACKS.map((cb, index)=>{
-                                        return (
-                                            <tr key={index} >
-                                                <td>
-                                                    <Typography >{FuseUtils.capital_letter(cb.DESCR)}</Typography>
-                                                </td>
-                                                <td className="text-right">${parseFloat(cb.TRX_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td className="text-right">${parseFloat(cb.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td className="text-right">${parseFloat(cb.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                            </tr>
-                                        )
-                                    })}
-                                    <tr >
-                                        <td>
-                                            <Typography >Total Charge Backs</Typography>
-                                        </td>
-                                        <td className="text-right">${cb_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                        <td className="text-right">${cb_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                        <td className="text-right">${cb_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                        {CHARGEBACKS.map((cb, index)=>{
+                                            return (
+                                                <tr key={index} >
+                                                    <td>
+                                                        <Typography >{FuseUtils.capital_letter(cb.DESCR)}</Typography>
+                                                    </td>
+                                                    <td className="text-right">${parseFloat(cb.TRX_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td className="text-right">${parseFloat(cb.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td className="text-right">${parseFloat(cb.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                </tr>
+                                            )
+                                        })}
+                                        <tr >
+                                            <td>
+                                                <Typography >Total Charge Backs</Typography>
+                                            </td>
+                                            <td className="text-right">${cb_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td className="text-right">${cb_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td className="text-right">${cb_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                    </CardContent>
-                </Card>
+                        </CardContent>
+                    </Card>
+                )}
 
                 <Card className={classNames(classes.card, "mx-auto mt-64")}>
                     <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
