@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 // core components
-import {Icon, Fab, Typography, Hidden, IconButton, AppBar, Toolbar, Button, Paper, Input} from '@material-ui/core';
+import {Icon, Fab, Typography, Hidden, IconButton, Button, Paper, Input} from '@material-ui/core';
 import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
@@ -19,7 +19,6 @@ import * as Actions from 'store/actions';
 
 // third party
 import classNames from 'classnames';
-import _ from "lodash";
 import moment from "moment"
 
 const headerHeight = 80;
@@ -195,7 +194,6 @@ class ReportsApp extends Component {
     getFranchiseeReports =(rawData=this.props.franchiseeReports) =>{
         if(rawData===null) return;
 
-        let temp0 = rawData.Data.Region[0].FranchiseeReports;
         let year = moment(this.props.reportDate).year();
         let month = parseInt(moment(this.props.reportDate).month())+1;
 

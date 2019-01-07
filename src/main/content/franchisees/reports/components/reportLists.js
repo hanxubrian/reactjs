@@ -212,11 +212,6 @@ class ReportLists extends Component {
         });
     }
 
-    handleOpen = (key)=>{
-        this.setState({alertOpen: true});
-        this.setState({keyToBeRemoved: key})
-    };
-
     render()
     {
         const { classes} = this.props;

@@ -184,7 +184,9 @@ class InvoiceApp extends Component {
         super(props);
 
         if(!props.bLoadedInvoices) {
-            props.getInvoices();
+            props.getInvoiceStatus(props.regionId);
+            props.getInvoices([props.regionId] ,props.StatusId, props.FromDate, props.ToDate, props.PeriodId,
+                props.OpenOrClosed, props.InvoiceTypeId, props.ToPrintOrToEmail, props.SearchText);
         }
 
         if (!props.bLoadedCustomers) {
@@ -198,6 +200,8 @@ class InvoiceApp extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot){
         let bChanged = false;
+
+        const {regionId, StatusId, FromDate, ToDate,PeriodId, OpenOrClosed,InvoiceTypeId, ToPrintOrToEmail, SearchText} = this.props;
         if(this.props.transactionStatus.checkedPaid !== prevProps.transactionStatus.checkedPaid) {
             this.setState({checkedPaid: !this.state.checkedPaid});
             bChanged = true;
@@ -229,8 +233,8 @@ class InvoiceApp extends Component {
         }
 
         if(this.props.regionId !== prevProps.regionId) {
-            this.setState({regionId: prevProps.regionId});
-            bChanged = true;
+            this.props.getInvoices([regionId] ,StatusId, FromDate, ToDate, PeriodId,
+                OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText);
         }
 
         if(bChanged)
@@ -279,23 +283,23 @@ class InvoiceApp extends Component {
 
         if(rawData===null) return;
 
-        let temp0 = rawData.Data;
+        let temp0 = rawData.Data.Region[0].InvList;
 
-        keys.map((key, index)=> {
-
-            if(this.props.transactionStatus[key]){
-                temp = temp0.filter(d => {
-                    if(this.props.regionId===0)
-                        return d.TransactionStatus.toLowerCase() === statusStrings[index]
-                    else
-                        return d.TransactionStatus.toLowerCase() === statusStrings[index] && d.RegionId === this.props.regionId
-                });
-            }
-            all_temp =_.uniq([...all_temp, ...temp]);
-            return true;
-        });
-        this.setState({temp: all_temp});
-        this.setState({data: all_temp});
+        // keys.map((key, index)=> {
+        //
+        //     if(this.props.transactionStatus[key]){
+        //         temp = temp0.filter(d => {
+        //             if(this.props.regionId===0)
+        //                 return d.TransactionStatus.toLowerCase() === statusStrings[index];
+        //             else
+        //                 return d.TransactionStatus.toLowerCase() === statusStrings[index] && d.RegionId === this.props.regionId
+        //         });
+        //     }
+        //     all_temp =_.uniq([...all_temp, ...temp]);
+        //     return true;
+        // });
+        this.setState({temp: temp0});
+        this.setState({data: temp0});
     };
 
     componentDidMount(){
@@ -549,6 +553,7 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         getInvoices: Actions.getInvoices,
+        getInvoiceStatus: Actions.getInvoiceStatus,
         toggleFilterPanel: Actions.toggleFilterPanel,
         toggleSummaryPanel: Actions.toggleSummaryPanel,
         openNewInvoiceForm: Actions.openNewInvoiceForm,
@@ -568,7 +573,15 @@ function mapStateToProps({invoices, auth, customers})
         regionId: auth.login.defaultRegionId,
         customers: customers.customersDB,
         bLoadedCustomers: customers.bLoadedCustomers,
-        invoiceForm: invoices.invoiceForm
+        invoiceForm: invoices.invoiceForm,
+        FromDate: invoices.FromDate,
+        ToDate: invoices.ToDate,
+        StatusId: invoices.StatusId,
+        PeriodId: invoices.PeriodId,
+        OpenOrClosed: invoices.OpenOrClosed,
+        InvoiceTypeId: invoices.InvoiceTypeId,
+        ToPrintOrToEmail: invoices.ToPrintOrToEmail,
+        SearchText: invoices.SearchText
     }
 }
 
