@@ -235,7 +235,7 @@ class ReportLists extends Component {
         const { toggleSelection, isSelected} = this;
 
         return (
-            <div className={classNames(classes.layoutTable, "h-full")}>
+            <div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
                 <ReactTable
                     data={this.state.data}
                     minRows = {0}
