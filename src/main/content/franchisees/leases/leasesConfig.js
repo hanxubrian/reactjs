@@ -10,7 +10,7 @@ export const LeasesConfig = {
         {
             path     : '/franchisees/leases',
             component: FuseLoadable({
-                loader: () => import('./Leases')
+                loader: () => import('./leases')
             })
         }
     ]
