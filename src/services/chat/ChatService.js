@@ -11,8 +11,9 @@ const LOCALHOST_URL = "http://localhost:12217/";
 
 class chatService {
     getContactList =  (userId) => {
-        return new Promise((resolve, reject) => {
-            axios_instance.get(`${LOCALHOST_URL}/api/chat/contacts?id=${userId}`)
+        
+             return new Promise((resolve, reject) => {
+            axios_instance.get(`${BASE_MONGO_API_URL}/api/chat/contacts?id=${userId}`)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);
@@ -24,8 +25,8 @@ class chatService {
                 .catch(error=>{
                     resolve(error);
                 })
-        });
-    };
+        }); 
+    }
 
     getUserData = (userId, name, avatar) =>{
         const data = {
@@ -35,7 +36,7 @@ class chatService {
         };
 
         return new Promise((resolve, reject) => {
-            axios_instance.post(`${LOCALHOST_URL}/api/chat/getuser`,data)
+            axios_instance.post(`${BASE_MONGO_API_URL}/api/chat/getuser`,data)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);
@@ -58,7 +59,7 @@ class chatService {
         };
 
         return new Promise((resolve, reject) => {
-            axios_instance.post(`${LOCALHOST_URL}/api/chat/openchat?id=${id}`, data)
+            axios_instance.post(`${BASE_MONGO_API_URL}/api/chat/openchat?id=${id}`, data)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);
