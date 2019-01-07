@@ -14,6 +14,10 @@ import classNames from 'classnames';
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import GridContainer from "../../../../Commons/Grid/GridContainer";
 import GridItem from "../../../../Commons/Grid/GridItem";
+import FormControl from "@material-ui/core/FormControl/FormControl";
+import FormLabel from "@material-ui/core/FormLabel/FormLabel";
+import RadioGroup from "@material-ui/core/RadioGroup/RadioGroup";
+import Radio from "@material-ui/core/Radio/Radio";
 
 const styles = theme => ({
     root : {
@@ -65,7 +69,8 @@ class FilterPanel extends Component {
         checkedPendingTransfer: true,
         checkedSelectAll: true,
         State: '',
-        contactState: ''
+        contactState: '',
+        locationValue: 'all',
     };
 
     componentDidMount()
@@ -136,7 +141,9 @@ class FilterPanel extends Component {
             [name]: event.target.value,
         });
     };
-
+    handleLocationChange = event => {
+        this.setState({ locationValue: event.target.value });
+    };
     render()
     {
         const {classes, franchiseesForm} = this.props;
@@ -475,7 +482,21 @@ class FilterPanel extends Component {
 
                            </div>
                         ):(
-                           <div style={{marginTop: 50, display: 'flex', flexDirection: 'column'}}>
+                           <div style={{display: 'flex', flexDirection: 'column'}}>
+                                <h3>Location</h3>
+                                <FormControl component="fieldset" className={classNames(classes.formControl,"mt-12")}>
+                                   <RadioGroup
+                                       aria-label="location"
+                                       name="location"
+                                       value={this.state.locationValue}
+                                       onChange={this.handleLocationChange}
+                                   >
+                                       <FormControlLabel value="all" control={<Radio />} label="All" />
+                                       <FormControlLabel value="nearby" control={<Radio />} label="Near By" />
+                                       <FormControlLabel value="nearSpecificAddress" control={<Radio />} label="Near Specific Address" />
+                                   </RadioGroup>
+                                </FormControl>
+                                <br/>
                                 <h3>Franchisees Statuses</h3>
                                 <FormControlLabel
                                     control={
