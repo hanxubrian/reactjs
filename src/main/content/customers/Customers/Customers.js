@@ -523,12 +523,12 @@ class Customers extends Component {
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
-											<IconButton
+											{/* <IconButton
 												className={classNames(classes.button, "mr-12")}
 												aria-label="Add an alarm"
 												onClick={(ev) => toggleMapView()}>
 												<Icon>{mapViewState ? 'list' : 'location_on'}</Icon>
-											</IconButton>
+											</IconButton> */}
 
 											<FuseAnimate animation="transition.expandIn" delay={300}>
 												<Fab

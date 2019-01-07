@@ -64,6 +64,8 @@ import {
 	TableColumnResizing,
 	ColumnChooser,
 	TableColumnVisibility,
+	TableFixedColumns,
+	VirtualTable,
 
 } from '@devexpress/dx-react-grid-material-ui';
 
@@ -348,76 +350,198 @@ const Command = ({ id, onExecute }) => {
 		/>
 	);
 };
-
+const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 class CustomerListContent extends Component {
-	state = {
-		s: '',
-		temp: [],
-		data: [],
-		selection: [],
-		selectAll: false,
 
-		selection: [],
-		rows: [],
-		columns: [
-			{
-				title: "No", name: "CustomerNo",
-				// getCellValue: row => (row.user ? row.user.firstName : undefined),
-			},
-			{ title: "Name", name: "CustomerName", width: 200, },
-			{ title: "Address", name: "Address", width: 160 },
-			{ title: "City", name: "City", width: 90 },
-			{ title: "State", name: "StateName", width: 50 },
-			{ title: "Zip", name: "PostalCode", width: 50 },
-			{ title: "Phone", name: "Phone", width: 80, },
-			{ title: "Account Type", name: "AccountTypeListName", width: 150 },
-			{ title: "Status", name: "StatusName", width: 60 },
-			{ title: "Contract Amount", name: "Amount", width: 80 },
-			// { title: "Actions", name: "Actions", width: 110, }
-		],
-		tableColumnExtensions: [
-			{ title: "No", name: "CustomerNo", columnName: "CustomerNo", width: 80, sortingEnabled: true, filteringEnabled: true, },
-			{ title: "Name", name: "CustomerName", columnName: "CustomerName", width: 200, wordWrapEnabled: true, sortingEnabled: true, filteringEnabled: true, },
-			{ title: "Address", name: "Address", columnName: "Address", width: 200, wordWrapEnabled: true, sortingEnabled: false, filteringEnabled: true, },
-			{ title: "City", name: "City", columnName: "City", width: 130, wordWrapEnabled: true, sortingEnabled: false, filteringEnabled: true, },
-			{ title: "State", name: "StateName", columnName: 'StateName', width: 90, align: 'center', sortingEnabled: true, filteringEnabled: true, },
-			{ title: "Zip", name: "PostalCode", columnName: "PostalCode", width: 90, sortingEnabled: false, filteringEnabled: true, },
-			{ title: "Phone", name: "Phone", columnName: "Phone", width: 100, sortingEnabled: false, filteringEnabled: true, },
-			{ title: "Account Type", name: "AccountTypeListName", columnName: "AccountTypeListName", width: 150, sortingEnabled: true, filteringEnabled: true, },
-			{ title: "Status", name: "StatusName", columnName: 'StatusName', width: 90, align: 'center', sortingEnabled: true, filteringEnabled: true, },
-			{ title: "Contract Amount", name: "Amount", columnName: 'Amount', width: 120, align: 'right', wordWrapEnabled: true, sortingEnabled: true, filteringEnabled: true, },
-			// { title: "Actions", name: "Actions", columnName: "Actions", width: 110, sortingEnabled: true, filteringEnabled: false, }
-		],
-		sorting: [
-			{ columnName: 'CustomerNo', direction: 'asc' }
-		],
-		editingColumnExtensions: [
-			// {
-			// 	columnName: 'firstName',
-			// 	createRowChange: (row, value) => ({ user: { ...row.user, firstName: value } }),
-			// },
-		],
-		currencyColumns: [
-			'Amount'
-		],
-		dateColumns: ['saleDate'],
-		groupingColumns: [
-			{ columnName: 'StateName', groupingEnabled: false },
-			{ columnName: 'AccountTypeListName', groupingEnabled: false },
-			{ columnName: 'StatusName', groupingEnabled: false },
-		],
-		grouping: [
-			// { columnName: 'AccountTypeListName' },
-		],
-		pageSize: 20,
-		pageSizes: [10, 20, 30, 50, 100],
-		amountFilterOperations: ['equal', 'notEqual', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual'],
-		// defaultFilters: [{ columnName: 'StateName', value: 'PA' }],
-		searchValue: '',
-	};
 
 	constructor(props) {
 		super(props);
+
+		this.state = {
+			s: '',
+			temp: [],
+			data: [],
+			selectAll: false,
+
+			selection: [],
+			rows: [],
+			// columns: [
+			// 	{
+			// 		title: "No", name: "CustomerNo",
+			// 		// getCellValue: row => (row.user ? row.user.firstName : undefined),
+			// 	},
+			// 	{ title: "Name", name: "CustomerName", width: 200, },
+			// 	{ title: "Address", name: "Address", width: 160 },
+			// 	{ title: "City", name: "City", width: 90 },
+			// 	{ title: "State", name: "StateName", width: 50 },
+			// 	{ title: "Zip", name: "PostalCode", width: 50 },
+			// 	{ title: "Phone", name: "Phone", width: 80, },
+			// 	{ title: "Account Type", name: "AccountTypeListName", width: 150 },
+			// 	{ title: "Status", name: "StatusName", width: 60 },
+			// 	{ title: "Contract Amount", name: "Amount", width: 80 },
+			// 	// { title: "Actions", name: "Actions", width: 110, }
+			// ],
+
+			tableColumnExtensions2: [
+				{
+					title: "id",
+					name: "id",
+					columnName: "id",
+					width: 80,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "product",
+					name: "product",
+					columnName: "product",
+					width: 80,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "owner",
+					name: "owner",
+					columnName: "owner",
+					width: 80,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+			],
+			tableColumnExtensions: [
+				{
+					title: "No",
+					name: "CustomerNo",
+					columnName: "CustomerNo",
+					width: 80,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "Name",
+					name: "CustomerName",
+					columnName: "CustomerName",
+					width: 200,
+					wordWrapEnabled: true,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+					togglingEnabled: false,
+				},
+				{
+					title: "Address",
+					name: "Address",
+					columnName: "Address",
+					width: 200,
+					wordWrapEnabled: true,
+					sortingEnabled: false,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "City",
+					name: "City",
+					columnName: "City",
+					width: 130,
+					wordWrapEnabled: true,
+					sortingEnabled: false,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "State",
+					name: "StateName",
+					columnName: 'StateName',
+					width: 90,
+					align: 'center',
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: true,
+				},
+				{
+					title: "Zip",
+					name: "PostalCode",
+					columnName: "PostalCode",
+					width: 90,
+					sortingEnabled: false,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "Phone",
+					name: "Phone",
+					columnName: "Phone",
+					width: 100,
+					sortingEnabled: false,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "Account Type",
+					name: "AccountTypeListName",
+					columnName: "AccountTypeListName",
+					width: 150,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: true,
+				},
+				{
+					title: "Status",
+					name: "StatusName",
+					columnName: 'StatusName',
+					width: 90,
+					align: 'center',
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: true,
+				},
+				{
+					title: "Contract Amount",
+					name: "Amount",
+					columnName: 'Amount',
+					width: 120,
+					align: 'right',
+					wordWrapEnabled: true,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+
+				},
+				// { title: "Actions", name: "Actions", columnName: "Actions", width: 110, sortingEnabled: true, filteringEnabled: false, }
+			],
+			sorting: [
+				{ columnName: 'CustomerNo', direction: 'asc' }
+			],
+			editingColumnExtensions: [
+				// {
+				// 	columnName: 'firstName',
+				// 	createRowChange: (row, value) => ({ user: { ...row.user, firstName: value } }),
+				// },
+			],
+			currencyColumns: [
+				'Amount'
+			],
+			dateColumns: ['saleDate'],
+			// groupingColumns: [
+			// 	{ columnName: 'StateName', groupingEnabled: false },
+			// 	{ columnName: 'AccountTypeListName', groupingEnabled: false },
+			// 	{ columnName: 'StatusName', groupingEnabled: false },
+			// ],
+			grouping: [
+				// { columnName: 'AccountTypeListName' },
+			],
+			pageSize: 20,
+			pageSizes: [10, 20, 30, 50, 100],
+			amountFilterOperations: ['equal', 'notEqual', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual'],
+			// defaultFilters: [{ columnName: 'StateName', value: 'PA' }],
+			searchValue: '',
+			// leftColumns: ['CustomerNo', 'CustomerName'],
+			// rightColumns: ['Amount'],
+		};
 
 		this.fetchData = this.fetchData.bind(this);
 		this.escFunction = this.escFunction.bind(this);
@@ -429,11 +553,13 @@ class CustomerListContent extends Component {
 		// this.changePageSize = pageSize => this.setState({ pageSize });
 		this.changeSearchValue = value => this.setState({ searchValue: value });
 		this.changeGrouping = grouping => this.setState({ grouping });
+		console.log("constructor");
 	}
 	//
 	// to edit table cell
 	//
 	commitChanges({ added, changed, deleted }) {
+		console.log("commitChanges");
 		let { rows } = this.state;
 		if (added) {
 			const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
@@ -456,12 +582,16 @@ class CustomerListContent extends Component {
 	}
 
 	onChange = (event, { newValue, method }) => {
+		console.log("onChange");
+
 		this.setState({
 			value: newValue.toString()
 		});
 	};
 
 	toggleSelection = (key, shift, row) => {
+		console.log("toggleSelection");
+
         /*
           https://react-table.js.org/#/story/select-table-hoc
           Implementation of how to manage the selection state is up to the developer.
@@ -487,6 +617,8 @@ class CustomerListContent extends Component {
 	};
 
 	toggleAll = (instance) => {
+		console.log("toggleAll");
+
 		const selectAll = this.state.selectAll ? false : true;
 		const selection = [];
 		if (selectAll) {
@@ -505,6 +637,8 @@ class CustomerListContent extends Component {
 	};
 
 	isSelected = key => {
+		console.log("isSelected");
+
         /*
           Instead of passing our external selection state we provide an 'isSelected'
           callback and detect the selection state ourselves. This allows any implementation
@@ -514,7 +648,7 @@ class CustomerListContent extends Component {
 	};
 
 	logSelection = () => {
-		console.log("selection:", this.state.selection);
+		console.log("logSelection", this.state.selection);
 	};
 
 
@@ -523,6 +657,7 @@ class CustomerListContent extends Component {
 		if (this.props.data !== prevProps.data) {
 			this.setState({ data: this.props.data });
 			this.setState({ rows: this.props.data });
+
 		}
 
 		if (prevState.s !== this.state.s) {
@@ -530,6 +665,8 @@ class CustomerListContent extends Component {
 		}
 	}
 	getCustomersFromStatus = (rawData = this.props.customers) => {
+		console.log("getCustomersFromStatus");
+
 		// let temp = [];
 		let all_temp = [];
 		// let temp1 = [];
@@ -557,6 +694,8 @@ class CustomerListContent extends Component {
 
 	};
 	search(val) {
+		console.log("search");
+
 		// const temp = this.props.data.filter( d => {
 		//     console.log('customer=', d);
 		//     return d.CustomerId.toString().indexOf(val) !== -1 || !val ||
@@ -593,19 +732,27 @@ class CustomerListContent extends Component {
 	}
 
 	componentDidMount() {
+		console.log("componentDidMount");
+
 		document.addEventListener("keydown", this.escFunction, false);
 		this.getLocation();
 	}
 
 	componentWillMount() {
+		console.log("componentWillMount");
+
 		this.setState({ rows: this.props.data })
 		this.setState({ data: this.props.data })
 	}
 	componentWillUnmount() {
+		console.log("componentWillUnmount");
+
 		document.removeEventListener("keydown", this.escFunction, false);
 	}
 
 	escFunction(event) {
+		console.log("escFunction");
+
 		if (event.keyCode === 27) {
 			this.setState({ s: '' });
 			this.setState({ data: this.props.data })
@@ -613,10 +760,14 @@ class CustomerListContent extends Component {
 	}
 
 	handleChange = prop => event => {
+		console.log("handleChange");
+
 		this.setState({ [prop]: event.target.value });
 	};
 
 	removeCustomers = () => {
+		console.log("removeCustomers");
+
 		if (this.state.selection.length === 0) {
 			alert("Please choose customer(s) to delete");
 			return;
@@ -628,6 +779,8 @@ class CustomerListContent extends Component {
 	};
 
 	fetchData(state, instance) {
+		console.log("fetchData");
+
 		this.setState({
 			pageSize: state.pageSize,
 			page: state.page,
@@ -635,6 +788,8 @@ class CustomerListContent extends Component {
 	}
 
 	capital_letter(str) {
+		console.log("capital_letter");
+
 		str = str.split(" ").map(x => {
 			if (x.length > 1) {
 				return x[0].toUpperCase() + x.substr(1).toLowerCase();
@@ -649,6 +804,8 @@ class CustomerListContent extends Component {
 	}
 
 	getLocation() {
+		console.log("getLocation");
+
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(
 				(position) => {
@@ -663,20 +820,36 @@ class CustomerListContent extends Component {
 	}
 
 	generateRows() {
+		console.log("generateRows");
+
 		console.log(this.props.data.slice(0, 15));
 		return this.props.data;
 	}
+	shouldComponentUpdate(nextProps, nextState) {
+		// return false 하면 업데이트를 안함
+		return this.state !== nextState ||
+			this.props.mapViewState !== nextProps.mapViewState
 
+		// return true;
+	}
+	componentWillReceiveProps(nextProps) {
+		// this.setState({ mapViewState: nextProps.mapViewState });
+	} // deprecate 
 	render() {
+		console.log("render");
+
 		const {
 			classes,
 			toggleFilterPanel,
 			toggleSummaryPanel,
 			mapViewState,
+			toggleMapView,
 			filterState
 		} = this.props;
 
 		const {
+
+			// mapViewState,
 			rows,
 			columns,
 			selection,
@@ -687,203 +860,245 @@ class CustomerListContent extends Component {
 			pageSize,
 			pageSizes,
 			amountFilterOperations,
-			groupingColumns,
+			// groupingColumns,
 			// booleanColumns,
 			searchValue,
-			grouping
+			grouping,
+			// leftColumns,
+			// rightColumns,
 		} = this.state;
 
 		return (
-			<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
-				<div className="flex flex-row items-center">
-					<div className="flex items-center justify-start p-12">
-						<Button
-							onClick={(ev) => toggleFilterPanel()}
-							aria-label="toggle filter panel"
-							color="secondary"
-							// disabled={filterState ? true : false}
-							className={classNames(classes.filterPanelButton)}
-						>
-							<img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" />
-						</Button>
-					</div>
-					{/* <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}> */}
-					<Paper className={"flex items-center w-full h-44 mr-12"} elevation={1}>
-						<Input
-							placeholder="Search..."
-							className={classNames(classes.search, 'pl-16')}
-							// className="pl-16"
-							disableUnderline
-							fullWidth
-							value={this.state.s}
-							onChange={this.handleChange('s')}
-							inputProps={{
-								'aria-label': 'Search'
-							}}
-						/>
-						<Icon color="action" className="mr-16">search</Icon>
-					</Paper>
-					<div className="flex items-center justify-end p-12">
-						<Button
-							onClick={(ev) => toggleSummaryPanel()}
-							aria-label="toggle summary panel"
-							// disabled={summaryState ? true : false}
-							className={classNames(classes.summaryPanelButton)}
-						>
-							<Icon>insert_chart</Icon>
-						</Button></div>
-				</div>
+			<Fragment>
+				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
 
-				{mapViewState && (<div className="w-full h-full">
-					<div className="w-full h-full">
-						<GoogleMap
-							bootstrapURLKeys={{
-								key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
-							}}
-							defaultZoom={12}
-							defaultCenter={[this.state.current_lat, this.state.current_long]}
-						>
-							<Marker
-								text="Marker Text"
-								lat={this.state.current_lat}
-								lng={this.state.current_long}
+					{/* Searchbar row */}
+					<div className="flex flex-row items-center">
+						<div className="flex items-center justify-start p-6">
+							<Button
+								onClick={(ev) => toggleFilterPanel()}
+								aria-label="toggle filter panel"
+								color="secondary"
+								className={classNames(classes.filterPanelButton)}
+							>
+								<img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" />
+							</Button>
+						</div>
+
+						<div className="flex items-center justify-start p-6">
+							{/* <Button
+								onClick={(ev) => toggleFilterPanel()}
+								aria-label="toggle filter panel"
+								color="secondary"
+								className={classNames(classes.filterPanelButton)}
+							>
+								<img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" />
+							</Button> */}
+
+							<IconButton
+								className={classNames(classes.button, "mr-12")}
+								aria-label="Add an alarm"
+								onClick={(ev) => toggleMapView()}>
+								<Icon>{mapViewState ? 'list' : 'location_on'}</Icon>
+							</IconButton>
+						</div>
+
+						<Paper className={"flex items-center w-full h-44 mr-12"} elevation={1}>
+							<Input
+								placeholder="Search..."
+								className={classNames(classes.search, 'pl-16')}
+								disableUnderline
+								fullWidth
+								value={this.state.s}
+								onChange={this.handleChange('s')}
+								inputProps={{
+									'aria-label': 'Search'
+								}}
 							/>
-						</GoogleMap>
+							<Icon color="action" className="mr-16">search</Icon>
+						</Paper>
+						<div className="flex items-center justify-end p-12">
+							<Button
+								onClick={(ev) => toggleSummaryPanel()}
+								aria-label="toggle summary panel"
+								className={classNames(classes.summaryPanelButton)}
+							>
+								<Icon>insert_chart</Icon>
+							</Button></div>
 					</div>
-				</div>)}
 
-				{!mapViewState &&
-					(
+					{/* Mapview */}
+					{mapViewState && (<div className="w-full h-full">
+						<div className="w-full h-full">
+							<GoogleMap
+								bootstrapURLKeys={{
+									key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
+								}}
+								defaultZoom={12}
+								defaultCenter={[this.state.current_lat, this.state.current_long]}
+							>
+								<Marker
+									text="Marker Text"
+									lat={this.state.current_lat}
+									lng={this.state.current_long}
+								/>
+							</GoogleMap>
+						</div>
+					</div>)}
 
-						<Paper
-							className={classNames(classes.layoutTable, "flex flex-col h-full")}
-							style={{ flex: '1', }}>
-							<span className={"p-6"}>
+					{/* Girdview */}
+					{!mapViewState &&
+						(
+							<Paper
+								className={classNames(classes.layoutTable, "flex flex-col h-full")}
+							// style={{ flex: '1', }}
+							>
+								{/* <span className={"p-6"}>
 								Rows Selected: {selection.length}
-							</span>
-							<Grid
-								rows={
-									// [
-									// 	{ id: 0, product: 'DevExtreme', owner: 'DevExpress' },
-									// 	{ id: 1, product: 'DevExtreme Reactive', owner: 'DevExpress' },
-									// ]
+							</span> */}
+								<Grid
+									rootComponent={GridRootComponent}
+									rows={
+										// [
+										// 	{ id: 0, product: 'DevExtreme', owner: 'DevExpress' },
+										// 	{ id: 1, product: 'DevExtreme Reactive', owner: 'DevExpress' },
+										// ]
 
 
-									// Array.apply(null, { length: 100 }).map(Number.call, Number)
-									// 	.map((val, index) => (
-									// 		{ id: index, product: 'Product' + index, owner: 'owner' + index }
-									// 	))
-									rows
-								}
-								columns={columns}>
-								<PagingState
-									defaultCurrentPage={0}
-									// currentPage={currentPage}
-									// onCurrentPageChange={this.changeCurrentPage}
-									// pageSize={pageSize}
-									// onPageSizeChange={this.changePageSize}
-									defaultPageSize={20}
-								/>
+										// Array.from({ length: 10000 })
+										// 	.map((item, index) => (
+										// 		{ id: index, product: 'Product' + index, owner: 'owner' + index }
+										// 	))
 
-								<PagingPanel pageSizes={pageSizes} />
+										rows
+									}
+									columns={tableColumnExtensions}
+								>
+									<DragDropProvider />
+									{/* <VirtualTable
+										height="auto"
+									/> */}
 
-								<SelectionState
-									selection={selection}
-									onSelectionChange={this.changeSelection}
-								/>
-								{/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
-								<IntegratedSelection />
-								<IntegratedPaging />
+									<PagingState
+										defaultCurrentPage={0}
+										// currentPage={currentPage}
+										// onCurrentPageChange={this.changeCurrentPage}
+										// pageSize={pageSize}
+										// onPageSizeChange={this.changePageSize}
+										defaultPageSize={20}
+									/>
 
+									<PagingPanel pageSizes={pageSizes} />
 
-								<SortingState
-									sorting={sorting}
-									onSortingChange={this.changeSorting}
-									columnExtensions={tableColumnExtensions}
-								/>
-								<IntegratedSorting />
+									<SelectionState
+										selection={selection}
+										onSelectionChange={this.changeSelection}
+									/>
+									{/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
+									<IntegratedSelection />
 
-								<SearchState
-									// defaultValue="Paris"
-									value={searchValue}
-									onValueChange={this.changeSearchValue}
-								/>
-
-								<FilteringState
-									defaultFilters={[]}
-									columnExtensions={tableColumnExtensions}
-								/>
-								<IntegratedFiltering />
-
-								<EditingState
-									columnExtensions={editingColumnExtensions}
-									onCommitChanges={this.commitChanges}
-								/>
+									<IntegratedPaging />
 
 
-								<DragDropProvider />
-								<GroupingState
-									grouping={grouping}
-									onGroupingChange={this.changeGrouping}
-								// defaultGrouping={[]}
-								// columnExtensions={groupingColumns}
-								/>
-								<IntegratedGrouping />
+									<SortingState
+										sorting={sorting}
+										onSortingChange={this.changeSorting}
+										columnExtensions={tableColumnExtensions}
+									/>
+									<IntegratedSorting />
 
-								{/* <BooleanTypeProvider
+									<SearchState
+										// defaultValue="Paris"
+										value={searchValue}
+										onValueChange={this.changeSearchValue}
+									/>
+
+									<FilteringState
+										defaultFilters={[]}
+										columnExtensions={tableColumnExtensions}
+									/>
+									<IntegratedFiltering />
+
+									<EditingState
+										columnExtensions={editingColumnExtensions}
+										onCommitChanges={this.commitChanges}
+									/>
+
+
+
+									<GroupingState
+										grouping={grouping}
+										onGroupingChange={this.changeGrouping}
+									// defaultGrouping={[]}
+									// columnExtensions={tableColumnExtensions}
+									/>
+									<IntegratedGrouping />
+
+									{/* <BooleanTypeProvider
 									for={booleanColumns}
 								/> */}
 
-								<CurrencyTypeProvider
-									for={currencyColumns}
-									availableFilterOperations={amountFilterOperations}
-									editorComponent={AmountEditor}
-								/>
-								{/* <DateTypeProvider
+									<CurrencyTypeProvider
+										for={currencyColumns}
+										availableFilterOperations={amountFilterOperations}
+										editorComponent={AmountEditor}
+									/>
+									{/* <DateTypeProvider
 									for={dateColumns}
 								/> */}
 
 
-								<Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} />
-								<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
-								<TableHeaderRow showSortingControls />
-								{/* showGroupingControls */}
-								<TableSelection showSelectAll selectByRowClick highlightRow />
+									<Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} />
+									<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
+									<TableHeaderRow showSortingControls />
+									{/* showGroupingControls */}
 
-								<TableEditRow />
-								<TableEditColumn
-									showAddCommand
-									showEditCommand
-									showDeleteCommand
-									commandComponent={Command}
-								/>
 
-								<TableColumnReordering
-									defaultOrder={tableColumnExtensions.map(x => x.columnName)}
-								/>
-								{/* Column Visibility */}
-								<TableColumnVisibility
-									defaultHiddenColumnNames={[]}
-								/>
-								<Toolbar />
-								{/* <SearchPanel /> */}
-								{/* Column Visibility */}
-								<ColumnChooser />
+									{/* <TableFixedColumns
+									leftColumns={leftColumns}
+									rightColumns={rightColumns}
+								/> */}
 
-								{filterState && (
-									<TableFilterRow
-										showFilterSelector
-										iconComponent={FilterIcon}
-									// messages={{ month: 'Month equals' }}
+									<TableSelection showSelectAll selectByRowClick highlightRow />
+
+									<TableEditRow />
+									<TableEditColumn
+										showAddCommand
+										showEditCommand
+										showDeleteCommand
+										commandComponent={Command}
 									/>
-								)}
-								<TableGroupRow />
-								{/* <GroupingPanel showSortingControls showGroupingControls /> */}
 
-							</Grid>
-						</Paper>
-					)}
-			</div>
+									<TableColumnReordering
+										defaultOrder={tableColumnExtensions.map(x => x.columnName)}
+									/>
+									{/* Column Visibility */}
+									{/* Disable Column Visibility Toggling */}
+									<TableColumnVisibility
+										defaultHiddenColumnNames={[]}
+										columnExtensions={tableColumnExtensions}
+									/>
+									{/* <Toolbar /> */}
+									{/* <SearchPanel /> */}
+									{/* Column Visibility */}
+									{/* <ColumnChooser /> */}
+
+									{filterState && (
+										<TableFilterRow
+											showFilterSelector
+											iconComponent={FilterIcon}
+										// messages={{ month: 'Month equals' }}
+										/>
+									)}
+									{/* <TableGroupRow /> */}
+									{/* <GroupingPanel showSortingControls showGroupingControls /> */}
+
+								</Grid>
+							</Paper>
+						)
+					}
+				</div>
+			</Fragment>
 		)
 	}
 
@@ -901,7 +1116,7 @@ class CustomerListContent extends Component {
 			// openNewCustomerForm,
 			// closeNewCustomerForm,
 			// CustomerForm,
-			// toggleMapView
+			// toggleMapView,
 			mapViewState
 		} = this.props;
 		const { toggleSelection, toggleAll, isSelected } = this;
@@ -910,6 +1125,8 @@ class CustomerListContent extends Component {
 
 		return (
 			<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
+
+				{/* SearchBar row */}
 				<div className="flex flex-row items-center">
 					<div className="flex items-center justify-start p-12">
 						<Button
@@ -949,6 +1166,7 @@ class CustomerListContent extends Component {
 						</Button></div>
 				</div>
 
+				{/* MapView */}
 				{mapViewState && (<div className="w-full h-full">
 					<div className="w-full h-full">
 						<GoogleMap
@@ -966,6 +1184,8 @@ class CustomerListContent extends Component {
 						</GoogleMap>
 					</div>
 				</div>)}
+
+				{/* GridView */}
 				{!mapViewState && (
 					<ReactTable
 						data={this.state.data}
