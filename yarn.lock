@@ -1525,7 +1525,7 @@
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.2.tgz#54c5a964462be3d4d78af631363c18d6fa91ac26"
 
-"@pusher/chatkit-client@^1.2.2":
+"@pusher/chatkit-client@1.2.2":
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@pusher/chatkit-client/-/chatkit-client-1.2.2.tgz#63326d25af119ab9b47bbd81e8191fa7cbd3352a"
   integrity sha512-VTXVR+CRRkkqp1z1AK8NhDtWKsnvVwHT33b2Em7tlMbcpJT17YHm0wsOZLytKJkO1QG5WMdYuOsGPkymBnMYww==
@@ -1533,7 +1533,7 @@
     "@pusher/platform" "^0.16.0"
     ramda "^0.25.0"
 
-"@pusher/chatkit-server@^1.0.4":
+"@pusher/chatkit-server@1.0.4":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@pusher/chatkit-server/-/chatkit-server-1.0.4.tgz#7a71980edae031b52b2033c8b2d4d09c3d6b176f"
   integrity sha512-71J2bpB7BG+ACWPAOJxdXrOMrOQ/BZxJmES0vbomghWmBTtVzx9a1jX5bVs3jh9R2Y2cwkJf2VFXuUMul3FSGA==
