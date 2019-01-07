@@ -544,7 +544,7 @@ class FilterPanel extends Component {
                                                    key={data.Value}
                                                    control={
                                                        <Switch
-                                                           checked={`this.state.${data.Name}`}
+                                                           checked={data.Name}
                                                            onChange={this.handleChange(`${data.Name}`)}
                                                            value={data.Value}
                                                        />

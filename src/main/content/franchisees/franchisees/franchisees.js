@@ -388,7 +388,7 @@ class Franchisees extends Component {
     getFranchiseesFromStatus =(rawData=this.props.franchisees) =>{
         let data = [];
         let tempData = [];
-        if(!rawData.IsSuccess) return;
+        if(rawData ===null) return;
 
         if(rawData.Data.Region.length===0){
             data = [];
