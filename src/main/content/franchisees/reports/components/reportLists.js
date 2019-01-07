@@ -105,6 +105,8 @@ const styles = theme => ({
         width: 24
     }
 });
+const months = ["January","February","March","April","May","June","July",
+    "August","September","October","November","December"];
 
 class ReportLists extends Component {
     state = {
@@ -231,7 +233,7 @@ class ReportLists extends Component {
     };
     render()
     {
-        const { classes,toggleFilterPanel, filterState, summaryState} = this.props;
+        const { classes} = this.props;
         const { toggleSelection, isSelected} = this;
 
         return (
@@ -299,8 +301,8 @@ class ReportLists extends Component {
                                                 onClick={(event) => {
                                                     event.stopPropagation();
                                                 }}
-                                                checked={isSelected(row.value.key)}
-                                                onChange={() => toggleSelection(row.value.key)}
+                                                checked={isSelected(row.value.FranchiseeNo)}
+                                                onChange={() => toggleSelection(row.value.FranchiseeNo)}
                                             />
                                         )
                                     },
@@ -317,7 +319,7 @@ class ReportLists extends Component {
                                     Header: "Franchisee #",
                                     accessor: "FranchiseeNo",
                                     filterAll: true,
-                                    width: 120,
+                                    // width: 120,
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center")
                                 },
                                 {
@@ -325,18 +327,6 @@ class ReportLists extends Component {
                                     accessor: "FranchiseeName",
                                     filterAll: true,
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center")
-                                },
-                                {
-                                    Header: "Month",
-                                    accessor: "BillMonth",
-                                    className: classNames("flex items-center  justify-center p-12-impor"),
-                                    width: 120,
-                                },
-                                {
-                                    Header: "Year",
-                                    accessor: "BillYear",
-                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-                                    width: 160
                                 },
                                 {
                                     Header: "Total Revenue",
@@ -364,24 +354,16 @@ class ReportLists extends Component {
                                 },
                                 {
                                     Header: "Actions",
-                                    width : 128,
+                                    // width : 128,
                                     Cell  : row => (
-                                        <div className="flex items-center actions">
+                                        <div className="flex items-center actions pl-24">
                                             <IconButton
                                                 onClick={(ev) => {
                                                     ev.stopPropagation();
                                                     this.handleOpen(row.original.key);
                                                 }}
                                             >
-                                                <Icon>delete</Icon>
-                                            </IconButton>
-                                            <IconButton
-                                                onClick={(ev) => {
-                                                    ev.stopPropagation();
-                                                    // this.props.openEditInvoiceForm(row.original);
-                                                }}
-                                            >
-                                                <Icon>edit</Icon>
+                                                <Icon>visibility</Icon>
                                             </IconButton>
                                         </div>
                                     )

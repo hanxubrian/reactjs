@@ -142,6 +142,9 @@ class ReportsApp extends Component {
         data: [],
         selection: [],
         regionId: 0,
+        headerTitle: '',
+        year: '2017',
+        month: '01'
     };
 
     constructor(props){
@@ -195,6 +198,7 @@ class ReportsApp extends Component {
 
         let temp0 = rawData.Data.Region[0].FranchiseeReports;
 
+        this.setState({headerTitle: `${rawData.Data.Region[0].Name} Region Franchisee Reports for ${this.state.month}/${this.state.year} Period`})
         this.setState({temp: temp0});
         this.setState({data: temp0});
     };
@@ -244,7 +248,7 @@ class ReportsApp extends Component {
                                         <Icon className="text-32 mr-12">account_box</Icon>
                                     </FuseAnimate>
                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                        <Typography variant="h6" className="hidden sm:flex">Franchisees | Reports</Typography>
+                                        <Typography variant="h6" className="hidden sm:flex">{this.state.headerTitle}</Typography>
                                     </FuseAnimate>
                                 </div>
                             </div>
