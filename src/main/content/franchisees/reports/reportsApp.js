@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 // core components
-import {Icon, Fab, Typography, Hidden, IconButton} from '@material-ui/core';
+import {Icon, Fab, Typography, Hidden, IconButton, AppBar, Toolbar, Button, Paper, Input} from '@material-ui/core';
 import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
@@ -55,7 +55,7 @@ const styles = theme => ({
             color: 'white!important'
         },
         '& .openFilter':{
-            width: 'inherit'
+            width: 250
         },
         '& .openSummary':{
             width: 300
@@ -104,7 +104,7 @@ const styles = theme => ({
         position: 'relative'
     },
     search: {
-        width: 360,
+        width: '100%',
         [theme.breakpoints.down('sm')]: {
             width: '100%'
         }
@@ -122,6 +122,18 @@ const styles = theme => ({
         backgroundColor: theme.palette.primary.main,
         padding: 12
     },
+    imageIcon: {
+        width: 24
+    },
+    filterPanelButton: {
+        backgroundColor: theme.palette.secondary.main,
+        minWidth: 42,
+        padding: 8,
+        justifyContent: 'center',
+        '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+        }
+    },
 });
 
 class ReportsApp extends Component {
@@ -136,7 +148,7 @@ class ReportsApp extends Component {
         super(props);
 
         if(!props.bLoadedFranchiseeReports) {
-            props.getReports();
+            props.getReports(props.regionId);
         }
         this.fetchData = this.fetchData.bind(this);
     }
@@ -170,12 +182,16 @@ class ReportsApp extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        if(this.props.regionId!==nextProps.regionId) {
+            this.props.getReports(nextProps.regionId);
+        }
+
         if(this.props.franchiseeReports!==nextProps.franchiseeReports)
             this.getFranchiseeReports(nextProps.franchiseeReports);
     }
 
     getFranchiseeReports =(rawData=this.props.franchiseeReports) =>{
-        if(rawData.Data.Region.length===0) return;
+        if(rawData===null) return;
 
         let temp0 = rawData.Data.Region[0].FranchiseeReports;
 
@@ -183,6 +199,12 @@ class ReportsApp extends Component {
         this.setState({data: temp0});
     };
 
+    toggleLeftSidebar = () => {
+    };
+
+    handleChange = prop => event => {
+        this.setState({ [prop]: event.target.value });
+    };
     render()
     {
         const {classes, filterState, toggleFilterPanel} = this.props;
@@ -210,9 +232,9 @@ class ReportsApp extends Component {
                         </FuseAnimate>
                     </div>
                 }
-                // leftSidebarContent={
-                //     <FilterPanel/>
-                // }
+                leftSidebarContent={
+                    <FilterPanel/>
+                }
                 header={
                     <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
                         <div className="flex flex-row flex-1 justify-between">
@@ -264,10 +286,49 @@ class ReportsApp extends Component {
                 }
                 content={
                     <div className="flex-1 flex-col absolute w-full h-full">
-                        <div/>
-                        {
+                        <div className={classNames("flex flex-col h-full")}>
+                            <div className="flex flex-row items-center p-12">
+                                <div className="flex justify-start items-center">
+                                    <Hidden smDown>
+                                        <Button
+                                            onClick={(ev) => toggleFilterPanel()}
+                                            aria-label="toggle filter panel"
+                                            color="secondary"
+                                            disabled={filterState ? true : false}
+                                            className={classNames(classes.filterPanelButton)}
+                                        >
+                                            <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
+                                        </Button>
+                                    </Hidden>
+                                    <Hidden smUp>
+                                        <Button
+                                            onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
+                                            aria-label="toggle filter panel"
+                                            className={classNames(classes.filterPanelButton)}
+                                        >
+                                            <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
+                                        </Button>
+                                    </Hidden>
+                                </div>
+                                <div className="flex items-center w-full h-44 mr-12 ml-12">
+                                    <Paper className={"flex items-center w-full h-44 lg:mr-12 xs:mr-0"}>
+                                        <Input
+                                            placeholder="Search..."
+                                            className={classNames(classes.search, 'pl-16')}
+                                            disableUnderline
+                                            fullWidth
+                                            value={this.state.s}
+                                            onChange={this.handleChange('s')}
+                                            inputProps={{
+                                                'aria-label': 'Search'
+                                            }}
+                                        />
+                                        <Icon color="action" className="mr-16">search</Icon>
+                                    </Paper>
+                                </div>
+                            </div>
                             <ReportLists data={this.state.data}/>
-                        }
+                        </div>
                     </div>
                 }
                 onRef={instance => {

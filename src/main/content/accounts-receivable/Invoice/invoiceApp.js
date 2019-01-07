@@ -195,6 +195,7 @@ class InvoiceApp extends Component {
         this.listenScrollEvent = this.listenScrollEvent.bind(this);
     }
 
+
     componentDidUpdate(prevProps, prevState, snapshot){
         let bChanged = false;
         if(this.props.transactionStatus.checkedPaid !== prevProps.transactionStatus.checkedPaid) {

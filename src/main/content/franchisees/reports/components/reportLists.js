@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 
 // core components
 import {
-    Hidden, Icon, IconButton, Input, Paper, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
+    Hidden, Icon, IconButton, Input, Paper, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+    AppBar, Toolbar, Typography
 } from '@material-ui/core';
 
 //Janiking
@@ -55,11 +56,6 @@ const styles = theme => ({
             top: '250px',
             border: '1px solid coral'
         },
-        '& .ReactTable .rt-thead.-headerGroups': {
-            paddingLeft: '0!important',
-            paddingRight: '0!important',
-            minWidth: 'inherit!important'
-        },
         '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
             background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
             color: 'white!important'
@@ -74,9 +70,8 @@ const styles = theme => ({
         '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
             justifyContent: 'center'
         },
-        '& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
-            width:'inherit!important',
-            minWidth:'inherit!important',
+        '& .rt-thead.-headerGroups': {
+          display: 'none'
         },
         '& .ReactTable .rt-thead .rt-th:last-child': {
             justifyContent: 'flex-end'
@@ -84,12 +79,6 @@ const styles = theme => ({
     },
     content:{
         position: 'relative'
-    },
-    search: {
-        width: 360,
-        [theme.breakpoints.down('sm')]: {
-            width: '100%'
-        }
     },
     tableTheadRow:{
         // backgroundColor: 'rgba(' + hexToRgb(theme.palette.primary.main).r + ',' + hexToRgb(theme.palette.primary.main).g + ',' + hexToRgb(theme.palette.primary.main).b +', .2)'
@@ -101,15 +90,7 @@ const styles = theme => ({
     tableTdEven:{
         // backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b +', .1)'
     },
-    filterPanelButton: {
-        backgroundColor: theme.palette.secondary.main,
-        minWidth: 42,
-        padding: 8,
-        justifyContent: 'center',
-        '&:hover': {
-            backgroundColor: theme.palette.primary.dark,
-        }
-    },
+
     summaryPanelButton: {
         backgroundColor: theme.palette.secondary.main,
         minWidth: 42,
@@ -224,10 +205,6 @@ class ReportLists extends Component {
         }
     }
 
-    handleChange = prop => event => {
-        this.setState({ [prop]: event.target.value });
-    };
-
     fetchData(state, instance) {
         this.setState({
             pageSize: state.pageSize,
@@ -264,25 +241,6 @@ class ReportLists extends Component {
                     minRows = {0}
                     PaginationComponent={JanikingPagination}
                     onFetchData={this.fetchData}
-                    getTheadGroupProps={(state, rowInfo, column, instance) =>{
-                        return {
-                            style:{
-                                padding: "10px 10px",
-                                fontSize: 16,
-                                fontWeight: 700
-                            },
-                        }
-                    }}
-                    getTheadGroupThProps={(state, rowInfo, column, instance) => {
-                        return {
-                            style:{
-                                padding: "10px 10px",
-                                fontSize: 18,
-                                fontWeight: 700,
-                            },
-                            className: classNames("flex items-center justify-start")
-                        }
-                    }}
                     getTheadThProps={(state, rowInfo, column, instance) =>{
                         let border = '1px solid rgba(255,255,255,.6)';
                         if(column.Header==='Actions') border = 'none';
@@ -330,30 +288,6 @@ class ReportLists extends Component {
                     }}
                     columns={[
                         {
-                            Header: (instance)=>(
-                                <div className="flex items-center">
-                                    <Hidden smDown>
-                                        <Button
-                                            onClick={(ev) => toggleFilterPanel()}
-                                            aria-label="toggle filter panel"
-                                            color="secondary"
-                                            disabled={filterState ? true : false}
-                                            className={classNames(classes.filterPanelButton)}
-                                        >
-                                            <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
-                                        </Button>
-                                    </Hidden>
-                                    <Hidden smUp>
-                                        <Button
-                                            onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
-                                            aria-label="toggle filter panel"
-                                            className={classNames(classes.filterPanelButton)}
-                                        >
-                                            <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
-                                        </Button>
-                                    </Hidden>
-                                </div>
-                            ),
                             columns: [
                                 {
                                     Header   : (instance) => (
@@ -378,25 +312,6 @@ class ReportLists extends Component {
                             className: classNames("justify-center")
                         },
                         {
-                            Header: ()=>(
-                                <div className="flex items-center pr-0 lg:pr-12">
-                                    <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
-                                        <Input
-                                            placeholder="Search..."
-                                            className={classNames(classes.search, 'pl-16')}
-                                            // className="pl-16"
-                                            disableUnderline
-                                            fullWidth
-                                            value={this.state.s}
-                                            onChange={this.handleChange('s')}
-                                            inputProps={{
-                                                'aria-label': 'Search'
-                                            }}
-                                        />
-                                        <Icon color="action" className="mr-16">search</Icon>
-                                    </Paper>
-                                </div>
-                            ),
                             columns: [
                                 {
                                     Header: "Franchisee #",
@@ -474,29 +389,6 @@ class ReportLists extends Component {
                             ]
                         },
                         {
-                            Header: (instance)=>(
-                                <div className="flex flex-1 items-center justify-end pr-12" style={{display: 'none'}}>
-                                    <Hidden smDown>
-                                        <Button
-                                            // onClick={(ev) => toggleSummaryPanel()}
-                                            aria-label="toggle summary panel"
-                                            disabled={summaryState ? true : false}
-                                            className={classNames(classes.summaryPanelButton)}
-                                        >
-                                            <Icon>insert_chart</Icon>
-                                        </Button>
-                                    </Hidden>
-                                    <Hidden smUp>
-                                        <Button
-                                            // onClick={(ev) => this.pageLayout.toggleRightSidebar()}
-                                            aria-label="toggle summary panel"
-                                            className={classNames(classes.summaryPanelButton)}
-                                        >
-                                            <Icon>insert_chart</Icon>
-                                        </Button>
-                                    </Hidden>
-                                </div>
-                            ),
                             columns:[
                                 {
                                     Header: '',

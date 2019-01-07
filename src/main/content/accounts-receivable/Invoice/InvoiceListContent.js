@@ -198,7 +198,7 @@ class InvoiceListContent extends Component {
         console.log("selection:", this.state.selection);
     };
 
-
+    toggleLeftSidebar = () => {};
     constructor(props){
         super(props);
 
