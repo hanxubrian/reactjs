@@ -21,11 +21,12 @@ class franchiseesService {
     getFranchiseesList =  (RegionId ,StatusId, Location, Latitude, Longitude, SearchText) => {
         const data = {
             "RegionId": [RegionId],
-            "TransactionStatusId": [StatusId],
+            "StatusId": [StatusId],
             "Location": Location,
             "Latitude": Latitude,
             "Longitude": Longitude,
-            "SearchText": SearchText
+            "SearchText": SearchText,
+            "Radius":0
         };
         return new Promise((resolve, reject) => {
             axios_instance.post(`${BASE_API_URL}/v1/franchisee/franchiseeList`,data)

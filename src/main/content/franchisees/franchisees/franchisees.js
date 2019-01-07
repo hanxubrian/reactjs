@@ -388,7 +388,9 @@ class Franchisees extends Component {
     getFranchiseesFromStatus =(rawData=this.props.franchisees) =>{
         let data = [];
         let tempData = [];
-        if(rawData===null || rawData.Data.Region.length===0){
+        if(!rawData.IsSuccess) return;
+
+        if(rawData.Data.Region.length===0){
             data = [];
             this.setState({temp: data});
             this.setState({data: data});
@@ -979,7 +981,6 @@ function mapStateToProps({franchisees,auth})
         Location: franchisees.Location,
         SearchText: franchisees.SearchText,
         mapViewState: franchisees.bOpenedMapView,
-        bLoadedFilterList: franchisees.bLoadedFilterList
     }
 }
 
