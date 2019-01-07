@@ -530,6 +530,10 @@ class InvoiceLineTable extends React.Component {
         this.setState({data: newData})
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+        return nextProps.id !== this.props.id;
+    }
+
     componentDidUpdate(prevProps, prevState, snapshot){
         if(prevState.data!==this.state.data){
             this.props.updateInvoiceLine(this.state.data);

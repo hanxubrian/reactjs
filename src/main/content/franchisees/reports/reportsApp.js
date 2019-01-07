@@ -7,6 +7,7 @@ import {withRouter} from 'react-router-dom';
 
 //Custom Components
 import FilterPanel from './components/filterPanel';
+import ReportLists from './components/reportLists';
 
 // theme components
 import {FusePageCustom, FuseAnimate} from '@fuse';
@@ -18,7 +19,6 @@ import * as Actions from 'store/actions';
 
 // third party
 import classNames from 'classnames';
-import ReportLists from './components/reportLists';
 import _ from "lodash";
 
 const headerHeight = 80;
@@ -151,7 +151,7 @@ class ReportsApp extends Component {
         this.setState({ [prop]: event.target.value });
     };
     componentWillMount(){
-        // this.getTransactions()
+        this.getFranchiseeReports()
     }
     componentDidUpdate(prevProps, prevState, snapshot){
         let bChanged = false;
@@ -161,43 +161,26 @@ class ReportsApp extends Component {
             bChanged = true;
         }
 
-        // if(bChanged)
-        //     this.getTransactions();
-        //
-        // if(prevProps.transactions!== this.props.transactions){
-        //     this.getTransactions();
-        // }
+        if(bChanged)
+            this.getFranchiseeReports();
+
+        if(prevProps.franchiseeReports!== this.props.franchiseeReports){
+            this.getFranchiseeReports();
+        }
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.props.transactions!==nextProps.transactions)
-            this.getTransactions(nextProps.transactions);
+        if(this.props.franchiseeReports!==nextProps.franchiseeReports)
+            this.getFranchiseeReports(nextProps.franchiseeReports);
     }
 
-    getTransactions =(rawData=this.props.transactions) =>{
-        if(rawData.transactionsDB===null) return;
+    getFranchiseeReports =(rawData=this.props.franchiseeReports) =>{
+        if(rawData.Data.Region.length===0) return;
 
-        let temp0 = rawData.transactionsDB.Data.FranchiseeTransactions;
-        let temp=[];
-        let all_temp=[];
-        const statusStrings = ['Open', 'Completed'];
-        const keys=['checkedOpen', 'checkedCompleted'];
+        let temp0 = rawData.Data.Region[0].FranchiseeReports;
 
-        keys.map((key, index)=> {
-
-            if(this.props.transactionStatus[key]){
-                temp = temp0.filter(d => {
-                    // if(this.props.regionId===0)
-                    return d.Status.toLowerCase() === statusStrings[index].toLowerCase();
-                    // else
-                    //     return d.Status.toLowerCase() === statusStrings[index] && d.RegionId === this.props.regionId
-                });
-            }
-            all_temp =_.uniq([...all_temp, ...temp]);
-            return true;
-        });
-        this.setState({temp: all_temp});
-        this.setState({data: all_temp});
+        this.setState({temp: temp0});
+        this.setState({data: temp0});
     };
 
     render()
@@ -282,9 +265,9 @@ class ReportsApp extends Component {
                 content={
                     <div className="flex-1 flex-col absolute w-full h-full">
                         <div/>
-                        {/*{*/}
-                            {/*<TransactionLists data={this.state.data}/>*/}
-                        {/*}*/}
+                        {
+                            <ReportLists data={this.state.data}/>
+                        }
                     </div>
                 }
                 onRef={instance => {
@@ -307,7 +290,7 @@ function mapDispatchToProps(dispatch)
 function mapStateToProps({franchiseeReports, auth})
 {
     return {
-        franchiseeReports: franchiseeReports,
+        franchiseeReports: franchiseeReports.franchiseeReports,
         bLoadedFranchiseeReports: franchiseeReports.bLoadedFranchiseeReports,
         filterState: franchiseeReports.bOpenedFilterPanelFranchiseeReports,
         regionId: auth.login.defaultRegionId
