@@ -826,9 +826,9 @@ class CustomerListContent extends Component {
 		return this.props.data;
 	}
 	shouldComponentUpdate(nextProps, nextState) {
-		// return false 하면 업데이트를 안함
 		return this.state !== nextState ||
-			this.props.mapViewState !== nextProps.mapViewState
+			this.props.mapViewState !== nextProps.mapViewState ||
+			this.props.data !== nextProps.data
 
 		// return true;
 	}
@@ -953,9 +953,9 @@ class CustomerListContent extends Component {
 								className={classNames(classes.layoutTable, "flex flex-col h-full")}
 							// style={{ flex: '1', }}
 							>
-								{/* <span className={"p-6"}>
-								Rows Selected: {selection.length}
-							</span> */}
+								<span className={"p-6"}>
+									Rows Selected: {selection.length}
+								</span>
 								<Grid
 									rootComponent={GridRootComponent}
 									rows={
@@ -975,11 +975,12 @@ class CustomerListContent extends Component {
 									columns={tableColumnExtensions}
 								>
 									<DragDropProvider />
-									{/* <VirtualTable
-										height="auto"
-									/> */}
 
-									<PagingState
+									<VirtualTable
+										height="auto"
+									/>
+
+									{/* <PagingState
 										defaultCurrentPage={0}
 										// currentPage={currentPage}
 										// onCurrentPageChange={this.changeCurrentPage}
@@ -988,7 +989,7 @@ class CustomerListContent extends Component {
 										defaultPageSize={20}
 									/>
 
-									<PagingPanel pageSizes={pageSizes} />
+									<PagingPanel pageSizes={pageSizes} /> */}
 
 									<SelectionState
 										selection={selection}
@@ -997,7 +998,7 @@ class CustomerListContent extends Component {
 									{/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
 									<IntegratedSelection />
 
-									<IntegratedPaging />
+									{/* <IntegratedPaging /> */}
 
 
 									<SortingState
@@ -1026,13 +1027,13 @@ class CustomerListContent extends Component {
 
 
 
-									<GroupingState
+									{/* <GroupingState
 										grouping={grouping}
 										onGroupingChange={this.changeGrouping}
 									// defaultGrouping={[]}
 									// columnExtensions={tableColumnExtensions}
 									/>
-									<IntegratedGrouping />
+									<IntegratedGrouping /> */}
 
 									{/* <BooleanTypeProvider
 									for={booleanColumns}
@@ -1048,7 +1049,7 @@ class CustomerListContent extends Component {
 								/> */}
 
 
-									<Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} />
+									{/* <Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} /> */}
 									<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
 									<TableHeaderRow showSortingControls />
 									{/* showGroupingControls */}
@@ -1074,10 +1075,10 @@ class CustomerListContent extends Component {
 									/>
 									{/* Column Visibility */}
 									{/* Disable Column Visibility Toggling */}
-									<TableColumnVisibility
+									{/* <TableColumnVisibility
 										defaultHiddenColumnNames={[]}
 										columnExtensions={tableColumnExtensions}
-									/>
+									/> */}
 									{/* <Toolbar /> */}
 									{/* <SearchPanel /> */}
 									{/* Column Visibility */}
