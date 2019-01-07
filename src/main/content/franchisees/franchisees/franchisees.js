@@ -865,12 +865,6 @@ class Franchisees extends Component {
                                                     width: 150
                                                 },
                                                 {
-                                                    Header: "DISTRIBUTION AMOUNT",
-                                                    accessor: "DistributionAmount",
-                                                    className: classNames("flex items-center  justify-end p-12-impor"),
-                                                    width: 200
-                                                },
-                                                {
                                                     Header: "Actions",
                                                     width : 150,
                                                     className: classNames("flex items-center  justify-center p-12-impor"),
