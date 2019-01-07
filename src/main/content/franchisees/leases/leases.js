@@ -398,7 +398,7 @@ class Leases extends Component {
 		});
 
 		regions.forEach(x => {
-			all_temp = [...all_temp, ...x.Leases];
+			all_temp = [...all_temp, ...x.LeaseList];
 		});
 
 		// regions.map(x => {

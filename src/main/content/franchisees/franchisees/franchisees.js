@@ -485,7 +485,6 @@ class Franchisees extends Component {
     {
         const { classes,toggleFilterPanelFranchisees,showCreteFranchisees, toggleSummaryPanelFranchisees, createFranchisees, filterStateFranchisees, summaryStateFranchisees, toggleFranchiseeMapView, mapViewState} = this.props;
         const { toggleSelection, toggleAll, isSelected} = this;
-
         const { selection } = this.state;
         return (
             <FusePageCustomSidebarScroll
