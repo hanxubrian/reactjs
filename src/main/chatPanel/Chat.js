@@ -196,7 +196,7 @@ class Chat extends Component {
                             <div className="flex flex-col flex-1 items-center justify-center p-24">
                                 <Icon className="text-128" color="disabled">chat</Icon>
                                 <Typography className="px-16 pb-24 mt-24 text-center" color="textSecondary">
-                                    Select a contact to start a conversation.
+                                    Select  a contact to start a conversation.
                                 </Typography>
                             </div>
                         ) :
