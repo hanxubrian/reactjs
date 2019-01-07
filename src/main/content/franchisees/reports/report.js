@@ -159,11 +159,13 @@ class Report extends Component {
             cb_total += parseFloat(st.TRX_TOT);
         });
 
-        REG_MISC.forEach(sm=>{
-            sm_amount += parseFloat(sm.TRX_AMT);
-            sm_tax += parseFloat(sm.TRX_TAX);
-            sm_total += parseFloat(sm.TRX_TOT);
-        });
+        if(REG_MISC!==null ) {
+            REG_MISC.forEach(sm => {
+                sm_amount += parseFloat(sm.TRX_AMT);
+                sm_tax += parseFloat(sm.TRX_TAX);
+                sm_total += parseFloat(sm.TRX_TOT);
+            });
+        }
 
         SUPPLY_TRXS.forEach(st=>{
             st_extended += parseFloat(st.EXTENDED);
@@ -888,103 +890,106 @@ class Report extends Component {
                     </CardContent>
                 </Card>
 
-                <Card className={classNames(classes.card, "mx-auto mt-64")}>
-                    <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
+                {REG_MISC!==null && (
+                    <Card className={classNames(classes.card, "mx-auto mt-64")}>
+                        <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
 
-                        <div>
-                            <table align="center">
-                                <tbody>
-                                {this.renderHeader()}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div className="">
                             <div>
-                                <table className="mb-16">
+                                <table align="center">
                                     <tbody>
-                                    <tr>
-                                        <td className="pr-16 pb-4">
-                                            <Typography className="font-light" variant="h6" color="textSecondary">
-                                                Franchisee Code
-                                            </Typography>
-                                        </td>
-                                        <td className="pb-4">
-                                            <Typography className="font-light" variant="h6" color="inherit">
-                                                Name
-                                            </Typography>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td className="pr-16">
-                                            <Typography color="textSecondary">
-                                                {DLR_CODE}
-                                            </Typography>
-                                        </td>
-                                        <td>
-                                            <Typography color="inherit">
-                                                {SUMMARY_PAGE[0].FRAN_NAME}
-                                            </Typography>
-                                        </td>
-                                    </tr>
+                                    {this.renderHeader()}
                                     </tbody>
                                 </table>
                             </div>
 
-                            <div className="mt-64">
-                                <table className="simple invoice-table">
-                                    <thead>
-                                    <tr>
-                                        <th>
-                                            <h2>Regular Misc</h2>
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr >
-                                        <td>
-                                            <Typography >Type</Typography>
-                                        </td>
-                                        <td className="text-center">
-                                            Description
-                                        </td>
-                                        <td className="text-center">
-                                            Tax Amt
-                                        </td>
-                                        <td className="text-center">
-                                            Tax
-                                        </td>
-                                        <td className="text-center">
-                                            Total Amt
-                                        </td>
-                                    </tr>
-                                    {REG_MISC.map((sm, index)=>{
-                                        return (
-                                            <tr key={index} >
-                                                <td>{sm.TYPE}</td>
-                                                <td>
-                                                    <Typography >{FuseUtils.capital_letter(sm.DESCR)}</Typography>
-                                                </td>
-                                                <td className="text-right">{parseFloat(sm.TRX_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td className="text-right">{parseFloat(sm.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td className="text-right">{parseFloat(sm.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                            </tr>
-                                        )
-                                    })}
-                                    <tr >
-                                        <td><Typography >Total Special</Typography></td>
-                                        <td className="text-center"></td>
-                                        <td className="text-right">{sm_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                        <td className="text-right">{sm_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                        <td className="text-right">{sm_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                            <div className="">
+                                <div>
+                                    <table className="mb-16">
+                                        <tbody>
+                                        <tr>
+                                            <td className="pr-16 pb-4">
+                                                <Typography className="font-light" variant="h6" color="textSecondary">
+                                                    Franchisee Code
+                                                </Typography>
+                                            </td>
+                                            <td className="pb-4">
+                                                <Typography className="font-light" variant="h6" color="inherit">
+                                                    Name
+                                                </Typography>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td className="pr-16">
+                                                <Typography color="textSecondary">
+                                                    {DLR_CODE}
+                                                </Typography>
+                                            </td>
+                                            <td>
+                                                <Typography color="inherit">
+                                                    {SUMMARY_PAGE[0].FRAN_NAME}
+                                                </Typography>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div className="mt-64">
+                                    <table className="simple invoice-table">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                <h2>Regular Misc</h2>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr >
+                                            <td>
+                                                <Typography >Type</Typography>
+                                            </td>
+                                            <td className="text-center">
+                                                Description
+                                            </td>
+                                            <td className="text-center">
+                                                Tax Amt
+                                            </td>
+                                            <td className="text-center">
+                                                Tax
+                                            </td>
+                                            <td className="text-center">
+                                                Total Amt
+                                            </td>
+                                        </tr>
+                                        {REG_MISC!==null && REG_MISC.map((sm, index)=>{
+                                            return (
+                                                <tr key={index} >
+                                                    <td>{sm.TYPE}</td>
+                                                    <td>
+                                                        <Typography >{FuseUtils.capital_letter(sm.DESCR)}</Typography>
+                                                    </td>
+                                                    <td className="text-right">{parseFloat(sm.TRX_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td className="text-right">{parseFloat(sm.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td className="text-right">{parseFloat(sm.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                </tr>
+                                            )
+                                        })}
+                                        <tr >
+                                            <td><Typography >Total Special</Typography></td>
+                                            <td className="text-center"></td>
+                                            <td className="text-right">{sm_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td className="text-right">{sm_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td className="text-right">{sm_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                    </CardContent>
-                </Card>
+                        </CardContent>
+                    </Card>
+                )}
+
             </div>
         )
     }
@@ -1003,6 +1008,5 @@ function mapStateToProps({auth, franchiseeReports})
         all_regions: auth.login.all_regions
     }
 }
-
 
 export default  withStyles(styles)(withRouter(connect(mapStateToProps, mapDispatchToProps)(Report)));
