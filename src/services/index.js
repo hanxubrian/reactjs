@@ -3,7 +3,7 @@ import _menuService from './menu/menuService';
 import _franchiseesService from './franchisees/franchiseesService';
 import _initialService from './initial/initialService';
 import _invoiceService from './invoice/invoiceServices';
-import _chatService from './chat/chatService';
+import _chatService from './chat/ChatService';
 export const authService = _authService;
 export const menuService = _menuService;
 export const franchiseesService = _franchiseesService;
