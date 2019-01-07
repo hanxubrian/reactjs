@@ -70,6 +70,7 @@ class FilterPanel extends Component {
         State: '',
         contactState: '',
         locationValue: 'all',
+        radius: 0
     };
 
     componentDidMount()
@@ -144,6 +145,12 @@ class FilterPanel extends Component {
         this.props.selectLocation(event.target.value);
         this.setState({ locationValue: event.target.value });
     };
+    handleFilterChange = name => event => {
+        this.setState({
+            [name]: event.target.value,
+        });
+    };
+
     render()
     {
         const {classes, franchiseesForm} = this.props;
@@ -494,7 +501,44 @@ class FilterPanel extends Component {
                                        <FormControlLabel value="all" control={<Radio />} label="All" />
                                        <FormControlLabel value="nearby" control={<Radio />} label="Near By" />
                                        <FormControlLabel value="address" control={<Radio />} label="Near Specific Address" />
+                                       {this.state.locationValue === "address" && (
+                                           <TextField
+                                               id="address"
+                                               label="Zip code or Address"
+                                               className={classes.textField}
+                                               value={this.state.address}
+                                               onChange={this.handleFilterChange('address')}
+                                               margin="normal"
+                                               variant="outlined"
+                                           />
+                                       ) }
                                        <FormControlLabel value="radius" control={<Radio />} label="Radius" />
+                                       {this.state.locationValue === "radius" && (
+                                           <TextField
+                                               id="franchisee_filter_radius"
+                                               select
+                                               label="Radius"
+                                               className={classes.textField}
+                                               value={this.state.radius}
+                                               onChange={this.handleFilterChange('radius')}
+                                               SelectProps={{
+                                                   MenuProps: {
+                                                       className: classes.menu,
+                                                   },
+                                               }}
+                                               margin="normal"
+                                               variant="outlined"
+                                           >
+                                               {
+                                                   Array.apply(null, {length: 15}).map(Number.call, Number)
+                                                       .map((val, index) => (
+                                                           <MenuItem key={index} value={index}>
+                                                               {(index) * 5} Miles
+                                                           </MenuItem>
+                                                       ))
+                                               }
+                                           </TextField>
+                                       )}
                                    </RadioGroup>
                                 </FormControl>
                                 <br/>
@@ -642,7 +686,8 @@ function mapStateToProps({franchisees})
         filterStateFranchisees: franchisees.bOpenedSummaryPanelFranchisees,
         transactionStatusFranchisees: franchisees.transactionStatusFranchisees,
         franchiseesForm: franchisees.createFranchisees,
-        Location: franchisees.Location
+        Location: franchisees.Location,
+        FranchiseeFilterList: franchisees.FranchiseeFilterList
     }
 }
 

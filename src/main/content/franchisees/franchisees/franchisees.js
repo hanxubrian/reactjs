@@ -979,7 +979,8 @@ function mapStateToProps({franchisees,auth})
         Latitude: franchisees.Latitude,
         Location: franchisees.Location,
         SearchText: franchisees.SearchText,
-        mapViewState: franchisees.bOpenedMapView
+        mapViewState: franchisees.bOpenedMapView,
+        bLoadedFilterList: franchisees.bLoadedFilterList
     }
 }
 

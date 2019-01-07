@@ -14,6 +14,8 @@ const initialState = {
     Longitude: "",
     Latitude: "",
     SearchText: "",
+    franchiseeFilterList: null,
+    bLoadedFilterList: false,
     transactionStatusFranchisees:{
         checkedSelectAll: true,
         checkedActive: true,
@@ -49,6 +51,14 @@ const franchisees = function(state = initialState, action) {
                 bLoadedFranchisees: true,
                 bOpenedFilterPanelFranchisees: state.bOpenedFilterPanelFranchisees
             };
+        }
+        case Actions.GET_FILTER_LIST:
+        {
+            return{
+                ...state,
+                franchiseeFilterList: action.payload,
+                bLoadedFilterList: true
+            }
         }
         case Actions.TOGGLE_FILTER_PANEL_FRANCHISEES:
         {
