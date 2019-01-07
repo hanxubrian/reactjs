@@ -12,7 +12,8 @@ const initialState = {
             open: false
         },
         data : null
-    }
+    },
+    reportDate: "Sun Jan 01 2017 12:00:00 GMT-0600 (Central Standard Time)"
 };
 
 
@@ -40,12 +41,6 @@ const franchiseeReports = function(state = initialState, action) {
                 ...state, bOpenedFilterPanelFranchiseeReports: !state.bOpenedFilterPanelFranchiseeReports
             }
         }
-        case UserActions.USER_LOGGED_OUT:
-        {
-            return {
-                ...initialState
-            }
-        }
         case Actions.OPEN_EDIT_FRANCHISEES_FORM:
         {
             return {
@@ -71,6 +66,18 @@ const franchiseeReports = function(state = initialState, action) {
                     data : null
                 }
             };
+        }
+        case Actions.UPDATE_REPORT_DATE:
+        {
+            return {
+                ...state, reportDate: action.payload
+            }
+        }
+        case UserActions.USER_LOGGED_OUT:
+        {
+            return {
+                ...initialState
+            }
         }
         default:
         {
