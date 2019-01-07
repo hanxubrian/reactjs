@@ -9,26 +9,35 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 
+import 'date-fns'
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 
+//Store
 import * as Actions from 'store/actions';
-
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import classNames from 'classnames';
+
+//third party
+import moment from "moment"
+
+import {UPDATE_FROM_DATE_INVOICE, UPDATE_TO_DATE_INVOICE} from "../../../../store/actions";
+
 
 const styles = theme => ({
     root : {
     },
     panel: {
         position                      : 'absolute',
-        width                         : 300,
+        width                         : 250,
         backgroundColor               : theme.palette.background.paper,
         boxShadow                     : theme.shadows[3],
         top                           : 0,
         height                        : '100%',
         minHeight                     : '100%',
         bottom                        : 0,
-        left                         :  -300,
+        left                         :  -250,
         margin                        : 0,
         zIndex                        : 1000,
         transform                     : 'translate3d(50px,0,0)',
@@ -45,7 +54,7 @@ const styles = theme => ({
             duration: theme.transitions.duration.standard
         }),
         '&.opened1'                    : {
-            transform: 'translateX(300px)'
+            transform: 'translateX(250px)'
         }
     }
 });
@@ -60,7 +69,9 @@ class FilterPanel extends Component {
         invoiceDate:'',
         checkedEbill: true,
         checkedPrint: true,
-        invoiceStatus: []
+        invoiceStatus: [],
+        FromDate: undefined,
+        ToDate: undefined
     };
 
     componentDidMount()
@@ -73,14 +84,22 @@ class FilterPanel extends Component {
             checkedComplete: this.props.transactionStatus.checkedComplete,
             checkedEbill: this.props.transactionStatus.checkedEbill,
             checkedPrint: this.props.transactionStatus.checkedPrint});
+        this.setState({FromDate: this.props.FromDate});
+        this.setState({ToDate: this.props.ToDate});
     }
 
     componentDidUpdate(prevProps, prevState, snapshot)
     {
         if(prevProps.invoiceStatus!==this.props.invoiceStatus){
             this.setState({invoiceStatus: this.props.invoiceStatus})
-
         }
+        if(prevProps.FromDate!==this.props.FromDate){
+            this.setState({FromDate: this.props.FromDate})
+        }
+        if(prevProps.ToDate!==this.props.ToDate){
+            this.setState({ToDate: this.props.ToDate})
+        }
+
         if ( this.props.state !== prevProps.state )
         {
             if ( this.props.state )
@@ -114,51 +133,87 @@ class FilterPanel extends Component {
     handleChange1 = event => {
         this.setState({[event.target.name]: event.target.value});
     };
+
+    handleInvoiceFromDateChange = date => {
+        this.setState({FromDate: date});
+        this.props.updateDate(UPDATE_FROM_DATE_INVOICE, moment(date).format("MM/DD/YYYY"));
+    }
+
+    handleInvoiceToDateChange = date => {
+        this.setState({ ToDate: date });
+        this.props.updateDate(UPDATE_TO_DATE_INVOICE, moment(date).format("MM/DD/YYYY"));
+    };
+
     render()
     {
         const {classes} = this.props;
 
-        console.log('status=', this.state.invoiceStatus);
+        console.log('status=', this.state.FromDate, this.state.ToDate);
 
         return (
             <div className={classNames(classes.root)}>
                 <div className={classNames("flex flex-col")}>
                     <Paper className="flex flex-1 flex-col min-h-px p-20">
-                        <div >
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <h3 className="mb-20">Filter by Date</h3>
-                            <FormControl className={classes.formControl} style={{width: 200}}>
-                                {/*<InputLabel htmlFor="age-simple">Invoice Date</InputLabel>*/}
-                                <Select
-                                    value={this.state.invoiceDate}
-                                    onChange={this.handleChange1}
-                                    inputProps={{
-                                        name: 'invoiceDate',
-                                        id  : 'invoice_date'
-                                    }}
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={1}>This Week</MenuItem>
-                                    <MenuItem value={2}>This Week-to-date</MenuItem>
-                                    <MenuItem value={3}>This Month</MenuItem>
-                                    <MenuItem value={4}>This Month-to-date</MenuItem>
-                                    <MenuItem value={5}>This Quarter</MenuItem>
-                                    <MenuItem value={6}>This Quarter-to-Date</MenuItem>
-                                    <MenuItem value={7}>This Fiscal Year</MenuItem>
-                                    <MenuItem value={8}>This Fiscal Year-to-date</MenuItem>
-                                    <MenuItem value={9}>Today</MenuItem>
-                                    <MenuItem value={10}>Yesterday</MenuItem>
-                                    <MenuItem value={11}>This Month</MenuItem>
-                                    <MenuItem value={12}>Last Quarter</MenuItem>
-                                    <MenuItem value={13}>Last Year</MenuItem>
-                                    <MenuItem value={14}>Custom Date</MenuItem>
-                                    <MenuItem value={15}>Period</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </div>
+                            <DatePicker
+                                margin="none"
+                                label="From Date"
+                                name="InvoiceDate"
+                                variant="outlined"
+                                format="MM/dd/YYYY"
+                                value={this.state.FromDate}
+                                onChange={this.handleInvoiceFromDateChange}
+                                fullWidth
+                                required
+                            />
+                            <br></br>
+                            <DatePicker
+                                margin="none"
+                                label="To Date"
+                                name="ToDate"
+                                variant="outlined"
+                                format="MM/dd/YYYY"
+                                value={this.state.ToDate}
+                                onChange={this.handleInvoiceToDateChange}
+                                fullWidth
+                                required
+                                style={{marginTop: '30px!important'}}
+                            />
 
-                        <div style={{marginTop: 50, display: 'flex', flexDirection: 'column'}}>
+                            {/*<FormControl className={classes.formControl} style={{width: 200}}>*/}
+                            {/*/!*<InputLabel htmlFor="age-simple">Invoice Date</InputLabel>*!/*/}
+                            {/*<Select*/}
+                            {/*value={this.state.invoiceDate}*/}
+                            {/*onChange={this.handleChange1}*/}
+                            {/*inputProps={{*/}
+                            {/*name: 'invoiceDate',*/}
+                            {/*id  : 'invoice_date'*/}
+                            {/*}}*/}
+                            {/*>*/}
+                            {/*<MenuItem value="">*/}
+                            {/*<em>None</em>*/}
+                            {/*</MenuItem>*/}
+                            {/*<MenuItem value={1}>This Week</MenuItem>*/}
+                            {/*<MenuItem value={2}>This Week-to-date</MenuItem>*/}
+                            {/*<MenuItem value={3}>This Month</MenuItem>*/}
+                            {/*<MenuItem value={4}>This Month-to-date</MenuItem>*/}
+                            {/*<MenuItem value={5}>This Quarter</MenuItem>*/}
+                            {/*<MenuItem value={6}>This Quarter-to-Date</MenuItem>*/}
+                            {/*<MenuItem value={7}>This Fiscal Year</MenuItem>*/}
+                            {/*<MenuItem value={8}>This Fiscal Year-to-date</MenuItem>*/}
+                            {/*<MenuItem value={9}>Today</MenuItem>*/}
+                            {/*<MenuItem value={10}>Yesterday</MenuItem>*/}
+                            {/*<MenuItem value={11}>This Month</MenuItem>*/}
+                            {/*<MenuItem value={12}>Last Quarter</MenuItem>*/}
+                            {/*<MenuItem value={13}>Last Year</MenuItem>*/}
+                            {/*<MenuItem value={14}>Custom Date</MenuItem>*/}
+                            {/*<MenuItem value={15}>Period</MenuItem>*/}
+                            {/*</Select>*/}
+                            {/*</FormControl>*/}
+                        </MuiPickersUtilsProvider>
+
+                        <div style={{marginTop: 20, display: 'flex', flexDirection: 'column'}}>
                             <h3>Invoice Status</h3>
                             {this.props.invoiceStatus.length>0 && this.props.invoiceStatus.map((iv, index)=> {
                                 return (
@@ -167,7 +222,7 @@ class FilterPanel extends Component {
                                         control={
                                             <Switch
                                                 checked={this.state.checkedPaid}
-                                                onChange={this.handleChange(iv.Name)}
+                                                // onChange={this.handleChange(iv.Name)}
                                                 value="checkedPaid"
                                             />
                                         }
@@ -187,7 +242,7 @@ class FilterPanel extends Component {
                                 }
                                 label="Ebill (Email)"
                             />
-                              <FormControlLabel
+                            <FormControlLabel
                                 control={
                                     <Switch
                                         checked={this.state.checkedPrint}
@@ -208,7 +263,8 @@ class FilterPanel extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        toggleStatus: Actions.toggleStatus
+        toggleStatus: Actions.toggleStatus,
+        updateDate: Actions.updateDate
     }, dispatch);
 }
 
@@ -217,8 +273,10 @@ function mapStateToProps({invoices})
     return {
         filterState: invoices.bOpenedFilterPanel,
         transactionStatus: invoices.transactionStatus,
-        invoiceStatus: invoices.invoiceStatus
+        invoiceStatus: invoices.invoiceStatus,
+        FromDate: invoices.FromDate,
+        ToDate: invoices.ToDate,
     }
 }
 
-export default (withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(FilterPanel)));
+export default (withStyles(styles,{withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(FilterPanel)));

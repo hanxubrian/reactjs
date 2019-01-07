@@ -9,6 +9,9 @@ export const REMOVE_SELECTED_INVOICE = "[INVOICE] REMOVE SELECTED";
 export const TOGGLE_SUMMARY_PANEL = "[INVOICES] TOGGLE SUMMARY PANEL";
 export const TOGGLE_FILTER_STATUS = "[INVOICES] TOGGLE FILTER STATUS";
 export const TOGGLE_FILTER_PANEL = "[INVOICES] TOGGLE FILTER PANEL";
+export const UPDATE_FROM_DATE_INVOICE = "[INVOICES] UPDATE FROM DATE";
+export const UPDATE_TO_DATE_INVOICE = "[INVOICES] UPDATE TO DATE";
+
 // for Add/Edit
 export const OPEN_NEW_INVOICE_FORM = '[INVOICES APP] OPEN NEW INVOICE FORM';
 export const CLOSE_NEW_INVOICE_FORM = '[INVOICES APP] CLOSE NEW INVOICE FORM';
@@ -133,6 +136,14 @@ export function closeEditInvoiceForm()
     return {
         type: CLOSE_EDIT_INVOICE_FORM
     }
+}
+
+export function updateDate(key, date) {
+    return {
+        type: key,
+        payload: date
+    }
+
 }
 
 export function addInvoice(newInvoice)

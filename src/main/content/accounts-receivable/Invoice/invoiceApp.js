@@ -232,7 +232,10 @@ class InvoiceApp extends Component {
             bChanged = true;
         }
 
-        if(this.props.regionId !== prevProps.regionId) {
+        if(regionId !== prevProps.regionId ||
+        FromDate !== prevProps.FromDate ||
+        ToDate !== prevProps.ToDate
+        ) {
             this.props.getInvoices([regionId] ,StatusId, FromDate, ToDate, PeriodId,
                 OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText);
         }
@@ -282,6 +285,7 @@ class InvoiceApp extends Component {
         const keys=['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
 
         if(rawData===null) return;
+        if(rawData.Data.Region.length===0) return;
 
         let temp0 = rawData.Data.Region[0].InvList;
 
@@ -568,6 +572,7 @@ function mapStateToProps({invoices, auth, customers})
         invoices: invoices.invoicesDB,
         bLoadedInvoices: invoices.bLoadedInvoices,
         transactionStatus: invoices.transactionStatus,
+        invoiceStatus: invoices.invoiceStatus,
         filterState: invoices.bOpenedFilterPanel,
         summaryState: invoices.bOpenedSummaryPanel,
         regionId: auth.login.defaultRegionId,

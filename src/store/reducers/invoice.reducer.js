@@ -4,6 +4,7 @@ import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+
 let today = new Date();
 const initialState = {
     invoicesDB: null,
@@ -45,6 +46,18 @@ const invoices = function(state = initialState, action) {
         {
             return {
                 ...state, invoiceStatus: action.payload
+            }
+        }
+        case Actions.UPDATE_FROM_DATE_INVOICE:
+        {
+            return {
+                ...state, FromDate: action.payload
+            }
+        }
+        case Actions.UPDATE_TO_DATE_INVOICE:
+        {
+            return {
+                ...state, ToDate: action.payload
             }
         }
         case Actions.TOGGLE_FILTER_PANEL:
