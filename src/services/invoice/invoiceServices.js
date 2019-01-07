@@ -50,7 +50,7 @@ class invoiceService {
 
     getInvoiceStatusList = (RegionId) => {
         return new Promise((resolve, reject) => {
-            axios_instance.get(`${BASE_API_URL}/v1/lists/GetTransactionStatusList`,
+            axios_instance.get(`${BASE_API_URL}/v1/lists/GetInvoiceStatusList`,
                 { params: {RegionId: RegionId}}
             )
                 .then( res => {
