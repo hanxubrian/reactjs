@@ -59,7 +59,8 @@ class FilterPanel extends Component {
         checkedOpen: true,
         invoiceDate:'',
         checkedEbill: true,
-        checkedPrint: true
+        checkedPrint: true,
+        invoiceStatus: []
     };
 
     componentDidMount()
@@ -74,8 +75,12 @@ class FilterPanel extends Component {
             checkedPrint: this.props.transactionStatus.checkedPrint});
     }
 
-    componentDidUpdate(prevProps)
+    componentDidUpdate(prevProps, prevState, snapshot)
     {
+        if(prevProps.invoiceStatus!==this.props.invoiceStatus){
+            this.setState({invoiceStatus: this.props.invoiceStatus})
+
+        }
         if ( this.props.state !== prevProps.state )
         {
             if ( this.props.state )
@@ -112,6 +117,8 @@ class FilterPanel extends Component {
     render()
     {
         const {classes} = this.props;
+
+        console.log('status=', this.state.invoiceStatus);
 
         return (
             <div className={classNames(classes.root)}>
@@ -153,46 +160,21 @@ class FilterPanel extends Component {
 
                         <div style={{marginTop: 50, display: 'flex', flexDirection: 'column'}}>
                             <h3>Invoice Status</h3>
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={this.state.checkedPaid}
-                                        onChange={this.handleChange('checkedPaid')}
-                                        value="checkedPaid"
+                            {this.props.invoiceStatus.length>0 && this.props.invoiceStatus.map((iv, index)=> {
+                                return (
+                                    <FormControlLabel
+                                        key={index}
+                                        control={
+                                            <Switch
+                                                checked={this.state.checkedPaid}
+                                                onChange={this.handleChange(iv.Name)}
+                                                value="checkedPaid"
+                                            />
+                                        }
+                                        label={iv.Name}
                                     />
-                                }
-                                label="Paid"
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={this.state.checkedPP}
-                                        onChange={this.handleChange('checkedPP')}
-                                        value="checkedPP"
-                                    />
-                                }
-                                label="Paid Partial"
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={this.state.checkedComplete}
-                                        onChange={this.handleChange('checkedComplete')}
-                                        value="checkedComplete"
-                                    />
-                                }
-                                label="Completed"
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={this.state.checkedOpen}
-                                        onChange={this.handleChange('checkedOpen')}
-                                        value="checkedOpen"
-                                    />
-                                }
-                                label="Open"
-                            />
+                                )
+                            })}
                             <br></br>
                             <h3>Delivery Method</h3>
                             <FormControlLabel
@@ -234,7 +216,8 @@ function mapStateToProps({invoices})
 {
     return {
         filterState: invoices.bOpenedFilterPanel,
-        transactionStatus: invoices.transactionStatus
+        transactionStatus: invoices.transactionStatus,
+        invoiceStatus: invoices.invoiceStatus
     }
 }
 
