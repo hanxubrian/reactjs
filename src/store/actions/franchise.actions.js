@@ -15,6 +15,7 @@ export const CLOSE_EDIT_FRANCHISEES_FORM = "[FRANCHISEES] FRANCHISEES EDIT CLOSE
 export const UPDATE_FRANCHISEES = '[FRANCHISEES] UPDATE FRANCHISEES';
 export const ADD_FRANCHISEES = '[FRANCHISEES] ADD FRANCHISEES';
 export const TOGGLE_FRANCHISEE_MAP_VIEW = '[FRANCHISEES] TOGGLE FRANCHISEE MAP VIEW';
+export const SELECTED_LOCATION = '[FRANCHISEES] SELECTED LOCATION';
 
 export function getFranchisees(regionId, statusId, location , latitude , longitude , searchtext) {
     return (dispatch) => {
@@ -149,3 +150,9 @@ export function toggleFranchiseeMapView(){
     }
 }
 
+export function selectLocation(location){
+    return {
+        type: SELECTED_LOCATION,
+        Location: location
+    }
+}

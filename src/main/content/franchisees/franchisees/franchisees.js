@@ -343,6 +343,11 @@ class Franchisees extends Component {
             bChanged = true;
         }
 
+        if(this.props.Location !== prevProps.Location){
+            this.props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
+            bChanged = true;
+        }
+
         if(bChanged)
             this.getFranchiseesFromStatus();
 

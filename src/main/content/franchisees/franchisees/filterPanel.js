@@ -141,6 +141,7 @@ class FilterPanel extends Component {
         });
     };
     handleLocationChange = event => {
+        this.props.selectLocation(event.target.value);
         this.setState({ locationValue: event.target.value });
     };
     render()
@@ -492,7 +493,7 @@ class FilterPanel extends Component {
                                    >
                                        <FormControlLabel value="all" control={<Radio />} label="All" />
                                        <FormControlLabel value="nearby" control={<Radio />} label="Near By" />
-                                       <FormControlLabel value="nearSpecificAddress" control={<Radio />} label="Near Specific Address" />
+                                       <FormControlLabel value="address" control={<Radio />} label="Near Specific Address" />
                                        <FormControlLabel value="radius" control={<Radio />} label="Radius" />
                                    </RadioGroup>
                                 </FormControl>
@@ -630,7 +631,8 @@ class FilterPanel extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        toggleStatusFranchisees: Actions.toggleStatusFranchisees
+        toggleStatusFranchisees: Actions.toggleStatusFranchisees,
+        selectLocation: Actions.selectLocation
     }, dispatch);
 }
 

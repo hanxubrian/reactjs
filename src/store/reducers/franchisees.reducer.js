@@ -44,9 +44,10 @@ const franchisees = function(state = initialState, action) {
         case Actions.GET_ALL_FRANCHISEES:
         {
             return {
-                ...initialState,
+                ...state,
                 franchiseesDB: action.payload,
                 bLoadedFranchisees: true,
+                bOpenedFilterPanelFranchisees: state.bOpenedFilterPanelFranchisees
             };
         }
         case Actions.TOGGLE_FILTER_PANEL_FRANCHISEES:
@@ -140,6 +141,13 @@ const franchisees = function(state = initialState, action) {
         {
             return {
                 ...state, bOpenedMapView: !state.bOpenedMapView
+            }
+        }
+        case Actions.SELECTED_LOCATION:
+        {
+            return{
+                ...state,
+                Location: action.Location
             }
         }
         default:
