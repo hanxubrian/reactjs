@@ -67,7 +67,7 @@ const franchisees = function(state = initialState, action) {
             }
             return{
                 ...state,
-                franchiseeFilterList: franchiseeStatus,
+                franchiseeStatus: franchiseeStatus,
                 bLoadedFilterList: true
             }
         }

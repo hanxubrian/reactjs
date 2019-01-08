@@ -118,7 +118,7 @@ class FilterPanel extends Component {
 
     handleChange = (index,name) => event => {
 
-        const iStatus = this.state.franchiseeStatus;
+        const iStatus = this.props.franchiseeStatus;
         iStatus[index][name] = event.target.checked;
 
         this.setState({franchiseeStatus: iStatus });
