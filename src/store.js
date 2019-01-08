@@ -26,6 +26,7 @@ const enhancer = composeEnhancers(
 const persistConfig = {
     key: 'janiking_web',
     storage: storage,
+    blacklist: ['invoices', 'customers', 'franchisees', 'franchiseeReports', 'chatPanel', 'leads', 'leases'],
     stateReconciler: autoMergeLevel2 // see "Merge Process" section for details.
 };
 

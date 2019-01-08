@@ -151,7 +151,6 @@ class FilterPanel extends Component {
     render()
     {
         const {classes} = this.props;
-        console.log('xxx=', this.props.settings);
         return (
             <div className={classNames(classes.root)}>
                 <div className={classNames("flex flex-col")}>
