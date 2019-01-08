@@ -62,11 +62,6 @@ const styles = theme => ({
 class FilterPanel extends Component {
 
     state = {
-        checkedPaid: true,
-        checkedPP: true,
-        checkedComplete: true,
-        checkedOpen: true,
-        invoiceDate:'',
         checkedEbill: true,
         checkedPrint: true,
         invoiceStatus: [],
@@ -79,11 +74,11 @@ class FilterPanel extends Component {
     }
 
     componentWillMount(){
-        this.setState({checkedPaid: this.props.transactionStatus.checkedPaid,
-            checkedPP: this.props.transactionStatus.checkedPP,
-            checkedComplete: this.props.transactionStatus.checkedComplete,
+        this.setState({
             checkedEbill: this.props.transactionStatus.checkedEbill,
             checkedPrint: this.props.transactionStatus.checkedPrint});
+
+        this.setState({invoiceStatus: this.props.invoiceStatus});
         this.setState({FromDate: this.props.FromDate});
         this.setState({ToDate: this.props.ToDate});
     }
@@ -125,9 +120,12 @@ class FilterPanel extends Component {
         }
     };
 
-    handleChange = name => event => {
-        this.setState({ [name]: event.target.checked });
-        this.props.toggleStatus(name, event.target.checked)
+    handleChange = (index, name) => event => {
+        const iStatus = this.state.invoiceStatus;
+        iStatus[index]['checked'+name] = event.target.checked;
+
+        this.setState({invoiceStatus: iStatus });
+        this.props.updateInvoiceStatus(iStatus)
     };
 
     handleChange1 = event => {
@@ -137,7 +135,7 @@ class FilterPanel extends Component {
     handleInvoiceFromDateChange = date => {
         this.setState({FromDate: date});
         this.props.updateDate(UPDATE_FROM_DATE_INVOICE, moment(date).format("MM/DD/YYYY"));
-    }
+    };
 
     handleInvoiceToDateChange = date => {
         this.setState({ ToDate: date });
@@ -147,9 +145,6 @@ class FilterPanel extends Component {
     render()
     {
         const {classes} = this.props;
-
-        console.log('status=', this.state.FromDate, this.state.ToDate);
-
         return (
             <div className={classNames(classes.root)}>
                 <div className={classNames("flex flex-col")}>
@@ -159,7 +154,7 @@ class FilterPanel extends Component {
                             <DatePicker
                                 margin="none"
                                 label="From Date"
-                                name="InvoiceDate"
+                                name="FromDate"
                                 variant="outlined"
                                 format="MM/dd/YYYY"
                                 value={this.state.FromDate}
@@ -215,14 +210,14 @@ class FilterPanel extends Component {
 
                         <div style={{marginTop: 20, display: 'flex', flexDirection: 'column'}}>
                             <h3>Invoice Status</h3>
-                            {this.props.invoiceStatus.length>0 && this.props.invoiceStatus.map((iv, index)=> {
+                            {this.state.invoiceStatus.length>0 && this.state.invoiceStatus.map((iv, index)=> {
                                 return (
                                     <FormControlLabel
                                         key={index}
                                         control={
                                             <Switch
-                                                checked={this.state.checkedPaid}
-                                                // onChange={this.handleChange(iv.Name)}
+                                                checked={iv['checked'+iv.TransactionStatusListId]}
+                                                onChange={this.handleChange(index, iv.TransactionStatusListId)}
                                                 value="checkedPaid"
                                             />
                                         }
@@ -264,7 +259,8 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         toggleStatus: Actions.toggleStatus,
-        updateDate: Actions.updateDate
+        updateDate: Actions.updateDate,
+        updateInvoiceStatus: Actions.updateInvoiceStatus,
     }, dispatch);
 }
 

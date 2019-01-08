@@ -80,9 +80,9 @@ const styles = theme => ({
 
 class ContactList extends Component {
 
-    handleContactClick = (contactId) => {
+    handleContactClick = (chatId, contactId) => {
         this.props.openChatPanel();
-        this.props.getChat(contactId);
+        //this.props.getChat(chatId, contactId);
         this.scrollToTop();
     };
 
@@ -94,11 +94,11 @@ class ContactList extends Component {
     {
         const {classes, contacts, user, selectedContactId} = this.props;
 
-        const ContactButton = ({contact}) => {
+        const ContactButton = ({chat, contact}) => {
             return (
                 <Tooltip title={contact.name} placement="left">
                     <Button
-                        onClick={() => this.handleContactClick(contact.id)}
+                        onClick={() => this.handleContactClick(chat.chatId, contact.id)}
                         className={classNames(classes.contactButton, {'active': (selectedContactId === contact.id)})}
                     >
                         {contact.unread && (
@@ -135,14 +135,14 @@ class ContactList extends Component {
                             user.chatList.map(chat => {
                                 const contact = contacts.find((_contact) => _contact.id === chat.contactId);
                                 return (
-                                    <ContactButton key={contact.id} contact={contact}/>
+                                    contact? <ContactButton key={contact.id} contact={contact} chat={chat}/> : ''
                                 )
                             })}
-                            <Divider className="mx-24 my-8"/>
+                           {/*  <Divider className="mx-24 my-8"/>
                             {contacts.map(contact => {
                                 const chatContact = user.chatList.find((_chat) => _chat.contactId === contact.id);
                                 return !chatContact ? <ContactButton key={contact.id} contact={contact}/> : '';
-                            })}
+                            })} */}
                         </FuseAnimateGroup>
                     </React.Fragment>
                 )}

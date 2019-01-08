@@ -124,6 +124,7 @@ const contactsReducer = function (state = initialState, action) {
                 }
             };
         }
+      
         default:
         {
             return state;

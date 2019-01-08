@@ -6,7 +6,7 @@ export const GET_CHAT = '[CHAT PANEL] GET CHAT';
 export const REMOVE_CHAT = '[CHAT PANEL] REMOVE CHAT';
 export const SEND_MESSAGE = '[CHAT PANEL] SEND MESSAGE';
 
-export function getChat(contactId)
+export function getChat(chatId, contactId)
 {
     return (dispatch, getState) => {
         const {id: userId} = getState().chatPanel.user;

@@ -1,5 +1,9 @@
 import axios from 'axios/index';
 import {getUserData} from 'main/content/apps/contacts/store/actions/user.actions';
+import {getChatUserData} from 'main/chatPanel//store/actions/user.actions';
+import {getChatContacts} from 'main/chatPanel//store/actions/contacts.actions';
+import {setselectedContactId} from 'main/chatPanel//store/actions/contacts.actions';
+import {chatService} from 'services'
 
 export const GET_CONTACTS = '[CONTACTS APP] GET CONTACTS';
 export const SET_SEARCH_TEXT = '[CONTACTS APP] SET SEARCH TEXT';
@@ -155,6 +159,22 @@ export function removeContact(contactId)
     };
 }
 
+export function openChat(contactId)
+{
+    return (dispatch, getState) => {
+
+        const contact = getState().contactsApp.contacts.entities[contactId];
+        const id = getState().auth.login.Username;
+       
+        (async () => {
+                chatService.openChat(id, contact.email, contact.lastName, contact.avatar).then(()=>{
+                    dispatch(getChatUserData());     }).then(()=>{dispatch(getChatContacts());})
+                }
+            )();
+           
+        
+    };
+}
 
 export function removeContacts(contactIds)
 {
