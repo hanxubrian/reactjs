@@ -16,6 +16,7 @@ const initialState = {
     SearchText: "",
     franchiseeFilterList: null,
     bLoadedFilterList: false,
+    franchiseeStatus: [],
     transactionStatusFranchisees:{
         Active: true,
         Inactive: true,
@@ -53,9 +54,15 @@ const franchisees = function(state = initialState, action) {
         }
         case Actions.GET_FILTER_LIST:
         {
+            let franchiseeStatus = action.payload;
+            if(action.payload.length>0) {
+                franchiseeStatus = action.payload.map(iv => {
+                    return {[iv.Name]: true, ...iv}
+                });
+            }
             return{
                 ...state,
-                franchiseeFilterList: action.payload,
+                franchiseeFilterList: franchiseeStatus,
                 bLoadedFilterList: true
             }
         }
@@ -65,7 +72,7 @@ const franchisees = function(state = initialState, action) {
                 ...state, bOpenedFilterPanelFranchisees: !state.bOpenedFilterPanelFranchisees
             }
         }
-        case Actions.TOGGLE_FILTER_STATUS_FRANCHISEES:{
+        case Actions.UPDATE_FRANCHISEE_STATUS:{
             return {
                 ...state, transactionStatusFranchisees:{...state.transactionStatusFranchisees,...action.payload}
             }

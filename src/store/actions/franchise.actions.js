@@ -1,12 +1,10 @@
 import axios from "axios";
 import {franchiseesService} from "services";
 
-
 export const GET_ALL_FRANCHISEES = "[FRANCHISEES] GETS ALL";
 export const DELETE_SELECTED_FRANCHISEES = "[FRANCHISEES] DELETE SELECTED";
 export const REMOVE_SELECTED_FRANCHISEES = "[FRANCHISEES] REMOVE SELECTED";
 export const TOGGLE_SUMMARY_PANEL_FRANCHISEES = "[FRANCHISEES] TOGGLE SUMMARY PANEL";
-export const TOGGLE_FILTER_STATUS_FRANCHISEES = "[FRANCHISEES] TOGGLE FILTER STATUS";
 export const TOGGLE_FILTER_PANEL_FRANCHISEES = "[FRANCHISEES] TOGGLE FILTER PANEL";
 export const CREATE_FRANCHISEES_LIST = "[FRANCHISEES] FRANCHISEES CREATE OPEN";
 export const CLOSE_CREATE_FRANCHISEES = "[FRANCHISEES] FRANCHISEES CREATE CLOSE";
@@ -17,6 +15,7 @@ export const ADD_FRANCHISEES = '[FRANCHISEES] ADD FRANCHISEES';
 export const TOGGLE_FRANCHISEE_MAP_VIEW = '[FRANCHISEES] TOGGLE FRANCHISEE MAP VIEW';
 export const SELECTED_LOCATION = '[FRANCHISEES] SELECTED LOCATION';
 export const GET_FILTER_LIST = '[FRANCHISEES] GET FILTER LIST';
+export const UPDATE_FRANCHISEE_STATUS = '[FRANCHISEES] UPDATE FRANCHISEE STATUS';
 
 export function getFranchisees(regionId, statusId, location , latitude , longitude , searchtext) {
     regionId = regionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [regionId]
@@ -37,7 +36,7 @@ export function getStatusFilterList(regionId) {
             let filterList = await franchiseesService.getStatusFilterList(regionId);
             dispatch({
                 type: GET_FILTER_LIST,
-                payload: filterList
+                payload: filterList.Data
             });
         })();
     }
@@ -52,13 +51,6 @@ export function toggleFilterPanelFranchisees(){
 export function toggleSummaryPanelFranchisees(){
     return {
         type: TOGGLE_SUMMARY_PANEL_FRANCHISEES
-    }
-}
-
-export function toggleStatusFranchisees(key, status){
-    return {
-        type: TOGGLE_FILTER_STATUS_FRANCHISEES,
-        payload: {[key]: status}
     }
 }
 
@@ -168,5 +160,11 @@ export function selectLocation(location){
     return {
         type: SELECTED_LOCATION,
         Location: location
+    }
+}
+export function updateFranchiseeStatus(newStatus){
+    return {
+        type: UPDATE_FRANCHISEE_STATUS,
+        payload: newStatus
     }
 }

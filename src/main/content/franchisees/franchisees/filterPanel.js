@@ -69,7 +69,8 @@ class FilterPanel extends Component {
         State: '',
         contactState: '',
         locationValue: 'all',
-        radius: 0
+        radius: 0,
+        franchiseeStatus: [],
     };
 
     constructor(props){
@@ -84,17 +85,7 @@ class FilterPanel extends Component {
 
     componentWillMount(){
         this.setState({
-            Active: this.props.transactionStatusFranchisees.Active,
-            Inactive: this.props.transactionStatusFranchisees.Inactive,
-            CTDB: this.props.transactionStatusFranchisees.CTDB,
-            PendingTransfer: this.props.transactionStatusFranchisees.PendingTransfer,
-            LegalCompliancePending: this.props.transactionStatusFranchisees.LegalCompliancePending,
-            Transfer: this.props.transactionStatusFranchisees.Transfer,
-            Terminated: this.props.transactionStatusFranchisees.Terminated,
-            Rejected: this.props.transactionStatusFranchisees.Rejected,
-            Pending: this.props.transactionStatusFranchisees.Pending,
-            NonRenewed: this.props.transactionStatusFranchisees.NonRenewed,
-            Repurchased: this.props.transactionStatusFranchisees.Repurchased
+           franchiseeStatus: this.props.franchiseeStatus
         });
     }
 
@@ -125,9 +116,13 @@ class FilterPanel extends Component {
         }
     };
 
-    handleChange = name => event => {
-            this.setState({ [name]: event.target.checked });
-            this.props.toggleStatusFranchisees(name, event.target.checked);
+    handleChange = (index,name) => event => {
+
+        const iStatus = this.state.franchiseeStatus;
+        iStatus[index][name] = event.target.checked;
+
+        this.setState({franchiseeStatus: iStatus });
+        this.props.updateFranchiseeStatus(iStatus)
     };
     handleSelectChange = name => event => {
         this.setState({
@@ -535,16 +530,16 @@ class FilterPanel extends Component {
                                 </FormControl>
                                 <br/>
                                 <h3>Franchisees Statuses</h3>
-                               { this.props.franchiseeFilterList && this.props.bLoadedFilterList && (
+                               { this.props.franchiseeStatus && this.props.bLoadedFilterList && (
                                    <FormControl>
                                        {
-                                           this.props.franchiseeFilterList.Data.map(data=>(
+                                           this.props.franchiseeStatus.map((data,index)=>(
                                                <FormControlLabel
                                                    key={data.Value}
                                                    control={
                                                        <Switch
-                                                           checked={window[data.Name]}
-                                                           onChange={this.handleChange(`${data.Name}`)}
+                                                           checked={data[data.Name]}
+                                                           onChange={this.handleChange(index,`${data.Name}`)}
                                                            value={data.Value}
                                                        />
                                                    }
@@ -568,7 +563,8 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         toggleStatusFranchisees: Actions.toggleStatusFranchisees,
         selectLocation: Actions.selectLocation,
-        getStatusFilterList: Actions.getStatusFilterList
+        getStatusFilterList: Actions.getStatusFilterList,
+        updateFranchiseeStatus: Actions.updateFranchiseeStatus
     }, dispatch);
 }
 
@@ -579,9 +575,9 @@ function mapStateToProps({franchisees, auth})
         transactionStatusFranchisees: franchisees.transactionStatusFranchisees,
         franchiseesForm: franchisees.createFranchisees,
         Location: franchisees.Location,
-        franchiseeFilterList: franchisees.franchiseeFilterList,
         bLoadedFilterList: franchisees.bLoadedFilterList,
         regionId: auth.login.defaultRegionId,
+        franchiseeStatus: franchisees.franchiseeStatus
     }
 }
 
