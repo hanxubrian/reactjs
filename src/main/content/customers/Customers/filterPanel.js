@@ -168,7 +168,7 @@ class FilterPanel extends Component {
 		AccountTypes: -2,
 		AccountExecutive: 0,
 
-		Location: "locationAll"
+		Location: this.props.locationFilterValue
 	};
 
 
@@ -665,6 +665,7 @@ function mapStateToProps({ customers, auth }) {
 		customers: customers.customersDB,
 		customerForm: customers.customerForm,
 		regionId: auth.login.defaultRegionId,
+		locationFilterValue: customers.locationFilterValue,
 	}
 }
 

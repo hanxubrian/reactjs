@@ -93,6 +93,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 
 import Spinner from 'react-spinner-material';
+import { getOverlappingDaysInIntervals } from 'date-fns';
 
 // function Marker({ text }) {
 // 	return (
@@ -364,6 +365,7 @@ const Command = ({ id, onExecute }) => {
 };
 const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 
+
 const MapWithAMarkerClusterer = compose(
 	withProps({
 		googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA&v=3.exp&libraries=geometry,drawing,places",
@@ -382,7 +384,7 @@ const MapWithAMarkerClusterer = compose(
 	withGoogleMap
 )(props =>
 	<GoogleMap
-		defaultZoom={12}
+		defaultZoom={10.5}
 		defaultCenter={{ lat: props.center.lat, lng: props.center.lng }}
 	>
 		<MarkerClusterer
@@ -402,21 +404,63 @@ const MapWithAMarkerClusterer = compose(
 );
 
 
+const MapWithAMarkerClusterer2 = compose(
+	withProps({
+		googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA&v=3.exp&libraries=geometry,drawing,places",
+		loadingElement: <div style={{ height: `100%` }} />,
+		containerElement: <div style={{ height: `100%` }} />,
+		mapElement: <div style={{ height: `100%` }} />,
+	}),
+	withHandlers({
+		onMarkerClustererClick: () => (markerClusterer) => {
+			const clickedMarkers = markerClusterer.getMarkers()
+			console.log(`Current clicked markers length: ${clickedMarkers.length}`)
+			console.log(clickedMarkers)
+		},
+	}),
+	withScriptjs,
+	withGoogleMap
+)(props =>
+	<GoogleMap
+		defaultZoom={10.5}
+		defaultCenter={{ lat: props.center.lat, lng: props.center.lng }}
+	>
+		<MarkerClusterer
+			onClick={props.onMarkerClustererClick}
+			averageCenter
+			enableRetinaIcons
+			gridSize={60}
+		>
+			{props.markers.map((x, index) => (
+				<Marker
+					key={index}
+					position={{ lat: x.lat, lng: x.lng }}
+				/>
+			))}
+		</MarkerClusterer>
+	</GoogleMap>
+);
+
 class CustomerListContent extends Component {
+
+
 
 
 	constructor(props) {
 		super(props);
-
 		this.state = {
+			gmapVisible: false,
+			locationFilterValue: this.props.locationFilterValue,
 			pins: [],
+			pins2: [],
+
 			s: '',
 			temp: [],
 			data: [],
 			selectAll: false,
 
 			selection: [],
-			rows: [],
+			rows: this.props.data,
 			// columns: [
 			// 	{
 			// 		title: "No", name: "CustomerNo",
@@ -644,12 +688,12 @@ class CustomerListContent extends Component {
 	toggleSelection = (key, shift, row) => {
 		console.log("toggleSelection");
 
-        /*
-          https://react-table.js.org/#/story/select-table-hoc
-          Implementation of how to manage the selection state is up to the developer.
-          This implementation uses an array stored in the component state.
-          Other implementations could use object keys, a Javascript Set, or Redux... etc.
-        */
+		/*
+		  https://react-table.js.org/#/story/select-table-hoc
+		  Implementation of how to manage the selection state is up to the developer.
+		  This implementation uses an array stored in the component state.
+		  Other implementations could use object keys, a Javascript Set, or Redux... etc.
+		*/
 		// start off with the existing state
 		let selection = [...this.state.selection];
 		const keyIndex = selection.indexOf(key);
@@ -691,11 +735,11 @@ class CustomerListContent extends Component {
 	isSelected = key => {
 		console.log("isSelected");
 
-        /*
-          Instead of passing our external selection state we provide an 'isSelected'
-          callback and detect the selection state ourselves. This allows any implementation
-          for selection (either an array, object keys, or even a Javascript Set object).
-        */
+		/*
+		  Instead of passing our external selection state we provide an 'isSelected'
+		  callback and detect the selection state ourselves. This allows any implementation
+		  for selection (either an array, object keys, or even a Javascript Set object).
+		*/
 		return this.state.selection.includes(key);
 	};
 
@@ -705,32 +749,15 @@ class CustomerListContent extends Component {
 
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
-		console.log("componentDidUpdate", "CustomerListContent.js", [...this.props.pins]);
+		// console.log("componentDidUpdate", "CustomerListContent.js", this.props.locationFilterValue);
 		if (this.props.data !== prevProps.data) {
 			// this.setState({ data: this.props.data });
-			this.setState({ rows: this.props.data });
-			// this.setState({ pins: [...this.props.pins] })
-			this.setState({ pins: this.nearbyLocations({ lat: this.state.current_lat, lng: this.state.current_long }, 15) })
+			// this.setState({ rows: this.props.data });
+			// this.setState({ pins: this.props.pins })
+			// this.setState({ pins: this.props.pins })
+			// this.setState({ locationFilterValue: this.props.locationFilterValue })
 		}
-
-		if (this.props.locationFilterValue !== prevProps.locationFilterValue) {
-			console.log("componentDidUpdate", "CustomerListContent.js", this.props.locationFilterValue)
-
-			switch (this.props.locationFilterValue) {
-				case "locationAll":
-					this.setState({ pins: [...this.props.pins] })
-					break;
-				case "locationNearBy":
-					this.setState({ pins: this.nearbyLocations({ lat: this.state.current_lat, lng: this.state.current_long }, 15) })
-					break;
-				case "locationNearSpecificAddress":
-					this.setState({ pins: [...this.props.pins] })
-					break;
-				default:
-					this.setState({ pins: [...this.props.pins] })
-					break;
-			}
-		}
+		
 		// if (prevState.s !== this.state.s) {
 		// 	this.search(this.state.s);
 		// }
@@ -809,13 +836,13 @@ class CustomerListContent extends Component {
 		console.log("componentDidMount");
 
 		document.addEventListener("keydown", this.escFunction, false);
-		this.getLocation();
 	}
 
 	componentWillMount() {
 		console.log("componentWillMount");
+		this.getLocation();
 
-		this.setState({ rows: this.props.data })
+		// this.setState({ rows: this.props.data })
 		// this.setState({ data: this.props.data })
 
 		this.timer = null;
@@ -904,6 +931,8 @@ class CustomerListContent extends Component {
 						current_lat: 42.910772,
 						current_long: -78.74557
 					})
+
+					this.initPins(this.props.locationFilterValue)
 				}
 			);
 		}
@@ -915,21 +944,88 @@ class CustomerListContent extends Component {
 		console.log(this.props.data.slice(0, 15));
 		return this.props.data;
 	}
+
 	shouldComponentUpdate(nextProps, nextState) {
 		return (this.state !== nextState) ||
 			this.props.mapViewState !== nextProps.mapViewState ||
 			this.props.data !== nextProps.data ||
 			this.props.loading !== nextProps.loading ||
-			this.props.locationFilterValue !== nextProps.locationFilterValue
+			this.props.pins !== nextProps.pins
+		// || 
+		// this.props.locationFilterValue !== nextProps.locationFilterValue
 
 		// return true;
 	}
 	componentWillReceiveProps(nextProps) {
 		// this.setState({ mapViewState: nextProps.mapViewState });
-		console.log("componentWillReceiveProps", "CustomerListContent.js", nextProps.locationFilterValue)
+		// console.log("componentWillReceiveProps", "CustomerListContent.js", nextProps.locationFilterValue)
 
+
+		if (nextProps.locationFilterValue !== this.props.locationFilterValue) {
+			console.log("componentDidUpdate", "CustomerListContent.js", nextProps.locationFilterValue)
+			this.initPins(nextProps.locationFilterValue);
+
+		}
 	} // deprecate 
 
+	initPins(locationFilterValue) {
+		// this.setState({ gmapVisible: !this.state.gmapVisible });
+		console.log("this.state.gmapVisible", this.state.gmapVisible)
+		switch (locationFilterValue) {
+			case "locationAll":
+				if (!this.state.gmapVisible) {
+					this.setState({
+						gmapVisible: !this.state.gmapVisible,
+						pins: [...this.props.pins],
+						pins2: []
+					})
+				} else {
+					this.setState({
+						gmapVisible: !this.state.gmapVisible,
+						pins: [],
+						pins2: [...this.props.pins]
+					})
+				}
+
+				break;
+			case "locationNearBy":
+				let _pins = this.nearbyLocations({ lat: this.state.current_lat, lng: this.state.current_long }, 15)
+
+				if (!this.state.gmapVisible) {
+					this.setState({
+						gmapVisible: !this.state.gmapVisible,
+						pins: [..._pins],
+						pins2: []
+					})
+				} else {
+					this.setState({
+						gmapVisible: !this.state.gmapVisible,
+						pins: [],
+						pins2: [..._pins]
+					})
+				}
+
+				break;
+			case "locationNearSpecificAddress":
+
+				if (!this.state.gmapVisible) {
+					this.setState({
+						pins: [],
+						gmapVisible: !this.state.gmapVisible,
+					})
+				} else {
+					this.setState({
+						pins2: [],
+						gmapVisible: !this.state.gmapVisible,
+					})
+				}
+				break;
+			default:
+				this.setState({ pins: this.props.pins })
+				break;
+		}
+
+	}
 
 	Deg2Rad(deg) {
 		return deg * Math.PI / 180;
@@ -956,25 +1052,21 @@ class CustomerListContent extends Component {
 	// 	}
 	// }
 
-	nearbyLocations(center, miles = 15) {
-		let _nearbys = [];
-		this.props.pins.forEach(x => {
-			let dist = geolib.getDistance(
-				{
-					latitude: center.lat,
-					longitude: center.lng
-				},
-				{
-					latitude: x.lat,
-					longitude: x.lng
-				}
-			)
+	nearbyLocations(center, miles = 5) {
+		// let _nearbys = [];
+		// this.props.pins.forEach(x => {
+		// 	let dist = this.PythagorasEquirectangular(center.lat, center.lng, x.lat, x.lng);
 
-			if (miles * 1609.344 <= dist) {
-				_nearbys = [..._nearbys, x]
-			}
-		});
-		return _nearbys
+		// 	if (dist <= miles) {
+		// 		_nearbys = [..._nearbys, x]
+		// 	}
+
+		// });
+
+		return [...this.props.pins.filter(x => {
+			return (this.PythagorasEquirectangular(center.lat, center.lng, x.lat, x.lng) <= miles)
+		})];
+		// return _nearbys
 	}
 
 	render() {
@@ -991,6 +1083,8 @@ class CustomerListContent extends Component {
 
 		const {
 			pins,
+			pins2,
+			gmapVisible,
 			// mapViewState,
 			rows,
 			columns,
@@ -1094,17 +1188,16 @@ class CustomerListContent extends Component {
 								}
 							</GoogleMap> */}
 
-							{/* <MapWithAMarker
-								googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA&libraries=geometry,drawing,places"
-								loadingElement={<div style={{ height: `100%` }} />}
-								containerElement={<div style={{ height: `100%` }} />}
-								mapElement={<div style={{ height: `100%` }} />}
-							/> */}
-
-							<MapWithAMarkerClusterer
+							{gmapVisible && (<MapWithAMarkerClusterer
 								markers={pins}
 								center={{ lat: this.state.current_lat, lng: this.state.current_long }}
-							/>
+							/>)}
+
+							{!gmapVisible && (<MapWithAMarkerClusterer2
+								markers={pins2}
+								center={{ lat: this.state.current_lat, lng: this.state.current_long }}
+							/>)}
+
 						</div>
 					</div>)}
 

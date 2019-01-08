@@ -72,7 +72,7 @@ export function toggleStatus(key, status) {
 
 export function selectLocationFilter(filter_value) {
 	return {
-		type: TOGGLE_FILTER_STATUS,
+		type: SELECT_LOCATION_FILTER,
 		payload: filter_value
 	}
 }

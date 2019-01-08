@@ -449,8 +449,7 @@ class Customers extends Component {
 		// 	return;
 		// });
 		// }
-		this.setState({ temp: all_temp });
-		this.setState({ data: all_temp });
+		
 
 
 
@@ -466,8 +465,9 @@ class Customers extends Component {
 
 		})
 
+		this.setState({ temp: all_temp });
+		this.setState({ data: all_temp });
 		this.setState({ pins: _pins_temp });
-		console.log("pins", _pins_temp)
 	};
 
 	componentDidMount() {
@@ -562,12 +562,12 @@ class Customers extends Component {
 									<div className="flex flex-row flex-1 justify-between">
 										<div className="flex flex-shrink items-center">
 											<div className="flex items-center">
-												<FuseAnimate animation="transition.expandIn" delay={300}>
+												{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
 													<Icon className="text-32 mr-12">account_box</Icon>
-												</FuseAnimate>
-												<FuseAnimate animation="transition.slideLeftIn" delay={300}>
+												{/* </FuseAnimate> */}
+												{/* <FuseAnimate animation="transition.slideLeftIn" delay={300}> */}
 													<Typography variant="h6" className="hidden sm:flex">Customers | Customers</Typography>
-												</FuseAnimate>
+												{/* </FuseAnimate> */}
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
@@ -578,7 +578,7 @@ class Customers extends Component {
 												<Icon>{mapViewState ? 'list' : 'location_on'}</Icon>
 											</IconButton> */}
 
-											<FuseAnimate animation="transition.expandIn" delay={300}>
+											{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
 												<Fab
 													color="secondary"
 													aria-label="add"
@@ -586,43 +586,43 @@ class Customers extends Component {
 													onClick={openNewCustomerForm}>
 													<Icon>add</Icon>
 												</Fab>
-											</FuseAnimate>
-											<FuseAnimate animation="transition.expandIn" delay={300}>
+											{/* </FuseAnimate> */}
+											{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
 												<Fab color="secondary" aria-label="add"
 													className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
 													<Icon>mail_outline</Icon>
 												</Fab>
-											</FuseAnimate>
-											<FuseAnimate animation="transition.expandIn" delay={300}>
+											{/* </FuseAnimate> */}
+											{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
 												<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
 													<Icon>print</Icon>
 												</Fab>
-											</FuseAnimate>
+											{/* </FuseAnimate> */}
 										</div>
 									</div>
 									<div className="flex flex-none items-end" style={{ display: 'none' }}>
-										<FuseAnimate animation="transition.expandIn" delay={600}>
+										{/* <FuseAnimate animation="transition.expandIn" delay={600}> */}
 											<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => openNewCustomerForm}>
 												<Icon>add</Icon>
 											</Fab>
-										</FuseAnimate>
-										<FuseAnimate animation="transition.expandIn" delay={300}>
+										{/* </FuseAnimate> */}
+										{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
 											<Fab color="primary" aria-label="add"
 												className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
 												<Icon>mail_outline</Icon>
 											</Fab>
-										</FuseAnimate>
-										<FuseAnimate animation="transition.expandIn" delay={300}>
+										{/* </FuseAnimate> */}
+										{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
 											<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
 												<Icon>print</Icon>
 											</Fab>
-										</FuseAnimate>
+										{/* </FuseAnimate> */}
 										{selection.length > 0 && (
-											<FuseAnimate animation="transition.expandIn" delay={600}>
+											// <FuseAnimate animation="transition.expandIn" delay={600}>
 												<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeInvoices()}>
 													<Icon>delete</Icon>
 												</Fab>
-											</FuseAnimate>
+											// </FuseAnimate>
 										)}
 									</div>
 								</div>
@@ -632,14 +632,14 @@ class Customers extends Component {
 									<div className="flex flex-row flex-1 justify-between">
 										<div className="flex flex-shrink items-center">
 											<div className="flex items-center">
-												<FuseAnimate animation="transition.expandIn" delay={300}>
+												{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
 													<Toolbar className="pl-12 pr-0">
 														<img className="mr-12" alt="" src="assets/images/invoices/invoice-icon-white.png" style={{ width: 32, height: 32 }} />
 													</Toolbar>
-												</FuseAnimate>
-												<FuseAnimate animation="transition.slideLeftIn" delay={300}>
+												{/* </FuseAnimate> */}
+												{/* <FuseAnimate animation="transition.slideLeftIn" delay={300}> */}
 													<Typography variant="h6" className="hidden sm:flex">Customers | New Customers</Typography>
-												</FuseAnimate>
+												{/* </FuseAnimate> */}
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
@@ -658,28 +658,28 @@ class Customers extends Component {
 										</div>
 									</div>
 									<div className="flex flex-none items-end" style={{ display: 'none' }}>
-										<FuseAnimate animation="transition.expandIn" delay={600}>
+										{/* <FuseAnimate animation="transition.expandIn" delay={600}> */}
 											<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
 												<Icon>add</Icon>
 											</Fab>
-										</FuseAnimate>
-										<FuseAnimate animation="transition.expandIn" delay={300}>
+										{/* </FuseAnimate> */}
+										{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
 											<Fab color="primary" aria-label="add"
 												className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
 												<Icon>mail_outline</Icon>
 											</Fab>
-										</FuseAnimate>
-										<FuseAnimate animation="transition.expandIn" delay={300}>
+										{/* </FuseAnimate> */}
+										{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
 											<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
 												<Icon>print</Icon>
 											</Fab>
-										</FuseAnimate>
+										{/* </FuseAnimate> */}
 										{selection.length > 0 && (
-											<FuseAnimate animation="transition.expandIn" delay={600}>
+											// <FuseAnimate animation="transition.expandIn" delay={600}>
 												<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeInvoices()}>
 													<Icon>delete</Icon>
 												</Fab>
-											</FuseAnimate>
+											// </FuseAnimate>
 										)}
 									</div>
 								</div>
