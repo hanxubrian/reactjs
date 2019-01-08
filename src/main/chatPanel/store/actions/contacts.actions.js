@@ -7,16 +7,6 @@ export const REMOVE_SELECTED_CONTACT_ID = '[CHAT PANEL] REMOVE SELECTED CONTACT 
 
 export function getContacts()
 {
-
-/*         const request = axios.get('/api/chat/contacts');
-        return (dispatch) =>
-        request.then((response) =>
-            dispatch({
-                type   : GET_CONTACTS,
-                payload: response.data
-            })
-        ); */
-        
     return  (dispatch, getState) => {
         const userId = getState().auth.login.Username;
         (async () => {
@@ -31,16 +21,6 @@ export function getContacts()
 
 export function getChatContacts()
 {
-
-/*         const request = axios.get('/api/chat/contacts');
-        return (dispatch) =>
-        request.then((response) =>
-            dispatch({
-                type   : GET_CONTACTS,
-                payload: response.data
-            })
-        ); */
-        
     return  (dispatch, getState) => {
         const userId = getState().auth.login.Username;
         (async () => {

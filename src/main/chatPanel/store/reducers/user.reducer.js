@@ -10,11 +10,13 @@ const userReducer = function (state = {}, action) {
         }
         case Actions.GET_CHAT:
         {
-            return getUpdatedUser(state, action);
+            return state;
+            //return getUpdatedUser(state, action);
         }
         case Actions.SEND_MESSAGE:
         {
-            return getUpdatedUser(state, action);
+            return state;
+            //return getUpdatedUser(state, action);
         }
         default:
             return state;

@@ -2,6 +2,7 @@ import axios from 'axios/index';
 import {setselectedContactId} from './contacts.actions';
 import {closeMobileChatsSidebar} from 'main/content/apps/chat/store/actions/sidebars.actions';
 import Chatkit from '@pusher/chatkit-client'
+import {chatService} from "services";
 
 export const GET_CHAT = '[CHAT PANEL] GET CHAT';
 export const REMOVE_CHAT = '[CHAT PANEL] REMOVE CHAT';
@@ -15,23 +16,9 @@ export function getChat(chatId, contactId)
 {
     return (dispatch, getState) => {
          const {id: userId} = getState().chatPanel.user;
-        /* const request = axios.get('/api/chat/get-chat', {
-            contactId,
-            userId
-        });
-
-        return request.then((response) => {
-
-            dispatch(setselectedContactId(contactId));
-
-            dispatch(closeMobileChatsSidebar());
-
-            return dispatch({
-                type        : GET_CHAT,
-                chat        : response.data.chat,
-                userChatData: response.data.userChatData
-            });
-        }); */
+        
+        dispatch(setselectedContactId(contactId));
+        dispatch(closeMobileChatsSidebar());
 
         const chatManager = new Chatkit.ChatManager({
             instanceLocator: 'v1:us1:e55a61d5-6a16-4a03-9ff0-5bdacd4f04ca',
@@ -46,7 +33,7 @@ export function getChat(chatId, contactId)
           .then(currentUser => {
             dispatch(setCurrentUser(currentUser))
             return currentUser.subscribeToRoom({
-                roomId: "19381749",
+                roomId: chatId,
                 messageLimit: 100,
                 hooks : {
                     onMessage: message=>{
@@ -61,6 +48,9 @@ export function getChat(chatId, contactId)
           })
           .then(currentRoom =>{
             dispatch(setCurrentRoom(currentRoom));
+          })
+          .then(()=>{
+            dispatch(getMessages())
           })
           .catch(error => console.error('error', error))
     }
@@ -89,16 +79,24 @@ export function setCurrentRoom(currentRoom)
     };
 }
 
+export function getMessages()
+{
+    return  (dispatch, getState) => {
+        const userId = getState().chatPanel.chat.currentUser.id;
+        const roomId = getState().chatPanel.chat.currentRoom.id;
+        (async () => {
+            let messages = await chatService.getMessages(roomId, userId);
+            dispatch({
+                type   : ON_MESSAGE,
+                message: messages
+            });
+        })();
+    }
+}
+
+
 export function sendMessage(messageText, chatId, userId)
 {
-    const message = {
-        'who'    : userId,
-        'message': messageText,
-        'time'   : new Date()
-    };
-
-   
-
     return (dispatch, getState) =>{
         const currentUser = getState().chatPanel.chat.currentUser;
         const currentRoom = getState().chatPanel.chat.currentRoom;
@@ -106,24 +104,19 @@ export function sendMessage(messageText, chatId, userId)
             text: messageText,
             roomId: currentRoom.id
         });
+
+        const message = {
+            'who'    : userId,
+            'message': messageText,
+            'time'   : new Date()
+        };
+
+        return (async () => {
+            return dispatch({
+                type        : SEND_MESSAGE,
+                message     : message,
+            })
+        })();
     }
 
-
-
-       
-     /*    (async () => {
-            let contacts = await chatService.getContactList(userId);
-            dispatch({
-                type   : GET_CONTACTS,
-                payload: contacts
-            });
-        })();
-        request.then((response) => {
-                return dispatch({
-                    type        : SEND_MESSAGE,
-                    message     : response.data.message,
-                    userChatData: response.data.userChatData
-                })
-            }
-        ); */
 }
