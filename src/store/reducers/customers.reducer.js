@@ -5,6 +5,7 @@ import { persistReducer } from 'redux-persist';
 
 const initialState = {
 	customersDB: null,
+	customersDocuments: null,
 	bLoadedCustomers: false,
 	bOpenedSummaryPanel: false,
 	bOpenedFilterPanel: false,
@@ -38,6 +39,13 @@ const customers = function (state = initialState, action) {
 					customersDB: action.payload,
 					bLoadedCustomers: true,
 					bCustomerFetchStart: false
+				};
+			}
+		case Actions.GET_ALL_DOCUMENTS:
+			{
+				return {
+					...initialState,
+					customersDocuments: action.payload
 				};
 			}
 		case Actions.GET_CUSTOMERS_FETCH_START:

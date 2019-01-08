@@ -82,6 +82,8 @@ import Switch from '@material-ui/core/Switch';
 import ReactTable from "react-table";
 import JanikingPagination from 'Commons/JanikingPagination';
 
+import CustomersDocumentUploadTable from "./documentUploadTable";
+
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 	return result ? {
@@ -353,6 +355,44 @@ const stateNames = [
 	}
 ];
 
+const Upload_Document_headers = [
+	// {
+	// 	id: 'doc_type',
+	// 	numeric: false,
+	// 	disablePadding: false,
+	// 	label: 'Doc Type'
+	// },
+	{
+		id: 'documentName',
+		numeric: false,
+		disablePadding: false,
+		label: 'Document Name'
+	},
+	{
+		id: 'uploadDateTime',
+		numeric: false,
+		disablePadding: false,
+		label: 'Upload Date Time'
+	},
+	{
+		id: 'browse',
+		numeric: false,
+		disablePadding: false,
+		label: 'Browse'
+	},
+	// {
+	// 	id: 'fileSize',
+	// 	numeric: false,
+	// 	disablePadding: false,
+	// 	label: 'File Size'
+	// },
+	// {
+	// 	id: 'view',
+	// 	numeric: false,
+	// 	disablePadding: false,
+	// 	label: 'View'
+	// }
+];
 
 
 
@@ -360,7 +400,7 @@ class CustomerForm extends Component {
 	state = {
 		temp: [],
 		data: [],
-
+		docs: [],
 		customers: [],
 		...newCustomerState,
 		value: '',
@@ -394,6 +434,7 @@ class CustomerForm extends Component {
 		// 	getSuggestionValue: customerForm.getSuggestionValue,
 		// 	renderSuggestion,
 		// };
+	
 
 		const address_headers = [
 			{
@@ -1737,6 +1778,15 @@ class CustomerForm extends Component {
 					</div>
 				</Fragment>)
 			case 6:
+				return(
+					<Fragment>
+					  <div style={{ marginTop: '30px' }}></div>
+						<div className="flex">
+							 <CustomersDocumentUploadTable tableType="DOCUMENT_UPLOADING" documents={this.props.documents} headers={Upload_Document_headers} />
+						</div>
+					</Fragment>
+					  )
+			case 7:
 				return (<Fragment></Fragment>)
 			default:
 				return 'Unknown step';
@@ -1788,6 +1838,9 @@ class CustomerForm extends Component {
 
 		if (!props.bLoadedFranchisees) {
 			props.getFranchisees();
+		}
+		if (!props.documents) {
+			props.getDocuments();
 		}
 		this.fetchData = this.fetchData.bind(this);
 		this.escFunction = this.escFunction.bind(this);
@@ -1921,12 +1974,25 @@ class CustomerForm extends Component {
 	};
 
 	componentDidMount() {
+		// this.getDocuments()
 		if (this.InputLabelRef) {
 			this.setState({
 				labelWidth: ReactDOM.findDOMNode(this.InputLabelRef).offsetWidth
 			});
 		}
 	}
+
+	getDocuments = (rawData = this.props.documents) => {
+		console.log("DOCUMENTS" + "" + rawData)
+		let all_docs = [];
+		if (rawData === null || rawData === undefined) return;
+		let documents = rawData.Data.filter(x => x);
+
+		all_docs = [...all_docs, ...rawData.Data]
+		this.setState({
+			docs: all_docs
+		});
+	};
 
 	handleChange = (event) => {
 		this.setState(_.set({ ...this.state }, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
@@ -2059,8 +2125,9 @@ class CustomerForm extends Component {
 	};
 	//////////////////////
 	render() {
+		console.log(this.props)
 		const { classes,
-			// CustomerForm,
+			 CustomerForm,
 			// addCustomer,
 			// updateCustomer,
 			// removeCustomer
@@ -2077,6 +2144,7 @@ class CustomerForm extends Component {
 		// };
 		console.log('customers', this.props.customers);
 		console.log("this.props.franchisees", this.props.franchisees);
+		console.log("this.props.documents", this.props.documents);
 
 		// const {classes} = this.props;
 		const steps = getSteps();
@@ -2310,6 +2378,7 @@ function mapDispatchToProps(dispatch) {
 		closeNewCustomerForm: Actions.closeNewCustomerForm,
 		openEditCustomerForm: Actions.openEditCustomerForm,
 		closeEditCustomerForm: Actions.closeEditCustomerForm,
+		getDocuments: Actions.getDocuments
 	}, dispatch);
 }
 
@@ -2317,7 +2386,8 @@ function mapStateToProps({ customers, franchisees, auth }) {
 	return {
 		bLoadedFranchisees: franchisees.bLoadedFranchisees,
 		regionId: auth.login.defaultRegionId,
-		CustomerForm: customers.CustomerForm
+		CustomerForm: customers.CustomerForm,
+		documents: customers.customersDocuments
 	}
 }
 

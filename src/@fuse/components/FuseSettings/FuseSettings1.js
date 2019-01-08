@@ -111,7 +111,7 @@ class FuseSettings extends Component {
             return (
                 <FormControl component="fieldset" className={classes.formControl}>
 
-                    <FormLabel component="legend" className="text-14">Style</FormLabel>
+                    <FormLabel component="legend" className="text-14">Navigation</FormLabel>
 
                     <RadioGroup
                         aria-label="Layout Style"

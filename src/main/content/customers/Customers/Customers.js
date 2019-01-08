@@ -403,6 +403,10 @@ class Customers extends Component {
 			bChanged = true;
 		}
 
+		if (this.props.documents === null && prevProps.documents !== this.props.documents) {
+			bChanged = true;
+		}
+
 		if (bChanged)
 			this.getCustomersFromStatus();
 
@@ -413,7 +417,6 @@ class Customers extends Component {
 		// this.setState({ checkedPP: this.props.transactionStatus.checkedPP });
 		// this.setState({ checkedComplete: this.props.transactionStatus.checkedComplete });
 		// this.setState({ checkedOpen: this.props.transactionStatus.checkedOpen });
-
 		this.getCustomersFromStatus()
 
 		if (this.props.customers === null) {
@@ -428,7 +431,6 @@ class Customers extends Component {
 			console.log("----------END FETCHING----------")
 			this.setState({ loading: false });
 			this.getCustomersFromStatus(nextProps.customers);
-
 		}
 	}
 
@@ -440,7 +442,6 @@ class Customers extends Component {
 		// let temp1 = [];
 		// const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
 		// const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
-
 		if (rawData === null || rawData === undefined) return;
 
 		let regions = rawData.Data.Regions.filter(x => {
@@ -552,6 +553,8 @@ class Customers extends Component {
 	}
 
 	render() {
+		console.log(this.props.documents)
+		console.log(this.props)
 		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, openNewCustomerForm, customerForm, mapViewState, toggleMapView } = this.props;
 
 		// const { toggleSelection, toggleAll, isSelected, logSelection } = this;

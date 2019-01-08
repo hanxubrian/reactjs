@@ -2,6 +2,7 @@ import axios from "axios";
 import { customersService } from "services";
 
 export const GET_ALL_CUSTOMERS = "[CUSTOMERS] GETS ALL";
+export const GET_ALL_DOCUMENTS = "[CUSTOMERS] DOCUMENTS GETS ALL";
 export const DELETE_SELECTED_CUSTOMERS = "[CUSTOMERS] DELETE SELECTED";
 export const REMOVE_SELECTED_CUSTOMER = "[CUSTOMER] REMOVE SELECTED";
 export const TOGGLE_SUMMARY_PANEL = "[CUSTOMERS] TOGGLE SUMMARY PANEL";
@@ -40,7 +41,7 @@ export function getCustomers(regionId, statusId=0, location="all", latitude="", 
             type: GET_CUSTOMERS_FETCH_START,
             payload: true
 		});
-		
+
 		(async () => {
 			regionId = regionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [regionId]
 			statusId = statusId === 0 ? Array.from({ length: 10 }).map((item, index) => (index + 1)) : [statusId]
@@ -53,6 +54,19 @@ export function getCustomers(regionId, statusId=0, location="all", latitude="", 
 		})();
 	}
 
+}
+
+export function getDocuments() {
+	return (dispatch) => {
+        (async () => {
+			let documentsList = await customersService.getCustomerDocuments();
+			console.log(documentsList)
+            dispatch({
+                type: GET_ALL_DOCUMENTS,
+                payload: documentsList
+            });
+        })();
+    }
 }
 
 export function toggleFilterPanel() {
