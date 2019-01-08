@@ -443,19 +443,21 @@ function getStepContent(franchiseeForm, step) {
                                 variant="outlined"
                                 className={classes.textField}
                                 style={{marginLeft: '1%', marginRight: '1%'}}
-                                value={franchiseeForm.state.planType}
-                                onChange={franchiseeForm.handleStateChange('planType')}
+                                value={franchiseeForm.state.defaultPlanType}
+                                onChange={franchiseeForm.handleStateChange('defaultPlanType')}
                                 SelectProps={{
                                     MenuProps: {
                                         className: classes.menu,
                                     },
                                 }}
                             >
-                                {planType.map(option => (
-                                <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                                </MenuItem>
-                                ))}
+                                {franchiseeForm.props.planType &&(
+                                    franchiseeForm.props.planType.Data.map(option => (
+                                            <MenuItem key={option.FranchiseeContractTypeListId} value={option.FranchiseeContractTypeListId}>
+                                                {option.Name}
+                                            </MenuItem>
+                                        ))
+                                )}
                             </TextField>
                             <TextField
                                 id="planAmount"
@@ -600,7 +602,7 @@ class FranchiseesCreateForm extends Component {
         generateReport: false,
         selectedValue: 'ein',
         StateValue: '',
-        planType: '',
+        defaultPlanType: 1,
         selectedSignDate: new Date(),
         selectedRenewDate: new Date(),
         selectedExpDate: new Date()
