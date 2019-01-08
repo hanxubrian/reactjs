@@ -95,6 +95,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import Spinner from 'react-spinner-material';
 import { getOverlappingDaysInIntervals } from 'date-fns';
 import CustomerSearchBar from './CustomerSearchBar';
+import { getCustomers } from '../../../../store/actions';
 
 // function Marker({ text }) {
 // 	return (
@@ -461,7 +462,7 @@ class CustomerListContent extends Component {
 			selectAll: false,
 
 			selection: [],
-			rows: this.props.data,
+			rows: [],
 			// columns: [
 			// 	{
 			// 		title: "No", name: "CustomerNo",
@@ -651,6 +652,7 @@ class CustomerListContent extends Component {
 		this.changeSearchValue = value => this.setState({ searchValue: value });
 		this.changeGrouping = grouping => this.setState({ grouping });
 		console.log("constructor");
+
 	}
 	//
 	// to edit table cell
@@ -932,8 +934,9 @@ class CustomerListContent extends Component {
 						current_lat: 42.910772,
 						current_long: -78.74557
 					})
-
-					this.initPins(this.props.locationFilterValue)
+					if (this.props.locationFilterValue && this.props.pins) {
+						this.initPins()
+					}
 				}
 			);
 		}
@@ -956,44 +959,54 @@ class CustomerListContent extends Component {
 			this.props.pins !== nextProps.pins ||
 			this.props.searchText !== nextProps.searchText
 	}
+
 	componentWillReceiveProps(nextProps) {
 		// this.setState({ mapViewState: nextProps.mapViewState });
 		// console.log("componentWillReceiveProps", "CustomerListContent.js", nextProps.locationFilterValue)
 
 
-		if (nextProps.locationFilterValue !== this.props.locationFilterValue) {
-			console.log("componentDidUpdate", "CustomerListContent.js", nextProps.locationFilterValue)
-			this.initPins(nextProps.locationFilterValue);
-
+		if (nextProps.data !== this.props.data) {
+			this.setState({ rows: nextProps.data })
 		}
+
+		if (this.props.locationFilterValue !== nextProps.locationFilterValue) {
+			this.setState({ locationFilterValue: nextProps.locationFilterValue })
+			this.props.pins && this.initPins(this.props.pins, nextProps.locationFilterValue)
+		}
+
+		if (this.props.pins !== nextProps.pins) {
+			// this.setState({ pins: nextProps.pins })
+			this.initPins(nextProps.pins, this.props.locationFilterValue)
+		}
+
 
 		if (nextProps.searchText !== this.props.searchText) {
 			this.search(nextProps.searchText);
 		}
 	} // deprecate 
 
-	initPins(locationFilterValue) {
+	initPins(pins, locationFilterValue) {
 		// this.setState({ gmapVisible: !this.state.gmapVisible });
-		console.log("this.state.gmapVisible", this.state.gmapVisible)
+		console.log("-------initPins---------", pins)
 		switch (locationFilterValue) {
 			case "locationAll":
 				if (!this.state.gmapVisible) {
 					this.setState({
 						gmapVisible: !this.state.gmapVisible,
-						pins: [...this.props.pins],
+						pins: pins === undefined ? [] : [...pins],
 						pins2: []
 					})
 				} else {
 					this.setState({
 						gmapVisible: !this.state.gmapVisible,
 						pins: [],
-						pins2: [...this.props.pins]
+						pins2: pins === undefined ? [] : [...pins]
 					})
 				}
 
 				break;
 			case "locationNearBy":
-				let _pins = this.nearbyLocations({ lat: this.state.current_lat, lng: this.state.current_long }, 15)
+				let _pins = this.nearbyLocations(pins, { lat: this.state.current_lat, lng: this.state.current_long }, 15)
 
 				if (!this.state.gmapVisible) {
 					this.setState({
@@ -1025,7 +1038,7 @@ class CustomerListContent extends Component {
 				}
 				break;
 			default:
-				this.setState({ pins: this.props.pins })
+				this.setState({ pins: pins })
 				break;
 		}
 
@@ -1056,7 +1069,7 @@ class CustomerListContent extends Component {
 	// 	}
 	// }
 
-	nearbyLocations(center, miles = 5) {
+	nearbyLocations(pins, center, miles = 5) {
 		// let _nearbys = [];
 		// this.props.pins.forEach(x => {
 		// 	let dist = this.PythagorasEquirectangular(center.lat, center.lng, x.lat, x.lng);
@@ -1067,7 +1080,7 @@ class CustomerListContent extends Component {
 
 		// });
 
-		return [...this.props.pins.filter(x => {
+		return [...pins.filter(x => {
 			return (this.PythagorasEquirectangular(center.lat, center.lng, x.lat, x.lng) <= miles)
 		})];
 		// return _nearbys
@@ -1087,6 +1100,7 @@ class CustomerListContent extends Component {
 
 		const {
 			pins,
+			locationFilterValue,
 			pins2,
 			gmapVisible,
 			// mapViewState,
@@ -1107,6 +1121,8 @@ class CustomerListContent extends Component {
 			// leftColumns,
 			// rightColumns,
 		} = this.state;
+
+		console.log("-------render-------", locationFilterValue, pins, pins2)
 
 		return (
 			<Fragment>

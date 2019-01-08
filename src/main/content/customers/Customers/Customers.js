@@ -261,9 +261,11 @@ class Customers extends Component {
 			loading: false,
 		};
 		console.log("constructor, Customer.js")
+
 		if (!props.bLoadedCustomers) {
 			console.log("getCustomers")
 			this.setState({ loading: true });
+			this.getCustomersFromStatus();
 			this.props.getCustomers(this.props.regionId, this.props.statusId, this.props.location, this.props.latitude, this.props.longitude, this.props.searchText);
 		}
 	}
@@ -377,21 +379,20 @@ class Customers extends Component {
 				statusId: this.props.statusId
 			});
 			console.log("----------START FETCHING----------")
-			this.setState({ loading: true });
+			// this.setState({ loading: true });
 			this.props.getCustomers(this.props.regionId, this.props.statusId, this.props.location, this.props.latitude, this.props.longitude, this.props.searchText);
+			bChanged = true;
+		}
+
+
+
+		if (this.props.customers === null && prevProps.customers !== this.props.customers) {
 			bChanged = true;
 		}
 
 		if (bChanged)
 			this.getCustomersFromStatus();
 
-		if (prevProps.customers === null && this.props.customers !== null) {
-			this.getCustomersFromStatus();
-		}
-
-		// if (prevState.s !== this.state.s) {
-		// 	this.search(this.state.s);
-		// }
 	}
 
 	componentWillMount() {
@@ -401,6 +402,10 @@ class Customers extends Component {
 		// this.setState({ checkedOpen: this.props.transactionStatus.checkedOpen });
 
 		this.getCustomersFromStatus()
+
+		if (this.props.customers === null) {
+			this.props.getCustomers(this.props.regionId, this.props.statusId, this.props.location, this.props.latitude, this.props.longitude, this.props.searchText);
+		}
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -445,9 +450,6 @@ class Customers extends Component {
 		// 	return;
 		// });
 		// }
-		
-
-
 
 		let _pins_temp = [];
 		regions.forEach(x => {
@@ -461,9 +463,12 @@ class Customers extends Component {
 
 		})
 
-		this.setState({ temp: all_temp });
-		this.setState({ data: all_temp });
-		this.setState({ pins: _pins_temp });
+		this.setState({
+			temp: all_temp,
+			data: all_temp,
+			pins: _pins_temp,
+		});
+
 	};
 
 	componentDidMount() {
@@ -540,6 +545,8 @@ class Customers extends Component {
 
 		const { selection } = this.state;
 
+		console.log('xxxx=', this.state.temp);
+
 		return (
 			<React.Fragment >
 				<FusePageCustomSidebarScroll
@@ -559,10 +566,10 @@ class Customers extends Component {
 										<div className="flex flex-shrink items-center">
 											<div className="flex items-center">
 												{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
-													<Icon className="text-32 mr-12">account_box</Icon>
+												<Icon className="text-32 mr-12">account_box</Icon>
 												{/* </FuseAnimate> */}
 												{/* <FuseAnimate animation="transition.slideLeftIn" delay={300}> */}
-													<Typography variant="h6" className="hidden sm:flex">Customers | Customers</Typography>
+												<Typography variant="h6" className="hidden sm:flex">Customers | Customers</Typography>
 												{/* </FuseAnimate> */}
 											</div>
 										</div>
@@ -575,49 +582,49 @@ class Customers extends Component {
 											</IconButton> */}
 
 											{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
-												<Fab
-													color="secondary"
-													aria-label="add"
-													className={classNames(classes.sideButton, "mr-12")}
-													onClick={openNewCustomerForm}>
-													<Icon>add</Icon>
-												</Fab>
+											<Fab
+												color="secondary"
+												aria-label="add"
+												className={classNames(classes.sideButton, "mr-12")}
+												onClick={openNewCustomerForm}>
+												<Icon>add</Icon>
+											</Fab>
 											{/* </FuseAnimate> */}
 											{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
-												<Fab color="secondary" aria-label="add"
-													className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-													<Icon>mail_outline</Icon>
-												</Fab>
+											<Fab color="secondary" aria-label="add"
+												className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
+												<Icon>mail_outline</Icon>
+											</Fab>
 											{/* </FuseAnimate> */}
 											{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
-												<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-													<Icon>print</Icon>
-												</Fab>
+											<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
+												<Icon>print</Icon>
+											</Fab>
 											{/* </FuseAnimate> */}
 										</div>
 									</div>
 									<div className="flex flex-none items-end" style={{ display: 'none' }}>
 										{/* <FuseAnimate animation="transition.expandIn" delay={600}> */}
-											<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => openNewCustomerForm}>
-												<Icon>add</Icon>
-											</Fab>
+										<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => openNewCustomerForm}>
+											<Icon>add</Icon>
+										</Fab>
 										{/* </FuseAnimate> */}
 										{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
-											<Fab color="primary" aria-label="add"
-												className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-												<Icon>mail_outline</Icon>
-											</Fab>
+										<Fab color="primary" aria-label="add"
+											className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
+											<Icon>mail_outline</Icon>
+										</Fab>
 										{/* </FuseAnimate> */}
 										{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
-											<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-												<Icon>print</Icon>
-											</Fab>
+										<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
+											<Icon>print</Icon>
+										</Fab>
 										{/* </FuseAnimate> */}
 										{selection.length > 0 && (
 											// <FuseAnimate animation="transition.expandIn" delay={600}>
-												<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeInvoices()}>
-													<Icon>delete</Icon>
-												</Fab>
+											<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeInvoices()}>
+												<Icon>delete</Icon>
+											</Fab>
 											// </FuseAnimate>
 										)}
 									</div>
@@ -629,12 +636,12 @@ class Customers extends Component {
 										<div className="flex flex-shrink items-center">
 											<div className="flex items-center">
 												{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
-													<Toolbar className="pl-12 pr-0">
-														<img className="mr-12" alt="" src="assets/images/invoices/invoice-icon-white.png" style={{ width: 32, height: 32 }} />
-													</Toolbar>
+												<Toolbar className="pl-12 pr-0">
+													<img className="mr-12" alt="" src="assets/images/invoices/invoice-icon-white.png" style={{ width: 32, height: 32 }} />
+												</Toolbar>
 												{/* </FuseAnimate> */}
 												{/* <FuseAnimate animation="transition.slideLeftIn" delay={300}> */}
-													<Typography variant="h6" className="hidden sm:flex">Customers | New Customers</Typography>
+												<Typography variant="h6" className="hidden sm:flex">Customers | New Customers</Typography>
 												{/* </FuseAnimate> */}
 											</div>
 										</div>
@@ -655,26 +662,26 @@ class Customers extends Component {
 									</div>
 									<div className="flex flex-none items-end" style={{ display: 'none' }}>
 										{/* <FuseAnimate animation="transition.expandIn" delay={600}> */}
-											<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
-												<Icon>add</Icon>
-											</Fab>
+										<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
+											<Icon>add</Icon>
+										</Fab>
 										{/* </FuseAnimate> */}
 										{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
-											<Fab color="primary" aria-label="add"
-												className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-												<Icon>mail_outline</Icon>
-											</Fab>
+										<Fab color="primary" aria-label="add"
+											className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
+											<Icon>mail_outline</Icon>
+										</Fab>
 										{/* </FuseAnimate> */}
 										{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
-											<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-												<Icon>print</Icon>
-											</Fab>
+										<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
+											<Icon>print</Icon>
+										</Fab>
 										{/* </FuseAnimate> */}
 										{selection.length > 0 && (
 											// <FuseAnimate animation="transition.expandIn" delay={600}>
-												<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeInvoices()}>
-													<Icon>delete</Icon>
-												</Fab>
+											<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeInvoices()}>
+												<Icon>delete</Icon>
+											</Fab>
 											// </FuseAnimate>
 										)}
 									</div>

@@ -21,7 +21,6 @@ const initialState = {
 	location: "all",
 	longitude: "",
 	latitude: "",
-	searchText: "",
 
 	locationFilterValue: "locationAll",
 	searchText: "",
