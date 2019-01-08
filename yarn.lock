@@ -1525,18 +1525,16 @@
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.2.tgz#54c5a964462be3d4d78af631363c18d6fa91ac26"
 
-"@pusher/chatkit-client@^1.2.2":
+"@pusher/chatkit-client@1.2.2":
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@pusher/chatkit-client/-/chatkit-client-1.2.2.tgz#63326d25af119ab9b47bbd81e8191fa7cbd3352a"
-  integrity sha512-VTXVR+CRRkkqp1z1AK8NhDtWKsnvVwHT33b2Em7tlMbcpJT17YHm0wsOZLytKJkO1QG5WMdYuOsGPkymBnMYww==
   dependencies:
     "@pusher/platform" "^0.16.0"
     ramda "^0.25.0"
 
-"@pusher/chatkit-server@^1.0.4":
+"@pusher/chatkit-server@1.0.4":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@pusher/chatkit-server/-/chatkit-server-1.0.4.tgz#7a71980edae031b52b2033c8b2d4d09c3d6b176f"
-  integrity sha512-71J2bpB7BG+ACWPAOJxdXrOMrOQ/BZxJmES0vbomghWmBTtVzx9a1jX5bVs3jh9R2Y2cwkJf2VFXuUMul3FSGA==
   dependencies:
     "@pusher/platform-node" "^0.15.1"
     jsonwebtoken "^8.3.0"
@@ -1544,7 +1542,6 @@
 "@pusher/platform-node@^0.15.1":
   version "0.15.2"
   resolved "https://registry.yarnpkg.com/@pusher/platform-node/-/platform-node-0.15.2.tgz#5879b461fbe1ef525d012374d3702c35e26c8088"
-  integrity sha512-ZypRRj5KnzwZ5JTG+Y7r/rLxq5qC6z/0Ko6idya8zZzThjk2nJJ+D/Hlc677s15GDGB+aBMNv5Xfl+heBVR5Uw==
   dependencies:
     extend "^2.0.1"
     jsonwebtoken "^8.3.0"
@@ -1553,7 +1550,6 @@
 "@pusher/platform@^0.16.0":
   version "0.16.0"
   resolved "https://registry.yarnpkg.com/@pusher/platform/-/platform-0.16.0.tgz#82510641fc3b4b7ee492726799266d59c5f35178"
-  integrity sha512-fN8GgHejm1U/WC6h9KcWfqK3kptFxMNSVXAhyCBkVek9mr63vvHnWBUmFcOZ1DBNWj8zBRxTSazfm2OvGOkkuQ==
 
 "@svgr/core@^2.4.1":
   version "2.4.1"
@@ -4372,7 +4368,6 @@ extend-shallow@^3.0.0, extend-shallow@^3.0.2:
 extend@^2.0.1:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/extend/-/extend-2.0.2.tgz#1b74985400171b85554894459c978de6ef453ab7"
-  integrity sha512-AgFD4VU+lVLP6vjnlNfF7OeInLTyeyckCNPEsuxz1vi786UuK/nk6ynPuhn/h+Ju9++TQyr5EpLRI14fc1QtTQ==
 
 extend@^3.0.0, extend@~3.0.2:
   version "3.0.2"
@@ -8556,7 +8551,6 @@ raf@3.4.0, raf@^3.4.0:
 ramda@^0.25.0:
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"
-  integrity sha512-GXpfrYVPwx3K7RQ6aYT8KPS8XViSXUVJT1ONhoKPE9VAleW42YE+U+8VEyGWt41EnEQW7gwecYJriTI0pKoecQ==
 
 randomatic@^3.0.0:
   version "3.1.0"
@@ -8939,6 +8933,12 @@ react-select@2.1.2:
     raf "^3.4.0"
     react-input-autosize "^2.2.1"
     react-transition-group "^2.2.1"
+
+react-spinner-material@^1.0.19:
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/react-spinner-material/-/react-spinner-material-1.0.19.tgz#312a7e2bfc3f8b07f00fce35f083ec514c9a9da5"
+  dependencies:
+    prop-types "^15.5.10"
 
 react-swipeable-views-core@^0.13.0:
   version "0.13.0"

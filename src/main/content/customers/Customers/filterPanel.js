@@ -245,7 +245,7 @@ class FilterPanel extends Component {
 			customers.Data.Regions.filter(x => {
 				return this.props.regionId === 0 || x.Id === this.props.regionId;
 			}).forEach(x => {
-				regionCustomers = [...regionCustomers, ...x.Customers];
+				regionCustomers = [...regionCustomers, ...x.CustomerList];
 			});
 		}
 		let accountTypes = [...new Set(regionCustomers.map(x => x.AccountTypeListName))].sort();

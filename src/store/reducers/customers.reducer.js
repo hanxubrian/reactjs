@@ -16,7 +16,12 @@ const initialState = {
 			open: false
 		},
 		data: null
-	}
+	},
+	statusId: 1,
+    location: "all",
+    longitude: "",
+    latitude: "",
+    searchText: ""
 };
 
 

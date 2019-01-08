@@ -235,9 +235,9 @@ class Customers extends Component {
 	constructor(props) {
 		super(props);
 
-		if (!props.bLoadedCustomers) {
-			props.getCustomers();
-		}
+
+
+
 		this.fetchData = this.fetchData.bind(this);
 		this.escFunction = this.escFunction.bind(this);
 
@@ -245,17 +245,31 @@ class Customers extends Component {
 			s: '',
 			temp: [],
 			data: [],
-			checkedPaid: true,
-			checkedPP: true,
-			checkedComplete: true,
-			checkedOpen: true,
+			// checkedPaid: true,
+			// checkedPP: true,
+			// checkedComplete: true,
+			// checkedOpen: true,
 			selection: [],
 			selectAll: false,
-			regionId: 0,
+
 
 			current_lat: 0,
 			current_long: 0,
+
+			regionId: this.props.regionId,
+			statusId: this.props.statusId,
+			longitude: this.props.longitude,
+			latitude: this.props.latitude,
+			location: this.props.location,
+			searchText: this.props.searchText,
+			loading: false,
 		};
+		console.log("constructor, Customer.js")
+		if (!props.bLoadedCustomers) {
+			console.log("getCustomers")
+			this.setState({ loading: true });
+			this.props.getCustomers(this.props.regionId, this.props.statusId, this.props.location, this.props.latitude, this.props.longitude, this.props.searchText);
+		}
 	}
 
 	toggleSelection = (key, shift, row) => {
@@ -336,32 +350,39 @@ class Customers extends Component {
 		this.props.customerForm.type === 'create' ? this.props.closeEditCustomerForm() : this.props.closeNewCustomerForm();
 	};
 
-
-
 	componentDidUpdate(prevProps, prevState, snapshot) {
+		console.log("componentDidUpdate", "Customer.js")
 		let bChanged = false;
-		if (this.props.transactionStatus.checkedPaid !== prevProps.transactionStatus.checkedPaid) {
-			this.setState({ checkedPaid: !this.state.checkedPaid });
-			bChanged = true;
-		}
+		// if (this.props.transactionStatus.checkedPaid !== prevProps.transactionStatus.checkedPaid) {
+		// 	this.setState({ checkedPaid: !this.state.checkedPaid });
+		// 	bChanged = true;
+		// }
 
-		if (this.props.transactionStatus.checkedPP !== prevProps.transactionStatus.checkedPP) {
-			this.setState({ checkedPP: !this.state.checkedPP });
-			bChanged = true;
-		}
+		// if (this.props.transactionStatus.checkedPP !== prevProps.transactionStatus.checkedPP) {
+		// 	this.setState({ checkedPP: !this.state.checkedPP });
+		// 	bChanged = true;
+		// }
 
-		if (this.props.transactionStatus.checkedComplete !== prevProps.transactionStatus.checkedComplete) {
-			this.setState({ checkedComplete: !this.state.checkedComplete });
-			bChanged = true;
-		}
+		// if (this.props.transactionStatus.checkedComplete !== prevProps.transactionStatus.checkedComplete) {
+		// 	this.setState({ checkedComplete: !this.state.checkedComplete });
+		// 	bChanged = true;
+		// }
 
-		if (this.props.transactionStatus.checkedOpen !== prevProps.transactionStatus.checkedOpen) {
-			this.setState({ checkedOpen: !this.state.checkedOpen });
-			bChanged = true;
-		}
+		// if (this.props.transactionStatus.checkedOpen !== prevProps.transactionStatus.checkedOpen) {
+		// 	this.setState({ checkedOpen: !this.state.checkedOpen });
+		// 	bChanged = true;
+		// }
 
-		if (this.props.regionId !== prevProps.regionId) {
-			this.setState({ regionId: prevProps.regionId });
+		if (this.props.regionId !== prevProps.regionId ||
+			this.props.statusId !== prevProps.statusId) {
+			console.log("regionId", this.props.regionId, prevProps.regionId)
+			this.setState({
+				regionId: this.props.regionId,
+				statusId: this.props.statusId
+			});
+			console.log("----------START FETCHING----------")
+			this.setState({ loading: true });
+			this.props.getCustomers(this.props.regionId, this.props.statusId, this.props.location, this.props.latitude, this.props.longitude, this.props.searchText);
 			bChanged = true;
 		}
 
@@ -372,54 +393,81 @@ class Customers extends Component {
 			this.getCustomersFromStatus();
 		}
 
-		if (prevState.s !== this.state.s) {
-			this.search(this.state.s);
-		}
+		// if (prevState.s !== this.state.s) {
+		// 	this.search(this.state.s);
+		// }
 	}
 
 	componentWillMount() {
-		this.setState({ checkedPaid: this.props.transactionStatus.checkedPaid });
-		this.setState({ checkedPP: this.props.transactionStatus.checkedPP });
-		this.setState({ checkedComplete: this.props.transactionStatus.checkedComplete });
-		this.setState({ checkedOpen: this.props.transactionStatus.checkedOpen });
+		// this.setState({ checkedPaid: this.props.transactionStatus.checkedPaid });
+		// this.setState({ checkedPP: this.props.transactionStatus.checkedPP });
+		// this.setState({ checkedComplete: this.props.transactionStatus.checkedComplete });
+		// this.setState({ checkedOpen: this.props.transactionStatus.checkedOpen });
 
 		this.getCustomersFromStatus()
-
-
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if (this.props.customers === null && nextProps.customers !== null)
 			this.getCustomersFromStatus(nextProps.customers);
-		if (this.props.customers !== nextProps.customers)
+		if (this.props.customers !== nextProps.customers) {
+			console.log("----------END FETCHING----------")
+			this.setState({ loading: false });
 			this.getCustomersFromStatus(nextProps.customers);
+
+		}
 	}
 
 
 	getCustomersFromStatus = (rawData = this.props.customers) => {
+		console.log("getCustomersFromStatus", "Customer.js", this.props.regionId, this.props.statusId, rawData)
 		// let temp = [];
 		let all_temp = [];
 		// let temp1 = [];
 		// const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
 		// const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
 
-		if (rawData === null) return;
+		if (rawData === null || rawData === undefined) return;
 
 		let regions = rawData.Data.Regions.filter(x => {
 			return this.props.regionId === 0 || x.Id === this.props.regionId;
 		});
 
+
+		console.log("regions")
+		console.log(regions.length)
+		console.log(regions)
+		// if (regions.length !== 0) {
+
+
 		regions.forEach(x => {
-			all_temp = [...all_temp, ...x.Customers];
+			all_temp = [...all_temp, ...x.CustomerList];
 		});
 
 		// regions.map(x => {
 		// 	all_temp = [...all_temp, ...x.Customers];
 		// 	return;
 		// });
-
+		// }
 		this.setState({ temp: all_temp });
 		this.setState({ data: all_temp });
+
+
+
+		let _pins_temp = [];
+		regions.forEach(x => {
+			_pins_temp = [..._pins_temp, ...x.CustomerList.map(customer => {
+				return {
+					lat: customer.Latitude,
+					lng: customer.Longitude,
+					text: customer.CustomerName
+				}
+			})];
+
+		})
+
+		this.setState({ pins: _pins_temp });
+		console.log("pins", _pins_temp)
 	};
 
 	componentDidMount() {
@@ -533,8 +581,8 @@ class Customers extends Component {
 											<FuseAnimate animation="transition.expandIn" delay={300}>
 												<Fab
 													color="secondary"
-													aria-label="add" 
-													className={classNames(classes.sideButton, "mr-12")} 
+													aria-label="add"
+													className={classNames(classes.sideButton, "mr-12")}
 													onClick={openNewCustomerForm}>
 													<Icon>add</Icon>
 												</Fab>
@@ -640,7 +688,13 @@ class Customers extends Component {
 					}
 					content={
 						<div className="flex-1 flex-col absolute w-full h-full">
-							{(this.state.temp && !customerForm.props.open) && (<CustomerListContent data={this.state.temp} />)}
+							{(this.state.temp && !customerForm.props.open) && (
+								<CustomerListContent
+									data={this.state.temp}
+									loading={this.state.loading}
+									pins={this.state.pins}
+								/>
+							)}
 							{(this.state.temp && customerForm.props.open) && (
 								<CustomerForm customers={this.props.customers} franchisees={this.props.franchisees} selectedCustomer={this.state.selectedCustomer} />
 							)}
@@ -692,7 +746,7 @@ function mapDispatchToProps(dispatch) {
 	}, dispatch);
 }
 
-function mapStateToProps({ customers, auth,franchisees }) {
+function mapStateToProps({ customers, auth, franchisees }) {
 	return {
 		franchisees: franchisees.franchiseesDB,
 		customers: customers.customersDB,
@@ -702,7 +756,13 @@ function mapStateToProps({ customers, auth,franchisees }) {
 		summaryState: customers.bOpenedSummaryPanel,
 		mapViewState: customers.bOpenedMapView,
 		regionId: auth.login.defaultRegionId,
-		customerForm: customers.customerForm
+		customerForm: customers.customerForm,
+
+		statusId: customers.statusId,
+		longitude: customers.longitude,
+		latitude: customers.latitude,
+		location: customers.location,
+		searchText: customers.searchText
 	}
 }
 

@@ -82,6 +82,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 
+import Spinner from 'react-spinner-material';
+
 function Marker({ text }) {
 	return (
 		<Tooltip title={text} placement="top">
@@ -358,6 +360,7 @@ class CustomerListContent extends Component {
 		super(props);
 
 		this.state = {
+			pins: [],
 			s: '',
 			temp: [],
 			data: [],
@@ -655,14 +658,14 @@ class CustomerListContent extends Component {
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		console.log("componentDidUpdate");
 		if (this.props.data !== prevProps.data) {
-			this.setState({ data: this.props.data });
+			// this.setState({ data: this.props.data });
 			this.setState({ rows: this.props.data });
-
+			this.setState({ pins: this.props.pins });
 		}
 
-		if (prevState.s !== this.state.s) {
-			this.search(this.state.s);
-		}
+		// if (prevState.s !== this.state.s) {
+		// 	this.search(this.state.s);
+		// }
 	}
 	getCustomersFromStatus = (rawData = this.props.customers) => {
 		console.log("getCustomersFromStatus");
@@ -687,13 +690,16 @@ class CustomerListContent extends Component {
 		// 	all_temp = [...all_temp, ...x.Customers];
 		// });
 
-		this.setState({ temp: all_temp });
-		this.setState({ data: all_temp });
+		// this.setState({ temp: all_temp });
+		// this.setState({ data: all_temp });
+
+
 
 		this.setState({ rows: all_temp });
 
 	};
-	search(val) {
+
+	search() {
 		console.log("search");
 
 		// const temp = this.props.data.filter( d => {
@@ -711,7 +717,7 @@ class CustomerListContent extends Component {
 		// });
 
 		// this.setState({data: temp});
-		val = val.toLowerCase();
+		let val = this.state.s.toLowerCase();
 		if (val === '') {
 			this.getCustomersFromStatus();
 			return;
@@ -727,7 +733,7 @@ class CustomerListContent extends Component {
 				(d.StatusName && d.StatusName.toString().toLowerCase().indexOf(val) !== -1)
 		});
 
-		this.setState({ data: temp });
+		// this.setState({ data: temp });
 		this.setState({ rows: temp });
 	}
 
@@ -742,7 +748,9 @@ class CustomerListContent extends Component {
 		console.log("componentWillMount");
 
 		this.setState({ rows: this.props.data })
-		this.setState({ data: this.props.data })
+		// this.setState({ data: this.props.data })
+
+		this.timer = null;
 	}
 	componentWillUnmount() {
 		console.log("componentWillUnmount");
@@ -755,14 +763,24 @@ class CustomerListContent extends Component {
 
 		if (event.keyCode === 27) {
 			this.setState({ s: '' });
-			this.setState({ data: this.props.data })
+			// this.setState({ data: this.props.data })
+			this.setState({ rows: this.props.data })
 		}
 	}
+
+	WAIT_INTERVAL = 1000;
+	ENTER_KEY = 13;
 
 	handleChange = prop => event => {
 		console.log("handleChange");
 
+
 		this.setState({ [prop]: event.target.value });
+
+		// if (prop === 's') {
+		// 	clearTimeout(this.timer);
+		// 	this.timer = setTimeout(this.search, this.WAIT_INTERVAL);
+		// }
 	};
 
 	removeCustomers = () => {
@@ -826,9 +844,10 @@ class CustomerListContent extends Component {
 		return this.props.data;
 	}
 	shouldComponentUpdate(nextProps, nextState) {
-		return this.state !== nextState ||
+		return (this.state !== nextState) ||
 			this.props.mapViewState !== nextProps.mapViewState ||
-			this.props.data !== nextProps.data
+			this.props.data !== nextProps.data ||
+			this.props.loading !== nextProps.loading
 
 		// return true;
 	}
@@ -848,7 +867,7 @@ class CustomerListContent extends Component {
 		} = this.props;
 
 		const {
-
+			pins,
 			// mapViewState,
 			rows,
 			columns,
@@ -895,15 +914,10 @@ class CustomerListContent extends Component {
 								<img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" />
 							</Button> */}
 
-							<IconButton
-								className={classNames(classes.button, "mr-12")}
-								aria-label="Add an alarm"
-								onClick={(ev) => toggleMapView()}>
-								<Icon>{mapViewState ? 'list' : 'location_on'}</Icon>
-							</IconButton>
+
 						</div>
 
-						<Paper className={"flex items-center w-full h-44 mr-12"} elevation={1}>
+						<Paper className={"flex items-center w-full h-44 mr-0"} elevation={1}>
 							<Input
 								placeholder="Search..."
 								className={classNames(classes.search, 'pl-16')}
@@ -918,6 +932,14 @@ class CustomerListContent extends Component {
 							<Icon color="action" className="mr-16">search</Icon>
 						</Paper>
 						<div className="flex items-center justify-end p-12">
+							<IconButton
+								// className={classNames(classes.summaryPanelButton, "mr-12")}
+								className={classNames(classes.button, "mr-12")}
+								aria-label="Add an alarm"
+								onClick={(ev) => toggleMapView()}>
+								<Icon>{mapViewState ? 'list' : 'location_on'}</Icon>
+							</IconButton>
+
 							<Button
 								onClick={(ev) => toggleSummaryPanel()}
 								aria-label="toggle summary panel"
@@ -937,11 +959,22 @@ class CustomerListContent extends Component {
 								defaultZoom={12}
 								defaultCenter={[this.state.current_lat, this.state.current_long]}
 							>
-								<Marker
+								{/* <Marker
 									text="Marker Text"
 									lat={this.state.current_lat}
 									lng={this.state.current_long}
-								/>
+								/> */}
+
+								{
+									this.props.pins.map((x, index) => (
+										<Marker
+											key={index}
+											text={x.text}
+											lat={x.lat}
+											lng={x.lng}
+										/>
+									))
+								}
 							</GoogleMap>
 						</div>
 					</div>)}
@@ -953,9 +986,7 @@ class CustomerListContent extends Component {
 								className={classNames(classes.layoutTable, "flex flex-col h-full")}
 							// style={{ flex: '1', }}
 							>
-								<span className={"p-6"}>
-									Rows Selected: {selection.length}
-								</span>
+
 								<Grid
 									rootComponent={GridRootComponent}
 									rows={
@@ -1095,6 +1126,23 @@ class CustomerListContent extends Component {
 									{/* <GroupingPanel showSortingControls showGroupingControls /> */}
 
 								</Grid>
+
+								<div
+									className={classNames(classes.layoutTable, "flex flex-row")}
+									style={{ justifyContent: "space-between" }}
+								>
+									<span className={"p-6"}>
+										Rows Selected: <strong>{selection.length}</strong>
+									</span>
+									<Spinner size={45} spinnerColor={"#F40456"} spinnerWidth={5}
+										visible={this.props.loading}
+										className={classNames("p-6")}
+									/>
+									<span className={"p-6"}>
+										Total Rows: <strong>{rows.length}</strong>
+									</span>
+								</div>
+
 							</Paper>
 						)
 					}
