@@ -32,6 +32,11 @@ import moment from "moment";
 import FranchiseesDocumentUploadTable from "./documentUploadTable";
 import FranchiseesMaintenanceTable from "./maintenanceTableLine";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
+import {
+    UPDATE_DATE_SIGN_FRANCHISEE,
+    UPDATE_EXP_DATE_FRANCHISEE,
+    UPDATE_RENEW_DATE_FRANCHISEE
+} from "../../../../../store/actions";
 const styles = theme => ({
 
     root: {
@@ -388,6 +393,7 @@ function getStepContent(customerForm, step) {
                                     label="Date Sign"
                                     value={customerForm.state.selectedSignDate}
                                     onChange={customerForm.handleSignDateChange}
+                                    format="MM/dd/YYYY"
                                     className={classes.textField}
                                     margin="dense"
                                     variant="outlined"
@@ -400,6 +406,7 @@ function getStepContent(customerForm, step) {
                                     value={customerForm.state.selectedRenewDate}
                                     onChange={customerForm.handleRenewDateChange}
                                     className={classes.textField}
+                                    format="MM/dd/YYYY"
                                     variant="outlined"
                                     margin="dense"
                                     style={{marginLeft: '1%', marginRight: '1%'}}
@@ -421,6 +428,7 @@ function getStepContent(customerForm, step) {
                                     label="EXP. Date"
                                     value={customerForm.state.selectedExpDate}
                                     onChange={customerForm.handleExpDateChange}
+                                    format="MM/dd/YYYY"
                                     className={classes.textField}
                                     variant="outlined"
                                     margin="dense"
@@ -617,12 +625,15 @@ class FranchiseesCreateForm extends Component {
     }
     handleSignDateChange = date => {
         this.setState({ selectedSignDate: date });
+        this.props.updateDate(UPDATE_DATE_SIGN_FRANCHISEE, moment(date).format("MM/DD/YYYY"));
     };
     handleRenewDateChange = date => {
         this.setState({ selectedRenewDate: date });
+        this.props.updateDate(UPDATE_RENEW_DATE_FRANCHISEE, moment(date).format("MM/DD/YYYY"));
     };
     handleExpDateChange = date => {
         this.setState({ selectedExpDate: date });
+        this.props.updateDate(UPDATE_EXP_DATE_FRANCHISEE, moment(date).format("MM/DD/YYYY"));
     };
     handleRadioChange = event => {
         this.setState({ selectedValue: event.target.value });
@@ -758,7 +769,8 @@ function mapDispatchToProps(dispatch) {
         showCreteFranchisees: Actions.showCreteFranchisees,
         closeCreateFranchisees: Actions.closeCreateFranchisees,
         showEditFranchisees: Actions.showCreteFranchisees,
-        closeEditFranchisees: Actions.showCreteFranchisees
+        closeEditFranchisees: Actions.showCreteFranchisees,
+        updateDate: Actions.updateDate
     }, dispatch);
 }
 

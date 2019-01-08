@@ -17,6 +17,9 @@ const initialState = {
     franchiseeFilterList: null,
     bLoadedFilterList: false,
     franchiseeStatus: [],
+    selectedSignDate: new Date(),
+    selectedRenewDate: new Date(),
+    selectedExpDate: new Date(),
     transactionStatusFranchisees:{
         Active: true,
         Inactive: true,
@@ -164,6 +167,24 @@ const franchisees = function(state = initialState, action) {
             return{
                 ...state,
                 Location: action.Location
+            }
+        }
+        case Actions.UPDATE_DATE_SIGN_FRANCHISEE:
+        {
+            return {
+                ...state, selectedSignDate: action.payload
+            }
+        }
+        case Actions.UPDATE_RENEW_DATE_FRANCHISEE:
+        {
+            return {
+                ...state, selectedRenewDate: action.payload
+            }
+        }
+        case Actions.UPDATE_EXP_DATE_FRANCHISEE:
+        {
+            return {
+                ...state, selectedExpDate: action.payload
             }
         }
         default:

@@ -16,6 +16,9 @@ export const TOGGLE_FRANCHISEE_MAP_VIEW = '[FRANCHISEES] TOGGLE FRANCHISEE MAP V
 export const SELECTED_LOCATION = '[FRANCHISEES] SELECTED LOCATION';
 export const GET_FILTER_LIST = '[FRANCHISEES] GET FILTER LIST';
 export const UPDATE_FRANCHISEE_STATUS = '[FRANCHISEES] UPDATE FRANCHISEE STATUS';
+export const UPDATE_DATE_SIGN_FRANCHISEE = "[FRANCHISEE] UPDATE  DATE_SIGN FRANCHISEE";
+export const UPDATE_RENEW_DATE_FRANCHISEE = "[FRANCHISEE] UPDATE  RENEW_DATE FRANCHISEE";
+export const UPDATE_EXP_DATE_FRANCHISEE = "[FRANCHISEE] UPDATE  EXP_DATE FRANCHISEE";
 
 export function getFranchisees(regionId, statusId, location , latitude , longitude , searchtext) {
     regionId = regionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [regionId]
@@ -167,4 +170,11 @@ export function updateFranchiseeStatus(newStatus){
         type: UPDATE_FRANCHISEE_STATUS,
         payload: newStatus
     }
+}
+export function updateDate(key, date) {
+    return {
+        type: key,
+        payload: date
+    }
+
 }
