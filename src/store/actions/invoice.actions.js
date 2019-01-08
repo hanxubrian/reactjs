@@ -1,11 +1,17 @@
 import axios from "axios";
+import {invoiceService} from "../../services"
 
 export const GET_ALL_INVOICES = "[INVOICES] GETS ALL";
+export const GET_INVOICE_STATUS = "[INVOICES] GETS INVOICE STATUS";
+export const GET_INVOICES_FETCH_START = "[INVOICES] GETS STARTED FETCH";
 export const DELETE_SELECTED_INVOICES = "[INVOICES] DELETE SELECTED";
 export const REMOVE_SELECTED_INVOICE = "[INVOICE] REMOVE SELECTED";
 export const TOGGLE_SUMMARY_PANEL = "[INVOICES] TOGGLE SUMMARY PANEL";
 export const TOGGLE_FILTER_STATUS = "[INVOICES] TOGGLE FILTER STATUS";
 export const TOGGLE_FILTER_PANEL = "[INVOICES] TOGGLE FILTER PANEL";
+export const UPDATE_FROM_DATE_INVOICE = "[INVOICES] UPDATE FROM DATE";
+export const UPDATE_TO_DATE_INVOICE = "[INVOICES] UPDATE TO DATE";
+
 // for Add/Edit
 export const OPEN_NEW_INVOICE_FORM = '[INVOICES APP] OPEN NEW INVOICE FORM';
 export const CLOSE_NEW_INVOICE_FORM = '[INVOICES APP] CLOSE NEW INVOICE FORM';
@@ -16,19 +22,48 @@ export const UPDATE_INVOICE = '[INVOICES APP] UPDATE INVOICE';
 export const UPDATE_INVOICE_LINE = '[INVOICES APP] UPDATE INVOICE LINE';
 
 
-export function getInvoices() {
-    return dispatch => {
-        const request = axios.get("/api/invoices/gets");
+export function getInvoices(RegionId, StatusId, FromDate, ToDate, PeriodId,OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText) {
+    if(ToDate==="") {
+        ToDate = new Date();
+    }
+    return (dispatch) => {
 
-        return request.then(response => {
-            return dispatch({
-                type: GET_ALL_INVOICES,
-                payload: response.data
-            });
+        dispatch({
+            type: GET_INVOICES_FETCH_START,
+            payload: true
         });
+
+        (async () => {
+            let res = await invoiceService.getInvoiceList(RegionId, StatusId, FromDate, ToDate, PeriodId, OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText);
+            console.log('invoice=', res);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: GET_ALL_INVOICES,
+                    payload: res
+                });
+            } else {
+
+            }
+        })();
     };
 }
 
+export function getInvoiceStatus(RegionId) {
+    return (dispatch) => {
+       (async () => {
+            let res = await invoiceService.getInvoiceStatusList(RegionId);
+            console.log('invoice status=', res);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: GET_INVOICE_STATUS,
+                    payload: res.Data
+                });
+            } else {
+
+            }
+        })();
+    };
+}
 export function toggleFilterPanel(){
     return {
         type: TOGGLE_FILTER_PANEL
@@ -101,6 +136,14 @@ export function closeEditInvoiceForm()
     return {
         type: CLOSE_EDIT_INVOICE_FORM
     }
+}
+
+export function updateDate(key, date) {
+    return {
+        type: key,
+        payload: date
+    }
+
 }
 
 export function addInvoice(newInvoice)

@@ -1,14 +1,17 @@
 import React, {Component} from 'react';
-import {Paper, withStyles} from '@material-ui/core';
 
 //Material UI core
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import {Paper, withStyles} from '@material-ui/core';
+import 'date-fns'
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 
-import * as Actions from 'store/actions';
-
+//Store
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import * as Actions from 'store/actions';
+
+//Third party
 import classNames from 'classnames';
 
 const styles = theme => ({
@@ -48,6 +51,7 @@ const styles = theme => ({
 class FilterPanel extends Component {
 
     state = {
+        reportDate: new Date()
     };
 
     componentDidMount()
@@ -56,11 +60,14 @@ class FilterPanel extends Component {
 
     componentWillMount(){
         this.setState({
+            reportDate: this.props.reportDate
         });
     }
 
-    componentDidUpdate(prevProps)
-    {
+    componentDidUpdate(prevProps, prevState, snapshot){
+        if(prevState.reportDate!==this.state.reportDate) {
+            this.props.updateReportDate(this.state.reportDate);
+        }
     }
 
     componentWillUnmount()
@@ -73,6 +80,10 @@ class FilterPanel extends Component {
         this.props.toggleStatus(name, event.target.checked)
     };
 
+    handleInvoiceDateChange = date => {
+        this.setState({ reportDate: date });
+    };
+
     render()
     {
         const {classes} = this.props;
@@ -81,11 +92,23 @@ class FilterPanel extends Component {
             <div className={classNames(classes.root)}>
                 <div className={classNames("flex flex-col")}>
                     <Paper className="flex flex-1 flex-col min-h-px p-20">
-
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <div style={{marginTop: 50, display: 'flex', flexDirection: 'column'}}>
-                            <h3>Filter Parameters</h3>
-
+                            <h3>Choose a date</h3>
+                            <DatePicker
+                                margin="none"
+                                label="Period"
+                                name="InvoiceDate"
+                                variant="outlined"
+                                format="MM/dd/yyyy"
+                                value={this.state.reportDate}
+                                onChange={this.handleInvoiceDateChange}
+                                fullWidth
+                                required
+                                className={classNames("mt-24")}
+                            />
                         </div>
+                        </MuiPickersUtilsProvider>
                     </Paper>
                 </div>
             </div>
@@ -96,6 +119,7 @@ class FilterPanel extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
+        updateReportDate: Actions.updateReportDate
 
     }, dispatch);
 }
@@ -104,6 +128,7 @@ function mapStateToProps({franchiseeReports, auth})
 {
     return {
         filterState: franchiseeReports.bOpenedFilterPanelFranchiseeReports,
+        reportDate: franchiseeReports.reportDate
     }
 }
 

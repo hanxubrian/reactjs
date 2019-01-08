@@ -1,19 +1,21 @@
-import React, {Component} from 'react';
-import {withStyles} from '@material-ui/core/styles/index';
-import {withRouter} from 'react-router-dom';
-import { bindActionCreators } from "redux";
+import React, { Component } from 'react';
 
 // core components
-import { Icon, IconButton, Fab, Typography, Toolbar} from '@material-ui/core';
+import { Icon, IconButton, Fab, Typography, Toolbar } from '@material-ui/core';
 
 // theme components
 import { FusePageCustomSidebarScroll, FuseAnimate } from '@fuse';
+
+
+import { bindActionCreators } from "redux";
+import { withStyles } from "@material-ui/core";
+import { withRouter } from 'react-router-dom';
 
 // for store
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
 import SummaryPanel from './SummaryPanel';
-import FilterPanel from './FilterPanel';
+import FilterPanel from './filterPanel';
 
 // third party
 // import moment from 'moment'
@@ -29,18 +31,9 @@ import classNames from 'classnames';
 //table pagination
 // import JanikingPagination from './../../../../Commons/JanikingPagination';
 
-import LeaseForm from './LeaseForm';
-import LeaseListContent from './LeaseListContent';
+import LeadForm from './LeadForm';
+import LeadListContent from './LeadListContent';
 
-// import GoogleMap from 'google-map-react';
-
-// function Marker({ text }) {
-// 	return (
-// 		<Tooltip title={text} placement="top">
-// 			<Icon className="text-red">place</Icon>
-// 		</Tooltip>
-// 	);
-// }
 const headerHeight = 80;
 
 const hexToRgb = (hex) => {
@@ -220,12 +213,30 @@ const styles = theme => ({
 // const defaultProps = {
 // 	trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
 // };
-class Leases extends Component {
+
+
+class Leads extends Component {
+	// state = {
+	// 	s: '',
+	// 	temp: [],
+	// 	data: [],
+	// 	checkedPaid: true,
+	// 	checkedPP: true,
+	// 	checkedComplete: true,
+	// 	checkedOpen: true,
+	// 	selection: [],
+	// 	selectAll: false,
+	// 	regionId: 0,
+
+	// 	current_lat:0,
+	// 	current_long:0,
+	// };
+
 	constructor(props) {
 		super(props);
 
-		if (!props.bLoadedLeases) {
-			props.getLeases();
+		if (!props.bLoadedLeads) {
+			props.getLeads();
 		}
 		this.fetchData = this.fetchData.bind(this);
 		this.escFunction = this.escFunction.bind(this);
@@ -245,9 +256,9 @@ class Leases extends Component {
 			current_lat: 0,
 			current_long: 0,
 		};
-    }
+	}
 
-    toggleSelection = (key, shift, row) => {
+	toggleSelection = (key, shift, row) => {
         /*
           https://react-table.js.org/#/story/select-table-hoc
           Implementation of how to manage the selection state is up to the developer.
@@ -302,7 +313,7 @@ class Leases extends Component {
 			let end_index = start_index + pageSize;
 			currentRecords.forEach(item => {
 				if (item._index >= start_index && item._index < end_index)
-					selection.push(item._original.LeaseId);
+					selection.push(item._original.LeadId);
 			});
 		}
 		this.setState({ selectAll, selection });
@@ -322,7 +333,7 @@ class Leases extends Component {
 	};
 
 	closeComposeForm = () => {
-		this.props.leaseForm.type === 'create' ? this.props.closeEditLeaseForm() : this.props.closeNewLeaseForm();
+		this.props.leadForm.type === 'create' ? this.props.closeEditLeadForm() : this.props.closeNewLeadForm();
 	};
 
 
@@ -355,10 +366,10 @@ class Leases extends Component {
 		}
 
 		if (bChanged)
-			this.getLeasesFromStatus();
+			this.getLeadsFromStatus();
 
-		if (prevProps.leases === null && this.props.leases !== null) {
-			this.getLeasesFromStatus();
+		if (prevProps.leads === null && this.props.leads !== null) {
+			this.getLeadsFromStatus();
 		}
 
 		if (prevState.s !== this.state.s) {
@@ -372,20 +383,20 @@ class Leases extends Component {
 		this.setState({ checkedComplete: this.props.transactionStatus.checkedComplete });
 		this.setState({ checkedOpen: this.props.transactionStatus.checkedOpen });
 
-		this.getLeasesFromStatus()
+		this.getLeadsFromStatus()
 
 
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (this.props.leases === null && nextProps.leases !== null)
-			this.getLeasesFromStatus(nextProps.leases);
-		if (this.props.leases !== nextProps.leases)
-			this.getLeasesFromStatus(nextProps.leases);
+		if (this.props.leads === null && nextProps.leads !== null)
+			this.getLeadsFromStatus(nextProps.leads);
+		if (this.props.leads !== nextProps.leads)
+			this.getLeadsFromStatus(nextProps.leads);
 	}
 
 
-	getLeasesFromStatus = (rawData = this.props.leases) => {
+	getLeadsFromStatus = (rawData = this.props.leads) => {
 		// let temp = [];
 		let all_temp = [];
 		// let temp1 = [];
@@ -393,13 +404,15 @@ class Leases extends Component {
 		// const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
 
 		if (rawData === null) return;
-		let regions = rawData.Data.Region.filter(x => {
-			return this.props.regionId === 24 || x.Id === this.props.regionId;
-		});
+        let regions = rawData.Data.Leads.filter(x => x )
+        all_temp = [...all_temp, ...regions]
+		// let regions = rawData.Data.Leads.filter(x => {
+		// 	return this.props.regionId === 0 || x.Id === this.props.regionId;
+		// });
 
-		regions.forEach(x => {
-			all_temp = [...all_temp, ...x.LeaseList];
-		});
+		// regions.forEach(x => {
+		// 	all_temp = [...all_temp, ...x.Leads];
+		// });
 
 		// regions.map(x => {
 		// 	all_temp = [...all_temp, ...x.Customers];
@@ -412,7 +425,6 @@ class Leases extends Component {
 
 	componentDidMount() {
 		document.addEventListener("keydown", this.escFunction, false);
-		this.getLocation();
 	}
 
 	componentWillUnmount() {
@@ -422,21 +434,21 @@ class Leases extends Component {
 	escFunction(event) {
 		if (event.keyCode === 27) {
 			this.setState({ s: '' });
-			this.getLeasesFromStatus();
+			this.getLeadsFromStatus();
 		}
 	}
 	search(val) {
 		if (val === '') {
-			this.getLeasesFromStatus();
+			this.getLeadsFromStatus();
 			return;
 		}
 		const temp = this.state.data.filter(d => {
-			return (d.LeaseNo && d.LeaseNo.toString().indexOf(val) !== -1) || !val ||
-				(d.LeaseName && d.LeaseName.toString().indexOf(val) !== -1) ||
+			return (d.LeadNo && d.LeadNo.toString().indexOf(val) !== -1) || !val ||
+				(d.LeadName && d.LeadName.toString().indexOf(val) !== -1) ||
 				(d.Address && d.Address.toString().indexOf(val) !== -1) ||
 				(d.Phone && d.Phone.toString().indexOf(val) !== -1) ||
 				(d.AccountTypeListName && d.AccountTypeListName.toString().indexOf(val) !== -1) ||
-				(d.LeaseDescription && d.LeaseDescription.toString().toLowerCase().indexOf(val) !== -1) ||
+				(d.LeadDescription && d.LeadDescription.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.Amount && d.Amount.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.StatusName && d.StatusName.toString().indexOf(val) !== -1)
 		});
@@ -460,13 +472,13 @@ class Leases extends Component {
 		// );
 	}
 
-	removeLeases = () => {
+	removeLeads = () => {
 		if (this.state.selection.length === 0) {
-			alert("Please choose customer(s) to delete");
+			alert("Please choose lead(s) to delete");
 			return;
 		}
-		if (window.confirm("Do you really want to remove the selected customer(s)")) {
-			this.props.deleteLeasesAction(this.state.selection, this.props.leases);
+		if (window.confirm("Do you really want to remove the selected lead(s)")) {
+			this.props.deleteLeadsAction(this.state.selection, this.props.leads);
 			this.setState({ selection: [], selectAll: false })
 		}
 	};
@@ -477,32 +489,16 @@ class Leases extends Component {
 			page: state.page,
 		});
 	}
-	getLocation() {
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(
-				(position) => {
-					console.log(position.coords);
-					this.setState({
-						current_lat: position.coords.latitude,
-						current_long: position.coords.longitude
-					})
-				}
-			);
-		}
-    }
 
-    render() {
-    const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, openNewLeaseForm, leaseForm, mapViewState } = this.props;
-		console.log(this.props)
-		console.log(this.state)
+	render() {
+		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, openNewLeadForm, leadForm, mapViewState, toggleMapView } = this.props;
+
 		// const { toggleSelection, toggleAll, isSelected, logSelection } = this;
 
-        const { selection } = this.state;
+		const { selection } = this.state;
 
-
-        console.log('props=', this.props);
-        return (
-            <React.Fragment >
+		return (
+			<React.Fragment >
 				<FusePageCustomSidebarScroll
 					classes={{
 						root: classNames(classes.layoutRoot, 'test123'),
@@ -514,7 +510,7 @@ class Leases extends Component {
 					}}
 					header={
 						<div className="flex w-full items-center">
-							{(this.state.temp && !leaseForm.props.open) && (
+							{(this.state.temp && !leadForm.props.open) && (
 								<div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
 									<div className="flex flex-row flex-1 justify-between">
 										<div className="flex flex-shrink items-center">
@@ -523,7 +519,7 @@ class Leases extends Component {
 													<Icon className="text-32 mr-12">account_box</Icon>
 												</FuseAnimate>
 												<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-													<Typography variant="h6" className="hidden sm:flex">Franchisees | Leases</Typography>
+													<Typography variant="h6" className="hidden sm:flex">Sales | Leads</Typography>
 												</FuseAnimate>
 											</div>
 										</div>
@@ -540,7 +536,7 @@ class Leases extends Component {
 													color="secondary"
 													aria-label="add" 
 													className={classNames(classes.sideButton, "mr-12")} 
-													onClick={openNewLeaseForm}>
+													onClick={openNewLeadForm}>
 													<Icon>add</Icon>
 												</Fab>
 											</FuseAnimate>
@@ -559,7 +555,7 @@ class Leases extends Component {
 									</div>
 									<div className="flex flex-none items-end" style={{ display: 'none' }}>
 										<FuseAnimate animation="transition.expandIn" delay={600}>
-											<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => openNewLeaseForm}>
+											<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => openNewLeadForm}>
 												<Icon>add</Icon>
 											</Fab>
 										</FuseAnimate>
@@ -584,7 +580,7 @@ class Leases extends Component {
 									</div>
 								</div>
 							)}
-							{(this.state.temp && leaseForm.props.open) && (
+							{(this.state.temp && leadForm.props.open) && (
 								<div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
 									<div className="flex flex-row flex-1 justify-between">
 										<div className="flex flex-shrink items-center">
@@ -595,7 +591,7 @@ class Leases extends Component {
 													</Toolbar>
 												</FuseAnimate>
 												<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-													<Typography variant="h6" className="hidden sm:flex">Leases | New Leases</Typography>
+													<Typography variant="h6" className="hidden sm:flex">Leads | New Leads</Typography>
 												</FuseAnimate>
 											</div>
 										</div>
@@ -612,42 +608,6 @@ class Leases extends Component {
 											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
 												<Icon>close</Icon>
 											</IconButton>
-
-											{/* <FuseAnimate animation="transition.expandIn" delay={300}>
-												<Button
-													variant="contained"
-													color="primary"
-													className={classNames(classes.button, "mr-12")}
-													onClick={() => {
-														this.closeComposeForm();
-													}}
-													disabled={!this.canBeSubmitted()}
-												> Discard </Button>
-											</FuseAnimate>
-											<FuseAnimate animation="transition.expandIn" delay={300}>
-												<Button
-													variant="contained"
-													color="primary"
-													className={classNames(classes.button, "mr-12")}
-													onClick={() => {
-														this.closeComposeForm();
-													}}
-													disabled={!this.canBeSubmitted()}
-												> Save </Button>
-											</FuseAnimate>
-											<FuseAnimate animation="transition.expandIn" delay={300}>
-												<Button
-													variant="contained"
-													color="primary"
-													className={classes.button}
-													onClick={() => {
-														this.closeComposeForm();
-													}}
-													disabled={!this.canBeSubmitted()}
-												> Close </Button>
-											</FuseAnimate> */}
-
-
 										</div>
 									</div>
 									<div className="flex flex-none items-end" style={{ display: 'none' }}>
@@ -681,71 +641,27 @@ class Leases extends Component {
 					}
 					content={
 						<div className="flex-1 flex-col absolute w-full h-full">
-							{(this.state.temp && !leaseForm.props.open) && (mapViewState) && (<div className="w-full h-full">
-								<div className="w-full h-full">
-									{/* <GoogleMap
-										bootstrapURLKeys={{
-											key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
-										}}
-										defaultZoom={12}
-										defaultCenter={[this.state.current_lat, this.state.current_long]}
-									>
-										<Marker
-											text="Marker Text"
-											lat={this.state.current_lat}
-											lng={this.state.current_long}
-										/>
-									</GoogleMap> */}
-								</div>
-							</div>)}
-							{(this.state.temp && !leaseForm.props.open) && (!mapViewState) && (<LeaseListContent data={this.state.temp} />)}
-							{(this.state.temp && leaseForm.props.open) && (
-								<LeaseForm leases={this.state.leases} selectedLease={this.state.selectedLease} />
+							{(this.state.temp && !leadForm.props.open) && (<LeadListContent data={this.state.temp} />)}
+							{(this.state.temp && leadForm.props.open) && (
+								<LeadForm leads={this.props.leads} franchisees={this.props.franchisees} selectedLead={this.state.selectedLead} />
 							)}
 						</div>
 					}
 					leftSidebarHeader={
 						<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
-							{/* <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", { 'filteropen': filterState })}> */}
-							{/* <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0"> */}
-							{leaseForm.props.open ? (
-								<h2 style={{ marginBlockStart: '1em' }}>Lease Information</h2>
+							{leadForm.props.open ? (
+								<h2 style={{ marginBlockStart: '1em' }}>Lead Information</h2>
 							) : (
 									<h2 style={{ marginBlockStart: '1em' }}>Filters</h2>
 								)}
-
-							{/* <FuseAnimate animation="transition.expandIn" delay={200}>
-								<div>
-									<Hidden xsDown>
-										<IconButton onClick={(ev) => toggleFilterPanel()}>
-											<Icon>close</Icon>
-										</IconButton>
-									</Hidden>
-								</div>
-							</FuseAnimate> */}
 						</div>
 					}
 					leftSidebarContent={
 						<FilterPanel />
 					}
 					rightSidebarHeader={
-						/*<div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0"> */
 						<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
 							<h2 style={{ marginBlockStart: '1em' }}>Summary</h2>
-							{/* <FuseAnimate animation="transition.expandIn" delay={200}> */}
-							{/* <div> */}
-							{/* <Hidden xsDown> */}
-							{/*<IconButton onClick={()=>this.removeCustomers()}>*/}
-							{/* <Icon>delete</Icon> */}
-							{/* </IconButton> */}
-							{/* <IconButton onClick={(ev) => toggleSummaryPanel()}>  */}
-
-							{/* <IconButton onClick={toggleSummaryPanel}> */}
-							{/* <Icon>close</Icon> */}
-							{/* </IconButton> */}
-							{/* </Hidden> */}
-							{/* </div> */}
-							{/* </FuseAnimate> */}
 						</div>
 					}
 					rightSidebarContent={
@@ -757,39 +673,38 @@ class Leases extends Component {
 					}}
 				>
 				</FusePageCustomSidebarScroll>
-				{/* <CustomerDialog customers={this.state.customers}/> */}
 			</React.Fragment >
-        );
-    }
-}
-
-
-function mapDispatchToProps(dispatch) {
-	return bindActionCreators({
-		getLeases: Actions.getLeases,
-		toggleFilterPanel: Actions.toggleFilterPanel,
-		toggleSummaryPanel: Actions.toggleSummaryPanel,
-		toggleMapView: Actions.toggleMapView,
-		deleteLeasesAction: Actions.deleteLeases,
-		removeLeaseAction: Actions.removeLease,
-		openNewLeaseForm: Actions.openNewLeaseForm,
-		openEditLeaseForm: Actions.openEditLeaseForm,
-		closeEditLeaseForm: Actions.closeEditLeaseForm,
-		closeNewLeaseForm: Actions.closeNewLeaseForm,
-	}, dispatch);
-}
-
-function mapStateToProps({ leases, auth }) {
-	return {
-		leases: leases.leasesDB,
-		bLoadedLeases: leases.bLoadedLeases,
-		transactionStatus: leases.transactionStatus,
-		filterState: leases.bOpenedFilterPanel,
-		summaryState: leases.bOpenedSummaryPanel,
-		mapViewState: leases.bOpenedMapView,
-		regionId: auth.login.defaultRegionId,
-		leaseForm: leases.leaseForm
+		);
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(Leases)));
+function mapDispatchToProps(dispatch) {
+	return bindActionCreators({
+		getLeads: Actions.getLeads,
+		toggleFilterPanel: Actions.toggleFilterPanel,
+		toggleSummaryPanel: Actions.toggleSummaryPanel,
+		toggleMapView: Actions.toggleMapView,
+		deleteLeadsAction: Actions.deleteLeads,
+		removeLeadAction: Actions.removeLead,
+		openNewLeadForm: Actions.openNewLeadForm,
+		openEditLeadForm: Actions.openEditLeadForm,
+		closeEditLeadForm: Actions.closeEditLeadForm,
+		closeNewLeadForm: Actions.closeNewLeadForm,
+	}, dispatch);
+}
+
+function mapStateToProps({ leads, auth, franchisees }) {
+	return {
+		franchisees: franchisees.franchiseesDB,
+		leads: leads.leadsDB,
+		bLoadedleads: leads.bLoadedleads,
+		transactionStatus: leads.transactionStatus,
+		filterState: leads.bOpenedFilterPanel,
+		summaryState: leads.bOpenedSummaryPanel,
+		mapViewState: leads.bOpenedMapView,
+		regionId: auth.login.defaultRegionId,
+		leadForm: leads.leadForm
+	}
+}
+
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(Leads)));

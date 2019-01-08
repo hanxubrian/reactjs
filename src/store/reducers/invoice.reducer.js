@@ -1,8 +1,11 @@
+import moment from "moment"
+
 import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 
+let today = new Date();
 const initialState = {
     invoicesDB: null,
     bLoadedInvoices: false,
@@ -16,7 +19,16 @@ const initialState = {
         },
         data : null,
         customer: null
-    }
+    },
+    FromDate: moment("01/01/2018").format("MM/DD/YYYY"),
+    ToDate: moment(today).format("MM/DD/YYYY"),
+    StatusId: [1],
+    PeriodId: [220],
+    OpenOrClosed: "N",
+    InvoiceTypeId: 1,
+    ToPrintOrToEmail: "print",
+    SearchText: "",
+    invoiceStatus: []
 };
 
 
@@ -26,9 +38,27 @@ const invoices = function(state = initialState, action) {
         case Actions.GET_ALL_INVOICES:
         {
             return {
-                ...initialState,
+                ...state,
                 invoicesDB: action.payload, bLoadedInvoices: true
             };
+        }
+        case Actions.GET_INVOICE_STATUS:
+        {
+            return {
+                ...state, invoiceStatus: action.payload
+            }
+        }
+        case Actions.UPDATE_FROM_DATE_INVOICE:
+        {
+            return {
+                ...state, FromDate: action.payload
+            }
+        }
+        case Actions.UPDATE_TO_DATE_INVOICE:
+        {
+            return {
+                ...state, ToDate: action.payload
+            }
         }
         case Actions.TOGGLE_FILTER_PANEL:
         {
@@ -136,6 +166,6 @@ const invoices = function(state = initialState, action) {
 const persistConfig = {
     key: 'invoices',
     storage: storage,
-    blacklist: ['bOpenedSummaryPanel','bOpenedFilterPanel']
+    blacklist: ['bOpenedSummaryPanel','bOpenedFilterPanel', 'invoicesDB']
 };
 export default persistReducer(persistConfig, invoices);

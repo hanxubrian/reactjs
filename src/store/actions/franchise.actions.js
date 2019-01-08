@@ -15,6 +15,8 @@ export const CLOSE_EDIT_FRANCHISEES_FORM = "[FRANCHISEES] FRANCHISEES EDIT CLOSE
 export const UPDATE_FRANCHISEES = '[FRANCHISEES] UPDATE FRANCHISEES';
 export const ADD_FRANCHISEES = '[FRANCHISEES] ADD FRANCHISEES';
 export const TOGGLE_FRANCHISEE_MAP_VIEW = '[FRANCHISEES] TOGGLE FRANCHISEE MAP VIEW';
+export const SELECTED_LOCATION = '[FRANCHISEES] SELECTED LOCATION';
+export const GET_FILTER_LIST = '[FRANCHISEES] GET FILTER LIST';
 
 export function getFranchisees(regionId, statusId, location , latitude , longitude , searchtext) {
     return (dispatch) => {
@@ -23,6 +25,18 @@ export function getFranchisees(regionId, statusId, location , latitude , longitu
             dispatch({
                 type: GET_ALL_FRANCHISEES,
                 payload: franchiseesList
+            });
+        })();
+    }
+}
+
+export function getStatusFilterList(regionId) {
+    return (dispatch) => {
+        (async () => {
+            let filterList = await franchiseesService.getStatusFilterList(regionId);
+            dispatch({
+                type: GET_FILTER_LIST,
+                payload: filterList
             });
         })();
     }
@@ -149,3 +163,9 @@ export function toggleFranchiseeMapView(){
     }
 }
 
+export function selectLocation(location){
+    return {
+        type: SELECTED_LOCATION,
+        Location: location
+    }
+}

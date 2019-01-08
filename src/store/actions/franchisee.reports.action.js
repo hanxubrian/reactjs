@@ -5,7 +5,7 @@ export const GET_FRANCHISEE_REPORTS = "[FRANCHISEE-REPORTS] GETS";
 export const GET_FRANCHISEE_REPORT_DETAIL = "[FRANCHISEE-REPORTS] GET A REPORT";
 export const GET_FRANCHISEE_REPORTS_FETCH_START = "[FRANCHISEE-REPORTS] GETS FETCH START";
 export const TOGGLE_FRANCHISEES_REPORTS_FILTER_PANEL = "[FRANCHISEE-REPORT] TOGGLE REPORTS FILTER PANEL";
-
+export const UPDATE_REPORT_DATE = "[FRANCHISEE-REPORT] UPDATE DATE";
 
 /**
  * @param regionId
@@ -55,6 +55,13 @@ export function getReport(params) {
 export function toggleReportsFilterPanel(){
     return {
         type: TOGGLE_FRANCHISEES_REPORTS_FILTER_PANEL
+    }
+}
+
+export function updateReportDate(date) {
+    return {
+        type: UPDATE_REPORT_DATE,
+        payload: date
     }
 }
 

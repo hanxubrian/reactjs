@@ -22,5 +22,6 @@ import './franchisees-db';
 import './customers-db';
 import './leases-db';
 import './transaction-db';
+import './leads-db';
 
 mock.onAny().passThrough();

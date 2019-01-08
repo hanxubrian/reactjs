@@ -223,7 +223,7 @@ class FilterPanel extends Component {
 	render() {
 		const { classes, leaseForm } = this.props;
 
-		let regionLeases = [];
+		// let regionLeases = [];
 
 		// leases.Data.Regions.filter(x => {
 		// 	return this.props.regionId === 0 || x.Id === this.props.regionId;
@@ -231,7 +231,7 @@ class FilterPanel extends Component {
 		// 	regionLeases = [...regionLeases, ...x.Leases];
 		// });
 
-		let accountTypes = [...new Set(regionLeases.map(x => x.AccountTypeListName))].sort();
+		// let accountTypes = [...new Set(regionLeases.map(x => x.AccountTypeListName))].sort();
 		// let accountStatuses = [...new Set(regionLeases.map(x => x.StatusName))].sort();
 
 		return (

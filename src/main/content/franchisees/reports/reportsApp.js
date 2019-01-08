@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 // core components
-import {Icon, Fab, Typography, Hidden, IconButton, AppBar, Toolbar, Button, Paper, Input} from '@material-ui/core';
+import {Icon, Fab, Typography, Hidden, IconButton, Button, Paper, Input} from '@material-ui/core';
 import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
@@ -19,7 +19,7 @@ import * as Actions from 'store/actions';
 
 // third party
 import classNames from 'classnames';
-import _ from "lodash";
+import moment from "moment"
 
 const headerHeight = 80;
 
@@ -149,9 +149,10 @@ class ReportsApp extends Component {
 
     constructor(props){
         super(props);
-
+        let year = moment(this.props.reportDate).year();
+        let month = parseInt(moment(this.props.reportDate).month())+1;
         if(!props.bLoadedFranchiseeReports) {
-            props.getReports(props.regionId);
+            props.getReports(props.regionId, year, month);
         }
         this.fetchData = this.fetchData.bind(this);
     }
@@ -169,15 +170,15 @@ class ReportsApp extends Component {
         this.getFranchiseeReports()
     }
     componentDidUpdate(prevProps, prevState, snapshot){
-        let bChanged = false;
+        let year = moment(this.props.reportDate).year();
+        let month = parseInt(moment(this.props.reportDate).month())+1;
 
         if(this.props.regionId !== prevProps.regionId) {
-            this.setState({regionId: prevProps.regionId});
-            bChanged = true;
+            this.props.getReports(this.props.regionId, year, month);
         }
-
-        if(bChanged)
-            this.getFranchiseeReports();
+        if(this.props.reportDate !== prevProps.reportDate) {
+            this.props.getReports(this.props.regionId, year, month);
+        }
 
         if(prevProps.franchiseeReports!== this.props.franchiseeReports){
             this.getFranchiseeReports();
@@ -185,20 +186,18 @@ class ReportsApp extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.props.regionId!==nextProps.regionId) {
-            this.props.getReports(nextProps.regionId);
-        }
-
-        if(this.props.franchiseeReports!==nextProps.franchiseeReports)
+        if(this.props.franchiseeReports!==nextProps.franchiseeReports) {
             this.getFranchiseeReports(nextProps.franchiseeReports);
+        }
     }
 
     getFranchiseeReports =(rawData=this.props.franchiseeReports) =>{
         if(rawData===null) return;
 
-        let temp0 = rawData.Data.Region[0].FranchiseeReports;
+        let year = moment(this.props.reportDate).year();
+        let month = parseInt(moment(this.props.reportDate).month())+1;
 
-        this.setState({headerTitle: `${rawData.Data.Region[0].Name} Region Franchisee Reports for ${this.state.month}/${this.state.year} Period`})
+        this.setState({headerTitle: `${rawData.Data.Region[0].Name} Region Franchisee Reports for ${month}/${year} Period`})
         this.setState({data: rawData.Data.Region[0]});
     };
 
@@ -357,7 +356,8 @@ function mapStateToProps({franchiseeReports, auth})
         franchiseeReports: franchiseeReports.franchiseeReports,
         bLoadedFranchiseeReports: franchiseeReports.bLoadedFranchiseeReports,
         filterState: franchiseeReports.bOpenedFilterPanelFranchiseeReports,
-        regionId: auth.login.defaultRegionId
+        regionId: auth.login.defaultRegionId,
+        reportDate: franchiseeReports.reportDate
     }
 }
 

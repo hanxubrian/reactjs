@@ -14,19 +14,20 @@ const initialState = {
     Longitude: "",
     Latitude: "",
     SearchText: "",
+    franchiseeFilterList: null,
+    bLoadedFilterList: false,
     transactionStatusFranchisees:{
-        checkedSelectAll: true,
-        checkedActive: true,
-        checkedInactive: true,
-        checkedCTDB: true,
-        checkedPendingTransfer: true,
-        checkedLegalCompliancePending: true,
-        checkedTransfer: true,
-        checkedTerminated: true,
-        checkedRejected: true,
-        checkedPending: true,
-        checkedNonRenewed: true,
-        checkedRepurchased: true
+        Active: true,
+        Inactive: true,
+        CTDB: true,
+        Transfer: true,
+        LegalCompliancePending: true,
+        PendingTransfer: true,
+        Terminated: true,
+        Rejected: true,
+        Pending: true,
+        "Non-Renewed": true,
+        Repurchased: true
     },
     createFranchisees: {
         type : 'new',
@@ -44,10 +45,19 @@ const franchisees = function(state = initialState, action) {
         case Actions.GET_ALL_FRANCHISEES:
         {
             return {
-                ...initialState,
+                ...state,
                 franchiseesDB: action.payload,
                 bLoadedFranchisees: true,
+                bOpenedFilterPanelFranchisees: state.bOpenedFilterPanelFranchisees
             };
+        }
+        case Actions.GET_FILTER_LIST:
+        {
+            return{
+                ...state,
+                franchiseeFilterList: action.payload,
+                bLoadedFilterList: true
+            }
         }
         case Actions.TOGGLE_FILTER_PANEL_FRANCHISEES:
         {
@@ -140,6 +150,13 @@ const franchisees = function(state = initialState, action) {
         {
             return {
                 ...state, bOpenedMapView: !state.bOpenedMapView
+            }
+        }
+        case Actions.SELECTED_LOCATION:
+        {
+            return{
+                ...state,
+                Location: action.Location
             }
         }
         default:

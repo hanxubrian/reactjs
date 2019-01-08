@@ -343,6 +343,11 @@ class Franchisees extends Component {
             bChanged = true;
         }
 
+        if(this.props.Location !== prevProps.Location){
+            this.props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
+            bChanged = true;
+        }
+
         if(bChanged)
             this.getFranchiseesFromStatus();
 
@@ -383,7 +388,9 @@ class Franchisees extends Component {
     getFranchiseesFromStatus =(rawData=this.props.franchisees) =>{
         let data = [];
         let tempData = [];
-        if(rawData===null || rawData.Data.Region.length===0){
+        if(rawData ===null) return;
+
+        if(rawData.Data.Region.length===0){
             data = [];
             this.setState({temp: data});
             this.setState({data: data});
@@ -480,7 +487,6 @@ class Franchisees extends Component {
     {
         const { classes,toggleFilterPanelFranchisees,showCreteFranchisees, toggleSummaryPanelFranchisees, createFranchisees, filterStateFranchisees, summaryStateFranchisees, toggleFranchiseeMapView, mapViewState} = this.props;
         const { toggleSelection, toggleAll, isSelected} = this;
-
         const { selection } = this.state;
         return (
             <FusePageCustomSidebarScroll
@@ -974,7 +980,7 @@ function mapStateToProps({franchisees,auth})
         Latitude: franchisees.Latitude,
         Location: franchisees.Location,
         SearchText: franchisees.SearchText,
-        mapViewState: franchisees.bOpenedMapView
+        mapViewState: franchisees.bOpenedMapView,
     }
 }
 
