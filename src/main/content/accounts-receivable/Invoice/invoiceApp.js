@@ -542,7 +542,7 @@ class InvoiceApp extends Component {
                     }}
                 >
                 </FusePageCustom>
-                {this.props.bInvoiceStart && (
+                {(this.props.bInvoiceStart || this.props.bCustomerFetchStart) && (
                     <div className={classes.overlay}>
                         <CircularProgress className={classes.progress} color="secondary"  />
                     </div>
@@ -587,6 +587,7 @@ function mapStateToProps({invoices, auth, customers})
         ToPrintOrToEmail: invoices.ToPrintOrToEmail,
         SearchText: invoices.SearchText,
         bInvoiceStart: invoices.bInvoiceStart,
+        bCustomerFetchStart: customers.bCustomerFetchStart
     }
 }
 

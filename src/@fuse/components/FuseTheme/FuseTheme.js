@@ -59,17 +59,17 @@ export const defaults = {
                 main : lightBlue[600],
                 dark : lightBlue[700]
             },
-            error    : red,
-            frame : {
-                main: 'white'
+            text: {
+              primary: 'white'
             },
+            error    : red,
         },
         status : {
             danger: 'orange'
         }
     }
 };
-
+//theme.palette.text.primary
 export let FuseSelectedTheme;
 
 const themesObj = Object.keys(fuseThemesConfig).length !== 0 ? fuseThemesConfig : defaults;

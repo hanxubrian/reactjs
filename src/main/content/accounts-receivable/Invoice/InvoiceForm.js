@@ -250,6 +250,8 @@ class InvoiceForm extends Component {
     }
 
     componentWillMount(){
+        if(this.props.invoiceForm.type === 'new')
+            this.setState({InvoiceNo: "PENDING"});
     }
 
     componentWillReceiveProps(nextProps) {
@@ -304,8 +306,6 @@ class InvoiceForm extends Component {
         const { classes} = this.props;
         const { value, suggestions } = this.state;
 
-        console.log('xxx', this.props.customers)
-
         const today = new Date();
 
         const autosuggestProps = {
@@ -316,6 +316,9 @@ class InvoiceForm extends Component {
             getSuggestionValue: this.getSuggestionValue,
             renderSuggestion,
         };
+
+        let bReadonly = false;
+        if(this.props.invoiceForm.type === 'new') bReadonly = true;
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
@@ -383,7 +386,7 @@ class InvoiceForm extends Component {
                                         shrink: true,
                                     }}
                                     InputProps={{
-                                        readOnly: true,
+                                        readOnly: bReadonly,
                                     }}
                                     name="InvoiceNo"
                                     variant="outlined"
@@ -391,6 +394,9 @@ class InvoiceForm extends Component {
                                     onChange={this.handleChange}
                                     required
                                     fullWidth
+                                    style = {{fontSize: this.props.invoiceForm.type === 'new' ? '18px!important': 'inherit',
+                                        fontWeight: this.props.invoiceForm.type === 'new' ? 700: 'inherit'
+                                    }}
                                 />
                             </GridItem>
                         </GridContainer>

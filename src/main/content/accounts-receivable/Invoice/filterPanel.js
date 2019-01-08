@@ -32,6 +32,9 @@ const styles = theme => ({
         },
         '& fieldset': {
             // borderColor: 'white!important'
+        },
+        '& white': {
+            color: 'white!important'
         }
     },
     panel: {
@@ -151,13 +154,14 @@ class FilterPanel extends Component {
     render()
     {
         const {classes} = this.props;
+        console.log('settings', this.props.settings);
         return (
             <div className={classNames(classes.root)}>
                 <div className={classNames("flex flex-col")}>
                     <Paper className="flex flex-1 flex-col min-h-px p-20">
+                        {/*<MuiThemeProvider theme={FuseThemes['mainThemeLight']}>*/}
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <h3 className="mb-20">Filter by Date</h3>
-                            <MuiThemeProvider theme={FuseThemes['mainThemeLight']}>
                             <DatePicker
                                 margin="none"
                                 label="From Date"
@@ -168,6 +172,7 @@ class FilterPanel extends Component {
                                 onChange={this.handleInvoiceFromDateChange}
                                 fullWidth
                                 required
+                                color="secondary"
                             />
                             <br></br>
                             <DatePicker
@@ -180,10 +185,9 @@ class FilterPanel extends Component {
                                 onChange={this.handleInvoiceToDateChange}
                                 fullWidth
                                 required
+                                color="secondary"
                                 style={{marginTop: '30px!important'}}
                             />
-                            </MuiThemeProvider>
-
                             {/*<FormControl className={classes.formControl} style={{width: 200}}>*/}
                             {/*/!*<InputLabel htmlFor="age-simple">Invoice Date</InputLabel>*!/*/}
                             {/*<Select*/}
@@ -215,7 +219,7 @@ class FilterPanel extends Component {
                             {/*</Select>*/}
                             {/*</FormControl>*/}
                         </MuiPickersUtilsProvider>
-
+                        {/*</MuiThemeProvider>*/}
                         <div style={{marginTop: 20, display: 'flex', flexDirection: 'column'}}>
                             <h3>Invoice Status</h3>
                             {this.state.invoiceStatus.length>0 && this.state.invoiceStatus.map((iv, index)=> {
