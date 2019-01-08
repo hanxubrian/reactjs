@@ -19,6 +19,7 @@ export const OPEN_EDIT_INVOICE_FORM = '[INVOICES APP] OPEN EDIT INVOICE FORM';
 export const CLOSE_EDIT_INVOICE_FORM = '[INVOICES APP] CLOSE EDIT INVOICE FORM';
 export const ADD_INVOICE = '[INVOICES APP] ADD INVOICE';
 export const UPDATE_INVOICE = '[INVOICES APP] UPDATE INVOICE';
+export const UPDATE_INVOICE_STATUS = '[INVOICES APP] UPDATE INVOICE STATUS';
 export const UPDATE_INVOICE_LINE = '[INVOICES APP] UPDATE INVOICE LINE';
 
 
@@ -35,7 +36,6 @@ export function getInvoices(RegionId, StatusId, FromDate, ToDate, PeriodId,OpenO
 
         (async () => {
             let res = await invoiceService.getInvoiceList(RegionId, StatusId, FromDate, ToDate, PeriodId, OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText);
-            console.log('invoice=', res);
             if (res.IsSuccess) {
                 dispatch({
                     type: GET_ALL_INVOICES,
@@ -80,6 +80,13 @@ export function toggleStatus(key, status){
     return {
         type: TOGGLE_FILTER_STATUS,
         payload: {[key]: status}
+    }
+}
+
+export function updateInvoiceStatus(newStatus){
+    return {
+        type: UPDATE_INVOICE_STATUS,
+        payload: newStatus
     }
 }
 

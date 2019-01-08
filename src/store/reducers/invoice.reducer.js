@@ -11,7 +11,7 @@ const initialState = {
     bLoadedInvoices: false,
     bOpenedSummaryPanel: false,
     bOpenedFilterPanel: false,
-    transactionStatus:{checkedPaid: true,checkedPP: true, checkedComplete: true, checkedOpen: true, checkedEbill: true, checkedPrint: true },
+    transactionStatus:{checkedEbill: true, checkedPrint: true },
     invoiceForm: {
         type : 'new',
         props: {
@@ -44,8 +44,14 @@ const invoices = function(state = initialState, action) {
         }
         case Actions.GET_INVOICE_STATUS:
         {
+            let invoiceStatus = action.payload;
+            if(action.payload.length>0) {
+                invoiceStatus = action.payload.map(iv => {
+                    return {['checked'+iv.TransactionStatusListId]: true, ...iv}
+                });
+            }
             return {
-                ...state, invoiceStatus: action.payload
+                ...state, invoiceStatus: invoiceStatus
             }
         }
         case Actions.UPDATE_FROM_DATE_INVOICE:
@@ -58,6 +64,11 @@ const invoices = function(state = initialState, action) {
         {
             return {
                 ...state, ToDate: action.payload
+            }
+        }
+        case Actions.UPDATE_FROM_DATE_INVOICE:{
+            return {
+                ...state, invoiceStatus:[...action.payload]
             }
         }
         case Actions.TOGGLE_FILTER_PANEL:

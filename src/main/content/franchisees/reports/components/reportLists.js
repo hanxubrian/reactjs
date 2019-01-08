@@ -217,6 +217,7 @@ class ReportLists extends Component {
         const { classes} = this.props;
         const { toggleSelection, isSelected} = this;
         const { data, year, month } = this.state;
+        if(data.length===0) return (<div/>);
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
