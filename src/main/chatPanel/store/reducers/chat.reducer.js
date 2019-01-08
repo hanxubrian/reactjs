@@ -1,6 +1,11 @@
 import * as Actions from '../actions';
 
-const initialState = null;
+
+const initialState = {
+    currentUser :{},
+    currentRoom: {},
+    messages:[],
+};
 
 const chat = function (state = initialState, action) {
     switch ( action.type )
@@ -8,7 +13,7 @@ const chat = function (state = initialState, action) {
         case Actions.GET_CHAT:
         {
             return {
-                ...action.chat
+                //...action.chat
             };
         }
         case Actions.REMOVE_CHAT:
@@ -18,11 +23,12 @@ const chat = function (state = initialState, action) {
         case Actions.SEND_MESSAGE:
         {
             return {
-                ...state,
-                dialog: [
-                    ...state.dialog,
-                    action.message
-                ]
+                //...state,
+                //dialog: [
+                //    ...state.dialog,
+                //    action.message
+                //]
+
             };
         }
         default:

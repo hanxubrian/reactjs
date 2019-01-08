@@ -46,7 +46,7 @@ class ContactsList extends Component {
 
     render()
     {
-        const {classes, contacts, user, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred} = this.props;
+        const {classes, contacts, user, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred, openChat} = this.props;
         const data = this.getFilteredArray(contacts, searchText);
         const {selectedContactsMenu} = this.state;
 
@@ -222,6 +222,15 @@ class ContactsList extends Component {
                                     >
                                         <Icon>delete</Icon>
                                     </IconButton>
+
+                                    <IconButton
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            openChat(row.original.id);
+                                        }}
+                                    >
+                                        <Icon>chat</Icon>
+                                    </IconButton>
                                 </div>
                             )
                         }
@@ -245,6 +254,7 @@ function mapDispatchToProps(dispatch)
         deSelectAllContacts     : Actions.deSelectAllContacts,
         openEditContactDialog   : Actions.openEditContactDialog,
         removeContacts          : Actions.removeContacts,
+        openChat                : Actions.openChat,
         removeContact           : Actions.removeContact,
         toggleStarredContact    : Actions.toggleStarredContact,
         toggleStarredContacts   : Actions.toggleStarredContacts,
