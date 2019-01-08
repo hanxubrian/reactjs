@@ -69,8 +69,8 @@ function getSteps() {
     return ["Company Information", "Franchisee Agreement", "Franchisees Fee Maintenance","Upload Required Document"];
 }
 
-function getStepContent(customerForm, step) {
-    const { classes} = customerForm.props;
+function getStepContent(franchiseeForm, step) {
+    const { classes} = franchiseeForm.props;
 
     const Owner_headers = [
         {
@@ -268,17 +268,17 @@ function getStepContent(customerForm, step) {
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                 <FormControlLabel
                                     value="ein"
-                                    checked={customerForm.state.selectedValue === 'ein'}
-                                    onChange={customerForm.handleRadioChange}
+                                    checked={franchiseeForm.state.selectedValue === 'ein'}
+                                    onChange={franchiseeForm.handleRadioChange}
                                     control={<Radio color="primary" />}
                                     label="EIN"
                                     labelPlacement="end"
                                     margin="dense"
                                 />
                                 <FormControlLabel
-                                    checked={customerForm.state.selectedValue === 'ssn'}
+                                    checked={franchiseeForm.state.selectedValue === 'ssn'}
                                     value="ssn"
-                                    onChange={customerForm.handleRadioChange}
+                                    onChange={franchiseeForm.handleRadioChange}
                                     control={<Radio color="primary" />}
                                     label="SSN"
                                     labelPlacement="end"
@@ -330,8 +330,8 @@ function getStepContent(customerForm, step) {
                                 label="State"
                                 select
                                 className={classes.textField}
-                                value={customerForm.state.StateValue}
-                                onChange={customerForm.handleStateChange('StateValue')}
+                                value={franchiseeForm.state.StateValue}
+                                onChange={franchiseeForm.handleStateChange('StateValue')}
                                 variant="outlined"
                                 margin="dense"
                                 style={{marginRight:'1%',marginLeft:'1%'}}
@@ -364,9 +364,9 @@ function getStepContent(customerForm, step) {
                             />
                             <FormControlLabel
                                 control={
-                                    <Checkbox checked={customerForm.state.print1099} />
+                                    <Checkbox checked={franchiseeForm.state.print1099} />
                                 }
-                                onChange={customerForm.handleCheckboxChange('print1099')}
+                                onChange={franchiseeForm.handleCheckboxChange('print1099')}
                                 className={classes.textField}
                                 label="Print 1099"
                                 margin="dense"
@@ -391,8 +391,8 @@ function getStepContent(customerForm, step) {
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                 <DatePicker
                                     label="Date Sign"
-                                    value={customerForm.state.selectedSignDate}
-                                    onChange={customerForm.handleSignDateChange}
+                                    value={franchiseeForm.state.selectedSignDate}
+                                    onChange={franchiseeForm.handleSignDateChange}
                                     format="MM/dd/YYYY"
                                     className={classes.textField}
                                     margin="dense"
@@ -403,8 +403,8 @@ function getStepContent(customerForm, step) {
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                 <DatePicker
                                     label="Latest Renew Date"
-                                    value={customerForm.state.selectedRenewDate}
-                                    onChange={customerForm.handleRenewDateChange}
+                                    value={franchiseeForm.state.selectedRenewDate}
+                                    onChange={franchiseeForm.handleRenewDateChange}
                                     className={classes.textField}
                                     format="MM/dd/YYYY"
                                     variant="outlined"
@@ -426,8 +426,8 @@ function getStepContent(customerForm, step) {
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                 <DatePicker
                                     label="EXP. Date"
-                                    value={customerForm.state.selectedExpDate}
-                                    onChange={customerForm.handleExpDateChange}
+                                    value={franchiseeForm.state.selectedExpDate}
+                                    onChange={franchiseeForm.handleExpDateChange}
                                     format="MM/dd/YYYY"
                                     className={classes.textField}
                                     variant="outlined"
@@ -443,8 +443,8 @@ function getStepContent(customerForm, step) {
                                 variant="outlined"
                                 className={classes.textField}
                                 style={{marginLeft: '1%', marginRight: '1%'}}
-                                value={customerForm.state.planType}
-                                onChange={customerForm.handleStateChange('planType')}
+                                value={franchiseeForm.state.planType}
+                                onChange={franchiseeForm.handleStateChange('planType')}
                                 SelectProps={{
                                     MenuProps: {
                                         className: classes.menu,
@@ -532,30 +532,30 @@ function getStepContent(customerForm, step) {
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <FormControlLabel
                                 control={
-                                    <Checkbox checked={customerForm.state.chargeBack} value="chargeBack" />
+                                    <Checkbox checked={franchiseeForm.state.chargeBack} value="chargeBack" />
                                 }
-                                onChange={customerForm.handleCheckboxChange('chargeBack')}
+                                onChange={franchiseeForm.handleCheckboxChange('chargeBack')}
                                 label="ChargeBack"
                             />
                             <FormControlLabel
                                 control={
-                                    <Checkbox checked={customerForm.state.bbpAdministration} value="bbp" />
+                                    <Checkbox checked={franchiseeForm.state.bbpAdministration} value="bbp" />
                                 }
-                                onChange={customerForm.handleCheckboxChange('bbpAdministration')}
+                                onChange={franchiseeForm.handleCheckboxChange('bbpAdministration')}
                                 label="BBP Administration Fee"
                             />
                             <FormControlLabel
                                 control={
-                                    <Checkbox checked={customerForm.state.accountRebate} value="accountRebate" />
+                                    <Checkbox checked={franchiseeForm.state.accountRebate} value="accountRebate" />
                                 }
-                                onChange={customerForm.handleCheckboxChange('accountRebate')}
+                                onChange={franchiseeForm.handleCheckboxChange('accountRebate')}
                                 label="Account Rebate"
                             />
                             <FormControlLabel
                                 control={
-                                    <Checkbox checked={customerForm.state.generateReport} value="generateReport" />
+                                    <Checkbox checked={franchiseeForm.state.generateReport} value="generateReport" />
                                 }
-                                onChange={customerForm.handleCheckboxChange('generateReport')}
+                                onChange={franchiseeForm.handleCheckboxChange('generateReport')}
                                 label="Generate Report"
                             />
                         </GridItem>
@@ -606,6 +606,11 @@ class FranchiseesCreateForm extends Component {
         selectedExpDate: new Date()
     };
 
+    constructor (props){
+        super(props);
+        props.getFranchiseeFormPlanType(props.regionId);
+    }
+
     onChange = (event, { newValue, method }) => {
         this.setState({
             value: newValue.toString()
@@ -615,6 +620,11 @@ class FranchiseesCreateForm extends Component {
     closeComposeForm = () => {
         this.type === 'create' ? this.props.closeEditFranchisees() : this.props.closeCreateFranchisees();
     };
+    componentWillMount(){
+        this.setState({
+            planType: this.props.planType
+        });
+    }
 
     componentDidMount() {
         if (this.InputLabelRef) {
@@ -770,13 +780,16 @@ function mapDispatchToProps(dispatch) {
         closeCreateFranchisees: Actions.closeCreateFranchisees,
         showEditFranchisees: Actions.showCreteFranchisees,
         closeEditFranchisees: Actions.showCreteFranchisees,
-        updateDate: Actions.updateDate
+        updateDate: Actions.updateDate,
+        getFranchiseeFormPlanType: Actions.getFranchiseeFormPlanType
     }, dispatch);
 }
 
 function mapStateToProps({ franchisees, auth }) {
     return {
         franchiseesForm: franchisees.createFranchisees,
+        regionId: auth.login.defaultRegionId,
+        planType: franchisees.planType,
         user: auth.login
     }
 }

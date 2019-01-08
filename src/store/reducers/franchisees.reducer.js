@@ -21,6 +21,7 @@ const initialState = {
     selectedRenewDate: new Date(),
     selectedExpDate: new Date(),
     bFranchiseesFetchStart: false,
+    planType: [],
     transactionStatusFranchisees:{
         Active: true,
         Inactive: true,
@@ -69,6 +70,13 @@ const franchisees = function(state = initialState, action) {
                 ...state,
                 franchiseeStatus: franchiseeStatus,
                 bLoadedFilterList: true
+            }
+        }
+        case Actions.GET_FRANCHISEE_FORM_PLAN_TYPE:
+        {
+            return{
+                ...state,
+                planType: action.payload
             }
         }
         case Actions.TOGGLE_FILTER_PANEL_FRANCHISEES:

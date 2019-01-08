@@ -20,6 +20,7 @@ export const UPDATE_DATE_SIGN_FRANCHISEE = "[FRANCHISEE] UPDATE  DATE_SIGN FRANC
 export const UPDATE_RENEW_DATE_FRANCHISEE = "[FRANCHISEE] UPDATE  RENEW_DATE FRANCHISEE";
 export const UPDATE_EXP_DATE_FRANCHISEE = "[FRANCHISEE] UPDATE  EXP_DATE FRANCHISEE";
 export const GET_FRANCHISEES_FETCH_START = "[FRANCHISEE] GET FRANCHISEES FETCH START";
+export const GET_FRANCHISEE_FORM_PLAN_TYPE = "[FRANCHISEE] GET FRANCHISEES FORM PLAN TYPE";
 
 export function getFranchisees(regionId, statusId, location , latitude , longitude , searchtext) {
 
@@ -48,6 +49,18 @@ export function getStatusFilterList(regionId) {
             dispatch({
                 type: GET_FILTER_LIST,
                 payload: filterList.Data
+            });
+        })();
+    }
+}
+
+export function getFranchiseeFormPlanType(regionId) {
+    return (dispatch) => {
+        (async () => {
+            let planType = await franchiseesService.getFranchiseeFormPlanType(regionId);
+            dispatch({
+                type: GET_FRANCHISEE_FORM_PLAN_TYPE,
+                payload:  planType
             });
         })();
     }
