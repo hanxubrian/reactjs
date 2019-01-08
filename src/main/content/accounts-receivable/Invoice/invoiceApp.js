@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
 // core components
-import {Hidden, Icon, IconButton, Fab, Typography,Toolbar} from '@material-ui/core';
+import {Hidden, Icon, IconButton, Fab, Typography,Toolbar, CircularProgress} from '@material-ui/core';
 
 // theme components
 import {FusePageCustom, FuseAnimate} from '@fuse';
@@ -126,6 +126,19 @@ const styles = theme => ({
     divider: {
         height: theme.spacing.unit * 2,
     },
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100vh',
+        backgroundColor: 'rgba(0,0,0, .9)',
+        zIndex: 1000,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
+        opacity: 0.5
+    }
 });
 
 const newInvoiceState = {
@@ -165,10 +178,6 @@ class InvoiceApp extends Component {
     state = {
         temp: [],
         data: [],
-        checkedPaid: true,
-        checkedPP: true,
-        checkedComplete: true,
-        checkedOpen: true,
         checkedEbill: true,
         checkedPrint: true,
         selection: [],
@@ -222,7 +231,6 @@ class InvoiceApp extends Component {
         ) {
             this.props.getInvoices([regionId] ,StatusId, FromDate, ToDate, PeriodId,
                 OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText);
-
         }
 
         if(bChanged)
@@ -234,14 +242,17 @@ class InvoiceApp extends Component {
     }
 
     componentWillMount(){
-        this.setState({checkedPaid: this.props.transactionStatus.checkedPaid});
-        this.setState({checkedPP: this.props.transactionStatus.checkedPP});
-        this.setState({checkedComplete: this.props.transactionStatus.checkedComplete});
-        this.setState({checkedOpen: this.props.transactionStatus.checkedOpen});
         this.setState({checkedOpen: this.props.transactionStatus.checkedEbill});
         this.setState({checkedOpen: this.props.transactionStatus.checkedPrint});
 
         this.getInvoicesFromStatus();
+        const {regionId, StatusId, FromDate, ToDate,PeriodId, OpenOrClosed,InvoiceTypeId, ToPrintOrToEmail, SearchText} = this.props;
+
+        if(this.props.invoices===null) {
+            this.props.getInvoices([regionId], StatusId, FromDate, ToDate, PeriodId,
+                OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText);
+            this.props.getCustomers(regionId);
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -531,6 +542,11 @@ class InvoiceApp extends Component {
                     }}
                 >
                 </FusePageCustom>
+                {this.props.bInvoiceStart && (
+                    <div className={classes.overlay}>
+                        <CircularProgress className={classes.progress} color="secondary"  />
+                    </div>
+                )}
             </React.Fragment>
         );
     }
@@ -569,7 +585,8 @@ function mapStateToProps({invoices, auth, customers})
         OpenOrClosed: invoices.OpenOrClosed,
         InvoiceTypeId: invoices.InvoiceTypeId,
         ToPrintOrToEmail: invoices.ToPrintOrToEmail,
-        SearchText: invoices.SearchText
+        SearchText: invoices.SearchText,
+        bInvoiceStart: invoices.bInvoiceStart,
     }
 }
 

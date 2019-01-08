@@ -5,6 +5,7 @@ import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 
+
 let today = new Date();
 const initialState = {
     invoicesDB: null,
@@ -28,7 +29,8 @@ const initialState = {
     InvoiceTypeId: 1,
     ToPrintOrToEmail: "print",
     SearchText: "",
-    invoiceStatus: []
+    invoiceStatus: [],
+    bInvoiceStart: false
 };
 
 
@@ -39,7 +41,7 @@ const invoices = function(state = initialState, action) {
         {
             return {
                 ...state,
-                invoicesDB: action.payload, bLoadedInvoices: true
+                invoicesDB: action.payload, bLoadedInvoices: true, bInvoiceStart: false
             };
         }
         case Actions.GET_INVOICE_STATUS:
@@ -53,6 +55,13 @@ const invoices = function(state = initialState, action) {
             return {
                 ...state, invoiceStatus: invoiceStatus
             }
+        }
+        case Actions.GET_INVOICES_FETCH_START:
+        {
+            return {
+                ...state,
+                bInvoiceStart: true
+            };
         }
         case Actions.UPDATE_FROM_DATE_INVOICE:
         {
@@ -177,6 +186,6 @@ const invoices = function(state = initialState, action) {
 const persistConfig = {
     key: 'invoices',
     storage: storage,
-    blacklist: ['invoicesDB']
+    blacklist: ['invoicesDB', 'bInvoiceStart', 'bOpenedSummaryPanel', 'bOpenedFilterPanel', 'bLoadedCustomers']
 };
 export default persistReducer(persistConfig, invoices);
