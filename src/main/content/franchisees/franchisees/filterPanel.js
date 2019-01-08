@@ -561,7 +561,6 @@ class FilterPanel extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        toggleStatusFranchisees: Actions.toggleStatusFranchisees,
         selectLocation: Actions.selectLocation,
         getStatusFilterList: Actions.getStatusFilterList,
         updateFranchiseeStatus: Actions.updateFranchiseeStatus
