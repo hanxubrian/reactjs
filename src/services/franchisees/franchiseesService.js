@@ -20,7 +20,7 @@ class franchiseesService {
      */
     getFranchiseesList =  (RegionId ,StatusId, Location, Latitude, Longitude, SearchText) => {
         const data = {
-            "RegionId": [RegionId],
+            "RegionId": RegionId,
             "StatusId": [StatusId],
             "Location": Location,
             "Latitude": Latitude,

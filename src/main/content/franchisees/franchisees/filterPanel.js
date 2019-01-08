@@ -129,7 +129,7 @@ class FilterPanel extends Component {
             this.setState({ [name]: event.target.checked });
             this.props.toggleStatusFranchisees(name, event.target.checked);
     };
-    handleStateChange = name => event => {
+    handleSelectChange = name => event => {
         this.setState({
             [name]: event.target.value,
         });
@@ -241,7 +241,6 @@ class FilterPanel extends Component {
                         {franchiseesForm && franchiseesForm.props.open
                         ?(
                            <div>
-                               <h2>Business info</h2>
                                <GridContainer style={{ alignItems: 'center', width: 300 }} className={classNames(classes.formControl)}>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
@@ -297,7 +296,7 @@ class FilterPanel extends Component {
                                                 select
                                                 className={classes.textField}
                                                 value={this.state.State}
-                                                onChange={this.handleStateChange('State')}
+                                                onChange={this.handleSelectChange('State')}
                                                 margin="normal"
                                                 variant="outlined"
                                                 required
@@ -405,7 +404,7 @@ class FilterPanel extends Component {
                                                 select
                                                 className={classes.textField}
                                                 value={this.state.contactState}
-                                                onChange={this.handleStateChange('contactState')}
+                                                onChange={this.handleSelectChange('contactState')}
                                                 margin="normal"
                                                 variant="outlined"
                                                 required

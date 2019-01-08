@@ -18,7 +18,6 @@ import * as Actions from 'store/actions';
 
 // third party
 import "react-table/react-table.css";
-import _ from 'lodash';
 import classNames from 'classnames';
 import Checkbox from '@material-ui/core/Checkbox';
 import AppBar from '@material-ui/core/AppBar';
@@ -26,13 +25,13 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import FranchiseesOwnerTable from './ownerTable'
 import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider,  DatePicker } from 'material-ui-pickers';
 import moment from "moment";
 import FranchiseesDocumentUploadTable from "./documentUploadTable";
 import FranchiseesMaintenanceTable from "./maintenanceTableLine";
+import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 const styles = theme => ({
 
     root: {
@@ -60,14 +59,9 @@ const styles = theme => ({
     }
 });
 
-function escapeRegexCharacters(str) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-
 
 function getSteps() {
-    return ["Owner", "Financial", "Billing Settings", "Contract", "Franchisees Fee Maintenance","Upload Required Document"];
+    return ["Company Information", "Franchisee Agreement", "Franchisees Fee Maintenance","Upload Required Document"];
 }
 
 function getStepContent(customerForm, step) {
@@ -158,45 +152,133 @@ function getStepContent(customerForm, step) {
             label: 'View'
         }
     ];
+
+    const stateNames = [
+        {
+            value: 2,
+            label: "Buffalo"
+        },
+        {
+            value: 7,
+            label: "Detroit"
+        },
+        {
+            value: 9,
+            label: "Hartford"
+        },
+        {
+            value: 13,
+            label: "Las Vegas"
+        },
+        {
+            value: 14,
+            label: "Los Angeles/Colton"
+        },
+        {
+            value: 16,
+            label: "Miami"
+        },
+        {
+            value: 18,
+            label: "Minneapolis"
+        },
+        {
+            value: 20,
+            label: "New Jersey"
+        },
+        {
+            value: 21,
+            label: "New York"
+        },
+        {
+            value: 22,
+            label: "San Francisco/Oakland"
+        },
+        {
+            value: 23,
+            label: "Oklahoma City"
+        },
+        {
+            value: 24,
+            label: "Philadelphia"
+        },
+        {
+            value: 25,
+            label: "Sacramento"
+        },
+        {
+            value: 26,
+            label: "Washington DC"
+        },
+        {
+            value: 28,
+            label: "Jani-King Int'l, Inc."
+        },
+        {
+            value: 29,
+            label: "JANI-KING OF NEW MEXICO, INC"
+        },
+        {
+            value: 31,
+            label: "New Mexico"
+        },
+        {
+            value: 46,
+            label: "Houston"
+        },
+        {
+            value: 55,
+            label: "Pittsburgh"
+        },
+        {
+            value: 64,
+            label: "Tulsa"
+        },
+        {
+            value: 82,
+            label: "Reno"
+        }
+    ];
+    const planType= [
+        {
+            value: 0,
+            label: "Basic"
+        },
+        {
+            value: 1,
+            label: "Medium"
+        },
+        {
+            value: 2,
+            label: "High"
+        }
+    ];
     switch (step) {
         case 0:
             return (
                 <Fragment>
-                    {/* <div style={{ marginTop: '30px' }}></div> */}
-                    {/* <h3>Owner</h3> */}
-                    <div className="flex">
-                        <FranchiseesOwnerTable tableType="OWNER" headers={Owner_headers} />
-                    </div>
-                </Fragment>
-            );
-        case 1:
-            return (
-                <Fragment>
-                    {/* <div style={{ marginTop: '30px' }}></div> */}
-                    {/* <h3>Financial Section</h3> */}
+                    <div style={{ marginTop: '30px' }}></div>
+                    <h3>Financial</h3>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <RadioGroup
-                                aria-label="financialRadio"
-                                name="financialRadio"
-                                margin="dense"
-                                row
-                            >
                                 <FormControlLabel
                                     value="ein"
+                                    checked={customerForm.state.selectedValue === 'ein'}
+                                    onChange={customerForm.handleRadioChange}
                                     control={<Radio color="primary" />}
                                     label="EIN"
                                     labelPlacement="end"
                                     margin="dense"
                                 />
                                 <FormControlLabel
+                                    checked={customerForm.state.selectedValue === 'ssn'}
                                     value="ssn"
+                                    onChange={customerForm.handleRadioChange}
                                     control={<Radio color="primary" />}
                                     label="SSN"
                                     labelPlacement="end"
                                     margin="dense"
                                 />
-                            </RadioGroup>
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
@@ -239,14 +321,23 @@ function getStepContent(customerForm, step) {
                                 required
                             />
                             <TextField
-                                id="outlined-state"
+                                id="state"
                                 label="State"
-                                variant="outlined"
+                                select
                                 className={classes.textField}
+                                value={customerForm.state.StateValue}
+                                onChange={customerForm.handleStateChange('StateValue')}
+                                variant="outlined"
                                 margin="dense"
                                 style={{marginRight:'1%',marginLeft:'1%'}}
                                 required
-                            />
+                            >
+                                {stateNames.map(option => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
                             <TextField
                                 id="outlined-zip"
                                 label="Zip"
@@ -268,8 +359,9 @@ function getStepContent(customerForm, step) {
                             />
                             <FormControlLabel
                                 control={
-                                    <Checkbox checked={true} />
+                                    <Checkbox checked={customerForm.state.print1099} />
                                 }
+                                onChange={customerForm.handleCheckboxChange('print1099')}
                                 className={classes.textField}
                                 label="Print 1099"
                                 margin="dense"
@@ -277,55 +369,25 @@ function getStepContent(customerForm, step) {
                             />
                         </GridItem>
                     </GridContainer>
+                    <div style={{ marginTop: '30px' }}></div>
+                    <h3>Owner</h3>
+                    <div className="flex">
+                        <FranchiseesOwnerTable tableType="OWNER" headers={Owner_headers} />
+                    </div>
                 </Fragment>
             );
-        case 2:
+        case 1:
             return (
                 <Fragment>
-                    {/* <div style={{ marginTop: '30px' }}></div> */}
-                    {/* <h3>Billing Setting Section</h3> */}
-                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <FormControlLabel
-                                control={
-                                    <Checkbox checked={true} value="chargeBack" />
-                                }
-                                label="ChargeBack"
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox checked={true} value="bbp" />
-                                }
-                                label="BBP Administration Fee"
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox checked={true} value="accountRebate" />
-                                }
-                                label="Account Rebate"
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox checked={true} value="generateReport" />
-                                }
-                                label="Generate Report"
-                            />
-                        </GridItem>
-                    </GridContainer>
-                </Fragment>
-            );
-        case 3:
-            return (
-                <Fragment>
-                    {/* <div style={{ marginTop: '30px' }}></div> */}
-                    {/* <h3>Contract</h3> */}
+                    <div style={{ marginTop: '30px' }}></div>
+                    <h3>Contract</h3>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                 <DatePicker
                                     label="Date Sign"
-                                    // value={selectedDateSign}
-                                    // onChange={this.handleDateSignChange}
+                                    value={customerForm.state.selectedSignDate}
+                                    onChange={customerForm.handleSignDateChange}
                                     className={classes.textField}
                                     margin="dense"
                                     variant="outlined"
@@ -335,8 +397,8 @@ function getStepContent(customerForm, step) {
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                 <DatePicker
                                     label="Latest Renew Date"
-                                    // value={selectedRenewDate}
-                                    // onChange={this.handleRenewDateChange}
+                                    value={customerForm.state.selectedRenewDate}
+                                    onChange={customerForm.handleRenewDateChange}
                                     className={classes.textField}
                                     variant="outlined"
                                     margin="dense"
@@ -357,8 +419,8 @@ function getStepContent(customerForm, step) {
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                 <DatePicker
                                     label="EXP. Date"
-                                    // value={selectedExpDate}
-                                    // onChange={this.handleExpDateChange}
+                                    value={customerForm.state.selectedExpDate}
+                                    onChange={customerForm.handleExpDateChange}
                                     className={classes.textField}
                                     variant="outlined"
                                     margin="dense"
@@ -368,24 +430,24 @@ function getStepContent(customerForm, step) {
                             <TextField
                                 id="selectPlanType"
                                 select
-                                label="Select"
+                                label="Plan Type"
                                 margin="dense"
                                 variant="outlined"
                                 className={classes.textField}
                                 style={{marginLeft: '1%', marginRight: '1%'}}
-                                // value={this.state.planType}
-                                // onChange={this.handlePlanTypeChange('planType')}
+                                value={customerForm.state.planType}
+                                onChange={customerForm.handleStateChange('planType')}
                                 SelectProps={{
                                     MenuProps: {
                                         className: classes.menu,
                                     },
                                 }}
                             >
-                                {/*{planType.map(option => (*/}
-                                {/*<MenuItem key={option.value} value={option.value}>*/}
-                                {/*{option.label}*/}
-                                {/*</MenuItem>*/}
-                                {/*))}*/}
+                                {planType.map(option => (
+                                <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                                </MenuItem>
+                                ))}
                             </TextField>
                             <TextField
                                 id="planAmount"
@@ -456,20 +518,52 @@ function getStepContent(customerForm, step) {
                             />
                         </GridItem>
                     </GridContainer>
+                    <div style={{ marginTop: '30px' }}></div>
+                    <h3>Billing Settings</h3>
+                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <FormControlLabel
+                                control={
+                                    <Checkbox checked={customerForm.state.chargeBack} value="chargeBack" />
+                                }
+                                onChange={customerForm.handleCheckboxChange('chargeBack')}
+                                label="ChargeBack"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox checked={customerForm.state.bbpAdministration} value="bbp" />
+                                }
+                                onChange={customerForm.handleCheckboxChange('bbpAdministration')}
+                                label="BBP Administration Fee"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox checked={customerForm.state.accountRebate} value="accountRebate" />
+                                }
+                                onChange={customerForm.handleCheckboxChange('accountRebate')}
+                                label="Account Rebate"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox checked={customerForm.state.generateReport} value="generateReport" />
+                                }
+                                onChange={customerForm.handleCheckboxChange('generateReport')}
+                                label="Generate Report"
+                            />
+                        </GridItem>
+                    </GridContainer>
                 </Fragment>
             );
 
-        case 4:
+        case 2:
             return(
                 <Fragment>
-                    {/* <div style={{ marginTop: '30px' }}></div> */}
-                    {/* <h3>Franchisees Fee Maintenance</h3> */}
                     <div className="flex">
                         <FranchiseesMaintenanceTable tableType="FEE_MAINTENACE" headers={fee_maintenance_headers} />
                     </div>
                 </Fragment>
             );
-        case 5:
+        case 3:
             return(
                 <Fragment>
                     <div style={{ marginTop: '30px' }}></div>
@@ -486,17 +580,22 @@ function getStepContent(customerForm, step) {
 
 class FranchiseesCreateForm extends Component {
     state = {
-        customers: [],
-        value: '',
-        suggestions: [],
-        selectedCustomer: null,
         labelWidth: 0,
         selectedWork: "",
         activeStep: 0,
         completed: new Set(),
         skipped: new Set(),
         print1099: false,
-        radioValue: 'ein'
+        chargeBack: false,
+        bbpAdministration: false,
+        accountRebate: false,
+        generateReport: false,
+        selectedValue: 'ein',
+        StateValue: '',
+        planType: '',
+        selectedSignDate: new Date(),
+        selectedRenewDate: new Date(),
+        selectedExpDate: new Date()
     };
 
     onChange = (event, { newValue, method }) => {
@@ -505,44 +604,9 @@ class FranchiseesCreateForm extends Component {
         });
     };
 
-    onSuggestionsFetchRequested = ({ value }) => {
-        if (value.length < 2) return;
-
-        this.setState({
-            suggestions: this.getSuggestions(value)
-        });
-    };
-
-    onSuggestionsClearRequested = () => {
-        this.setState({
-            suggestions: []
-        });
-    };
-
-    getSuggestionValue = (suggestion) => {
-        this.setState({ selectedCustomer: suggestion });
-        return suggestion.CustomerName;
-    };
-
-    getSuggestions = (value) => {
-        const escapedValue = escapeRegexCharacters(value.trim());
-        const regex = new RegExp(escapedValue, 'i');
-
-        return this.props.customers.filter(customer => regex.test(customer.CustomerName));
-    };
-
     closeComposeForm = () => {
         this.type === 'create' ? this.props.closeEditFranchisees() : this.props.closeCreateFranchisees();
     };
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-    }
-
-    componentWillMount() {
-    }
-
-    componentWillReceiveProps(nextProps) {
-    }
 
     componentDidMount() {
         if (this.InputLabelRef) {
@@ -551,21 +615,29 @@ class FranchiseesCreateForm extends Component {
             });
         }
     }
-
-    handleChange = (event) => {
-        this.setState(_.set({ ...this.state }, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
+    handleSignDateChange = date => {
+        this.setState({ selectedSignDate: date });
     };
-
-    handleChange = name => event => {
-        this.setState({
-            [name]: event.target.value
-        });
+    handleRenewDateChange = date => {
+        this.setState({ selectedRenewDate: date });
     };
-
+    handleExpDateChange = date => {
+        this.setState({ selectedExpDate: date });
+    };
+    handleRadioChange = event => {
+        this.setState({ selectedValue: event.target.value });
+    };
+    handleCheckboxChange = name => event => {
+        this.setState({ [name]: event.target.checked });
+    };
     canBeSubmitted() {
         return true;
     }
-
+    handleStateChange = name => event => {
+        this.setState({
+            [name]: event.target.value,
+        });
+    };
 
     //////////////////////
     totalSteps = () => {
@@ -607,10 +679,8 @@ class FranchiseesCreateForm extends Component {
                         scrollable
                         scrollButtons="auto"
                     >
-                        <Tab label="Owner" />
-                        <Tab label="Financial" />
-                        <Tab label="Billing Settings" />
-                        <Tab label="Contract" />
+                        <Tab label="Company Information" />
+                        <Tab label="Franchisee Agreement" />
                         <Tab label="Franchisees Fee Maintenance" />
                         <Tab label="Upload Required Document" />
                     </Tabs>

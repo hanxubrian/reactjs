@@ -237,7 +237,8 @@ class FranchiseesMaintenanceTable extends React.Component {
         labelWidth: 0,
         data: [
             createData('', '', '','')
-        ]
+        ],
+        feeType: 0
     };
 
     handleRequestSort = (event, property) => {
@@ -261,7 +262,11 @@ class FranchiseesMaintenanceTable extends React.Component {
         }
         this.setState({ selected: [] });
     };
-
+    handleSelectChange = name => event => {
+        this.setState({
+            [name]: event.target.value,
+        });
+    };
     componentDidMount() {
         let id = 0;
         const data = [...this.state.data];
@@ -322,8 +327,9 @@ class FranchiseesMaintenanceTable extends React.Component {
                                                     <TableCell component="td" scope="row" >
                                                         <TextField
                                                             select
-                                                            value = {0}
+                                                            value = {this.state.feeType}
                                                             id={"FEE_MAINTENACE_name" + n.id}
+                                                            onChange={this.handleSelectChange('feeType')}
                                                             className={classes.textField}
                                                             variant="outlined"
                                                             fullWidth
