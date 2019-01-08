@@ -448,10 +448,7 @@ class Customers extends Component {
 		// 	all_temp = [...all_temp, ...x.Customers];
 		// 	return;
 		// });
-<<<<<<< HEAD
 		// }
-=======
->>>>>>> 71f622b2fc56f3f7f2a1d8829955f0cac9305ea1
 		this.setState({ temp: all_temp });
 		this.setState({ data: all_temp });
 
