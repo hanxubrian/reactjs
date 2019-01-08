@@ -28,7 +28,15 @@ import classNames from 'classnames';
 
 
 import { Tooltip } from '@material-ui/core';
-import GoogleMap from 'google-map-react';
+// import GoogleMap from 'google-map-react';
+import {
+	withScriptjs,
+	withGoogleMap,
+	GoogleMap,
+	Marker,
+} from "react-google-maps";
+import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
+import { compose, withProps, withHandlers } from "recompose";
 
 import {
 	SelectionState,
@@ -84,13 +92,13 @@ import CancelIcon from '@material-ui/icons/Cancel';
 
 import Spinner from 'react-spinner-material';
 
-function Marker({ text }) {
-	return (
-		<Tooltip title={text} placement="top">
-			<Icon className="text-red">place</Icon>
-		</Tooltip>
-	);
-}
+// function Marker({ text }) {
+// 	return (
+// 		<Tooltip title={text} placement="top">
+// 			<Icon className="text-red">place</Icon>
+// 		</Tooltip>
+// 	);
+// }
 
 
 
@@ -353,6 +361,45 @@ const Command = ({ id, onExecute }) => {
 	);
 };
 const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
+
+const MapWithAMarkerClusterer = compose(
+	withProps({
+		googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA&v=3.exp&libraries=geometry,drawing,places",
+		loadingElement: <div style={{ height: `100%` }} />,
+		containerElement: <div style={{ height: `100%` }} />,
+		mapElement: <div style={{ height: `100%` }} />,
+	}),
+	withHandlers({
+		onMarkerClustererClick: () => (markerClusterer) => {
+			const clickedMarkers = markerClusterer.getMarkers()
+			console.log(`Current clicked markers length: ${clickedMarkers.length}`)
+			console.log(clickedMarkers)
+		},
+	}),
+	withScriptjs,
+	withGoogleMap
+)(props =>
+	<GoogleMap
+		defaultZoom={3}
+		defaultCenter={{ lat: 25.0391667, lng: 121.525 }}
+	>
+		<MarkerClusterer
+			onClick={props.onMarkerClustererClick}
+			averageCenter
+			enableRetinaIcons
+			gridSize={60}
+		>
+			{props.markers.map((x, index) => (
+				<Marker
+					key={index}
+					position={{ lat: x.lat, lng: x.lng }}
+				/>
+			))}
+		</MarkerClusterer>
+	</GoogleMap>
+);
+
+
 class CustomerListContent extends Component {
 
 
@@ -952,19 +999,13 @@ class CustomerListContent extends Component {
 					{/* Mapview */}
 					{mapViewState && (<div className="w-full h-full">
 						<div className="w-full h-full">
-							<GoogleMap
+							{/* <GoogleMap
 								bootstrapURLKeys={{
 									key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
 								}}
 								defaultZoom={12}
 								defaultCenter={[this.state.current_lat, this.state.current_long]}
 							>
-								{/* <Marker
-									text="Marker Text"
-									lat={this.state.current_lat}
-									lng={this.state.current_long}
-								/> */}
-
 								{
 									this.props.pins.map((x, index) => (
 										<Marker
@@ -975,7 +1016,16 @@ class CustomerListContent extends Component {
 										/>
 									))
 								}
-							</GoogleMap>
+							</GoogleMap> */}
+
+							{/* <MapWithAMarker
+								googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA&libraries=geometry,drawing,places"
+								loadingElement={<div style={{ height: `100%` }} />}
+								containerElement={<div style={{ height: `100%` }} />}
+								mapElement={<div style={{ height: `100%` }} />}
+							/> */}
+
+							<MapWithAMarkerClusterer markers={this.props.pins} />
 						</div>
 					</div>)}
 
