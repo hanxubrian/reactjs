@@ -215,6 +215,19 @@ const styles = theme => ({
 			backgroundColor: 'fade(' + theme.palette.primary.secondary + ', 0.03)',
 		},
 	},
+	overlay: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		width: '100%',
+		height: '100vh',
+		backgroundColor: 'rgba(0,0,0, .9)',
+		zIndex: 1000,
+		alignItems: 'center',
+		justifyContent: 'center',
+		display: 'flex',
+		opacity: 0.5
+	}
 });
 //
 // table content rows stle
@@ -1175,6 +1188,11 @@ class CustomerListContent extends Component {
 							// style={{ flex: '1', }}
 							>
 
+								{/* <Spinner size={45} spinnerColor={"#F40456"} spinnerWidth={5}
+									visible={this.props.bCustomerFetchStart}
+									className={classNames("overlay")}
+								/> */}
+
 								<Grid
 									rootComponent={GridRootComponent}
 									rows={
@@ -1322,10 +1340,7 @@ class CustomerListContent extends Component {
 									<span className={"p-6"}>
 										Rows Selected: <strong>{selection.length}</strong>
 									</span>
-									<Spinner size={45} spinnerColor={"#F40456"} spinnerWidth={5}
-										visible={this.props.loading}
-										className={classNames("p-6")}
-									/>
+
 									<span className={"p-6"}>
 										Total Rows: <strong>{rows.length}</strong>
 									</span>
@@ -1364,6 +1379,7 @@ function mapStateToProps({ customers, auth }) {
 		mapViewState: customers.bOpenedMapView,
 		locationFilterValue: customers.locationFilterValue,
 		searchText: customers.searchText,
+		bCustomerFetchStart: customers.bCustomerFetchStart,
 	}
 }
 

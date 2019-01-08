@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 // core components
-import { Icon, IconButton, Fab, Typography, Toolbar } from '@material-ui/core';
+import { Icon, IconButton, Fab, Typography, Toolbar, CircularProgress } from '@material-ui/core';
 
 // theme components
 import { FusePageCustomSidebarScroll, FuseAnimate } from '@fuse';
@@ -208,7 +208,20 @@ const styles = theme => ({
 		'&:hover': {
 			backgroundColor: theme.palette.primary.dark,
 		}
-	}
+	},
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100vh',
+        backgroundColor: 'rgba(0,0,0, .9)',
+        zIndex: 1000,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
+        opacity: 0.5
+    }
 });
 // const defaultProps = {
 // 	trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
@@ -729,6 +742,11 @@ class Customers extends Component {
 					}}
 				>
 				</FusePageCustomSidebarScroll>
+				{(this.props.bCustomerFetchStart) && (
+					<div className={classes.overlay}>
+						<CircularProgress className={classes.progress} color="secondary" />
+					</div>
+				)}
 			</React.Fragment >
 		);
 	}
@@ -765,7 +783,8 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		longitude: customers.longitude,
 		latitude: customers.latitude,
 		location: customers.location,
-		searchText: customers.searchText
+		searchText: customers.searchText,
+		bCustomerFetchStart: customers.bCustomerFetchStart,
 	}
 }
 
