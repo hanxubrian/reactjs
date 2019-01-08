@@ -18,6 +18,9 @@ export const ADD_CUSTOMER = '[CUSTOMERS APP] ADD CUSTOMER';
 export const UPDATE_CUSTOMER = '[CUSTOMERS APP] UPDATE CUSTOMER';
 
 export const SELECT_LOCATION_FILTER = '[CUSTOMERS APP] SELECT LOCATION FILTER';
+export const APPLY_SEARCH_TEXT = '[CUSTOMERS APP] APPLY SEARCH TEXT';
+
+export const GET_CUSTOMERS_FETCH_START = "[CUSTOMERS APP] GET CUSTOMERS FETCH START";
 
 export function getCustomers(regionId, statusId=0, location="all", latitude="", longitude="", searchText="") {
 	// return dispatch => {
@@ -32,6 +35,12 @@ export function getCustomers(regionId, statusId=0, location="all", latitude="", 
 
 	// };
 	return (dispatch) => {
+
+		dispatch({
+            type: GET_CUSTOMERS_FETCH_START,
+            payload: true
+		});
+		
 		(async () => {
 			regionId = regionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [regionId]
 			statusId = statusId === 0 ? Array.from({ length: 10 }).map((item, index) => (index + 1)) : [statusId]
@@ -74,6 +83,13 @@ export function selectLocationFilter(filter_value) {
 	return {
 		type: SELECT_LOCATION_FILTER,
 		payload: filter_value
+	}
+}
+
+export function applySearchText(s) {
+	return {
+		type: APPLY_SEARCH_TEXT,
+		payload: s
 	}
 }
 

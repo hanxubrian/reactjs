@@ -24,6 +24,9 @@ const initialState = {
 	searchText: "",
 
 	locationFilterValue: "locationAll",
+	searchText: "",
+
+	bCustomerFetchStart: false
 };
 
 
@@ -33,7 +36,16 @@ const customers = function (state = initialState, action) {
 			{
 				return {
 					...initialState,
-					customersDB: action.payload, bLoadedCustomers: true
+					customersDB: action.payload,
+					bLoadedCustomers: true,
+					bCustomerFetchStart: false
+				};
+			}
+		case Actions.GET_CUSTOMERS_FETCH_START:
+			{
+				return {
+					...state,
+					bCustomerFetchStart: true
 				};
 			}
 		case Actions.TOGGLE_FILTER_PANEL:
@@ -62,6 +74,11 @@ const customers = function (state = initialState, action) {
 		case Actions.SELECT_LOCATION_FILTER: {
 			return {
 				...state, locationFilterValue: action.payload
+			}
+		}
+		case Actions.APPLY_SEARCH_TEXT: {
+			return {
+				...state, searchText: action.payload
 			}
 		}
 		case Actions.DELETE_SELECTED_CUSTOMERS:

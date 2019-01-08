@@ -94,6 +94,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 
 import Spinner from 'react-spinner-material';
 import { getOverlappingDaysInIntervals } from 'date-fns';
+import CustomerSearchBar from './CustomerSearchBar';
 
 // function Marker({ text }) {
 // 	return (
@@ -640,7 +641,7 @@ class CustomerListContent extends Component {
 		};
 
 		this.fetchData = this.fetchData.bind(this);
-		this.escFunction = this.escFunction.bind(this);
+		// this.escFunction = this.escFunction.bind(this);
 
 		this.changeSelection = selection => this.setState({ selection });
 		this.changeSorting = sorting => this.setState({ sorting });
@@ -757,7 +758,7 @@ class CustomerListContent extends Component {
 			// this.setState({ pins: this.props.pins })
 			// this.setState({ locationFilterValue: this.props.locationFilterValue })
 		}
-		
+
 		// if (prevState.s !== this.state.s) {
 		// 	this.search(this.state.s);
 		// }
@@ -778,7 +779,7 @@ class CustomerListContent extends Component {
 		});
 
 		regions.forEach(x => {
-			all_temp = [...all_temp, ...x.Customers];
+			all_temp = [...all_temp, ...x.CustomerList];
 		});
 
 		// regions.map(x => {
@@ -789,13 +790,15 @@ class CustomerListContent extends Component {
 		// this.setState({ data: all_temp });
 
 
-
-		this.setState({ rows: all_temp });
+		this.setState({
+			data: [...all_temp],
+			rows: [...all_temp]
+		});
 
 	};
 
-	search() {
-		console.log("search");
+	search(val) {
+		console.log("---------search---------", val);
 
 		// const temp = this.props.data.filter( d => {
 		//     console.log('customer=', d);
@@ -812,7 +815,7 @@ class CustomerListContent extends Component {
 		// });
 
 		// this.setState({data: temp});
-		let val = this.state.s.toLowerCase();
+		val = val.toLowerCase();
 		if (val === '') {
 			this.getCustomersFromStatus();
 			return;
@@ -829,7 +832,7 @@ class CustomerListContent extends Component {
 		});
 
 		// this.setState({ data: temp });
-		this.setState({ rows: temp });
+		this.setState({ rows: [...temp] });
 	}
 
 	componentDidMount() {
@@ -850,21 +853,19 @@ class CustomerListContent extends Component {
 	componentWillUnmount() {
 		console.log("componentWillUnmount");
 
-		document.removeEventListener("keydown", this.escFunction, false);
+		// document.removeEventListener("keydown", this.escFunction, false);
 	}
 
-	escFunction(event) {
-		console.log("escFunction");
+	// escFunction(event) {
+	// 	console.log("escFunction");
 
-		if (event.keyCode === 27) {
-			this.setState({ s: '' });
-			// this.setState({ data: this.props.data })
-			this.setState({ rows: this.props.data })
-		}
-	}
+	// 	if (event.keyCode === 27) {
+	// 		this.setState({ s: '' });
+	// 		// this.setState({ data: this.props.data })
+	// 		this.setState({ rows: this.props.data })
+	// 	}
+	// }
 
-	WAIT_INTERVAL = 1000;
-	ENTER_KEY = 13;
 
 	handleChange = prop => event => {
 		console.log("handleChange");
@@ -946,15 +947,14 @@ class CustomerListContent extends Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		return (this.state !== nextState) ||
+		console.log("shouldComponentUpdate", this.state !== nextState);
+
+		return this.state !== nextState ||
 			this.props.mapViewState !== nextProps.mapViewState ||
 			this.props.data !== nextProps.data ||
 			this.props.loading !== nextProps.loading ||
-			this.props.pins !== nextProps.pins
-		// || 
-		// this.props.locationFilterValue !== nextProps.locationFilterValue
-
-		// return true;
+			this.props.pins !== nextProps.pins ||
+			this.props.searchText !== nextProps.searchText
 	}
 	componentWillReceiveProps(nextProps) {
 		// this.setState({ mapViewState: nextProps.mapViewState });
@@ -965,6 +965,10 @@ class CustomerListContent extends Component {
 			console.log("componentDidUpdate", "CustomerListContent.js", nextProps.locationFilterValue)
 			this.initPins(nextProps.locationFilterValue);
 
+		}
+
+		if (nextProps.searchText !== this.props.searchText) {
+			this.search(nextProps.searchText);
 		}
 	} // deprecate 
 
@@ -1108,63 +1112,9 @@ class CustomerListContent extends Component {
 			<Fragment>
 				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
 
-					{/* Searchbar row */}
-					<div className="flex flex-row items-center">
-						<div className="flex items-center justify-start p-6">
-							<Button
-								onClick={(ev) => toggleFilterPanel()}
-								aria-label="toggle filter panel"
-								color="secondary"
-								className={classNames(classes.filterPanelButton)}
-							>
-								<img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" />
-							</Button>
-						</div>
+					<CustomerSearchBar>
 
-						<div className="flex items-center justify-start p-6">
-							{/* <Button
-								onClick={(ev) => toggleFilterPanel()}
-								aria-label="toggle filter panel"
-								color="secondary"
-								className={classNames(classes.filterPanelButton)}
-							>
-								<img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" />
-							</Button> */}
-
-
-						</div>
-
-						<Paper className={"flex items-center w-full h-44 mr-0"} elevation={1}>
-							<Input
-								placeholder="Search..."
-								className={classNames(classes.search, 'pl-16')}
-								disableUnderline
-								fullWidth
-								value={this.state.s}
-								onChange={this.handleChange('s')}
-								inputProps={{
-									'aria-label': 'Search'
-								}}
-							/>
-							<Icon color="action" className="mr-16">search</Icon>
-						</Paper>
-						<div className="flex items-center justify-end p-12">
-							<IconButton
-								// className={classNames(classes.summaryPanelButton, "mr-12")}
-								className={classNames(classes.button, "mr-12")}
-								aria-label="Add an alarm"
-								onClick={(ev) => toggleMapView()}>
-								<Icon>{mapViewState ? 'list' : 'location_on'}</Icon>
-							</IconButton>
-
-							<Button
-								onClick={(ev) => toggleSummaryPanel()}
-								aria-label="toggle summary panel"
-								className={classNames(classes.summaryPanelButton)}
-							>
-								<Icon>insert_chart</Icon>
-							</Button></div>
-					</div>
+					</CustomerSearchBar>
 
 					{/* Mapview */}
 					{mapViewState && (<div className="w-full h-full">
@@ -1397,6 +1347,7 @@ function mapStateToProps({ customers, auth }) {
 		CustomerForm: customers.CustomerForm,
 		mapViewState: customers.bOpenedMapView,
 		locationFilterValue: customers.locationFilterValue,
+		searchText: customers.searchText,
 	}
 }
 

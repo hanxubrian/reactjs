@@ -235,11 +235,7 @@ class Customers extends Component {
 	constructor(props) {
 		super(props);
 
-
-
-
 		this.fetchData = this.fetchData.bind(this);
-		this.escFunction = this.escFunction.bind(this);
 
 		this.state = {
 			s: '',
@@ -471,11 +467,11 @@ class Customers extends Component {
 	};
 
 	componentDidMount() {
-		document.addEventListener("keydown", this.escFunction, false);
+		// document.addEventListener("keydown", this.escFunction, false);
 	}
 
 	componentWillUnmount() {
-		document.removeEventListener("keydown", this.escFunction, false);
+		// document.removeEventListener("keydown", this.escFunction, false);
 	}
 
 	escFunction(event) {
