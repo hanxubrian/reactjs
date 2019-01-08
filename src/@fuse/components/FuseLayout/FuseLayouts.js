@@ -3,7 +3,7 @@ import FuseLayout2 from './layouts/FuseLayout2';
 
 const FuseLayouts = {
     layout1: {
-        title    : 'Layout 1 - Vertical',
+        title    : 'Vertical',
         type     : 'vertical',
         component: FuseLayout1,
         defaults : {
@@ -161,7 +161,7 @@ const FuseLayouts = {
         }
     },
     layout2: {
-        title    : 'Layout 2 - Horizontal',
+        title    : 'Horizontal',
         type     : 'horizontal',
         component: FuseLayout2,
         defaults : {

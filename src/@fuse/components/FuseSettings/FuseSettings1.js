@@ -70,7 +70,6 @@ class FuseSettings extends Component {
     render()
     {
         const {classes, settings} = this.props;
-
         function ThemeSelect({value, name, handleChange})
         {
             return (
@@ -207,6 +206,30 @@ class FuseSettings extends Component {
         return (
             <div className={classes.root}>
 
+                <div className={classNames(classes.formGroup, "pb-16")}>
+
+                <Typography className={classes.formGroupTitle} color="textSecondary">
+                    Theme
+                </Typography>
+
+                <FormControl component="fieldset" className={classes.formControl}>
+                    <FormLabel component="legend" className="text-14">Main</FormLabel>
+                    <ThemeSelect value={settings.theme.main} name="theme.main" handleChange={this.handleChange}/>
+                </FormControl>
+                {/* <FormControl component="fieldset" className={classes.formControl}>
+                    <FormLabel component="legend" className="text-14">Navbar</FormLabel>
+                    <ThemeSelect value={settings.theme.navbar} name="theme.navbar" handleChange={this.handleChange}/>
+                </FormControl>
+                <FormControl component="fieldset" className={classes.formControl}>
+                    <FormLabel component="legend" className="text-14">Toolbar</FormLabel>
+                    <ThemeSelect value={settings.theme.toolbar} name="theme.toolbar" handleChange={this.handleChange}/>
+                </FormControl>
+                <FormControl component="fieldset" className={classes.formControl}>
+                    <FormLabel component="legend" className="text-14">Footer</FormLabel>
+                    <ThemeSelect value={settings.theme.footer} name="theme.footer" handleChange={this.handleChange}/>
+                </FormControl> */}
+                </div>
+
                 <div className={classes.formGroup}>
 
                     <Typography className={classes.formGroupTitle} color="textSecondary">
@@ -223,29 +246,6 @@ class FuseSettings extends Component {
 
                 </div>
 
-                <div className={classNames(classes.formGroup, "pb-16")}>
-
-                    <Typography className={classes.formGroupTitle} color="textSecondary">
-                        Theme
-                    </Typography>
-
-                    <FormControl component="fieldset" className={classes.formControl}>
-                        <FormLabel component="legend" className="text-14">Main</FormLabel>
-                        <ThemeSelect value={settings.theme.main} name="theme.main" handleChange={this.handleChange}/>
-                    </FormControl>
-                    <FormControl component="fieldset" className={classes.formControl}>
-                        <FormLabel component="legend" className="text-14">Navbar</FormLabel>
-                        <ThemeSelect value={settings.theme.navbar} name="theme.navbar" handleChange={this.handleChange}/>
-                    </FormControl>
-                    <FormControl component="fieldset" className={classes.formControl}>
-                        <FormLabel component="legend" className="text-14">Toolbar</FormLabel>
-                        <ThemeSelect value={settings.theme.toolbar} name="theme.toolbar" handleChange={this.handleChange}/>
-                    </FormControl>
-                    <FormControl component="fieldset" className={classes.formControl}>
-                        <FormLabel component="legend" className="text-14">Footer</FormLabel>
-                        <ThemeSelect value={settings.theme.footer} name="theme.footer" handleChange={this.handleChange}/>
-                    </FormControl>
-                </div>
 
                 <FormControl component="fieldset" className={classes.formControl}>
                     <FormLabel component="legend" className="text-14">Custom Scrollbars</FormLabel>

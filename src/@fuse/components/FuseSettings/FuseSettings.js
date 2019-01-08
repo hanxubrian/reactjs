@@ -66,7 +66,6 @@ class FuseSettings extends Component {
     render()
     {
         const {classes, settings} = this.props;
-
         function ThemeSelect({value, name, handleChange})
         {
             return (

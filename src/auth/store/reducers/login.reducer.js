@@ -38,7 +38,8 @@ const login = function (state = initialState, action) {
                 lastName: action.payload.LastName,
                 role: action.payload.Roles[0].RoleName,
                 Username: action.payload.Username,
-                Phone: action.payload.Phone
+                Phone: action.payload.Phone,
+                profilePhoto: action.payload.ProfilePhoto
             };
             return {
                 ...initialState,
@@ -54,7 +55,8 @@ const login = function (state = initialState, action) {
                 defaultRegionId: action.payload.defaultRegionId,
                 firstName: action.payload.firstName,
                 lastName: action.payload.lastName,
-                role: action.payload.role
+                role: action.payload.role,
+                profilePhoto: action.payload.ProfilePhoto
             };
             return {
                 ...initialState,

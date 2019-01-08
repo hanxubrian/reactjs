@@ -100,7 +100,7 @@ class MainToolbar extends Component {
                         <Button className="h-64" onClick={this.userMenuClick}>
                             {user.data.photoURL ?
                                 (
-                                    <Avatar className="" alt="user photo" src="assets/images/avatars/german.png"/>
+                                    <Avatar className="" alt="user photo" src={this.props.login.profilePhoto}/>
                                 )
                                 :
                                 (
@@ -166,7 +166,7 @@ class MainToolbar extends Component {
                             <React.Fragment>
                             <MenuItem component={Link} to="/pages/profile" onClick={this.userMenuClose}>
                                <ListItemIcon>
-                                   <img src="assets/images/avatars/german.png" alt="user" style={{width: 32, height: 32, borderRadius: 30}}/>
+                                   <img src={this.props.login.profilePhoto} alt="user" style={{width: 32, height: 32, borderRadius: 30}}/>
                                </ListItemIcon>
                                <ListItemText className="pl-0" primary="My Profile"/>
                             </MenuItem>
