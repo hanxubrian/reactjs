@@ -190,7 +190,7 @@ class InvoiceApp extends Component {
         }
 
         if (!props.bLoadedCustomers) {
-            props.getCustomers();
+            props.getCustomers(props.regionId);
         }
 
         this.escFunction = this.escFunction.bind(this);
@@ -202,25 +202,6 @@ class InvoiceApp extends Component {
         let bChanged = false;
 
         const {regionId, StatusId, FromDate, ToDate,PeriodId, OpenOrClosed,InvoiceTypeId, ToPrintOrToEmail, SearchText} = this.props;
-        if(this.props.transactionStatus.checkedPaid !== prevProps.transactionStatus.checkedPaid) {
-            this.setState({checkedPaid: !this.state.checkedPaid});
-            bChanged = true;
-        }
-
-        if(this.props.transactionStatus.checkedPP !== prevProps.transactionStatus.checkedPP) {
-            this.setState({checkedPP: !this.state.checkedPP});
-            bChanged = true;
-        }
-
-        if(this.props.transactionStatus.checkedComplete !== prevProps.transactionStatus.checkedComplete) {
-            this.setState({checkedComplete: !this.state.checkedComplete});
-            bChanged = true;
-        }
-
-        if(this.props.transactionStatus.checkedOpen !== prevProps.transactionStatus.checkedOpen) {
-            this.setState({checkedOpen: !this.state.checkedOpen});
-            bChanged = true;
-        }
 
         if(this.props.transactionStatus.checkedEbill !== prevProps.transactionStatus.checkedEbill) {
             this.setState({checkedEbill: !this.state.checkedEbill});
@@ -232,12 +213,16 @@ class InvoiceApp extends Component {
             bChanged = true;
         }
 
+        if(regionId !== prevProps.regionId){
+            this.props.getCustomers(regionId);
+        }
         if(regionId !== prevProps.regionId ||
-        FromDate !== prevProps.FromDate ||
-        ToDate !== prevProps.ToDate
+            FromDate !== prevProps.FromDate ||
+            ToDate !== prevProps.ToDate
         ) {
             this.props.getInvoices([regionId] ,StatusId, FromDate, ToDate, PeriodId,
                 OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText);
+
         }
 
         if(bChanged)
@@ -266,12 +251,12 @@ class InvoiceApp extends Component {
             this.getInvoicesFromStatus(nextProps.invoices);
 
 
-        if(nextProps.customers!==null && this.state.customers===null){
+        if(nextProps.customers!==null && this.props.customers!==nextProps.customers){
             let temp = [];
             let regions = nextProps.customers.Data.Regions
 
             regions.map(x => {
-                temp = [...temp, ...x.Customers];
+                temp = [...temp, ...x.CustomerList];
                 return true;
             });
             this.setState({customers: temp});
@@ -281,8 +266,6 @@ class InvoiceApp extends Component {
     getInvoicesFromStatus =(rawData=this.props.invoices) =>{
         let temp=[];
         let all_temp=[];
-        const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
-        const keys=['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
 
         if(rawData===null) return;
         if(rawData.Data.Region.length===0) return;
@@ -320,7 +303,7 @@ class InvoiceApp extends Component {
             let regions = this.props.customers.Data.Regions;
 
             regions.map(x => {
-                temp = [...temp, ...x.Customers];
+                temp = [...temp, ...x.CustomerList];
                 return true;
             });
             this.setState({customers: temp});
@@ -455,18 +438,18 @@ class InvoiceApp extends Component {
                                                     </Toolbar>
                                                 </FuseAnimate>
 
-                                                    {this.props.invoiceForm.type === 'edit' && (
-                                                        <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                {this.props.invoiceForm.type === 'edit' && (
+                                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                                         <Typography variant="h6" className="hidden sm:flex">Accounts
                                                             Receivable | Edit Invoice</Typography>
-                                                        </FuseAnimate>
-                                                    )}
-                                                    {this.props.invoiceForm.type === 'new' && (
-                                                        <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                    </FuseAnimate>
+                                                )}
+                                                {this.props.invoiceForm.type === 'new' && (
+                                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                                         <Typography variant="h6" className="hidden sm:flex">Accounts
                                                             Receivable | New Invoice</Typography>
-                                                        </FuseAnimate>
-                                                    )}
+                                                    </FuseAnimate>
+                                                )}
 
                                             </div>
                                         </div>

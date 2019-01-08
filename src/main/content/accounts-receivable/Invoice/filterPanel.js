@@ -5,9 +5,9 @@ import keycode from 'keycode';
 //Material UI core
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
+import lightBlue from '@material-ui/core/colors/lightBlue';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+import {FuseThemes} from '@fuse';
 
 import 'date-fns'
 import DateFnsUtils from '@date-io/date-fns';
@@ -27,6 +27,12 @@ import {UPDATE_FROM_DATE_INVOICE, UPDATE_TO_DATE_INVOICE} from "../../../../stor
 
 const styles = theme => ({
     root : {
+        '& input, & label': {
+            // color: 'white'
+        },
+        '& fieldset': {
+            // borderColor: 'white!important'
+        }
     },
     panel: {
         position                      : 'absolute',
@@ -145,12 +151,14 @@ class FilterPanel extends Component {
     render()
     {
         const {classes} = this.props;
+        console.log('xxx=', this.props.settings);
         return (
             <div className={classNames(classes.root)}>
                 <div className={classNames("flex flex-col")}>
                     <Paper className="flex flex-1 flex-col min-h-px p-20">
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <h3 className="mb-20">Filter by Date</h3>
+                            <MuiThemeProvider theme={FuseThemes['mainThemeLight']}>
                             <DatePicker
                                 margin="none"
                                 label="From Date"
@@ -175,6 +183,7 @@ class FilterPanel extends Component {
                                 required
                                 style={{marginTop: '30px!important'}}
                             />
+                            </MuiThemeProvider>
 
                             {/*<FormControl className={classes.formControl} style={{width: 200}}>*/}
                             {/*/!*<InputLabel htmlFor="age-simple">Invoice Date</InputLabel>*!/*/}
@@ -264,7 +273,7 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({invoices})
+function mapStateToProps({invoices, fuse})
 {
     return {
         filterState: invoices.bOpenedFilterPanel,
@@ -272,6 +281,7 @@ function mapStateToProps({invoices})
         invoiceStatus: invoices.invoiceStatus,
         FromDate: invoices.FromDate,
         ToDate: invoices.ToDate,
+        settings       : fuse.settings.current,
     }
 }
 

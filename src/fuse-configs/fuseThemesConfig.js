@@ -113,7 +113,7 @@ export const fuseThemesConfig = {
             primary  : fuseDark,
             secondary: {
                 light: lightBlue[400],
-                main : lightBlue[600],
+                main : lightBlue[500],
                 dark : lightBlue[700]
             },
             error    : red

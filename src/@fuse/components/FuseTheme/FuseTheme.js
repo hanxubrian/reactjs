@@ -41,7 +41,10 @@ export const defaults = {
                 main : lightBlue[600],
                 dark : lightBlue[700]
             },
-            error    : red
+            error    : red,
+            frame : {
+                main: 'white'
+            },
         },
         status : {
             danger: 'orange'
@@ -56,7 +59,10 @@ export const defaults = {
                 main : lightBlue[600],
                 dark : lightBlue[700]
             },
-            error    : red
+            error    : red,
+            frame : {
+                main: 'white'
+            },
         },
         status : {
             danger: 'orange'
@@ -114,7 +120,14 @@ function updateLightDarkThemes(val)
     const theme = themesObj[val];
     themes = {
         ...themes,
-        mainThemeDark : createMuiTheme(_.merge({}, defaultOptions, theme, {palette: {type: 'dark'}, ...mustHaveOptions})),
+        mainThemeDark : createMuiTheme(_.merge({}, defaultOptions, theme, {
+            palette: {
+            type: 'dark',
+            frame : {
+                main: 'white'
+            },
+            },
+            ...mustHaveOptions})),
         mainThemeLight: createMuiTheme(_.merge({}, defaultOptions, theme, {palette: {
             type: 'light',
                 primary  : {
