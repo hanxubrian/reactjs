@@ -145,17 +145,17 @@ class Chat extends Component {
 
     shouldShowContactAvatar = (item, i) => {
         return (
-            item.who === this.props.selectedContactId &&
-            ((this.props.chat.dialog[i + 1] && this.props.chat.dialog[i + 1].who !== this.props.selectedContactId) || !this.props.chat.dialog[i + 1])
+            item.senderUsername === this.props.selectedContactId &&
+            ((this.props.chat.messages[i + 1] && this.props.chat.messages[i + 1].senderUsername !== this.props.selectedContactId) || !this.props.chat.messages[i + 1])
         );
     };
 
     isFirstMessageOfGroup = (item, i) => {
-        return (i === 0 || (this.props.chat.dialog[i - 1] && this.props.chat.dialog[i - 1].who !== item.who));
+        return (i === 0 || (this.props.chat.messages[i - 1] && this.props.chat.messages[i - 1].senderUsername !== item.senderUsername));
     };
 
     isLastMessageOfGroup = (item, i) => {
-        return (i === this.props.chat.dialog.length - 1 || (this.props.chat.dialog[i + 1] && this.props.chat.dialog[i + 1].who !== item.who));
+        return (i === this.props.chat.messages.length - 1 || (this.props.chat.messages[i + 1] && this.props.chat.messages[i + 1].senderUsername !== item.senderUsername));
     };
 
     onInputChange = (ev) => {
@@ -168,11 +168,11 @@ class Chat extends Component {
         {
             return;
         }
-        this.props.sendMessage(this.state.messageText, this.props.chat.id, this.props.user.id)
-            .then(() => {
+         this.props.sendMessage(this.state.messageText, this.props.chat.currentUser, this.props.user.id)
+            /* .then(() => {
                 this.setState({messageText: ''});
                 this.scrollToBottom();
-            });
+            });  */
     };
 
     scrollToBottom = () => {
@@ -191,7 +191,7 @@ class Chat extends Component {
                     }}
                     className="flex flex-1 flex-col overflow-y-auto"
                 >
-                    {!chat ?
+                    { !chat ?
                         (
                             <div className="flex flex-col flex-1 items-center justify-center p-24">
                                 <Icon className="text-128" color="disabled">chat</Icon>
@@ -200,18 +200,18 @@ class Chat extends Component {
                                 </Typography>
                             </div>
                         ) :
-                        chat.dialog.length > 0 ?
+                        chat.messages && chat.messages.length > 0 ?
                             (
                                 <div className="flex flex-col pt-16 pl-40 pb-40">
-                                    {chat.dialog.map((item, i) => {
-                                        const contact = item.who === user.id ? user : contacts.find(_contact => _contact.id === item.who);
+                                    {chat.messages.map((item, i) => {
+                                        const contact = item.senderUsername === user.id ? user : contacts.find(_contact => _contact.id === item.senderUsername);
                                         return (
                                             <div
-                                                key={item.time}
+                                                key={item.created_at}
                                                 className={classNames(
                                                     classes.messageRow,
-                                                    {'me': item.who === user.id},
-                                                    {'contact': item.who !== user.id},
+                                                    {'me': item.senderUsername === user.id},
+                                                    {'contact': item.senderUsername !== user.id},
                                                     {'first-of-group': this.isFirstMessageOfGroup(item, i)},
                                                     {'last-of-group': this.isLastMessageOfGroup(item, i)}
                                                 )}
@@ -220,8 +220,8 @@ class Chat extends Component {
                                                     <Avatar className={classes.avatar} src={contact.avatar}/>
                                                 )}
                                                 <div className={classes.bubble}>
-                                                    <div className={classes.message}>{item.message}</div>
-                                                    <Typography className={classes.time} color="textSecondary">{moment(item.time).format('MMMM Do YYYY, h:mm:ss a')}</Typography>
+                                                    <div className={classes.message}>{item.text}</div>
+                                                    <Typography className={classes.created_at} color="textSecondary">{moment(item.created_at).format('MMMM Do YYYY, h:mm:ss a')}</Typography>
                                                 </div>
                                             </div>
                                         )

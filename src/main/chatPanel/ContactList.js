@@ -82,7 +82,7 @@ class ContactList extends Component {
 
     handleContactClick = (chatId, contactId) => {
         this.props.openChatPanel();
-        //this.props.getChat(chatId, contactId);
+        this.props.getChat(chatId, contactId);
         this.scrollToTop();
     };
 

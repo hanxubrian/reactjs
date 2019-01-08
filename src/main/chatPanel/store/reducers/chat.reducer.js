@@ -20,6 +20,27 @@ const chat = function (state = initialState, action) {
         {
             return null;
         }
+        case Actions.CURRENT_USER:
+        {
+            return {
+                ...state,
+                currentUser : action.data
+            }
+        }
+        case Actions.CURRENT_ROOM:
+        {
+            return {
+                ...state,
+                currentRoom : action.data
+            }
+        }
+        case Actions.ON_MESSAGE:
+        {
+            return {
+                ...state,
+                messages : [...state.messages, action.message]
+            }
+        }
         case Actions.SEND_MESSAGE:
         {
             return {
