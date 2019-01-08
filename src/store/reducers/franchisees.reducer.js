@@ -20,6 +20,7 @@ const initialState = {
     selectedSignDate: new Date(),
     selectedRenewDate: new Date(),
     selectedExpDate: new Date(),
+    bFranchiseesFetchStart: false,
     transactionStatusFranchisees:{
         Active: true,
         Inactive: true,
@@ -31,7 +32,7 @@ const initialState = {
         Rejected: true,
         Pending: true,
         "Non-Renewed": true,
-        Repurchased: true
+        Repurchased: true,
     },
     createFranchisees: {
         type : 'new',
@@ -52,7 +53,8 @@ const franchisees = function(state = initialState, action) {
                 ...state,
                 franchiseesDB: action.payload,
                 bLoadedFranchisees: true,
-                bOpenedFilterPanelFranchisees: state.bOpenedFilterPanelFranchisees
+                bOpenedFilterPanelFranchisees: state.bOpenedFilterPanelFranchisees,
+                bFranchiseesFetchStart: false
             };
         }
         case Actions.GET_FILTER_LIST:
@@ -180,6 +182,13 @@ const franchisees = function(state = initialState, action) {
             return {
                 ...state, selectedRenewDate: action.payload
             }
+        }
+        case Actions.GET_FRANCHISEES_FETCH_START:
+        {
+            return {
+                ...state,
+                bFranchiseesFetchStart: true
+            };
         }
         case Actions.UPDATE_EXP_DATE_FRANCHISEE:
         {

@@ -19,10 +19,18 @@ export const UPDATE_FRANCHISEE_STATUS = '[FRANCHISEES] UPDATE FRANCHISEE STATUS'
 export const UPDATE_DATE_SIGN_FRANCHISEE = "[FRANCHISEE] UPDATE  DATE_SIGN FRANCHISEE";
 export const UPDATE_RENEW_DATE_FRANCHISEE = "[FRANCHISEE] UPDATE  RENEW_DATE FRANCHISEE";
 export const UPDATE_EXP_DATE_FRANCHISEE = "[FRANCHISEE] UPDATE  EXP_DATE FRANCHISEE";
+export const GET_FRANCHISEES_FETCH_START = "[FRANCHISEE] GET FRANCHISEES FETCH START";
 
 export function getFranchisees(regionId, statusId, location , latitude , longitude , searchtext) {
+
     regionId = regionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [regionId]
     return (dispatch) => {
+
+        dispatch({
+            type: GET_FRANCHISEES_FETCH_START,
+            payload: true
+        });
+
         (async () => {
             let franchiseesList = await franchiseesService.getFranchiseesList(regionId, statusId, location , latitude , longitude , searchtext);
             dispatch({
