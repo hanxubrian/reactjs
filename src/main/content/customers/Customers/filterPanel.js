@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Paper, withStyles } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
 import keycode from 'keycode';
@@ -231,11 +231,18 @@ class FilterPanel extends Component {
 		this.setState({
 			[name]: event.target.value
 		});
+
+		if (name === "Location") {
+			this.props.selectLocationFilter(event.target.value)
+
+			
+		}
 	};
 
 	handleChange1 = event => {
 		this.setState({ [event.target.name]: event.target.value });
 	};
+
 	render() {
 		const { classes, customerForm, customers } = this.props;
 
@@ -451,7 +458,7 @@ class FilterPanel extends Component {
 										onChange={this.handleChange('Location')}
 									>
 										<FormControlLabel value="locationAll" control={<Radio />} label="All" />
-										<FormControlLabel value="locationNearBy" control={<Radio />} label="Near By" />
+										<FormControlLabel value="locationNearBy" control={<Radio />} label="Near By (15 Miles)" />
 										<FormControlLabel value="locationNearSpecificAddress" control={<Radio />} label="Near Specific Address" />
 
 									</RadioGroup>
@@ -462,7 +469,12 @@ class FilterPanel extends Component {
 										onChange={this.handleChange('SpecificAddress')}
 										margin="normal"
 										variant="outlined"
-										style={{ width: '100%' }} />
+										style={{
+											width: '100%',
+											visibility: this.state.Location === "locationNearSpecificAddress" ? 'visible' : 'hidden'
+										}}
+									/>
+
 									<TextField
 										select
 
@@ -476,7 +488,11 @@ class FilterPanel extends Component {
 										onChange={this.handleChange('Radius')}
 										margin="normal"
 										variant="outlined"
-										style={{ width: '100%' }}>
+										style={{
+											width: '100%',
+											visibility: this.state.Location === "locationNearSpecificAddress" ? 'visible' : 'hidden'
+										}}
+									>
 										{
 											// [
 											// 	{ value: 0, label: "5 Miles" },
@@ -490,13 +506,14 @@ class FilterPanel extends Component {
 											// 	{ value: 3, label: "30 Miles" }
 											// ]
 											// (new Array(15))
-											Array.apply(null, {length: 15}).map(Number.call, Number)
+											Array.apply(null, { length: 15 }).map(Number.call, Number)
 												.map((val, index) => (
 													<MenuItem key={index} value={index}>
-														{(index + 1 ) * 5} Miles
+														{(index + 1) * 5} Miles
 													</MenuItem>
 												))}
 									</TextField>
+
 								</div>
 
 								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
@@ -636,7 +653,8 @@ class FilterPanel extends Component {
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
-		toggleStatus: Actions.toggleStatus
+		toggleStatus: Actions.toggleStatus,
+		selectLocationFilter: Actions.selectLocationFilter
 	}, dispatch);
 }
 

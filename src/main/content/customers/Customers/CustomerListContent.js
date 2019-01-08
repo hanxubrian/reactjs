@@ -38,6 +38,8 @@ import {
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 import { compose, withProps, withHandlers } from "recompose";
 
+import { geolib } from 'geolib';
+
 import {
 	SelectionState,
 	PagingState,
@@ -380,8 +382,8 @@ const MapWithAMarkerClusterer = compose(
 	withGoogleMap
 )(props =>
 	<GoogleMap
-		defaultZoom={3}
-		defaultCenter={{ lat: 25.0391667, lng: 121.525 }}
+		defaultZoom={12}
+		defaultCenter={{ lat: props.center.lat, lng: props.center.lng }}
 	>
 		<MarkerClusterer
 			onClick={props.onMarkerClustererClick}
@@ -703,13 +705,32 @@ class CustomerListContent extends Component {
 
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
-		console.log("componentDidUpdate");
+		console.log("componentDidUpdate", "CustomerListContent.js", [...this.props.pins]);
 		if (this.props.data !== prevProps.data) {
 			// this.setState({ data: this.props.data });
 			this.setState({ rows: this.props.data });
-			this.setState({ pins: this.props.pins });
+			// this.setState({ pins: [...this.props.pins] })
+			this.setState({ pins: this.nearbyLocations({ lat: this.state.current_lat, lng: this.state.current_long }, 15) })
 		}
 
+		if (this.props.locationFilterValue !== prevProps.locationFilterValue) {
+			console.log("componentDidUpdate", "CustomerListContent.js", this.props.locationFilterValue)
+
+			switch (this.props.locationFilterValue) {
+				case "locationAll":
+					this.setState({ pins: [...this.props.pins] })
+					break;
+				case "locationNearBy":
+					this.setState({ pins: this.nearbyLocations({ lat: this.state.current_lat, lng: this.state.current_long }, 15) })
+					break;
+				case "locationNearSpecificAddress":
+					this.setState({ pins: [...this.props.pins] })
+					break;
+				default:
+					this.setState({ pins: [...this.props.pins] })
+					break;
+			}
+		}
 		// if (prevState.s !== this.state.s) {
 		// 	this.search(this.state.s);
 		// }
@@ -875,9 +896,13 @@ class CustomerListContent extends Component {
 			navigator.geolocation.getCurrentPosition(
 				(position) => {
 					console.log(position.coords);
+					// this.setState({
+					// 	current_lat: position.coords.latitude,
+					// 	current_long: position.coords.longitude
+					// })
 					this.setState({
-						current_lat: position.coords.latitude,
-						current_long: position.coords.longitude
+						current_lat: 42.910772,
+						current_long: -78.74557
 					})
 				}
 			);
@@ -894,13 +919,64 @@ class CustomerListContent extends Component {
 		return (this.state !== nextState) ||
 			this.props.mapViewState !== nextProps.mapViewState ||
 			this.props.data !== nextProps.data ||
-			this.props.loading !== nextProps.loading
+			this.props.loading !== nextProps.loading ||
+			this.props.locationFilterValue !== nextProps.locationFilterValue
 
 		// return true;
 	}
 	componentWillReceiveProps(nextProps) {
 		// this.setState({ mapViewState: nextProps.mapViewState });
+		console.log("componentWillReceiveProps", "CustomerListContent.js", nextProps.locationFilterValue)
+
 	} // deprecate 
+
+
+	Deg2Rad(deg) {
+		return deg * Math.PI / 180;
+	}
+
+	PythagorasEquirectangular(lat1, lon1, lat2, lon2) {
+		lat1 = this.Deg2Rad(lat1);
+		lat2 = this.Deg2Rad(lat2);
+		lon1 = this.Deg2Rad(lon1);
+		lon2 = this.Deg2Rad(lon2);
+		var R = 6371; // km
+		var x = (lon2 - lon1) * Math.cos((lat1 + lat2) / 2);
+		var y = (lat2 - lat1);
+		var d = Math.sqrt(x * x + y * y) * R;
+		return d;
+	}
+
+	// NearestCity(latitude, longitude) {
+	// 	var mindif = 99999;
+	// 	var closest;
+
+	// 	for (index = 0; index < cities.length; ++index) {
+	// 		var dif = this.PythagorasEquirectangular(latitude, longitude, cities[index][1], cities[index][2]);
+	// 	}
+	// }
+
+	nearbyLocations(center, miles = 15) {
+		let _nearbys = [];
+		this.props.pins.forEach(x => {
+			let dist = geolib.getDistance(
+				{
+					latitude: center.lat,
+					longitude: center.lng
+				},
+				{
+					latitude: x.lat,
+					longitude: x.lng
+				}
+			)
+
+			if (miles * 1609.344 <= dist) {
+				_nearbys = [..._nearbys, x]
+			}
+		});
+		return _nearbys
+	}
+
 	render() {
 		console.log("render");
 
@@ -1025,7 +1101,10 @@ class CustomerListContent extends Component {
 								mapElement={<div style={{ height: `100%` }} />}
 							/> */}
 
-							<MapWithAMarkerClusterer markers={this.props.pins} />
+							<MapWithAMarkerClusterer
+								markers={pins}
+								center={{ lat: this.state.current_lat, lng: this.state.current_long }}
+							/>
 						</div>
 					</div>)}
 
@@ -1200,323 +1279,6 @@ class CustomerListContent extends Component {
 			</Fragment>
 		)
 	}
-
-	render2() {
-		console.log(this.props)
-		console.log(this.state)
-		const {
-			classes,
-			toggleFilterPanel,
-			toggleSummaryPanel,
-			// filterState,
-			// summaryState,
-			// deleteCustomersAction,
-			// data,
-			// openNewCustomerForm,
-			// closeNewCustomerForm,
-			// CustomerForm,
-			// toggleMapView,
-			mapViewState
-		} = this.props;
-		const { toggleSelection, toggleAll, isSelected } = this;
-		console.log("mapViewState")
-		console.log(this.state.mapViewState)
-
-		return (
-			<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
-
-				{/* SearchBar row */}
-				<div className="flex flex-row items-center">
-					<div className="flex items-center justify-start p-12">
-						<Button
-							onClick={(ev) => toggleFilterPanel()}
-							aria-label="toggle filter panel"
-							color="secondary"
-							// disabled={filterState ? true : false}
-							className={classNames(classes.filterPanelButton)}
-						>
-							<img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" />
-						</Button>
-					</div>
-					{/* <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}> */}
-					<Paper className={"flex items-center w-full h-44 mr-12"} elevation={1}>
-						<Input
-							placeholder="Search..."
-							className={classNames(classes.search, 'pl-16')}
-							// className="pl-16"
-							disableUnderline
-							fullWidth
-							value={this.state.s}
-							onChange={this.handleChange('s')}
-							inputProps={{
-								'aria-label': 'Search'
-							}}
-						/>
-						<Icon color="action" className="mr-16">search</Icon>
-					</Paper>
-					<div className="flex items-center justify-end p-12">
-						<Button
-							onClick={(ev) => toggleSummaryPanel()}
-							aria-label="toggle summary panel"
-							// disabled={summaryState ? true : false}
-							className={classNames(classes.summaryPanelButton)}
-						>
-							<Icon>insert_chart</Icon>
-						</Button></div>
-				</div>
-
-				{/* MapView */}
-				{mapViewState && (<div className="w-full h-full">
-					<div className="w-full h-full">
-						<GoogleMap
-							bootstrapURLKeys={{
-								key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
-							}}
-							defaultZoom={12}
-							defaultCenter={[this.state.current_lat, this.state.current_long]}
-						>
-							<Marker
-								text="Marker Text"
-								lat={this.state.current_lat}
-								lng={this.state.current_long}
-							/>
-						</GoogleMap>
-					</div>
-				</div>)}
-
-				{/* GridView */}
-				{!mapViewState && (
-					<ReactTable
-						data={this.state.data}
-						minRows={0}
-						PaginationComponent={JanikingPagination}
-						onFetchData={this.fetchData}
-						getTheadGroupProps={(state, rowInfo, column, instance) => {
-							return {
-								style: {
-									padding: "10px 10px",
-									fontSize: 16,
-									fontWeight: 700
-								},
-							}
-						}}
-						getTheadGroupThProps={(state, rowInfo, column, instance) => {
-							return {
-								style: {
-									padding: "10px 10px",
-									fontSize: 18,
-									fontWeight: 700,
-								},
-								className: classNames("flex items-center justify-start")
-							}
-						}}
-						getTheadThProps={(state, rowInfo, column, instance) => {
-							let border = '1px solid rgba(255,255,255,.6)';
-							if (column.Header === 'Actions') border = 'none';
-
-							return {
-								style: {
-									fontSize: '1.6rem',
-									fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
-									fontWeight: 400,
-									lineHeight: 1.75,
-									color: 'white',
-									borderRight: border
-								},
-							}
-						}}
-						getTheadProps={(state, rowInfo, column, instance) => {
-							return {
-								style: {
-									fontSize: 13,
-								},
-								className: classes.tableTheadRow
-							}
-						}}
-						getTdProps={(state, rowInfo, column, instance) => {
-							// let tdClass = 'flex items-center justify-center';
-							// if (column.id === 'CustomerNo' || column.id === 'CustomerNo' || column.id === 'CustomerBalanceAmount' ||
-							// 	column.id === 'CustomerDate' || column.id === 'TransactionStatus') tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
-
-							return {
-								style: {
-									textAlign: 'center',
-									flexDirection: 'row',
-									fontSize: 12,
-									padding: "0",
-								},
-							}
-						}}
-						getTrProps={(state, rowInfo, column) => {
-							return {
-								className: "cursor-pointer",
-								onClick: (e, handleOriginal) => {
-									if (rowInfo) {
-										alert('ok');
-										// openEditContactDialog(rowInfo.original);
-									}
-								}
-							}
-						}}
-						columns={[
-							{
-								Header: (instance) => (
-									<Checkbox
-										onClick={(event) => {
-											event.stopPropagation();
-										}}
-										onChange={(event) => toggleAll(instance)}
-										checked={this.state.selectAll}
-										style={{ color: 'white' }}
-									// indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
-									/>
-								),
-								accessor: "",
-								Cell: row => {
-									return (<Checkbox
-										onClick={(event) => {
-											event.stopPropagation();
-										}}
-										checked={isSelected(row.value.CustomerId)}
-										onChange={() => toggleSelection(row.value.CustomerId)}
-									/>
-									)
-								},
-								className: "justify-center",
-								sortable: false,
-								width: 72
-							},
-							{
-								Header: "No",
-								accessor: "CustomerNo",
-								filterAll: true,
-								width: 60,
-								className: classNames("flex items-center  justify-center") //classes.tableTdEven
-							},
-							{
-								Header: "Name",
-								accessor: "CustomerName",
-								width: 200,
-								className: classNames("flex items-center  justify-start p-12-impor")
-							},
-							{
-								Header: "Address",
-								// accessor: "Address",
-								id: "Address",
-								accessor: d => (this.capital_letter(d.Address)),
-								className: classNames("flex items-center  justify-start"),
-								width: 160
-							},
-							{
-								Header: "City",
-								// accessor: "City",
-								id: "City",
-								accessor: d => (this.capital_letter(d.City)),
-								className: classNames("flex items-center  justify-start"),
-								width: 90
-							},
-							{
-								Header: "State",
-								accessor: "StateName",
-								className: classNames("flex items-center  justify-center"),
-								width: 50
-							},
-							{
-								Header: "Zip",
-								accessor: "PostalCode",
-								className: classNames("flex items-center  justify-center"),
-								headerClassName: "wordwrap",
-								width: 50
-							},
-							{
-								Header: "Phone",
-								accessor: "Phone",
-								width: 80,
-								className: classNames("flex items-center  justify-center p-12-impor")
-							},
-							{
-								Header: "Account Type",
-								accessor: "AccountTypeListName",
-								// Cell: row => {
-								// 	return '$' + parseFloat(row.original.CustomerBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-								// },
-								className: classNames("flex items-center  justify-center p-12-impor"),
-								width: 150
-							},
-							{
-								Header: "Status",
-								// Cell: row => {
-								// 	return '$' + parseFloat(row.original.CustomerTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-								// },
-								accessor: "StatusName",
-								className: classNames("flex items-center  justify-center p-12-impor"),
-								width: 60
-							},
-							{
-								Header: "Contract Amount",
-								id: "Amount",
-								// accessor: d => ('$' + Number(d.Amount).toFixed(2)),
-								accessor: d => '$' + d.Amount.toLocaleString(undefined, { minimumFractionDigits: 2 }),
-								// accessor: "Amount",
-								className: classNames("flex items-center  justify-end p-12-impor"),
-								headerClassName: "wordwrap",
-								width: 80
-							},
-							// {
-							// 	Header: "Due Date",
-							// 	id: "DueDate",
-							// 	accessor: d => moment(d.DueDate).format('MM/DD/YYYY'),
-							// 	className: classNames("flex items-center  justify-center"),
-							// 	width: 120
-							// },
-							// {
-							// 	Header: "Status",
-							// 	accessor: "TransactionStatus",
-							// 	className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-							// 	width: 120
-							// },
-							{
-								Header: "Actions",
-								width: 110,
-								Cell: row => (
-									<div className="flex items-center actions">
-										<IconButton
-											onClick={(ev) => {
-												ev.stopPropagation();
-												if (window.confirm("Do you really want to remove this customer")) {
-													this.props.removeCustomerAction(row.original.CustomerId, this.props.customers);
-													if (this.state.selection.length > 0) {
-														_.remove(this.state.selection, function (id) {
-															return id === row.original.CustomerId;
-														});
-													}
-												}
-											}}
-										>
-											<Icon>delete</Icon>
-										</IconButton>
-										<IconButton
-											onClick={(ev) => {
-												ev.stopPropagation();
-												// removeContact(row.original.id);
-											}}
-										>
-											<Icon>edit</Icon>
-										</IconButton>
-									</div>
-								)
-							},
-
-						]}
-						defaultPageSize={100}
-						className={classNames("-striped -highlight")}
-						totalRecords={this.state.data.length}
-						style={{ flex: '1', }}
-					/>
-				)}
-			</div>
-		);
-	}
 }
 
 function mapDispatchToProps(dispatch) {
@@ -1540,7 +1302,8 @@ function mapStateToProps({ customers, auth }) {
 		summaryState: customers.bOpenedSummaryPanel,
 		regionId: auth.login.defaultRegionId,
 		CustomerForm: customers.CustomerForm,
-		mapViewState: customers.bOpenedMapView
+		mapViewState: customers.bOpenedMapView,
+		locationFilterValue: customers.locationFilterValue,
 	}
 }
 

@@ -18,10 +18,12 @@ const initialState = {
 		data: null
 	},
 	statusId: 1,
-    location: "all",
-    longitude: "",
-    latitude: "",
-    searchText: ""
+	location: "all",
+	longitude: "",
+	latitude: "",
+	searchText: "",
+
+	locationFilterValue: "locationAll",
 };
 
 
@@ -55,6 +57,11 @@ const customers = function (state = initialState, action) {
 		case Actions.TOGGLE_FILTER_STATUS: {
 			return {
 				...state, transactionStatus: { ...state.transactionStatus, ...action.payload }
+			}
+		}
+		case Actions.SELECT_LOCATION_FILTER: {
+			return {
+				...state, locationFilterValue: action.payload
 			}
 		}
 		case Actions.DELETE_SELECTED_CUSTOMERS:
@@ -137,5 +144,6 @@ const customers = function (state = initialState, action) {
 const persistConfig = {
 	key: 'customers',
 	storage: storage,
+	blacklist: ['customersDB']
 };
 export default persistReducer(persistConfig, customers);

@@ -17,7 +17,9 @@ export const CLOSE_EDIT_CUSTOMER_FORM = '[CUSTOMERS APP] CLOSE EDIT CUSTOMER FOR
 export const ADD_CUSTOMER = '[CUSTOMERS APP] ADD CUSTOMER';
 export const UPDATE_CUSTOMER = '[CUSTOMERS APP] UPDATE CUSTOMER';
 
-export function getCustomers(regionId, statusId, location, latitude, longitude, searchText) {
+export const SELECT_LOCATION_FILTER = '[CUSTOMERS APP] SELECT LOCATION FILTER';
+
+export function getCustomers(regionId, statusId=0, location="all", latitude="", longitude="", searchText="") {
 	// return dispatch => {
 	// const request = axios.get("/api/customers/gets");
 
@@ -65,6 +67,13 @@ export function toggleStatus(key, status) {
 	return {
 		type: TOGGLE_FILTER_STATUS,
 		payload: { [key]: status }
+	}
+}
+
+export function selectLocationFilter(filter_value) {
+	return {
+		type: TOGGLE_FILTER_STATUS,
+		payload: filter_value
 	}
 }
 
