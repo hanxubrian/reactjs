@@ -429,8 +429,6 @@ class InvoiceListContent extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        toggleFilterPanel: Actions.toggleFilterPanel,
-        toggleSummaryPanel: Actions.toggleSummaryPanel,
         deleteInvoicesAction: Actions.deleteInvoices,
         removeInvoiceAction: Actions.removeInvoice,
         openEditInvoiceForm: Actions.openEditInvoiceForm,
@@ -442,10 +440,7 @@ function mapStateToProps({invoices, auth})
 {
     return {
         invoices: invoices.invoicesDB,
-        bLoadedInvoices: invoices.bLoadedInvoices,
         transactionStatus: invoices.transactionStatus,
-        filterState: invoices.bOpenedFilterPanel,
-        summaryState: invoices.bOpenedSummaryPanel,
         regionId: auth.login.defaultRegionId,
         InvoiceForm: invoices.InvoiceForm
     }

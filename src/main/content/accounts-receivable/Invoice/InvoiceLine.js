@@ -1,14 +1,13 @@
 import React from 'react';
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
+import NumberFormat from 'react-number-format';
 import {withRouter} from 'react-router-dom';
 
 //Material UI core and icons
 import {
-    Table, TableBody, TableCell, TableHead, TableRow, Snackbar, SnackbarContent,
-    Toolbar, Typography, Paper, Icon, IconButton, Tooltip, Select, OutlinedInput, MenuItem, FormControl, Fab
+    Table, TableBody, TableCell, TableRow, Snackbar, SnackbarContent,
+    Paper, Icon, IconButton, Select, OutlinedInput, MenuItem, FormControl, Fab
 } from '@material-ui/core'
+import {withStyles} from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
 import amber from '@material-ui/core/colors/amber';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -17,20 +16,19 @@ import InfoIcon from '@material-ui/icons/Info';
 import CloseIcon from '@material-ui/icons/Close';
 import WarningIcon from '@material-ui/icons/Warning';
 
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import {lighten} from '@material-ui/core/styles/colorManipulator';
-
 // third party
 import _ from 'lodash';
 import Chance from "chance";
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import ReactTable from "react-table";
+import "react-table/react-table.css";
 
 //Store
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
 import keycode from "keycode";
-
 
 //Snackbar
 const variantIcon = {
@@ -120,7 +118,7 @@ function createFranchisee(parent_id,id, franchisee="Franchisee", name="Franchise
     }
 }
 
-function createData(billing='Regular Billing', service='Adjust-Balance', description=' ', quantity=' ', amount=' ', markup=0, extended=0)
+function createData(billing='Regular Billing', service='Adjust-Balance', description=' ', quantity=' ', amount=' ', tax=" ", markup=0, extended=0)
 {
     return {
         id: counter++,
@@ -129,6 +127,7 @@ function createData(billing='Regular Billing', service='Adjust-Balance', descrip
         description,
         quantity,
         amount,
+        tax,
         markup,
         extended,
         franchisees: [],
@@ -181,116 +180,6 @@ const rows = [
     }
 ];
 
-class InvoiceLineTableHead extends React.Component {
-    createSortHandler = property => event => {
-        this.props.onRequestSort(event, property);
-    };
-
-    render()
-    {
-        return (
-            <TableHead style={{backgroundColor: "lightgray"}}>
-                <TableRow style={{backgroundColor: "lightgray"}}>
-                    {rows.map(row => {
-                        return (
-                            <TableCell
-                                key={row.id}
-                                numeric={row.numeric}
-                                padding={row.disablePadding ? 'none' : 'default'}
-                            >
-                                {row.label}
-                            </TableCell>
-                        );
-                    }, this)}
-                    <TableCell padding="checkbox" style={{width: 100}}>
-                        Action
-                    </TableCell>
-                </TableRow>
-            </TableHead>
-        );
-    }
-}
-
-
-InvoiceLineTableHead.propTypes = {
-    numSelected     : PropTypes.number.isRequired,
-    onRequestSort   : PropTypes.func.isRequired,
-    onSelectAllClick: PropTypes.func.isRequired,
-    order           : PropTypes.string.isRequired,
-};
-
-const toolbarStyles = theme => ({
-    root     : {
-        paddingRight: theme.spacing.unit
-    },
-    highlight:
-        theme.palette.type === 'light'
-            ? {
-                color          : theme.palette.secondary.main,
-                backgroundColor: lighten(theme.palette.secondary.light, 0.85)
-            }
-            : {
-                color          : theme.palette.text.primary,
-                backgroundColor: theme.palette.secondary.dark
-            },
-    spacer   : {
-        flex: '1 1 100%'
-    },
-    actions  : {
-        color: theme.palette.text.secondary
-    },
-    title    : {
-        flex: '0 0 auto'
-    },
-});
-
-let InvoiceLineTableToolbar = props => {
-    const {numSelected, classes} = props;
-
-    return (
-        <Toolbar
-            className={classNames(classes.root, {
-                [classes.highlight]: numSelected > 0
-            })}
-        >
-            <div className={classes.title}>
-                {numSelected > 0 ? (
-                    <Typography color="inherit" variant="subtitle1">
-                        {numSelected} selected
-                    </Typography>
-                ) : (
-                    <Typography variant="h6" id="tableTitle">
-                        Invoice Lines
-                    </Typography>
-                )}
-            </div>
-            <div className={classes.spacer}/>
-            <div className={classes.actions}>
-                {numSelected > 0 ? (
-                    <Tooltip title="Delete">
-                        <IconButton aria-label="Delete">
-                            <DeleteIcon/>
-                        </IconButton>
-                    </Tooltip>
-                ) : (
-                    <Tooltip title="Filter list">
-                        <IconButton aria-label="Filter list">
-                            <FilterListIcon/>
-                        </IconButton>
-                    </Tooltip>
-                )}
-            </div>
-        </Toolbar>
-    );
-};
-
-InvoiceLineTableToolbar.propTypes = {
-    classes    : PropTypes.object.isRequired,
-    numSelected: PropTypes.number.isRequired
-};
-
-InvoiceLineTableToolbar = withStyles(toolbarStyles)(InvoiceLineTableToolbar);
-
 const styles = theme => ({
     root        : {
         width    : '100%',
@@ -305,37 +194,25 @@ const styles = theme => ({
             padding: "4px 24px",
             borderRight: '1px solid darkgray'
         },
-        '& thead tr th:nth-child(1)':{
-            width: 250
-        },
-        '& thead tr th:nth-child(2)':{
-            width: 260
-        },
-        '& thead tr th:nth-child(3)':{
-            width: 360
-        },
-        '& thead tr th:nth-child(8)':{
-            width: 160
-        },
-        '& thead tr th:nth-child(4)':{
-            width: 80,
-            textAlign: 'center',
-            '& svg':{
-                display: 'none'
-            }
-        },
-        '& thead tr th:nth-child(5)':{
-            width: 130,
-        },
-        '& thead tr th:nth-child(7)':{
-            width: 130,
-        },
-        '& thead tr th:last-child':{
-            borderRight: 'none'
-        },
         '& tbody tr td':{
             padding: "4px 12px",
             width: 120
+        },
+        '& .ReactTable .rt-thead.-headerGroups': {
+            display: 'none'
+        },
+        '& .ReactTable .rt-tbody': {
+            overflowY: 'scroll',
+            overflowX: 'hidden'
+        },
+        '& .ReactTable .rt-tr-group':{
+            flex: '0 0 auto'
+        },
+        '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
+            justifyContent: 'center'
+        },
+        '& .ReactTable .rt-thead .rt-th:last-child': {
+            justifyContent: 'flex-end'
         },
         InvoiceLineHeadRoot:{
             backgroundColor: 'lightgray',
@@ -451,6 +328,10 @@ const styles = theme => ({
             borderRadius: 20
         }
     },
+    tableTheadRow:{
+        // backgroundColor: 'rgba(' + hexToRgb(theme.palette.primary.main).r + ',' + hexToRgb(theme.palette.primary.main).g + ',' + hexToRgb(theme.palette.primary.main).b +', .2)'
+        backgroundColor: theme.palette.primary.main
+    },
 });
 
 class InvoiceLineTable extends React.Component {
@@ -482,29 +363,6 @@ class InvoiceLineTable extends React.Component {
             this.addLineData();
         }
     }
-    handleRequestSort = (event, property) => {
-        const orderBy = property;
-        let order = 'desc';
-
-        if ( this.state.orderBy === property && this.state.order === 'desc' )
-        {
-            order = 'asc';
-        }
-
-        this.setState({
-            order,
-            orderBy
-        });
-    };
-
-    handleSelectAllClick = event => {
-        if ( event.target.checked )
-        {
-            this.setState(state => ({selected: state.data.map(n => n.id)}));
-            return;
-        }
-        this.setState({selected: []});
-    };
 
     handleChangeBilling = (event, n) => {
         let newData = this.state.data.map(row=>{
@@ -545,7 +403,6 @@ class InvoiceLineTable extends React.Component {
     };
 
     addLineData=()=>{
-        console.log('fired addline',this.state.data);
         const lineData = [...this.state.data];
         const lastRow = lineData[lineData.length-1];
 
@@ -575,7 +432,6 @@ class InvoiceLineTable extends React.Component {
         });
         this.setState({data: newData})
     };
-
 
     addFranchiseeLine = (n) =>{
         const data = [...this.state.data];
@@ -626,14 +482,14 @@ class InvoiceLineTable extends React.Component {
                 });
                 d.franchisees = newData
             }
-        })
+        });
         this.setState({data: data});
     };
 
     renderEditable(cellInfo, id) {
         if (cellInfo.id>this.state.data.length-1) return;
         let prefix = '';
-        if (id==='amount' || id==='extended') {
+        if (id==='amount' || id==='tax' || id==='extended') {
             if(this.state.data[cellInfo.id][id]!==' ')
             prefix = "$";
         }
@@ -643,13 +499,13 @@ class InvoiceLineTable extends React.Component {
         let value='';
         value= this.state.data[cellInfo.id][id];
 
-        if (id==='amount' || id==='extended') {
+        if (id==='amount' || id==='tax' || id==='extended') {
             if(this.state.data[cellInfo.id][id]!==' ')
                 value = parseFloat(this.state.data[cellInfo.id][id]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         }
         return (
             <div
-                style={{ backgroundColor: "#fafafa", padding: 12, border: "1px solid lightgray", borderRadius: 6 }}
+                style={{ backgroundColor: "#fafafa", padding: 12, border: "1px solid lightgray", borderRadius: 6, width: '100%' }}
                 contentEditable
                 suppressContentEditableWarning
                 onBlur={e => {
@@ -677,7 +533,7 @@ class InvoiceLineTable extends React.Component {
         if (cellInfo.id>this.state.data.length-1) return;
         return (
             <div
-                style={{ backgroundColor: "#fafafa", padding: 12 }}
+                style={{ backgroundColor: "#fafafa", padding: 12, border: "1px solid lightgray", width: '100%', borderRadius: 6 }}
                 contentEditable={cellInfo.billing==="Client Supplies" ? true: false}
                 suppressContentEditableWarning
                 onBlur={e => {
@@ -695,7 +551,7 @@ class InvoiceLineTable extends React.Component {
     render()
     {
         const {classes} = this.props;
-        const {data, order, selected} = this.state;
+        const {data} = this.state;
 
         let all_data = [];
 
@@ -710,15 +566,8 @@ class InvoiceLineTable extends React.Component {
 
         return (
             <Paper className={classNames(classes.root)}>
-                <div className={classNames(classes.tableWrapper, "h-full")}>
-                    <Table className={classNames(classes.table, "flex flex-col h-full")} aria-labelledby="tableTitle">
-                        <InvoiceLineTableHead
-                            className={classNames(classes.InvoiceLineHeadRoot)}
-                            numSelected={selected.length}
-                            order={order}
-                            onSelectAllClick={this.handleSelectAllClick}
-                            onRequestSort={this.handleRequestSort}
-                        />
+                <div className={classNames(classes.tableWrapper, "flex flex-col h-full")}>
+                    <Table className={classNames(classes.table, "flex flex-col h-full")} aria-labelledby="tableTitle" style={{display: 'block'}}>
                         <TableBody className="flex flex-col" style={{overflowY: 'scroll'}}>
                             {
                                 all_data.map((n, index) => {
@@ -843,6 +692,213 @@ class InvoiceLineTable extends React.Component {
                                 })}
                         </TableBody>
                     </Table>
+                    <ReactTable
+                        data={all_data}
+                        minRows = {0}
+                        showPagination ={false}
+                        getTheadThProps={(state, rowInfo, column, instance) =>{
+                            let border = '1px solid rgba(255,255,255,.6)';
+                            if(column.Header==='Action') border = 'none';
+
+                            return {
+                                style:{
+                                    fontSize: 13,
+                                    fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
+                                    fontWeight: 400,
+                                    lineHeight: 1.75,
+                                    color: 'white',
+                                    borderRight: border
+                                },
+                            }
+                        }}
+                        getTheadProps={(state, rowInfo, column, instance) =>{
+                            return {
+                                style:{
+                                    fontSize: 13,
+                                },
+                                className: classes.tableTheadRow
+                            }
+                        }}
+                        columns={[
+                            {
+                                columns: [
+                                    {
+                                        Header: "Billing",
+                                        accessor: "billing",
+                                        Cell: row=>{
+                                            return (
+                                                <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl)} style={{marginBottom: '0!important'}}>
+                                                    <Select
+                                                        classes={{
+                                                            outlined: classNames(classes.outlined, classes.billing)
+                                                        }}
+                                                        value={row.original.billing}
+                                                        onChange={(ev)=>this.handleChangeBilling(ev, row.original)}
+                                                        input={
+                                                            <OutlinedInput
+                                                                labelWidth={this.state.labelWidth}
+                                                                name="billing"
+                                                                id="billing"
+                                                            />
+                                                        }
+                                                    >
+                                                        <MenuItem value="">
+                                                            <em>Select</em>
+                                                        </MenuItem>
+                                                        <MenuItem value="Regular Billing">Regular Billing</MenuItem>
+                                                        <MenuItem value="Additional Billing Office">Additional Billing Office</MenuItem>
+                                                        <MenuItem value="Extra Work">Extra Work</MenuItem>
+                                                        <MenuItem value="Client Supplies">Client Supplies</MenuItem>
+                                                    </Select>
+                                                </FormControl>
+                                            )
+                                        },
+                                        width: 200,
+                                        className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+                                    },
+                                    {
+                                        Header: "Service",
+                                        accessor: "service",
+                                        Cell: row=>{
+                                            return (
+                                                <FormControl variant="outlined" className={classes.formControl} style={{marginBottom: '0!important'}}>
+                                                    <Select
+                                                        classes={{
+                                                            outlined: classNames(classes.outlined,classes.services)
+                                                        }}
+                                                        value={row.original.service}
+                                                        onChange={(ev)=>this.handleChangeBilling(ev, row.original)}
+                                                        input={
+                                                            <OutlinedInput
+                                                                labelWidth={this.state.labelWidth}
+                                                                name="service"
+                                                                id="service"
+                                                            />
+                                                        }
+                                                    >
+                                                        <MenuItem value="">
+                                                            <em>Select</em>
+                                                        </MenuItem>
+                                                        <MenuItem value="Adjust-Balance">Adjust - Balance</MenuItem>
+                                                        <MenuItem value="Adjust-Refund">Adjust - Refund</MenuItem>
+                                                        <MenuItem value="Adjust-WriteOff">Adjust - WriteOff</MenuItem>
+                                                        <MenuItem value="Buffing">Buffing</MenuItem>
+                                                        <MenuItem value="Carpet Clean">Carpet Clean</MenuItem>
+                                                        <MenuItem value="Customer Suppliers">Customer Suppliers</MenuItem>
+                                                        <MenuItem value="Emergency Clean">Emergency Clean</MenuItem>
+                                                        <MenuItem value="Event Center">Event Center</MenuItem>
+                                                        <MenuItem value="Floor Services">Floor Services</MenuItem>
+                                                        <MenuItem value="Furniture Cleaning Service">Furniture Cleaning Service</MenuItem>
+                                                        <MenuItem value="High Dusting">High Dusting</MenuItem>
+                                                        <MenuItem value="Hotel">Hotel</MenuItem>
+                                                        <MenuItem value="In-House Work">In-House Work</MenuItem>
+                                                        <MenuItem value="Initial and Deep Clean">Initial and Deep Clean</MenuItem>
+                                                        <MenuItem value="Initial One-Time Clean">Initial One-Time Clean</MenuItem>
+                                                        <MenuItem value="Make Ready">Make Ready</MenuItem>
+                                                        <MenuItem value="Miscellaneous - Special">Miscellaneous - Special</MenuItem>
+                                                        <MenuItem value="Other">Other</MenuItem>
+                                                        <MenuItem value="Porter Services">Porter Services</MenuItem>
+                                                        <MenuItem value="Power Washing">Power Washing</MenuItem>
+                                                        <MenuItem value="Regular Billing">Regular Billing</MenuItem>
+                                                        <MenuItem value="Regular Cleaning - Day">Regular Cleaning - Day</MenuItem>
+                                                        <MenuItem value="Regular Cleaning - Night">Regular Cleaning - Night</MenuItem>
+                                                    </Select>
+                                                </FormControl>
+                                            )
+                                        },
+                                        width: 200,
+                                        className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+                                    },
+                                    {
+                                        Header: "Description",
+                                        accessor: "description",
+                                        Cell: row=>{
+                                            return (this.renderEditable(row.original, 'description'))
+                                        },
+                                    },
+                                    {
+                                        Header: "Quantity",
+                                        accessor: "quantity",
+                                        Cell: row=>{
+                                            return (this.renderEditable(row.original, 'quantity'))
+                                        },
+                                        className: classNames(classes.tableTdEven, "flex items-center  justify-center text-center"),
+                                        width: 80
+                                    },
+                                    {
+                                        Header: "Amount",
+                                        accessor: "amount",
+                                        Cell: row=>{
+                                            return (this.renderEditable(row.original, 'amount'))
+                                        },
+                                        className: classNames(classes.tableTdEven, "flex items-center  justify-center text-right"),
+                                        width: 100
+                                    },
+                                    {
+                                        Header: "Tax",
+                                        accessor: "tax",
+                                        Cell: row=>{
+                                            return (this.renderEditable(row.original, 'tax'))
+                                        },
+                                        className: classNames(classes.tableTdEven, "flex items-center  justify-center text-right"),
+                                        width: 100
+                                    },
+                                    {
+                                        Header: "Markup(%)",
+                                        accessor: "markup",
+                                        Cell: row=>{
+                                            return (this.renderEditableMarkup(row.original, 'markup'))
+                                        },
+                                        className: classNames(classes.tableTdEven, "flex items-center  text-right justify-end"),
+                                        width: 100
+                                    },
+                                    {
+                                        Header: "Extended Amount",
+                                        accessor: "markup",
+                                        Cell: row=>{
+                                            return ("$"+parseFloat((row.original.amount*row.original.quantity)*(1+parseFloat(row.original.markup)/100)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))
+                                        },
+                                        className: classNames(classes.tableTdEven, "flex items-center  w-full text-center justify-end pr-12"),
+                                        width: 140
+                                    },
+                                    {
+                                        Header: "Action",
+                                        width: 200,
+                                        Cell: row=>{
+                                            return (
+                                                <div className="flex flex-row items-center w-full justify-center">
+                                                    <Fab color="secondary" aria-label="add"
+                                                         className={classNames(classes.lineButton, "mr-12")}
+                                                         onClick={()=>this.addFranchiseeLine(row.original)}
+                                                    >
+                                                        <Icon>call_merge</Icon>
+                                                    </Fab>
+                                                    <Fab color="secondary" aria-label="add"
+                                                         className={classNames(classes.lineButton, "mr-12")}
+                                                         onClick={()=>this.addLineData()}
+                                                    >
+                                                        <Icon>add</Icon>
+                                                    </Fab>
+                                                    {this.state.data.length>1 && (
+                                                        <Fab aria-label="remove"
+                                                             onClick={()=>this.removeLineData(row.original)}
+                                                             className={classNames(classes.lineCancelButton, "mr-12")}>
+                                                            <Icon>close</Icon>
+                                                        </Fab>
+                                                    )}
+                                                </div>
+                                            )
+                                        }
+                                    },
+                                ]
+                            }
+                        ]}
+                        className={classNames( "-striped -highlight")}
+                        defaultPageSize={200}
+                        style={{
+                            height: '100%',
+                        }}
+                    />
                 </div>
                 <Snackbar
                     anchorOrigin={{

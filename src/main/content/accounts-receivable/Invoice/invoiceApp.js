@@ -288,7 +288,6 @@ class InvoiceApp extends Component {
 
     search(val) {
         const temp = this.state.data.filter( d => {
-            console.log('ddd=',d);
             return d.InvoiceId.toString().indexOf(val) !== -1 || !val ||
                 d.InvoiceNo.indexOf(val) !== -1 ||
                 d.InvoiceAmount.toString().indexOf(val) !== -1 ||
@@ -404,7 +403,7 @@ class InvoiceApp extends Component {
         }
     }
 
-    onNewInvoice=()=>{
+    onNewInvoice = ()=>{
         if(this.props.filterState) this.props.toggleFilterPanel();
         if(this.props.summaryState) this.props.toggleSummaryPanel();
 
