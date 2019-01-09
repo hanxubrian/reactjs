@@ -44,15 +44,16 @@ class SigninPage extends Component {
         email   : '',
         password: '',
         remember: true,
-        alertOpen: false
+        alertOpen: false,
+        url: window.location.host.split(':')[0]
     };
 
     componentDidMount() {
-        this.handleAppStart();
+        this.handleAppStart(this.state.url);
     }
 
-    handleAppStart = () => {
-       this.props.loadHomeScreen();
+    handleAppStart = (url) => {
+       this.props.loadHomeScreen(url);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -87,6 +88,7 @@ class SigninPage extends Component {
         this.props.signinUser(email, password);
     }
     render() {
+        console.log(this.state)
        const styles = ({
             root: {
                 background:  `url(${this.props.app.loginBackground})`,

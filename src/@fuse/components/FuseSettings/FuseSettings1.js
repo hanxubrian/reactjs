@@ -48,6 +48,8 @@ class FuseSettings extends Component {
 
         const newSettings = _.set(_.merge({}, this.props.settings), event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
 
+
+
         /**
          * If layout style changes,
          * Reset Layout Configuration
@@ -70,8 +72,7 @@ class FuseSettings extends Component {
     render()
     {
         const {classes, settings} = this.props;
-        function ThemeSelect({value, name, handleChange})
-        {
+        function ThemeSelect({value, name, handleChange}) {
             return (
                 <Select
                     className="w-full"
@@ -216,7 +217,7 @@ class FuseSettings extends Component {
                     <FormLabel component="legend" className="text-14">Main</FormLabel>
                     <ThemeSelect value={settings.theme.main} name="theme.main" handleChange={this.handleChange}/>
                 </FormControl>
-                {/* <FormControl component="fieldset" className={classes.formControl}>
+                <FormControl component="fieldset" className={classes.formControl}>
                     <FormLabel component="legend" className="text-14">Navbar</FormLabel>
                     <ThemeSelect value={settings.theme.navbar} name="theme.navbar" handleChange={this.handleChange}/>
                 </FormControl>
@@ -227,7 +228,7 @@ class FuseSettings extends Component {
                 <FormControl component="fieldset" className={classes.formControl}>
                     <FormLabel component="legend" className="text-14">Footer</FormLabel>
                     <ThemeSelect value={settings.theme.footer} name="theme.footer" handleChange={this.handleChange}/>
-                </FormControl> */}
+                </FormControl>
                 </div>
 
                 <div className={classes.formGroup}>
