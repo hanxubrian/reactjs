@@ -186,7 +186,7 @@ const styles = theme => ({
             color: 'black',
         },
         '& .ReactTable .rt-thead.-headerGroups': {
-            // display: 'none'
+            display: 'none'
         },
         '& .ReactTable .rt-tbody': {
             overflowY: 'scroll',
@@ -521,7 +521,7 @@ class InvoiceLineTable extends React.Component {
                                     fontSize: 13,
                                     fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
                                     fontWeight: 400,
-                                    lineHeight: 1.75,
+                                    lineHeight: 2.75,
                                     color: 'white',
                                     borderRight: border
                                 },
