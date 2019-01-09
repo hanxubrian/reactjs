@@ -217,7 +217,7 @@ class SigninPage extends Component {
                                             disabled={!this.canBeSubmitted()}
                                             onClick={this.onLogin.bind(this)}
                                     >
-                                        SIGNIN
+                                        SIGN IN
                                     </Button>
 
                                 </form>
