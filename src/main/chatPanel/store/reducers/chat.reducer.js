@@ -2,8 +2,11 @@ import * as Actions from '../actions';
 
 
 const initialState = {
+    loading: true,
     currentUser :{},
     currentRoom: {},
+    messages:[],
+    rooms:[],
     dialog:[],
 };
 
@@ -13,27 +16,64 @@ const chat = function (state = initialState, action) {
         case Actions.GET_CHAT:
         {
             return {
-                //...action.chat
+                ...state
             };
         }
         case Actions.REMOVE_CHAT:
         {
-            return null;
+            return {...state};
         }
         case Actions.CURRENT_USER:
         {
             return {
                 ...state,
-                currentUser : action.data
+                currentUser : action.data,
+                
             }
         }
         case Actions.CURRENT_ROOM:
         {
             return {
                 ...state,
-                currentRoom : action.data
+                currentRoom : action.data,
             }
         }
+        case Actions.GET_ROOMS:
+        {
+            return {
+                ...state,
+                rooms : [
+                    ...state.rooms,
+                    action.data
+                ],
+                loading : action.loading
+            }
+        }
+        case Actions.ADD_MESSAGE:
+        {
+           if(action.current){
+            return {
+                ...state,
+                messages : action.data,
+                dialog: action.data[action.roomId]
+            }
+           }
+            else{
+                return {
+                    ...state,
+                    messages : action.data
+                }
+            }
+        }
+        case Actions.APPEND_MESSAGE:
+        {
+            
+            return {
+                ...state,
+                messages : {...state.messages, ...action.data}
+            }
+        }
+
         case Actions.ON_MESSAGE:
         {
             return {

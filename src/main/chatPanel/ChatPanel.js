@@ -62,6 +62,7 @@ class ChatPanel extends Component {
     {
         if ( this.props.state !== prevProps.state )
         {
+            
             if ( this.props.state )
             {
                 document.addEventListener("keydown", this.handleDocumentKeyDown);
@@ -134,6 +135,7 @@ class ChatPanel extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
+        initChat       : Actions.initChat,
         getUserData   : Actions.getUserData,
         getContacts   : Actions.getContacts,
         openChatPanel : Actions.openChatPanel,

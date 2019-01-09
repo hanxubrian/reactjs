@@ -68,7 +68,7 @@ const styles = theme => ({
             backgroundColor: '#F44336'
         },
 
-        '&.away': {
+        '&.unknown': {
             backgroundColor: '#FFC107'
         },
 
@@ -79,6 +79,11 @@ const styles = theme => ({
 });
 
 class ContactList extends Component {
+
+    componentDidMount(){
+        this.props.initChat();
+    }
+
 
     handleContactClick = (chatId, contactId) => {
         this.props.openChatPanel();
@@ -92,7 +97,7 @@ class ContactList extends Component {
 
     render()
     {
-        const {classes, contacts, user, selectedContactId} = this.props;
+        const {classes, chat, contacts, user, selectedContactId} = this.props;
 
         const ContactButton = ({chat, contact}) => {
             return (
@@ -123,7 +128,7 @@ class ContactList extends Component {
                     this.contactListScroll = ref
                 }}
             >
-                {contacts.length > 0 && (
+                {!chat.loading && contacts.length > 0 && (
                     <React.Fragment>
                         <FuseAnimateGroup
                             enter={{
@@ -155,6 +160,7 @@ class ContactList extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
+        initChat       :Actions.initChat,
         getChat      : Actions.getChat,
         openChatPanel: Actions.openChatPanel
     }, dispatch);
@@ -163,6 +169,7 @@ function mapDispatchToProps(dispatch)
 function mapStateToProps({chatPanel})
 {
     return {
+        chat            : chatPanel.chat,
         contacts         : chatPanel.contacts.entities,
         selectedContactId: chatPanel.contacts.selectedContactId,
         user             : chatPanel.user

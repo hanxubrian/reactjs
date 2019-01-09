@@ -169,11 +169,9 @@ class Chat extends Component {
         {
             return;
         }
-         this.props.sendMessage(this.state.messageText, this.props.chat.currentUser, this.props.user.id)
-             .then(() => {
-                this.setState({messageText: ''});
-                this.scrollToBottom();
-            });  
+        this.props.sendMessage(this.state.messageText, this.props.chat.currentUser, this.props.user.id)
+        this.setState({messageText: ''});
+        this.scrollToBottom();
     };
 
     scrollToBottom = () => {

@@ -3,6 +3,11 @@ import {setselectedContactId} from './contacts.actions';
 import {closeMobileChatsSidebar} from 'main/content/apps/chat/store/actions/sidebars.actions';
 import Chatkit from '@pusher/chatkit-client'
 import {chatService} from "services";
+import {updateContactsPresense} from './contacts.actions';
+import {initContactsPresense} from  './contacts.actions';
+import {addUnread} from  './contacts.actions';
+import {initUnread} from  './contacts.actions';
+import _ from '@lodash';
 
 export const GET_CHAT = '[CHAT PANEL] GET CHAT';
 export const REMOVE_CHAT = '[CHAT PANEL] REMOVE CHAT';
@@ -10,49 +15,133 @@ export const SEND_MESSAGE = '[CHAT PANEL] SEND MESSAGE';
 export const CURRENT_USER = '[CHAT PANEL] CURRENT USER';
 export const CURRENT_ROOM = '[CHAT PANEL] CURRENT ROOM';
 export const ON_MESSAGE = '[CHAT PANEL] ON MESSAGE';
+export const APPEND_MESSAGE = '[CHAT PANEL] APPEND MESSAGE';
+export const ADD_MESSAGE = '[CHAT PANEL] ADD MESSAGE';
+export const READ_MESSAGE = '[CHAT PANEL] READ MESSAGE';
+export const GET_ROOMS = '[CHAT PANEL] GET ROOMS';
+
+export function initChat()
+{
+    return (dispatch, getState) =>{
+        const user = getState().chatPanel.user;
+        const chat = getState().chatPanel.chat;
+        if (user.id && chat)
+        {
+            const rooms = chat.rooms;
+            const currentRoom = chat.currentRoom;
+            const chatManager = new Chatkit.ChatManager({
+                instanceLocator: 'v1:us1:e55a61d5-6a16-4a03-9ff0-5bdacd4f04ca',
+                userId: user.id,
+                tokenProvider: new Chatkit.TokenProvider({
+                  url: 'https://us1.pusherplatform.io/services/chatkit_token_provider/v1/e55a61d5-6a16-4a03-9ff0-5bdacd4f04ca/token',
+                }),
+            })
+    
+            chatManager
+            .connect()
+            .then(currentUser => {
+              dispatch(setCurrentUser(currentUser));
+              dispatch(assignRooms(currentUser));
+
+    
+             
+            })
+        }
+        
+    }
+}
+
+export function assignRooms(currentUser)
+{
+    return (dispatch, getState) =>{
+        const user = getState().chatPanel.user;
+        const chat = getState().chatPanel.chat;
+        const rooms = chat.rooms;
+        if (currentUser === null)
+        {
+            currentUser = getState().chatPanel.chat.currentUser;
+        }
+
+        user.chatList.map((chat, i)=>{
+              
+            var room = rooms.find(_room=>_room.id === chat.chatId)
+            if (!room){
+                currentUser.subscribeToRoom({
+                    roomId: chat.chatId,
+                    messageLimit: 100,
+                    hooks : {
+                        onMessage: message=>{
+                            const newmsg = {
+                                'who'    : message.sender.id,
+                                'message': message.text,
+                                'time'   : message.createdAt
+                            };
+                           
+                            return dispatch(addMessage(chat.chatId, newmsg)) 
+                        
+                         },
+                         onPresenceChanged: (state, user) => {
+                            return dispatch(updateContactsPresense(user, state));
+                         }
+                    }
+                })
+                .then(currentRoom =>{
+                    dispatch(appendNewRoom(currentRoom));
+                })
+                .then(()=>{
+                    dispatch(appendMessages(chat.chatId));
+                })
+                .catch(error => console.error('error', error))
+            }
+          }
+          ); 
+
+    };
+}
 
 
 export function getChat(chatId, contactId)
 {
-    return (dispatch, getState) => {
-         const {id: userId} = getState().chatPanel.user;
-        
+    return async (dispatch, getState) => {
+        const {id: userId} = getState().chatPanel.user;
+        const chat = getState().chatPanel.chat;
+        if (!chat)
+            return;
+        const user = getState().chatPanel.chat.currentUser;
+        const rooms = getState().chatPanel.chat.rooms;
+        const messages = getState().chatPanel.chat.messages;
+
         dispatch(setselectedContactId(contactId));
         dispatch(closeMobileChatsSidebar());
+        dispatch(initContactsPresense(user));
+        dispatch(initUnread(contactId));
+        let room = rooms.find(_r =>_r.id === chatId);
+        let msg = messages[chatId];
 
-        const chatManager = new Chatkit.ChatManager({
-            instanceLocator: 'v1:us1:e55a61d5-6a16-4a03-9ff0-5bdacd4f04ca',
-            userId: userId,
-            tokenProvider: new Chatkit.TokenProvider({
-              url: 'https://us1.pusherplatform.io/services/chatkit_token_provider/v1/e55a61d5-6a16-4a03-9ff0-5bdacd4f04ca/token',
-            }),
-          })
+        if (room && msg)
+        {
+            dispatch(setCurrentRoom(room));
+            dispatch(updateDialog(msg));
+        }
+        else{
+            initChat();
+        }
+    }
+}
 
-          chatManager
-          .connect()
-          .then(currentUser => {
-            dispatch(setCurrentUser(currentUser))
-            return currentUser.subscribeToRoom({
-                roomId: chatId,
-                messageLimit: 100,
-                hooks : {
-                    onMessage: message=>{
-                        return {
-                            type : ON_MESSAGE,
-                            data : message
-                        }
-                    },
-                 
-                },
-            })
-          })
-          .then(currentRoom =>{
-            dispatch(setCurrentRoom(currentRoom));
-          })
-          .then(()=>{
-            dispatch(getMessages())
-          })
-          .catch(error => console.error('error', error))
+export function insertChatMessage(newmsg)
+{
+    return {
+        type : SEND_MESSAGE,
+        message : newmsg
+    }
+}
+
+export function updateDialog(newmsg)
+{
+    return {
+        type : ON_MESSAGE,
+        message : newmsg
     }
 }
 
@@ -77,6 +166,82 @@ export function setCurrentRoom(currentRoom)
         type: CURRENT_ROOM,
         data: currentRoom
     };
+}
+
+export function appendNewRoom(room)
+{
+    return  (dispatch, getState) => {
+        const rooms = getState().chatPanel.chat.rooms;
+        const contacts = getState().chatPanel.user.chatList;
+
+        let loading = contacts.length - 1 !== rooms.length;
+ 
+        dispatch( {
+            type: GET_ROOMS,
+            data: room, 
+            loading : loading,
+        })
+       
+    }
+
+   
+}
+
+export function appendMessages(chatId)
+{
+    return  (dispatch, getState) => {
+        const userId = getState().chatPanel.chat.currentUser.id;
+
+        (async () => {
+            let messages = await chatService.getMessages(chatId, userId);
+           
+            dispatch({
+                type   : APPEND_MESSAGE,
+                data: {[chatId]:messages},
+            });
+        })();
+    }
+}
+
+export function addMessage(roomId, message)
+{
+
+    return (dispatch, getState) => {
+        const currentRoom = getState().chatPanel.chat.currentRoom;
+        const loading = getState().chatPanel.chat.loading;
+
+        if (loading) return;
+        let isthis;
+        if (currentRoom && currentRoom.id == roomId)
+            isthis = true;
+        else{
+            if (!loading)
+                dispatch(addUnread(message.who));
+        }
+        let messages = getState().chatPanel.chat.messages;
+        
+        if (messages === null || messages.length === 0)
+        {
+            messages = [];
+            messages[roomId] = [message];
+        }
+        else{
+            if(messages[roomId] && messages[roomId].length > 0)
+                messages[roomId] = [...messages[roomId], message];
+            else
+                messages[roomId] = [message];
+        }
+    
+        
+       
+
+        return dispatch({
+            type   : ADD_MESSAGE,
+            data: messages,
+            roomId: roomId,
+            current: isthis,
+        });
+    }
 }
 
 export function getMessages()
@@ -105,7 +270,7 @@ export function sendMessage(messageText, chatId, userId)
             roomId: currentRoom.id
         });
 
-        const message = {
+         /* const message = {
             'who'    : userId,
             'message': messageText,
             'time'   : new Date()
@@ -116,7 +281,7 @@ export function sendMessage(messageText, chatId, userId)
                 type        : SEND_MESSAGE,
                 message     : message,
             })
-        })();
+        })();  */
     }
 
 }

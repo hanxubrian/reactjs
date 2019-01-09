@@ -168,7 +168,7 @@ export function openChat(contactId)
        
         (async () => {
                 chatService.openChat(id, contact.email, contact.lastName, contact.avatar).then(()=>{
-                    dispatch(getChatUserData());     }).then(()=>{dispatch(getChatContacts());})
+                    dispatch(getChatUserData())}).then(()=>{dispatch(getChatContacts())})
                 }
             )();
            
