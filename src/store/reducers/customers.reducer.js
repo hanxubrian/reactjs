@@ -35,7 +35,7 @@ const customers = function (state = initialState, action) {
 		case Actions.GET_ALL_CUSTOMERS:
 			{
 				return {
-					...initialState,
+					...state,
 					customersDB: action.payload,
 					bLoadedCustomers: true,
 					bCustomerFetchStart: false

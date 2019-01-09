@@ -666,6 +666,8 @@ class CustomerListContent extends Component {
 		this.changeGrouping = grouping => this.setState({ grouping });
 		console.log("constructor");
 
+
+
 	}
 	//
 	// to edit table cell
@@ -763,9 +765,45 @@ class CustomerListContent extends Component {
 		console.log("logSelection", this.state.selection);
 	};
 
+	shouldComponentUpdate(nextProps, nextState) {
+		console.log("shouldComponentUpdate", this.state !== nextState);
+
+		return this.state !== nextState
+			|| this.props.mapViewState !== nextProps.mapViewState
+		// || this.props.data !== nextProps.data 
+		// || this.props.loading !== nextProps.loading 
+		// || this.props.pins !== nextProps.pins 
+		// || this.props.searchText !== nextProps.searchText
+	}
+
+	componentWillReceiveProps(nextProps) {
+		// this.setState({ mapViewState: nextProps.mapViewState });
+		console.log("componentWillReceiveProps", "CustomerListContent.js", nextProps.customers, this.props.customers)
+
+
+		if (nextProps.customers !== this.props.customers) {
+			this.initRowsFromRawJson(nextProps.customers);
+		}
+
+		if (this.props.locationFilterValue !== nextProps.locationFilterValue) {
+			this.setState({ locationFilterValue: nextProps.locationFilterValue })
+			console.log("componentWillReceiveProps", "locationFilterValue", nextProps.locationFilterValue, this.props.customers)
+			this.initRowsFromRawJson(this.props.customers, nextProps.locationFilterValue);
+		}
+
+		// if (this.props.pins !== nextProps.pins) {
+		// 	// this.setState({ pins: nextProps.pins })
+		// 	this.filterPins(nextProps.pins, this.props.locationFilterValue)
+		// }
+
+
+		if (nextProps.searchText !== this.props.searchText) {
+			this.search(nextProps.searchText);
+		}
+	} // deprecate 
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
-		// console.log("componentDidUpdate", "CustomerListContent.js", this.props.locationFilterValue);
+		console.log("componentDidUpdate", "CustomerListContent.js", this.props.locationFilterValue, this.props.customers);
 		if (this.props.data !== prevProps.data) {
 			// this.setState({ data: this.props.data });
 			// this.setState({ rows: this.props.data });
@@ -778,86 +816,36 @@ class CustomerListContent extends Component {
 		// 	this.search(this.state.s);
 		// }
 	}
-	getCustomersFromStatus = (rawData = this.props.customers) => {
-		console.log("getCustomersFromStatus");
-
-		// let temp = [];
-		let all_temp = [];
-		// let temp1 = [];
-		// const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
-		// const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
-
-		if (rawData === null) return;
-
-		let regions = rawData.Data.Regions.filter(x => {
-			return this.props.regionId === 0 || x.Id === this.props.regionId;
-		});
-
-		regions.forEach(x => {
-			all_temp = [...all_temp, ...x.CustomerList];
-		});
-
-		// regions.map(x => {
-		// 	all_temp = [...all_temp, ...x.Customers];
-		// });
-
-		// this.setState({ temp: all_temp });
-		// this.setState({ data: all_temp });
-
-
-		this.setState({
-			data: [...all_temp],
-			rows: [...all_temp]
-		});
-
-	};
 
 	search(val) {
 		console.log("---------search---------", val);
-
-		// const temp = this.props.data.filter( d => {
-		//     console.log('customer=', d);
-		//     return d.CustomerId.toString().indexOf(val) !== -1 || !val ||
-		//         d.CustomerNo.indexOf(val) !== -1 ||
-		//         d.CustomerAmount.toString().indexOf(val) !== -1 ||
-		//         d.CustomerTotal.toString().indexOf(val) !== -1 ||
-		//         d.CustomerTax.toString().indexOf(val) !== -1 ||
-		//         d.CustomerDescription.toLowerCase().indexOf(val) !== -1 ||
-		//         d.CustomerName.toLowerCase().indexOf(val) !== -1 ||
-		//         d.CustomerId.toString().indexOf(val) !== -1 ||
-		//         d.CustomerNo.toString().indexOf(val) !== -1 ||
-		//         d.TransactionStatusListId.toString().indexOf(val) !== -1
-		// });
-
-		// this.setState({data: temp});
 		val = val.toLowerCase();
 		if (val === '') {
-			this.getCustomersFromStatus();
+			this.setState({ rows: [...this.state.data] });
 			return;
 		}
 		const temp = this.state.data.filter(d => {
-			return (d.CustomerNo && d.CustomerNo.toString().toLowerCase().indexOf(val) !== -1) || !val ||
+			return (d.CustomerNo && d.CustomerNo.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.CustomerName && d.CustomerName.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.Address && d.Address.toString().toLowerCase().indexOf(val) !== -1) ||
+				(d.City && d.City.toString().toLowerCase().indexOf(val) !== -1) ||
+				(d.StateName && d.StateName.toString().toLowerCase().indexOf(val) !== -1) ||
+				(d.PostalCode && d.PostalCode.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.Phone && d.Phone.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.AccountTypeListName && d.AccountTypeListName.toString().toLowerCase().indexOf(val) !== -1) ||
-				(d.CustomerDescription && d.CustomerDescription.toString().toLowerCase().indexOf(val) !== -1) ||
-				(d.Amount && d.Amount.toString().toLowerCase().indexOf(val) !== -1) ||
-				(d.StatusName && d.StatusName.toString().toLowerCase().indexOf(val) !== -1)
+				(d.Amount && d.Amount.toString().toLowerCase().indexOf(val) !== -1)
 		});
-
-		// this.setState({ data: temp });
 		this.setState({ rows: [...temp] });
 	}
 
 	componentDidMount() {
 		console.log("componentDidMount");
-
-		document.addEventListener("keydown", this.escFunction, false);
 	}
 
 	componentWillMount() {
 		console.log("componentWillMount");
+		this.initRowsFromRawJson();
+
 		this.getLocation();
 
 		// this.setState({ rows: this.props.data })
@@ -867,19 +855,7 @@ class CustomerListContent extends Component {
 	}
 	componentWillUnmount() {
 		console.log("componentWillUnmount");
-
-		// document.removeEventListener("keydown", this.escFunction, false);
 	}
-
-	// escFunction(event) {
-	// 	console.log("escFunction");
-
-	// 	if (event.keyCode === 27) {
-	// 		this.setState({ s: '' });
-	// 		// this.setState({ data: this.props.data })
-	// 		this.setState({ rows: this.props.data })
-	// 	}
-	// }
 
 
 	handleChange = prop => event => {
@@ -939,16 +915,16 @@ class CustomerListContent extends Component {
 			navigator.geolocation.getCurrentPosition(
 				(position) => {
 					console.log(position.coords);
-					this.setState({
-						current_lat: position.coords.latitude,
-						current_long: position.coords.longitude
-					})
 					// this.setState({
-					// 	current_lat: 42.910772,
-					// 	current_long: -78.74557
+					// 	current_lat: position.coords.latitude,
+					// 	current_long: position.coords.longitude
 					// })
-					if (this.props.locationFilterValue && this.props.pins) {
-						this.initPins()
+					this.setState({
+						current_lat: 42.910772,
+						current_long: -78.74557
+					})
+					if (this.props.locationFilterValue) {
+						this.initRowsFromRawJson();
 					}
 				}
 			);
@@ -962,45 +938,49 @@ class CustomerListContent extends Component {
 		return this.props.data;
 	}
 
-	shouldComponentUpdate(nextProps, nextState) {
-		console.log("shouldComponentUpdate", this.state !== nextState);
+	
 
-		return this.state !== nextState ||
-			this.props.mapViewState !== nextProps.mapViewState ||
-			this.props.data !== nextProps.data ||
-			this.props.loading !== nextProps.loading ||
-			this.props.pins !== nextProps.pins ||
-			this.props.searchText !== nextProps.searchText
-	}
+	initRowsFromRawJson = (rawData = this.props.customers, locationFilterValue = this.props.locationFilterValue) => {
+		console.log("initRowsFromRawJson", "CustomerListContent.js", this.props.regionId, this.props.statusId, rawData)
+		let all_temp = [];
+		if (rawData === null || rawData === undefined) return;
 
-	componentWillReceiveProps(nextProps) {
-		// this.setState({ mapViewState: nextProps.mapViewState });
-		// console.log("componentWillReceiveProps", "CustomerListContent.js", nextProps.locationFilterValue)
+		let regions = rawData.Data.Regions.filter(x => {
+			return this.props.regionId === 0 || x.Id === this.props.regionId;
+		});
 
 
-		if (nextProps.data !== this.props.data) {
-			this.setState({ rows: nextProps.data })
-		}
+		console.log("regions", regions)
 
-		if (this.props.locationFilterValue !== nextProps.locationFilterValue) {
-			this.setState({ locationFilterValue: nextProps.locationFilterValue })
-			this.props.pins && this.initPins(this.props.pins, nextProps.locationFilterValue)
-		}
+		regions.forEach(x => {
+			all_temp = [...all_temp, ...x.CustomerList];
+		});
 
-		if (this.props.pins !== nextProps.pins) {
-			// this.setState({ pins: nextProps.pins })
-			this.initPins(nextProps.pins, this.props.locationFilterValue)
-		}
+		let _pins_temp = [];
+		regions.forEach(x => {
+			_pins_temp = [..._pins_temp, ...x.CustomerList.map(customer => {
+				return {
+					lat: customer.Latitude,
+					lng: customer.Longitude,
+					text: customer.CustomerName
+				}
+			})];
 
+		})
 
-		if (nextProps.searchText !== this.props.searchText) {
-			this.search(nextProps.searchText);
-		}
-	} // deprecate 
+		this.filterPins(_pins_temp, locationFilterValue)
 
-	initPins(pins, locationFilterValue) {
+		this.setState({
+			rows: all_temp,
+			data: all_temp,
+			// pins: _pins_temp,
+		});
+
+	};
+
+	filterPins(pins, locationFilterValue) {
 		// this.setState({ gmapVisible: !this.state.gmapVisible });
-		console.log("-------initPins---------", pins)
+		console.log("-------filterPins---------", pins)
 		switch (locationFilterValue) {
 			case "locationAll":
 				if (!this.state.gmapVisible) {
@@ -1100,7 +1080,7 @@ class CustomerListContent extends Component {
 	}
 
 	render() {
-		console.log("render");
+		console.log("------render------");
 
 		const {
 			classes,

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 // core components
 import { Icon, IconButton, Fab, Typography, Toolbar, CircularProgress } from '@material-ui/core';
@@ -209,19 +209,19 @@ const styles = theme => ({
 			backgroundColor: theme.palette.primary.dark,
 		}
 	},
-    overlay: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100vh',
-        backgroundColor: 'rgba(0,0,0, .9)',
-        zIndex: 1000,
-        alignItems: 'center',
-        justifyContent: 'center',
-        display: 'flex',
-        opacity: 0.5
-    }
+	overlay: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		width: '100%',
+		height: '100vh',
+		backgroundColor: 'rgba(0,0,0, .9)',
+		zIndex: 1000,
+		alignItems: 'center',
+		justifyContent: 'center',
+		display: 'flex',
+		opacity: 0.5
+	}
 });
 // const defaultProps = {
 // 	trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
@@ -271,14 +271,14 @@ class Customers extends Component {
 			latitude: this.props.latitude,
 			location: this.props.location,
 			searchText: this.props.searchText,
-			loading: false,
+			// loading: false,
 		};
 		console.log("constructor, Customer.js")
 
 		if (!props.bLoadedCustomers) {
 			console.log("getCustomers")
-			this.setState({ loading: true });
-			this.getCustomersFromStatus();
+			// this.setState({ loading: true });
+			// this.getCustomersFromStatus();
 			this.props.getCustomers(this.props.regionId, this.props.statusId, this.props.location, this.props.latitude, this.props.longitude, this.props.searchText);
 		}
 	}
@@ -399,16 +399,18 @@ class Customers extends Component {
 
 
 
-		if (this.props.customers === null && prevProps.customers !== this.props.customers) {
-			bChanged = true;
-		}
+		// if (this.props.customers === null && prevProps.customers !== this.props.customers) {
+		// 	bChanged = true;
+		// }
 
-		if (this.props.documents === null && prevProps.documents !== this.props.documents) {
-			bChanged = true;
-		}
+		// if (bChanged)
+		// 	this.getCustomersFromStatus();
 
-		if (bChanged)
-			this.getCustomersFromStatus();
+		// if (this.props.documents === null && prevProps.documents !== this.props.documents) {
+		// 	bChanged = true;
+		// }
+
+
 
 	}
 
@@ -417,7 +419,7 @@ class Customers extends Component {
 		// this.setState({ checkedPP: this.props.transactionStatus.checkedPP });
 		// this.setState({ checkedComplete: this.props.transactionStatus.checkedComplete });
 		// this.setState({ checkedOpen: this.props.transactionStatus.checkedOpen });
-		this.getCustomersFromStatus()
+		// this.getCustomersFromStatus()
 
 		if (this.props.customers === null) {
 			this.props.getCustomers(this.props.regionId, this.props.statusId, this.props.location, this.props.latitude, this.props.longitude, this.props.searchText);
@@ -425,65 +427,51 @@ class Customers extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (this.props.customers === null && nextProps.customers !== null)
-			this.getCustomersFromStatus(nextProps.customers);
-		if (this.props.customers !== nextProps.customers) {
-			console.log("----------END FETCHING----------")
-			this.setState({ loading: false });
-			this.getCustomersFromStatus(nextProps.customers);
-		}
+		// if (this.props.customers === null && nextProps.customers !== null)
+		// 	this.getCustomersFromStatus(nextProps.customers);
+		// if (this.props.customers !== nextProps.customers) {
+		// 	console.log("----------END FETCHING----------")
+		// 	// this.setState({ loading: false });
+		// 	this.getCustomersFromStatus(nextProps.customers);
+		// }
 	}
 
 
-	getCustomersFromStatus = (rawData = this.props.customers) => {
-		console.log("getCustomersFromStatus", "Customer.js", this.props.regionId, this.props.statusId, rawData)
-		// let temp = [];
-		let all_temp = [];
-		// let temp1 = [];
-		// const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
-		// const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
-		if (rawData === null || rawData === undefined) return;
+	// getCustomersFromStatus = (rawData = this.props.customers) => {
+	// 	console.log("getCustomersFromStatus", "Customer.js", this.props.regionId, this.props.statusId, rawData)
+	// 	let all_temp = [];
+	// 	if (rawData === null || rawData === undefined) return;
 
-		let regions = rawData.Data.Regions.filter(x => {
-			return this.props.regionId === 0 || x.Id === this.props.regionId;
-		});
+	// 	let regions = rawData.Data.Regions.filter(x => {
+	// 		return this.props.regionId === 0 || x.Id === this.props.regionId;
+	// 	});
 
 
-		console.log("regions")
-		console.log(regions.length)
-		console.log(regions)
-		// if (regions.length !== 0) {
+	// 	console.log("regions", regions)
 
+	// 	regions.forEach(x => {
+	// 		all_temp = [...all_temp, ...x.CustomerList];
+	// 	});
 
-		regions.forEach(x => {
-			all_temp = [...all_temp, ...x.CustomerList];
-		});
+	// 	let _pins_temp = [];
+	// 	regions.forEach(x => {
+	// 		_pins_temp = [..._pins_temp, ...x.CustomerList.map(customer => {
+	// 			return {
+	// 				lat: customer.Latitude,
+	// 				lng: customer.Longitude,
+	// 				text: customer.CustomerName
+	// 			}
+	// 		})];
 
-		// regions.map(x => {
-		// 	all_temp = [...all_temp, ...x.Customers];
-		// 	return;
-		// });
-		// }
+	// 	})
 
-		let _pins_temp = [];
-		regions.forEach(x => {
-			_pins_temp = [..._pins_temp, ...x.CustomerList.map(customer => {
-				return {
-					lat: customer.Latitude,
-					lng: customer.Longitude,
-					text: customer.CustomerName
-				}
-			})];
+	// 	this.setState({
+	// 		temp: all_temp,
+	// 		data: all_temp,
+	// 		pins: _pins_temp,
+	// 	});
 
-		})
-
-		this.setState({
-			temp: all_temp,
-			data: all_temp,
-			pins: _pins_temp,
-		});
-
-	};
+	// };
 
 	componentDidMount() {
 		// document.addEventListener("keydown", this.escFunction, false);
@@ -493,37 +481,37 @@ class Customers extends Component {
 		// document.removeEventListener("keydown", this.escFunction, false);
 	}
 
-	escFunction(event) {
-		if (event.keyCode === 27) {
-			this.setState({ s: '' });
-			this.getCustomersFromStatus();
-		}
-	}
-	search(val) {
-		if (val === '') {
-			this.getCustomersFromStatus();
-			return;
-		}
-		const temp = this.state.data.filter(d => {
-			return (d.CustomerNo && d.CustomerNo.toString().indexOf(val) !== -1) || !val ||
-				(d.CustomerName && d.CustomerName.toString().indexOf(val) !== -1) ||
-				(d.Address && d.Address.toString().indexOf(val) !== -1) ||
-				(d.Phone && d.Phone.toString().indexOf(val) !== -1) ||
-				(d.AccountTypeListName && d.AccountTypeListName.toString().indexOf(val) !== -1) ||
-				(d.CustomerDescription && d.CustomerDescription.toString().toLowerCase().indexOf(val) !== -1) ||
-				(d.Amount && d.Amount.toString().toLowerCase().indexOf(val) !== -1) ||
-				(d.StatusName && d.StatusName.toString().indexOf(val) !== -1)
-		});
+	// escFunction(event) {
+	// 	if (event.keyCode === 27) {
+	// 		this.setState({ s: '' });
+	// 		this.getCustomersFromStatus();
+	// 	}
+	// }
+	// search(val) {
+	// 	if (val === '') {
+	// 		this.getCustomersFromStatus();
+	// 		return;
+	// 	}
+	// 	const temp = this.state.data.filter(d => {
+	// 		return (d.CustomerNo && d.CustomerNo.toString().indexOf(val) !== -1) || !val ||
+	// 			(d.CustomerName && d.CustomerName.toString().indexOf(val) !== -1) ||
+	// 			(d.Address && d.Address.toString().indexOf(val) !== -1) ||
+	// 			(d.Phone && d.Phone.toString().indexOf(val) !== -1) ||
+	// 			(d.AccountTypeListName && d.AccountTypeListName.toString().indexOf(val) !== -1) ||
+	// 			(d.CustomerDescription && d.CustomerDescription.toString().toLowerCase().indexOf(val) !== -1) ||
+	// 			(d.Amount && d.Amount.toString().toLowerCase().indexOf(val) !== -1) ||
+	// 			(d.StatusName && d.StatusName.toString().indexOf(val) !== -1)
+	// 	});
 
-		this.setState({ temp: temp });
-	}
+	// 	this.setState({ temp: temp });
+	// }
 
 	handleChange = prop => event => {
 		this.setState({ [prop]: event.target.value });
 
-		if (prop === 's') {
-			// this.search(event.target.value.toLowerCase());
-		}
+		// if (prop === 's') {
+		// 	// this.search(event.target.value.toLowerCase());
+		// }
 	};
 
 	canBeSubmitted() {
@@ -561,7 +549,8 @@ class Customers extends Component {
 
 		const { selection } = this.state;
 
-		console.log('xxxx=', this.state.temp);
+		console.log('render temp =', this.state.temp);
+		console.log('customerForm.props.open =', customerForm.props.open);
 
 		return (
 			<React.Fragment >
@@ -590,14 +579,6 @@ class Customers extends Component {
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
-											{/* <IconButton
-												className={classNames(classes.button, "mr-12")}
-												aria-label="Add an alarm"
-												onClick={(ev) => toggleMapView()}>
-												<Icon>{mapViewState ? 'list' : 'location_on'}</Icon>
-											</IconButton> */}
-
-											{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
 											<Fab
 												color="secondary"
 												aria-label="add"
@@ -605,45 +586,16 @@ class Customers extends Component {
 												onClick={openNewCustomerForm}>
 												<Icon>add</Icon>
 											</Fab>
-											{/* </FuseAnimate> */}
-											{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
 											<Fab color="secondary" aria-label="add"
 												className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
 												<Icon>mail_outline</Icon>
 											</Fab>
-											{/* </FuseAnimate> */}
-											{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
 											<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
 												<Icon>print</Icon>
 											</Fab>
-											{/* </FuseAnimate> */}
 										</div>
 									</div>
-									<div className="flex flex-none items-end" style={{ display: 'none' }}>
-										{/* <FuseAnimate animation="transition.expandIn" delay={600}> */}
-										<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => openNewCustomerForm}>
-											<Icon>add</Icon>
-										</Fab>
-										{/* </FuseAnimate> */}
-										{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
-										<Fab color="primary" aria-label="add"
-											className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-											<Icon>mail_outline</Icon>
-										</Fab>
-										{/* </FuseAnimate> */}
-										{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
-										<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-											<Icon>print</Icon>
-										</Fab>
-										{/* </FuseAnimate> */}
-										{selection.length > 0 && (
-											// <FuseAnimate animation="transition.expandIn" delay={600}>
-											<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeInvoices()}>
-												<Icon>delete</Icon>
-											</Fab>
-											// </FuseAnimate>
-										)}
-									</div>
+
 								</div>
 							)}
 							{(this.state.temp && customerForm.props.open) && (
@@ -651,23 +603,19 @@ class Customers extends Component {
 									<div className="flex flex-row flex-1 justify-between">
 										<div className="flex flex-shrink items-center">
 											<div className="flex items-center">
-												{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
 												<Toolbar className="pl-12 pr-0">
 													<img className="mr-12" alt="" src="assets/images/invoices/invoice-icon-white.png" style={{ width: 32, height: 32 }} />
 												</Toolbar>
-												{/* </FuseAnimate> */}
-												{/* <FuseAnimate animation="transition.slideLeftIn" delay={300}> */}
 												<Typography variant="h6" className="hidden sm:flex">Customers | New Customers</Typography>
-												{/* </FuseAnimate> */}
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
 
-											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleFilterPanel()}>
+											<IconButton className={classes.button} aria-label="Add an alarm" onClick={toggleFilterPanel}>
 												<Icon>person_outline</Icon>
 											</IconButton>
 
-											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleSummaryPanel()}>
+											<IconButton className={classes.button} aria-label="Add an alarm" onClick={toggleSummaryPanel}>
 												<Icon>check_circle</Icon>
 											</IconButton>
 
@@ -676,46 +624,31 @@ class Customers extends Component {
 											</IconButton>
 										</div>
 									</div>
-									<div className="flex flex-none items-end" style={{ display: 'none' }}>
-										{/* <FuseAnimate animation="transition.expandIn" delay={600}> */}
-										<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
-											<Icon>add</Icon>
-										</Fab>
-										{/* </FuseAnimate> */}
-										{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
-										<Fab color="primary" aria-label="add"
-											className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-											<Icon>mail_outline</Icon>
-										</Fab>
-										{/* </FuseAnimate> */}
-										{/* <FuseAnimate animation="transition.expandIn" delay={300}> */}
-										<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-											<Icon>print</Icon>
-										</Fab>
-										{/* </FuseAnimate> */}
-										{selection.length > 0 && (
-											// <FuseAnimate animation="transition.expandIn" delay={600}>
-											<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeInvoices()}>
-												<Icon>delete</Icon>
-											</Fab>
-											// </FuseAnimate>
-										)}
-									</div>
+
 								</div>
 							)}
 						</div>
 					}
 					content={
 						<div className="flex-1 flex-col absolute w-full h-full">
-							{(this.state.temp && !customerForm.props.open) && (
-								<CustomerListContent
-									data={this.state.temp}
-									loading={this.state.loading}
-									pins={this.state.pins}
-								/>
-							)}
-							{(this.state.temp && customerForm.props.open) && (
-								<CustomerForm customers={this.props.customers} franchisees={this.props.franchisees} selectedCustomer={this.state.selectedCustomer} />
+
+							{this.state.temp && (
+								<Fragment>
+									{customerForm.props.open ?
+										(
+											<CustomerForm
+												customers={this.props.customers}
+												franchisees={this.props.franchisees}
+												selectedCustomer={this.state.selectedCustomer} />
+										) :
+										(
+											<CustomerListContent
+											// data={this.state.temp}
+											// loading={this.state.loading}
+											// pins={this.state.pins}
+											/>
+										)}
+								</Fragment>
 							)}
 						</div>
 					}

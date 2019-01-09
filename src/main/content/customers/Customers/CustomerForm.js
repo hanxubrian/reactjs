@@ -2127,7 +2127,6 @@ class CustomerForm extends Component {
 	render() {
 		console.log(this.props)
 		const { classes,
-			 CustomerForm,
 			// addCustomer,
 			// updateCustomer,
 			// removeCustomer
