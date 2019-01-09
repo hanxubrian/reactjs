@@ -244,20 +244,7 @@ function getStepContent(franchiseeForm, step) {
             label: "Reno"
         }
     ];
-    const planType= [
-        {
-            value: 0,
-            label: "Basic"
-        },
-        {
-            value: 1,
-            label: "Medium"
-        },
-        {
-            value: 2,
-            label: "High"
-        }
-    ];
+
     switch (step) {
         case 0:
             return (
@@ -417,6 +404,7 @@ function getStepContent(franchiseeForm, step) {
                                 label="Term(Yrs)"
                                 margin="dense"
                                 variant="outlined"
+                                onChange={franchiseeForm.handleTextChange('termYrs')}
                                 className={classes.textField}
                                 required
                                 style={{marginLeft: '1%'}}
@@ -462,6 +450,8 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="planAmount"
                                 label="Plan Amount"
+                                value={franchiseeForm.state.planAmount}
+                                onChange={franchiseeForm.handleTextChange('BusinessAmount')}
                                 className={classes.textField}
                                 variant="outlined"
                                 margin="dense"
@@ -474,7 +464,15 @@ function getStepContent(franchiseeForm, step) {
                                 id="ibAmount"
                                 label="IB Amount"
                                 className={classes.textField}
+                                onChange={franchiseeForm.handleTextChange('BusinessAmount')}
                                 margin="dense"
+                                value={franchiseeForm.state.ibAmount}
+                                InputProps={{
+                                    readOnly: true
+                                }}
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
                                 variant="outlined"
                                 style={{marginRight: '1%'}}
                                 required
@@ -483,6 +481,14 @@ function getStepContent(franchiseeForm, step) {
                                 id="downPayment"
                                 label="Down Payment"
                                 className={classes.textField}
+                                onChange={franchiseeForm.handleTextChange('DownPayment')}
+                                value={franchiseeForm.state.downPayment}
+                                InputProps={{
+                                    readOnly: true
+                                }}
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
                                 variant="outlined"
                                 margin="dense"
                                 style={{marginLeft: '1%', marginRight: '1%'}}
@@ -492,7 +498,15 @@ function getStepContent(franchiseeForm, step) {
                                 id="interest"
                                 label="Interest"
                                 className={classes.textField}
+                                onChange={franchiseeForm.handleTextChange('Interest')}
                                 variant="outlined"
+                                value={franchiseeForm.state.interest}
+                                InputProps={{
+                                    readOnly: true
+                                }}
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
                                 style={{marginLeft: '1%'}}
                                 margin="dense"
                                 required
@@ -502,9 +516,17 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="paymentAmount"
                                 label="Payment Amount"
-                                className={classes.textField}
+                                className={classNames(classes.textField)}
+                                onChange={franchiseeForm.handleTextChange('BusinessAmount')}
+                                value={franchiseeForm.state.paymentAmount}
                                 variant="outlined"
                                 margin="dense"
+                                InputProps={{
+                                    readOnly: true
+                                }}
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
                                 style={{marginRight: '1%'}}
                                 required
                             />
@@ -512,8 +534,16 @@ function getStepContent(franchiseeForm, step) {
                                 id="noOfPayments"
                                 label="No Of Payments"
                                 className={classes.textField}
+                                onChange={franchiseeForm.handleTextChange('NoOfPayments')}
+                                value={franchiseeForm.state.noOfPayments}
                                 variant="outlined"
                                 margin="dense"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
                                 style={{marginLeft: '1%', marginRight: '1%'}}
                                 required
                             />
@@ -521,7 +551,15 @@ function getStepContent(franchiseeForm, step) {
                                 id="daysToFullFill"
                                 label="Days To Fullfill"
                                 className={classes.textField}
+                                onChange={franchiseeForm.handleTextChange('DaysToFulfill')}
+                                value={franchiseeForm.state.daysToFullfill}
                                 variant="outlined"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
                                 style={{marginLeft: '1%'}}
                                 margin="dense"
                                 required
@@ -594,6 +632,7 @@ class FranchiseesCreateForm extends Component {
         selectedWork: "",
         activeStep: 0,
         completed: new Set(),
+        termsYrs: '',
         skipped: new Set(),
         print1099: false,
         chargeBack: false,
@@ -605,7 +644,14 @@ class FranchiseesCreateForm extends Component {
         defaultPlanType: 1,
         selectedSignDate: new Date(),
         selectedRenewDate: new Date(),
-        selectedExpDate: new Date()
+        selectedExpDate: new Date(),
+        planAmount: 0,
+        ibAmount: 0,
+        downPayment: 0,
+        interest: 0,
+        noOfPayments: 0,
+        daysToFullfill: 0,
+        paymentAmount: 0
     };
 
     constructor (props){
@@ -626,6 +672,19 @@ class FranchiseesCreateForm extends Component {
         this.setState({
             planType: this.props.planType
         });
+        this.props.planType.Data.map( x => {
+                if (x.FranchiseeContractTypeListId === this.state.defaultPlanType) {
+                    this.setState({
+                        planAmount: x.Price,
+                        daysToFullfill: x.DaysToFulfill,
+                        noOfPayments: x.NoOfPayments,
+                        interest: x.Interest,
+                        downPayment: x.DownPayment,
+                        ibAmount: x.BusinessAmount
+                    });
+                }
+            }
+        )
     }
 
     componentDidMount() {
@@ -657,11 +716,31 @@ class FranchiseesCreateForm extends Component {
         return true;
     }
     handleStateChange = name => event => {
+        let val = event.target.value;
+        if(name === 'defaultPlanType'){
+            this.props.planType.Data.map( (x,index)=> {
+                    if (val === x.FranchiseeContractTypeListId) {
+                        this.setState({
+                            planAmount: x.Price,
+                            daysToFullfill: x.DaysToFulfill,
+                            noOfPayments: x.NoOfPayments,
+                            interest: x.Interest,
+                            downPayment: x.DownPayment,
+                            ibAmount: x.BusinessAmount
+                        });
+                    }
+                }
+            )
+        }
+        this.setState({
+            [name]: val,
+        });
+    };
+    handleTextChange = name => event => {
         this.setState({
             [name]: event.target.value,
         });
     };
-
     //////////////////////
     totalSteps = () => {
         return getSteps().length;
