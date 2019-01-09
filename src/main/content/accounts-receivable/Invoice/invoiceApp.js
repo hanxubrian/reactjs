@@ -2,7 +2,18 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
 // core components
-import {Hidden, Icon, IconButton, Fab, Typography,Toolbar, CircularProgress} from '@material-ui/core';
+import {
+    Hidden,
+    Icon,
+    IconButton,
+    Fab,
+    Typography,
+    Toolbar,
+    CircularProgress,
+    Button,
+    Input,
+    Paper
+} from '@material-ui/core';
 
 // theme components
 import {FusePageCustom, FuseAnimate} from '@fuse';
@@ -138,6 +149,28 @@ const styles = theme => ({
         justifyContent: 'center',
         display: 'flex',
         opacity: 0.5
+    },
+    filterPanelButton: {
+        backgroundColor: theme.palette.secondary.main,
+        minWidth: 42,
+        padding: 8,
+        justifyContent: 'center',
+        '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+        }
+    },
+    summaryPanelButton: {
+        backgroundColor: theme.palette.secondary.main,
+        minWidth: 42,
+        padding: 8,
+        color: 'white',
+        justifyContent: 'center',
+        '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+        }
+    },
+    imageIcon: {
+        width: 24
     }
 });
 
@@ -176,6 +209,7 @@ const newInvoiceState = {
 
 class InvoiceApp extends Component {
     state = {
+        s: '',
         temp: [],
         data: [],
         checkedEbill: true,
@@ -184,6 +218,7 @@ class InvoiceApp extends Component {
         selectAll: false,
         regionId: 0,
         customers: null,
+        franchisees: null,
         ...newInvoiceState,
         value: '',
         selectedInvoice: null
@@ -201,7 +236,9 @@ class InvoiceApp extends Component {
         if (!props.bLoadedCustomers) {
             props.getCustomers(props.regionId);
         }
-
+        if (!props.bLoadedFranchisees) {
+            props.getFranchisees(props.regionId, props.fstatusId, props.fLocation, props.fLongitude, props.fLatitude, props.fSearchText);
+        }
         this.escFunction = this.escFunction.bind(this);
         this.listenScrollEvent = this.listenScrollEvent.bind(this);
     }
@@ -211,6 +248,7 @@ class InvoiceApp extends Component {
         let bChanged = false;
 
         const {regionId, StatusId, FromDate, ToDate,PeriodId, OpenOrClosed,InvoiceTypeId, ToPrintOrToEmail, SearchText} = this.props;
+        const {fstatusId, fLocation, fLongitude, fLatitude, fSearchText} = this.props;
 
         if(this.props.transactionStatus.checkedEbill !== prevProps.transactionStatus.checkedEbill) {
             this.setState({checkedEbill: !this.state.checkedEbill});
@@ -225,12 +263,19 @@ class InvoiceApp extends Component {
         if(regionId !== prevProps.regionId){
             this.props.getCustomers(regionId);
         }
+        if(regionId !== prevProps.regionId){
+            this.props.getFranchisees(regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText);
+        }
         if(regionId !== prevProps.regionId ||
             FromDate !== prevProps.FromDate ||
             ToDate !== prevProps.ToDate
         ) {
             this.props.getInvoices([regionId] ,StatusId, FromDate, ToDate, PeriodId,
                 OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText);
+        }
+
+        if(prevState.s!==this.state.s) {
+            this.search(this.state.s);
         }
 
         if(bChanged)
@@ -241,28 +286,48 @@ class InvoiceApp extends Component {
         }
     }
 
+    search(val) {
+        const temp = this.state.data.filter( d => {
+            console.log('ddd=',d);
+            return d.InvoiceId.toString().indexOf(val) !== -1 || !val ||
+                d.InvoiceNo.indexOf(val) !== -1 ||
+                d.InvoiceAmount.toString().indexOf(val) !== -1 ||
+                d.InvoiceTotal.toString().indexOf(val) !== -1 ||
+                d.InvoiceTax.toString().indexOf(val) !== -1 ||
+                d.InvoiceDescription!==null && d.InvoiceDescription.toLowerCase().indexOf(val) !== -1 ||
+                d.CustomerName.toLowerCase().indexOf(val) !== -1 ||
+                d.CustomerId.toString().indexOf(val) !== -1 ||
+                d.CustomerNo.toString().indexOf(val) !== -1 ||
+                d.TransactionStatusListId.toString().indexOf(val) !== -1
+        });
+
+        this.setState({temp: temp});
+    }
+
     componentWillMount(){
         this.setState({checkedOpen: this.props.transactionStatus.checkedEbill});
         this.setState({checkedOpen: this.props.transactionStatus.checkedPrint});
 
         this.getInvoicesFromStatus();
         const {regionId, StatusId, FromDate, ToDate,PeriodId, OpenOrClosed,InvoiceTypeId, ToPrintOrToEmail, SearchText} = this.props;
+        const {fstatusId, fLocation, fLongitude, fLatitude, fSearchText} = this.props;
 
         if(this.props.invoices===null) {
             this.props.getInvoices([regionId], StatusId, FromDate, ToDate, PeriodId,
                 OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText);
             this.props.getCustomers(regionId);
+            this.props.getFranchisees(regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText);
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.props.invoices===null && nextProps.invoices!==null)
+        if (this.props.invoices === null && nextProps.invoices !== null)
             this.getInvoicesFromStatus(nextProps.invoices);
-        if(this.props.invoices!==nextProps.invoices)
+        if (this.props.invoices !== nextProps.invoices)
             this.getInvoicesFromStatus(nextProps.invoices);
 
 
-        if(nextProps.customers!==null && this.props.customers!==nextProps.customers){
+        if (nextProps.customers !== null && this.props.customers !== nextProps.customers) {
             let temp = [];
             let regions = nextProps.customers.Data.Regions
 
@@ -272,8 +337,10 @@ class InvoiceApp extends Component {
             });
             this.setState({customers: temp});
         }
+        if(nextProps.franchisees!==null && this.props.franchisees!==nextProps.franchisees){
+            this.setState({franchisees: nextProps.franchisees.Data.Region[0].FranchiseeList});
+        }
     }
-
     getInvoicesFromStatus =(rawData=this.props.invoices) =>{
         let temp=[];
         let all_temp=[];
@@ -348,6 +415,9 @@ class InvoiceApp extends Component {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
     };
 
+    handleSearchChange = prop => event => {
+        this.setState({ [prop]: event.target.value });
+    };
     removeInvoices = ()=> {
         if(this.state.selection.length===0){
             alert("Please choose invoice(s) to delete");
@@ -497,7 +567,71 @@ class InvoiceApp extends Component {
                     content={
                         <div className="flex-1 flex-col absolute w-full h-full">
                             {(this.state.temp && !invoiceForm.props.open) && (
-                                <InvoiceListContent data={this.state.temp}/>
+                                <div className={classNames("flex flex-col h-full")}>
+                                    <div className="flex flex-row items-center p-12">
+                                        <div className="flex justify-start items-center">
+                                            <Hidden smDown>
+                                                <Button
+                                                    onClick={(ev) => toggleFilterPanel()}
+                                                    aria-label="toggle filter panel"
+                                                    color="secondary"
+                                                    disabled={filterState ? true : false}
+                                                    className={classNames(classes.filterPanelButton)}
+                                                >
+                                                    <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
+                                                </Button>
+                                            </Hidden>
+                                            <Hidden smUp>
+                                                <Button
+                                                    onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
+                                                    aria-label="toggle filter panel"
+                                                    className={classNames(classes.filterPanelButton)}
+                                                >
+                                                    <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
+                                                </Button>
+                                            </Hidden>
+                                        </div>
+                                        <div className="flex items-center w-full h-44 mr-12 ml-12">
+                                            <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
+                                                <Input
+                                                    placeholder="Search..."
+                                                    className={classNames(classes.search, 'pl-16')}
+                                                    // className="pl-16"
+                                                    disableUnderline
+                                                    fullWidth
+                                                    value={this.state.s}
+                                                    onChange={this.handleSearchChange('s')}
+                                                    inputProps={{
+                                                        'aria-label': 'Search'
+                                                    }}
+                                                />
+                                                <Icon color="action" className="mr-16">search</Icon>
+                                            </Paper>
+                                        </div>
+                                        <div className="flex items-center justify-end pr-12">
+                                            <Hidden smDown>
+                                                <Button
+                                                    onClick={(ev) => toggleSummaryPanel()}
+                                                    aria-label="toggle summary panel"
+                                                    disabled={summaryState ? true : false}
+                                                    className={classNames(classes.summaryPanelButton)}
+                                                >
+                                                    <Icon>insert_chart</Icon>
+                                                </Button>
+                                            </Hidden>
+                                            <Hidden smUp>
+                                                <Button
+                                                    onClick={(ev) => this.pageLayout.toggleRightSidebar()}
+                                                    aria-label="toggle summary panel"
+                                                    className={classNames(classes.summaryPanelButton)}
+                                                >
+                                                    <Icon>insert_chart</Icon>
+                                                </Button>
+                                            </Hidden>
+                                        </div>
+                                    </div>
+                                    <InvoiceListContent data={this.state.temp}/>
+                                </div>
                             )}
                             {(this.state.temp && invoiceForm.props.open) && (
                                 <InvoiceForm customers={this.state.customers} selectedInvoice={this.state.selectedInvoice}/>
@@ -542,7 +676,7 @@ class InvoiceApp extends Component {
                     }}
                 >
                 </FusePageCustom>
-                {(this.props.bInvoiceStart || this.props.bCustomerFetchStart) && (
+                {(this.props.bInvoiceStart || this.props.bCustomerFetchStart || this.props.bFranchiseesFetchStart) && (
                     <div className={classes.overlay}>
                         <CircularProgress className={classes.progress} color="secondary"  />
                     </div>
@@ -562,10 +696,11 @@ function mapDispatchToProps(dispatch)
         openNewInvoiceForm: Actions.openNewInvoiceForm,
         openEditInvoiceForm: Actions.openEditInvoiceForm,
         getCustomers: Actions.getCustomers,
+        getFranchisees: Actions.getFranchisees,
     }, dispatch);
 }
 
-function mapStateToProps({invoices, auth, customers})
+function mapStateToProps({invoices, auth, customers, franchisees})
 {
     return {
         invoices: invoices.invoicesDB,
@@ -574,9 +709,6 @@ function mapStateToProps({invoices, auth, customers})
         invoiceStatus: invoices.invoiceStatus,
         filterState: invoices.bOpenedFilterPanel,
         summaryState: invoices.bOpenedSummaryPanel,
-        regionId: auth.login.defaultRegionId,
-        customers: customers.customersDB,
-        bLoadedCustomers: customers.bLoadedCustomers,
         invoiceForm: invoices.invoiceForm,
         FromDate: invoices.FromDate,
         ToDate: invoices.ToDate,
@@ -587,7 +719,18 @@ function mapStateToProps({invoices, auth, customers})
         ToPrintOrToEmail: invoices.ToPrintOrToEmail,
         SearchText: invoices.SearchText,
         bInvoiceStart: invoices.bInvoiceStart,
-        bCustomerFetchStart: customers.bCustomerFetchStart
+        customers: customers.customersDB,
+        bLoadedCustomers: customers.bLoadedCustomers,
+        bCustomerFetchStart: customers.bCustomerFetchStart,
+        regionId: auth.login.defaultRegionId,
+        franchisees: franchisees.franchiseesDB,
+        bLoadedFranchisees: franchisees.bLoadedFranchisees,
+        fstatusId: franchisees.statusId,
+        fLocation: franchisees.Location,
+        fLongitude: franchisees.Longitude,
+        fLatitude: franchisees.Latitude,
+        fSearchText: franchisees.SearchText,
+        bFranchiseesFetchStart: franchisees.bFranchiseesFetchStart,
     }
 }
 

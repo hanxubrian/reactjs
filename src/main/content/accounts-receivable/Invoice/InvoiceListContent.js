@@ -42,12 +42,6 @@ const styles = theme => ({
         '& .-pageSizeOptions': {
             display: 'none'
         },
-        '& .openFilter':{
-            width: 'inherit'
-        },
-        '& .openSummary':{
-            width: 300
-        },
         '& .p-12-impor': {
             paddingLeft: '1.2rem!important',
             paddingRight: '1.2rem!important',
@@ -57,9 +51,7 @@ const styles = theme => ({
             border: '1px solid coral'
         },
         '& .ReactTable .rt-thead.-headerGroups': {
-            paddingLeft: '0!important',
-            paddingRight: '0!important',
-            minWidth: 'inherit!important'
+            display: 'none'
         },
         '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
             background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
@@ -102,28 +94,6 @@ const styles = theme => ({
     tableTdEven:{
         // backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b +', .1)'
     },
-    filterPanelButton: {
-        backgroundColor: theme.palette.secondary.main,
-        minWidth: 42,
-        padding: 8,
-        justifyContent: 'center',
-        '&:hover': {
-            backgroundColor: theme.palette.primary.dark,
-        }
-    },
-    summaryPanelButton: {
-        backgroundColor: theme.palette.secondary.main,
-        minWidth: 42,
-        padding: 8,
-        color: 'white',
-        justifyContent: 'center',
-        '&:hover': {
-            backgroundColor: theme.palette.primary.dark,
-        }
-    },
-    imageIcon: {
-        width: 24
-    }
 });
 
 class InvoiceListContent extends Component {
@@ -208,26 +178,6 @@ class InvoiceListContent extends Component {
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.props.data!==prevProps.data)
             this.setState({data: this.props.data});
-
-        if(prevState.s!==this.state.s) {
-            this.search(this.state.s);
-        }
-    }
-    search(val) {
-        const temp = this.props.data.filter( d => {
-            return d.InvoiceId.toString().indexOf(val) !== -1 || !val ||
-                d.InvoiceNo.indexOf(val) !== -1 ||
-                d.InvoiceAmount.toString().indexOf(val) !== -1 ||
-                d.InvoiceTotal.toString().indexOf(val) !== -1 ||
-                d.InvoiceTax.toString().indexOf(val) !== -1 ||
-                d.InvoiceDescription.toLowerCase().indexOf(val) !== -1 ||
-                d.CustomerName.toLowerCase().indexOf(val) !== -1 ||
-                d.CustomerId.toString().indexOf(val) !== -1 ||
-                d.CustomerNo.toString().indexOf(val) !== -1 ||
-                d.TransactionStatusListId.toString().indexOf(val) !== -1
-        });
-
-        this.setState({data: temp});
     }
 
     componentDidMount(){
@@ -247,10 +197,6 @@ class InvoiceListContent extends Component {
             this.setState({data: this.props.data})
         }
     }
-
-    handleChange = prop => event => {
-        this.setState({ [prop]: event.target.value });
-    };
 
     removeInvoices = ()=> {
         if(this.state.selection.length===0){
@@ -272,35 +218,16 @@ class InvoiceListContent extends Component {
 
     render()
     {
-        const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState} = this.props;
+        const { classes} = this.props;
         const { toggleSelection, toggleAll, isSelected} = this;
 
         return (
-            <div className={classNames(classes.layoutTable, "h-full")}>
+            <div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
                 <ReactTable
                     data={this.state.data}
                     minRows = {0}
                     PaginationComponent={JanikingPagination}
                     onFetchData={this.fetchData}
-                    getTheadGroupProps={(state, rowInfo, column, instance) =>{
-                        return {
-                            style:{
-                                padding: "10px 10px",
-                                fontSize: 16,
-                                fontWeight: 700
-                            },
-                        }
-                    }}
-                    getTheadGroupThProps={(state, rowInfo, column, instance) => {
-                        return {
-                            style:{
-                                padding: "10px 10px",
-                                fontSize: 18,
-                                fontWeight: 700,
-                            },
-                            className: classNames("flex items-center justify-start")
-                        }
-                    }}
                     getTheadThProps={(state, rowInfo, column, instance) =>{
                         let border = '1px solid rgba(255,255,255,.6)';
                         if(column.Header==='Actions') border = 'none';
@@ -348,30 +275,6 @@ class InvoiceListContent extends Component {
                     }}
                     columns={[
                         {
-                            Header: (instance)=>(
-                                <div className="flex items-center">
-                                    <Hidden smDown>
-                                        <Button
-                                            onClick={(ev) => toggleFilterPanel()}
-                                            aria-label="toggle filter panel"
-                                            color="secondary"
-                                            disabled={filterState ? true : false}
-                                            className={classNames(classes.filterPanelButton)}
-                                        >
-                                            <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
-                                        </Button>
-                                    </Hidden>
-                                    <Hidden smUp>
-                                        <Button
-                                            onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
-                                            aria-label="toggle filter panel"
-                                            className={classNames(classes.filterPanelButton)}
-                                        >
-                                            <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
-                                        </Button>
-                                    </Hidden>
-                                </div>
-                            ),
                             columns: [
                                 {
                                     Header   : (instance) => (
@@ -403,25 +306,6 @@ class InvoiceListContent extends Component {
                             className: classNames("justify-center")
                         },
                         {
-                            Header: ()=>(
-                                <div className="flex items-center pr-0 lg:pr-12">
-                                    <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
-                                        <Input
-                                            placeholder="Search..."
-                                            className={classNames(classes.search, 'pl-16')}
-                                            // className="pl-16"
-                                            disableUnderline
-                                            fullWidth
-                                            value={this.state.s}
-                                            onChange={this.handleChange('s')}
-                                            inputProps={{
-                                                'aria-label': 'Search'
-                                            }}
-                                        />
-                                        <Icon color="action" className="mr-16">search</Icon>
-                                    </Paper>
-                                </div>
-                            ),
                             columns: [
                                 {
                                     Header: "Invoice #",
@@ -520,29 +404,6 @@ class InvoiceListContent extends Component {
                             ]
                         },
                         {
-                            Header: (instance)=>(
-                                <div className="flex items-center justify-end pr-12">
-                                    <Hidden smDown>
-                                        <Button
-                                            onClick={(ev) => toggleSummaryPanel()}
-                                            aria-label="toggle summary panel"
-                                            disabled={summaryState ? true : false}
-                                            className={classNames(classes.summaryPanelButton)}
-                                        >
-                                            <Icon>insert_chart</Icon>
-                                        </Button>
-                                    </Hidden>
-                                    <Hidden smUp>
-                                        <Button
-                                            onClick={(ev) => this.pageLayout.toggleRightSidebar()}
-                                            aria-label="toggle summary panel"
-                                            className={classNames(classes.summaryPanelButton)}
-                                        >
-                                            <Icon>insert_chart</Icon>
-                                        </Button>
-                                    </Hidden>
-                                </div>
-                            ),
                             columns:[
                                 {
                                     Header: '',
