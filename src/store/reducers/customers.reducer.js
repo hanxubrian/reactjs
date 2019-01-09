@@ -44,7 +44,7 @@ const customers = function (state = initialState, action) {
 		case Actions.GET_ALL_DOCUMENTS:
 			{
 				return {
-					...initialState,
+					...state,
 					customersDocuments: action.payload
 				};
 			}

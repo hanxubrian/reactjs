@@ -38,7 +38,7 @@ import {
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 import { compose, withProps, withHandlers } from "recompose";
 
-import { geolib } from 'geolib';
+import Geocode from "react-geocode";
 
 import {
 	SelectionState,
@@ -105,7 +105,7 @@ import { getCustomers } from '../../../../store/actions';
 // 	);
 // }
 
-
+Geocode.setApiKey("AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA");
 
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -939,14 +939,14 @@ class CustomerListContent extends Component {
 			navigator.geolocation.getCurrentPosition(
 				(position) => {
 					console.log(position.coords);
-					// this.setState({
-					// 	current_lat: position.coords.latitude,
-					// 	current_long: position.coords.longitude
-					// })
 					this.setState({
-						current_lat: 42.910772,
-						current_long: -78.74557
+						current_lat: position.coords.latitude,
+						current_long: position.coords.longitude
 					})
+					// this.setState({
+					// 	current_lat: 42.910772,
+					// 	current_long: -78.74557
+					// })
 					if (this.props.locationFilterValue && this.props.pins) {
 						this.initPins()
 					}

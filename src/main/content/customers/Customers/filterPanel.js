@@ -235,7 +235,7 @@ class FilterPanel extends Component {
 		if (name === "Location") {
 			this.props.selectLocationFilter(event.target.value)
 
-			
+
 		}
 	};
 
@@ -447,34 +447,74 @@ class FilterPanel extends Component {
 										</FormControl>
 									</div>
 									*/}
-								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
-									<h3>Location</h3>
 
+								{/* <RadioGroup */}
+								<div style={{
+									marginTop: 30, display: 'flex', flexDirection: 'column',
+									alignItems: "stretch"
+								}}>
+									<h3>Location</h3>
 									<RadioGroup
+
+
 										aria-label="Location"
 										name="Location"
 										className={classes.group}
 										value={this.state.Location}
 										onChange={this.handleChange('Location')}
 									>
+
 										<FormControlLabel value="locationAll" control={<Radio />} label="All" />
-										<FormControlLabel value="locationNearBy" control={<Radio />} label="Near By (15 Miles)" />
+										<FormControlLabel value="locationNearBy" control={<Radio />} label="NearBy" />
+
+										<TextField
+											select
+
+											id="NearbyRadius"
+											label="NearbyRadius"
+											className={classes.textField}
+											InputLabelProps={{
+												shrink: true
+											}}
+											value={this.state.NearbyRadius === undefined ? 2 : this.state.NearbyRadius}
+											onChange={this.handleChange('NearbyRadius')}
+											margin="normal"
+											variant="outlined"
+											style={{
+												width: "100%",
+												// maxWidth: 200,
+												// display: this.state.Location === "locationNearBy" ? 'block' : 'none'
+											}}
+										// fullWidth
+										>
+											{
+												Array.apply(null, { length: 15 }).map(Number.call, Number)
+													.map((val, index) => (
+														<MenuItem key={index} value={index}>
+															{(index + 1) * 5} Miles
+													</MenuItem>
+													))
+											}
+										</TextField>
+
 										<FormControlLabel value="locationNearSpecificAddress" control={<Radio />} label="Near Specific Address" />
+
 
 									</RadioGroup>
 									<TextField
-										id="outlined-name"
-										label="Address or Zipcode"
+										id="SpecificAddress"
+										label="Address"
 										className={classes.textField}
 										onChange={this.handleChange('SpecificAddress')}
 										margin="normal"
 										variant="outlined"
 										style={{
-											width: '100%',
-											visibility: this.state.Location === "locationNearSpecificAddress" ? 'visible' : 'hidden'
+											width: "100%",
+											// maxWidth: 200,
+											// display: this.state.Location === "locationNearSpecificAddress" ? 'block' : 'none'
 										}}
+									// fullWidth
 									/>
-
 									<TextField
 										select
 
@@ -489,38 +529,23 @@ class FilterPanel extends Component {
 										margin="normal"
 										variant="outlined"
 										style={{
-											width: '100%',
-											visibility: this.state.Location === "locationNearSpecificAddress" ? 'visible' : 'hidden'
+											width: "100%",
+											// maxWidth: 200,
+											// display: this.state.Location === "locationNearSpecificAddress" ? 'block' : 'none'
 										}}
+									// fullWidth
 									>
 										{
-											// [
-											// 	{ value: 0, label: "5 Miles" },
-											// 	{ value: 1, label: "10 Miles" },
-											// 	{ value: 2, label: "20 Miles" },
-											// 	{ value: 2, label: "20 Miles" },
-											// 	{ value: 2, label: "20 Miles" },
-											// 	{ value: 2, label: "20 Miles" },
-											// 	{ value: 2, label: "20 Miles" },
-											// 	{ value: 2, label: "20 Miles" },
-											// 	{ value: 3, label: "30 Miles" }
-											// ]
-											// (new Array(15))
 											Array.apply(null, { length: 15 }).map(Number.call, Number)
 												.map((val, index) => (
 													<MenuItem key={index} value={index}>
 														{(index + 1) * 5} Miles
 													</MenuItem>
-												))}
+												))
+										}
 									</TextField>
-
 								</div>
 
-								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
-
-
-
-								</div>
 								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
 									<TextField
 										select

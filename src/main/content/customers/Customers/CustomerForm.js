@@ -880,7 +880,7 @@ class CustomerForm extends Component {
 
 
 
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							{/* <GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
 									id="AccountType"
 									label="Account Type *"
@@ -901,7 +901,7 @@ class CustomerForm extends Component {
 										</MenuItem>
 									))}
 								</TextField>
-							</GridItem>
+							</GridItem> */}
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
