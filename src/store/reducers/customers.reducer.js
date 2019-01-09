@@ -23,7 +23,11 @@ const initialState = {
 	longitude: "",
 	latitude: "",
 
-	locationFilterValue: "locationAll",
+	locationFilterValue: {
+		id: "locationAll",
+		miles: 15,
+		addrZipcode: undefined
+	},
 	searchText: "",
 
 	bCustomerFetchStart: false

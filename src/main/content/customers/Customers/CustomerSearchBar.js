@@ -160,11 +160,8 @@ class CustomerSearchBar extends Component {
 		this.setState({ [prop]: event.target.value });
 
 		if (prop === 's') {
-
 			clearTimeout(this.timer);
-			this.setState({ s: event.target.value });
 			this.timer = setTimeout(this.triggerChange, WAIT_INTERVAL);
-
 		}
 	};
 

@@ -38,8 +38,6 @@ import {
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 import { compose, withProps, withHandlers } from "recompose";
 
-import Geocode from "react-geocode";
-
 import {
 	SelectionState,
 	PagingState,
@@ -105,7 +103,7 @@ import { getCustomers } from '../../../../store/actions';
 // 	);
 // }
 
-Geocode.setApiKey("AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA");
+
 
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -768,12 +766,13 @@ class CustomerListContent extends Component {
 	shouldComponentUpdate(nextProps, nextState) {
 		console.log("shouldComponentUpdate", this.state !== nextState);
 
-		return this.state !== nextState
-			|| this.props.mapViewState !== nextProps.mapViewState
+		// return this.state !== nextState
+		// || this.props.mapViewState !== nextProps.mapViewState
 		// || this.props.data !== nextProps.data 
 		// || this.props.loading !== nextProps.loading 
 		// || this.props.pins !== nextProps.pins 
 		// || this.props.searchText !== nextProps.searchText
+		return true;
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -923,6 +922,13 @@ class CustomerListContent extends Component {
 						current_lat: 42.910772,
 						current_long: -78.74557
 					})
+
+					if (this.state.addrLat == undefined) {
+						this.setState({
+							addrLat: 42.910772,
+							addrLng: -78.74557
+						})
+					}
 					if (this.props.locationFilterValue) {
 						this.initRowsFromRawJson();
 					}
@@ -938,7 +944,7 @@ class CustomerListContent extends Component {
 		return this.props.data;
 	}
 
-	
+
 
 	initRowsFromRawJson = (rawData = this.props.customers, locationFilterValue = this.props.locationFilterValue) => {
 		console.log("initRowsFromRawJson", "CustomerListContent.js", this.props.regionId, this.props.statusId, rawData)
@@ -981,7 +987,7 @@ class CustomerListContent extends Component {
 	filterPins(pins, locationFilterValue) {
 		// this.setState({ gmapVisible: !this.state.gmapVisible });
 		console.log("-------filterPins---------", pins)
-		switch (locationFilterValue) {
+		switch (locationFilterValue.id) {
 			case "locationAll":
 				if (!this.state.gmapVisible) {
 					this.setState({
@@ -999,7 +1005,19 @@ class CustomerListContent extends Component {
 
 				break;
 			case "locationNearBy":
-				let _pins = this.nearbyLocations(pins, { lat: this.state.current_lat, lng: this.state.current_long }, 15)
+				let _pins = []
+				this.setState({
+					addrLat: this.state.current_lat,
+					addrLng: this.state.current_long
+				})
+
+				_pins = this.nearbyLocations(
+					pins,
+					{
+						lat: this.state.current_lat,
+						lng: this.state.current_long
+					},
+					locationFilterValue.miles)
 
 				if (!this.state.gmapVisible) {
 					this.setState({
@@ -1018,15 +1036,44 @@ class CustomerListContent extends Component {
 				break;
 			case "locationNearSpecificAddress":
 
+				let _ = []
+				if (locationFilterValue.addrZipcode !== undefined) {
+					this.setState({
+						addrLat: locationFilterValue.addrZipcode.lat,
+						addrLng: locationFilterValue.addrZipcode.lng
+					})
+					_ = this.nearbyLocations(
+						pins,
+						{
+							lat: locationFilterValue.addrZipcode.lat,
+							lng: locationFilterValue.addrZipcode.lng
+						},
+						locationFilterValue.miles)
+				} else {
+					this.setState({
+						addrLat: this.state.current_lat,
+						addrLng: this.state.current_long
+					})
+					_ = this.nearbyLocations(
+						pins,
+						{
+							lat: this.state.current_lat,
+							lng: this.state.current_long
+						},
+						locationFilterValue.miles)
+				}
+
 				if (!this.state.gmapVisible) {
 					this.setState({
-						pins: [],
 						gmapVisible: !this.state.gmapVisible,
+						pins: [..._],
+						pins2: []
 					})
 				} else {
 					this.setState({
-						pins2: [],
 						gmapVisible: !this.state.gmapVisible,
+						pins: [],
+						pins2: [..._]
 					})
 				}
 				break;
@@ -1062,7 +1109,7 @@ class CustomerListContent extends Component {
 	// 	}
 	// }
 
-	nearbyLocations(pins, center, miles = 5) {
+	nearbyLocations(pins, center, miles = 5, addrZipcode = "") {
 		// let _nearbys = [];
 		// this.props.pins.forEach(x => {
 		// 	let dist = this.PythagorasEquirectangular(center.lat, center.lng, x.lat, x.lng);
@@ -1149,12 +1196,12 @@ class CustomerListContent extends Component {
 
 							{gmapVisible && (<MapWithAMarkerClusterer
 								markers={pins}
-								center={{ lat: this.state.current_lat, lng: this.state.current_long }}
+								center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
 							/>)}
 
 							{!gmapVisible && (<MapWithAMarkerClusterer2
 								markers={pins2}
-								center={{ lat: this.state.current_lat, lng: this.state.current_long }}
+								center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
 							/>)}
 
 						</div>
@@ -1193,11 +1240,9 @@ class CustomerListContent extends Component {
 								>
 									<DragDropProvider />
 
-									<VirtualTable
-										height="auto"
-									/>
 
-									{/* <PagingState
+
+									<PagingState
 										defaultCurrentPage={0}
 										// currentPage={currentPage}
 										// onCurrentPageChange={this.changeCurrentPage}
@@ -1206,7 +1251,8 @@ class CustomerListContent extends Component {
 										defaultPageSize={20}
 									/>
 
-									<PagingPanel pageSizes={pageSizes} /> */}
+									<PagingPanel pageSizes={pageSizes} />
+
 
 									<SelectionState
 										selection={selection}
@@ -1215,8 +1261,11 @@ class CustomerListContent extends Component {
 									{/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
 									<IntegratedSelection />
 
-									{/* <IntegratedPaging /> */}
+									<IntegratedPaging />
 
+									<VirtualTable
+										height="auto"
+									/>
 
 									<SortingState
 										sorting={sorting}

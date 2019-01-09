@@ -1,4 +1,6 @@
 import React, { Component, Fragment } from 'react';
+import Geocode from "react-geocode";
+
 import { Paper, withStyles } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
 import keycode from 'keycode';
@@ -20,6 +22,9 @@ import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
+
+Geocode.setApiKey("AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA");
+
 const styles = theme => ({
 	root: {
 
@@ -142,6 +147,9 @@ const stateNames = [
 	}
 ];
 
+const WAIT_INTERVAL = 1000
+const ENTER_KEY = 13
+
 class FilterPanel extends Component {
 
 
@@ -168,7 +176,9 @@ class FilterPanel extends Component {
 		AccountTypes: -2,
 		AccountExecutive: 0,
 
-		Location: this.props.locationFilterValue
+		Location: this.props.locationFilterValue.id,
+		NearbyRadius: this.props.locationFilterValue.miles,
+		AddressZipcodeRadius: this.props.locationFilterValue.miles,
 	};
 
 
@@ -232,12 +242,124 @@ class FilterPanel extends Component {
 			[name]: event.target.value
 		});
 
-		if (name === "Location") {
-			this.props.selectLocationFilter(event.target.value)
-
-
+		let val = event.target.value
+		let onLocationFilter = this.onLocationFilter
+		if (name === "SpecificAddress") {
+			clearTimeout(this.timer)
+			this.timer = setTimeout(
+				function () {
+					onLocationFilter(name, val);
+				},
+				WAIT_INTERVAL)
+		}
+		else if (
+			name === "Location"
+			|| name === "NearbyRadius"
+			|| name === "AddressZipcodeRadius"
+		) {
+			this.onLocationFilter(name, val)
 		}
 	};
+
+	onLocationFilter = (name, value) => {
+
+		let payload = {
+			id: this.state.Location,
+			miles: this.state.Location === "locationNearBy" ? this.state.NearbyRadius : (this.state.Location === "locationNearSpecificAddress" ? this.state.AddressZipcodeRadius : 0),
+			addrZipcode:
+				this.state.Location === "locationNearSpecificAddress" ?
+					this.state.SpecificAddress : undefined
+		}
+		switch (name) {
+			case "Location":
+				payload = {
+					...payload,
+					id: value,
+					miles: value === "locationNearBy" ?
+						this.state.NearbyRadius :
+						(value === "locationNearSpecificAddress" ?
+							this.state.AddressZipcodeRadius :
+							0),
+				}
+				if (value != "locationNearSpecificAddress") {
+
+				} else {
+					Geocode.fromAddress(this.state.SpecificAddress).then(
+						response => {
+							const { lat, lng } = response.results[0].geometry.location;
+							// console.log(lat, lng);
+
+							payload = {
+								...payload,
+								addrZipcode: {
+									lat,
+									lng,
+									addr: this.state.SpecificAddress
+								}
+							}
+							this.props.selectLocationFilter(payload)
+							return
+						},
+						error => {
+							// console.error(error);
+							payload = {
+								...payload,
+								addrZipcode: undefined
+							}
+							this.props.selectLocationFilter(payload)
+							return
+						}
+					);
+					return
+				}
+
+				break;
+			case "NearbyRadius":
+				payload = {
+					...payload,
+					miles: value
+				}
+				break;
+			case "SpecificAddress":
+
+				Geocode.fromAddress(value).then(
+					response => {
+						const { lat, lng } = response.results[0].geometry.location;
+						// console.log(lat, lng);
+
+						payload = {
+							...payload,
+							addrZipcode: {
+								lat,
+								lng,
+								addr: value
+							}
+						}
+						this.props.selectLocationFilter(payload)
+						return
+					},
+					error => {
+						// console.error(error);
+						payload = {
+							...payload,
+							addrZipcode: undefined
+						}
+						this.props.selectLocationFilter(payload)
+						return
+					}
+				);
+
+				return;
+			case "AddressZipcodeRadius":
+				payload = {
+					...payload,
+					miles: value
+				}
+				break;
+		}
+		console.log(payload)
+		this.props.selectLocationFilter(payload)
+	}
 
 	handleChange1 = event => {
 		this.setState({ [event.target.name]: event.target.value });
@@ -455,52 +577,53 @@ class FilterPanel extends Component {
 								}}>
 									<h3>Location</h3>
 									<RadioGroup
-
-
 										aria-label="Location"
 										name="Location"
 										className={classes.group}
-										value={this.state.Location}
+										value={this.state.Location === undefined ? "locationAll" : this.state.Location}
 										onChange={this.handleChange('Location')}
 									>
 
 										<FormControlLabel value="locationAll" control={<Radio />} label="All" />
 										<FormControlLabel value="locationNearBy" control={<Radio />} label="NearBy" />
-
-										<TextField
-											select
-
-											id="NearbyRadius"
-											label="NearbyRadius"
-											className={classes.textField}
-											InputLabelProps={{
-												shrink: true
-											}}
-											value={this.state.NearbyRadius === undefined ? 2 : this.state.NearbyRadius}
-											onChange={this.handleChange('NearbyRadius')}
-											margin="normal"
-											variant="outlined"
-											style={{
-												width: "100%",
-												// maxWidth: 200,
-												// display: this.state.Location === "locationNearBy" ? 'block' : 'none'
-											}}
-										// fullWidth
-										>
-											{
-												Array.apply(null, { length: 15 }).map(Number.call, Number)
-													.map((val, index) => (
-														<MenuItem key={index} value={index}>
-															{(index + 1) * 5} Miles
-													</MenuItem>
-													))
-											}
-										</TextField>
-
 										<FormControlLabel value="locationNearSpecificAddress" control={<Radio />} label="Near Specific Address" />
-
-
 									</RadioGroup>
+
+
+								</div>
+
+								<div style={{ marginTop: 0, display: 'flex', flexDirection: 'column' }}>
+
+									<TextField
+										select
+
+										id="NearbyRadius"
+										label="Radius"
+										className={classes.textField}
+										InputLabelProps={{
+											shrink: true
+										}}
+										value={this.state.NearbyRadius === undefined ? 5 : this.state.NearbyRadius}
+										onChange={this.handleChange('NearbyRadius')}
+										margin="normal"
+										variant="outlined"
+										style={{
+											width: "100%",
+											// maxWidth: 200,
+											display: this.state.Location === "locationNearBy" ? 'block' : 'none'
+										}}
+									// fullWidth
+									>
+										{
+											Array.from({ length: 15 })
+												.map((val, index) => (
+													<MenuItem key={index} value={(index + 1) * 5}>
+														{(index + 1) * 5} Miles
+													</MenuItem>
+												))
+										}
+									</TextField>
+
 									<TextField
 										id="SpecificAddress"
 										label="Address"
@@ -509,44 +632,43 @@ class FilterPanel extends Component {
 										margin="normal"
 										variant="outlined"
 										style={{
-											width: "100%",
-											// maxWidth: 200,
-											// display: this.state.Location === "locationNearSpecificAddress" ? 'block' : 'none'
+											width: 180,
+											maxWidth: 180,
+											display: this.state.Location === "locationNearSpecificAddress" ? 'block' : 'none'
 										}}
 									// fullWidth
 									/>
 									<TextField
 										select
 
-										id="Radius"
+										id="AddressZipcodeRadius"
 										label="Radius"
 										className={classes.textField}
 										InputLabelProps={{
 											shrink: true
 										}}
-										value={this.state.Radius === undefined ? 0 : this.state.Radius}
-										onChange={this.handleChange('Radius')}
+										value={this.state.AddressZipcodeRadius === undefined ? 5 : this.state.AddressZipcodeRadius}
+										onChange={this.handleChange('AddressZipcodeRadius')}
 										margin="normal"
 										variant="outlined"
 										style={{
-											width: "100%",
-											// maxWidth: 200,
-											// display: this.state.Location === "locationNearSpecificAddress" ? 'block' : 'none'
+											width: 180,
+											maxWidth: 180,
+											display: this.state.Location === "locationNearSpecificAddress" ? 'block' : 'none'
 										}}
 									// fullWidth
 									>
 										{
-											Array.apply(null, { length: 15 }).map(Number.call, Number)
+											Array.from({ length: 15 })
 												.map((val, index) => (
-													<MenuItem key={index} value={index}>
+													<MenuItem key={index} value={(index + 1) * 5}>
 														{(index + 1) * 5} Miles
 													</MenuItem>
 												))
 										}
 									</TextField>
-								</div>
 
-								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
+
 									<TextField
 										select
 
@@ -560,7 +682,7 @@ class FilterPanel extends Component {
 										onChange={this.handleChange('AccountTypes')}
 										margin="normal"
 										variant="outlined"
-										style={{ width: '100%' }}>
+										style={{ width: 180 }}>
 										{/* {[{
 											value: 0, label: "All"
 										}, {
@@ -583,9 +705,6 @@ class FilterPanel extends Component {
 										}
 
 									</TextField>
-								</div>
-
-								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
 
 									<TextField
 										select
@@ -600,7 +719,7 @@ class FilterPanel extends Component {
 										onChange={this.handleChange('AccountExecutive')}
 										margin="normal"
 										variant="outlined"
-										style={{ width: '100%' }}>
+										style={{ width: 180 }}>
 										{[{
 											value: 0, label: "All"
 										}, {
