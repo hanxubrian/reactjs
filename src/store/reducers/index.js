@@ -14,6 +14,7 @@ import franchiseeReports from'./franchisee.reports.reducer';
 import customers from './customers.reducer'
 import leases from './leases.reducer'
 import leads from './leads.reducer'
+import findersFees from './findersfees.reducer'
 
 
 const createReducer = (asyncReducers) =>
@@ -33,6 +34,7 @@ const createReducer = (asyncReducers) =>
 		customers,
         franchiseeReports,
         leads,
+        findersFees,
         ...asyncReducers
     });
 

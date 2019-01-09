@@ -6,7 +6,7 @@ import keycode from 'keycode';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import lightBlue from '@material-ui/core/colors/lightBlue';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+import { MuiThemeProvider, createMuiTheme, MenuItem, FormControl, InputLabel, Select } from '@material-ui/core';
 import {FuseThemes} from '@fuse';
 
 import 'date-fns'
@@ -161,6 +161,39 @@ class FilterPanel extends Component {
                     <Paper className="flex flex-1 flex-col min-h-px p-20">
                         {/*<MuiThemeProvider theme={FuseThemes['mainThemeLight']}>*/}
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <FormControl className={classes.formControl} style={{width: 200}}>
+                                <h3 className="mb-20">Invoice Date</h3>
+                                {/* <InputLabel htmlFor="age-simple">Invoice Date</InputLabel> */}
+                                <Select
+                                value={this.state.invoiceDate}
+                                onChange={this.handleChange1}
+                                inputProps={{
+                                name: 'invoiceDate',
+                                id  : 'invoice_date'
+                                }}
+                                >
+                                <MenuItem value="">
+                                <em>None</em>
+                                </MenuItem>
+                                <MenuItem value={1}>This Week</MenuItem>
+                                <MenuItem value={2}>This Week-to-date</MenuItem>
+                                <MenuItem value={3}>This Month</MenuItem>
+                                <MenuItem value={4}>This Month-to-date</MenuItem>
+                                <MenuItem value={5}>This Quarter</MenuItem>
+                                <MenuItem value={6}>This Quarter-to-Date</MenuItem>
+                                <MenuItem value={7}>This Fiscal Year</MenuItem>
+                                <MenuItem value={8}>This Fiscal Year-to-date</MenuItem>
+                                <MenuItem value={9}>Today</MenuItem>
+                                <MenuItem value={10}>Yesterday</MenuItem>
+                                <MenuItem value={11}>This Month</MenuItem>
+                                <MenuItem value={12}>Last Quarter</MenuItem>
+                                <MenuItem value={13}>Last Year</MenuItem>
+                                <MenuItem value={14}>Custom Date</MenuItem>
+                                <MenuItem value={15}>Period</MenuItem>
+                                </Select>
+                            </FormControl>
+                                <br></br>
+
                             <h3 className="mb-20">Filter by Date</h3>
                             <DatePicker
                                 margin="none"
@@ -188,36 +221,7 @@ class FilterPanel extends Component {
                                 color="secondary"
                                 style={{marginTop: '30px!important'}}
                             />
-                            {/*<FormControl className={classes.formControl} style={{width: 200}}>*/}
-                            {/*/!*<InputLabel htmlFor="age-simple">Invoice Date</InputLabel>*!/*/}
-                            {/*<Select*/}
-                            {/*value={this.state.invoiceDate}*/}
-                            {/*onChange={this.handleChange1}*/}
-                            {/*inputProps={{*/}
-                            {/*name: 'invoiceDate',*/}
-                            {/*id  : 'invoice_date'*/}
-                            {/*}}*/}
-                            {/*>*/}
-                            {/*<MenuItem value="">*/}
-                            {/*<em>None</em>*/}
-                            {/*</MenuItem>*/}
-                            {/*<MenuItem value={1}>This Week</MenuItem>*/}
-                            {/*<MenuItem value={2}>This Week-to-date</MenuItem>*/}
-                            {/*<MenuItem value={3}>This Month</MenuItem>*/}
-                            {/*<MenuItem value={4}>This Month-to-date</MenuItem>*/}
-                            {/*<MenuItem value={5}>This Quarter</MenuItem>*/}
-                            {/*<MenuItem value={6}>This Quarter-to-Date</MenuItem>*/}
-                            {/*<MenuItem value={7}>This Fiscal Year</MenuItem>*/}
-                            {/*<MenuItem value={8}>This Fiscal Year-to-date</MenuItem>*/}
-                            {/*<MenuItem value={9}>Today</MenuItem>*/}
-                            {/*<MenuItem value={10}>Yesterday</MenuItem>*/}
-                            {/*<MenuItem value={11}>This Month</MenuItem>*/}
-                            {/*<MenuItem value={12}>Last Quarter</MenuItem>*/}
-                            {/*<MenuItem value={13}>Last Year</MenuItem>*/}
-                            {/*<MenuItem value={14}>Custom Date</MenuItem>*/}
-                            {/*<MenuItem value={15}>Period</MenuItem>*/}
-                            {/*</Select>*/}
-                            {/*</FormControl>*/}
+
                         </MuiPickersUtilsProvider>
                         {/*</MuiThemeProvider>*/}
                         <div style={{marginTop: 20, display: 'flex', flexDirection: 'column'}}>
