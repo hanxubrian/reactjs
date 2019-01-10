@@ -28,7 +28,6 @@ export function getFranchisees(regionId, statusId, location , latitude , longitu
     regionId = regionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [regionId];
 
     return (dispatch) => {
-
         dispatch({
             type: GET_FRANCHISEES_FETCH_START,
             payload: true

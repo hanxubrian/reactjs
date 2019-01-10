@@ -9,6 +9,10 @@ const initialState = {
 	bOpenedSummaryPanel: false,
 	bOpenedFilterPanel: false,
 	bOpenedMapView: false,
+	bLeasesFetchStart: false,
+	regionId: [24],
+    statusId: [21, 24],
+    searchText: "",
 	transactionStatus: { checkedPaid: true, checkedPP: true, checkedComplete: true, checkedOpen: true },
 	leaseForm: {
 		type: 'new',
@@ -25,8 +29,17 @@ const leases = function (state = initialState, action) {
 		case Actions.GET_ALL_LEASES:
 			{
 				return {
-					...initialState,
-					leasesDB: action.payload, bLoadedLeases: true
+					...state,
+					leasesDB: action.payload,
+					bLoadedLeases: true,
+					bLeasesFetchStart: false
+				};
+			}
+		case Actions.GET_LEASES_FETCH_START:
+			{
+				return {
+					...state,
+					bLeasesFetchStart: true
 				};
 			}
 		case Actions.TOGGLE_FILTER_PANEL:

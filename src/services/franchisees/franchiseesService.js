@@ -33,7 +33,7 @@ class franchiseesService {
             "Radius":0
         };
         return new Promise((resolve, reject) => {
-            axios_instance.post(`${BASE_API_URL}/v1/franchisee/franchiseeList`,data)
+            axios_instance.post(`${BASE_API_URL}/v1/franchisee/franchiseeList`, data)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);
