@@ -20,6 +20,7 @@ import classNames from 'classnames';
 
 //third party
 import moment from "moment"
+import _ from "lodash"
 
 import {UPDATE_FROM_DATE_INVOICE, UPDATE_TO_DATE_INVOICE} from "../../../../store/actions";
 
@@ -89,7 +90,9 @@ class FilterPanel extends Component {
         invoiceStatus: [],
         FromDate: undefined,
         ToDate: undefined,
-        invoiceDateOption: LAST_YEAR
+        invoiceDateOption: THIS_MONTH,
+        invoiceDatePeriodMonth: moment().month(),
+        invoiceDatePeriodYear: moment().year(),
     };
 
     componentDidMount()
@@ -116,6 +119,15 @@ class FilterPanel extends Component {
         }
         if(prevProps.ToDate!==this.props.ToDate){
             this.setState({ToDate: this.props.ToDate})
+        }
+
+        if(prevState.invoiceDatePeriodYear !== this.state.invoiceDatePeriodYear ||
+            prevProps.invoiceDatePeriodMonth !== this.state.invoiceDatePeriodMonth) {
+            let startDate, endDate;
+            startDate = moment().year(this.state.invoiceDatePeriodYear).month(this.state.invoiceDatePeriodMonth).startOf('month').format("MM/DD/YYYY");
+            endDate = moment().year(this.state.invoiceDatePeriodYear).month(this.state.invoiceDatePeriodMonth).endOf('month').format("MM/DD/YYYY");
+            this.props.updateDate(UPDATE_FROM_DATE_INVOICE, startDate);
+            this.props.updateDate(UPDATE_TO_DATE_INVOICE, endDate);
         }
 
         if ( this.props.state !== prevProps.state )
@@ -224,6 +236,11 @@ class FilterPanel extends Component {
         }
     };
 
+    handleChangePeriod = event =>{
+        console.log('name=',event.target.name, event.target.value);
+        this.setState({[event.target.name]: event.target.value});
+    };
+
     handleInvoiceFromDateChange = date => {
         this.setState({FromDate: date});
         this.props.updateDate(UPDATE_FROM_DATE_INVOICE, moment(date).format("MM/DD/YYYY"));
@@ -237,6 +254,9 @@ class FilterPanel extends Component {
     render()
     {
         const {classes} = this.props;
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const years = _.range(moment().year(), 2000,-1);
+        console.log('month=', this.state.invoiceDatePeriodYear);
         return (
             <div className={classNames(classes.root)}>
                 <div className={classNames("flex flex-col")}>
@@ -304,6 +324,40 @@ class FilterPanel extends Component {
                                     />
                                 </div>
                             </MuiPickersUtilsProvider>
+                        )}
+                        { this.state.invoiceDateOption===PERIOD && (
+                            <div className="flex flex-col mt-20">
+                                <h3 className="mb-20">Choose a Period</h3>
+                                <Select
+                                    value={this.state.invoiceDatePeriodYear}
+                                    onChange={this.handleChangePeriod}
+                                    inputProps={{
+                                        name: 'invoiceDatePeriodYear',
+                                        id  : 'invoiceDatePeriodYear'
+                                    }}
+                                >
+                                    {
+                                        years.map((y, index)=> {
+                                            return <MenuItem key={index} value={y}>{y}</MenuItem>
+                                        })
+                                    }
+                                </Select>
+                                <br></br>
+                                <Select
+                                    value={this.state.invoiceDatePeriodMonth}
+                                    onChange={this.handleChangePeriod}
+                                    inputProps={{
+                                        name: 'invoiceDatePeriodMonth',
+                                        id  : 'invoiceDatePeriodMonth'
+                                    }}
+                                >
+                                    {
+                                        months.map((m, index)=> {
+                                            return <MenuItem key={index} value={index}>{m}</MenuItem>
+                                        })
+                                    }
+                                </Select>
+                            </div>
                         )}
 
                         <div style={{marginTop: 20, display: 'flex', flexDirection: 'column'}}>
