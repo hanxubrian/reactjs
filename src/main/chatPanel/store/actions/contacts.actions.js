@@ -65,10 +65,11 @@ export function addUnread(userId)
         contacts.map((item, i) => {
             if (item.id === userId)
             {
-                if (item.unread === null)
+                let i = parseInt(item.unread);
+                if (i === undefined)
                     item.unread = "1";
                 else
-                    item.unread = parseInt(item.unread) + 1;
+                    item.unread = "" + (i + 1);
             }
         });
        

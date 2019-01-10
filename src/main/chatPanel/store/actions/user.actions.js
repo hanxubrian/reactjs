@@ -10,7 +10,7 @@ export function getUserData()
 
             const userId = getState().auth.login.Username;
             const name = getState().auth.login.firstName ;
-            const avatar = getState().auth.user.data.photoURL;
+            const avatar = getState().auth.app.loginLogo.photoURL;
 
             return chatService.getUserData(userId, name, avatar).then((user) =>
 			Promise.all([
