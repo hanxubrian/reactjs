@@ -927,8 +927,8 @@ class CustomerListContent extends Component {
 
 					if (this.state.addrLat == undefined) {
 						this.setState({
-							current_lat: position.coords.latitude,
-							current_long: position.coords.longitude
+							addrLat: position.coords.latitude,
+							addrLng: position.coords.longitude
 						})
 						// this.setState({
 						// 	addrLat: 42.910772,
