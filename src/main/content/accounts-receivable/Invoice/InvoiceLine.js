@@ -1,10 +1,9 @@
 import React from 'react';
-import NumberFormat from 'react-number-format';
 import {withRouter} from 'react-router-dom';
 
 //Material UI core and icons
 import {
-    Snackbar, SnackbarContent,
+    Snackbar, SnackbarContent, Input,TextField,
     Paper, Icon, IconButton, Select, OutlinedInput, MenuItem, FormControl, Fab
 } from '@material-ui/core'
 import {withStyles} from '@material-ui/core/styles';
@@ -22,12 +21,17 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
+// import Autosuggest from '../../../../react-autosuggest';
+import Autosuggest from 'react-autosuggest';
 
 //Store
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
 import keycode from "keycode";
+
+//Utility
+import {NumberFormatCustom, escapeRegexCharacters} from '../../../../services/utils'
 
 //Snackbar
 const variantIcon = {
@@ -105,11 +109,11 @@ const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
 
 let counter = 0;
 
-function createFranchisee(parent_id,id, franchisee="Franchisee", name="Franchisee Name", amount=0) {
+function createFranchisee(parent_id,id, fnumber="", name="", amount=0) {
     return {
         id: parent_id,
         fid: id,
-        franchisee,
+        fnumber,
         name,
         amount,
         type: 'franch'
@@ -132,51 +136,6 @@ function createData(billing='Regular Billing', service='Adjust-Balance', descrip
         type: 'line'
     };
 }
-
-const rows = [
-    {
-        id            : 'billing',
-        numeric       : false,
-        disablePadding: false,
-        label         : 'Billing'
-    },
-    {
-        id            : 'service',
-        numeric       : false,
-        disablePadding: false,
-        label         : 'Service'
-    },
-    {
-        id            : 'description',
-        numeric       : false,
-        disablePadding: false,
-        label         : 'Description'
-    },
-    {
-        id            : 'quantity',
-        numeric       : true,
-        disablePadding: false,
-        label         : 'Quantity'
-    },
-    {
-        id            : 'amount',
-        numeric       : true,
-        disablePadding: false,
-        label         : 'Amount'
-    },
-    {
-        id            : 'markup',
-        numeric       : true,
-        disablePadding: false,
-        label         : 'Markup (%)'
-    },
-    {
-        id            : 'extend_amount',
-        numeric       : true,
-        disablePadding: false,
-        label         : 'Extended Amount'
-    }
-];
 
 const styles = theme => ({
     root        : {
@@ -205,13 +164,13 @@ const styles = theme => ({
             '& .f1': {
                 width: '25%',
                 minWidth: 100,
-                padding: 10,
-                border: '1px solid lightgray',
+                padding: 0,
+                border: '0px solid lightgray',
                 borderRadius: 6
             },
             '& .f2': {
                 width: '75%',
-                padding: 10,
+                padding: 8,
                 border: '1px solid lightgray',
                 borderRadius: 6,
                 marginLeft: 10
@@ -271,12 +230,52 @@ const styles = theme => ({
     tableTheadRow:{
         backgroundColor: theme.palette.primary.main
     },
+    input: {
+        margin: 0,
+    },
+    fInput: {
+        width: '96%',
+        marginLeft: 15,
+        '& input': {
+            fontSize: 14,
+            textAlign: 'right',
+        }
+    },
+    container: {
+        position: 'relative',
+        width: '100%'
+    },
+    suggestionsContainerOpen: {
+        position: 'fixed',
+        zIndex: 100,
+        marginTop: theme.spacing.unit,
+        maxHeight: 200,
+        overflowY: 'scroll',
+        backgroundColor: 'white',
+        borderRadius: 6,
+        border: '1px solid lightgray'
+    },
+    suggestion: {
+        display: 'block',
+    },
+    suggestionsList: {
+        margin: 0,
+        padding: 0,
+        listStyleType: 'none',
+    },
 });
+{/*<span>{suggestion.Number} - {suggestion.Name}</span>*/}
+function renderSuggestion (suggestion,  { isHighlighted }) {
+    return (
+    <MenuItem selected={isHighlighted} component="div">
+        <span>{suggestion.Number} - {suggestion.Name}</span>
+    </MenuItem>
+    );
+}
 
 class InvoiceLineTable extends React.Component {
     state = {
         order      : 'asc',
-        // orderBy    : 'billing',
         selected   : [],
         data       : [
             createData("Regular Billing", "Adjust-Balance", " ",' '),
@@ -285,21 +284,65 @@ class InvoiceLineTable extends React.Component {
         rowsPerPage: 10,
         labelWidth: 0,
         openSnack: false,
-        snackMessage: 'Please fill the data'
+        snackMessage: 'Please fill the data',
+        nameValue0: '',
+        nameValue1: '',
+        nameValue2: '',
+        nameValue3: '',
+        nameValue4: '',
+        nameValue5: '',
+        nameValue6: '',
+        nameValue7: '',
+        nameValue8: '',
+        nameValue9: '',
+        nameValue10: '',
+        nameValue11: '',
+        nameValue12: '',
+        nameValue13: '',
+        nameValue14: '',
+        nameValue15: '',
+        nameValue16: '',
+        nameValue17: '',
+        nameValue18: '',
+        nameValue19: '',
+        nameValue20: '',
+        nameSuggestions: [],
+        numberValue0: '',
+        numberValue1: '',
+        numberValue2: '',
+        numberValue3: '',
+        numberValue4: '',
+        numberValue5: '',
+        numberValue6: '',
+        numberValue7: '',
+        numberValue8: '',
+        numberValue9: '',
+        numberValue10: '',
+        numberValue11: '',
+        numberValue12: '',
+        numberValue13: '',
+        numberValue14: '',
+        numberValue15: '',
+        numberValue16: '',
+        numberValue17: '',
+        numberValue18: '',
+        numberValue19: '',
+        numberValue20: '',
+        numberSuggestions: []
     };
 
     constructor(props) {
         super(props);
-        this.addInvoiceLineFunction = this.addInvoiceLineFunction.bind(this);
+        // this.addInvoiceLineFunction = this.addInvoiceLineFunction.bind(this);
     }
 
     componentWillUnmount() {
-        document.removeEventListener("keydown", this.addInvoiceLineFunction, false);
+        // document.removeEventListener("keydown", this.addInvoiceLineFunction, false);
     }
 
     addInvoiceLineFunction(event){
         if(keycode(event)==='enter' || keycode(event)==='down'){
-            this.addLineData();
+            // this.addLineData();
         }
     }
 
@@ -333,6 +376,57 @@ class InvoiceLineTable extends React.Component {
         }
     }
 
+    // For Franchisee suggestion
+    getSuggestions = (value) => {
+        const escapedValue = escapeRegexCharacters(value.trim());
+        const regex = new RegExp('^' + escapedValue, 'i');
+
+        let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList;
+        return franchisees.filter(f => regex.test(f.Number) || regex.test(f.Name));
+    };
+
+    getSuggestionfName = (suggestion) => {
+        return suggestion.Name;
+    };
+
+    onNameChange = row =>(event, { newValue }) => {
+        this.setState({
+            ["nameValue"+row.f_index]: newValue
+        });
+        const data = [...this.state.data];
+        data[row.id].franchisees[row.fid].name = newValue;
+        this.setState({data: data});
+    };
+    onNameChange0 = row => event => {
+        console.log('onNameChange=', row);
+        console.log('event.target.value=', event.target.value);
+        console.log('f_index=', row.f_index);
+        const data = [...this.state.data];
+        data[row.id].franchisees[row.fid].name = event.target.value;
+        this.setState({data: data});
+        let aNames = [...this.state.aNames];
+        aNames[row.f_index] = event.target.value;
+        this.setState({nameValue: event.target.value});
+    };
+
+    onNameSuggestionsFetchRequested = ({ value }) => {
+        this.setState({
+            nameSuggestions: this.getSuggestions(value)
+        });
+    };
+
+    onNameSuggestionsClearRequested = () => {
+        this.setState({
+            nameSuggestions: []
+        });
+    };
+
+    onNameSuggestionSelected = row => (event, { suggestion }) => {
+        const data = [...this.state.data];
+        data[row.id].franchisees[row.fid].fnumber = suggestion.Number;
+        this.setState({data: data});
+    };
+
     handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -346,19 +440,19 @@ class InvoiceLineTable extends React.Component {
         const lastRow = lineData[lineData.length-1];
 
         if(lastRow.description===' ') {
-            this.setState({snackMessage: 'Please enter description'})
+            this.setState({snackMessage: 'Please enter description'});
             this.setState({openSnack: true});
             return;
         }
 
         if(lastRow.quantity===' ') {
-            this.setState({snackMessage: 'Please enter quantity'})
+            this.setState({snackMessage: 'Please enter quantity'});
             this.setState({openSnack: true});
             return;
         }
 
         if(lastRow.amount===' ') {
-            this.setState({snackMessage: 'Please enter amount'})
+            this.setState({snackMessage: 'Please enter amount'});
             this.setState({openSnack: true});
             return;
         }
@@ -373,9 +467,7 @@ class InvoiceLineTable extends React.Component {
     };
 
     addFranchiseeLine = (n) =>{
-        console.log('fired franchiseeline=', n);
         const data = [...this.state.data];
-        console.log('data=', data);
         let fline = createFranchisee(n.id, n.franchisees.length);
         n.franchisees = [...n.franchisees, fline];
 
@@ -470,6 +562,7 @@ class InvoiceLineTable extends React.Component {
             />
         );
     }
+
     renderEditableMarkup(cellInfo, id) {
         if (cellInfo.id>this.state.data.length-1) return;
         return (
@@ -489,22 +582,39 @@ class InvoiceLineTable extends React.Component {
         );
     }
 
+    handleChange = row => event => {
+        const data = [...this.state.data];
+        data[row.id].franchisees[row.fid].amount = event.target.value;
+        this.setState({data: data});
+    };
+
     render()
     {
         const {classes} = this.props;
         const {data} = this.state;
 
+        const {
+            nameValue,
+            nameSuggestions,
+            numberValue,
+            numberSuggestions
+        } = this.state;
+
         let all_data = [];
 
+        let f_index = 0;
         data.forEach(d=>{
             if(d.franchisees.length===0) return all_data.push(d);
             let franchisees = d.franchisees;
             all_data.push(d);
             franchisees.forEach(f=>{
-                all_data.push(f);
+                all_data.push({f_index: f_index++,...f});
             });
         });
-        console.log('row=', all_data);
+
+        console.log('all data=', all_data);
+        console.log('state=', this.state);
+
         return (
             <Paper className={classNames(classes.root)}>
                 <div className={classNames(classes.tableWrapper, "flex flex-col h-full")}>
@@ -542,7 +652,6 @@ class InvoiceLineTable extends React.Component {
                                         style: {display: 'none'},
                                         className: {}
                                     };
-                                // else if(column.Header==='Service' || column.Header==='extended')
                                 return {
                                     className: classNames(
                                         {"justify-end": column.Header==='Service'},
@@ -566,7 +675,6 @@ class InvoiceLineTable extends React.Component {
                                         Header: "Billing",
                                         accessor: "billing",
                                         Cell: row=>{
-                                            console.log('row=', row);
                                             if(row.original.type==='line')
                                                 return (
                                                     <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl)} style={{marginBottom: '0!important', display: row.original.type!=='line'?'none':'block'}}>
@@ -665,8 +773,39 @@ class InvoiceLineTable extends React.Component {
                                             else
                                                 return (
                                                     <div className={classNames("flex flex-row w-full justify-start")}>
-                                                        <div className="f1">{row.original.franchisee}</div>
-                                                        <div className="f2">{row.original.name}</div>
+                                                        <div className="f1">
+                                                            {row.original.fnumber}
+                                                        </div>
+                                                        <div className="f2">
+                                                            <Autosuggest
+                                                                suggestions={nameSuggestions}
+                                                                onSuggestionsFetchRequested={this.onNameSuggestionsFetchRequested}
+                                                                onSuggestionsClearRequested={this.onNameSuggestionsClearRequested}
+                                                                onSuggestionSelected={this.onNameSuggestionSelected(row.original)}
+                                                                getSuggestionValue={this.getSuggestionfName}
+                                                                renderSuggestion={renderSuggestion}
+                                                                inputProps={
+                                                                    {
+                                                                        placeholder: "Search Franchisee Name or Number",
+                                                                        value: this.state['nameValue'+row.original.f_index],
+                                                                        onChange: this.onNameChange(row.original)
+                                                                    }
+                                                                }
+                                                                theme={{
+                                                                    container: classNames(classes.container),
+                                                                    suggestionsContainerOpen: classes.suggestionsContainerOpen,
+                                                                    suggestionsList: classes.suggestionsList,
+                                                                    suggestion: classes.suggestion,
+                                                                }}
+                                                                renderSuggestionsContainer={options => (
+                                                                    <Paper {...options.containerProps} square>
+                                                                        {options.children}
+                                                                    </Paper>
+                                                                )}
+                                                            />
+                                                            {/*{row.original.name}*/}
+
+                                                        </div>
                                                     </div>
                                                 )
                                         },
@@ -714,7 +853,19 @@ class InvoiceLineTable extends React.Component {
                                             if(row.original.type==='line')
                                                 return (this.renderEditableMarkup(row.original, 'markup'));
                                             else
-                                                return (<div className="" style={{width: '96%', marginLeft: 15, border:'1px solid lightgray', borderRadius: 6, padding:'8px 12px'}}>{row.original.amount}</div>)
+                                            // return (<div className="" style={{width: '96%', marginLeft: 15, border:'1px solid lightgray', borderRadius: 6, padding:'8px 12px'}}>{row.original.amount}</div>)
+                                                return (
+                                                    <div className="flex flex-wrap">
+                                                        <TextField
+                                                            className={classes.fInput}
+                                                            placeholder="Amount"
+                                                            value={row.original.amount}
+                                                            onChange={this.handleChange(row.original)}
+                                                            InputProps={{
+                                                                inputComponent: NumberFormatCustom,
+                                                            }}
+                                                        />
+                                                    </div>)
                                         },
                                         className: classNames(classes.tableTdEven, "flex items-center  text-right justify-end"),
                                         width: 100
@@ -810,10 +961,11 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({invoices })
+function mapStateToProps({invoices, franchisees})
 {
     return {
-        invoiceForm: invoices.invoiceForm
+        invoiceForm: invoices.invoiceForm,
+        franchisees: franchisees.franchiseesDB,
     }
 }
 

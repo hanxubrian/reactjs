@@ -340,6 +340,7 @@ class InvoiceApp extends Component {
             this.setState({franchisees: nextProps.franchisees.Data.Region[0].FranchiseeList});
         }
     }
+
     getInvoicesFromStatus =(rawData=this.props.invoices) =>{
         let temp=[];
         let all_temp=[];
@@ -367,14 +368,6 @@ class InvoiceApp extends Component {
     };
 
     componentDidMount(){
-        window.addEventListener('scroll', this.listenScrollEvent);
-        document.addEventListener("keydown", this.escFunction, false);
-        if(this.InputLabelRef) {
-            this.setState({
-                labelWidth: ReactDOM.findDOMNode(this.InputLabelRef).offsetWidth
-            });
-        }
-
         if(this.props.customers!==null){
             let temp = [];
             let regions = this.props.customers.Data.Regions;

@@ -40,6 +40,9 @@ import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
 import moment from 'moment'
 
+//Utility
+import {escapeRegexCharacters} from 'services/utils'
+
 const styles = theme => ({
     layoutForm: {
         flexDirection: 'row',
@@ -177,17 +180,16 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
     );
 }
 
-function escapeRegexCharacters(str) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
 class InvoiceForm extends Component {
     state = {
         customers: [],
+        franchisees: [],
         ...newInvoiceState,
         value: '',
         suggestions: [],
         selectedCustomer: null,
+        fSuggestions: [],
+        selectedFranchisee: null,
         labelWidth: 0,
         selectedWork: "",
         total: 0.0,
@@ -216,6 +218,18 @@ class InvoiceForm extends Component {
         });
     };
 
+    getSuggestionValue =  (suggestion) =>{
+        this.setState({selectedCustomer: suggestion});
+        return suggestion.CustomerName;
+    };
+
+    getSuggestions = (value) => {
+        const escapedValue = escapeRegexCharacters(value.trim());
+        const regex = new RegExp(escapedValue, 'i');
+
+        return this.props.customers.filter(customer => regex.test(customer.CustomerName));
+    };
+
     getTotal = () => {
         let subTotal = 0.0;
         let markup = 0.0;
@@ -229,18 +243,6 @@ class InvoiceForm extends Component {
         this.setState({subTotal: subTotal});
         this.setState({markup: markup});
         this.setState({total: subTotal+this.state.tax+markup});
-    };
-
-    getSuggestionValue =  (suggestion) =>{
-        this.setState({selectedCustomer: suggestion});
-        return suggestion.CustomerName;
-    };
-
-    getSuggestions = (value) => {
-        const escapedValue = escapeRegexCharacters(value.trim());
-        const regex = new RegExp(escapedValue, 'i');
-
-        return this.props.customers.filter(customer => regex.test(customer.CustomerName));
     };
 
     componentDidUpdate(prevProps, prevState, snapshot){
@@ -268,11 +270,6 @@ class InvoiceForm extends Component {
     }
 
     componentDidMount(){
-        if(this.InputLabelRef) {
-            this.setState({
-                labelWidth: ReactDOM.findDOMNode(this.InputLabelRef).offsetWidth
-            });
-        }
     }
 
     handleChange = (event) => {
