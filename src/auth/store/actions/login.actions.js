@@ -14,7 +14,7 @@ export const LOADED_MENU = 'LOADED_MENU';
 
 
 
-export function submitSignIn(email, password)  {
+export function submitSignIn(email, password, url)  {
     return (dispatch) => {
         dispatch({
             type: LOGIN_START,
@@ -24,7 +24,7 @@ export function submitSignIn(email, password)  {
             let res = await authService.authSignin(email, password);
             if (res.IsSuccess) {
 
-                let navigations = await menuService.loadAccountMenu();
+                let navigations = await menuService.loadAccountMenu(url);
                 dispatch({
                     type: LOGIN_SUCCESS,
                     payload: res

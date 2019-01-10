@@ -5,6 +5,7 @@ import { persistReducer } from 'redux-persist';
 const initialState = {
     api: null,
     background: null,
+    url: ''
 };
 
 const app = function (state = initialState, action) {
@@ -20,7 +21,8 @@ const app = function (state = initialState, action) {
                 navSideBarLogo: action.payload.Settings.local.devices[0].assets.sidebarLogo,
                 navSideBarIcon: action.payload.Settings.local.devices[0].assets.sidebarIcon,
                 navSideBarLeftBg: action.payload.Settings.local.devices[0].assets.vsidebarLeftBg,
-                copyRight: action.payload.Settings.local.copyright
+                copyRight: action.payload.Settings.local.copyright,
+                url: window.location.host.split(':')[0]
             };
         }
         default:

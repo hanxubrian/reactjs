@@ -29,7 +29,7 @@ import classNames from 'classnames';
 //table pagination
 // import JanikingPagination from './../../../../Commons/JanikingPagination';
 
-// import FindersFeesForm from './FindersFeesForm';
+import FindersFeesForm from './FindersFeesForm';
 import FindersFeesListContent from './FindersFeesListContent';
 
 // import GoogleMap from 'google-map-react';
@@ -491,7 +491,9 @@ class FindersFees extends Component {
 
     render() {
 
-    const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, openNewFindersFeesForm, findersFeesForm, mapViewState } = this.props;
+	const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState,
+		openNewFindersFeesForm, findersFeesForm, mapViewState } = this.props;
+
 		console.log(this.props)
 		console.log(this.state)
 		// const { toggleSelection, toggleAll, isSelected, logSelection } = this;
@@ -511,249 +513,127 @@ class FindersFees extends Component {
 						header: classes.layoutHeader,
 						content: classes.content
                     }}
-                    header = {
-                        	<div className="flex w-full items-center">
-								<div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
-									<div className="flex flex-row flex-1 justify-between">
-										<div className="flex flex-shrink items-center">
-											<div className="flex items-center">
-												<FuseAnimate animation="transition.expandIn" delay={300}>
-													<Icon className="text-32 mr-12">account_box</Icon>
-												</FuseAnimate>
-												<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-													<Typography variant="h6" className="hidden sm:flex">Franchisees | FindersFees</Typography>
-												</FuseAnimate>
-											</div>
-										</div>
-										<div className="flex flex-shrink items-center">
-											{/* <IconButton
-												className={classNames(classes.button, "mr-12")}
-												aria-label="Add an alarm"
-												onClick={(ev) => toggleMapView()}>
-												<Icon>{mapViewState ? 'list' : 'location_on'}</Icon>
-											</IconButton> */}
+					header={
+                        <div className="flex w-full items-center">
+                            {(this.state.temp && !findersFeesForm.props.open) && (
+                                <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
+                                    <div className="flex flex-row flex-1 justify-between">
+                                        <div className="flex flex-shrink items-center">
+                                            <div className="flex items-center">
+                                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                    <Icon className="text-32 mr-12">account_box</Icon>
+                                                </FuseAnimate>
+                                                <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                    <Typography variant="h6" className="hidden sm:flex">Franchisees | Finders Fees</Typography>
+                                                </FuseAnimate>
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-shrink items-center">
+                                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                <Fab color="secondary" aria-label="add"
+                                                     className={classNames(classes.sideButton, "mr-12")} >
+                                                    <Icon>add</Icon>
+                                                </Fab>
+                                            </FuseAnimate>
+                                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                <Fab color="secondary" aria-label="add"
+                                                     className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
+                                                    <Icon>mail_outline</Icon>
+                                                </Fab>
+                                            </FuseAnimate>
+                                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
+                                                    <Icon>print</Icon>
+                                                </Fab>
+                                            </FuseAnimate>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-none items-end" style={{display: 'none'}}>
+                                        <FuseAnimate animation="transition.expandIn" delay={600}>
+                                            <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => openNewFindersFeesForm}>
+                                                <Icon>add</Icon>
+                                            </Fab>
+                                        </FuseAnimate>
+                                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                                            <Fab color="primary" aria-label="add"
+                                                 className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
+                                                <Icon>mail_outline</Icon>
+                                            </Fab>
+                                        </FuseAnimate>
+                                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                                            <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
+                                                <Icon>print</Icon>
+                                            </Fab>
+                                        </FuseAnimate>
+                                        { selection.length>0 && (
+                                            <FuseAnimate animation="transition.expandIn" delay={600}>
+                                                <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeInvoices()}>
+                                                    <Icon>delete</Icon>
+                                                </Fab>
+                                            </FuseAnimate>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                            {(this.state.temp && findersFeesForm.props.open) && (
+                                <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
+                                    <div className="flex flex-row flex-1 justify-between">
+                                        <div className="flex flex-shrink items-center">
+                                            <div className="flex items-center">
+                                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                    <Toolbar className="pl-12 pr-0">
+                                                        <img className="mr-12" src="assets/images/invoices/invoice-icon-white.png" alt="new invoice" style={{width: 32, height: 32}}/>
+                                                    </Toolbar>
+                                                </FuseAnimate>
 
-											<FuseAnimate animation="transition.expandIn" delay={300}>
-												<Fab
-													color="secondary"
-													aria-label="add" 
-													className={classNames(classes.sideButton, "mr-12")} 
-													onClick={openNewFindersFeesForm}>
-													<Icon>add</Icon>
-												</Fab>
-											</FuseAnimate>
-											<FuseAnimate animation="transition.expandIn" delay={300}>
-												<Fab color="secondary" aria-label="add"
-													className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-													<Icon>mail_outline</Icon>
-												</Fab>
-											</FuseAnimate>
-											<FuseAnimate animation="transition.expandIn" delay={300}>
-												<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-													<Icon>print</Icon>
-												</Fab>
-											</FuseAnimate>
-										</div>
-									</div>
-									<div className="flex flex-none items-end" style={{ display: 'none' }}>
-										<FuseAnimate animation="transition.expandIn" delay={600}>
-											<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => openNewFindersFeesForm}>
-												<Icon>add</Icon>
-											</Fab>
-										</FuseAnimate>
-										<FuseAnimate animation="transition.expandIn" delay={300}>
-											<Fab color="primary" aria-label="add"
-												className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-												<Icon>mail_outline</Icon>
-											</Fab>
-										</FuseAnimate>
-										<FuseAnimate animation="transition.expandIn" delay={300}>
-											<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-												<Icon>print</Icon>
-											</Fab>
-										</FuseAnimate>
-										{selection.length > 0 && (
-											<FuseAnimate animation="transition.expandIn" delay={600}>
-												<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeInvoices()}>
-													<Icon>delete</Icon>
-												</Fab>
-											</FuseAnimate>
-										)}
-									</div>
-                    			</div>
-                            </div>
+                                                {this.props.findersFeesForm.type === 'edit' && (
+                                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                        <Typography variant="h6" className="hidden sm:flex">Accounts
+                                                            Receivable | Edit Invoice</Typography>
+                                                    </FuseAnimate>
+                                                )}
+                                                {this.props.findersFeesForm.type === 'new' && (
+                                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                        <Typography variant="h6" className="hidden sm:flex">Accounts
+                                                            Receivable | New Invoice</Typography>
+                                                    </FuseAnimate>
+                                                )}
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-none items-end" style={{display: 'none'}}>
+                                        <FuseAnimate animation="transition.expandIn" delay={600}>
+                                            <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
+                                                <Icon>add</Icon>
+                                            </Fab>
+                                        </FuseAnimate>
+                                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                                            <Fab color="primary" aria-label="add"
+                                                 className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
+                                                <Icon>mail_outline</Icon>
+                                            </Fab>
+                                        </FuseAnimate>
+                                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                                            <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
+                                                <Icon>print</Icon>
+                                            </Fab>
+                                        </FuseAnimate>
+                                        { selection.length>0 && (
+                                            <FuseAnimate animation="transition.expandIn" delay={600}>
+                                                <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeInvoices()}>
+                                                    <Icon>delete</Icon>
+                                                </Fab>
+                                            </FuseAnimate>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     }
-					// header={
-					// 	<div className="flex w-full items-center">
-					// 		{(this.state.temp && !findersFeesForm) (
-					// 			<div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
-					// 				<div className="flex flex-row flex-1 justify-between">
-					// 					<div className="flex flex-shrink items-center">
-					// 						<div className="flex items-center">
-					// 							<FuseAnimate animation="transition.expandIn" delay={300}>
-					// 								<Icon className="text-32 mr-12">account_box</Icon>
-					// 							</FuseAnimate>
-					// 							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-					// 								<Typography variant="h6" className="hidden sm:flex">Franchisees | FindersFees</Typography>
-					// 							</FuseAnimate>
-					// 						</div>
-					// 					</div>
-					// 					<div className="flex flex-shrink items-center">
-					// 						{/* <IconButton
-					// 							className={classNames(classes.button, "mr-12")}
-					// 							aria-label="Add an alarm"
-					// 							onClick={(ev) => toggleMapView()}>
-					// 							<Icon>{mapViewState ? 'list' : 'location_on'}</Icon>
-					// 						</IconButton> */}
-
-					// 						<FuseAnimate animation="transition.expandIn" delay={300}>
-					// 							<Fab
-					// 								color="secondary"
-					// 								aria-label="add" 
-					// 								className={classNames(classes.sideButton, "mr-12")} 
-					// 								onClick={openNewFindersFeesForm}>
-					// 								<Icon>add</Icon>
-					// 							</Fab>
-					// 						</FuseAnimate>
-					// 						<FuseAnimate animation="transition.expandIn" delay={300}>
-					// 							<Fab color="secondary" aria-label="add"
-					// 								className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-					// 								<Icon>mail_outline</Icon>
-					// 							</Fab>
-					// 						</FuseAnimate>
-					// 						<FuseAnimate animation="transition.expandIn" delay={300}>
-					// 							<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-					// 								<Icon>print</Icon>
-					// 							</Fab>
-					// 						</FuseAnimate>
-					// 					</div>
-					// 				</div>
-					// 				<div className="flex flex-none items-end" style={{ display: 'none' }}>
-					// 					<FuseAnimate animation="transition.expandIn" delay={600}>
-					// 						<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => openNewFindersFeesForm}>
-					// 							<Icon>add</Icon>
-					// 						</Fab>
-					// 					</FuseAnimate>
-					// 					<FuseAnimate animation="transition.expandIn" delay={300}>
-					// 						<Fab color="primary" aria-label="add"
-					// 							className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-					// 							<Icon>mail_outline</Icon>
-					// 						</Fab>
-					// 					</FuseAnimate>
-					// 					<FuseAnimate animation="transition.expandIn" delay={300}>
-					// 						<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-					// 							<Icon>print</Icon>
-					// 						</Fab>
-					// 					</FuseAnimate>
-					// 					{selection.length > 0 && (
-					// 						<FuseAnimate animation="transition.expandIn" delay={600}>
-					// 							<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeInvoices()}>
-					// 								<Icon>delete</Icon>
-					// 							</Fab>
-					// 						</FuseAnimate>
-					// 					)}
-					// 				</div>
-					// 			</div>
-					// 		)}
-					// 		{(this.state.temp && findersFeesForm) && (
-					// 			<div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
-					// 				<div className="flex flex-row flex-1 justify-between">
-					// 					<div className="flex flex-shrink items-center">
-					// 						<div className="flex items-center">
-					// 							<FuseAnimate animation="transition.expandIn" delay={300}>
-					// 								<Toolbar className="pl-12 pr-0">
-					// 									<img className="mr-12" alt="" src="assets/images/invoices/invoice-icon-white.png" style={{ width: 32, height: 32 }} />
-					// 								</Toolbar>
-					// 							</FuseAnimate>
-					// 							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-					// 								<Typography variant="h6" className="hidden sm:flex">FindersFees | New FindersFees</Typography>
-					// 							</FuseAnimate>
-					// 						</div>
-					// 					</div>
-					// 					<div className="flex flex-shrink items-center">
-
-					// 						<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleFilterPanel()}>
-					// 							<Icon>person_outline</Icon>
-					// 						</IconButton>
-
-					// 						<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleSummaryPanel()}>
-					// 							<Icon>check_circle</Icon>
-					// 						</IconButton>
-
-					// 						<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
-					// 							<Icon>close</Icon>
-					// 						</IconButton>
-
-					// 						{/* <FuseAnimate animation="transition.expandIn" delay={300}>
-					// 							<Button
-					// 								variant="contained"
-					// 								color="primary"
-					// 								className={classNames(classes.button, "mr-12")}
-					// 								onClick={() => {
-					// 									this.closeComposeForm();
-					// 								}}
-					// 								disabled={!this.canBeSubmitted()}
-					// 							> Discard </Button>
-					// 						</FuseAnimate>
-					// 						<FuseAnimate animation="transition.expandIn" delay={300}>
-					// 							<Button
-					// 								variant="contained"
-					// 								color="primary"
-					// 								className={classNames(classes.button, "mr-12")}
-					// 								onClick={() => {
-					// 									this.closeComposeForm();
-					// 								}}
-					// 								disabled={!this.canBeSubmitted()}
-					// 							> Save </Button>
-					// 						</FuseAnimate>
-					// 						<FuseAnimate animation="transition.expandIn" delay={300}>
-					// 							<Button
-					// 								variant="contained"
-					// 								color="primary"
-					// 								className={classes.button}
-					// 								onClick={() => {
-					// 									this.closeComposeForm();
-					// 								}}
-					// 								disabled={!this.canBeSubmitted()}
-					// 							> Close </Button>
-					// 						</FuseAnimate> */}
-
-
-					// 					</div>
-					// 				</div>
-					// 				<div className="flex flex-none items-end" style={{ display: 'none' }}>
-					// 					<FuseAnimate animation="transition.expandIn" delay={600}>
-					// 						<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
-					// 							<Icon>add</Icon>
-					// 						</Fab>
-					// 					</FuseAnimate>
-					// 					<FuseAnimate animation="transition.expandIn" delay={300}>
-					// 						<Fab color="primary" aria-label="add"
-					// 							className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-					// 							<Icon>mail_outline</Icon>
-					// 						</Fab>
-					// 					</FuseAnimate>
-					// 					<FuseAnimate animation="transition.expandIn" delay={300}>
-					// 						<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-					// 							<Icon>print</Icon>
-					// 						</Fab>
-					// 					</FuseAnimate>
-					// 					{selection.length > 0 && (
-					// 						<FuseAnimate animation="transition.expandIn" delay={600}>
-					// 							<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeInvoices()}>
-					// 								<Icon>delete</Icon>
-					// 							</Fab>
-					// 						</FuseAnimate>
-					// 					)}
-					// 				</div>
-					// 			</div>
-					// 		)}
-					// 	</div>
-					// }
 					content={
 						<div className="flex-1 flex-col absolute w-full h-full">
-							{(this.state.temp && !findersFeesForm) && (mapViewState) && (<div className="w-full h-full">
+							{(this.state.temp && !findersFeesForm.props.open) && (mapViewState) && (<div className="w-full h-full">
 								<div className="w-full h-full">
 									{/* <GoogleMap
 										bootstrapURLKeys={{
@@ -770,17 +650,17 @@ class FindersFees extends Component {
 									</GoogleMap> */}
 								</div>
 							</div>)}
-							{(this.state.temp && !findersFeesForm) && (!mapViewState) && (<FindersFeesListContent data={this.state.temp} />)}
-							{/* {(this.state.temp && findersFeesForm) && (
+							{(this.state.temp && !findersFeesForm.props.open) && (!mapViewState) && (<FindersFeesListContent data={this.state.temp} />)}
+							{(this.state.temp && !findersFeesForm.props.open) && (
 								<FindersFeesForm findersFees={this.state.findersFees} selectedLease={this.state.selectedLease} />
-							)} */}
+							)}
 						</div>
 					}
 					leftSidebarHeader={
 						<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
 							{/* <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", { 'filteropen': filterState })}> */}
 							{/* <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0"> */}
-							{findersFeesForm ? (
+							{!findersFeesForm.props.open ? (
 								<h2 style={{ marginBlockStart: '1em' }}>Finders Fees Information</h2>
 							) : (
 									<h2 style={{ marginBlockStart: '1em' }}>Filters</h2>
@@ -844,10 +724,10 @@ function mapDispatchToProps(dispatch) {
 		toggleMapView: Actions.toggleMapView,
 		deleteFindersFeesAction: Actions.deleteFindersFees,
 		removeFindersFeeAction: Actions.removeFindersFee,
-		// openNewFindersFeesForm: Actions.openNewFindersFeesForm,
-		// openEditFindersFeesForm: Actions.openEditFindersFeesForm,
-		// closeEditFindersFeesForm: Actions.closeEditFindersFeesForm,
-		// closeNewFindersFeesForm: Actions.closeNewFindersFeesForm,
+		openNewFindersFeesForm: Actions.openNewFindersFeesForm,
+		openEditFindersFeesForm: Actions.openEditFindersFeesForm,
+		closeEditFindersFeesForm: Actions.closeEditFindersFeesForm,
+		closeNewFindersFeesForm: Actions.closeNewFindersFeesForm,
 	}, dispatch);
 }
 
@@ -862,7 +742,7 @@ function mapStateToProps({ findersFees, auth }) {
         regionId: auth.login.defaultRegionId,
         month: findersFees.month,
         year: findersFees.year,
-		// findersFeesForm: findersFees.findersFeesForm
+		findersFeesForm: findersFees.findersFeesForm
 	}
 }
 

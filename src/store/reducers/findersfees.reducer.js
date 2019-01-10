@@ -14,7 +14,7 @@ const initialState = {
     bFindersFeesFetchStart: false,
 	bOpenedMapView: false,
 	transactionStatus: { checkedPaid: true, checkedPP: true, checkedComplete: true, checkedOpen: true },
-	findersFeeForm: {
+	findersFeesForm: {
 		type: 'new',
 		props: {
 			open: false
@@ -88,7 +88,7 @@ const findersFees = function (state = initialState, action) {
 					...state,
 					bOpenedFilterPanel: true,
 					bOpenedSummaryPanel: true,
-					findersFeeForm: {
+					findersFeesForm: {
 						type: 'new',
 						props: {
 							open: true
@@ -101,7 +101,7 @@ const findersFees = function (state = initialState, action) {
 			{
 				return {
 					...state,
-					findersFeeForm: {
+					findersFeesForm: {
 						type: 'new',
 						props: {
 							open: false
@@ -114,7 +114,7 @@ const findersFees = function (state = initialState, action) {
 			{
 				return {
 					...state,
-					findersFeeForm: {
+					findersFeesForm: {
 						type: 'create',
 						props: {
 							open: true
@@ -127,7 +127,7 @@ const findersFees = function (state = initialState, action) {
 			{
 				return {
 					...state,
-					findersFeeForm: {
+					findersFeesForm: {
 						type: 'create',
 						props: {
 							open: false

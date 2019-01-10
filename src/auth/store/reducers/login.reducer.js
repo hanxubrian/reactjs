@@ -17,7 +17,8 @@ export const initialState = {
     lastName: '',
     role: [],
     Username: '',
-    Phone: ''
+    Phone: '',
+    url: ''
 };
 
 const login = function (state = initialState, action) {
@@ -39,7 +40,8 @@ const login = function (state = initialState, action) {
                 role: action.payload.Roles[0].RoleName,
                 Username: action.payload.Username,
                 Phone: action.payload.Phone,
-                profilePhoto: action.payload.ProfilePhoto
+                profilePhoto: action.payload.ProfilePhoto,
+                url: window.location.host.split(':')[0]
             };
             return {
                 ...initialState,

@@ -36,7 +36,7 @@ import { withRouter } from 'react-router-dom';
 //Custom components
 import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
-import FindersFeeLineTable from "./FindersFeeLine"
+// import FindersFeeLineTable from "./FindersFeeLine"
 
 // for store
 import { bindActionCreators } from "redux";
@@ -420,14 +420,14 @@ function getStepContent(findersFeesForm, step) {
 				<Fragment>
 					<h3>Addresses</h3>
 					<div className="flex">
-						<FindersFeeLineTable tableType="ADDRESS" headers={address_headers} />
+						{/* <FindersFeeLineTable tableType="ADDRESS" headers={address_headers} /> */}
 					</div>
 
 					<Divider variant="middle" />
 					<div style={{ marginTop: '30px' }}></div>
 					<h3>Contacts</h3>
 					<div className="flex">
-						<FindersFeeLineTable tableType="BILLING_SETTING" headers={billing_headers} />
+						{/* <FindersFeeLineTable tableType="BILLING_SETTING" headers={billing_headers} /> */}
 					</div>
 
 				</Fragment>
@@ -1584,7 +1584,7 @@ class FindersFeeForm extends Component {
 
 	closeComposeForm = () => {
 		//this.props.customerForm.type === 'create' ? this.props.closeEditCustomerForm() : this.props.closeNewCustomerForm();
-		this.type === 'create' ? this.props.closeEditFindersFeeForm() : this.props.closeNewFindersFeeForm();
+		this.type === 'create' ? this.props.closeEditFindersFeesForm() : this.props.closeNewFindersFeeForm();
 	};
 
 	// constructor(props) {
@@ -1984,10 +1984,10 @@ class FindersFeeForm extends Component {
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
-		openNewFindersFeeForm: Actions.openNewFindersFeeForm,
-		closeNewFindersFeeForm: Actions.closeNewFindersFeeForm,
-		openEditFindersFeeForm: Actions.openEditFindersFeeForm,
-		closeEditFindersFeeForm: Actions.closeEditFindersFeeForm,
+		openNewFindersFeesForm: Actions.openNewFindersFeesForm,
+		closeNewFindersFeesForm: Actions.closeNewFindersFeesForm,
+		openEditFindersFeesForm: Actions.openEditFindersFeesForm,
+		closeEditFindersFeesForm: Actions.closeEditFindersFeesForm,
 	}, dispatch);
 }
 

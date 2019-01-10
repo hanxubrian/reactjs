@@ -118,21 +118,21 @@ export function removeFindersFee(key, findersFees) {
     };
 }
 
-export function openNewFindersFeeForm()
+export function openNewFindersFeesForm()
 {
     return {
         type: OPEN_NEW_FINDERSFEE_FORM
     }
 }
 
-export function closeNewFindersFeeForm()
+export function closeNewFindersFeesForm()
 {
     return {
         type: CLOSE_NEW_FINDERSFEE_FORM
     }
 }
 
-export function openEditFindersFeeForm(data)
+export function openEditFindersFeesForm(data)
 {
     return {
         type: OPEN_EDIT_FINDERSFEE_FORM,
@@ -140,7 +140,7 @@ export function openEditFindersFeeForm(data)
     }
 }
 
-export function closeEditFindersFeeForm()
+export function closeEditFindersFeesForm()
 {
     return {
         type: CLOSE_EDIT_FINDERSFEE_FORM
