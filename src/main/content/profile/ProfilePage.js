@@ -59,9 +59,9 @@ class ProfilePage extends Component {
                 }}
                 header={
                     <div className="p-4 flex flex-1 flex-col items-center justify-center md:flex-row md:items-end">
-                        <div className="flex flex-1 flex-col items-center justify-center md:flex-row md:items-center md:justify-start">
+                        <div className="p-4 flex flex-1 flex-col items-center justify-center md:flex-row md:items-center md:justify-start">
                             <FuseAnimate animation="transition.expandIn" delay={300}>
-                                <Avatar className="w-96 h-96" src={this.props.login.profilePhoto}/>
+                                <Avatar className="w-84 h-84" src={this.props.login.profilePhoto}/>
                             </FuseAnimate>
                             <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                 <Typography className="md:ml-24" variant="h4" color="inherit">{this.props.login.firstName}&nbsp;&nbsp;{this.props.login.lastName}</Typography>
@@ -69,8 +69,8 @@ class ProfilePage extends Component {
                         </div>
 
                         <div className="flex items-center justify-end">
-                            <Button className="mr-8 normal-case" variant="contained" color="secondary" aria-label="Follow">Follow</Button>
-                            <Button className="normal-case" variant="contained" color="primary" aria-label="Send Message">Send Message</Button>
+                            <Button className="mr-8 mb-24 normal-case" variant="contained" color="secondary" aria-label="Follow">Follow</Button>
+                            <Button className="mb-24 normal-case" variant="contained" color="primary" aria-label="Send Message">Send Message</Button>
                         </div>
                     </div>
                 }
