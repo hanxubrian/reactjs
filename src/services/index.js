@@ -1,6 +1,7 @@
 import _authService from './auth/authService';
 import _menuService from './menu/menuService';
 import _franchiseesService from './franchisees/franchiseesService';
+import _leaseService from './franchisees/leaseService';
 import _findersFeesService from './franchisees/findersFeesService';
 import _initialService from './initial/initialService';
 import _invoiceService from './invoice/invoiceServices';
@@ -10,6 +11,7 @@ import _chatService from './chat/ChatService';
 export const authService = _authService;
 export const menuService = _menuService;
 export const franchiseesService = _franchiseesService;
+export const leaseService = _leaseService;
 export const findersFeesService = _findersFeesService;
 export const initialService = _initialService;
 export const invoiceService = _invoiceService;

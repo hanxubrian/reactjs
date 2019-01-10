@@ -221,30 +221,32 @@ const styles = theme => ({
 // 	trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
 // };
 class Leases extends Component {
+	state = {
+		s: '',
+		temp: [],
+		data: [],
+		checkedPaid: true,
+		checkedPP: true,
+		checkedComplete: true,
+		checkedOpen: true,
+		selection: [],
+		selectAll: false,
+		// regionId: [2, 24],
+		// statusId: [21, 24],
+		// searchText: '',
+
+		current_lat: 0,
+		current_long: 0,
+	};
+
 	constructor(props) {
 		super(props);
 
 		if (!props.bLoadedLeases) {
-			props.getLeases();
+			props.getLeases(this.props.regionId, this.props.statusId, this.props.searchText);
 		}
 		this.fetchData = this.fetchData.bind(this);
 		this.escFunction = this.escFunction.bind(this);
-
-		this.state = {
-			s: '',
-			temp: [],
-			data: [],
-			checkedPaid: true,
-			checkedPP: true,
-			checkedComplete: true,
-			checkedOpen: true,
-			selection: [],
-			selectAll: false,
-			regionId: 0,
-
-			current_lat: 0,
-			current_long: 0,
-		};
     }
 
     toggleSelection = (key, shift, row) => {
@@ -351,6 +353,7 @@ class Leases extends Component {
 
 		if (this.props.regionId !== prevProps.regionId) {
 			this.setState({ regionId: prevProps.regionId });
+			this.props.getLeases(this.props.regionId, this.props.statusId, this.props.searchText);
 			bChanged = true;
 		}
 
@@ -391,8 +394,8 @@ class Leases extends Component {
 		// let temp1 = [];
 		// const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
 		// const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
-
 		if (rawData === null) return;
+		// debugger
 		let regions = rawData.Data.Region.filter(x => {
 			return this.props.regionId === 24 || x.Id === this.props.regionId;
 		});
@@ -492,7 +495,7 @@ class Leases extends Component {
     }
 
     render() {
-    const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, openNewLeaseForm, leaseForm, mapViewState } = this.props;
+    	const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, openNewLeaseForm, leaseForm, mapViewState } = this.props;
 		console.log(this.props)
 		console.log(this.state)
 		// const { toggleSelection, toggleAll, isSelected, logSelection } = this;
@@ -787,8 +790,10 @@ function mapStateToProps({ leases, auth }) {
 		filterState: leases.bOpenedFilterPanel,
 		summaryState: leases.bOpenedSummaryPanel,
 		mapViewState: leases.bOpenedMapView,
+		leaseForm: leases.leaseForm,
 		regionId: auth.login.defaultRegionId,
-		leaseForm: leases.leaseForm
+		statusId: leases.statusId,
+		searchText: leases.searchText,
 	}
 }
 

@@ -281,6 +281,10 @@ class Customers extends Component {
 			// this.getCustomersFromStatus();
 			this.props.getCustomers(this.props.regionId, this.props.statusId, this.props.location, this.props.latitude, this.props.longitude, this.props.searchText);
 		}
+
+		this.props.getAccountTypeList();
+		this.props.getAccountExecutiveList();
+		this.props.getCustomerStatusList();
 	}
 
 	toggleSelection = (key, shift, row) => {
@@ -423,6 +427,15 @@ class Customers extends Component {
 
 		if (this.props.customers === null) {
 			this.props.getCustomers(this.props.regionId, this.props.statusId, this.props.location, this.props.latitude, this.props.longitude, this.props.searchText);
+		}
+		if (this.props.accountTypeList === null) {
+			this.props.getAccountTypeList();
+		}
+		if (this.props.accountExecutiveList === null) {
+			this.props.getAccountExecutiveList();
+		}
+		if (this.props.customerStatusList === null) {
+			this.props.getCustomerStatusList();
 		}
 	}
 
@@ -700,6 +713,10 @@ function mapDispatchToProps(dispatch) {
 		openEditCustomerForm: Actions.openEditCustomerForm,
 		closeEditCustomerForm: Actions.closeEditCustomerForm,
 		closeNewCustomerForm: Actions.closeNewCustomerForm,
+
+		getAccountTypeList: Actions.getAccountTypeList,
+		getAccountExecutiveList: Actions.getAccountExecutiveList,
+		getCustomerStatusList: Actions.getCustomerStatusList,
 	}, dispatch);
 }
 
@@ -721,6 +738,10 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		location: customers.location,
 		searchText: customers.searchText,
 		bCustomerFetchStart: customers.bCustomerFetchStart,
+
+		accountTypeList: customers.accountTypeList,
+		accountExecutiveList: customers.accountExecutiveList,
+		customerStatusList: customers.customerStatusList,
 	}
 }
 

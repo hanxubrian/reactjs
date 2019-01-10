@@ -434,7 +434,7 @@ class CustomerForm extends Component {
 		// 	getSuggestionValue: customerForm.getSuggestionValue,
 		// 	renderSuggestion,
 		// };
-	
+
 
 		const address_headers = [
 			{
@@ -1626,10 +1626,11 @@ class CustomerForm extends Component {
 					</Fragment>
 				);
 			case 5:
+				console.log("this.props.franchisees.Data", this.props.franchisees.Data)
 				return (<Fragment>
 					<div className="flex-1 flex-col w-full h-full">
 						<ReactTable
-							data={this.props.franchisees.Data.Region[0].Franchisees}
+							data={this.props.franchisees.Data.Region[0].FranchiseeList}
 							minRows={0}
 							onFetchData={this.fetchData}
 							PaginationComponent={JanikingPagination}
@@ -1770,7 +1771,7 @@ class CustomerForm extends Component {
 							]}
 							defaultPageSize={100}
 							className={classNames("-striped -highlight")}
-							totalRecords={this.props.franchisees.Data.Region[0].Franchisees.length}
+							totalRecords={this.props.franchisees.Data.Region[0].FranchiseeList.length}
 							style={{
 								height: '100%',
 							}}
@@ -1778,14 +1779,14 @@ class CustomerForm extends Component {
 					</div>
 				</Fragment>)
 			case 6:
-				return(
+				return (
 					<Fragment>
-					  <div style={{ marginTop: '30px' }}></div>
+						<div style={{ marginTop: '30px' }}></div>
 						<div className="flex">
-							 <CustomersDocumentUploadTable tableType="DOCUMENT_UPLOADING" documents={this.props.documents} headers={Upload_Document_headers} />
+							<CustomersDocumentUploadTable tableType="DOCUMENT_UPLOADING" documents={this.props.documents} headers={Upload_Document_headers} />
 						</div>
 					</Fragment>
-					  )
+				)
 			case 7:
 				return (<Fragment></Fragment>)
 			default:

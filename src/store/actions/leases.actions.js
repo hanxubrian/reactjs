@@ -1,6 +1,8 @@
 import axios from "axios";
+import {leaseService} from "services";
 
 export const GET_ALL_LEASES = "[LEASES] GETS ALL";
+export const GET_LEASES_FETCH_START = "[LEASES] GET LEASES FETCH START";
 export const DELETE_SELECTED_LEASES = "[LEASES] DELETE SELECTED";
 export const REMOVE_SELECTED_LEASE = "[LEASE] REMOVE SELECTED";
 export const TOGGLE_SUMMARY_PANEL = "[LEASES] TOGGLE SUMMARY PANEL";
@@ -16,10 +18,21 @@ export const CLOSE_EDIT_LEASE_FORM = '[LEASES APP] CLOSE EDIT LEASE FORM';
 export const ADD_LEASE = '[LEASES APP] ADD LEASE';
 export const UPDATE_LEASE = '[LEASES APP] UPDATE LEASE';
 
-// export function getLeases() {
-//     return dispatch => {
-//         const request = axios.post("/api/leases/post");
+const axios_instance = axios.create({
+    headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+    withCredentials: false
+});
 
+// alternative fetch method
+// export function getLeases() {
+//     const data = {
+//         'RegionId': [2,24],
+//         'TransactionStatusId': [21,24],
+//         'SearchText': '',
+//     };
+
+//     return dispatch => {
+//         const request = axios_instance.post("https://apifmsplus.jkdev.com/v1/franchisee/LeaseList", data);
 //         return request.then(response => {
 //             return dispatch({
 //                 type: GET_ALL_LEASES,
@@ -28,32 +41,6 @@ export const UPDATE_LEASE = '[LEASES APP] UPDATE LEASE';
 //         });
 //     };
 // }
-
-
-const axios_instance = axios.create({
-    headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-    withCredentials: false
-});
-
-
-export function getLeases() {
-
-    const data = {
-        'RegionId': [2,24],
-        'TransactionStatusId': [21,24],
-        'SearchText': '',
-    };
-
-    return dispatch => {
-        const request = axios_instance.post("https://apifmsplus.jkdev.com/v1/franchisee/LeaseList", data);
-        return request.then(response => {
-            return dispatch({
-                type: GET_ALL_LEASES,
-                payload: response.data
-            });
-        });
-    };
-}
 
 // alternative fetch method
 // fetch('https://apifmsplus.jkdev.com/v1/franchisee/LeaseList', {
@@ -66,6 +53,26 @@ export function getLeases() {
 //   }).then(res => res.json())
 // .then(data => console.log(data))
 
+
+export function getLeases(regionId, statusId, searchText) {
+
+    regionId = regionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [regionId];
+
+    return (dispatch) => {
+        dispatch({
+            type: GET_LEASES_FETCH_START,
+            payload: true
+        });
+
+        (async () => {
+            let leaseList = await leaseService.getLeaseList(regionId, statusId, searchText);
+            dispatch({
+                type: GET_ALL_LEASES,
+                payload: leaseList
+            });
+        })();
+    }
+}
 
 export function toggleFilterPanel(){
     return {
