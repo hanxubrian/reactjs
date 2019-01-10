@@ -94,8 +94,9 @@ class Report extends Component {
         });
         return (
             <tr>
-                <td className="text-center" width='200'>
+                <td className="text-center" width='200' align="left">
                     <Typography color="inherit">
+                        <img src="https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png" alt=""/>
                     </Typography>
                 </td>
                 <td className="text-center" width='500'>
@@ -190,7 +191,7 @@ class Report extends Component {
                     <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
 
                         <div>
-                            <table align="center">
+                            <table align="">
                                 <tbody>
                                 {this.renderHeader()}
                                 </tbody>
@@ -203,11 +204,12 @@ class Report extends Component {
                                     <tbody>
                                     <tr>
                                         <td className="pb-4">
-                                            <Typography color="inherit">Franchisee</Typography>
-                                            <Typography color="inherit">Code</Typography>
+                                            <Typography color="inherit">Franchisee Code:</Typography>
+                                        </td>
+                                        <td className="text-left" width='100'>
+                                            <Typography color="inherit"><br/></Typography>
                                         </td>
                                         <td className="pb-4">
-                                            <Typography color="inherit"><br/></Typography>
                                             <Typography color="inherit">Name</Typography>
                                         </td>
                                     </tr>
@@ -217,12 +219,17 @@ class Report extends Component {
                                             <Typography color="inherit"><br/></Typography>
                                             <Typography color="inherit"><br/></Typography>
                                         </td>
+                                        <td className="text-left" width='100'>
+                                            <Typography color="inherit"><br/></Typography>
+                                            <Typography color="inherit"><br/></Typography>
+                                            <Typography color="inherit"><br/></Typography>
+                                        </td>
                                         <td className="text-left">
                                             <Typography color="inherit">{SUMMARY_PAGE[0].FRAN_NAME}</Typography>
                                             <Typography color="inherit">{SUMMARY_PAGE[0].FRAN_ADDRESS}</Typography>
                                             <Typography color="inherit">{SUMMARY_PAGE[0].FRAN_CITY} {SUMMARY_PAGE[0].FRAN_STATE},{SUMMARY_PAGE[0].FRAN_ZIP}</Typography>
                                         </td>
-                                        <td className="text-left" width='310'>
+                                        <td className="text-left" width='200'>
                                             <Typography color="inherit"><br/></Typography>
                                             <Typography color="inherit"><br/></Typography>
                                             <Typography color="inherit"><br/></Typography>
@@ -237,16 +244,23 @@ class Report extends Component {
                                 </table>
                             </div>
 
-                            <div className="mt-64">
-                                <table className="simple invoice-table">
+                            <div className="mt-16">
+                                <h2 style ={{color:'blue'}}>FRANCHISEE REVENUE:</h2>
+                                <div style ={divline}></div>
+                                <table className="">
                                     <thead>
                                     <tr>
-                                        <th>
-                                            <h2>{SUMMARY_PAGE[0].TOTAL_CONTRACT_BILLING[0].LABEL}:</h2>
+                                        <th width="250">
+                                            {/*<h2 style ={{color:'blue'}}>FRANCHISEE REVENUES:</h2>*/}
+                                        </th>
+                                        <th width="350">
                                         </th>
                                         <th className="text-right">
-                                            ${parseFloat(SUMMARY_PAGE[0].TOTAL_CONTRACT_BILLING[0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
                                         </th>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -265,11 +279,14 @@ class Report extends Component {
                                     )}
                                     </tbody>
                                 </table>
-
-                                <table className="simple invoice-table">
+                                <h2 className="pt-16" style ={{color:'blue'}}>FRANCHISEE DEDUCTIONS:</h2>
+                                <div style ={divline}></div>
+                                <table className="">
                                     <thead>
                                     <tr>
-                                        <th><h2>FRANCHISEE DEDUCTIONS:</h2></th>
+                                        <th width="250"></th>
+                                        <th width="350">
+                                        </th>
                                         <th className="text-right">
                                             {/* UNIT */}
                                         </th>
@@ -304,11 +321,19 @@ class Report extends Component {
                                     )}
                                     </tbody>
                                 </table>
-                                <table className="simple invoice-table">
+                                <table>
+                                    <tr>
+                                        <td width="700"> <h2 style ={{color:'blue'}}>DUE TO FRANCHISEE:</h2></td>
+                                        <td>97,794.90</td>
+                                    </tr>
+                                </table>
+                                <div style ={divline}></div>
+
+                                <table className="">
                                     <thead>
                                     <tr>
                                         <th>
-                                            <h2>DUE TO FRANCHISEE:</h2>
+
                                         </th>
                                         <th>
                                             {/* UNIT */}
@@ -320,7 +345,7 @@ class Report extends Component {
                                             {/* QUANTITY */}
                                         </th>
                                         <th className="text-right">
-                                            97,794.90
+
                                         </th>
                                     </tr>
                                     </thead>
@@ -351,7 +376,7 @@ class Report extends Component {
                 <Card className={classNames(classes.card, "mx-auto mt-64")}>
                     <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                         <div>
-                            <table align="center">
+                            <table align="">
                                 <tbody>
                                 {this.renderHeader()}
                                 </tbody>
@@ -364,12 +389,14 @@ class Report extends Component {
                                     <tbody>
                                     <tr>
                                         <td className="pr-16 pb-4">
-                                            <Typography className="font-light" variant="h6" color="textSecondary">
-                                                Franchisee Code
+                                            <Typography color="inherit">Franchisee Code:
                                             </Typography>
                                         </td>
+                                        <td className="text-left" width='100'>
+                                            <Typography color="inherit"><br/></Typography>
+                                        </td>
                                         <td className="pb-4">
-                                            <Typography className="font-light" variant="h6" color="inherit">
+                                            <Typography color="inherit">
                                                 Name
                                             </Typography>
                                         </td>
@@ -377,9 +404,12 @@ class Report extends Component {
 
                                     <tr>
                                         <td className="pr-16">
-                                            <Typography color="textSecondary">
+                                            <Typography color="inherit">
                                                 {DLR_CODE}
                                             </Typography>
+                                        </td>
+                                        <td className="text-left" width='100'>
+                                            <Typography color="inherit"><br/></Typography>
                                         </td>
                                         <td>
                                             <Typography color="inherit">
@@ -392,11 +422,13 @@ class Report extends Component {
                             </div>
 
                             <div className="mt-64">
-                                <table className="simple invoice-table">
+                                <h2 >Customer Transactions</h2>
+                                <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+                                <table className="">
                                     <thead>
                                     <tr>
                                         <th>
-                                            <h2>Customer Transactions</h2>
+
                                         </th>
                                         <th>
                                             Invoice
@@ -1012,5 +1044,9 @@ function mapStateToProps({auth, franchiseeReports})
         all_regions: auth.login.all_regions
     }
 }
+const divline ={
+    width:'65%',
+    borderBottom:'2px solid #25058a',
+};
 
 export default  withStyles(styles)(withRouter(connect(mapStateToProps, mapDispatchToProps)(Report)));
