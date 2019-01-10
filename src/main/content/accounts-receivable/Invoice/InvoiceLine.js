@@ -21,7 +21,6 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-// import Autosuggest from '../../../../react-autosuggest';
 import Autosuggest from 'react-autosuggest';
 
 //Store
@@ -137,6 +136,25 @@ function createData(billing='Regular Billing', service='Adjust-Balance', descrip
     };
 }
 
+
+function renderInputComponent(inputProps) {
+    const { classes, inputRef = () => {}, ref, ...other } = inputProps;
+
+    return (
+        <Input
+            fullWidth
+            InputProps={{
+                inputRef: node => {
+                    ref(node);
+                    inputRef(node);
+                },
+            }}
+            {...other}
+            required
+        />
+    );
+}
+
 const styles = theme => ({
     root        : {
         width    : '100%',
@@ -164,14 +182,14 @@ const styles = theme => ({
             '& .f1': {
                 width: '25%',
                 minWidth: 100,
-                padding: 0,
-                border: '0px solid lightgray',
+                padding: 10,
+                border: '1px solid lightgray',
                 borderRadius: 6
             },
             '& .f2': {
                 width: '75%',
-                padding: 8,
-                border: '1px solid lightgray',
+                padding: '4px 8px',
+                border: '0px solid lightgray',
                 borderRadius: 6,
                 marginLeft: 10
             }
@@ -264,7 +282,7 @@ const styles = theme => ({
         listStyleType: 'none',
     },
 });
-{/*<span>{suggestion.Number} - {suggestion.Name}</span>*/}
+
 function renderSuggestion (suggestion,  { isHighlighted }) {
     return (
     <MenuItem selected={isHighlighted} component="div">
@@ -397,17 +415,6 @@ class InvoiceLineTable extends React.Component {
         data[row.id].franchisees[row.fid].name = newValue;
         this.setState({data: data});
     };
-    onNameChange0 = row => event => {
-        console.log('onNameChange=', row);
-        console.log('event.target.value=', event.target.value);
-        console.log('f_index=', row.f_index);
-        const data = [...this.state.data];
-        data[row.id].franchisees[row.fid].name = event.target.value;
-        this.setState({data: data});
-        let aNames = [...this.state.aNames];
-        aNames[row.f_index] = event.target.value;
-        this.setState({nameValue: event.target.value});
-    };
 
     onNameSuggestionsFetchRequested = ({ value }) => {
         this.setState({
@@ -492,21 +499,21 @@ class InvoiceLineTable extends React.Component {
 
         this.setState({data: newData})
     };
-
-    removeFranch=(parent_id, child_id)=>{
+//.original.id, row.original.fid
+    removeFranch=(row)=>{
         const data = [...this.state.data];
 
         data.forEach(d=>{
-            if(d.franchisees.length>0 && d.id===parent_id){
+            if(d.franchisees.length>0 && d.id===row.id){
                 let franchisees = d.franchisees;
                 _.remove(franchisees, function (record) {
-                    return record.fid === child_id
+                    return record.fid === row.fid
                 })
             }
         });
 
         data.forEach(d=>{
-            if(d.franchisees.length>0 && d.id===parent_id){
+            if(d.franchisees.length>0 && d.id===row.fid){
                 let fid=0;
                 let franchisees = d.franchisees;
                 let newData = franchisees.map(record=>{
@@ -517,6 +524,7 @@ class InvoiceLineTable extends React.Component {
             }
         });
         this.setState({data: data});
+        this.setState({['nameValue'+row.f_index]: ''})
     };
 
     renderEditable(cellInfo, id) {
@@ -778,6 +786,7 @@ class InvoiceLineTable extends React.Component {
                                                         </div>
                                                         <div className="f2">
                                                             <Autosuggest
+                                                                renderInputComponent = {renderInputComponent}
                                                                 suggestions={nameSuggestions}
                                                                 onSuggestionsFetchRequested={this.onNameSuggestionsFetchRequested}
                                                                 onSuggestionsClearRequested={this.onNameSuggestionsClearRequested}
@@ -879,7 +888,7 @@ class InvoiceLineTable extends React.Component {
                                             else
                                                 return (
                                                     <Fab aria-label="remove"
-                                                         onClick={()=>this.removeFranch(row.original.id, row.original.fid)}
+                                                         onClick={()=>this.removeFranch(row.original)}
                                                          className={classNames(classes.lineCancelButton, "mr-12")} style={{width: 24, height: 24, minHeight: 24}}>
                                                         <Icon>close</Icon>
                                                     </Fab>
