@@ -407,7 +407,7 @@ class FilterPanel extends Component {
 		// 		regionCustomers = [...regionCustomers, ...x.CustomerList];
 		// 	});
 		// }
-		
+
 		// let accountTypes = [...new Set(regionCustomers.map(x => x.AccountTypeListName))].sort();
 		// let accountStatuses = [...new Set(regionCustomers.map(x => x.StatusName))].sort();
 
@@ -538,6 +538,35 @@ class FilterPanel extends Component {
 											margin="normal"
 											variant="outlined"
 											style={{ marginLeft: '2px' }} />
+									</GridItem>
+
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+										<TextField
+											id="AccountTypeGroup"
+											label="Account Type Group"
+											select
+											className={classes.textField}
+											value={this.state.AccountTypeGroup === undefined ? 0 : this.state.AccountTypeGroup}
+											onChange={this.handleChange('AccountTypeGroup')}
+											margin="normal"
+											variant="outlined"
+											fullWidth
+										// style={{ minWidth: "100px", width: "30%" }}
+										>
+											<MenuItem value="0">
+												
+											</MenuItem>
+											{/* {[{ value: 0, label: "Airline" }].map(option => (
+												<MenuItem key={option.value} value={option.value}>
+													{option.label}
+												</MenuItem>
+											))} */}
+
+											{/* {this.props.accountTypeList.Data !== undefined && this.props.accountTypeList.Data.map((x, index) => (
+												<MenuItem key={index} value={index}>{x.Text}</MenuItem>
+											))} */}
+
+										</TextField>
 									</GridItem>
 
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
