@@ -765,13 +765,14 @@ class CustomerListContent extends Component {
 
 	shouldComponentUpdate(nextProps, nextState) {
 		console.log("shouldComponentUpdate", this.state !== nextState);
-
+		// return this.props.mapViewState !== nextProps.mapViewState
 		// return this.state !== nextState
-		// || this.props.mapViewState !== nextProps.mapViewState
-		// || this.props.data !== nextProps.data 
-		// || this.props.loading !== nextProps.loading 
-		// || this.props.pins !== nextProps.pins 
-		// || this.props.searchText !== nextProps.searchText
+		// 	|| this.props.mapViewState !== nextProps.mapViewState
+		// 	|| this.props.customers !== nextProps.customers
+		// 	|| this.props.bOpenedFilterPanel !== nextProps.bOpenedFilterPanel
+		// 	// || this.props.loading !== nextProps.loading
+		// 	|| this.props.pins !== nextProps.pins
+		// 	|| this.props.searchText !== nextProps.searchText
 		return true;
 	}
 
@@ -914,20 +915,25 @@ class CustomerListContent extends Component {
 			navigator.geolocation.getCurrentPosition(
 				(position) => {
 					console.log(position.coords);
-					// this.setState({
-					// 	current_lat: position.coords.latitude,
-					// 	current_long: position.coords.longitude
-					// })
 					this.setState({
-						current_lat: 42.910772,
-						current_long: -78.74557
+						current_lat: position.coords.latitude,
+						current_long: position.coords.longitude
 					})
+
+					// this.setState({
+					// 	current_lat: 42.910772,
+					// 	current_long: -78.74557
+					// })
 
 					if (this.state.addrLat == undefined) {
 						this.setState({
-							addrLat: 42.910772,
-							addrLng: -78.74557
+							current_lat: position.coords.latitude,
+							current_long: position.coords.longitude
 						})
+						// this.setState({
+						// 	addrLat: 42.910772,
+						// 	addrLng: -78.74557
+						// })
 					}
 					if (this.props.locationFilterValue) {
 						this.initRowsFromRawJson();
