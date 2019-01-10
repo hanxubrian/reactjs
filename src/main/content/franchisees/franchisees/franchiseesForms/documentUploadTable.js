@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import * as Actions from 'store/actions';
 import { withStyles } from '@material-ui/core/styles';
 
 //Material UI core and icons
@@ -13,22 +14,10 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 // third party
-import _ from 'lodash';
 import TextField from "@material-ui/core/TextField/TextField";
-
-let counter = 0;
-
-function createData(docType = '', documentName = '', browse = '', uploadDateTime='',fileSize='',view='') {
-    return {
-        id: counter++,
-        docType,
-        documentName,
-        browse,
-        uploadDateTime,
-        fileSize,
-        view
-    };
-}
+import {bindActionCreators} from "redux";
+import connect from "react-redux/es/connect/connect";
+import {withRouter} from "react-router-dom";
 
 
 function desc(a, b, orderBy) {
@@ -55,7 +44,7 @@ function getSorting(order, orderBy) {
     return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
 
-class CustomerLineTableHead extends React.Component {
+class DocumentUploadTableHead extends React.Component {
     createSortHandler = property => event => {
         this.props.onRequestSort(event, property);
     };
@@ -91,9 +80,6 @@ class CustomerLineTableHead extends React.Component {
                             </TableCell>
                         );
                     }, this)}
-                    <TableCell padding="checkbox" style={{ width: 100 }}>
-                        Action
-                    </TableCell>
                 </TableRow>
             </TableHead>
         );
@@ -101,10 +87,9 @@ class CustomerLineTableHead extends React.Component {
 }
 
 
-CustomerLineTableHead.propTypes = {
+DocumentUploadTableHead.propTypes = {
     numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
-    onSelectAllClick: PropTypes.func.isRequired,
     order: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired
 };
@@ -134,7 +119,7 @@ const toolbarStyles = theme => ({
     },
 });
 
-let CustomerLineTableToolbar = props => {
+let documentUploadTableToolbar = props => {
     const { numSelected, classes } = props;
 
     return (
@@ -174,12 +159,12 @@ let CustomerLineTableToolbar = props => {
     );
 };
 
-CustomerLineTableToolbar.propTypes = {
+documentUploadTableToolbar.propTypes = {
     classes: PropTypes.object.isRequired,
     numSelected: PropTypes.number.isRequired
 };
 
-CustomerLineTableToolbar = withStyles(toolbarStyles)(CustomerLineTableToolbar);
+documentUploadTableToolbar = withStyles(toolbarStyles)(documentUploadTableToolbar);
 
 const styles = theme => ({
     root: {
@@ -199,12 +184,12 @@ const styles = theme => ({
             padding: "4px 24px",
             width: 180
         },
-        CustomerLineHeadRoot: {
+        documentuploadHeadRoot: {
             backgroundColor: 'lightgray',
         },
     },
     outlined: {
-        padding: "12px 24px 12px 12px!important"
+        padding: "6px 24px 6px 12px!important"
     },
     table: {
         minWidth: 1020
@@ -236,11 +221,17 @@ class FranchiseesDocumentUploadTable extends React.Component {
         page: 0,
         rowsPerPage: 10,
         labelWidth: 0,
-        data: [
-            createData('', '', '','','','')
-        ]
+        documentsList: [],
+        documentName: [],
+        uploadDateTime: [],
+        fileSize: [],
+        view: []
     };
-
+    constructor(props)
+    {
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+    }
     handleRequestSort = (event, property) => {
         const orderBy = property;
         let order = 'desc';
@@ -255,139 +246,138 @@ class FranchiseesDocumentUploadTable extends React.Component {
         });
     };
 
-    handleSelectAllClick = event => {
-        if (event.target.checked) {
-            this.setState(state => ({ selected: state.data.map(n => n.id) }));
-            return;
-        }
-        this.setState({ selected: [] });
-    };
-
     componentDidMount() {
-        let id = 0;
-        const data = [...this.state.data];
-        let newData = data.map(record => {
-            record.id = id++;
-            return record;
-        });
-        this.setState({ data: newData })
+
+    }
+    componentWillMount() {
+        if(this.props.documentsList != null){
+            this.setState({
+                documentsList: this.props.documentsList
+            })
+        }
+    }
+    handleSetState = name =>{
+      // this.setState({
+      //     [name]:["AAA"+name],
+      // })
+    };
+    documentView(data){
+
     }
 
-    AddLineData = () => {
-        const data = [...this.state.data, createData()];
-        let id = 0;
-        let newData = data.map(record => {
-            record.id = id++;
-            return record;
+    handleChange(selectorFiles,id)
+    {
+        let today = new Date();
+        let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        // console.log('fileObject = ',URL.createObjectURL(selectorFiles[0]));
+        const list = this.props.documentsList;
+        list["documentName"+id] = selectorFiles[0].name;
+        list["documentDateTime"+id] = date;
+        list["documentFileSize"+id] = selectorFiles[0].size+" bytes";
+        this.setState({
+            documentsList: list
         });
-        this.setState({ data: newData })
-    };
+    }
 
-    removeLineData = (line) => {
-        const data = [...this.state.data];
-        _.remove(data, function (row) {
-            return row.id === line.id;
-        });
-        let id = 0;
-        let newData = data.map(record => {
-            record.id = id++;
-            return record;
-        });
-
-        this.setState({ data: newData })
-    };
 
     render() {
         const { classes } = this.props;
-        const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
-        console.log("this.props.tableType", this.props.tableType)
+        const { documentsList, order, orderBy, selected, rowsPerPage, page } = this.state;
+
+        const headers = [
+            {
+                id: 'doc_type',
+                numeric: false,
+                disablePadding: false,
+                label: 'Doc Type'
+            },
+            {
+                id: 'browse',
+                numeric: false,
+                disablePadding: false,
+                label: 'Browse'
+            },
+            {
+                id: 'documentName',
+                numeric: false,
+                disablePadding: false,
+                label: 'Document Name'
+            },
+            {
+                id: 'uploadDateTime',
+                numeric: false,
+                disablePadding: false,
+                label: 'Upload Date Time'
+            },
+            {
+                id: 'fileSize',
+                numeric: false,
+                disablePadding: false,
+                label: 'File Size'
+            },
+            {
+                id: 'view',
+                numeric: false,
+                disablePadding: false,
+                label: 'View'
+            }
+        ];
+
         return (
             <Paper className={classes.root}>
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table} aria-labelledby="tableTitle">
-                        <CustomerLineTableHead
-                            className={classNames(classes.CustomerLineHeadRoot)}
+                        <DocumentUploadTableHead
+                            className={classNames(classes.documentuploadHeadRoot)}
                             numSelected={selected.length}
                             order={order}
-                            onSelectAllClick={this.handleSelectAllClick}
                             onRequestSort={this.handleRequestSort}
-                            rowCount={data.length}
-                            headers={this.props.headers}
+                            rowCount={documentsList.length}
+                            headers={headers}
                         />
                         <TableBody>
-                            {stableSort(data, getSorting(order, orderBy))
+                            {documentsList.length > 0 && (
+                                stableSort(documentsList, getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map(n => {
                                             return (
-                                                <TableRow hover key={n.id} >
+                                                <TableRow hover key={n.FileTypeListId} >
+
                                                     <TableCell component="td" scope="row" >
-                                                        <TextField
-                                                            id={"active" + n.id}
-                                                            className={classes.textField}
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
+                                                        {n.Name}
                                                     </TableCell>
                                                     <TableCell>
                                                         <TextField
-                                                            id={"rate" + n.id}
-                                                            className={classes.textField}
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <TextField
-                                                            id={"value" + n.id}
+                                                            id={"value" + n.FileTypeListId}
                                                             type="file"
+                                                            onChange={ (e) => this.handleChange(e.target.files,n.FileTypeListId)}
+                                                            margin="dense"
                                                             className={classes.textField}
                                                             variant="outlined"
                                                             fullWidth
                                                         />
                                                     </TableCell>
                                                     <TableCell>
-                                                        <TextField
-                                                            id={"browse" + n.id}
-                                                            className={classes.textField}
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
+                                                        {documentsList["documentName"+n.FileTypeListId]}
                                                     </TableCell>
                                                     <TableCell>
-                                                        <TextField
-                                                            id={"active" + n.id}
-                                                            className={classes.textField}
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
+                                                        {documentsList["documentDateTime"+n.FileTypeListId]}
                                                     </TableCell>
                                                     <TableCell>
-                                                        <TextField
-                                                            id={"active" + n.id}
-                                                            className={classes.textField}
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
+                                                        {documentsList["documentFileSize"+n.FileTypeListId]}
                                                     </TableCell>
-                                                    <TableCell padding="checkbox">
-                                                        <Fab color="secondary" aria-label="add"
-                                                             className={classNames(classes.lineButton, "mr-12")}
-                                                             onClick={() => this.AddLineData()}
-                                                        >
-                                                            <Icon>add</Icon>
-                                                        </Fab>
-                                                        {this.state.data.length > 1 && (
-                                                            <Fab aria-label="add"
-                                                                 onClick={() => this.removeLineData(n)}
-                                                                 className={classNames(classes.lineCancelButton, "mr-12")}>
-                                                                <Icon>close</Icon>
-                                                            </Fab>
-                                                        )}
+                                                    <TableCell>
+                                                        <IconButton
+                                                            className={classNames(classes.summaryPanelButton, "mr-12")}
+                                                            aria-label="Add an alarm"
+                                                            onClick={(ev) => this.documentView(["documentView"+n.FileTypeListId])}>
+                                                            <Icon>visibility</Icon>
+                                                        </IconButton>
                                                     </TableCell>
                                                 </TableRow>
                                             )
                                     }
-                                )}
+                                ))}
                         </TableBody>
                     </Table>
                 </div>
@@ -395,9 +385,22 @@ class FranchiseesDocumentUploadTable extends React.Component {
         );
     }
 }
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+       getFranchiseeDocumentsList: Actions.getFranchiseeDocumentsList
+    }, dispatch);
+}
+
+function mapStateToProps({ franchisees, auth }) {
+    return {
+        regionId: auth.login.defaultRegionId,
+        documentsList: franchisees.documentsList
+    }
+}
 
 FranchiseesDocumentUploadTable.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(FranchiseesDocumentUploadTable);
+
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(FranchiseesDocumentUploadTable)));

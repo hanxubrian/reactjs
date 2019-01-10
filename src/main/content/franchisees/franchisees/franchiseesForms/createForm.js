@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 // core components
 import {
-    TextField, Button, Typography,  Divider, FormControlLabel
+    TextField, Button, Typography, Divider, FormControlLabel, IconButton, Icon
 } from '@material-ui/core';
 // theme components
 import { FuseAnimate} from '@fuse';
@@ -29,7 +29,6 @@ import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider,  DatePicker } from 'material-ui-pickers';
 import moment from "moment";
-import FranchiseesDocumentUploadTable from "./documentUploadTable";
 import FranchiseesMaintenanceTable from "./maintenanceTableLine";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import {
@@ -37,6 +36,7 @@ import {
     UPDATE_EXP_DATE_FRANCHISEE,
     UPDATE_RENEW_DATE_FRANCHISEE
 } from "../../../../../store/actions";
+import FranchiseesDocumentUploadTable from "./documentUploadTable";
 const styles = theme => ({
 
     root: {
@@ -118,44 +118,6 @@ function getStepContent(franchiseeForm, step) {
             disablePadding: false,
             label: 'Active'
         },
-    ];
-    const Upload_Document_headers = [
-        {
-            id: 'doc_type',
-            numeric: false,
-            disablePadding: false,
-            label: 'Doc Type'
-        },
-        {
-            id: 'documentName',
-            numeric: false,
-            disablePadding: false,
-            label: 'Document Name'
-        },
-        {
-            id: 'browse',
-            numeric: false,
-            disablePadding: false,
-            label: 'Browse'
-        },
-        {
-            id: 'uploadDateTime',
-            numeric: false,
-            disablePadding: false,
-            label: 'Upload Date Time'
-        },
-        {
-            id: 'fileSize',
-            numeric: false,
-            disablePadding: false,
-            label: 'File Size'
-        },
-        {
-            id: 'view',
-            numeric: false,
-            disablePadding: false,
-            label: 'View'
-        }
     ];
 
     const stateNames = [
@@ -286,6 +248,7 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="financeName"
                                 label="Name"
+                                value=""
                                 variant="outlined"
                                 className={classes.textField}
                                 margin="dense"
@@ -296,6 +259,7 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="financeAddress"
                                 label="Address"
+                                value=""
                                 variant="outlined"
                                 className={classes.textField}
                                 margin="dense"
@@ -616,7 +580,7 @@ function getStepContent(franchiseeForm, step) {
                 <Fragment>
                     <div style={{ marginTop: '30px' }}></div>
                     <div className="flex">
-                        <FranchiseesDocumentUploadTable tableType="DOCUMENT_UPLOADING" headers={Upload_Document_headers} />
+                        <FranchiseesDocumentUploadTable/>
                     </div>
                 </Fragment>
             )
@@ -651,7 +615,8 @@ class FranchiseesCreateForm extends Component {
         interest: 0,
         noOfPayments: 0,
         daysToFullfill: 0,
-        paymentAmount: 0
+        paymentAmount: 0,
+        documentsList: []
     };
 
     constructor (props){
@@ -664,13 +629,15 @@ class FranchiseesCreateForm extends Component {
             value: newValue.toString()
         });
     };
-
     closeComposeForm = () => {
         this.type === 'create' ? this.props.closeEditFranchisees() : this.props.closeCreateFranchisees();
     };
     componentWillMount(){
         this.setState({
             planType: this.props.planType
+        });
+        this.setState({
+            documentsList: this.props.getFranchiseeDocumentsList(this.props.regionId)
         });
         this.props.planType.Data.map( x => {
                 if (x.FranchiseeContractTypeListId === this.state.defaultPlanType) {
@@ -862,7 +829,8 @@ function mapDispatchToProps(dispatch) {
         showEditFranchisees: Actions.showCreteFranchisees,
         closeEditFranchisees: Actions.showCreteFranchisees,
         updateDate: Actions.updateDate,
-        getFranchiseeFormPlanType: Actions.getFranchiseeFormPlanType
+        getFranchiseeFormPlanType: Actions.getFranchiseeFormPlanType,
+        getFranchiseeDocumentsList: Actions.getFranchiseeDocumentsList
     }, dispatch);
 }
 
@@ -871,7 +839,8 @@ function mapStateToProps({ franchisees, auth }) {
         franchiseesForm: franchisees.createFranchisees,
         regionId: auth.login.defaultRegionId,
         planType: franchisees.planType,
-        user: auth.login
+        user: auth.login,
+        documentsList: franchisees.documentsList
     }
 }
 

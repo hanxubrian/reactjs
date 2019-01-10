@@ -22,6 +22,7 @@ const initialState = {
     selectedExpDate: new Date(),
     bFranchiseesFetchStart: false,
     planType: [],
+    documentsList: [],
     transactionStatusFranchisees:{
         Active: true,
         Inactive: true,
@@ -77,6 +78,26 @@ const franchisees = function(state = initialState, action) {
             return{
                 ...state,
                 planType: action.payload
+            }
+        }
+        case Actions.GET_FRANCHISEE_DOCUMENTS_LIST:
+        {
+            let documentsList = action.payload;
+            if(action.payload.length>0) {
+                documentsList = action.payload.map(iv => {
+                    return {
+                        ["documentName"+iv.FileTypeListId]: "",
+                        ["documentDateTime"+iv.FileTypeListId]: "",
+                        ["documentFileSize"+iv.FileTypeListId]: "",
+                        ["documentView"+iv.FileTypeListId]: "",
+                        ["documentAction"+iv.FileTypeListId]: "",
+                        ...iv
+                    }
+                });
+            }
+            return{
+                ...state,
+                documentsList: documentsList
             }
         }
         case Actions.TOGGLE_FILTER_PANEL_FRANCHISEES:

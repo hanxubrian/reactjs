@@ -738,26 +738,6 @@ class Franchisees extends Component {
                                     minRows = {0}
                                     onFetchData={this.fetchData}
                                     PaginationComponent={JanikingPagination}
-                                    // getTheadGroupProps={(state, rowInfo, column, instance) =>{
-                                    //     return {
-                                    //         style:{
-                                    //             padding: "10px 10px",
-                                    //             fontSize: 16,
-                                    //             fontWeight: 700
-                                    //         },
-                                    //
-                                    //     }
-                                    // }}
-                                    // getTheadGroupThProps={(state, rowInfo, column, instance) => {
-                                    //     return {
-                                    //         style:{
-                                    //             padding: "10px 10px",
-                                    //             fontSize: 18,
-                                    //             fontWeight: 700,
-                                    //         },
-                                    //         className: classNames("flex items-center justify-start")
-                                    //     }
-                                    // }}
                                     getTheadThProps={(state, rowInfo, column, instance) =>{
                                         let border = '1px solid rgba(255,255,255,.6)';
                                         if(column.Header==='Actions') border = 'none';
