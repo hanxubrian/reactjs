@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import Geocode from "react-geocode";
 
 import { Paper, withStyles } from '@material-ui/core';
-import { TextField } from '@material-ui/core';
+import { TextField, Divider } from '@material-ui/core';
 import keycode from 'keycode';
 
 //Material UI core
@@ -223,21 +223,13 @@ class FilterPanel extends Component {
 	};
 
 	handleChangeChecked = name => event => {
-		if (name === "isAllCustomerStatus") {
-			this.setState({
-				isAllCustomerStatus: event.target.checked,
-				isActiveCustomerStatus: event.target.checked,
-				isCancelledCustomerStatus: event.target.checked,
-				isSuspendedCustomerStatus: event.target.checked,
-				isPendingCustomerStatus: event.target.checked,
-				isInactiveCustomerStatus: event.target.checked,
-				isTransferredCustomerStatus: event.target.checked,
-				isUnknownCustomerStatus: event.target.checked,
-				isRejectedCustomerStatus: event.target.checked,
-				isRegionOperationCustomerStatus: event.target.checked,
-				isRegionAccountingCustomerStatus: event.target.checked,
-				isVariableCustomerStatus: event.target.checked,
+		if (name === "customerStatusList0") {
+			this.props.customerStatusList.Data.map((x, index) => {
+				this.setState({
+					["customerStatusList" + index + 1]: event.target.checked
+				})
 			})
+
 		} else {
 			this.setState({ [name]: event.target.checked });
 		}
@@ -405,17 +397,18 @@ class FilterPanel extends Component {
 
 	render() {
 		const { classes, customerForm, customers } = this.props;
-		
+
 		let regionCustomers = [];
 
-		if (customers) { // to avoid error
-			customers.Data.Regions.filter(x => {
-				return this.props.regionId === 0 || x.Id === this.props.regionId;
-			}).forEach(x => {
-				regionCustomers = [...regionCustomers, ...x.CustomerList];
-			});
-		}
-		let accountTypes = [...new Set(regionCustomers.map(x => x.AccountTypeListName))].sort();
+		// if (customers) { // to avoid error
+		// 	customers.Data.Regions.filter(x => {
+		// 		return this.props.regionId === 0 || x.Id === this.props.regionId;
+		// 	}).forEach(x => {
+		// 		regionCustomers = [...regionCustomers, ...x.CustomerList];
+		// 	});
+		// }
+		
+		// let accountTypes = [...new Set(regionCustomers.map(x => x.AccountTypeListName))].sort();
 		// let accountStatuses = [...new Set(regionCustomers.map(x => x.StatusName))].sort();
 
 		return (
@@ -553,18 +546,23 @@ class FilterPanel extends Component {
 											label="Account Type *"
 											select
 											className={classes.textField}
-											value={this.state.AccountType === undefined ? "" : this.state.AccountType}
+											value={this.state.AccountType === undefined ? 0 : this.state.AccountType}
 											onChange={this.handleChange('AccountType')}
 											margin="normal"
 											variant="outlined"
 											fullWidth
 										// style={{ minWidth: "100px", width: "30%" }}
 										>
-											{[{ value: 0, label: "Airline" }].map(option => (
+											{/* {[{ value: 0, label: "Airline" }].map(option => (
 												<MenuItem key={option.value} value={option.value}>
 													{option.label}
 												</MenuItem>
+											))} */}
+
+											{this.props.accountTypeList.Data !== undefined && this.props.accountTypeList.Data.map((x, index) => (
+												<MenuItem key={index} value={index}>{x.Text}</MenuItem>
 											))}
+
 										</TextField>
 									</GridItem>
 
@@ -705,7 +703,7 @@ class FilterPanel extends Component {
 												))
 										}
 									</TextField>
-
+									<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
 
 									<TextField
 										select
@@ -716,22 +714,14 @@ class FilterPanel extends Component {
 										InputLabelProps={{
 											shrink: true
 										}}
-										value={this.state.AccountTypes === undefined ? 0 : this.state.AccountTypes}
-										onChange={this.handleChange('AccountTypes')}
+										value={this.state.AccountType === undefined ? 0 : this.state.AccountType}
+										onChange={this.handleChange('AccountType')}
 										margin="normal"
 										variant="outlined"
 										style={{ width: 180 }}>
-										{/* {[{
-											value: 0, label: "All"
-										}, {
-											value: 1, label: "None"
-										}].map(option => (
-											<MenuItem key={option.value} value={option.value}>
-												{option.label}
-											</MenuItem>
-										))} */}
 
-										<MenuItem value={-2}><em>All</em></MenuItem>
+
+										{/* <MenuItem value={-2}><em>All</em></MenuItem>
 										<MenuItem value={-1}><em>None</em></MenuItem>
 										{
 											accountTypes.map((x, index) => {
@@ -740,7 +730,13 @@ class FilterPanel extends Component {
 												else
 													return null
 											})
+										} */}
+										{this.props.accountTypeList.Data !== undefined &&
+											this.props.accountTypeList.Data.map((x, index) => {
+												return (<MenuItem key={index} value={index}>{x.Text}</MenuItem>)
+											})
 										}
+
 
 									</TextField>
 
@@ -753,12 +749,12 @@ class FilterPanel extends Component {
 										InputLabelProps={{
 											shrink: true
 										}}
-										value={this.state.AccountExecutive === undefined ? 0 : this.state.AccountExecutive}
+										value={this.state.AccountExecutive.Data === undefined ? 0 : this.state.AccountExecutive}
 										onChange={this.handleChange('AccountExecutive')}
 										margin="normal"
 										variant="outlined"
 										style={{ width: 180 }}>
-										{[{
+										{/* {[{
 											value: 0, label: "All"
 										}, {
 											value: 1, label: "None"
@@ -766,15 +762,44 @@ class FilterPanel extends Component {
 											<MenuItem key={option.value} value={option.value}>
 												{option.label}
 											</MenuItem>
-										))}
+										))} */}
+										{this.props.accountExecutiveList.Data !== undefined && this.props.accountExecutiveList.Data.map((x, index) => {
+											if (x !== null)
+												return (<MenuItem key={index} value={index}>{x.Text}</MenuItem>)
+											else
+												return null
+										})}
 									</TextField>
 
 								</div>
 
 								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
 									<h3>Customer Status</h3>
-
 									<FormControlLabel
+										control={
+											<Switch checked={this.state['customerStatusList0']}
+												onChange={this.handleChangeChecked('customerStatusList0')} />
+										}
+										label="All"
+									/>
+									{
+										this.props.customerStatusList.Data !== undefined && this.props.customerStatusList.Data.map((x, index) => {
+											if (x !== null)
+												return (
+													<FormControlLabel key={index}
+														control={
+															<Switch checked={this.state['customerStatusList' + (index + 1)]}
+																onChange={this.handleChangeChecked('customerStatusList' + index + 1)} />
+														}
+														label={x.Text}
+													/>
+												)
+											else
+												return null
+										})
+									}
+
+									{/* <FormControlLabel
 										control={<Switch checked={this.state.isAllCustomerStatus} onChange={this.handleChangeChecked('isAllCustomerStatus')} />}
 										label="All"
 									/>
@@ -821,7 +846,7 @@ class FilterPanel extends Component {
 									<FormControlLabel
 										control={<Switch checked={this.state.isVariableCustomerStatus} onChange={this.handleChangeChecked('isVariableCustomerStatus')} />}
 										label="Variable"
-									/>
+									/> */}
 								</div>
 							</div>
 						)
@@ -848,6 +873,10 @@ function mapStateToProps({ customers, auth }) {
 		customerForm: customers.customerForm,
 		regionId: auth.login.defaultRegionId,
 		locationFilterValue: customers.locationFilterValue,
+
+		accountTypeList: customers.accountTypeList,
+		accountExecutiveList: customers.accountExecutiveList,
+		customerStatusList: customers.customerStatusList,
 	}
 }
 

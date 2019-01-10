@@ -30,7 +30,11 @@ const initialState = {
 	},
 	searchText: "",
 
-	bCustomerFetchStart: false
+	bCustomerFetchStart: false,
+
+	accountTypeList: [],
+	accountExecutiveList: [],
+	customerStatusList: [],
 };
 
 
@@ -44,6 +48,27 @@ const customers = function (state = initialState, action) {
 					bLoadedCustomers: true,
 					bCustomerFetchStart: false
 				};
+			}
+		case Actions.GET_ACCOUNT_TYPE_LIST:
+			{
+				return {
+					...state,
+					accountTypeList: action.payload
+				}
+			}
+		case Actions.GET_CUSTOMER_STATUS_LIST:
+			{
+				return {
+					...state,
+					customerStatusList: action.payload
+				}
+			}
+		case Actions.GET_ACCOUNT_EXCUTIVE_LIST:
+			{
+				return {
+					...state,
+					accountExecutiveList: action.payload
+				}
 			}
 		case Actions.GET_ALL_DOCUMENTS:
 			{

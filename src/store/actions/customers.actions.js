@@ -23,7 +23,12 @@ export const APPLY_SEARCH_TEXT = '[CUSTOMERS APP] APPLY SEARCH TEXT';
 
 export const GET_CUSTOMERS_FETCH_START = "[CUSTOMERS APP] GET CUSTOMERS FETCH START";
 
-export function getCustomers(regionId, statusId=0, location="all", latitude="", longitude="", searchText="") {
+export const GET_ACCOUNT_TYPE_LIST = "[CUSTOMERS APP] GET ACCOUNT TYPE LIST";
+export const GET_ACCOUNT_EXCUTIVE_LIST = "[CUSTOMERS APP] GET ACCOUNT EXCUTIVE LIST";
+export const GET_CUSTOMER_STATUS_LIST = "[CUSTOMERS APP] GET CUSTOMER STATUS LIST";
+
+
+export function getCustomers(regionId, statusId = 0, location = "all", latitude = "", longitude = "", searchText = "") {
 	// return dispatch => {
 	// const request = axios.get("/api/customers/gets");
 
@@ -38,8 +43,8 @@ export function getCustomers(regionId, statusId=0, location="all", latitude="", 
 	return (dispatch) => {
 
 		dispatch({
-            type: GET_CUSTOMERS_FETCH_START,
-            payload: true
+			type: GET_CUSTOMERS_FETCH_START,
+			payload: true
 		});
 
 		(async () => {
@@ -53,20 +58,54 @@ export function getCustomers(regionId, statusId=0, location="all", latitude="", 
 			});
 		})();
 	}
-
 }
+export function getAccountTypeList() {
+	return (dispatch) => {
 
+		(async () => {
+			let response = await customersService.getAccountTypeList();
+			dispatch({
+				type: GET_ACCOUNT_TYPE_LIST,
+				payload: response
+			});
+		})();
+	}
+}
+export function getAccountExecutiveList() {
+	return (dispatch) => {
+
+		(async () => {
+			let response = await customersService.getAccountExecutiveList();
+			dispatch({
+				type: GET_ACCOUNT_EXCUTIVE_LIST,
+				payload: response
+			});
+		})();
+	}
+}
+export function getCustomerStatusList() {
+	return (dispatch) => {
+
+		(async () => {
+			let response = await customersService.getCustomerStatusList();
+			dispatch({
+				type: GET_CUSTOMER_STATUS_LIST,
+				payload: response
+			});
+		})();
+	}
+}
 export function getDocuments() {
 	return (dispatch) => {
-        (async () => {
+		(async () => {
 			let documentsList = await customersService.getCustomerDocuments();
 			console.log(documentsList)
-            dispatch({
-                type: GET_ALL_DOCUMENTS,
-                payload: documentsList
-            });
-        })();
-    }
+			dispatch({
+				type: GET_ALL_DOCUMENTS,
+				payload: documentsList
+			});
+		})();
+	}
 }
 
 export function toggleFilterPanel() {
