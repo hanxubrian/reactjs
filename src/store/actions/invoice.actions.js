@@ -11,6 +11,7 @@ export const TOGGLE_FILTER_STATUS = "[INVOICES] TOGGLE FILTER STATUS";
 export const TOGGLE_FILTER_PANEL = "[INVOICES] TOGGLE FILTER PANEL";
 export const UPDATE_FROM_DATE_INVOICE = "[INVOICES] UPDATE FROM DATE";
 export const UPDATE_TO_DATE_INVOICE = "[INVOICES] UPDATE TO DATE";
+export const GET_CUSTOMER_TAX_AMOUNT = "[INVOICES] GET CUSTOMER TAX AMOUNT";
 
 // for Add/Edit
 export const OPEN_NEW_INVOICE_FORM = '[INVOICES APP] OPEN NEW INVOICE FORM';
@@ -21,6 +22,7 @@ export const ADD_INVOICE = '[INVOICES APP] ADD INVOICE';
 export const UPDATE_INVOICE = '[INVOICES APP] UPDATE INVOICE';
 export const UPDATE_INVOICE_STATUS = '[INVOICES APP] UPDATE INVOICE STATUS';
 export const UPDATE_INVOICE_LINE = '[INVOICES APP] UPDATE INVOICE LINE';
+export const UPDATE_INVOICE_DATE_OPTION = '[INVOICES APP] UPDATE INVOICE DATE OPTION';
 
 
 export function getInvoices(RegionId, StatusId, FromDate, ToDate, PeriodId,OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText) {
@@ -52,7 +54,6 @@ export function getInvoiceStatus(RegionId) {
     return (dispatch) => {
        (async () => {
             let res = await invoiceService.getInvoiceStatusList(RegionId);
-            console.log('invoice status=', res);
             if (res.IsSuccess) {
                 dispatch({
                     type: GET_INVOICE_STATUS,
@@ -199,5 +200,42 @@ export function updateInvoiceLine(data) {
     return {
         type: UPDATE_INVOICE_LINE,
         payload: data
+    }
+}
+
+/**
+ * Gets Customer TaxRate, Extended Price, TaxAmount and Total Amount
+ * @param RegionId
+ * @param CustomerId
+ * @param Amount
+ * @param Quantity
+ * @param TaxTypeId
+ * @returns {Function}
+ */
+export function getCustomerTaxAmount(RegionId,CustomerId, Amount, Quantity, TaxTypeId=1) {
+    return (dispatch) => {
+        (async () => {
+            let res = await invoiceService.getInvoiceStatusList(RegionId);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: GET_CUSTOMER_TAX_AMOUNT,
+                    payload: res.Data
+                });
+            } else {
+
+            }
+        })();
+    };
+}
+
+/**
+ * updates invoice date option index
+ * @param option
+ * @returns {{type: string, payload: *}}
+ */
+export function updateInvoiceDateOption(option){
+    return {
+        type: UPDATE_INVOICE_DATE_OPTION,
+        payload: option
     }
 }

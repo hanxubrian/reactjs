@@ -4,6 +4,7 @@ import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import {UPDATE_INVOICE_DATE_OPTION} from "../actions/";
 
 
 let today = new Date();
@@ -30,7 +31,9 @@ const initialState = {
     ToPrintOrToEmail: "print",
     SearchText: "",
     invoiceStatus: [],
-    bInvoiceStart: false
+    bInvoiceStart: false,
+    customerTaxAmountLine: null,
+    invoiceDateOption: 3
 };
 
 
@@ -75,9 +78,14 @@ const invoices = function(state = initialState, action) {
                 ...state, ToDate: action.payload
             }
         }
-        case Actions.UPDATE_FROM_DATE_INVOICE:{
+        case Actions.GET_CUSTOMER_TAX_AMOUNT:{
             return {
-                ...state, invoiceStatus:[...action.payload]
+                ...state, customerTaxAmountLine: action.payload
+            }
+        }
+        case Actions.UPDATE_INVOICE_DATE_OPTION:{
+            return {
+                ...state, invoiceDateOption: action.payload
             }
         }
         case Actions.TOGGLE_FILTER_PANEL:

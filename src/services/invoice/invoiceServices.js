@@ -54,6 +54,34 @@ class invoiceService {
                 { params: {RegionId: RegionId}}
             )
                 .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    };
+
+    /**
+     * Gets Customer Tax Amount
+     * @param RegionId
+     * @param CustomerId
+     * @param Amount
+     * @param Quantity
+     * @param TaxTypeId = 1, for now
+     * @returns {Promise<any>}
+     */
+    getCustomerTaxAmount = (RegionId, CustomerId, Amount, Quantity, TaxTypeId) => {
+        return new Promise((resolve, reject) => {
+            axios_instance.get(`${BASE_API_URL}/v1/regions/CustomerTaxAmount/Get`,
+                { params: {RegionId, CustomerId, Amount, Quantity, TaxTypeId}}
+            )
+                .then( res => {
                     console.log('status API result=', res);
                     if(res.status===200) {
                         resolve(res.data);
@@ -67,7 +95,6 @@ class invoiceService {
                 })
         });
     }
-
 }
 
 const instance = new invoiceService();
