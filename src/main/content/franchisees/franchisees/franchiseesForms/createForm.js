@@ -639,19 +639,21 @@ class FranchiseesCreateForm extends Component {
         this.setState({
             documentsList: this.props.getFranchiseeDocumentsList(this.props.regionId)
         });
-        this.props.planType.Data.map( x => {
-                if (x.FranchiseeContractTypeListId === this.state.defaultPlanType) {
-                    this.setState({
-                        planAmount: x.Price,
-                        daysToFullfill: x.DaysToFulfill,
-                        noOfPayments: x.NoOfPayments,
-                        interest: x.Interest,
-                        downPayment: x.DownPayment,
-                        ibAmount: x.BusinessAmount
-                    });
+        if(this.props.planType.Data != null){
+            this.props.planType.Data.map( x => {
+                    if (x.FranchiseeContractTypeListId === this.state.defaultPlanType) {
+                        this.setState({
+                            planAmount: x.Price,
+                            daysToFullfill: x.DaysToFulfill,
+                            noOfPayments: x.NoOfPayments,
+                            interest: x.Interest,
+                            downPayment: x.DownPayment,
+                            ibAmount: x.BusinessAmount
+                        });
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 
     componentDidMount() {

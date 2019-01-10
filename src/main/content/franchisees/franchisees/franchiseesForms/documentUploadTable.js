@@ -269,7 +269,6 @@ class FranchiseesDocumentUploadTable extends React.Component {
     {
         let today = new Date();
         let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-        // console.log('fileObject = ',URL.createObjectURL(selectorFiles[0]));
         const list = this.props.documentsList;
         list["documentName"+id] = selectorFiles[0].name;
         list["documentDateTime"+id] = date;
@@ -397,10 +396,5 @@ function mapStateToProps({ franchisees, auth }) {
         documentsList: franchisees.documentsList
     }
 }
-
-FranchiseesDocumentUploadTable.propTypes = {
-    classes: PropTypes.object.isRequired
-};
-
 
 export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(FranchiseesDocumentUploadTable)));

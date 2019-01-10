@@ -108,6 +108,26 @@ class franchiseesService {
         });
     };
     /**
+     * @param RegionId
+     * @returns {Promise<any>}
+     */
+    getFranchiseeFeeMaintenance = (RegionId) => {
+        return new Promise((resolve, reject) => {
+            axios_instance.get(`${BASE_API_URL}/v1/regions/getdefaultfeestructure?regionId=${RegionId}`)
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    };
+    /**
      * @param regionId
      * @param year
      * @param month

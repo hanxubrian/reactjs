@@ -79,6 +79,18 @@ export function getFranchiseeDocumentsList(regionId) {
     }
 }
 
+export function getFranchiseeFeeMaintenance(regionId) {
+    return (dispatch) => {
+        (async () => {
+            let documentsList = await franchiseesService.getFranchiseeDocumentsList(regionId);
+            dispatch({
+                type: GET_FRANCHISEE_DOCUMENTS_LIST,
+                payload:  documentsList.Data
+            });
+        })();
+    }
+}
+
 export function toggleFilterPanelFranchisees(){
     return {
         type: TOGGLE_FILTER_PANEL_FRANCHISEES
