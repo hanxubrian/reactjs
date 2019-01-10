@@ -68,14 +68,29 @@ const styles = theme => ({
     }
 });
 
-class FilterPanel extends Component {
+const THIS_WEEK = 1;
+const THIS_WEEK_TO_DATE = 2;
+const THIS_MONTH = 3;
+const THIS_MONTH_TO_DATE = 4;
+const THIS_QUARTER = 5;
+const THIS_QUARTER_TO_DATE = 6;
+const THIS_FISCAL_YEAR = 7;
+const THIS_FISCAL_YEAR_TO_DATE = 8;
+const TODAY = 9;
+const YESTERDAY = 10;
+const LAST_QUARTER = 11;
+const LAST_YEAR = 12;
+const CUSTOM_DATE = 13;
+const PERIOD = 14;
 
+class FilterPanel extends Component {
     state = {
         checkedEbill: true,
         checkedPrint: true,
         invoiceStatus: [],
         FromDate: undefined,
-        ToDate: undefined
+        ToDate: undefined,
+        invoiceDateOption: LAST_YEAR
     };
 
     componentDidMount()
@@ -154,7 +169,6 @@ class FilterPanel extends Component {
     render()
     {
         const {classes} = this.props;
-        console.log('settings', this.props.settings);
         return (
             <div className={classNames(classes.root)}>
                 <div className={classNames("flex flex-col")}>
@@ -165,31 +179,30 @@ class FilterPanel extends Component {
                                 <h3 className="mb-20">Invoice Date</h3>
                                 {/* <InputLabel htmlFor="age-simple">Invoice Date</InputLabel> */}
                                 <Select
-                                value={this.state.invoiceDate}
+                                value={this.state.invoiceDateOption}
                                 onChange={this.handleChange1}
                                 inputProps={{
-                                name: 'invoiceDate',
-                                id  : 'invoice_date'
+                                name: 'invoiceDateOption',
+                                id  : 'invoiceDateOption'
                                 }}
                                 >
                                 <MenuItem value="">
                                 <em>None</em>
                                 </MenuItem>
-                                <MenuItem value={1}>This Week</MenuItem>
-                                <MenuItem value={2}>This Week-to-date</MenuItem>
-                                <MenuItem value={3}>This Month</MenuItem>
-                                <MenuItem value={4}>This Month-to-date</MenuItem>
-                                <MenuItem value={5}>This Quarter</MenuItem>
-                                <MenuItem value={6}>This Quarter-to-Date</MenuItem>
-                                <MenuItem value={7}>This Fiscal Year</MenuItem>
-                                <MenuItem value={8}>This Fiscal Year-to-date</MenuItem>
-                                <MenuItem value={9}>Today</MenuItem>
-                                <MenuItem value={10}>Yesterday</MenuItem>
-                                <MenuItem value={11}>This Month</MenuItem>
-                                <MenuItem value={12}>Last Quarter</MenuItem>
-                                <MenuItem value={13}>Last Year</MenuItem>
-                                <MenuItem value={14}>Custom Date</MenuItem>
-                                <MenuItem value={15}>Period</MenuItem>
+                                <MenuItem value={THIS_WEEK}>This Week</MenuItem>
+                                <MenuItem value={THIS_WEEK_TO_DATE}>This Week-to-date</MenuItem>
+                                <MenuItem value={THIS_MONTH}>This Month</MenuItem>
+                                <MenuItem value={THIS_MONTH_TO_DATE}>This Month-to-date</MenuItem>
+                                <MenuItem value={THIS_QUARTER}>This Quarter</MenuItem>
+                                <MenuItem value={THIS_QUARTER_TO_DATE}>This Quarter-to-Date</MenuItem>
+                                <MenuItem value={THIS_FISCAL_YEAR}>This Fiscal Year</MenuItem>
+                                <MenuItem value={THIS_FISCAL_YEAR_TO_DATE}>This Fiscal Year-to-date</MenuItem>
+                                <MenuItem value={TODAY}>Today</MenuItem>
+                                <MenuItem value={YESTERDAY}>Yesterday</MenuItem>
+                                <MenuItem value={LAST_QUARTER}>Last Quarter</MenuItem>
+                                <MenuItem value={LAST_YEAR}>Last Year</MenuItem>
+                                <MenuItem value={CUSTOM_DATE}>Custom Date</MenuItem>
+                                <MenuItem value={PERIOD}>Period</MenuItem>
                                 </Select>
                             </FormControl>
                                 <br></br>
