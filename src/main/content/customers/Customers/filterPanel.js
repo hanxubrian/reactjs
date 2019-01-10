@@ -351,11 +351,36 @@ class FilterPanel extends Component {
 
 				return;
 			case "AddressZipcodeRadius":
-				payload = {
-					...payload,
-					miles: value
-				}
-				break;
+				Geocode.fromAddress(this.state.SpecificAddress).then(
+					response => {
+						const { lat, lng } = response.results[0].geometry.location;
+						// console.log(lat, lng);
+
+						payload = {
+							...payload,
+							miles: value,
+							addrZipcode: {
+								lat,
+								lng,
+								addr: value
+							}
+						}
+						this.props.selectLocationFilter(payload)
+						return
+					},
+					error => {
+						// console.error(error);
+						payload = {
+							...payload,
+							miles: value,
+							addrZipcode: undefined
+						}
+						this.props.selectLocationFilter(payload)
+						return
+					}
+				);
+
+				return;
 		}
 		console.log(payload)
 		this.props.selectLocationFilter(payload)
