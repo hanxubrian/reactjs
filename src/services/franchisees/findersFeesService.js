@@ -15,12 +15,8 @@ class findersFeesService {
      * @returns {Promise<any>}
      */
     getFindersFeeList =  (year, month) => {
-        const data = {
-            "year": year,
-            "month": month
-        };
         return new Promise((resolve, reject) => {
-            axios_instance.get(`${BASE_MONGO_API_URL}/api/Franchisee/leafil?year=2018&month=12`)
+            axios_instance.get(`${BASE_MONGO_API_URL}/api/Franchisee/leafil?year=${year}&month=${month}`)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);

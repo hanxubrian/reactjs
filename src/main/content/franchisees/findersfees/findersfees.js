@@ -225,7 +225,7 @@ class FindersFees extends Component {
 		super(props);
 
 		if (!props.bLoadedFindersFees) {
-			props.getFindersFees(this.props.month, this.props.year);
+			props.getFindersFees(this.props.year, this.props.month);
 		}
 		this.fetchData = this.fetchData.bind(this);
 		this.escFunction = this.escFunction.bind(this);
@@ -241,7 +241,7 @@ class FindersFees extends Component {
 			selection: [],
 			selectAll: false,
             regionId: 0,
-            
+
             year: 2018,
             month: 12,
 			current_lat: 0,
@@ -394,7 +394,6 @@ class FindersFees extends Component {
 		// let temp1 = [];
 		// const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
 		// const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
-        // debugger
         if (rawData === null) return;
 		let regions = rawData.Data.filter(x => x);
         filteredValues = regions.filter(x => x.FF_TOT && x.FF_DWNAMT && x.FF_BALANCE && x.FF_PYAMT !== null)

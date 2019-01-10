@@ -9,8 +9,8 @@ const initialState = {
 	bOpenedSummaryPanel: false,
     bOpenedFilterPanel: false,
     bOpenedFilterPanelFindersFees: false,
-    year: "",
-    month: "",
+    year: 2018,
+    month: 12,
     bFindersFeesFetchStart: false,
 	bOpenedMapView: false,
 	transactionStatus: { checkedPaid: true, checkedPP: true, checkedComplete: true, checkedOpen: true },
@@ -29,20 +29,20 @@ const findersFees = function (state = initialState, action) {
 		case Actions.GET_ALL_FINDERSFEES:
 			{
 				return {
-					...initialState,
+					...state,
                     findersFeesDB: action.payload,
                     bLoadedFindersFees: true,
                     bOpenedFilterPanelFindersFees: state.bOpenedFilterPanelFindersFees,
                     bFindersFeesFetchStart: false
 				};
             }
-        // case Actions.GET_FINDERSFEES_FETCH_START:
-        //     {
-        //         return {
-        //             ...state,
-        //             bFindersFeesFetchStart: true
-        //         };
-        // }
+        case Actions.GET_FINDERSFEES_FETCH_START:
+            {
+                return {
+                    ...state,
+                    bFindersFeesFetchStart: true
+                };
+        }
 		case Actions.TOGGLE_FILTER_PANEL:
 			{
 				return {

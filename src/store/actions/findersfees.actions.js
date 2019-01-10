@@ -2,7 +2,7 @@ import axios from "axios";
 import {findersFeesService} from "services";
 
 export const GET_ALL_FINDERSFEES = "[FINDERSFEES] GETS ALL";
-// export const GET_FINDERSFEES_FETCH_START = "[FINDERSFEES] GET FINDERSFEES FETCH START";
+export const GET_FINDERSFEES_FETCH_START = "[FINDERSFEES] GET FINDERSFEES FETCH START";
 export const DELETE_SELECTED_FINDERSFEES = "[FINDERSFEES] DELETE SELECTED";
 export const REMOVE_SELECTED_FINDERSFEE = "[FINDERSFEE] REMOVE SELECTED";
 export const TOGGLE_SUMMARY_PANEL = "[FINDERSFEES] TOGGLE SUMMARY PANEL";
@@ -39,13 +39,12 @@ const axios_instance = axios.create({
 
 
 export function getFindersFees(year, month) {
-
     return (dispatch) => {
 
-        // dispatch({
-        //     type: GET_FINDERSFEES_FETCH_START,
-        //     payload: true
-        // });
+        dispatch({
+            type: GET_FINDERSFEES_FETCH_START,
+            payload: true
+        });
 
         (async () => {
             let findersFeesList = await findersFeesService.getFindersFeeList(year, month);
