@@ -90,7 +90,7 @@ class FilterPanel extends Component {
         invoiceStatus: [],
         FromDate: undefined,
         ToDate: undefined,
-        invoiceDateOption: LAST_YEAR
+        invoiceDateOption: PERIOD
     };
 
     componentDidMount()
@@ -173,11 +173,9 @@ class FilterPanel extends Component {
             <div className={classNames(classes.root)}>
                 <div className={classNames("flex flex-col")}>
                     <Paper className="flex flex-1 flex-col min-h-px p-20">
-                        {/*<MuiThemeProvider theme={FuseThemes['mainThemeLight']}>*/}
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <FormControl className={classes.formControl} style={{width: 200}}>
                                 <h3 className="mb-20">Invoice Date</h3>
-                                {/* <InputLabel htmlFor="age-simple">Invoice Date</InputLabel> */}
                                 <Select
                                 value={this.state.invoiceDateOption}
                                 onChange={this.handleChange1}
@@ -236,7 +234,6 @@ class FilterPanel extends Component {
                             />
 
                         </MuiPickersUtilsProvider>
-                        {/*</MuiThemeProvider>*/}
                         <div style={{marginTop: 20, display: 'flex', flexDirection: 'column'}}>
                             <h3>Invoice Status</h3>
                             {this.state.invoiceStatus.length>0 && this.state.invoiceStatus.map((iv, index)=> {

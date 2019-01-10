@@ -350,24 +350,12 @@ class InvoiceApp extends Component {
 
         let temp0 = rawData.Data.Region[0].InvList;
 
-        // keys.map((key, index)=> {
-        //
-        //     if(this.props.transactionStatus[key]){
-        //         temp = temp0.filter(d => {
-        //             if(this.props.regionId===0)
-        //                 return d.TransactionStatus.toLowerCase() === statusStrings[index];
-        //             else
-        //                 return d.TransactionStatus.toLowerCase() === statusStrings[index] && d.RegionId === this.props.regionId
-        //         });
-        //     }
-        //     all_temp =_.uniq([...all_temp, ...temp]);
-        //     return true;
-        // });
         this.setState({temp: temp0});
         this.setState({data: temp0});
     };
 
     componentDidMount(){
+        document.addEventListener("keydown", this.escFunction);
         if(this.props.customers!==null){
             let temp = [];
             let regions = this.props.customers.Data.Regions;
