@@ -66,7 +66,7 @@ const styles = theme => ({
 
 
 function getSteps() {
-    return ["Company Information", "Franchisee Agreement", "Franchisees Fee Maintenance","Upload Required Document"];
+    return ["Company Information", "Franchisee Agreement", "Fees","Upload Required Document"];
 }
 
 function getStepContent(franchiseeForm, step) {
@@ -752,7 +752,7 @@ class FranchiseesCreateForm extends Component {
                     >
                         <Tab label="Company Information" />
                         <Tab label="Franchisee Agreement" />
-                        <Tab label="Franchisees Fee Maintenance" />
+                        <Tab label="Fees" />
                         <Tab label="Upload Required Document" />
                     </Tabs>
                 </AppBar>

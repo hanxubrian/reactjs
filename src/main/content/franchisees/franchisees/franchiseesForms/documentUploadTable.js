@@ -285,22 +285,16 @@ class FranchiseesDocumentUploadTable extends React.Component {
 
         const headers = [
             {
+                id: 'documents',
+                numeric: false,
+                disablePadding: false,
+                label: 'Documents'
+            },
+            {
                 id: 'doc_type',
                 numeric: false,
                 disablePadding: false,
                 label: 'Doc Type'
-            },
-            {
-                id: 'browse',
-                numeric: false,
-                disablePadding: false,
-                label: 'Browse'
-            },
-            {
-                id: 'documentName',
-                numeric: false,
-                disablePadding: false,
-                label: 'Document Name'
             },
             {
                 id: 'uploadDateTime',
@@ -319,6 +313,12 @@ class FranchiseesDocumentUploadTable extends React.Component {
                 numeric: false,
                 disablePadding: false,
                 label: 'View'
+            },
+            {
+                id: 'browse',
+                numeric: false,
+                disablePadding: false,
+                label: 'Browse'
             }
         ];
 
@@ -341,23 +341,11 @@ class FranchiseesDocumentUploadTable extends React.Component {
                                 .map(n => {
                                             return (
                                                 <TableRow hover key={n.FileTypeListId} >
-
-                                                    <TableCell component="td" scope="row" >
-                                                        {n.Name}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <TextField
-                                                            id={"value" + n.FileTypeListId}
-                                                            type="file"
-                                                            onChange={ (e) => this.handleChange(e.target.files,n.FileTypeListId)}
-                                                            margin="dense"
-                                                            className={classes.textField}
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
-                                                    </TableCell>
                                                     <TableCell>
                                                         {documentsList["documentName"+n.FileTypeListId]}
+                                                    </TableCell>
+                                                    <TableCell component="td" scope="row" >
+                                                        {n.Name}
                                                     </TableCell>
                                                     <TableCell>
                                                         {documentsList["documentDateTime"+n.FileTypeListId]}
@@ -372,6 +360,17 @@ class FranchiseesDocumentUploadTable extends React.Component {
                                                             onClick={(ev) => this.documentView(["documentView"+n.FileTypeListId])}>
                                                             <Icon>visibility</Icon>
                                                         </IconButton>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <TextField
+                                                            id={"value" + n.FileTypeListId}
+                                                            type="file"
+                                                            onChange={ (e) => this.handleChange(e.target.files,n.FileTypeListId)}
+                                                            margin="dense"
+                                                            className={classes.textField}
+                                                            variant="outlined"
+                                                            fullWidth
+                                                        />
                                                     </TableCell>
                                                 </TableRow>
                                             )
