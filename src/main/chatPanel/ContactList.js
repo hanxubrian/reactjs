@@ -106,7 +106,7 @@ class ContactList extends Component {
                         onClick={() => this.handleContactClick(chat.chatId, contact.id)}
                         className={classNames(classes.contactButton, {'active': (selectedContactId === contact.id)})}
                     >
-                        {contact.unread && (
+                        {contact.unread !==0 && (
                             <div className={classes.unreadBadge}>{contact.unread}</div>
                         )}
                         <div className={classNames(contact.status, classes.status)}/>

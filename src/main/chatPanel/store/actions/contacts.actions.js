@@ -90,7 +90,7 @@ export function initUnread(userId)
         contacts.map((item, i) => {
             if (item.id === userId)
             {
-                item.unread = null;
+                item.unread = 0;
             }
         });
        

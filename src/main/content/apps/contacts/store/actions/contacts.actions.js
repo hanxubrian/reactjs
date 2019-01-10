@@ -205,7 +205,7 @@ export function openChat(contactId)
         const id = getState().auth.login.Username;
        
         (async () => {
-                chatService.openChat(id, contact.email, contact.lastName, contact.avatar).then(()=>{
+                chatService.openChat(id, contact.name, contact.lastName, contact.avatar).then(()=>{
                     dispatch(getChatUserData())}).then(()=>{dispatch(getChatContacts())})
                 }
             )();
