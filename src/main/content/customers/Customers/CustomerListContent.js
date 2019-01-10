@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 // import ReactDOM from 'react-dom';
 
 // core components
-import { Icon, IconButton, Input, Paper, Button } from '@material-ui/core';
+import { Icon, IconButton, Input, Paper, Button, Zoom } from '@material-ui/core';
 
 //Janiking
 import JanikingPagination from 'Commons/JanikingPagination';
@@ -378,6 +378,8 @@ const Command = ({ id, onExecute }) => {
 };
 const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 
+const DEFAULT_ZOOM = 8
+let map_zoom = DEFAULT_ZOOM
 
 const MapWithAMarkerClusterer = compose(
 	withProps({
@@ -397,7 +399,7 @@ const MapWithAMarkerClusterer = compose(
 	withGoogleMap
 )(props =>
 	<GoogleMap
-		defaultZoom={10.5}
+		defaultZoom={map_zoom}
 		defaultCenter={{ lat: props.center.lat, lng: props.center.lng }}
 	>
 		<MarkerClusterer
@@ -435,7 +437,7 @@ const MapWithAMarkerClusterer2 = compose(
 	withGoogleMap
 )(props =>
 	<GoogleMap
-		defaultZoom={10.5}
+		defaultZoom={map_zoom}
 		defaultCenter={{ lat: props.center.lat, lng: props.center.lng }}
 	>
 		<MarkerClusterer
@@ -993,6 +995,9 @@ class CustomerListContent extends Component {
 	filterPins(pins, locationFilterValue) {
 		// this.setState({ gmapVisible: !this.state.gmapVisible });
 		console.log("-------filterPins---------", pins)
+		let k = (12.5 - 9.5) * 75 / (75 / 5 - 1)
+		let b = 12.5 - k / 5
+
 		switch (locationFilterValue.id) {
 			case "locationAll":
 				if (!this.state.gmapVisible) {
@@ -1008,7 +1013,7 @@ class CustomerListContent extends Component {
 						pins2: pins === undefined ? [] : [...pins]
 					})
 				}
-
+				map_zoom = DEFAULT_ZOOM
 				break;
 			case "locationNearBy":
 				let _pins = []
@@ -1039,6 +1044,7 @@ class CustomerListContent extends Component {
 					})
 				}
 
+				map_zoom = locationFilterValue.miles !== undefined ? k / locationFilterValue.miles + b : DEFAULT_ZOOM
 				break;
 			case "locationNearSpecificAddress":
 
@@ -1082,6 +1088,7 @@ class CustomerListContent extends Component {
 						pins2: [..._]
 					})
 				}
+				map_zoom = locationFilterValue.miles !== undefined ? k / locationFilterValue.miles + b : DEFAULT_ZOOM
 				break;
 			default:
 				this.setState({ pins: pins })
