@@ -186,13 +186,21 @@ class FilterPanel extends Component {
 	}
 
 	componentWillMount() {
-		this.setState({
-			checkedPaid: this.props.transactionStatus.checkedPaid,
-			checkedPP: this.props.transactionStatus.checkedPP,
-			checkedComplete: this.props.transactionStatus.checkedComplete
-		});
+		// this.setState({
+		// 	checkedPaid: this.props.transactionStatus.checkedPaid,
+		// 	checkedPP: this.props.transactionStatus.checkedPP,
+		// 	checkedComplete: this.props.transactionStatus.checkedComplete
+		// });
 	}
-
+	componentWillReceiveProps(nextProps) {
+		// if (nextProps.locationFilterValue !== this.props.locationFilterValue) {
+		// 	this.setState({
+		// 		Location: nextProps.locationFilterValue.id,
+		// 		NearbyRadius: nextProps.locationFilterValue.miles,
+		// 		AddressZipcodeRadius: nextProps.locationFilterValue.miles,
+		// 	})
+		// }
+	}
 	componentDidUpdate(prevProps) {
 		if (this.props.state !== prevProps.state) {
 			if (this.props.state) {
@@ -264,8 +272,13 @@ class FilterPanel extends Component {
 	onLocationFilter = (name, value) => {
 
 		let payload = {
+			...this.props.locationFilterValue,
 			id: this.state.Location,
-			miles: this.state.Location === "locationNearBy" ? this.state.NearbyRadius : (this.state.Location === "locationNearSpecificAddress" ? this.state.AddressZipcodeRadius : 0),
+			miles: this.state.Location === "locationNearBy" ?
+				this.state.NearbyRadius :
+				(this.state.Location === "locationNearSpecificAddress" ?
+					this.state.AddressZipcodeRadius :
+					this.props.locationFilterValue.miles),
 			addrZipcode:
 				this.state.Location === "locationNearSpecificAddress" ?
 					this.state.SpecificAddress : undefined
@@ -392,7 +405,7 @@ class FilterPanel extends Component {
 
 	render() {
 		const { classes, customerForm, customers } = this.props;
-
+		
 		let regionCustomers = [];
 
 		if (customers) { // to avoid error
@@ -605,7 +618,7 @@ class FilterPanel extends Component {
 										aria-label="Location"
 										name="Location"
 										className={classes.group}
-										value={this.state.Location === undefined ? "locationAll" : this.state.Location}
+										value={this.props.locationFilterValue.id}
 										onChange={this.handleChange('Location')}
 									>
 
@@ -628,7 +641,7 @@ class FilterPanel extends Component {
 										InputLabelProps={{
 											shrink: true
 										}}
-										value={this.state.NearbyRadius === undefined ? 5 : this.state.NearbyRadius}
+										value={this.props.locationFilterValue.miles}
 										onChange={this.handleChange('NearbyRadius')}
 										margin="normal"
 										variant="outlined"
@@ -672,7 +685,7 @@ class FilterPanel extends Component {
 										InputLabelProps={{
 											shrink: true
 										}}
-										value={this.state.AddressZipcodeRadius === undefined ? 5 : this.state.AddressZipcodeRadius}
+										value={this.props.locationFilterValue.miles}
 										onChange={this.handleChange('AddressZipcodeRadius')}
 										margin="normal"
 										variant="outlined"
