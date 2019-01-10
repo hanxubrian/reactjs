@@ -17,7 +17,10 @@ const styles = theme => ({
     avatar  : {
         backgroundColor: theme.palette.primary[500]
     },
-    labels  : {}
+    labels  : {},
+    chatIcon : {
+        padding: 8
+    }
 
 });
 
@@ -169,28 +172,31 @@ class ContactsList extends Component {
                             Header    : "First Name",
                             accessor  : "name",
                             filterable: true,
-                            className : "font-bold"
+                            className : "font-bold",
+                            width    : 200,
                         },
                         {
                             Header    : "Last Name",
                             accessor  : "lastName",
                             filterable: true,
-                            className : "font-bold"
+                            className : "font-bold",
+                            width    : 150,
                         },
-                        {
+                     /*    {
                             Header    : "Company",
                             accessor  : "company",
                             filterable: true
-                        },
-                        {
+                        }, */
+                        /* {
                             Header    : "Job Title",
                             accessor  : "jobTitle",
                             filterable: true
-                        },
+                        }, */
                         {
                             Header    : "Email",
                             accessor  : "email",
-                            filterable: true
+                            filterable: true,
+                            width    : 300,
                         },
                         {
                             Header    : "Phone",
@@ -207,6 +213,7 @@ class ContactsList extends Component {
                                             ev.stopPropagation();
                                             toggleStarredContact(row.original.id)
                                         }}
+                                        className={classes.chatIcon}
                                     >
                                         {user.starred && user.starred.includes(row.original.id) ? (
                                             <Icon>star</Icon>
@@ -219,8 +226,10 @@ class ContactsList extends Component {
                                             ev.stopPropagation();
                                             removeContact(row.original.id);
                                         }}
+                                        className={classes.chatIcon}
                                     >
                                         <Icon>delete</Icon>
+                                       
                                     </IconButton>
 
                                     <IconButton
@@ -228,6 +237,7 @@ class ContactsList extends Component {
                                             ev.stopPropagation();
                                             openChat(row.original.id);
                                         }}
+                                        className={classes.chatIcon}
                                     >
                                         <Icon>chat</Icon>
                                     </IconButton>

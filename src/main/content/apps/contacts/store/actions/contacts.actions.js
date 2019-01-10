@@ -4,6 +4,7 @@ import {getChatUserData} from 'main/chatPanel//store/actions/user.actions';
 import {getChatContacts} from 'main/chatPanel//store/actions/contacts.actions';
 import {setselectedContactId} from 'main/chatPanel//store/actions/contacts.actions';
 import {chatService} from 'services'
+import {contactService} from 'services'
 
 export const GET_CONTACTS = '[CONTACTS APP] GET CONTACTS';
 export const SET_SEARCH_TEXT = '[CONTACTS APP] SET SEARCH TEXT';
@@ -24,7 +25,7 @@ export const SET_CONTACTS_STARRED = '[CONTACTS APP] SET CONTACTS STARRED ';
 
 export function getContacts(routeParams)
 {
-    const request = axios.get('/api/contacts-app/contacts', {
+/*     const request = axios.get('/api/contacts-app/contacts', {
         params: routeParams
     });
 
@@ -35,7 +36,44 @@ export function getContacts(routeParams)
                 payload: response.data,
                 routeParams
             })
-        );
+        ); */
+       
+        return  (dispatch, getState) => {
+            const userId = getState().auth.login.Username;
+            (async () => {
+                let response = await contactService.getRegisteredGroupUserList();
+
+                let contacts = [];
+                response.Data.map((item)=>{
+                    contacts= [...contacts,
+                        {
+                            id: item.UserId,
+                            name: item.UserName,
+                            firstName : item.FirstName,
+                            lastName : item.LastName,
+                            avatar : item.ProfilePhoto,
+                            nickname : item.FirstName,
+                            company: item.DepartmentName,
+                            jobTitle: item.RoleName,
+                            email : item.Email,
+                            phone: item.Phone,
+                            address : item.Addres +' '+ item.City+ ' ' + item.Zipcode,
+                            birthday: undefined,
+                            notes: ''
+
+                        } ]
+                    
+
+                });
+
+                dispatch({
+                    type   : GET_CONTACTS,
+                    payload: contacts
+                });
+            })();
+        }
+
+
 }
 
 export function setSearchText(event)

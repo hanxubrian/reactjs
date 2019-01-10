@@ -13,7 +13,7 @@ class chatService {
     getContactList =  (userId) => {
         
              return new Promise((resolve, reject) => {
-            axios_instance.get(`${BASE_MONGO_API_URL}/api/chat/contacts?id=${userId}`)
+             axios_instance.get(`${BASE_MONGO_API_URL}/api/chat/contacts?id=${userId}`)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);
