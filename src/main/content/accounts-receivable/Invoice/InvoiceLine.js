@@ -141,7 +141,7 @@ function renderInputComponent(inputProps) {
     const { classes, inputRef = () => {}, ref, ...other } = inputProps;
 
     return (
-        <Input
+        <TextField
             fullWidth
             InputProps={{
                 inputRef: node => {
@@ -150,7 +150,6 @@ function renderInputComponent(inputProps) {
                 },
             }}
             {...other}
-            required
         />
     );
 }
