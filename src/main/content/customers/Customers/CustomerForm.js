@@ -1845,6 +1845,10 @@ class CustomerForm extends Component {
 		}
 		this.fetchData = this.fetchData.bind(this);
 		this.escFunction = this.escFunction.bind(this);
+
+		if (!props.bLoadedFranchisees) {
+			props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
+		}
 	}
 	fetchData(state, instance) {
 		this.setState({
@@ -2387,7 +2391,13 @@ function mapStateToProps({ customers, franchisees, auth }) {
 		bLoadedFranchisees: franchisees.bLoadedFranchisees,
 		regionId: auth.login.defaultRegionId,
 		CustomerForm: customers.CustomerForm,
-		documents: customers.customersDocuments
+		documents: customers.customersDocuments,
+
+		statusId: franchisees.statusId,
+		Longitude: franchisees.Longitude,
+		Latitude: franchisees.Latitude,
+		Location: franchisees.Location,
+		SearchText: franchisees.SearchText,
 	}
 }
 

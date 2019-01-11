@@ -554,7 +554,7 @@ class FilterPanel extends Component {
 										// style={{ minWidth: "100px", width: "30%" }}
 										>
 											<MenuItem value="0">
-												
+
 											</MenuItem>
 											{/* {[{ value: 0, label: "Airline" }].map(option => (
 												<MenuItem key={option.value} value={option.value}>
@@ -792,12 +792,14 @@ class FilterPanel extends Component {
 												{option.label}
 											</MenuItem>
 										))} */}
-										{this.props.accountExecutiveList.Data !== undefined && this.props.accountExecutiveList.Data.map((x, index) => {
-											if (x !== null)
-												return (<MenuItem key={index} value={index}>{x.Text}</MenuItem>)
-											else
-												return null
-										})}
+										{this.props.accountExecutiveList.Data !== undefined &&
+											this.props.accountExecutiveList.Data.map((x, index) => {
+												if (x !== null && x.Title !== null && x.Title !== undefined)
+													return (<MenuItem key={index} value={index}>{x.Title}</MenuItem>)
+												else
+													return
+											})
+										}
 									</TextField>
 
 								</div>

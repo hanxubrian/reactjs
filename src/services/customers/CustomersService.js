@@ -79,7 +79,7 @@ class CustomersService {
 	}
 	getAccountExecutiveList() {
 		return new Promise((resolve, reject) => {
-			axios_instance.get(`${BASE_API_URL}/v1/lists/GetAccountTypeList?RegionId=99999`)
+			axios_instance.get(`${BASE_API_URL}/v1/lists/GetAccountExecutivesList?RegionId=2`)
 				.then(res => {
 					if (res.status === 200) {
 						resolve(res.data);
