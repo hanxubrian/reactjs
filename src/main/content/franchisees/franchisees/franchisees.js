@@ -565,7 +565,7 @@ class Franchisees extends Component {
                                             <Icon>person_outline</Icon>
                                         </IconButton>
 
-                                        <IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleSummaryPanelFranchisees()}>
+                                        <IconButton className={classes.button} aria-label="Add an alarm">
                                             <Icon>check_circle</Icon>
                                         </IconButton>
                                     </div>

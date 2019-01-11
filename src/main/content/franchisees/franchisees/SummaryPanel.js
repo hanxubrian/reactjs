@@ -190,97 +190,97 @@ class SummaryPanel extends Component {
                 <div className={classNames("flex flex-col p-16")}>
                     {this.props.franchisees && (
                         <Paper className="flex flex-1 flex-col min-h-px shadow-none" style={{alignItems: 'center', flexDirection:'column'}}>
-                            {franchiseesForm && franchiseesForm.props.open
-                                ?(
-                                    <div style={{ marginTop: 50, display: 'flex', flexDirection: 'column' }}>
-                                        <h3>Validation Status</h3>
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={this.state.checkedCompanyInfo}
-                                                    onChange={this.handleValidationStatusChange('checkedCompanyInfo')}
-                                                    value="checkedCompanyInfo"
-                                                    classes={{
-                                                        root: classes.root,
-                                                        checked: classes.checked
-                                                    }}
-                                                />
-                                            }
-                                            label="Company Information"
-                                        />
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={this.state.checkedOwner}
-                                                    onChange={this.handleValidationStatusChange('checkedOwner')}
-                                                    value="checkedOwner"
-                                                    classes={{
-                                                        root: classes.root,
-                                                        checked: classes.checked
-                                                    }}
-                                                />
-                                            }
-                                            label="Owner"
-                                        />
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={this.state.checkedFinancial}
-                                                    onChange={this.handleValidationStatusChange('checkedFinancial')}
-                                                    value="checkedFinancial"
-                                                    classes={{
-                                                        root: classes.root,
-                                                        checked: classes.checked
-                                                    }}
-                                                />
-                                            }
-                                            label="Financial"
-                                        />
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={this.state.checkedBilling}
-                                                    onChange={this.handleValidationStatusChange('checkedBilling')}
-                                                    value="checkedBilling"
-                                                    classes={{
-                                                        root: classes.root,
-                                                        checked: classes.checked
-                                                    }}
-                                                />
-                                            }
-                                            label="Billing Settings"
-                                        />
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={this.state.checkedContract}
-                                                    onChange={this.handleValidationStatusChange('checkedContract')}
-                                                    value="checkedContract"
-                                                    classes={{
-                                                        root: classes.root,
-                                                        checked: classes.checked
-                                                    }}
-                                                />
-                                            }
-                                            label="Contract"
-                                        />
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={this.state.checkedMaintenance}
-                                                    onChange={this.handleValidationStatusChange('checkedMaintenance')}
-                                                    value="checkedMaintenance"
-                                                    classes={{
-                                                        root: classes.root,
-                                                        checked: classes.checked
-                                                    }}
-                                                />
-                                            }
-                                            label="Franchisees Fee Maintenance"
-                                        />
-                                    </div>
-                                )
-                                :(
+                            {/*{franchiseesForm && franchiseesForm.props.open*/}
+                                    {/*?(*/}
+                                        {/*<div style={{ marginTop: 50, display: 'flex', flexDirection: 'column' }}>*/}
+                                            {/*<h3>Validation Status</h3>*/}
+                                            {/*<FormControlLabel*/}
+                                                {/*control={*/}
+                                                    {/*<Checkbox*/}
+                                                        {/*checked={this.state.checkedCompanyInfo}*/}
+                                                        {/*onChange={this.handleValidationStatusChange('checkedCompanyInfo')}*/}
+                                                        {/*value="checkedCompanyInfo"*/}
+                                                        {/*classes={{*/}
+                                                            {/*root: classes.root,*/}
+                                                            {/*checked: classes.checked*/}
+                                                        {/*}}*/}
+                                                    {/*/>*/}
+                                                {/*}*/}
+                                                {/*label="Company Information"*/}
+                                            {/*/>*/}
+                                            {/*<FormControlLabel*/}
+                                                {/*control={*/}
+                                                    {/*<Checkbox*/}
+                                                        {/*checked={this.state.checkedOwner}*/}
+                                                        {/*onChange={this.handleValidationStatusChange('checkedOwner')}*/}
+                                                        {/*value="checkedOwner"*/}
+                                                        {/*classes={{*/}
+                                                            {/*root: classes.root,*/}
+                                                            {/*checked: classes.checked*/}
+                                                        {/*}}*/}
+                                                    {/*/>*/}
+                                                {/*}*/}
+                                                {/*label="Owner"*/}
+                                            {/*/>*/}
+                                            {/*<FormControlLabel*/}
+                                                {/*control={*/}
+                                                    {/*<Checkbox*/}
+                                                        {/*checked={this.state.checkedFinancial}*/}
+                                                        {/*onChange={this.handleValidationStatusChange('checkedFinancial')}*/}
+                                                        {/*value="checkedFinancial"*/}
+                                                        {/*classes={{*/}
+                                                            {/*root: classes.root,*/}
+                                                            {/*checked: classes.checked*/}
+                                                        {/*}}*/}
+                                                    {/*/>*/}
+                                                {/*}*/}
+                                                {/*label="Financial"*/}
+                                            {/*/>*/}
+                                            {/*<FormControlLabel*/}
+                                                {/*control={*/}
+                                                    {/*<Checkbox*/}
+                                                        {/*checked={this.state.checkedBilling}*/}
+                                                        {/*onChange={this.handleValidationStatusChange('checkedBilling')}*/}
+                                                        {/*value="checkedBilling"*/}
+                                                        {/*classes={{*/}
+                                                            {/*root: classes.root,*/}
+                                                            {/*checked: classes.checked*/}
+                                                        {/*}}*/}
+                                                    {/*/>*/}
+                                                {/*}*/}
+                                                {/*label="Billing Settings"*/}
+                                            {/*/>*/}
+                                            {/*<FormControlLabel*/}
+                                                {/*control={*/}
+                                                    {/*<Checkbox*/}
+                                                        {/*checked={this.state.checkedContract}*/}
+                                                        {/*onChange={this.handleValidationStatusChange('checkedContract')}*/}
+                                                        {/*value="checkedContract"*/}
+                                                        {/*classes={{*/}
+                                                            {/*root: classes.root,*/}
+                                                            {/*checked: classes.checked*/}
+                                                        {/*}}*/}
+                                                    {/*/>*/}
+                                                {/*}*/}
+                                                {/*label="Contract"*/}
+                                            {/*/>*/}
+                                            {/*<FormControlLabel*/}
+                                                {/*control={*/}
+                                                    {/*<Checkbox*/}
+                                                        {/*checked={this.state.checkedMaintenance}*/}
+                                                        {/*onChange={this.handleValidationStatusChange('checkedMaintenance')}*/}
+                                                        {/*value="checkedMaintenance"*/}
+                                                        {/*classes={{*/}
+                                                            {/*root: classes.root,*/}
+                                                            {/*checked: classes.checked*/}
+                                                        {/*}}*/}
+                                                    {/*/>*/}
+                                                {/*}*/}
+                                                {/*label="Franchisees Fee Maintenance"*/}
+                                            {/*/>*/}
+                                        {/*</div>*/}
+                                    {/*)*/}
+                                {/*:(*/}
                                     <div>
                                         <Card className={classes.card} >
                                             <CardContent style={{color: 'white'}}>
@@ -307,7 +307,7 @@ class SummaryPanel extends Component {
                                             </div>
                                         </Card>
                                     </div>
-                                )}
+                                {/*)}*/}
                         </Paper>
                     )}
                 </div>
