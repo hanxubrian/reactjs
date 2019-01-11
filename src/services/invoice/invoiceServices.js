@@ -67,6 +67,36 @@ class invoiceService {
         });
     };
 
+    getInvoiceDetailList = () => {
+        return new Promise((resolve, reject) => {
+            axios.get("/api/invoiceDetail/gets")
+            //     { params: {RegionId, InvoiceTypeId}}
+            // )
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    };
+    // return dispatch => {
+	// const request = axios.get("/api/customers/gets");
+
+	// return request.then(response => {
+	//     return dispatch({
+	//         type: GET_ALL_CUSTOMERS,
+	//         payload: response.data
+	//     });
+	// });
+
+	// };
+
     /**
      * Gets Customer Tax Amount
      * @param RegionId

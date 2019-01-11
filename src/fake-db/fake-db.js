@@ -17,6 +17,7 @@ import './e-commerce-db';
 import './scrumboard-db';
 import './academy-db';
 import './invoices-db';
+import './invoiceDetail-db';
 import './billrun-db';
 import './franchisees-db';
 import './customers-db';
