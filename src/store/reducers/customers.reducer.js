@@ -35,6 +35,7 @@ const initialState = {
 	accountTypeList: [],
 	accountExecutiveList: [],
 	customerStatusList: [],
+	accountTypesGroups: [],
 };
 
 
@@ -68,6 +69,13 @@ const customers = function (state = initialState, action) {
 				return {
 					...state,
 					accountExecutiveList: action.payload
+				}
+			}
+		case Actions.GET_ACCOUNT_TYPES_GROUPS:
+			{
+				return {
+					...state,
+					accountTypesGroups: action.payload
 				}
 			}
 		case Actions.GET_ALL_DOCUMENTS:

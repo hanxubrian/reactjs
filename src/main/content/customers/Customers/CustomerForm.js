@@ -435,6 +435,15 @@ class CustomerForm extends Component {
 		// 	renderSuggestion,
 		// };
 
+		let execTitles = []
+		if (this.props.accountExecutiveList !== null && this.props.accountExecutiveList.Data !== undefined) {
+			execTitles = this.props.accountExecutiveList.Data.filter(x => {
+				if (x.Title === null) return false
+				return true
+			}).map(x => {
+				return x.Title
+			}).sort();
+		}
 
 		const address_headers = [
 			{
@@ -536,7 +545,7 @@ class CustomerForm extends Component {
 						{/* <h3>Billing Settings</h3> */}
 
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-							<GridItem xs={12} sm={8} md={8} className="flex flex-row">
+							{/* <GridItem xs={12} sm={8} md={8} className="flex flex-row">
 								<FormControlLabel
 									control={
 										<Checkbox onChange={this.handleChange('gilad')} />
@@ -614,14 +623,14 @@ class CustomerForm extends Component {
 									variant="outlined"
 									style={{ width: '100%', marginLeft: '2%' }}
 								/>
-							</GridItem>
+							</GridItem> */}
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
 									type="date"
 									id="EffectiveDate"
 									label="Effective Date"
-									className={classes.textField}
+									className={classNames(classes.textField)}
 									InputLabelProps={{
 										shrink: true
 									}}
@@ -629,7 +638,8 @@ class CustomerForm extends Component {
 									onChange={this.handleChange('EffectiveDate')}
 									margin="normal"
 									variant="outlined"
-									style={{ minWidth: "100px", width: "30%" }}
+									style={{ minWidth: 100, width: "30%" }}
+
 								/>
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -637,7 +647,7 @@ class CustomerForm extends Component {
 									type="date"
 									id="InvoiceDate"
 									label="Invoice Date"
-									className={classes.textField}
+									className={classNames(classes.textField, "mr-12")}
 									select
 									InputLabelProps={{
 										shrink: true
@@ -646,7 +656,7 @@ class CustomerForm extends Component {
 									onChange={this.handleChange('InvoiceDate')}
 									margin="normal"
 									variant="outlined"
-									style={{ minWidth: "100px", width: "30%" }}
+									style={{ width: "100%" }}
 								>
 									{[{ value: 0, label: "BOM" },
 									{ value: 1, label: "EOM" }].map(option => (
@@ -655,8 +665,7 @@ class CustomerForm extends Component {
 										</MenuItem>
 									))}
 								</TextField>
-							</GridItem>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+
 								<TextField
 									id="BillingFrequency"
 									label="Billing Frequency"
@@ -664,12 +673,12 @@ class CustomerForm extends Component {
 									InputLabelProps={{
 										shrink: true
 									}}
-									className={classes.textField}
+									className={classNames(classes.textField, "ml-12")}
 									value={this.state.BillingFrequency === undefined ? "" : this.state.BillingFrequency}
 									onChange={this.handleChange('BillingFrequency')}
 									margin="normal"
 									variant="outlined"
-									style={{ minWidth: "100px", width: "30%" }}
+									style={{ width: "100%" }}
 								>
 									{[{ value: 0, label: "Monthly" }].map(option => (
 										<MenuItem key={option.value} value={option.value}>
@@ -677,7 +686,9 @@ class CustomerForm extends Component {
 										</MenuItem>
 									))}
 								</TextField>
+
 							</GridItem>
+
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<div style={{ display: 'flex', flexDirection: 'row', minWidth: "100px", width: "50%" }}>
@@ -723,12 +734,12 @@ class CustomerForm extends Component {
 									InputLabelProps={{
 										shrink: true
 									}}
-									className={classes.textField}
+									className={classNames(classes.textField, "mr-12")}
 									value={this.state.Term === undefined ? "" : this.state.Term}
 									onChange={this.handleChange('Term')}
 									margin="normal"
 									variant="outlined"
-									style={{ width: '100%', marginRight: '5px' }}
+									style={{ width: '100%' }}
 								>
 									{[{ value: 0, label: "Due Upon Receipt" },
 									{ value: 1, label: "EOM" },
@@ -746,7 +757,7 @@ class CustomerForm extends Component {
 									id="ARStatus"
 									label="AR Status"
 									select
-									className={classes.textField}
+									className={classNames(classes.textField, "ml-12")}
 									InputLabelProps={{
 										shrink: true
 									}}
@@ -754,7 +765,7 @@ class CustomerForm extends Component {
 									onChange={this.handleChange('ARStatus')}
 									margin="normal"
 									variant="outlined"
-									style={{ width: '100%', marginLeft: '5px' }}
+									style={{ width: '100%' }}
 								>
 									{[{ value: 0, label: "Select" },
 									{ value: 1, label: "Bankruptcy" },
@@ -795,10 +806,10 @@ class CustomerForm extends Component {
 				// return 'Step 2: What is an ad group anyways?';
 				return (
 					<Fragment>
-						<FormLabel component="legend">Service Location</FormLabel>
+						{/* <FormLabel component="legend">Service Location</FormLabel> */}
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
 
-							<GridItem xs={12} sm={8} md={8} className="flex flex-row">
+							{/* <GridItem xs={12} sm={8} md={8} className="flex flex-row">
 								<FormControlLabel
 									control={
 										<Checkbox onChange={this.handleChange('gilad')} />
@@ -828,9 +839,9 @@ class CustomerForm extends Component {
 									variant="outlined"
 									style={{ width: '100%', marginLeft: '2%' }}
 								/>
-							</GridItem>
+							</GridItem> */}
 
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							{/* <GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
 									id="outlined-name"
 									label="City *"
@@ -876,7 +887,7 @@ class CustomerForm extends Component {
 									variant="outlined"
 									style={{ width: '100%', marginLeft: '2%' }}
 								/>
-							</GridItem>
+							</GridItem> */}
 
 
 
@@ -912,17 +923,19 @@ class CustomerForm extends Component {
 										shrink: true
 									}}
 									className={classes.textField}
-									value={this.state.ContractType === undefined ? "" : this.state.ContractType}
+									value={this.state.ContractType === undefined ? 0 : this.state.ContractType}
 									onChange={this.handleChange('ContractType')}
 									margin="normal"
 									variant="outlined"
 									style={{ minWidth: "100px", width: "30%" }}
 								>
-									{[{ value: 0, label: "Recurring" }].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
+									{[{ value: 0, label: "Recurring" }
+										, { value: 1, label: "One-Time" }
+										, { value: 2, label: "Variable" }].map(option => (
+											<MenuItem key={option.value} value={option.value}>
+												{option.label}
+											</MenuItem>
+										))}
 								</TextField>
 							</GridItem>
 
@@ -935,7 +948,7 @@ class CustomerForm extends Component {
 										shrink: true
 									}}
 									className={classes.textField}
-									value={this.state.AgreementType === undefined ? "" : this.state.AgreementType}
+									value={this.state.AgreementType === undefined ? 1 : this.state.AgreementType}
 									onChange={this.handleChange('AgreementType')}
 									margin="normal"
 									variant="outlined"
@@ -943,7 +956,10 @@ class CustomerForm extends Component {
 									style={{ marginRight: "2%" }}
 									fullWidth
 								>
-									{[{ value: 0, label: "Jani-King" }].map(option => (
+									{[{ value: 0, label: "Customer" }
+										, { value: 1, label: "Jani-King" }
+										, { value: 2, label: "General" }
+									].map(option => (
 										<MenuItem key={option.value} value={option.value}>
 											{option.label}
 										</MenuItem>
@@ -958,18 +974,18 @@ class CustomerForm extends Component {
 										shrink: true
 									}}
 									className={classes.textField}
-									value={this.state.AcctExec === undefined ? "" : this.state.AcctExec}
+									value={this.state.AcctExec === undefined ? 0 : this.state.AcctExec}
 									onChange={this.handleChange('AcctExec')}
 									margin="normal"
 									variant="outlined"
 									style={{ marginLeft: "2%" }}
 									fullWidth
 								>
-									{[{ value: 0, label: "Stacey Jarvis" }].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
+									{
+										execTitles.map((x, index) => {
+											return (<MenuItem key={index} value={index}>{x}</MenuItem>)
+										})
+									}
 								</TextField>
 							</GridItem>
 
@@ -979,7 +995,7 @@ class CustomerForm extends Component {
 									type="number"
 									label="PO Numer"
 									className={classes.textField}
-									value={this.state.name}
+									value={this.state.PONumer}
 									onChange={this.handleChange('PONumer')}
 									margin="normal"
 									variant="outlined"
@@ -997,7 +1013,7 @@ class CustomerForm extends Component {
 									InputLabelProps={{
 										shrink: true
 									}}
-									value={this.state.name}
+									value={this.state.SignDate}
 									onChange={this.handleChange('SignDate')}
 									margin="normal"
 									variant="outlined"
@@ -1011,7 +1027,7 @@ class CustomerForm extends Component {
 									InputLabelProps={{
 										shrink: true
 									}}
-									value={this.state.name}
+									value={this.state.StartDate}
 									onChange={this.handleChange('StartDate')}
 									margin="normal"
 									variant="outlined"
@@ -1024,7 +1040,7 @@ class CustomerForm extends Component {
 									id="TermMonths"
 									label="Term Months *"
 									className={classes.textField}
-									value={this.state.name}
+									value={this.state.TermMonths}
 									onChange={this.handleChange('TermMonths')}
 									margin="normal"
 									variant="outlined"
@@ -1033,14 +1049,14 @@ class CustomerForm extends Component {
 
 								<TextField
 									type="date"
-									id="ExpiratinDate"
-									label="Expiratin Date *"
+									id="ExpirationDate"
+									label="Expiration Date *"
 									className={classes.textField}
 									InputLabelProps={{
 										shrink: true
 									}}
-									value={this.state.name}
-									onChange={this.handleChange('ExpiratinDate')}
+									value={this.state.ExpirationDate}
+									onChange={this.handleChange('ExpirationDate')}
 									margin="normal"
 									variant="outlined"
 									style={{ width: '100%', marginLeft: "2%" }}
@@ -1055,7 +1071,7 @@ class CustomerForm extends Component {
 									InputLabelProps={{
 										shrink: true
 									}}
-									value={this.state.name}
+									value={this.state.Amount}
 									onChange={this.handleChange('Amount')}
 									margin="normal"
 									variant="outlined"
@@ -1072,7 +1088,7 @@ class CustomerForm extends Component {
 									multiline
 									rowsMax="4"
 									className={classes.textField}
-									value={this.state.name}
+									value={this.state.Description}
 									onChange={this.handleChange('Description')}
 									margin="normal"
 									variant="outlined"
@@ -1118,7 +1134,7 @@ class CustomerForm extends Component {
 									id="SquareFootage"
 									label="Square Footage"
 									className={classes.textField}
-									value={this.state.name}
+									value={this.state.SquareFootage}
 									onChange={this.handleChange('SquareFootage')}
 									margin="normal"
 									variant="outlined"
@@ -1136,7 +1152,7 @@ class CustomerForm extends Component {
 									InputLabelProps={{
 										shrink: true
 									}}
-									value={this.state.name}
+									value={this.state.StartTime}
 									onChange={this.handleChange('StartTime')}
 									margin="normal"
 									variant="outlined"
@@ -1150,7 +1166,7 @@ class CustomerForm extends Component {
 									InputLabelProps={{
 										shrink: true
 									}}
-									value={this.state.name}
+									value={this.state.EndTime}
 									onChange={this.handleChange('EndTime')}
 									margin="normal"
 									variant="outlined"
@@ -1167,7 +1183,7 @@ class CustomerForm extends Component {
 									InputLabelProps={{
 										shrink: true
 									}}
-									value={this.state.name}
+									value={this.state.Amount}
 									onChange={this.handleChange('Amount')}
 									margin="normal"
 									variant="outlined"
@@ -1184,7 +1200,7 @@ class CustomerForm extends Component {
 									id="CleanTimes"
 									label="Clean Times *"
 									className={classes.textField}
-									value={this.state.name}
+									value={this.state.CleanTimes}
 									onChange={this.handleChange('CleanTimes')}
 									margin="normal"
 									variant="outlined"
@@ -1297,7 +1313,7 @@ class CustomerForm extends Component {
 									multiline
 									rowsMax="4"
 									className={classes.textField}
-									value={this.state.name}
+									value={this.state.Description}
 									onChange={this.handleChange('Description')}
 									margin="normal"
 									variant="outlined"
@@ -2155,6 +2171,7 @@ class CustomerForm extends Component {
 		const { activeStep } = this.state;
 
 
+
 		return (
 			// <div className={classNames(classes.layoutTable, "h-full")}></div>
 			// <FuseAnimate animation="transition.slideRightIn" delay={300} className={classNames(classes.layoutTable, "h-full")}>
@@ -2398,6 +2415,8 @@ function mapStateToProps({ customers, franchisees, auth }) {
 		Latitude: franchisees.Latitude,
 		Location: franchisees.Location,
 		SearchText: franchisees.SearchText,
+
+		accountExecutiveList: customers.accountExecutiveList,
 	}
 }
 

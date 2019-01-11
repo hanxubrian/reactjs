@@ -26,7 +26,7 @@ export const GET_CUSTOMERS_FETCH_START = "[CUSTOMERS APP] GET CUSTOMERS FETCH ST
 export const GET_ACCOUNT_TYPE_LIST = "[CUSTOMERS APP] GET ACCOUNT TYPE LIST";
 export const GET_ACCOUNT_EXCUTIVE_LIST = "[CUSTOMERS APP] GET ACCOUNT EXCUTIVE LIST";
 export const GET_CUSTOMER_STATUS_LIST = "[CUSTOMERS APP] GET CUSTOMER STATUS LIST";
-
+export const GET_ACCOUNT_TYPES_GROUPS = "[CUSTOMERS APP] GET ACCOUNT TYPES GROUPS";
 
 export function getCustomers(regionId, statusId = 0, location = "all", latitude = "", longitude = "", searchText = "") {
 	// return dispatch => {
@@ -90,6 +90,18 @@ export function getCustomerStatusList() {
 			let response = await customersService.getCustomerStatusList();
 			dispatch({
 				type: GET_CUSTOMER_STATUS_LIST,
+				payload: response
+			});
+		})();
+	}
+}
+export function getAccountTypesGroups() {
+	return (dispatch) => {
+
+		(async () => {
+			let response = await customersService.getAccountTypesGroups();
+			dispatch({
+				type: GET_ACCOUNT_TYPES_GROUPS,
 				payload: response
 			});
 		})();

@@ -411,6 +411,50 @@ class FilterPanel extends Component {
 		// let accountTypes = [...new Set(regionCustomers.map(x => x.AccountTypeListName))].sort();
 		// let accountStatuses = [...new Set(regionCustomers.map(x => x.StatusName))].sort();
 
+		// return (<MenuItem key={index} value={index}>{x.Title}</MenuItem>)
+
+		let customerStatusListTexts = []
+		if (this.props.customerStatusList !== null && this.props.customerStatusList.Data !== undefined) {
+			customerStatusListTexts = this.props.customerStatusList.Data.filter(x => {
+				if (x.Text === null) return false
+				return true
+			}).map(x => {
+				return x.Text
+			}).sort();
+		}
+
+
+		let accountTypeTexts = []
+		if (this.props.accountTypeList !== null && this.props.accountTypeList.Data !== undefined) {
+			accountTypeTexts = this.props.accountTypeList.Data.filter(x => {
+				if (x.Text === null) return false
+				return true
+			}).map(x => {
+				return x.Text
+			}).sort();
+		}
+
+		let execTitles = []
+		if (this.props.accountExecutiveList !== null && this.props.accountExecutiveList.Data !== undefined) {
+			execTitles = this.props.accountExecutiveList.Data.filter(x => {
+				if (x.Title === null) return false
+				return true
+			}).map(x => {
+				return x.Title
+			}).sort();
+		}
+
+		let accountTypesGroups = []
+		if (this.props.accountTypesGroups !== null && this.props.accountTypesGroups.Data !== undefined) {
+			accountTypesGroups = this.props.accountTypesGroups.Data.filter(x => {
+				if (x.Name === null) return false
+				return true
+			}).map(x => {
+				return x.Name
+			}).sort();
+		}
+
+
 		return (
 			<div className={classNames(classes.root, "flex flex-col")}>
 				{/* <div className={classNames("flex flex-col")}> */}
@@ -553,18 +597,11 @@ class FilterPanel extends Component {
 											fullWidth
 										// style={{ minWidth: "100px", width: "30%" }}
 										>
-											<MenuItem value="0">
-
-											</MenuItem>
-											{/* {[{ value: 0, label: "Airline" }].map(option => (
-												<MenuItem key={option.value} value={option.value}>
-													{option.label}
-												</MenuItem>
-											))} */}
-
-											{/* {this.props.accountTypeList.Data !== undefined && this.props.accountTypeList.Data.map((x, index) => (
-												<MenuItem key={index} value={index}>{x.Text}</MenuItem>
-											))} */}
+											{
+												accountTypesGroups.map((x, index) => (
+													<MenuItem key={index} value={index}>{x}</MenuItem>
+												))
+											}
 
 										</TextField>
 									</GridItem>
@@ -588,9 +625,11 @@ class FilterPanel extends Component {
 												</MenuItem>
 											))} */}
 
-											{this.props.accountTypeList.Data !== undefined && this.props.accountTypeList.Data.map((x, index) => (
-												<MenuItem key={index} value={index}>{x.Text}</MenuItem>
-											))}
+											{
+												accountTypeTexts.map((x, index) => (
+													<MenuItem key={index} value={index}>{x}</MenuItem>
+												))
+											}
 
 										</TextField>
 									</GridItem>
@@ -760,10 +799,10 @@ class FilterPanel extends Component {
 													return null
 											})
 										} */}
-										{this.props.accountTypeList.Data !== undefined &&
-											this.props.accountTypeList.Data.map((x, index) => {
-												return (<MenuItem key={index} value={index}>{x.Text}</MenuItem>)
-											})
+										{
+											accountTypeTexts.map((x, index) => (
+												<MenuItem key={index} value={index}>{x}</MenuItem>
+											))
 										}
 
 
@@ -778,7 +817,7 @@ class FilterPanel extends Component {
 										InputLabelProps={{
 											shrink: true
 										}}
-										value={this.state.AccountExecutive.Data === undefined ? 0 : this.state.AccountExecutive}
+										value={this.state.AccountExecutive === undefined ? 0 : this.state.AccountExecutive}
 										onChange={this.handleChange('AccountExecutive')}
 										margin="normal"
 										variant="outlined"
@@ -792,14 +831,12 @@ class FilterPanel extends Component {
 												{option.label}
 											</MenuItem>
 										))} */}
-										{this.props.accountExecutiveList.Data !== undefined &&
-											this.props.accountExecutiveList.Data.map((x, index) => {
-												if (x !== null && x.Title !== null && x.Title !== undefined)
-													return (<MenuItem key={index} value={index}>{x.Title}</MenuItem>)
-												else
-													return
+										{
+											execTitles.map((x, index) => {
+												return (<MenuItem key={index} value={index}>{x}</MenuItem>)
 											})
 										}
+
 									</TextField>
 
 								</div>
@@ -814,20 +851,15 @@ class FilterPanel extends Component {
 										label="All"
 									/>
 									{
-										this.props.customerStatusList.Data !== undefined && this.props.customerStatusList.Data.map((x, index) => {
-											if (x !== null)
-												return (
-													<FormControlLabel key={index}
-														control={
-															<Switch checked={this.state['customerStatusList' + (index + 1)]}
-																onChange={this.handleChangeChecked('customerStatusList' + index + 1)} />
-														}
-														label={x.Text}
-													/>
-												)
-											else
-												return null
-										})
+										customerStatusListTexts.map((x, index) => (
+											<FormControlLabel key={index}
+												control={
+													<Switch checked={this.state['customerStatusList' + (index + 1)]}
+														onChange={this.handleChangeChecked('customerStatusList' + index + 1)} />
+												}
+												label={x}
+											/>
+										))
 									}
 
 									{/* <FormControlLabel
@@ -908,6 +940,7 @@ function mapStateToProps({ customers, auth }) {
 		accountTypeList: customers.accountTypeList,
 		accountExecutiveList: customers.accountExecutiveList,
 		customerStatusList: customers.customerStatusList,
+		accountTypesGroups: customers.accountTypesGroups,
 	}
 }
 

@@ -285,6 +285,7 @@ class Customers extends Component {
 		this.props.getAccountTypeList();
 		this.props.getAccountExecutiveList();
 		this.props.getCustomerStatusList();
+		this.props.getAccountTypesGroups();
 	}
 
 	toggleSelection = (key, shift, row) => {
@@ -436,6 +437,9 @@ class Customers extends Component {
 		}
 		if (this.props.customerStatusList === null) {
 			this.props.getCustomerStatusList();
+		}
+		if (this.props.getAccountTypesGroups === null) {
+			this.props.getAccountTypesGroups();
 		}
 	}
 
@@ -717,6 +721,7 @@ function mapDispatchToProps(dispatch) {
 		getAccountTypeList: Actions.getAccountTypeList,
 		getAccountExecutiveList: Actions.getAccountExecutiveList,
 		getCustomerStatusList: Actions.getCustomerStatusList,
+		getAccountTypesGroups: Actions.getAccountTypesGroups,
 	}, dispatch);
 }
 
@@ -739,9 +744,10 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		searchText: customers.searchText,
 		bCustomerFetchStart: customers.bCustomerFetchStart,
 
-		accountTypeList: customers.accountTypeList,
-		accountExecutiveList: customers.accountExecutiveList,
-		customerStatusList: customers.customerStatusList,
+		// accountTypeList: customers.accountTypeList,
+		// accountExecutiveList: customers.accountExecutiveList,
+		// customerStatusList: customers.customerStatusList,
+
 	}
 }
 

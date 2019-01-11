@@ -767,14 +767,14 @@ class CustomerListContent extends Component {
 
 	shouldComponentUpdate(nextProps, nextState) {
 		console.log("shouldComponentUpdate", this.state !== nextState);
-		// return this.props.mapViewState !== nextProps.mapViewState
-		// return this.state !== nextState
-		// 	|| this.props.mapViewState !== nextProps.mapViewState
-		// 	|| this.props.customers !== nextProps.customers
-		// 	|| this.props.bOpenedFilterPanel !== nextProps.bOpenedFilterPanel
-		// 	// || this.props.loading !== nextProps.loading
-		// 	|| this.props.pins !== nextProps.pins
-		// 	|| this.props.searchText !== nextProps.searchText
+
+		return this.state !== nextState
+			|| this.props.mapViewState !== nextProps.mapViewState
+			|| this.props.customers !== nextProps.customers
+			|| this.props.bOpenedFilterPanel !== nextProps.bOpenedFilterPanel
+			// 	// || this.props.loading !== nextProps.loading
+			// 	|| this.props.pins !== nextProps.pins
+			|| this.props.searchText !== nextProps.searchText
 		return true;
 	}
 

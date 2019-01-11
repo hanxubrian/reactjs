@@ -110,6 +110,23 @@ class CustomersService {
 				})
 		});
 	}
+
+	getAccountTypesGroups() {
+		return new Promise((resolve, reject) => {
+			axios_instance.get(`${BASE_API_URL}/v1/lists/GetAccountTypesGroups/?RegionId=2`)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
 }
 
 
