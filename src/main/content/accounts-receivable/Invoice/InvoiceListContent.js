@@ -215,9 +215,6 @@ class InvoiceListContent extends Component {
             page: state.page,
         });
     }
-    onEditInvoice = row => {
-        this.props.openEditInvoiceForm(row);
-    };
 
     render()
     {
