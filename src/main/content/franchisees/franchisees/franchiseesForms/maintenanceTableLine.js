@@ -303,18 +303,18 @@ class FranchiseesMaintenanceTable extends React.Component {
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map(n => {
                                             return (
-                                                <TableRow hover key={n.FileTypeListId} >
+                                                <TableRow hover key={n.FranchiseeFeeListId} >
                                                     <TableCell>
-
+                                                        {n.FranchiseeFeeList.Name}
                                                     </TableCell>
                                                     <TableCell >
-
+                                                        {n.FeeRateTypeList.Rate}
                                                     </TableCell>
                                                     <TableCell>
-
+                                                        {n.FranchiseeFeeList.Amount}
                                                     </TableCell>
                                                     <TableCell>
-
+                                                        {n.FranchiseeFeeList.IsActive===true && ('Active')}
                                                     </TableCell>
                                                 </TableRow>
                                             )
