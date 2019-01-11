@@ -213,17 +213,17 @@ function getStepContent(franchiseeForm, step) {
                                 label="EIN/SSN"
                                 variant="outlined"
                                 className={classes.textField}
+                                style={{marginRight:'1%'}}
                                 margin="dense"
                                 required
                             />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
                                 id="financeName"
                                 label="Name"
                                 value=""
                                 variant="outlined"
                                 className={classes.textField}
+                                style={{marginLeft:'1%'}}
                                 margin="dense"
                                 required
                             />
@@ -243,6 +243,7 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="outlined-city"
                                 label="City"
+                                value=""
                                 variant="outlined"
                                 className={classes.textField}
                                 margin="dense"
@@ -270,6 +271,7 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="outlined-zip"
                                 label="Zip"
+                                value=""
                                 variant="outlined"
                                 className={classes.textField}
                                 margin="dense"
@@ -278,6 +280,17 @@ function getStepContent(franchiseeForm, step) {
                             />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <FormControlLabel
+                                control={
+                                    <Checkbox checked={franchiseeForm.state.print1099} />
+                                }
+                                onChange={franchiseeForm.handleCheckboxChange('print1099')}
+                                className={classes.textField}
+                                value=""
+                                label="Print 1099"
+                                margin="dense"
+                                style={{marginLeft:'1%'}}
+                            />
                             <TextField
                                 id="outlined-phone"
                                 variant="outlined"
@@ -285,16 +298,6 @@ function getStepContent(franchiseeForm, step) {
                                 className={classes.textField}
                                 margin="dense"
                                 style={{marginRight:'1%'}}
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox checked={franchiseeForm.state.print1099} />
-                                }
-                                onChange={franchiseeForm.handleCheckboxChange('print1099')}
-                                className={classes.textField}
-                                label="Print 1099"
-                                margin="dense"
-                                style={{marginLeft:'1%'}}
                             />
                         </GridItem>
                     </GridContainer>
