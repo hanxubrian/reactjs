@@ -1,7 +1,19 @@
 import React, {Component} from 'react';
 
 // core components
-import {Hidden, Icon, IconButton, Fab, Input, Paper, Button, Typography, Toolbar, Tooltip} from '@material-ui/core';
+import {
+    Hidden,
+    Icon,
+    IconButton,
+    Fab,
+    Input,
+    Paper,
+    Button,
+    Typography,
+    Toolbar,
+    Tooltip,
+    CircularProgress
+} from '@material-ui/core';
 
 // theme components
 import {FuseAnimate} from '@fuse';
@@ -209,6 +221,19 @@ const styles = theme => ({
         justifyContent: 'center',
         alignItems: 'center',
         fontSize: '2rem'
+    },
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100vh',
+        backgroundColor: 'rgba(0,0,0, .9)',
+        zIndex: 1000,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
+        opacity: 0.5
     }
 });
 
@@ -489,7 +514,8 @@ class Franchisees extends Component {
         const { toggleSelection, toggleAll, isSelected} = this;
         const { selection } = this.state;
         return (
-            <FusePageCustomSidebarScroll
+            <React.Fragment >
+              <FusePageCustomSidebarScroll
                 classes={{
                     root: classNames(classes.layoutRoot,'test123'),
                     rightSidebar : classNames(classes.layoutRightSidebar, {'openSummary': summaryStateFranchisees}),
@@ -925,6 +951,12 @@ class Franchisees extends Component {
                 }}
             >
             </FusePageCustomSidebarScroll>
+                {(this.props.bFranchiseesFetchStart) && (
+                    <div className={classes.overlay}>
+                        <CircularProgress className={classes.progress} color="secondary" />
+                    </div>
+                )}
+            </React.Fragment>
         );
     }
 }
@@ -961,6 +993,7 @@ function mapStateToProps({franchisees,auth})
         Location: franchisees.Location,
         SearchText: franchisees.SearchText,
         mapViewState: franchisees.bOpenedMapView,
+        bFranchiseesFetchStart: franchisees.bFranchiseesFetchStart
     }
 }
 
