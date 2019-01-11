@@ -322,6 +322,7 @@ class FranchiseesOwnerTable extends React.Component {
 														id={"name" + n.id}
 														className={classes.textField}
 														variant="outlined"
+														margin="dense"
 														fullWidth
 													/>
 												</TableCell>
@@ -330,6 +331,7 @@ class FranchiseesOwnerTable extends React.Component {
 														id={"phone" + n.id}
 														className={classes.textField}
 														variant="outlined"
+														margin="dense"
 														fullWidth
 													/>
 												</TableCell>
@@ -338,6 +340,7 @@ class FranchiseesOwnerTable extends React.Component {
 														id={"title" + n.id}
 														className={classes.textField}
 														variant="outlined"
+														margin="dense"
 														fullWidth
 													/>
 												</TableCell>
