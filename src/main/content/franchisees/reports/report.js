@@ -132,9 +132,10 @@ class Report extends Component {
             SUMMARY_PAGE[0].CLIENT_SALES_TAX[0],SUMMARY_PAGE[0].TOTAL_MON_REV[0]];
 
         const aDeductions0= [SUMMARY_PAGE[0].ROYALTY[0], SUMMARY_PAGE[0].ACCT_FEE[0],SUMMARY_PAGE[0].TECH_FEE[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE_COMM[0],SUMMARY_PAGE[0].FRAN_NOTE_PYMT[0]];
-        const aDeductions1 = [ "FRANCHISE NOTE PAYMENT2", "FINDERS_FEES", "FRANCHISE_SUPPLIES", "REGULAR_MISC", "SUBTOTAL_REG_DEDS",
+        const aDeductions1 = [ "FINDERS_FEES", "FRANCHISE SUPPLIES", "REGULAR MISCELLANEOUS", "SUBTOTAL_REG_DEDS",
             "ADVERTISING_FEE", "TOTAL_LEASES", "BUSINESS_PROT", "BPP_ADMIN", "CLIENT_SALES_TAX_BOT", "CHARGEBACKS", "PAGERS",
-            "PAGERS2", "SPECIAL_MISC", "SUBTOTAL_SPEC_DEDS", "TOTAL_DEDS", "DUE_FRAN", "ACCT_FEE_REB_CUR", "ACCT_FEE_REB_BAL"];
+            "PAGERS2", "SPECIAL_MISC", "SUBTOTAL_SPEC_DEDS", "TOTAL_DEDS", "DUE_TO_FRAN"];
+        const aDeductions2 =["FRANCHISE NOTE PAYMENT2", "ACCT_FEE_REB_CUR", "ACCT_FEE_REB_BAL"];
 
         let ct_amount = 0.0, ct_tax = 0.0, ct_total = 0.0;
         let cb_amount = 0.0, cb_tax = 0.0, cb_total = 0.0;
@@ -143,16 +144,21 @@ class Report extends Component {
         let st_extended = 0.0, st_tax = 0.0, st_total = 0.0;
         let cat_billing = 0.0, cat_month = 0.0, cat_addtl = 0.0, cat_cs = 0.0, cat_ofc = 0.0, cat_fee = 0.0;
 
-        CUS_TRXS.forEach(ct=>{
-            ct_amount += parseFloat(ct.TRX_AMT);
-            ct_tax += parseFloat(ct.TRX_TAX);
-            ct_total += parseFloat(ct.TRX_TOT);
-        });
-        LEASE_PAYMENTS.forEach(lp=>{
-            lp_amount += parseFloat(lp.PYMNT_AMT);
-            lp_tax += parseFloat(lp.PYMNT_TAX);
-            lp_total += parseFloat(lp.PYMNT_TOT);
-        });
+        if(CUS_TRXS!==null){
+            CUS_TRXS.forEach(ct=>{
+                ct_amount += parseFloat(ct.TRX_AMT);
+                ct_tax += parseFloat(ct.TRX_TAX);
+                ct_total += parseFloat(ct.TRX_TOT);
+            });
+        }
+        if(LEASE_PAYMENTS !==null){
+            LEASE_PAYMENTS.forEach(lp=>{
+                lp_amount += parseFloat(lp.PYMNT_AMT);
+                lp_tax += parseFloat(lp.PYMNT_TAX);
+                lp_total += parseFloat(lp.PYMNT_TOT);
+            });
+        }
+
 
         if(CHARGEBACKS!==null) {
             CHARGEBACKS.forEach(st => {
@@ -169,21 +175,24 @@ class Report extends Component {
                 sm_total += parseFloat(sm.TRX_TOT);
             });
         }
+        if(SUPPLY_TRXS!==null){
+            SUPPLY_TRXS.forEach(st=>{
+                st_extended += parseFloat(st.EXTENDED);
+                st_tax += parseFloat(st.TRX_TAX);
+                st_total += parseFloat(st.TRX_TOT);
+            });
+        }
+        if(CUST_ACCT_TOTALS!==null){
+            CUST_ACCT_TOTALS.forEach(cat=>{
+                cat_billing += parseFloat(cat.CONT_BILL);
+                cat_month += parseFloat(cat.CUR_MONTH);
+                cat_addtl += parseFloat(cat.ADTL_B_FRN);
+                cat_cs += parseFloat(cat.CLIENT_SUP);
+                cat_ofc += parseFloat(cat.ADTL_B_OFC);
+                cat_fee += parseFloat(cat.FF_PYMNT);
+            });
 
-        SUPPLY_TRXS.forEach(st=>{
-            st_extended += parseFloat(st.EXTENDED);
-            st_tax += parseFloat(st.TRX_TAX);
-            st_total += parseFloat(st.TRX_TOT);
-        });
-
-        CUST_ACCT_TOTALS.forEach(cat=>{
-            cat_billing += parseFloat(cat.CONT_BILL);
-            cat_month += parseFloat(cat.CUR_MONTH);
-            cat_addtl += parseFloat(cat.ADTL_B_FRN);
-            cat_cs += parseFloat(cat.CLIENT_SUP);
-            cat_ofc += parseFloat(cat.ADTL_B_OFC);
-            cat_fee += parseFloat(cat.FF_PYMNT);
-        });
+        }
 
         return (
             <div className={classNames(classes.root, "p-0 sm:p-64  print:p-0")}>
@@ -310,22 +319,44 @@ class Report extends Component {
                                             return (
                                                 <tr key={index}>
                                                     <td>
-                                                        <Typography variant="subtitle1">{b}</Typography>
+                                                        <Typography variant="subtitle1">
+                                                            {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
+                                                        </Typography>
                                                     </td>
                                                     <td className="text-right">
-                                                        ${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                                        {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
+                                                        ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
                                                     </td>
                                                 </tr>
                                             )
                                         }
                                     )}
+                                    { aDeductions2 !=null && (aDeductions2.map((b, index)=>{
+                                            return (
+                                                <tr key={index}>
+                                                    <td>
+                                                        <Typography variant="subtitle1">{b}</Typography>
+                                                    </td>
+                                                    <td className="text-right">
+                                                        ${SUMMARY_PAGE[0][b]!=null &&(parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}
+                                                        {SUMMARY_PAGE[0][b] ==null &&(parseFloat(0).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}
+
+                                                        {/*${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }*/}
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }
+                                    ))}
+
                                     </tbody>
                                 </table>
                                 <table>
+                                    <tbody>
                                     <tr>
                                         <td width="700"> <h2 style ={{color:'blue'}}>DUE TO FRANCHISEE:</h2></td>
                                         <td>97,794.90</td>
                                     </tr>
+                                    </tbody>
                                 </table>
                                 <div style ={divline}></div>
 
@@ -422,64 +453,88 @@ class Report extends Component {
                             </div>
 
                             <div className="mt-64">
-                                <h2 >Customer Transactions</h2>
-                                <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
-                                <table className="">
-                                    <thead>
-                                    <tr>
-                                        <th>
+                                <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}>
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th width="300" align="left">
+                                                <h2 >Customer Transactions</h2>
+                                            </th>
+                                            <th width="100">Invoice</th>
+                                            <th width="250">Description</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
 
-                                        </th>
-                                        <th>
-                                            Invoice
-                                        </th>
-                                        <th className="text-left">
-                                            Description
-                                        </th>
-                                        <th className="text-right">
-                                            {/* QUANTITY */}
-                                        </th>
-                                        <th className="text-right">
-                                        </th>
-                                    </tr>
-                                    </thead>
+
+                                <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}>
+                                <table style={{width:'100%'}}>
                                     <tbody>
                                     <tr >
-                                        <td><Typography >Customer</Typography></td>
-                                        <td>I/C</td>
-                                        <td className="text-right"></td>
-                                        <td className="text-right">Inv Amt</td>
-                                        <td className="text-right">Inv Tax</td>
+                                        <td width="65"><Typography >Customer</Typography></td>
+                                        <td width ="227"></td>
+                                        <td width ="25">I/C</td>
+                                        <td width ="74">Invoice</td>
+                                        <td className="text-left" width="345">Description</td>
+                                        <td className="text-right" width ="73">Inv Amt</td>
+                                        <td className="text-right" width ="60">Inv Tax</td>
                                         <td className="text-right">Total</td>
                                     </tr>
+                                    </tbody>
+                                </table>
+                                </div>
+                                <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}>
+                                <table className="" style={{width:'100%'}}>
+                                    <tbody>
+                                    <tr >
+                                        <td width="65"><Typography ></Typography></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td className="text-left"></td>
+                                        <td className="text-right"></td>
+                                        <td className="text-right"></td>
+                                        <td className="text-right"></td>
+                                    </tr>
 
-                                    {CUS_TRXS.map((ct, index)=>{
+                                    {CUS_TRXS!=null && ( CUS_TRXS.map((ct, index)=>{
                                         return (
                                             <tr key={index}>
                                             <td>
-                                                <Typography >{ct.CUST_NO} {FuseUtils.capital_letter(ct.CUS_NAME)}</Typography>
+                                                <Typography >{ct.CUST_NO}</Typography>
                                             </td>
-                                            <td>{ct.INV_NO}</td>
-                                            <td className="text-left">{FuseUtils.capital_letter(ct.DESCR)}</td>
-                                            <td className="text-right">${parseFloat(ct.TRX_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                            <td className="text-right">${parseFloat(ct.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td width ="227">
+                                                    <Typography >{FuseUtils.capital_letter(ct.CUS_NAME)}</Typography>
+                                                </td>
+                                                <td width ="25">{ct.TRX_TYPE}</td>
+                                                <td width ="74"><Typography >{ct.CUST_NO}</Typography></td>
+
+                                            <td className="text-left" width ="345">{FuseUtils.capital_letter(ct.DESCR)}</td>
+                                            <td className="text-right" width ="73">${parseFloat(ct.TRX_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td className="text-right" width ="60">${parseFloat(ct.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                             <td className="text-right">${parseFloat(ct.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                         </tr>
                                         )
-                                    })}
+                                    }))}
+
+                                    </tbody>
+                                </table>
+                                </div>
+                                <table  style={{width:'100%'}}>
+                                    <tbody>
                                     <tr >
-                                        <td>
+                                        <td width="736">
                                             <Typography >Totals for this Franchise</Typography>
                                         </td>
-                                        <td>
-                                        </td>
-                                        <td className="text-left">
-                                        </td>
-                                        <td className="text-right">${ct_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                        <td className="text-right">${ct_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+
+
+                                        <td className="text-right" width ="73">${ct_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        <td className="text-right" width ="60">${ct_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                         <td className="text-right">${ct_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                     </tr>
                                     </tbody>
+
                                 </table>
                             </div>
                         </div>
@@ -489,7 +544,7 @@ class Report extends Component {
                 <Card className={classNames(classes.card, "mx-auto mt-64")}>
                     <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                         <div>
-                            <table align="center">
+                            <table align="">
                                 <tbody>
                                 {this.renderHeader()}
                                 </tbody>
@@ -501,12 +556,14 @@ class Report extends Component {
                                     <tbody>
                                     <tr>
                                         <td className="pr-16 pb-4">
-                                            <Typography className="font-light" variant="h6" color="textSecondary">
-                                                Franchisee Code
+                                            <Typography color="inherit">Franchisee Code:
                                             </Typography>
                                         </td>
+                                        <td className="text-left" width='100'>
+                                            <Typography color="inherit"><br/></Typography>
+                                        </td>
                                         <td className="pb-4">
-                                            <Typography className="font-light" variant="h6" color="inherit">
+                                            <Typography color="inherit">
                                                 Name
                                             </Typography>
                                         </td>
@@ -514,9 +571,12 @@ class Report extends Component {
 
                                     <tr>
                                         <td className="pr-16">
-                                            <Typography color="textSecondary">
+                                            <Typography color="inherit">
                                                 {DLR_CODE}
                                             </Typography>
+                                        </td>
+                                        <td className="text-left" width='100'>
+                                            <Typography color="inherit"><br/></Typography>
                                         </td>
                                         <td>
                                             <Typography color="inherit">
@@ -528,86 +588,89 @@ class Report extends Component {
                                 </table>
                             </div>
 
-                            <div className="mt-64">
-                                <table className="simple invoice-table">
-                                    <thead>
-                                    <tr>
-                                        <th>
-                                            <h2>Customer Account Totals</h2>
-                                        </th>
-                                        <th>
-                                        </th>
-                                        <th className="text-center">
-                                        </th>
-                                        <th className="text-right">
-                                            {/* QUANTITY */}
-                                        </th>
-                                        <th className="text-right">
-                                        </th>
-                                    </tr>
-                                    </thead>
+                            <div className="" >
+                                <h2>Customer Account Totals</h2>
+                                <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+                                <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}>
+                                    <table style={{width:'100%'}}>
+                                        <tbody>
+                                        <tr>
+                                            <td width="65">
+                                                <Typography >Customer</Typography>
+                                            </td>
+                                            <td width="253">
+
+                                            </td>
+                                            <td className="text-right" width="70">
+                                                <Typography >Contract</Typography>
+                                                <Typography >Billing</Typography>
+                                            </td>
+                                            <td className="text-right" width="70">
+                                                <Typography >Current</Typography>
+                                                <Typography >Month</Typography>
+                                            </td>
+                                            <td className="text-right" width="70">
+                                                <Typography >Addtl Bill</Typography>
+                                                <Typography >Franchisee</Typography>
+                                            </td>
+                                            <td className="text-right" width="70">
+                                                Client Supplies
+                                            </td>
+                                            <td className="text-right" width="70">
+                                                Additional Bill Office
+                                            </td>
+                                            <td className="text-right" width="70">
+                                                <Typography >Finders</Typography>
+                                                <Typography >Fee Nbr</Typography>
+                                            </td>
+                                            <td className="text-right" width="70">
+                                                <Typography >Finders</Typography>
+                                                <Typography >Fee</Typography>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <table className="" style={{width:'100%'}}>
                                     <tbody>
-                                    <tr >
-                                        <td>
-                                            <Typography >Customer</Typography>
-                                        </td>
-                                        <td className="text-center">
-                                            Contract Billing
-                                        </td>
-                                        <td className="text-center">
-                                            Current Month
-                                        </td>
-                                        <td className="text-center">
-                                            Addtl Bill Franchisee
-                                        </td>
-                                        <td className="text-center">
-                                            Client Supplies
-                                        </td>
-                                        <td className="text-center">
-                                            Additional Bill Office
-                                        </td>
-                                        <td className="text-center">
-                                            Total
-                                        </td>
-                                        <td className="text-center">
-                                            Finders Fee Nbr
-                                        </td>
-                                        <td className="text-center">
-                                            Finders Fee
-                                        </td>
-                                    </tr>
-                                    {CUST_ACCT_TOTALS.map((ct, index)=>{
+                                    {CUST_ACCT_TOTALS !=null && (CUST_ACCT_TOTALS.map((ct, index)=>{
                                         return (
                                             <tr key={index}>
-                                                <td>
-                                                    <Typography >{ct.CUST_NO} {FuseUtils.capital_letter(ct.CUS_NAME)}</Typography>
+                                                <td width="65">
+                                                    <Typography >{ct.CUST_NO}</Typography>
                                                 </td>
-                                                <td className="text-right">${parseFloat(ct.CONT_BILL).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td className="text-right">${parseFloat(ct.CUR_MONTH).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td className="text-right">${parseFloat(ct.ADTL_B_FRN).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td className="text-right">${parseFloat(ct.CLIENT_SUP).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td className="text-right">${parseFloat(ct.ADTL_B_OFC).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td></td>
-                                                <td className="text-right">{ct.FF_NBR}</td>
-                                                <td className="text-right">${parseFloat(ct.FF_PYMNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td width="250">
+                                                    <Typography >{FuseUtils.capital_letter(ct.CUS_NAME)}</Typography>
+                                                </td>
+                                                <td className="text-right" width="70">${parseFloat(ct.CONT_BILL).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right" width="70">${parseFloat(ct.CUR_MONTH).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right" width="70">${parseFloat(ct.ADTL_B_FRN).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right" width="70">${parseFloat(ct.CLIENT_SUP).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right" width="70">${parseFloat(ct.ADTL_B_OFC).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right" width="70">{ct.FF_NBR}</td>
+                                                <td className="text-right" width="70">${parseFloat(ct.FF_PYMNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                             </tr>
                                         )
-                                    })}
-                                    <tr >
-                                        <td>
-                                            <Typography >Franchisee Actual Amount</Typography>
-                                        </td>
-                                        <td className="text-right">${cat_billing.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                        <td className="text-right">${cat_month.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                        <td className="text-right">${cat_addtl.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                        <td className="text-right">${cat_cs.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                        <td className="text-right">${cat_ofc.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                        <td className="text-right"></td>
-                                        <td className="text-right"></td>
-                                        <td className="text-right">${cat_fee.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                    </tr>
+                                    }))}
                                     </tbody>
                                 </table>
+                                <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+                                <div style ={{ width:'100%'}}>
+                                    <table style={{width:'100%'}}>
+                                        <tbody>
+                                        <tr>
+                                            <td width ="325"><Typography >Franchisee Actual Amount</Typography></td>
+                                            <td className="text-right" width="70">${cat_billing.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td className="text-right" width="70">${cat_month.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td className="text-right" width="70">${cat_addtl.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td className="text-right" width="70">${cat_cs.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td className="text-right" width="70">${cat_ofc.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td className="text-right" width="70"></td>
+                                            <td className="text-right" width="70">${cat_fee.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </CardContent>
@@ -616,7 +679,7 @@ class Report extends Component {
                 <Card className={classNames(classes.card, "mx-auto mt-64")}>
                     <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                         <div>
-                            <table align="center">
+                            <table align="">
                                 <tbody>
                                 {this.renderHeader()}
                                 </tbody>
@@ -629,12 +692,14 @@ class Report extends Component {
                                     <tbody>
                                     <tr>
                                         <td className="pr-16 pb-4">
-                                            <Typography className="font-light" variant="h6" color="textSecondary">
-                                                Franchisee Code
+                                            <Typography color="inherit">Franchisee Code:
                                             </Typography>
                                         </td>
+                                        <td className="text-left" width='100'>
+                                            <Typography color="inherit"><br/></Typography>
+                                        </td>
                                         <td className="pb-4">
-                                            <Typography className="font-light" variant="h6" color="inherit">
+                                            <Typography color="inherit">
                                                 Name
                                             </Typography>
                                         </td>
@@ -642,9 +707,12 @@ class Report extends Component {
 
                                     <tr>
                                         <td className="pr-16">
-                                            <Typography color="textSecondary">
+                                            <Typography color="inherit">
                                                 {DLR_CODE}
                                             </Typography>
+                                        </td>
+                                        <td className="text-left" width='100'>
+                                            <Typography color="inherit"><br/></Typography>
                                         </td>
                                         <td>
                                             <Typography color="inherit">
@@ -656,60 +724,72 @@ class Report extends Component {
                                 </table>
                             </div>
 
-                            <div className="mt-64">
-                                <table className="simple invoice-table">
-                                    <thead>
-                                    <tr>
-                                        <th>
-                                            <h2>Supply Transactions</h2>
-                                        </th>
-                                    </tr>
-                                    </thead>
+                            <div className="">
+                                <h2>Supply Transactions</h2>
+                                <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+                                <div style ={{width:'100%'}}>
+                                    <table style ={{width:'100%'}}>
+                                        <tbody>
+                                        <tr>
+                                            <td className="text-left" width="350">
+                                                Description
+                                            </td>
+                                            <td className="text-right" width="70">
+                                                Quantity
+                                            </td>
+                                            <td className="text-right" width="70">
+                                                Unit Cost
+                                            </td>
+                                            <td className="text-right" width="70">
+                                                Extended
+                                            </td>
+                                            <td className="text-right" width="70">
+                                                Tax
+                                            </td>
+                                            <td className="text-right" width="70">
+                                                Total Amt
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                {SUPPLY_TRXS != null && (
+                                    <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+                                )}
+                                <table className="" style={{width:'100%',}}>
                                     <tbody>
-                                    <tr >
-                                        <td>
-                                            <Typography >Description</Typography>
-                                        </td>
-                                        <td className="text-right">
-                                            Quantity
-                                        </td>
-                                        <td className="text-right">
-                                            Unit Cost
-                                        </td>
-                                        <td className="text-right">
-                                            Extended
-                                        </td>
-                                        <td className="text-right">
-                                            Tax
-                                        </td>
-                                        <td className="text-right">
-                                            Total Amt
-                                        </td>
-                                    </tr>
-                                    {SUPPLY_TRXS.map((st, index)=>{
+                                    { SUPPLY_TRXS != null && (SUPPLY_TRXS.map((st, index)=>{
                                         return (
                                             <tr key={index}>
-                                                <td>
+                                                <td width="350">
                                                     <Typography >{FuseUtils.capital_letter(st.DESCR)}</Typography>
                                                 </td>
-                                                <td className="text-right">{st.QUANTITY}</td>
-                                                <td className="text-right">${parseFloat(st["UNIT COST"]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td className="text-right">${parseFloat(st.EXTENDED).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td className="text-right">${parseFloat(st.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td className="text-right">${parseFloat(st.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right" width="70">{st.QUANTITY}</td>
+                                                <td className="text-right" width="70">${parseFloat(st["UNIT COST"]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right" width="70">${parseFloat(st.EXTENDED).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right" width="70">${parseFloat(st.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right" width="70">${parseFloat(st.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                             </tr>
                                         )
-                                    })}
-                                    <tr >
-                                        <td><Typography >Total Supplies</Typography></td>
-                                        <td className="text-right"></td>
-                                        <td className="text-right"></td>
-                                        <td className="text-right">${st_extended.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                        <td className="text-right">${st_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                        <td className="text-right">${st_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                    </tr>
+                                    }))}
                                     </tbody>
                                 </table>
+                                <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+                                <div style={{width:'100%'}}>
+                                    <table style={{width:'100%'}}>
+                                        <tbody>
+                                        <tr >
+                                            <td width="350"><Typography >Total Supplies</Typography></td>
+                                            <td width="70" className="text-right"></td>
+                                            <td width="70"  className="text-right"></td>
+                                            <td width="70"  className="text-right">${st_extended.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td  width="70" className="text-right">${st_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td  width="70" className="text-right">${st_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </CardContent>
@@ -719,7 +799,7 @@ class Report extends Component {
                     <Card className={classNames(classes.card, "mx-auto mt-64")}>
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                             <div>
-                                <table align="center">
+                                <table align="">
                                     <tbody>
                                     {this.renderHeader()}
                                     </tbody>
@@ -732,12 +812,14 @@ class Report extends Component {
                                         <tbody>
                                         <tr>
                                             <td className="pr-16 pb-4">
-                                                <Typography className="font-light" variant="h6" color="textSecondary">
-                                                    Franchisee Code
+                                                <Typography color="inherit">Franchisee Code:
                                                 </Typography>
                                             </td>
+                                            <td className="text-left" width='100'>
+                                                <Typography color="inherit"><br/></Typography>
+                                            </td>
                                             <td className="pb-4">
-                                                <Typography className="font-light" variant="h6" color="inherit">
+                                                <Typography color="inherit">
                                                     Name
                                                 </Typography>
                                             </td>
@@ -745,9 +827,12 @@ class Report extends Component {
 
                                         <tr>
                                             <td className="pr-16">
-                                                <Typography color="textSecondary">
+                                                <Typography color="inherit">
                                                     {DLR_CODE}
                                                 </Typography>
+                                            </td>
+                                            <td className="text-left" width='100'>
+                                                <Typography color="inherit"><br/></Typography>
                                             </td>
                                             <td>
                                                 <Typography color="inherit">
@@ -785,7 +870,7 @@ class Report extends Component {
                                         </tr>
 
 
-                                        {CHARGEBACKS.map((cb, index)=>{
+                                        { CHARGEBACKS != null && (CHARGEBACKS.map((cb, index)=>{
                                             return (
                                                 <tr key={index} >
                                                     <td>
@@ -796,7 +881,7 @@ class Report extends Component {
                                                     <td className="text-right">${parseFloat(cb.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                                 </tr>
                                             )
-                                        })}
+                                        })) }
                                         <tr >
                                             <td>
                                                 <Typography >Total Charge Backs</Typography>
@@ -816,7 +901,7 @@ class Report extends Component {
                 <Card className={classNames(classes.card, "mx-auto mt-64")}>
                     <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                         <div>
-                            <table align="center">
+                            <table align="">
                                 <tbody>
                                 {this.renderHeader()}
                                 </tbody>
@@ -829,12 +914,16 @@ class Report extends Component {
                                     <tbody>
                                     <tr>
                                         <td className="pr-16 pb-4">
-                                            <Typography className="font-light" variant="h6" color="textSecondary">
-                                                Franchisee Code
-                                            </Typography>
+
+                                                <Typography color="inherit">Franchisee Code:
+                                                </Typography>
+
+                                        </td>
+                                        <td className="text-left" width='100'>
+                                            <Typography color="inherit"><br/></Typography>
                                         </td>
                                         <td className="pb-4">
-                                            <Typography className="font-light" variant="h6" color="inherit">
+                                            <Typography color="inherit">
                                                 Name
                                             </Typography>
                                         </td>
@@ -842,9 +931,12 @@ class Report extends Component {
 
                                     <tr>
                                         <td className="pr-16">
-                                            <Typography color="textSecondary">
+                                            <Typography color="inherit">
                                                 {DLR_CODE}
                                             </Typography>
+                                        </td>
+                                        <td className="text-left" width='100'>
+                                            <Typography color="inherit"><br/></Typography>
                                         </td>
                                         <td>
                                             <Typography color="inherit">
@@ -855,69 +947,59 @@ class Report extends Component {
                                     </tbody>
                                 </table>
                             </div>
-
-                            <div className="mt-64">
-                                <table className="simple invoice-table">
-                                    <thead>
-                                    <tr>
-                                        <th>
-                                            <h2>Leases</h2>
-                                        </th>
-                                    </tr>
-                                    </thead>
+                            <h2>Leases</h2>
+                            <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+                            <table style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}>
+                                <tbody>
+                                <tr>
+                                    <td width="100" className="text-left">Lease Date</td>
+                                    <td width="100" className="text-right">Lease No</td>
+                                    <td width="300" className="text-right">Description & Serial Number</td>
+                                    <td width="100" className="text-right">Payment#</td>
+                                    <td width="100" className="text-right">Amount</td>
+                                    <td width="100" className="text-right">Tax</td>
+                                    <td width="100" className="text-right">Total</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div className="">
+                                <table className="" style={{width:'100%'}}>
                                     <tbody>
-                                    <tr >
-                                        <td>
-                                            <Typography >Lease Date</Typography>
-                                        </td>
-                                        <td className="text-center">
-                                            Lease No
-                                        </td>
-                                        <td className="text-center">
-                                            Description & Serial Number
-                                        </td>
-                                        <td className="text-center">
-                                            Payment #
-                                        </td>
-                                        <td className="text-center">
-                                            Amount
-                                        </td>
-                                        <td className="text-center">
-                                            Tax
-                                        </td>
-                                        <td className="text-center">
-                                            Total
-                                        </td>
-                                    </tr>
-                                    {LEASE_PAYMENTS.map((lp, index)=> {
+                                    {LEASE_PAYMENTS != null && (LEASE_PAYMENTS.map((lp, index)=> {
                                         return (
                                             <tr key={index}>
-                                                <td>
+                                                <td width="100" className="text-left">
                                                     <Typography>{lp.LEASE_DATE}</Typography>
                                                 </td>
-                                                <td className="text-left">{lp.LEASE_NO}</td>
-                                                <td className="text-left">{FuseUtils.capital_letter(lp.DESCR)}</td>
-                                                <td className="text-right">{lp.PYMNT_NUM}</td>
-                                                <td className="text-right">${parseFloat(lp.PYMNT_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td className="text-right">${parseFloat(lp.PYMNT_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td className="text-right">${parseFloat(lp.PYMNT_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td width="100" className="text-right">{lp.LEASE_NO}</td>
+                                                <td width="300" className="text-right">{FuseUtils.capital_letter(lp.DESCR)}</td>
+                                                <td width="100" className="text-right">{lp.PYMNT_NUM}</td>
+                                                <td width="100" className="text-right">${parseFloat(lp.PYMNT_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td width="100" className="text-right">${parseFloat(lp.PYMNT_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td width="100" className="text-right">${parseFloat(lp.PYMNT_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                             </tr>
                                         )
-                                    })
+                                    }))
                                     }
-                                    <tr >
-                                        <td>
+
+                                    </tbody>
+                                </table>
+                                {LEASE_PAYMENTS !=null && (
+                                    <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+
+                                )}
+                                <table style={{width:'100%'}}>
+                                    <tbody>
+                                    <tr>
+                                        <td width="100" className="text-left">
                                             <Typography >Lease Totals</Typography>
                                         </td>
-                                        <td className="text-center">
-                                        </td>
-                                        <td className="text-center">
-                                        </td>
-                                        <td className="text-center">
-                                        </td>
-                                        <td className="text-right">${lp_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                        <td className="text-right">${lp_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                        <td className="text-right">${lp_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        <td width="100" className="text-right"></td>
+                                        <td width="300" className="text-right"></td>
+                                        <td width="100" className="text-right"></td>
+                                        <td width="100" className="text-right">${lp_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        <td width="100" className="text-right">${lp_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                        <td width="100" className="text-right">${lp_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -931,7 +1013,7 @@ class Report extends Component {
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
 
                             <div>
-                                <table align="center">
+                                <table align="">
                                     <tbody>
                                     {this.renderHeader()}
                                     </tbody>
@@ -944,12 +1026,14 @@ class Report extends Component {
                                         <tbody>
                                         <tr>
                                             <td className="pr-16 pb-4">
-                                                <Typography className="font-light" variant="h6" color="textSecondary">
-                                                    Franchisee Code
+                                                <Typography color="inherit">Franchisee Code:
                                                 </Typography>
                                             </td>
+                                            <td className="text-left" width='100'>
+                                                <Typography color="inherit"><br/></Typography>
+                                            </td>
                                             <td className="pb-4">
-                                                <Typography className="font-light" variant="h6" color="inherit">
+                                                <Typography color="inherit">
                                                     Name
                                                 </Typography>
                                             </td>
@@ -957,9 +1041,12 @@ class Report extends Component {
 
                                         <tr>
                                             <td className="pr-16">
-                                                <Typography color="textSecondary">
+                                                <Typography color="inherit">
                                                     {DLR_CODE}
                                                 </Typography>
+                                            </td>
+                                            <td className="text-left" width='100'>
+                                                <Typography color="inherit"><br/></Typography>
                                             </td>
                                             <td>
                                                 <Typography color="inherit">
@@ -971,52 +1058,61 @@ class Report extends Component {
                                     </table>
                                 </div>
 
-                                <div className="mt-64">
-                                    <table className="simple invoice-table">
-                                        <thead>
-                                        <tr>
-                                            <th>
-                                                <h2>Regular Misc</h2>
-                                            </th>
-                                        </tr>
-                                        </thead>
+                                <div className="">
+                                    <h2>Regular Misc</h2>
+                                    <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+                                    <table style={{width:'100%'}}>
                                         <tbody>
-                                        <tr >
-                                            <td>
+                                        <tr>
+                                            <td width="100" className="text-left">
                                                 <Typography >Type</Typography>
                                             </td>
-                                            <td className="text-center">
+                                            <td  width="400" className="text-left">
                                                 Description
                                             </td>
-                                            <td className="text-center">
+                                            <td  width="100" className="text-right">
                                                 Tax Amt
                                             </td>
-                                            <td className="text-center">
+                                            <td  width="100" className="text-right">
                                                 Tax
                                             </td>
-                                            <td className="text-center">
+                                            <td  width="100" className="text-right">
                                                 Total Amt
                                             </td>
                                         </tr>
+                                        </tbody>
+                                    </table>
+                                    {REG_MISC!==null &&(
+                                        <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+                                    )}
+                                    <table className="" style={{width:'100%'}}>
+                                        <tbody>
+
                                         {REG_MISC!==null && REG_MISC.map((sm, index)=>{
                                             return (
                                                 <tr key={index} >
-                                                    <td>{sm.TYPE}</td>
-                                                    <td>
+                                                    <td width="100" className="text-left">{sm.TYPE}</td>
+                                                    <td width="400" className="text-left">
                                                         <Typography >{FuseUtils.capital_letter(sm.DESCR)}</Typography>
                                                     </td>
-                                                    <td className="text-right">{parseFloat(sm.TRX_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                    <td className="text-right">{parseFloat(sm.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                    <td className="text-right">{parseFloat(sm.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td width="100" className="text-right">{parseFloat(sm.TRX_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td width="100" className="text-right">{parseFloat(sm.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td width="100" className="text-right">{parseFloat(sm.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                                 </tr>
                                             )
                                         })}
-                                        <tr >
-                                            <td><Typography >Total Special</Typography></td>
-                                            <td className="text-center"></td>
-                                            <td className="text-right">{sm_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                            <td className="text-right">{sm_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                            <td className="text-right">{sm_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+
+                                        </tbody>
+                                    </table>
+                                    <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+                                    <table style={{width:'100%'}}>
+                                        <tbody>
+                                        <tr>
+                                            <td width="100" className="text-left"><Typography >Total Regular</Typography></td>
+                                            <td width="400" className="text-right"></td>
+                                            <td width="100" className="text-right">{sm_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td width="100" className="text-right">{sm_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td width="100" className="text-right">{sm_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                         </tr>
                                         </tbody>
                                     </table>

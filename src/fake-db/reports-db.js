@@ -22,7 +22,7 @@ let reportsDB = {
                             "CONTACT": "KEVIN BURNS",
                             "TOTAL_CONTRACT_BILLING": [
                                 {
-                                    "LABEL": "TOTAL CONTRACT BILLING:",
+                                    "LABEL": "FRANCHISEE REVENUES",
                                     "AMOUNT": "46096.26"
                                 }
                             ],
