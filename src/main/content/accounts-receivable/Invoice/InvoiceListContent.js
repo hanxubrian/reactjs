@@ -271,6 +271,8 @@ class InvoiceListContent extends Component {
                             onClick  : (e, handleOriginal) => {
                                 if ( rowInfo )
                                 {
+                                    if(this.props.filterState) this.props.toggleFilterPanel();
+                                    if(this.props.summaryState) this.props.toggleSummaryPanel();
                                     this.props.openEditInvoiceForm(rowInfo.original);
                                 }
                             }
@@ -436,6 +438,8 @@ function mapDispatchToProps(dispatch)
         removeInvoiceAction: Actions.removeInvoice,
         openEditInvoiceForm: Actions.openEditInvoiceForm,
         closeEditInvoiceForm: Actions.closeEditInvoiceForm,
+        toggleFilterPanel: Actions.toggleFilterPanel,
+        toggleSummaryPanel: Actions.toggleSummaryPanel,
     }, dispatch);
 }
 
@@ -445,7 +449,9 @@ function mapStateToProps({invoices, auth})
         invoices: invoices.invoicesDB,
         transactionStatus: invoices.transactionStatus,
         regionId: auth.login.defaultRegionId,
-        InvoiceForm: invoices.InvoiceForm
+        InvoiceForm: invoices.InvoiceForm,
+        filterState: invoices.bOpenedFilterPanel,
+        summaryState: invoices.bOpenedSummaryPanel,
     }
 }
 
