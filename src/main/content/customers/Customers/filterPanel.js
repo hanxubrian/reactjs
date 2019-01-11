@@ -440,7 +440,7 @@ class FilterPanel extends Component {
 				if (x.Title === null) return false
 				return true
 			}).map(x => {
-				return x.Title
+				return x.FirstName + " " + x.LastName
 			}).sort();
 		}
 

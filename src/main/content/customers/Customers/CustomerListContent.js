@@ -399,6 +399,7 @@ const MapWithAMarkerClusterer = compose(
 	withGoogleMap
 )(props =>
 	<GoogleMap
+		fitBounds
 		defaultZoom={map_zoom}
 		defaultCenter={{ lat: props.center.lat, lng: props.center.lng }}
 	>
@@ -437,6 +438,7 @@ const MapWithAMarkerClusterer2 = compose(
 	withGoogleMap
 )(props =>
 	<GoogleMap
+		fitBounds
 		defaultZoom={map_zoom}
 		defaultCenter={{ lat: props.center.lat, lng: props.center.lng }}
 	>
