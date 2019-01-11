@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
 
 // core components
-import { Icon, IconButton, Fab, Typography, Toolbar, CircularProgress } from '@material-ui/core';
-
+import { Icon, IconButton, Fab, Typography, Toolbar, CircularProgress, Menu, MenuItem, Checkbox, FormControlLabel } from '@material-ui/core';
+import { green } from '@material-ui/core/colors';
 // theme components
 import { FusePageCustomSidebarScroll, FuseAnimate } from '@fuse';
 
@@ -221,6 +221,21 @@ const styles = theme => ({
 		justifyContent: 'center',
 		display: 'flex',
 		opacity: 0.5
+	},
+	validationMenu: {
+		color: "#07DF07!important",//green[600],
+		'&$checked': {
+			color: "#07DF07!important", //green[500] 00C73F 33FF33 66CC66 07DF07
+		}
+	},
+	invalidationMenu: {
+		color: "#FF557F!important",//green[600],
+		'&$checked': {
+			color: "#FF557F!important", //green[500] FF557F
+		}
+	},
+	validationMenuChecked: {
+
 	}
 });
 // const defaultProps = {
@@ -557,6 +572,13 @@ class Customers extends Component {
 		});
 	}
 
+	showValidationMenu = event => {
+		this.setState({ anchorEl: event.currentTarget });
+	}
+	closeValidationMenu = () => {
+		this.setState({ anchorEl: null });
+	}
+
 	render() {
 		console.log(this.props.documents)
 		console.log(this.props)
@@ -564,7 +586,7 @@ class Customers extends Component {
 
 		// const { toggleSelection, toggleAll, isSelected, logSelection } = this;
 
-		const { selection } = this.state;
+		const { selection, anchorEl } = this.state;
 
 		console.log('render temp =', this.state.temp);
 		console.log('customerForm.props.open =', customerForm.props.open);
@@ -596,7 +618,7 @@ class Customers extends Component {
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
-										<IconButton className={classes.button} aria-label="add" onClick={openNewCustomerForm}>
+											<IconButton className={classes.button} aria-label="add" onClick={openNewCustomerForm}>
 												<Icon>add</Icon>
 											</IconButton>
 											<IconButton className={classes.button} aria-label="mail" onClick={() => this.props.history.push('/apps/mail/inbox')}>
@@ -642,9 +664,36 @@ class Customers extends Component {
 												<Icon>person_outline</Icon>
 											</IconButton>
 
-											<IconButton className={classes.button} aria-label="Add an alarm" onClick={toggleSummaryPanel}>
+											{/* <IconButton className={classes.button} aria-label="Add an alarm" onClick={toggleSummaryPanel}>
 												<Icon>check_circle</Icon>
+											</IconButton> */}
+											
+											<IconButton
+												// className={classNames(classes.button, classes.validationMenu)}
+												className={classNames(classes.button, classes.invalidationMenu)}
+												aria-label="Add an alarm"
+												aria-owns={anchorEl ? 'validation-menu' : undefined}
+												aria-haspopup="true"
+												onClick={this.showValidationMenu}
+											>
+												{/* <Icon>check_circle</Icon> */}
+												<Icon>error</Icon>
 											</IconButton>
+											<Menu
+												id="validation-menu"
+												anchorEl={anchorEl}
+												open={Boolean(anchorEl)}
+												onClose={this.closeValidationMenu}
+											>
+												<MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Company Information" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Billing Address" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Billing Settings" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Company Contacts" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Contract Details" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Contract Signed" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Service Location Info" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Verified &amp; Approved" /></MenuItem>
+											</Menu>
 
 											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
 												<Icon>close</Icon>
