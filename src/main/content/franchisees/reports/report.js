@@ -128,14 +128,21 @@ class Report extends Component {
         const {DLR_CODE, SUMMARY_PAGE, CUS_TRXS, CUST_ACCT_TOTALS, SUPPLY_TRXS, LEASE_PAYMENTS,REG_MISC, CHARGEBACKS }  = franchiseeReport.Data;
 
         const aBillings = [SUMMARY_PAGE[0]['ACTUAL BILLING'][0],SUMMARY_PAGE[0].ADTL_BILL_FRAN[0],
-            SUMMARY_PAGE[0].CLIENT_SUPPLIES[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE[0],SUMMARY_PAGE[0].SUBTOTAL[0],
-            SUMMARY_PAGE[0].CLIENT_SALES_TAX[0],SUMMARY_PAGE[0].TOTAL_MON_REV[0]];
-
+            SUMMARY_PAGE[0].CLIENT_SUPPLIES[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE[0]];
+        const aBillings1 =[SUMMARY_PAGE[0].SUBTOTAL[0], SUMMARY_PAGE[0].CLIENT_SALES_TAX[0]];
+        const aBillings2 =[SUMMARY_PAGE[0].TOTAL_MON_REV[0]];
         const aDeductions0= [SUMMARY_PAGE[0].ROYALTY[0], SUMMARY_PAGE[0].ACCT_FEE[0],SUMMARY_PAGE[0].TECH_FEE[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE_COMM[0],SUMMARY_PAGE[0].FRAN_NOTE_PYMT[0]];
-        const aDeductions1 = [ "FINDERS_FEES", "FRANCHISE SUPPLIES", "REGULAR MISCELLANEOUS", "SUBTOTAL_REG_DEDS",
-            "ADVERTISING_FEE", "TOTAL_LEASES", "BUSINESS_PROT", "BPP_ADMIN", "CLIENT_SALES_TAX_BOT", "CHARGEBACKS", "PAGERS",
-            "PAGERS2", "SPECIAL_MISC", "SUBTOTAL_SPEC_DEDS", "TOTAL_DEDS", "DUE_TO_FRAN"];
+        const aDeductions1 = [ "FINDERS_FEES", "FRANCHISE SUPPLIES", "REGULAR MISCELLANEOUS"];
+        // "SUBTOTAL_REG_DEDS",
+        //     "ADVERTISING_FEE", "TOTAL_LEASES", "BUSINESS_PROT", "BPP_ADMIN", "CLIENT_SALES_TAX_BOT", "CHARGEBACKS", "PAGERS",
+        //     "PAGERS2", "SPECIAL_MISC", "SUBTOTAL_SPEC_DEDS", "TOTAL_DEDS", "DUE_TO_FRAN"
         const aDeductions2 =["FRANCHISE NOTE PAYMENT2", "ACCT_FEE_REB_CUR", "ACCT_FEE_REB_BAL"];
+        const aDeductions3 =["SUBTOTAL_REG_DEDS"];
+        const aDeductions4 =["ADVERTISING_FEE", "TOTAL_LEASES", "BUSINESS_PROT", "BPP_ADMIN", "CLIENT_SALES_TAX_BOT", "CHARGEBACKS", "PAGERS",
+            "PAGERS2", "SPECIAL_MISC","DUE_TO_FRAN"];
+        const aDeductions5 =["SUBTOTAL_SPEC_DEDS"];
+        const aDeductions6 =["TOTAL_DEDS"];
+
 
         let ct_amount = 0.0, ct_tax = 0.0, ct_total = 0.0;
         let cb_amount = 0.0, cb_tax = 0.0, cb_total = 0.0;
@@ -286,6 +293,46 @@ class Report extends Component {
                                             )
                                         }
                                     )}
+
+
+                                    </tbody>
+                                </table>
+                                <table style={{width:'80%'}}>
+                                    <tbody>
+
+                                        { aBillings1.map((b, index)=>{
+                                                return (
+                                                    <tr key={index}>
+                                                        <td width="350">
+                                                            <Typography variant="subtitle1">{b.LABEL}</Typography>
+                                                        </td>
+                                                        <td width ="" className="text-right">
+                                                            ${parseFloat(b.AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            }
+                                        )}
+
+                                    </tbody>
+                                </table>
+                                <table style={{width:'90%'}}>
+                                    <tbody>
+
+                                    { aBillings2.map((b, index)=>{
+                                            return (
+                                                <tr key={index}>
+                                                    <td width="350">
+                                                        <Typography variant="subtitle1">{b.LABEL}</Typography>
+                                                    </td>
+                                                    <td width ="" className="text-right">
+                                                        ${parseFloat(b.AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }
+                                    )}
+
                                     </tbody>
                                 </table>
                                 <h2 className="pt-16" style ={{color:'blue'}}>FRANCHISEE DEDUCTIONS:</h2>
@@ -331,6 +378,47 @@ class Report extends Component {
                                             )
                                         }
                                     )}
+                                    {/*{ aDeductions2 !=null && (aDeductions2.map((b, index)=>{*/}
+                                            {/*return (*/}
+                                                {/*<tr key={index}>*/}
+                                                    {/*<td>*/}
+                                                        {/*<Typography variant="subtitle1">{b}</Typography>*/}
+                                                    {/*</td>*/}
+                                                    {/*<td className="text-right">*/}
+                                                        {/*${SUMMARY_PAGE[0][b]!=null &&(parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}*/}
+                                                        {/*{SUMMARY_PAGE[0][b] ==null &&(parseFloat(0).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}*/}
+
+                                                        {/*/!*${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }*!/*/}
+                                                    {/*</td>*/}
+                                                {/*</tr>*/}
+                                            {/*)*/}
+                                        {/*}*/}
+                                    {/*))}*/}
+
+                                    </tbody>
+                                </table>
+                                <table style={{width:'80%'}}>
+                                    <tbody>
+                                    { aDeductions3.map((b, index)=>{
+                                            return (
+                                                <tr key={index}>
+                                                    <td>
+                                                        <Typography variant="subtitle1">
+                                                            {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
+                                                        </Typography>
+                                                    </td>
+                                                    <td className="text-right">
+                                                        {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
+                                                        ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }
+                                    )}
+                                    </tbody>
+                                </table>
+                                <table style={{width:'63.5%'}}>
+                                    <tbody>
                                     { aDeductions2 !=null && (aDeductions2.map((b, index)=>{
                                             return (
                                                 <tr key={index}>
@@ -347,14 +435,73 @@ class Report extends Component {
                                             )
                                         }
                                     ))}
-
                                     </tbody>
                                 </table>
-                                <table>
+                                <table style={{width:'63.5%'}}>
+                                    <tbody>
+                                    { aDeductions4.map((b, index)=>{
+                                            return (
+                                                <tr key={index}>
+                                                    <td>
+                                                        <Typography variant="subtitle1">
+                                                            {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
+                                                        </Typography>
+                                                    </td>
+                                                    <td className="text-right">
+                                                        {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
+                                                        ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }
+                                    )}
+                                    </tbody>
+                                </table>
+                                <table style={{width:'80%'}}>
+                                    <tbody>
+                                    { aDeductions5.map((b, index)=>{
+                                            return (
+                                                <tr key={index}>
+                                                    <td>
+                                                        <Typography variant="subtitle1">
+                                                            {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
+                                                        </Typography>
+                                                    </td>
+                                                    <td className="text-right">
+                                                        {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
+                                                        ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }
+                                    )}
+                                    </tbody>
+                                </table>
+                                <table style={{width:'90%'}}>
+                                    <tbody>
+                                    { aDeductions6.map((b, index)=>{
+                                            return (
+                                                <tr key={index}>
+                                                    <td>
+                                                        <Typography variant="subtitle1">
+                                                            {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
+                                                        </Typography>
+                                                    </td>
+                                                    <td className="text-right">
+                                                        {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
+                                                        ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }
+                                    )}
+                                    </tbody>
+                                </table>
+                                <table style={{width:'90%'}}>
                                     <tbody>
                                     <tr>
-                                        <td width="700"> <h2 style ={{color:'blue'}}>DUE TO FRANCHISEE:</h2></td>
-                                        <td>97,794.90</td>
+                                        <td ><h2 style ={{color:'blue'}}>DUE TO FRANCHISEE:</h2></td>
+                                        <td className="text-right">97,794.90</td>
                                     </tr>
                                     </tbody>
                                 </table>
