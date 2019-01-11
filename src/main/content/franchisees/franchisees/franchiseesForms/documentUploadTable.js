@@ -256,11 +256,7 @@ class FranchiseesDocumentUploadTable extends React.Component {
             })
         }
     }
-    handleSetState = name =>{
-      // this.setState({
-      //     [name]:["AAA"+name],
-      // })
-    };
+
     documentView(data){
 
     }
@@ -270,7 +266,6 @@ class FranchiseesDocumentUploadTable extends React.Component {
         let today = new Date();
         let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
         const list = this.props.documentsList;
-        list["documentName"+id] = selectorFiles[0].name;
         list["documentDateTime"+id] = date;
         list["documentFileSize"+id] = selectorFiles[0].size+" bytes";
         this.setState({
@@ -285,16 +280,10 @@ class FranchiseesDocumentUploadTable extends React.Component {
 
         const headers = [
             {
-                id: 'documents',
+                id: 'doc_name',
                 numeric: false,
                 disablePadding: false,
-                label: 'Documents'
-            },
-            {
-                id: 'doc_type',
-                numeric: false,
-                disablePadding: false,
-                label: 'Doc Type'
+                label: 'Document Name'
             },
             {
                 id: 'uploadDateTime',
@@ -341,9 +330,6 @@ class FranchiseesDocumentUploadTable extends React.Component {
                                 .map(n => {
                                             return (
                                                 <TableRow hover key={n.FileTypeListId} >
-                                                    <TableCell>
-                                                        {documentsList["documentName"+n.FileTypeListId]}
-                                                    </TableCell>
                                                     <TableCell component="td" scope="row" >
                                                         {n.Name}
                                                     </TableCell>

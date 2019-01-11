@@ -565,8 +565,8 @@ class Franchisees extends Component {
                                             <Icon>person_outline</Icon>
                                         </IconButton>
 
-                                        <IconButton className={classes.button} aria-label="Add an alarm">
-                                            <Icon>check_circle</Icon>
+                                        <IconButton className={classNames(classes.button)} aria-label="Add an alarm">
+                                            <Icon color="error">error_outline</Icon>
                                         </IconButton>
                                     </div>
                                 </div>

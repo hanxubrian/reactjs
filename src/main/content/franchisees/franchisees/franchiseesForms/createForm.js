@@ -592,7 +592,8 @@ class FranchiseesCreateForm extends Component {
         noOfPayments: 0,
         daysToFullfill: 0,
         paymentAmount: 0,
-        documentsList: []
+        documentsList: [],
+        franchiseeFees: [],
     };
 
     constructor (props){
@@ -615,6 +616,7 @@ class FranchiseesCreateForm extends Component {
         this.setState({
             documentsList: this.props.getFranchiseeDocumentsList(this.props.regionId)
         });
+        this.props.getFranchiseeFeeMaintenance(this.props.regionId);
         if(this.props.planType.Data != null){
             this.props.planType.Data.map( x => {
                     if (x.FranchiseeContractTypeListId === this.state.defaultPlanType) {
@@ -808,7 +810,8 @@ function mapDispatchToProps(dispatch) {
         closeEditFranchisees: Actions.showCreteFranchisees,
         updateDate: Actions.updateDate,
         getFranchiseeFormPlanType: Actions.getFranchiseeFormPlanType,
-        getFranchiseeDocumentsList: Actions.getFranchiseeDocumentsList
+        getFranchiseeDocumentsList: Actions.getFranchiseeDocumentsList,
+        getFranchiseeFeeMaintenance: Actions.getFranchiseeFeeMaintenance
     }, dispatch);
 }
 
@@ -818,7 +821,8 @@ function mapStateToProps({ franchisees, auth }) {
         regionId: auth.login.defaultRegionId,
         planType: franchisees.planType,
         user: auth.login,
-        documentsList: franchisees.documentsList
+        documentsList: franchisees.documentsList,
+        franchiseeFees: franchisees.franchiseeFees
     }
 }
 

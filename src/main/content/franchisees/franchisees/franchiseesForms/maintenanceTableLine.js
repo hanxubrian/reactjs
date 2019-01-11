@@ -14,11 +14,10 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 // third party
-import _ from 'lodash';
-import TextField from "@material-ui/core/TextField/TextField";
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import {withRouter} from "react-router-dom";
+import Button from "@material-ui/core/Button/Button";
 
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -211,6 +210,12 @@ const styles = theme => ({
         '&:hover': {
             backgroundColor: '#ff2a32',
         }
+    },
+    leftIcon: {
+        marginRight: theme.spacing.unit,
+    },
+    btnAddFees: {
+        marginBottom: '20px'
     }
 });
 
@@ -245,7 +250,7 @@ class FranchiseesMaintenanceTable extends React.Component {
 
     }
     componentWillMount() {
-        this.props.getFranchiseeFeeMaintenance(this.props.regionId);
+
         if(this.props.franchiseeFees != null){
             this.setState({
                 franchiseeFees: this.props.franchiseeFees.FranchiseeFees
@@ -266,28 +271,22 @@ class FranchiseesMaintenanceTable extends React.Component {
                 label: 'Name'
             },
             {
-                id: 'rate',
-                numeric: false,
-                disablePadding: false,
-                label: 'Rate'
-            },
-            {
                 id: 'value',
                 numeric: false,
                 disablePadding: false,
                 label: 'Value'
-            },
-            {
-                id: 'active',
-                numeric: false,
-                disablePadding: false,
-                label: 'Active'
-            },
+            }
         ];
 
         return (
-            <Paper className={classes.root}>
-                <div className={classes.tableWrapper}>
+            <div className={classes.root}>
+                <Button variant="contained" color="primary" className={classNames(classes.button,classes.btnAddFees)}>
+                    {/* This Button uses a Font Icon, see the installation instructions in the docs. */}
+                    <Icon className={classes.leftIcon}>add fees</Icon>
+                    add
+                </Button>
+            <Paper>
+                <div className={classNames(classes.tableWrapper,"mt-5 mb-5")}>
                     <Table className={classes.table} aria-labelledby="tableTitle">
                         <FranchiseeFeesTableHead
                             className={classNames(classes.franchiseeFeesHeadRoot)}
@@ -303,18 +302,18 @@ class FranchiseesMaintenanceTable extends React.Component {
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map(n => {
                                             return (
-                                                <TableRow hover key={n.FranchiseeFeeListId} >
+                                                <TableRow hover key={n.FranchiseeFeeList.FranchiseeFeeListId} >
                                                     <TableCell>
                                                         {n.FranchiseeFeeList.Name}
                                                     </TableCell>
-                                                    <TableCell >
-                                                        {n.FeeRateTypeList.Rate}
-                                                    </TableCell>
                                                     <TableCell>
+                                                        {n.FeeRateTypeList.Rate ==="Value" && (
+                                                            <span>$&nbsp;</span>
+                                                        )}
                                                         {n.FranchiseeFeeList.Amount}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {n.FranchiseeFeeList.IsActive===true && ('Active')}
+                                                        {n.FeeRateTypeList.Rate ==="Percentage" && (
+                                                            <span>&nbsp;%</span>
+                                                        )}
                                                     </TableCell>
                                                 </TableRow>
                                             )
@@ -324,6 +323,7 @@ class FranchiseesMaintenanceTable extends React.Component {
                     </Table>
                 </div>
             </Paper>
+            </div>
         );
     }
 }
