@@ -23,6 +23,7 @@ const initialState = {
     bFranchiseesFetchStart: false,
     planType: [],
     documentsList: [],
+    franchiseeFees: [],
     transactionStatusFranchisees:{
         Active: true,
         Inactive: true,
@@ -99,6 +100,13 @@ const franchisees = function(state = initialState, action) {
                 ...state,
                 documentsList: documentsList
             }
+        }
+        case Actions.GET_FRANCHISEE_FEE:
+        {
+          return{
+              ...state,
+              franchiseeFees: action.payload
+          }
         }
         case Actions.TOGGLE_FILTER_PANEL_FRANCHISEES:
         {

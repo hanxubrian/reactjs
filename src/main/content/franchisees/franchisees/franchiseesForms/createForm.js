@@ -93,34 +93,7 @@ function getStepContent(franchiseeForm, step) {
         }
 	];
 	
-	const fee_maintenance_headers = [
-        {
-            id: 'name',
-            numeric: false,
-            disablePadding: false,
-            label: 'Name'
-        },
-        {
-            id: 'rate',
-            numeric: false,
-            disablePadding: false,
-            label: 'Rate'
-        },
-        {
-            id: 'value',
-            numeric: false,
-            disablePadding: false,
-            label: 'Value'
-		},
-		{
-            id: 'active',
-            numeric: false,
-            disablePadding: false,
-            label: 'Active'
-        },
-    ];
-
-    const stateNames = [
+	const stateNames = [
         {
             value: 2,
             label: "Buffalo"
@@ -571,7 +544,7 @@ function getStepContent(franchiseeForm, step) {
             return(
                 <Fragment>
                     <div className="flex">
-                        <FranchiseesMaintenanceTable tableType="FEE_MAINTENACE" headers={fee_maintenance_headers} />
+                        <FranchiseesMaintenanceTable/>
                     </div>
                 </Fragment>
             );

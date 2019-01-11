@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
+import * as Actions from 'store/actions';
 //Material UI core and icons
 import {
     Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
@@ -16,19 +16,9 @@ import { lighten } from '@material-ui/core/styles/colorManipulator';
 // third party
 import _ from 'lodash';
 import TextField from "@material-ui/core/TextField/TextField";
-
-let counter = 0;
-
-
-function createData(name = 'Select Fee', rate = '', value = '', active='') {
-    return {
-        id: counter++,
-        name,
-        rate,
-        value,
-        active
-    };
-}
+import {bindActionCreators} from "redux";
+import connect from "react-redux/es/connect/connect";
+import {withRouter} from "react-router-dom";
 
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -54,7 +44,7 @@ function getSorting(order, orderBy) {
     return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
 
-class CustomerLineTableHead extends React.Component {
+class FranchiseeFeesTableHead extends React.Component {
     createSortHandler = property => event => {
         this.props.onRequestSort(event, property);
     };
@@ -90,9 +80,6 @@ class CustomerLineTableHead extends React.Component {
                             </TableCell>
                         );
                     }, this)}
-                    <TableCell padding="checkbox" style={{ width: 100 }}>
-                        Action
-                    </TableCell>
                 </TableRow>
             </TableHead>
         );
@@ -100,10 +87,9 @@ class CustomerLineTableHead extends React.Component {
 }
 
 
-CustomerLineTableHead.propTypes = {
+FranchiseeFeesTableHead.propTypes = {
     numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
-    onSelectAllClick: PropTypes.func.isRequired,
     order: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired
 };
@@ -133,7 +119,7 @@ const toolbarStyles = theme => ({
     },
 });
 
-let CustomerLineTableToolbar = props => {
+let FranchiseeFeeTableToolbar = props => {
     const { numSelected, classes } = props;
 
     return (
@@ -173,12 +159,12 @@ let CustomerLineTableToolbar = props => {
     );
 };
 
-CustomerLineTableToolbar.propTypes = {
+FranchiseeFeeTableToolbar.propTypes = {
     classes: PropTypes.object.isRequired,
     numSelected: PropTypes.number.isRequired
 };
 
-CustomerLineTableToolbar = withStyles(toolbarStyles)(CustomerLineTableToolbar);
+FranchiseeFeeTableToolbar = withStyles(toolbarStyles)(FranchiseeFeeTableToolbar);
 
 const styles = theme => ({
     root: {
@@ -198,12 +184,12 @@ const styles = theme => ({
             padding: "4px 24px",
             width: 180
         },
-        CustomerLineHeadRoot: {
+        franchiseeFeesHeadRoot: {
             backgroundColor: 'lightgray',
         },
     },
     outlined: {
-        padding: "12px 24px 12px 12px!important"
+        padding: "6px 24px 6px 12px!important"
     },
     table: {
         minWidth: 1020
@@ -235,12 +221,12 @@ class FranchiseesMaintenanceTable extends React.Component {
         page: 0,
         rowsPerPage: 10,
         labelWidth: 0,
-        data: [
-            createData('', '', '','')
-        ],
-        feeType: 0
+        franchiseeFees: [],
     };
-
+    constructor(props)
+    {
+        super(props);
+    }
     handleRequestSort = (event, property) => {
         const orderBy = property;
         let order = 'desc';
@@ -255,144 +241,85 @@ class FranchiseesMaintenanceTable extends React.Component {
         });
     };
 
-    handleSelectAllClick = event => {
-        if (event.target.checked) {
-            this.setState(state => ({ selected: state.data.map(n => n.id) }));
-            return;
-        }
-        this.setState({ selected: [] });
-    };
-    handleSelectChange = name => event => {
-        this.setState({
-            [name]: event.target.value,
-        });
-    };
     componentDidMount() {
-        let id = 0;
-        const data = [...this.state.data];
-        let newData = data.map(record => {
-            record.id = id++;
-            return record;
-        });
-        this.setState({ data: newData })
+
+    }
+    componentWillMount() {
+        this.props.getFranchiseeFeeMaintenance(this.props.regionId);
+        if(this.props.franchiseeFees != null){
+            this.setState({
+                franchiseeFees: this.props.franchiseeFees.FranchiseeFees
+            })
+        }
     }
 
-    AddLineData = () => {
-        const data = [...this.state.data, createData()];
-        let id = 0;
-        let newData = data.map(record => {
-            record.id = id++;
-            return record;
-        });
-        this.setState({ data: newData })
-    };
-
-    removeLineData = (line) => {
-        const data = [...this.state.data];
-        _.remove(data, function (row) {
-            return row.id === line.id;
-        });
-        let id = 0;
-        let newData = data.map(record => {
-            record.id = id++;
-            return record;
-        });
-
-        this.setState({ data: newData })
-    };
 
     render() {
         const { classes } = this.props;
-        const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
-        console.log("this.props.tableType", this.props.tableType)
+        const { franchiseeFees, order, orderBy, selected, rowsPerPage, page } = this.state;
+
+        const headers = [
+            {
+                id: 'name',
+                numeric: false,
+                disablePadding: false,
+                label: 'Name'
+            },
+            {
+                id: 'rate',
+                numeric: false,
+                disablePadding: false,
+                label: 'Rate'
+            },
+            {
+                id: 'value',
+                numeric: false,
+                disablePadding: false,
+                label: 'Value'
+            },
+            {
+                id: 'active',
+                numeric: false,
+                disablePadding: false,
+                label: 'Active'
+            },
+        ];
+
         return (
             <Paper className={classes.root}>
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table} aria-labelledby="tableTitle">
-                        <CustomerLineTableHead
-                            className={classNames(classes.CustomerLineHeadRoot)}
+                        <FranchiseeFeesTableHead
+                            className={classNames(classes.franchiseeFeesHeadRoot)}
                             numSelected={selected.length}
                             order={order}
-                            onSelectAllClick={this.handleSelectAllClick}
                             onRequestSort={this.handleRequestSort}
-                            rowCount={data.length}
-                            headers={this.props.headers}
+                            rowCount={franchiseeFees.length}
+                            headers={headers}
                         />
                         <TableBody>
-                            {stableSort(data, getSorting(order, orderBy))
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map(n => {
-                                   return (
-                                     <TableRow hover key={n.id} >
-                                                    <TableCell component="td" scope="row" >
-                                                        <TextField
-                                                            select
-                                                            value = {this.state.feeType}
-                                                            id={"FEE_MAINTENACE_name" + n.id}
-                                                            onChange={this.handleSelectChange('feeType')}
-                                                            className={classes.textField}
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        >
+                            {franchiseeFees.length > 0 && (
+                                stableSort(franchiseeFees, getSorting(order, orderBy))
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    .map(n => {
+                                            return (
+                                                <TableRow hover key={n.FileTypeListId} >
+                                                    <TableCell>
 
-                                                            {[
-                                                                { value: 0, label: "Select Fee" },
-                                                                { value: 1, label: "Accounting Fee" },
-                                                                { value: 2, label: "Technology Fee" },
-                                                                { value: 3, label: "Advertising Fee" },
-                                                                { value: 4, label: "Royalty" },
-                                                                { value: 5, label: "Additional Billing (R.O.) Commission" },
-                                                                { value: 6, label: "Business Protection" },
-                                                            ].map(option => (
-                                                                <MenuItem key={option.value} value={option.value}>
-                                                                    {option.label}
-                                                                </MenuItem>
-                                                            ))}
-                                                        </TextField>
+                                                    </TableCell>
+                                                    <TableCell >
+
                                                     </TableCell>
                                                     <TableCell>
-                                                        <TextField
-                                                            id={"rate" + n.id}
-                                                            className={classes.textField}
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
+
                                                     </TableCell>
                                                     <TableCell>
-                                                        <TextField
-                                                            id={"value" + n.id}
-                                                            className={classes.textField}
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <TextField
-                                                            id={"active" + n.id}
-                                                            className={classes.textField}
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
-                                                    </TableCell>
-                                                    <TableCell padding="checkbox">
-                                                        <Fab color="secondary" aria-label="add"
-                                                             className={classNames(classes.lineButton, "mr-12")}
-                                                             onClick={() => this.AddLineData()}
-                                                        >
-                                                            <Icon>add</Icon>
-                                                        </Fab>
-                                                        {this.state.data.length > 1 && (
-                                                            <Fab aria-label="add"
-                                                                 onClick={() => this.removeLineData(n)}
-                                                                 className={classNames(classes.lineCancelButton, "mr-12")}>
-                                                                <Icon>close</Icon>
-                                                            </Fab>
-                                                        )}
+
                                                     </TableCell>
                                                 </TableRow>
-                                   );
-                                }
-                                )}
+                                            )
+                                        }
+                                    ))}
                         </TableBody>
                     </Table>
                 </div>
@@ -401,8 +328,19 @@ class FranchiseesMaintenanceTable extends React.Component {
     }
 }
 
-FranchiseesMaintenanceTable.propTypes = {
-    classes: PropTypes.object.isRequired
-};
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        getFranchiseeFeeMaintenance: Actions.getFranchiseeFeeMaintenance
+    }, dispatch);
+}
 
-export default withStyles(styles)(FranchiseesMaintenanceTable);
+
+function mapStateToProps({ franchisees, auth }) {
+    return {
+        regionId: auth.login.defaultRegionId,
+        franchiseeFees: franchisees.franchiseeFees
+    }
+}
+
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(FranchiseesMaintenanceTable)));
+
