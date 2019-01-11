@@ -414,7 +414,6 @@ class InvoiceApp extends Component {
         const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState,
             openNewInvoiceForm, invoiceForm} = this.props;
         const { selection } = this.state;
-            console.log(this.props)
         return (
             <React.Fragment>
                 <FusePageCustom

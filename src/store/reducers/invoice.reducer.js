@@ -33,7 +33,9 @@ const initialState = {
     invoiceStatus: [],
     bInvoiceStart: false,
     customerTaxAmountLine: null,
-    invoiceDateOption: 3
+    invoiceDateOption: 3,
+    invoiceDatePeriodMonth: moment().month(),
+    invoiceDatePeriodYear: moment().year(),
 };
 
 
@@ -86,6 +88,11 @@ const invoices = function(state = initialState, action) {
         case Actions.UPDATE_INVOICE_DATE_OPTION:{
             return {
                 ...state, invoiceDateOption: action.payload
+            }
+        }
+        case Actions.UPDATE_INVOICE_PERIOD_OPTION:{
+            return {
+                ...state, ...action.payload
             }
         }
         case Actions.TOGGLE_FILTER_PANEL:
@@ -194,6 +201,6 @@ const invoices = function(state = initialState, action) {
 const persistConfig = {
     key: 'invoices',
     storage: storage,
-    blacklist: ['invoicesDB', 'bInvoiceStart', 'bOpenedSummaryPanel', 'bOpenedFilterPanel', 'bLoadedCustomers']
+    blacklist: ['invoicesDB', 'bInvoiceStart', 'bOpenedSummaryPanel', 'bOpenedFilterPanel', 'bLoadedCustomers','customerTaxAmountLine']
 };
 export default persistReducer(persistConfig, invoices);

@@ -107,6 +107,9 @@ class FilterPanel extends Component {
         this.setState({invoiceStatus: this.props.invoiceStatus});
         this.setState({FromDate: this.props.FromDate});
         this.setState({ToDate: this.props.ToDate});
+        this.setState({invoiceDateOption: this.props.invoiceDateOption});
+        this.setState({invoiceDatePeriodMonth: this.props.invoiceDatePeriodMonth});
+        this.setState({invoiceDatePeriodYear: this.props.invoiceDatePeriodYear});
     }
 
     componentDidUpdate(prevProps, prevState, snapshot)
@@ -121,8 +124,12 @@ class FilterPanel extends Component {
             this.setState({ToDate: this.props.ToDate})
         }
 
+        if(prevProps.invoiceDateOption!==this.props.invoiceDateOption){
+            this.setState({invoiceDateOption: this.props.invoiceDateOption})
+        }
+
         if(prevState.invoiceDatePeriodYear !== this.state.invoiceDatePeriodYear ||
-            prevProps.invoiceDatePeriodMonth !== this.state.invoiceDatePeriodMonth) {
+            prevState.invoiceDatePeriodMonth !== this.state.invoiceDatePeriodMonth) {
             let startDate, endDate;
             startDate = moment().year(this.state.invoiceDatePeriodYear).month(this.state.invoiceDatePeriodMonth).startOf('month').format("MM/DD/YYYY");
             endDate = moment().year(this.state.invoiceDatePeriodYear).month(this.state.invoiceDatePeriodMonth).endOf('month').format("MM/DD/YYYY");
@@ -166,6 +173,7 @@ class FilterPanel extends Component {
     handleChange1 = event => {
         this.setState({[event.target.name]: event.target.value});
         let startDate, endDate, quarter, year;
+        this.props.updateInvoiceDateOption(event.target.value);
 
         switch (event.target.value) {
             case THIS_WEEK:
@@ -173,72 +181,75 @@ class FilterPanel extends Component {
                 endDate = moment().day(6);
                 break;
             case THIS_WEEK_TO_DATE:
-                startDate = moment().day(0).format("MM/DD/YYYY");
-                endDate = moment().format("MM/DD/YYYY");
+                startDate = moment().day(0);
+                endDate = moment();
                 break;
             case THIS_MONTH:
-                startDate = moment().date(1).format("MM/DD/YYYY");
-                endDate = moment(moment().date(1)).endOf('month').format("MM/DD/YYYY");
+                startDate = moment().date(1);
+                endDate = moment(moment().date(1)).endOf('month');
                 break;
             case THIS_MONTH_TO_DATE:
-                startDate = moment().date(1).format("MM/DD/YYYY");
-                endDate = moment().format("MM/DD/YYYY");
+                startDate = moment().date(1);
+                endDate = moment();
                 break;
             case THIS_QUARTER:
                 quarter = moment().quarter();
-                startDate = moment().quarter(quarter).startOf('quarter').format("MM/DD/YYYY");
-                endDate = moment().quarter(quarter).endOf('quarter').format("MM/DD/YYYY");
+                startDate = moment().quarter(quarter).startOf('quarter');
+                endDate = moment().quarter(quarter).endOf('quarter');
                 break;
             case THIS_QUARTER_TO_DATE:
                 quarter = moment().quarter();
-                startDate = moment().quarter(quarter).startOf('quarter').format("MM/DD/YYYY");
-                endDate = moment().format("MM/DD/YYYY");
+                startDate = moment().quarter(quarter).startOf('quarter');
+                endDate = moment();
                 break;
             case THIS_YEAR:
                 year = moment().year();
-                startDate = moment().startOf('year').format("MM/DD/YYYY");
-                endDate = moment().endOf('year').format("MM/DD/YYYY");
+                startDate = moment().startOf('year');
+                endDate = moment().endOf('year');
                 break;
             case THIS_YEAR_TO_DATE:
                 year = moment().year();
-                startDate = moment().startOf('year').format("MM/DD/YYYY");
-                endDate = moment().format("MM/DD/YYYY");
+                startDate = moment().startOf('year');
+                endDate = moment();
                 break;
             case TODAY:
-                startDate = moment().format("MM/DD/YYYY");
+                startDate = moment();
                 endDate = startDate;
                 break;
             case YESTERDAY:
-                startDate = moment().subtract(1, 'days').format("MM/DD/YYYY");
+                startDate = moment().subtract(1, 'days');
                 endDate = startDate;
                 break;
             case LAST_QUARTER:
                 quarter = moment().quarter();
                 if(quarter===1)
-                    startDate = moment().subtract(1, 'years').quarter(4).startOf('quarter').format("MM/DD/YYYY");
+                    startDate = moment().subtract(1, 'years').quarter(4).startOf('quarter');
                 else
-                    startDate = moment().quarter(quarter-1).startOf('quarter').format("MM/DD/YYYY");
+                    startDate = moment().quarter(quarter-1).startOf('quarter');
 
                 if(quarter===1)
-                    endDate = moment().quarter(quarter).startOf('quarter').subtract(1, 'days').format("MM/DD/YYYY");
+                    endDate = moment().quarter(quarter).startOf('quarter').subtract(1, 'days');
                 else
-                    endDate = moment().quarter(quarter-1).endOf('quarter').format("MM/DD/YYYY");
+                    endDate = moment().quarter(quarter-1).endOf('quarter');
                 break;
             case LAST_YEAR:
                 year = moment().year();
-                startDate = moment().subtract(1, 'years').startOf('year').format("MM/DD/YYYY");
-                endDate = moment().subtract(1, 'years').startOf('year').add(1,'years').subtract(1,'days').format("MM/DD/YYYY");
+                startDate = moment().subtract(1, 'years').startOf('year');
+                endDate = moment().subtract(1, 'years').startOf('year').add(1,'years').subtract(1,'days');
                 break;
+            case PERIOD:
+                startDate = moment().year(this.state.invoiceDatePeriodYear).month(this.state.invoiceDatePeriodMonth).startOf('month');
+                endDate = moment().year(this.state.invoiceDatePeriodYear).month(this.state.invoiceDatePeriodMonth).endOf('month');
         }
-        if(event.target.value!==CUSTOM_DATE && event.target.value!==PERIOD){
-            this.props.updateDate(UPDATE_FROM_DATE_INVOICE, startDate);
-            this.props.updateDate(UPDATE_TO_DATE_INVOICE, endDate);
+        if(event.target.value!==CUSTOM_DATE){
+            this.props.updateDate(UPDATE_FROM_DATE_INVOICE, startDate.format("MM/DD/YYYY"));
+            this.props.updateDate(UPDATE_TO_DATE_INVOICE, endDate.format("MM/DD/YYYY"));
         }
     };
 
     handleChangePeriod = event =>{
-        console.log('name=',event.target.name, event.target.value);
         this.setState({[event.target.name]: event.target.value});
+        this.props.updatePeriodOption(event.target.name, event.target.value);
     };
 
     handleInvoiceFromDateChange = date => {
@@ -413,6 +424,8 @@ function mapDispatchToProps(dispatch)
         toggleStatus: Actions.toggleStatus,
         updateDate: Actions.updateDate,
         updateInvoiceStatus: Actions.updateInvoiceStatus,
+        updateInvoiceDateOption: Actions.updateInvoiceDateOption,
+        updatePeriodOption: Actions.updatePeriodOption
     }, dispatch);
 }
 
@@ -425,6 +438,9 @@ function mapStateToProps({invoices, fuse})
         FromDate: invoices.FromDate,
         ToDate: invoices.ToDate,
         settings       : fuse.settings.current,
+        invoiceDateOption: invoices.invoiceDateOption,
+        invoiceDatePeriodMonth: invoices.invoiceDatePeriodMonth,
+        invoiceDatePeriodYear: invoices.invoiceDatePeriodYear,
     }
 }
 

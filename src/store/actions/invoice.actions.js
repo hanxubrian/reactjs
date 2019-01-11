@@ -12,6 +12,7 @@ export const TOGGLE_FILTER_PANEL = "[INVOICES] TOGGLE FILTER PANEL";
 export const UPDATE_FROM_DATE_INVOICE = "[INVOICES] UPDATE FROM DATE";
 export const UPDATE_TO_DATE_INVOICE = "[INVOICES] UPDATE TO DATE";
 export const GET_CUSTOMER_TAX_AMOUNT = "[INVOICES] GET CUSTOMER TAX AMOUNT";
+export const UPDATE_INVOICE_PERIOD_OPTION = "[INVOICES] UPDATE PERIOD OPTION";
 
 // for Add/Edit
 export const OPEN_NEW_INVOICE_FORM = '[INVOICES APP] OPEN NEW INVOICE FORM';
@@ -160,8 +161,6 @@ export function addInvoice(newInvoice)
 
         console.log('state', getState());
 
-        // const {routeParams} = getState().contactsApp.contacts;
-
         const request = axios.post('/api/contacts-app/add-contact', {
             newInvoice
         });
@@ -237,5 +236,12 @@ export function updateInvoiceDateOption(option){
     return {
         type: UPDATE_INVOICE_DATE_OPTION,
         payload: option
+    }
+}
+
+export function updatePeriodOption(key, option) {
+    return {
+        type: UPDATE_INVOICE_PERIOD_OPTION,
+        payload: {[key]: option}
     }
 }
