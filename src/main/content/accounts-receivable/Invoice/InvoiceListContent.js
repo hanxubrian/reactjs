@@ -318,7 +318,7 @@ class InvoiceListContent extends Component {
                         {
                             columns: [
                                 {
-                                    Header: "Invoice #x",
+                                    Header: "Invoice #",
                                     accessor: "InvoiceNo",
                                     filterAll: true,
                                     width: 120,
@@ -434,10 +434,11 @@ class InvoiceListContent extends Component {
                 />
                 {this.state.isOpen && (
                     <div onClick={this.invoicereport}  className="backdrop" style={{position: 'absolute',
-                        top: 0,
+                        top: -110,
                         bottom: 0,
                         left: 0,
                         right: 0,
+                        zIndex:99999,
                         backgroundColor: 'rgba(0,0,0,0.3)',
                         padding: 50}}>
                         <div onClick={this.invoicereport} className="modal" style={{ backgroundColor: '#fff',
