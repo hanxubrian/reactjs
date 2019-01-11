@@ -3,6 +3,7 @@ import {invoiceService} from "../../services"
 
 export const GET_ALL_INVOICES = "[INVOICES] GETS ALL";
 export const GET_INVOICE_STATUS = "[INVOICES] GETS INVOICE STATUS";
+export const GET_INVOICE_DETAIL = "[INVOICES] GETS INVOICE DETAIL";
 export const GET_INVOICES_FETCH_START = "[INVOICES] GETS STARTED FETCH";
 export const DELETE_SELECTED_INVOICES = "[INVOICES] DELETE SELECTED";
 export const REMOVE_SELECTED_INVOICE = "[INVOICE] REMOVE SELECTED";
@@ -52,6 +53,22 @@ export function getInvoices(RegionId, StatusId, FromDate, ToDate, PeriodId,OpenO
     };
 }
 
+export function getInvoiceDetail() {
+    return (dispatch) => {
+       (async () => {
+            let res = await invoiceService.getInvoiceDetailList();
+            if (res) {
+                dispatch({
+                    type: GET_INVOICE_DETAIL,
+                    payload: res
+                });
+            } else {
+
+            }
+        })();
+    };
+}
+
 export function getInvoiceStatus(RegionId) {
     return (dispatch) => {
        (async () => {
@@ -67,6 +84,7 @@ export function getInvoiceStatus(RegionId) {
         })();
     };
 }
+
 export function toggleFilterPanel(){
     return {
         type: TOGGLE_FILTER_PANEL

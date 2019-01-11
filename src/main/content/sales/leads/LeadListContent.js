@@ -1,14 +1,10 @@
 import React, { Component, Fragment } from 'react';
-// import ReactDOM from 'react-dom';
-
 // core components
 import { Icon, IconButton, Input, Paper, Button } from '@material-ui/core';
 
 //Janiking
 import JanikingPagination from 'Commons/JanikingPagination';
 
-// theme components
-// import {FuseAnimate} from '@fuse';
 
 import { withStyles, Checkbox } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
@@ -19,8 +15,6 @@ import { bindActionCreators } from "redux";
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
 
-// third party
-// import moment from 'moment'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import _ from 'lodash';
@@ -32,14 +26,10 @@ import GoogleMap from 'google-map-react';
 
 import {
 	SelectionState,
-	// PagingState,
-	// IntegratedPaging,
 	IntegratedSelection,
 	SortingState,
 	IntegratedSorting,
 	EditingState,
-	// GroupingState,
-	// IntegratedGrouping,
 	DataTypeProvider,
 	FilteringState,
 	IntegratedFiltering,
@@ -51,20 +41,12 @@ import {
 	Table,
 	TableHeaderRow,
 	TableSelection,
-	// PagingPanel,
 	TableEditRow,
 	TableEditColumn,
-	// GroupingPanel,
-	// Toolbar,
-	// TableGroupRow,
 	TableFilterRow,
-	// SearchPanel,
 	DragDropProvider,
 	TableColumnReordering,
 	TableColumnResizing,
-	// ColumnChooser,
-	// TableColumnVisibility,
-	// TableFixedColumns,
 	VirtualTable,
 
 } from '@devexpress/dx-react-grid-material-ui';
@@ -75,7 +57,6 @@ import Chip from '@material-ui/core/Chip';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
-import { fade } from '@material-ui/core/styles/colorManipulator';
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -362,25 +343,8 @@ class LeadListContent extends Component {
 			temp: [],
 			data: [],
 			selectAll: false,
-
 			selection: [],
 			rows: [],
-			// columns: [
-			// 	{
-			// 		title: "No", name: "LeadNo",
-			// 		// getCellValue: row => (row.user ? row.user.firstName : undefined),
-			// 	},
-			// 	{ title: "Name", name: "LeadName", width: 200, },
-			// 	{ title: "Address", name: "Address", width: 160 },
-			// 	{ title: "City", name: "City", width: 90 },
-			// 	{ title: "State", name: "StateName", width: 50 },
-			// 	{ title: "Zip", name: "PostalCode", width: 50 },
-			// 	{ title: "Phone", name: "Phone", width: 80, },
-			// 	{ title: "Account Type", name: "AccountTypeListName", width: 150 },
-			// 	{ title: "Status", name: "StatusName", width: 60 },
-			// 	{ title: "Contract Amount", name: "Amount", width: 80 },
-			// 	// { title: "Actions", name: "Actions", width: 110, }
-			// ],
 
 			tableColumnExtensions2: [
 				{
@@ -516,36 +480,24 @@ class LeadListContent extends Component {
 					groupingEnabled: false,
 
 				},
-				// { title: "Actions", name: "Actions", columnName: "Actions", width: 110, sortingEnabled: true, filteringEnabled: false, }
 			],
 			sorting: [
 				{ columnName: 'LeadNo', direction: 'asc' }
 			],
 			editingColumnExtensions: [
-				// {
-				// 	columnName: 'firstName',
-				// 	createRowChange: (row, value) => ({ user: { ...row.user, firstName: value } }),
-				// },
+
 			],
 			currencyColumns: [
 				'BudgetAmount','ContractAmount', 'CRM_BiddingId'
 			],
 			dateColumns: ['saleDate'],
-			// groupingColumns: [
-			// 	{ columnName: 'StateName', groupingEnabled: false },
-			// 	{ columnName: 'AccountTypeListName', groupingEnabled: false },
-			// 	{ columnName: 'StatusName', groupingEnabled: false },
-			// ],
+
 			grouping: [
-				// { columnName: 'AccountTypeListName' },
 			],
 			pageSize: 20,
 			pageSizes: [10, 20, 30, 50, 100],
 			amountFilterOperations: ['equal', 'notEqual', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual'],
-			// defaultFilters: [{ columnName: 'StateName', value: 'PA' }],
-			searchValue: '',
-			// leftColumns: ['LeadNo', 'LeadName'],
-			// rightColumns: ['Amount'],
+			searchValue: ''
 		};
 
 		this.fetchData = this.fetchData.bind(this);
@@ -554,8 +506,6 @@ class LeadListContent extends Component {
 		this.changeSelection = selection => this.setState({ selection });
 		this.changeSorting = sorting => this.setState({ sorting });
 		this.commitChanges = this.commitChanges.bind(this);
-		// this.changeCurrentPage = currentPage => this.setState({ currentPage });
-		// this.changePageSize = pageSize => this.setState({ pageSize });
 		this.changeSearchValue = value => this.setState({ searchValue: value });
 		this.changeGrouping = grouping => this.setState({ grouping });
 		console.log("constructor");
@@ -597,12 +547,6 @@ class LeadListContent extends Component {
 	toggleSelection = (key, shift, row) => {
 		console.log("toggleSelection");
 
-        /*
-          https://react-table.js.org/#/story/select-table-hoc
-          Implementation of how to manage the selection state is up to the developer.
-          This implementation uses an array stored in the component state.
-          Other implementations could use object keys, a Javascript Set, or Redux... etc.
-        */
 		// start off with the existing state
 		let selection = [...this.state.selection];
 		const keyIndex = selection.indexOf(key);
@@ -644,11 +588,6 @@ class LeadListContent extends Component {
 	isSelected = key => {
 		console.log("isSelected");
 
-        /*
-          Instead of passing our external selection state we provide an 'isSelected'
-          callback and detect the selection state ourselves. This allows any implementation
-          for selection (either an array, object keys, or even a Javascript Set object).
-        */
 		return this.state.selection.includes(key);
 	};
 
@@ -672,11 +611,7 @@ class LeadListContent extends Component {
 	getLeadsFromStatus = (rawData = this.props.leads) => {
 		console.log("getLeadsFromStatus");
 
-		// let temp = [];
 		let all_temp = [];
-		// let temp1 = [];
-		// const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
-		// const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
 
 		if (rawData === null) return;
 
@@ -688,9 +623,6 @@ class LeadListContent extends Component {
 			all_temp = [...all_temp, ...x.Leads];
 		});
 
-		// regions.map(x => {
-		// 	all_temp = [...all_temp, ...x.Leads];
-		// });
 
 		this.setState({ temp: all_temp });
 		this.setState({ data: all_temp });
@@ -701,21 +633,7 @@ class LeadListContent extends Component {
 	search(val) {
 		console.log("search");
 
-		// const temp = this.props.data.filter( d => {
-		//     console.log('lead=', d);
-		//     return d.LeadId.toString().indexOf(val) !== -1 || !val ||
-		//         d.LeadNo.indexOf(val) !== -1 ||
-		//         d.LeadAmount.toString().indexOf(val) !== -1 ||
-		//         d.LeadTotal.toString().indexOf(val) !== -1 ||
-		//         d.LeadTax.toString().indexOf(val) !== -1 ||
-		//         d.LeadDescription.toLowerCase().indexOf(val) !== -1 ||
-		//         d.LeadName.toLowerCase().indexOf(val) !== -1 ||
-		//         d.LeadId.toString().indexOf(val) !== -1 ||
-		//         d.LeadNo.toString().indexOf(val) !== -1 ||
-		//         d.TransactionStatusListId.toString().indexOf(val) !== -1
-		// });
-
-		// this.setState({data: temp});
+	    // this.setState({data: temp});
 		val = val.toLowerCase();
 		if (val === '') {
 			this.getLeadsFromStatus();
@@ -853,31 +771,20 @@ class LeadListContent extends Component {
 		} = this.props;
 
 		const {
-
-			// mapViewState,
 			rows,
-			columns,
 			selection,
 			tableColumnExtensions,
 			sorting,
 			editingColumnExtensions,
 			currencyColumns,
-			pageSize,
-			pageSizes,
 			amountFilterOperations,
-			// groupingColumns,
-			// booleanColumns,
 			searchValue,
-			grouping,
-			// leftColumns,
-			// rightColumns,
 		} = this.state;
 
 		return (
 			<Fragment>
 				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
 
-					{/* Searchbar row */}
 					<div className="flex flex-row items-center">
 						<div className="flex items-center justify-start p-6">
 							<Button
@@ -889,26 +796,7 @@ class LeadListContent extends Component {
 								<img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" />
 							</Button>
 						</div>
-
-						<div className="flex items-center justify-start p-6">
-							{/* <Button
-								onClick={(ev) => toggleFilterPanel()}
-								aria-label="toggle filter panel"
-								color="secondary"
-								className={classNames(classes.filterPanelButton)}
-							>
-								<img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" />
-							</Button> */}
-
-							<IconButton
-								className={classNames(classes.button, "mr-12")}
-								aria-label="Add an alarm"
-								onClick={(ev) => toggleMapView()}>
-								<Icon>{mapViewState ? 'list' : 'location_on'}</Icon>
-							</IconButton>
-						</div>
-
-						<Paper className={"flex items-center w-full h-44 mr-12"} elevation={1}>
+						<Paper className={"flex items-center w-full h-44 m-12"} elevation={1}>
 							<Input
 								placeholder="Search..."
 								className={classNames(classes.search, 'pl-16')}
@@ -922,17 +810,24 @@ class LeadListContent extends Component {
 							/>
 							<Icon color="action" className="mr-16">search</Icon>
 						</Paper>
-						<div className="flex items-center justify-end p-12">
+                        <div className="flex items-center justify-start p-6">
+                            <IconButton
+                                className={classNames(classes.button,classes.summaryPanelButton, "mr-12")}
+                                aria-label="Add an alarm"
+                                onClick={(ev) => toggleMapView()}>
+                                <Icon>{mapViewState ? 'list' : 'location_on'}</Icon>
+                            </IconButton>
+                        </div>
+						<div className="flex items-center justify-end p-6 pl-0">
 							<Button
 								onClick={(ev) => toggleSummaryPanel()}
 								aria-label="toggle summary panel"
 								className={classNames(classes.summaryPanelButton)}
 							>
 								<Icon>insert_chart</Icon>
-							</Button></div>
+							</Button>
+						</div>
 					</div>
-
-					{/* Mapview */}
 					{mapViewState && (<div className="w-full h-full">
 						<div className="w-full h-full">
 							<GoogleMap
@@ -950,31 +845,14 @@ class LeadListContent extends Component {
 							</GoogleMap>
 						</div>
 					</div>)}
-
-					{/* Girdview */}
 					{!mapViewState &&
 						(
 							<Paper
 								className={classNames(classes.layoutTable, "flex flex-col h-full")}
-							// style={{ flex: '1', }}
 							>
-								<span className={"p-6"}>
-									Rows Selected: {selection.length}
-								</span>
 								<Grid
 									rootComponent={GridRootComponent}
 									rows={
-										// [
-										// 	{ id: 0, product: 'DevExtreme', owner: 'DevExpress' },
-										// 	{ id: 1, product: 'DevExtreme Reactive', owner: 'DevExpress' },
-										// ]
-
-
-										// Array.from({ length: 10000 })
-										// 	.map((item, index) => (
-										// 		{ id: index, product: 'Product' + index, owner: 'owner' + index }
-										// 	))
-
 										rows
 									}
 									columns={tableColumnExtensions}
@@ -985,26 +863,12 @@ class LeadListContent extends Component {
 										height="auto"
 									/>
 
-									{/* <PagingState
-										defaultCurrentPage={0}
-										// currentPage={currentPage}
-										// onCurrentPageChange={this.changeCurrentPage}
-										// pageSize={pageSize}
-										// onPageSizeChange={this.changePageSize}
-										defaultPageSize={20}
-									/>
-
-									<PagingPanel pageSizes={pageSizes} /> */}
-
 									<SelectionState
 										selection={selection}
 										onSelectionChange={this.changeSelection}
 									/>
-									{/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
+
 									<IntegratedSelection />
-
-									{/* <IntegratedPaging /> */}
-
 
 									<SortingState
 										sorting={sorting}
@@ -1014,7 +878,6 @@ class LeadListContent extends Component {
 									<IntegratedSorting />
 
 									<SearchState
-										// defaultValue="Paris"
 										value={searchValue}
 										onValueChange={this.changeSearchValue}
 									/>
@@ -1030,40 +893,14 @@ class LeadListContent extends Component {
 										onCommitChanges={this.commitChanges}
 									/>
 
-
-
-									{/* <GroupingState
-										grouping={grouping}
-										onGroupingChange={this.changeGrouping}
-									// defaultGrouping={[]}
-									// columnExtensions={tableColumnExtensions}
-									/>
-									<IntegratedGrouping /> */}
-
-									{/* <BooleanTypeProvider
-									for={booleanColumns}
-								/> */}
-
 									<CurrencyTypeProvider
 										for={currencyColumns}
 										availableFilterOperations={amountFilterOperations}
 										editorComponent={AmountEditor}
 									/>
-									{/* <DateTypeProvider
-									for={dateColumns}
-								/> */}
 
-
-									{/* <Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} /> */}
 									<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
 									<TableHeaderRow showSortingControls />
-									{/* showGroupingControls */}
-
-
-									{/* <TableFixedColumns
-									leftColumns={leftColumns}
-									rightColumns={rightColumns}
-								/> */}
 
 									<TableSelection showSelectAll selectByRowClick highlightRow />
 
@@ -1078,26 +915,13 @@ class LeadListContent extends Component {
 									<TableColumnReordering
 										defaultOrder={tableColumnExtensions.map(x => x.columnName)}
 									/>
-									{/* Column Visibility */}
-									{/* Disable Column Visibility Toggling */}
-									{/* <TableColumnVisibility
-										defaultHiddenColumnNames={[]}
-										columnExtensions={tableColumnExtensions}
-									/> */}
-									{/* <Toolbar /> */}
-									{/* <SearchPanel /> */}
-									{/* Column Visibility */}
-									{/* <ColumnChooser /> */}
 
 									{filterState && (
 										<TableFilterRow
 											showFilterSelector
 											iconComponent={FilterIcon}
-										// messages={{ month: 'Month equals' }}
 										/>
 									)}
-									{/* <TableGroupRow /> */}
-									{/* <GroupingPanel showSortingControls showGroupingControls /> */}
 
 								</Grid>
 							</Paper>
@@ -1115,14 +939,6 @@ class LeadListContent extends Component {
 			classes,
 			toggleFilterPanel,
 			toggleSummaryPanel,
-			// filterState,
-			// summaryState,
-			// deleteLeadsAction,
-			// data,
-			// openNewLeadForm,
-			// closeNewLeadForm,
-			// LeadForm,
-			// toggleMapView,
 			mapViewState
 		} = this.props;
 		const { toggleSelection, toggleAll, isSelected } = this;
@@ -1132,20 +948,17 @@ class LeadListContent extends Component {
 		return (
 			<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
 
-				{/* SearchBar row */}
 				<div className="flex flex-row items-center">
 					<div className="flex items-center justify-start p-12">
 						<Button
 							onClick={(ev) => toggleFilterPanel()}
 							aria-label="toggle filter panel"
 							color="secondary"
-							// disabled={filterState ? true : false}
 							className={classNames(classes.filterPanelButton)}
 						>
 							<img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" />
 						</Button>
 					</div>
-					{/* <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}> */}
 					<Paper className={"flex items-center w-full h-44 mr-12"} elevation={1}>
 						<Input
 							placeholder="Search..."
@@ -1165,7 +978,6 @@ class LeadListContent extends Component {
 						<Button
 							onClick={(ev) => toggleSummaryPanel()}
 							aria-label="toggle summary panel"
-							// disabled={summaryState ? true : false}
 							className={classNames(classes.summaryPanelButton)}
 						>
 							<Icon>insert_chart</Icon>
@@ -1241,10 +1053,6 @@ class LeadListContent extends Component {
 							}
 						}}
 						getTdProps={(state, rowInfo, column, instance) => {
-							// let tdClass = 'flex items-center justify-center';
-							// if (column.id === 'LeadNo' || column.id === 'LeadNo' || column.id === 'LeadBalanceAmount' ||
-							// 	column.id === 'LeadDate' || column.id === 'TransactionStatus') tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
-
 							return {
 								style: {
 									textAlign: 'center',
@@ -1260,7 +1068,6 @@ class LeadListContent extends Component {
 								onClick: (e, handleOriginal) => {
 									if (rowInfo) {
 										alert('ok');
-										// openEditContactDialog(rowInfo.original);
 									}
 								}
 							}
@@ -1275,7 +1082,6 @@ class LeadListContent extends Component {
 										onChange={(event) => toggleAll(instance)}
 										checked={this.state.selectAll}
 										style={{ color: 'white' }}
-									// indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
 									/>
 								),
 								accessor: "",
@@ -1344,17 +1150,11 @@ class LeadListContent extends Component {
 							{
 								Header: "Account Type",
 								accessor: "AccountTypeListName",
-								// Cell: row => {
-								// 	return '$' + parseFloat(row.original.LeadBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-								// },
 								className: classNames("flex items-center  justify-center p-12-impor"),
 								width: 150
 							},
 							{
 								Header: "Status",
-								// Cell: row => {
-								// 	return '$' + parseFloat(row.original.LeadTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-								// },
 								accessor: "StatusName",
 								className: classNames("flex items-center  justify-center p-12-impor"),
 								width: 60
@@ -1362,26 +1162,11 @@ class LeadListContent extends Component {
 							{
 								Header: "Contract Amount",
 								id: "Amount",
-								// accessor: d => ('$' + Number(d.Amount).toFixed(2)),
 								accessor: d => '$' + d.Amount.toLocaleString(undefined, { minimumFractionDigits: 2 }),
-								// accessor: "Amount",
 								className: classNames("flex items-center  justify-end p-12-impor"),
 								headerClassName: "wordwrap",
 								width: 80
 							},
-							// {
-							// 	Header: "Due Date",
-							// 	id: "DueDate",
-							// 	accessor: d => moment(d.DueDate).format('MM/DD/YYYY'),
-							// 	className: classNames("flex items-center  justify-center"),
-							// 	width: 120
-							// },
-							// {
-							// 	Header: "Status",
-							// 	accessor: "TransactionStatus",
-							// 	className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-							// 	width: 120
-							// },
 							{
 								Header: "Actions",
 								width: 110,
@@ -1405,7 +1190,6 @@ class LeadListContent extends Component {
 										<IconButton
 											onClick={(ev) => {
 												ev.stopPropagation();
-												// removeContact(row.original.id);
 											}}
 										>
 											<Icon>edit</Icon>

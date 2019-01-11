@@ -10,6 +10,7 @@ import {UPDATE_INVOICE_DATE_OPTION} from "../actions/";
 let today = new Date();
 const initialState = {
     invoicesDB: null,
+    invoiceDetail: null,
     bLoadedInvoices: false,
     bOpenedSummaryPanel: false,
     bOpenedFilterPanel: false,
@@ -59,6 +60,21 @@ const invoices = function(state = initialState, action) {
             }
             return {
                 ...state, invoiceStatus: invoiceStatus
+            }
+        }
+        case Actions.GET_INVOICE_DETAIL:
+        {
+            // let invoiceStatus = action.payload;
+            // if(action.payload.length>0) {
+            //     invoiceStatus = action.payload.map(iv => {
+            //         return {['checked'+iv.TransactionStatusListId]: true, ...iv}
+            //     });
+            // }
+            return {
+                ...state,
+                invoiceDetail: action.payload,
+                bLoadedInvoices: true,
+                bInvoiceStart: false
             }
         }
         case Actions.GET_INVOICES_FETCH_START:
