@@ -596,7 +596,17 @@ class Customers extends Component {
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
-											<Fab
+										<IconButton className={classes.button} aria-label="add" onClick={openNewCustomerForm}>
+												<Icon>add</Icon>
+											</IconButton>
+											<IconButton className={classes.button} aria-label="mail" onClick={() => this.props.history.push('/apps/mail/inbox')}>
+												<Icon>mail_outline</Icon>
+											</IconButton>
+											<IconButton className={classes.button} aria-label="print" onClick={() => alert('ok')}>
+												<Icon>print</Icon>
+											</IconButton>
+
+											{/* <Fab
 												color="secondary"
 												aria-label="add"
 												className={classNames(classes.sideButton, "mr-12")}
@@ -609,7 +619,7 @@ class Customers extends Component {
 											</Fab>
 											<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
 												<Icon>print</Icon>
-											</Fab>
+											</Fab> */}
 										</div>
 									</div>
 

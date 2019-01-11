@@ -1285,6 +1285,13 @@ class CustomerForm extends Component {
 									label="Sun"
 
 								/>
+								<FormControlLabel
+									control={
+										<Checkbox onChange={this.handleChange('weekdays')} />
+									}
+									label="Weekends"
+
+								/>
 							</GridItem>
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">

@@ -194,11 +194,13 @@ class FilterPanel extends Component {
 	}
 	componentWillReceiveProps(nextProps) {
 		// if (nextProps.locationFilterValue !== this.props.locationFilterValue) {
-		// 	this.setState({
-		// 		Location: nextProps.locationFilterValue.id,
-		// 		NearbyRadius: nextProps.locationFilterValue.miles,
-		// 		AddressZipcodeRadius: nextProps.locationFilterValue.miles,
-		// 	})
+			// 	this.setState({
+			// 		Location: nextProps.locationFilterValue.id,
+			// 		NearbyRadius: nextProps.locationFilterValue.miles,
+			// 		AddressZipcodeRadius: nextProps.locationFilterValue.miles,
+			// 		SpecificAddress: nextProps.locationFilterValue.addrZipcode === undefined ? "" : nextProps.locationFilterValue.addrZipcode.addr,
+			// 	})
+			// this.onLocationFilter("Location", nextProps.locationFilterValue.id)
 		// }
 	}
 	componentDidUpdate(prevProps) {
@@ -281,10 +283,10 @@ class FilterPanel extends Component {
 					...payload,
 					id: value,
 					miles: value === "locationNearBy" ?
-						this.state.NearbyRadius :
+						this.props.locationFilterValue.miles :
 						(value === "locationNearSpecificAddress" ?
 							this.state.AddressZipcodeRadius :
-							0),
+							this.props.locationFilterValue.miles),
 				}
 				if (value != "locationNearSpecificAddress") {
 

@@ -467,7 +467,7 @@ class CustomerListContent extends Component {
 		super(props);
 		this.state = {
 			gmapVisible: false,
-			locationFilterValue: this.props.locationFilterValue,
+			locationFilterValue: [],
 			pins: [],
 			pins2: [],
 
@@ -773,7 +773,7 @@ class CustomerListContent extends Component {
 		return this.state !== nextState
 			|| this.props.mapViewState !== nextProps.mapViewState
 			|| this.props.customers !== nextProps.customers
-			|| this.props.bOpenedFilterPanel !== nextProps.bOpenedFilterPanel
+			// || this.props.bOpenedFilterPanel !== nextProps.bOpenedFilterPanel
 			// 	// || this.props.loading !== nextProps.loading
 			// 	|| this.props.pins !== nextProps.pins
 			|| this.props.searchText !== nextProps.searchText
@@ -782,7 +782,7 @@ class CustomerListContent extends Component {
 
 	componentWillReceiveProps(nextProps) {
 		// this.setState({ mapViewState: nextProps.mapViewState });
-		console.log("componentWillReceiveProps", "CustomerListContent.js", nextProps.customers, this.props.customers)
+		console.log("componentWillReceiveProps", "CustomerListContent.js", nextProps.locationFilterValue)
 
 
 		if (nextProps.customers !== this.props.customers) {
@@ -1142,20 +1142,19 @@ class CustomerListContent extends Component {
 	}
 
 	render() {
-		console.log("------render------");
-
 		const {
 			classes,
 			toggleFilterPanel,
 			toggleSummaryPanel,
 			mapViewState,
 			toggleMapView,
-			filterState
+			filterState,
+			locationFilterValue,
 		} = this.props;
 
 		const {
 			pins,
-			locationFilterValue,
+			// locationFilterValue,
 			pins2,
 			gmapVisible,
 			// mapViewState,
@@ -1365,13 +1364,14 @@ class CustomerListContent extends Component {
 									{/* Column Visibility */}
 									{/* <ColumnChooser /> */}
 
-									{filterState && (
+									{/* {filterState && (
 										<TableFilterRow
 											showFilterSelector
 											iconComponent={FilterIcon}
 										// messages={{ month: 'Month equals' }}
 										/>
-									)}
+									)} */}
+
 									{/* <TableGroupRow /> */}
 									{/* <GroupingPanel showSortingControls showGroupingControls /> */}
 
