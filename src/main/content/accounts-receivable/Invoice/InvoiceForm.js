@@ -105,7 +105,6 @@ const newInvoiceState = {
     "RegionId": "",
     "RegionName": "",
     "InvoiceId": "",
-    "InvoiceNo": "",
     "InvoiceDate": new Date(),
     "DueDate": new Date(),
     "CustomerId": "",
@@ -195,7 +194,8 @@ class InvoiceForm extends Component {
         total: 0.0,
         subTotal: 0.0,
         tax: 0,
-        markup: 0.0
+        markup: 0.0,
+        InvoiceNo: "",
     };
 
     onChange = (event, { newValue, method }) => {
@@ -233,27 +233,32 @@ class InvoiceForm extends Component {
     getTotal = () => {
         let subTotal = 0.0;
         let markup = 0.0;
+        let tax = 0.0;
         const data = [...this.props.invoiceForm.data.line];
 
         data.forEach(n => {
-            subTotal += parseFloat(n.amount*n.quantity);
-            markup += parseFloat(n.amount*n.quantity*parseFloat(n.markup)/100);
+            subTotal += parseFloat(n.extended);
+            tax += parseFloat(n.tax);
+            markup += parseFloat(n.extended*n.quantity*parseFloat(n.markup)/100);
         });
 
         this.setState({subTotal: subTotal});
         this.setState({markup: markup});
-        this.setState({total: subTotal+this.state.tax+markup});
+        this.setState({tax: tax});
+        this.setState({total: subTotal+tax+markup});
     };
 
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.props.invoiceForm!== prevProps.invoiceForm) {
             this.getTotal();
         }
+        if(this.state.selectedCustomer!== null && JSON.stringify(this.state.selectedCustomer)!== JSON.stringify(this.props.invoiceForm.customer)) {
+            this.props.selectCustomer(this.state.selectedCustomer);
+        }
     }
 
     componentWillMount(){
-        if(this.props.invoiceForm.type === 'new')
-            this.setState({InvoiceNo: "PENDING"});
+
     }
 
     componentWillReceiveProps(nextProps) {
@@ -270,6 +275,8 @@ class InvoiceForm extends Component {
     }
 
     componentDidMount(){
+        if(this.props.invoiceForm.type === 'new')
+            this.setState({InvoiceNo: "PENDING"});
     }
 
     handleChange = (event) => {
@@ -566,6 +573,7 @@ function mapDispatchToProps(dispatch)
         openEditInvoiceForm: Actions.openEditInvoiceForm,
         closeEditInvoiceForm: Actions.closeEditInvoiceForm,
         closeNewInvoiceForm : Actions.closeNewInvoiceForm,
+        selectCustomer: Actions.selectCustomer
     }, dispatch);
 }
 

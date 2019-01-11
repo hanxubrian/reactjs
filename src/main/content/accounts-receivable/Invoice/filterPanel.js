@@ -267,7 +267,6 @@ class FilterPanel extends Component {
         const {classes} = this.props;
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         const years = _.range(moment().year(), 2000,-1);
-        console.log('month=', this.state.invoiceDatePeriodYear);
         return (
             <div className={classNames(classes.root)}>
                 <div className={classNames("flex flex-col")}>

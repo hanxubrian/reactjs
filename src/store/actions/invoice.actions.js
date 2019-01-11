@@ -13,6 +13,7 @@ export const UPDATE_FROM_DATE_INVOICE = "[INVOICES] UPDATE FROM DATE";
 export const UPDATE_TO_DATE_INVOICE = "[INVOICES] UPDATE TO DATE";
 export const GET_CUSTOMER_TAX_AMOUNT = "[INVOICES] GET CUSTOMER TAX AMOUNT";
 export const UPDATE_INVOICE_PERIOD_OPTION = "[INVOICES] UPDATE PERIOD OPTION";
+export const SELECT_INVOICE_CUSTOMER = "[INVOICES] SELECT CUSTOMER";
 
 // for Add/Edit
 export const OPEN_NEW_INVOICE_FORM = '[INVOICES APP] OPEN NEW INVOICE FORM';
@@ -214,7 +215,7 @@ export function updateInvoiceLine(data) {
 export function getCustomerTaxAmount(RegionId,CustomerId, Amount, Quantity, TaxTypeId=1) {
     return (dispatch) => {
         (async () => {
-            let res = await invoiceService.getInvoiceStatusList(RegionId);
+            let res = await invoiceService.getCustomerTaxAmount(RegionId,CustomerId, Amount, Quantity, TaxTypeId);
             if (res.IsSuccess) {
                 dispatch({
                     type: GET_CUSTOMER_TAX_AMOUNT,
@@ -239,9 +240,27 @@ export function updateInvoiceDateOption(option){
     }
 }
 
+/**
+ * Update perion options (year & month)
+ * @param key
+ * @param option
+ * @returns {{type: string, payload: {}}}
+ */
 export function updatePeriodOption(key, option) {
     return {
         type: UPDATE_INVOICE_PERIOD_OPTION,
         payload: {[key]: option}
+    }
+}
+
+/**
+ * select a customer from auto suggetion on invoice form
+ * @param obj
+ * @returns {{type: string, payload: *}}
+ */
+export function selectCustomer(obj) {
+    return {
+        type: SELECT_INVOICE_CUSTOMER,
+        payload: obj
     }
 }

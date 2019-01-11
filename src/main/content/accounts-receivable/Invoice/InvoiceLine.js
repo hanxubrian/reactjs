@@ -3,7 +3,7 @@ import {withRouter} from 'react-router-dom';
 
 //Material UI core and icons
 import {
-    Snackbar, SnackbarContent, Input,TextField,
+    Snackbar, SnackbarContent, Tooltip,TextField,
     Paper, Icon, IconButton, Select, OutlinedInput, MenuItem, FormControl, Fab
 } from '@material-ui/core'
 import {withStyles} from '@material-ui/core/styles';
@@ -119,7 +119,7 @@ function createFranchisee(parent_id,id, fnumber="", name="", amount=0) {
     }
 }
 
-function createData(billing='Regular Billing', service='Adjust-Balance', description=' ', quantity=' ', amount=' ', tax=" ", markup=0, extended=0)
+function createData(billing='Regular Billing', service='Adjust-Balance', description=' ', quantity=' ', amount=' ', tax=0, markup=0, extended=0, total=0)
 {
     return {
         id: counter++,
@@ -131,14 +131,14 @@ function createData(billing='Regular Billing', service='Adjust-Balance', descrip
         tax,
         markup,
         extended,
+        total,
         franchisees: [],
         type: 'line'
     };
 }
 
-
 function renderInputComponent(inputProps) {
-    const { classes, inputRef = () => {}, ref, ...other } = inputProps;
+    const { inputRef = () => {}, ref, ...other } = inputProps;
 
     return (
         <TextField
@@ -284,9 +284,9 @@ const styles = theme => ({
 
 function renderSuggestion (suggestion,  { isHighlighted }) {
     return (
-    <MenuItem selected={isHighlighted} component="div">
-        <span>{suggestion.Number} - {suggestion.Name}</span>
-    </MenuItem>
+        <MenuItem selected={isHighlighted} component="div">
+            <span>{suggestion.Number} - {suggestion.Name}</span>
+        </MenuItem>
     );
 }
 
@@ -345,7 +345,9 @@ class InvoiceLineTable extends React.Component {
         numberValue18: '',
         numberValue19: '',
         numberValue20: '',
-        numberSuggestions: []
+        numberSuggestions: [],
+        taxRowId: 0,
+        customerTaxAmountLine: null
     };
 
     constructor(props) {
@@ -391,7 +393,27 @@ class InvoiceLineTable extends React.Component {
         if(prevState.data!==this.state.data){
             this.props.updateInvoiceLine(this.state.data);
         }
+        if(JSON.stringify(this.state.customerTaxAmountLine)!== JSON.stringify(prevState.customerTaxAmountLine)){
+            console.log('updated tax', this.state.customerTaxAmountLine, prevState.customerTaxAmountLine);
+            this.updateTaxFromLine();
+        }
     }
+
+    componentWillReceiveProps(nextProps) {
+        if(JSON.stringify(this.props.customerTaxAmountLine)!==JSON.stringify(nextProps.customerTaxAmountLine)){
+            this.setState({customerTaxAmountLine: nextProps.customerTaxAmountLine})
+        }
+    }
+
+    updateTaxFromLine = ()=> {
+        const data = [...this.state.data];
+        const {taxRowId, customerTaxAmountLine} = this.state;
+        // data[taxRowIdrow.id].franchisees[row.fid].amount = event.target.value;
+        data[taxRowId].tax = customerTaxAmountLine.TaxAmount;
+        data[taxRowId].extended = customerTaxAmountLine.ExtendedPrice;
+        data[taxRowId].total = customerTaxAmountLine.TotalAmount;
+        this.setState({data: data});
+    };
 
     // For Franchisee suggestion
     getSuggestions = (value) => {
@@ -441,23 +463,26 @@ class InvoiceLineTable extends React.Component {
         this.setState({ openSnack: false });
     };
 
-    addLineData=()=>{
-        const lineData = [...this.state.data];
-        const lastRow = lineData[lineData.length-1];
+    addLineData=(row)=>{
+        if(this.props.invoiceForm.customer===null) {
+            this.setState({snackMessage: 'Please choose customer from Invoice suggestion'});
+            this.setState({openSnack: true});
+            return;
+        }
 
-        if(lastRow.description===' ') {
+        if(row.description===' ') {
             this.setState({snackMessage: 'Please enter description'});
             this.setState({openSnack: true});
             return;
         }
 
-        if(lastRow.quantity===' ') {
+        if(row.quantity===' ') {
             this.setState({snackMessage: 'Please enter quantity'});
             this.setState({openSnack: true});
             return;
         }
 
-        if(lastRow.amount===' ') {
+        if(row.amount===' ') {
             this.setState({snackMessage: 'Please enter amount'});
             this.setState({openSnack: true});
             return;
@@ -498,7 +523,7 @@ class InvoiceLineTable extends React.Component {
 
         this.setState({data: newData})
     };
-//.original.id, row.original.fid
+
     removeFranch=(row)=>{
         const data = [...this.state.data];
 
@@ -524,6 +549,11 @@ class InvoiceLineTable extends React.Component {
         });
         this.setState({data: data});
         this.setState({['nameValue'+row.f_index]: ''})
+    };
+
+    getInvoiceLineTaxAmount = row =>{
+        this.props.getCustomerTaxAmount(this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity);
+        this.setState({taxRowId: row.id})
     };
 
     renderEditable(cellInfo, id) {
@@ -595,16 +625,19 @@ class InvoiceLineTable extends React.Component {
         this.setState({data: data});
     };
 
+    isDisable = row =>{
+        if(this.props.invoiceForm.customer===null) return true;
+        if(row.quantity===' ') return true;
+        if(row.amount===' ') return true;
+    };
+
     render()
     {
         const {classes} = this.props;
         const {data} = this.state;
 
         const {
-            nameValue,
             nameSuggestions,
-            numberValue,
-            numberSuggestions
         } = this.state;
 
         let all_data = [];
@@ -618,9 +651,6 @@ class InvoiceLineTable extends React.Component {
                 all_data.push({f_index: f_index++,...f});
             });
         });
-
-        console.log('all data=', all_data);
-        console.log('state=', this.state);
 
         return (
             <Paper className={classNames(classes.root)}>
@@ -811,8 +841,6 @@ class InvoiceLineTable extends React.Component {
                                                                     </Paper>
                                                                 )}
                                                             />
-                                                            {/*{row.original.name}*/}
-
                                                         </div>
                                                     </div>
                                                 )
@@ -823,7 +851,7 @@ class InvoiceLineTable extends React.Component {
                                         accessor: "quantity",
                                         Cell: row=>{
                                             if(row.original.type==='line')
-                                                return (this.renderEditable(row.original, 'quantity'))
+                                                return (this.renderEditable(row.original, 'quantity'));
                                             else
                                                 return (<div/>)
                                         },
@@ -847,11 +875,11 @@ class InvoiceLineTable extends React.Component {
                                         accessor: "tax",
                                         Cell: row=>{
                                             if(row.original.type==='line')
-                                                return (this.renderEditable(row.original, 'tax'));
+                                                return ("$"+parseFloat(row.original.tax).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
                                             else
                                                 return (<div/>)
                                         },
-                                        className: classNames(classes.tableTdEven, "flex items-center  justify-center text-right"),
+                                        className: classNames(classes.tableTdEven, "flex items-center  justify-end text-right"),
                                         width: 100
                                     },
                                     {
@@ -861,7 +889,6 @@ class InvoiceLineTable extends React.Component {
                                             if(row.original.type==='line')
                                                 return (this.renderEditableMarkup(row.original, 'markup'));
                                             else
-                                            // return (<div className="" style={{width: '96%', marginLeft: 15, border:'1px solid lightgray', borderRadius: 6, padding:'8px 12px'}}>{row.original.amount}</div>)
                                                 return (
                                                     <div className="flex flex-wrap">
                                                         <TextField
@@ -883,7 +910,7 @@ class InvoiceLineTable extends React.Component {
                                         accessor: "extended",
                                         Cell: row=>{
                                             if(row.original.type==='line')
-                                                return ("$"+parseFloat((row.original.amount*row.original.quantity)*(1+parseFloat(row.original.markup)/100)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+                                                return ("$"+parseFloat(row.original.extended*(1+parseFloat(row.original.markup)/100)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
                                             else
                                                 return (
                                                     <Fab aria-label="remove"
@@ -903,6 +930,17 @@ class InvoiceLineTable extends React.Component {
                                             if(row.original.type==='line')
                                                 return (
                                                     <div className="flex flex-row items-center w-full justify-center">
+                                                        <Tooltip title="Fetch Tax from API">
+                                                            <span>
+                                                        <Fab color="secondary" aria-label="fetch"
+                                                             className={classNames(classes.lineButton, "mr-12")}
+                                                             onClick={()=>this.getInvoiceLineTaxAmount(row.original)}
+                                                             disabled = {this.isDisable(row.original)}
+                                                        >
+                                                            <Icon>refresh</Icon>
+                                                        </Fab>
+                                                            </span>
+                                                        </Tooltip>
                                                         <Fab color="secondary" aria-label="add"
                                                              className={classNames(classes.lineButton, "mr-12")}
                                                              onClick={()=>this.addFranchiseeLine(row.original)}
@@ -911,7 +949,7 @@ class InvoiceLineTable extends React.Component {
                                                         </Fab>
                                                         <Fab color="secondary" aria-label="add"
                                                              className={classNames(classes.lineButton, "mr-12")}
-                                                             onClick={()=>this.addLineData()}
+                                                             onClick={()=>this.addLineData(row.original)}
                                                         >
                                                             <Icon>add</Icon>
                                                         </Fab>
@@ -965,15 +1003,18 @@ InvoiceLineTable.propTypes = {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        updateInvoiceLine: Actions.updateInvoiceLine
+        updateInvoiceLine: Actions.updateInvoiceLine,
+        getCustomerTaxAmount: Actions.getCustomerTaxAmount
     }, dispatch);
 }
 
-function mapStateToProps({invoices, franchisees})
+function mapStateToProps({invoices, franchisees, auth})
 {
     return {
         invoiceForm: invoices.invoiceForm,
         franchisees: franchisees.franchiseesDB,
+        regionId: auth.login.defaultRegionId,
+        customerTaxAmountLine: invoices.customerTaxAmountLine
     }
 }
 

@@ -95,6 +95,13 @@ const invoices = function(state = initialState, action) {
                 ...state, ...action.payload
             }
         }
+        case Actions.SELECT_INVOICE_CUSTOMER:
+        {
+            return {
+                ...state,
+                invoiceForm: {...state.invoiceForm, customer: action.payload}
+            }
+        }
         case Actions.TOGGLE_FILTER_PANEL:
         {
             return {
