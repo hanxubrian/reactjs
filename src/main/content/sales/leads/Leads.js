@@ -17,19 +17,11 @@ import * as Actions from 'store/actions';
 import SummaryPanel from './SummaryPanel';
 import FilterPanel from './filterPanel';
 
-// third party
-// import moment from 'moment'
-// import checkboxHOC from "react-table/lib/hoc/selectTable";
-// import Chance from "chance";
-// import ReactTable from "react-table";
 import "react-table/react-table.css";
 // import _ from 'lodash';
 
 
 import classNames from 'classnames';
-
-//table pagination
-// import JanikingPagination from './../../../../Commons/JanikingPagination';
 
 import LeadForm from './LeadForm';
 import LeadListContent from './LeadListContent';
@@ -210,27 +202,9 @@ const styles = theme => ({
 		}
 	}
 });
-// const defaultProps = {
-// 	trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
-// };
 
 
 class Leads extends Component {
-	// state = {
-	// 	s: '',
-	// 	temp: [],
-	// 	data: [],
-	// 	checkedPaid: true,
-	// 	checkedPP: true,
-	// 	checkedComplete: true,
-	// 	checkedOpen: true,
-	// 	selection: [],
-	// 	selectAll: false,
-	// 	regionId: 0,
-
-	// 	current_lat:0,
-	// 	current_long:0,
-	// };
 
 	constructor(props) {
 		super(props);
@@ -252,20 +226,13 @@ class Leads extends Component {
 			selection: [],
 			selectAll: false,
 			regionId: 0,
-
 			current_lat: 0,
 			current_long: 0,
 		};
 	}
 
 	toggleSelection = (key, shift, row) => {
-        /*
-          https://react-table.js.org/#/story/select-table-hoc
-          Implementation of how to manage the selection state is up to the developer.
-          This implementation uses an array stored in the component state.
-          Other implementations could use object keys, a Javascript Set, or Redux... etc.
-        */
-		// start off with the existing state
+
 		let selection = [...this.state.selection];
 		const keyIndex = selection.indexOf(key);
 		// check to see if the key exists
@@ -284,24 +251,7 @@ class Leads extends Component {
 	};
 
 	toggleAll = (instance) => {
-        /*
-          'toggleAll' is a tricky concept with any filterable table
-          do you just select ALL the records that are in your data?
-          OR
-          do you only select ALL the records that are in the current filtered data?
 
-          The latter makes more sense because 'selection' is a visual thing for the user.
-          This is especially true if you are going to implement a set of external functions
-          that act on the selected information (you would not want to DELETE the wrong thing!).
-
-          So, to that end, access to the internals of ReactTable are required to get what is
-          currently visible in the table (either on the current page or any other page).
-
-          The HOC provides a method call 'getWrappedInstance' to get a ref to the wrapped
-          ReactTable and then get the internal state and the 'sortedData'.
-          That can then be iterated to get all the currently visible records and set
-          the selection state.
-        */
 		const selectAll = this.state.selectAll ? false : true;
 		const selection = [];
 		if (selectAll) {
@@ -320,11 +270,6 @@ class Leads extends Component {
 	};
 
 	isSelected = key => {
-        /*
-          Instead of passing our external selection state we provide an 'isSelected'
-          callback and detect the selection state ourselves. This allows any implementation
-          for selection (either an array, object keys, or even a Javascript Set object).
-        */
 		return this.state.selection.includes(key);
 	};
 
@@ -382,7 +327,6 @@ class Leads extends Component {
 		this.setState({ checkedPP: this.props.transactionStatus.checkedPP });
 		this.setState({ checkedComplete: this.props.transactionStatus.checkedComplete });
 		this.setState({ checkedOpen: this.props.transactionStatus.checkedOpen });
-
 		this.getLeadsFromStatus()
 
 
@@ -397,27 +341,12 @@ class Leads extends Component {
 
 
 	getLeadsFromStatus = (rawData = this.props.leads) => {
-		// let temp = [];
+
 		let all_temp = [];
-		// let temp1 = [];
-		// const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
-		// const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
 
 		if (rawData === null) return;
         let regions = rawData.Data.Leads.filter(x => x )
         all_temp = [...all_temp, ...regions]
-		// let regions = rawData.Data.Leads.filter(x => {
-		// 	return this.props.regionId === 0 || x.Id === this.props.regionId;
-		// });
-
-		// regions.forEach(x => {
-		// 	all_temp = [...all_temp, ...x.Leads];
-		// });
-
-		// regions.map(x => {
-		// 	all_temp = [...all_temp, ...x.Customers];
-		// 	return;
-		// });
 
 		this.setState({ temp: all_temp });
 		this.setState({ data: all_temp });
@@ -466,10 +395,6 @@ class Leads extends Component {
 
 	canBeSubmitted() {
 		return true;
-		// const { name } = this.state;
-		// return (
-		// 	name.length > 0
-		// );
 	}
 
 	removeLeads = () => {
@@ -492,8 +417,6 @@ class Leads extends Component {
 
 	render() {
 		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, openNewLeadForm, leadForm, mapViewState, toggleMapView } = this.props;
-
-		// const { toggleSelection, toggleAll, isSelected, logSelection } = this;
 
 		const { selection } = this.state;
 
@@ -524,13 +447,6 @@ class Leads extends Component {
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
-											{/* <IconButton
-												className={classNames(classes.button, "mr-12")}
-												aria-label="Add an alarm"
-												onClick={(ev) => toggleMapView()}>
-												<Icon>{mapViewState ? 'list' : 'location_on'}</Icon>
-											</IconButton> */}
-
 											<FuseAnimate animation="transition.expandIn" delay={300}>
 												<Fab
 													color="secondary"

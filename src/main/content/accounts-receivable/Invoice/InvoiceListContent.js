@@ -9,7 +9,7 @@ import {
 import JanikingPagination from 'Commons/JanikingPagination';
 
 
-import {withStyles,Card, CardContent, Typography, TextField, Checkbox} from "@material-ui/core";
+import {withStyles, Checkbox} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
 // for store
@@ -105,11 +105,13 @@ class InvoiceListContent extends Component {
         data: [],
         selection: [],
         selectAll: false,
+
         selectedInvoice: null,
         isOpen: false,
         invoiceDetail: null,
         CustomerFor: [],
         CustomerSoldTo:[],
+        selectedInvoice: null
     };
 
     onChange = (event, { newValue, method }) => {
@@ -224,6 +226,7 @@ class InvoiceListContent extends Component {
     onEditInvoice = row => {
         this.props.openEditInvoiceForm(row);
     };
+
     invoicereport =(ev)=>{
         ev.stopPropagation();
         console.log("invoice report");
@@ -241,6 +244,7 @@ class InvoiceListContent extends Component {
             isOpen: !this.state.isOpen
         });
     }
+
 
     render()
     {
@@ -294,6 +298,8 @@ class InvoiceListContent extends Component {
                             onClick  : (e, handleOriginal) => {
                                 if ( rowInfo )
                                 {
+                                    if(this.props.filterState) this.props.toggleFilterPanel();
+                                    if(this.props.summaryState) this.props.toggleSummaryPanel();
                                     this.props.openEditInvoiceForm(rowInfo.original);
                                 }
                             }
@@ -448,6 +454,7 @@ class InvoiceListContent extends Component {
                         height: '100%',
                     }}
                 />
+
                 <InvoiceReport show={this.state.isOpen} onClose={this.toggleModal} getData={this.state.invoiceDetail}>
 
                 </InvoiceReport>
@@ -464,6 +471,8 @@ function mapDispatchToProps(dispatch)
         openEditInvoiceForm: Actions.openEditInvoiceForm,
         closeEditInvoiceForm: Actions.closeEditInvoiceForm,
         getInvoiceDetail: Actions.getInvoiceDetail,
+        toggleFilterPanel: Actions.toggleFilterPanel,
+        toggleSummaryPanel: Actions.toggleSummaryPanel,
     }, dispatch);
 }
 
@@ -474,27 +483,11 @@ function mapStateToProps({invoices, auth})
         invoicesdetail: invoices.invoiceDetail,
         transactionStatus: invoices.transactionStatus,
         regionId: auth.login.defaultRegionId,
-        InvoiceForm: invoices.InvoiceForm
+        InvoiceForm: invoices.InvoiceForm,
+        filterState: invoices.bOpenedFilterPanel,
+        summaryState: invoices.bOpenedSummaryPanel,
     }
 }
-const backdropStyle = {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    padding: 50
-};
 
-// The modal "window"
-const modalStyle = {
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    maxWidth: 500,
-    minHeight: 300,
-    margin: '0 auto',
-    padding: 30
-};
 export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceListContent)));
 
