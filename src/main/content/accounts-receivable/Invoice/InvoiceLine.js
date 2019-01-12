@@ -119,7 +119,7 @@ function createFranchisee(parent_id,id, fnumber="", name="", amount=0) {
     }
 }
 
-function createData(billing='Regular Billing', service='Adjust-Balance', description='', quantity='', amount='', tax=0, markup=0, extended=0, total=0)
+function createData(billing='Regular Billing', service='Adjust-Balance', description='', quantity='', amount='', tax=0, markup='', extended=0, total=0)
 {
     return {
         id: counter++,
@@ -557,70 +557,6 @@ class InvoiceLineTable extends React.Component {
         }
     };
 
-    renderEditable(cellInfo, id) {
-        if (cellInfo.id>this.state.data.length-1) return;
-        let prefix = '';
-        if (id==='amount' || id==='tax' || id==='extended') {
-            if(this.state.data[cellInfo.id][id]!==' ')
-                prefix = "$";
-        }
-
-        if(this.state.data[cellInfo.id][id].length===0) return;
-
-        let value='';
-        value= this.state.data[cellInfo.id][id];
-
-        if (id==='amount' || id==='tax' || id==='extended') {
-            if(this.state.data[cellInfo.id][id]!==' ')
-                value = parseFloat(this.state.data[cellInfo.id][id]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-        }
-        return (
-            <div
-                style={{ backgroundColor: "#fafafa", padding: 12, border: "1px solid lightgray", borderRadius: 6, width: '96%', marginLeft: id==='description'?'2%':'15px' }}
-                contentEditable
-                suppressContentEditableWarning
-                onBlur={e => {
-                    const data = [...this.state.data];
-                    data[cellInfo.id][id] = (e.target.innerHTML).replace('$','').replace(',','');
-
-                    if(id==='amount' || id==='markup') {
-                        if(this.state.data[cellInfo.id][id]!==' ')
-                            data[cellInfo.id][id] = parseFloat(data[cellInfo.id][id]);
-                    }
-
-                    if(id==='quantity') {
-                        if(this.state.data[cellInfo.id][id]!==' ')
-                            data[cellInfo.id][id] = parseInt(data[cellInfo.id][id]);
-                    }
-                    this.setState({ data });
-                    this.getInvoiceLineTaxAmount(cellInfo);
-                }}
-                dangerouslySetInnerHTML={{
-                    __html: prefix + value
-                }}
-            />
-        );
-    }
-
-    renderEditableMarkup(cellInfo, id) {
-        if (cellInfo.id>this.state.data.length-1) return;
-        return (
-            <div
-                style={{ backgroundColor: "#fafafa", padding: 12, border: "1px solid lightgray", width: '96%', borderRadius: 6, marginLeft:'15px' }}
-                contentEditable={cellInfo.billing==="Client Supplies" ? true: false}
-                suppressContentEditableWarning
-                onBlur={e => {
-                    const data = [...this.state.data];
-                    data[cellInfo.id][id] = e.target.innerHTML;
-                    this.setState({ data });
-                }}
-                dangerouslySetInnerHTML={{
-                    __html: this.state.data[cellInfo.id][id]
-                }}
-            />
-        );
-    }
-
     handleChange = row => event => {
         const data = [...this.state.data];
         data[row.id].franchisees[row.fid].amount = event.target.value;
@@ -635,18 +571,17 @@ class InvoiceLineTable extends React.Component {
 
     handleChangeInvoiceLine = (row, name) => event => {
         const data = [...this.state.data];
-        console.log('ev=', event);
         data[row.id][name] = event.target.value;
         this.setState({data: data});
-         if(!this.isDisable(row))
-             this.getInvoiceLineTaxAmount(row)
+        if(!this.isDisable(row))
+            this.getInvoiceLineTaxAmount(row)
     };
 
     isDisable = row =>{
         if(this.props.invoiceForm.customer===null) {
-                this.setState({snackMessage: 'Please choose customer from Invoice suggestion'});
-                this.setState({openSnack: true});
-                return true;
+            this.setState({snackMessage: 'Please choose customer from Invoice suggestion'});
+            this.setState({openSnack: true});
+            return true;
         }
         if(row.quantity==='') return true;
         if(row.amount==='') return true;
@@ -910,7 +845,6 @@ class InvoiceLineTable extends React.Component {
                                                     className={classes.fInput}
                                                     placeholder="Amount"
                                                     value={row.original.amount}
-                                                    name='amount'
                                                     onChange={this.handleChangeInvoiceLine(row.original, 'amount')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustom,
@@ -939,8 +873,18 @@ class InvoiceLineTable extends React.Component {
                                         Header: "Markup(%)",
                                         accessor: "markup",
                                         Cell: row=>{
-                                            if(row.original.type==='line')
-                                                return (this.renderEditableMarkup(row.original, 'markup'));
+                                            if(row.original.type==='line') {
+                                                return <TextField
+                                                    className={classes.fInput}
+                                                    placeholder="Markup"
+                                                    value={row.original.markup}
+                                                    onChange={this.handleChangeInvoiceLine(row.original, 'markup')}
+                                                    InputProps={{
+                                                        inputComponent: NumberFormatCustomPercent,
+                                                        readOnly: row.original.billing!=="Client Supplies"
+                                                    }}
+                                                />
+                                            }
                                             else
                                                 return (
                                                     <div className="flex flex-wrap">
