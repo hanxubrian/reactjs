@@ -263,15 +263,13 @@ class InvoiceForm extends Component {
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.invoiceForm.customer!==null){
-            this.setState({InvoiceNo: nextProps.invoiceForm.customer.InvoiceNo});
+            if(nextProps.invoiceForm.type==='edit')
+                this.setState({InvoiceNo: nextProps.invoiceForm.customer.InvoiceNo});
             this.setState({value: nextProps.invoiceForm.customer.CustomerName});
             this.setState({CustomerNo: nextProps.invoiceForm.customer.CustomerNo});
             this.setState({InvoiceDate: moment(nextProps.invoiceForm.customer.InvoiceDate).format('MM/DD/YYYY')});
             this.setState({DueDate: moment(nextProps.invoiceForm.customer.DueDate).format('MM/DD/YYYY')});
         }
-    }
-
-    componentWillUnmount() {
     }
 
     componentDidMount(){

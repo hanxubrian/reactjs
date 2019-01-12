@@ -119,7 +119,7 @@ function createFranchisee(parent_id,id, fnumber="", name="", amount=0) {
     }
 }
 
-function createData(billing='Regular Billing', service='Adjust-Balance', description=' ', quantity=' ', amount=' ', tax=0, markup=0, extended=0, total=0)
+function createData(billing='Regular Billing', service='Adjust-Balance', description='', quantity=' ', amount=' ', tax=0, markup=0, extended=0, total=0)
 {
     return {
         id: counter++,
@@ -295,7 +295,7 @@ class InvoiceLineTable extends React.Component {
         order      : 'asc',
         selected   : [],
         data       : [
-            createData("Regular Billing", "Adjust-Balance", " ",' '),
+            createData("Regular Billing", "Adjust-Balance", '',' '),
         ],
         page       : 0,
         rowsPerPage: 10,
@@ -470,7 +470,7 @@ class InvoiceLineTable extends React.Component {
             return;
         }
 
-        if(row.description===' ') {
+        if(row.description==='') {
             this.setState({snackMessage: 'Please enter description'});
             this.setState({openSnack: true});
             return;
@@ -552,8 +552,11 @@ class InvoiceLineTable extends React.Component {
     };
 
     getInvoiceLineTaxAmount = row =>{
-        this.props.getCustomerTaxAmount(this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity);
-        this.setState({taxRowId: row.id})
+        if(!this.isDisable(row)) {
+            console.log('zz=', this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity);
+            this.props.getCustomerTaxAmount(this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity);
+            this.setState({taxRowId: row.id})
+        }
     };
 
     renderEditable(cellInfo, id) {
@@ -592,6 +595,7 @@ class InvoiceLineTable extends React.Component {
                             data[cellInfo.id][id] = parseInt(data[cellInfo.id][id]);
                     }
                     this.setState({ data });
+                    this.getInvoiceLineTaxAmount(cellInfo);
                 }}
                 dangerouslySetInnerHTML={{
                     __html: prefix + value
@@ -625,8 +629,18 @@ class InvoiceLineTable extends React.Component {
         this.setState({data: data});
     };
 
+    handleChangeDesc = row => event => {
+        const data = [...this.state.data];
+        data[row.id].description = event.target.value;
+        this.setState({data: data});
+    };
+
     isDisable = row =>{
-        if(this.props.invoiceForm.customer===null) return true;
+        if(this.props.invoiceForm.customer===null) {
+                this.setState({snackMessage: 'Please choose customer from Invoice suggestion'});
+                this.setState({openSnack: true});
+                return true;
+        }
         if(row.quantity===' ') return true;
         if(row.amount===' ') return true;
     };
@@ -701,7 +715,6 @@ class InvoiceLineTable extends React.Component {
                                 return {
                                     className: classNames(
                                         {"justify-end": column.id==='extended'},
-                                        // {"justify-center": rowInfo.original.type==='line'},
                                         {"justify-end": rowInfo.original.type!=='line'})
                                 }
                         }}
@@ -805,8 +818,22 @@ class InvoiceLineTable extends React.Component {
                                         Header: "Description",
                                         accessor: "description",
                                         Cell: row=>{
-                                            if(row.original.type==='line')
-                                                return (this.renderEditable(row.original, 'description'))
+                                            if(row.original.type==='line') {
+                                                return (
+                                                    <TextField
+                                                        id="description"
+                                                        style={{ margin: 8 }}
+                                                        placeholder="Description"
+                                                        fullWidth
+                                                        value={row.original.description}
+                                                        onChange={this.handleChangeDesc(row.original)}
+                                                        margin="normal"
+                                                        InputLabelProps={{
+                                                            shrink: true,
+                                                        }}
+                                                    />
+                                                )
+                                            }
                                             else
                                                 return (
                                                     <div className={classNames("flex flex-row w-full justify-start")}>
@@ -930,17 +957,6 @@ class InvoiceLineTable extends React.Component {
                                             if(row.original.type==='line')
                                                 return (
                                                     <div className="flex flex-row items-center w-full justify-center">
-                                                        <Tooltip title="Fetch Tax from API">
-                                                            <span>
-                                                        <Fab color="secondary" aria-label="fetch"
-                                                             className={classNames(classes.lineButton, "mr-12")}
-                                                             onClick={()=>this.getInvoiceLineTaxAmount(row.original)}
-                                                             disabled = {this.isDisable(row.original)}
-                                                        >
-                                                            <Icon>refresh</Icon>
-                                                        </Fab>
-                                                            </span>
-                                                        </Tooltip>
                                                         <Fab color="secondary" aria-label="add"
                                                              className={classNames(classes.lineButton, "mr-12")}
                                                              onClick={()=>this.addFranchiseeLine(row.original)}
