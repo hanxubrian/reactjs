@@ -30,7 +30,7 @@ import * as Actions from 'store/actions';
 import keycode from "keycode";
 
 //Utility
-import {NumberFormatCustom, escapeRegexCharacters} from '../../../../services/utils'
+import {NumberFormatCustom, escapeRegexCharacters, NumberFormatCustom1} from '../../../../services/utils'
 
 //Snackbar
 const variantIcon = {
@@ -635,6 +635,14 @@ class InvoiceLineTable extends React.Component {
         this.setState({data: data});
     };
 
+    handleChangeQuantity = row => event => {
+        const data = [...this.state.data];
+        data[row.id].quantity = event.target.value;
+        this.setState({data: data});
+        if(!this.isDisable(row))
+            this.getInvoiceLineTaxAmount(row)
+    };
+
     isDisable = row =>{
         if(this.props.invoiceForm.customer===null) {
                 this.setState({snackMessage: 'Please choose customer from Invoice suggestion'});
@@ -877,8 +885,18 @@ class InvoiceLineTable extends React.Component {
                                         Header: "Quantity",
                                         accessor: "quantity",
                                         Cell: row=>{
-                                            if(row.original.type==='line')
-                                                return (this.renderEditable(row.original, 'quantity'));
+                                            if(row.original.type==='line') {
+                                                return <TextField
+                                                    className={classes.fInput}
+                                                    placeholder="Qty"
+                                                    value={row.original.quantity}
+                                                    onChange={this.handleChangeQuantity(row.original)}
+                                                    InputProps={{
+                                                        inputComponent: NumberFormatCustom1,
+                                                    }}
+                                                />
+                                                // return (this.renderEditable(row.original, 'quantity'));
+                                            }
                                             else
                                                 return (<div/>)
                                         },
