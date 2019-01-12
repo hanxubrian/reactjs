@@ -289,7 +289,7 @@ class CustomerLineTable extends React.Component {
 		// orderBy    : 'billing',
 		selected: [],
 		data: [
-			createData("Regular Billing", "Adjust-Balance", "Customer", 1),
+			createData("Regular Billing", "Adjust-Balance", " ", 1),
 		],
 		page: 0,
 		rowsPerPage: 10,
@@ -436,7 +436,7 @@ class CustomerLineTable extends React.Component {
 								.map(n => {
 									return (
 										<TableRow hover key={n.id}>
-											<TableCell component="td" scope="row" >
+											<TableCell component="td" scope="row" >{this.renderEditable(n, 'description')}
 												{/* <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl)} style={{ marginBottom: '0!important' }}>
 													<Select
 														classes={{
@@ -462,7 +462,7 @@ class CustomerLineTable extends React.Component {
 													</Select>
 												</FormControl> */}
 											</TableCell>
-											<TableCell>
+											<TableCell>{this.renderEditable(n, 'description')}
 												{/* <FormControl variant="outlined" className={classes.formControl} style={{ marginBottom: '0!important' }}>
 													<Select
 														classes={{
@@ -508,13 +508,13 @@ class CustomerLineTable extends React.Component {
 												</FormControl> */}
 											</TableCell>
 											<TableCell>{this.renderEditable(n, 'description')}</TableCell>
-											<TableCell numeric>{this.renderEditable(n, 'quantity')}</TableCell>
-											<TableCell numeric>{this.renderEditable(n, 'amount')}</TableCell>
+											<TableCell>{this.renderEditable(n, 'description')}</TableCell>
+											<TableCell>{this.renderEditable(n, 'description')}</TableCell>
 											{/* <TableCell numeric>{this.renderEditableMarkup(n, 'markup')}</TableCell>
 											<TableCell numeric>{this.renderEditable(n, 'extended')}</TableCell> */}
 											{this.props.tableType === "BILLING_SETTING" &&
 												(
-													<TableCell numeric>{this.renderEditable(n, 'extended')}</TableCell>
+													<TableCell>{this.renderEditable(n, 'description')}</TableCell>
 												)
 											}
 											<TableCell padding="checkbox">
@@ -522,7 +522,7 @@ class CustomerLineTable extends React.Component {
 													className={classNames(classes.lineButton, "mr-12")}
 													onClick={() => this.AddLineData()}
 												>
-													<Icon>call_merge</Icon>
+													<Icon>add</Icon>
 												</Fab>
 												{this.state.data.length > 1 && (
 													<Fab aria-label="add"

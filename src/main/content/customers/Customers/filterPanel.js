@@ -23,6 +23,8 @@ import GridItem from "Commons/Grid/GridItem";
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 
+import CustomerLineTable from "./CustomerLine"
+
 Geocode.setApiKey("AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA");
 
 const styles = theme => ({
@@ -146,6 +148,77 @@ const stateNames = [
 		label: "Reno"
 	}
 ];
+const address_headers = [
+	{
+		id: 'billing',
+		numeric: false,
+		disablePadding: false,
+		label: 'Type'
+	},
+	{
+		id: 'service',
+		numeric: false,
+		disablePadding: false,
+		label: 'Address'
+	},
+	{
+		id: 'description',
+		numeric: false,
+		disablePadding: false,
+		label: 'City'
+	},
+	{
+		id: 'quantity',
+		numeric: true,
+		disablePadding: false,
+		label: 'State'
+	},
+	{
+		id: 'amount',
+		numeric: true,
+		disablePadding: false,
+		label: 'Zip / Postal'
+	}
+];
+
+const billing_headers = [
+	{
+		id: 'billing',
+		numeric: false,
+		disablePadding: false,
+		label: 'First'
+	},
+	{
+		id: 'service',
+		numeric: false,
+		disablePadding: false,
+		label: 'Last'
+	},
+	{
+		id: 'description',
+		numeric: false,
+		disablePadding: false,
+		label: 'Title'
+	},
+	{
+		id: 'quantity',
+		numeric: true,
+		disablePadding: false,
+		label: 'Office Phone'
+	},
+	{
+		id: 'amount',
+		numeric: true,
+		disablePadding: false,
+		label: 'Mobile Phone'
+	},
+	{
+		id: 'email',
+		numeric: true,
+		disablePadding: false,
+		label: 'Email'
+	}
+];
 
 const WAIT_INTERVAL = 1000
 const ENTER_KEY = 13
@@ -194,13 +267,13 @@ class FilterPanel extends Component {
 	}
 	componentWillReceiveProps(nextProps) {
 		// if (nextProps.locationFilterValue !== this.props.locationFilterValue) {
-			// 	this.setState({
-			// 		Location: nextProps.locationFilterValue.id,
-			// 		NearbyRadius: nextProps.locationFilterValue.miles,
-			// 		AddressZipcodeRadius: nextProps.locationFilterValue.miles,
-			// 		SpecificAddress: nextProps.locationFilterValue.addrZipcode === undefined ? "" : nextProps.locationFilterValue.addrZipcode.addr,
-			// 	})
-			// this.onLocationFilter("Location", nextProps.locationFilterValue.id)
+		// 	this.setState({
+		// 		Location: nextProps.locationFilterValue.id,
+		// 		NearbyRadius: nextProps.locationFilterValue.miles,
+		// 		AddressZipcodeRadius: nextProps.locationFilterValue.miles,
+		// 		SpecificAddress: nextProps.locationFilterValue.addrZipcode === undefined ? "" : nextProps.locationFilterValue.addrZipcode.addr,
+		// 	})
+		// this.onLocationFilter("Location", nextProps.locationFilterValue.id)
 		// }
 	}
 	componentDidUpdate(prevProps) {
@@ -466,7 +539,7 @@ class FilterPanel extends Component {
 						? (
 							<div>
 								{/* <h3 className="mb-20">Customer Information</h3> */}
-								<GridContainer style={{ alignItems: 'center', width: 300 }} className={classNames(classes.formControl)}>
+								<GridContainer style={{ alignItems: 'center', width: 500 }} className={classNames(classes.formControl)}>
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 										<TextField
 											id="Name"
@@ -505,24 +578,26 @@ class FilterPanel extends Component {
 										<TextField
 											id="outlined-name"
 											label="City *"
-											className={classes.textField}
+											className={classNames(classes.textField, 'mr-6')}
 											// value={customerForm.state.name}
 											onChange={this.handleChange('City')}
 											margin="normal"
 											variant="outlined"
-											fullWidth />
-									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+											style={{ width: '40%' }}
+										/>
+
+
 										<TextField
 											id="outlined-name"
 											label="State *"
 											select
-											className={classes.textField}
+											className={classNames(classes.textField, 'mr-6 ml-6')}
 											value={this.state.State === undefined ? "" : this.state.State}
 											onChange={this.handleChange('State')}
 											margin="normal"
 											variant="outlined"
-											style={{ width: '40%', marginRight: '2px' }}>
+											style={{ width: '25%' }}
+										>
 											{stateNames.map(option => (
 												<MenuItem key={option.value} value={option.value}>
 													{option.label}
@@ -533,34 +608,38 @@ class FilterPanel extends Component {
 										<TextField
 											id="outlined-name"
 											label="Zip *"
-											className={classes.textField}
+											className={classNames(classes.textField, 'ml-6')}
 											// value={customerForm.state.name}
 											onChange={this.handleChange('Zip')}
 											margin="normal"
 											variant="outlined"
-											style={{ width: '60%', marginLeft: '2px' }} />
+											style={{ width: '35%' }}
+										/>
 									</GridItem>
 
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 										<TextField
 											id="outlined-name"
 											label="Phone *"
-											className={classes.textField}
+											className={classNames(classes.textField, 'mr-6')}
 											// value={customerForm.state.name}
 											onChange={this.handleChange('Phone')}
 											margin="normal"
 											variant="outlined"
-											style={{ marginRight: '2px' }} />
+											style={{ width: '100%' }}
+										/>
 
 										<TextField
 											id="outlined-name"
 											label="Fax"
-											className={classes.textField}
+											className={classNames(classes.textField, 'ml-6')}
 											// value={customerForm.state.name}
 											onChange={this.handleChange('Fax')}
 											margin="normal"
 											variant="outlined"
-											style={{ marginLeft: '2px' }} />
+
+											style={{ width: '100%' }}
+										/>
 									</GridItem>
 
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -568,22 +647,32 @@ class FilterPanel extends Component {
 											id="outlined-name"
 											label="Email"
 											type="email"
-											className={classes.textField}
+											className={classNames(classes.textField, 'mr-6')}
 											// value={customerForm.state.name}
 											onChange={this.handleChange('Email')}
 											margin="normal"
 											variant="outlined"
-											style={{ marginRight: '2px' }} />
+											style={{ width: '100%' }}
+										/>
 
 										<TextField
 											id="outlined-name"
 											label="Website"
-											className={classes.textField}
+											className={classNames(classes.textField, 'ml-6')}
 											// value={customerForm.state.name}
 											onChange={this.handleChange('Website')}
 											margin="normal"
 											variant="outlined"
-											style={{ marginLeft: '2px' }} />
+											style={{ width: '100%' }}
+										/>
+									</GridItem>
+									
+									<GridItem xs={12} sm={12} md={12} className="flex flex-col">
+										<h3 className="mt-24">Addresses</h3>
+										<CustomerLineTable tableType="ADDRESS" headers={address_headers} />
+
+										<h3 className="mt-24">Contacts</h3>
+										<CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} />
 									</GridItem>
 
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -591,7 +680,7 @@ class FilterPanel extends Component {
 											id="AccountTypeGroup"
 											label="Account Type Group"
 											select
-											className={classes.textField}
+											className={classNames(classes.textField, 'mr-6')}
 											value={this.state.AccountTypeGroup === undefined ? 0 : this.state.AccountTypeGroup}
 											onChange={this.handleChange('AccountTypeGroup')}
 											margin="normal"
@@ -606,14 +695,12 @@ class FilterPanel extends Component {
 											}
 
 										</TextField>
-									</GridItem>
 
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 										<TextField
 											id="AccountType"
 											label="Account Type *"
 											select
-											className={classes.textField}
+											className={classNames(classes.textField, 'ml-6')}
 											value={this.state.AccountType === undefined ? 0 : this.state.AccountType}
 											onChange={this.handleChange('AccountType')}
 											margin="normal"
@@ -621,12 +708,6 @@ class FilterPanel extends Component {
 											fullWidth
 										// style={{ minWidth: "100px", width: "30%" }}
 										>
-											{/* {[{ value: 0, label: "Airline" }].map(option => (
-												<MenuItem key={option.value} value={option.value}>
-													{option.label}
-												</MenuItem>
-											))} */}
-
 											{
 												accountTypeTexts.map((x, index) => (
 													<MenuItem key={index} value={index}>{x}</MenuItem>
@@ -635,7 +716,6 @@ class FilterPanel extends Component {
 
 										</TextField>
 									</GridItem>
-
 								</GridContainer>
 							</div>
 						) :

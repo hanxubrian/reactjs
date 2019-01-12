@@ -660,9 +660,9 @@ class Customers extends Component {
 										</div>
 										<div className="flex flex-shrink items-center">
 
-											<IconButton className={classes.button} aria-label="Add an alarm" onClick={toggleFilterPanel}>
+											{/* <IconButton className={classes.button} aria-label="Add an alarm" onClick={toggleFilterPanel}>
 												<Icon>person_outline</Icon>
-											</IconButton>
+											</IconButton> */}
 
 											{/* <IconButton className={classes.button} aria-label="Add an alarm" onClick={toggleSummaryPanel}>
 												<Icon>check_circle</Icon>

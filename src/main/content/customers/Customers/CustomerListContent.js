@@ -36,7 +36,7 @@ import {
 	Marker,
 } from "react-google-maps";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
-import { compose, withProps, withHandlers } from "recompose";
+import { compose, withProps, withHandlers, lifecycle } from "recompose";
 
 import {
 	SelectionState,
@@ -395,11 +395,29 @@ const MapWithAMarkerClusterer = compose(
 			console.log(clickedMarkers)
 		},
 	}),
+	// lifecycle({
+	// 	componentDidMount() {
+
+	// 		this.setState({
+
+	// 			zoomToMarkers: map => {
+	// 				console.log("Zoom to markers");
+	// 				const bounds = new window.google.maps.LatLngBounds();
+	// 				props.markers.forEach((child) => {
+	// 					if (child.type === Marker) {
+	// 						bounds.extend(new window.google.maps.LatLng(child.props.position.lat, child.props.position.lng));
+	// 					}
+	// 				})
+	// 				map.fitBounds(bounds);
+	// 			}
+	// 		})
+	// 	},
+	// }),
 	withScriptjs,
 	withGoogleMap
 )(props =>
 	<GoogleMap
-		fitBounds
+		// ref={props.markers}
 		defaultZoom={map_zoom}
 		defaultCenter={{ lat: props.center.lat, lng: props.center.lng }}
 	>
@@ -434,11 +452,29 @@ const MapWithAMarkerClusterer2 = compose(
 			console.log(clickedMarkers)
 		},
 	}),
+	// lifecycle({
+	// 	componentDidMount() {
+
+	// 		this.setState({
+
+	// 			zoomToMarkers: map => {
+	// 				console.log("Zoom to markers");
+	// 				const bounds = new window.google.maps.LatLngBounds();
+	// 				props.markers.forEach((child) => {
+	// 					if (child.type === Marker) {
+	// 						bounds.extend(new window.google.maps.LatLng(child.props.position.lat, child.props.position.lng));
+	// 					}
+	// 				})
+	// 				map.fitBounds(bounds);
+	// 			}
+	// 		})
+	// 	},
+	// }),
 	withScriptjs,
 	withGoogleMap
 )(props =>
 	<GoogleMap
-		fitBounds
+		// ref={props.zoomToMarkers}
 		defaultZoom={map_zoom}
 		defaultCenter={{ lat: props.center.lat, lng: props.center.lng }}
 	>
@@ -1228,34 +1264,12 @@ class CustomerListContent extends Component {
 								className={classNames(classes.layoutTable, "flex flex-col h-full")}
 							// style={{ flex: '1', }}
 							>
-
-								{/* <Spinner size={45} spinnerColor={"#F40456"} spinnerWidth={5}
-									visible={this.props.bCustomerFetchStart}
-									className={classNames("overlay")}
-								/> */}
-
 								<Grid
 									rootComponent={GridRootComponent}
-									rows={
-										// [
-										// 	{ id: 0, product: 'DevExtreme', owner: 'DevExpress' },
-										// 	{ id: 1, product: 'DevExtreme Reactive', owner: 'DevExpress' },
-										// ]
-
-
-										// Array.from({ length: 10000 })
-										// 	.map((item, index) => (
-										// 		{ id: index, product: 'Product' + index, owner: 'owner' + index }
-										// 	))
-
-										rows
-									}
+									rows={rows}
 									columns={tableColumnExtensions}
 								>
 									<DragDropProvider />
-
-
-
 									<PagingState
 										defaultCurrentPage={0}
 										// currentPage={currentPage}
@@ -1266,7 +1280,6 @@ class CustomerListContent extends Component {
 									/>
 
 									<PagingPanel pageSizes={pageSizes} />
-
 
 									<SelectionState
 										selection={selection}
@@ -1350,9 +1363,9 @@ class CustomerListContent extends Component {
 										commandComponent={Command}
 									/>
 
-									<TableColumnReordering
+									{/* <TableColumnReordering
 										defaultOrder={tableColumnExtensions.map(x => x.columnName)}
-									/>
+									/> */}
 									{/* Column Visibility */}
 									{/* Disable Column Visibility Toggling */}
 									{/* <TableColumnVisibility

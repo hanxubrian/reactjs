@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 // core components
 import {
-	// Paper,
+	Paper,
 	TextField,
 	Button,
 	Typography,
@@ -83,6 +83,50 @@ import ReactTable from "react-table";
 import JanikingPagination from 'Commons/JanikingPagination';
 
 import CustomersDocumentUploadTable from "./documentUploadTable";
+
+import {
+	SelectionState,
+	PagingState,
+	IntegratedPaging,
+	IntegratedSelection,
+	SortingState,
+	IntegratedSorting,
+	EditingState,
+	GroupingState,
+	IntegratedGrouping,
+	DataTypeProvider,
+	FilteringState,
+	IntegratedFiltering,
+	SearchState,
+} from '@devexpress/dx-react-grid';
+
+import {
+	Grid,
+	Table,
+	TableHeaderRow,
+	TableSelection,
+	PagingPanel,
+	TableEditRow,
+	TableEditColumn,
+	GroupingPanel,
+	Toolbar,
+	TableGroupRow,
+	TableFilterRow,
+	SearchPanel,
+	DragDropProvider,
+	TableColumnReordering,
+	TableColumnResizing,
+	ColumnChooser,
+	TableColumnVisibility,
+	TableFixedColumns,
+	VirtualTable,
+
+} from '@devexpress/dx-react-grid-material-ui';
+
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import SaveIcon from '@material-ui/icons/Save';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -265,7 +309,7 @@ function escapeRegexCharacters(str) {
 
 
 function getSteps() {
-	return ['Contact', 'Billing', 'Service Agreement', 'Service Settings', "Walk-Thru", "Account Offering", "Documents"];
+	return ['Billing', 'Service Agreement', 'Service Settings', "Walk-Thru", "Account Offering", "Documents"];
 }
 
 const stateNames = [
@@ -394,8 +438,91 @@ const Upload_Document_headers = [
 	// }
 ];
 
+const account_offering_columns = [
+	{
+		title: "No.",
+		name: "Number",
+		columnName: "Number",
+	},
+	{
+		title: "Franchisees Name",
+		name: "Name",
+		columnName: "Name",
+	},
+	{
+		title: "Address",
+		name: "Address",
+		columnName: "Address",
+	},
+	{
+		title: "Phone",
+		name: "Phone",
+		columnName: "Phone",
+	},
+	{
+		title: "Status",
+		name: "StatusName",
+		columnName: "StatusName",
+	},
+];
 
 
+//
+// table row edit command buttons
+//
+const AddButton = ({ onExecute }) => (
+	<div style={{ textAlign: 'center' }}>
+		<Button
+			color="primary"
+			onClick={onExecute}
+			title="Create new row"
+		>
+			New
+	  </Button>
+	</div>
+);
+
+const EditButton = ({ onExecute }) => (
+	<IconButton onClick={onExecute} title="Edit row">
+		<EditIcon />
+	</IconButton>
+);
+
+const DeleteButton = ({ onExecute }) => (
+	<IconButton onClick={onExecute} title="Delete row">
+		<DeleteIcon />
+	</IconButton>
+);
+
+const CommitButton = ({ onExecute }) => (
+	<IconButton onClick={onExecute} title="Save changes">
+		<SaveIcon />
+	</IconButton>
+);
+
+const CancelButton = ({ onExecute }) => (
+	<IconButton color="secondary" onClick={onExecute} title="Cancel changes">
+		<CancelIcon />
+	</IconButton>
+);
+
+const commandComponents = {
+	add: AddButton,
+	edit: EditButton,
+	delete: DeleteButton,
+	commit: CommitButton,
+	cancel: CancelButton,
+};
+
+const Command = ({ id, onExecute }) => {
+	const CommandButton = commandComponents[id];
+	return (
+		<CommandButton
+			onExecute={onExecute}
+		/>
+	);
+};
+const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 class CustomerForm extends Component {
 	state = {
 		temp: [],
@@ -411,8 +538,46 @@ class CustomerForm extends Component {
 
 		activeStep: 0,
 		completed: new Set(),
-		skipped: new Set()
+		skipped: new Set(),
+
+
+		pageSizes: [5, 10, 20, 30, 50, 100],
+		pageSize: 20,
+		searchValue: '',
+		selection: [],
+		sorting: [
+			{ columnName: 'Number', direction: 'asc' }
+		],
+
+
+
 	};
+
+	//
+	// to edit table cell
+	//
+	commitChanges = ({ added, changed, deleted }) => {
+		console.log("commitChanges");
+		let { rows } = this.state;
+		if (added) {
+			const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
+			rows = [
+				...rows,
+				...added.map((row, index) => ({
+					id: startingAddedId + index,
+					...row,
+				})),
+			];
+		}
+		if (changed) {
+			rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+		}
+		if (deleted) {
+			const deletedSet = new Set(deleted);
+			rows = rows.filter(row => !deletedSet.has(row.id));
+		}
+		this.setState({ rows });
+	}
 
 	getStepContent(step) {
 		const { classes,
@@ -517,114 +682,11 @@ class CustomerForm extends Component {
 			}
 		];
 
-		switch (step) {
-			case 0:
-				// return 'Step 1: Select campaign settings...';
-
-				return (
-					<Fragment>
-						<h3>Addresses</h3>
-						<div className="flex">
-							<CustomerLineTable tableType="ADDRESS" headers={address_headers} />
-						</div>
-
-						<Divider variant="middle" />
-						<div style={{ marginTop: '30px' }}></div>
-						<h3>Contacts</h3>
-						<div className="flex">
-							<CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} />
-						</div>
-
-					</Fragment>
-				);
+		switch (step + 1) {
 			case 1:
 				return (
 					<Fragment>
-
-						{/* <div style={{ marginTop: '30px' }}></div> */}
-						{/* <h3>Billing Settings</h3> */}
-
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-							{/* <GridItem xs={12} sm={8} md={8} className="flex flex-row">
-								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('gilad')} />
-									}
-									label="Different than Main Address"
-								/>
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="Address"
-									label="Address *"
-									className={classes.textField}
-									value={this.state.Address}
-									onChange={this.handleChange('Address')}
-									margin="normal"
-									variant="outlined"
-									style={{ width: '100%', marginRight: '2%' }}
-								/>
-								<TextField
-									id="Address2"
-									label="Address2"
-									className={classes.textField}
-									value={this.state.Address2}
-									onChange={this.handleChange('Address2')}
-									margin="normal"
-									variant="outlined"
-									style={{ width: '100%', marginLeft: '2%' }}
-								/>
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="outlined-name"
-									label="City *"
-									className={classes.textField}
-									value={this.state.City}
-									onChange={this.handleChange('City')}
-									margin="normal"
-									variant="outlined"
-									style={{ width: '100%', marginRight: '2%' }}
-								/>
-								<TextField
-									id="outlined-name"
-									label="State *"
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classes.textField}
-									value={this.state.State === undefined ? "" : this.state.State}
-									onChange={this.handleChange('State')}
-									margin="normal"
-									variant="outlined"
-									SelectProps={{
-										MenuProps: {
-											className: classes.menu
-										}
-									}}
-									style={{ width: '100%', marginRight: '2%', marginLeft: '2%' }}
-								>
-									{stateNames.map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-								<TextField
-									id="outlined-name"
-									label="Zip *"
-									className={classes.textField}
-									value={this.state.name}
-									onChange={this.handleChange('Zip')}
-									margin="normal"
-									variant="outlined"
-									style={{ width: '100%', marginLeft: '2%' }}
-								/>
-							</GridItem> */}
-
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
 									type="date"
@@ -692,14 +754,6 @@ class CustomerForm extends Component {
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<div style={{ display: 'flex', flexDirection: 'row', minWidth: "100px", width: "50%" }}>
-
-									{/* <FormControlLabel
-										control={
-											<Checkbox onChange={this.handleChange('gilad')} />
-										}
-										label="E-Billing"
-									/> */}
-
 									<FormControlLabel
 										control={
 											<Switch
@@ -806,114 +860,7 @@ class CustomerForm extends Component {
 				// return 'Step 2: What is an ad group anyways?';
 				return (
 					<Fragment>
-						{/* <FormLabel component="legend">Service Location</FormLabel> */}
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-
-							{/* <GridItem xs={12} sm={8} md={8} className="flex flex-row">
-								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('gilad')} />
-									}
-									label="Same as Main Address"
-								/>
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="Address"
-									label="Address *"
-									className={classes.textField}
-									value={this.state.Address}
-									onChange={this.handleChange('Address')}
-									margin="normal"
-									variant="outlined"
-									style={{ width: '100%', marginRight: '2%' }}
-								/>
-								<TextField
-									id="Address2"
-									label="Address2"
-									className={classes.textField}
-									value={this.state.Address2}
-									onChange={this.handleChange('Address2')}
-									margin="normal"
-									variant="outlined"
-									style={{ width: '100%', marginLeft: '2%' }}
-								/>
-							</GridItem> */}
-
-							{/* <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="outlined-name"
-									label="City *"
-									className={classes.textField}
-									value={this.state.City}
-									onChange={this.handleChange('City')}
-									margin="normal"
-									variant="outlined"
-									style={{ width: '100%', marginRight: '2%' }}
-								/>
-								<TextField
-									id="outlined-name"
-									label="State *"
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classes.textField}
-									value={this.state.State === undefined ? "" : this.state.State}
-									onChange={this.handleChange('State')}
-									margin="normal"
-									variant="outlined"
-									SelectProps={{
-										MenuProps: {
-											className: classes.menu
-										}
-									}}
-									style={{ width: '100%', marginRight: '2%', marginLeft: '2%' }}
-								>
-									{stateNames.map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-								<TextField
-									id="outlined-name"
-									label="Zip *"
-									className={classes.textField}
-									value={this.state.name}
-									onChange={this.handleChange('Zip')}
-									margin="normal"
-									variant="outlined"
-									style={{ width: '100%', marginLeft: '2%' }}
-								/>
-							</GridItem> */}
-
-
-
-							{/* <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="AccountType"
-									label="Account Type *"
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classes.textField}
-									value={this.state.AccountType === undefined ? "" : this.state.AccountType}
-									onChange={this.handleChange('AccountType')}
-									margin="normal"
-									variant="outlined"
-									style={{ minWidth: "100px", width: "30%" }}
-								>
-									{[{ value: 0, label: "Airline" }].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-							</GridItem> */}
-
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
 									id="ContractType"
@@ -1332,7 +1279,6 @@ class CustomerForm extends Component {
 					</Fragment>
 				);
 			case 4:
-				// return 'Step 3: This is the bit I really care about!';
 				return (
 					<Fragment>
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
@@ -1649,158 +1595,96 @@ class CustomerForm extends Component {
 					</Fragment>
 				);
 			case 5:
-				console.log("this.props.franchisees.Data", this.props.franchisees.Data)
-				return (<Fragment>
-					<div className="flex-1 flex-col w-full h-full">
-						<ReactTable
-							data={this.props.franchisees.Data.Region[0].FranchiseeList}
-							minRows={0}
-							onFetchData={this.fetchData}
-							PaginationComponent={JanikingPagination}
-							getTheadGroupProps={(state, rowInfo, column, instance) => {
-								return {
-									style: {
-										padding: "10px 10px",
-										fontSize: 16,
-										fontWeight: 700
-									},
+				const {
+					searchValue,
+					pageSizes,
+					sorting,
+					selection,
+				} = this.state;
 
-								}
-							}}
-							getTheadGroupThProps={(state, rowInfo, column, instance) => {
-								return {
-									style: {
-										padding: "10px 10px",
-										fontSize: 18,
-										fontWeight: 700,
-									},
-									className: classNames("flex items-center justify-start")
-								}
-							}}
-							getTheadThProps={(state, rowInfo, column, instance) => {
-								let border = '1px solid rgba(255,255,255,.6)';
-								if (column.Header === 'Actions') border = 'none';
+				let rows = this.props.franchisees.Data.Region.filter(x => x.Id == this.props.regionId)[0].FranchiseeList
+				console.log("this.props.franchisees.Data", rows, account_offering_columns)
+				// account offering
+				return (
+					<Paper
+						className={classNames(classes.layoutTable, "flex flex-col h-full")}
+					>
+						<Grid
+							rows={rows}
+							columns={account_offering_columns}
+							rootComponent={GridRootComponent}
+						>
+							<SelectionState
+								selection={selection}
+								onSelectionChange={this.changeSelection}
+							/>
+							<PagingState
+								defaultCurrentPage={0}
+								defaultPageSize={10}
+							/>
+							<PagingPanel pageSizes={pageSizes} />
+							<SelectionState
+								selection={selection}
+								onSelectionChange={this.changeSelection}
+							/>
+							<IntegratedSelection />
 
-								return {
-									style: {
-										fontSize: '1.6rem',
-										fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
-										fontWeight: 400,
-										lineHeight: 1.75,
-										color: 'white',
-										borderRight: border
-									},
-								}
-							}}
-							getTheadProps={(state, rowInfo, column, instance) => {
-								return {
-									style: {
-										fontSize: 13,
-									},
-									className: classes.tableTheadRow
-								}
-							}}
-							getTdProps={(state, rowInfo, column, instance) => {
-								return {
-									style: {
-										textAlign: 'center',
-										flexDirection: 'row',
-										fontSize: 12,
-										padding: "0",
-									},
-								}
-							}}
-							getTrProps={(state, rowInfo, column) => {
-								return {
-									className: "cursor-pointer",
-									onClick: (e, handleOriginal) => {
-										if (rowInfo) {
-											alert('ok');
-											// openEditContactDialog(rowInfo.original);
-										}
-									}
-								}
-							}}
-							columns={[
-								{
-									Header: "NUMBER",
-									accessor: "Number",
-									filterAll: true,
-									width: 200,
-									className: classNames("flex items-center  justify-center")
-								},
-								{
-									Header: "FRANCHISEES NAME",
-									accessor: "Name",
-									width: 350,
-									className: classNames("flex items-center  justify-start p-12-impor")
-								},
-								{
-									Header: "FULL ADDRESS",
-									accessor: "Address",
-									className: classNames("flex items-center  justify-start p-12-impor"),
-									width: 420
-								},
-								{
-									Header: "PHONE",
-									accessor: "Phone",
-									width: 200,
-									className: classNames("flex items-center  justify-center p-12-impor")
-								},
-								{
-									Header: "STATUS",
-									accessor: "StatusName",
-									className: classNames("flex items-center  justify-center p-12-impor"),
-									width: 150
-								},
-								{
-									Header: "DISTRIBUTION AMOUNT",
-									accessor: "DistributionAmount",
-									className: classNames("flex items-center  justify-end p-12-impor"),
-									width: 200
-								},
-								{
-									Header: "Actions",
-									width: 150,
-									className: classNames("flex items-center  justify-center p-12-impor"),
-									Cell: row => (
-										<div className="flex items-center actions ">
-											<IconButton
-												onClick={(ev) => {
-													ev.stopPropagation();
-													if (window.confirm("Do you really want to remove this franchisee")) {
-														this.props.removeFranchisees(row.original.ID, this.props.franchisees);
-														if (this.state.selection.length > 0) {
-															_.remove(this.state.selection, function (id) {
-																return id === row.original.ID;
-															});
-														}
-													}
-												}}
-											>
-												<Icon>delete</Icon>
-											</IconButton>
-											<IconButton
-												onClick={(ev) => {
-													ev.stopPropagation();
-													// removeContact(row.original.id);
-												}}
-											>
-												<Icon>edit</Icon>
-											</IconButton>
-										</div>
-									)
-								}
-							]}
-							defaultPageSize={100}
-							className={classNames("-striped -highlight")}
-							totalRecords={this.props.franchisees.Data.Region[0].FranchiseeList.length}
-							style={{
-								height: '100%',
-							}}
-						/>
-					</div>
-				</Fragment>)
+							<IntegratedPaging />
+							{/* <Table /> */}
+							<VirtualTable
+							// height="auto"
+							/>
+							<SortingState
+								sorting={sorting}
+								onSortingChange={this.changeSorting}
+								columnExtensions={account_offering_columns}
+							/>
+							<IntegratedSorting />
+
+							<SearchState
+								value={searchValue}
+								onValueChange={this.changeSearchValue}
+							/>
+
+							<TableHeaderRow showSortingControls />
+							<TableSelection showSelectAll selectByRowClick highlightRow />
+
+							<Toolbar />
+							<SearchPanel />
+							{/* 
+								
+
+
+								
+								<EditingState
+									columnExtensions={[]}
+									onCommitChanges={this.commitChanges}
+								/>
+								<TableColumnResizing defaultColumnWidths={account_offering_columns} />
+								<TableHeaderRow showSortingControls />
+								
+								<TableEditRow />
+								<TableEditColumn
+									showAddCommand
+									showEditCommand
+									showDeleteCommand
+									commandComponent={Command}
+								/> */}
+						</Grid>
+						<div
+							className={classNames(classes.layoutTable, "flex flex-row")}
+							style={{ justifyContent: "space-between" }}
+						>
+							<span className={"p-6"}>
+								Rows Selected: <strong>{selection.length}</strong>
+							</span>
+
+							<span className={"p-6"}>
+								Total Rows: <strong>{rows.length}</strong>
+							</span>
+						</div>
+					</Paper>
+				)
 			case 6:
 				return (
 					<Fragment>
@@ -1853,7 +1737,9 @@ class CustomerForm extends Component {
 		//this.props.this.type === 'create' ? this.props.closeEditCustomerForm() : this.props.closeNewCustomerForm();
 		this.type === 'create' ? this.props.closeEditCustomerForm() : this.props.closeNewCustomerForm();
 	};
+	sendOffer = () => {
 
+	}
 	// constructor(props) {
 	// 	super(props);
 	// }
@@ -1872,6 +1758,10 @@ class CustomerForm extends Component {
 		if (!props.bLoadedFranchisees) {
 			props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
 		}
+
+		this.changeSelection = selection => this.setState({ selection });
+		this.changeSorting = sorting => this.setState({ sorting });
+		this.changeSearchValue = value => this.setState({ searchValue: value });
 	}
 	fetchData(state, instance) {
 		this.setState({
@@ -2175,41 +2065,13 @@ class CustomerForm extends Component {
 
 		// const {classes} = this.props;
 		const steps = getSteps();
-		const { activeStep } = this.state;
+		const { activeStep,
+		} = this.state;
 
 
 
 		return (
-			// <div className={classNames(classes.layoutTable, "h-full")}></div>
-			// <FuseAnimate animation="transition.slideRightIn" delay={300} className={classNames(classes.layoutTable, "h-full")}>
-			// <div className="p-24 h-full">
 			<Fragment>
-				{/* <Stepper alternativeLabel nonLinear activeStep={activeStep}>
-					{steps.map((label, index) => {
-						const props = {};
-						const buttonProps = {};
-						if (this.isStepOptional(index)) {
-							buttonProps.optional = <Typography variant="caption">Optional</Typography>;
-						}
-						if (this.isStepSkipped(index)) {
-							props.completed = false;
-						}
-						return (
-							<Step key={label} {...props}>
-								<StepButton
-									onClick={this.handleStep(index)}
-									completed={this.isStepComplete(index)}
-									{...buttonProps}
-								>
-									{label}
-								</StepButton>
-							</Step>
-						);
-					})}
-				</Stepper> */}
-
-
-
 				<AppBar position="static" color="default">
 					<Tabs
 						value={activeStep}
@@ -2219,20 +2081,9 @@ class CustomerForm extends Component {
 						scrollable
 						scrollButtons="auto"
 					>
-						{
-							getSteps().map(
-								(x) => {
-									return (<Tab key={x} label={x} />)
-								}
-							)
-						}
-						{/* <Tab label="Customer" />
-						 <Tab label="Contract" />
-						 <Tab label="Service Settings" />
-						 <Tab label="Walk-Thru" />
-						 <Tab label="Account Offering" />
-						 <Tab label="Documents" disabled /> */}
-
+						{steps.map((x) =>
+							(<Tab key={x} label={x} />)
+						)}
 					</Tabs>
 				</AppBar>
 
@@ -2245,66 +2096,34 @@ class CustomerForm extends Component {
 						// height: 'calc(100% - 190px)'
 						height: 'calc(100% - 110px)'
 						// flex: '1 1 auto'
-					}}>
+					}}
+				>
+
+					{activeStep === 4 ?
+						(<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+							<h2>{steps[activeStep]}</h2>
+							<Button
+								variant="contained"
+								color="primary"
+								className={classes.button}
+								onClick={() => {
+									this.sendOffer();
+								}}
+							> Send Offer </Button>
+						</div>) :
+						(<h2>{steps[activeStep]}</h2>)}
 
 
-					<h2>{steps[activeStep]}</h2>
 					<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
 
 					<div>
-						{this.allStepsCompleted() ? (
-							<div>
-								<Typography className={classes.instructions}>
-									All steps completed - you&apos;re finished
-                            </Typography>
-								<Button onClick={this.handleReset}>Reset</Button>
-							</div>
-						) : (
-								<div>
-									{/* <Typography className={classes.instructions}>{getStepContent(this, activeStep)}</Typography> */}
-									{this.getStepContent(activeStep)}
-									{/* <div>
-										<Button
-											disabled={activeStep === 0}
-											onClick={this.handleBack}
-											className={classes.button}
-										>Back</Button>
-										<Button
-											variant="contained"
-											color="primary"
-											onClick={this.handleNext}
-											className={classes.button}
-										>Next</Button>
-										{this.isStepOptional(activeStep) &&
-											!this.state.completed.has(this.state.activeStep) && (
-												<Button
-													variant="contained"
-													color="primary"
-													onClick={this.handleSkip}
-													className={classes.button}
-												>Skip</Button>
-											)}
-										{activeStep !== steps.length &&
-											(this.state.completed.has(this.state.activeStep) ? (
-												<Typography variant="caption" className={classes.completed}>
-													Step {activeStep + 1} already completed
-												</Typography>
-											)
-												:
-												(
-													<Button variant="contained" color="primary" onClick={this.handleComplete}>
-														{this.completedSteps() === this.totalSteps() - 1 ? 'Done' : 'Save'}
-													</Button>
-												))}
-									</div> */}
-								</div>
-							)}
+						{this.getStepContent(activeStep)}
 					</div>
 				</div>
 
 
 				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
-					<div style={{ display: 'flex' }}>
+					{activeStep === 4 ? (<div></div>) : (<div style={{ display: 'flex' }}>
 						<FuseAnimate animation="transition.expandIn" delay={300} style={{ alignItems: 'justify-start' }}>
 							<Button
 								variant="contained"
@@ -2316,7 +2135,8 @@ class CustomerForm extends Component {
 								disabled={!this.canBeSubmitted()}
 							> Submit for Approval </Button>
 						</FuseAnimate>
-					</div>
+					</div>)}
+
 					<div style={{ display: 'flex' }}>
 						<FuseAnimate animation="transition.expandIn" delay={300} style={{ alignItems: 'justify-end' }}>
 							<Button
@@ -2352,52 +2172,10 @@ class CustomerForm extends Component {
 
 
 				</div>
-				{/* <div>
-					<Button
-						disabled={activeStep === 0}
-						onClick={this.handleBack}
-						className={classes.button}
-					>Back</Button>
-					<Button
-						variant="contained"
-						color="primary"
-						onClick={this.handleNext}
-						className={classes.button}
-					> Next </Button>
-					{this.isStepOptional(activeStep) &&
-						!this.state.completed.has(this.state.activeStep) && (
-							<Button
-								variant="contained"
-								color="primary"
-								onClick={this.handleSkip}
-								className={classes.button}
-							> Skip </Button>
-						)}
-					{activeStep !== steps.length &&
-						(this.state.completed.has(this.state.activeStep) ? (
-							<Typography variant="caption" className={classes.completed}>
-								Step {activeStep + 1} already completed
-												</Typography>
-						)
-							:
-							(
-								<Button variant="contained" color="primary" onClick={this.handleComplete}>
-									{this.completedSteps() === this.totalSteps() - 1 ? ' Done ' : ' Save '}
-								</Button>
-							))}
-				</div> */}
-
-				{/* </FuseAnimate> */}
-
-
 			</Fragment>
 		);
 	}
 }
-
-// CustomerForm.propTypes = {
-// 	classes: PropTypes.object
-// };
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
