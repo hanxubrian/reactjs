@@ -119,7 +119,7 @@ function createFranchisee(parent_id,id, fnumber="", name="", amount=0) {
     }
 }
 
-function createData(billing='Regular Billing', service='Adjust-Balance', description='', quantity=' ', amount=' ', tax=0, markup=0, extended=0, total=0)
+function createData(billing='Regular Billing', service='Adjust-Balance', description='', quantity='', amount='', tax=0, markup=0, extended=0, total=0)
 {
     return {
         id: counter++,
@@ -295,7 +295,7 @@ class InvoiceLineTable extends React.Component {
         order      : 'asc',
         selected   : [],
         data       : [
-            createData("Regular Billing", "Adjust-Balance", '',' '),
+            createData("Regular Billing", "Adjust-Balance", '',''),
         ],
         page       : 0,
         rowsPerPage: 10,
@@ -394,7 +394,6 @@ class InvoiceLineTable extends React.Component {
             this.props.updateInvoiceLine(this.state.data);
         }
         if(JSON.stringify(this.state.customerTaxAmountLine)!== JSON.stringify(prevState.customerTaxAmountLine)){
-            console.log('updated tax', this.state.customerTaxAmountLine, prevState.customerTaxAmountLine);
             this.updateTaxFromLine();
         }
     }
@@ -408,7 +407,6 @@ class InvoiceLineTable extends React.Component {
     updateTaxFromLine = ()=> {
         const data = [...this.state.data];
         const {taxRowId, customerTaxAmountLine} = this.state;
-        // data[taxRowIdrow.id].franchisees[row.fid].amount = event.target.value;
         data[taxRowId].tax = customerTaxAmountLine.TaxAmount;
         data[taxRowId].extended = customerTaxAmountLine.ExtendedPrice;
         data[taxRowId].total = customerTaxAmountLine.TotalAmount;
@@ -476,13 +474,13 @@ class InvoiceLineTable extends React.Component {
             return;
         }
 
-        if(row.quantity===' ') {
+        if(row.quantity==='') {
             this.setState({snackMessage: 'Please enter quantity'});
             this.setState({openSnack: true});
             return;
         }
 
-        if(row.amount===' ') {
+        if(row.amount==='') {
             this.setState({snackMessage: 'Please enter amount'});
             this.setState({openSnack: true});
             return;
