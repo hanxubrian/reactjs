@@ -12,7 +12,7 @@ import {
     Typography,
     Toolbar,
     Tooltip,
-    CircularProgress
+    CircularProgress, Menu, MenuItem, FormControlLabel
 } from '@material-ui/core';
 
 // theme components
@@ -486,6 +486,12 @@ class Franchisees extends Component {
             page: state.page,
         });
     }
+    showValidationMenu = event => {
+        this.setState({ anchorEl: event.currentTarget });
+    }
+    closeValidationMenu = () => {
+        this.setState({ anchorEl: null });
+    }
 
     canBeSubmitted()
     {
@@ -512,7 +518,7 @@ class Franchisees extends Component {
     {
         const { classes,toggleFilterPanelFranchisees,showCreteFranchisees, toggleSummaryPanelFranchisees, createFranchisees, filterStateFranchisees, summaryStateFranchisees, toggleFranchiseeMapView, mapViewState} = this.props;
         const { toggleSelection, toggleAll, isSelected} = this;
-        const { selection } = this.state;
+        const { selection, anchorEl } = this.state;
         return (
             <React.Fragment >
               <FusePageCustomSidebarScroll
@@ -591,9 +597,31 @@ class Franchisees extends Component {
                                             <Icon>person_outline</Icon>
                                         </IconButton>
 
-                                        <IconButton className={classNames(classes.button)} aria-label="Add an alarm">
-                                            <Icon color="error">error_outline</Icon>
+                                        <IconButton
+                                            // className={classNames(classes.button, classes.validationMenu)}
+                                            className={classNames(classes.button, classes.invalidationMenu)}
+                                            aria-label="Add an alarm"
+                                            aria-owns={anchorEl ? 'validation-menu' : undefined}
+                                            aria-haspopup="true"
+                                            onClick={this.showValidationMenu}
+                                        >
+                                            <Icon color="error">error</Icon>
                                         </IconButton>
+                                        <Menu
+                                            id="validation-menu"
+                                            anchorEl={anchorEl}
+                                            open={Boolean(anchorEl)}
+                                            onClose={this.closeValidationMenu}
+                                        >
+                                            <MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Company Information" /></MenuItem>
+                                            <MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Billing Address" /></MenuItem>
+                                            <MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Billing Settings" /></MenuItem>
+                                            <MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Company Contacts" /></MenuItem>
+                                            <MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Contract Details" /></MenuItem>
+                                            <MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Contract Signed" /></MenuItem>
+                                            <MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Service Location Info" /></MenuItem>
+                                            <MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Verified &amp; Approved" /></MenuItem>
+                                        </Menu>
                                     </div>
                                 </div>
                             </div>
