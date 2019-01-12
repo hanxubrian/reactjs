@@ -5,6 +5,7 @@ const axios_instance = axios.create({
 });
 
 const BASE_API_URL='https://apifmsplus.jkdev.com';
+const BASE_MONGO_API_URL='https://apifmsplusplus_mongo.jkdev.com';
 
 class invoiceService {
     /**
@@ -30,10 +31,10 @@ class invoiceService {
             "OpenOrClosed": OpenOrClosed,
             "InvoiceTypeId": InvoiceTypeId,
             "ToPrintOrToEmail": ToPrintOrToEmail,
-            "SearchText": SearchText
+            "SearchText": SearchText,
         };
         return new Promise((resolve, reject) => {
-            axios_instance.post(`${BASE_API_URL}/v1/accountsreceivable/InvoiceList`,data)
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/InvoiceList`,data)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);
