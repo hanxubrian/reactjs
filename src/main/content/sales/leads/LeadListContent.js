@@ -31,8 +31,6 @@ import {
 	IntegratedSorting,
 	EditingState,
 	DataTypeProvider,
-	FilteringState,
-	IntegratedFiltering,
 	SearchState,
 } from '@devexpress/dx-react-grid';
 
@@ -882,12 +880,6 @@ class LeadListContent extends Component {
 										onValueChange={this.changeSearchValue}
 									/>
 
-									<FilteringState
-										defaultFilters={[]}
-										columnExtensions={tableColumnExtensions}
-									/>
-									<IntegratedFiltering />
-
 									<EditingState
 										columnExtensions={editingColumnExtensions}
 										onCommitChanges={this.commitChanges}
@@ -895,7 +887,6 @@ class LeadListContent extends Component {
 
 									<CurrencyTypeProvider
 										for={currencyColumns}
-										availableFilterOperations={amountFilterOperations}
 										editorComponent={AmountEditor}
 									/>
 
@@ -916,12 +907,6 @@ class LeadListContent extends Component {
 										defaultOrder={tableColumnExtensions.map(x => x.columnName)}
 									/>
 
-									{filterState && (
-										<TableFilterRow
-											showFilterSelector
-											iconComponent={FilterIcon}
-										/>
-									)}
 
 								</Grid>
 							</Paper>

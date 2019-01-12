@@ -1,7 +1,17 @@
 import React, { Component } from 'react';
 
 // core components
-import { Icon, IconButton, Fab, Typography, Toolbar } from '@material-ui/core';
+import {
+    Icon,
+    IconButton,
+    Fab,
+    Typography,
+    Toolbar,
+    Menu,
+    MenuItem,
+    FormControlLabel,
+    Checkbox
+} from '@material-ui/core';
 
 // theme components
 import { FusePageCustomSidebarScroll, FuseAnimate } from '@fuse';
@@ -397,6 +407,13 @@ class Leads extends Component {
 		return true;
 	}
 
+    showValidationMenu = event => {
+        this.setState({ anchorEl: event.currentTarget });
+    }
+    closeValidationMenu = () => {
+        this.setState({ anchorEl: null });
+    }
+
 	removeLeads = () => {
 		if (this.state.selection.length === 0) {
 			alert("Please choose lead(s) to delete");
@@ -418,7 +435,7 @@ class Leads extends Component {
 	render() {
 		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, openNewLeadForm, leadForm, mapViewState, toggleMapView } = this.props;
 
-		const { selection } = this.state;
+		const { selection, anchorEl } = this.state;
 
 		return (
 			<React.Fragment >
@@ -517,9 +534,31 @@ class Leads extends Component {
 												<Icon>person_outline</Icon>
 											</IconButton>
 
-											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleSummaryPanel()}>
-												<Icon>check_circle</Icon>
-											</IconButton>
+                                            <IconButton
+												// className={classNames(classes.button, classes.validationMenu)}
+                                                className={classNames(classes.button, classes.invalidationMenu)}
+                                                aria-label="Add an alarm"
+                                                aria-owns={anchorEl ? 'validation-menu' : undefined}
+                                                aria-haspopup="true"
+                                                onClick={this.showValidationMenu}
+                                            >
+                                                <Icon color="error">error</Icon>
+                                            </IconButton>
+                                            <Menu
+                                                id="validation-menu"
+                                                anchorEl={anchorEl}
+                                                open={Boolean(anchorEl)}
+                                                onClose={this.closeValidationMenu}
+                                            >
+                                                <MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Company Information" /></MenuItem>
+                                                <MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Billing Address" /></MenuItem>
+                                                <MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Billing Settings" /></MenuItem>
+                                                <MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Company Contacts" /></MenuItem>
+                                                <MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Contract Details" /></MenuItem>
+                                                <MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Contract Signed" /></MenuItem>
+                                                <MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Service Location Info" /></MenuItem>
+                                                <MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Verified &amp; Approved" /></MenuItem>
+                                            </Menu>
 
 											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
 												<Icon>close</Icon>

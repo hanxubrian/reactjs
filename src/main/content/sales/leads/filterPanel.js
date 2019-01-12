@@ -144,7 +144,6 @@ const stateNames = [
 
 class FilterPanel extends Component {
 
-
 	state = {
 		checkedPaid: true,
 		checkedPP: true,
@@ -164,16 +163,10 @@ class FilterPanel extends Component {
 		isRegionOperationLeadStatus: true,
 		isRegionAccountingLeadStatus: true,
 		isVariableLeadStatus: true,
-
 		AccountTypes: -2,
 		AccountExecutive: 0,
-
 		Location: "locationAll"
 	};
-
-
-	componentDidMount() {
-	}
 
 	componentWillMount() {
 		this.setState({
@@ -224,7 +217,6 @@ class FilterPanel extends Component {
 			this.setState({ [name]: event.target.checked });
 		}
 
-		// this.props.toggleStatus(name, event.target.checked)
 	};
 
 	handleChange = name => event => {
@@ -233,41 +225,28 @@ class FilterPanel extends Component {
 		});
 	};
 
-	handleChange1 = event => {
-		this.setState({ [event.target.name]: event.target.value });
-	};
 	render() {
 		const { classes, leadForm } = this.props;
 
 		let regionLeads = [];
 
-		// if (leads) { // to avoid error
-		// 	leads.Data.Regions.filter(x => {
-		// 		return this.props.regionId === 0 || x.Id === this.props.regionId;
-		// 	}).forEach(x => {
-		// 		regionLeads = [...regionLeads, ...x.Leads];
-		// 	});
-        // }
-        
+
 		let accountTypes = [...new Set(regionLeads.map(x => x.AccountTypeListName))].sort();
-		// let accountStatuses = [...new Set(regionLeads.map(x => x.StatusName))].sort();
+
 
 		return (
 			<div className={classNames(classes.root, "flex flex-col")}>
-				{/* <div className={classNames("flex flex-col")}> */}
 
 				<Paper className="flex flex-1 flex-col min-h-px p-20">
 					{leadForm && leadForm.props.open
 						? (
 							<div>
-								{/* <h3 className="mb-20">Lead Information</h3> */}
 								<GridContainer style={{ alignItems: 'center', width: 300 }} className={classNames(classes.formControl)}>
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 										<TextField
 											id="Name"
 											label="Name *"
 											className={classes.textField}
-											// value={leadForm.state.name}
 											onChange={this.handleChange('Name')}
 											margin="normal"
 											variant="outlined"
@@ -279,7 +258,6 @@ class FilterPanel extends Component {
 											id="outlined-name"
 											label="Address *"
 											className={classes.textField}
-											// value={leadForm.state.name}
 											onChange={this.handleChange('Address')}
 											margin="normal"
 											variant="outlined"
@@ -290,7 +268,6 @@ class FilterPanel extends Component {
 											id="outlined-name"
 											label="Address2"
 											className={classes.textField}
-											// value={leadForm.state.name}
 											onChange={this.handleChange('Address2')}
 											margin="normal"
 											variant="outlined"
@@ -301,7 +278,6 @@ class FilterPanel extends Component {
 											id="outlined-name"
 											label="City *"
 											className={classes.textField}
-											// value={leadForm.state.name}
 											onChange={this.handleChange('City')}
 											margin="normal"
 											variant="outlined"
@@ -329,7 +305,6 @@ class FilterPanel extends Component {
 											id="outlined-name"
 											label="Zip *"
 											className={classes.textField}
-											// value={leadForm.state.name}
 											onChange={this.handleChange('Zip')}
 											margin="normal"
 											variant="outlined"
@@ -341,7 +316,6 @@ class FilterPanel extends Component {
 											id="outlined-name"
 											label="Phone *"
 											className={classes.textField}
-											// value={leadForm.state.name}
 											onChange={this.handleChange('Phone')}
 											margin="normal"
 											variant="outlined"
@@ -351,7 +325,6 @@ class FilterPanel extends Component {
 											id="outlined-name"
 											label="Fax"
 											className={classes.textField}
-											// value={leadForm.state.name}
 											onChange={this.handleChange('Fax')}
 											margin="normal"
 											variant="outlined"
@@ -364,7 +337,6 @@ class FilterPanel extends Component {
 											label="Email"
 											type="email"
 											className={classes.textField}
-											// value={leadForm.state.name}
 											onChange={this.handleChange('Email')}
 											margin="normal"
 											variant="outlined"
@@ -374,7 +346,6 @@ class FilterPanel extends Component {
 											id="outlined-name"
 											label="Website"
 											className={classes.textField}
-											// value={leadForm.state.name}
 											onChange={this.handleChange('Website')}
 											margin="normal"
 											variant="outlined"
@@ -392,7 +363,6 @@ class FilterPanel extends Component {
 											margin="normal"
 											variant="outlined"
 											fullWidth
-										// style={{ minWidth: "100px", width: "30%" }}
 										>
 											{[{ value: 0, label: "Airline" }].map(option => (
 												<MenuItem key={option.value} value={option.value}>
@@ -407,40 +377,6 @@ class FilterPanel extends Component {
 						) :
 						(
 							<div>
-								{/*
-									 <div>
-										<h3 className="mb-20">Filter by Date</h3>
-										<FormControl className={classes.formControl} style={{ width: 200 }}>
-											<Select
-												value={this.state.invoiceDate}
-												onChange={this.handleChange1}
-												inputProps={{
-													name: 'invoiceDate',
-													id: 'invoice_date'
-												}}
-											>
-												<MenuItem value="">
-													<em>None</em>
-												</MenuItem>
-												<MenuItem value={1}>This Week</MenuItem>
-												<MenuItem value={2}>This Week-to-date</MenuItem>
-												<MenuItem value={3}>This Month</MenuItem>
-												<MenuItem value={4}>This Month-to-date</MenuItem>
-												<MenuItem value={5}>This Quarter</MenuItem>
-												<MenuItem value={6}>This Quarter-to-Date</MenuItem>
-												<MenuItem value={7}>This Fiscal Year</MenuItem>
-												<MenuItem value={8}>This Fiscal Year-to-date</MenuItem>
-												<MenuItem value={9}>Today</MenuItem>
-												<MenuItem value={10}>Yesterday</MenuItem>
-												<MenuItem value={11}>This Month</MenuItem>
-												<MenuItem value={12}>Last Quarter</MenuItem>
-												<MenuItem value={13}>Last Year</MenuItem>
-												<MenuItem value={14}>Custom Date</MenuItem>
-												<MenuItem value={15}>Period</MenuItem>
-											</Select>
-										</FormControl>
-									</div>
-									*/}
 								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
 									<h3>Location</h3>
 
@@ -463,7 +399,11 @@ class FilterPanel extends Component {
 										onChange={this.handleChange('SpecificAddress')}
 										margin="normal"
 										variant="outlined"
-										style={{ width: '100%' }} />
+                                        style={{
+                                            width: '100%',
+                                            maxWidth: '100%',
+                                            display: this.state.Location === "locationNearSpecificAddress" ? 'block' : 'none'
+                                        }} />
 									<TextField
 										select
 
@@ -479,18 +419,6 @@ class FilterPanel extends Component {
 										variant="outlined"
 										style={{ width: '100%' }}>
 										{
-											// [
-											// 	{ value: 0, label: "5 Miles" },
-											// 	{ value: 1, label: "10 Miles" },
-											// 	{ value: 2, label: "20 Miles" },
-											// 	{ value: 2, label: "20 Miles" },
-											// 	{ value: 2, label: "20 Miles" },
-											// 	{ value: 2, label: "20 Miles" },
-											// 	{ value: 2, label: "20 Miles" },
-											// 	{ value: 2, label: "20 Miles" },
-											// 	{ value: 3, label: "30 Miles" }
-											// ]
-											// (new Array(15))
 											Array.apply(null, {length: 15}).map(Number.call, Number)
 												.map((val, index) => (
 													<MenuItem key={index} value={index}>
@@ -520,15 +448,6 @@ class FilterPanel extends Component {
 										margin="normal"
 										variant="outlined"
 										style={{ width: '100%' }}>
-										{/* {[{
-											value: 0, label: "All"
-										}, {
-											value: 1, label: "None"
-										}].map(option => (
-											<MenuItem key={option.value} value={option.value}>
-												{option.label}
-											</MenuItem>
-										))} */}
 
 										<MenuItem value={-2}><em>All</em></MenuItem>
 										<MenuItem value={-1}><em>None</em></MenuItem>
@@ -629,7 +548,6 @@ class FilterPanel extends Component {
 						)
 					}
 				</Paper>
-				{/* </div> */}
 			</div >
 		);
 	}
