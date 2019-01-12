@@ -643,6 +643,14 @@ class InvoiceLineTable extends React.Component {
             this.getInvoiceLineTaxAmount(row)
     };
 
+    handleChangeAmount = row => event => {
+        const data = [...this.state.data];
+        data[row.id].amount = event.target.value;
+        this.setState({data: data});
+        if(!this.isDisable(row))
+            this.getInvoiceLineTaxAmount(row)
+    };
+
     isDisable = row =>{
         if(this.props.invoiceForm.customer===null) {
                 this.setState({snackMessage: 'Please choose customer from Invoice suggestion'});
@@ -895,7 +903,6 @@ class InvoiceLineTable extends React.Component {
                                                         inputComponent: NumberFormatCustom1,
                                                     }}
                                                 />
-                                                // return (this.renderEditable(row.original, 'quantity'));
                                             }
                                             else
                                                 return (<div/>)
@@ -907,8 +914,17 @@ class InvoiceLineTable extends React.Component {
                                         Header: "Amount",
                                         accessor: "amount",
                                         Cell: row=>{
-                                            if(row.original.type==='line')
-                                                return (this.renderEditable(row.original, 'amount'));
+                                            if(row.original.type==='line'){
+                                                return <TextField
+                                                    className={classes.fInput}
+                                                    placeholder="Amount"
+                                                    value={row.original.amount}
+                                                    onChange={this.handleChangeAmount(row.original)}
+                                                    InputProps={{
+                                                        inputComponent: NumberFormatCustom,
+                                                    }}
+                                                />
+                                            }
                                             else
                                                 return (<div/>)
                                         },
