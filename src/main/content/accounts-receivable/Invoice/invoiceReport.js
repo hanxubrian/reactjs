@@ -25,17 +25,7 @@ class InvoiceReport extends Component {
         if(!this.props.show) {
             return null;
         }
-        console.log(this.props);
-        // if(!this.props.getData){
-        //     this.setState({
-        //         invoiceDetail: this.props.getData,
-        //     });
-        //     this.setState({
-        //         CustomerFor: this.props.getData.CustomerFor[0],
-        //         // CustomerSoldTo: this.props.getData.CustomerSoldTo[0],
-        //     });
-        // }
-        console.log(JSON.stringify(this.state.CustomerFor)+"==customerfor");
+        
         return (
                     <div onClick={this.props.onClose}  className="backdrop" style={{position: 'absolute',
                         top: -110,
