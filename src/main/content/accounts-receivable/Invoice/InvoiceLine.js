@@ -30,7 +30,7 @@ import * as Actions from 'store/actions';
 import keycode from "keycode";
 
 //Utility
-import {NumberFormatCustom, escapeRegexCharacters, NumberFormatCustom1} from '../../../../services/utils'
+import {NumberFormatCustom, escapeRegexCharacters, NumberFormatCustom1, NumberFormatCustomPercent} from '../../../../services/utils'
 
 //Snackbar
 const variantIcon = {
@@ -633,20 +633,13 @@ class InvoiceLineTable extends React.Component {
         this.setState({data: data});
     };
 
-    handleChangeQuantity = row => event => {
+    handleChangeInvoiceLine = (row, name) => event => {
         const data = [...this.state.data];
-        data[row.id].quantity = event.target.value;
+        console.log('ev=', event);
+        data[row.id][name] = event.target.value;
         this.setState({data: data});
-        if(!this.isDisable(row))
-            this.getInvoiceLineTaxAmount(row)
-    };
-
-    handleChangeAmount = row => event => {
-        const data = [...this.state.data];
-        data[row.id].amount = event.target.value;
-        this.setState({data: data});
-        if(!this.isDisable(row))
-            this.getInvoiceLineTaxAmount(row)
+         if(!this.isDisable(row))
+             this.getInvoiceLineTaxAmount(row)
     };
 
     isDisable = row =>{
@@ -655,8 +648,8 @@ class InvoiceLineTable extends React.Component {
                 this.setState({openSnack: true});
                 return true;
         }
-        if(row.quantity===' ') return true;
-        if(row.amount===' ') return true;
+        if(row.quantity==='') return true;
+        if(row.amount==='') return true;
     };
 
     render()
@@ -896,7 +889,7 @@ class InvoiceLineTable extends React.Component {
                                                     className={classes.fInput}
                                                     placeholder="Qty"
                                                     value={row.original.quantity}
-                                                    onChange={this.handleChangeQuantity(row.original)}
+                                                    onChange={this.handleChangeInvoiceLine(row.original, 'quantity')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustom1,
                                                     }}
@@ -917,7 +910,8 @@ class InvoiceLineTable extends React.Component {
                                                     className={classes.fInput}
                                                     placeholder="Amount"
                                                     value={row.original.amount}
-                                                    onChange={this.handleChangeAmount(row.original)}
+                                                    name='amount'
+                                                    onChange={this.handleChangeInvoiceLine(row.original, 'amount')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustom,
                                                     }}
