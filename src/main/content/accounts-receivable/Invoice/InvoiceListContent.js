@@ -106,7 +106,6 @@ class InvoiceListContent extends Component {
         selection: [],
         selectAll: false,
 
-        selectedInvoice: null,
         isOpen: false,
         invoiceDetail: null,
         CustomerFor: [],
@@ -455,9 +454,7 @@ class InvoiceListContent extends Component {
                     }}
                 />
 
-                <InvoiceReport show={this.state.isOpen} onClose={this.toggleModal} getData={this.state.invoiceDetail}>
-
-                </InvoiceReport>
+                <InvoiceReport show={this.state.isOpen} onClose={this.toggleModal} getData={this.state.invoiceDetail} />
             </div>
         );
     }
