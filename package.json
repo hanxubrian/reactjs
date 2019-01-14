@@ -1,5 +1,6 @@
 {
-    "name": "fuse-react-app",
+	"name": "gink",
+	"homepage": "https://gink.herokuapp.com/",
     "version": "1.2.8",
     "private": true,
     "dependencies": {
@@ -67,7 +68,8 @@
         "velocity-react": "1.4.1"
     },
     "scripts": {
-        "start": "yarn run build-css-helpers && cross-env NODE_PATH=src react-scripts start",
+		"start": "node server.js",
+        "start2": "yarn run build-css-helpers && cross-env NODE_PATH=src react-scripts start",
         "build": "yarn run build-css-helpers && cross-env NODE_PATH=src react-scripts build",
         "build-css-helpers": "./node_modules/.bin/tailwind build ./src/styles/fuse-helpers.tailwind.css -c ./tailwind.js -o ./src/styles/fuse-helpers.css && postcss --use autoprefixer -o ./src/styles/fuse-helpers.css ./src/styles/fuse-helpers.css",
         "test": "cross-env NODE_PATH=src react-scripts test --env=node",
