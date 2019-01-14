@@ -31,6 +31,7 @@ import keycode from "keycode";
 
 //Utility
 import {NumberFormatCustom, escapeRegexCharacters, NumberFormatCustom1, NumberFormatCustomPercent} from '../../../../services/utils'
+import {DatePicker} from "material-ui-pickers";
 
 //Snackbar
 const variantIcon = {
@@ -260,13 +261,13 @@ const styles = theme => ({
         backgroundColor: theme.palette.primary.main
     },
     input: {
-        margin: 0,
+        fontSize: 13
     },
     fInput: {
         width: '96%',
         marginLeft: 15,
         '& input': {
-            fontSize: 14,
+            fontSize: 13,
             textAlign: 'right',
         }
     },
@@ -791,6 +792,11 @@ class InvoiceLineTable extends React.Component {
                                                         InputLabelProps={{
                                                             shrink: true,
                                                         }}
+                                                        InputProps={{
+                                                            classes: {
+                                                                input: classes.input,
+                                                            },
+                                                        }}
                                                     />
                                                 )
                                             }
@@ -845,6 +851,9 @@ class InvoiceLineTable extends React.Component {
                                                     onChange={this.handleChangeInvoiceLine(row.original, 'quantity')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustom1,
+                                                        classes: {
+                                                            input: classes.input,
+                                                        },
                                                     }}
                                                 />
                                             }
@@ -866,6 +875,9 @@ class InvoiceLineTable extends React.Component {
                                                     onChange={this.handleChangeInvoiceLine(row.original, 'amount')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustom,
+                                                        classes: {
+                                                            input: classes.input,
+                                                        },
                                                     }}
                                                 />
                                             }
@@ -899,7 +911,10 @@ class InvoiceLineTable extends React.Component {
                                                     onChange={this.handleChangeInvoiceLine(row.original, 'markup')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustomPercent,
-                                                        readOnly: row.original.billing!=="Client Supplies"
+                                                        readOnly: row.original.billing!=="Client Supplies",
+                                                        classes: {
+                                                            input: classes.input,
+                                                        },
                                                     }}
                                                 />
                                             }
