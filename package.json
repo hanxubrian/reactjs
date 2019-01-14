@@ -71,8 +71,8 @@
         "velocity-react": "1.4.1"
     },
     "scripts": {
-        "start": "node server.js",
-        "start2": "yarn run build-css-helpers && cross-env NODE_PATH=src react-scripts start",
+        "start2": "node server.js",
+        "start": "yarn run build-css-helpers && cross-env NODE_PATH=src react-scripts start",
         "build": "yarn run build-css-helpers && cross-env NODE_PATH=src react-scripts build",
         "build-css-helpers": "./node_modules/.bin/tailwind build ./src/styles/fuse-helpers.tailwind.css -c ./tailwind.js -o ./src/styles/fuse-helpers.css && postcss --use autoprefixer -o ./src/styles/fuse-helpers.css ./src/styles/fuse-helpers.css",
         "test": "cross-env NODE_PATH=src react-scripts test --env=node",
