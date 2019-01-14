@@ -35,6 +35,7 @@ class InvoiceReport extends Component {
                 left: 0,
                 right: 0,
                 zIndex:99999,
+                height: 'fit-content',
                 backgroundColor: 'rgba(0,0,0,0.3)',
                 padding: 50}}>
                 <div onClick={this.props.onClose} id ="divToPrint" className="modal" style={{ backgroundColor: '#fff',
