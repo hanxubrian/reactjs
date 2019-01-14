@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
 // core components
-import { Icon, IconButton, Fab, Typography,  CircularProgress, Menu, MenuItem, Checkbox, FormControlLabel } from '@material-ui/core';
-import {withStyles,Paper} from "@material-ui/core";
+import { withStyles,Paper,Icon, IconButton, Fab, Typography,  CircularProgress, Menu, MenuItem, Checkbox, FormControlLabel } from '@material-ui/core';
+// import {withStyles,Paper} from "@material-ui/core";
+import { fade } from '@material-ui/core/styles/colorManipulator';
 import {withRouter} from 'react-router-dom';
 
 //Custom Components
@@ -257,8 +258,23 @@ const styles = theme => ({
     },
     validationMenuChecked: {
 
-    }
+    },
+    tableStriped: {
+        '& tbody tr:nth-of-type(odd)': {
+            backgroundColor: fade(theme.palette.primary.main, 0.15),
+        },
+    },
+    checked:{}
 });
+
+const TableComponentBase = ({ classes, ...restProps }) => (
+    <Table.Table
+        {...restProps}
+        className={classes.tableStriped}
+    />
+);
+
+export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
 const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 class PaymentList extends Component {
 
@@ -267,7 +283,7 @@ class PaymentList extends Component {
         this.state = {
             columns: Array.from([
                 { name: 'resion', title: 'REGION' },
-                { name: 'payment', title: 'PAYMENT' },
+                { name: 'paymentno', title: 'PAYMENT NO' },
                 { name: 'date', title: 'DATE' },
                 { name: 'customerno', title: 'CUSTOMER NO.' },
                 { name: 'customer', title: 'CUSTOMER' },
@@ -286,7 +302,17 @@ class PaymentList extends Component {
             pageSizes: [5,25, 50,75, 100],
             searchValue: '',
             tableColumnExtensions: [
-                { columnName: 'resion', width: 130 },
+                { columnName: 'resion',        width: 130 },
+                { columnName: 'paymentno',     wordWrapEnabled: true ,width: 150},
+                { columnName: 'date',          wordWrapEnabled: true ,width: 100},
+                { columnName: 'customerno',    wordWrapEnabled: true ,width: 130},
+                { columnName: 'customer',      wordWrapEnabled: true ,width: 280},
+                { columnName: 'paymenttype',   wordWrapEnabled: true ,width: 100},
+                { columnName: 'checkno',       wordWrapEnabled: true ,width: 100},
+                { columnName: 'referencememo', wordWrapEnabled: true ,width: 130},
+                { columnName: 'invoiceno',     wordWrapEnabled: true ,width: 130},
+                { columnName: 'paymentamount', wordWrapEnabled: true ,width: 130},
+                { columnName: 'invoicebalance',wordWrapEnabled: true ,width: 130},
             ],
             hiddenColumnNames: ['customer', 'referencememo'],
         };
@@ -305,7 +331,6 @@ class PaymentList extends Component {
         const {
             rows, columns, pageSize, pageSizes, currentPage,searchValue,tableColumnExtensions,hiddenColumnNames
         } = this.state;
-        console.log(this.state.rows+"==row");
         return (
 
             <React.Fragment >
@@ -324,7 +349,7 @@ class PaymentList extends Component {
                                 <div className="flex flex-row flex-1 justify-between">
                                     <div className="flex flex-shrink items-center">
                                         <div className="flex items-center">
-                                            <Icon className="text-32 mr-12">account_box</Icon>
+                                            <Icon className="text-32 mr-12">payment</Icon>
                                             <Typography variant="h6" className="hidden sm:flex">Payment | List</Typography>
                                         </div>
                                     </div>
@@ -365,7 +390,10 @@ class PaymentList extends Component {
                                     <IntegratedSorting />
                                     <IntegratedPaging />
                                     <IntegratedFiltering />
-                                    <Table  columnExtensions={tableColumnExtensions} />
+                                    <Table
+                                        columnExtensions={tableColumnExtensions}
+                                        tableComponent={TableComponent}
+                                    />
                                     <TableHeaderRow showSortingControls />
                                     <TableColumnVisibility
                                         hiddenColumnNames={hiddenColumnNames}
