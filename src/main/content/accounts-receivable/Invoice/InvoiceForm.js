@@ -492,6 +492,28 @@ class InvoiceForm extends Component {
                                 </Card>
                             </GridItem>
                         </GridContainer>
+                        <div className="w-full mt-4">
+                            <TextField
+                                id="InvoiceDescription"
+                                name="InvoiceDescription"
+                                label="Description"
+                                className={classes.textField}
+                                value={this.state.InvoiceDescription}
+                                onChange={this.handleChange}
+                                margin="dense"
+                                variant="outlined"
+                                fullWidth
+                                InputLabelProps = {{
+                                    shrink: true,
+                                    classes: {outlined: classes.label}
+                                }}
+                                InputProps={{
+                                    classes: {
+                                        input: classes.input, multiline: classes.input
+                                    },
+                                }}
+                            />
+                        </div>
                         <GridContainer className={classNames(classes.formControl)} style={{flex: "9999 1 0"}}>
                             <GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col xs:mb-24">
                                 <InvoiceLineTable />
@@ -499,23 +521,9 @@ class InvoiceForm extends Component {
                         </GridContainer>
                         <Divider variant="middle"/>
                     </div>
-                    <div className="flex flex-shrink flex-col w-full pl-24 pr-24 pt-12 pb-12">
+                    <div className="flex flex-shrink flex-col w-full pl-24 pr-24 pt-0 pb-12">
                         <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
                             <GridItem xs={12} sm={9} md={9} className="flex flex-col xs:flex-col xs:mb-24">
-                                <div className="w-full">
-                                    <TextField
-                                        id="InvoiceDescription"
-                                        name="InvoiceDescription"
-                                        label="Description"
-                                        className={classes.textField}
-                                        value={this.state.InvoiceDescription}
-                                        onChange={this.handleChange}
-                                        margin="dense"
-                                        variant="outlined"
-                                        fullWidth
-                                        multiline
-                                    />
-                                </div>
                                 <div className="w-full">
                                     <TextField
                                         id="note"
@@ -528,6 +536,16 @@ class InvoiceForm extends Component {
                                         variant="outlined"
                                         fullWidth
                                         multiline
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input, multiline: classes.input
+                                            },
+                                        }}
+                                        rows={4}
                                     />
                                 </div>
                             </GridItem>

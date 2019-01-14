@@ -158,7 +158,7 @@ function renderInputComponent(inputProps) {
 const styles = theme => ({
     root        : {
         width    : '100%',
-        marginTop: theme.spacing.unit * 2,
+        marginTop: theme.spacing.unit,
         head: {
             color: 'black',
         },
