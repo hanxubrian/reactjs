@@ -10,7 +10,6 @@ const initialState = {
     bOpenedFilterPanelFranchisees: false,
     bOpenedMapView: false,
     statusId: 0,
-    Location: "all",
     Longitude: "",
     Latitude: "",
     SearchText: "",
@@ -43,7 +42,12 @@ const initialState = {
             open: false
         },
         data : null
-    }
+    },
+    locationFilterValue: {
+        id: "locationAll",
+        miles: 15,
+        addrZipcode: undefined
+    },
 };
 
 
@@ -139,6 +143,11 @@ const franchisees = function(state = initialState, action) {
                 ...initialState
             }
         }
+        case Actions.FRANCHISEE_SELECT_LOCATION_FILTER: {
+            return {
+                ...state, locationFilterValue: action.payload
+            }
+        }
         case Actions.CREATE_FRANCHISEES_LIST:
         {
             return {
@@ -197,13 +206,6 @@ const franchisees = function(state = initialState, action) {
         {
             return {
                 ...state, bOpenedMapView: !state.bOpenedMapView
-            }
-        }
-        case Actions.SELECTED_LOCATION:
-        {
-            return{
-                ...state,
-                Location: action.Location
             }
         }
         case Actions.UPDATE_DATE_SIGN_FRANCHISEE:

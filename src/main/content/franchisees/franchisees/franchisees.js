@@ -39,15 +39,18 @@ import _ from 'lodash';
 
 import CreateFranchiseesPage from "./franchiseesForms/createForm"
 import FusePageCustomSidebarScroll from "../../../../@fuse/components/FusePageLayouts/FusePageCustomSidebarScroll";
-import GoogleMap from 'google-map-react';
 
-function Marker({ text }) {
-    return (
-        <Tooltip title={text} placement="top">
-            <Icon className="text-red">place</Icon>
-        </Tooltip>
-    );
-}
+import {withScriptjs, withGoogleMap, GoogleMap, Marker,} from "react-google-maps";
+import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
+import { compose, withProps, withHandlers, lifecycle } from "recompose";
+
+// function Marker({ text }) {
+//     return (
+//         <Tooltip title={text} placement="top">
+//             <Icon className="text-red">place</Icon>
+//         </Tooltip>
+//     );
+// }
 
 const headerHeight = 80;
 
@@ -237,6 +240,83 @@ const styles = theme => ({
     }
 });
 
+const DEFAULT_ZOOM = 8
+let map_zoom = DEFAULT_ZOOM
+
+const MapWithAMarkerClusterer = compose(
+    withProps({
+        googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA&v=3.exp&libraries=geometry,drawing,places",
+        loadingElement: <div style={{ height: `100%` }} />,
+        containerElement: <div style={{ height: `100%` }} />,
+        mapElement: <div style={{ height: `100%` }} />,
+    }),
+    withHandlers({
+        onMarkerClustererClick: () => (markerClusterer) => {
+            const clickedMarkers = markerClusterer.getMarkers()
+            console.log(`Current clicked markers length: ${clickedMarkers.length}`)
+            console.log(clickedMarkers)
+        },
+    }),
+    withScriptjs,
+    withGoogleMap
+)(props =>
+    <GoogleMap
+        defaultZoom={map_zoom}
+        defaultCenter={{ lat: props.center.lat, lng: props.center.lng }}
+    >
+        <MarkerClusterer
+            onClick={props.onMarkerClustererClick}
+            averageCenter
+            enableRetinaIcons
+            gridSize={60}
+        >
+            {props.markers.map((x, index) => (
+                <Marker
+                    key={index}
+                    position={{ lat: x.lat, lng: x.lng }}
+                />
+            ))}
+        </MarkerClusterer>
+    </GoogleMap>
+);
+
+
+const MapWithAMarkerClusterer2 = compose(
+    withProps({
+        googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA&v=3.exp&libraries=geometry,drawing,places",
+        loadingElement: <div style={{ height: `100%` }} />,
+        containerElement: <div style={{ height: `100%` }} />,
+        mapElement: <div style={{ height: `100%` }} />,
+    }),
+    withHandlers({
+        onMarkerClustererClick: () => (markerClusterer) => {
+            const clickedMarkers = markerClusterer.getMarkers()
+            console.log(`Current clicked markers length: ${clickedMarkers.length}`)
+            console.log(clickedMarkers)
+        },
+    }),
+    withScriptjs,
+    withGoogleMap
+)(props =>
+    <GoogleMap
+        defaultZoom={map_zoom}
+        defaultCenter={{ lat: props.center.lat, lng: props.center.lng }}
+    >
+        <MarkerClusterer
+            onClick={props.onMarkerClustererClick}
+            averageCenter
+            enableRetinaIcons
+            gridSize={60}
+        >
+            {props.markers.map((x, index) => (
+                <Marker
+                    key={index}
+                    position={{ lat: x.lat, lng: x.lng }}
+                />
+            ))}
+        </MarkerClusterer>
+    </GoogleMap>
+);
 
 class Franchisees extends Component {
     state = {
@@ -261,6 +341,9 @@ class Franchisees extends Component {
         statusId: 9,
         current_lat: 0,
         current_long: 0,
+        pins: [],
+        pins2: [],
+        gmapVisible: false,
     };
 
     toggleSelection = (key, shift, row) => {
@@ -407,6 +490,14 @@ class Franchisees extends Component {
             this.getFranchiseesFromStatus(nextProps.franchisees);
         if(this.props.franchisees!==nextProps.franchisees)
             this.getFranchiseesFromStatus(nextProps.franchisees);
+        if (nextProps.franchisees !== this.props.franchisees) {
+            this.initRowsFromRawJson(nextProps.franchisees);
+        }
+        if (this.props.locationFilterValue !== nextProps.locationFilterValue) {
+            this.setState({ locationFilterValue: nextProps.locationFilterValue })
+            console.log("componentWillReceiveProps", "locationFilterValue", nextProps.locationFilterValue, this.props.franchisees)
+            this.initRowsFromRawJson(this.props.franchisees, nextProps.locationFilterValue);
+        }
     }
 
 
@@ -437,6 +528,10 @@ class Franchisees extends Component {
 
     componentWillUnmount(){
         document.removeEventListener("keydown", this.escFunction, false);
+
+        this.initRowsFromRawJson();
+
+        this.getLocation();
     }
 
     escFunction(event){
@@ -501,6 +596,8 @@ class Franchisees extends Component {
         this.props.createFranchisees.type === 'create' ? this.props.closeEditFranchisees() : this.props.closeCreateFranchisees();
     };
     getLocation() {
+        console.log("getLocation");
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
@@ -509,16 +606,193 @@ class Franchisees extends Component {
                         current_lat: position.coords.latitude,
                         current_long: position.coords.longitude
                     })
+
+                    if (this.state.addrLat == undefined) {
+                        this.setState({
+                            addrLat: position.coords.latitude,
+                            addrLng: position.coords.longitude
+                        })
+                    }
+                    if (this.props.locationFilterValue) {
+                        this.initRowsFromRawJson();
+                    }
                 }
             );
         }
+    }
+
+    initRowsFromRawJson = (rawData = this.props.franchisees, locationFilterValue = this.props.locationFilterValue) => {
+        console.log("initRowsFromRawJson", "CustomerListContent.js", this.props.regionId, this.props.statusId, rawData)
+        let all_temp = [];
+        if (rawData === null || rawData === undefined) return;
+
+        let regions = rawData.Data.Region.filter(x => {
+            return this.props.regionId === 0 || x.Id === this.props.regionId;
+        });
+
+
+        console.log("regions", regions)
+
+        regions.forEach(x => {
+            all_temp = [...all_temp, ...x.FranchiseeList];
+        });
+
+        let _pins_temp = [];
+        regions.forEach(x => {
+            _pins_temp = [..._pins_temp, ...x.FranchiseeList.map(franchisee => {
+                return {
+                    lat: franchisee.Latitude,
+                    lng: franchisee.Longitude,
+                    text: franchisee.Name
+                }
+            })];
+
+        })
+
+        this.filterPins(_pins_temp, locationFilterValue)
+
+        this.setState({
+            rows: all_temp,
+            data: all_temp,
+            // pins: _pins_temp,
+        });
+
+    };
+
+    filterPins(pins, locationFilterValue) {
+        // this.setState({ gmapVisible: !this.state.gmapVisible });
+        console.log("-------filterPins---------", pins)
+        let k = (12.5 - 9.5) * 75 / (75 / 5 - 1)
+        let b = 12.5 - k / 5
+
+        switch (locationFilterValue.id) {
+            case "locationAll":
+                if (!this.state.gmapVisible) {
+                    this.setState({
+                        gmapVisible: !this.state.gmapVisible,
+                        pins: pins === undefined ? [] : [...pins],
+                        pins2: []
+                    })
+                } else {
+                    this.setState({
+                        gmapVisible: !this.state.gmapVisible,
+                        pins: [],
+                        pins2: pins === undefined ? [] : [...pins]
+                    })
+                }
+                map_zoom = DEFAULT_ZOOM
+                break;
+            case "locationNearBy":
+                let _pins = []
+                this.setState({
+                    addrLat: this.state.current_lat,
+                    addrLng: this.state.current_long
+                })
+
+                _pins = this.nearbyLocations(
+                    pins,
+                    {
+                        lat: this.state.current_lat,
+                        lng: this.state.current_long
+                    },
+                    locationFilterValue.miles)
+
+                if (!this.state.gmapVisible) {
+                    this.setState({
+                        gmapVisible: !this.state.gmapVisible,
+                        pins: [..._pins],
+                        pins2: []
+                    })
+                } else {
+                    this.setState({
+                        gmapVisible: !this.state.gmapVisible,
+                        pins: [],
+                        pins2: [..._pins]
+                    })
+                }
+
+                map_zoom = locationFilterValue.miles !== undefined ? k / locationFilterValue.miles + b : DEFAULT_ZOOM
+                break;
+            case "locationNearSpecificAddress":
+
+                let _ = []
+                if (locationFilterValue.addrZipcode !== undefined) {
+                    this.setState({
+                        addrLat: locationFilterValue.addrZipcode.lat,
+                        addrLng: locationFilterValue.addrZipcode.lng
+                    })
+                    _ = this.nearbyLocations(
+                        pins,
+                        {
+                            lat: locationFilterValue.addrZipcode.lat,
+                            lng: locationFilterValue.addrZipcode.lng
+                        },
+                        locationFilterValue.miles)
+                } else {
+                    this.setState({
+                        addrLat: this.state.current_lat,
+                        addrLng: this.state.current_long
+                    })
+                    _ = this.nearbyLocations(
+                        pins,
+                        {
+                            lat: this.state.current_lat,
+                            lng: this.state.current_long
+                        },
+                        locationFilterValue.miles)
+                }
+
+                if (!this.state.gmapVisible) {
+                    this.setState({
+                        gmapVisible: !this.state.gmapVisible,
+                        pins: [..._],
+                        pins2: []
+                    })
+                } else {
+                    this.setState({
+                        gmapVisible: !this.state.gmapVisible,
+                        pins: [],
+                        pins2: [..._]
+                    })
+                }
+                map_zoom = locationFilterValue.miles !== undefined ? k / locationFilterValue.miles + b : DEFAULT_ZOOM
+                break;
+            default:
+                this.setState({ pins: pins })
+                break;
+        }
+
+    }
+
+    Deg2Rad(deg) {
+        return deg * Math.PI / 180;
+    }
+
+    PythagorasEquirectangular(lat1, lon1, lat2, lon2) {
+        lat1 = this.Deg2Rad(lat1);
+        lat2 = this.Deg2Rad(lat2);
+        lon1 = this.Deg2Rad(lon1);
+        lon2 = this.Deg2Rad(lon2);
+        var R = 6371; // km
+        var x = (lon2 - lon1) * Math.cos((lat1 + lat2) / 2);
+        var y = (lat2 - lat1);
+        var d = Math.sqrt(x * x + y * y) * R;
+        return d;
+    }
+
+
+    nearbyLocations(pins, center, miles = 5, addrZipcode = "") {
+
+        return [...pins.filter(x => {
+            return (this.PythagorasEquirectangular(center.lat, center.lng, x.lat, x.lng) <= miles)
+        })];
     }
 
     render()
     {
         const { classes,toggleFilterPanelFranchisees,showCreteFranchisees, toggleSummaryPanelFranchisees, createFranchisees, filterStateFranchisees, summaryStateFranchisees, toggleFranchiseeMapView, mapViewState} = this.props;
         const { toggleSelection, toggleAll, isSelected} = this;
-        const { selection, anchorEl } = this.state;
+        const { selection, anchorEl,pins, pins2,gmapVisible } = this.state;
         return (
             <React.Fragment >
               <FusePageCustomSidebarScroll
@@ -701,19 +975,15 @@ class Franchisees extends Component {
                                 </div>
                                 <div className="w-full h-full">
                                     <div className="w-full h-full">
-                                        <GoogleMap
-                                            bootstrapURLKeys={{
-                                                key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
-                                            }}
-                                            defaultZoom={12}
-                                            defaultCenter={[this.state.current_lat, this.state.current_long]}
-                                        >
-                                            <Marker
-                                                text="Marker Text"
-                                                lat={this.state.current_lat}
-                                                lng={this.state.current_long}
-                                            />
-                                        </GoogleMap>
+                                        {gmapVisible && (<MapWithAMarkerClusterer
+                                            markers={pins}
+                                            center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
+                                        />)}
+
+                                        {!gmapVisible && (<MapWithAMarkerClusterer2
+                                            markers={pins2}
+                                            center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
+                                        />)}
                                     </div>
                                 </div>
                             </div>
@@ -1021,7 +1291,8 @@ function mapStateToProps({franchisees,auth})
         Location: franchisees.Location,
         SearchText: franchisees.SearchText,
         mapViewState: franchisees.bOpenedMapView,
-        bFranchiseesFetchStart: franchisees.bFranchiseesFetchStart
+        bFranchiseesFetchStart: franchisees.bFranchiseesFetchStart,
+        locationFilterValue: franchisees.locationFilterValue
     }
 }
 
