@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import Geocode from "react-geocode";
 
 import { Paper, withStyles } from '@material-ui/core';
-import { TextField, Divider } from '@material-ui/core';
+import { TextField, Divider, Toolbar, Typography } from '@material-ui/core';
 import keycode from 'keycode';
 
 //Material UI core
@@ -538,8 +538,10 @@ class FilterPanel extends Component {
 					{customerForm && customerForm.props.open
 						? (
 							<div>
-								{/* <h3 className="mb-20">Customer Information</h3> */}
 								<GridContainer style={{ alignItems: 'center', width: 500 }} className={classNames(classes.formControl)}>
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+										<h3 className="mt-24">Customer Information</h3>
+									</GridItem>
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 										<TextField
 											id="Name"
@@ -666,14 +668,6 @@ class FilterPanel extends Component {
 											style={{ width: '100%' }}
 										/>
 									</GridItem>
-									
-									<GridItem xs={12} sm={12} md={12} className="flex flex-col">
-										<h3 className="mt-24">Addresses</h3>
-										<CustomerLineTable tableType="ADDRESS" headers={address_headers} />
-
-										<h3 className="mt-24">Contacts</h3>
-										<CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} />
-									</GridItem>
 
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 										<TextField
@@ -716,6 +710,29 @@ class FilterPanel extends Component {
 
 										</TextField>
 									</GridItem>
+									<GridItem xs={12} sm={12} md={12} className="flex flex-col">
+										<RadioGroup
+											aria-label="nativeChildAccount"
+											name="nativeChildAccount"
+											className={classNames(classes.group, "flex flex-row")}
+											style={{justifyContent: "space-between"}}
+											value={this.state.nativeChildAccount}
+											onChange={this.handleChange('nativeChildAccount')}
+										>
+											<FormControlLabel value="nativeAccount" control={<Radio />} label="Native Account" />
+											<FormControlLabel value="childAccount" control={<Radio />} label="Child Account" />
+										</RadioGroup>
+									</GridItem>
+
+									<GridItem xs={12} sm={12} md={12} className="flex flex-col">
+										<h3 className="mt-24">Addresses</h3>
+										<CustomerLineTable tableType="ADDRESS" headers={address_headers} />
+
+										<h3 className="mt-24">Contacts</h3>
+										<CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} />
+									</GridItem>
+
+
 								</GridContainer>
 							</div>
 						) :

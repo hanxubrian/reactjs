@@ -57,8 +57,19 @@ class menuService {
                       })
               });
             break
-            default:
-                 return "none"
+			default:
+				return new Promise((resolve, reject) => {
+					axios_instance.get(`${BASE_API_URL}/v1/menu/get/?appid=2`)
+						.then(res => {
+							if (res.status === 200) {
+								resolve(res.data);
+							}
+							else if (res.status !== 200) {
+								reject(res.data);
+							}
+						})
+				});
+				return "none"
         }
     };
 }

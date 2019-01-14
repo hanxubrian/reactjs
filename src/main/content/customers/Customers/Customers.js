@@ -652,10 +652,10 @@ class Customers extends Component {
 									<div className="flex flex-row flex-1 justify-between">
 										<div className="flex flex-shrink items-center">
 											<div className="flex items-center">
-												<Toolbar className="pl-12 pr-0">
+												{/* <Toolbar className="pl-12 pr-0">
 													<img className="mr-12" alt="" src="assets/images/invoices/invoice-icon-white.png" style={{ width: 32, height: 32 }} />
 												</Toolbar>
-												<Typography variant="h6" className="hidden sm:flex">Customers | New Customers</Typography>
+												<Typography variant="h6" className="hidden sm:flex">Customers | New Customers</Typography> */}
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
@@ -667,7 +667,7 @@ class Customers extends Component {
 											{/* <IconButton className={classes.button} aria-label="Add an alarm" onClick={toggleSummaryPanel}>
 												<Icon>check_circle</Icon>
 											</IconButton> */}
-											
+
 											<IconButton
 												// className={classNames(classes.button, classes.validationMenu)}
 												className={classNames(classes.button, classes.invalidationMenu)}
@@ -729,13 +729,23 @@ class Customers extends Component {
 						</div>
 					}
 					leftSidebarHeader={
-						<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
+						<Fragment>
 							{customerForm.props.open ? (
-								<h2 style={{ marginBlockStart: '1em' }}>Customer Information</h2>
+								// <h2 style={{ marginBlockStart: '1em' }}>Customer Information</h2>
+								<div className="flex flex-shrink items-center">
+									<div className="flex items-center">
+										<Toolbar className="pl-12 pr-0">
+											<img className="mr-12" alt="" src="assets/images/invoices/invoice-icon-white.png" style={{ width: 32, height: 32 }} />
+										</Toolbar>
+										<Typography variant="h6" className="hidden sm:flex">Customers | New Customers</Typography>
+									</div>
+								</div>
 							) : (
-									<h2 style={{ marginBlockStart: '1em' }}>Filters</h2>
+									<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
+										<h2 style={{ marginBlockStart: '1em' }}>Filters</h2>
+									</div>
 								)}
-						</div>
+						</Fragment>
 					}
 					leftSidebarContent={
 						<FilterPanel />

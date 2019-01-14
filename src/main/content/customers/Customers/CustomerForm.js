@@ -309,7 +309,7 @@ function escapeRegexCharacters(str) {
 
 
 function getSteps() {
-	return ['Billing', 'Service Agreement', 'Service Settings', "Walk-Thru", "Account Offering", "Documents"];
+	return ['Service Agreement', 'Billing', 'Service Settings', "Walk-Thru", "Account Offering", "Documents", "Marketing", "Account History"];
 }
 
 const stateNames = [
@@ -684,183 +684,43 @@ class CustomerForm extends Component {
 
 		switch (step + 1) {
 			case 1:
-				return (
-					<Fragment>
-						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									type="date"
-									id="EffectiveDate"
-									label="Effective Date"
-									className={classNames(classes.textField)}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.EffectiveDate}
-									onChange={this.handleChange('EffectiveDate')}
-									margin="normal"
-									variant="outlined"
-									style={{ minWidth: 100, width: "30%" }}
-
-								/>
-							</GridItem>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									type="date"
-									id="InvoiceDate"
-									label="Invoice Date"
-									className={classNames(classes.textField, "mr-12")}
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.InvoiceDate === undefined ? "" : this.state.InvoiceDate}
-									onChange={this.handleChange('InvoiceDate')}
-									margin="normal"
-									variant="outlined"
-									style={{ width: "100%" }}
-								>
-									{[{ value: 0, label: "BOM" },
-									{ value: 1, label: "EOM" }].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-
-								<TextField
-									id="BillingFrequency"
-									label="Billing Frequency"
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classNames(classes.textField, "ml-12")}
-									value={this.state.BillingFrequency === undefined ? "" : this.state.BillingFrequency}
-									onChange={this.handleChange('BillingFrequency')}
-									margin="normal"
-									variant="outlined"
-									style={{ width: "100%" }}
-								>
-									{[{ value: 0, label: "Monthly" }].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-
-							</GridItem>
-
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<div style={{ display: 'flex', flexDirection: 'row', minWidth: "100px", width: "50%" }}>
-									<FormControlLabel
-										control={
-											<Switch
-												checked={this.state.checkedA}
-												onChange={this.handleChange('checkedA')}
-												value={this.state.checkedA}
-											/>
-										}
-										label="E-Billing"
-									// style={{ width: '40%' }}
-									/>
-
-									<TextField
-										type="email"
-										id="Email"
-										label="Email"
-										className={classes.textField}
-										value={this.state.Email}
-										onChange={this.handleChange('Email')}
-										margin="normal"
-										variant="outlined"
-										style={{ width: '60%' }}
-									/>
-								</div>
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="outlined-name"
-									label="Term"
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classNames(classes.textField, "mr-12")}
-									value={this.state.Term === undefined ? "" : this.state.Term}
-									onChange={this.handleChange('Term')}
-									margin="normal"
-									variant="outlined"
-									style={{ width: '100%' }}
-								>
-									{[{ value: 0, label: "Due Upon Receipt" },
-									{ value: 1, label: "EOM" },
-									{ value: 2, label: "Net 30" },
-									{ value: 3, label: "Net 40" },
-									{ value: 4, label: "Net 45" },
-									{ value: 5, label: "Net 60" },].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-
-								<TextField
-									id="ARStatus"
-									label="AR Status"
-									select
-									className={classNames(classes.textField, "ml-12")}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.ARStatus === undefined ? "" : this.state.ARStatus}
-									onChange={this.handleChange('ARStatus')}
-									margin="normal"
-									variant="outlined"
-									style={{ width: '100%' }}
-								>
-									{[{ value: 0, label: "Select" },
-									{ value: 1, label: "Bankruptcy" },
-									{ value: 2, label: "In Litigation" },
-									{ value: 3, label: "Normal" },
-									{ value: 4, label: "Referred to Collections" },
-									{ value: 5, label: "Slow Pay" },
-									{ value: 6, label: "Uncollectable" },
-									{ value: 7, label: "National Accoints" },
-									{ value: 8, label: "AutoPay" },
-									{ value: 9, label: "TEST" },].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="Notes"
-									label="Notes"
-									multiline
-									rowsMax="4"
-									className={classes.textField}
-									value={this.state.Notes}
-									onChange={this.handleChange('Notes')}
-									margin="normal"
-									variant="outlined"
-									style={{ width: '100%' }}
-								/>
-							</GridItem>
-						</GridContainer>
-
-					</Fragment>
-				);
-			case 2:
 				// return 'Step 2: What is an ad group anyways?';
 				return (
 					<Fragment>
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									type="number"
+									id="Amount"
+									label="Amount *"
+									className={classes.textField}
+									InputLabelProps={{
+										shrink: true
+									}}
+									value={this.state.Amount}
+									onChange={this.handleChange('Amount')}
+									margin="normal"
+									variant="outlined"
+									style={{ minWidth: "100px", width: "30%" }}
+									InputProps={{
+										startAdornment: <InputAdornment position="start">$</InputAdornment>
+									}}
+											/>
+							</GridItem>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									id="Description"
+									label="Description"
+									multiline
+									rowsMax="4"
+									className={classes.textField}
+									value={this.state.Description}
+									onChange={this.handleChange('Description')}
+									margin="normal"
+									variant="outlined"
+									style={{ width: '100%' }}
+								/>
+							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
 									id="ContractType"
@@ -938,6 +798,107 @@ class CustomerForm extends Component {
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
+									type="date"
+									id="SignDate"
+									label="Sign Date *"
+									className={classes.textField}
+									InputLabelProps={{
+										shrink: true
+									}}
+									value={this.state.SignDate}
+									onChange={this.handleChange('SignDate')}
+									margin="normal"
+									variant="outlined"
+									style={{ minWidth: "100px", width: "30%" }}
+								/>
+
+							</GridItem>
+
+
+
+
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									type="date"
+									id="StartDate"
+									label="Start Date *"
+									className={classes.textField}
+									InputLabelProps={{
+										shrink: true
+									}}
+									value={this.state.StartDate}
+									onChange={this.handleChange('StartDate')}
+									margin="normal"
+									variant="outlined"
+									style={{ minWidth: "100px", width: "30%" }}
+								/>
+
+								<TextField
+									type="number"
+									id="TermMonths"
+									label="Term Months *"
+									className={classNames(classes.textField,"ml-12")}
+									value={this.state.TermMonths}
+									onChange={this.handleChange('TermMonths')}
+									margin="normal"
+									variant="outlined"
+									style={{ width: '70%'}}
+								/>
+
+
+							</GridItem>
+
+
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+
+
+								<TextField
+									type="date"
+									id="ExpirationDate"
+									label="Expiration Date *"
+									className={classes.textField}
+									InputLabelProps={{
+										shrink: true
+									}}
+									value={this.state.ExpirationDate}
+									onChange={this.handleChange('ExpirationDate')}
+									margin="normal"
+									variant="outlined"
+									style={{ minWidth: "100px", width: "30%" }}
+								/>
+							</GridItem>
+
+
+
+						</GridContainer>
+
+
+					</Fragment>
+				);
+			case 2:
+				return (
+					<Fragment>
+						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									type="date"
+									id="EffectiveDate"
+									label="Effective Date"
+									className={classNames(classes.textField)}
+									InputLabelProps={{
+										shrink: true
+									}}
+									value={this.state.EffectiveDate}
+									onChange={this.handleChange('EffectiveDate')}
+									margin="normal"
+									variant="outlined"
+									style={{ minWidth: 100, width: "30%" }}
+
+								/>
+							</GridItem>
+
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
 									id="PONumer"
 									type="number"
 									label="PO Numer"
@@ -954,97 +915,152 @@ class CustomerForm extends Component {
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
 									type="date"
-									id="SignDate"
-									label="Sign Date *"
-									className={classes.textField}
+									id="InvoiceDate"
+									label="Invoice Date"
+									className={classNames(classes.textField, "mr-12")}
+									select
 									InputLabelProps={{
 										shrink: true
 									}}
-									value={this.state.SignDate}
-									onChange={this.handleChange('SignDate')}
+									value={this.state.InvoiceDate === undefined ? "" : this.state.InvoiceDate}
+									onChange={this.handleChange('InvoiceDate')}
 									margin="normal"
 									variant="outlined"
-									style={{ width: '100%', marginRight: "2%" }}
-								/>
-								<TextField
-									type="date"
-									id="StartDate"
-									label="Start Date *"
-									className={classes.textField}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.StartDate}
-									onChange={this.handleChange('StartDate')}
-									margin="normal"
-									variant="outlined"
-									style={{ width: '100%', marginLeft: "2%" }}
-								/>
-							</GridItem>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									type="number"
-									id="TermMonths"
-									label="Term Months *"
-									className={classes.textField}
-									value={this.state.TermMonths}
-									onChange={this.handleChange('TermMonths')}
-									margin="normal"
-									variant="outlined"
-									style={{ width: '100%', marginRight: "2%" }}
-								/>
+									style={{ width: "100%" }}
+								>
+									{[{ value: 0, label: "BOM" },
+									{ value: 1, label: "EOM" }].map(option => (
+										<MenuItem key={option.value} value={option.value}>
+											{option.label}
+										</MenuItem>
+									))}
+								</TextField>
 
 								<TextField
-									type="date"
-									id="ExpirationDate"
-									label="Expiration Date *"
-									className={classes.textField}
+									id="BillingFrequency"
+									label="Billing Frequency"
+									select
 									InputLabelProps={{
 										shrink: true
 									}}
-									value={this.state.ExpirationDate}
-									onChange={this.handleChange('ExpirationDate')}
+									className={classNames(classes.textField, "ml-12")}
+									value={this.state.BillingFrequency === undefined ? "" : this.state.BillingFrequency}
+									onChange={this.handleChange('BillingFrequency')}
 									margin="normal"
 									variant="outlined"
-									style={{ width: '100%', marginLeft: "2%" }}
-								/>
+									style={{ width: "100%" }}
+								>
+									{[{ value: 0, label: "Monthly" }].map(option => (
+										<MenuItem key={option.value} value={option.value}>
+											{option.label}
+										</MenuItem>
+									))}
+								</TextField>
+
 							</GridItem>
+
+
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<div style={{ display: 'flex', flexDirection: 'row', minWidth: "100px", width: "50%" }}>
+									<FormControlLabel
+										control={
+											<Switch
+												checked={this.state.checkedA}
+												onChange={this.handleChange('checkedA')}
+												value={this.state.checkedA}
+											/>
+										}
+										label="E-Billing"
+									// style={{ width: '40%' }}
+									/>
+
+									<TextField
+										type="email"
+										id="Email"
+										label="Email"
+										className={classes.textField}
+										value={this.state.Email}
+										onChange={this.handleChange('Email')}
+										margin="normal"
+										variant="outlined"
+										style={{ width: '60%' }}
+								/>
+								</div>
+							</GridItem>
+
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
-									type="number"
-									id="Amount"
-									label="Amount *"
-									className={classes.textField}
+									id="outlined-name"
+									label="Term"
+									select
 									InputLabelProps={{
 										shrink: true
 									}}
-									value={this.state.Amount}
-									onChange={this.handleChange('Amount')}
+									className={classNames(classes.textField, "mr-12")}
+									value={this.state.Term === undefined ? "" : this.state.Term}
+									onChange={this.handleChange('Term')}
 									margin="normal"
 									variant="outlined"
-									style={{ minWidth: "100px", width: "30%" }}
-									InputProps={{
-										startAdornment: <InputAdornment position="start">$</InputAdornment>
+									style={{ width: '100%' }}
+								>
+									{[{ value: 0, label: "Due Upon Receipt" },
+									{ value: 1, label: "EOM" },
+									{ value: 2, label: "Net 30" },
+									{ value: 3, label: "Net 40" },
+									{ value: 4, label: "Net 45" },
+									{ value: 5, label: "Net 60" },].map(option => (
+										<MenuItem key={option.value} value={option.value}>
+											{option.label}
+										</MenuItem>
+									))}
+								</TextField>
+
+								<TextField
+									id="ARStatus"
+									label="AR Status"
+									select
+									className={classNames(classes.textField, "ml-12")}
+									InputLabelProps={{
+										shrink: true
 									}}
-								/>
+									value={this.state.ARStatus === undefined ? "" : this.state.ARStatus}
+									onChange={this.handleChange('ARStatus')}
+									margin="normal"
+									variant="outlined"
+									style={{ width: '100%' }}
+								>
+									{[{ value: 0, label: "Select" },
+									{ value: 1, label: "Bankruptcy" },
+									{ value: 2, label: "In Litigation" },
+									{ value: 3, label: "Normal" },
+									{ value: 4, label: "Referred to Collections" },
+									{ value: 5, label: "Slow Pay" },
+									{ value: 6, label: "Uncollectable" },
+									{ value: 7, label: "National Accoints" },
+									{ value: 8, label: "AutoPay" },
+									{ value: 9, label: "TEST" },].map(option => (
+										<MenuItem key={option.value} value={option.value}>
+											{option.label}
+										</MenuItem>
+									))}
+								</TextField>
 							</GridItem>
+
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
-									id="Description"
-									label="Description"
+									id="Notes"
+									label="Notes"
 									multiline
 									rowsMax="4"
 									className={classes.textField}
-									value={this.state.Description}
-									onChange={this.handleChange('Description')}
+									value={this.state.Notes}
+									onChange={this.handleChange('Notes')}
 									margin="normal"
 									variant="outlined"
 									style={{ width: '100%' }}
 								/>
 							</GridItem>
-
 						</GridContainer>
-
 
 					</Fragment>
 				);
@@ -1630,10 +1646,10 @@ class CustomerForm extends Component {
 							<IntegratedSelection />
 
 							<IntegratedPaging />
-							{/* <Table /> */}
-							<VirtualTable
-							// height="auto"
-							/>
+							<Table />
+							{/* <VirtualTable
+								height="auto"
+							/> */}
 							<SortingState
 								sorting={sorting}
 								onSortingChange={this.changeSorting}
@@ -1780,6 +1796,7 @@ class CustomerForm extends Component {
 	}
 
 	componentWillMount() {
+		this.getFranchiseesFromStatus();
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -1793,102 +1810,23 @@ class CustomerForm extends Component {
 
 
 	getFranchiseesFromStatus = (rawData = this.props.franchisees) => {
-		console.log("rawData")
-		console.log(rawData)
-		let filterTemp = [];
-		let totalFilterTemp = [];
-		let all_temp = [];
-		let temp1 = [];
-		let currentStatus = this.props.transactionStatusFranchisees;
+		let data = [];
+		let tempData = [];
 		if (rawData === null) return;
-		let temp0 = rawData.Data.Region;
-		if (this.props.regionId === 0) {
-			for (let i = 0; i < temp0.length; i++) {
-				temp1 = all_temp.concat(temp0[i].Franchisees);
-				all_temp = temp1;
-			}
+
+		if (rawData.Data.Region.length === 0) {
+			data = [];
+			this.setState({ temp: data });
+			this.setState({ data: data });
+			return;
 		} else {
-			for (let i = 0; i < temp0.length; i++) {
-				if (this.props.regionId === temp0[i].Id) {
-					all_temp = temp0[i].Franchisees;
-				}
+			for (let i = 0; i < rawData.Data.Region.length; i++) {
+				tempData = rawData.Data.Region[i].FranchiseeList;
+				data = data.concat(tempData);
 			}
 		}
-		// if(all_temp.length>0){
-		// 	for(var i = 0; i < all_temp.length ; i++){
-		// 		if(currentStatus.checkedInactive){
-		// 			if(all_temp[i].StatusName ==='InActive'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedActive){
-		// 			if(all_temp[i].StatusName==='Active'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedLegalCompliancePending){
-		// 			if(all_temp[i].StatusName ==='LegalCompliancePending'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedPending){
-		// 			if(all_temp[i].StatusName==='Pending'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedTerminated){
-		// 			if(all_temp[i].StatusName==='Terminated'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedTransfer){
-		// 			if(all_temp[i].StatusName==='Transfer'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedPendingTransfer){
-		// 			if(all_temp[i].StatusName==='PendingTransfer'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedNonRenewed){
-		// 			if(all_temp[i].StatusName==='NonRenewed'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedRejected){
-		// 			if(all_temp[i].StatusName==='Rejected'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedRepurchased){
-		// 			if(all_temp[i].StatusName==='Repurchased'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedCTDB){
-		// 			if(all_temp[i].StatusName==='CTDB'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 	}
-		// }
-		console.log("all_temp")
-		console.log(all_temp)
-		totalFilterTemp = { ...all_temp }
-		this.setState({ temp: totalFilterTemp });
-		this.setState({ data: totalFilterTemp });
+		this.setState({ temp: data });
+		this.setState({ data: data });
 	};
 
 	componentDidMount() {
