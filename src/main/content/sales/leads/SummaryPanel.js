@@ -187,120 +187,7 @@ class SummaryPanel extends Component {
 				<div className={classNames("flex flex-col p-16")}>
 					{this.props.leads && (
 						<Paper className="flex flex-1 flex-col min-h-px shadow-none" style={{ alignItems: 'center', flexDirection: 'column' }}>
-
-							{leadForm && leadForm.props.open
-								? (
-									<div style={{ marginTop: 50, display: 'flex', flexDirection: 'column' }}>
-										<h3>Validation Status</h3>
-										<FormControlLabel
-											control={
-												<Checkbox
-													checked={true}
-													// onChange={this.handleChange('checkedG')}
-													value="checkedG"
-													classes={{
-														root: classes.root,
-														checked: classes.checked
-													}}
-												/>
-											}
-											label="Company Information"
-										/>
-										<FormControlLabel
-											control={
-												<Checkbox
-													checked={true}
-													// onChange={this.handleChange('checkedG')}
-													value="checkedG"
-													classes={{
-														root: classes.root,
-														checked: classes.checked
-													}}
-												/>
-											}
-											label="Billing Address"
-										/><FormControlLabel
-											control={
-												<Checkbox
-													checked={true}
-													// onChange={this.handleChange('checkedG')}
-													value="checkedG"
-													classes={{
-														root: classes.root,
-														checked: classes.checked
-													}}
-												/>
-											}
-											label="Billing Settings"
-										/><FormControlLabel
-											control={
-												<Checkbox
-													checked={true}
-													// onChange={this.handleChange('checkedG')}
-													value="checkedG"
-													classes={{
-														root: classes.root,
-														checked: classes.checked
-													}}
-												/>
-											}
-											label="Company Contacts"
-										/><FormControlLabel
-											control={
-												<Checkbox
-													checked={true}
-													// onChange={this.handleChange('checkedG')}
-													value="checkedG"
-													classes={{
-														root: classes.root,
-														checked: classes.checked
-													}}
-												/>
-											}
-											label="Contract Details"
-										/><FormControlLabel
-											control={
-												<Checkbox
-													checked={true}
-													// onChange={this.handleChange('checkedG')}
-													value="checkedG"
-													classes={{
-														root: classes.root,
-														checked: classes.checked
-													}}
-												/>
-											}
-											label="Contract Signed"
-										/><FormControlLabel
-											control={
-												<Checkbox
-													checked={true}
-													// onChange={this.handleChange('checkedG')}
-													value="checkedG"
-													classes={{
-														root: classes.root,
-														checked: classes.checked
-													}}
-												/>
-											}
-											label="Service Location Info"
-										/><FormControlLabel
-											control={
-												<Checkbox
-													checked={true}
-													// onChange={this.handleChange('checkedG')}
-													value="checkedG"
-													classes={{
-														root: classes.root,
-														checked: classes.checked
-													}}
-												/>
-											}
-											label="Verified & Approved"
-										/>
-
-									</div>)
-								: (<div>
+							<div>
 									<Card className={classes.card} >
 										<CardContent style={{ color: 'white' }}>
 											<h2>Sales</h2>
@@ -327,8 +214,7 @@ class SummaryPanel extends Component {
 											</div>
 										</div>
 									</Card>
-								</div>
-								)}
+							</div>
 						</Paper>
 					)}
 				</div>
