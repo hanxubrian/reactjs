@@ -237,9 +237,13 @@ class InvoiceForm extends Component {
         const data = [...this.props.invoiceForm.data.line];
 
         data.forEach(n => {
+            let mk = 0.;
+            let qty = 0;
+            if(n.quantity!=='') qty = n.quantity;
+            if(n.markup!=='') mk = n.markup;
             subTotal += parseFloat(n.extended);
             tax += parseFloat(n.tax);
-            markup += parseFloat(n.extended*n.quantity*parseFloat(n.markup)/100);
+            markup += parseFloat(n.extended*qty*parseFloat(mk)/100);
         });
 
         this.setState({subTotal: subTotal});
