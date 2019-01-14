@@ -73,7 +73,7 @@ const leads = function (state = initialState, action) {
 				return {
 					...state,
 					bOpenedFilterPanel: true,
-					bOpenedSummaryPanel: true,
+					bOpenedSummaryPanel: false,
 					leadForm: {
 						type: 'new',
 						props: {

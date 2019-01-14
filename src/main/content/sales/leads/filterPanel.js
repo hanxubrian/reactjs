@@ -142,6 +142,7 @@ const stateNames = [
 	}
 ];
 
+
 class FilterPanel extends Component {
 
 	state = {
@@ -165,7 +166,9 @@ class FilterPanel extends Component {
 		isVariableLeadStatus: true,
 		AccountTypes: -2,
 		AccountExecutive: 0,
-		Location: "locationAll"
+		Location: "locationAll",
+        addressState: 2,
+        addressZipcode: ''
 	};
 
 	componentWillMount() {
@@ -219,6 +222,7 @@ class FilterPanel extends Component {
 
 	};
 
+
 	handleChange = name => event => {
 		this.setState({
 			[name]: event.target.value
@@ -241,137 +245,161 @@ class FilterPanel extends Component {
 					{leadForm && leadForm.props.open
 						? (
 							<div>
+                                <br/>
+								<h3>COMPANY INFO</h3>
 								<GridContainer style={{ alignItems: 'center', width: 300 }} className={classNames(classes.formControl)}>
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 										<TextField
-											id="Name"
-											label="Name *"
+											id="companyName"
+											label="Name"
 											className={classes.textField}
-											onChange={this.handleChange('Name')}
-											margin="normal"
+											onChange={this.handleChange('companyName')}
+											margin="dense"
 											variant="outlined"
-											fullWidth />
+											fullWidth
+											required
+										/>
 
 									</GridItem>
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 										<TextField
-											id="outlined-name"
-											label="Address *"
+											id="companyPhone"
+											label="Phone"
+											type="phone"
 											className={classes.textField}
-											onChange={this.handleChange('Address')}
-											margin="normal"
+											onChange={this.handleChange('companyPhone')}
+											margin="dense"
+											required
+                                            fullWidth
 											variant="outlined"
-											fullWidth />
+										/>
+									</GridItem>
+								</GridContainer>
+                                <br/>
+                                <h3>CONTACT</h3>
+                                <GridContainer style={{ alignItems: 'center', width: 300 }} className={classNames(classes.formControl)}>
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+											<TextField
+												id="contactTitle"
+												label="Title"
+												className={classes.textField}
+												onChange={this.handleChange('contactTitle')}
+												margin="dense"
+												variant="outlined"
+                                                fullWidth
+											/>
+									</GridItem>
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+											<TextField
+												id="contactName"
+												label="Name"
+												className={classes.textField}
+												onChange={this.handleChange('contactName')}
+												margin="dense"
+												variant="outlined"
+												required
+                                                fullWidth
+											/>
+									</GridItem>
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+											<TextField
+												id="contactPhone"
+												label="Phone"
+												type="phone"
+												className={classes.textField}
+												value=""
+												onChange={this.handleChange('contactPhone')}
+												margin="dense"
+												required
+												variant="outlined"
+                                                fullWidth
+											/>
+									</GridItem>
+                                    <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+											<TextField
+												id="contactEmail"
+												label="E-mail"
+												type="email"
+												className={classes.textField}
+												onChange={this.handleChange('contactEmail')}
+												margin="dense"
+												variant="outlined"
+                                                fullWidth
+											/>
+									</GridItem>
+								</GridContainer>
+                                <br/>
+                                <h3>ADDRESS</h3>
+                                <GridContainer style={{ alignItems: 'center', width: 300 }} className={classNames(classes.formControl)}>
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+										<TextField
+											id="addressAddress1"
+											label="Address 1"
+											className={classes.textField}
+											onChange={this.handleChange('addressAddress1')}
+											margin="dense"
+											variant="outlined"
+                                            fullWidth
+											required
+										/>
+									</GridItem>
+                                    <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+										<TextField
+											id="addressAddress2"
+											label="Address 2"
+											className={classes.textField}
+											onChange={this.handleChange('addressAddress2')}
+											margin="dense"
+                                            fullWidth
+											variant="outlined"
+										/>
+									</GridItem>
+
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+										<TextField
+											id="addressCity"
+											label="City"
+											className={classes.textField}
+											onChange={this.handleChange('addressCity')}
+											margin="dense"
+											variant="outlined"
+                                            fullWidth
+                                            required
+										/>
 									</GridItem>
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 										<TextField
-											id="outlined-name"
-											label="Address2"
-											className={classes.textField}
-											onChange={this.handleChange('Address2')}
-											margin="normal"
-											variant="outlined"
-											fullWidth />
-									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="outlined-name"
-											label="City *"
-											className={classes.textField}
-											onChange={this.handleChange('City')}
-											margin="normal"
-											variant="outlined"
-											fullWidth />
-									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="outlined-name"
-											label="State *"
+											id="addressState"
+											label="State"
 											select
 											className={classes.textField}
-											value={this.state.State === undefined ? "" : this.state.State}
-											onChange={this.handleChange('State')}
-											margin="normal"
+											value={this.state.addressState === undefined ? "" : this.state.addressState}
+											onChange={this.handleChange('addressState')}
+											margin="dense"
 											variant="outlined"
-											style={{ width: '40%', marginRight: '2px' }}>
+                                            fullWidth
+											required
+										>
 											{stateNames.map(option => (
 												<MenuItem key={option.value} value={option.value}>
 													{option.label}
 												</MenuItem>
 											))}
 										</TextField>
-
-										<TextField
-											id="outlined-name"
-											label="Zip *"
-											className={classes.textField}
-											onChange={this.handleChange('Zip')}
-											margin="normal"
-											variant="outlined"
-											style={{ width: '60%', marginLeft: '2px' }} />
 									</GridItem>
-
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="outlined-name"
-											label="Phone *"
-											className={classes.textField}
-											onChange={this.handleChange('Phone')}
-											margin="normal"
-											variant="outlined"
-											style={{ marginRight: '2px' }} />
-
-										<TextField
-											id="outlined-name"
-											label="Fax"
-											className={classes.textField}
-											onChange={this.handleChange('Fax')}
-											margin="normal"
-											variant="outlined"
-											style={{ marginLeft: '2px' }} />
-									</GridItem>
-
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="outlined-name"
-											label="Email"
-											type="email"
-											className={classes.textField}
-											onChange={this.handleChange('Email')}
-											margin="normal"
-											variant="outlined"
-											style={{ marginRight: '2px' }} />
-
-										<TextField
-											id="outlined-name"
-											label="Website"
-											className={classes.textField}
-											onChange={this.handleChange('Website')}
-											margin="normal"
-											variant="outlined"
-											style={{ marginLeft: '2px' }} />
-									</GridItem>
-
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="AccountType"
-											label="Account Type *"
-											select
-											className={classes.textField}
-											value={this.state.AccountType === undefined ? "" : this.state.AccountType}
-											onChange={this.handleChange('AccountType')}
-											margin="normal"
-											variant="outlined"
-											fullWidth
-										>
-											{[{ value: 0, label: "Airline" }].map(option => (
-												<MenuItem key={option.value} value={option.value}>
-													{option.label}
-												</MenuItem>
-											))}
-										</TextField>
-									</GridItem>
-
+                                    <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                        <TextField
+                                            id="addressZipcode"
+                                            label="ZipCode"
+                                            className={classes.textField}
+											value={this.state.addressZipcode}
+                                            onChange={this.handleChange('addressZipcode')}
+                                            margin="dense"
+                                            fullWidth
+                                            variant="outlined"
+                                            required
+                                        />
+                                    </GridItem>
 								</GridContainer>
 							</div>
 						) :
