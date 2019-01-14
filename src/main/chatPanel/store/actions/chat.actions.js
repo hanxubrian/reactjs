@@ -7,6 +7,8 @@ import {updateContactsPresense} from './contacts.actions';
 import {initContactsPresense} from  './contacts.actions';
 import {addUnread} from  './contacts.actions';
 import {initUnread} from  './contacts.actions';
+import {updateUser} from './user.actions'
+import {checkChatUserData} from './user.actions'
 import _ from '@lodash';
 
 export const GET_CHAT = '[CHAT PANEL] GET CHAT';
@@ -27,8 +29,6 @@ export function initChat()
         const chat = getState().chatPanel.chat;
         if (user.id && chat)
         {
-            const rooms = chat.rooms;
-            const currentRoom = chat.currentRoom;
             const chatManager = new Chatkit.ChatManager({
                 instanceLocator: 'v1:us1:e55a61d5-6a16-4a03-9ff0-5bdacd4f04ca',
                 userId: user.id,
@@ -42,9 +42,6 @@ export function initChat()
             .then(currentUser => {
               dispatch(setCurrentUser(currentUser));
               dispatch(assignRooms(currentUser));
-
-    
-             
             })
         }
         
@@ -99,6 +96,12 @@ export function assignRooms(currentUser)
     };
 }
 
+export function checkChat()
+{
+    return  (dispatch) => {
+        return dispatch(checkChatUserData());
+    }
+}
 
 export function getChat(chatId, contactId)
 {
@@ -191,14 +194,27 @@ export function appendMessages(chatId)
 {
     return  (dispatch, getState) => {
         const userId = getState().chatPanel.chat.currentUser.id;
+        const user = getState().chatPanel.user;
 
         (async () => {
             let messages = await chatService.getMessages(chatId, userId);
-           
+            if (messages.length > 0)
+            {
+                let lastmsg = messages[messages.length - 1];
+                user.chatList.map((item) => {
+                    if(item.chatId === chatId)
+                    {
+                        item.lastMessageTime = lastmsg.time;
+                    }
+                });
+            }
+
             dispatch({
                 type   : APPEND_MESSAGE,
-                data: {[chatId]:messages},
+                data: {[chatId] : messages},
+                
             });
+            dispatch(updateUser(user));
         })();
     }
 }
@@ -209,6 +225,7 @@ export function addMessage(roomId, message)
     return (dispatch, getState) => {
         const currentRoom = getState().chatPanel.chat.currentRoom;
         const loading = getState().chatPanel.chat.loading;
+        const user = getState().chatPanel.user;
 
         if (loading) return;
         let isthis;
@@ -232,7 +249,12 @@ export function addMessage(roomId, message)
                 messages[roomId] = [message];
         }
     
-        
+        user.chatList.map((item) => {
+                    if(item.chatId === roomId)
+                    {
+                        item.lastMessageTime = message.time;
+                    }
+                });
        
 
         return dispatch({

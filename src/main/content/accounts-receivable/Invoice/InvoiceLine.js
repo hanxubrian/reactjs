@@ -31,6 +31,7 @@ import keycode from "keycode";
 
 //Utility
 import {NumberFormatCustom, escapeRegexCharacters, NumberFormatCustom1, NumberFormatCustomPercent} from '../../../../services/utils'
+import {DatePicker} from "material-ui-pickers";
 
 //Snackbar
 const variantIcon = {
@@ -157,7 +158,7 @@ function renderInputComponent(inputProps) {
 const styles = theme => ({
     root        : {
         width    : '100%',
-        marginTop: theme.spacing.unit * 2,
+        marginTop: theme.spacing.unit,
         head: {
             color: 'black',
         },
@@ -204,27 +205,36 @@ const styles = theme => ({
         padding: "12px 24px 12px 12px!important"
     },
     billing:{
-        width: 200,
+        width: 170,
         fontSize: '1.3rem'
     },
     services:{
-        width: 200,
+        width: 180,
         fontSize: '1.3rem'
     },
+    dropdownMenu:{
+        '& li':{
+            fontSize: 12,
+            height: 12,
+        }
+    },
     lineButton: {
-        width: 32,
-        height: 32,
-        minHeight: 32,
+        width: 24,
+        height: 24,
+        minHeight: 24,
         [theme.breakpoints.down('sm')]: {
             width: 24,
             height: 24,
             minHeight: 24,
+        },
+        '& .material-icons':{
+            fontSize: 16
         }
     },
     lineCancelButton:{
-        width: 32,
-        height: 32,
-        minHeight: 32,
+        width: 24,
+        height: 24,
+        minHeight: 24,
         backgroundColor: '#ff4850',
         color: 'white',
         '&:hover':{
@@ -235,6 +245,9 @@ const styles = theme => ({
             height: 24,
             minHeight: 24,
             padding: 0
+        },
+        '& .material-icons':{
+            fontSize: 16
         }
     },
     distribution: {
@@ -248,13 +261,13 @@ const styles = theme => ({
         backgroundColor: theme.palette.primary.main
     },
     input: {
-        margin: 0,
+        fontSize: 13
     },
     fInput: {
         width: '96%',
         marginLeft: 15,
         '& input': {
-            fontSize: 14,
+            fontSize: 13,
             textAlign: 'right',
         }
     },
@@ -624,7 +637,7 @@ class InvoiceLineTable extends React.Component {
                                     fontSize: 13,
                                     fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
                                     fontWeight: 400,
-                                    lineHeight: 2.75,
+                                    lineHeight: 2.0,
                                     color: 'white',
                                     borderRight: border
                                 },
@@ -672,7 +685,7 @@ class InvoiceLineTable extends React.Component {
                                                     <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl)} style={{marginBottom: '0!important', display: row.original.type!=='line'?'none':'block'}}>
                                                         <Select
                                                             classes={{
-                                                                outlined: classNames(classes.outlined, classes.billing)
+                                                                outlined: classNames(classes.outlined, classes.billing),
                                                             }}
                                                             value={row.original.billing}
                                                             onChange={(ev)=>this.handleChangeBilling(ev, row.original)}
@@ -683,6 +696,9 @@ class InvoiceLineTable extends React.Component {
                                                                     id="billing"
                                                                 />
                                                             }
+                                                            MenuProps = {{
+                                                                classes:{paper: classes.dropdownMenu},
+                                                            }}
                                                         >
                                                             <MenuItem value="">
                                                                 <em>Select</em>
@@ -697,7 +713,7 @@ class InvoiceLineTable extends React.Component {
                                             else
                                                 return (<div/>)
                                         },
-                                        width: 210,
+                                        width: 180,
                                         className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
                                     },
                                     {
@@ -720,6 +736,9 @@ class InvoiceLineTable extends React.Component {
                                                                     id="service"
                                                                 />
                                                             }
+                                                            MenuProps = {{
+                                                                classes:{paper: classes.dropdownMenu},
+                                                            }}
                                                         >
                                                             <MenuItem value="">
                                                                 <em>Select</em>
@@ -753,7 +772,7 @@ class InvoiceLineTable extends React.Component {
                                             else
                                                 return (<div className={classNames(classes.distribution)}><span>Distribution</span></div>)
                                         },
-                                        width: 210,
+                                        width: 180,
                                         className: classNames(classes.tableTdEven, "flex items-center"),
                                     },
                                     {
@@ -772,6 +791,11 @@ class InvoiceLineTable extends React.Component {
                                                         margin="normal"
                                                         InputLabelProps={{
                                                             shrink: true,
+                                                        }}
+                                                        InputProps={{
+                                                            classes: {
+                                                                input: classes.input,
+                                                            },
                                                         }}
                                                     />
                                                 )
@@ -816,7 +840,7 @@ class InvoiceLineTable extends React.Component {
                                         },
                                     },
                                     {
-                                        Header: "Quantity",
+                                        Header: "Qty",
                                         accessor: "quantity",
                                         Cell: row=>{
                                             if(row.original.type==='line') {
@@ -827,6 +851,9 @@ class InvoiceLineTable extends React.Component {
                                                     onChange={this.handleChangeInvoiceLine(row.original, 'quantity')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustom1,
+                                                        classes: {
+                                                            input: classes.input,
+                                                        },
                                                     }}
                                                 />
                                             }
@@ -834,7 +861,7 @@ class InvoiceLineTable extends React.Component {
                                                 return (<div/>)
                                         },
                                         className: classNames(classes.tableTdEven, "flex items-center  justify-center text-center"),
-                                        width: 80
+                                        width: 60
                                     },
                                     {
                                         Header: "Amount",
@@ -848,6 +875,9 @@ class InvoiceLineTable extends React.Component {
                                                     onChange={this.handleChangeInvoiceLine(row.original, 'amount')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustom,
+                                                        classes: {
+                                                            input: classes.input,
+                                                        },
                                                     }}
                                                 />
                                             }
@@ -867,7 +897,7 @@ class InvoiceLineTable extends React.Component {
                                                 return (<div/>)
                                         },
                                         className: classNames(classes.tableTdEven, "flex items-center  justify-end text-right"),
-                                        width: 100
+                                        width: 80
                                     },
                                     {
                                         Header: "Markup(%)",
@@ -881,7 +911,10 @@ class InvoiceLineTable extends React.Component {
                                                     onChange={this.handleChangeInvoiceLine(row.original, 'markup')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustomPercent,
-                                                        readOnly: row.original.billing!=="Client Supplies"
+                                                        readOnly: row.original.billing!=="Client Supplies",
+                                                        classes: {
+                                                            input: classes.input,
+                                                        },
                                                     }}
                                                 />
                                             }
@@ -900,10 +933,10 @@ class InvoiceLineTable extends React.Component {
                                                     </div>)
                                         },
                                         className: classNames(classes.tableTdEven, "flex items-center  text-right justify-end"),
-                                        width: 100
+                                        width: 80
                                     },
                                     {
-                                        Header: "Extended Amount",
+                                        Header: "Ext. Amount",
                                         accessor: "extended",
                                         Cell: row=>{
                                             if(row.original.type==='line') {
@@ -921,23 +954,23 @@ class InvoiceLineTable extends React.Component {
                                                 )
                                         },
                                         className: classNames(classes.tableTdEven, "flex items-center  w-full text-center pr-12"),
-                                        width: 140
+                                        width: 100
                                     },
                                     {
                                         Header: "Action",
-                                        width: 200,
+                                        width: 130,
                                         Cell: row=>{
                                             if(row.original.type==='line')
                                                 return (
                                                     <div className="flex flex-row items-center w-full justify-center">
                                                         <Fab color="secondary" aria-label="add"
-                                                             className={classNames(classes.lineButton, "mr-12")}
+                                                             className={classNames(classes.lineButton, "mr-8")}
                                                              onClick={()=>this.addFranchiseeLine(row.original)}
                                                         >
                                                             <Icon>call_merge</Icon>
                                                         </Fab>
                                                         <Fab color="secondary" aria-label="add"
-                                                             className={classNames(classes.lineButton, "mr-12")}
+                                                             className={classNames(classes.lineButton, "mr-8")}
                                                              onClick={()=>this.addLineData(row.original)}
                                                         >
                                                             <Icon>add</Icon>
@@ -945,7 +978,7 @@ class InvoiceLineTable extends React.Component {
                                                         {this.state.data.length>1 && (
                                                             <Fab aria-label="remove"
                                                                  onClick={()=>this.removeLineData(row.original)}
-                                                                 className={classNames(classes.lineCancelButton, "mr-12")}>
+                                                                 className={classNames(classes.lineCancelButton, "mr-0")}>
                                                                 <Icon>close</Icon>
                                                             </Fab>
                                                         )}

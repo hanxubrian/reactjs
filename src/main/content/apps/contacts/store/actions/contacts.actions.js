@@ -25,19 +25,7 @@ export const SET_CONTACTS_STARRED = '[CONTACTS APP] SET CONTACTS STARRED ';
 
 export function getContacts(routeParams)
 {
-/*     const request = axios.get('/api/contacts-app/contacts', {
-        params: routeParams
-    });
-
-    return (dispatch) =>
-        request.then((response) =>
-            dispatch({
-                type   : GET_CONTACTS,
-                payload: response.data,
-                routeParams
-            })
-        ); */
-       
+  
         return  (dispatch, getState) => {
             const userId = getState().auth.login.Username;
             (async () => {
@@ -75,6 +63,14 @@ export function getContacts(routeParams)
 
 
 }
+
+export function checkChat()
+{
+    return  (dispatch, getState) => {
+        
+    }
+}
+
 
 export function setSearchText(event)
 {

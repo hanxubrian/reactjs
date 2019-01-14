@@ -68,7 +68,7 @@ const styles = theme => ({
         marginRight: theme.spacing.unit,
     },
     summary: {
-        fontSize: 16,
+        fontSize: 15,
         fontWeight: 700
     },
     suggestionsContainerOpen: {
@@ -95,9 +95,28 @@ const styles = theme => ({
         backgroundColor: theme.palette.secondary.main,
         padding: '8px 24px',
         '& span': {
-            color: 'white'
+            color: 'white',
+            fontSize: 16,
         }
     },
+    cardContent: {
+        paddingTop: 12,
+        paddingBottom: '12px!important',
+        '& h6':{
+            lineHeight: 1.6,
+            fontSize: 14
+        }
+    },
+    input: {
+        padding: '12px 14px'
+    },
+    label: {
+        transform: 'translate(14px, 14px) scale(1)'
+    },
+    inputOrange: {
+        padding: '12px 14px',
+        color: 'orange'
+    }
 });
 
 const newInvoiceState = {
@@ -149,6 +168,9 @@ function renderInputComponent(inputProps) {
                 classes: {
                     input: classes.input,
                 },
+            }}
+            InputLabelProps = {{
+                classes: {outlined: classes.label}
             }}
             {...other}
             required
@@ -331,87 +353,106 @@ class InvoiceForm extends Component {
                 <div className="h-full flex flex-col relative">
                     <div className="flex flex-col p-24 pt-12 pb-0" style={{flex: "1"}}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <GridContainer className={classNames(classes.formControl)}>
-                            <GridItem xs={12} sm={6} md={6} className="flex flex-row">
-                                <Autosuggest
-                                    {...autosuggestProps}
-                                    inputProps={{
-                                        classes,
-                                        placeholder: 'Search Customer Name or Number',
-                                        value: value,
-                                        onChange: this.onChange,
-                                    }}
-                                    theme={{
-                                        container: classNames(classes.container),
-                                        suggestionsContainerOpen: classes.suggestionsContainerOpen,
-                                        suggestionsList: classes.suggestionsList,
-                                        suggestion: classes.suggestion,
-                                    }}
-                                    renderSuggestionsContainer={options => (
-                                        <Paper {...options.containerProps} square>
-                                            {options.children}
-                                        </Paper>
-                                    )}
-                                />
-                            </GridItem>
-                            <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col xs:mb-24">
-                                <DatePicker
-                                    margin="none"
-                                    label="Invoice Date"
-                                    name="InvoiceDate"
-                                    variant="outlined"
-                                    format="MM/dd/YYYY"
-                                    value={this.state.InvoiceDate}
-                                    onChange={this.handleInvoiceDateChange}
-                                    fullWidth
-                                    required
-                                />
-                            </GridItem>
-                            <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
-                                <DatePicker
-                                    margin="none"
-                                    label="Due Date"
-                                    format="MM/dd/YYYY"
-                                    InputLabelProps={{
-                                        shrink: true
-                                    }}
-                                    name="DueDate"
-                                    variant="outlined"
-                                    value={this.state.DueDate}
-                                    onChange={this.handleDueDateChange}
-                                    required
-                                    fullWidth
-                                />
-                            </GridItem>
-                            <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
-                                <TextField
-                                    margin="none"
-                                    label="Invoice #"
-                                    placeholder="Invoice #"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    InputProps={{
-                                        readOnly: bReadonly,
-                                    }}
-                                    name="InvoiceNo"
-                                    variant="outlined"
-                                    value={this.state.InvoiceNo}
-                                    onChange={this.handleChange}
-                                    required
-                                    fullWidth
-                                    style = {{fontSize: this.props.invoiceForm.type === 'new' ? '18px!important': 'inherit',
-                                        fontWeight: this.props.invoiceForm.type === 'new' ? 700: 'inherit'
-                                    }}
-                                />
-                            </GridItem>
-                        </GridContainer>
+                            <GridContainer className={classNames(classes.formControl)}>
+                                <GridItem xs={12} sm={6} md={6} className="flex flex-row">
+                                    <Autosuggest
+                                        {...autosuggestProps}
+                                        inputProps={{
+                                            classes,
+                                            placeholder: 'Search Customer Name or Number',
+                                            value: value,
+                                            onChange: this.onChange,
+                                        }}
+                                        theme={{
+                                            container: classNames(classes.container),
+                                            suggestionsContainerOpen: classes.suggestionsContainerOpen,
+                                            suggestionsList: classes.suggestionsList,
+                                            suggestion: classes.suggestion,
+                                        }}
+                                        renderSuggestionsContainer={options => (
+                                            <Paper {...options.containerProps} square>
+                                                {options.children}
+                                            </Paper>
+                                        )}
+                                    />
+                                </GridItem>
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col xs:mb-24">
+                                    <DatePicker
+                                        margin="none"
+                                        label="Invoice Date"
+                                        name="InvoiceDate"
+                                        variant="outlined"
+                                        format="MM/dd/YYYY"
+                                        value={this.state.InvoiceDate}
+                                        onChange={this.handleInvoiceDateChange}
+                                        fullWidth
+                                        required
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input,
+                                            },
+                                        }}
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                    />
+                                </GridItem>
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                    <DatePicker
+                                        margin="none"
+                                        label="Due Date"
+                                        format="MM/dd/YYYY"
+                                        name="DueDate"
+                                        variant="outlined"
+                                        value={this.state.DueDate}
+                                        onChange={this.handleDueDateChange}
+                                        required
+                                        fullWidth
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input,
+                                            },
+                                        }}
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                    />
+                                </GridItem>
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                    <TextField
+                                        margin="none"
+                                        label="Invoice #"
+                                        placeholder="Invoice #"
+                                        InputProps={{
+                                            readOnly: bReadonly,
+                                            classes: {
+                                                input: bReadonly? classes.inputOrange: classes.input,
+                                            },
+                                        }}
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        name="InvoiceNo"
+                                        variant="outlined"
+                                        value={this.state.InvoiceNo}
+                                        onChange={this.handleChange}
+                                        required
+                                        fullWidth
+                                        style = {{fontSize: this.props.invoiceForm.type === 'new' ? '18px!important': 'inherit',
+                                            fontWeight: this.props.invoiceForm.type === 'new' ? 700: 'inherit'
+                                        }}
+                                    />
+                                </GridItem>
+                            </GridContainer>
                         </MuiPickersUtilsProvider>
                         <GridContainer className={classNames(classes.formControl, "mb-0")}>
                             <GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col">
                                 <Card className={classes.card}>
                                     <CardHeader title="Customer" className={classNames(classes.cardHeader, "flex-1")} />
-                                    <CardContent>
+                                    <CardContent className={classNames(classes.cardContent)}>
                                         <Typography variant="subtitle1" color="inherit">
                                             <strong>Customer Name: {this.state.selectedCustomer ? this.state.selectedCustomer.CustomerName: this.state.value}</strong>
                                         </Typography>
@@ -432,7 +473,7 @@ class InvoiceForm extends Component {
                             <GridItem xs={12} sm={6} md={6} className= "flex flex-row justify-end xs:flex-col">
                                 <Card className={classes.card}>
                                     <CardHeader title="Billing" className={classNames(classes.cardHeader, "flex-1")} />
-                                    <CardContent>
+                                    <CardContent className={classNames(classes.cardContent)}>
                                         <Typography variant="subtitle1" color="inherit">
                                             <strong>Billing Name: {this.state.selectedCustomer ? this.state.selectedCustomer.CustomerName: this.state.value}</strong>
                                         </Typography>
@@ -451,6 +492,28 @@ class InvoiceForm extends Component {
                                 </Card>
                             </GridItem>
                         </GridContainer>
+                        <div className="w-full mt-4">
+                            <TextField
+                                id="InvoiceDescription"
+                                name="InvoiceDescription"
+                                label="Description"
+                                className={classes.textField}
+                                value={this.state.InvoiceDescription}
+                                onChange={this.handleChange}
+                                margin="dense"
+                                variant="outlined"
+                                fullWidth
+                                InputLabelProps = {{
+                                    shrink: true,
+                                    classes: {outlined: classes.label}
+                                }}
+                                InputProps={{
+                                    classes: {
+                                        input: classes.input, multiline: classes.input
+                                    },
+                                }}
+                            />
+                        </div>
                         <GridContainer className={classNames(classes.formControl)} style={{flex: "9999 1 0"}}>
                             <GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col xs:mb-24">
                                 <InvoiceLineTable />
@@ -458,23 +521,9 @@ class InvoiceForm extends Component {
                         </GridContainer>
                         <Divider variant="middle"/>
                     </div>
-                    <div className="flex flex-shrink flex-col w-full pl-24 pr-24 pt-12 pb-12">
+                    <div className="flex flex-shrink flex-col w-full pl-24 pr-24 pt-0 pb-12">
                         <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
                             <GridItem xs={12} sm={9} md={9} className="flex flex-col xs:flex-col xs:mb-24">
-                                <div className="w-full">
-                                    <TextField
-                                        id="InvoiceDescription"
-                                        name="InvoiceDescription"
-                                        label="Description"
-                                        className={classes.textField}
-                                        value={this.state.InvoiceDescription}
-                                        onChange={this.handleChange}
-                                        margin="dense"
-                                        variant="outlined"
-                                        fullWidth
-                                        multiline
-                                    />
-                                </div>
                                 <div className="w-full">
                                     <TextField
                                         id="note"
@@ -487,6 +536,16 @@ class InvoiceForm extends Component {
                                         variant="outlined"
                                         fullWidth
                                         multiline
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input, multiline: classes.input
+                                            },
+                                        }}
+                                        rows={3}
                                     />
                                 </div>
                             </GridItem>
@@ -494,13 +553,13 @@ class InvoiceForm extends Component {
                                 <div className="w-full p-12 flex justify-end pb-0">
                                     <span className={classes.summary}><strong>Subtotal: </strong>${this.state.subTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
-                                <div className="w-full p-12 flex justify-end pb-0">
+                                <div className="w-full p-12 flex justify-end pb-0 pt-6 ">
                                     <span className={classes.summary}><strong>Markup Total: </strong>${this.state.markup.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
-                                <div className="w-full p-12 flex justify-end">
+                                <div className="w-full p-12 flex justify-end pt-6 pb-6">
                                     <span className={classes.summary}><strong>Tax: </strong>${this.state.tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
-                                <div className="w-full p-12 flex justify-end">
+                                <div className="w-full p-12 flex justify-end  pt-6 pb-6">
                                     <span className={classes.summary}><strong>Grand Total: </strong>${this.state.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
                             </GridItem>

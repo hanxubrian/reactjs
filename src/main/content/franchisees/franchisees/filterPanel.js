@@ -17,6 +17,7 @@ import GridItem from "../../../../Commons/Grid/GridItem";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import RadioGroup from "@material-ui/core/RadioGroup/RadioGroup";
 import Radio from "@material-ui/core/Radio/Radio";
+import Geocode from "react-geocode";
 
 const styles = theme => ({
     root : {
@@ -52,6 +53,8 @@ const styles = theme => ({
     }
 });
 
+const WAIT_INTERVAL = 1000;
+
 class FilterPanel extends Component {
 
     state = {
@@ -68,8 +71,9 @@ class FilterPanel extends Component {
         PendingTransfer: true,
         State: '',
         contactState: '',
-        locationValue: 'all',
-        radius: 0,
+        Location: this.props.locationFilterValue.id,
+        NearbyRadius: this.props.locationFilterValue.miles,
+        AddressZipcodeRadius: this.props.locationFilterValue.miles,
         franchiseeStatus: [],
     };
 
@@ -129,16 +133,165 @@ class FilterPanel extends Component {
             [name]: event.target.value,
         });
     };
-    handleLocationChange = event => {
-        this.props.selectLocation(event.target.value);
-        this.setState({ locationValue: event.target.value });
+
+    handleLocationChange = name => event => {
+        this.setState({
+            [name]: event.target.value
+        });
+
+        let val = event.target.value
+        let onLocationFilter = this.onLocationFilter
+        if (name === "SpecificAddress") {
+            clearTimeout(this.timer)
+            this.timer = setTimeout(
+                function () {
+                    onLocationFilter(name, val);
+                },
+                WAIT_INTERVAL)
+        }
+        else if (
+            name === "Location"
+            || name === "NearbyRadius"
+            || name === "AddressZipcodeRadius"
+        ) {
+            onLocationFilter(name, val)
+        }
     };
+
     handleFilterChange = name => event => {
         this.setState({
             [name]: event.target.value,
         });
     };
+    onLocationFilter = (name, value) => {
 
+        let payload = {
+            ...this.props.locationFilterValue,
+            id: this.state.Location,
+            miles: this.state.Location === "locationNearBy" ?
+                this.state.NearbyRadius :
+                (this.state.Location === "locationNearSpecificAddress" ?
+                    this.state.AddressZipcodeRadius :
+                    this.props.locationFilterValue.miles),
+            addrZipcode:
+                this.state.Location === "locationNearSpecificAddress" ?
+                    this.state.SpecificAddress : undefined
+        }
+        console.log("payload", payload)
+        switch (name) {
+            case "Location":
+                payload = {
+                    ...payload,
+                    id: value,
+                    miles: value === "locationNearBy" ?
+                        this.props.locationFilterValue.miles :
+                        (value === "locationNearSpecificAddress" ?
+                            this.state.AddressZipcodeRadius :
+                            this.props.locationFilterValue.miles),
+                }
+                if (value != "locationNearSpecificAddress") {
+
+                } else {
+                    Geocode.fromAddress(this.state.SpecificAddress).then(
+                        response => {
+                            const { lat, lng } = response.results[0].geometry.location;
+                            // console.log(lat, lng);
+
+                            payload = {
+                                ...payload,
+                                addrZipcode: {
+                                    lat,
+                                    lng,
+                                    addr: this.state.SpecificAddress
+                                }
+                            }
+                            this.props.franchiseeSelectLocationFilter(payload)
+                            return
+                        },
+                        error => {
+                            // console.error(error);
+                            payload = {
+                                ...payload,
+                                addrZipcode: undefined
+                            }
+                            this.props.franchiseeSelectLocationFilter(payload)
+                            return
+                        }
+                    );
+                    return
+                }
+
+                break;
+            case "NearbyRadius":
+                payload = {
+                    ...payload,
+                    miles: value
+                }
+                break;
+            case "SpecificAddress":
+
+                Geocode.fromAddress(value).then(
+                    response => {
+                        const { lat, lng } = response.results[0].geometry.location;
+                        // console.log(lat, lng);
+
+                        payload = {
+                            ...payload,
+                            addrZipcode: {
+                                lat,
+                                lng,
+                                addr: value
+                            }
+                        }
+                        this.props.franchiseeSelectLocationFilter(payload)
+                        return
+                    },
+                    error => {
+                        // console.error(error);
+                        payload = {
+                            ...payload,
+                            addrZipcode: undefined
+                        }
+                        this.props.franchiseeSelectLocationFilter(payload)
+                        return
+                    }
+                );
+
+                return;
+            case "AddressZipcodeRadius":
+                Geocode.fromAddress(this.state.SpecificAddress).then(
+                    response => {
+                        const { lat, lng } = response.results[0].geometry.location;
+                        // console.log(lat, lng);
+
+                        payload = {
+                            ...payload,
+                            miles: value,
+                            addrZipcode: {
+                                lat,
+                                lng,
+                                addr: value
+                            }
+                        }
+                        this.props.franchiseeSelectLocationFilter(payload)
+                        return
+                    },
+                    error => {
+                        // console.error(error);
+                        payload = {
+                            ...payload,
+                            miles: value,
+                            addrZipcode: undefined
+                        }
+                        this.props.franchiseeSelectLocationFilter(payload)
+                        return
+                    }
+                );
+
+                return;
+        }
+        this.props.franchiseeSelectLocationFilter(payload)
+    }
     render()
     {
         const {classes, franchiseesForm} = this.props;
@@ -476,57 +629,83 @@ class FilterPanel extends Component {
 
                            </div>
                         ):(
-                           <div style={{display: 'flex', flexDirection: 'column'}}>
+                           <div style={{display: 'flex', flexDirection: 'column',width: '200px'}}>
                                 <h3>Location</h3>
                                 <FormControl component="fieldset" className={classNames(classes.formControl,"mt-12")}>
                                    <RadioGroup
-                                       aria-label="location"
-                                       name="location"
-                                       value={this.state.locationValue}
-                                       onChange={this.handleLocationChange}
+                                       aria-label="Location"
+                                       name="Location"
+                                       value={this.props.locationFilterValue.id}
+
                                    >
-                                       <FormControlLabel value="all" control={<Radio />} label="All" />
-                                       <FormControlLabel value="nearby" control={<Radio />} label="Near By" />
-                                       <FormControlLabel value="address" control={<Radio />} label="Near Specific Address" />
-                                       {this.state.locationValue === "address" && (
+                                       <FormControlLabel value="locationAll" control={<Radio onChange={this.handleLocationChange('Location')}/>} label="All" />
+                                       <FormControlLabel value="locationNearBy" control={<Radio onChange={this.handleLocationChange('Location')}/>} label="Near By" />
+                                       {this.state.Location === "locationNearBy" && (
                                            <TextField
-                                               id="address"
-                                               label="Zip code or Address"
-                                               className={classes.textField}
-                                               value={this.state.address}
-                                               onChange={this.handleFilterChange('address')}
-                                               margin="normal"
-                                               variant="outlined"
-                                           />
-                                       ) }
-                                       <FormControlLabel value="radius" control={<Radio />} label="Radius" />
-                                       {this.state.locationValue === "radius" && (
-                                           <TextField
-                                               id="franchisee_filter_radius"
                                                select
+
+                                               id="NearbyRadius"
                                                label="Radius"
                                                className={classes.textField}
-                                               value={this.state.radius}
-                                               onChange={this.handleFilterChange('radius')}
-                                               SelectProps={{
-                                                   MenuProps: {
-                                                       className: classes.menu,
-                                                   },
+                                               InputLabelProps={{
+                                                   shrink: true
                                                }}
-                                               margin="normal"
+                                               value={this.props.locationFilterValue.miles}
+                                               onChange={this.handleLocationChange('NearbyRadius')}
+                                               margin="dense"
                                                variant="outlined"
+                                               fullWidth
                                            >
                                                {
-                                                   Array.apply(null, {length: 15}).map(Number.call, Number)
+                                                   Array.from({ length: 15 })
                                                        .map((val, index) => (
-                                                           <MenuItem key={index} value={index}>
-                                                               {(index) * 5} Miles
+                                                           <MenuItem key={index} value={(index + 1) * 5}>
+                                                               {(index + 1) * 5} Miles
                                                            </MenuItem>
                                                        ))
                                                }
                                            </TextField>
-                                       )}
+                                       ) }
+                                       <FormControlLabel value="locationNearSpecificAddress" control={<Radio onChange={this.handleLocationChange('Location')}/>} label="Near Specific Address" />
+
                                    </RadioGroup>
+                                    {this.state.Location === "locationNearSpecificAddress" && (
+                                        <div>
+                                            <TextField
+                                                id="SpecificAddress"
+                                                label="Address"
+                                                className={classes.textField}
+                                                onChange={this.handleLocationChange('SpecificAddress')}
+                                                margin="dense"
+                                                variant="outlined"
+                                                fullWidth
+                                            />
+                                            <TextField
+                                                select
+
+                                                id="AddressZipcodeRadius"
+                                                label="Radius"
+                                                className={classes.textField}
+                                                InputLabelProps={{
+                                                    shrink: true
+                                                }}
+                                                value={this.props.locationFilterValue.miles}
+                                                onChange={this.handleLocationChange('AddressZipcodeRadius')}
+                                                margin="dense"
+                                                variant="outlined"
+                                                fullWidth
+                                            >
+                                                {
+                                                    Array.from({ length: 15 })
+                                                        .map((val, index) => (
+                                                            <MenuItem key={index} value={(index + 1) * 5}>
+                                                                {(index + 1) * 5} Miles
+                                                            </MenuItem>
+                                                        ))
+                                                }
+                                            </TextField>
+                                        </div>
+                                    )}
                                 </FormControl>
                                 <br/>
                                 <h3>Franchisees Statuses</h3>
@@ -561,7 +740,7 @@ class FilterPanel extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        selectLocation: Actions.selectLocation,
+        franchiseeSelectLocationFilter: Actions.franchiseeSelectLocationFilter,
         getStatusFilterList: Actions.getStatusFilterList,
         updateFranchiseeStatus: Actions.updateFranchiseeStatus
     }, dispatch);
@@ -573,10 +752,10 @@ function mapStateToProps({franchisees, auth})
         filterStateFranchisees: franchisees.bOpenedSummaryPanelFranchisees,
         transactionStatusFranchisees: franchisees.transactionStatusFranchisees,
         franchiseesForm: franchisees.createFranchisees,
-        Location: franchisees.Location,
         bLoadedFilterList: franchisees.bLoadedFilterList,
         regionId: auth.login.defaultRegionId,
-        franchiseeStatus: franchisees.franchiseeStatus
+        franchiseeStatus: franchisees.franchiseeStatus,
+        locationFilterValue: franchisees.locationFilterValue,
     }
 }
 

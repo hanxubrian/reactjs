@@ -13,7 +13,6 @@ export const CLOSE_EDIT_FRANCHISEES_FORM = "[FRANCHISEES] FRANCHISEES EDIT CLOSE
 export const UPDATE_FRANCHISEES = '[FRANCHISEES] UPDATE FRANCHISEES';
 export const ADD_FRANCHISEES = '[FRANCHISEES] ADD FRANCHISEES';
 export const TOGGLE_FRANCHISEE_MAP_VIEW = '[FRANCHISEES] TOGGLE FRANCHISEE MAP VIEW';
-export const SELECTED_LOCATION = '[FRANCHISEES] SELECTED LOCATION';
 export const GET_FILTER_LIST = '[FRANCHISEES] GET FILTER LIST';
 export const UPDATE_FRANCHISEE_STATUS = '[FRANCHISEES] UPDATE FRANCHISEE STATUS';
 export const UPDATE_DATE_SIGN_FRANCHISEE = "[FRANCHISEE] UPDATE  DATE_SIGN FRANCHISEE";
@@ -23,6 +22,7 @@ export const GET_FRANCHISEES_FETCH_START = "[FRANCHISEE] GET FRANCHISEES FETCH S
 export const GET_FRANCHISEE_FORM_PLAN_TYPE = "[FRANCHISEE] GET FRANCHISEES FORM PLAN TYPE";
 export const GET_FRANCHISEE_DOCUMENTS_LIST = "[FRANCHISEE] GET FRANCHISEES DOCUMENT LIST";
 export const GET_FRANCHISEE_FEE = "[FRANCHISEE] GET FRANCHISEES FEE MAINTENANCE";
+export const FRANCHISEE_SELECT_LOCATION_FILTER = '[FRANCHISEE] FRANCHISEE SELECT LOCATION FILTER';
 
 export function getFranchisees(regionId, statusId, location , latitude , longitude , searchtext) {
 
@@ -205,12 +205,6 @@ export function toggleFranchiseeMapView(){
     }
 }
 
-export function selectLocation(location){
-    return {
-        type: SELECTED_LOCATION,
-        Location: location
-    }
-}
 export function updateFranchiseeStatus(newStatus){
     return {
         type: UPDATE_FRANCHISEE_STATUS,
@@ -223,4 +217,11 @@ export function updateDate(key, date) {
         payload: date
     }
 
+}
+
+export function franchiseeSelectLocationFilter(filter_value) {
+    return {
+        type: FRANCHISEE_SELECT_LOCATION_FILTER,
+        payload: filter_value
+    }
 }

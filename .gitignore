@@ -7,7 +7,11 @@
 /coverage
 
 # production
+<<<<<<< HEAD
 # /build
+=======
+/build
+>>>>>>> eec816938499c776b95827efe164a42db05ded06
 src/*
 public/*
 build/static/css/*.map
