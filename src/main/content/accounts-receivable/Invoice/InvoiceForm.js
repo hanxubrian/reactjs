@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import {withRouter} from 'react-router-dom';
 
 // core components
@@ -17,6 +16,7 @@ import {
 import 'date-fns'
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+
 // theme components
 import {FuseAnimate} from '@fuse';
 import {withStyles} from "@material-ui/core";
@@ -152,32 +152,6 @@ const newInvoiceState = {
     "notes": ""
 };
 
-function renderInputComponent(inputProps) {
-    const { classes, inputRef = () => {}, ref, ...other } = inputProps;
-
-    return (
-        <TextField
-            fullWidth
-            variant="outlined"
-            label="Invoice For:"
-            InputProps={{
-                inputRef: node => {
-                    ref(node);
-                    inputRef(node);
-                },
-                classes: {
-                    input: classes.input,
-                },
-            }}
-            InputLabelProps = {{
-                classes: {outlined: classes.label}
-            }}
-            {...other}
-            required
-        />
-    );
-}
-
 function renderSuggestion(suggestion, { query, isHighlighted }) {
     const matches = match(suggestion.CustomerName, query);
     const parts = parse(suggestion.CustomerName, matches);
@@ -219,6 +193,33 @@ class InvoiceForm extends Component {
         markup: 0.0,
         InvoiceNo: "",
     };
+
+    renderInputComponent = (inputProps ) => {
+        const { classes, inputRef = () => {}, ref, ...other } = inputProps ;
+
+        return (
+            <TextField
+                fullWidth
+                variant="outlined"
+                label="Invoice For:"
+                InputProps={{
+                    inputRef: node => {
+                        ref(node);
+                        inputRef(node);
+                    },
+                    classes: {
+                        input: classes.input,
+                    },
+                }}
+                InputLabelProps = {{
+                    classes: {outlined: classes.label}
+                }}
+                required
+                {...other}
+                autoFocus={true}
+            />
+        );
+    }
 
     onChange = (event, { newValue, method }) => {
         this.setState({
@@ -301,6 +302,10 @@ class InvoiceForm extends Component {
     componentDidMount(){
         if(this.props.invoiceForm.type === 'new')
             this.setState({InvoiceNo: "PENDING"});
+
+        if(this.input) {
+            setTimeout(() => {this.input.focus()}, 1000);
+        }
     }
 
     handleChange = (event) => {
@@ -329,6 +334,13 @@ class InvoiceForm extends Component {
     handleInvoiceDateChange = date => {
         this.setState({ InvoiceDate: date });
     };
+
+    storeInputReference = autosuggest => {
+        if (autosuggest !== null) {
+            this.input = autosuggest.input;
+        }
+    };
+
     render()
     {
         const { classes} = this.props;
@@ -337,13 +349,15 @@ class InvoiceForm extends Component {
         const today = new Date();
 
         const autosuggestProps = {
-            renderInputComponent,
+            renderInputComponent: this.renderInputComponent,
             suggestions: suggestions,
             onSuggestionsFetchRequested: this.onSuggestionsFetchRequested,
             onSuggestionsClearRequested: this.onSuggestionsClearRequested,
             getSuggestionValue: this.getSuggestionValue,
             renderSuggestion,
         };
+
+
 
         let bReadonly = false;
         if(this.props.invoiceForm.type === 'new') bReadonly = true;
@@ -374,6 +388,7 @@ class InvoiceForm extends Component {
                                                 {options.children}
                                             </Paper>
                                         )}
+                                        ref={this.storeInputReference}
                                     />
                                 </GridItem>
                                 <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col xs:mb-24">
@@ -577,10 +592,10 @@ class InvoiceForm extends Component {
                                         color="primary"
                                         className={classNames(classes.button, "mr-12")}
                                         onClick={() => {
-                                            this.onSaveAndClose();
+                                            this.onSaveAndAddMore();
                                         }}
                                     >
-                                        Save & Close
+                                        Save & Add more
                                     </Button>
                                 </FuseAnimate>
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
@@ -589,10 +604,10 @@ class InvoiceForm extends Component {
                                         color="primary"
                                         className={classNames(classes.button, "mr-12")}
                                         onClick={() => {
-                                            this.onSaveAndAddMore();
+                                            this.onSaveAndClose();
                                         }}
                                     >
-                                        Save & Add more
+                                        Save & Close
                                     </Button>
                                 </FuseAnimate>
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
@@ -647,4 +662,3 @@ function mapStateToProps({invoices, auth})
 }
 
 export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceForm)));
-
