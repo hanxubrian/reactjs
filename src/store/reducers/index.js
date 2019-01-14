@@ -15,6 +15,7 @@ import customers from './customers.reducer'
 import leases from './leases.reducer'
 import leads from './leads.reducer'
 import findersFees from './findersfees.reducer'
+import payments from './payment.reducer'
 
 
 const createReducer = (asyncReducers) =>
@@ -35,6 +36,7 @@ const createReducer = (asyncReducers) =>
         franchiseeReports,
         leads,
         findersFees,
+        payments,
         ...asyncReducers
     });
 

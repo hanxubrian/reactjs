@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 // core components
-import { withStyles,Paper,Icon, IconButton, Fab, Typography,  CircularProgress, Menu, MenuItem, Checkbox, FormControlLabel } from '@material-ui/core';
+import { withStyles,Paper,Icon, IconButton, Fab, Typography,Button, Input, CircularProgress, Menu, MenuItem, Checkbox, FormControlLabel } from '@material-ui/core';
 // import {withStyles,Paper} from "@material-ui/core";
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import {withRouter} from 'react-router-dom';
@@ -197,7 +197,7 @@ const styles = theme => ({
         backgroundColor: theme.palette.divider
     },
     search: {
-        width: 360,
+        width: '100%',
         [theme.breakpoints.down('sm')]: {
             width: '100%'
         }
@@ -281,6 +281,7 @@ class PaymentList extends Component {
     constructor(props){
         super(props);
         this.state = {
+            leftsidebar:false,
             columns: Array.from([
                 { name: 'resion', title: 'REGION' },
                 { name: 'paymentno', title: 'PAYMENT NO' },
@@ -323,7 +324,12 @@ class PaymentList extends Component {
         this.changeCurrentPage = currentPage => this.setState({ currentPage });
         this.changePageSize = pageSize => this.setState({ pageSize });
     }
+    leftsidebar=()=>{
+        this.setState({
+            leftsidebar:!this.state.leftsidebar,
+        })
 
+    }
     render()
     {
 
@@ -353,7 +359,32 @@ class PaymentList extends Component {
                                             <Typography variant="h6" className="hidden sm:flex">Payment | List</Typography>
                                         </div>
                                     </div>
+                                    <div className="flex flex-shrink items-center">
+                                        <IconButton className={classes.button} aria-label="add" onClick={()=>alert('ok')}>
+                                            <Icon>add</Icon>
+                                        </IconButton>
+                                        <IconButton className={classes.button} aria-label="mail" onClick={() => alert('ok')}>
+                                            <Icon>mail_outline</Icon>
+                                        </IconButton>
+                                        <IconButton className={classes.button} aria-label="print" onClick={() => alert('ok')}>
+                                            <Icon>print</Icon>
+                                        </IconButton>
 
+                                        {/* <Fab
+												color="secondary"
+												aria-label="add"
+												className={classNames(classes.sideButton, "mr-12")}
+												onClick={openNewCustomerForm}>
+												<Icon>add</Icon>
+											</Fab>
+											<Fab color="secondary" aria-label="add"
+												className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
+												<Icon>mail_outline</Icon>
+											</Fab>
+											<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
+												<Icon>print</Icon>
+											</Fab> */}
+                                    </div>
                                 </div>
 
                             </div>
@@ -361,7 +392,46 @@ class PaymentList extends Component {
                     }
                     content={
                         <div>
-                            <div><br/></div>
+                            <div>
+                                <div className="flex flex-row items-center">
+                                    <div className="flex items-center justify-start p-12">
+                                        <Button
+                                            onClick={(ev)=>toggleFilterPanel()}
+                                            aria-label="toggle filter panel"
+                                            color="secondary"
+                                            className={classNames(classes.filterPanelButton)}
+                                        >
+                                            <img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" />
+                                        </Button>
+                                    </div>
+
+                                    <Paper className={"flex items-center w-full h-44 mr-0"}>
+                                        <Input
+                                            placeholder="Search..."
+                                            className={classNames(classes.search, 'pl-16')}
+                                            disableUnderline
+                                            fullWidth
+                                            // value={this.state.s}
+                                            // onChange={this.handleChange('s')}
+                                            inputProps={{
+                                                'aria-label': 'Search'
+                                            }}
+                                            // onKeyDown={this.handleKeyDown}
+                                        />
+                                        <Icon color="action" className="mr-16">search</Icon>
+                                    </Paper>
+
+                                    <div className="flex items-center justify-end p-12">
+                                        <Button
+                                            onClick={this.props.toggleSummaryPanel}
+                                            aria-label="toggle summary panel"
+                                            className={classNames(classes.summaryPanelButton)}
+                                        >
+                                            <Icon>insert_chart</Icon>
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
                             <Paper>
                                 <Grid
                                     rootComponent={GridRootComponent}
@@ -410,6 +480,20 @@ class PaymentList extends Component {
                         </div>
 
                     }
+                    leftSidebarHeader={
+                        <div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
+                            <h2 style={{ marginBlockStart: '1em' }}>Leftside Bar</h2>
+                        </div>
+                    }
+                    leftSidebarContent={
+                        <div>
+                            content content content content content
+
+                        </div>
+                    }
+                    onRef={instance => {
+                        this.pageLayout = instance;
+                    }}
                 />
             </React.Fragment>
 
@@ -417,5 +501,19 @@ class PaymentList extends Component {
         )
     }
 }
+function mapDispatchToProps(dispatch)
+{
+    return bindActionCreators({
+        toggleFilterPanel: Actions.paymenttoggleFilterPanel,
+    }, dispatch);
+}
+function mapStateToProps({payments, auth})
+{
+    return {
+        payments: payments.paymentsDB,
+        filterState: payments.bOpenedFilterPanel,
+    }
+}
 
-export default withStyles(styles, {withTheme: true})(PaymentList);
+// export default withStyles(styles, {withTheme: true})(PaymentList);
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(PaymentList)));
