@@ -304,7 +304,7 @@ class InvoiceForm extends Component {
             this.setState({InvoiceNo: "PENDING"});
 
         if(this.input) {
-            setTimeout(() => {this.input.focus()}, 1000);
+            setTimeout(() => {this.input.focus()}, 500);
         }
     }
 
