@@ -79,8 +79,8 @@
         "bundle-report": "yarn run build-stats && webpack-bundle-analyzer build/bundle-stats.json"
     },
     "devDependencies": {
-        "@babel/core": "7.0.0-rc.1",
-        "@babel/preset-env": "7.0.0-rc.1",
+        "@babel/core": "7.2.2",
+        "@babel/preset-env": "7.2.2",
         "@devexpress/dx-react-core": "1.10.0",
         "@devexpress/dx-react-grid": "1.10.0",
         "@devexpress/dx-react-grid-material-ui": "1.10.0",
