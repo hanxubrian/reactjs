@@ -68,7 +68,7 @@ const styles = theme => ({
         marginRight: theme.spacing.unit,
     },
     summary: {
-        fontSize: 16,
+        fontSize: 15,
         fontWeight: 700
     },
     suggestionsContainerOpen: {
@@ -545,7 +545,7 @@ class InvoiceForm extends Component {
                                                 input: classes.input, multiline: classes.input
                                             },
                                         }}
-                                        rows={4}
+                                        rows={3}
                                     />
                                 </div>
                             </GridItem>
@@ -553,13 +553,13 @@ class InvoiceForm extends Component {
                                 <div className="w-full p-12 flex justify-end pb-0">
                                     <span className={classes.summary}><strong>Subtotal: </strong>${this.state.subTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
-                                <div className="w-full p-12 flex justify-end pb-0">
+                                <div className="w-full p-12 flex justify-end pb-0 pt-6 ">
                                     <span className={classes.summary}><strong>Markup Total: </strong>${this.state.markup.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
-                                <div className="w-full p-12 flex justify-end">
+                                <div className="w-full p-12 flex justify-end pt-6 pb-6">
                                     <span className={classes.summary}><strong>Tax: </strong>${this.state.tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
-                                <div className="w-full p-12 flex justify-end">
+                                <div className="w-full p-12 flex justify-end  pt-6 pb-6">
                                     <span className={classes.summary}><strong>Grand Total: </strong>${this.state.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
                             </GridItem>
