@@ -23,6 +23,7 @@ export const GET_FRANCHISEE_FORM_PLAN_TYPE = "[FRANCHISEE] GET FRANCHISEES FORM 
 export const GET_FRANCHISEE_DOCUMENTS_LIST = "[FRANCHISEE] GET FRANCHISEES DOCUMENT LIST";
 export const GET_FRANCHISEE_FEE = "[FRANCHISEE] GET FRANCHISEES FEE MAINTENANCE";
 export const FRANCHISEE_SELECT_LOCATION_FILTER = '[FRANCHISEE] FRANCHISEE SELECT LOCATION FILTER';
+export const SELECTED_LOCATION = '[FRANCHISEES] SELECTED LOCATION'
 
 export function getFranchisees(regionId, statusId, location , latitude , longitude , searchtext) {
 
@@ -224,4 +225,11 @@ export function franchiseeSelectLocationFilter(filter_value) {
         type: FRANCHISEE_SELECT_LOCATION_FILTER,
         payload: filter_value
     }
+}
+
+export function selectLocation(location){
+     return {
+       type: SELECTED_LOCATION,
+        Location: location
+     }
 }

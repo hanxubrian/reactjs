@@ -23,6 +23,7 @@ const initialState = {
     planType: [],
     documentsList: [],
     franchiseeFees: [],
+    Location: "all",
     transactionStatusFranchisees:{
         Active: true,
         Inactive: true,
@@ -231,6 +232,13 @@ const franchisees = function(state = initialState, action) {
         {
             return {
                 ...state, selectedExpDate: action.payload
+            }
+        }
+        case Actions.SELECTED_LOCATION:
+        {
+            return{
+                ...state,
+                Location: action.Location
             }
         }
         default:
