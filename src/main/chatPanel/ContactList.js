@@ -82,8 +82,13 @@ class ContactList extends Component {
 
     componentDidMount(){
         this.props.initChat();
+
+        setInterval(this.tick, 5000);
     }
 
+    tick = () => {
+        this.props.checkChatUserData();
+    };
 
     handleContactClick = (chatId, contactId) => {
         this.props.openChatPanel();
@@ -160,9 +165,10 @@ class ContactList extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        initChat       :Actions.initChat,
-        getChat      : Actions.getChat,
-        openChatPanel: Actions.openChatPanel
+        initChat        : Actions.initChat,
+        checkChatUserData       : Actions.checkChatUserData,
+        getChat         : Actions.getChat,
+        openChatPanel   : Actions.openChatPanel
     }, dispatch);
 }
 
