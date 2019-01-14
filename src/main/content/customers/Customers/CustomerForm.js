@@ -1618,7 +1618,8 @@ class CustomerForm extends Component {
 					selection,
 				} = this.state;
 
-				let rows = this.props.franchisees.Data.Region.filter(x => x.Id == this.props.regionId)[0].FranchiseeList
+				// let rows = this.props.franchisees.Data.Region.filter(x => x.Id == this.props.regionId)[0].FranchiseeList
+				let rows = this.state.data;
 				console.log("this.props.franchisees.Data", rows, account_offering_columns)
 				// account offering
 				return (
