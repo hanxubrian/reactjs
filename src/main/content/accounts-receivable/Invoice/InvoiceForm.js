@@ -393,6 +393,7 @@ class InvoiceForm extends Component {
                                             },
                                         }}
                                         InputLabelProps = {{
+                                            shrink: true,
                                             classes: {outlined: classes.label}
                                         }}
                                     />
@@ -402,9 +403,6 @@ class InvoiceForm extends Component {
                                         margin="none"
                                         label="Due Date"
                                         format="MM/dd/YYYY"
-                                        InputLabelProps={{
-                                            shrink: true
-                                        }}
                                         name="DueDate"
                                         variant="outlined"
                                         value={this.state.DueDate}
@@ -417,6 +415,7 @@ class InvoiceForm extends Component {
                                             },
                                         }}
                                         InputLabelProps = {{
+                                            shrink: true,
                                             classes: {outlined: classes.label}
                                         }}
                                     />
