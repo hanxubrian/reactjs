@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import Geocode from "react-geocode";
 
-import { Paper, withStyles } from '@material-ui/core';
+import { Paper, withStyles, Checkbox } from '@material-ui/core';
 import { TextField, Divider, Toolbar, Typography } from '@material-ui/core';
 import keycode from 'keycode';
 
@@ -710,8 +710,20 @@ class FilterPanel extends Component {
 
 										</TextField>
 									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-col">
-										<RadioGroup
+									<GridItem xs={12} sm={12} md={12} className="flex justify-around">
+										<FormControlLabel
+											control={
+												<Checkbox onChange={this.handleChange('nativeChildAccount')} />
+											}
+											label="Native Account"
+										/>
+										<FormControlLabel
+											control={
+												<Checkbox onChange={this.handleChange('nativeChildAccount')} />
+											}
+											label="Child Account"
+										/>
+										{/* <RadioGroup
 											aria-label="nativeChildAccount"
 											name="nativeChildAccount"
 											className={classNames(classes.group, "flex flex-row")}
@@ -719,9 +731,9 @@ class FilterPanel extends Component {
 											value={this.state.nativeChildAccount}
 											onChange={this.handleChange('nativeChildAccount')}
 										>
-											<FormControlLabel value="nativeAccount" control={<Radio />} label="Native Account" />
-											<FormControlLabel value="childAccount" control={<Radio />} label="Child Account" />
-										</RadioGroup>
+											<FormControlLabel value="nativeAccount" control={<Checkbox />} label="Native Account" />
+											<FormControlLabel value="childAccount" control={<Checkbox />} label="Child Account" />
+										</RadioGroup> */}
 									</GridItem>
 
 									<GridItem xs={12} sm={12} md={12} className="flex flex-col">

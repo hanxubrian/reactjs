@@ -705,7 +705,7 @@ class CustomerForm extends Component {
 									InputProps={{
 										startAdornment: <InputAdornment position="start">$</InputAdornment>
 									}}
-											/>
+								/>
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
@@ -837,12 +837,12 @@ class CustomerForm extends Component {
 									type="number"
 									id="TermMonths"
 									label="Term Months *"
-									className={classNames(classes.textField,"ml-12")}
+									className={classNames(classes.textField, "ml-12")}
 									value={this.state.TermMonths}
 									onChange={this.handleChange('TermMonths')}
 									margin="normal"
 									variant="outlined"
-									style={{ width: '70%'}}
+									style={{ width: '70%' }}
 								/>
 
 
@@ -984,7 +984,7 @@ class CustomerForm extends Component {
 										margin="normal"
 										variant="outlined"
 										style={{ width: '60%' }}
-								/>
+									/>
 								</div>
 							</GridItem>
 
@@ -1192,13 +1192,13 @@ class CustomerForm extends Component {
 								</TextField>
 							</GridItem>
 
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-start">
 								<FormControlLabel
 									control={
 										<Checkbox onChange={this.handleChange('weekdays')} />
 									}
 									label="Mon"
-									style={{ marginRight: "30px" }}
+									className="mr-36"
 
 								/>
 								<FormControlLabel
@@ -1206,7 +1206,7 @@ class CustomerForm extends Component {
 										<Checkbox onChange={this.handleChange('weekdays')} />
 									}
 									label="Tue"
-									style={{ marginRight: "30px" }}
+									className="mr-36"
 
 								/>
 								<FormControlLabel
@@ -1214,7 +1214,7 @@ class CustomerForm extends Component {
 										<Checkbox onChange={this.handleChange('weekdays')} />
 									}
 									label="Wed"
-									style={{ marginRight: "30px" }}
+									className="mr-36"
 
 								/>
 								<FormControlLabel
@@ -1222,7 +1222,7 @@ class CustomerForm extends Component {
 										<Checkbox onChange={this.handleChange('weekdays')} />
 									}
 									label="Thu"
-									style={{ marginRight: "30px" }}
+									className="mr-36"
 
 								/>
 								<FormControlLabel
@@ -1230,7 +1230,7 @@ class CustomerForm extends Component {
 										<Checkbox onChange={this.handleChange('weekdays')} />
 									}
 									label="Fri"
-									style={{ marginRight: "30px" }}
+									className="mr-36"
 
 								/>
 								<FormControlLabel
@@ -1238,7 +1238,7 @@ class CustomerForm extends Component {
 										<Checkbox onChange={this.handleChange('weekdays')} />
 									}
 									label="Sat"
-									style={{ marginRight: "30px" }}
+									className="mr-36"
 
 								/>
 								<FormControlLabel
@@ -1246,7 +1246,7 @@ class CustomerForm extends Component {
 										<Checkbox onChange={this.handleChange('weekdays')} />
 									}
 									label="Sun"
-
+									className="mr-36"
 								/>
 								<FormControlLabel
 									control={
