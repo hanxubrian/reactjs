@@ -4,7 +4,6 @@ import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
-import {UPDATE_INVOICE_DATE_OPTION} from "../actions/";
 
 
 let today = new Date();

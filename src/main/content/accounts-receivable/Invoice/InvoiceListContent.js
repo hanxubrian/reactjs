@@ -239,22 +239,18 @@ class InvoiceListContent extends Component {
             page: state.page,
         });
     }
-    onEditInvoice = row => {
-        this.props.openEditInvoiceForm(row);
-    };
 
-    invoicereport =(ev)=>{
+    invoiceReport =(ev)=>{
         ev.stopPropagation();
-        console.log("invoice report");
         this.props.getInvoiceDetail();
-        console.log('asd=',this.props.invoicesdetail);
         this.setState({
             isOpen: !this.state.isOpen
         });
         this.setState({
             invoiceDetail: this.props.invoicesdetail,
         });
-    }
+    };
+
     toggleModal = () => {
         this.setState({
             isOpen: !this.state.isOpen
@@ -360,7 +356,7 @@ class InvoiceListContent extends Component {
                                     accessor: "InvoiceNo",
                                     filterAll: true,
                                     width: 100,
-                                    Cell: props => <Button onClick={this.invoicereport}>{props.value}</Button> ,
+                                    Cell: props => <Button onClick={this.invoiceReport}>{props.value}</Button> ,
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center")
                                 },
                                 {

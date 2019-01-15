@@ -219,7 +219,7 @@ class InvoiceForm extends Component {
                 autoFocus={true}
             />
         );
-    }
+    };
 
     onChange = (event, { newValue, method }) => {
         this.setState({
@@ -312,16 +312,38 @@ class InvoiceForm extends Component {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
     };
 
+    onSaveInvoice = () => {
+        let result = {
+            CustomerId: this.state.selectedCustomer.CustomerId,
+            PeriodId: this.props.invoices.PeriodId[0],
+            PeriodMonth: moment().month()+1,
+            PeriodYear: moment().year(),
+            Description: this.state.InvoiceDescription,
+            Notes: this.state.note,
+            RegionId: this.props.regionId,
+            BillRunId: 999,
+            InvoiceDate: this.state.InvoiceDate,
+            CreatedById: this.props.user.UserId,
+            CreatedDate: moment().format('MM/DD/YYYY'),
+            SubTotal: this.state.subTotal,
+            MarkupAmountTotal :this.state.markup,
+            CPIIncrease: 0.00,
+            TaxTotal: this.state.tax,
+            GrandTotal: this.state.total,
+        }
+    };
+
     onSaveAndAddMore=()=>{
+        this.onSaveInvoice();
 
     };
 
     onSubmitForApproval=()=>{
-
+        this.onSaveInvoice();
     };
 
     onSaveAndClose = () => {
-
+        this.onSaveInvoice();
     };
 
     closeComposeForm = () => {
@@ -356,7 +378,6 @@ class InvoiceForm extends Component {
             getSuggestionValue: this.getSuggestionValue,
             renderSuggestion,
         };
-
 
 
         let bReadonly = false;
@@ -657,7 +678,9 @@ function mapStateToProps({invoices, auth})
 {
     return {
         invoiceForm: invoices.invoiceForm,
-        user: auth.login
+        invoices: invoices,
+        user: auth.login,
+        regionId: auth.login.defaultRegionId,
     }
 }
 
