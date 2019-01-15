@@ -174,15 +174,6 @@ const styles = theme => ({
 	},
 	tableThEven: {
 		backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .3)'
-	},
-    leadFormBottomSection: {
-		position: 'absolute',
-		right: 0,
-		left: 0,
-		bottom: 0,
-		width: '100%',
-		zIndex: 999,
-		backgroundColor: 'white'
 	}
 
 });
@@ -220,50 +211,6 @@ const newLeadState = {
 	"Service": ""
 };
 
-// function renderInputComponent(inputProps) {
-// 	const { classes, inputRef = () => { }, ref, ...other } = inputProps;
-
-// 	return (
-// 		<TextField
-// 			fullWidth
-// 			variant="outlined"
-// 			label="Lead For:"
-// 			InputProps={{
-// 				inputRef: node => {
-// 					ref(node);
-// 					inputRef(node);
-// 				},
-// 				classes: {
-// 					input: classes.input,
-// 				},
-// 			}}
-// 			{...other}
-// 		/>
-// 	);
-// }
-
-// function renderSuggestion(suggestion, { query, isHighlighted }) {
-// 	const matches = match(suggestion.LeadName, query);
-// 	const parts = parse(suggestion.LeadName, matches);
-
-// 	return (
-// 		<MenuItem selected={isHighlighted} component="div">
-// 			<div>
-// 				{parts.map((part, index) => {
-// 					return part.highlight ? (
-// 						<span key={String(index)} style={{ fontWeight: 700 }}>
-// 							{part.text}
-// 						</span>
-// 					) : (
-// 							<strong key={String(index)} style={{ fontWeight: 300 }}>
-// 								{part.text}
-// 							</strong>
-// 						);
-// 				})}
-// 			</div>
-// 		</MenuItem>
-// 	);
-// }
 
 function escapeRegexCharacters(str) {
 	return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -384,25 +331,7 @@ class LeadForm extends Component {
 	};
 
 	getStepContent(step) {
-		const { classes,
-			// LeadForm,
-			// addLead,
-			// updateLead,
-			// removeLead
-		} = this.props;
-		// const {
-		// 	value,
-		// 	suggestions
-		// } = leadForm.state;
-
-		// const autosuggestProps = {
-		// 	renderInputComponent,
-		// 	suggestions: suggestions,
-		// 	onSuggestionsFetchRequested: leadForm.onSuggestionsFetchRequested,
-		// 	onSuggestionsClearRequested: leadForm.onSuggestionsClearRequested,
-		// 	getSuggestionValue: leadForm.getSuggestionValue,
-		// 	renderSuggestion,
-		// };
+		const { classes,} = this.props;
 
 		const address_headers = [
 			{
@@ -478,7 +407,6 @@ class LeadForm extends Component {
 
 		switch (step) {
 			case 0:
-				// return 'Step 1: Select campaign settings...';
 
 				return (
 					<Fragment>
@@ -499,10 +427,6 @@ class LeadForm extends Component {
 			case 1:
 				return (
 					<Fragment>
-
-						{/* <div style={{ marginTop: '30px' }}></div> */}
-						{/* <h3>Billing Settings</h3> */}
-
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
 							<GridItem xs={12} sm={8} md={8} className="flex flex-row">
 								<FormControlLabel
@@ -1583,11 +1507,6 @@ class LeadForm extends Component {
 									style={{ width: '100%' }}
 								/>
 							</GridItem>
-							{/* <GridItem>
-								<img className="mr-12" alt="" src="assets/images/leads/walk-through.jpg" style={{ width: '100%', height: 'auto' }} />
-							</GridItem> */}
-
-
 
 						</GridContainer>
 
@@ -1855,10 +1774,6 @@ class LeadForm extends Component {
 
 	canBeSubmitted() {
 		return true;
-		// const { name } = this.state;
-		// return (
-		// 	name.length > 0
-		// );
 	}
 
 
@@ -1909,11 +1824,131 @@ class LeadForm extends Component {
 		return (
 
 			<Fragment>
+                <div className={"pr-12 pl-12 container"}>
+                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between">
+                            <TextField
+                                id="newLead"
+                                label="New Lead"
+                                type="number"
+                                className={classes.textField}
+                                value={this.state.Stage}
+                                onChange={this.handleChange('newLead')}
+                                margin="dense"
+                                variant="outlined"
+								fullWidth
+								style={{marginRight:"2px", marginLeft:"2px"}}
+                            />
+                            <TextField
+                                id="accountType"
+                                label="Account Type"
+                                className={classes.textField}
+                                value={this.state.accountType}
+                                onChange={this.handleChange('accountType')}
+                                margin="dense"
+                                variant="outlined"
+                                style={{marginRight:"2px", marginLeft:"2px"}}
+                                fullWidth
+                            />
+                            <TextField
+                                id="ofLocation"
+                                label="# of Location"
+                                className={classes.textField}
+                                value={this.state.ofLocation}
+                                onChange={this.handleChange('SqFt')}
+                                margin="dense"
+                                variant="outlined"
+                                style={{marginRight:"2px", marginLeft:"2px"}}
+                                fullWidth
+                            />
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between">
+                            <TextField
+                                id="sqft"
+                                label="SqFt"
+                                type="number"
+                                className={classes.textField}
+                                value={this.state.sqft}
+                                onChange={this.handleChange('sqft')}
+                                margin="dense"
+                                variant="outlined"
+                                fullWidth
+                                style={{marginRight:"2px", marginLeft:"2px"}}
+                            />
+                            <TextField
+                                id="leadSource"
+                                label="Lead Source"
+								type="number"
+                                className={classes.textField}
+                                value={this.state.leadSource}
+                                onChange={this.handleChange('leadSource')}
+                                margin="dense"
+                                variant="outlined"
+                                style={{marginRight:"2px", marginLeft:"2px"}}
+                                fullWidth
+                            />
+                            <TextField
+                                id="currentProvider"
+                                label="Current Provider"
+                                className={classes.textField}
+                                value={this.state.currentProvider}
+                                onChange={this.handleChange('currentProvider')}
+                                margin="dense"
+								type="number"
+                                variant="outlined"
+                                style={{marginRight:"2px", marginLeft:"2px"}}
+                                fullWidth
+                            />
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between">
+                            <TextField
+                                id="contractExpire"
+                                label="Contract Expire"
+                                className={classes.textField}
+                                value={this.state.contractExpire}
+                                onChange={this.handleChange('contractExpire')}
+                                margin="dense"
+                                variant="outlined"
+                                fullWidth
+                                style={{marginRight:"2px", marginLeft:"2px"}}
+                            />
+                            <TextField
+                                id="budget"
+                                label="Budget"
+                                className={classes.textField}
+                                value={this.state.budget}
+                                onChange={this.handleChange('budget')}
+                                margin="dense"
+                                variant="outlined"
+                                style={{marginRight:"2px", marginLeft:"2px"}}
+                                fullWidth
+                            />
+                            <TextField
+                                id="salesPossibility"
+                                label="Sales Possibility"
+                                className={classes.textField}
+                                value={this.state.salesPossibility}
+                                onChange={this.handleChange('salesPossibility')}
+                                margin="dense"
+                                variant="outlined"
+                                style={{marginRight:"2px", marginLeft:"2px"}}
+                                fullWidth
+                            />
+                            <TextField
+                                id="accountExec"
+                                label="Account Exec"
+                                className={classes.textField}
+                                value={this.state.accountExec}
+                                onChange={this.handleChange('accountExec')}
+                                margin="dense"
+                                variant="outlined"
+                                style={{marginRight:"2px", marginLeft:"2px"}}
+                                fullWidth
+                            />
+                        </GridItem>
+                    </GridContainer>
+                </div>
 				<AppBar position="static" color="default">
-                    <div>
-                        <h1>Hello</h1>
-                    </div>
-
 					<Tabs
 						value={activeStep}
 						onChange={this.handleTab}
@@ -1939,7 +1974,8 @@ class LeadForm extends Component {
 					style={{
 						overflowY: 'scroll',
 						width: '100%',
-						height: 'calc(100% - 110px)'
+						height: 'calc(100% - 307px)',
+						// height: "100%",
 					}}>
 
 
