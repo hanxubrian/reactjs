@@ -578,7 +578,12 @@ class Customers extends Component {
 	closeValidationMenu = () => {
 		this.setState({ anchorEl: null });
 	}
-
+	showContactMenu = event => {
+		this.setState({ anchorContactMenu: event.currentTarget });
+	}
+	closeContactMenu = () => {
+		this.setState({ anchorContactMenu: null });
+	}
 	render() {
 		console.log(this.props.documents)
 		console.log(this.props)
@@ -586,7 +591,7 @@ class Customers extends Component {
 
 		// const { toggleSelection, toggleAll, isSelected, logSelection } = this;
 
-		const { selection, anchorEl } = this.state;
+		const { selection, anchorEl, anchorContactMenu } = this.state;
 
 		console.log('render temp =', this.state.temp);
 		console.log('customerForm.props.open =', customerForm.props.open);
@@ -650,24 +655,13 @@ class Customers extends Component {
 							{(this.state.temp && customerForm.props.open) && (
 								<div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
 									<div className="flex flex-row flex-1 justify-between">
-										<div className="flex flex-shrink items-center">
+										{/* <div className="flex flex-shrink items-center">
 											<div className="flex items-center">
-												{/* <Toolbar className="pl-12 pr-0">
-													<img className="mr-12" alt="" src="assets/images/invoices/invoice-icon-white.png" style={{ width: 32, height: 32 }} />
-												</Toolbar>
-												<Typography variant="h6" className="hidden sm:flex">Customers | New Customers</Typography> */}
+												
 											</div>
-										</div>
-										<div className="flex flex-shrink items-center">
-
-											{/* <IconButton className={classes.button} aria-label="Add an alarm" onClick={toggleFilterPanel}>
-												<Icon>person_outline</Icon>
-											</IconButton> */}
-
-											{/* <IconButton className={classes.button} aria-label="Add an alarm" onClick={toggleSummaryPanel}>
-												<Icon>check_circle</Icon>
-											</IconButton> */}
-
+										</div> */}
+										{/* <div className="flex flex-shrink" style={{ justifyContent: "space-between" }}> */}
+										<div className="flex">
 											<IconButton
 												// className={classNames(classes.button, classes.validationMenu)}
 												className={classNames(classes.button, classes.invalidationMenu)}
@@ -696,9 +690,53 @@ class Customers extends Component {
 											</Menu>
 
 											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
+												<Icon>save</Icon>
+											</IconButton>
+
+											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
+												<Icon>cloud_upload</Icon>
+											</IconButton>
+										</div>
+										<div className="flex">
+											<IconButton
+												className={classNames(classes.button)}
+												aria-label="Add an alarm"
+												aria-owns={anchorContactMenu ? 'title-bar-contact-menu' : undefined}
+												aria-haspopup="true"
+												onClick={this.showContactMenu}
+											>
+												<Icon>sms</Icon>
+											</IconButton>
+											<Menu
+												id="title-bar-contact-menu"
+												anchorEl={anchorContactMenu}
+												open={Boolean(anchorContactMenu)}
+												onClose={this.closeContactMenu}
+											>
+												<MenuItem onClick={this.closeContactMenu}>Chat with Account Executive</MenuItem>
+												<MenuItem onClick={this.closeContactMenu}>Email to Account Executive</MenuItem>
+												<MenuItem onClick={this.closeContactMenu}>SMS to Customer</MenuItem>
+												<MenuItem onClick={this.closeContactMenu}>Email to Customer</MenuItem>
+											</Menu>
+											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
+												<Icon>delete</Icon>
+											</IconButton>
+											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
 												<Icon>close</Icon>
 											</IconButton>
 										</div>
+										{/* <IconButton className={classes.button} aria-label="Add an alarm" onClick={toggleFilterPanel}>
+												<Icon>person_outline</Icon>
+											</IconButton> */}
+
+										{/* <IconButton className={classes.button} aria-label="Add an alarm" onClick={toggleSummaryPanel}>
+												<Icon>check_circle</Icon>
+											</IconButton> */}
+
+
+
+
+										{/* </div> */}
 									</div>
 
 								</div>

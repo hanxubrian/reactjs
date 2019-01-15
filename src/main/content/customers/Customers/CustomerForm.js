@@ -2032,8 +2032,8 @@ class CustomerForm extends Component {
 					style={{
 						overflowY: 'scroll',
 						width: '100%',
-						// height: 'calc(100% - 190px)'
-						height: 'calc(100% - 110px)'
+						// height: 'calc(100% - 110px)'
+						height: 'calc(100% - 50px)'
 						// flex: '1 1 auto'
 					}}
 				>
@@ -2061,7 +2061,7 @@ class CustomerForm extends Component {
 				</div>
 
 
-				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+				{/* <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 					{activeStep === 4 ? (<div></div>) : (<div style={{ display: 'flex' }}>
 						<FuseAnimate animation="transition.expandIn" delay={300} style={{ alignItems: 'justify-start' }}>
 							<Button
@@ -2110,7 +2110,7 @@ class CustomerForm extends Component {
 
 
 
-				</div>
+				</div> */}
 			</Fragment>
 		);
 	}
