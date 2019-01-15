@@ -243,6 +243,7 @@ class FilterPanel extends Component {
                                 addr: value
                             }
                         }
+                        console.log("payload", payload)
                         this.props.franchiseeSelectLocationFilter(payload)
                         return
                     },
