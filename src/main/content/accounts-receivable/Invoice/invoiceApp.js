@@ -228,7 +228,7 @@ class InvoiceApp extends Component {
         super(props);
 
         if(!props.bLoadedInvoices) {
-            props.getInvoiceDetail()
+            props.getInvoiceDetail();
             props.getInvoiceStatus(props.regionId);
             props.getInvoices([props.regionId] ,props.StatusId, props.FromDate, props.ToDate, props.PeriodId,
                 props.OpenOrClosed, props.InvoiceTypeId, props.ToPrintOrToEmail, props.SearchText);

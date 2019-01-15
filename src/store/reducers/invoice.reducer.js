@@ -26,7 +26,7 @@ const initialState = {
     },
     FromDate: moment("01/01/2018").format("MM/DD/YYYY"),
     ToDate: moment(today).format("MM/DD/YYYY"),
-    StatusId: [1],
+    StatusId: [],
     PeriodId: [220],
     OpenOrClosed: "N",
     InvoiceTypeId: 1,
