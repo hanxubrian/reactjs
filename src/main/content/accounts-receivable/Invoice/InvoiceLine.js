@@ -139,7 +139,7 @@ function createData(billing='Regular Billing', service='Adjust-Balance', descrip
 }
 
 function renderInputComponent(inputProps) {
-    const { inputRef = () => {}, ref, ...other } = inputProps;
+    const { classes, inputRef = () => {}, ref, ...other } = inputProps;
 
     return (
         <TextField
@@ -149,6 +149,9 @@ function renderInputComponent(inputProps) {
                     ref(node);
                     inputRef(node);
                 },
+                classes: {
+                    input: classes.input,
+                }
             }}
             {...other}
         />
@@ -572,7 +575,7 @@ class InvoiceLineTable extends React.Component {
 
     handleChange = row => event => {
         const data = [...this.state.data];
-        data[row.id].franchisees[row.fid].amount = event.target.value;
+        data[row.id].franchisees[row.fid].amount = parseFloat(event.target.value);
         this.setState({data: data});
     };
 
@@ -817,6 +820,7 @@ class InvoiceLineTable extends React.Component {
                                                                 renderSuggestion={renderSuggestion}
                                                                 inputProps={
                                                                     {
+                                                                        classes,
                                                                         placeholder: "Search Franchisee Name or Number",
                                                                         value: this.state['nameValue'+row.original.f_index],
                                                                         onChange: this.onNameChange(row.original)

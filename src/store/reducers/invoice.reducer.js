@@ -63,12 +63,6 @@ const invoices = function(state = initialState, action) {
         }
         case Actions.GET_INVOICE_DETAIL:
         {
-            // let invoiceStatus = action.payload;
-            // if(action.payload.length>0) {
-            //     invoiceStatus = action.payload.map(iv => {
-            //         return {['checked'+iv.TransactionStatusListId]: true, ...iv}
-            //     });
-            // }
             return {
                 ...state,
                 invoiceDetail: action.payload,
@@ -223,6 +217,6 @@ const invoices = function(state = initialState, action) {
 const persistConfig = {
     key: 'invoices',
     storage: storage,
-    blacklist: ['invoicesDB', 'bInvoiceStart', 'bOpenedSummaryPanel', 'bOpenedFilterPanel', 'bLoadedCustomers','customerTaxAmountLine']
+    blacklist: ['invoicesDB', 'bInvoiceStart', 'bOpenedSummaryPanel', 'bOpenedFilterPanel', 'bLoadedCustomers','customerTaxAmountLine', 'invoiceForm']
 };
 export default persistReducer(persistConfig, invoices);

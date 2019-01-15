@@ -88,8 +88,6 @@ class SigninPage extends Component {
         this.props.signinUser(email, password, url);
     }
     render() {
-       console.log(this.state)
-       console.log(this.props)
        const styles = ({
             root: {
                 background:  `url(${this.props.app.loginBackground})`,

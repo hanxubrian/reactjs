@@ -34,6 +34,7 @@ import * as Actions from 'store/actions';
 // third party
 import "react-table/react-table.css";
 import _ from 'lodash';
+import Chance from 'chance'
 import Autosuggest from 'react-autosuggest';
 import classNames from 'classnames';
 import match from "autosuggest-highlight/match";
@@ -118,6 +119,7 @@ const styles = theme => ({
         color: 'orange'
     }
 });
+const chance = new Chance();
 
 const newInvoiceState = {
     "MasterTrxTypeListId": "",
@@ -249,8 +251,8 @@ class InvoiceForm extends Component {
     getSuggestions = (value) => {
         const escapedValue = escapeRegexCharacters(value.trim());
         const regex = new RegExp(escapedValue, 'i');
-
-        return this.props.customers.filter(customer => regex.test(customer.CustomerName));
+        if(this.props.customers!==null)
+            return this.props.customers.filter(customer => regex.test(customer.CustomerName));
     };
 
     getTotal = () => {
@@ -313,6 +315,48 @@ class InvoiceForm extends Component {
     };
 
     onSaveInvoice = () => {
+        let items = [];
+        let lines = this.props.invoiceForm.data.line;
+        //
+        lines.forEach(line=>{
+            let item = {
+                ServiceTypeListId: 0,
+                Descrption: line.description,
+                LineNo: 1,
+                UnitPrice: line.amount,
+                Quantity: parseInt(line.quantity),
+                TaxRate: line.tax,
+                ExtendedPrice: line.extended,
+                Total: line.total,
+                MarkUpTotal: line.markup,
+                Commission: 0,
+                CommissionTotal: 0,
+                ExtraWork: 1,
+                TaxExcempt: 1,
+                Distribution: []
+            };
+            let franchisees = [];
+
+            if(line.franchisees.length>0) {
+                line.franchisees.forEach(f=>{
+                    franchisees.push(
+                        {
+                            FranchiseeId: 12,
+                            FranchiseNumber: f.fnumber,
+                            LineNo: 1,
+                            Name: f.name,
+                            Description: "Work done",
+                            Amount: f.amount
+                        }
+                    )
+
+                })
+            }
+            item.Distribution.push(franchisees);
+
+            items.push(item);
+        });
+
         let result = {
             CustomerId: this.state.selectedCustomer.CustomerId,
             PeriodId: this.props.invoices.PeriodId[0],
@@ -330,7 +374,15 @@ class InvoiceForm extends Component {
             CPIIncrease: 0.00,
             TaxTotal: this.state.tax,
             GrandTotal: this.state.total,
-        }
+            InvoiceItems: [
+                {
+                    Inv_No: chance.guid()+'_pending',
+                    Items: items
+                }
+            ]
+        };
+
+        console.log('result', JSON.stringify(result));
     };
 
     onSaveAndAddMore=()=>{
