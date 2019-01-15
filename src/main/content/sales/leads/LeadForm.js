@@ -2084,37 +2084,13 @@ class LeadForm extends Component {
 
 
 		return (
-			// <div className={classNames(classes.layoutTable, "h-full")}></div>
-			// <FuseAnimate animation="transition.slideRightIn" delay={300} className={classNames(classes.layoutTable, "h-full")}>
-			// <div className="p-24 h-full">
-			<Fragment>
-				{/* <Stepper alternativeLabel nonLinear activeStep={activeStep}>
-					{steps.map((label, index) => {
-						const props = {};
-						const buttonProps = {};
-						if (this.isStepOptional(index)) {
-							buttonProps.optional = <Typography variant="caption">Optional</Typography>;
-						}
-						if (this.isStepSkipped(index)) {
-							props.completed = false;
-						}
-						return (
-							<Step key={label} {...props}>
-								<StepButton
-									onClick={this.handleStep(index)}
-									completed={this.isStepComplete(index)}
-									{...buttonProps}
-								>
-									{label}
-								</StepButton>
-							</Step>
-						);
-					})}
-				</Stepper> */}
 
-
-
+			<Fragment style={{overflow:"hidden !important"}}>
 				<AppBar position="static" color="default">
+                    <div>
+                        <h1>Hello</h1>
+                    </div>
+
 					<Tabs
 						value={activeStep}
 						onChange={this.handleTab}

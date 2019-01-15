@@ -54,6 +54,7 @@ const styles = theme => ({
 	},
 	layoutRoot: {
 		flexDirection: 'row',
+		overflow: 'hidden !important',
 		'& .z-9999': {
 			height: 64
 		},
