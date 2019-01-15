@@ -120,7 +120,7 @@ function createFranchisee(parent_id,id, fnumber="", name="", amount=0) {
     }
 }
 
-function createData(billing='Regular Billing', service='Adjust-Balance', description='', quantity='', amount='', tax=0, markup='', extended=0, total=0)
+function createData(billing='Regular Billing', service='Adjust-Balance', description='', quantity='', amount='', tax=0, markup='', extended=0, total=0, fTotal=0)
 {
     return {
         id: counter++,
@@ -133,6 +133,7 @@ function createData(billing='Regular Billing', service='Adjust-Balance', descrip
         markup,
         extended,
         total,
+        fTotal,
         franchisees: [],
         type: 'line'
     };
@@ -899,8 +900,21 @@ class InvoiceLineTable extends React.Component {
                                         Header: "Tax",
                                         accessor: "tax",
                                         Cell: row=>{
-                                            if(row.original.type==='line')
-                                                return ("$"+parseFloat(row.original.tax).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+                                            if(row.original.type==='line') {
+                                                return <TextField
+                                                    className={classes.fInput}
+                                                    placeholder="Tax"
+                                                    value={row.original.tax}
+                                                    onChange={this.handleChangeInvoiceLine(row.original, 'tax')}
+                                                    InputProps={{
+                                                        inputComponent: NumberFormatCustom,
+                                                        classes: {
+                                                            input: classes.input,
+                                                        },
+                                                    }}
+                                                />
+                                            }
+                                                // return ("$"+parseFloat(row.original.tax).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
                                             else
                                                 return (<div/>)
                                         },
