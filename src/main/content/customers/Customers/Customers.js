@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 
 // core components
-import { Icon, IconButton, Fab, Typography, Toolbar, CircularProgress, Menu, MenuItem, Checkbox, FormControlLabel } from '@material-ui/core';
+import { Icon, IconButton, Fab, Typography, Toolbar, CircularProgress, Menu, MenuItem, Checkbox, FormControlLabel, Tooltip } from '@material-ui/core';
 import { green } from '@material-ui/core/colors';
 // theme components
 import { FusePageCustomSidebarScroll, FuseAnimate } from '@fuse';
@@ -623,9 +623,11 @@ class Customers extends Component {
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
-											<IconButton className={classes.button} aria-label="add" onClick={openNewCustomerForm}>
-												<Icon>add</Icon>
-											</IconButton>
+											<Tooltip title="Add new customer">
+												<IconButton className={classes.button} aria-label="add" onClick={openNewCustomerForm}>
+													<Icon>add</Icon>
+												</IconButton>
+											</Tooltip>
 											<IconButton className={classes.button} aria-label="mail" onClick={() => this.props.history.push('/apps/mail/inbox')}>
 												<Icon>mail_outline</Icon>
 											</IconButton>
@@ -688,25 +690,29 @@ class Customers extends Component {
 												<MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Service Location Info" /></MenuItem>
 												<MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Verified &amp; Approved" /></MenuItem>
 											</Menu>
-
-											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
-												<Icon>save</Icon>
-											</IconButton>
-
-											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
-												<Icon>cloud_upload</Icon>
-											</IconButton>
+											<Tooltip title="Save">
+												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
+													<Icon>save</Icon>
+												</IconButton>
+											</Tooltip>
+											<Tooltip title="Submit for Approval">
+												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
+													<Icon>cloud_upload</Icon>
+												</IconButton>
+											</Tooltip>
 										</div>
 										<div className="flex">
-											<IconButton
-												className={classNames(classes.button)}
-												aria-label="Add an alarm"
-												aria-owns={anchorContactMenu ? 'title-bar-contact-menu' : undefined}
-												aria-haspopup="true"
-												onClick={this.showContactMenu}
-											>
-												<Icon>sms</Icon>
-											</IconButton>
+											<Tooltip title="Contact">
+												<IconButton
+													className={classNames(classes.button)}
+													aria-label="Add an alarm"
+													aria-owns={anchorContactMenu ? 'title-bar-contact-menu' : undefined}
+													aria-haspopup="true"
+													onClick={this.showContactMenu}
+												>
+													<Icon>sms</Icon>
+												</IconButton>
+											</Tooltip>
 											<Menu
 												id="title-bar-contact-menu"
 												anchorEl={anchorContactMenu}
@@ -718,12 +724,16 @@ class Customers extends Component {
 												<MenuItem onClick={this.closeContactMenu}>SMS to Customer</MenuItem>
 												<MenuItem onClick={this.closeContactMenu}>Email to Customer</MenuItem>
 											</Menu>
-											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
-												<Icon>delete</Icon>
-											</IconButton>
-											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
-												<Icon>close</Icon>
-											</IconButton>
+											<Tooltip title="Discard">
+												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
+													<Icon>delete</Icon>
+												</IconButton>
+											</Tooltip>
+											<Tooltip title="Close">
+												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
+													<Icon>close</Icon>
+												</IconButton>
+											</Tooltip>
 										</div>
 										{/* <IconButton className={classes.button} aria-label="Add an alarm" onClick={toggleFilterPanel}>
 												<Icon>person_outline</Icon>

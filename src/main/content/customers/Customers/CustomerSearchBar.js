@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Icon, IconButton, Input, Paper, Button } from '@material-ui/core';
+import { Icon, IconButton, Input, Paper, Button, Tooltip } from '@material-ui/core';
 import classNames from 'classnames';
 
 import { withStyles } from "@material-ui/core";
@@ -208,14 +208,15 @@ class CustomerSearchBar extends Component {
 				</Paper>
 
 				<div className="flex items-center justify-end p-12">
-					<IconButton
-						// className={classNames(classes.summaryPanelButton, "mr-12")}
-						className={classNames(classes.button, "mr-12")}
-						aria-label="Add an alarm"
-						onClick={this.props.toggleMapView}>
-						<Icon>{this.props.mapViewState ? 'list' : 'location_on'}</Icon>
-					</IconButton>
-
+					<Tooltip title={this.props.mapViewState ? "List view" : "Map view"}>
+						<IconButton
+							// className={classNames(classes.summaryPanelButton, "mr-12")}
+							className={classNames(classes.button, "mr-12")}
+							aria-label="Add an alarm"
+							onClick={this.props.toggleMapView}>
+							<Icon>{this.props.mapViewState ? 'list' : 'location_on'}</Icon>
+						</IconButton>
+					</Tooltip>
 					<Button
 						onClick={this.props.toggleSummaryPanel}
 						aria-label="toggle summary panel"

@@ -39,6 +39,9 @@ import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerC
 import { compose, withProps, withHandlers, lifecycle } from "recompose";
 
 import {
+	Getter,
+  } from '@devexpress/dx-react-core';
+import {
 	SelectionState,
 	PagingState,
 	IntegratedPaging,
@@ -1357,12 +1360,23 @@ class CustomerListContent extends Component {
 
 									<TableEditRow />
 									<TableEditColumn
-										showAddCommand
+										// showAddCommand
 										showEditCommand
 										showDeleteCommand
 										commandComponent={Command}
 									/>
-
+									<Getter
+										name="tableColumns"
+										computed={({ tableColumns }) => {
+											// debugger
+											const result = [
+												...tableColumns.filter(c => c.type !== TableEditColumn.COLUMN_TYPE),
+												{ key: 'editCommand', type: TableEditColumn.COLUMN_TYPE, width: 140 }
+											];
+											return result;
+										}
+										}
+									/>
 									{/* <TableColumnReordering
 										defaultOrder={tableColumnExtensions.map(x => x.columnName)}
 									/> */}
