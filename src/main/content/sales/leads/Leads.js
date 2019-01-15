@@ -28,14 +28,12 @@ import SummaryPanel from './SummaryPanel';
 import FilterPanel from './filterPanel';
 
 import "react-table/react-table.css";
-// import _ from 'lodash';
 
 
 import classNames from 'classnames';
 
 import LeadForm from './LeadForm';
 import LeadListContent from './LeadListContent';
-
 const headerHeight = 80;
 
 const hexToRgb = (hex) => {
@@ -239,6 +237,7 @@ class Leads extends Component {
 			regionId: 0,
 			current_lat: 0,
 			current_long: 0,
+            drawOpen: false,
 		};
 	}
 
@@ -433,10 +432,15 @@ class Leads extends Component {
 		});
 	}
 
-	render() {
+    toggleDrawerOpen = () => {
+        this.setState({ drawOpen: !this.state.drawOpen });
+        this.props.updateDrawStatus(!this.state.drawOpen);
+    };
+
+    render() {
 		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, openNewLeadForm, leadForm, mapViewState, toggleMapView } = this.props;
 
-		const { selection, anchorEl } = this.state;
+		const { selection, anchorEl,drawOpen } = this.state;
 
 		return (
 			<React.Fragment >
@@ -530,7 +534,9 @@ class Leads extends Component {
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
-
+                                            <IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev)=> this.toggleDrawerOpen()}>
+                                                <Icon>{this.props.drawOpen === false ? ("keyboard_arrow_down"): ("keyboard_arrow_up")}</Icon>
+                                            </IconButton>
 											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleFilterPanel()}>
 												<Icon>person_outline</Icon>
 											</IconButton>
@@ -646,6 +652,7 @@ function mapDispatchToProps(dispatch) {
 		openEditLeadForm: Actions.openEditLeadForm,
 		closeEditLeadForm: Actions.closeEditLeadForm,
 		closeNewLeadForm: Actions.closeNewLeadForm,
+		updateDrawStatus: Actions.updateDrawStatus
 	}, dispatch);
 }
 
@@ -659,7 +666,8 @@ function mapStateToProps({ leads, auth, franchisees }) {
 		summaryState: leads.bOpenedSummaryPanel,
 		mapViewState: leads.bOpenedMapView,
 		regionId: auth.login.defaultRegionId,
-		leadForm: leads.leadForm
+		leadForm: leads.leadForm,
+		drawOpen: leads.drawOpen
 	}
 }
 

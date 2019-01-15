@@ -2,6 +2,7 @@ import * as Actions from "../actions";
 import * as UserActions from "../../auth/store/actions";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import {UPDATE_DRAW_STATUS} from "../actions";
 
 const initialState = {
 	leadsDB: null,
@@ -10,6 +11,7 @@ const initialState = {
 	bOpenedFilterPanel: false,
 	bOpenedMapView: false,
 	transactionStatus: { checkedPaid: true, checkedPP: true, checkedComplete: true, checkedOpen: true },
+	drawOpen: false,
 	leadForm: {
 		type: 'new',
 		props: {
@@ -122,6 +124,13 @@ const leads = function (state = initialState, action) {
 					}
 				};
 			}
+		case Actions.UPDATE_DRAW_STATUS:
+		{
+			return{
+				...state,
+				drawOpen: action.payload
+			}
+		}
 		default:
 			{
 				return state;
