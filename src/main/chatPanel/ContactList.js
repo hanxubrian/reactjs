@@ -142,7 +142,7 @@ class ContactList extends Component {
                             className="flex flex-col flex-no-shrink"
                         >
                             {(user && user.chatList) &&
-                            user.chatList.map(chat => {
+                            user.chatList.sort((a, b) => { return new Date(b.lastMessageTime) - new Date(a.lastMessageTime)}).map(chat => {
                                 const contact = contacts.find((_contact) => _contact.id === chat.contactId);
                                 return (
                                     contact? <ContactButton key={contact.id} contact={contact} chat={chat}/> : ''
