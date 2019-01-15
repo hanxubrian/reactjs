@@ -175,6 +175,15 @@ const styles = theme => ({
 	tableThEven: {
 		backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .3)'
 	},
+    leadFormBottomSection: {
+		position: 'absolute',
+		right: 0,
+		left: 0,
+		bottom: 0,
+		width: '100%',
+		zIndex: 999,
+		backgroundColor: 'white'
+	}
 
 });
 
@@ -1749,25 +1758,6 @@ class LeadForm extends Component {
 		});
 	};
 
-	onSuggestionsFetchRequested = ({ value }) => {
-		if (value.length < 2) return;
-
-		this.setState({
-			suggestions: this.getSuggestions(value)
-		});
-	};
-
-	onSuggestionsClearRequested = () => {
-		this.setState({
-			suggestions: []
-		});
-	};
-
-	getSuggestionValue = (suggestion) => {
-		this.setState({ selectedLead: suggestion });
-		return suggestion.LeadName;
-	};
-
 	getSuggestions = (value) => {
 		const escapedValue = escapeRegexCharacters(value.trim());
 		const regex = new RegExp(escapedValue, 'i');
@@ -1776,13 +1766,9 @@ class LeadForm extends Component {
 	};
 
 	closeComposeForm = () => {
-		//this.props.this.type === 'create' ? this.props.closeEditLeadForm() : this.props.closeNewLeadForm();
 		this.type === 'create' ? this.props.closeEditLeadForm() : this.props.closeNewLeadForm();
 	};
 
-	// constructor(props) {
-	// 	super(props);
-	// }
 	constructor(props) {
 		super(props);
 
@@ -1824,7 +1810,6 @@ class LeadForm extends Component {
 	getFranchiseesFromStatus = (rawData = this.props.franchisees) => {
 		console.log("rawData")
 		console.log(rawData)
-		// let filterTemp = [];
 		let totalFilterTemp = [];
 		let all_temp = [];
 		let temp1 = [];
@@ -1843,76 +1828,6 @@ class LeadForm extends Component {
 				}
 			}
 		}
-		// if(all_temp.length>0){
-		// 	for(var i = 0; i < all_temp.length ; i++){
-		// 		if(currentStatus.checkedInactive){
-		// 			if(all_temp[i].StatusName ==='InActive'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedActive){
-		// 			if(all_temp[i].StatusName==='Active'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedLegalCompliancePending){
-		// 			if(all_temp[i].StatusName ==='LegalCompliancePending'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedPending){
-		// 			if(all_temp[i].StatusName==='Pending'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedTerminated){
-		// 			if(all_temp[i].StatusName==='Terminated'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedTransfer){
-		// 			if(all_temp[i].StatusName==='Transfer'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedPendingTransfer){
-		// 			if(all_temp[i].StatusName==='PendingTransfer'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedNonRenewed){
-		// 			if(all_temp[i].StatusName==='NonRenewed'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedRejected){
-		// 			if(all_temp[i].StatusName==='Rejected'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedRepurchased){
-		// 			if(all_temp[i].StatusName==='Repurchased'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 		if(currentStatus.checkedCTDB){
-		// 			if(all_temp[i].StatusName==='CTDB'){
-		// 				filterTemp = totalFilterTemp.concat(all_temp[i]);
-		// 				totalFilterTemp = filterTemp;
-		// 			}
-		// 		}
-		// 	}
-		// }
 		console.log("all_temp")
 		console.log(all_temp)
 		totalFilterTemp = { ...all_temp }
@@ -1952,75 +1867,6 @@ class LeadForm extends Component {
 		return getSteps().length;
 	};
 
-	isStepOptional = step => {
-		// return step === 1;
-		return false;
-	};
-
-	handleSkip = () => {
-		const { activeStep } = this.state;
-		if (!this.isStepOptional(activeStep)) {
-			// You probably want to guard against something like this
-			// it should never occur unless someone's actively trying to break something.
-			throw new Error("You can't skip a step that isn't optional.");
-		}
-
-		this.setState(state => {
-			const skipped = new Set(state.skipped.values());
-			skipped.add(activeStep);
-			return {
-				activeStep: state.activeStep + 1,
-				skipped
-			};
-		});
-	};
-
-	handleNext = () => {
-		let activeStep;
-
-		if (this.isLastStep() && !this.allStepsCompleted()) {
-			// It's the last step, but not all steps have been completed
-			// find the first step that has been completed
-			const steps = getSteps();
-			activeStep = steps.findIndex((step, i) => !this.state.completed.has(i));
-		}
-		else {
-			activeStep = this.state.activeStep + 1;
-		}
-		this.setState({
-			activeStep
-		});
-	};
-
-	handleBack = () => {
-		this.setState(state => ({
-			activeStep: state.activeStep - 1
-		}));
-	};
-
-	handleStep = step => () => {
-		this.setState({
-			activeStep: step
-		});
-	};
-
-	handleComplete = () => {
-		// eslint-disable-next-line react/no-access-state-in-setstate
-		const completed = new Set(this.state.completed);
-		completed.add(this.state.activeStep);
-		this.setState({
-			completed
-		});
-
-		/**
-		 * Sigh... it would be much nicer to replace the following if conditional with
-		 * `if (!this.allStepsComplete())` however state is not set when we do this,
-		 * thus we have to resort to not being very DRY.
-		 */
-		if (completed.size !== this.totalSteps() - this.skippedSteps()) {
-			this.handleNext();
-		}
-	};
 
 	handleReset = () => {
 		this.setState({
@@ -2032,14 +1878,6 @@ class LeadForm extends Component {
 
 	skippedSteps() {
 		return this.state.skipped.size;
-	}
-
-	isStepSkipped(step) {
-		return this.state.skipped.has(step);
-	}
-
-	isStepComplete(step) {
-		return this.state.completed.has(step);
 	}
 
 	completedSteps() {
@@ -2060,32 +1898,17 @@ class LeadForm extends Component {
 	//////////////////////
 	render() {
 		const { classes,
-			// LeadForm,
-			// addLead,
-			// updateLead,
-			// removeLead
 		} = this.props;
-		// const { value, suggestions } = this.state;
-
-		// const autosuggestProps = {
-		// 	renderInputComponent,
-		// 	suggestions: suggestions,
-		// 	onSuggestionsFetchRequested: this.onSuggestionsFetchRequested,
-		// 	onSuggestionsClearRequested: this.onSuggestionsClearRequested,
-		// 	getSuggestionValue: this.getSuggestionValue,
-		// 	renderSuggestion,
-		// };
 		console.log('leads', this.props.leads);
 		console.log("this.props.franchisees", this.props.franchisees);
 
-		// const {classes} = this.props;
 		const steps = getSteps();
 		const { activeStep } = this.state;
 
 
 		return (
 
-			<Fragment style={{overflow:"hidden !important"}}>
+			<Fragment>
 				<AppBar position="static" color="default">
                     <div>
                         <h1>Hello</h1>
@@ -2106,12 +1929,6 @@ class LeadForm extends Component {
 								}
 							)
 						}
-						{/* <Tab label="Lead" />
-						 <Tab label="Contract" />
-						 <Tab label="Service Settings" />
-						 <Tab label="Walk-Thru" />
-						 <Tab label="Account Offering" />
-						 <Tab label="Documents" disabled /> */}
 
 					</Tabs>
 				</AppBar>
@@ -2122,9 +1939,7 @@ class LeadForm extends Component {
 					style={{
 						overflowY: 'scroll',
 						width: '100%',
-						// height: 'calc(100% - 190px)'
 						height: 'calc(100% - 110px)'
-						// flex: '1 1 auto'
 					}}>
 
 
@@ -2141,49 +1956,14 @@ class LeadForm extends Component {
 							</div>
 						) : (
 								<div>
-									{/* <Typography className={classes.instructions}>{getStepContent(this, activeStep)}</Typography> */}
 									{this.getStepContent(activeStep)}
-									{/* <div>
-										<Button
-											disabled={activeStep === 0}
-											onClick={this.handleBack}
-											className={classes.button}
-										>Back</Button>
-										<Button
-											variant="contained"
-											color="primary"
-											onClick={this.handleNext}
-											className={classes.button}
-										>Next</Button>
-										{this.isStepOptional(activeStep) &&
-											!this.state.completed.has(this.state.activeStep) && (
-												<Button
-													variant="contained"
-													color="primary"
-													onClick={this.handleSkip}
-													className={classes.button}
-												>Skip</Button>
-											)}
-										{activeStep !== steps.length &&
-											(this.state.completed.has(this.state.activeStep) ? (
-												<Typography variant="caption" className={classes.completed}>
-													Step {activeStep + 1} already completed
-												</Typography>
-											)
-												:
-												(
-													<Button variant="contained" color="primary" onClick={this.handleComplete}>
-														{this.completedSteps() === this.totalSteps() - 1 ? 'Done' : 'Save'}
-													</Button>
-												))}
-									</div> */}
 								</div>
 							)}
 					</div>
 				</div>
 
 
-				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+				<div  className={classNames(classes.leadFormBottomSection)} style={{ display: 'flex', justifyContent: 'space-between' }}>
 					<div style={{ display: 'flex' }}>
 						<FuseAnimate animation="transition.expandIn" delay={300} style={{ alignItems: 'justify-start' }}>
 							<Button
@@ -2228,56 +2008,11 @@ class LeadForm extends Component {
 							> Close </Button>
 						</FuseAnimate>
 					</div>
-
-
-
 				</div>
-				{/* <div>
-					<Button
-						disabled={activeStep === 0}
-						onClick={this.handleBack}
-						className={classes.button}
-					>Back</Button>
-					<Button
-						variant="contained"
-						color="primary"
-						onClick={this.handleNext}
-						className={classes.button}
-					> Next </Button>
-					{this.isStepOptional(activeStep) &&
-						!this.state.completed.has(this.state.activeStep) && (
-							<Button
-								variant="contained"
-								color="primary"
-								onClick={this.handleSkip}
-								className={classes.button}
-							> Skip </Button>
-						)}
-					{activeStep !== steps.length &&
-						(this.state.completed.has(this.state.activeStep) ? (
-							<Typography variant="caption" className={classes.completed}>
-								Step {activeStep + 1} already completed
-												</Typography>
-						)
-							:
-							(
-								<Button variant="contained" color="primary" onClick={this.handleComplete}>
-									{this.completedSteps() === this.totalSteps() - 1 ? ' Done ' : ' Save '}
-								</Button>
-							))}
-				</div> */}
-
-				{/* </FuseAnimate> */}
-
-
 			</Fragment>
 		);
 	}
 }
-
-// LeadForm.propTypes = {
-// 	classes: PropTypes.object
-// };
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
