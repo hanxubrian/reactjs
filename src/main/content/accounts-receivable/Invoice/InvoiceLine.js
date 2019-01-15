@@ -31,7 +31,7 @@ import keycode from "keycode";
 
 //Utility
 import {NumberFormatCustom, escapeRegexCharacters, NumberFormatCustom1, NumberFormatCustomPercent} from '../../../../services/utils'
-import {DatePicker} from "material-ui-pickers";
+
 
 //Snackbar
 const variantIcon = {
