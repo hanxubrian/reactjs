@@ -723,17 +723,6 @@ class FilterPanel extends Component {
 											}
 											label="Child Account"
 										/>
-										{/* <RadioGroup
-											aria-label="nativeChildAccount"
-											name="nativeChildAccount"
-											className={classNames(classes.group, "flex flex-row")}
-											style={{justifyContent: "space-between"}}
-											value={this.state.nativeChildAccount}
-											onChange={this.handleChange('nativeChildAccount')}
-										>
-											<FormControlLabel value="nativeAccount" control={<Checkbox />} label="Native Account" />
-											<FormControlLabel value="childAccount" control={<Checkbox />} label="Child Account" />
-										</RadioGroup> */}
 									</GridItem>
 
 									<GridItem xs={12} sm={12} md={12} className="flex flex-col">
@@ -786,104 +775,88 @@ class FilterPanel extends Component {
 									*/}
 
 								{/* <RadioGroup */}
-								<div style={{
-									marginTop: 30, display: 'flex', flexDirection: 'column',
-									alignItems: "stretch"
-								}}>
+								<div className="mt-0 flex flex-col" style={{width: '200px'}}>
 									<h3>Location</h3>
 									<RadioGroup
 										aria-label="Location"
 										name="Location"
 										className={classes.group}
 										value={this.props.locationFilterValue.id}
-										onChange={this.handleChange('Location')}
 									>
 
-										<FormControlLabel value="locationAll" control={<Radio />} label="All" />
-										<FormControlLabel value="locationNearBy" control={<Radio />} label="NearBy" />
-										<FormControlLabel value="locationNearSpecificAddress" control={<Radio />} label="Near Specific Address" />
+										<FormControlLabel value="locationAll" control={<Radio onChange={this.handleChange('Location')} />} label="All" />
+										<FormControlLabel value="locationNearBy" control={<Radio onChange={this.handleChange('Location')} />} label="NearBy" />
+										{this.state.Location === "locationNearBy" && (
+											<TextField
+												select
+
+												id="NearbyRadius"
+												label="Radius"
+												className={classes.textField}
+												InputLabelProps={{
+													shrink: true
+												}}
+												value={this.props.locationFilterValue.miles}
+												onChange={this.handleChange('NearbyRadius')}
+												margin="normal"
+												variant="outlined"
+												fullWidth
+											>
+												{
+													Array.from({ length: 15 })
+														.map((val, index) => (
+															<MenuItem key={index} value={(index + 1) * 5}>
+																{(index + 1) * 5} Miles
+													</MenuItem>
+														))
+												}
+											</TextField>)}
+
+										<FormControlLabel value="locationNearSpecificAddress" control={<Radio onChange={this.handleChange('Location')} />} label="Near Specific Address" />
+										{this.state.Location === "locationNearSpecificAddress" && (
+											<Fragment>
+												<TextField
+													id="SpecificAddress"
+													label="Address"
+													className={classes.textField}
+													onChange={this.handleChange('SpecificAddress')}
+													margin="normal"
+													variant="outlined"
+													fullWidth
+												/>
+												<TextField
+													select
+
+													id="AddressZipcodeRadius"
+													label="Radius"
+													className={classes.textField}
+													InputLabelProps={{
+														shrink: true
+													}}
+													value={this.props.locationFilterValue.miles}
+													onChange={this.handleChange('AddressZipcodeRadius')}
+													margin="normal"
+													variant="outlined"
+													fullWidth
+												>
+													{
+														Array.from({ length: 15 })
+															.map((val, index) => (
+																<MenuItem key={index} value={(index + 1) * 5}>
+																	{(index + 1) * 5} Miles
+																</MenuItem>
+															))
+													}
+												</TextField>
+											</Fragment>
+										)}
 									</RadioGroup>
 
 
 								</div>
 
-								<div style={{ marginTop: 0, display: 'flex', flexDirection: 'column' }}>
-
-									<TextField
-										select
-
-										id="NearbyRadius"
-										label="Radius"
-										className={classes.textField}
-										InputLabelProps={{
-											shrink: true
-										}}
-										value={this.props.locationFilterValue.miles}
-										onChange={this.handleChange('NearbyRadius')}
-										margin="normal"
-										variant="outlined"
-										style={{
-											width: "100%",
-											// maxWidth: 200,
-											display: this.state.Location === "locationNearBy" ? 'block' : 'none'
-										}}
-									// fullWidth
-									>
-										{
-											Array.from({ length: 15 })
-												.map((val, index) => (
-													<MenuItem key={index} value={(index + 1) * 5}>
-														{(index + 1) * 5} Miles
-													</MenuItem>
-												))
-										}
-									</TextField>
-
-									<TextField
-										id="SpecificAddress"
-										label="Address"
-										className={classes.textField}
-										onChange={this.handleChange('SpecificAddress')}
-										margin="normal"
-										variant="outlined"
-										style={{
-											width: 180,
-											maxWidth: 180,
-											display: this.state.Location === "locationNearSpecificAddress" ? 'block' : 'none'
-										}}
-									// fullWidth
-									/>
-									<TextField
-										select
-
-										id="AddressZipcodeRadius"
-										label="Radius"
-										className={classes.textField}
-										InputLabelProps={{
-											shrink: true
-										}}
-										value={this.props.locationFilterValue.miles}
-										onChange={this.handleChange('AddressZipcodeRadius')}
-										margin="normal"
-										variant="outlined"
-										style={{
-											width: 180,
-											maxWidth: 180,
-											display: this.state.Location === "locationNearSpecificAddress" ? 'block' : 'none'
-										}}
-									// fullWidth
-									>
-										{
-											Array.from({ length: 15 })
-												.map((val, index) => (
-													<MenuItem key={index} value={(index + 1) * 5}>
-														{(index + 1) * 5} Miles
-													</MenuItem>
-												))
-										}
-									</TextField>
+								<div className="mt-0 flex flex-col" style={{width: '200px'}}>
 									<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
-
 									<TextField
 										select
 
@@ -897,7 +870,8 @@ class FilterPanel extends Component {
 										onChange={this.handleChange('AccountType')}
 										margin="normal"
 										variant="outlined"
-										style={{ width: 180 }}>
+										fullWidth
+										>
 
 
 										{/* <MenuItem value={-2}><em>All</em></MenuItem>
@@ -932,7 +906,8 @@ class FilterPanel extends Component {
 										onChange={this.handleChange('AccountExecutive')}
 										margin="normal"
 										variant="outlined"
-										style={{ width: 180 }}>
+										fullWidth
+										>
 										{/* {[{
 											value: 0, label: "All"
 										}, {
@@ -952,7 +927,7 @@ class FilterPanel extends Component {
 
 								</div>
 
-								<div style={{ marginTop: 30, display: 'flex', flexDirection: 'column' }}>
+								<div className="mt-36 flex flex-col" style={{width: '200px'}}>
 									<h3>Customer Status</h3>
 									<FormControlLabel
 										control={
