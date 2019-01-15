@@ -3,7 +3,7 @@ import {withRouter} from 'react-router-dom';
 
 //Material UI core and icons
 import {
-    Snackbar, SnackbarContent, Tooltip,TextField,
+    Snackbar, SnackbarContent, TextField,
     Paper, Icon, IconButton, Select, OutlinedInput, MenuItem, FormControl, Fab
 } from '@material-ui/core'
 import {withStyles} from '@material-ui/core/styles';
@@ -406,7 +406,7 @@ class InvoiceLineTable extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot){
-        if(prevState.data!==this.state.data){
+        if(this.state.data!==null && prevState.data!==this.state.data){
             this.props.updateInvoiceLine(this.state.data);
         }
         if(JSON.stringify(this.state.customerTaxAmountLine)!== JSON.stringify(prevState.customerTaxAmountLine)){
@@ -417,6 +417,11 @@ class InvoiceLineTable extends React.Component {
     componentWillReceiveProps(nextProps) {
         if(JSON.stringify(this.props.customerTaxAmountLine)!==JSON.stringify(nextProps.customerTaxAmountLine)){
             this.setState({customerTaxAmountLine: nextProps.customerTaxAmountLine})
+        }
+        if(nextProps.invoiceForm.data===null && JSON.stringify(nextProps.invoiceForm.data)!==JSON.stringify(this.props.invoiceForm.data)){
+            console.log('passs');
+            let newData = createData("Regular Billing", "Adjust-Balance", '','');
+            this.setState({data: [{...newData, id: 0}]});
         }
     }
 
@@ -567,7 +572,6 @@ class InvoiceLineTable extends React.Component {
 
     getInvoiceLineTaxAmount = row =>{
         if(!this.isDisable(row)) {
-            console.log('zz=', this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity);
             this.props.getCustomerTaxAmount(this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity);
             this.setState({taxRowId: row.id})
         }
@@ -615,6 +619,7 @@ class InvoiceLineTable extends React.Component {
         let all_data = [];
 
         let f_index = 0;
+        console.log('data=', data);
         data.forEach(d=>{
             if(d.franchisees.length===0) return all_data.push(d);
             let franchisees = d.franchisees;
@@ -1040,7 +1045,8 @@ function mapStateToProps({invoices, franchisees, auth})
         invoiceForm: invoices.invoiceForm,
         franchisees: franchisees.franchiseesDB,
         regionId: auth.login.defaultRegionId,
-        customerTaxAmountLine: invoices.customerTaxAmountLine
+        customerTaxAmountLine: invoices.customerTaxAmountLine,
+        bStartingSaveFormData: invoices.bStartingSaveFormData
     }
 }
 

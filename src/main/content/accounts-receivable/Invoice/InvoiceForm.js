@@ -3,15 +3,8 @@ import {withRouter} from 'react-router-dom';
 
 // core components
 import {
-    Paper,
-    TextField,
-    Typography,
-    MenuItem,
-    Card,
-    CardHeader,
-    CardContent,
-    Divider,
-    Button,
+    Paper, TextField, Typography, MenuItem, Card,  CardHeader, CardContent, Divider, Button,
+    Snackbar, SnackbarContent,
 } from '@material-ui/core';
 import 'date-fns'
 import DateFnsUtils from '@date-io/date-fns';
@@ -194,6 +187,7 @@ class InvoiceForm extends Component {
         tax: 0,
         markup: 0.0,
         InvoiceNo: "",
+        snackMessage: ""
     };
 
     renderInputComponent = (inputProps ) => {
@@ -259,6 +253,9 @@ class InvoiceForm extends Component {
         let subTotal = 0.0;
         let markup = 0.0;
         let tax = 0.0;
+
+        if(this.props.invoiceForm.data===null) return;
+
         const data = [...this.props.invoiceForm.data.line];
 
         data.forEach(n => {
@@ -381,13 +378,17 @@ class InvoiceForm extends Component {
                 }
             ]
         };
-
         console.log('result', JSON.stringify(result));
     };
 
     onSaveAndAddMore=()=>{
         this.onSaveInvoice();
-
+        this.props.resetInvoiceForm();
+        this.setState({InvoiceDescription: ''});
+        this.setState({note: ''});
+        this.setState({selectedCustomer: null});
+        this.setState({value: ''});
+        this.setState({CustomerNo: ''});
     };
 
     onSubmitForApproval=()=>{
@@ -396,6 +397,7 @@ class InvoiceForm extends Component {
 
     onSaveAndClose = () => {
         this.onSaveInvoice();
+        this.closeComposeForm();
     };
 
     closeComposeForm = () => {
@@ -722,7 +724,8 @@ function mapDispatchToProps(dispatch)
         openEditInvoiceForm: Actions.openEditInvoiceForm,
         closeEditInvoiceForm: Actions.closeEditInvoiceForm,
         closeNewInvoiceForm : Actions.closeNewInvoiceForm,
-        selectCustomer: Actions.selectCustomer
+        selectCustomer: Actions.selectCustomer,
+        resetInvoiceForm: Actions.resetInvoiceForm
     }, dispatch);
 }
 
@@ -733,6 +736,7 @@ function mapStateToProps({invoices, auth})
         invoices: invoices,
         user: auth.login,
         regionId: auth.login.defaultRegionId,
+        bStartingSaveFormData: invoices.bStartingSaveFormData
     }
 }
 

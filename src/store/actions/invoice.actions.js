@@ -15,6 +15,8 @@ export const UPDATE_TO_DATE_INVOICE = "[INVOICES] UPDATE TO DATE";
 export const GET_CUSTOMER_TAX_AMOUNT = "[INVOICES] GET CUSTOMER TAX AMOUNT";
 export const UPDATE_INVOICE_PERIOD_OPTION = "[INVOICES] UPDATE PERIOD OPTION";
 export const SELECT_INVOICE_CUSTOMER = "[INVOICES] SELECT CUSTOMER";
+export const RESET_INVOICE_FORM = "[INVOICES] RESET INVOICE FORM";
+export const STARTING_SAVE_INVOICE_FORM_DATA = "[INVOICES] STARTING SAVE INVOICE FORM DATA";
 
 // for Add/Edit
 export const OPEN_NEW_INVOICE_FORM = '[INVOICES APP] OPEN NEW INVOICE FORM';
@@ -281,4 +283,20 @@ export function selectCustomer(obj) {
         type: SELECT_INVOICE_CUSTOMER,
         payload: obj
     }
+}
+
+export function resetInvoiceForm(){
+    return (dispatch) => {
+
+        dispatch({
+            type: STARTING_SAVE_INVOICE_FORM_DATA,
+            payload: true
+        });
+
+        (async () => {
+                dispatch({
+                    type: RESET_INVOICE_FORM,
+                });
+        })();
+    };
 }

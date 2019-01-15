@@ -4,6 +4,7 @@ import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import {STARTING_SAVE_INVOICE_FORM_DATA} from "../actions/";
 
 
 let today = new Date();
@@ -13,6 +14,7 @@ const initialState = {
     bLoadedInvoices: false,
     bOpenedSummaryPanel: false,
     bOpenedFilterPanel: false,
+    bStartingSaveFormData: false,
     transactionStatus:{checkedEbill: true, checkedPrint: true },
     invoiceForm: {
         type : 'new',
@@ -205,6 +207,19 @@ const invoices = function(state = initialState, action) {
             return {
                 ...state,
                 invoiceForm: {...state.invoiceForm, data: {line: action.payload}}
+            }
+        }
+        case Actions.STARTING_SAVE_INVOICE_FORM_DATA: {
+            return {
+                ...state,
+                bStartingSaveFormData: true
+            }
+        }
+        case Actions.RESET_INVOICE_FORM: {
+            return {
+                ...state,
+                bStartingSaveFormData: false,
+                invoiceForm: {...state.invoiceForm, data: null, customer: null}
             }
         }
         default:
