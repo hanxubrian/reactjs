@@ -34,7 +34,7 @@ class invoiceService {
             "SearchText": SearchText,
         };
         return new Promise((resolve, reject) => {
-            axios_instance.post(`${BASE_API_URL}/v1/accountsreceivable/InvoiceList`,data)
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/InvoiceList`,data)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);

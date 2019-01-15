@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 // core components
 import {
     Paper, TextField, Typography, MenuItem, Card, CardHeader, CardContent, Divider, Button,
-    Snackbar, SnackbarContent, IconButton, Select, Grid
+    Snackbar, SnackbarContent, IconButton, Icon, Grid, FormControlLabel, Checkbox
 } from '@material-ui/core';
 import 'date-fns'
 import DateFnsUtils from '@date-io/date-fns';
@@ -288,7 +288,8 @@ class InvoiceForm extends Component {
         snackMessage: "",
         openSnack: false,
         PO_number: '',
-        period: moment()
+        period: moment(),
+        taxExempt: false
     };
 
     renderInputComponent = (inputProps ) => {
@@ -431,7 +432,7 @@ class InvoiceForm extends Component {
                 Billing: line.billing,
                 Service: line.service,
                 LineNo: 1,
-                UnitPrice: line.amount,
+                UnitPrice: parseFloat(line.amount),
                 Quantity: parseInt(line.quantity),
                 TaxRate: line.tax,
                 ExtendedPrice: line.extended,
@@ -636,7 +637,7 @@ class InvoiceForm extends Component {
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={1} md={1} className="flex flex-row xs:flex-col pr-4 pl-4"
-                                          style={{padding: '0 6px!important'}}>
+                                      style={{padding: '0 6px!important'}}>
                                     <DatePicker
                                         margin="none"
                                         label="Due Date"
@@ -712,19 +713,36 @@ class InvoiceForm extends Component {
                                 <Card className={classes.card}>
                                     <CardHeader title="Customer" className={classNames(classes.cardHeader, "flex-1")} />
                                     <CardContent className={classNames(classes.cardContent)}>
-                                        <Typography variant="subtitle1" color="inherit">
-                                            <strong>Customer Name: {this.state.selectedCustomer ? this.state.selectedCustomer.CustomerName: this.state.value}</strong>
-                                        </Typography>
-                                        <Typography variant="subtitle1" color="inherit">
-                                            Customer No: {this.state.selectedCustomer? this.state.selectedCustomer.CustomerNo: this.state.CustomerNo}
-                                        </Typography>
-                                        <Typography variant="subtitle1" color="inherit">
-                                            Address: {this.state.selectedCustomer ? this.state.selectedCustomer.Address: ''}
-                                        </Typography>
-                                        {this.state.selectedCustomer && (
+                                        <div className="flex flex-row justify-between mb-4">
+                                            <div className="flex flex-row">
+                                                <Icon fontSize={"small"} className="mr-4">account_circle</Icon>
+                                                <Typography variant="subtitle1" color="inherit">
+                                                    <strong>{this.state.selectedCustomer ? this.state.selectedCustomer.CustomerName: this.state.value}</strong>
+                                                </Typography>
+                                            </div>
                                             <Typography variant="subtitle1" color="inherit">
-                                                {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
+                                                <strong>{this.state.selectedCustomer? this.state.selectedCustomer.CustomerNo: this.state.CustomerNo}</strong>
                                             </Typography>
+                                        </div>
+                                        {this.state.selectedCustomer && (
+                                            <div className="flex flex-row justify-start mb-4">
+                                                <div className="flex flex-row items-center">
+                                                    <Icon fontSize={"small"} className="mr-4">place</Icon>
+                                                    <Typography variant="subtitle1" color="inherit">
+                                                        {this.state.selectedCustomer.Address}, {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
+                                                    </Typography>
+                                                </div>
+                                            </div>
+                                        )}
+                                        {this.state.selectedCustomer && (
+                                            <div className="flex flex-row justify-between mb-4">
+                                                <div className="flex flex-row items-center">
+                                                    <Icon fontSize={"small"} className="mr-4">smartphone</Icon>
+                                                    <Typography variant="subtitle1" color="inherit">
+                                                        {this.state.selectedCustomer.Phone}
+                                                    </Typography>
+                                                </div>
+                                            </div>
                                         )}
                                     </CardContent>
                                 </Card>
@@ -733,19 +751,48 @@ class InvoiceForm extends Component {
                                 <Card className={classes.card}>
                                     <CardHeader title="Billing" className={classNames(classes.cardHeader, "flex-1")} />
                                     <CardContent className={classNames(classes.cardContent)}>
-                                        <Typography variant="subtitle1" color="inherit">
-                                            <strong>Billing Name: {this.state.selectedCustomer ? this.state.selectedCustomer.CustomerName: this.state.value}</strong>
-                                        </Typography>
-                                        <Typography variant="subtitle1" color="inherit">
-                                            Customer No: {this.state.selectedCustomer ? this.state.selectedCustomer.CustomerNo: this.state.CustomerNo}
-                                        </Typography>
-                                        <Typography variant="subtitle1" color="inherit">
-                                            Address: {this.state.selectedCustomer ? this.state.selectedCustomer.Address: ''}
-                                        </Typography>
+                                        <div className="flex flex-row justify-between mb-4">
+                                            <div className="flex flex-row">
+                                                <Icon fontSize={"small"} className="mr-4">account_circle</Icon>
+                                                <Typography variant="subtitle1" color="inherit">
+                                                    <strong>{this.state.selectedCustomer ? this.state.selectedCustomer.CustomerName: this.state.value}</strong>
+                                                </Typography>
+                                            </div>
+                                        </div>
                                         {this.state.selectedCustomer && (
-                                            <Typography variant="subtitle1" color="inherit">
-                                                {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
-                                            </Typography>
+                                            <div className="flex flex-row justify-start mb-4">
+                                                <div className="flex flex-row items-center">
+                                                    <Icon fontSize={"small"} className="mr-4">place</Icon>
+                                                    <Typography variant="subtitle1" color="inherit">
+                                                        {this.state.selectedCustomer.Address}, {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
+                                                    </Typography>
+                                                </div>
+                                            </div>
+                                        )}
+                                        {this.state.selectedCustomer && (
+                                            <div className="flex flex-row justify-between mb-4">
+                                                <div className="flex flex-row items-center">
+                                                    <Icon fontSize={"small"} className="mr-4">smartphone</Icon>
+                                                    <Typography variant="subtitle1" color="inherit">
+                                                        {this.state.selectedCustomer.Phone}
+                                                    </Typography>
+                                                </div>
+                                                <div>
+                                                    <FormControlLabel
+                                                        control={
+                                                            <Checkbox
+                                                                name="taxExempt"
+                                                                checked={this.state.taxExempt}
+                                                                onChange={this.handleChange}
+                                                                value="checkedB"
+                                                                color="primary"
+                                                                className="p-0"
+                                                            />
+                                                        }
+                                                        label="Tax Exempt"
+                                                    />
+                                                </div>
+                                            </div>
                                         )}
                                     </CardContent>
                                 </Card>
