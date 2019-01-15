@@ -533,36 +533,6 @@ class CustomerListContent extends Component {
 			// 	{ title: "Contract Amount", name: "Amount", width: 80 },
 			// 	// { title: "Actions", name: "Actions", width: 110, }
 			// ],
-
-			tableColumnExtensions2: [
-				{
-					title: "id",
-					name: "id",
-					columnName: "id",
-					width: 80,
-					sortingEnabled: true,
-					filteringEnabled: true,
-					groupingEnabled: false,
-				},
-				{
-					title: "product",
-					name: "product",
-					columnName: "product",
-					width: 80,
-					sortingEnabled: true,
-					filteringEnabled: true,
-					groupingEnabled: false,
-				},
-				{
-					title: "owner",
-					name: "owner",
-					columnName: "owner",
-					width: 80,
-					sortingEnabled: true,
-					filteringEnabled: true,
-					groupingEnabled: false,
-				},
-			],
 			tableColumnExtensions: [
 				{
 					title: "No",
@@ -608,7 +578,7 @@ class CustomerListContent extends Component {
 					title: "State",
 					name: "StateName",
 					columnName: 'StateName',
-					width: 90,
+					width: 50,
 					align: 'center',
 					sortingEnabled: true,
 					filteringEnabled: true,

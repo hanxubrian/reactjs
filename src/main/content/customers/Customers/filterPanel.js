@@ -715,7 +715,7 @@ class FilterPanel extends Component {
 											control={
 												<Checkbox onChange={this.handleChange('nativeChildAccount')} />
 											}
-											label="Native Account"
+											label="National Account"
 										/>
 										<FormControlLabel
 											control={

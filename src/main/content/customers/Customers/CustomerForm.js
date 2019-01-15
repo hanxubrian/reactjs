@@ -744,6 +744,22 @@ class CustomerForm extends Component {
 											</MenuItem>
 										))}
 								</TextField>
+
+								<TextField
+									type="number"
+									inputProps={{ min: "0", max: "99", step: "1" }}
+									id="TermMonths"
+									label="Term Months *"
+									InputLabelProps={{
+										shrink: true
+									}}
+									className={classNames(classes.textField, "ml-12")}
+									value={this.state.TermMonths}
+									onChange={this.handleChange('TermMonths')}
+									margin="normal"
+									variant="outlined"
+									style={{ width: '10%', minWidth: '110px' }}
+								/>
 							</GridItem>
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -796,12 +812,15 @@ class CustomerForm extends Component {
 								</TextField>
 							</GridItem>
 
+
+
+
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
 									type="date"
 									id="SignDate"
 									label="Sign Date *"
-									className={classes.textField}
+									className={classNames(classes.textField, "mr-12")}
 									InputLabelProps={{
 										shrink: true
 									}}
@@ -809,20 +828,13 @@ class CustomerForm extends Component {
 									onChange={this.handleChange('SignDate')}
 									margin="normal"
 									variant="outlined"
-									style={{ minWidth: "100px", width: "30%" }}
+									style={{ width: "20%", minWidth: "180px" }}
 								/>
-
-							</GridItem>
-
-
-
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
 									type="date"
 									id="StartDate"
 									label="Start Date *"
-									className={classes.textField}
+									className={classNames(classes.textField, "mr-12 ml-12")}
 									InputLabelProps={{
 										shrink: true
 									}}
@@ -830,33 +842,14 @@ class CustomerForm extends Component {
 									onChange={this.handleChange('StartDate')}
 									margin="normal"
 									variant="outlined"
-									style={{ minWidth: "100px", width: "30%" }}
+									style={{ width: "20%", minWidth: "180px" }}
 								/>
-
-								<TextField
-									type="number"
-									id="TermMonths"
-									label="Term Months *"
-									className={classNames(classes.textField, "ml-12")}
-									value={this.state.TermMonths}
-									onChange={this.handleChange('TermMonths')}
-									margin="normal"
-									variant="outlined"
-									style={{ width: '70%' }}
-								/>
-
-
-							</GridItem>
-
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-
 
 								<TextField
 									type="date"
 									id="ExpirationDate"
 									label="Expiration Date *"
-									className={classes.textField}
+									className={classNames(classes.textField, "ml-12")}
 									InputLabelProps={{
 										shrink: true
 									}}
@@ -864,15 +857,10 @@ class CustomerForm extends Component {
 									onChange={this.handleChange('ExpirationDate')}
 									margin="normal"
 									variant="outlined"
-									style={{ minWidth: "100px", width: "30%" }}
+									style={{ width: "20%", minWidth: "180px" }}
 								/>
 							</GridItem>
-
-
-
 						</GridContainer>
-
-
 					</Fragment>
 				);
 			case 2:
@@ -892,7 +880,7 @@ class CustomerForm extends Component {
 									onChange={this.handleChange('EffectiveDate')}
 									margin="normal"
 									variant="outlined"
-									style={{ minWidth: 100, width: "30%" }}
+									style={{ width: "20%", minWidth: "180px" }}
 
 								/>
 							</GridItem>
@@ -914,7 +902,6 @@ class CustomerForm extends Component {
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
-									type="date"
 									id="InvoiceDate"
 									label="Invoice Date"
 									className={classNames(classes.textField, "mr-12")}
@@ -1094,6 +1081,8 @@ class CustomerForm extends Component {
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
+									type="number"
+									inputProps={{ min: "0", max: "999999", step: "1" }}
 									id="SquareFootage"
 									label="Square Footage"
 									className={classes.textField}
@@ -1305,7 +1294,7 @@ class CustomerForm extends Component {
 									type="date"
 									id="Date"
 									label="Date"
-									className={classes.textField}
+									className={classNames(classes.textField, "mr-12")}
 									InputLabelProps={{
 										shrink: true
 									}}
@@ -1314,13 +1303,13 @@ class CustomerForm extends Component {
 									margin="normal"
 									variant="outlined"
 									fullWidth
-									style={{ width: '100%', marginRight: '2%', marginLeft: '0%' }}
+									style={{ width: "20%", minWidth: "180px" }}
 								/>
 								<TextField
 									type="date"
 									id="WalkThroughDate"
 									label="Walk Through Date"
-									className={classes.textField}
+									className={classNames(classes.textField, "mr-12 ml-12")}
 									InputLabelProps={{
 										shrink: true
 									}}
@@ -1329,13 +1318,13 @@ class CustomerForm extends Component {
 									margin="normal"
 									variant="outlined"
 									fullWidth
-									style={{ width: '100%', marginRight: '2%', marginLeft: '2%' }}
+									style={{ width: "20%", minWidth: "180px" }}
 								/>
 								<TextField
 									type="date"
 									id="StartDate"
 									label="Start Date"
-									className={classes.textField}
+									className={classNames(classes.textField, "ml-12")}
 									InputLabelProps={{
 										shrink: true
 									}}
@@ -1344,7 +1333,7 @@ class CustomerForm extends Component {
 									margin="normal"
 									variant="outlined"
 									fullWidth
-									style={{ width: '100%', marginRight: '0%', marginLeft: '2%' }}
+									style={{ width: "20%", minWidth: "180px" }}
 								/>
 
 							</GridItem>
