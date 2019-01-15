@@ -298,7 +298,7 @@ class InvoiceForm extends Component {
             <TextField
                 fullWidth
                 variant="outlined"
-                label="Invoice For:"
+                label="Customer:"
                 InputProps={{
                     inputRef: node => {
                         ref(node);
@@ -340,6 +340,7 @@ class InvoiceForm extends Component {
 
     getSuggestionValue =  (suggestion) =>{
         this.setState({selectedCustomer: suggestion});
+        this.setState({PO_number: suggestion.CustomerNo})
         return suggestion.CustomerName;
     };
 
@@ -426,7 +427,9 @@ class InvoiceForm extends Component {
         lines.forEach(line=>{
             let item = {
                 ServiceTypeListId: 0,
-                Descrption: line.description,
+                Description: line.description,
+                Billing: line.billing,
+                Service: line.service,
                 LineNo: 1,
                 UnitPrice: line.amount,
                 Quantity: parseInt(line.quantity),
@@ -464,6 +467,7 @@ class InvoiceForm extends Component {
 
         let result = {
             CustomerId: this.state.selectedCustomer.CustomerId,
+            CustomerNumber: this.state.PO_number,
             PeriodId: this.props.invoices.PeriodId[0],
             PeriodMonth: this.state.period.month()+1,
             PeriodYear: this.state.period.year(),
@@ -553,10 +557,6 @@ class InvoiceForm extends Component {
             getSuggestionValue: this.getSuggestionValue,
             renderSuggestion,
         };
-
-        const years = _.range(moment().year(), 2000,-1);
-        const monthes= ["January","February","March","April","May","June","July",
-            "August","September","October","November","December"];
 
         let bReadonly = false;
         if(this.props.invoiceForm.type === 'new') bReadonly = true;
@@ -661,6 +661,27 @@ class InvoiceForm extends Component {
                                 <Grid item xs={12} sm={3} md={3} className="flex flex-row xs:flex-col pl-4" >
                                     <TextField
                                         margin="none"
+                                        label="P.O #"
+                                        placeholder="P.O #"
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input,
+                                            },
+                                        }}
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        name="PO_number"
+                                        variant="outlined"
+                                        value={this.state.PO_number}
+                                        onChange={this.handleChange}
+                                        required
+                                        fullWidth
+                                        style={{paddingRight: 4}}
+                                    />
+                                    <TextField
+                                        margin="none"
                                         label="Invoice #"
                                         placeholder="Invoice #"
                                         InputProps={{
@@ -679,30 +700,9 @@ class InvoiceForm extends Component {
                                         onChange={this.handleChange}
                                         required
                                         fullWidth
-                                        style = {{paddingRight: 4,fontSize: this.props.invoiceForm.type === 'new' ? '18px!important': 'inherit',
+                                        style = {{paddingLeft: 4,fontSize: this.props.invoiceForm.type === 'new' ? '18px!important': 'inherit',
                                             fontWeight: this.props.invoiceForm.type === 'new' ? 700: 'inherit'
                                         }}
-                                    />
-                                    <TextField
-                                        margin="none"
-                                        label="P.O #"
-                                        placeholder="P.O #"
-                                        InputProps={{
-                                            classes: {
-                                                input: classes.input,
-                                            },
-                                        }}
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                        name="PO_number"
-                                        variant="outlined"
-                                        value={this.state.PO_number}
-                                        onChange={this.handleChange}
-                                        required
-                                        fullWidth
-                                        style={{paddingLeft: 4}}
                                     />
                                 </Grid>
                             </Grid>
