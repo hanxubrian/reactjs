@@ -3,8 +3,8 @@ import {withRouter} from 'react-router-dom';
 
 // core components
 import {
-    Paper, TextField, Typography, MenuItem, Card,  CardHeader, CardContent, Divider, Button,
-    Snackbar, SnackbarContent, IconButton
+    Paper, TextField, Typography, MenuItem, Card, CardHeader, CardContent, Divider, Button,
+    Snackbar, SnackbarContent, IconButton, Select, Grid
 } from '@material-ui/core';
 import 'date-fns'
 import DateFnsUtils from '@date-io/date-fns';
@@ -51,12 +51,12 @@ const styles = theme => ({
         flexDirection: 'row',
     },
     button: {
-        '& span':{
+        '& span': {
             textTransform: 'none'
         }
     },
     card: {
-        width   : '100%',
+        width: '100%',
     },
     container: {
         position: 'relative',
@@ -94,7 +94,7 @@ const styles = theme => ({
     divider: {
         height: theme.spacing.unit * 2,
     },
-    cardHeader       : {
+    cardHeader: {
         backgroundColor: theme.palette.secondary.main,
         padding: '8px 24px',
         '& span': {
@@ -105,7 +105,7 @@ const styles = theme => ({
     cardContent: {
         paddingTop: 12,
         paddingBottom: '12px!important',
-        '& h6':{
+        '& h6': {
             lineHeight: 1.6,
             fontSize: 14
         }
@@ -113,14 +113,28 @@ const styles = theme => ({
     input: {
         padding: '12px 14px'
     },
+    input1: {
+        padding: '12px 6px'
+    },
+
     label: {
         transform: 'translate(14px, 14px) scale(1)'
     },
     inputOrange: {
         padding: '12px 14px',
         color: 'orange'
+    },
+    dropdownMenu: {
+        '& li': {
+            fontSize: 12,
+            height: 12,
+        }
+    },
+    picker: {
+        padding: '0 6px'
     }
-});
+})
+
 const chance = new Chance();
 
 const newInvoiceState = {
@@ -272,7 +286,9 @@ class InvoiceForm extends Component {
         markup: 0.0,
         InvoiceNo: "",
         snackMessage: "",
-        openSnack: false
+        openSnack: false,
+        PO_number: '',
+        period: moment()
     };
 
     renderInputComponent = (inputProps ) => {
@@ -449,8 +465,8 @@ class InvoiceForm extends Component {
         let result = {
             CustomerId: this.state.selectedCustomer.CustomerId,
             PeriodId: this.props.invoices.PeriodId[0],
-            PeriodMonth: moment().month()+1,
-            PeriodYear: moment().year(),
+            PeriodMonth: this.state.period.month()+1,
+            PeriodYear: this.state.period.year(),
             Description: this.state.InvoiceDescription,
             Notes: this.state.note,
             RegionId: this.props.regionId,
@@ -503,6 +519,10 @@ class InvoiceForm extends Component {
         this.setState({ InvoiceDate: date });
     };
 
+    handlePeriodChange = date => {
+        this.setState({ period: date });
+    };
+
     storeInputReference = autosuggest => {
         if (autosuggest !== null) {
             this.input = autosuggest.input;
@@ -516,6 +536,7 @@ class InvoiceForm extends Component {
 
         this.setState({ openSnack: false });
     };
+
 
     render()
     {
@@ -533,6 +554,9 @@ class InvoiceForm extends Component {
             renderSuggestion,
         };
 
+        const years = _.range(moment().year(), 2000,-1);
+        const monthes= ["January","February","March","April","May","June","July",
+            "August","September","October","November","December"];
 
         let bReadonly = false;
         if(this.props.invoiceForm.type === 'new') bReadonly = true;
@@ -542,8 +566,8 @@ class InvoiceForm extends Component {
                 <div className="h-full flex flex-col relative">
                     <div className="flex flex-col p-24 pt-12 pb-0" style={{flex: "1"}}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <GridContainer className={classNames(classes.formControl)}>
-                                <GridItem xs={12} sm={6} md={6} className="flex flex-row">
+                            <Grid container className={classNames(classes.formControl)}>
+                                <Grid item xs={12} sm={6} md={6} className="flex flex-row pr-16">
                                     <Autosuggest
                                         {...autosuggestProps}
                                         inputProps={{
@@ -565,8 +589,31 @@ class InvoiceForm extends Component {
                                         )}
                                         ref={this.storeInputReference}
                                     />
-                                </GridItem>
-                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col xs:mb-24">
+                                </Grid>
+                                <Grid item xs={12} sm={1} md={1} className="flex flex-row pl-16 pr-4">
+                                    <DatePicker
+                                        margin="none"
+                                        label="Period"
+                                        name="InvoicePeriod"
+                                        variant="outlined"
+                                        format="MM/YYYY"
+                                        value={this.state.period}
+                                        onChange={this.handlePeriodChange}
+                                        fullWidth
+                                        required
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input,
+                                            },
+                                        }}
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        openToYearSelection={true}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={1} md={1} className="flex flex-row xs:flex-col xs:mb-24 pr-4 pl-4" style={{padding: '0 6px!important'}}>
                                     <DatePicker
                                         margin="none"
                                         label="Invoice Date"
@@ -579,7 +626,7 @@ class InvoiceForm extends Component {
                                         required
                                         InputProps={{
                                             classes: {
-                                                input: classes.input,
+                                                input: classes.input1,
                                             },
                                         }}
                                         InputLabelProps = {{
@@ -587,8 +634,9 @@ class InvoiceForm extends Component {
                                             classes: {outlined: classes.label}
                                         }}
                                     />
-                                </GridItem>
-                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                </Grid>
+                                <Grid item xs={12} sm={1} md={1} className="flex flex-row xs:flex-col pr-4 pl-4"
+                                          style={{padding: '0 6px!important'}}>
                                     <DatePicker
                                         margin="none"
                                         label="Due Date"
@@ -601,7 +649,7 @@ class InvoiceForm extends Component {
                                         fullWidth
                                         InputProps={{
                                             classes: {
-                                                input: classes.input,
+                                                input: classes.input1,
                                             },
                                         }}
                                         InputLabelProps = {{
@@ -609,8 +657,8 @@ class InvoiceForm extends Component {
                                             classes: {outlined: classes.label}
                                         }}
                                     />
-                                </GridItem>
-                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                </Grid>
+                                <Grid item xs={12} sm={3} md={3} className="flex flex-row xs:flex-col pl-4" >
                                     <TextField
                                         margin="none"
                                         label="Invoice #"
@@ -631,12 +679,33 @@ class InvoiceForm extends Component {
                                         onChange={this.handleChange}
                                         required
                                         fullWidth
-                                        style = {{fontSize: this.props.invoiceForm.type === 'new' ? '18px!important': 'inherit',
+                                        style = {{paddingRight: 4,fontSize: this.props.invoiceForm.type === 'new' ? '18px!important': 'inherit',
                                             fontWeight: this.props.invoiceForm.type === 'new' ? 700: 'inherit'
                                         }}
                                     />
-                                </GridItem>
-                            </GridContainer>
+                                    <TextField
+                                        margin="none"
+                                        label="P.O #"
+                                        placeholder="P.O #"
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input,
+                                            },
+                                        }}
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        name="PO_number"
+                                        variant="outlined"
+                                        value={this.state.PO_number}
+                                        onChange={this.handleChange}
+                                        required
+                                        fullWidth
+                                        style={{paddingLeft: 4}}
+                                    />
+                                </Grid>
+                            </Grid>
                         </MuiPickersUtilsProvider>
                         <GridContainer className={classNames(classes.formControl, "mb-0")}>
                             <GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col">
@@ -704,11 +773,11 @@ class InvoiceForm extends Component {
                                 }}
                             />
                         </div>
-                        <GridContainer className={classNames(classes.formControl)} style={{flex: "9999 1 0"}}>
-                            <GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col xs:mb-24">
+                        <Grid container className={classNames(classes.formControl)} style={{flex: "9999 1 0"}}>
+                            <Grid item xs={12} sm={12} md={12} className="flex flex-row xs:flex-col xs:mb-24">
                                 <InvoiceLineTable />
-                            </GridItem>
-                        </GridContainer>
+                            </Grid>
+                        </Grid>
                         <Divider variant="middle"/>
                     </div>
                     <div className="flex flex-shrink flex-col w-full pl-24 pr-24 pt-0 pb-12">

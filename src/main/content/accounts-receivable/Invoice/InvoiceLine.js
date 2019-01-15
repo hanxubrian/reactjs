@@ -619,7 +619,6 @@ class InvoiceLineTable extends React.Component {
         let all_data = [];
 
         let f_index = 0;
-        console.log('data=', data);
         data.forEach(d=>{
             if(d.franchisees.length===0) return all_data.push(d);
             let franchisees = d.franchisees;
