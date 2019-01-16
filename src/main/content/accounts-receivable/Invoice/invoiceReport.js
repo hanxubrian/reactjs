@@ -243,10 +243,6 @@ class InvoiceReport extends Component {
                                     {this.state.invoiceDetail.TRX_Amount}
                                 </td>
 
-                                {/*<td rowSpan="1" width="15%" style={{border:'solid 1px'}} className="text-center"><strong>Extended Price1</strong></td>*/}
-                                {/*<td rowSpan="1" width="15%" style={{border:'solid 1px'}} className="text-center"><strong>Extended Price2</strong></td>*/}
-                                {/*<td rowSpan="1" width="15%" style={{border:'solid 1px'}} className="text-center"><strong>Extended Price3</strong></td>*/}
-                                {/*<td rowSpan="1" width="15%" style={{border:'solid 1px'}} className="text-center"><strong>Extended Price4</strong></td>*/}
                             </tr>
                             <tr>
                                 <td style={{borderRight:'solid 1px'}}>

@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { withRouter } from 'react-router-dom';
 import Geocode from "react-geocode";
 
 import { Paper, withStyles, Checkbox } from '@material-ui/core';
@@ -24,6 +25,12 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 
 import CustomerLineTable from "./CustomerLine"
+
+import Autosuggest from "react-autosuggest"
+import AutosuggestHighlightMatch from 'autosuggest-highlight/match'
+import AutosuggestHighlightParse from 'autosuggest-highlight/parse'
+
+import Utils from './Utils'
 
 Geocode.setApiKey("AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA");
 
@@ -59,7 +66,98 @@ const styles = theme => ({
 		'&.opened1': {
 			transform: 'translateX(300px)'
 		}
-	}
+	},
+
+	autosuggest__container: {
+		position: "relative",
+	},
+
+	autosuggest__input: {
+		width: "240px",
+		height: "30px",
+		padding: "10px 20px",
+		fontFamily: "Helvetica, sans-serif",
+		fontWeight: "300",
+		fontDize: "16px",
+		border: "1px solid #aaa",
+		borderRadius: "4px",
+	},
+
+	autosuggest__input_focused: {
+		outline: "none",
+	},
+
+	autosuggest__input_open: {
+		borderBottomLeftRadius: "0",
+		borderBottomRightRadius: "0",
+	},
+
+	autosuggest__suggestions_container: {
+		display: "none",
+	},
+
+	autosuggest__suggestions_container_open: {
+		display: "block",
+		position: "absolute",
+		top: "51px",
+		width: "280px",
+		border: "1px solid #aaa",
+		backgroundColor: "#fff",
+		fontFamily: "Helvetica, sans-serif",
+		fontWeight: "300",
+		fontSize: "16px",
+		borderBottomLeftRadius: "4px",
+		borderBottomRightRadius: "4px",
+		zIndex: "2",
+	},
+
+	autosuggest__suggestions_list: {
+		margin: "0",
+		padding: "0",
+		listStyleType: "none",
+	},
+
+	autosuggest__suggestion: {
+		cursor: "pointer",
+		padding: "10px 20px",
+	},
+
+	autosuggest__suggestion_highlighted: {
+		backgroundColor: "#ddd",
+	},
+
+	autosuggest__suggestion_match: {
+		color: "red",
+		fontWeight: "bold",
+	},
+
+	suggestionsContainerOpen: {
+		position: 'absolute',
+		zIndex: 10,
+		marginTop: theme.spacing.unit,
+		left: 0,
+		right: 0,
+		maxHeight: 200,
+		overflowY: 'scroll'
+	},
+	suggestion: {
+		display: 'block',
+	},
+	suggestionsList: {
+		margin: 0,
+		padding: 0,
+		listStyleType: 'none',
+	},
+	container: {
+		position: 'relative',
+		width: '100%'
+	},
+	input: {
+		padding: '12px 14px'
+	},
+	label: {
+		transform: 'translate(14px, 14px) scale(1)'
+	},
 });
 
 const stateNames = [
@@ -217,55 +315,52 @@ const billing_headers = [
 		numeric: true,
 		disablePadding: false,
 		label: 'Email'
-	}
+	},
 ];
+
 
 const WAIT_INTERVAL = 1000
 const ENTER_KEY = 13
 
 class FilterPanel extends Component {
 
+	constructor(props) {
+		super(props)
 
-	state = {
-		checkedPaid: true,
-		checkedPP: true,
-		checkedComplete: true,
-		checkedOpen: true,
-		invoiceDate: '',
+		this.state = {
+			AccountTypes: -2,
+			AccountExecutive: 0,
 
-		isAllCustomerStatus: true,
-		isActiveCustomerStatus: true,
-		isCancelledCustomerStatus: true,
-		isSuspendedCustomerStatus: true,
-		isPendingCustomerStatus: true,
-		isInactiveCustomerStatus: true,
-		isTransferredCustomerStatus: true,
-		isUnknownCustomerStatus: true,
-		isRejectedCustomerStatus: true,
-		isRegionOperationCustomerStatus: true,
-		isRegionAccountingCustomerStatus: true,
-		isVariableCustomerStatus: true,
+			Location: this.props.locationFilterValue.id,
+			NearbyRadius: this.props.locationFilterValue.miles,
+			AddressZipcodeRadius: this.props.locationFilterValue.miles,
 
-		AccountTypes: -2,
-		AccountExecutive: 0,
+			customerName: "",
+			suggestions: [],
+		}
+	}
 
-		Location: this.props.locationFilterValue.id,
-		NearbyRadius: this.props.locationFilterValue.miles,
-		AddressZipcodeRadius: this.props.locationFilterValue.miles,
-	};
+
 
 
 	componentDidMount() {
+		const { customers } = this.props;
+		this.setState({
+			rows: Utils.getCustomerListFromDb(customers)
+		});
 	}
 
 	componentWillMount() {
-		// this.setState({
-		// 	checkedPaid: this.props.transactionStatus.checkedPaid,
-		// 	checkedPP: this.props.transactionStatus.checkedPP,
-		// 	checkedComplete: this.props.transactionStatus.checkedComplete
-		// });
+
 	}
 	componentWillReceiveProps(nextProps) {
+		const { customers } = this.props;
+		if (nextProps.customers !== customers) {
+			this.setState({
+				rows: Utils.getCustomerListFromDb(nextProps.customers)
+			});
+		}
+
 		// if (nextProps.locationFilterValue !== this.props.locationFilterValue) {
 		// 	this.setState({
 		// 		Location: nextProps.locationFilterValue.id,
@@ -466,12 +561,128 @@ class FilterPanel extends Component {
 		this.props.selectLocationFilter(payload)
 	}
 
-	handleChange1 = event => {
-		this.setState({ [event.target.name]: event.target.value });
+
+	//
+	// customer name suggestion
+	//
+	escapeRegexCharacters(str) {
+		return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+	}
+
+	getSuggestions(value) {
+		const escapedValue = this.escapeRegexCharacters(value.trim());
+
+		if (escapedValue === '') {
+			return [];
+		}
+
+		const regex = new RegExp('^' + escapedValue, 'i');
+		if (this.state.rows == undefined) return [];
+		return this.state.rows.filter(x => regex.test(x.CustomerName));
+	}
+
+	getSuggestionValue(suggestion) {
+		return suggestion.CustomerName;
+	}
+
+	// renderSuggestion(suggestion, { query }) {
+	// 	const matches = AutosuggestHighlightMatch(suggestion.CustomerName, query);
+	// 	const parts = AutosuggestHighlightParse(suggestion.CustomerName, matches);
+
+	// 	return (
+	// 		<span>
+	// 			{parts.map((part, index) => {
+	// 				const className = part.highlight ? 'autosuggest__suggestion_match' : null;
+
+	// 				return (
+	// 					<span className={className} key={index}>
+	// 						{part.text}
+	// 					</span>
+	// 				);
+	// 			})}
+	// 		</span>
+	// 	);
+	// }
+
+	renderSuggestion(suggestion, { query, isHighlighted }) {
+		const matches = AutosuggestHighlightMatch(suggestion.CustomerName, query);
+		const parts = AutosuggestHighlightParse(suggestion.CustomerName, matches);
+
+		return (
+			<MenuItem selected={isHighlighted} component="div">
+				<div>
+					{parts.map((part, index) => {
+						return part.highlight ? (
+							<span key={String(index)} style={{ fontWeight: 700 }}>
+								{part.text}
+							</span>
+						) : (
+								<strong key={String(index)} style={{ fontWeight: 300 }}>
+									{part.text}
+								</strong>
+							);
+					})}
+				</div>
+			</MenuItem>
+		);
+	}
+
+
+	onChange = (event, { newValue, method }) => {
+		this.setState({
+			customerName: newValue
+		});
 	};
 
+	onSuggestionsFetchRequested = ({ value }) => {
+		this.setState({
+			suggestions: this.getSuggestions(value)
+		});
+	};
+
+	onSuggestionsClearRequested = () => {
+		this.setState({
+			suggestions: []
+		});
+	};
+	renderInputComponent = (inputProps) => {
+		const { classes, inputRef = () => { }, ref, ...other } = inputProps;
+
+		return (
+			<TextField
+				fullWidth
+				variant="outlined"
+				label="Customer name"
+				InputProps={{
+					inputRef: node => {
+						ref(node);
+						inputRef(node);
+					},
+					classes: {
+						input: classes.input,
+					},
+				}}
+				InputLabelProps={{
+					classes: { outlined: classes.label }
+				}}
+				required
+				{...other}
+				autoFocus={true}
+			/>
+		);
+	};
 	render() {
 		const { classes, customerForm, customers } = this.props;
+
+		const { customerName, suggestions } = this.state;
+		// Autosuggest will pass through all these props to the input.
+		const inputProps = {
+			classes,
+			placeholder: 'Type a customer name...',
+			value: customerName,
+			onChange: this.onChange
+		};
+
 
 		let regionCustomers = [];
 
@@ -529,7 +740,7 @@ class FilterPanel extends Component {
 			}).sort();
 		}
 
-
+		
 		return (
 			<div className={classNames(classes.root, "flex flex-col")}>
 				{/* <div className={classNames("flex flex-col")}> */}
@@ -551,6 +762,7 @@ class FilterPanel extends Component {
 											onChange={this.handleChange('Name')}
 											margin="normal"
 											variant="outlined"
+											autoFocus
 											fullWidth />
 
 									</GridItem>
@@ -710,19 +922,78 @@ class FilterPanel extends Component {
 
 										</TextField>
 									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex justify-around">
-										<FormControlLabel
-											control={
-												<Checkbox onChange={this.handleChange('nativeChildAccount')} />
-											}
-											label="National Account"
-										/>
-										<FormControlLabel
-											control={
-												<Checkbox onChange={this.handleChange('nativeChildAccount')} />
-											}
-											label="Child Account"
-										/>
+									<GridItem xs={12} sm={12} md={12} className="flex flex-col">
+										<div className="flex justify-around">
+											<FormControlLabel
+												control={
+													<Checkbox
+														checked={this.state.NationalAccount}
+														onChange={this.handleChangeChecked('NationalAccount')}
+														value="NationalAccount"
+													/>
+												}
+												label="National Account"
+											/>
+											<FormControlLabel
+												control={
+													<Checkbox
+														checked={this.state.ChildAccount}
+														onChange={this.handleChangeChecked('ChildAccount')}
+														value="ChildAccount"
+													/>
+												}
+												label="Child Account"
+											/>
+										</div>
+
+										{this.state.ChildAccount && (
+											<div className="flex flex-col">
+												{/* <TextField
+													id="CustomerName"
+													label="Customer Name"
+													className={classes.textField}
+													onChange={this.handleChange('CustomerName')}
+													margin="normal"
+													variant="outlined"
+													autoFocus
+													fullWidth /> */}
+
+												<Autosuggest
+													style={{ width: "100%" }}
+													className={classNames(classes.textfield)}
+													theme={{
+														container: classNames(classes.container),
+														suggestionsContainerOpen: classes.suggestionsContainerOpen,
+														suggestionsList: classes.suggestionsList,
+														suggestion: classes.suggestion,
+													}}
+													renderSuggestionsContainer={options => (
+														<Paper {...options.containerProps} square>
+															{options.children}
+														</Paper>
+													)}
+													renderInputComponent={this.renderInputComponent}
+
+													suggestions={suggestions}
+													onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+													onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+													getSuggestionValue={this.getSuggestionValue}
+													renderSuggestion={this.renderSuggestion}
+													inputProps={inputProps}
+												/>
+
+												<TextField
+													id="StoreNumber"
+													label="Store Number"
+													className={classes.textField}
+													onChange={this.handleChange('StoreNumber')}
+													margin="normal"
+													variant="outlined"
+													fullWidth />
+											</div>
+										)}
+
+
 									</GridItem>
 
 									<GridItem xs={12} sm={12} md={12} className="flex flex-col">
@@ -739,43 +1010,8 @@ class FilterPanel extends Component {
 						) :
 						(
 							<div>
-								{/*
-									 <div>
-										<h3 className="mb-20">Filter by Date</h3>
-										<FormControl className={classes.formControl} style={{ width: 200 }}>
-											<Select
-												value={this.state.invoiceDate}
-												onChange={this.handleChange1}
-												inputProps={{
-													name: 'invoiceDate',
-													id: 'invoice_date'
-												}}
-											>
-												<MenuItem value="">
-													<em>None</em>
-												</MenuItem>
-												<MenuItem value={1}>This Week</MenuItem>
-												<MenuItem value={2}>This Week-to-date</MenuItem>
-												<MenuItem value={3}>This Month</MenuItem>
-												<MenuItem value={4}>This Month-to-date</MenuItem>
-												<MenuItem value={5}>This Quarter</MenuItem>
-												<MenuItem value={6}>This Quarter-to-Date</MenuItem>
-												<MenuItem value={7}>This Fiscal Year</MenuItem>
-												<MenuItem value={8}>This Fiscal Year-to-date</MenuItem>
-												<MenuItem value={9}>Today</MenuItem>
-												<MenuItem value={10}>Yesterday</MenuItem>
-												<MenuItem value={11}>This Month</MenuItem>
-												<MenuItem value={12}>Last Quarter</MenuItem>
-												<MenuItem value={13}>Last Year</MenuItem>
-												<MenuItem value={14}>Custom Date</MenuItem>
-												<MenuItem value={15}>Period</MenuItem>
-											</Select>
-										</FormControl>
-									</div>
-									*/}
-
 								{/* <RadioGroup */}
-								<div className="mt-0 flex flex-col" style={{width: '200px'}}>
+								<div className="mt-0 flex flex-col" style={{ width: '200px' }}>
 									<h3>Location</h3>
 									<RadioGroup
 										aria-label="Location"
@@ -855,7 +1091,7 @@ class FilterPanel extends Component {
 
 								</div>
 
-								<div className="mt-0 flex flex-col" style={{width: '200px'}}>
+								<div className="mt-0 flex flex-col" style={{ width: '200px' }}>
 									<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
 									<TextField
 										select
@@ -871,7 +1107,7 @@ class FilterPanel extends Component {
 										margin="normal"
 										variant="outlined"
 										fullWidth
-										>
+									>
 
 
 										{/* <MenuItem value={-2}><em>All</em></MenuItem>
@@ -907,7 +1143,7 @@ class FilterPanel extends Component {
 										margin="normal"
 										variant="outlined"
 										fullWidth
-										>
+									>
 										{/* {[{
 											value: 0, label: "All"
 										}, {
@@ -927,7 +1163,7 @@ class FilterPanel extends Component {
 
 								</div>
 
-								<div className="mt-36 flex flex-col" style={{width: '200px'}}>
+								<div className="mt-36 flex flex-col" style={{ width: '200px' }}>
 									<h3>Customer Status</h3>
 									<FormControlLabel
 										control={
@@ -947,55 +1183,6 @@ class FilterPanel extends Component {
 											/>
 										))
 									}
-
-									{/* <FormControlLabel
-										control={<Switch checked={this.state.isAllCustomerStatus} onChange={this.handleChangeChecked('isAllCustomerStatus')} />}
-										label="All"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isActiveCustomerStatus} onChange={this.handleChangeChecked('isActiveCustomerStatus')} />}
-										label="Active"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isCancelledCustomerStatus} onChange={this.handleChangeChecked('isCancelledCustomerStatus')} />}
-										label="Cancelled"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isSuspendedCustomerStatus} onChange={this.handleChangeChecked('isSuspendedCustomerStatus')} />}
-										label="Suspended"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isPendingCustomerStatus} onChange={this.handleChangeChecked('isPendingCustomerStatus')} />}
-										label="Pending"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isInactiveCustomerStatus} onChange={this.handleChangeChecked('isInactiveCustomerStatus')} />}
-										label="Inactive"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isTransferredCustomerStatus} onChange={this.handleChangeChecked('isTransferredCustomerStatus')} />}
-										label="Transferred"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isUnknownCustomerStatus} onChange={this.handleChangeChecked('isUnknownCustomerStatus')} />}
-										label="Unknown"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isRejectedCustomerStatus} onChange={this.handleChangeChecked('isRejectedCustomerStatus')} />}
-										label="Rejected"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isRegionOperationCustomerStatus} onChange={this.handleChangeChecked('isRegionOperationCustomerStatus')} />}
-										label="Region Operation"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isRegionAccountingCustomerStatus} onChange={this.handleChangeChecked('isRegionAccountingCustomerStatus')} />}
-										label="Region Accounting"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isVariableCustomerStatus} onChange={this.handleChangeChecked('isVariableCustomerStatus')} />}
-										label="Variable"
-									/> */}
 								</div>
 							</div>
 						)
@@ -1030,4 +1217,4 @@ function mapStateToProps({ customers, auth }) {
 	}
 }
 
-export default (withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(FilterPanel)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(FilterPanel)));

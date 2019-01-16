@@ -867,38 +867,66 @@ class CustomerForm extends Component {
 				return (
 					<Fragment>
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									type="date"
-									id="EffectiveDate"
-									label="Effective Date"
-									className={classNames(classes.textField)}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.EffectiveDate}
-									onChange={this.handleChange('EffectiveDate')}
-									margin="normal"
-									variant="outlined"
-									style={{ width: "20%", minWidth: "180px" }}
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between">
+								<div className="flex flex-col">
+									<TextField
+										type="date"
+										id="EffectiveDate"
+										label="Effective Date"
+										className={classNames(classes.textField)}
+										InputLabelProps={{
+											shrink: true
+										}}
+										value={this.state.EffectiveDate}
+										onChange={this.handleChange('EffectiveDate')}
+										margin="normal"
+										variant="outlined"
+										style={{ width: "20%", minWidth: "180px" }}
 
-								/>
+									/>
+
+									<TextField
+										id="PONumer"
+										type="number"
+										label="PO Numer"
+										className={classes.textField}
+										value={this.state.PONumer}
+										onChange={this.handleChange('PONumer')}
+										margin="normal"
+										variant="outlined"
+										style={{ width: "20%", minWidth: "180px" }}
+									/>
+								</div>
+								<div className="flex flex-col justify-between">
+									<FormControlLabel
+										control={
+											<Checkbox onChange={this.handleChange('weekdays')} />
+										}
+										label="Print Past Due"
+										className="mr-36"
+
+									/>
+									<FormControlLabel
+										control={
+											<Checkbox onChange={this.handleChange('weekdays')} />
+										}
+										label="Tax Exempt"
+										className="mr-36"
+
+									/>
+									<FormControlLabel
+										control={
+											<Checkbox onChange={this.handleChange('weekdays')} />
+										}
+										label="Consolidated Invoice"
+										className=""
+
+									/>
+								</div>
+
 							</GridItem>
 
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="PONumer"
-									type="number"
-									label="PO Numer"
-									className={classes.textField}
-									value={this.state.PONumer}
-									onChange={this.handleChange('PONumer')}
-									margin="normal"
-									variant="outlined"
-									style={{ minWidth: "100px", width: "30%" }}
-								/>
 
-							</GridItem>
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
