@@ -25,7 +25,7 @@ import {withStyles} from "@material-ui/core";
 //Custom components
 import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
-// import InvoiceLineTable from "./InvoiceLine"
+import TransactionTable from "./transactionLine"
 
 // for store
 import {bindActionCreators} from "redux";
@@ -761,7 +761,7 @@ class TransactionForm extends Component {
                         </div>
                         <Grid container className={classNames(classes.formControl)} style={{flex: "9999 1 0"}}>
                             <Grid item xs={12} sm={12} md={12} className="flex flex-row xs:flex-col xs:mb-24">
-                                {/*<InvoiceLineTable />*/}
+                                <TransactionTable />
                             </Grid>
                         </Grid>
                         <Divider variant="middle"/>
