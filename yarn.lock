@@ -1298,11 +1298,21 @@
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@date-io/core/-/core-0.0.2.tgz#35be27d26eb652e752ccfbffe624c95169200dbd"
 
+"@date-io/core@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@date-io/core/-/core-1.0.1.tgz#70624c535f2a53bf7ecefb486fc86e3edecf0078"
+
 "@date-io/date-fns@^0.0.2":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@date-io/date-fns/-/date-fns-0.0.2.tgz#1604546d080707b73185a135db197598cfd16e6d"
   dependencies:
     "@date-io/core" "^0.0.2"
+
+"@date-io/moment@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@date-io/moment/-/moment-1.0.1.tgz#8db657df90c1af59c8f284b1941da144ae25fd64"
+  dependencies:
+    "@date-io/core" "^1.0.1"
 
 "@devexpress/dx-core@1.10.0":
   version "1.10.0"
@@ -7066,11 +7076,7 @@ mobile-detect@1.4.3:
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/mobile-detect/-/mobile-detect-1.4.3.tgz#e436a3839f5807dd4d3cd4e081f7d3a51ffda2dd"
 
-moment@2.22.2:
-  version "2.22.2"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
-
-moment@^2.10.2:
+moment@^2.10.2, moment@^2.23.0:
   version "2.23.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.23.0.tgz#759ea491ac97d54bac5ad776996e2a58cc1bc225"
 
