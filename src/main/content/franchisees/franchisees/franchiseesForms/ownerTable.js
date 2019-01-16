@@ -19,10 +19,11 @@ import TextField from "@material-ui/core/TextField/TextField";
 
 let counter = 0;
 
-function createData(name = '', phone = '', title = 'description') {
+function createData(firstName = '',lastName='', phone = '', title = 'description') {
 	return {
 		id: counter++,
-		name,
+		firstName,
+		lastName,
 		phone,
 		title
 	};
@@ -234,7 +235,7 @@ class FranchiseesOwnerTable extends React.Component {
 		rowsPerPage: 10,
 		labelWidth: 0,
 		data: [
-			createData('', '', '')
+			createData('','', '', '')
 		]
 	};
 
@@ -319,13 +320,22 @@ class FranchiseesOwnerTable extends React.Component {
 											<TableRow hover key={n.id} >
 												<TableCell component="td" scope="row" >
 													<TextField
-														id={"name" + n.id}
+														id={"firstName" + n.id}
 														className={classes.textField}
 														variant="outlined"
 														margin="dense"
 														fullWidth
 													/>
 												</TableCell>
+                                                <TableCell component="td" scope="row" >
+                                                    <TextField
+                                                        id={"lastName" + n.id}
+                                                        className={classes.textField}
+                                                        variant="outlined"
+                                                        margin="dense"
+                                                        fullWidth
+                                                    />
+                                                </TableCell>
 												<TableCell>
 													<TextField
 														id={"phone" + n.id}

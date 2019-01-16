@@ -74,10 +74,16 @@ function getStepContent(franchiseeForm, step) {
 
     const Owner_headers = [
         {
-            id: 'name',
+            id: 'firstName',
             numeric: false,
             disablePadding: false,
-            label: 'Name'
+            label: 'First Name'
+        },
+        {
+            id: 'lastName',
+            numeric: false,
+            disablePadding: false,
+            label: 'Last Name'
         },
         {
             id: 'phone',
