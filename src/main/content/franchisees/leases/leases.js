@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {withStyles} from '@material-ui/core/styles/index';
 import {withRouter} from 'react-router-dom';
 import { bindActionCreators } from "redux";
@@ -405,7 +405,7 @@ class Leases extends Component {
 		});
 
 		// regions.map(x => {
-		// 	all_temp = [...all_temp, ...x.Customers];
+		// 	all_temp = [...all_temp, ...x.Leases];
 		// 	return;
 		// });
 
@@ -465,10 +465,10 @@ class Leases extends Component {
 
 	removeLeases = () => {
 		if (this.state.selection.length === 0) {
-			alert("Please choose customer(s) to delete");
+			alert("Please choose lease(s) to delete");
 			return;
 		}
-		if (window.confirm("Do you really want to remove the selected customer(s)")) {
+		if (window.confirm("Do you really want to remove the selected lease(s)")) {
 			this.props.deleteLeasesAction(this.state.selection, this.props.leases);
 			this.setState({ selection: [], selectAll: false })
 		}
@@ -495,7 +495,8 @@ class Leases extends Component {
     }
 
     render() {
-    	const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, openNewLeaseForm, leaseForm, mapViewState } = this.props;
+		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState,
+		openNewLeaseForm, leaseForm, mapViewState } = this.props;
 		console.log(this.props)
 		console.log(this.state)
 		// const { toggleSelection, toggleAll, isSelected, logSelection } = this;
@@ -597,6 +598,7 @@ class Leases extends Component {
 														<img className="mr-12" alt="" src="assets/images/invoices/invoice-icon-white.png" style={{ width: 32, height: 32 }} />
 													</Toolbar>
 												</FuseAnimate>
+
 												<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 													<Typography variant="h6" className="hidden sm:flex">Leases | New Leases</Typography>
 												</FuseAnimate>
@@ -684,33 +686,32 @@ class Leases extends Component {
 					}
 					content={
 						<div className="flex-1 flex-col absolute w-full h-full">
-							{(this.state.temp && !leaseForm.props.open) && (mapViewState) && (<div className="w-full h-full">
-								<div className="w-full h-full">
-									{/* <GoogleMap
-										bootstrapURLKeys={{
-											key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
-										}}
-										defaultZoom={12}
-										defaultCenter={[this.state.current_lat, this.state.current_long]}
-									>
-										<Marker
-											text="Marker Text"
-											lat={this.state.current_lat}
-											lng={this.state.current_long}
-										/>
-									</GoogleMap> */}
-								</div>
-							</div>)}
-							{(this.state.temp && !leaseForm.props.open) && (!mapViewState) && (<LeaseListContent data={this.state.temp} />)}
-							{(this.state.temp && leaseForm.props.open) && (
-								<LeaseForm leases={this.state.leases} selectedLease={this.state.selectedLease} />
+						{this.state.temp && (
+								<Fragment>
+									{leaseForm.props.open ?
+										(
+											<LeaseForm
+												leases={this.props.leases}
+												franchisees={this.props.franchisees}
+												selectedLease={this.state.selectedLease} />
+										) :
+										(
+											<LeaseListContent
+											// data={this.state.temp}
+											// loading={this.state.loading}
+											// pins={this.state.pins}
+											/>
+										)}
+								</Fragment>
 							)}
+							
 						</div>
 					}
 					leftSidebarHeader={
 						<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
 							{/* <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", { 'filteropen': filterState })}> */}
 							{/* <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0"> */}
+
 							{leaseForm.props.open ? (
 								<h2 style={{ marginBlockStart: '1em' }}>Lease Information</h2>
 							) : (
@@ -731,36 +732,36 @@ class Leases extends Component {
 					leftSidebarContent={
 						<FilterPanel />
 					}
-					rightSidebarHeader={
-						/*<div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0"> */
-						<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
-							<h2 style={{ marginBlockStart: '1em' }}>Summary</h2>
-							{/* <FuseAnimate animation="transition.expandIn" delay={200}> */}
-							{/* <div> */}
-							{/* <Hidden xsDown> */}
-							{/*<IconButton onClick={()=>this.removeCustomers()}>*/}
-							{/* <Icon>delete</Icon> */}
-							{/* </IconButton> */}
-							{/* <IconButton onClick={(ev) => toggleSummaryPanel()}>  */}
+					// rightSidebarHeader={
+					// 	/*<div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0"> */
+					// 	<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
+					// 		<h2 style={{ marginBlockStart: '1em' }}>Summary</h2>
+					// 		{/* <FuseAnimate animation="transition.expandIn" delay={200}> */}
+					// 		{/* <div> */}
+					// 		{/* <Hidden xsDown> */}
+					// 		{/*<IconButton onClick={()=>this.removeLeases()}>*/}
+					// 		{/* <Icon>delete</Icon> */}
+					// 		{/* </IconButton> */}
+					// 		{/* <IconButton onClick={(ev) => toggleSummaryPanel()}>  */}
 
-							{/* <IconButton onClick={toggleSummaryPanel}> */}
-							{/* <Icon>close</Icon> */}
-							{/* </IconButton> */}
-							{/* </Hidden> */}
-							{/* </div> */}
-							{/* </FuseAnimate> */}
-						</div>
-					}
-					rightSidebarContent={
-						<SummaryPanel />
-					}
+					// 		{/* <IconButton onClick={toggleSummaryPanel}> */}
+					// 		{/* <Icon>close</Icon> */}
+					// 		{/* </IconButton> */}
+					// 		{/* </Hidden> */}
+					// 		{/* </div> */}
+					// 		{/* </FuseAnimate> */}
+					// 	</div>
+					// }
+					// rightSidebarContent={
+					// 	<SummaryPanel />
+					// }
 
 					onRef={instance => {
 						this.pageLayout = instance;
 					}}
 				>
 				</FusePageCustomSidebarScroll>
-				{/* <CustomerDialog customers={this.state.customers}/> */}
+				{/* <LeaseDialog leases={this.state.leases}/> */}
 			</React.Fragment >
         );
     }

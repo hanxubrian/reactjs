@@ -385,12 +385,6 @@ class InvoiceListContent extends Component {
                                     className: classNames(classes.invoiceNo, "flex items-center  justify-center text-12")
                                 },
                                 {
-                                    Header: "Description",
-                                    accessor: "InvoiceDescription",
-                                    className: classNames(classes.descr,"flex items-center justify-start p-12-impor"),
-                                    width: '100%'
-                                },
-                                {
                                     Header: "Customer #",
                                     accessor: "CustomerNo",
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
@@ -403,23 +397,47 @@ class InvoiceListContent extends Component {
                                     className: classNames("flex items-center  justify-start pl-12-impor")
                                 },
                                 {
-                                    Header: "Balance",
-                                    accessor: "InvoiceBalanceAmount",
-                                    Cell     : row => {
-                                        return '$'+parseFloat(row.original.InvoiceBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-                                    },
-                                    className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor"),
-                                    width: 80
+                                    Header: "Description",
+                                    accessor: "InvoiceDescription",
+                                    className: classNames(classes.descr,"flex items-center justify-start p-12-impor"),
+                                    width: '100%'
                                 },
                                 {
-                                    Header: "Total",
+                                    Header: "Amount",
                                     Cell     : row => {
                                         return '$'+parseFloat(row.original.InvoiceTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
                                     },
-                                    accessor: "InvoiceTotal",
+                                    accessor: "InvoiceAmount",
                                     className: classNames("flex items-center  justify-end p-12-impor"),
                                     width: 100
                                 },
+                                {
+                                    Header: "Tax",
+                                    Cell     : row => {
+                                        return '$'+parseFloat(row.original.InvoiceTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+                                    },
+                                    accessor: "InvoiceTax",
+                                    className: classNames("flex items-center  justify-end p-12-impor"),
+                                    width: 100
+                                },
+                                // {
+                                //     Header: "Balance",
+                                //     accessor: "InvoiceBalanceAmount",
+                                //     Cell     : row => {
+                                //         return '$'+parseFloat(row.original.InvoiceBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+                                //     },
+                                //     className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor"),
+                                //     width: 80
+                                // },
+                                // {
+                                //     Header: "Total",
+                                //     Cell     : row => {
+                                //         return '$'+parseFloat(row.original.InvoiceTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+                                //     },
+                                //     accessor: "InvoiceTotal",
+                                //     className: classNames("flex items-center  justify-end p-12-impor"),
+                                //     width: 100
+                                // },
                                 {
                                     Header: "Invoice Date",
                                     id: "InvoiceDate",
@@ -434,12 +452,12 @@ class InvoiceListContent extends Component {
                                     className: classNames("flex items-center  justify-center"),
                                     width: 100
                                 },
-                                {
-                                    Header: "Status",
-                                    accessor: "TransactionStatus",
-                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-                                    width: 80
-                                },
+                                // {
+                                //     Header: "Status",
+                                //     accessor: "TransactionStatus",
+                                //     className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+                                //     width: 80
+                                // },
                                 {
                                     Header: "Actions",
                                     width : 90,

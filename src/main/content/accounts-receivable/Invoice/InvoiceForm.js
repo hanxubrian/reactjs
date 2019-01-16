@@ -267,7 +267,12 @@ MySnackbarContent.propTypes = {
 
 const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
 
-
+const periods = [
+    {
+      value: ['01', '2018'],
+      label: '01/2018',
+    }
+  ];
 class InvoiceForm extends Component {
     state = {
         customers: [],
@@ -627,12 +632,18 @@ class InvoiceForm extends Component {
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={1} md={1} className="flex flex-row pl-16 pr-4">
-                                    <DatePicker
+                                    <TextField
                                         margin="none"
                                         label="Period"
                                         name="InvoicePeriod"
+                                        select
                                         variant="outlined"
                                         format="MM/YYYY"
+                                        SelectProps={{
+                                            MenuProps: {
+                                              className: classes.menu,
+                                            },
+                                          }}
                                         value={this.state.period}
                                         onChange={this.handlePeriodChange}
                                         fullWidth
@@ -646,43 +657,24 @@ class InvoiceForm extends Component {
                                             shrink: true,
                                             classes: {outlined: classes.label}
                                         }}
-                                        openToYearSelection={true}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={1} md={1} className="flex flex-row xs:flex-col xs:mb-24 pr-4 pl-4" style={{padding: '0 6px!important'}}>
-                                    <DatePicker
-                                        margin="none"
-                                        label="Invoice Date"
-                                        name="InvoiceDate"
-                                        variant="outlined"
-                                        format="MM/dd/YYYY"
-                                        value={this.state.InvoiceDate}
-                                        onChange={this.handleInvoiceDateChange}
-                                        fullWidth
-                                        required
-                                        InputProps={{
-                                            classes: {
-                                                input: classes.input1,
-                                            },
-                                        }}
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                    />
+                                        // openToYearSelection={true}
+                                    >
+                                    {periods.map(option => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                    </TextField>
                                 </Grid>
                                 <Grid item xs={12} sm={1} md={1} className="flex flex-row xs:flex-col pr-4 pl-4"
                                       style={{padding: '0 6px!important'}}>
-                                    <DatePicker
+                                    <TextField
+                                        type="date"
+                                        id="InvoiceDate"
+                                        label="Invoice Date"
+                                        name="InvoiceDate"
                                         margin="none"
-                                        label="Due Date"
-                                        format="MM/dd/YYYY"
-                                        name="DueDate"
                                         variant="outlined"
-                                        value={this.state.DueDate}
-                                        onChange={this.handleDueDateChange}
-                                        required
-                                        fullWidth
                                         InputProps={{
                                             classes: {
                                                 input: classes.input1,
@@ -692,7 +684,34 @@ class InvoiceForm extends Component {
                                             shrink: true,
                                             classes: {outlined: classes.label}
                                         }}
-                                    />
+                                        value={this.state.InvoiceDate}
+                                        onChange={this.handleInvoiceDateChange}
+                                        // onChange={this.handleChange('StartDate')}
+								    />
+                                </Grid>
+                                    <br></br>
+                                    <Grid item xs={12} sm={1} md={1} className="flex flex-row xs:flex-col pr-4 pl-4"
+                                      style={{padding: '0 6px!important'}}>
+                                    <TextField
+                                        type="date"
+                                        id="DueDate"
+                                        label="Due Date"
+                                        name="DueDate"
+                                        margin="none"
+                                        variant="outlined"
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input1,
+                                            },
+                                        }}
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        value={this.state.DueDate}
+                                        onChange={this.handleDueDateChange}
+                                        // onChange={this.handleChange('StartDate')}
+								    />
                                 </Grid>
                                 <Grid item xs={12} sm={3} md={3} className="flex flex-row xs:flex-col pl-4" >
                                     <TextField

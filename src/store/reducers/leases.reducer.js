@@ -1,15 +1,25 @@
+import moment from "moment"
+
 import * as Actions from "../actions";
 import * as UserActions from "../../auth/store/actions";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 
+let today = new Date();
 const initialState = {
 	leasesDB: null,
+	leaseStatus: [],
+	leaseDateOption: 3,
+    leaseDatePeriodMonth: moment().month(),
+	leaseDatePeriodYear: moment().year(),
+	FromDate: moment("01/01/2018").format("MM/DD/YYYY"),
+    ToDate: moment(today).format("MM/DD/YYYY"),
 	bLoadedLeases: false,
 	bOpenedSummaryPanel: false,
 	bOpenedFilterPanel: false,
 	bOpenedMapView: false,
 	bLeasesFetchStart: false,
+	bStartingSaveFormData: false,
 	regionId: [24],
     statusId: [21, 24],
     searchText: "",
@@ -34,6 +44,27 @@ const leases = function (state = initialState, action) {
 					bLoadedLeases: true,
 					bLeasesFetchStart: false
 				};
+			}
+			case Actions.GET_LEASE_STATUS:
+			{
+				let leaseStatus = action.payload;
+				if(action.payload.length>0) {
+					leaseStatus = action.payload.map(iv => {
+						return {['checked'+iv.TransactionStatusListId]: true, ...iv}
+					});
+				}
+				return {
+					...state, leaseStatus: leaseStatus
+				}
+			}
+			case Actions.GET_LEASE_DETAIL:
+			{
+				return {
+					...state,
+					leaseDetail: action.payload,
+					bLoadedInvoices: true,
+					bInvoiceStart: false
+				}
 			}
 		case Actions.GET_LEASES_FETCH_START:
 			{
@@ -134,6 +165,28 @@ const leases = function (state = initialState, action) {
 						data: null
 					}
 				};
+			}
+		case Actions.STARTING_SAVE_LEASE_FORM_DATA: 
+			{
+				return {
+					...state,
+					bStartingSaveFormData: true
+				}
+			}
+		case Actions.RESET_LEASE_FORM:
+			{
+				return {
+					...state,
+					bStartingSaveFormData: false,
+					leaseForm: {...state.leaseForm, data: null, customer: null}
+				}
+			}
+		case Actions.UPDATE_LEASE_DATE_OPTION:
+			{
+				return {
+					...state,
+					leaseDateOption: action.payload
+				}
 			}
 		default:
 			{

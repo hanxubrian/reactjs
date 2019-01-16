@@ -1,555 +1,1053 @@
 import React from 'react';
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import {withRouter} from 'react-router-dom';
 
 //Material UI core and icons
 import {
-	Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
-	Toolbar, Typography, Paper,
-	Icon, IconButton, Tooltip, Fab
+    Snackbar, SnackbarContent, TextField,
+    Paper, Icon, IconButton, Select, OutlinedInput, MenuItem, FormControl, Fab
 } from '@material-ui/core'
-
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import { lighten } from '@material-ui/core/styles/colorManipulator';
+import {withStyles} from '@material-ui/core/styles';
+import green from '@material-ui/core/colors/green';
+import amber from '@material-ui/core/colors/amber';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
+import InfoIcon from '@material-ui/icons/Info';
+import CloseIcon from '@material-ui/icons/Close';
+import WarningIcon from '@material-ui/icons/Warning';
 
 // third party
 import _ from 'lodash';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import ReactTable from "react-table";
+import "react-table/react-table.css";
+import Autosuggest from 'react-autosuggest';
+
+//Store
+import {bindActionCreators} from "redux";
+import connect from "react-redux/es/connect/connect";
+import * as Actions from 'store/actions';
+import keycode from "keycode";
+
+//Utility
+import {NumberFormatCustom, escapeRegexCharacters, NumberFormatCustom1, NumberFormatCustomPercent} from '../../../../services/utils'
+
+
+//Snackbar
+const variantIcon = {
+    success: CheckCircleIcon,
+    warning: WarningIcon,
+    error: ErrorIcon,
+    info: InfoIcon,
+};
+
+const styles1 = theme => ({
+    success: {
+        backgroundColor: green[600],
+    },
+    error: {
+        backgroundColor: theme.palette.error.dark,
+    },
+    info: {
+        backgroundColor: theme.palette.primary.dark,
+    },
+    warning: {
+        backgroundColor: amber[700],
+    },
+    icon: {
+        fontSize: 20,
+    },
+    iconVariant: {
+        opacity: 0.9,
+        marginRight: theme.spacing.unit,
+    },
+    message: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+});
+
+function MySnackbarContent(props) {
+    const { classes, className, message, onClose, variant, ...other } = props;
+    const Icon = variantIcon[variant];
+
+    return (
+        <SnackbarContent
+            className={classNames(classes[variant], className)}
+            aria-describedby="client-snackbar"
+            message={
+                <span id="client-snackbar" className={classes.message}>
+          <Icon className={classNames(classes.icon, classes.iconVariant)} />
+                    {message}
+        </span>
+            }
+            action={[
+                <IconButton
+                    key="close"
+                    aria-label="Close"
+                    color="inherit"
+                    className={classes.close}
+                    onClick={onClose}
+                >
+                    <CloseIcon className={classes.icon} />
+                </IconButton>,
+            ]}
+            {...other}
+        />
+    );
+}
+
+MySnackbarContent.propTypes = {
+    classes: PropTypes.object.isRequired,
+    className: PropTypes.string,
+    message: PropTypes.node,
+    onClose: PropTypes.func,
+    variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
+};
+
+const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
 
 let counter = 0;
 
-function createData(billing = 'Regular Billing', service = 'Adjust-Balance', description = 'description', quantity = 1, amount = 0, markup = 0, extended = 0) {
-	return {
-		id: counter++,
-		billing,
-		service,
-		description,
-		quantity,
-		amount,
-		markup,
-		extended
-	};
+function createFranchisee(parent_id,id, fnumber="", name="", amount=0) {
+    return {
+        id: parent_id,
+        fid: id,
+        fnumber,
+        name,
+        amount,
+        type: 'franch'
+    }
 }
 
-function desc(a, b, orderBy) {
-	if (b[orderBy] < a[orderBy]) {
-		return -1;
-	}
-	if (b[orderBy] > a[orderBy]) {
-		return 1;
-	}
-	return 0;
+function createData(billing='Regular Billing', service='Adjust-Balance', description='', quantity='', amount='', tax=0, markup='', extended=0, total=0)
+{
+    return {
+        id: counter++,
+        billing,
+        service,
+        description,
+        quantity,
+        amount,
+        tax,
+        markup,
+        extended,
+        total,
+        franchisees: [],
+        type: 'line'
+    };
 }
 
-function stableSort(array, cmp) {
-	const stabilizedThis = array.map((el, index) => [el, index]);
-	stabilizedThis.sort((a, b) => {
-		const order = cmp(a[0], b[0]);
-		if (order !== 0) return order;
-		return a[1] - b[1];
-	});
-	return stabilizedThis.map(el => el[0]);
+function renderInputComponent(inputProps) {
+    const { classes, inputRef = () => {}, ref, ...other } = inputProps;
+
+    return (
+        <TextField
+            fullWidth
+            InputProps={{
+                inputRef: node => {
+                    ref(node);
+                    inputRef(node);
+                },
+                classes: {
+                    input: classes.input,
+                }
+            }}
+            {...other}
+        />
+    );
 }
-
-function getSorting(order, orderBy) {
-	return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
-}
-
-// const rows = [
-// 	{
-// 		id: 'billing',
-// 		numeric: false,
-// 		disablePadding: false,
-// 		label: 'Type'
-// 	},
-// 	{
-// 		id: 'service',
-// 		numeric: false,
-// 		disablePadding: false,
-// 		label: 'Address'
-// 	},
-// 	{
-// 		id: 'description',
-// 		numeric: false,
-// 		disablePadding: false,
-// 		label: 'City'
-// 	},
-// 	{
-// 		id: 'quantity',
-// 		numeric: true,
-// 		disablePadding: false,
-// 		label: 'State'
-// 	},
-// 	{
-// 		id: 'amount',
-// 		numeric: true,
-// 		disablePadding: false,
-// 		label: 'Zip / Postal'
-// 	},
-// 	// {
-// 	//     id            : 'markup',
-// 	//     numeric       : true,
-// 	//     disablePadding: false,
-// 	//     label         : 'Markup (%)'
-// 	// },
-// 	// {
-// 	//     id            : 'extend_amount',
-// 	//     numeric       : true,
-// 	//     disablePadding: false,
-// 	//     label         : 'Extended Amount'
-// 	// }
-// ];
-
-class LeaseLineTableHead extends React.Component {
-	createSortHandler = property => event => {
-		this.props.onRequestSort(event, property);
-	};
-
-	render() {
-		const {
-			// classes,
-			// onSelectAllClick,
-			order,
-			orderBy,
-			// numSelected,
-			// rowCount,
-			headers
-		} = this.props;
-		let rows = headers;
-
-		return (
-			<TableHead style={{ backgroundColor: "lightgray" }}>
-				<TableRow>
-					{rows.map(row => {
-						return (
-							<TableCell
-								key={row.id}
-								numeric={row.numeric}
-								padding={row.disablePadding ? 'none' : 'default'}
-								sortDirection={orderBy === row.id ? order : false}
-							>
-								<Tooltip
-									title="Sort"
-									placement={row.numeric ? 'bottom-end' : 'bottom-start'}
-									enterDelay={300}
-								>
-									<TableSortLabel
-										active={orderBy === row.id}
-										direction={order}
-										onClick={this.createSortHandler(row.id)}
-									>
-										{row.label}
-									</TableSortLabel>
-								</Tooltip>
-							</TableCell>
-						);
-					}, this)}
-					<TableCell padding="checkbox" style={{ width: 100 }}>
-						Action
-                    </TableCell>
-				</TableRow>
-			</TableHead>
-		);
-	}
-}
-
-
-LeaseLineTableHead.propTypes = {
-	numSelected: PropTypes.number.isRequired,
-	onRequestSort: PropTypes.func.isRequired,
-	onSelectAllClick: PropTypes.func.isRequired,
-	order: PropTypes.string.isRequired,
-	rowCount: PropTypes.number.isRequired
-};
-
-const toolbarStyles = theme => ({
-	root: {
-		paddingRight: theme.spacing.unit
-	},
-	highlight:
-		theme.palette.type === 'light'
-			? {
-				color: theme.palette.secondary.main,
-				backgroundColor: lighten(theme.palette.secondary.light, 0.85)
-			}
-			: {
-				color: theme.palette.text.primary,
-				backgroundColor: theme.palette.secondary.dark
-			},
-	spacer: {
-		flex: '1 1 100%'
-	},
-	actions: {
-		color: theme.palette.text.secondary
-	},
-	title: {
-		flex: '0 0 auto'
-	},
-});
-
-let LeaseLineTableToolbar = props => {
-	const { numSelected, classes } = props;
-
-	return (
-		<Toolbar
-			className={classNames(classes.root, {
-				[classes.highlight]: numSelected > 0
-			})}
-		>
-			<div className={classes.title}>
-				{numSelected > 0 ? (
-					<Typography color="inherit" variant="subtitle1">
-						{numSelected} selected
-                    </Typography>
-				) : (
-						<Typography variant="h6" id="tableTitle">
-							Lease Lines
-                    </Typography>
-					)}
-			</div>
-			<div className={classes.spacer} />
-			<div className={classes.actions}>
-				{numSelected > 0 ? (
-					<Tooltip title="Delete">
-						<IconButton aria-label="Delete">
-							<DeleteIcon />
-						</IconButton>
-					</Tooltip>
-				) : (
-						<Tooltip title="Filter list">
-							<IconButton aria-label="Filter list">
-								<FilterListIcon />
-							</IconButton>
-						</Tooltip>
-					)}
-			</div>
-		</Toolbar>
-	);
-};
-
-LeaseLineTableToolbar.propTypes = {
-	classes: PropTypes.object.isRequired,
-	numSelected: PropTypes.number.isRequired
-};
-
-LeaseLineTableToolbar = withStyles(toolbarStyles)(LeaseLineTableToolbar);
 
 const styles = theme => ({
-	root: {
-		width: '100%',
-		marginTop: theme.spacing.unit * 3,
-		head: {
-			color: 'black',
-		},
-		'& thead tr th': {
-			color: 'black!important',
-			fontWeight: 700,
-			fontSize: 14,
-			padding: "4px 24px",
-			width: 180
-		},
-		'& tbody tr td': {
-			padding: "4px 24px",
-			width: 180
-		},
-		LeaseLineHeadRoot: {
-			backgroundColor: 'lightgray',
-		},
-	},
-	outlined: {
-		padding: "12px 24px 12px 12px!important"
-	},
-	table: {
-		minWidth: 1020
-	},
-	tableWrapper: {
-		overflowX: 'auto'
-	},
-	lineButton: {
-		width: 32,
-		height: 32,
-		minHeight: 32
-	},
-	lineCancelButton: {
-		width: 32,
-		height: 32,
-		minHeight: 32,
-		backgroundColor: '#ff4850',
-		color: 'white',
-		'&:hover': {
-			backgroundColor: '#ff2a32',
-		}
-	}
+    root        : {
+        width    : '100%',
+        marginTop: theme.spacing.unit,
+        head: {
+            color: 'black',
+        },
+        '& .ReactTable .rt-thead.-headerGroups': {
+            display: 'none'
+        },
+        '& .ReactTable .rt-tbody': {
+            overflowY: 'scroll',
+            overflowX: 'hidden'
+        },
+        '& .ReactTable .rt-tr-group':{
+            flex: '0 0 auto'
+        },
+        '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
+            justifyContent: 'center'
+        },
+        '& .ReactTable .rt-thead .rt-th:last-child': {
+            justifyContent: 'flex-end'
+        },
+        '& .franchiRow': {
+            '& .f1': {
+                width: '25%',
+                minWidth: 100,
+                padding: 10,
+                border: '1px solid lightgray',
+                borderRadius: 6
+            },
+            '& .f2': {
+                width: '75%',
+                padding: '4px 8px',
+                border: '0px solid lightgray',
+                borderRadius: 6,
+                marginLeft: 10
+            }
+        },
+        InvoiceLineHeadRoot:{
+            backgroundColor: 'lightgray',
+        },
+        selectRoot:{
+            backgroundColor: 'green'
+        }
+    },
+    outlined: {
+        padding: "12px 24px 12px 12px!important"
+    },
+    billing:{
+        width: 170,
+        fontSize: '1.3rem'
+    },
+    services:{
+        width: 180,
+        fontSize: '1.3rem'
+    },
+    dropdownMenu:{
+        '& li':{
+            fontSize: 12,
+            height: 12,
+        }
+    },
+    lineButton: {
+        width: 24,
+        height: 24,
+        minHeight: 24,
+        [theme.breakpoints.down('sm')]: {
+            width: 24,
+            height: 24,
+            minHeight: 24,
+        },
+        '& .material-icons':{
+            fontSize: 16
+        }
+    },
+    lineCancelButton:{
+        width: 24,
+        height: 24,
+        minHeight: 24,
+        backgroundColor: '#ff4850',
+        color: 'white',
+        '&:hover':{
+            backgroundColor: '#ff2a32',
+        },
+        [theme.breakpoints.down('sm')]: {
+            width: 24,
+            height: 24,
+            minHeight: 24,
+            padding: 0
+        },
+        '& .material-icons':{
+            fontSize: 16
+        }
+    },
+    distribution: {
+        '& span': {
+            backgroundColor: 'lightgrey',
+            padding: '8px 12px',
+            borderRadius: 20
+        }
+    },
+    tableTheadRow:{
+        backgroundColor: theme.palette.primary.main
+    },
+    input: {
+        fontSize: 13
+    },
+    fInput: {
+        width: '96%',
+        marginLeft: 15,
+        '& input': {
+            fontSize: 13,
+            textAlign: 'right',
+        }
+    },
+    container: {
+        position: 'relative',
+        width: '100%'
+    },
+    suggestionsContainerOpen: {
+        position: 'fixed',
+        zIndex: 100,
+        marginTop: theme.spacing.unit,
+        maxHeight: 200,
+        overflowY: 'scroll',
+        backgroundColor: 'white',
+        borderRadius: 6,
+        border: '1px solid lightgray'
+    },
+    suggestion: {
+        display: 'block',
+    },
+    suggestionsList: {
+        margin: 0,
+        padding: 0,
+        listStyleType: 'none',
+    },
 });
 
-class LeaseLineTable extends React.Component {
-	state = {
-		order: 'asc',
-		// orderBy    : 'billing',
-		selected: [],
-		data: [
-			createData("Regular Billing", "Adjust-Balance", "Lease", 1),
-		],
-		page: 0,
-		rowsPerPage: 10,
-		labelWidth: 0,
-		//tableType: "ADDRESS", //"BILLING_SETTING"
-		// tableType: props.tableType
-	};
-
-	handleRequestSort = (event, property) => {
-		const orderBy = property;
-		let order = 'desc';
-
-		if (this.state.orderBy === property && this.state.order === 'desc') {
-			order = 'asc';
-		}
-
-		this.setState({
-			order,
-			orderBy
-		});
-	};
-
-	handleSelectAllClick = event => {
-		if (event.target.checked) {
-			this.setState(state => ({ selected: state.data.map(n => n.id) }));
-			return;
-		}
-		this.setState({ selected: [] });
-	};
-
-	handleChangeBilling = (event, n) => {
-		let newData = this.state.data.map(row => {
-			let temp = row;
-			if (n.id === row.id) {
-				temp[event.target.name] = event.target.value
-			}
-			return temp;
-		});
-
-		this.setState({ data: newData })
-	};
-
-	componentDidMount() {
-		let id = 0;
-		const data = [...this.state.data];
-		let newData = data.map(record => {
-			record.id = id++;
-			return record;
-		});
-		this.setState({ data: newData })
-	}
-
-	isSelected = id => this.state.selected.indexOf(id) !== -1;
-
-	AddLineData = () => {
-		const data = [...this.state.data, createData()];
-		let id = 0;
-		let newData = data.map(record => {
-			record.id = id++;
-			return record;
-		});
-		this.setState({ data: newData })
-	};
-
-	removeLineData = (line) => {
-		const data = [...this.state.data];
-		_.remove(data, function (row) {
-			return row.id === line.id;
-		});
-		let id = 0;
-		let newData = data.map(record => {
-			record.id = id++;
-			return record;
-		});
-
-		this.setState({ data: newData })
-	};
-
-	renderEditable(cellInfo, id) {
-		if (cellInfo.id > this.state.data.length - 1) return;
-		let prefix = '';
-		if (id === 'amount' || id === 'extended') prefix = "$";
-		let value = '';
-		if (this.state.data[cellInfo.id][id].length === 0) return
-		value = this.state.data[cellInfo.id][id];
-		if (id === 'amount' || id === 'extended')
-			value = parseFloat(this.state.data[cellInfo.id][id]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-		return (
-			<div
-				style={{ backgroundColor: "#fafafa", padding: 12 }}
-				contentEditable
-				suppressContentEditableWarning
-				onBlur={e => {
-					const data = [...this.state.data];
-					data[cellInfo.id][id] = (e.target.innerHTML).replace('$', '').replace(',', '');
-					this.setState({ data });
-				}}
-				dangerouslySetInnerHTML={{
-					__html: prefix + value
-				}}
-			/>
-		);
-	}
-	renderEditableMarkup(cellInfo, id) {
-		if (cellInfo.id > this.state.data.length - 1) return;
-		return (
-			<div
-				style={{ backgroundColor: "#fafafa", padding: 12 }}
-				contentEditable={cellInfo.billing === "Client Supplies" ? true : false}
-				suppressContentEditableWarning
-				onBlur={e => {
-					const data = [...this.state.data];
-					data[cellInfo.id][id] = e.target.innerHTML;
-					this.setState({ data });
-				}}
-				dangerouslySetInnerHTML={{
-					__html: this.state.data[cellInfo.id][id]
-				}}
-			/>
-		);
-	}
-
-	render() {
-		const { classes } = this.props;
-		const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
-		const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-
-		return (
-			<Paper className={classes.root}>
-				<div className={classes.tableWrapper}>
-					<Table className={classes.table} aria-labelledby="tableTitle">
-						<LeaseLineTableHead
-							className={classNames(classes.LeaseLineHeadRoot)}
-							numSelected={selected.length}
-							order={order}
-							onSelectAllClick={this.handleSelectAllClick}
-							onRequestSort={this.handleRequestSort}
-							rowCount={data.length}
-							headers={this.props.headers}
-						/>
-						<TableBody>
-							{stableSort(data, getSorting(order, orderBy))
-								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-								.map(n => {
-									return (
-										<TableRow hover key={n.id}>
-											<TableCell component="td" scope="row" >
-												{/* <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl)} style={{ marginBottom: '0!important' }}>
-													<Select
-														classes={{
-															outlined: classes.outlined
-														}}
-														value={n.billing}
-														onChange={(ev) => this.handleChangeBilling(ev, n)}
-														input={
-															<OutlinedInput
-																labelWidth={this.state.labelWidth}
-																name="billing"
-																id="billing"
-															/>
-														}
-													>
-														<MenuItem value="">
-															<em>Select</em>
-														</MenuItem>
-														<MenuItem value="Regular Billing">Regular Billing</MenuItem>
-														<MenuItem value="Additional Billing Office">Additional Billing Office</MenuItem>
-														<MenuItem value="Extra Work">Extra Work</MenuItem>
-														<MenuItem value="Client Supplies">Client Supplies</MenuItem>
-													</Select>
-												</FormControl> */}
-											</TableCell>
-											<TableCell>
-												{/* <FormControl variant="outlined" className={classes.formControl} style={{ marginBottom: '0!important' }}>
-													<Select
-														classes={{
-															outlined: classes.outlined
-														}}
-														value={n.service}
-														onChange={(ev) => this.handleChangeBilling(ev, n)}
-														input={
-															<OutlinedInput
-																labelWidth={this.state.labelWidth}
-																name="service"
-																id="service"
-															/>
-														}
-													>
-														<MenuItem value="">
-															<em>Select</em>
-														</MenuItem>
-														<MenuItem value="Adjust-Balance">Adjust - Balance</MenuItem>
-														<MenuItem value="Adjust-Refund">Adjust - Refund</MenuItem>
-														<MenuItem value="Adjust-WriteOff">Adjust - WriteOff</MenuItem>
-														<MenuItem value="Buffing">Buffing</MenuItem>
-														<MenuItem value="Carpet Clean">Carpet Clean</MenuItem>
-														<MenuItem value="Lease Suppliers">Lease Suppliers</MenuItem>
-														<MenuItem value="Emergency Clean">Emergency Clean</MenuItem>
-														<MenuItem value="Event Center">Event Center</MenuItem>
-														<MenuItem value="Floor Services">Floor Services</MenuItem>
-														<MenuItem value="Furniture Cleaning Service">Furniture Cleaning Service</MenuItem>
-														<MenuItem value="High Dusting">High Dusting</MenuItem>
-														<MenuItem value="Hotel">Hotel</MenuItem>
-														<MenuItem value="In-House Work">In-House Work</MenuItem>
-														<MenuItem value="Initial and Deep Clean">Initial and Deep Clean</MenuItem>
-														<MenuItem value="Initial One-Time Clean">Initial One-Time Clean</MenuItem>
-														<MenuItem value="Make Ready">Make Ready</MenuItem>
-														<MenuItem value="Miscellaneous - Special">Miscellaneous - Special</MenuItem>
-														<MenuItem value="Other">Other</MenuItem>
-														<MenuItem value="Porter Services">Porter Services</MenuItem>
-														<MenuItem value="Power Washing">Power Washing</MenuItem>
-														<MenuItem value="Regular Billing">Regular Billing</MenuItem>
-														<MenuItem value="Regular Cleaning - Day">Regular Cleaning - Day</MenuItem>
-														<MenuItem value="Regular Cleaning - Night">Regular Cleaning - Night</MenuItem>
-													</Select>
-												</FormControl> */}
-											</TableCell>
-											<TableCell>{this.renderEditable(n, 'description')}</TableCell>
-											<TableCell numeric>{this.renderEditable(n, 'quantity')}</TableCell>
-											<TableCell numeric>{this.renderEditable(n, 'amount')}</TableCell>
-											{/* <TableCell numeric>{this.renderEditableMarkup(n, 'markup')}</TableCell>
-											<TableCell numeric>{this.renderEditable(n, 'extended')}</TableCell> */}
-											{this.props.headers.length === 6 &&
-												(
-													<TableCell numeric>{this.renderEditable(n, 'extended')}</TableCell>
-												)
-											}
-											<TableCell padding="checkbox">
-												<Fab color="secondary" aria-label="add"
-													className={classNames(classes.lineButton, "mr-12")}
-													onClick={() => this.AddLineData()}
-												>
-													<Icon>call_merge</Icon>
-												</Fab>
-												{this.state.data.length > 1 && (
-													<Fab aria-label="add"
-														onClick={() => this.removeLineData(n)}
-														className={classNames(classes.lineCancelButton, "mr-12")}>
-														<Icon>close</Icon>
-													</Fab>
-												)}
-											</TableCell>
-										</TableRow>
-									);
-								})}
-							{emptyRows > 0 && (
-								<TableRow style={{ height: 49 * emptyRows, display: 'none' }}>
-									<TableCell colSpan={8} />
-								</TableRow>
-							)}
-						</TableBody>
-					</Table>
-				</div>
-			</Paper>
-		);
-	}
+function renderSuggestion (suggestion,  { isHighlighted }) {
+    return (
+        <MenuItem selected={isHighlighted} component="div">
+            <span>{suggestion.Number} - {suggestion.Name}</span>
+        </MenuItem>
+    );
 }
 
-LeaseLineTable.propTypes = {
-	classes: PropTypes.object.isRequired
+class InvoiceLineTable extends React.Component {
+    state = {
+        order      : 'asc',
+        selected   : [],
+        data       : [
+            createData("Regular Billing", "Adjust-Balance", '',''),
+        ],
+        page       : 0,
+        rowsPerPage: 10,
+        labelWidth: 0,
+        openSnack: false,
+        snackMessage: 'Please fill the data',
+        nameValue0: '',
+        nameValue1: '',
+        nameValue2: '',
+        nameValue3: '',
+        nameValue4: '',
+        nameValue5: '',
+        nameValue6: '',
+        nameValue7: '',
+        nameValue8: '',
+        nameValue9: '',
+        nameValue10: '',
+        nameValue11: '',
+        nameValue12: '',
+        nameValue13: '',
+        nameValue14: '',
+        nameValue15: '',
+        nameValue16: '',
+        nameValue17: '',
+        nameValue18: '',
+        nameValue19: '',
+        nameValue20: '',
+        nameSuggestions: [],
+        numberValue0: '',
+        numberValue1: '',
+        numberValue2: '',
+        numberValue3: '',
+        numberValue4: '',
+        numberValue5: '',
+        numberValue6: '',
+        numberValue7: '',
+        numberValue8: '',
+        numberValue9: '',
+        numberValue10: '',
+        numberValue11: '',
+        numberValue12: '',
+        numberValue13: '',
+        numberValue14: '',
+        numberValue15: '',
+        numberValue16: '',
+        numberValue17: '',
+        numberValue18: '',
+        numberValue19: '',
+        numberValue20: '',
+        numberSuggestions: [],
+        taxRowId: 0,
+        customerTaxAmountLine: null
+    };
+
+    constructor(props) {
+        super(props);
+        // this.addInvoiceLineFunction = this.addInvoiceLineFunction.bind(this);
+    }
+
+    componentWillUnmount() {
+        // document.removeEventListener("keydown", this.addInvoiceLineFunction, false);
+    }
+
+    addInvoiceLineFunction(event){
+        if(keycode(event)==='enter' || keycode(event)==='down'){
+            // this.addLineData();
+        }
+    }
+
+    handleChangeBilling = (event, n) => {
+        let newData = this.state.data.map(row=>{
+            let temp = row;
+            if(n.id===row.id){
+                temp[event.target.name] = event.target.value
+            }
+            return temp;
+        });
+
+        this.setState({data: newData})
+    };
+
+    componentDidMount(){
+        document.addEventListener("keydown", this.addInvoiceLineFunction, false);
+
+        let id = 0;
+        const data = [...this.state.data];
+        let newData = data.map(record=>{
+            record.id = id++;
+            return record;
+        });
+        this.setState({data: newData})
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot){
+        if(this.state.data!==null && prevState.data!==this.state.data){
+            this.props.updateInvoiceLine(this.state.data);
+        }
+        if(JSON.stringify(this.state.customerTaxAmountLine)!== JSON.stringify(prevState.customerTaxAmountLine)){
+            this.updateTaxFromLine();
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(JSON.stringify(this.props.customerTaxAmountLine)!==JSON.stringify(nextProps.customerTaxAmountLine)){
+            this.setState({customerTaxAmountLine: nextProps.customerTaxAmountLine})
+        }
+        if(nextProps.leaseForm.data===null && JSON.stringify(nextProps.leaseForm.data)!==JSON.stringify(this.props.leaseForm.data)){
+            console.log('passs');
+            let newData = createData("Regular Billing", "Adjust-Balance", '','');
+            this.setState({data: [{...newData, id: 0}]});
+        }
+    }
+
+    updateTaxFromLine = ()=> {
+        const data = [...this.state.data];
+        const {taxRowId, customerTaxAmountLine} = this.state;
+        data[taxRowId].tax = customerTaxAmountLine.TaxAmount;
+        data[taxRowId].extended = customerTaxAmountLine.ExtendedPrice;
+        data[taxRowId].total = customerTaxAmountLine.TotalAmount;
+        this.setState({data: data});
+    };
+
+    // For Franchisee suggestion
+    getSuggestions = (value) => {
+        const escapedValue = escapeRegexCharacters(value.trim());
+        const regex = new RegExp('^' + escapedValue, 'i');
+
+        let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList;
+        return franchisees.filter(f => regex.test(f.Number) || regex.test(f.Name));
+    };
+
+    getSuggestionfName = (suggestion) => {
+        return suggestion.Name;
+    };
+
+    onNameChange = row =>(event, { newValue }) => {
+        this.setState({
+            ["nameValue"+row.f_index]: newValue
+        });
+        const data = [...this.state.data];
+        data[row.id].franchisees[row.fid].name = newValue;
+        this.setState({data: data});
+    };
+
+    onNameSuggestionsFetchRequested = ({ value }) => {
+        this.setState({
+            nameSuggestions: this.getSuggestions(value)
+        });
+    };
+
+    onNameSuggestionsClearRequested = () => {
+        this.setState({
+            nameSuggestions: []
+        });
+    };
+
+    onNameSuggestionSelected = row => (event, { suggestion }) => {
+        const data = [...this.state.data];
+        data[row.id].franchisees[row.fid].fnumber = suggestion.Number;
+        this.setState({data: data});
+    };
+
+    handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        this.setState({ openSnack: false });
+    };
+
+    addLineData=(row)=>{
+        if(this.props.leaseForm.customer===null) {
+            this.setState({snackMessage: 'Please choose customer from Invoice suggestion'});
+            this.setState({openSnack: true});
+            return;
+        }
+
+        if(row.description==='') {
+            this.setState({snackMessage: 'Please enter description'});
+            this.setState({openSnack: true});
+            return;
+        }
+
+        if(row.quantity==='') {
+            this.setState({snackMessage: 'Please enter quantity'});
+            this.setState({openSnack: true});
+            return;
+        }
+
+        if(row.amount==='') {
+            this.setState({snackMessage: 'Please enter amount'});
+            this.setState({openSnack: true});
+            return;
+        }
+
+        const data = [...this.state.data, createData()];
+        let id = 0;
+        let newData = data.map(record=>{
+            record.id = id++;
+            return record;
+        });
+        this.setState({data: newData})
+    };
+
+    addFranchiseeLine = (n) =>{
+        const data = [...this.state.data];
+        let fline = createFranchisee(n.id, n.franchisees.length);
+        n.franchisees = [...n.franchisees, fline];
+
+        let newData = data.map(record=>{
+            if(record.id===n.id)
+                record = n;
+            return record;
+        });
+        this.setState({data: newData})
+    };
+
+    removeLineData=(line)=>{
+        const data = [...this.state.data];
+        _.remove(data, function (row) {
+            return row.id === line.id;
+        });
+        let id = 0;
+        let newData = data.map(record=>{
+            record.id = id++;
+            return record;
+        });
+
+        this.setState({data: newData})
+    };
+
+    removeFranch=(row)=>{
+        const data = [...this.state.data];
+
+        data.forEach(d=>{
+            if(d.franchisees.length>0 && d.id===row.id){
+                let franchisees = d.franchisees;
+                _.remove(franchisees, function (record) {
+                    return record.fid === row.fid
+                })
+            }
+        });
+
+        data.forEach(d=>{
+            if(d.franchisees.length>0 && d.id===row.fid){
+                let fid=0;
+                let franchisees = d.franchisees;
+                let newData = franchisees.map(record=>{
+                    record.fid = fid++;
+                    return record;
+                });
+                d.franchisees = newData
+            }
+        });
+        this.setState({data: data});
+        this.setState({['nameValue'+row.f_index]: ''})
+    };
+
+    getInvoiceLineTaxAmount = row =>{
+        if(!this.isDisable(row)) {
+            this.props.getCustomerTaxAmount(this.props.regionId, this.props.leaseForm.customer.CustomerId, row.amount, row.quantity);
+            this.setState({taxRowId: row.id})
+        }
+    };
+
+    handleChange = row => event => {
+        const data = [...this.state.data];
+        data[row.id].franchisees[row.fid].amount = parseFloat(event.target.value);
+        this.setState({data: data});
+    };
+
+    handleChangeDesc = row => event => {
+        const data = [...this.state.data];
+        data[row.id].description = event.target.value;
+        this.setState({data: data});
+    };
+
+    handleChangeInvoiceLine = (row, name) => event => {
+        const data = [...this.state.data];
+        data[row.id][name] = event.target.value;
+        this.setState({data: data});
+        if(!this.isDisable(row))
+            this.getInvoiceLineTaxAmount(row)
+    };
+
+    isDisable = row =>{
+        if(this.props.leaseForm.customer===null) {
+            this.setState({snackMessage: 'Please choose customer from Invoice suggestion'});
+            this.setState({openSnack: true});
+            return true;
+        }
+        if(row.quantity==='') return true;
+        if(row.amount==='') return true;
+    };
+
+    render()
+    {
+        const {classes} = this.props;
+        const {data} = this.state;
+
+        const {
+            nameSuggestions,
+        } = this.state;
+
+        let all_data = [];
+
+        let f_index = 0;
+        console.log('data=', data);
+        data.forEach(d=>{
+            if(d.franchisees.length===0) return all_data.push(d);
+            let franchisees = d.franchisees;
+            all_data.push(d);
+            franchisees.forEach(f=>{
+                all_data.push({f_index: f_index++,...f});
+            });
+        });
+
+        return (
+            <Paper className={classNames(classes.root)}>
+                <div className={classNames(classes.tableWrapper, "flex flex-col h-full")}>
+                    <ReactTable
+                        data={all_data}
+                        minRows = {0}
+                        showPagination ={false}
+                        getTheadThProps={(state, rowInfo, column, instance) =>{
+                            let border = '1px solid rgba(255,255,255,.6)';
+                            if(column.Header==='Action') border = 'none';
+
+                            return {
+                                style:{
+                                    fontSize: 13,
+                                    fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
+                                    fontWeight: 400,
+                                    lineHeight: 2.0,
+                                    color: 'white',
+                                    borderRight: border
+                                },
+                            }
+                        }}
+                        getTheadProps={(state, rowInfo, column, instance) =>{
+                            return {
+                                style:{
+                                    fontSize: 13,
+                                },
+                                className: classes.tableTheadRow
+                            }
+                        }}
+                        getTdProps={(state, rowInfo, column, instance) =>{
+                            if(rowInfo.original.type==='franch'){
+                                if(column.Header==='Quantity' || column.Header==='Amount' || column.Header==='Tax')
+                                    return {
+                                        style: {display: 'none'},
+                                        className: {}
+                                    };
+                                return {
+                                    className: classNames(
+                                        {"justify-end": column.Header==='Service'},
+                                        {"justify-start": column.id==='extended'},
+                                        {"franchiRow": column.id==='description'},
+                                    )
+                                };
+                            }
+                            else
+                                return {
+                                    className: classNames(
+                                        {"justify-end": column.id==='extended'},
+                                        {"justify-end": rowInfo.original.type!=='line'})
+                                }
+                        }}
+                        columns={[
+                            {
+                                columns: [
+                                    {
+                                        Header: "Billing",
+                                        accessor: "billing",
+                                        Cell: row=>{
+                                            if(row.original.type==='line')
+                                                return (
+                                                    <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl)} style={{marginBottom: '0!important', display: row.original.type!=='line'?'none':'block'}}>
+                                                        <Select
+                                                            classes={{
+                                                                outlined: classNames(classes.outlined, classes.billing),
+                                                            }}
+                                                            value={row.original.billing}
+                                                            onChange={(ev)=>this.handleChangeBilling(ev, row.original)}
+                                                            input={
+                                                                <OutlinedInput
+                                                                    labelWidth={this.state.labelWidth}
+                                                                    name="billing"
+                                                                    id="billing"
+                                                                />
+                                                            }
+                                                            MenuProps = {{
+                                                                classes:{paper: classes.dropdownMenu},
+                                                            }}
+                                                        >
+                                                            <MenuItem value="">
+                                                                <em>Select</em>
+                                                            </MenuItem>
+                                                            <MenuItem value="Regular Billing">Regular Billing</MenuItem>
+                                                            <MenuItem value="Additional Billing Office">Additional Billing Office</MenuItem>
+                                                            <MenuItem value="Extra Work">Extra Work</MenuItem>
+                                                            <MenuItem value="Client Supplies">Client Supplies</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
+                                                );
+                                            else
+                                                return (<div/>)
+                                        },
+                                        width: 180,
+                                        className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+                                    },
+                                    {
+                                        Header: "Service",
+                                        accessor: "service",
+                                        Cell: row=>{
+                                            if(row.original.type==='line')
+                                                return (
+                                                    <FormControl variant="outlined" className={classes.formControl} style={{marginBottom: '0!important'}}>
+                                                        <Select
+                                                            classes={{
+                                                                outlined: classNames(classes.outlined,classes.services)
+                                                            }}
+                                                            value={row.original.service}
+                                                            onChange={(ev)=>this.handleChangeBilling(ev, row.original)}
+                                                            input={
+                                                                <OutlinedInput
+                                                                    labelWidth={this.state.labelWidth}
+                                                                    name="service"
+                                                                    id="service"
+                                                                />
+                                                            }
+                                                            MenuProps = {{
+                                                                classes:{paper: classes.dropdownMenu},
+                                                            }}
+                                                        >
+                                                            <MenuItem value="">
+                                                                <em>Select</em>
+                                                            </MenuItem>
+                                                            <MenuItem value="Adjust-Balance">Adjust - Balance</MenuItem>
+                                                            <MenuItem value="Adjust-Refund">Adjust - Refund</MenuItem>
+                                                            <MenuItem value="Adjust-WriteOff">Adjust - WriteOff</MenuItem>
+                                                            <MenuItem value="Buffing">Buffing</MenuItem>
+                                                            <MenuItem value="Carpet Clean">Carpet Clean</MenuItem>
+                                                            <MenuItem value="Customer Suppliers">Customer Suppliers</MenuItem>
+                                                            <MenuItem value="Emergency Clean">Emergency Clean</MenuItem>
+                                                            <MenuItem value="Event Center">Event Center</MenuItem>
+                                                            <MenuItem value="Floor Services">Floor Services</MenuItem>
+                                                            <MenuItem value="Furniture Cleaning Service">Furniture Cleaning Service</MenuItem>
+                                                            <MenuItem value="High Dusting">High Dusting</MenuItem>
+                                                            <MenuItem value="Hotel">Hotel</MenuItem>
+                                                            <MenuItem value="In-House Work">In-House Work</MenuItem>
+                                                            <MenuItem value="Initial and Deep Clean">Initial and Deep Clean</MenuItem>
+                                                            <MenuItem value="Initial One-Time Clean">Initial One-Time Clean</MenuItem>
+                                                            <MenuItem value="Make Ready">Make Ready</MenuItem>
+                                                            <MenuItem value="Miscellaneous - Special">Miscellaneous - Special</MenuItem>
+                                                            <MenuItem value="Other">Other</MenuItem>
+                                                            <MenuItem value="Porter Services">Porter Services</MenuItem>
+                                                            <MenuItem value="Power Washing">Power Washing</MenuItem>
+                                                            <MenuItem value="Regular Billing">Regular Billing</MenuItem>
+                                                            <MenuItem value="Regular Cleaning - Day">Regular Cleaning - Day</MenuItem>
+                                                            <MenuItem value="Regular Cleaning - Night">Regular Cleaning - Night</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
+                                                );
+                                            else
+                                                return (<div className={classNames(classes.distribution)}><span>Distribution</span></div>)
+                                        },
+                                        width: 180,
+                                        className: classNames(classes.tableTdEven, "flex items-center"),
+                                    },
+                                    {
+                                        Header: "Description",
+                                        accessor: "description",
+                                        Cell: row=>{
+                                            if(row.original.type==='line') {
+                                                return (
+                                                    <TextField
+                                                        id="description"
+                                                        style={{ margin: 8 }}
+                                                        placeholder="Description"
+                                                        fullWidth
+                                                        value={row.original.description}
+                                                        onChange={this.handleChangeDesc(row.original)}
+                                                        margin="normal"
+                                                        InputLabelProps={{
+                                                            shrink: true,
+                                                        }}
+                                                        InputProps={{
+                                                            classes: {
+                                                                input: classes.input,
+                                                            },
+                                                        }}
+                                                    />
+                                                )
+                                            }
+                                            else
+                                                return (
+                                                    <div className={classNames("flex flex-row w-full justify-start")}>
+                                                        <div className="f1">
+                                                            {row.original.fnumber}
+                                                        </div>
+                                                        <div className="f2">
+                                                            <Autosuggest
+                                                                renderInputComponent = {renderInputComponent}
+                                                                suggestions={nameSuggestions}
+                                                                onSuggestionsFetchRequested={this.onNameSuggestionsFetchRequested}
+                                                                onSuggestionsClearRequested={this.onNameSuggestionsClearRequested}
+                                                                onSuggestionSelected={this.onNameSuggestionSelected(row.original)}
+                                                                getSuggestionValue={this.getSuggestionfName}
+                                                                renderSuggestion={renderSuggestion}
+                                                                inputProps={
+                                                                    {
+                                                                        classes,
+                                                                        placeholder: "Search Franchisee Name or Number",
+                                                                        value: this.state['nameValue'+row.original.f_index],
+                                                                        onChange: this.onNameChange(row.original)
+                                                                    }
+                                                                }
+                                                                theme={{
+                                                                    container: classNames(classes.container),
+                                                                    suggestionsContainerOpen: classes.suggestionsContainerOpen,
+                                                                    suggestionsList: classes.suggestionsList,
+                                                                    suggestion: classes.suggestion,
+                                                                }}
+                                                                renderSuggestionsContainer={options => (
+                                                                    <Paper {...options.containerProps} square>
+                                                                        {options.children}
+                                                                    </Paper>
+                                                                )}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                )
+                                        },
+                                    },
+                                    {
+                                        Header: "Qty",
+                                        accessor: "quantity",
+                                        Cell: row=>{
+                                            if(row.original.type==='line') {
+                                                return <TextField
+                                                    className={classes.fInput}
+                                                    placeholder="Qty"
+                                                    value={row.original.quantity}
+                                                    onChange={this.handleChangeInvoiceLine(row.original, 'quantity')}
+                                                    InputProps={{
+                                                        inputComponent: NumberFormatCustom1,
+                                                        classes: {
+                                                            input: classes.input,
+                                                        },
+                                                    }}
+                                                />
+                                            }
+                                            else
+                                                return (<div/>)
+                                        },
+                                        className: classNames(classes.tableTdEven, "flex items-center  justify-center text-center"),
+                                        width: 60
+                                    },
+                                    {
+                                        Header: "Amount",
+                                        accessor: "amount",
+                                        Cell: row=>{
+                                            if(row.original.type==='line'){
+                                                return <TextField
+                                                    className={classes.fInput}
+                                                    placeholder="Amount"
+                                                    value={row.original.amount}
+                                                    onChange={this.handleChangeInvoiceLine(row.original, 'amount')}
+                                                    InputProps={{
+                                                        inputComponent: NumberFormatCustom,
+                                                        classes: {
+                                                            input: classes.input,
+                                                        },
+                                                    }}
+                                                />
+                                            }
+                                            else
+                                                return (<div/>)
+                                        },
+                                        className: classNames(classes.tableTdEven, "flex items-center  justify-center text-right"),
+                                        width: 100
+                                    },
+                                    {
+                                        Header: "Tax",
+                                        accessor: "tax",
+                                        Cell: row=>{
+                                            if(row.original.type==='line')
+                                                return ("$"+parseFloat(row.original.tax).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+                                            else
+                                                return (<div/>)
+                                        },
+                                        className: classNames(classes.tableTdEven, "flex items-center  justify-end text-right"),
+                                        width: 80
+                                    },
+                                    {
+                                        Header: "Markup(%)",
+                                        accessor: "markup",
+                                        Cell: row=>{
+                                            if(row.original.type==='line') {
+                                                return <TextField
+                                                    className={classes.fInput}
+                                                    placeholder="Markup"
+                                                    value={row.original.markup}
+                                                    onChange={this.handleChangeInvoiceLine(row.original, 'markup')}
+                                                    InputProps={{
+                                                        inputComponent: NumberFormatCustomPercent,
+                                                        readOnly: row.original.billing!=="Client Supplies",
+                                                        classes: {
+                                                            input: classes.input,
+                                                        },
+                                                    }}
+                                                />
+                                            }
+                                            else
+                                                return (
+                                                    <div className="flex flex-wrap">
+                                                        <TextField
+                                                            className={classes.fInput}
+                                                            placeholder="Amount"
+                                                            value={row.original.amount}
+                                                            onChange={this.handleChange(row.original)}
+                                                            InputProps={{
+                                                                inputComponent: NumberFormatCustom,
+                                                            }}
+                                                        />
+                                                    </div>)
+                                        },
+                                        className: classNames(classes.tableTdEven, "flex items-center  text-right justify-end"),
+                                        width: 80
+                                    },
+                                    {
+                                        Header: "Ext. Amount",
+                                        accessor: "extended",
+                                        Cell: row=>{
+                                            if(row.original.type==='line') {
+                                                let markup = 0.0;
+                                                if(row.original.markup!=='') markup = row.original.markup;
+                                                return ("$" + parseFloat(row.original.extended * (1 + parseFloat(markup) / 100)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+                                            }
+                                            else
+                                                return (
+                                                    <Fab aria-label="remove"
+                                                         onClick={()=>this.removeFranch(row.original)}
+                                                         className={classNames(classes.lineCancelButton, "mr-12")} style={{width: 24, height: 24, minHeight: 24}}>
+                                                        <Icon>close</Icon>
+                                                    </Fab>
+                                                )
+                                        },
+                                        className: classNames(classes.tableTdEven, "flex items-center  w-full text-center pr-12"),
+                                        width: 100
+                                    },
+                                    {
+                                        Header: "Action",
+                                        width: 130,
+                                        Cell: row=>{
+                                            if(row.original.type==='line')
+                                                return (
+                                                    <div className="flex flex-row items-center w-full justify-center">
+                                                        <Fab color="secondary" aria-label="add"
+                                                             className={classNames(classes.lineButton, "mr-8")}
+                                                             onClick={()=>this.addFranchiseeLine(row.original)}
+                                                        >
+                                                            <Icon>call_merge</Icon>
+                                                        </Fab>
+                                                        <Fab color="secondary" aria-label="add"
+                                                             className={classNames(classes.lineButton, "mr-8")}
+                                                             onClick={()=>this.addLineData(row.original)}
+                                                        >
+                                                            <Icon>add</Icon>
+                                                        </Fab>
+                                                        {this.state.data.length>1 && (
+                                                            <Fab aria-label="remove"
+                                                                 onClick={()=>this.removeLineData(row.original)}
+                                                                 className={classNames(classes.lineCancelButton, "mr-0")}>
+                                                                <Icon>close</Icon>
+                                                            </Fab>
+                                                        )}
+                                                    </div>
+                                                );
+                                            else
+                                                return (<div/>)
+                                        }
+                                    },
+                                ]
+                            }
+                        ]}
+                        className={classNames( "-striped -highlight")}
+                        defaultPageSize={200}
+                        style={{
+                            height: '100%',
+                        }}
+                    />
+                </div>
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={this.state.openSnack}
+                    autoHideDuration={3000}
+                    onClose={this.handleClose}
+                >
+                    <MySnackbarContentWrapper
+                        onClose={this.handleClose}
+                        variant="error"
+                        message={this.state.snackMessage}
+                    />
+                </Snackbar>
+            </Paper>
+        );
+    }
+}
+
+InvoiceLineTable.propTypes = {
+    classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(LeaseLineTable);
+function mapDispatchToProps(dispatch)
+{
+    return bindActionCreators({
+        updateInvoiceLine: Actions.updateInvoiceLine,
+        getCustomerTaxAmount: Actions.getCustomerTaxAmount
+    }, dispatch);
+}
+
+function mapStateToProps({leases, franchisees, auth})
+{
+    return {
+        leaseForm: leases.leaseForm,
+        franchisees: franchisees.franchiseesDB,
+        regionId: auth.login.defaultRegionId,
+        customerTaxAmountLine: leases.customerTaxAmountLine,
+        bStartingSaveFormData: leases.bStartingSaveFormData
+    }
+}
+
+export default withStyles(styles)(withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceLineTable)));

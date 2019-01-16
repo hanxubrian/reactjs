@@ -1,442 +1,477 @@
-import React, { Component } from 'react';
-import { Paper, withStyles } from '@material-ui/core';
-import { TextField } from '@material-ui/core';
+import React, {Component} from 'react';
+import {Paper, withStyles} from '@material-ui/core';
 import keycode from 'keycode';
 
 //Material UI core
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import MenuItem from '@material-ui/core/MenuItem';
+import { MenuItem, FormControl, Select } from '@material-ui/core';
+import {FuseThemes} from '@fuse';
+
+import 'date-fns'
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 
 //Store
 import * as Actions from 'store/actions';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-
-//Third Party
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import classNames from 'classnames';
 
-import GridContainer from "Commons/Grid/GridContainer";
-import GridItem from "Commons/Grid/GridItem";
+//third party
+import moment from "moment"
+import _ from "lodash"
+
+import {UPDATE_FROM_DATE_INVOICE, UPDATE_TO_DATE_INVOICE} from "../../../../store/actions";
+
 
 const styles = theme => ({
-	root: {
-
-	},
-	panel: {
-		position: 'absolute',
-		width: 300,
-		backgroundColor: theme.palette.background.paper,
-		boxShadow: theme.shadows[3],
-		top: 0,
-		height: '100%',
-		minHeight: '100%',
-		bottom: 0,
-		left: -300,
-		margin: 0,
-		zIndex: 1000,
-		transform: 'translate3d(50px,0,0)',
-		overflow: 'hidden',
-		[theme.breakpoints.down('md')]: {
-			transform: 'translate3d(360px,0,0)',
-			boxShadow: 'none',
-			'&.opened': {
-				boxShadow: theme.shadows[5]
-			}
-		},
-		transition: theme.transitions.create(['transform'], {
-			easing: theme.transitions.easing.easeInOut,
-			duration: theme.transitions.duration.standard
-		}),
-		'&.opened1': {
-			transform: 'translateX(300px)'
-		}
-	}
+    root : {
+        '& input, & label': {
+            // color: 'white'
+        },
+        '& fieldset': {
+            // borderColor: 'white!important'
+        },
+        '& white': {
+            color: 'white!important'
+        }
+    },
+    panel: {
+        position                      : 'absolute',
+        width                         : 250,
+        backgroundColor               : theme.palette.background.paper,
+        boxShadow                     : theme.shadows[3],
+        top                           : 0,
+        height                        : '100%',
+        minHeight                     : '100%',
+        bottom                        : 0,
+        left                         :  -250,
+        margin                        : 0,
+        zIndex                        : 1000,
+        transform                     : 'translate3d(50px,0,0)',
+        overflow                      : 'hidden',
+        [theme.breakpoints.down('md')]: {
+            transform : 'translate3d(360px,0,0)',
+            boxShadow : 'none',
+            '&.opened': {
+                boxShadow: theme.shadows[5]
+            }
+        },
+        transition  : theme.transitions.create(['transform'], {
+            easing  : theme.transitions.easing.easeInOut,
+            duration: theme.transitions.duration.standard
+        }),
+        '&.opened1'                    : {
+            transform: 'translateX(250px)'
+        }
+    }
 });
 
-const stateNames = [
-	{
-		value: 2,
-		label: "Buffalo"
-	},
-	{
-		value: 7,
-		label: "Detroit"
-	},
-	{
-		value: 9,
-		label: "Hartford"
-	},
-	{
-		value: 13,
-		label: "Las Vegas"
-	},
-	{
-		value: 14,
-		label: "Los Angeles/Colton"
-	},
-	{
-		value: 16,
-		label: "Miami"
-	},
-	{
-		value: 18,
-		label: "Minneapolis"
-	},
-	{
-		value: 20,
-		label: "New Jersey"
-	},
-	{
-		value: 21,
-		label: "New York"
-	},
-	{
-		value: 22,
-		label: "San Francisco/Oakland"
-	},
-	{
-		value: 23,
-		label: "Oklahoma City"
-	},
-	{
-		value: 24,
-		label: "Philadelphia"
-	},
-	{
-		value: 25,
-		label: "Sacramento"
-	},
-	{
-		value: 26,
-		label: "Washington DC"
-	},
-	{
-		value: 28,
-		label: "Jani-King Int'l, Inc."
-	},
-	{
-		value: 29,
-		label: "JANI-KING OF NEW MEXICO, INC"
-	},
-	{
-		value: 31,
-		label: "New Mexico"
-	},
-	{
-		value: 46,
-		label: "Houston"
-	},
-	{
-		value: 55,
-		label: "Pittsburgh"
-	},
-	{
-		value: 64,
-		label: "Tulsa"
-	},
-	{
-		value: 82,
-		label: "Reno"
-	}
-];
+const THIS_WEEK = 1;
+const THIS_WEEK_TO_DATE = 2;
+const THIS_MONTH = 3;
+const THIS_MONTH_TO_DATE = 4;
+const THIS_QUARTER = 5;
+const THIS_QUARTER_TO_DATE = 6;
+const THIS_YEAR = 7;
+const THIS_YEAR_TO_DATE = 8;
+const TODAY = 9;
+const YESTERDAY = 10;
+const LAST_QUARTER = 11;
+const LAST_YEAR = 12;
+const CUSTOM_DATE = 13;
+const PERIOD = 14;
 
 class FilterPanel extends Component {
+    state = {
+        checkedEbill: true,
+        checkedPrint: true,
+        leaseStatus: [],
+        FromDate: undefined,
+        ToDate: undefined,
+        leaseDateOption: THIS_MONTH,
+        leaseDatePeriodMonth: moment().month(),
+        leaseDatePeriodYear: moment().year(),
+    };
 
+    componentDidMount()
+    {
+    }
 
-	state = {
-		checkedPaid: true,
-		checkedPP: true,
-		checkedComplete: true,
-		checkedOpen: true,
-		invoiceDate: '',
+    componentWillMount(){
+        this.setState({
+            checkedEbill: this.props.transactionStatus.checkedEbill,
+            checkedPrint: this.props.transactionStatus.checkedPrint});
 
-		isAllLeaseStatus: true,
-		isActiveLeaseStatus: true,
-		isCompleteLeaseStatus: true,
-		isStoppedLeaseStatus: true,
-		isTransferredLeaseStatus: true,
+        this.setState({leaseStatus: this.props.leaseStatus});
+        this.setState({FromDate: this.props.FromDate});
+        this.setState({ToDate: this.props.ToDate});
+        this.setState({leaseDateOption: this.props.leaseDateOption});
+        this.setState({leaseDatePeriodMonth: this.props.leaseDatePeriodMonth});
+        this.setState({leaseDatePeriodYear: this.props.leaseDatePeriodYear});
+    }
 
-		AccountTypes: -2,
-		AccountExecutive: 0,
-	};
+    componentDidUpdate(prevProps, prevState, snapshot)
+    {
+        if(prevProps.leaseStatus!==this.props.leaseStatus){
+            this.setState({leaseStatus: this.props.leaseStatus})
+        }
+        if(prevProps.FromDate!==this.props.FromDate){
+            this.setState({FromDate: this.props.FromDate})
+        }
+        if(prevProps.ToDate!==this.props.ToDate){
+            this.setState({ToDate: this.props.ToDate})
+        }
 
+        if(prevProps.leaseDateOption!==this.props.leaseDateOption){
+            this.setState({leaseDateOption: this.props.leaseDateOption})
+        }
 
-	componentDidMount() {
-	}
+        if(prevState.leaseDatePeriodYear !== this.state.leaseDatePeriodYear ||
+            prevState.leaseDatePeriodMonth !== this.state.leaseDatePeriodMonth) {
+            let startDate, endDate;
+            startDate = moment().year(this.state.leaseDatePeriodYear).month(this.state.leaseDatePeriodMonth).startOf('month').format("MM/DD/YYYY");
+            endDate = moment().year(this.state.leaseDatePeriodYear).month(this.state.leaseDatePeriodMonth).endOf('month').format("MM/DD/YYYY");
+            this.props.updateDate(UPDATE_FROM_DATE_INVOICE, startDate);
+            this.props.updateDate(UPDATE_TO_DATE_INVOICE, endDate);
+        }
 
-	componentWillMount() {
-		this.setState({
-			checkedPaid: this.props.transactionStatus.checkedPaid,
-			checkedPP: this.props.transactionStatus.checkedPP,
-			checkedComplete: this.props.transactionStatus.checkedComplete
-		});
-	}
+        if ( this.props.state !== prevProps.state )
+        {
+            if ( this.props.state )
+            {
+                document.addEventListener("keydown", this.handleDocumentKeyDown);
+            }
+            else
+            {
+                document.removeEventListener('keydown', this.handleDocumentKeyDown);
+            }
+        }
+    }
 
-	componentDidUpdate(prevProps) {
-		if (this.props.state !== prevProps.state) {
-			if (this.props.state) {
-				document.addEventListener("keydown", this.handleDocumentKeyDown);
-			}
-			else {
-				document.removeEventListener('keydown', this.handleDocumentKeyDown);
-			}
-		}
-	}
+    componentWillUnmount()
+    {
+        document.removeEventListener('keydown', this.handleDocumentKeyDown);
+    }
 
-	componentWillUnmount() {
-		document.removeEventListener('keydown', this.handleDocumentKeyDown);
-	}
+    handleDocumentKeyDown = event => {
+        if ( keycode(event) === 'esc' )
+        {
+            this.props.closeFilterPanel();
+        }
+    };
 
-	handleDocumentKeyDown = event => {
-		if (keycode(event) === 'esc') {
-			this.props.closeFilterPanel();
-		}
-	};
+    handleChange = (index, name) => event => {
+		const iStatus = this.state.leaseStatus;
+		debugger
+        iStatus[index]['checked'+name] = event.target.checked;
 
-	handleChangeChecked = name => event => {
-		if (name === "isAllLeaseStatus") {
-			this.setState({
-				isAllLeaseStatus: event.target.checked,
-				isActiveLeaseStatus: event.target.checked,
-				isCompleteLeaseStatus: event.target.checked,
-				isStoppedLeaseStatus: event.target.checked,
-				isTransferredLeaseStatus: event.target.checked
-			})
-		} else {
-			this.setState({ [name]: event.target.checked });
-		}
+        this.setState({leaseStatus: iStatus });
+        this.props.updateLeaseStatus(iStatus)
+    };
 
-		this.props.toggleStatus(name, event.target.checked)
-	};
+    handleChange1 = event => {
+        this.setState({[event.target.name]: event.target.value});
+        let startDate, endDate, quarter, year;
+        this.props.updateLeaseDateOption(event.target.value);
 
-	handleChange = name => event => {
-		this.setState({
-			[name]: event.target.value
-		});
-	};
+        switch (event.target.value) {
+            case THIS_WEEK:
+                startDate = moment().day(0);
+                endDate = moment().day(6);
+                break;
+            case THIS_WEEK_TO_DATE:
+                startDate = moment().day(0);
+                endDate = moment();
+                break;
+            case THIS_MONTH:
+                startDate = moment().date(1);
+                endDate = moment(moment().date(1)).endOf('month');
+                break;
+            case THIS_MONTH_TO_DATE:
+                startDate = moment().date(1);
+                endDate = moment();
+                break;
+            case THIS_QUARTER:
+                quarter = moment().quarter();
+                startDate = moment().quarter(quarter).startOf('quarter');
+                endDate = moment().quarter(quarter).endOf('quarter');
+                break;
+            case THIS_QUARTER_TO_DATE:
+                quarter = moment().quarter();
+                startDate = moment().quarter(quarter).startOf('quarter');
+                endDate = moment();
+                break;
+            case THIS_YEAR:
+                year = moment().year();
+                startDate = moment().startOf('year');
+                endDate = moment().endOf('year');
+                break;
+            case THIS_YEAR_TO_DATE:
+                year = moment().year();
+                startDate = moment().startOf('year');
+                endDate = moment();
+                break;
+            case TODAY:
+                startDate = moment();
+                endDate = startDate;
+                break;
+            case YESTERDAY:
+                startDate = moment().subtract(1, 'days');
+                endDate = startDate;
+                break;
+            case LAST_QUARTER:
+                quarter = moment().quarter();
+                if(quarter===1)
+                    startDate = moment().subtract(1, 'years').quarter(4).startOf('quarter');
+                else
+                    startDate = moment().quarter(quarter-1).startOf('quarter');
 
+                if(quarter===1)
+                    endDate = moment().quarter(quarter).startOf('quarter').subtract(1, 'days');
+                else
+                    endDate = moment().quarter(quarter-1).endOf('quarter');
+                break;
+            case LAST_YEAR:
+                year = moment().year();
+                startDate = moment().subtract(1, 'years').startOf('year');
+                endDate = moment().subtract(1, 'years').startOf('year').add(1,'years').subtract(1,'days');
+                break;
+            case PERIOD:
+                startDate = moment().year(this.state.leaseDatePeriodYear).month(this.state.leaseDatePeriodMonth).startOf('month');
+                endDate = moment().year(this.state.leaseDatePeriodYear).month(this.state.leaseDatePeriodMonth).endOf('month');
+        }
+        if(event.target.value!==CUSTOM_DATE){
+            this.props.updateDate(UPDATE_FROM_DATE_INVOICE, startDate.format("MM/DD/YYYY"));
+            this.props.updateDate(UPDATE_TO_DATE_INVOICE, endDate.format("MM/DD/YYYY"));
+        }
+    };
 
-	handleChange1 = event => {
-		this.setState({ [event.target.name]: event.target.value });
-	};
-	render() {
-		const { classes, leaseForm } = this.props;
+    handleChangePeriod = event =>{
+        this.setState({[event.target.name]: event.target.value});
+        this.props.updatePeriodOption(event.target.name, event.target.value);
+    };
 
-		// let regionLeases = [];
+    handleLeaseFromDateChange = date => {
+        this.setState({FromDate: date});
+        this.props.updateDate(UPDATE_FROM_DATE_INVOICE, moment(date).format("MM/DD/YYYY"));
+    };
 
-		// leases.Data.Regions.filter(x => {
-		// 	return this.props.regionId === 0 || x.Id === this.props.regionId;
-		// }).forEach(x => {
-		// 	regionLeases = [...regionLeases, ...x.Leases];
-		// });
+    handleLeaseToDateChange = date => {
+        this.setState({ ToDate: date });
+        this.props.updateDate(UPDATE_TO_DATE_INVOICE, moment(date).format("MM/DD/YYYY"));
+    };
 
-		// let accountTypes = [...new Set(regionLeases.map(x => x.AccountTypeListName))].sort();
-		// let accountStatuses = [...new Set(regionLeases.map(x => x.StatusName))].sort();
+    render()
+    {
+        const {classes} = this.props;
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const years = _.range(moment().year(), 2000,-1);
+        return (
+            <div className={classNames(classes.root)}>
+                <div className={classNames("flex flex-col")}>
+                    <Paper className="flex flex-1 flex-col min-h-px p-20">
+                        <FormControl className={classes.formControl} style={{width: 200}}>
+                            <h3 className="mb-20">Lease Date</h3>
+                            <Select
+                                value={this.state.leaseDateOption}
+                                onChange={this.handleChange1}
+                                inputProps={{
+                                    name: 'leaseDateOption',
+                                    id  : 'leaseDateOption'
+                                }}
+                            >
+                                <MenuItem value="">
+                                    <em>None</em>
+                                </MenuItem>
+                                <MenuItem value={THIS_WEEK}>This Week</MenuItem>
+                                <MenuItem value={THIS_WEEK_TO_DATE}>This Week-to-date</MenuItem>
+                                <MenuItem value={THIS_MONTH}>This Month</MenuItem>
+                                <MenuItem value={THIS_MONTH_TO_DATE}>This Month-to-date</MenuItem>
+                                <MenuItem value={THIS_QUARTER}>This Quarter</MenuItem>
+                                <MenuItem value={THIS_QUARTER_TO_DATE}>This Quarter-to-Date</MenuItem>
+                                <MenuItem value={THIS_YEAR}>This Year</MenuItem>
+                                <MenuItem value={THIS_YEAR_TO_DATE}>This Year-to-date</MenuItem>
+                                <MenuItem value={TODAY}>Today</MenuItem>
+                                <MenuItem value={YESTERDAY}>Yesterday</MenuItem>
+                                <MenuItem value={LAST_QUARTER}>Last Quarter</MenuItem>
+                                <MenuItem value={LAST_YEAR}>Last Year</MenuItem>
+                                <MenuItem value={CUSTOM_DATE}>Custom Date</MenuItem>
+                                <MenuItem value={PERIOD}>Period</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <br></br>
 
-		return (
-			<div className={classNames(classes.root, "flex flex-col")}>
-				{/* <div className={classNames("flex flex-col")}> */}
+                        { this.state.leaseDateOption===CUSTOM_DATE && (
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <div className="flex flex-col mt-20">
+                                    <h3 className="mb-20">Custom Date</h3>
+                                    <DatePicker
+                                        margin="none"
+                                        label="From Date"
+                                        name="FromDate"
+                                        variant="outlined"
+                                        format="MM/dd/yyyy"
+                                        value={this.state.FromDate}
+                                        onChange={this.handleLeaseFromDateChange}
+                                        fullWidth
+                                        required
+                                        color="secondary"
+                                    />
+                                    <br></br>
+                                    <DatePicker
+                                        margin="none"
+                                        label="To Date"
+                                        name="ToDate"
+                                        variant="outlined"
+                                        format="MM/dd/yyyy"
+                                        value={this.state.ToDate}
+                                        onChange={this.handleLeaseToDateChange}
+                                        fullWidth
+                                        required
+                                        color="secondary"
+                                        style={{marginTop: '30px!important'}}
+                                    />
+                                </div>
+                            </MuiPickersUtilsProvider>
+                        )}
+                        { this.state.leaseDateOption===PERIOD && (
+                            <div className="flex flex-col mt-20">
+                                <h3 className="mb-20">Choose a Period</h3>
+                                <Select
+                                    value={this.state.leaseDatePeriodYear}
+                                    onChange={this.handleChangePeriod}
+                                    inputProps={{
+                                        name: 'leaseDatePeriodYear',
+                                        id  : 'leaseDatePeriodYear'
+                                    }}
+                                >
+                                    {
+                                        years.map((y, index)=> {
+                                            return <MenuItem key={index} value={y}>{y}</MenuItem>
+                                        })
+                                    }
+                                </Select>
+                                <br></br>
+                                <Select
+                                    value={this.state.leaseDatePeriodMonth}
+                                    onChange={this.handleChangePeriod}
+                                    inputProps={{
+                                        name: 'leaseDatePeriodMonth',
+                                        id  : 'leaseDatePeriodMonth'
+                                    }}
+                                >
+                                    {
+                                        months.map((m, index)=> {
+                                            return <MenuItem key={index} value={index}>{m}</MenuItem>
+                                        })
+                                    }
+                                </Select>
+                            </div>
+                        )}
 
-				<Paper className="flex flex-1 flex-col min-h-px p-20">
-					{leaseForm && leaseForm.props.open
-						? (
-							<div>
-								{/* <h3 className="mb-20">Customer Information</h3> */}
-								<GridContainer style={{ alignItems: 'center', width: 300 }} className={classNames(classes.formControl)}>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="Name"
-											label="Name *"
-											className={classes.textField}
-											// value={customerForm.state.name}
-											onChange={this.handleChange('Name')}
-											margin="normal"
-											variant="outlined"
-											fullWidth />
-
-									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="outlined-name"
-											label="Address *"
-											className={classes.textField}
-											// value={customerForm.state.name}
-											onChange={this.handleChange('Address')}
-											margin="normal"
-											variant="outlined"
-											fullWidth />
-									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="outlined-name"
-											label="Address2"
-											className={classes.textField}
-											// value={customerForm.state.name}
-											onChange={this.handleChange('Address2')}
-											margin="normal"
-											variant="outlined"
-											fullWidth />
-									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="outlined-name"
-											label="City *"
-											className={classes.textField}
-											// value={customerForm.state.name}
-											onChange={this.handleChange('City')}
-											margin="normal"
-											variant="outlined"
-											fullWidth />
-									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="outlined-name"
-											label="State *"
-											select
-											className={classes.textField}
-											value={this.state.State === undefined ? "" : this.state.State}
-											onChange={this.handleChange('State')}
-											margin="normal"
-											variant="outlined"
-											style={{ width: '40%', marginRight: '2px' }}>
-											{stateNames.map(option => (
-												<MenuItem key={option.value} value={option.value}>
-													{option.label}
-												</MenuItem>
-											))}
-										</TextField>
-
-										<TextField
-											id="outlined-name"
-											label="Zip *"
-											className={classes.textField}
-											// value={customerForm.state.name}
-											onChange={this.handleChange('Zip')}
-											margin="normal"
-											variant="outlined"
-											style={{ width: '60%', marginLeft: '2px' }} />
-									</GridItem>
-
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="outlined-name"
-											label="Phone *"
-											className={classes.textField}
-											// value={customerForm.state.name}
-											onChange={this.handleChange('Phone')}
-											margin="normal"
-											variant="outlined"
-											style={{ marginRight: '2px' }} />
-
-										<TextField
-											id="outlined-name"
-											label="Fax"
-											className={classes.textField}
-											// value={customerForm.state.name}
-											onChange={this.handleChange('Fax')}
-											margin="normal"
-											variant="outlined"
-											style={{ marginLeft: '2px' }} />
-									</GridItem>
-
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="outlined-name"
-											label="Email"
-											type="email"
-											className={classes.textField}
-											// value={customerForm.state.name}
-											onChange={this.handleChange('Email')}
-											margin="normal"
-											variant="outlined"
-											style={{ marginRight: '2px' }} />
-
-										<TextField
-											id="outlined-name"
-											label="Website"
-											className={classes.textField}
-											// value={customerForm.state.name}
-											onChange={this.handleChange('Website')}
-											margin="normal"
-											variant="outlined"
-											style={{ marginLeft: '2px' }} />
-									</GridItem>
-
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="AccountType"
-											label="Account Type *"
-											select
-											className={classes.textField}
-											value={this.state.AccountType === undefined ? "" : this.state.AccountType}
-											onChange={this.handleChange('AccountType')}
-											margin="normal"
-											variant="outlined"
-											fullWidth
-										// style={{ minWidth: "100px", width: "30%" }}
-										>
-											{[{ value: 0, label: "Airline" }].map(option => (
-												<MenuItem key={option.value} value={option.value}>
-													{option.label}
-												</MenuItem>
-											))}
-										</TextField>
-									</GridItem>
-
-								</GridContainer>
-							</div>
-						) :
-						(
-							<div>
-
-								<div style={{ marginTop: 50, display: 'flex', flexDirection: 'column' }}>
-									<h3>Lease Status</h3>
-									<FormControlLabel
-										control={<Switch checked={this.state.isAllLeaseStatus} onChange={this.handleChangeChecked('isAllLeaseStatus')} value="isAllLeaseStatus"  />}
-										label="Select All"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isActiveLeaseStatus} onChange={this.handleChangeChecked('isActiveLeaseStatus')} value="isActiveStatus" />}
-										label="Active"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isCompleteLeaseStatus} onChange={this.handleChangeChecked('isCompleteLeaseStatus')} value="isCompleteStatus" />}
-										label="Complete"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isStoppedLeaseStatus} onChange={this.handleChangeChecked('isStoppedLeaseStatus')} value="isStoppedLeaseStatus" />}
-										label="Stopped"
-									/>
-									<FormControlLabel
-										control={<Switch checked={this.state.isTransferredLeaseStatus} onChange={this.handleChangeChecked('isTransferredLeaseStatus')} value="isTransferredLeaseStatus" />}
-										label="Transferred"
-									/>
-								</div>
-							</div>
-						)
-					}
-				</Paper>
-				{/* </div> */}
-			</div >
-		);
-	}
+                        <div style={{marginTop: 20, display: 'flex', flexDirection: 'column'}}>
+                            <h3>Lease Status</h3>
+                            {/* {this.state.leaseStatus.length>0 && this.state.leaseStatus.map((iv, index)=> {
+                                return (
+                                    <FormControlLabel
+                                        key={index}
+                                        control={
+                                            <Switch
+                                                checked={iv['checked'+iv.TransactionStatusListId]}
+                                                onChange={this.handleChange(index, iv.TransactionStatusListId)}
+                                                value="checkedPaid"
+                                            />
+                                        }
+                                        label={iv.Name}
+                                    />
+                                )
+                            })} */}
+                            <br></br>
+                            {/* <h3>Delivery Method</h3> */}
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={this.state.selectAll}
+                                        onChange={this.handleChange('selectAll')}
+                                        value="selectAll"
+                                    />
+                                }
+                                label="Select All"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={this.state.checkedActive}
+                                        onChange={this.handleChange('checkedActive')}
+                                        value="checkedActive"
+                                    />
+                                }
+                                label="Active"
+                            />
+							<FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={this.state.checkedComplete}
+                                        onChange={this.handleChange('checkedComplete')}
+                                        value="checkedComplete"
+                                    />
+                                }
+                                label="Complete"
+                            />
+							<FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={this.state.checkedStopped}
+                                        onChange={this.handleChange('checkedStopped')}
+                                        value="checkedStopped"
+                                    />
+                                }
+                                label="Stopped"
+                            />
+							<FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={this.state.checkedTransferred}
+                                        onChange={this.handleChange('checkedTransferred')}
+                                        value="checkedTransferred"
+                                    />
+                                }
+                                label="Transferred"
+                            />
+                        </div>
+                    </Paper>
+                </div>
+            </div>
+        );
+    }
 }
 
-function mapDispatchToProps(dispatch) {
-	return bindActionCreators({
-		toggleStatus: Actions.toggleStatus
-	}, dispatch);
+function mapDispatchToProps(dispatch)
+{
+    return bindActionCreators({
+        toggleStatus: Actions.toggleStatus,
+        updateDate: Actions.updateDate,
+        updateLeaseStatus: Actions.updateLeaseStatus,
+        updateLeaseDateOption: Actions.updateLeaseDateOption,
+        updatePeriodOption: Actions.updatePeriodOption
+    }, dispatch);
 }
 
-function mapStateToProps({ leases, auth }) {
-	return {
-		filterState: leases.bOpenedFilterPanel,
-		transactionStatus: leases.transactionStatus,
-		leases: leases.leasesDB,
-		leaseForm: leases.leaseForm,
-		regionId: auth.login.defaultRegionId,
-	}
+function mapStateToProps({leases, fuse})
+{
+    return {
+        filterState: leases.bOpenedFilterPanel,
+        transactionStatus: leases.transactionStatus,
+        leaseStatus: leases.leaseStatus,
+        FromDate: leases.FromDate,
+        ToDate: leases.ToDate,
+        settings       : fuse.settings.current,
+        leaseDateOption: leases.leaseDateOption,
+        leaseDatePeriodMonth: leases.leaseDatePeriodMonth,
+        leaseDatePeriodYear: leases.leaseDatePeriodYear,
+    }
 }
 
-export default (withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(FilterPanel)));
+export default (withStyles(styles,{withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(FilterPanel)));

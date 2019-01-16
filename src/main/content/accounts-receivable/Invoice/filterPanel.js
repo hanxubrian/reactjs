@@ -5,7 +5,7 @@ import keycode from 'keycode';
 //Material UI core
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { MenuItem, FormControl, Select } from '@material-ui/core';
+import { MenuItem, FormControl, Select, TextField } from '@material-ui/core';
 import {FuseThemes} from '@fuse';
 
 import 'date-fns'
@@ -274,7 +274,7 @@ class FilterPanel extends Component {
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                 <div className="flex flex-col mt-20">
                                     <h3 className="mb-20">Custom Date</h3>
-                                    <DatePicker
+                                    {/* <DatePicker
                                         margin="none"
                                         label="From Date"
                                         name="FromDate"
@@ -285,9 +285,39 @@ class FilterPanel extends Component {
                                         fullWidth
                                         required
                                         color="secondary"
-                                    />
+                                    /> */}
+                                    <TextField
+                                        type="date"
+                                        id="StartDate"
+                                        label="Start Date *"
+                                        className={classNames(classes.textField, "mr-12 ml-12")}
+                                        InputLabelProps={{
+                                            shrink: true
+                                        }}
+                                        value={this.state.StartDate}
+                                        onChange={this.handleInvoiceFromDateChange}
+                                        // onChange={this.handleChange('StartDate')}
+                                        margin="normal"
+                                        variant="outlined"
+                                        style={{ width: "20%", minWidth: "180px" }}
+								    />
                                     <br></br>
-                                    <DatePicker
+                                    <TextField
+                                        type="date"
+                                        id="ToDate"
+                                        label="To Date *"
+                                        className={classNames(classes.textField, "mr-12 ml-12")}
+                                        InputLabelProps={{
+                                            shrink: true
+                                        }}
+                                        value={this.state.ToDate}
+                                        onChange={this.handleInvoiceToDateChange}
+                                        // onChange={this.handleChange('ToDate')}
+                                        margin="normal"
+                                        variant="outlined"
+                                        style={{ width: "20%", minWidth: "180px" }}
+								/>
+                                    {/* <DatePicker
                                         margin="none"
                                         label="To Date"
                                         name="ToDate"
@@ -299,7 +329,7 @@ class FilterPanel extends Component {
                                         required
                                         color="secondary"
                                         style={{marginTop: '30px!important'}}
-                                    />
+                                    /> */}
                                 </div>
                             </MuiPickersUtilsProvider>
                         )}
