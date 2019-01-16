@@ -25,12 +25,12 @@ import {withStyles} from "@material-ui/core";
 //Custom components
 import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
-import InvoiceLineTable from "./InvoiceLine"
+// import InvoiceLineTable from "./InvoiceLine"
 
 // for store
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
-import * as Actions from 'store/actions';
+import * as Actions from '../../../../store/actions';
 
 // third party
 import "react-table/react-table.css";
@@ -422,7 +422,7 @@ class TransactionForm extends Component {
     }
 
     componentDidMount(){
-        if(this.props.invoiceForm.type === 'new')
+        if(this.props.transactionForm.type === 'new')
             this.setState({InvoiceNo: "PENDING"});
 
         if(this.input) {
@@ -543,7 +543,7 @@ class TransactionForm extends Component {
 
 
     closeComposeForm = () => {
-        this.props.invoiceForm.type === 'edit' ? this.props.closeEditInvoiceForm() : this.props.closeNewInvoiceForm();
+        this.props.transactionForm.type === 'edit' ? this.props.closeEditTransactionForm() : this.props.closeNewTransactionForm();
     };
 
     handleDueDateChange = date => {
@@ -594,7 +594,7 @@ class TransactionForm extends Component {
         };
 
         let bReadonly = false;
-        if(this.props.invoiceForm.type === 'new') bReadonly = true;
+        if(this.props.transactionForm.type === 'new') bReadonly = true;
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
@@ -735,8 +735,8 @@ class TransactionForm extends Component {
                                         onChange={this.handleChange}
                                         required
                                         fullWidth
-                                        style = {{paddingLeft: 4,fontSize: this.props.invoiceForm.type === 'new' ? '18px!important': 'inherit',
-                                            fontWeight: this.props.invoiceForm.type === 'new' ? 700: 'inherit'
+                                        style = {{paddingLeft: 4,fontSize: this.props.transactionForm.type === 'new' ? '18px!important': 'inherit',
+                                            fontWeight: this.props.transactionForm.type === 'new' ? 700: 'inherit'
                                         }}
                                     />
                                 </Grid>
@@ -856,7 +856,7 @@ class TransactionForm extends Component {
                         </div>
                         <Grid container className={classNames(classes.formControl)} style={{flex: "9999 1 0"}}>
                             <Grid item xs={12} sm={12} md={12} className="flex flex-row xs:flex-col xs:mb-24">
-                                <InvoiceLineTable />
+                                {/*<InvoiceLineTable />*/}
                             </Grid>
                         </Grid>
                         <Divider variant="middle"/>
@@ -1007,24 +1007,22 @@ class TransactionForm extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        openEditInvoiceForm: Actions.openEditInvoiceForm,
-        closeEditInvoiceForm: Actions.closeEditInvoiceForm,
-        closeNewInvoiceForm : Actions.closeNewInvoiceForm,
+        closeEditTransactionForm: Actions.closeEditTransactionForm,
+        closeNewTransactionForm : Actions.closeNewTransactionForm,
         selectCustomer: Actions.selectCustomer,
         resetInvoiceForm: Actions.resetInvoiceForm,
         addInvoice: Actions.addInvoice
     }, dispatch);
 }
 
-function mapStateToProps({invoices, auth})
+function mapStateToProps({transactions, auth})
 {
     return {
-        invoiceForm: invoices.invoiceForm,
-        invoices: invoices,
-        newInvoice: invoices.newInvoice,
+        transactionForm: transactions.transactionForm,
+        newTransaction: transactions.newTransaction,
         user: auth.login,
         regionId: auth.login.defaultRegionId,
-        bStartingSaveFormData: invoices.bStartingSaveFormData
+        // bStartingSaveFormData: invoices.bStartingSaveFormData
     }
 }
 

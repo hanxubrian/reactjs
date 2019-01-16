@@ -379,7 +379,7 @@ class InvoiceListContent extends Component {
                                     accessor: "InvoiceNo",
                                     filterAll: true,
                                     width: 280,
-                                    Cell: props => <Button onClick={this.invoiceReport}>{props.value}</Button> ,
+                                    Cell: row => <Button onClick={this.invoiceReport}>{row.original.InvoiceNo}</Button> ,
                                     className: classNames(classes.invoiceNo, "flex items-center  justify-center text-12")
                                 },
                                 {
@@ -446,7 +446,7 @@ class InvoiceListContent extends Component {
                                             <IconButton style={{padding: 8}}
                                                 onClick={(ev) => {
                                                     ev.stopPropagation();
-                                                    this.handleOpenRemoveDialog(row.original.InvoiceNo);
+                                                    this.handleOpenRemoveDialog(row.original.InvoiceId);
                                                 }}
                                             >
                                                 <Icon fontSize={"small"}>delete</Icon>

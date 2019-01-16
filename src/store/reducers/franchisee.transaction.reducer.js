@@ -8,6 +8,15 @@ const initialState = {
     bLoadedTransactions: false,
     bOpenedTransactionFilterPanel: false,
     transactionStatus:{checkedCompleted: true, checkedOpen: true},
+    transactionForm: {
+        type : 'new',
+        props: {
+            open: false
+        },
+        data : null,
+        franchisee: null
+    },
+    newTransaction: null
 };
 
 const transactions = function(state = initialState, action) {
@@ -42,6 +51,65 @@ const transactions = function(state = initialState, action) {
                 ...initialState
             }
         }
+        case Actions.OPEN_NEW_TRANSACTION_FORM:
+        {
+            return {
+                ...state,
+                transactionForm: {
+                    type : 'new',
+                    props: {
+                        open: true
+                    },
+                    data : null,
+                    franchisee: null
+                },
+            };
+        }
+        case Actions.CLOSE_NEW_TRANSACTION_FORM:
+        {
+            return {
+                ...state,
+                transactionForm: {
+                    type : 'new',
+                    props: {
+                        open: false
+                    },
+                    data : null,
+                    franchisee: null
+                },
+                newTransaction: null
+            };
+        }
+        case Actions.OPEN_EDIT_TRANSACTION_FORM:
+        {
+            return {
+                ...state,
+                transactionForm: {
+                    type : 'new',
+                    props: {
+                        open: true
+                    },
+                    data : null,
+                    franchisee: action.payload
+                },
+            };
+        }
+        case Actions.CLOSE_EDIT_TRANSACTION_FORM:
+        {
+            return {
+                ...state,
+                transactionForm: {
+                    type : 'new',
+                    props: {
+                        open: false
+                    },
+                    data : null,
+                    franchisee: action.payload
+                },
+                newTransaction: null
+            };
+        }
+
         default:
         {
             return state;

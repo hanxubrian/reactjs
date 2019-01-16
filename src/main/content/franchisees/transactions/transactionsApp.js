@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 
-// core components
-import {Icon, Fab, Typography, Hidden, IconButton, Button, Paper, Input} from '@material-ui/core';
+// Material-UI core components
+import {
+    Icon, Fab, Typography, Hidden, IconButton, Button, Paper, Input, CircularProgress, Toolbar} from '@material-ui/core';
 import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
@@ -10,16 +11,18 @@ import FilterPanel from './filterPanel';
 
 // theme components
 import {FusePageCustom, FuseAnimate} from '@fuse';
+import TransactionForm from './transactionForm'
 
 // for store
 import connect from "react-redux/es/connect/connect";
 import {bindActionCreators} from "redux";
-import * as Actions from 'store/actions';
+import * as Actions from '../../../../store/actions';
 
 // third party
 import classNames from 'classnames';
 import TransactionLists from './FranchiseeLists';
 import _ from "lodash";
+import InvoiceForm from "../../accounts-receivable/Invoice/InvoiceForm";
 
 const headerHeight = 80;
 
@@ -93,7 +96,23 @@ const styles = theme => ({
     },
     imageIcon: {
         width: 24
-    }
+    },
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100vh',
+        backgroundColor: 'rgba(0,0,0, .9)',
+        zIndex: 1000,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
+        opacity: 0.5
+    },
+    progress: {
+        margin: theme.spacing.unit * 2,
+    },
 });
 
 class TransactionsApp extends Component {
@@ -104,6 +123,8 @@ class TransactionsApp extends Component {
         regionId: 0,
         checkedCompleted: true,
         checkedOpen: true,
+        selectedTransaction: null,
+        franchisees: null,
     };
 
     constructor(props){
@@ -112,13 +133,10 @@ class TransactionsApp extends Component {
         if(!props.bLoadedTransactions) {
             props.getTransactions();
         }
-        this.fetchData = this.fetchData.bind(this);
-    }
-    fetchData(state, instance) {
-        this.setState({
-            pageSize: state.pageSize,
-            page: state.page,
-        });
+
+        if (!props.bLoadedFranchisees) {
+            props.getFranchisees(props.regionId, props.fstatusId, props.fLocation, props.fLongitude, props.fLatitude, props.fSearchText);
+        }
     }
 
     search = (val)=> {
@@ -142,12 +160,16 @@ class TransactionsApp extends Component {
         this.setState({ [prop]: event.target.value });
     };
     componentWillMount(){
+        const {regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText} = this.props;
+
         this.setState({checkedCompleted: this.props.transactionStatus.checkedCompleted});
         this.setState({checkedOpen: this.props.transactionStatus.checkedOpen});
-        this.getTransactions()
+        this.getTransactions();
+        this.props.getFranchisees(regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText);
     }
     componentDidUpdate(prevProps, prevState, snapshot){
         let bChanged = false;
+        const {fstatusId, fLocation, fLongitude, fLatitude, fSearchText} = this.props;
 
         if(this.props.regionId !== prevProps.regionId) {
             this.setState({regionId: prevProps.regionId});
@@ -162,6 +184,10 @@ class TransactionsApp extends Component {
         if(this.props.transactionStatus.checkedOpen !== prevProps.transactionStatus.checkedOpen) {
             this.setState({checkedOpen: !this.state.checkedOpen});
             bChanged = true;
+        }
+
+        if(this.props.regionId !== prevProps.regionId){
+            this.props.getFranchisees(this.props.regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText);
         }
 
         if(bChanged)
@@ -179,7 +205,17 @@ class TransactionsApp extends Component {
     componentWillReceiveProps(nextProps) {
         if(this.props.transactions!==nextProps.transactions)
             this.getTransactions(nextProps.transactions);
+
+        if(nextProps.franchisees!==null && this.props.franchisees!==nextProps.franchisees){
+            this.setState({franchisees: nextProps.franchisees.Data.Region[0].FranchiseeList});
+        }
     }
+
+    onNewTransaction = () => {
+        if(this.props.filterState) this.props.toggleFilterPanel();
+
+        this.props.openNewTransactionForm();
+    };
 
     getTransactions =(rawData=this.props.transactions) =>{
         if(rawData.transactionsDB===null) return;
@@ -209,138 +245,165 @@ class TransactionsApp extends Component {
 
     render()
     {
-        const {classes, filterState, toggleFilterPanel} = this.props;
+        const {classes, filterState, toggleFilterPanel, transactionForm} = this.props;
         const { selection } = this.state;
         return (
-            <FusePageCustom
-                classes={{
-                    root: classes.layoutRoot,
-                    header: classes.layoutHeader,
-                    content: classes.content,
-                    leftSidebar : classNames(classes.layoutLeftSidebar, {'openFilter': filterState}),
-                    sidebarHeader: classes.layoutSidebarHeader,
-                }}
-                leftSidebarHeader={
-                    <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", {'filteropen': filterState})}>
-                        <h4 style={{marginBlockStart: '1em'}}>Filter Panel</h4>
-                        <FuseAnimate animation="transition.expandIn" delay={200}>
-                            <div>
-                                <Hidden xsDown>
-                                    <IconButton onClick={(ev)=>toggleFilterPanel()}>
-                                        <Icon>close</Icon>
-                                    </IconButton>
-                                </Hidden>
-                            </div>
-                        </FuseAnimate>
-                    </div>
-                }
-                leftSidebarContent={
-                    <FilterPanel/>
-                }
-                header={
-                    <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
-                        <div className="flex flex-row flex-1 justify-between">
-                            <div className="flex flex-shrink items-center">
-                                <div className="flex items-center">
-                                    <FuseAnimate animation="transition.expandIn" delay={300}>
-                                        <Icon className="text-32 mr-12">account_box</Icon>
-                                    </FuseAnimate>
-                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                        <Typography variant="h6" className="hidden sm:flex">Franchisees | Transactions</Typography>
-                                    </FuseAnimate>
+            <React.Fragment>
+                <FusePageCustom
+                    classes={{
+                        root: classes.layoutRoot,
+                        header: classes.layoutHeader,
+                        content: classes.content,
+                        leftSidebar : classNames(classes.layoutLeftSidebar, {'openFilter': filterState}),
+                        sidebarHeader: classes.layoutSidebarHeader,
+                    }}
+                    leftSidebarHeader={
+                        <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", {'filteropen': filterState})}>
+                            <h4 style={{marginBlockStart: '1em'}}>Filter Panel</h4>
+                            <FuseAnimate animation="transition.expandIn" delay={200}>
+                                <div>
+                                    <Hidden xsDown>
+                                        <IconButton onClick={(ev)=>toggleFilterPanel()}>
+                                            <Icon>close</Icon>
+                                        </IconButton>
+                                    </Hidden>
                                 </div>
-                            </div>
-                            <div className="flex flex-shrink items-center">
-                                <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <Fab color="secondary" aria-label="add"
-                                         className={classNames(classes.sideButton, "mr-12")} onClick={() => alert('ok')}>
-                                        <Icon>add</Icon>
-                                    </Fab>
-                                </FuseAnimate>
-                                <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <Fab color="secondary" aria-label="add"
-                                         className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-                                        <Icon>mail_outline</Icon>
-                                    </Fab>
-                                </FuseAnimate>
-                                <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-                                        <Icon>print</Icon>
-                                    </Fab>
-                                </FuseAnimate>
-                            </div>
-                        </div>
-                        <div className="flex flex-none items-end" style={{display: 'none'}}>
-                            <FuseAnimate animation="transition.expandIn" delay={600}>
-                                <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
-                                    <Icon>add</Icon>
-                                </Fab>
                             </FuseAnimate>
-                            { selection.length>0 && (
-                                <FuseAnimate animation="transition.expandIn" delay={600}>
-                                    <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeInvoices()}>
-                                        <Icon>delete</Icon>
-                                    </Fab>
-                                </FuseAnimate>
+                        </div>
+                    }
+                    leftSidebarContent={
+                        <FilterPanel/>
+                    }
+                    header={
+                        <div className="flex w-full items-center">
+                            {(this.state.temp && !transactionForm.props.open) && (
+                                <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
+                                    <div className="flex flex-row flex-1 justify-between">
+                                        <div className="flex flex-shrink items-center">
+                                            <div className="flex items-center">
+                                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                    <Icon className="text-32 mr-12">account_box</Icon>
+                                                </FuseAnimate>
+                                                <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                    <Typography variant="h6" className="hidden sm:flex">Franchisees | Transactions</Typography>
+                                                </FuseAnimate>
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-shrink items-center">
+                                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                <Fab color="secondary" aria-label="add"
+                                                     className={classNames(classes.sideButton, "mr-12")} onClick={() => this.onNewTransaction()}>
+                                                    <Icon>add</Icon>
+                                                </Fab>
+                                            </FuseAnimate>
+                                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                <Fab color="secondary" aria-label="add"
+                                                     className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
+                                                    <Icon>mail_outline</Icon>
+                                                </Fab>
+                                            </FuseAnimate>
+                                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
+                                                    <Icon>print</Icon>
+                                                </Fab>
+                                            </FuseAnimate>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            {(this.state.temp && transactionForm.props.open) && (
+                                <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
+                                    <div className="flex flex-row flex-1 justify-between">
+                                        <div className="flex flex-shrink items-center">
+                                            <div className="flex items-center">
+                                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                    <Toolbar className="pl-12 pr-0">
+                                                        <img className="mr-12" src="assets/images/invoices/invoice-icon-white.png" alt="new transaction" style={{width: 32, height: 32}}/>
+                                                    </Toolbar>
+                                                </FuseAnimate>
+
+                                                {this.props.transactionForm.type === 'edit' && (
+                                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                        <Typography variant="h6" className="hidden sm:flex">Franchisees | Edit Transaction</Typography>
+                                                    </FuseAnimate>
+                                                )}
+                                                {this.props.transactionForm.type === 'new' && (
+                                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                        <Typography variant="h6" className="hidden sm:flex">Franchisees | New Transaction</Typography>
+                                                    </FuseAnimate>
+                                                )}
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             )}
                         </div>
-                    </div>
-                }
-                content={
-                    <div className="flex-1 flex-col absolute w-full h-full">
-                        {
-                            <div className={classNames("flex flex-col h-full")}>
-                                <div className="flex flex-row items-center p-12">
-                                    <div className="flex justify-start items-center">
-                                        <Hidden smDown>
-                                            <Button
-                                                onClick={(ev) => toggleFilterPanel()}
-                                                aria-label="toggle filter panel"
-                                                color="secondary"
-                                                disabled={filterState ? true : false}
-                                                className={classNames(classes.filterPanelButton)}
-                                            >
-                                                <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
-                                            </Button>
-                                        </Hidden>
-                                        <Hidden smUp>
-                                            <Button
-                                                onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
-                                                aria-label="toggle filter panel"
-                                                className={classNames(classes.filterPanelButton)}
-                                            >
-                                                <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
-                                            </Button>
-                                        </Hidden>
+                    }
+                    content={
+                        <div className="flex-1 flex-col absolute w-full h-full">
+                            {(this.state.temp && !transactionForm.props.open) && (
+                                <div className={classNames("flex flex-col h-full")}>
+                                    <div className="flex flex-row items-center p-12">
+                                        <div className="flex justify-start items-center">
+                                            <Hidden smDown>
+                                                <Button
+                                                    onClick={(ev) => toggleFilterPanel()}
+                                                    aria-label="toggle filter panel"
+                                                    color="secondary"
+                                                    disabled={filterState ? true : false}
+                                                    className={classNames(classes.filterPanelButton)}
+                                                >
+                                                    <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
+                                                </Button>
+                                            </Hidden>
+                                            <Hidden smUp>
+                                                <Button
+                                                    onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
+                                                    aria-label="toggle filter panel"
+                                                    className={classNames(classes.filterPanelButton)}
+                                                >
+                                                    <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
+                                                </Button>
+                                            </Hidden>
+                                        </div>
+                                        <div className="flex items-center w-full h-44 mr-12 ml-12">
+                                            <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
+                                                <Input
+                                                    placeholder="Search..."
+                                                    className={classNames(classes.search, 'pl-16')}
+                                                    // className="pl-16"
+                                                    disableUnderline
+                                                    fullWidth
+                                                    value={this.state.s}
+                                                    onChange={this.handleChange('s')}
+                                                    inputProps={{
+                                                        'aria-label': 'Search'
+                                                    }}
+                                                />
+                                                <Icon color="action" className="mr-16">search</Icon>
+                                            </Paper>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center w-full h-44 mr-12 ml-12">
-                                        <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
-                                            <Input
-                                                placeholder="Search..."
-                                                className={classNames(classes.search, 'pl-16')}
-                                                // className="pl-16"
-                                                disableUnderline
-                                                fullWidth
-                                                value={this.state.s}
-                                                onChange={this.handleChange('s')}
-                                                inputProps={{
-                                                    'aria-label': 'Search'
-                                                }}
-                                            />
-                                            <Icon color="action" className="mr-16">search</Icon>
-                                        </Paper>
-                                    </div>
+                                    <TransactionLists data={this.state.temp}/>
                                 </div>
-                                <TransactionLists data={this.state.temp}/>
-                            </div>
-                        }
+                            )}
+                            {(this.state.temp && transactionForm.props.open) && (
+                                <TransactionForm franchisees={this.state.franchisees} selectedTransaction={this.state.selectedTransaction}/>
+                            )}
+                        </div>
+                    }
+                    onRef={instance => {
+                        this.pageLayout = instance;
+                    }}
+                >
+                </FusePageCustom>
+                {(this.props.bFranchiseesFetchStart) && (
+                    <div className={classes.overlay}>
+                        <CircularProgress className={classes.progress} color="secondary"  />
                     </div>
-                }
-                onRef={instance => {
-                    this.pageLayout = instance;
-                }}
-            >
-            </FusePageCustom>
+                )}
+            </React.Fragment>
         );
     }
 }
@@ -349,18 +412,30 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         getTransactions: Actions.getTransactions,
-        toggleFilterPanel: Actions.toggleTransactionFilterPanel
+        toggleFilterPanel: Actions.toggleTransactionFilterPanel,
+        openNewTransactionForm: Actions.openNewTransactionForm,
+        openEditTransactionForm: Actions.openEditTransactionForm,
+        getFranchisees: Actions.getFranchisees,
     }, dispatch);
 }
 
-function mapStateToProps({transactions, auth})
+function mapStateToProps({transactions, auth, franchisees})
 {
     return {
         transactions: transactions,
+        transactionForm: transactions.transactionForm,
         bLoadedTransactions: transactions.bLoadedTransactions,
         filterState: transactions.bOpenedTransactionFilterPanel,
         transactionStatus: transactions.transactionStatus,
-        regionId: auth.login.defaultRegionId
+        regionId: auth.login.defaultRegionId,
+
+        bLoadedFranchisees: franchisees.bLoadedFranchisees,
+        fstatusId: franchisees.statusId,
+        fLocation: franchisees.Location,
+        fLongitude: franchisees.Longitude,
+        fLatitude: franchisees.Latitude,
+        fSearchText: franchisees.SearchText,
+        bFranchiseesFetchStart: franchisees.bFranchiseesFetchStart,
     }
 }
 
