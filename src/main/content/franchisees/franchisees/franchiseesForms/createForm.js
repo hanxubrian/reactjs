@@ -26,6 +26,7 @@ import Tab from '@material-ui/core/Tab';
 import FranchiseesOwnerTable from './ownerTable'
 import Radio from '@material-ui/core/Radio';
 import 'date-fns';
+import MomentUtils from '@date-io/moment';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider,  DatePicker } from 'material-ui-pickers';
 import moment from "moment";
@@ -342,25 +343,25 @@ function getStepContent(franchiseeForm, step) {
                     <h3>Contract</h3>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <MuiPickersUtilsProvider utils={MomentUtils}>
                                 <DatePicker
                                     label="Date Sign"
                                     value={franchiseeForm.state.selectedSignDate}
                                     onChange={franchiseeForm.handleSignDateChange}
-                                    format="MM/dd/YYYY"
+                                    format="MM/DD/YYYY"
                                     className={classes.textField}
                                     margin="dense"
                                     variant="outlined"
                                     style={{marginRight: '1%'}}
                                 />
                             </MuiPickersUtilsProvider>
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <MuiPickersUtilsProvider utils={MomentUtils}>
                                 <DatePicker
                                     label="Latest Renew Date"
                                     value={franchiseeForm.state.selectedRenewDate}
                                     onChange={franchiseeForm.handleRenewDateChange}
                                     className={classes.textField}
-                                    format="MM/dd/YYYY"
+                                    format="MM/DD/YYYY"
                                     variant="outlined"
                                     margin="dense"
                                     style={{marginLeft: '1%', marginRight: '1%'}}
@@ -378,12 +379,12 @@ function getStepContent(franchiseeForm, step) {
                             />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <MuiPickersUtilsProvider utils={MomentUtils}>
                                 <DatePicker
                                     label="EXP. Date"
                                     value={franchiseeForm.state.selectedExpDate}
                                     onChange={franchiseeForm.handleExpDateChange}
-                                    format="MM/dd/YYYY"
+                                    format="MM/DD/YYYY"
                                     className={classes.textField}
                                     variant="outlined"
                                     margin="dense"
