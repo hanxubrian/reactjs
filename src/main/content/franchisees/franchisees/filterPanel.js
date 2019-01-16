@@ -393,11 +393,11 @@ class FilterPanel extends Component {
                                <GridContainer style={{ alignItems: 'center', width: 300 }} className={classNames(classes.formControl)}>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
-                                                id="Name"
+                                                id="lf_name"
                                                 label="Name"
                                                 className={classes.textField}
                                                 onChange={this.handleChange('Name')}
-                                                margin="normal"
+                                                margin="dense"
                                                 variant="outlined"
                                                 required
                                                 fullWidth
@@ -406,11 +406,11 @@ class FilterPanel extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
-                                                id="outlined-name"
+                                                id="lf_address1"
                                                 label="Address"
                                                 className={classes.textField}
                                                 onChange={this.handleChange('Address')}
-                                                margin="normal"
+                                                margin="dense"
                                                 variant="outlined"
                                                 fullWidth
                                                 required
@@ -418,21 +418,21 @@ class FilterPanel extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
-                                                id="outlined-name"
+                                                id="lf_address2"
                                                 label="Address2"
                                                 className={classes.textField}
                                                 onChange={this.handleChange('Address2')}
-                                                margin="normal"
+                                                margin="dense"
                                                 variant="outlined"
                                                 fullWidth
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
-                                                id="outlined-name"
+                                                id="lf_city"
                                                 label="City"
                                                 className={classes.textField}
-                                                margin="normal"
+                                                margin="dense"
                                                 variant="outlined"
                                                 fullWidth
                                                 required
@@ -440,13 +440,13 @@ class FilterPanel extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
-                                                id="outlined-name"
+                                                id="lf_state"
                                                 label="State"
                                                 select
                                                 className={classes.textField}
                                                 value={this.state.State}
                                                 onChange={this.handleSelectChange('State')}
-                                                margin="normal"
+                                                margin="dense"
                                                 variant="outlined"
                                                 required
                                                 fullWidth
@@ -460,11 +460,11 @@ class FilterPanel extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
-                                                id="outlined-name"
+                                                id="lf_zip"
                                                 label="Zip"
                                                 className={classes.textField}
                                                 onChange={this.handleChange('Zip')}
-                                                margin="normal"
+                                                margin="dense"
                                                 variant="outlined"
                                                 fullWidth
                                                 required
@@ -473,118 +473,11 @@ class FilterPanel extends Component {
 
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
-                                                id="outlined-name"
+                                                id="lf_phone1"
                                                 label="Phone"
                                                 className={classes.textField}
-                                                onChange={this.handleChange('Phone')}
-                                                margin="normal"
-                                                variant="outlined"
-                                                fullWidth
-                                                required
-                                            />
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="outlined-name"
-                                                label="E-mail"
-                                                className={classes.textField}
-                                                onChange={this.handleChange('Email')}
-                                                margin="normal"
-                                                variant="outlined"
-                                                fullWidth
-                                                required
-                                            />
-                                        </GridItem>
-                               </GridContainer>
-                               <br/>
-                               <h2>Contact</h2>
-                               <GridContainer style={{ alignItems: 'center', width: 300 }} className={classNames(classes.formControl)}>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="Name"
-                                                label="Name"
-                                                className={classes.textField}
-                                                onChange={this.handleChange('Name')}
-                                                margin="normal"
-                                                variant="outlined"
-                                                required
-                                                fullWidth
-                                            />
-
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="outlined-name"
-                                                label="Address"
-                                                className={classes.textField}
-                                                onChange={this.handleChange('Address')}
-                                                margin="normal"
-                                                variant="outlined"
-                                                fullWidth
-                                                required
-                                            />
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="outlined-name"
-                                                label="Address2"
-                                                className={classes.textField}
-                                                onChange={this.handleChange('Address2')}
-                                                margin="normal"
-                                                variant="outlined"
-                                                fullWidth
-                                            />
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="outlined-name"
-                                                label="City"
-                                                className={classes.textField}
-                                                margin="normal"
-                                                variant="outlined"
-                                                fullWidth
-                                                required
-                                            />
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="outlined-name"
-                                                label="State"
-                                                select
-                                                className={classes.textField}
-                                                value={this.state.contactState}
-                                                onChange={this.handleSelectChange('contactState')}
-                                                margin="normal"
-                                                variant="outlined"
-                                                required
-                                                fullWidth
-                                            >
-                                                {stateNames.map(option => (
-                                                    <MenuItem key={option.value} value={option.value}>
-                                                        {option.label}
-                                                    </MenuItem>
-                                                ))}
-                                            </TextField>
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="outlined-name"
-                                                label="Zip"
-                                                className={classes.textField}
-                                                onChange={this.handleChange('Zip')}
-                                                margin="normal"
-                                                variant="outlined"
-                                                fullWidth
-                                                required
-                                            />
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="outlined-name"
-                                                label="Phone"
-                                                className={classes.textField}
-                                                onChange={this.handleChange('Phone')}
-                                                margin="normal"
+                                                onChange={this.handleChange('Phone1')}
+                                                margin="dense"
                                                 variant="outlined"
                                                 fullWidth
                                                 required
@@ -592,23 +485,11 @@ class FilterPanel extends Component {
                                         </GridItem>
                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                            <TextField
-                                               id="contactExt"
-                                               label="Ext"
-                                               className={classes.textField}
-                                               onChange={this.handleChange('Ext')}
-                                               margin="normal"
-                                               variant="outlined"
-                                               fullWidth
-                                               required
-                                           />
-                                       </GridItem>
-                                       <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                           <TextField
-                                               id="contactCell"
+                                               id="lf_phone2"
                                                label="Cell"
                                                className={classes.textField}
-                                               onChange={this.handleChange('Cell')}
-                                               margin="normal"
+                                               onChange={this.handleChange('Phone2')}
+                                               margin="dense"
                                                variant="outlined"
                                                fullWidth
                                                required
@@ -616,18 +497,17 @@ class FilterPanel extends Component {
                                        </GridItem>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
-                                                id="outlined-name"
+                                                id="lf_email"
                                                 label="E-mail"
                                                 className={classes.textField}
                                                 onChange={this.handleChange('Email')}
-                                                margin="normal"
+                                                margin="dense"
                                                 variant="outlined"
                                                 fullWidth
                                                 required
                                             />
                                         </GridItem>
                                </GridContainer>
-
                            </div>
                         ):(
                            <div style={{display: 'flex', flexDirection: 'column',width: '200px'}}>
