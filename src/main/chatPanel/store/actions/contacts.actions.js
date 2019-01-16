@@ -11,10 +11,14 @@ export function getContacts()
         const userId = getState().auth.login.Username;
         (async () => {
             let contacts = await chatService.getContactList(userId);
-            dispatch({
-                type   : GET_CONTACTS,
-                payload: contacts
-            });
+            if (contacts)
+            {   
+                dispatch({
+                    type   : GET_CONTACTS,
+                    payload: contacts
+                });
+            }
+         
         })();
     }
 }
@@ -110,10 +114,13 @@ export function getChatContacts()
         const userId = getState().auth.login.Username;
         (async () => {
             let contacts = await chatService.getContactList(userId);
-            dispatch({
-                type   : GET_CONTACTS,
-                payload: contacts
-            });
+            if (contacts){
+                dispatch({
+                    type   : GET_CONTACTS,
+                    payload: contacts
+                });
+            }
+           
         })();
     }
 }

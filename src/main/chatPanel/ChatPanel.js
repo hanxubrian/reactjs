@@ -54,8 +54,8 @@ class ChatPanel extends Component {
 
     componentDidMount()
     {
-        this.props.getUserData();
-        this.props.getContacts();
+ //       this.props.getUserData();
+  //      this.props.getContacts();
     }
 
     componentDidUpdate(prevProps)

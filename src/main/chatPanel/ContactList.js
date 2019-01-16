@@ -87,7 +87,7 @@ class ContactList extends Component {
     }
 
     tick = () => {
-        this.props.checkChatUserData();
+        //this.props.checkChatUserData();
     };
 
     handleContactClick = (chatId, contactId) => {
