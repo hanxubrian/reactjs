@@ -16,7 +16,7 @@ import leases from './leases.reducer'
 import leads from './leads.reducer'
 import findersFees from './findersfees.reducer'
 import payments from './payment.reducer'
-
+import dashboard from './dashboard.reducer'
 
 const createReducer = (asyncReducers) =>
     combineReducers({
@@ -37,6 +37,7 @@ const createReducer = (asyncReducers) =>
         leads,
         findersFees,
         payments,
+		dashboard,
         ...asyncReducers
     });
 
