@@ -123,6 +123,19 @@ class FilterPanel extends Component {
         }
     };
 
+    handleFormChange = (name) => event => {
+
+        if(name === 'State'){
+            this.setState({
+                [name]: event.target.value,
+            });
+        }
+        const iStatus = this.props.insertPayload;
+        console.log('insertPayload = ',iStatus);
+        iStatus[name] = event.target.value;
+        this.props.franchiseeUpdateInsertPayload(iStatus)
+    };
+
     handleChange = (index,name) => event => {
 
         const iStatus = this.props.franchiseeStatus;

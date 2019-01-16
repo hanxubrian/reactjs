@@ -74,28 +74,28 @@ function getStepContent(franchiseeForm, step) {
 
     const Owner_headers = [
         {
-            id: 'firstName',
-            numeric: false,
-            disablePadding: false,
-            label: 'First Name'
+                id: 'firstName',
+                numeric: false,
+                disablePadding: false,
+                label: 'First Name'
         },
         {
-            id: 'lastName',
-            numeric: false,
-            disablePadding: false,
-            label: 'Last Name'
+                id: 'lastName',
+                numeric: false,
+                disablePadding: false,
+                label: 'Last Name'
         },
         {
-            id: 'phone',
-            numeric: false,
-            disablePadding: false,
-            label: 'Phone'
+                id: 'phone',
+                numeric: false,
+                disablePadding: false,
+                label: 'Phone'
         },
         {
-            id: 'title',
-            numeric: false,
-            disablePadding: false,
-            label: 'Title'
+                id: 'title',
+                numeric: false,
+                disablePadding: false,
+                label: 'Title'
         }
 	];
 	
@@ -268,9 +268,9 @@ function getStepContent(franchiseeForm, step) {
                                 style={{marginRight:'1%',marginLeft:'1%'}}
                                 required
                             >
-                                {stateNames.map(option => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
+                                {franchiseeForm.props.stateList.map(option => (
+                                    <MenuItem key={option.Value} value={option.Value}>
+                                        {option.Text}
                                     </MenuItem>
                                 ))}
                             </TextField>
@@ -599,12 +599,13 @@ class FranchiseesCreateForm extends Component {
         daysToFullfill: 0,
         paymentAmount: 0,
         documentsList: [],
-        franchiseeFees: [],
+        franchiseeFees: []
     };
 
     constructor (props){
         super(props);
         props.getFranchiseeFormPlanType(props.regionId);
+        props.getFranchiseeStateList(props.regionId);
     }
 
     onChange = (event, { newValue, method }) => {
@@ -623,6 +624,7 @@ class FranchiseesCreateForm extends Component {
             documentsList: this.props.getFranchiseeDocumentsList(this.props.regionId)
         });
         this.props.getFranchiseeFeeMaintenance(this.props.regionId);
+        this.props.getFranchiseeStateList(this.props.regionId);
         if(this.props.planType.Data != null){
             this.props.planType.Data.map( x => {
                     if (x.FranchiseeContractTypeListId === this.state.defaultPlanType) {
@@ -817,7 +819,8 @@ function mapDispatchToProps(dispatch) {
         updateDate: Actions.updateDate,
         getFranchiseeFormPlanType: Actions.getFranchiseeFormPlanType,
         getFranchiseeDocumentsList: Actions.getFranchiseeDocumentsList,
-        getFranchiseeFeeMaintenance: Actions.getFranchiseeFeeMaintenance
+        getFranchiseeFeeMaintenance: Actions.getFranchiseeFeeMaintenance,
+        getFranchiseeStateList: Actions.getFranchiseeStateList
     }, dispatch);
 }
 
@@ -828,7 +831,8 @@ function mapStateToProps({ franchisees, auth }) {
         planType: franchisees.planType,
         user: auth.login,
         documentsList: franchisees.documentsList,
-        franchiseeFees: franchisees.franchiseeFees
+        franchiseeFees: franchisees.franchiseeFees,
+        stateList: franchisees.StateList
     }
 }
 
