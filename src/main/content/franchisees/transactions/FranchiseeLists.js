@@ -56,9 +56,7 @@ const styles = theme => ({
             border: '1px solid coral'
         },
         '& .ReactTable .rt-thead.-headerGroups': {
-            paddingLeft: '0!important',
-            paddingRight: '0!important',
-            minWidth: 'inherit!important'
+            display: 'none'
         },
         '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
             background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
@@ -70,6 +68,10 @@ const styles = theme => ({
         },
         '& .ReactTable .rt-tr-group':{
             flex: '0 0 auto'
+        },
+        '& .ReactTable .rt-thead.-header':{
+            flex: '0 0 auto',
+            overflowY: 'scroll'
         },
         '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
             justifyContent: 'center'
@@ -85,12 +87,6 @@ const styles = theme => ({
     content:{
         position: 'relative'
     },
-    search: {
-        width: 360,
-        [theme.breakpoints.down('sm')]: {
-            width: '100%'
-        }
-    },
     tableTheadRow:{
         // backgroundColor: 'rgba(' + hexToRgb(theme.palette.primary.main).r + ',' + hexToRgb(theme.palette.primary.main).g + ',' + hexToRgb(theme.palette.primary.main).b +', .2)'
         backgroundColor: theme.palette.primary.main
@@ -100,25 +96,6 @@ const styles = theme => ({
     },
     tableTdEven:{
         // backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b +', .1)'
-    },
-    filterPanelButton: {
-        backgroundColor: theme.palette.secondary.main,
-        minWidth: 42,
-        padding: 8,
-        justifyContent: 'center',
-        '&:hover': {
-            backgroundColor: theme.palette.primary.dark,
-        }
-    },
-    summaryPanelButton: {
-        backgroundColor: theme.palette.secondary.main,
-        minWidth: 42,
-        padding: 8,
-        color: 'white',
-        justifyContent: 'center',
-        '&:hover': {
-            backgroundColor: theme.palette.primary.dark,
-        }
     },
     imageIcon: {
         width: 24
@@ -186,26 +163,7 @@ class TransactionsLists extends Component {
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.props.data!==prevProps.data)
             this.setState({data: this.props.data});
-
-        if(prevState.s!==this.state.s) {
-            this.search(this.state.s);
-        }
     }
-    search = (val)=> {
-        const temp = this.props.data.filter( d => {
-            console.log('value=', d);
-            return d.Name.indexOf(val) !== -1 || !val ||
-                d.FranchiseeNo.indexOf(val) !== -1 ||
-                // d.TrxType.toString().indexOf(val) !== -1
-                d.Number.indexOf(val) !== -1 ||
-                d.ExtendedPrice.toString().indexOf(val) !== -1 ||
-                d.Tax.toString().indexOf(val) !== -1 ||
-                d.Fees.toString().indexOf(val) !== -1 ||
-                d.TotalTrxAmount.toString().indexOf(val) !== -1
-        });
-
-        this.setState({data: temp});
-    };
 
     componentDidMount(){
         document.addEventListener("keydown", this.escFunction, false);
@@ -225,10 +183,6 @@ class TransactionsLists extends Component {
         }
     }
 
-    handleChange = prop => event => {
-        this.setState({ [prop]: event.target.value });
-    };
-
     fetchData(state, instance) {
         this.setState({
             pageSize: state.pageSize,
@@ -239,6 +193,7 @@ class TransactionsLists extends Component {
     handleClose = ()=>{
         this.setState({alertOpen: false})
     };
+
     handleOpen = (key)=>{
         this.setState({alertOpen: true});
         this.setState({keyToBeRemoved: key})
@@ -255,11 +210,11 @@ class TransactionsLists extends Component {
     };
     render()
     {
-        const { classes,toggleFilterPanel, filterState, summaryState} = this.props;
+        const { classes} = this.props;
         const { toggleSelection, isSelected} = this;
 
         return (
-            <div className={classNames(classes.layoutTable, "h-full")}>
+            <div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
                 <ReactTable
                     data={this.state.data}
                     minRows = {0}
@@ -331,30 +286,6 @@ class TransactionsLists extends Component {
                     }}
                     columns={[
                         {
-                            Header: (instance)=>(
-                                <div className="flex items-center">
-                                    <Hidden smDown>
-                                        <Button
-                                            onClick={(ev) => toggleFilterPanel()}
-                                            aria-label="toggle filter panel"
-                                            color="secondary"
-                                            disabled={filterState ? true : false}
-                                            className={classNames(classes.filterPanelButton)}
-                                        >
-                                            <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
-                                        </Button>
-                                    </Hidden>
-                                    <Hidden smUp>
-                                        <Button
-                                            onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
-                                            aria-label="toggle filter panel"
-                                            className={classNames(classes.filterPanelButton)}
-                                        >
-                                            <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
-                                        </Button>
-                                    </Hidden>
-                                </div>
-                            ),
                             columns: [
                                 {
                                     Header   : (instance) => (
@@ -373,50 +304,30 @@ class TransactionsLists extends Component {
                                     },
                                     className: "justify-center",
                                     sortable : false,
-                                    width    : 72
+                                    width    : 48
                                 }
                             ],
                             className: classNames("justify-center")
                         },
                         {
-                            Header: ()=>(
-                                <div className="flex items-center pr-0 lg:pr-12">
-                                    <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
-                                        <Input
-                                            placeholder="Search..."
-                                            className={classNames(classes.search, 'pl-16')}
-                                            // className="pl-16"
-                                            disableUnderline
-                                            fullWidth
-                                            value={this.state.s}
-                                            onChange={this.handleChange('s')}
-                                            inputProps={{
-                                                'aria-label': 'Search'
-                                            }}
-                                        />
-                                        <Icon color="action" className="mr-16">search</Icon>
-                                    </Paper>
-                                </div>
-                            ),
                             columns: [
                                 {
-                                    Header: "Franchisee #",
+                                    Header: "Fran. #",
                                     accessor: "FranchiseeNo",
                                     filterAll: true,
-                                    width: 120,
+                                    width: 100,
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center")
                                 },
                                 {
                                     Header: "Number",
                                     accessor: "Number",
                                     filterAll: true,
-                                    width: 120,
+                                    width: 80,
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center")
                                 },
                                 {
                                     Header: "Description",
                                     accessor: "Description",
-                                    width: 420,
                                     className: classNames("flex items-center  justify-start p-12-impor")
                                 },
                                 {
@@ -426,13 +337,13 @@ class TransactionsLists extends Component {
                                     width: 160
                                 },
                                 {
-                                    Header: "Extended Price",
+                                    Header: "Ext. Price",
                                     accessor: "ExtendedPrice",
                                     Cell     : row => {
                                         return '$'+parseFloat(row.original.ExtendedPrice).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
                                     },
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor"),
-                                    width: 150
+                                    width: 100
                                 },
                                 {
                                     Header: "Tax",
@@ -441,7 +352,7 @@ class TransactionsLists extends Component {
                                         return '$'+parseFloat(row.original.Tax).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
                                     },
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor"),
-                                    width: 120
+                                    width: 80
                                 },
                                 {
                                     Header: "Fees",
@@ -450,7 +361,7 @@ class TransactionsLists extends Component {
                                         return '$'+parseFloat(row.original.Fees).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
                                     },
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor"),
-                                    width: 120
+                                    width: 80
                                 },
                                 {
                                     Header: "Total",
@@ -465,79 +376,45 @@ class TransactionsLists extends Component {
                                     Header: "Trx Date",
                                     accessor: "TrxDate",
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-                                    width: 120
+                                    width: 100
                                 },
                                 {
                                     Header: "TrxType",
                                     accessor: "TrxType",
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-                                    width: 120
+                                    width: 70
                                 },
                                 {
                                     Header: "Status",
                                     accessor: "Status",
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-                                    width: 120
+                                    width: 80
                                 },
                                 {
                                     Header: "Actions",
-                                    width : 128,
+                                    width : 100,
                                     Cell  : row => (
-                                        <div className="flex items-center actions">
+                                        <div className="flex items-center actions justify-center w-full">
                                             <IconButton
                                                 onClick={(ev) => {
                                                     ev.stopPropagation();
                                                     this.handleOpen(row.original.key);
                                                 }}
                                             >
-                                                <Icon>delete</Icon>
+                                                <Icon fontSize={"small"}>delete</Icon>
                                             </IconButton>
                                             <IconButton
                                                 onClick={(ev) => {
                                                     ev.stopPropagation();
-                                                    // this.props.openEditInvoiceForm(row.original);
                                                 }}
                                             >
-                                                <Icon>edit</Icon>
+                                                <Icon fontSize={"small"}>edit</Icon>
                                             </IconButton>
                                         </div>
                                     )
                                 }
                             ]
                         },
-                        {
-                            Header: (instance)=>(
-                                <div className="flex flex-1 items-center justify-end pr-12" style={{display: 'none'}}>
-                                    <Hidden smDown>
-                                        <Button
-                                            // onClick={(ev) => toggleSummaryPanel()}
-                                            aria-label="toggle summary panel"
-                                            disabled={summaryState ? true : false}
-                                            className={classNames(classes.summaryPanelButton)}
-                                        >
-                                            <Icon>insert_chart</Icon>
-                                        </Button>
-                                    </Hidden>
-                                    <Hidden smUp>
-                                        <Button
-                                            // onClick={(ev) => this.pageLayout.toggleRightSidebar()}
-                                            aria-label="toggle summary panel"
-                                            className={classNames(classes.summaryPanelButton)}
-                                        >
-                                            <Icon>insert_chart</Icon>
-                                        </Button>
-                                    </Hidden>
-                                </div>
-                            ),
-                            columns:[
-                                {
-                                    Header: '',
-                                    cell: ()=>(
-                                        <div className="flex w-full justify-end"/>
-                                    )
-                                }
-                            ]
-                        }
                     ]}
                     defaultPageSize={100}
                     className={classNames( "-striped -highlight")}

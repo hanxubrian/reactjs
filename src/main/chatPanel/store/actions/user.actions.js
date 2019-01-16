@@ -42,6 +42,7 @@ export function getChatUserData()
         const avatar = getState().auth.user.data.photoURL;
 
         return chatService.getUserData(userId, name, avatar).then((user) =>
+        
         Promise.all([
             dispatch({
                 type   : GET_USER_DATA,
@@ -62,7 +63,7 @@ export function checkChatUserData()
         const chatuser = getState().chatPanel.user;
 
         return chatService.getUserData(userId, name, avatar).then((user) =>{
-            if (chatuser && chatuser.chatList.length !== user.chatList.length)
+            if (user && user.chatList && chatuser.chatList.length !== user.chatList.length)
             {
                 Promise.all([
                     dispatch({

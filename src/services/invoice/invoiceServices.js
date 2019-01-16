@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment'
 const axios_instance = axios.create({
     headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
     withCredentials: false
@@ -32,9 +33,11 @@ class invoiceService {
             "InvoiceTypeId": InvoiceTypeId,
             "ToPrintOrToEmail": ToPrintOrToEmail,
             "SearchText": SearchText,
+            "Month": moment().month(),
+            "Year": moment().year()
         };
         return new Promise((resolve, reject) => {
-            axios_instance.post(`${BASE_API_URL}/v1/accountsreceivable/InvoiceList`,data)
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/InvoiceList`,data)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);
@@ -103,6 +106,46 @@ class invoiceService {
             )
                 .then( res => {
                     console.log('status API result=', res);
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    };
+
+    /**
+     * create new invoice
+     * @param regionId
+     * @param data
+     * @returns {Promise<any>}
+     */
+    createNewInvoice = (regionId, data) => {
+        return new Promise((resolve, reject) => {
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/invoice/create/${regionId}`,data)
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    };
+
+    deleteInvoice = (regionId, id) => {
+        return new Promise((resolve, reject) => {
+            axios_instance.delete(`${BASE_MONGO_API_URL}/v1/accountsreceivable/invoice/delete/${id}?regionId=${regionId}`)
+                .then( res => {
                     if(res.status===200) {
                         resolve(res.data);
                     }

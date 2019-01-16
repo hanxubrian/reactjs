@@ -1,9 +1,16 @@
 import axios from "axios";
 
+
 export const GET_ALL_FRANCHISEE_TRANSACTIONS = "[FRANCHISEE-TRANSACTIONS] GETS ALL";
 export const REMOVE_SELECTED_FRANCHISEE_TRANSACTION = "[FRANCHISEE-TRANSACTION] REMOVE SELECTED";
 export const TOGGLE_TRANSACTION_FILTER_PANEL = "[FRANCHISEE-TRANSACTION] TOGGLE TRANSACTION FILTER PANEL";
 export const TOGGLE_TRANSACTION_FILTER_STATUS = "[FRANCHISEE-TRANSACTION] TOGGLE TRANSACTION FILTER STATUS";
+export const OPEN_NEW_TRANSACTION_FORM = '[FRANCHISEE-TRANSACTION] OPEN NEW TRANSACTION FORM';
+export const CLOSE_NEW_TRANSACTION_FORM = '[FRANCHISEE-TRANSACTION] CLOSE NEW TRANSACTION FORM';
+export const OPEN_EDIT_TRANSACTION_FORM = '[FRANCHISEE-TRANSACTION] OPEN EDIT TRANSACTION FORM';
+export const CLOSE_EDIT_TRANSACTION_FORM = '[FRANCHISEE-TRANSACTION] CLOSE EDIT TRANSACTION FORM';
+export const SELECT_TRANSACTION_FRANCHISEE = '[FRANCHISEE-TRANSACTION] SELECT TRANSACTION FRANCHISEE';
+export const UPDATE_TRANSACTION_LINE = '[FRANCHISEE-TRANSACTION] UPDATE TRANSACTION LINE';
 
 export function getTransactions() {
     return dispatch => {
@@ -44,3 +51,47 @@ export function toggleTransactionStatus(key, status){
     }
 }
 
+export function openNewTransactionForm()
+{
+    return {
+        type: OPEN_NEW_TRANSACTION_FORM
+    }
+}
+
+export function closeNewTransactionForm()
+{
+    return {
+        type: CLOSE_NEW_TRANSACTION_FORM
+    }
+}
+
+export function openEditTransactionForm(data)
+{
+    return {
+        type: OPEN_EDIT_TRANSACTION_FORM,
+        data
+    }
+}
+
+export function closeEditTransactionForm()
+{
+    return {
+        type: CLOSE_EDIT_TRANSACTION_FORM
+    }
+}
+
+
+export function selectFranchisee(obj) {
+    return {
+        type: SELECT_TRANSACTION_FRANCHISEE,
+        payload: obj
+    }
+}
+
+
+export function updateTransactionLine(data) {
+    return {
+        type: UPDATE_TRANSACTION_LINE,
+        payload: data
+    }
+}

@@ -75,12 +75,14 @@ class FilterPanel extends Component {
         NearbyRadius: this.props.locationFilterValue.miles,
         AddressZipcodeRadius: this.props.locationFilterValue.miles,
         franchiseeStatus: [],
+        stateList: []
     };
 
     constructor(props){
         super(props);
         if(!props.bLoadedFilterList) {
             props.getStatusFilterList(this.props.regionId);
+            props.getFranchiseeStateList(this.props.regionId);
         }
     }
     componentDidMount()
@@ -89,7 +91,8 @@ class FilterPanel extends Component {
 
     componentWillMount(){
         this.setState({
-           franchiseeStatus: this.props.franchiseeStatus
+           franchiseeStatus: this.props.franchiseeStatus,
+           stateList: this.props.getFranchiseeStateList(this.props.regionId)
         });
     }
 
@@ -128,10 +131,18 @@ class FilterPanel extends Component {
         this.setState({franchiseeStatus: iStatus });
         this.props.updateFranchiseeStatus(iStatus)
     };
-    handleSelectChange = name => event => {
-        this.setState({
-            [name]: event.target.value,
-        });
+
+    handleFormChange = (name) => event => {
+
+        if(name === 'State'){
+            this.setState({
+                [name]: event.target.value,
+            });
+        }
+        const iStatus = this.props.insertPayload;
+        console.log('insertPayload = ',iStatus);
+        iStatus[name] = event.target.value;
+        this.props.franchiseeUpdateInsertPayload(iStatus)
     };
 
     handleLocationChange = name => event => {
@@ -243,6 +254,7 @@ class FilterPanel extends Component {
                                 addr: value
                             }
                         }
+                        console.log("payload", payload)
                         this.props.franchiseeSelectLocationFilter(payload)
                         return
                     },
@@ -295,92 +307,6 @@ class FilterPanel extends Component {
     render()
     {
         const {classes, franchiseesForm} = this.props;
-        const stateNames = [
-            {
-                value: 2,
-                label: "Buffalo"
-            },
-            {
-                value: 7,
-                label: "Detroit"
-            },
-            {
-                value: 9,
-                label: "Hartford"
-            },
-            {
-                value: 13,
-                label: "Las Vegas"
-            },
-            {
-                value: 14,
-                label: "Los Angeles/Colton"
-            },
-            {
-                value: 16,
-                label: "Miami"
-            },
-            {
-                value: 18,
-                label: "Minneapolis"
-            },
-            {
-                value: 20,
-                label: "New Jersey"
-            },
-            {
-                value: 21,
-                label: "New York"
-            },
-            {
-                value: 22,
-                label: "San Francisco/Oakland"
-            },
-            {
-                value: 23,
-                label: "Oklahoma City"
-            },
-            {
-                value: 24,
-                label: "Philadelphia"
-            },
-            {
-                value: 25,
-                label: "Sacramento"
-            },
-            {
-                value: 26,
-                label: "Washington DC"
-            },
-            {
-                value: 28,
-                label: "Jani-King Int'l, Inc."
-            },
-            {
-                value: 29,
-                label: "JANI-KING OF NEW MEXICO, INC"
-            },
-            {
-                value: 31,
-                label: "New Mexico"
-            },
-            {
-                value: 46,
-                label: "Houston"
-            },
-            {
-                value: 55,
-                label: "Pittsburgh"
-            },
-            {
-                value: 64,
-                label: "Tulsa"
-            },
-            {
-                value: 82,
-                label: "Reno"
-            }
-        ];
 
         return (
             <div className={classNames(classes.root)}>
@@ -392,11 +318,11 @@ class FilterPanel extends Component {
                                <GridContainer style={{ alignItems: 'center', width: 300 }} className={classNames(classes.formControl)}>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
-                                                id="Name"
+                                                id="lf_name"
                                                 label="Name"
                                                 className={classes.textField}
-                                                onChange={this.handleChange('Name')}
-                                                margin="normal"
+                                                onChange={this.handleFormChange('Name')}
+                                                margin="dense"
                                                 variant="outlined"
                                                 required
                                                 fullWidth
@@ -405,11 +331,11 @@ class FilterPanel extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
-                                                id="outlined-name"
+                                                id="lf_address1"
                                                 label="Address"
                                                 className={classes.textField}
-                                                onChange={this.handleChange('Address')}
-                                                margin="normal"
+                                                onChange={this.handleFormChange('AddressLine1')}
+                                                margin="dense"
                                                 variant="outlined"
                                                 fullWidth
                                                 required
@@ -417,21 +343,22 @@ class FilterPanel extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
-                                                id="outlined-name"
+                                                id="lf_address2"
                                                 label="Address2"
                                                 className={classes.textField}
-                                                onChange={this.handleChange('Address2')}
-                                                margin="normal"
+                                                onChange={this.handleFormChange('AddressLine2')}
+                                                margin="dense"
                                                 variant="outlined"
                                                 fullWidth
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
-                                                id="outlined-name"
+                                                id="lf_city"
                                                 label="City"
                                                 className={classes.textField}
-                                                margin="normal"
+                                                onChange={this.handleFormChange('City')}
+                                                margin="dense"
                                                 variant="outlined"
                                                 fullWidth
                                                 required
@@ -439,31 +366,31 @@ class FilterPanel extends Component {
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
-                                                id="outlined-name"
+                                                id="lf_state"
                                                 label="State"
                                                 select
                                                 className={classes.textField}
                                                 value={this.state.State}
-                                                onChange={this.handleSelectChange('State')}
-                                                margin="normal"
+                                                onChange={this.handleFormChange('State')}
+                                                margin="dense"
                                                 variant="outlined"
                                                 required
                                                 fullWidth
                                             >
-                                                {stateNames.map(option => (
-                                                    <MenuItem key={option.value} value={option.value}>
-                                                        {option.label}
+                                                {this.props.stateList.map(option => (
+                                                    <MenuItem key={option.Value} value={option.Value}>
+                                                        {option.Text}
                                                     </MenuItem>
                                                 ))}
                                             </TextField>
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
-                                                id="outlined-name"
+                                                id="lf_zip"
                                                 label="Zip"
                                                 className={classes.textField}
-                                                onChange={this.handleChange('Zip')}
-                                                margin="normal"
+                                                onChange={this.handleFormChange('Zip')}
+                                                margin="dense"
                                                 variant="outlined"
                                                 fullWidth
                                                 required
@@ -472,118 +399,11 @@ class FilterPanel extends Component {
 
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
-                                                id="outlined-name"
+                                                id="lf_phone1"
                                                 label="Phone"
                                                 className={classes.textField}
-                                                onChange={this.handleChange('Phone')}
-                                                margin="normal"
-                                                variant="outlined"
-                                                fullWidth
-                                                required
-                                            />
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="outlined-name"
-                                                label="E-mail"
-                                                className={classes.textField}
-                                                onChange={this.handleChange('Email')}
-                                                margin="normal"
-                                                variant="outlined"
-                                                fullWidth
-                                                required
-                                            />
-                                        </GridItem>
-                               </GridContainer>
-                               <br/>
-                               <h2>Contact</h2>
-                               <GridContainer style={{ alignItems: 'center', width: 300 }} className={classNames(classes.formControl)}>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="Name"
-                                                label="Name"
-                                                className={classes.textField}
-                                                onChange={this.handleChange('Name')}
-                                                margin="normal"
-                                                variant="outlined"
-                                                required
-                                                fullWidth
-                                            />
-
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="outlined-name"
-                                                label="Address"
-                                                className={classes.textField}
-                                                onChange={this.handleChange('Address')}
-                                                margin="normal"
-                                                variant="outlined"
-                                                fullWidth
-                                                required
-                                            />
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="outlined-name"
-                                                label="Address2"
-                                                className={classes.textField}
-                                                onChange={this.handleChange('Address2')}
-                                                margin="normal"
-                                                variant="outlined"
-                                                fullWidth
-                                            />
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="outlined-name"
-                                                label="City"
-                                                className={classes.textField}
-                                                margin="normal"
-                                                variant="outlined"
-                                                fullWidth
-                                                required
-                                            />
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="outlined-name"
-                                                label="State"
-                                                select
-                                                className={classes.textField}
-                                                value={this.state.contactState}
-                                                onChange={this.handleSelectChange('contactState')}
-                                                margin="normal"
-                                                variant="outlined"
-                                                required
-                                                fullWidth
-                                            >
-                                                {stateNames.map(option => (
-                                                    <MenuItem key={option.value} value={option.value}>
-                                                        {option.label}
-                                                    </MenuItem>
-                                                ))}
-                                            </TextField>
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="outlined-name"
-                                                label="Zip"
-                                                className={classes.textField}
-                                                onChange={this.handleChange('Zip')}
-                                                margin="normal"
-                                                variant="outlined"
-                                                fullWidth
-                                                required
-                                            />
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="outlined-name"
-                                                label="Phone"
-                                                className={classes.textField}
-                                                onChange={this.handleChange('Phone')}
-                                                margin="normal"
+                                                onChange={this.handleFormChange('Phone1')}
+                                                margin="dense"
                                                 variant="outlined"
                                                 fullWidth
                                                 required
@@ -591,23 +411,11 @@ class FilterPanel extends Component {
                                         </GridItem>
                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                            <TextField
-                                               id="contactExt"
-                                               label="Ext"
-                                               className={classes.textField}
-                                               onChange={this.handleChange('Ext')}
-                                               margin="normal"
-                                               variant="outlined"
-                                               fullWidth
-                                               required
-                                           />
-                                       </GridItem>
-                                       <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                           <TextField
-                                               id="contactCell"
+                                               id="lf_phone2"
                                                label="Cell"
                                                className={classes.textField}
-                                               onChange={this.handleChange('Cell')}
-                                               margin="normal"
+                                               onChange={this.handleFormChange('Phone2')}
+                                               margin="dense"
                                                variant="outlined"
                                                fullWidth
                                                required
@@ -615,18 +423,17 @@ class FilterPanel extends Component {
                                        </GridItem>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
-                                                id="outlined-name"
+                                                id="lf_email"
                                                 label="E-mail"
                                                 className={classes.textField}
-                                                onChange={this.handleChange('Email')}
-                                                margin="normal"
+                                                onChange={this.handleFormChange('Email')}
+                                                margin="dense"
                                                 variant="outlined"
                                                 fullWidth
                                                 required
                                             />
                                         </GridItem>
                                </GridContainer>
-
                            </div>
                         ):(
                            <div style={{display: 'flex', flexDirection: 'column',width: '200px'}}>
@@ -742,7 +549,9 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         franchiseeSelectLocationFilter: Actions.franchiseeSelectLocationFilter,
         getStatusFilterList: Actions.getStatusFilterList,
-        updateFranchiseeStatus: Actions.updateFranchiseeStatus
+        updateFranchiseeStatus: Actions.updateFranchiseeStatus,
+        franchiseeUpdateInsertPayload: Actions.franchiseeUpdateInsertPayload,
+        getFranchiseeStateList: Actions.getFranchiseeStateList
     }, dispatch);
 }
 
@@ -756,6 +565,8 @@ function mapStateToProps({franchisees, auth})
         regionId: auth.login.defaultRegionId,
         franchiseeStatus: franchisees.franchiseeStatus,
         locationFilterValue: franchisees.locationFilterValue,
+        insertPayload: franchisees.insertPayload,
+        stateList: franchisees.StateList
     }
 }
 

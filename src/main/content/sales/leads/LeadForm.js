@@ -169,7 +169,6 @@ const styles = theme => ({
 		}
 	},
 	tableTheadRow: {
-		// backgroundColor: 'rgba(' + hexToRgb(theme.palette.primary.main).r + ',' + hexToRgb(theme.palette.primary.main).g + ',' + hexToRgb(theme.palette.primary.main).b +', .2)'
 		backgroundColor: theme.palette.primary.main
 	},
 	tableThEven: {
@@ -208,7 +207,8 @@ const newLeadState = {
 	"ConsolidatedLeadId": "",
 	"ConsolidatedLeadNo": "",
 	"CreditId": "",
-	"Service": ""
+	"Service": "",
+	height: 0
 };
 
 
@@ -1824,130 +1824,132 @@ class LeadForm extends Component {
 		return (
 
 			<Fragment>
-                <div className={"pr-12 pl-12 container"}>
-                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between">
-                            <TextField
-                                id="newLead"
-                                label="New Lead"
-                                type="number"
-                                className={classes.textField}
-                                value={this.state.Stage}
-                                onChange={this.handleChange('newLead')}
-                                margin="dense"
-                                variant="outlined"
-								fullWidth
-								style={{marginRight:"2px", marginLeft:"2px"}}
-                            />
-                            <TextField
-                                id="accountType"
-                                label="Account Type"
-                                className={classes.textField}
-                                value={this.state.accountType}
-                                onChange={this.handleChange('accountType')}
-                                margin="dense"
-                                variant="outlined"
-                                style={{marginRight:"2px", marginLeft:"2px"}}
-                                fullWidth
-                            />
-                            <TextField
-                                id="ofLocation"
-                                label="# of Location"
-                                className={classes.textField}
-                                value={this.state.ofLocation}
-                                onChange={this.handleChange('SqFt')}
-                                margin="dense"
-                                variant="outlined"
-                                style={{marginRight:"2px", marginLeft:"2px"}}
-                                fullWidth
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between">
-                            <TextField
-                                id="sqft"
-                                label="SqFt"
-                                type="number"
-                                className={classes.textField}
-                                value={this.state.sqft}
-                                onChange={this.handleChange('sqft')}
-                                margin="dense"
-                                variant="outlined"
-                                fullWidth
-                                style={{marginRight:"2px", marginLeft:"2px"}}
-                            />
-                            <TextField
-                                id="leadSource"
-                                label="Lead Source"
-								type="number"
-                                className={classes.textField}
-                                value={this.state.leadSource}
-                                onChange={this.handleChange('leadSource')}
-                                margin="dense"
-                                variant="outlined"
-                                style={{marginRight:"2px", marginLeft:"2px"}}
-                                fullWidth
-                            />
-                            <TextField
-                                id="currentProvider"
-                                label="Current Provider"
-                                className={classes.textField}
-                                value={this.state.currentProvider}
-                                onChange={this.handleChange('currentProvider')}
-                                margin="dense"
-								type="number"
-                                variant="outlined"
-                                style={{marginRight:"2px", marginLeft:"2px"}}
-                                fullWidth
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between">
-                            <TextField
-                                id="contractExpire"
-                                label="Contract Expire"
-                                className={classes.textField}
-                                value={this.state.contractExpire}
-                                onChange={this.handleChange('contractExpire')}
-                                margin="dense"
-                                variant="outlined"
-                                fullWidth
-                                style={{marginRight:"2px", marginLeft:"2px"}}
-                            />
-                            <TextField
-                                id="budget"
-                                label="Budget"
-                                className={classes.textField}
-                                value={this.state.budget}
-                                onChange={this.handleChange('budget')}
-                                margin="dense"
-                                variant="outlined"
-                                style={{marginRight:"2px", marginLeft:"2px"}}
-                                fullWidth
-                            />
-                            <TextField
-                                id="salesPossibility"
-                                label="Sales Possibility"
-                                className={classes.textField}
-                                value={this.state.salesPossibility}
-                                onChange={this.handleChange('salesPossibility')}
-                                margin="dense"
-                                variant="outlined"
-                                style={{marginRight:"2px", marginLeft:"2px"}}
-                                fullWidth
-                            />
-                            <TextField
-                                id="accountExec"
-                                label="Account Exec"
-                                className={classes.textField}
-                                value={this.state.accountExec}
-                                onChange={this.handleChange('accountExec')}
-                                margin="dense"
-                                variant="outlined"
-                                style={{marginRight:"2px", marginLeft:"2px"}}
-                                fullWidth
-                            />
-                        </GridItem>
-                    </GridContainer>
-                </div>
+				{this.props.drawOpen === true && (
+                    <div className={"pr-12 pl-12 container"}>
+                        <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+                            <GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between">
+                                <TextField
+                                    id="newLead"
+                                    label="New Lead"
+                                    type="number"
+                                    className={classes.textField}
+                                    value={this.state.Stage}
+                                    onChange={this.handleChange('newLead')}
+                                    margin="dense"
+                                    variant="outlined"
+                                    fullWidth
+                                    style={{marginRight:"2px", marginLeft:"2px"}}
+                                />
+                                <TextField
+                                    id="accountType"
+                                    label="Account Type"
+                                    className={classes.textField}
+                                    value={this.state.accountType}
+                                    onChange={this.handleChange('accountType')}
+                                    margin="dense"
+                                    variant="outlined"
+                                    style={{marginRight:"2px", marginLeft:"2px"}}
+                                    fullWidth
+                                />
+                                <TextField
+                                    id="ofLocation"
+                                    label="# of Location"
+                                    className={classes.textField}
+                                    value={this.state.ofLocation}
+                                    onChange={this.handleChange('SqFt')}
+                                    margin="dense"
+                                    variant="outlined"
+                                    style={{marginRight:"2px", marginLeft:"2px"}}
+                                    fullWidth
+                                />
+                            </GridItem>
+                            <GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between">
+                                <TextField
+                                    id="sqft"
+                                    label="SqFt"
+                                    type="number"
+                                    className={classes.textField}
+                                    value={this.state.sqft}
+                                    onChange={this.handleChange('sqft')}
+                                    margin="dense"
+                                    variant="outlined"
+                                    fullWidth
+                                    style={{marginRight:"2px", marginLeft:"2px"}}
+                                />
+                                <TextField
+                                    id="leadSource"
+                                    label="Lead Source"
+                                    type="number"
+                                    className={classes.textField}
+                                    value={this.state.leadSource}
+                                    onChange={this.handleChange('leadSource')}
+                                    margin="dense"
+                                    variant="outlined"
+                                    style={{marginRight:"2px", marginLeft:"2px"}}
+                                    fullWidth
+                                />
+                                <TextField
+                                    id="currentProvider"
+                                    label="Current Provider"
+                                    className={classes.textField}
+                                    value={this.state.currentProvider}
+                                    onChange={this.handleChange('currentProvider')}
+                                    margin="dense"
+                                    type="number"
+                                    variant="outlined"
+                                    style={{marginRight:"2px", marginLeft:"2px"}}
+                                    fullWidth
+                                />
+                            </GridItem>
+                            <GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between">
+                                <TextField
+                                    id="contractExpire"
+                                    label="Contract Expire"
+                                    className={classes.textField}
+                                    value={this.state.contractExpire}
+                                    onChange={this.handleChange('contractExpire')}
+                                    margin="dense"
+                                    variant="outlined"
+                                    fullWidth
+                                    style={{marginRight:"2px", marginLeft:"2px"}}
+                                />
+                                <TextField
+                                    id="budget"
+                                    label="Budget"
+                                    className={classes.textField}
+                                    value={this.state.budget}
+                                    onChange={this.handleChange('budget')}
+                                    margin="dense"
+                                    variant="outlined"
+                                    style={{marginRight:"2px", marginLeft:"2px"}}
+                                    fullWidth
+                                />
+                                <TextField
+                                    id="salesPossibility"
+                                    label="Sales Possibility"
+                                    className={classes.textField}
+                                    value={this.state.salesPossibility}
+                                    onChange={this.handleChange('salesPossibility')}
+                                    margin="dense"
+                                    variant="outlined"
+                                    style={{marginRight:"2px", marginLeft:"2px"}}
+                                    fullWidth
+                                />
+                                <TextField
+                                    id="accountExec"
+                                    label="Account Exec"
+                                    className={classes.textField}
+                                    value={this.state.accountExec}
+                                    onChange={this.handleChange('accountExec')}
+                                    margin="dense"
+                                    variant="outlined"
+                                    style={{marginRight:"2px", marginLeft:"2px"}}
+                                    fullWidth
+                                />
+                            </GridItem>
+                        </GridContainer>
+                    </div>
+				)}
 				<AppBar position="static" color="default">
 					<Tabs
 						value={activeStep}
@@ -1974,8 +1976,8 @@ class LeadForm extends Component {
 					style={{
 						overflowY: 'scroll',
 						width: '100%',
-						height: 'calc(100% - 307px)',
-						// height: "100%",
+						height: this.props.drawOpen ? 'calc(100% - 317px)':'calc(100% - 107px)',
+						// height: "auto",
 					}}>
 
 
@@ -2064,7 +2066,8 @@ function mapStateToProps({ leads, franchisees, auth }) {
 	return {
 		bLoadedFranchisees: franchisees.bLoadedFranchisees,
 		regionId: auth.login.defaultRegionId,
-		LeadForm: leads.LeadForm
+		LeadForm: leads.LeadForm,
+		drawOpen: leads.drawOpen
 	}
 }
 

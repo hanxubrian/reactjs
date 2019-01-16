@@ -228,7 +228,7 @@ class InvoiceApp extends Component {
         super(props);
 
         if(!props.bLoadedInvoices) {
-            props.getInvoiceDetail()
+            props.getInvoiceDetail();
             props.getInvoiceStatus(props.regionId);
             props.getInvoices([props.regionId] ,props.StatusId, props.FromDate, props.ToDate, props.PeriodId,
                 props.OpenOrClosed, props.InvoiceTypeId, props.ToPrintOrToEmail, props.SearchText);
@@ -515,31 +515,6 @@ class InvoiceApp extends Component {
 
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="flex flex-none items-end" style={{display: 'none'}}>
-                                        <FuseAnimate animation="transition.expandIn" delay={600}>
-                                            <Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => alert('ok')}>
-                                                <Icon>add</Icon>
-                                            </Fab>
-                                        </FuseAnimate>
-                                        <FuseAnimate animation="transition.expandIn" delay={300}>
-                                            <Fab color="primary" aria-label="add"
-                                                 className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-                                                <Icon>mail_outline</Icon>
-                                            </Fab>
-                                        </FuseAnimate>
-                                        <FuseAnimate animation="transition.expandIn" delay={300}>
-                                            <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-                                                <Icon>print</Icon>
-                                            </Fab>
-                                        </FuseAnimate>
-                                        { selection.length>0 && (
-                                            <FuseAnimate animation="transition.expandIn" delay={600}>
-                                                <Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={()=>this.removeInvoices()}>
-                                                    <Icon>delete</Icon>
-                                                </Fab>
-                                            </FuseAnimate>
-                                        )}
                                     </div>
                                 </div>
                             )}

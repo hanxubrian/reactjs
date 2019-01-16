@@ -15,6 +15,7 @@ export const OPEN_EDIT_LEAD_FORM = '[LEADS APP] OPEN EDIT LEAD FORM';
 export const CLOSE_EDIT_LEAD_FORM = '[LEADS APP] CLOSE EDIT LEAD FORM';
 export const ADD_LEAD = '[LEADS APP] ADD LEAD';
 export const UPDATE_LEAD = '[LEADS APP] UPDATE LEAD';
+export const UPDATE_DRAW_STATUS = '[LEADS APP] UPDATE DRAW STATUS';
 
 // export function getLeases() {
 //     return dispatch => {
@@ -199,4 +200,11 @@ export function updateLease(lead)
             ]).then(() => dispatch(getLeads()))
         );
     };
+}
+
+export function updateDrawStatus (drawStatus){
+    return{
+        type: UPDATE_DRAW_STATUS,
+        payload: drawStatus
+    }
 }

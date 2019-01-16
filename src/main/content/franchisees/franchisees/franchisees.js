@@ -641,8 +641,8 @@ class Franchisees extends Component {
         regions.forEach(x => {
             _pins_temp = [..._pins_temp, ...x.FranchiseeList.map(franchisee => {
                 return {
-                    lat: franchisee.Latitude,
-                    lng: franchisee.Longitude,
+                    lat: parseFloat(0+franchisee.Latitude),
+                    lng: parseFloat(0+franchisee.Longitude),
                     text: franchisee.Name
                 }
             })];

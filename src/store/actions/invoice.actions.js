@@ -126,16 +126,20 @@ export function deleteInvoices(keys, invoices) {
     };
 }
 
-export function removeInvoice(key, invoices) {
-    return dispatch => {
-        const request = axios.post("/api/invoices/remove", { id: key, invoices: invoices });
+export function removeInvoice(regionId, id) {
+    return (dispatch) => {
+        (async () => {
+            let res = await invoiceService.deleteInvoice(regionId, id);
+            console.log('remove result=', res);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: REMOVE_SELECTED_INVOICE,
+                    payload: res
+                });
+            } else {
 
-        return request.then(response => {
-            return dispatch({
-                type: REMOVE_SELECTED_INVOICE,
-                payload: response.data
-            });
-        });
+            }
+        })();
     };
 }
 
@@ -176,23 +180,26 @@ export function updateDate(key, date) {
 
 }
 
-export function addInvoice(newInvoice)
+export function addInvoice(regionId, data)
 {
-    return (dispatch, getState) => {
+    return (dispatch) => {
+        // dispatch({
+        //     type: GET_INVOICES_FETCH_START,
+        //     payload: true
+        // });
 
-        console.log('state', getState());
-
-        const request = axios.post('/api/contacts-app/add-contact', {
-            newInvoice
-        });
-
-        return request.then((response) =>
-            Promise.all([
+        (async () => {
+            let res = await invoiceService.createNewInvoice(regionId, data);
+            console.log('result=', res);
+            if (res.IsSuccess) {
                 dispatch({
-                    type: ADD_INVOICE
-                })
-            ]).then(() => dispatch(getInvoices()))
-        );
+                    type: ADD_INVOICE,
+                    payload: res
+                });
+            } else {
+
+            }
+        })();
     };
 }
 

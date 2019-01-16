@@ -2,6 +2,7 @@ import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import {GET_FRANCHISEE_STATE_LIST} from "../actions/";
 
 const initialState = {
     franchiseesDB: null,
@@ -24,6 +25,7 @@ const initialState = {
     documentsList: [],
     franchiseeFees: [],
     Location: "all",
+    StateList: [],
     transactionStatusFranchisees:{
         Active: true,
         Inactive: true,
@@ -49,6 +51,72 @@ const initialState = {
         miles: 15,
         addrZipcode: undefined
     },
+    insertPayload: {
+        AddressLine1:"",
+        AddressLine2: "",
+        Name: "",
+        City: "",
+        State: "",
+        Zip: "",
+        County: "",
+        Email: "",
+        Phone1: "",
+        Phone2: "",
+        CheckPayee1: "",
+        CheckPayee2: "",
+        Owners: [
+            {
+                FirstName: "",
+                LastName: "",
+                Title: "",
+                Phone: ""
+            }
+        ],
+        ssn: "",
+        DATE_1: "",
+        DATE_2: "",
+        AgreementPlanType: "",
+        AgreementPlanTypeid: 0,
+        AgreementTerm: 0,
+        AgreementDownPayment: 0,
+        AgreementPlanAmount: 0,
+        AgreementMonthlyPayment: 0,
+        AgreementInterestrate: 0,
+        AgreementPaymentBill: 0,
+        AgreementTotalPayments: 0,
+        AgreementDateSigned: "",
+        AgreementLastRenewDate: "",
+        AgreementExpirationDate: "",
+        MoralObligation: 0,
+        CurrentBusiness: 0,
+        Fees: [
+            {
+                FeeName: "",
+                Amount: 0
+            }
+        ],
+        PctFlag: "",
+        AddPct: 0,
+        Status: "",
+        SecNote: "",
+        SecPBill: "",
+        TakeNote: "",
+        InitTot: 0,
+        REBELIG: 0,
+        NewFindersFee: 0,
+        DeductAdvertisingFee: 0,
+        DeductTechnologyFee: "",
+        AD_CUR: 0,
+        AD_MAX: 0,
+        DLR_ID: "",
+        ChargeBack: "",
+        Print1099: "",
+        NameOn1099: "",
+        BppAdmin: "",
+        CURSTAT: "",
+        CURSTATDT: "",
+        Documents: []
+    }
 };
 
 
@@ -239,6 +307,18 @@ const franchisees = function(state = initialState, action) {
             return{
                 ...state,
                 Location: action.Location
+            }
+        }
+        case Actions.UPLOAD_INSERT_PAYLOAD: {
+            return{
+                ...state,
+                insertPayload: action.payload
+            }
+        }
+        case Actions.GET_FRANCHISEE_STATE_LIST: {
+            return{
+                ...state,
+                StateList: action.payload
             }
         }
         default:
