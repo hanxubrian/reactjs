@@ -19,7 +19,6 @@ class InvoiceReport extends Component {
             this.setState({
                 invoiceDetail:nextProps.getData.Data,
                 Items: nextProps.getData.Data.Items,
-                // CustomerSoldTo: nextProps.getData.CustomerSoldTo[0]
             });
         }
 
