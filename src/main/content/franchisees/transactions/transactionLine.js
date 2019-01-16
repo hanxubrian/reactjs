@@ -308,7 +308,6 @@ class TransactionTable extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.transactionForm.data===null && JSON.stringify(nextProps.transactionForm.data)!==JSON.stringify(this.props.transactionForm.data)){
-            console.log('passs');
             let newData = createData("Regular Billing", "Adjust-Balance", '','');
             this.setState({data: [{...newData, id: 0}]});
         }

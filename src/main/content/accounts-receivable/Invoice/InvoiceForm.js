@@ -267,6 +267,32 @@ MySnackbarContent.propTypes = {
 
 const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
 
+function renderInputComponent (inputProps ) {
+    const { classes, inputRef = () => {}, ref, ...other } = inputProps ;
+
+    return (
+        <TextField
+            fullWidth
+            variant="outlined"
+            label="Customer:"
+            InputProps={{
+                inputRef: node => {
+                    ref(node);
+                    inputRef(node);
+                },
+                classes: {
+                    input: classes.input,
+                },
+            }}
+            InputLabelProps = {{
+                classes: {outlined: classes.label}
+            }}
+            required
+            {...other}
+            autoFocus={true}
+        />
+    );
+};
 
 class InvoiceForm extends Component {
     state = {
@@ -587,6 +613,7 @@ class InvoiceForm extends Component {
 
         const autosuggestProps = {
             renderInputComponent: this.renderInputComponent,
+            // renderInputComponent,
             suggestions: suggestions,
             onSuggestionsFetchRequested: this.onSuggestionsFetchRequested,
             onSuggestionsClearRequested: this.onSuggestionsClearRequested,
@@ -601,8 +628,7 @@ class InvoiceForm extends Component {
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="h-full flex flex-col relative">
                     <div className="flex flex-col p-24 pt-12 pb-0" style={{flex: "1"}}>
-                        <MuiPickersUtilsProvider utils={MomentUtils}>
-                            <Grid container className={classNames(classes.formControl)}>
+                           <Grid container className={classNames(classes.formControl)}>
                                 <Grid item xs={12} sm={6} md={6} className="flex flex-row pr-16">
                                     <Autosuggest
                                         {...autosuggestProps}
@@ -626,6 +652,7 @@ class InvoiceForm extends Component {
                                         ref={this.storeInputReference}
                                     />
                                 </Grid>
+                               <MuiPickersUtilsProvider utils={MomentUtils}>
                                 <Grid item xs={12} sm={1} md={1} className="flex flex-row pl-16 pr-4">
                                     <DatePicker
                                         margin="none"
@@ -694,6 +721,7 @@ class InvoiceForm extends Component {
                                         }}
                                     />
                                 </Grid>
+                               </MuiPickersUtilsProvider>
                                 <Grid item xs={12} sm={3} md={3} className="flex flex-row xs:flex-col pl-4" >
                                     <TextField
                                         margin="none"
@@ -742,7 +770,6 @@ class InvoiceForm extends Component {
                                     />
                                 </Grid>
                             </Grid>
-                        </MuiPickersUtilsProvider>
                         <GridContainer className={classNames(classes.formControl, "mb-0")}>
                             <GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col">
                                 <Card className={classes.card}>
