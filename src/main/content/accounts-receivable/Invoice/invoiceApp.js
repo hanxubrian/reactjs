@@ -330,10 +330,12 @@ class InvoiceApp extends Component {
 
         if (nextProps.customers !== null && this.props.customers !== nextProps.customers) {
             let temp = [];
-            let regions = nextProps.customers.Data.Regions
+            let regions = nextProps.customers.Data.Regions;
+
+            console.log('customer=', regions);
 
             regions.map(x => {
-                temp = [...temp, ...x.CustomerList];
+                temp = [...temp, ...x.Customers];
                 return true;
             });
             this.setState({customers: temp});
