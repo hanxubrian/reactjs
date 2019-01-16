@@ -61,6 +61,44 @@ class leaseService {
                 })
         });
     };
+
+    getLeaseStatusList = (RegionId) => {
+        return new Promise((resolve, reject) => {
+            axios_instance.get(`${BASE_API_URL}/v1/lists/GetLeaseStatusList`,
+                { params: {RegionId: RegionId}}
+            )
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    };
+
+    getLeaseDetailList = () => {
+        return new Promise((resolve, reject) => {
+            axios.get("/api/LeaseDetail/gets")
+            //     { params: {RegionId, LeaseTypeId}}
+            // )
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    };
 }
 
 const instance = new leaseService();

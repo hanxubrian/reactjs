@@ -7,7 +7,7 @@ import {
     IconButton, Icon, Grid, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog
 } from '@material-ui/core';
 import 'date-fns'
-import DateFnsUtils from '@date-io/date-fns';
+import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 import green from '@material-ui/core/colors/green';
 import amber from '@material-ui/core/colors/amber';
@@ -564,13 +564,11 @@ class TransactionForm extends Component {
         let bReadonly = false;
         if(this.props.transactionForm.type === 'new') bReadonly = true;
 
-        console.log('aaaa=', this.state);
-
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="h-full flex flex-col relative">
                     <div className="flex flex-col p-24 pt-12 pb-0" style={{flex: "1"}}>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <MuiPickersUtilsProvider utils={MomentUtils}>
                             <Grid container className={classNames(classes.formControl)}>
                                 <Grid item xs={12} sm={6} md={6} className="flex flex-row pr-16">
                                     <Autosuggest
@@ -601,7 +599,7 @@ class TransactionForm extends Component {
                                         label="Transaction Date"
                                         name="TransactionDate"
                                         variant="outlined"
-                                        format="MM/dd/YYYY"
+                                        format="MM/DD/YYYY"
                                         value={this.state.TransactionDate}
                                         onChange={this.handleTransactionDateChange}
                                         fullWidth
@@ -622,7 +620,7 @@ class TransactionForm extends Component {
                                     <DatePicker
                                         margin="none"
                                         label="Due Date"
-                                        format="MM/dd/YYYY"
+                                        format="MM/DD/YYYY"
                                         name="Date"
                                         variant="outlined"
                                         value={this.state.Date}

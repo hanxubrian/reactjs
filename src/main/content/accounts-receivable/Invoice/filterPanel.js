@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Grid, Paper, withStyles} from '@material-ui/core';
-import keycode from 'keycode';
 
 //Material UI core
 import Switch from '@material-ui/core/Switch';
@@ -9,7 +8,8 @@ import { MenuItem, FormControl, Select } from '@material-ui/core';
 import {FuseThemes} from '@fuse';
 
 import 'date-fns'
-import DateFnsUtils from '@date-io/date-fns';
+import MomentUtils from '@date-io/moment';
+
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 
 //Store
@@ -271,7 +271,7 @@ class FilterPanel extends Component {
                         <br></br>
 
                         { this.state.invoiceDateOption===CUSTOM_DATE && (
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <MuiPickersUtilsProvider utils={MomentUtils}>
                                 <div className="flex flex-col mt-20">
                                     <h3 className="mb-20">Custom Date</h3>
                                     <DatePicker
@@ -279,7 +279,7 @@ class FilterPanel extends Component {
                                         label="From Date"
                                         name="FromDate"
                                         variant="outlined"
-                                        format="MM/dd/yyyy"
+                                        format="MM/DD/YYYY"
                                         value={this.state.FromDate}
                                         onChange={this.handleInvoiceFromDateChange}
                                         fullWidth
@@ -292,7 +292,7 @@ class FilterPanel extends Component {
                                         label="To Date"
                                         name="ToDate"
                                         variant="outlined"
-                                        format="MM/dd/yyyy"
+                                        format="MM/DD/YYYY"
                                         value={this.state.ToDate}
                                         onChange={this.handleInvoiceToDateChange}
                                         fullWidth
@@ -304,7 +304,7 @@ class FilterPanel extends Component {
                             </MuiPickersUtilsProvider>
                         )}
                         { this.state.invoiceDateOption===PERIOD && (
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <MuiPickersUtilsProvider utils={MomentUtils}>
                                 <div className="flex flex-col mt-20">
                                     <h3 className="mb-20">Choose a Period</h3>
                                     <DatePicker
