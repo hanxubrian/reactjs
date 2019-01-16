@@ -398,6 +398,18 @@ class FilterPanel extends Component {
                                             </TextField>
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                           <TextField
+                                               id="lf_county"
+                                               label="County"
+                                               className={classes.textField}
+                                               onChange={this.handleFormChange('County')}
+                                               margin="dense"
+                                               variant="outlined"
+                                               fullWidth
+                                               required
+                                           />
+                                        </GridItem>
+                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
                                                 id="lf_zip"
                                                 label="Zip"

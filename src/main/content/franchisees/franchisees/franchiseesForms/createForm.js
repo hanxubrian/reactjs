@@ -236,11 +236,22 @@ function getStepContent(franchiseeForm, step) {
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
-                                id="financeAddress"
-                                label="Address"
+                                id="financeAddress1"
+                                label="Address 1"
                                 value=""
                                 variant="outlined"
                                 className={classes.textField}
+                                style={{marginRight:'1%'}}
+                                margin="dense"
+                                required
+                            />
+                            <TextField
+                                id="financeAddress2"
+                                label="Address 2"
+                                value=""
+                                variant="outlined"
+                                className={classes.textField}
+                                style={{marginLeft:'1%'}}
                                 margin="dense"
                                 required
                             />
@@ -286,6 +297,16 @@ function getStepContent(franchiseeForm, step) {
                             />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <TextField
+                                id="financeCounty"
+                                label="County"
+                                value=""
+                                variant="outlined"
+                                className={classes.textField}
+                                style={{marginRight:'1%'}}
+                                margin="dense"
+                                required
+                            />
                             <FormControlLabel
                                 control={
                                     <Checkbox checked={franchiseeForm.state.print1099} />
@@ -295,7 +316,7 @@ function getStepContent(franchiseeForm, step) {
                                 value=""
                                 label="Print 1099"
                                 margin="dense"
-                                style={{marginLeft:'1%'}}
+                                style={{marginLeft:'1%',marginRight: '1%'}}
                             />
                             <TextField
                                 id="outlined-phone"
@@ -303,7 +324,7 @@ function getStepContent(franchiseeForm, step) {
                                 label="1099 Name"
                                 className={classes.textField}
                                 margin="dense"
-                                style={{marginRight:'1%'}}
+                                style={{marginLeft:'1%'}}
                             />
                         </GridItem>
                     </GridContainer>

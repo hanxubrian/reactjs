@@ -52,13 +52,26 @@ const initialState = {
         addrZipcode: undefined
     },
     insertPayload: {
-        AddressLine1:"",
-        AddressLine2: "",
-        Name: "",
-        City: "",
-        State: "",
-        Zip: "",
-        County: "",
+        Addresses: [
+            {
+                Type: "Main",
+                AddressLine1: "",
+                AddressLine2: "",
+                City: "",
+                State: "",
+                Zip: "",
+                County: ""
+            },
+            {
+                Type: "Legal",
+                AddressLine1: "",
+                AddressLine2: "",
+                City: "",
+                State: "",
+                Zip: "",
+                County: ""
+            }
+        ],
         Email: "",
         Phone1: "",
         Phone2: "",
