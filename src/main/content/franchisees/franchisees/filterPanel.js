@@ -75,12 +75,14 @@ class FilterPanel extends Component {
         NearbyRadius: this.props.locationFilterValue.miles,
         AddressZipcodeRadius: this.props.locationFilterValue.miles,
         franchiseeStatus: [],
+        stateList: []
     };
 
     constructor(props){
         super(props);
         if(!props.bLoadedFilterList) {
             props.getStatusFilterList(this.props.regionId);
+            props.getFranchiseeStateList(this.props.regionId);
         }
     }
     componentDidMount()
@@ -89,7 +91,8 @@ class FilterPanel extends Component {
 
     componentWillMount(){
         this.setState({
-           franchiseeStatus: this.props.franchiseeStatus
+           franchiseeStatus: this.props.franchiseeStatus,
+           stateList: this.props.getFranchiseeStateList(this.props.regionId)
         });
     }
 
@@ -128,10 +131,18 @@ class FilterPanel extends Component {
         this.setState({franchiseeStatus: iStatus });
         this.props.updateFranchiseeStatus(iStatus)
     };
-    handleSelectChange = name => event => {
-        this.setState({
-            [name]: event.target.value,
-        });
+
+    handleFormChange = (name) => event => {
+
+        if(name === 'State'){
+            this.setState({
+                [name]: event.target.value,
+            });
+        }
+        const iStatus = this.props.insertPayload;
+        console.log('insertPayload = ',iStatus);
+        iStatus[name] = event.target.value;
+        this.props.franchiseeUpdateInsertPayload(iStatus)
     };
 
     handleLocationChange = name => event => {
@@ -296,92 +307,6 @@ class FilterPanel extends Component {
     render()
     {
         const {classes, franchiseesForm} = this.props;
-        const stateNames = [
-            {
-                value: 2,
-                label: "Buffalo"
-            },
-            {
-                value: 7,
-                label: "Detroit"
-            },
-            {
-                value: 9,
-                label: "Hartford"
-            },
-            {
-                value: 13,
-                label: "Las Vegas"
-            },
-            {
-                value: 14,
-                label: "Los Angeles/Colton"
-            },
-            {
-                value: 16,
-                label: "Miami"
-            },
-            {
-                value: 18,
-                label: "Minneapolis"
-            },
-            {
-                value: 20,
-                label: "New Jersey"
-            },
-            {
-                value: 21,
-                label: "New York"
-            },
-            {
-                value: 22,
-                label: "San Francisco/Oakland"
-            },
-            {
-                value: 23,
-                label: "Oklahoma City"
-            },
-            {
-                value: 24,
-                label: "Philadelphia"
-            },
-            {
-                value: 25,
-                label: "Sacramento"
-            },
-            {
-                value: 26,
-                label: "Washington DC"
-            },
-            {
-                value: 28,
-                label: "Jani-King Int'l, Inc."
-            },
-            {
-                value: 29,
-                label: "JANI-KING OF NEW MEXICO, INC"
-            },
-            {
-                value: 31,
-                label: "New Mexico"
-            },
-            {
-                value: 46,
-                label: "Houston"
-            },
-            {
-                value: 55,
-                label: "Pittsburgh"
-            },
-            {
-                value: 64,
-                label: "Tulsa"
-            },
-            {
-                value: 82,
-                label: "Reno"
-            }
-        ];
 
         return (
             <div className={classNames(classes.root)}>
@@ -396,7 +321,7 @@ class FilterPanel extends Component {
                                                 id="lf_name"
                                                 label="Name"
                                                 className={classes.textField}
-                                                onChange={this.handleChange('Name')}
+                                                onChange={this.handleFormChange('Name')}
                                                 margin="dense"
                                                 variant="outlined"
                                                 required
@@ -409,7 +334,7 @@ class FilterPanel extends Component {
                                                 id="lf_address1"
                                                 label="Address"
                                                 className={classes.textField}
-                                                onChange={this.handleChange('Address')}
+                                                onChange={this.handleFormChange('AddressLine1')}
                                                 margin="dense"
                                                 variant="outlined"
                                                 fullWidth
@@ -421,7 +346,7 @@ class FilterPanel extends Component {
                                                 id="lf_address2"
                                                 label="Address2"
                                                 className={classes.textField}
-                                                onChange={this.handleChange('Address2')}
+                                                onChange={this.handleFormChange('AddressLine2')}
                                                 margin="dense"
                                                 variant="outlined"
                                                 fullWidth
@@ -432,6 +357,7 @@ class FilterPanel extends Component {
                                                 id="lf_city"
                                                 label="City"
                                                 className={classes.textField}
+                                                onChange={this.handleFormChange('City')}
                                                 margin="dense"
                                                 variant="outlined"
                                                 fullWidth
@@ -445,15 +371,15 @@ class FilterPanel extends Component {
                                                 select
                                                 className={classes.textField}
                                                 value={this.state.State}
-                                                onChange={this.handleSelectChange('State')}
+                                                onChange={this.handleFormChange('State')}
                                                 margin="dense"
                                                 variant="outlined"
                                                 required
                                                 fullWidth
                                             >
-                                                {stateNames.map(option => (
-                                                    <MenuItem key={option.value} value={option.value}>
-                                                        {option.label}
+                                                {this.props.stateList.map(option => (
+                                                    <MenuItem key={option.Value} value={option.Value}>
+                                                        {option.Text}
                                                     </MenuItem>
                                                 ))}
                                             </TextField>
@@ -463,7 +389,7 @@ class FilterPanel extends Component {
                                                 id="lf_zip"
                                                 label="Zip"
                                                 className={classes.textField}
-                                                onChange={this.handleChange('Zip')}
+                                                onChange={this.handleFormChange('Zip')}
                                                 margin="dense"
                                                 variant="outlined"
                                                 fullWidth
@@ -476,7 +402,7 @@ class FilterPanel extends Component {
                                                 id="lf_phone1"
                                                 label="Phone"
                                                 className={classes.textField}
-                                                onChange={this.handleChange('Phone1')}
+                                                onChange={this.handleFormChange('Phone1')}
                                                 margin="dense"
                                                 variant="outlined"
                                                 fullWidth
@@ -488,7 +414,7 @@ class FilterPanel extends Component {
                                                id="lf_phone2"
                                                label="Cell"
                                                className={classes.textField}
-                                               onChange={this.handleChange('Phone2')}
+                                               onChange={this.handleFormChange('Phone2')}
                                                margin="dense"
                                                variant="outlined"
                                                fullWidth
@@ -500,7 +426,7 @@ class FilterPanel extends Component {
                                                 id="lf_email"
                                                 label="E-mail"
                                                 className={classes.textField}
-                                                onChange={this.handleChange('Email')}
+                                                onChange={this.handleFormChange('Email')}
                                                 margin="dense"
                                                 variant="outlined"
                                                 fullWidth
@@ -623,7 +549,9 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         franchiseeSelectLocationFilter: Actions.franchiseeSelectLocationFilter,
         getStatusFilterList: Actions.getStatusFilterList,
-        updateFranchiseeStatus: Actions.updateFranchiseeStatus
+        updateFranchiseeStatus: Actions.updateFranchiseeStatus,
+        franchiseeUpdateInsertPayload: Actions.franchiseeUpdateInsertPayload,
+        getFranchiseeStateList: Actions.getFranchiseeStateList
     }, dispatch);
 }
 
@@ -637,6 +565,8 @@ function mapStateToProps({franchisees, auth})
         regionId: auth.login.defaultRegionId,
         franchiseeStatus: franchisees.franchiseeStatus,
         locationFilterValue: franchisees.locationFilterValue,
+        insertPayload: franchisees.insertPayload,
+        stateList: franchisees.StateList
     }
 }
 
