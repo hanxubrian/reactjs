@@ -112,6 +112,15 @@ const styles = theme => ({
     tableTdEven:{
         // backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b +', .1)'
     },
+    invoiceNo: {
+        '& button':{
+            padding :'8px 4px',
+            '& span':{
+                fontSize: 11,
+                textTransform: 'none'
+            }
+        }
+    }
 });
 
 class InvoiceListContent extends Component {
@@ -317,46 +326,46 @@ class InvoiceListContent extends Component {
                         }
                     }}
                     columns={[
-                        {
-                            columns: [
-                                {
-                                    Header   : (instance) => (
-                                        <Checkbox
-                                            onClick={(event) => {
-                                                event.stopPropagation();
-                                            }}
-                                            onChange={(event) => toggleAll(instance) }
-                                            checked={this.state.selectAll}
-                                            style={{color: 'white'}}
-                                        />
-                                    ),
-                                    accessor : "",
-                                    Cell     : row => {
-                                        return (<Checkbox
-                                                onClick={(event) => {
-                                                    event.stopPropagation();
-                                                }}
-                                                checked={isSelected(row.value.InvoiceId)}
-                                                onChange={() => toggleSelection(row.value.InvoiceId)}
-                                            />
-                                        )
-                                    },
-                                    className: "justify-center",
-                                    sortable : false,
-                                    width    : 56
-                                }
-                            ],
-                            className: classNames("justify-center")
-                        },
+                        // {
+                        //     columns: [
+                        //         {
+                        //             Header   : (instance) => (
+                        //                 <Checkbox
+                        //                     onClick={(event) => {
+                        //                         event.stopPropagation();
+                        //                     }}
+                        //                     onChange={(event) => toggleAll(instance) }
+                        //                     checked={this.state.selectAll}
+                        //                     style={{color: 'white'}}
+                        //                 />
+                        //             ),
+                        //             accessor : "",
+                        //             Cell     : row => {
+                        //                 return (<Checkbox
+                        //                         onClick={(event) => {
+                        //                             event.stopPropagation();
+                        //                         }}
+                        //                         checked={isSelected(row.value.InvoiceId)}
+                        //                         onChange={() => toggleSelection(row.value.InvoiceId)}
+                        //                     />
+                        //                 )
+                        //             },
+                        //             className: "justify-center",
+                        //             sortable : false,
+                        //             width    : 56
+                        //         }
+                        //     ],
+                        //     className: classNames("justify-center")
+                        // },
                         {
                             columns: [
                                 {
                                     Header: "Invoice #",
                                     accessor: "InvoiceNo",
                                     filterAll: true,
-                                    width: 100,
+                                    width: 280,
                                     Cell: props => <Button onClick={this.invoiceReport}>{props.value}</Button> ,
-                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+                                    className: classNames(classes.invoiceNo, "flex items-center  justify-center text-12")
                                 },
                                 {
                                     Header: "Description",
@@ -368,7 +377,7 @@ class InvoiceListContent extends Component {
                                     Header: "Customer #",
                                     accessor: "CustomerNo",
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-                                    width: 120
+                                    width: 100
                                 },
                                 {
                                     Header: "Customer Name",
@@ -383,7 +392,7 @@ class InvoiceListContent extends Component {
                                         return '$'+parseFloat(row.original.InvoiceBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
                                     },
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor"),
-                                    width: 100
+                                    width: 80
                                 },
                                 {
                                     Header: "Total",
@@ -392,21 +401,21 @@ class InvoiceListContent extends Component {
                                     },
                                     accessor: "InvoiceTotal",
                                     className: classNames("flex items-center  justify-end p-12-impor"),
-                                    width: 120
+                                    width: 100
                                 },
                                 {
                                     Header: "Invoice Date",
                                     id: "InvoiceDate",
                                     accessor: d => moment(d.InvoiceDate).format('MM/DD/YYYY'),
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-                                    width: 120
+                                    width: 100
                                 },
                                 {
                                     Header: "Due Date",
                                     id: "DueDate",
                                     accessor: d => moment(d.DueDate).format('MM/DD/YYYY'),
                                     className: classNames("flex items-center  justify-center"),
-                                    width: 120
+                                    width: 100
                                 },
                                 {
                                     Header: "Status",
@@ -416,10 +425,10 @@ class InvoiceListContent extends Component {
                                 },
                                 {
                                     Header: "Actions",
-                                    width : 108,
+                                    width : 90,
                                     Cell  : row => (
-                                        <div className="flex items-center actions">
-                                            <IconButton
+                                        <div className="flex items-center actions justify-center w-full">
+                                            <IconButton style={{padding: 8}}
                                                 onClick={(ev) => {
                                                     ev.stopPropagation();
                                                     if (window.confirm("Do you really want to remove this invoice")) {
@@ -432,15 +441,15 @@ class InvoiceListContent extends Component {
                                                     }
                                                 }}
                                             >
-                                                <Icon>delete</Icon>
+                                                <Icon fontSize={"small"}>delete</Icon>
                                             </IconButton>
-                                            <IconButton
+                                            <IconButton style={{padding: 8}}
                                                 onClick={(ev) => {
                                                     ev.stopPropagation();
                                                     this.props.openEditInvoiceForm(row.original);
                                                 }}
                                             >
-                                                <Icon>edit</Icon>
+                                                <Icon fontSize={"small"}>edit</Icon>
                                             </IconButton>
                                         </div>
                                     )

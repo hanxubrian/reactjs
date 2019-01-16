@@ -281,9 +281,6 @@ class FilterPanel extends Component {
                                     id  : 'invoiceDateOption'
                                 }}
                             >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
                                 <MenuItem value={THIS_WEEK}>This Week</MenuItem>
                                 <MenuItem value={THIS_WEEK_TO_DATE}>This Week-to-date</MenuItem>
                                 <MenuItem value={THIS_MONTH}>This Month</MenuItem>

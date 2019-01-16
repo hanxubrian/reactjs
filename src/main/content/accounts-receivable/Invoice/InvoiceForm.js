@@ -755,7 +755,7 @@ class InvoiceForm extends Component {
                                                 </Typography>
                                             </div>
                                             <Typography variant="subtitle1" color="inherit">
-                                                <strong>{this.state.selectedCustomer? this.state.selectedCustomer.CustomerNo: this.state.CustomerNo}</strong>
+                                                <strong>Customer #: {this.state.selectedCustomer? this.state.selectedCustomer.CustomerNo: this.state.CustomerNo}</strong>
                                             </Typography>
                                         </div>
                                         {this.state.selectedCustomer && (
