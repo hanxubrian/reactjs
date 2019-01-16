@@ -219,10 +219,7 @@ class InvoiceReport extends Component {
                                      <td width="10%" style={{border:'solid 1px'}} className="text-center">112/31/2018</td>
                                  </tr>
                              )
-
                             })}
-
-
                             </tbody>
                         </table>
                         <table style={{width:'100%',borderCollapse: 'collapse',border:'solid 1px'}}>
@@ -259,12 +256,12 @@ class InvoiceReport extends Component {
 
                             <tr>
                                 <td width="10%"  style={{borderRight:'solid 1px'}} className="text-center"></td>
-                                <td width="60%"  className="text-center">PO63356B</td>
+                                <td width="60%"  className="text-center">  {this.state.invoiceDetail.InvMsg}</td>
                                 <td width="15%" style={{border:'solid 1px'}} className="text-center">
                                     <strong>Amount of Sale</strong>
                                 </td>
                                 <td width="15%" style={{border:'solid 1px'}} className="text-center">
-                                    $28671.77
+                                    {this.state.invoiceDetail.TRX_Amount}
                                 </td>
                             </tr>
                             <tr>
@@ -274,7 +271,7 @@ class InvoiceReport extends Component {
                                     <strong>Sales Tax</strong>
                                 </td>
                                 <td width="15%" style={{border:'solid 1px'}} className="text-center">
-                                    $2,508.78
+                                    {this.state.invoiceDetail.TRX_Tax}
                                 </td>
                             </tr>
                             <tr>
