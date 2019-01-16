@@ -8,20 +8,17 @@ class InvoiceReport extends Component {
     state = {
         isOpen: false,
         invoiceDetail: [],
-        Items: [],
+        CustomerFor: [],
         CustomerSoldTo:[],
-        CustomerFor:[],
-
     };
     componentWillReceiveProps(nextProps) {
-
         if(nextProps.getData) {
             this.setState({
-                invoiceDetail:nextProps.getData.Data,
-                Items: nextProps.getData.Data.Items,
+                invoiceDetail:nextProps.getData,
+                CustomerFor: nextProps.getData.CustomerFor[0],
+                CustomerSoldTo: nextProps.getData.CustomerSoldTo[0]
             });
         }
-
     }
     render()
     {
@@ -86,7 +83,7 @@ class InvoiceReport extends Component {
                                             </td>
                                             <td style={{border:'solid 1px'}}>
                                                 <Typography><strong>Cust#</strong></Typography>
-                                                <Typography>{this.state.invoiceDetail.CustomerNumber}</Typography>
+                                                <Typography>{this.state.invoiceDetail.CustomerNo}</Typography>
                                             </td>
                                         </tr>
                                         <tr>
@@ -207,19 +204,16 @@ class InvoiceReport extends Component {
                             </tr>
                             </thead>
                             <tbody>
-                            {this.state.Items !=null && this.state.Items && this.state.Items.map((item,index)=>{
-                             return (
-                                 <tr key={index}>
-                                     <td width="15%" style={{border:'solid 1px'}} className="text-center">{item.inv_no}</td>
-                                     <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.InvoiceDate}</td>
-                                     <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.CustomerNo}</td>
-                                     <td width="15%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.SismnNo}</td>
-                                     <td width="15%" style={{border:'solid 1px'}} className="text-center">63356B</td>
-                                     <td width="25%" style={{border:'solid 1px'}} className="text-center">KMBURNS.LLC</td>
-                                     <td width="10%" style={{border:'solid 1px'}} className="text-center">112/31/2018</td>
-                                 </tr>
-                             )
-                            })}
+                            <tr>
+                                <td width="15%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.inv_no}</td>
+                                <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.InvoiceDate}</td>
+                                <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.CustomerNo}</td>
+                                <td width="15%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.SismnNo}</td>
+                                <td width="15%" style={{border:'solid 1px'}} className="text-center">63356B</td>
+                                <td width="25%" style={{border:'solid 1px'}} className="text-center">KMBURNS.LLC</td>
+                                <td width="10%" style={{border:'solid 1px'}} className="text-center">112/31/2018</td>
+                            </tr>
+
                             </tbody>
                         </table>
                         <table style={{width:'100%',borderCollapse: 'collapse',border:'solid 1px'}}>
@@ -232,14 +226,18 @@ class InvoiceReport extends Component {
                             </tr>
                             <tr>
                                 <td width="10%" style={{border:'solid 1px'}} className="text-center">1</td>
-                                <td width="60%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.Description}</td>
+                                <td width="60%" style={{border:'solid 1px'}} className="text-center">MONTHLY CONTRACY BILLING AMOUNT FOR DECEMBER</td>
                                 <td width="15%" style={{border:'solid 1px'}} className="text-center">
-                                    {this.state.invoiceDetail.TRX_Amount}
+                                    28671.77
                                 </td>
                                 <td rowSpan="1" width="15%" style={{border:'solid 1px'}} className="text-center">
-                                    {this.state.invoiceDetail.TRX_Amount}
+                                    28671.77
                                 </td>
 
+                                {/*<td rowSpan="1" width="15%" style={{border:'solid 1px'}} className="text-center"><strong>Extended Price1</strong></td>*/}
+                                {/*<td rowSpan="1" width="15%" style={{border:'solid 1px'}} className="text-center"><strong>Extended Price2</strong></td>*/}
+                                {/*<td rowSpan="1" width="15%" style={{border:'solid 1px'}} className="text-center"><strong>Extended Price3</strong></td>*/}
+                                {/*<td rowSpan="1" width="15%" style={{border:'solid 1px'}} className="text-center"><strong>Extended Price4</strong></td>*/}
                             </tr>
                             <tr>
                                 <td style={{borderRight:'solid 1px'}}>
@@ -256,12 +254,12 @@ class InvoiceReport extends Component {
 
                             <tr>
                                 <td width="10%"  style={{borderRight:'solid 1px'}} className="text-center"></td>
-                                <td width="60%"  className="text-center">  {this.state.invoiceDetail.InvMsg}</td>
+                                <td width="60%"  className="text-center">PO63356B</td>
                                 <td width="15%" style={{border:'solid 1px'}} className="text-center">
                                     <strong>Amount of Sale</strong>
                                 </td>
                                 <td width="15%" style={{border:'solid 1px'}} className="text-center">
-                                    {this.state.invoiceDetail.SubTotal}
+                                    $28671.77
                                 </td>
                             </tr>
                             <tr>
@@ -271,7 +269,7 @@ class InvoiceReport extends Component {
                                     <strong>Sales Tax</strong>
                                 </td>
                                 <td width="15%" style={{border:'solid 1px'}} className="text-center">
-                                    {this.state.invoiceDetail.TaxTotal}
+                                    $2,508.78
                                 </td>
                             </tr>
                             <tr>
@@ -284,7 +282,7 @@ class InvoiceReport extends Component {
                                     <strong>Total</strong>
                                 </td>
                                 <td width="15%" style={{border:'solid 1px'}} className="text-center">
-                                    {this.state.invoiceDetail.GrandTotal}
+                                    $31,180.55
                                 </td>
                             </tr>
                             </tbody>

@@ -71,10 +71,9 @@ class invoiceService {
         });
     };
 
-    getInvoiceDetailList = (InvoiceId,RegionId) => {
+    getInvoiceDetailList = () => {
         return new Promise((resolve, reject) => {
-            axios_instance.get(`${BASE_MONGO_API_URL}/v1/accountsreceivable/Invoice/`+InvoiceId,{
-                params: {RegionId: RegionId}})
+            axios.get("/api/invoiceDetail/gets")
             //     { params: {RegionId, InvoiceTypeId}}
             // )
                 .then( res => {
@@ -118,7 +117,7 @@ class invoiceService {
                     resolve(error);
                 })
         });
-    };
+    }
 
     /**
      * create new invoice
@@ -129,23 +128,6 @@ class invoiceService {
     createNewInvoice = (regionId, data) => {
         return new Promise((resolve, reject) => {
             axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/invoice/create/${regionId}`,data)
-                .then( res => {
-                    if(res.status===200) {
-                        resolve(res.data);
-                    }
-                    else if(res.status!==200){
-                        reject(res.data);
-                    }
-                })
-                .catch(error=>{
-                    resolve(error);
-                })
-        });
-    };
-
-    deleteInvoice = (regionId, id) => {
-        return new Promise((resolve, reject) => {
-            axios_instance.delete(`${BASE_MONGO_API_URL}/v1/accountsreceivable/invoice/delete/${id}?regionId=${regionId}`)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);

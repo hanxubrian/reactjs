@@ -23,9 +23,7 @@ export const GET_FRANCHISEE_FORM_PLAN_TYPE = "[FRANCHISEE] GET FRANCHISEES FORM 
 export const GET_FRANCHISEE_DOCUMENTS_LIST = "[FRANCHISEE] GET FRANCHISEES DOCUMENT LIST";
 export const GET_FRANCHISEE_FEE = "[FRANCHISEE] GET FRANCHISEES FEE MAINTENANCE";
 export const FRANCHISEE_SELECT_LOCATION_FILTER = '[FRANCHISEE] FRANCHISEE SELECT LOCATION FILTER';
-export const SELECTED_LOCATION = '[FRANCHISEES] SELECTED LOCATION';
-export const UPLOAD_INSERT_PAYLOAD = '[FRANCHISEES] UPDATE INSERT PAYLOAD';
-export const GET_FRANCHISEE_STATE_LIST = '[FRANCHISEES] GET FRANCHISEE STATE LIST';
+export const SELECTED_LOCATION = '[FRANCHISEES] SELECTED LOCATION'
 
 export function getFranchisees(regionId, statusId, location , latitude , longitude , searchtext) {
 
@@ -54,18 +52,6 @@ export function getStatusFilterList(regionId) {
             dispatch({
                 type: GET_FILTER_LIST,
                 payload: filterList.Data
-            });
-        })();
-    }
-}
-
-export function getFranchiseeStateList(regionId) {
-    return (dispatch) => {
-        (async () => {
-            let stateList = await franchiseesService.getFranchiseeStateList(regionId);
-            dispatch({
-                type: GET_FRANCHISEE_STATE_LIST,
-                payload: stateList.Data
             });
         })();
     }
@@ -223,12 +209,6 @@ export function toggleFranchiseeMapView(){
 export function updateFranchiseeStatus(newStatus){
     return {
         type: UPDATE_FRANCHISEE_STATUS,
-        payload: newStatus
-    }
-}
-export function franchiseeUpdateInsertPayload(newStatus){
-    return {
-        type: UPLOAD_INSERT_PAYLOAD,
         payload: newStatus
     }
 }

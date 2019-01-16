@@ -486,7 +486,6 @@ class InvoiceForm extends Component {
             Apply_to: 'Apply To',
             CustomerId: this.state.selectedCustomer.CustomerId,
             CustomerNumber: this.state.PO_number,
-            CustomerName: this.state.selectedCustomer.CustomerName,
             PeriodId: this.props.invoices.PeriodId[0],
             PeriodMonth: moment(this.state.period).month()+1,
             PeriodYear: moment(this.state.period).year(),

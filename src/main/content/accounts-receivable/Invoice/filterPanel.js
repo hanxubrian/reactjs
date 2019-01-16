@@ -124,8 +124,31 @@ class FilterPanel extends Component {
         if(prevProps.invoiceDateOption!==this.props.invoiceDateOption){
             this.setState({invoiceDateOption: this.props.invoiceDateOption})
         }
+
+        if ( this.props.state !== prevProps.state )
+        {
+            if ( this.props.state )
+            {
+                document.addEventListener("keydown", this.handleDocumentKeyDown);
+            }
+            else
+            {
+                document.removeEventListener('keydown', this.handleDocumentKeyDown);
+            }
+        }
     }
 
+    componentWillUnmount()
+    {
+        document.removeEventListener('keydown', this.handleDocumentKeyDown);
+    }
+
+    handleDocumentKeyDown = event => {
+        if ( keycode(event) === 'esc' )
+        {
+            this.props.closeFilterPanel();
+        }
+    };
 
     handleChange = (index, name) => event => {
         const iStatus = this.state.invoiceStatus;

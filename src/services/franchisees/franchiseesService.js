@@ -14,8 +14,6 @@ const BASE_MONGO_API_URL='https://apifmsplusplus_mongo.jkdev.com';
 
 class franchiseesService {
     /**
-     * @method POST
-     *
      * @param RegionId
      * @param StatusId
      * @param Location
@@ -50,8 +48,6 @@ class franchiseesService {
         });
     };
     /**
-     * @method GET
-     *
      * @param RegionId
      * @returns {Promise<any>}
      */
@@ -72,8 +68,6 @@ class franchiseesService {
         });
     };
     /**
-     * @method GET
-     *
      * @param RegionId
      * @returns {Promise<any>}
      */
@@ -94,8 +88,6 @@ class franchiseesService {
         });
     };
     /**
-     * @method GET
-     *
      * @param RegionId
      * @returns {Promise<any>}
      */
@@ -116,8 +108,6 @@ class franchiseesService {
         });
     };
     /**
-     * @method GET
-     *
      * @param RegionId
      * @returns {Promise<any>}
      */
@@ -138,31 +128,6 @@ class franchiseesService {
         });
     };
     /**
-     * @method GET
-     *
-     * @param RegionId
-     * @returns {Promise<any>}
-     */
-    getFranchiseeStateList = (RegionId) => {
-        return new Promise((resolve, reject) => {
-            axios_instance.get(`${BASE_API_URL}/v1/lists/GetStateAbbreviationList?RegionId=${RegionId}`)
-                .then( res => {
-                    if(res.status===200) {
-                        resolve(res.data);
-                    }
-                    else if(res.status!==200){
-                        reject(res.data);
-                    }
-                })
-                .catch(error=>{
-                    resolve(error);
-                })
-        });
-    };
-
-    /**
-     * @method GET
-     *
      * @param regionId
      * @param year
      * @param month
@@ -186,31 +151,6 @@ class franchiseesService {
                 })
         });
     }
-    /**
-     * @method POST
-     *
-     * @param data
-     * @param regionId
-     * @returns {Promise<any>}
-     */
-    createFranchiseesList =  (data,regionId) => {
-
-        return new Promise((resolve, reject) => {
-            axios_instance.post(`${BASE_API_URL}/v1/Franchisee/create/${regionId}`, data)
-                .then( res => {
-                    if(res.status===200) {
-                        resolve(res.data);
-                    }
-                    else if(res.status!==200){
-                        reject(res.data);
-                    }
-                })
-                .catch(error=>{
-                    resolve(error);
-                })
-        });
-    };
-
 
     getFranchiseeReport = (params) => {
         return new Promise((resolve, reject) => {

@@ -193,7 +193,6 @@ class TransactionsLists extends Component {
     handleClose = ()=>{
         this.setState({alertOpen: false})
     };
-
     handleOpen = (key)=>{
         this.setState({alertOpen: true});
         this.setState({keyToBeRemoved: key})

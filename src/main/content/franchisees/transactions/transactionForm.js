@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 // core components
 import {
     Paper, TextField, Typography, MenuItem, Card, CardHeader, CardContent, Divider, Button, Snackbar, SnackbarContent,
-    IconButton, Icon, Grid, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog
+    IconButton, Icon, Grid, FormControlLabel, Checkbox, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog
 } from '@material-ui/core';
 import 'date-fns'
 import DateFnsUtils from '@date-io/date-fns';
@@ -25,12 +25,12 @@ import {withStyles} from "@material-ui/core";
 //Custom components
 import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
-import TransactionTable from "./transactionLine"
+import InvoiceLineTable from "./InvoiceLine"
 
 // for store
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
-import * as Actions from '../../../../store/actions';
+import * as Actions from 'store/actions';
 
 // third party
 import "react-table/react-table.css";
@@ -142,14 +142,14 @@ const newInvoiceState = {
     "RegionId": "",
     "RegionName": "",
     "InvoiceId": "",
-    "TransactionDate": new Date(),
-    "Date": new Date(),
+    "InvoiceDate": new Date(),
+    "DueDate": new Date(),
     "CustomerId": "",
-    "franchiseeNo": "",
+    "CustomerNo": "",
     "CustomerName": "",
     "EBill": "",
     "PrintInvoice": "",
-    "FranchiseeDescription": "",
+    "InvoiceDescription": "",
     "InvoiceAmount": "",
     "InvoiceTax": "",
     "InvoiceTotal": "",
@@ -171,8 +171,8 @@ const newInvoiceState = {
 };
 
 function renderSuggestion(suggestion, { query, isHighlighted }) {
-    const matches = match(suggestion.Name, query);
-    const parts = parse(suggestion.Name, matches);
+    const matches = match(suggestion.CustomerName, query);
+    const parts = parse(suggestion.CustomerName, matches);
 
     return (
         <MenuItem selected={isHighlighted} component="div">
@@ -270,10 +270,12 @@ const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
 
 class TransactionForm extends Component {
     state = {
+        customers: [],
         franchisees: [],
         ...newInvoiceState,
         value: '',
         suggestions: [],
+        selectedCustomer: null,
         fSuggestions: [],
         selectedFranchisee: null,
         labelWidth: 0,
@@ -288,7 +290,7 @@ class TransactionForm extends Component {
         PO_number: '',
         period: moment(),
         taxExempt: false,
-        bAlertNewTransaction: false,
+        bAlertNewInvoice: false,
         buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval
     };
 
@@ -299,7 +301,7 @@ class TransactionForm extends Component {
             <TextField
                 fullWidth
                 variant="outlined"
-                label="Franchisee:"
+                label="Customer:"
                 InputProps={{
                     inputRef: node => {
                         ref(node);
@@ -326,6 +328,8 @@ class TransactionForm extends Component {
     };
 
     onSuggestionsFetchRequested = ({ value }) => {
+        if(value.length<2) return;
+
         this.setState({
             suggestions: this.getSuggestions(value)
         });
@@ -338,16 +342,16 @@ class TransactionForm extends Component {
     };
 
     getSuggestionValue =  (suggestion) =>{
-        this.setState({selectedFranchisee: suggestion});
-        this.setState({PO_number: suggestion.franchiseeNo});
-        return suggestion.Name;
+        this.setState({selectedCustomer: suggestion});
+        this.setState({PO_number: suggestion.CustomerNo})
+        return suggestion.CustomerName;
     };
 
     getSuggestions = (value) => {
         const escapedValue = escapeRegexCharacters(value.trim());
         const regex = new RegExp(escapedValue, 'i');
-        if(this.props.franchisees!==null)
-            return this.props.franchisees.filter(f => regex.test(f.Name));
+        if(this.props.customers!==null)
+            return this.props.customers.filter(customer => regex.test(customer.CustomerName));
     };
 
     getTotal = () => {
@@ -355,10 +359,10 @@ class TransactionForm extends Component {
         let markup = 0.0;
         let tax = 0.0;
 
-        if(this.props.transactionForm.data===null) return;
+        if(this.props.invoiceForm.data===null) return;
 
-        const data = [...this.props.transactionForm.data.line];
-        console.log('line=', this.props.transactionForm.data.line);
+        const data = [...this.props.invoiceForm.data.line];
+
         data.forEach(n => {
             let mk = 0.;
             let qty = 0;
@@ -369,8 +373,6 @@ class TransactionForm extends Component {
             markup += parseFloat(n.extended*qty*parseFloat(mk)/100);
         });
 
-        console.log('aaaaa', subTotal, markup, tax, subTotal+tax+markup);
-
         this.setState({subTotal: subTotal});
         this.setState({markup: markup});
         this.setState({tax: tax});
@@ -378,11 +380,11 @@ class TransactionForm extends Component {
     };
 
     componentDidUpdate(prevProps, prevState, snapshot){
-        if(this.props.transactionForm!== prevProps.transactionForm) {
+        if(this.props.invoiceForm!== prevProps.invoiceForm) {
             this.getTotal();
         }
-        if(this.state.selectedFranchisee!== null && JSON.stringify(this.state.selectedFranchisee)!== JSON.stringify(this.props.transactionForm.franchisee)) {
-            this.props.selectFranchisee(this.state.selectedFranchisee);
+        if(this.state.selectedCustomer!== null && JSON.stringify(this.state.selectedCustomer)!== JSON.stringify(this.props.invoiceForm.customer)) {
+            this.props.selectCustomer(this.state.selectedCustomer);
         }
     }
 
@@ -391,36 +393,36 @@ class TransactionForm extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        // if(nextProps.invoiceForm.customer!==null){
-        //     if(nextProps.invoiceForm.type==='edit')
-        //         this.setState({InvoiceNo: nextProps.invoiceForm.customer.InvoiceNo});
-        //     this.setState({value: nextProps.invoiceForm.customer.CustomerName});
-        //     this.setState({franchiseeNo: nextProps.invoiceForm.customer.franchiseeNo});
-        //     this.setState({InvoiceDate: moment(nextProps.invoiceForm.customer.InvoiceDate)});
-        //     this.setState({Date: moment(nextProps.invoiceForm.customer.Date)});
-        // }
-        //
-        // if(nextProps.newInvoice!==null && nextProps.newInvoice!==this.props.newInvoice){
-        //     this.setState({bAlertNewTransaction: false});
-        //     if(this.state.buttonOption===0){
-        //         this.props.resetInvoiceForm();
-        //         this.setState({FranchiseeDescription: ''});
-        //         this.setState({note: ''});
-        //         this.setState({selectedFranchisee: null});
-        //         this.setState({value: ''});
-        //         this.setState({franchiseeNo: ''});
-        //     }
-        //     else if(this.state.buttonOption===1) {
-        //         this.closeComposeForm();
-        //     }
-        //     else if(this.state.buttonOption===2) {
-        //         this.closeComposeForm();
-        //     }
-        // }
+        if(nextProps.invoiceForm.customer!==null){
+            if(nextProps.invoiceForm.type==='edit')
+                this.setState({InvoiceNo: nextProps.invoiceForm.customer.InvoiceNo});
+            this.setState({value: nextProps.invoiceForm.customer.CustomerName});
+            this.setState({CustomerNo: nextProps.invoiceForm.customer.CustomerNo});
+            this.setState({InvoiceDate: moment(nextProps.invoiceForm.customer.InvoiceDate)});
+            this.setState({DueDate: moment(nextProps.invoiceForm.customer.DueDate)});
+        }
+
+        if(nextProps.newInvoice!==null && nextProps.newInvoice!==this.props.newInvoice){
+            this.setState({bAlertNewInvoice: false});
+            if(this.state.buttonOption===0){
+                this.props.resetInvoiceForm();
+                this.setState({InvoiceDescription: ''});
+                this.setState({note: ''});
+                this.setState({selectedCustomer: null});
+                this.setState({value: ''});
+                this.setState({CustomerNo: ''});
+            }
+            else if(this.state.buttonOption===1) {
+                this.closeComposeForm();
+            }
+            else if(this.state.buttonOption===2) {
+                this.closeComposeForm();
+            }
+        }
     }
 
     componentDidMount(){
-        if(this.props.transactionForm.type === 'new')
+        if(this.props.invoiceForm.type === 'new')
             this.setState({InvoiceNo: "PENDING"});
 
         if(this.input) {
@@ -435,15 +437,15 @@ class TransactionForm extends Component {
     addNewInvoice = () => {
         let inv_no = chance.guid()+'_pending';
         let items = [];
-        let lines = this.props.transactionForm.data.line;
+        let lines = this.props.invoiceForm.data.line;
         //
         lines.forEach(line=>{
             let item = {
                 Inv_No: inv_no,
                 ServiceTypeListId: 0,
                 Description: line.description,
-                Type: line.type,
-                Frequency: line.frequency,
+                Billing: line.billing,
+                Service: line.service,
                 LineNo: 1,
                 UnitPrice: parseFloat(line.amount),
                 Quantity: parseInt(line.quantity),
@@ -454,7 +456,27 @@ class TransactionForm extends Component {
                 Commission: 0,
                 CommissionTotal: 0,
                 ExtraWork: 1,
+                TaxExcempt: this.state.taxExempt ? 1 : 0,
+                Distribution: [],
             };
+            let franchisees = [];
+
+            if(line.franchisees.length>0) {
+                line.franchisees.forEach(f=>{
+                    franchisees.push(
+                        {
+                            FranchiseeId: 12,
+                            FranchiseNumber: f.fnumber,
+                            LineNo: 1,
+                            Name: f.name,
+                            Description: "Work done",
+                            Amount: f.amount
+                        }
+                    )
+
+                })
+            }
+            item.Distribution = franchisees;
 
             items.push(item);
         });
@@ -462,17 +484,22 @@ class TransactionForm extends Component {
         let result = {
             Inv_No: inv_no,
             Apply_to: 'Apply To',
+            CustomerId: this.state.selectedCustomer.CustomerId,
+            CustomerNumber: this.state.PO_number,
             PeriodId: this.props.invoices.PeriodId[0],
-            Description: this.state.FranchiseeDescription,
+            PeriodMonth: moment(this.state.period).month()+1,
+            PeriodYear: moment(this.state.period).year(),
+            Description: this.state.InvoiceDescription,
             Notes: this.state.note,
             RegionId: this.props.regionId,
             BillRunId: 999,
             InvoiceDate: this.state.InvoiceDate,
-            Date: this.state.Date,
+            DueDate: this.state.DueDate,
             CreatedById: this.props.user.UserId,
             CreatedDate: moment(),
             SubTotal: this.state.subTotal,
             MarkupAmountTotal :this.state.markup,
+            CPIIncrease: 0.00,
             TaxTotal: this.state.tax,
             GrandTotal: this.state.total,
             TransactionStatusListId: 2,
@@ -484,9 +511,9 @@ class TransactionForm extends Component {
         console.log('result', JSON.stringify(result));
     };
 
-    validateNewTransaction = () => {
-        if(this.state.selectedFranchisee===null){
-            this.setState({snackMessage: 'Please choose a franchisee from Franchisee suggestion'});
+    validateNewInvoice = () => {
+        if(this.state.selectedCustomer===null){
+            this.setState({snackMessage: 'Please choose customer from Invoice suggestion'});
             this.setState({openSnack: true});
             return false;
         }
@@ -494,35 +521,40 @@ class TransactionForm extends Component {
         return true;
     };
 
-    onSaveTransaction = (buttonOption) => {
-        if(this.validateNewTransaction()){
-            this.setState({bAlertNewTransaction: true});
+    onSaveInvoice = (buttonOption) => {
+        if(this.validateNewInvoice()){
+            this.setState({bAlertNewInvoice: true});
             this.setState({buttonOption: buttonOption});
         }
     };
 
     onSaveAndAddMore=()=>{
-        this.onSaveTransaction(0);
+        this.onSaveInvoice(0);
     };
 
     onSaveAndClose = () => {
-        this.onSaveTransaction(1);
+        this.onSaveInvoice(1);
         this.closeComposeForm();
     };
 
     onSubmitForApproval=()=>{
-        this.onSaveTransaction(2);
+        this.onSaveInvoice(2);
     };
 
+
     closeComposeForm = () => {
-        this.props.transactionForm.type === 'edit' ? this.props.closeEditTransactionForm() : this.props.closeNewTransactionForm();
+        this.props.invoiceForm.type === 'edit' ? this.props.closeEditInvoiceForm() : this.props.closeNewInvoiceForm();
     };
 
     handleDueDateChange = date => {
-        this.setState({ Date: date});
+        this.setState({ DueDate: date});
     };
-    handleTransactionDateChange = date => {
-        this.setState({ TransactionDate: date });
+    handleInvoiceDateChange = date => {
+        this.setState({ InvoiceDate: date });
+    };
+
+    handlePeriodChange = date => {
+        this.setState({ period: date });
     };
 
     storeInputReference = autosuggest => {
@@ -532,7 +564,7 @@ class TransactionForm extends Component {
     };
 
     handleCloseNewInvoice = ()=>{
-        this.setState({bAlertNewTransaction: false})
+        this.setState({bAlertNewInvoice: false})
     };
 
 
@@ -562,7 +594,7 @@ class TransactionForm extends Component {
         };
 
         let bReadonly = false;
-        if(this.props.transactionForm.type === 'new') bReadonly = true;
+        if(this.props.invoiceForm.type === 'new') bReadonly = true;
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
@@ -575,7 +607,7 @@ class TransactionForm extends Component {
                                         {...autosuggestProps}
                                         inputProps={{
                                             classes,
-                                            placeholder: 'Search Franchisee Name',
+                                            placeholder: 'Search Customer Name or Number',
                                             value: value,
                                             onChange: this.onChange,
                                         }}
@@ -593,15 +625,38 @@ class TransactionForm extends Component {
                                         ref={this.storeInputReference}
                                     />
                                 </Grid>
-                                <Grid item xs={12} sm={2} md={2} className="flex flex-row xs:flex-col xs:mb-24 pr-8 pl-16" style={{padding: '0 6px!important'}}>
+                                <Grid item xs={12} sm={1} md={1} className="flex flex-row pl-16 pr-4">
                                     <DatePicker
                                         margin="none"
-                                        label="Transaction Date"
-                                        name="TransactionDate"
+                                        label="Period"
+                                        name="InvoicePeriod"
+                                        variant="outlined"
+                                        format="MM/YYYY"
+                                        value={this.state.period}
+                                        onChange={this.handlePeriodChange}
+                                        fullWidth
+                                        required
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input,
+                                            },
+                                        }}
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        openToYearSelection={true}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={1} md={1} className="flex flex-row xs:flex-col xs:mb-24 pr-4 pl-4" style={{padding: '0 6px!important'}}>
+                                    <DatePicker
+                                        margin="none"
+                                        label="Invoice Date"
+                                        name="InvoiceDate"
                                         variant="outlined"
                                         format="MM/dd/YYYY"
-                                        value={this.state.TransactionDate}
-                                        onChange={this.handleTransactionDateChange}
+                                        value={this.state.InvoiceDate}
+                                        onChange={this.handleInvoiceDateChange}
                                         fullWidth
                                         required
                                         InputProps={{
@@ -615,15 +670,15 @@ class TransactionForm extends Component {
                                         }}
                                     />
                                 </Grid>
-                                <Grid item xs={12} sm={2} md={2} className="flex flex-row xs:flex-col pr-8 pl-8"
+                                <Grid item xs={12} sm={1} md={1} className="flex flex-row xs:flex-col pr-4 pl-4"
                                       style={{padding: '0 6px!important'}}>
                                     <DatePicker
                                         margin="none"
                                         label="Due Date"
                                         format="MM/dd/YYYY"
-                                        name="Date"
+                                        name="DueDate"
                                         variant="outlined"
-                                        value={this.state.Date}
+                                        value={this.state.DueDate}
                                         onChange={this.handleDueDateChange}
                                         required
                                         fullWidth
@@ -638,11 +693,32 @@ class TransactionForm extends Component {
                                         }}
                                     />
                                 </Grid>
-                                <Grid item xs={12} sm={2} md={2} className="flex flex-row xs:flex-col pl-4" >
+                                <Grid item xs={12} sm={3} md={3} className="flex flex-row xs:flex-col pl-4" >
                                     <TextField
                                         margin="none"
-                                        label="Transaction #"
-                                        placeholder="Transaction #"
+                                        label="P.O #"
+                                        placeholder="P.O #"
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input,
+                                            },
+                                        }}
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        name="PO_number"
+                                        variant="outlined"
+                                        value={this.state.PO_number}
+                                        onChange={this.handleChange}
+                                        required
+                                        fullWidth
+                                        style={{paddingRight: 4}}
+                                    />
+                                    <TextField
+                                        margin="none"
+                                        label="Invoice #"
+                                        placeholder="Invoice #"
                                         InputProps={{
                                             readOnly: bReadonly,
                                             classes: {
@@ -659,8 +735,8 @@ class TransactionForm extends Component {
                                         onChange={this.handleChange}
                                         required
                                         fullWidth
-                                        style = {{paddingLeft: 4,fontSize: this.props.transactionForm.type === 'new' ? '18px!important': 'inherit',
-                                            fontWeight: this.props.transactionForm.type === 'new' ? 700: 'inherit'
+                                        style = {{paddingLeft: 4,fontSize: this.props.invoiceForm.type === 'new' ? '18px!important': 'inherit',
+                                            fontWeight: this.props.invoiceForm.type === 'new' ? 700: 'inherit'
                                         }}
                                     />
                                 </Grid>
@@ -669,35 +745,35 @@ class TransactionForm extends Component {
                         <GridContainer className={classNames(classes.formControl, "mb-0")}>
                             <GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col">
                                 <Card className={classes.card}>
-                                    <CardHeader title="Franchisee Transaction" className={classNames(classes.cardHeader, "flex-1")} />
+                                    <CardHeader title="Customer" className={classNames(classes.cardHeader, "flex-1")} />
                                     <CardContent className={classNames(classes.cardContent)}>
                                         <div className="flex flex-row justify-between mb-4">
                                             <div className="flex flex-row">
                                                 <Icon fontSize={"small"} className="mr-4">account_circle</Icon>
                                                 <Typography variant="subtitle1" color="inherit">
-                                                    <strong>{this.state.selectedFranchisee ? this.state.selectedFranchisee.Name: this.state.value}</strong>
+                                                    <strong>{this.state.selectedCustomer ? this.state.selectedCustomer.CustomerName: this.state.value}</strong>
                                                 </Typography>
                                             </div>
                                             <Typography variant="subtitle1" color="inherit">
-                                                <strong>Franchisee #: {this.state.selectedFranchisee? this.state.selectedFranchisee.Number: this.state.franchiseeNo}</strong>
+                                                <strong>Customer #: {this.state.selectedCustomer? this.state.selectedCustomer.CustomerNo: this.state.CustomerNo}</strong>
                                             </Typography>
                                         </div>
-                                        {this.state.selectedFranchisee && (
+                                        {this.state.selectedCustomer && (
                                             <div className="flex flex-row justify-start mb-4">
                                                 <div className="flex flex-row items-center">
                                                     <Icon fontSize={"small"} className="mr-4">place</Icon>
                                                     <Typography variant="subtitle1" color="inherit">
-                                                        {this.state.selectedFranchisee.Address}
+                                                        {this.state.selectedCustomer.Address}, {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
                                                     </Typography>
                                                 </div>
                                             </div>
                                         )}
-                                        {this.state.selectedFranchisee && (
+                                        {this.state.selectedCustomer && (
                                             <div className="flex flex-row justify-between mb-4">
                                                 <div className="flex flex-row items-center">
                                                     <Icon fontSize={"small"} className="mr-4">smartphone</Icon>
                                                     <Typography variant="subtitle1" color="inherit">
-                                                        {this.state.selectedFranchisee.Phone}
+                                                        {this.state.selectedCustomer.Phone}
                                                     </Typography>
                                                 </div>
                                             </div>
@@ -709,18 +785,60 @@ class TransactionForm extends Component {
                                 <Card className={classes.card}>
                                     <CardHeader title="Billing" className={classNames(classes.cardHeader, "flex-1")} />
                                     <CardContent className={classNames(classes.cardContent)}>
-
+                                        <div className="flex flex-row justify-between mb-4">
+                                            <div className="flex flex-row">
+                                                <Icon fontSize={"small"} className="mr-4">account_circle</Icon>
+                                                <Typography variant="subtitle1" color="inherit">
+                                                    <strong>{this.state.selectedCustomer ? this.state.selectedCustomer.CustomerName: this.state.value}</strong>
+                                                </Typography>
+                                            </div>
+                                        </div>
+                                        {this.state.selectedCustomer && (
+                                            <div className="flex flex-row justify-start mb-4">
+                                                <div className="flex flex-row items-center">
+                                                    <Icon fontSize={"small"} className="mr-4">place</Icon>
+                                                    <Typography variant="subtitle1" color="inherit">
+                                                        {this.state.selectedCustomer.Address}, {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
+                                                    </Typography>
+                                                </div>
+                                            </div>
+                                        )}
+                                        {this.state.selectedCustomer && (
+                                            <div className="flex flex-row justify-between mb-4">
+                                                <div className="flex flex-row items-center">
+                                                    <Icon fontSize={"small"} className="mr-4">smartphone</Icon>
+                                                    <Typography variant="subtitle1" color="inherit">
+                                                        {this.state.selectedCustomer.Phone}
+                                                    </Typography>
+                                                </div>
+                                                <div>
+                                                    <FormControlLabel
+                                                        control={
+                                                            <Checkbox
+                                                                name="taxExempt"
+                                                                checked={this.state.taxExempt}
+                                                                onChange={this.handleChange}
+                                                                value="checkedB"
+                                                                color="primary"
+                                                                className="p-0"
+                                                            />
+                                                        }
+                                                        label="Tax Exempt"
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
                                     </CardContent>
                                 </Card>
                             </GridItem>
                         </GridContainer>
                         <div className="w-full mt-4">
                             <TextField
-                                id="FranchiseeDescription"
-                                name="FranchiseeDescription"
+                                id="InvoiceDescription"
+                                name="InvoiceDescription"
                                 label="Description"
                                 className={classes.textField}
-                                value={this.state.FranchiseeDescription}
+                                value={this.state.InvoiceDescription}
                                 onChange={this.handleChange}
                                 margin="dense"
                                 variant="outlined"
@@ -738,7 +856,7 @@ class TransactionForm extends Component {
                         </div>
                         <Grid container className={classNames(classes.formControl)} style={{flex: "9999 1 0"}}>
                             <Grid item xs={12} sm={12} md={12} className="flex flex-row xs:flex-col xs:mb-24">
-                                <TransactionTable />
+                                <InvoiceLineTable />
                             </Grid>
                         </Grid>
                         <Divider variant="middle"/>
@@ -860,7 +978,7 @@ class TransactionForm extends Component {
                         />
                     </Snackbar>
                     <Dialog
-                        open={this.state.bAlertNewTransaction}
+                        open={this.state.bAlertNewInvoice}
                         onClose={()=>this.handleCloseNewInvoice()}
                         aria-labelledby="alert-dialog-title"
                         aria-describedby="alert-dialog-description"
@@ -889,23 +1007,24 @@ class TransactionForm extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        closeEditTransactionForm: Actions.closeEditTransactionForm,
-        closeNewTransactionForm : Actions.closeNewTransactionForm,
+        openEditInvoiceForm: Actions.openEditInvoiceForm,
+        closeEditInvoiceForm: Actions.closeEditInvoiceForm,
+        closeNewInvoiceForm : Actions.closeNewInvoiceForm,
         selectCustomer: Actions.selectCustomer,
         resetInvoiceForm: Actions.resetInvoiceForm,
-        addInvoice: Actions.addInvoice,
-        selectFranchisee: Actions.selectFranchisee
+        addInvoice: Actions.addInvoice
     }, dispatch);
 }
 
-function mapStateToProps({transactions, auth})
+function mapStateToProps({invoices, auth})
 {
     return {
-        transactionForm: transactions.transactionForm,
-        newTransaction: transactions.newTransaction,
+        invoiceForm: invoices.invoiceForm,
+        invoices: invoices,
+        newInvoice: invoices.newInvoice,
         user: auth.login,
         regionId: auth.login.defaultRegionId,
-        // bStartingSaveFormData: invoices.bStartingSaveFormData
+        bStartingSaveFormData: invoices.bStartingSaveFormData
     }
 }
 

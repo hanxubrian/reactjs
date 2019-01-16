@@ -40,7 +40,7 @@ import { compose, withProps, withHandlers, lifecycle } from "recompose";
 
 import {
 	Getter,
-} from '@devexpress/dx-react-core';
+  } from '@devexpress/dx-react-core';
 import {
 	SelectionState,
 	PagingState,
@@ -56,8 +56,6 @@ import {
 	IntegratedFiltering,
 	SearchState,
 } from '@devexpress/dx-react-grid';
-
-import { SelectionPanel } from "./selection-panel";
 
 import {
 	Grid,
@@ -1235,8 +1233,9 @@ class CustomerListContent extends Component {
 					{/* Girdview */}
 					{!mapViewState &&
 						(
-							<div className={classNames(classes.layoutTable, "flex flex-col")}
-								style={{ height: "calc(100% - 110px)" }}
+							<Paper
+								className={classNames(classes.layoutTable, "flex flex-col h-full")}
+							// style={{ flex: '1', }}
 							>
 								<Grid
 									rootComponent={GridRootComponent}
@@ -1372,8 +1371,10 @@ class CustomerListContent extends Component {
 
 									{/* <TableGroupRow /> */}
 									{/* <GroupingPanel showSortingControls showGroupingControls /> */}
-									<SelectionPanel selection={selection} />
-									{/* <div
+
+								</Grid>
+
+								<div
 									className={classNames(classes.layoutTable, "flex flex-row")}
 									style={{ justifyContent: "space-between" }}
 								>
@@ -1384,10 +1385,9 @@ class CustomerListContent extends Component {
 									<span className={"p-6"}>
 										Total Rows: <strong>{rows.length}</strong>
 									</span>
-								</div> */}
-								</Grid>
-							</div>
+								</div>
 
+							</Paper>
 						)
 					}
 				</div>

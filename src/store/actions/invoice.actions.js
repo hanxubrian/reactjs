@@ -55,10 +55,10 @@ export function getInvoices(RegionId, StatusId, FromDate, ToDate, PeriodId,OpenO
     };
 }
 
-export function getInvoiceDetail(InvoiceId,RegionId) {
+export function getInvoiceDetail() {
     return (dispatch) => {
        (async () => {
-            let res = await invoiceService.getInvoiceDetailList(InvoiceId,RegionId);
+            let res = await invoiceService.getInvoiceDetailList();
             if (res) {
                 dispatch({
                     type: GET_INVOICE_DETAIL,
@@ -126,20 +126,16 @@ export function deleteInvoices(keys, invoices) {
     };
 }
 
-export function removeInvoice(regionId, id) {
-    return (dispatch) => {
-        (async () => {
-            let res = await invoiceService.deleteInvoice(regionId, id);
-            console.log('remove result=', res);
-            if (res.IsSuccess) {
-                dispatch({
-                    type: REMOVE_SELECTED_INVOICE,
-                    payload: res
-                });
-            } else {
+export function removeInvoice(key, invoices) {
+    return dispatch => {
+        const request = axios.post("/api/invoices/remove", { id: key, invoices: invoices });
 
-            }
-        })();
+        return request.then(response => {
+            return dispatch({
+                type: REMOVE_SELECTED_INVOICE,
+                payload: response.data
+            });
+        });
     };
 }
 

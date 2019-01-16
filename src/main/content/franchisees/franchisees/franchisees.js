@@ -549,7 +549,8 @@ class Franchisees extends Component {
             return d.Number.toLowerCase().indexOf(val) !== -1 || !val ||
                 d.StatusName.toLowerCase().indexOf(val) !== -1 ||
                 d.Name.toLowerCase().indexOf(val) !== -1 ||
-                d.Address.toLowerCase().indexOf(val) !== -1 ||
+                d.Address1.toLowerCase().indexOf(val) !== -1 ||
+                d.DistributionAmount.toLowerCase().indexOf(val) !== -1 ||
                 d.Phone.toLowerCase().indexOf(val) !== -1
         });
         this.setState({temp: temp});
@@ -559,7 +560,7 @@ class Franchisees extends Component {
         this.setState({ [prop]: event.target.value });
 
         if(prop==='s') {
-            this.search(event.target.value.toLowerCase());
+            // this.search(event.target.value.toLowerCase());
         }
     };
 
