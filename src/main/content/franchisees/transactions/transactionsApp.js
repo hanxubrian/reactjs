@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 // core components
-import {Icon, Fab, Typography, Hidden, IconButton} from '@material-ui/core';
+import {Icon, Fab, Typography, Hidden, IconButton, Button, Paper, Input} from '@material-ui/core';
 import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
@@ -38,49 +38,9 @@ const styles = theme => ({
         '& .z-9999': {
             height: 64
         },
-        '& .-pageSizeOptions': {
-            display: 'none'
-        },
-        '& .ReactTable .rt-noData': {
-            top: '250px',
-            border: '1px solid coral'
-        },
-        '& .ReactTable .rt-thead.-headerGroups': {
-            paddingLeft: '0!important',
-            paddingRight: '0!important',
-            minWidth: 'inherit!important'
-        },
-        '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
-            background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
-            color: 'white!important'
-        },
         '& .openFilter':{
             width: 'inherit'
         },
-        '& .openSummary':{
-            width: 300
-        },
-        '& .ReactTable .rt-tbody': {
-            overflowY: 'scroll',
-            overflowX: 'hidden'
-        },
-        '& .ReactTable .rt-tr-group':{
-            flex: '0 0 auto'
-        },
-        '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
-            justifyContent: 'center'
-        },
-        '& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
-            width:'inherit!important',
-            minWidth:'inherit!important',
-        },
-        '& .ReactTable .rt-thead .rt-th:last-child': {
-            justifyContent: 'flex-start'
-        },
-        '& .p-12-impor': {
-            paddingLeft: '1.2rem!important',
-            paddingRight: '1.2rem!important',
-        }
     },
     layoutHeader       : {
         height   : headerHeight,
@@ -104,9 +64,18 @@ const styles = theme => ({
         position: 'relative'
     },
     search: {
-        width: 360,
+        width: '100%',
         [theme.breakpoints.down('sm')]: {
             width: '100%'
+        }
+    },
+    filterPanelButton: {
+        backgroundColor: theme.palette.secondary.main,
+        minWidth: 42,
+        padding: 8,
+        justifyContent: 'center',
+        '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
         }
     },
     sideButton          : {
@@ -122,6 +91,9 @@ const styles = theme => ({
         backgroundColor: theme.palette.primary.main,
         padding: 12
     },
+    imageIcon: {
+        width: 24
+    }
 });
 
 class TransactionsApp extends Component {
@@ -148,6 +120,23 @@ class TransactionsApp extends Component {
             page: state.page,
         });
     }
+
+    search = (val)=> {
+        const temp = this.state.data.filter( d => {
+            console.log('value=', d);
+            return d.Name.indexOf(val) !== -1 || !val ||
+                d.FranchiseeNo.indexOf(val) !== -1 ||
+                // d.TrxType.toString().indexOf(val) !== -1
+                d.Number.indexOf(val) !== -1 ||
+                d.ExtendedPrice.toString().indexOf(val) !== -1 ||
+                d.Tax.toString().indexOf(val) !== -1 ||
+                d.Fees.toString().indexOf(val) !== -1 ||
+                d.TotalTrxAmount.toString().indexOf(val) !== -1
+        });
+
+        this.setState({temp: temp});
+    };
+
 
     handleChange = prop => event => {
         this.setState({ [prop]: event.target.value });
@@ -181,6 +170,10 @@ class TransactionsApp extends Component {
         if(prevProps.transactions!== this.props.transactions){
             this.getTransactions();
         }
+
+        if(prevState.s!==this.state.s) {
+            this.search(this.state.s);
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -202,7 +195,7 @@ class TransactionsApp extends Component {
             if(this.props.transactionStatus[key]){
                 temp = temp0.filter(d => {
                     // if(this.props.regionId===0)
-                        return d.Status.toLowerCase() === statusStrings[index].toLowerCase();
+                    return d.Status.toLowerCase() === statusStrings[index].toLowerCase();
                     // else
                     //     return d.Status.toLowerCase() === statusStrings[index] && d.RegionId === this.props.regionId
                 });
@@ -296,7 +289,50 @@ class TransactionsApp extends Component {
                 content={
                     <div className="flex-1 flex-col absolute w-full h-full">
                         {
-                            <TransactionLists data={this.state.data}/>
+                            <div className={classNames("flex flex-col h-full")}>
+                                <div className="flex flex-row items-center p-12">
+                                    <div className="flex justify-start items-center">
+                                        <Hidden smDown>
+                                            <Button
+                                                onClick={(ev) => toggleFilterPanel()}
+                                                aria-label="toggle filter panel"
+                                                color="secondary"
+                                                disabled={filterState ? true : false}
+                                                className={classNames(classes.filterPanelButton)}
+                                            >
+                                                <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
+                                            </Button>
+                                        </Hidden>
+                                        <Hidden smUp>
+                                            <Button
+                                                onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
+                                                aria-label="toggle filter panel"
+                                                className={classNames(classes.filterPanelButton)}
+                                            >
+                                                <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
+                                            </Button>
+                                        </Hidden>
+                                    </div>
+                                    <div className="flex items-center w-full h-44 mr-12 ml-12">
+                                        <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
+                                            <Input
+                                                placeholder="Search..."
+                                                className={classNames(classes.search, 'pl-16')}
+                                                // className="pl-16"
+                                                disableUnderline
+                                                fullWidth
+                                                value={this.state.s}
+                                                onChange={this.handleChange('s')}
+                                                inputProps={{
+                                                    'aria-label': 'Search'
+                                                }}
+                                            />
+                                            <Icon color="action" className="mr-16">search</Icon>
+                                        </Paper>
+                                    </div>
+                                </div>
+                                <TransactionLists data={this.state.temp}/>
+                            </div>
                         }
                     </div>
                 }

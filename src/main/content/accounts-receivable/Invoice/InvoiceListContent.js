@@ -24,7 +24,6 @@ import "react-table/react-table.css";
 import _ from 'lodash';
 import classNames from 'classnames';
 import InvoiceReport from './invoiceReport'
-import {ON_MESSAGE} from "../../../chatPanel/store/actions/chat.actions";
 
 const hexToRgb = (hex) =>{
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
