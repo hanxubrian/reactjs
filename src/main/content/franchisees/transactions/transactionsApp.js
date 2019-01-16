@@ -430,6 +430,7 @@ function mapStateToProps({transactions, auth, franchisees})
         regionId: auth.login.defaultRegionId,
 
         bLoadedFranchisees: franchisees.bLoadedFranchisees,
+        franchisees: franchisees.franchiseesDB,
         fstatusId: franchisees.statusId,
         fLocation: franchisees.Location,
         fLongitude: franchisees.Longitude,

@@ -109,6 +109,13 @@ const transactions = function(state = initialState, action) {
                 newTransaction: null
             };
         }
+        case Actions.SELECT_TRANSACTION_FRANCHISEE:
+        {
+            return {
+                ...state,
+                transactionForm: {...state.transactionForm, franchisee: action.payload}
+            }
+        }
 
         default:
         {

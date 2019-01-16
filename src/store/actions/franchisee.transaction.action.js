@@ -8,6 +8,7 @@ export const OPEN_NEW_TRANSACTION_FORM = '[FRANCHISEE-TRANSACTION] OPEN NEW TRAN
 export const CLOSE_NEW_TRANSACTION_FORM = '[FRANCHISEE-TRANSACTION] CLOSE NEW TRANSACTION FORM';
 export const OPEN_EDIT_TRANSACTION_FORM = '[FRANCHISEE-TRANSACTION] OPEN EDIT TRANSACTION FORM';
 export const CLOSE_EDIT_TRANSACTION_FORM = '[FRANCHISEE-TRANSACTION] CLOSE EDIT TRANSACTION FORM';
+export const SELECT_TRANSACTION_FRANCHISEE = '[FRANCHISEE-TRANSACTION] SELECT TRANSACTION FRANCHISEE';
 
 export function getTransactions() {
     return dispatch => {
@@ -74,5 +75,13 @@ export function closeEditTransactionForm()
 {
     return {
         type: CLOSE_EDIT_TRANSACTION_FORM
+    }
+}
+
+
+export function selectFranchisee(obj) {
+    return {
+        type: SELECT_TRANSACTION_FRANCHISEE,
+        payload: obj
     }
 }
