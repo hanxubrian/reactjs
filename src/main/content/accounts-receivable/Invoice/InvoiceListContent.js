@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 // core components
 import {
-    Hidden, Icon, IconButton, Input, Paper, Button
+    Hidden, Icon, IconButton, Input, Paper, Button, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog
 } from '@material-ui/core';
 
 //Janiking
@@ -135,7 +135,9 @@ class InvoiceListContent extends Component {
         invoiceDetail: null,
         CustomerFor: [],
         CustomerSoldTo:[],
-        selectedInvoice: null
+        selectedInvoice: null,
+        alertOpen: false,
+        selectedId: ''
     };
 
     onChange = (event, { newValue, method }) => {
@@ -263,8 +265,21 @@ class InvoiceListContent extends Component {
         this.setState({
             isOpen: !this.state.isOpen
         });
-    }
+    };
 
+
+    handleCloseRemoveDialog = ()=>{
+        this.setState({alertOpen: false})
+    };
+
+    handleOpenRemoveDialog = (key)=>{
+        this.setState({alertOpen: true});
+        this.setState({selectedId: key})
+    };
+
+    removeSelectedInvoice = ()=>{
+        this.props.removeInvoiceAction(this.props.regionId, this.state.selectedId);
+    };
 
     render()
     {
@@ -431,14 +446,7 @@ class InvoiceListContent extends Component {
                                             <IconButton style={{padding: 8}}
                                                 onClick={(ev) => {
                                                     ev.stopPropagation();
-                                                    if (window.confirm("Do you really want to remove this invoice")) {
-                                                        this.props.removeInvoiceAction(row.original.InvoiceId, this.props.invoices);
-                                                        if(this.state.selection.length>0){
-                                                            _.remove(this.state.selection, function(id) {
-                                                                return id === row.original.InvoiceId;
-                                                            });
-                                                        }
-                                                    }
+                                                    this.handleOpenRemoveDialog(row.original.InvoiceNo);
                                                 }}
                                             >
                                                 <Icon fontSize={"small"}>delete</Icon>
@@ -464,6 +472,27 @@ class InvoiceListContent extends Component {
                         height: '100%',
                     }}
                 />
+                <Dialog
+                    open={this.state.alertOpen}
+                    onClose={()=>this.handleCloseRemoveDialog()}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Remove an Invoice"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Do you really want to remove the selected invoice?
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={()=>this.handleCloseRemoveDialog()} color="primary">
+                            Disagree
+                        </Button>
+                        <Button onClick={()=>this.removeSelectedInvoice()} color="primary" autoFocus>
+                            Agree
+                        </Button>
+                    </DialogActions>
+                </Dialog>
 
                 <InvoiceReport show={this.state.isOpen} onClose={this.toggleModal} getData={this.state.invoiceDetail} />
             </div>

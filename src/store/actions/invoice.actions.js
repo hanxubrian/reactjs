@@ -126,16 +126,20 @@ export function deleteInvoices(keys, invoices) {
     };
 }
 
-export function removeInvoice(key, invoices) {
-    return dispatch => {
-        const request = axios.post("/api/invoices/remove", { id: key, invoices: invoices });
+export function removeInvoice(regionId, id) {
+    return (dispatch) => {
+        (async () => {
+            let res = await invoiceService.deleteInvoice(regionId, id);
+            console.log('remove result=', res);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: REMOVE_SELECTED_INVOICE,
+                    payload: res
+                });
+            } else {
 
-        return request.then(response => {
-            return dispatch({
-                type: REMOVE_SELECTED_INVOICE,
-                payload: response.data
-            });
-        });
+            }
+        })();
     };
 }
 
