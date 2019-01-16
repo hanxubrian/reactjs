@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 // core components
 import {
     Paper, TextField, Typography, MenuItem, Card, CardHeader, CardContent, Divider, Button, Snackbar, SnackbarContent,
-    IconButton, Icon, Grid, FormControlLabel, Checkbox, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog
+    IconButton, Icon, Grid, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog
 } from '@material-ui/core';
 import 'date-fns'
 import DateFnsUtils from '@date-io/date-fns';
@@ -288,7 +288,7 @@ class TransactionForm extends Component {
         PO_number: '',
         period: moment(),
         taxExempt: false,
-        bAlertNewInvoice: false,
+        bAlertNewTransaction: false,
         buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval
     };
 
@@ -355,10 +355,10 @@ class TransactionForm extends Component {
         let markup = 0.0;
         let tax = 0.0;
 
-        if(this.props.invoiceForm.data===null) return;
+        if(this.props.transactionForm.data===null) return;
 
-        const data = [...this.props.invoiceForm.data.line];
-
+        const data = [...this.props.transactionForm.data.line];
+        console.log('line=', this.props.transactionForm.data.line);
         data.forEach(n => {
             let mk = 0.;
             let qty = 0;
@@ -369,6 +369,8 @@ class TransactionForm extends Component {
             markup += parseFloat(n.extended*qty*parseFloat(mk)/100);
         });
 
+        console.log('aaaaa', subTotal, markup, tax, subTotal+tax+markup);
+
         this.setState({subTotal: subTotal});
         this.setState({markup: markup});
         this.setState({tax: tax});
@@ -377,7 +379,8 @@ class TransactionForm extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.props.transactionForm!== prevProps.transactionForm) {
-            // this.getTotal();
+            console.log('passss');
+            this.getTotal();
         }
         if(this.state.selectedFranchisee!== null && JSON.stringify(this.state.selectedFranchisee)!== JSON.stringify(this.props.transactionForm.franchisee)) {
             this.props.selectFranchisee(this.state.selectedFranchisee);
@@ -399,7 +402,7 @@ class TransactionForm extends Component {
         // }
         //
         // if(nextProps.newInvoice!==null && nextProps.newInvoice!==this.props.newInvoice){
-        //     this.setState({bAlertNewInvoice: false});
+        //     this.setState({bAlertNewTransaction: false});
         //     if(this.state.buttonOption===0){
         //         this.props.resetInvoiceForm();
         //         this.setState({FranchiseeDescription: ''});
@@ -519,7 +522,7 @@ class TransactionForm extends Component {
 
     onSaveInvoice = (buttonOption) => {
         if(this.validateNewInvoice()){
-            this.setState({bAlertNewInvoice: true});
+            this.setState({bAlertNewTransaction: true});
             this.setState({buttonOption: buttonOption});
         }
     };
@@ -544,8 +547,8 @@ class TransactionForm extends Component {
     handleDueDateChange = date => {
         this.setState({ Date: date});
     };
-    handleInvoiceDateChange = date => {
-        this.setState({ InvoiceDate: date });
+    handleTransactionDateChange = date => {
+        this.setState({ TransactionDate: date });
     };
 
     storeInputReference = autosuggest => {
@@ -555,7 +558,7 @@ class TransactionForm extends Component {
     };
 
     handleCloseNewInvoice = ()=>{
-        this.setState({bAlertNewInvoice: false})
+        this.setState({bAlertNewTransaction: false})
     };
 
 
@@ -586,6 +589,8 @@ class TransactionForm extends Component {
 
         let bReadonly = false;
         if(this.props.transactionForm.type === 'new') bReadonly = true;
+
+        console.log('aaaa=', this.state);
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
@@ -624,7 +629,7 @@ class TransactionForm extends Component {
                                         variant="outlined"
                                         format="MM/dd/YYYY"
                                         value={this.state.TransactionDate}
-                                        onChange={this.handleInvoiceDateChange}
+                                        onChange={this.handleTransactionDateChange}
                                         fullWidth
                                         required
                                         InputProps={{
@@ -883,7 +888,7 @@ class TransactionForm extends Component {
                         />
                     </Snackbar>
                     <Dialog
-                        open={this.state.bAlertNewInvoice}
+                        open={this.state.bAlertNewTransaction}
                         onClose={()=>this.handleCloseNewInvoice()}
                         aria-labelledby="alert-dialog-title"
                         aria-describedby="alert-dialog-description"

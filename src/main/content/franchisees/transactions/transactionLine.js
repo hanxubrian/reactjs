@@ -382,10 +382,24 @@ class TransactionTable extends React.Component {
         this.setState({data: data});
     };
 
-    handleChangeInvoiceLine = (row, name) => event => {
+    handleChangeTransactionLine = (row, name) => event => {
         const data = [...this.state.data];
-        data[row.id][name] = event.target.value;
+        data[row.id][name] = name==='quantity' ? parseInt(event.target.value) : parseFloat(event.target.value);
+
+        if(!this.isDisable(row))
+            data[row.id]['extended'] = data[row.id].quantity * data[row.id].amount;
+
         this.setState({data: data});
+    };
+
+    isDisable = row =>{
+        if(this.props.transactionForm.franchisee ===null) {
+            this.setState({snackMessage: 'Please choose franchisee from suggestion'});
+            this.setState({openSnack: true});
+            return true;
+        }
+        if(row.quantity==='') return true;
+        if(row.amount==='') return true;
     };
 
     render()
@@ -559,7 +573,7 @@ class TransactionTable extends React.Component {
                                                 className={classes.fInput}
                                                 placeholder="Qty"
                                                 value={row.original.quantity}
-                                                onChange={this.handleChangeInvoiceLine(row.original, 'quantity')}
+                                                onChange={this.handleChangeTransactionLine(row.original, 'quantity')}
                                                 InputProps={{
                                                     inputComponent: NumberFormatCustom1,
                                                     classes: {
@@ -579,7 +593,7 @@ class TransactionTable extends React.Component {
                                                 className={classes.fInput}
                                                 placeholder="Amount"
                                                 value={row.original.amount}
-                                                onChange={this.handleChangeInvoiceLine(row.original, 'amount')}
+                                                onChange={this.handleChangeTransactionLine(row.original, 'amount')}
                                                 InputProps={{
                                                     inputComponent: NumberFormatCustom,
                                                     classes: {
@@ -599,7 +613,7 @@ class TransactionTable extends React.Component {
                                                 className={classes.fInput}
                                                 placeholder="Tax"
                                                 value={row.original.tax}
-                                                onChange={this.handleChangeInvoiceLine(row.original, 'tax')}
+                                                onChange={this.handleChangeTransactionLine(row.original, 'tax')}
                                                 InputProps={{
                                                     inputComponent: NumberFormatCustom,
                                                     classes: {
@@ -619,7 +633,7 @@ class TransactionTable extends React.Component {
                                                 className={classes.fInput}
                                                 placeholder="Markup"
                                                 value={row.original.markup}
-                                                onChange={this.handleChangeInvoiceLine(row.original, 'markup')}
+                                                onChange={this.handleChangeTransactionLine(row.original, 'markup')}
                                                 InputProps={{
                                                     inputComponent: NumberFormatCustomPercent,
                                                     readOnly: row.original.billing!=="Client Supplies",
