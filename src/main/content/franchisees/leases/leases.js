@@ -4,7 +4,18 @@ import {withRouter} from 'react-router-dom';
 import { bindActionCreators } from "redux";
 
 // core components
-import { Icon, IconButton, Fab, Typography, Toolbar} from '@material-ui/core';
+import {
+    Hidden,
+    Icon,
+    IconButton,
+    Fab,
+    Typography,
+    Toolbar,
+    CircularProgress,
+    Button,
+    Input,
+    Paper
+} from '@material-ui/core';
 
 // theme components
 import { FusePageCustomSidebarScroll, FuseAnimate } from '@fuse';
@@ -455,6 +466,10 @@ class Leases extends Component {
 		}
 	};
 
+	handleSearchChange = prop => event => {
+        this.setState({ [prop]: event.target.value });
+    };
+
 	canBeSubmitted() {
 		return true;
 		// const { name } = this.state;
@@ -685,28 +700,79 @@ class Leases extends Component {
 						</div>
 					}
 					content={
-						<div className="flex-1 flex-col absolute w-full h-full">
-						{this.state.temp && (
-								<Fragment>
-									{leaseForm.props.open ?
-										(
-											<LeaseForm
-												leases={this.props.leases}
-												franchisees={this.props.franchisees}
-												selectedLease={this.state.selectedLease} />
-										) :
-										(
-											<LeaseListContent
-											// data={this.state.temp}
-											// loading={this.state.loading}
-											// pins={this.state.pins}
-											/>
-										)}
-								</Fragment>
-							)}
-							
-						</div>
-					}
+                        <div className="flex-1 flex-col absolute w-full h-full">
+                            {(this.state.temp && !leaseForm.props.open) && (
+                                <div className={classNames("flex flex-col h-full")}>
+                                    <div className="flex flex-row items-center p-12">
+                                        <div className="flex justify-start items-center">
+                                            <Hidden smDown>
+                                                <Button
+                                                    onClick={(ev) => toggleFilterPanel()}
+                                                    aria-label="toggle filter panel"
+                                                    color="secondary"
+                                                    disabled={filterState ? true : false}
+                                                    className={classNames(classes.filterPanelButton)}
+                                                >
+                                                    <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
+                                                </Button>
+                                            </Hidden>
+                                            <Hidden smUp>
+                                                <Button
+                                                    onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
+                                                    aria-label="toggle filter panel"
+                                                    className={classNames(classes.filterPanelButton)}
+                                                >
+                                                    <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
+                                                </Button>
+                                            </Hidden>
+                                        </div>
+                                        <div className="flex items-center w-full h-44 mr-12 ml-12">
+                                            <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
+                                                <Input
+                                                    placeholder="Search..."
+                                                    className={classNames(classes.search, 'pl-16')}
+                                                    // className="pl-16"
+                                                    disableUnderline
+                                                    fullWidth
+                                                    value={this.state.s}
+                                                    onChange={this.handleSearchChange('s')}
+                                                    inputProps={{
+                                                        'aria-label': 'Search'
+                                                    }}
+                                                />
+                                                {/* <Icon color="action" className="mr-16">search</Icon> */}
+                                            </Paper>
+                                        </div>
+                                        {/* <div className="flex items-center justify-end pr-12">
+                                            <Hidden smDown>
+                                                <Button
+                                                    onClick={(ev) => toggleSummaryPanel()}
+                                                    aria-label="toggle summary panel"
+                                                    disabled={summaryState ? true : false}
+                                                    className={classNames(classes.summaryPanelButton)}
+                                                >
+                                                    <Icon>insert_chart</Icon>
+                                                </Button>
+                                            </Hidden>
+                                            <Hidden smUp>
+                                                <Button
+                                                    onClick={(ev) => this.pageLayout.toggleRightSidebar()}
+                                                    aria-label="toggle summary panel"
+                                                    className={classNames(classes.summaryPanelButton)}
+                                                >
+                                                    <Icon>insert_chart</Icon>
+                                                </Button>
+                                            </Hidden>
+                                        </div> */}
+                                    </div>
+                                    <LeaseListContent data={this.state.temp}/>
+                                </div>
+                            )}
+                            {(this.state.temp && leaseForm.props.open) && (
+                                <LeaseForm customers={this.state.customers} selectedInvoice={this.state.selectedInvoice}/>
+                            )}
+                        </div>
+                    }
 					leftSidebarHeader={
 						<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
 							{/* <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", { 'filteropen': filterState })}> */}
@@ -718,7 +784,7 @@ class Leases extends Component {
 									<h2 style={{ marginBlockStart: '1em' }}>Filters</h2>
 								)}
 
-							{/* <FuseAnimate animation="transition.expandIn" delay={200}>
+							<FuseAnimate animation="transition.expandIn" delay={200}>
 								<div>
 									<Hidden xsDown>
 										<IconButton onClick={(ev) => toggleFilterPanel()}>
@@ -726,7 +792,7 @@ class Leases extends Component {
 										</IconButton>
 									</Hidden>
 								</div>
-							</FuseAnimate> */}
+							</FuseAnimate>
 						</div>
 					}
 					leftSidebarContent={
