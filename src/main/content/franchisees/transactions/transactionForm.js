@@ -379,7 +379,6 @@ class TransactionForm extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.props.transactionForm!== prevProps.transactionForm) {
-            console.log('passss');
             this.getTotal();
         }
         if(this.state.selectedFranchisee!== null && JSON.stringify(this.state.selectedFranchisee)!== JSON.stringify(this.props.transactionForm.franchisee)) {
@@ -436,15 +435,15 @@ class TransactionForm extends Component {
     addNewInvoice = () => {
         let inv_no = chance.guid()+'_pending';
         let items = [];
-        let lines = this.props.invoiceForm.data.line;
+        let lines = this.props.transactionForm.data.line;
         //
         lines.forEach(line=>{
             let item = {
                 Inv_No: inv_no,
                 ServiceTypeListId: 0,
                 Description: line.description,
-                Billing: line.billing,
-                Service: line.service,
+                Type: line.type,
+                Frequency: line.frequency,
                 LineNo: 1,
                 UnitPrice: parseFloat(line.amount),
                 Quantity: parseInt(line.quantity),
@@ -455,27 +454,7 @@ class TransactionForm extends Component {
                 Commission: 0,
                 CommissionTotal: 0,
                 ExtraWork: 1,
-                TaxExcempt: this.state.taxExempt ? 1 : 0,
-                Distribution: [],
             };
-            let franchisees = [];
-
-            if(line.franchisees.length>0) {
-                line.franchisees.forEach(f=>{
-                    franchisees.push(
-                        {
-                            FranchiseeId: 12,
-                            FranchiseNumber: f.fnumber,
-                            LineNo: 1,
-                            Name: f.name,
-                            Description: "Work done",
-                            Amount: f.amount
-                        }
-                    )
-
-                })
-            }
-            item.Distribution = franchisees;
 
             items.push(item);
         });
@@ -483,11 +462,7 @@ class TransactionForm extends Component {
         let result = {
             Inv_No: inv_no,
             Apply_to: 'Apply To',
-            CustomerId: this.state.selectedFranchisee.CustomerId,
-            CustomerNumber: this.state.PO_number,
             PeriodId: this.props.invoices.PeriodId[0],
-            PeriodMonth: moment(this.state.period).month()+1,
-            PeriodYear: moment(this.state.period).year(),
             Description: this.state.FranchiseeDescription,
             Notes: this.state.note,
             RegionId: this.props.regionId,
@@ -498,7 +473,6 @@ class TransactionForm extends Component {
             CreatedDate: moment(),
             SubTotal: this.state.subTotal,
             MarkupAmountTotal :this.state.markup,
-            CPIIncrease: 0.00,
             TaxTotal: this.state.tax,
             GrandTotal: this.state.total,
             TransactionStatusListId: 2,
@@ -510,7 +484,7 @@ class TransactionForm extends Component {
         console.log('result', JSON.stringify(result));
     };
 
-    validateNewInvoice = () => {
+    validateNewTransaction = () => {
         if(this.state.selectedFranchisee===null){
             this.setState({snackMessage: 'Please choose a franchisee from Franchisee suggestion'});
             this.setState({openSnack: true});
@@ -520,24 +494,24 @@ class TransactionForm extends Component {
         return true;
     };
 
-    onSaveInvoice = (buttonOption) => {
-        if(this.validateNewInvoice()){
+    onSaveTransaction = (buttonOption) => {
+        if(this.validateNewTransaction()){
             this.setState({bAlertNewTransaction: true});
             this.setState({buttonOption: buttonOption});
         }
     };
 
     onSaveAndAddMore=()=>{
-        this.onSaveInvoice(0);
+        this.onSaveTransaction(0);
     };
 
     onSaveAndClose = () => {
-        this.onSaveInvoice(1);
+        this.onSaveTransaction(1);
         this.closeComposeForm();
     };
 
     onSubmitForApproval=()=>{
-        this.onSaveInvoice(2);
+        this.onSaveTransaction(2);
     };
 
     closeComposeForm = () => {
