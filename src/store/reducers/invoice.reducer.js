@@ -36,8 +36,6 @@ const initialState = {
     bInvoiceStart: false,
     customerTaxAmountLine: null,
     invoiceDateOption: 3,
-    invoiceDatePeriodMonth: moment().month(),
-    invoiceDatePeriodYear: moment().year(),
     newInvoice: null
 };
 

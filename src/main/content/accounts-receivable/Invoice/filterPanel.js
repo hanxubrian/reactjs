@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Paper, withStyles} from '@material-ui/core';
+import {Grid, Paper, withStyles} from '@material-ui/core';
 import keycode from 'keycode';
 
 //Material UI core
@@ -91,8 +91,7 @@ class FilterPanel extends Component {
         FromDate: undefined,
         ToDate: undefined,
         invoiceDateOption: THIS_MONTH,
-        invoiceDatePeriodMonth: moment().month(),
-        invoiceDatePeriodYear: moment().year(),
+        invoiceDatePeriod: moment(),
     };
 
     componentDidMount()
@@ -108,8 +107,6 @@ class FilterPanel extends Component {
         this.setState({FromDate: this.props.FromDate});
         this.setState({ToDate: this.props.ToDate});
         this.setState({invoiceDateOption: this.props.invoiceDateOption});
-        this.setState({invoiceDatePeriodMonth: this.props.invoiceDatePeriodMonth});
-        this.setState({invoiceDatePeriodYear: this.props.invoiceDatePeriodYear});
     }
 
     componentDidUpdate(prevProps, prevState, snapshot)
@@ -126,15 +123,6 @@ class FilterPanel extends Component {
 
         if(prevProps.invoiceDateOption!==this.props.invoiceDateOption){
             this.setState({invoiceDateOption: this.props.invoiceDateOption})
-        }
-
-        if(prevState.invoiceDatePeriodYear !== this.state.invoiceDatePeriodYear ||
-            prevState.invoiceDatePeriodMonth !== this.state.invoiceDatePeriodMonth) {
-            let startDate, endDate;
-            startDate = moment().year(this.state.invoiceDatePeriodYear).month(this.state.invoiceDatePeriodMonth).startOf('month').format("MM/DD/YYYY");
-            endDate = moment().year(this.state.invoiceDatePeriodYear).month(this.state.invoiceDatePeriodMonth).endOf('month').format("MM/DD/YYYY");
-            this.props.updateDate(UPDATE_FROM_DATE_INVOICE, startDate);
-            this.props.updateDate(UPDATE_TO_DATE_INVOICE, endDate);
         }
 
         if ( this.props.state !== prevProps.state )
@@ -238,18 +226,15 @@ class FilterPanel extends Component {
                 endDate = moment().subtract(1, 'years').startOf('year').add(1,'years').subtract(1,'days');
                 break;
             case PERIOD:
-                startDate = moment().year(this.state.invoiceDatePeriodYear).month(this.state.invoiceDatePeriodMonth).startOf('month');
-                endDate = moment().year(this.state.invoiceDatePeriodYear).month(this.state.invoiceDatePeriodMonth).endOf('month');
+                year = moment(this.state.invoiceDatePeriod).year();
+                let month = moment(this.state.invoiceDatePeriod).month();
+                startDate = moment().year(year).month(month).startOf('month');
+                endDate = moment().year(year).month(month).endOf('month');
         }
         if(event.target.value!==CUSTOM_DATE){
             this.props.updateDate(UPDATE_FROM_DATE_INVOICE, startDate.format("MM/DD/YYYY"));
             this.props.updateDate(UPDATE_TO_DATE_INVOICE, endDate.format("MM/DD/YYYY"));
         }
-    };
-
-    handleChangePeriod = event =>{
-        this.setState({[event.target.name]: event.target.value});
-        this.props.updatePeriodOption(event.target.name, event.target.value);
     };
 
     handleInvoiceFromDateChange = date => {
@@ -262,11 +247,20 @@ class FilterPanel extends Component {
         this.props.updateDate(UPDATE_TO_DATE_INVOICE, moment(date).format("MM/DD/YYYY"));
     };
 
+    handlePeriodChange = date => {
+        this.setState({ invoiceDatePeriod: date });
+        let year = moment(date).year();
+        let month = moment(date).month();
+        let startDate = moment().year(year).month(month).startOf('month').format("MM/DD/YYYY");
+        let endDate = moment().year(year).month(month).endOf('month').format("MM/DD/YYYY");
+
+        this.props.updateDate(UPDATE_FROM_DATE_INVOICE, startDate);
+        this.props.updateDate(UPDATE_TO_DATE_INVOICE, endDate);
+    };
+
     render()
     {
         const {classes} = this.props;
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const years = _.range(moment().year(), 2000,-1);
         return (
             <div className={classNames(classes.root)}>
                 <div className={classNames("flex flex-col")}>
@@ -333,38 +327,31 @@ class FilterPanel extends Component {
                             </MuiPickersUtilsProvider>
                         )}
                         { this.state.invoiceDateOption===PERIOD && (
-                            <div className="flex flex-col mt-20">
-                                <h3 className="mb-20">Choose a Period</h3>
-                                <Select
-                                    value={this.state.invoiceDatePeriodYear}
-                                    onChange={this.handleChangePeriod}
-                                    inputProps={{
-                                        name: 'invoiceDatePeriodYear',
-                                        id  : 'invoiceDatePeriodYear'
-                                    }}
-                                >
-                                    {
-                                        years.map((y, index)=> {
-                                            return <MenuItem key={index} value={y}>{y}</MenuItem>
-                                        })
-                                    }
-                                </Select>
-                                <br></br>
-                                <Select
-                                    value={this.state.invoiceDatePeriodMonth}
-                                    onChange={this.handleChangePeriod}
-                                    inputProps={{
-                                        name: 'invoiceDatePeriodMonth',
-                                        id  : 'invoiceDatePeriodMonth'
-                                    }}
-                                >
-                                    {
-                                        months.map((m, index)=> {
-                                            return <MenuItem key={index} value={index}>{m}</MenuItem>
-                                        })
-                                    }
-                                </Select>
-                            </div>
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <div className="flex flex-col mt-20">
+                                    <h3 className="mb-20">Choose a Period</h3>
+                                    <DatePicker
+                                        margin="none"
+                                        label="Period"
+                                        name="invoiceDatePeriod"
+                                        variant="outlined"
+                                        format="MM/YYYY"
+                                        value={this.state.invoiceDatePeriod}
+                                        onChange={this.handlePeriodChange}
+                                        fullWidth
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input,
+                                            },
+                                        }}
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        openToYearSelection={true}
+                                    />
+                                </div>
+                            </MuiPickersUtilsProvider>
                         )}
 
                         <div style={{marginTop: 20, display: 'flex', flexDirection: 'column'}}>
@@ -435,8 +422,6 @@ function mapStateToProps({invoices, fuse})
         ToDate: invoices.ToDate,
         settings       : fuse.settings.current,
         invoiceDateOption: invoices.invoiceDateOption,
-        invoiceDatePeriodMonth: invoices.invoiceDatePeriodMonth,
-        invoiceDatePeriodYear: invoices.invoiceDatePeriodYear,
     }
 }
 
