@@ -261,7 +261,7 @@ class InvoiceReport extends Component {
                                     <strong>Amount of Sale</strong>
                                 </td>
                                 <td width="15%" style={{border:'solid 1px'}} className="text-center">
-                                    {this.state.invoiceDetail.TRX_Amount}
+                                    {this.state.invoiceDetail.SubTotal}
                                 </td>
                             </tr>
                             <tr>
@@ -271,7 +271,7 @@ class InvoiceReport extends Component {
                                     <strong>Sales Tax</strong>
                                 </td>
                                 <td width="15%" style={{border:'solid 1px'}} className="text-center">
-                                    {this.state.invoiceDetail.TRX_Tax}
+                                    {this.state.invoiceDetail.TaxTotal}
                                 </td>
                             </tr>
                             <tr>
@@ -284,7 +284,7 @@ class InvoiceReport extends Component {
                                     <strong>Total</strong>
                                 </td>
                                 <td width="15%" style={{border:'solid 1px'}} className="text-center">
-                                    $31,180.55
+                                    {this.state.invoiceDetail.GrandTotal}
                                 </td>
                             </tr>
                             </tbody>
