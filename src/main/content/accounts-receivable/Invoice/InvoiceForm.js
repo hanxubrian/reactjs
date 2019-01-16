@@ -402,7 +402,7 @@ class InvoiceForm extends Component {
             this.setState({DueDate: moment(nextProps.invoiceForm.customer.DueDate)});
         }
 
-        if(nextProps.newInvoice!==null && nextProps.newInvoice!==this.props.nextProps.newInvoice){
+        if(nextProps.newInvoice!==null && nextProps.newInvoice!==this.props.newInvoice){
             this.setState({bAlertNewInvoice: false});
             if(this.state.buttonOption===0){
                 this.props.resetInvoiceForm();
@@ -456,7 +456,7 @@ class InvoiceForm extends Component {
                 Commission: 0,
                 CommissionTotal: 0,
                 ExtraWork: 1,
-                TaxExcempt: 1,
+                TaxExcempt: this.state.taxExempt ? 1 : 0,
                 Distribution: [],
             };
             let franchisees = [];
@@ -476,7 +476,7 @@ class InvoiceForm extends Component {
 
                 })
             }
-            item.Distribution.push(franchisees);
+            item.Distribution = franchisees;
 
             items.push(item);
         });
@@ -505,11 +505,7 @@ class InvoiceForm extends Component {
             TransactionStatusListId: 2,
             Status: 2,
             SysCust: 2,
-            InvoiceItems: [
-                {
-                    Items: items
-                }
-            ]
+            Items: items
         };
         this.props.addInvoice(this.props.regionId, result);
         console.log('result', JSON.stringify(result));
