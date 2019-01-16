@@ -3,12 +3,17 @@ import {leaseService} from "services";
 
 export const GET_ALL_LEASES = "[LEASES] GETS ALL";
 export const GET_LEASES_FETCH_START = "[LEASES] GET LEASES FETCH START";
+export const GET_LEASE_STATUS = "[LEASES] GETS LEASE STATUS";
+export const GET_LEASE_DETAIL = "[LEASES] GETS LEASE DETAIL";
 export const DELETE_SELECTED_LEASES = "[LEASES] DELETE SELECTED";
 export const REMOVE_SELECTED_LEASE = "[LEASE] REMOVE SELECTED";
 export const TOGGLE_SUMMARY_PANEL = "[LEASES] TOGGLE SUMMARY PANEL";
 export const TOGGLE_FILTER_STATUS = "[LEASES] TOGGLE FILTER STATUS";
 export const TOGGLE_FILTER_PANEL = "[LEASES] TOGGLE FILTER PANEL";
 export const TOGGLE_MAP_VIEW = '[LEASES] TOGGLE MAP VIEW';
+export const RESET_LEASE_FORM = "[LEASES] RESET LEASE FORM";
+export const STARTING_SAVE_LEASE_FORM_DATA = "[LEASES] STARTING SAVE LEASE FORM DATA";
+
 
 // for Add/Edit
 export const OPEN_NEW_LEASE_FORM = '[LEASES APP] OPEN NEW LEASE FORM';
@@ -17,6 +22,9 @@ export const OPEN_EDIT_LEASE_FORM = '[LEASES APP] OPEN EDIT LEASE FORM';
 export const CLOSE_EDIT_LEASE_FORM = '[LEASES APP] CLOSE EDIT LEASE FORM';
 export const ADD_LEASE = '[LEASES APP] ADD LEASE';
 export const UPDATE_LEASE = '[LEASES APP] UPDATE LEASE';
+export const UPDATE_LEASE_STATUS = '[LEASES APP] UPDATE LEASE STATUS';
+export const UPDATE_LEASE_DATE_OPTION = '[LEASES APP] UPDATE LEASE DATE OPTION';
+
 
 const axios_instance = axios.create({
     headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
@@ -73,6 +81,39 @@ export function getLeases(regionId, statusId, searchText) {
         })();
     }
 }
+
+export function getLeaseDetail() {
+    return (dispatch) => {
+       (async () => {
+            let res = await leaseService.getLeaseDetailList();
+            if (res) {
+                dispatch({
+                    type: GET_LEASE_DETAIL,
+                    payload: res
+                });
+            } else {
+
+            }
+        })();
+    };
+}
+
+export function getLeaseStatus(RegionId) {
+    return (dispatch) => {
+       (async () => {
+            let res = await leaseService.getLeaseStatusList(RegionId);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: GET_LEASE_STATUS,
+                    payload: res.Data
+                });
+            } else {
+
+            }
+        })();
+    };
+}
+
 
 export function toggleFilterPanel(){
     return {
@@ -192,4 +233,39 @@ export function updateLease(lease)
             ]).then(() => dispatch(getLeases()))
         );
     };
+}
+
+export function resetLeaseForm(){
+    return (dispatch) => {
+
+        dispatch({
+            type: STARTING_SAVE_LEASE_FORM_DATA,
+            payload: true
+        });
+
+        (async () => {
+                dispatch({
+                    type: RESET_LEASE_FORM,
+                });
+        })();
+    };
+}
+
+export function updateLeaseStatus(newStatus){
+    return {
+        type: UPDATE_LEASE_STATUS,
+        payload: newStatus
+    }
+}
+
+/**
+ * updates lease date option index
+ * @param option
+ * @returns {{type: string, payload: *}}
+ */
+export function updateLeaseDateOption(option){
+    return {
+        type: UPDATE_LEASE_DATE_OPTION,
+        payload: option
+    }
 }

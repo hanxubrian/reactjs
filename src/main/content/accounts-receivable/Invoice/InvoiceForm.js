@@ -7,7 +7,7 @@ import {
     IconButton, Icon, Grid, FormControlLabel, Checkbox, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog
 } from '@material-ui/core';
 import 'date-fns'
-import MomentUtils from '@date-io/moment';
+import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 import green from '@material-ui/core/colors/green';
 import amber from '@material-ui/core/colors/amber';
@@ -601,7 +601,7 @@ class InvoiceForm extends Component {
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="h-full flex flex-col relative">
                     <div className="flex flex-col p-24 pt-12 pb-0" style={{flex: "1"}}>
-                        <MuiPickersUtilsProvider utils={MomentUtils}>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <Grid container className={classNames(classes.formControl)}>
                                 <Grid item xs={12} sm={6} md={6} className="flex flex-row pr-16">
                                     <Autosuggest
@@ -655,7 +655,7 @@ class InvoiceForm extends Component {
                                         label="Invoice Date"
                                         name="InvoiceDate"
                                         variant="outlined"
-                                        format="MM/DD/YYYY"
+                                        format="MM/dd/YYYY"
                                         value={this.state.InvoiceDate}
                                         onChange={this.handleInvoiceDateChange}
                                         fullWidth
@@ -676,7 +676,7 @@ class InvoiceForm extends Component {
                                     <DatePicker
                                         margin="none"
                                         label="Due Date"
-                                        format="MM/DD/YYYY"
+                                        format="MM/dd/YYYY"
                                         name="DueDate"
                                         variant="outlined"
                                         value={this.state.DueDate}
