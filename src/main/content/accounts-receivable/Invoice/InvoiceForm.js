@@ -3,8 +3,8 @@ import {withRouter} from 'react-router-dom';
 
 // core components
 import {
-    Paper, TextField, Typography, MenuItem, Card, CardHeader, CardContent, Divider, Button,
-    Snackbar, SnackbarContent, IconButton, Icon, Grid, FormControlLabel, Checkbox
+    Paper, TextField, Typography, MenuItem, Card, CardHeader, CardContent, Divider, Button, Snackbar, SnackbarContent,
+    IconButton, Icon, Grid, FormControlLabel, Checkbox, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog
 } from '@material-ui/core';
 import 'date-fns'
 import DateFnsUtils from '@date-io/date-fns';
@@ -289,7 +289,9 @@ class InvoiceForm extends Component {
         openSnack: false,
         PO_number: '',
         period: moment(),
-        taxExempt: false
+        taxExempt: false,
+        bAlertNewInvoice: false,
+        buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval
     };
 
     renderInputComponent = (inputProps ) => {
@@ -396,8 +398,26 @@ class InvoiceForm extends Component {
                 this.setState({InvoiceNo: nextProps.invoiceForm.customer.InvoiceNo});
             this.setState({value: nextProps.invoiceForm.customer.CustomerName});
             this.setState({CustomerNo: nextProps.invoiceForm.customer.CustomerNo});
-            this.setState({InvoiceDate: moment(nextProps.invoiceForm.customer.InvoiceDate).format('MM/DD/YYYY')});
-            this.setState({DueDate: moment(nextProps.invoiceForm.customer.DueDate).format('MM/DD/YYYY')});
+            this.setState({InvoiceDate: moment(nextProps.invoiceForm.customer.InvoiceDate)});
+            this.setState({DueDate: moment(nextProps.invoiceForm.customer.DueDate)});
+        }
+
+        if(nextProps.newInvoice!==null && nextProps.newInvoice!==this.props.nextProps.newInvoice){
+            this.setState({bAlertNewInvoice: false});
+            if(this.state.buttonOption===0){
+                this.props.resetInvoiceForm();
+                this.setState({InvoiceDescription: ''});
+                this.setState({note: ''});
+                this.setState({selectedCustomer: null});
+                this.setState({value: ''});
+                this.setState({CustomerNo: ''});
+            }
+            else if(this.state.buttonOption===1) {
+                this.closeComposeForm();
+            }
+            else if(this.state.buttonOption===2) {
+                this.closeComposeForm();
+            }
         }
     }
 
@@ -414,19 +434,14 @@ class InvoiceForm extends Component {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
     };
 
-    onSaveInvoice = () => {
-        if(this.state.selectedCustomer===null){
-            this.setState({snackMessage: 'Please choose customer from Invoice suggestion'});
-            this.setState({openSnack: true});
-            return;
-        }
-
-
+    addNewInvoice = () => {
+        let inv_no = chance.guid()+'_pending';
         let items = [];
         let lines = this.props.invoiceForm.data.line;
         //
         lines.forEach(line=>{
             let item = {
+                Inv_No: inv_no,
                 ServiceTypeListId: 0,
                 Description: line.description,
                 Billing: line.billing,
@@ -442,7 +457,7 @@ class InvoiceForm extends Component {
                 CommissionTotal: 0,
                 ExtraWork: 1,
                 TaxExcempt: 1,
-                Distribution: []
+                Distribution: [],
             };
             let franchisees = [];
 
@@ -467,6 +482,8 @@ class InvoiceForm extends Component {
         });
 
         let result = {
+            Inv_No: inv_no,
+            Apply_to: 'Apply To',
             CustomerId: this.state.selectedCustomer.CustomerId,
             CustomerNumber: this.state.PO_number,
             PeriodId: this.props.invoices.PeriodId[0],
@@ -477,41 +494,57 @@ class InvoiceForm extends Component {
             RegionId: this.props.regionId,
             BillRunId: 999,
             InvoiceDate: this.state.InvoiceDate,
+            DueDate: this.state.DueDate,
             CreatedById: this.props.user.UserId,
-            CreatedDate: moment().format('MM/DD/YYYY'),
+            CreatedDate: moment(),
             SubTotal: this.state.subTotal,
             MarkupAmountTotal :this.state.markup,
             CPIIncrease: 0.00,
             TaxTotal: this.state.tax,
             GrandTotal: this.state.total,
+            TransactionStatusListId: 2,
+            Status: 2,
+            SysCust: 2,
             InvoiceItems: [
                 {
-                    Inv_No: chance.guid()+'_pending',
                     Items: items
                 }
             ]
         };
+        this.props.addInvoice(this.props.regionId, result);
         console.log('result', JSON.stringify(result));
     };
 
-    onSaveAndAddMore=()=>{
-        this.onSaveInvoice();
-        this.props.resetInvoiceForm();
-        this.setState({InvoiceDescription: ''});
-        this.setState({note: ''});
-        this.setState({selectedCustomer: null});
-        this.setState({value: ''});
-        this.setState({CustomerNo: ''});
+    validateNewInvoice = () => {
+        if(this.state.selectedCustomer===null){
+            this.setState({snackMessage: 'Please choose customer from Invoice suggestion'});
+            this.setState({openSnack: true});
+            return false;
+        }
+
+        return true;
     };
 
-    onSubmitForApproval=()=>{
-        this.onSaveInvoice();
+    onSaveInvoice = (buttonOption) => {
+        if(this.validateNewInvoice()){
+            this.setState({bAlertNewInvoice: true});
+            this.setState({buttonOption: buttonOption});
+        }
+    };
+
+    onSaveAndAddMore=()=>{
+        this.onSaveInvoice(0);
     };
 
     onSaveAndClose = () => {
-        this.onSaveInvoice();
+        this.onSaveInvoice(1);
         this.closeComposeForm();
     };
+
+    onSubmitForApproval=()=>{
+        this.onSaveInvoice(2);
+    };
+
 
     closeComposeForm = () => {
         this.props.invoiceForm.type === 'edit' ? this.props.closeEditInvoiceForm() : this.props.closeNewInvoiceForm();
@@ -533,6 +566,11 @@ class InvoiceForm extends Component {
             this.input = autosuggest.input;
         }
     };
+
+    handleCloseNewInvoice = ()=>{
+        this.setState({bAlertNewInvoice: false})
+    };
+
 
     handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -943,6 +981,27 @@ class InvoiceForm extends Component {
                             message={this.state.snackMessage}
                         />
                     </Snackbar>
+                    <Dialog
+                        open={this.state.bAlertNewInvoice}
+                        onClose={()=>this.handleCloseNewInvoice()}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Create New Invoice"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Do you really want to insert the new invoice?
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={()=>this.handleCloseNewInvoice()} color="primary">
+                                Close
+                            </Button>
+                            <Button onClick={()=>this.addNewInvoice()} color="primary" autoFocus>
+                                Create
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                 </div>
             </FuseAnimate>
         );
@@ -956,7 +1015,8 @@ function mapDispatchToProps(dispatch)
         closeEditInvoiceForm: Actions.closeEditInvoiceForm,
         closeNewInvoiceForm : Actions.closeNewInvoiceForm,
         selectCustomer: Actions.selectCustomer,
-        resetInvoiceForm: Actions.resetInvoiceForm
+        resetInvoiceForm: Actions.resetInvoiceForm,
+        addInvoice: Actions.addInvoice
     }, dispatch);
 }
 
@@ -965,6 +1025,7 @@ function mapStateToProps({invoices, auth})
     return {
         invoiceForm: invoices.invoiceForm,
         invoices: invoices,
+        newInvoice: invoices.newInvoice,
         user: auth.login,
         regionId: auth.login.defaultRegionId,
         bStartingSaveFormData: invoices.bStartingSaveFormData

@@ -38,6 +38,7 @@ const initialState = {
     invoiceDateOption: 3,
     invoiceDatePeriodMonth: moment().month(),
     invoiceDatePeriodYear: moment().year(),
+    newInvoice: null
 };
 
 
@@ -171,7 +172,8 @@ const invoices = function(state = initialState, action) {
                     },
                     data : null,
                     customer: null
-                }
+                },
+                newInvoice: null
             };
         }
         case Actions.OPEN_EDIT_INVOICE_FORM:
@@ -199,7 +201,8 @@ const invoices = function(state = initialState, action) {
                     },
                     data : null,
                     customer: null
-                }
+                },
+                newInvoice: null
             };
         }
         case Actions.UPDATE_INVOICE_LINE:
@@ -219,8 +222,13 @@ const invoices = function(state = initialState, action) {
             return {
                 ...state,
                 bStartingSaveFormData: false,
-                invoiceForm: {...state.invoiceForm, data: null, customer: null}
+                invoiceForm: {...state.invoiceForm, data: null, customer: null},
+                newInvoice: null
             }
+        }
+        case Actions.ADD_INVOICE:
+        {
+            return {...state, newInvoice: action.payload}
         }
         default:
         {

@@ -176,23 +176,26 @@ export function updateDate(key, date) {
 
 }
 
-export function addInvoice(newInvoice)
+export function addInvoice(regionId, data)
 {
-    return (dispatch, getState) => {
+    return (dispatch) => {
+        // dispatch({
+        //     type: GET_INVOICES_FETCH_START,
+        //     payload: true
+        // });
 
-        console.log('state', getState());
-
-        const request = axios.post('/api/contacts-app/add-contact', {
-            newInvoice
-        });
-
-        return request.then((response) =>
-            Promise.all([
+        (async () => {
+            let res = await invoiceService.createNewInvoice(regionId, data);
+            console.log('result=', res);
+            if (res.IsSuccess) {
                 dispatch({
-                    type: ADD_INVOICE
-                })
-            ]).then(() => dispatch(getInvoices()))
-        );
+                    type: ADD_INVOICE,
+                    payload: res
+                });
+            } else {
+
+            }
+        })();
     };
 }
 

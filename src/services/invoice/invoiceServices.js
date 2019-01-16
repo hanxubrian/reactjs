@@ -36,7 +36,6 @@ class invoiceService {
             "Month": moment().month(),
             "Year": moment().year()
         };
-        console.log('data=', data);
         return new Promise((resolve, reject) => {
             axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/InvoiceList`,data)
                 .then( res => {
@@ -107,6 +106,29 @@ class invoiceService {
             )
                 .then( res => {
                     console.log('status API result=', res);
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    }
+
+    /**
+     * create new invoice
+     * @param regionId
+     * @param data
+     * @returns {Promise<any>}
+     */
+    createNewInvoice = (regionId, data) => {
+        return new Promise((resolve, reject) => {
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/create/${regionId}`,data)
+                .then( res => {
                     if(res.status===200) {
                         resolve(res.data);
                     }
