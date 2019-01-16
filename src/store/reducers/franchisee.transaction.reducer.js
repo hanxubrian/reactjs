@@ -116,7 +116,13 @@ const transactions = function(state = initialState, action) {
                 transactionForm: {...state.transactionForm, franchisee: action.payload}
             }
         }
-
+        case Actions.UPDATE_TRANSACTION_LINE:
+        {
+            return {
+                ...state,
+                transactionForm: {...state.transactionForm, data: {line: action.payload}}
+            }
+        }
         default:
         {
             return state;

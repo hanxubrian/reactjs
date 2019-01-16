@@ -25,11 +25,11 @@ import "react-table/react-table.css";
 //Store
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
-import * as Actions from 'store/actions';
+import * as Actions from '../../../../store/actions';
 
 
 //Utility
-import {NumberFormatCustom, escapeRegexCharacters, NumberFormatCustom1, NumberFormatCustomPercent} from '../../../../services/utils'
+import {NumberFormatCustom, NumberFormatCustom1, NumberFormatCustomPercent} from '../../../../services/utils'
 
 
 //Snackbar
@@ -272,64 +272,10 @@ class TransactionTable extends React.Component {
             createData("Regular Billing", "Adjust-Balance", '',''),
         ],
         page       : 0,
-        rowsPerPage: 10,
         labelWidth: 0,
         openSnack: false,
         snackMessage: 'Please fill the data',
-        nameValue0: '',
-        nameValue1: '',
-        nameValue2: '',
-        nameValue3: '',
-        nameValue4: '',
-        nameValue5: '',
-        nameValue6: '',
-        nameValue7: '',
-        nameValue8: '',
-        nameValue9: '',
-        nameValue10: '',
-        nameValue11: '',
-        nameValue12: '',
-        nameValue13: '',
-        nameValue14: '',
-        nameValue15: '',
-        nameValue16: '',
-        nameValue17: '',
-        nameValue18: '',
-        nameValue19: '',
-        nameValue20: '',
-        numberValue0: '',
-        numberValue1: '',
-        numberValue2: '',
-        numberValue3: '',
-        numberValue4: '',
-        numberValue5: '',
-        numberValue6: '',
-        numberValue7: '',
-        numberValue8: '',
-        numberValue9: '',
-        numberValue10: '',
-        numberValue11: '',
-        numberValue12: '',
-        numberValue13: '',
-        numberValue14: '',
-        numberValue15: '',
-        numberValue16: '',
-        numberValue17: '',
-        numberValue18: '',
-        numberValue19: '',
-        numberValue20: '',
-        numberSuggestions: [],
-        taxRowId: 0,
-        customerTaxAmountLine: null
     };
-
-    constructor(props) {
-        super(props);
-    }
-
-    componentWillUnmount() {
-
-    }
 
     handleChangeBilling = (event, n) => {
         let newData = this.state.data.map(row=>{
@@ -355,51 +301,18 @@ class TransactionTable extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot){
-        // if(this.state.data!==null && prevState.data!==this.state.data){
-        //     this.props.updateInvoiceLine(this.state.data);
-        // }
-        // if(JSON.stringify(this.state.customerTaxAmountLine)!== JSON.stringify(prevState.customerTaxAmountLine)){
-        //     this.updateTaxFromLine();
-        // }
+        if(this.state.data!==null && prevState.data!==this.state.data){
+            this.props.updateTransactionLine(this.state.data);
+        }
     }
 
     componentWillReceiveProps(nextProps) {
-        // if(JSON.stringify(this.props.customerTaxAmountLine)!==JSON.stringify(nextProps.customerTaxAmountLine)){
-        //     this.setState({customerTaxAmountLine: nextProps.customerTaxAmountLine})
-        // }
-        // if(nextProps.transactionForm.data===null && JSON.stringify(nextProps.transactionForm.data)!==JSON.stringify(this.props.transactionForm.data)){
-        //     console.log('passs');
-        //     let newData = createData("Regular Billing", "Adjust-Balance", '','');
-        //     this.setState({data: [{...newData, id: 0}]});
-        // }
+        if(nextProps.transactionForm.data===null && JSON.stringify(nextProps.transactionForm.data)!==JSON.stringify(this.props.transactionForm.data)){
+            console.log('passs');
+            let newData = createData("Regular Billing", "Adjust-Balance", '','');
+            this.setState({data: [{...newData, id: 0}]});
+        }
     }
-
-    updateTaxFromLine = ()=> {
-        // const data = [...this.state.data];
-        // const {taxRowId, customerTaxAmountLine} = this.state;
-        // data[taxRowId].tax = customerTaxAmountLine.TaxAmount;
-        // data[taxRowId].extended = customerTaxAmountLine.ExtendedPrice;
-        // data[taxRowId].total = customerTaxAmountLine.TotalAmount;
-        // this.setState({data: data});
-    };
-
-    // For Franchisee suggestion
-    getSuggestions = (value) => {
-        const escapedValue = escapeRegexCharacters(value.trim());
-        const regex = new RegExp('^' + escapedValue, 'i');
-
-        let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList;
-        return franchisees.filter(f => regex.test(f.Number) || regex.test(f.Name));
-    };
-
-    onNameChange = row =>(event, { newValue }) => {
-        this.setState({
-            ["nameValue"+row.f_index]: newValue
-        });
-        const data = [...this.state.data];
-        data[row.id].franchisees[row.fid].name = newValue;
-        this.setState({data: data});
-    };
 
     handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -457,13 +370,6 @@ class TransactionTable extends React.Component {
         this.setState({data: newData})
     };
 
-    getInvoiceLineTaxAmount = row =>{
-        if(!this.isDisable(row)) {
-            // this.props.getCustomerTaxAmount(this.props.regionId, this.props.transactionForm.customer.CustomerId, row.amount, row.quantity);
-            // this.setState({taxRowId: row.id})
-        }
-    };
-
     handleChange = row => event => {
         const data = [...this.state.data];
         data[row.id].franchisees[row.fid].amount = parseFloat(event.target.value);
@@ -480,18 +386,6 @@ class TransactionTable extends React.Component {
         const data = [...this.state.data];
         data[row.id][name] = event.target.value;
         this.setState({data: data});
-        // if(!this.isDisable(row))
-        //     this.getInvoiceLineTaxAmount(row)
-    };
-
-    isDisable = row =>{
-        if(this.props.transactionForm.franchisee===null) {
-            this.setState({snackMessage: 'Please choose customer from Franchisee suggestion'});
-            this.setState({openSnack: true});
-            return true;
-        }
-        if(row.quantity==='') return true;
-        if(row.amount==='') return true;
     };
 
     render()
@@ -809,8 +703,8 @@ TransactionTable.propTypes = {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        updateInvoiceLine: Actions.updateInvoiceLine,
-        getCustomerTaxAmount: Actions.getCustomerTaxAmount
+        getCustomerTaxAmount: Actions.getCustomerTaxAmount,
+        updateTransactionLine: Actions.updateTransactionLine
     }, dispatch);
 }
 

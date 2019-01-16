@@ -9,7 +9,7 @@ import {
 import JanikingPagination from 'Commons/JanikingPagination';
 
 
-import {withStyles, Checkbox} from "@material-ui/core";
+import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
 // for store
@@ -21,7 +21,6 @@ import * as Actions from 'store/actions';
 import moment from 'moment'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import _ from 'lodash';
 import classNames from 'classnames';
 import InvoiceReport from './invoiceReport'
 
