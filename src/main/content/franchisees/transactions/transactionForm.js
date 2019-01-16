@@ -564,8 +564,6 @@ class TransactionForm extends Component {
         let bReadonly = false;
         if(this.props.transactionForm.type === 'new') bReadonly = true;
 
-        console.log('aaaa=', this.state);
-
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="h-full flex flex-col relative">
