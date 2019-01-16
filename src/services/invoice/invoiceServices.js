@@ -71,9 +71,10 @@ class invoiceService {
         });
     };
 
-    getInvoiceDetailList = () => {
+    getInvoiceDetailList = (InvoiceId,RegionId) => {
         return new Promise((resolve, reject) => {
-            axios.get("/api/invoiceDetail/gets")
+            axios_instance.get(`${BASE_MONGO_API_URL}/v1/accountsreceivable/Invoice/`+InvoiceId,{
+                params: {RegionId: RegionId}})
             //     { params: {RegionId, InvoiceTypeId}}
             // )
                 .then( res => {

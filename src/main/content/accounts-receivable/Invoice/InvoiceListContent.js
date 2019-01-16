@@ -248,15 +248,17 @@ class InvoiceListContent extends Component {
         });
     }
 
-    invoiceReport =(ev)=>{
+    invoiceReport =(ev,InvoiceId, RegionId)=>{
         ev.stopPropagation();
-        this.props.getInvoiceDetail();
+        console.log(InvoiceId+"+invoice id+"+RegionId);
+        this.props.getInvoiceDetail(InvoiceId, RegionId);
         this.setState({
             isOpen: !this.state.isOpen
         });
         this.setState({
-            invoiceDetail: this.props.invoicesdetail,
+            invoiceDetail: this.props.invoiceDetail,
         });
+
     };
 
     toggleModal = () => {
@@ -364,7 +366,7 @@ class InvoiceListContent extends Component {
                                     accessor: "InvoiceNo",
                                     filterAll: true,
                                     width: 280,
-                                    Cell: props => <Button onClick={this.invoiceReport}>{props.value}</Button> ,
+                                    Cell: row => <Button onClick={(e)=>{this.invoiceReport(e,row.original.InvoiceId,row.original.RegionId)}}>{row.original.InvoiceNo}</Button> ,
                                     className: classNames(classes.invoiceNo, "flex items-center  justify-center text-12")
                                 },
                                 {
@@ -488,7 +490,7 @@ function mapStateToProps({invoices, auth})
 {
     return {
         invoices: invoices.invoicesDB,
-        invoicesdetail: invoices.invoiceDetail,
+        invoiceDetail: invoices.invoiceDetail,
         transactionStatus: invoices.transactionStatus,
         regionId: auth.login.defaultRegionId,
         InvoiceForm: invoices.InvoiceForm,

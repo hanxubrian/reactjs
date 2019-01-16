@@ -55,10 +55,10 @@ export function getInvoices(RegionId, StatusId, FromDate, ToDate, PeriodId,OpenO
     };
 }
 
-export function getInvoiceDetail() {
+export function getInvoiceDetail(InvoiceId,RegionId) {
     return (dispatch) => {
        (async () => {
-            let res = await invoiceService.getInvoiceDetailList();
+            let res = await invoiceService.getInvoiceDetailList(InvoiceId,RegionId);
             if (res) {
                 dispatch({
                     type: GET_INVOICE_DETAIL,
