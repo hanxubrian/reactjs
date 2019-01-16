@@ -36,76 +36,76 @@ const styles = theme => ({
         '& .rbc-today' : {
             backgroundColor: 'transparent'
         },
-        '& .rbc-header.rbc-today, & .rbc-month-view .rbc-day-bg.rbc-today'  : {
-            borderBottom: '2px solid ' + theme.palette.secondary.main + '!important'
-        },
-        '& .rbc-month-view, & .rbc-time-view, & .rbc-agenda-view'   : {
-            padding: 24,
-            [theme.breakpoints.down('sm')]: {
-                padding: 16
-            },
-            ...theme.mixins.border(0)
-        },
-        '& .rbc-agenda-view table' : {
-            ...theme.mixins.border(1),
-            '& thead > tr > th': {
-                ...theme.mixins.borderBottom(0)
-            },
-            '& tbody > tr > td': {
-                padding : '12px 6px',
-                '& + td': {
-                    ...theme.mixins.borderLeft(1)
-                }
-            }
-        },
-        '& .rbc-time-view' : {
-            '& .rbc-time-header' : {
-                ...theme.mixins.border(1)
-            },
-            '& .rbc-time-content': {
-                flex: '0 1 auto',
-                ...theme.mixins.border(1)
-            }
-        },
-        '& .rbc-month-view' : {
-            '& > .rbc-row': {
-                ...theme.mixins.border(1)
-            },
-            '& .rbc-month-row': {
-                ...theme.mixins.border(1),
-                borderWidth: '0 1px 1px 1px!important',
-                minHeight  : 128
-            },
-            '& .rbc-header + .rbc-header': {
-                ...theme.mixins.borderLeft(1)
-            },
-            '& .rbc-header'              : {
-                ...theme.mixins.borderBottom(0)
-            },
-            '& .rbc-day-bg + .rbc-day-bg': {
-                ...theme.mixins.borderLeft(1)
-            }
-        },
-        '& .rbc-day-slot .rbc-time-slot' : {
-            ...theme.mixins.borderTop(1),
-            opacity: 0.5
-        },
-        '& .rbc-time-header > .rbc-row > * + *' : {
-            ...theme.mixins.borderLeft(1)
-        },
-        '& .rbc-time-content > * + * > *': {
-            ...theme.mixins.borderLeft(1)
-        },
-        '& .rbc-day-bg + .rbc-day-bg' : {
-            ...theme.mixins.borderLeft(1)
-        },
-        '& .rbc-time-header > .rbc-row:first-child' : {
-            ...theme.mixins.borderBottom(1)
-        },
-        '& .rbc-timeslot-group' : {
-            minHeight: 64,
-            ...theme.mixins.borderBottom(1)
-        },
+        // '& .rbc-header.rbc-today, & .rbc-month-view .rbc-day-bg.rbc-today'  : {
+        //     borderBottom: '2px solid ' + theme.palette.secondary.main + '!important'
+        // },
+        // '& .rbc-month-view, & .rbc-time-view, & .rbc-agenda-view'   : {
+        //     padding: 24,
+        //     [theme.breakpoints.down('sm')]: {
+        //         padding: 16
+        //     },
+        //     ...theme.mixins.border(0)
+        // },
+        // '& .rbc-agenda-view table' : {
+        //     ...theme.mixins.border(1),
+        //     '& thead > tr > th': {
+        //         ...theme.mixins.borderBottom(0)
+        //     },
+        //     '& tbody > tr > td': {
+        //         padding : '12px 6px',
+        //         '& + td': {
+        //             ...theme.mixins.borderLeft(1)
+        //         }
+        //     }
+        // },
+        // '& .rbc-time-view' : {
+        //     '& .rbc-time-header' : {
+        //         ...theme.mixins.border(1)
+        //     },
+        //     '& .rbc-time-content': {
+        //         flex: '0 1 auto',
+        //         ...theme.mixins.border(1)
+        //     }
+        // },
+        // '& .rbc-month-view' : {
+        //     '& > .rbc-row': {
+        //         ...theme.mixins.border(1)
+        //     },
+        //     '& .rbc-month-row': {
+        //         ...theme.mixins.border(1),
+        //         borderWidth: '0 1px 1px 1px!important',
+        //         minHeight  : 128
+        //     },
+        //     '& .rbc-header + .rbc-header': {
+        //         ...theme.mixins.borderLeft(1)
+        //     },
+        //     '& .rbc-header'              : {
+        //         ...theme.mixins.borderBottom(0)
+        //     },
+        //     '& .rbc-day-bg + .rbc-day-bg': {
+        //         ...theme.mixins.borderLeft(1)
+        //     }
+        // },
+        // '& .rbc-day-slot .rbc-time-slot' : {
+        //     ...theme.mixins.borderTop(1),
+        //     opacity: 0.5
+        // },
+        // '& .rbc-time-header > .rbc-row > * + *' : {
+        //     ...theme.mixins.borderLeft(1)
+        // },
+        // '& .rbc-time-content > * + * > *': {
+        //     ...theme.mixins.borderLeft(1)
+        // },
+        // '& .rbc-day-bg + .rbc-day-bg' : {
+        //     ...theme.mixins.borderLeft(1)
+        // },
+        // '& .rbc-time-header > .rbc-row:first-child' : {
+        //     ...theme.mixins.borderBottom(1)
+        // },
+        // '& .rbc-timeslot-group' : {
+        //     minHeight: 64,
+        //     ...theme.mixins.borderBottom(1)
+        // },
         '& .rbc-date-cell' : {
             padding   : 8,
             fontSize  : 16,
