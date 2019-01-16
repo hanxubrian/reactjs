@@ -257,10 +257,15 @@ class InvoiceListContent extends Component {
 
     invoiceReport =(ev,InvoiceId, RegionId)=>{
         ev.stopPropagation();
+        console.log(InvoiceId+"+invoice id+"+RegionId);
         this.props.getInvoiceDetail(InvoiceId, RegionId);
         this.setState({
             isOpen: !this.state.isOpen
         });
+        this.setState({
+            invoiceDetail: this.props.invoiceDetail,
+        });
+
     };
 
     toggleModal = () => {
@@ -386,6 +391,12 @@ class InvoiceListContent extends Component {
                                     className: classNames(classes.invoiceNo, "flex items-center  justify-center text-12")
                                 },
                                 {
+                                    Header: "Description",
+                                    accessor: "InvoiceDescription",
+                                    className: classNames(classes.descr,"flex items-center justify-start p-12-impor"),
+                                    width: '100%'
+                                },
+                                {
                                     Header: "Customer #",
                                     accessor: "CustomerNo",
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
@@ -398,26 +409,20 @@ class InvoiceListContent extends Component {
                                     className: classNames("flex items-center  justify-start pl-12-impor")
                                 },
                                 {
-                                    Header: "Description",
-                                    accessor: "InvoiceDescription",
-                                    className: classNames(classes.descr,"flex items-center justify-start p-12-impor"),
-                                    width: '100%'
+                                    Header: "Balance",
+                                    accessor: "InvoiceBalanceAmount",
+                                    Cell     : row => {
+                                        return '$'+parseFloat(row.original.InvoiceBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+                                    },
+                                    className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor"),
+                                    width: 80
                                 },
                                 {
-                                    Header: "Amount",
+                                    Header: "Total",
                                     Cell     : row => {
                                         return '$'+parseFloat(row.original.InvoiceTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
                                     },
-                                    accessor: "InvoiceAmount",
-                                    className: classNames("flex items-center  justify-end p-12-impor"),
-                                    width: 100
-                                },
-                                {
-                                    Header: "Tax",
-                                    Cell     : row => {
-                                        return '$'+parseFloat(row.original.InvoiceTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-                                    },
-                                    accessor: "InvoiceTax",
+                                    accessor: "InvoiceTotal",
                                     className: classNames("flex items-center  justify-end p-12-impor"),
                                     width: 100
                                 },
@@ -435,12 +440,12 @@ class InvoiceListContent extends Component {
                                     className: classNames("flex items-center  justify-center"),
                                     width: 100
                                 },
-                                // {
-                                //     Header: "Status",
-                                //     accessor: "TransactionStatus",
-                                //     className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-                                //     width: 80
-                                // },
+                                {
+                                    Header: "Status",
+                                    accessor: "TransactionStatus",
+                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+                                    width: 80
+                                },
                                 {
                                     Header: "Actions",
                                     width : 90,
