@@ -332,8 +332,6 @@ class InvoiceApp extends Component {
             let temp = [];
             let regions = nextProps.customers.Data.Regions;
 
-            console.log('customer=', regions);
-
             regions.map(x => {
                 temp = [...temp, ...x.Customers];
                 return true;

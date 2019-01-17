@@ -379,6 +379,7 @@ class TransactionForm extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.props.transactionForm!== prevProps.transactionForm) {
+            console.log('pppppp');
             this.getTotal();
         }
         if(this.state.selectedFranchisee!== null && JSON.stringify(this.state.selectedFranchisee)!== JSON.stringify(this.props.transactionForm.franchisee)) {

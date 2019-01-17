@@ -20,7 +20,7 @@ const initialState = {
 	bOpenedMapView: false,
 	bLeasesFetchStart: false,
 	bStartingSaveFormData: false,
-	regionId: [24],
+	regionId: [2, 24],
     statusId: [21, 24],
     searchText: "",
 	transactionStatus: { checkedPaid: true, checkedPP: true, checkedComplete: true, checkedOpen: true },

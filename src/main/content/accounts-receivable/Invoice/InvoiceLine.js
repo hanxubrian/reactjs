@@ -407,7 +407,7 @@ class InvoiceLineTable extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot){
-        if(this.state.data!==null && prevState.data!==this.state.data){
+        if(this.state.data!==null && JSON.stringify(prevState.data)!==JSON.stringify(this.state.data)){
             this.props.updateInvoiceLine(this.state.data);
         }
         if(JSON.stringify(this.state.customerTaxAmountLine)!== JSON.stringify(prevState.customerTaxAmountLine)){
@@ -420,7 +420,6 @@ class InvoiceLineTable extends React.Component {
             this.setState({customerTaxAmountLine: nextProps.customerTaxAmountLine})
         }
         if(nextProps.invoiceForm.data===null && JSON.stringify(nextProps.invoiceForm.data)!==JSON.stringify(this.props.invoiceForm.data)){
-            console.log('passs');
             let newData = createData("Regular Billing", "Adjust-Balance", '','');
             this.setState({data: [{...newData, id: 0}]});
         }
@@ -816,7 +815,7 @@ class InvoiceLineTable extends React.Component {
                                                         </div>
                                                         <div className="f2">
                                                             <Autosuggest
-                                                                renderInputComponent = {renderInputComponent}
+                                                                renderInputComponent = {this.renderInputComponent}
                                                                 suggestions={nameSuggestions}
                                                                 onSuggestionsFetchRequested={this.onNameSuggestionsFetchRequested}
                                                                 onSuggestionsClearRequested={this.onNameSuggestionsClearRequested}

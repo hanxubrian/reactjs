@@ -1068,13 +1068,13 @@ const AddButton = ({ onExecute }) => (
 
 const EditButton = ({ onExecute }) => (
 	<IconButton onClick={onExecute} title="Edit row">
-		<EditIcon />
+		{/* <EditIcon /> */}
 	</IconButton>
 );
 
 const DeleteButton = ({ onExecute }) => (
 	<IconButton onClick={onExecute} title="Delete row">
-		<DeleteIcon />
+		{/* <DeleteIcon /> */}
 	</IconButton>
 );
 
@@ -1683,28 +1683,30 @@ class LeaseListContent extends Component {
 		console.log("initRowsFromRawJson", "LeaseListContent.js", this.props.regionId, this.props.statusId, rawData)
 		let all_temp = [];
 		if (rawData === null || rawData === undefined) return;
-		let regions = rawData.Data.Region.filter(x => {
-			return this.props.regionId === 0 || x.Id === this.props.regionId;
-		});
+		// let regions = rawData.Data.Region.filter(x => {
+		// 	return this.props.regionId === 0 || x.Id === this.props.regionId;
+		// });
 
 
-		console.log("regions", regions)
+		// console.log("regions", regions)
 
-		regions.forEach(x => {
-			all_temp = [...all_temp, ...x.LeaseList];
-		});
+		// regions.forEach(x => {
+		// 	all_temp = [...all_temp, ...x.LeaseList];
+		// });
+		let regions = rawData.Data[0].LeaseList.filter(x => x)
+		all_temp = regions
 
-		let _pins_temp = [];
-		regions.forEach(x => {
-			_pins_temp = [..._pins_temp, ...x.LeaseList.map(lease => {
-				return {
-					lat: lease.Latitude,
-					lng: lease.Longitude,
-					text: lease.LeaseName
-				}
-			})];
+		// let _pins_temp = [];
+		// regions.forEach(x => {
+		// 	_pins_temp = [..._pins_temp, ...x.LeaseList.map(lease => {
+		// 		return {
+		// 			lat: lease.Latitude,
+		// 			lng: lease.Longitude,
+		// 			text: lease.LeaseName
+		// 		}
+		// 	})];
 
-		})
+		// })
 
 		// this.filterPins(_pins_temp, locationFilterValue)
 
