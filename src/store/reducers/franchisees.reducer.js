@@ -17,9 +17,9 @@ const initialState = {
     franchiseeFilterList: null,
     bLoadedFilterList: false,
     franchiseeStatus: [],
-    selectedSignDate: new Date(),
-    selectedRenewDate: new Date(),
-    selectedExpDate: new Date(),
+    // selectedSignDate: new Date(),
+    // selectedRenewDate: new Date(),
+    // selectedExpDate: new Date(),
     bFranchiseesFetchStart: false,
     planType: [],
     documentsList: [],
@@ -218,7 +218,7 @@ const franchisees = function(state = initialState, action) {
             if(action.payload.FranchiseeFees.length>0) {
                 franchiseeFee = action.payload.FranchiseeFees.map(iv => {
                     return {
-                        ["deduct"+iv.FranchiseeFeeList.FranchiseeFeeListId]: false,
+                        ["Deduct"+iv.FranchiseeFeeList.FranchiseeFeeListId]: false,
                         ...iv
                     }
                 });
@@ -238,6 +238,12 @@ const franchisees = function(state = initialState, action) {
         case Actions.UPDATE_FRANCHISEE_STATUS:{
             return {
                 ...state, transactionStatusFranchisees:{...state.transactionStatusFranchisees,...action.payload}
+            }
+        }
+        case Actions.UPDATE_FRANCHISEE_UPDATE_CHECKBOX:{
+            return{
+                ...state,
+                franchiseeFees: action.payload
             }
         }
         case Actions.TOGGLE_SUMMARY_PANEL_FRANCHISEES:

@@ -260,15 +260,31 @@ class FranchiseesMaintenanceTable extends React.Component {
         }
     }
 
-    handleCheckboxChange = name => {
+    handleCheckboxChange = name => event=> {
 
+        this.handleInitialUpdate(name,event.target.checked);
 
+    }
 
+    handleInitialUpdate (name , value){
+        let originalStatus = this.props.franchiseeFees;
+        const iStatus = this.props.franchiseeFees.FranchiseeFees;
+        originalStatus.FranchiseeFees = iStatus.map( x => {
+           if(x[name] != undefined){
+               x[name] = value
+           }
+           return x;
+        });
+        // console.log(originalStatus);
+        this.setState({
+            franchiseeFees: originalStatus.FranchiseeFees,
+        });
+        this.props.franchiseeFeeUpdateCheckbox(originalStatus);
     }
 
     render() {
         const { classes } = this.props;
-        const { franchiseeFees, order, orderBy, selected, rowsPerPage, page } = this.state;
+        const {  franchiseeFees,order, orderBy, selected, rowsPerPage, page } = this.state;
 
         const headers = [
             {
@@ -313,7 +329,7 @@ class FranchiseesMaintenanceTable extends React.Component {
                             {franchiseeFees.length > 0 && (
                                 stableSort(franchiseeFees, getSorting(order, orderBy))
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map(n => {
+                                    .map((n,index) => {
                                             return (
                                                 <TableRow hover key={n.FranchiseeFeeList.FranchiseeFeeListId} >
                                                     <TableCell>
@@ -331,7 +347,7 @@ class FranchiseesMaintenanceTable extends React.Component {
                                                     <TableCell>
                                                         <FormControlLabel
                                                             control={
-                                                                <Checkbox checked={n["Deduct" + n.FranchiseeFeeList.FranchiseeFeeListId]} />
+                                                                <Checkbox checked={franchiseeFees[index]["Deduct" + n.FranchiseeFeeList.FranchiseeFeeListId]} />
                                                             }
                                                             onChange={this.handleCheckboxChange(["Deduct" + n.FranchiseeFeeList.FranchiseeFeeListId])}
                                                             value="Y"
@@ -352,7 +368,8 @@ class FranchiseesMaintenanceTable extends React.Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getFranchiseeFeeMaintenance: Actions.getFranchiseeFeeMaintenance
+        getFranchiseeFeeMaintenance: Actions.getFranchiseeFeeMaintenance,
+        franchiseeFeeUpdateCheckbox: Actions. franchiseeFeeUpdateCheckbox
     }, dispatch);
 }
 

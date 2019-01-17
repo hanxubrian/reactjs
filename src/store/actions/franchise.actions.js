@@ -26,6 +26,9 @@ export const FRANCHISEE_SELECT_LOCATION_FILTER = '[FRANCHISEE] FRANCHISEE SELECT
 export const SELECTED_LOCATION = '[FRANCHISEES] SELECTED LOCATION';
 export const UPLOAD_INSERT_PAYLOAD = '[FRANCHISEES] UPDATE INSERT PAYLOAD';
 export const GET_FRANCHISEE_STATE_LIST = '[FRANCHISEES] GET FRANCHISEE STATE LIST';
+export const UPDATE_FRANCHISEE_UPDATE_CHECKBOX = '[FRANCHISEES] UPDATE FRANCHISEE UPDATE CHECKBOX';
+
+
 
 export function getFranchisees(regionId, statusId, location , latitude , longitude , searchtext) {
 
@@ -226,6 +229,14 @@ export function updateFranchiseeStatus(newStatus){
         payload: newStatus
     }
 }
+
+export function franchiseeFeeUpdateCheckbox (newStatus){
+    return{
+        type: UPDATE_FRANCHISEE_UPDATE_CHECKBOX,
+        payload: newStatus
+    }
+}
+
 export function franchiseeUpdateInsertPayload(newStatus){
     return {
         type: UPLOAD_INSERT_PAYLOAD,
