@@ -312,14 +312,14 @@ class InvoiceReport extends Component {
 
 
 // The modal "window"
-const modalStyle = {
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    maxWidth: 500,
-    minHeight: 300,
-    margin: '0 auto',
-    padding: 30
-};
+// const modalStyle = {
+//     backgroundColor: '#fff',
+//     borderRadius: 5,
+//     maxWidth: 500,
+//     minHeight: 300,
+//     margin: '0 auto',
+//     padding: 30
+// };
 
 InvoiceReport.propTypes = {
     onClose: PropTypes.func.isRequired,
