@@ -27,6 +27,7 @@ import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
 import InvoiceLineTable from "./InvoiceLine"
 
+
 // for store
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
@@ -42,6 +43,7 @@ import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
 import moment from 'moment'
 import PropTypes from 'prop-types';
+import NumberFormat from 'react-number-format';
 
 //Utility
 import {escapeRegexCharacters} from 'services/utils'
@@ -461,7 +463,7 @@ class InvoiceForm extends Component {
     };
 
     addNewInvoice = () => {
-        let inv_no = chance.guid()+'_pending';
+        let inv_no = 'PENDING';
         let items = [];
         let lines = this.props.invoiceForm.data.line;
         //
@@ -499,7 +501,6 @@ class InvoiceForm extends Component {
                             Amount: f.amount
                         }
                     )
-
                 })
             }
             item.Distribution = franchisees;
@@ -628,31 +629,31 @@ class InvoiceForm extends Component {
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="h-full flex flex-col relative">
                     <div className="flex flex-col p-24 pt-12 pb-0" style={{flex: "1"}}>
-                           <Grid container className={classNames(classes.formControl)}>
-                                <Grid item xs={12} sm={6} md={6} className="flex flex-row pr-16">
-                                    <Autosuggest
-                                        {...autosuggestProps}
-                                        inputProps={{
-                                            classes,
-                                            placeholder: 'Search Customer Name or Number',
-                                            value: value,
-                                            onChange: this.onChange,
-                                        }}
-                                        theme={{
-                                            container: classNames(classes.container),
-                                            suggestionsContainerOpen: classes.suggestionsContainerOpen,
-                                            suggestionsList: classes.suggestionsList,
-                                            suggestion: classes.suggestion,
-                                        }}
-                                        renderSuggestionsContainer={options => (
-                                            <Paper {...options.containerProps} square>
-                                                {options.children}
-                                            </Paper>
-                                        )}
-                                        ref={this.storeInputReference}
-                                    />
-                                </Grid>
-                               <MuiPickersUtilsProvider utils={MomentUtils}>
+                        <Grid container className={classNames(classes.formControl)}>
+                            <Grid item xs={12} sm={6} md={6} className="flex flex-row pr-16">
+                                <Autosuggest
+                                    {...autosuggestProps}
+                                    inputProps={{
+                                        classes,
+                                        placeholder: 'Search Customer Name or Number',
+                                        value: value,
+                                        onChange: this.onChange,
+                                    }}
+                                    theme={{
+                                        container: classNames(classes.container),
+                                        suggestionsContainerOpen: classes.suggestionsContainerOpen,
+                                        suggestionsList: classes.suggestionsList,
+                                        suggestion: classes.suggestion,
+                                    }}
+                                    renderSuggestionsContainer={options => (
+                                        <Paper {...options.containerProps} square>
+                                            {options.children}
+                                        </Paper>
+                                    )}
+                                    ref={this.storeInputReference}
+                                />
+                            </Grid>
+                            <MuiPickersUtilsProvider utils={MomentUtils}>
                                 <Grid item xs={12} sm={1} md={1} className="flex flex-row pl-16 pr-4">
                                     <DatePicker
                                         margin="none"
@@ -721,55 +722,55 @@ class InvoiceForm extends Component {
                                         }}
                                     />
                                 </Grid>
-                               </MuiPickersUtilsProvider>
-                                <Grid item xs={12} sm={3} md={3} className="flex flex-row xs:flex-col pl-4" >
-                                    <TextField
-                                        margin="none"
-                                        label="P.O #"
-                                        placeholder="P.O #"
-                                        InputProps={{
-                                            classes: {
-                                                input: classes.input,
-                                            },
-                                        }}
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                        name="PO_number"
-                                        variant="outlined"
-                                        value={this.state.PO_number}
-                                        onChange={this.handleChange}
-                                        required
-                                        fullWidth
-                                        style={{paddingRight: 4}}
-                                    />
-                                    <TextField
-                                        margin="none"
-                                        label="Invoice #"
-                                        placeholder="Invoice #"
-                                        InputProps={{
-                                            readOnly: bReadonly,
-                                            classes: {
-                                                input: bReadonly? classes.inputOrange: classes.input,
-                                            },
-                                        }}
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                        name="InvoiceNo"
-                                        variant="outlined"
-                                        value={this.state.InvoiceNo}
-                                        onChange={this.handleChange}
-                                        required
-                                        fullWidth
-                                        style = {{paddingLeft: 4,fontSize: this.props.invoiceForm.type === 'new' ? '18px!important': 'inherit',
-                                            fontWeight: this.props.invoiceForm.type === 'new' ? 700: 'inherit'
-                                        }}
-                                    />
-                                </Grid>
+                            </MuiPickersUtilsProvider>
+                            <Grid item xs={12} sm={3} md={3} className="flex flex-row xs:flex-col pl-4" >
+                                <TextField
+                                    margin="none"
+                                    label="P.O #"
+                                    placeholder="P.O #"
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input,
+                                        },
+                                    }}
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                    name="PO_number"
+                                    variant="outlined"
+                                    value={this.state.PO_number}
+                                    onChange={this.handleChange}
+                                    required
+                                    fullWidth
+                                    style={{paddingRight: 4}}
+                                />
+                                <TextField
+                                    margin="none"
+                                    label="Invoice #"
+                                    placeholder="Invoice #"
+                                    InputProps={{
+                                        readOnly: bReadonly,
+                                        classes: {
+                                            input: bReadonly? classes.inputOrange: classes.input,
+                                        },
+                                    }}
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                    name="InvoiceNo"
+                                    variant="outlined"
+                                    value={this.state.InvoiceNo}
+                                    onChange={this.handleChange}
+                                    required
+                                    fullWidth
+                                    style = {{paddingLeft: 4,fontSize: this.props.invoiceForm.type === 'new' ? '18px!important': 'inherit',
+                                        fontWeight: this.props.invoiceForm.type === 'new' ? 700: 'inherit'
+                                    }}
+                                />
                             </Grid>
+                        </Grid>
                         <GridContainer className={classNames(classes.formControl, "mb-0")}>
                             <GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col">
                                 <Card className={classes.card}>
@@ -801,7 +802,7 @@ class InvoiceForm extends Component {
                                                 <div className="flex flex-row items-center">
                                                     <Icon fontSize={"small"} className="mr-4">smartphone</Icon>
                                                     <Typography variant="subtitle1" color="inherit">
-                                                        {this.state.selectedCustomer.Phone}
+                                                        <NumberFormat value={this.state.selectedCustomer.Phone} displayType={'text'}  format="+1 (###) ###-####" mask="_" renderText={value => <div>{value}</div>} />
                                                     </Typography>
                                                 </div>
                                             </div>
@@ -836,7 +837,7 @@ class InvoiceForm extends Component {
                                                 <div className="flex flex-row items-center">
                                                     <Icon fontSize={"small"} className="mr-4">smartphone</Icon>
                                                     <Typography variant="subtitle1" color="inherit">
-                                                        {this.state.selectedCustomer.Phone}
+                                                        <NumberFormat value={this.state.selectedCustomer.Phone} displayType={'text'}  format="+1 (###) ###-####" mask="_" renderText={value => <div>{value}</div>} />
                                                     </Typography>
                                                 </div>
                                                 <div>
@@ -849,6 +850,7 @@ class InvoiceForm extends Component {
                                                                 value="checkedB"
                                                                 color="primary"
                                                                 className="p-0"
+                                                                disabled
                                                             />
                                                         }
                                                         label="Tax Exempt"
