@@ -850,6 +850,7 @@ class InvoiceForm extends Component {
                                                                 value="checkedB"
                                                                 color="primary"
                                                                 className="p-0"
+                                                                disabled
                                                             />
                                                         }
                                                         label="Tax Exempt"
