@@ -376,11 +376,17 @@ class InvoiceForm extends Component {
         let year = moment().year();
         let month = moment().month();
         let invoiceDate = moment().year(year).month(month).endOf('month');
+        let dueDate = moment().year(year).month(month).endOf('month').add(suggestion.PaymentTerm, 'days');
 
-        if(suggestion.InvoiceDayPreference==='BOM')
+        if(suggestion.InvoiceDayPreference==='BOM') {
             invoiceDate = moment().year(year).month(month).startOf('month');
+            dueDate = moment().year(year).month(month).startOf('month').add(suggestion.PaymentTerm, 'days');
+        }
+
+        console.log('dueDate=', dueDate);
 
         this.setState({InvoiceDate: invoiceDate});
+        this.setState({DueDate: dueDate});
 
         return suggestion.CustomerName;
     };
