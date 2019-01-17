@@ -363,7 +363,7 @@ class InvoiceApp extends Component {
             let regions = this.props.customers.Data.Regions;
 
             regions.map(x => {
-                temp = [...temp, ...x.CustomerList];
+                temp = [...temp, ...x.Customers];
                 return true;
             });
             this.setState({customers: temp});

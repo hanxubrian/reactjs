@@ -381,7 +381,7 @@ class InvoiceListContent extends Component {
                                     Header: "Invoice #",
                                     accessor: "InvoiceNo",
                                     filterAll: true,
-                                    width: 280,
+                                    width: 120,
 
                                     Cell: row => <Button onClick={(e)=>{this.invoiceReport(e,row.original.InvoiceId,row.original.RegionId)}}>{row.original.InvoiceNo}</Button> ,
                                     className: classNames(classes.invoiceNo, "flex items-center  justify-center text-12")
