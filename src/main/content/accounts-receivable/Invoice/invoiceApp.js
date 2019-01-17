@@ -332,7 +332,7 @@ class InvoiceApp extends Component {
             let regions = nextProps.customers.Data.Regions;
 
             regions.map(x => {
-                temp = [...temp, ...x.Customers];
+                temp = [...temp, ...x.CustomerList];
                 return true;
             });
             this.setState({customers: temp});
@@ -362,7 +362,7 @@ class InvoiceApp extends Component {
             let regions = this.props.customers.Data.Regions;
 
             regions.map(x => {
-                temp = [...temp, ...x.Customers];
+                temp = [...temp, ...x.CustomerList];
                 return true;
             });
             this.setState({customers: temp});
