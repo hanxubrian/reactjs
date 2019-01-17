@@ -16,11 +16,12 @@ class InvoiceReport extends Component {
     };
     componentWillReceiveProps(nextProps) {
 
-        if(nextProps.getData) {
+        if(nextProps.Detail) {
+            console.log('Detail', nextProps.Detail)
             this.setState({
-                invoiceDetail:nextProps.getData.Data,
-                Items: nextProps.getData.Data.Items,
-                Region: nextProps.getData.Data.Region,
+                invoiceDetail:nextProps.Detail.Data,
+                Items: nextProps.Detail.Data.Items,
+                Region: nextProps.Detail.Data.Region,
             });
         }
 
@@ -201,24 +202,26 @@ class InvoiceReport extends Component {
                                 <th width="15%" style={{border:'solid 1px'}} className="text-center">Invoice No</th>
                                 <th width="10%" style={{border:'solid 1px'}} className="text-center">Date</th>
                                 <th width="10%" style={{border:'solid 1px'}} className="text-center">Cust No</th>
-                                <th width="15%" style={{border:'solid 1px'}} className="text-center">Sismn No</th>
+                                <th width="15%" style={{border:'solid 1px'}} className="text-center">Slsmn No</th>
                                 <th width="15%" style={{border:'solid 1px'}} className="text-center">PO Number</th>
                                 <th width="25%" style={{border:'solid 1px'}} className="text-center">Franchisee</th>
                                 <th width="10%" style={{border:'solid 1px'}} className="text-center">Due Date</th>
                             </tr>
                             </thead>
                             <tbody>
-
-                                 <tr >
-                                     <td width="15%" style={{border:'solid 1px'}} className="text-center">1</td>
-                                     <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.InvoiceDate}</td>
-                                     <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.CustomerNumber}</td>
-                                     <td width="15%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.slsmn_no}</td>
-                                     <td width="15%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.PONumber}</td>
-                                     <td width="25%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.apply_fran}</td>
-                                     <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.DueDate}</td>
-                                 </tr>
-
+                            {/*{this.state.Items !=null && this.state.Items && this.state.Items.map((item,index)=>{*/}
+                                {/*return (*/}
+                            <tr >
+                                <td width="15%" style={{border:'solid 1px'}} className="text-center">1</td>
+                                <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.InvoiceDate}</td>
+                                <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.CustomerNumber}</td>
+                                <td width="15%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.slsmn_no}</td>
+                                <td width="15%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.PONumber}</td>
+                                <td width="25%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.apply_fran}</td>
+                                <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.DueDate}</td>
+                            </tr>
+                                {/*)*/}
+                            {/*})}*/}
                             </tbody>
                         </table>
                         <table style={{width:'100%',borderCollapse: 'collapse',border:'solid 1px'}}>
@@ -316,8 +319,7 @@ InvoiceReport.propTypes = {
     onClose: PropTypes.func.isRequired,
     show: PropTypes.bool,
     children: PropTypes.node,
-    getData: PropTypes.object,
-
+    Detail: PropTypes.object,
 };
 
 export default InvoiceReport;

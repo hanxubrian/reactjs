@@ -255,7 +255,6 @@ class InvoiceListContent extends Component {
 
     invoiceReport =(ev,InvoiceId, RegionId)=>{
         ev.stopPropagation();
-        console.log(InvoiceId+"+invoice id+"+RegionId);
         this.props.getInvoiceDetail(InvoiceId, RegionId);
         this.setState({
             isOpen: !this.state.isOpen
@@ -381,7 +380,7 @@ class InvoiceListContent extends Component {
                                     Header: "Invoice #",
                                     accessor: "InvoiceNo",
                                     filterAll: true,
-                                    width: 280,
+                                    width: 120,
 
                                     Cell: row => <Button onClick={(e)=>{this.invoiceReport(e,row.original.InvoiceId,row.original.RegionId)}}>{row.original.InvoiceNo}</Button> ,
                                     className: classNames(classes.invoiceNo, "flex items-center  justify-center text-12")
@@ -448,18 +447,18 @@ class InvoiceListContent extends Component {
                                     Cell  : row => (
                                         <div className="flex items-center actions justify-center w-full">
                                             <IconButton style={{padding: 8}}
-                                                onClick={(ev) => {
-                                                    ev.stopPropagation();
-                                                    this.handleOpenRemoveDialog(row.original.InvoiceId);
-                                                }}
+                                                        onClick={(ev) => {
+                                                            ev.stopPropagation();
+                                                            this.handleOpenRemoveDialog(row.original.InvoiceId);
+                                                        }}
                                             >
                                                 <Icon fontSize={"small"}>delete</Icon>
                                             </IconButton>
                                             <IconButton style={{padding: 8}}
-                                                onClick={(ev) => {
-                                                    ev.stopPropagation();
-                                                    this.props.openEditInvoiceForm(row.original);
-                                                }}
+                                                        onClick={(ev) => {
+                                                            ev.stopPropagation();
+                                                            this.props.openEditInvoiceForm(row.original);
+                                                        }}
                                             >
                                                 <Icon fontSize={"small"}>edit</Icon>
                                             </IconButton>
@@ -498,7 +497,9 @@ class InvoiceListContent extends Component {
                     </DialogActions>
                 </Dialog>
 
-                <InvoiceReport show={this.state.isOpen} onClose={this.toggleModal} getData={this.state.invoiceDetail} />
+                {this.state.invoiceDetail!==null && (
+                    <InvoiceReport show={this.state.isOpen} onClose={this.toggleModal} Detail={this.state.invoiceDetail} />
+                )}
             </div>
         );
     }
