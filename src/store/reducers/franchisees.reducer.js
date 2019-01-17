@@ -2,7 +2,7 @@ import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
-import {GET_FRANCHISEE_STATE_LIST} from "../actions/";
+import moment from "moment";
 
 const initialState = {
     franchiseesDB: null,
@@ -52,6 +52,8 @@ const initialState = {
         addrZipcode: undefined
     },
     insertPayload: {
+        RegionId: 2,
+        Name: "",
         Addresses: [
             {
                 Type: "Main",
@@ -85,47 +87,72 @@ const initialState = {
                 Phone: ""
             }
         ],
-        ssn: "",
+        LegalId:"SSN",
+        LegalIdNum: "57547120",
         DATE_1: "",
         DATE_2: "",
-        AgreementPlanType: "",
-        AgreementPlanTypeid: 0,
-        AgreementTerm: 0,
-        AgreementDownPayment: 0,
-        AgreementPlanAmount: 0,
-        AgreementMonthlyPayment: 0,
-        AgreementInterestrate: 0,
-        AgreementPaymentBill: 0,
-        AgreementTotalPayments: 0,
-        AgreementDateSigned: "",
-        AgreementLastRenewDate: "",
-        AgreementExpirationDate: "",
-        MoralObligation: 0,
-        CurrentBusiness: 0,
+        AgreementPlanType: "B",
+        AgreementPlanTypeid: 99,
+        AgreementTerm: 20,
+        AgreementDownPayment: 2850.00,
+        AgreementPlanAmount: 9500.00,
+        AgreementMonthlyPayment: 147.93,
+        AgreementInterestRate: 12.00,
+        AgreementPaymentBill: 31,
+        AgreementTotalPayments: 60,
+        AgreementDateSigned: moment(new Date()).format("MM/DD/YYYY"),
+        AgreementLatestRenewDate: moment(new Date()).format("MM/DD/YYYY"),
+        AgreementExpirationDate: moment(new Date()).format("MM/DD/YYYY"),
+        AgreementInitialBusinessAmount: 1000.00,
+        AgreementDaysToFulfill:200,
+        MoralObligation: 0.00,
+        CurrentBusiness: 0.00,
         Fees: [
             {
-                FeeName: "",
-                Amount: 0
+                FeeName: "Royalty",
+                Amount: 10.00,
+                Deduct:1
+            },
+            {
+                FeeName: "AdvertisingFee",
+                Amount: 10.00,
+                Deduct:1
+            },
+            {
+                FeeName: "AccountingFee",
+                Amount: 5.00,
+                Deduct:1
+            },
+            {
+                FeeName: "TechnologyFee",
+                Amount: 10.00,
+                Deduct:1
+            },
+            {
+                FeeName: "AdditionalBillingComission",
+                Amount: 10.00,
+                Deduct:1
+            },
+            {
+                FeeName: "BusinessProtection",
+                Amount: 6.75,
+                Deduct:1
             }
         ],
-        PctFlag: "",
-        AddPct: 0,
-        Status: "",
-        SecNote: "",
-        SecPBill: "",
-        TakeNote: "",
-        InitTot: 0,
-        REBELIG: 0,
-        NewFindersFee: 0,
-        DeductAdvertisingFee: 0,
-        DeductTechnologyFee: "",
-        AD_CUR: 0,
-        AD_MAX: 0,
-        DLR_ID: "",
-        ChargeBack: "",
-        Print1099: "",
+        AllowBppAdminFee: "Y",
+        AllowChargeBack: "Y",
+        AllowAccountRebate: "Y",
+        AllowGenerateReport: "Y",
+        Print1099: "Y",
         NameOn1099: "",
-        BppAdmin: "",
+        PctFlag: "Y",
+        AddPct: 3.00,
+        Status: "Y",
+        SecNote: "N",
+        SecPBill: "15",
+        TakeNote: "N",
+        REBELIG: 1,
+        NewFindersFee: 1,
         CURSTAT: "",
         CURSTATDT: "",
         Documents: []
@@ -187,6 +214,16 @@ const franchisees = function(state = initialState, action) {
         }
         case Actions.GET_FRANCHISEE_FEE:
         {
+            let franchiseeFee = action.payload;
+            if(action.payload.FranchiseeFees.length>0) {
+                franchiseeFee = action.payload.FranchiseeFees.map(iv => {
+                    return {
+                        ["deduct"+iv.FranchiseeFeeList.FranchiseeFeeListId]: false,
+                        ...iv
+                    }
+                });
+                action.payload.FranchiseeFees = franchiseeFee;
+            }
           return{
               ...state,
               franchiseeFees: action.payload

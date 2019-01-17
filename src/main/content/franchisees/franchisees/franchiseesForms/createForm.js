@@ -27,7 +27,7 @@ import FranchiseesOwnerTable from './ownerTable'
 import Radio from '@material-ui/core/Radio';
 import 'date-fns';
 import MomentUtils from '@date-io/moment';
-import DateFnsUtils from '@date-io/date-fns';
+
 import { MuiPickersUtilsProvider,  DatePicker } from 'material-ui-pickers';
 import moment from "moment";
 import FranchiseesMaintenanceTable from "./maintenanceTableLine";
@@ -100,92 +100,6 @@ function getStepContent(franchiseeForm, step) {
         }
 	];
 	
-	const stateNames = [
-        {
-            value: 2,
-            label: "Buffalo"
-        },
-        {
-            value: 7,
-            label: "Detroit"
-        },
-        {
-            value: 9,
-            label: "Hartford"
-        },
-        {
-            value: 13,
-            label: "Las Vegas"
-        },
-        {
-            value: 14,
-            label: "Los Angeles/Colton"
-        },
-        {
-            value: 16,
-            label: "Miami"
-        },
-        {
-            value: 18,
-            label: "Minneapolis"
-        },
-        {
-            value: 20,
-            label: "New Jersey"
-        },
-        {
-            value: 21,
-            label: "New York"
-        },
-        {
-            value: 22,
-            label: "San Francisco/Oakland"
-        },
-        {
-            value: 23,
-            label: "Oklahoma City"
-        },
-        {
-            value: 24,
-            label: "Philadelphia"
-        },
-        {
-            value: 25,
-            label: "Sacramento"
-        },
-        {
-            value: 26,
-            label: "Washington DC"
-        },
-        {
-            value: 28,
-            label: "Jani-King Int'l, Inc."
-        },
-        {
-            value: 29,
-            label: "JANI-KING OF NEW MEXICO, INC"
-        },
-        {
-            value: 31,
-            label: "New Mexico"
-        },
-        {
-            value: 46,
-            label: "Houston"
-        },
-        {
-            value: 55,
-            label: "Pittsburgh"
-        },
-        {
-            value: 64,
-            label: "Tulsa"
-        },
-        {
-            value: 82,
-            label: "Reno"
-        }
-    ];
 
     switch (step) {
         case 0:
@@ -197,17 +111,17 @@ function getStepContent(franchiseeForm, step) {
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                 <FormControlLabel
                                     value="ein"
-                                    checked={franchiseeForm.state.selectedValue === 'ein'}
-                                    onChange={franchiseeForm.handleRadioChange}
+                                    checked={franchiseeForm.state.LegalId === 'ein'}
+                                    onChange={franchiseeForm.handleTextChange("LegalId")}
                                     control={<Radio color="primary" />}
                                     label="EIN"
                                     labelPlacement="end"
                                     margin="dense"
                                 />
                                 <FormControlLabel
-                                    checked={franchiseeForm.state.selectedValue === 'ssn'}
+                                    checked={franchiseeForm.state.LegalId === 'ssn'}
                                     value="ssn"
-                                    onChange={franchiseeForm.handleRadioChange}
+                                    onChange={franchiseeForm.handleTextChange("LegalId")}
                                     control={<Radio color="primary" />}
                                     label="SSN"
                                     labelPlacement="end"
@@ -218,8 +132,11 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="financeEinSsn"
                                 label="EIN/SSN"
+                                type="number"
                                 variant="outlined"
                                 className={classes.textField}
+                                value={franchiseeForm.state.LegalIdNum}
+                                onChange={franchiseeForm.handleTextChange("LegalIdNum")}
                                 style={{marginRight:'1%'}}
                                 margin="dense"
                                 required
@@ -227,7 +144,8 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="financeName"
                                 label="Name"
-                                value=""
+                                onChange={franchiseeForm.handleAddressFormChange("Name")}
+                                value={franchiseeForm.state.Name}
                                 variant="outlined"
                                 className={classes.textField}
                                 style={{marginLeft:'1%'}}
@@ -239,8 +157,9 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="financeAddress1"
                                 label="Address 1"
-                                value=""
+                                onChange={franchiseeForm.handleAddressFormChange('AddressLine1')}
                                 variant="outlined"
+                                value={franchiseeForm.state.AddressLine1}
                                 className={classes.textField}
                                 style={{marginRight:'1%'}}
                                 margin="dense"
@@ -249,8 +168,9 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="financeAddress2"
                                 label="Address 2"
-                                value=""
+                                onChange={franchiseeForm.handleAddressFormChange('AddressLine2')}
                                 variant="outlined"
+                                value={franchiseeForm.state.AddressLine2}
                                 className={classes.textField}
                                 style={{marginLeft:'1%'}}
                                 margin="dense"
@@ -261,8 +181,9 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="outlined-city"
                                 label="City"
-                                value=""
+                                onChange={franchiseeForm.handleAddressFormChange('City')}
                                 variant="outlined"
+                                value={franchiseeForm.state.City}
                                 className={classes.textField}
                                 margin="dense"
                                 style={{marginRight:'1%'}}
@@ -273,8 +194,8 @@ function getStepContent(franchiseeForm, step) {
                                 label="State"
                                 select
                                 className={classes.textField}
-                                value={franchiseeForm.state.StateValue}
-                                onChange={franchiseeForm.handleStateChange('StateValue')}
+                                value={franchiseeForm.state.State}
+                                onChange={franchiseeForm.handleAddressFormChange('State')}
                                 variant="outlined"
                                 margin="dense"
                                 style={{marginRight:'1%',marginLeft:'1%'}}
@@ -289,8 +210,9 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="outlined-zip"
                                 label="Zip"
-                                value=""
                                 variant="outlined"
+                                onChange={franchiseeForm.handleAddressFormChange('Zip')}
+                                value={franchiseeForm.state.Zip}
                                 className={classes.textField}
                                 margin="dense"
                                 style={{marginLeft:'1%'}}
@@ -301,9 +223,10 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="financeCounty"
                                 label="County"
-                                value=""
+                                onChange={franchiseeForm.handleAddressFormChange('County')}
                                 variant="outlined"
                                 className={classes.textField}
+                                value={franchiseeForm.state.County}
                                 style={{marginRight:'1%'}}
                                 margin="dense"
                                 required
@@ -314,7 +237,7 @@ function getStepContent(franchiseeForm, step) {
                                 }
                                 onChange={franchiseeForm.handleCheckboxChange('print1099')}
                                 className={classes.textField}
-                                value=""
+                                value={franchiseeForm.state.print1099 === true ? "N" : "Y" }
                                 label="Print 1099"
                                 margin="dense"
                                 style={{marginLeft:'1%',marginRight: '1%'}}
@@ -323,6 +246,8 @@ function getStepContent(franchiseeForm, step) {
                                 id="outlined-phone"
                                 variant="outlined"
                                 label="1099 Name"
+                                value={franchiseeForm.state.NameOn1099}
+                                onChange={franchiseeForm.handleAddressFormChange('NameOn1099')}
                                 className={classes.textField}
                                 margin="dense"
                                 style={{marginLeft:'1%'}}
@@ -370,9 +295,10 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="termYrs"
                                 label="Term(Yrs)"
+                                type="number"
                                 margin="dense"
                                 variant="outlined"
-                                onChange={franchiseeForm.handleTextChange('termYrs')}
+                                onChange={franchiseeForm.handleFormChange('AgreementTerm')}
                                 className={classes.textField}
                                 required
                                 style={{marginLeft: '1%'}}
@@ -540,30 +466,34 @@ function getStepContent(franchiseeForm, step) {
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <FormControlLabel
                                 control={
-                                    <Checkbox checked={franchiseeForm.state.chargeBack} value="chargeBack" />
+                                    <Checkbox checked={franchiseeForm.state.AllowChargeBack}  />
                                 }
-                                onChange={franchiseeForm.handleCheckboxChange('chargeBack')}
+                                onChange={franchiseeForm.handleCheckboxChange('AllowChargeBack')}
+                                value={franchiseeForm.state.AllowChargeBack===true ? "N" : "Y"}
                                 label="ChargeBack"
                             />
                             <FormControlLabel
                                 control={
-                                    <Checkbox checked={franchiseeForm.state.bbpAdministration} value="bbp" />
+                                    <Checkbox checked={franchiseeForm.state.AllowBppAdminFee} />
                                 }
-                                onChange={franchiseeForm.handleCheckboxChange('bbpAdministration')}
+                                onChange={franchiseeForm.handleCheckboxChange('AllowBppAdminFee')}
+                                value={franchiseeForm.state.AllowBppAdminFee === true ? "N" : "Y"}
                                 label="BBP Administration Fee"
                             />
                             <FormControlLabel
                                 control={
-                                    <Checkbox checked={franchiseeForm.state.accountRebate} value="accountRebate" />
+                                    <Checkbox checked={franchiseeForm.state.AllowAccountRebate}/>
                                 }
-                                onChange={franchiseeForm.handleCheckboxChange('accountRebate')}
+                                onChange={franchiseeForm.handleCheckboxChange('AllowAccountRebate')}
+                                value={franchiseeForm.state.AllowAccountRebate === true ? "N" : "Y"}
                                 label="Account Rebate"
                             />
                             <FormControlLabel
                                 control={
-                                    <Checkbox checked={franchiseeForm.state.generateReport} value="generateReport" />
+                                    <Checkbox checked={franchiseeForm.state.AllowGenerateReport} />
                                 }
-                                onChange={franchiseeForm.handleCheckboxChange('generateReport')}
+                                onChange={franchiseeForm.handleCheckboxChange('AllowGenerateReport')}
+                                value={franchiseeForm.state.AllowGenerateReport === true ? "N" : "Y"}
                                 label="Generate Report"
                             />
                         </GridItem>
@@ -602,12 +532,11 @@ class FranchiseesCreateForm extends Component {
         completed: new Set(),
         termsYrs: '',
         skipped: new Set(),
-        print1099: false,
+        print1099: true,
         chargeBack: false,
         bbpAdministration: false,
         accountRebate: false,
         generateReport: false,
-        selectedValue: 'ein',
         StateValue: '',
         defaultPlanType: 1,
         selectedSignDate: new Date(),
@@ -621,7 +550,20 @@ class FranchiseesCreateForm extends Component {
         daysToFullfill: 0,
         paymentAmount: 0,
         documentsList: [],
-        franchiseeFees: []
+        franchiseeFees: [],
+        AddressLine1: "",
+        AddressLine2: "",
+        City: "",
+        State: "",
+        Zip: "",
+        County: "",
+        LegalIdNum: 0,
+        LegalId: "ein",
+        NameOn1099: "",
+        AllowBppAdminFee: true,
+        AllowChargeBack: true,
+        AllowAccountRebate: true,
+        AllowGenerateReport: true,
     };
 
     constructor (props){
@@ -648,20 +590,45 @@ class FranchiseesCreateForm extends Component {
         this.props.getFranchiseeFeeMaintenance(this.props.regionId);
         this.props.getFranchiseeStateList(this.props.regionId);
         if(this.props.planType.Data != null){
-            this.props.planType.Data.map( x => {
-                    if (x.FranchiseeContractTypeListId === this.state.defaultPlanType) {
-                        this.setState({
-                            planAmount: x.Price,
-                            daysToFullfill: x.DaysToFulfill,
-                            noOfPayments: x.NoOfPayments,
-                            interest: x.Interest,
-                            downPayment: x.DownPayment,
-                            ibAmount: x.BusinessAmount
-                        });
-                    }
-                }
-            )
+            this.setState({
+               planAmount: this.props.planType.Data[0].Price,
+               daysToFullfill: this.props.planType.Data[0].DaysToFulfill,
+               noOfPayments: this.props.planType.Data[0].NoOfPayments,
+               interest: this.props.planType.Data[0].Interest,
+               downPayment: this.props.planType.Data[0].DownPayment,
+               ibAmount: this.props.planType.Data[0].BusinessAmount,
+               planTypeId: this.props.planType.Data[0].FranchiseeContractTypeListId,
+            });
+            this.handleInitialUpdate("AgreementPlanAmount",this.props.planType.Data[0].Price);
+            this.handleInitialUpdate("AgreementDaysToFullfill",this.props.planType.Data[0].DaysToFulfill);
+            this.handleInitialUpdate("AgreementTotalPayments",this.props.planType.Data[0].NoOfPayments);
+            this.handleInitialUpdate("AgreementInterestrate",this.props.planType.Data[0].Interest);
+            this.handleInitialUpdate("AgreementPlanTypeid",this.props.planType.Data[0].FranchiseeContractTypeListId);
+            this.handleInitialUpdate("AgreementDownPayment",this.props.planType.Data[0].DownPayment);
+            this.handleInitialUpdate("AgreementInitialBusinessAmount",this.props.planType.Data[0].BusinessAmount);
+            this.handleInitialUpdate("AgreementPlanType",this.props.planType.Data[0].Name);
+            this.handleInitialUpdate("AgreementMonthlyPayment",this.props.planType.Data[0].PaymentAmount);
         }
+    }
+
+    handleFormChange = (name) => event => {
+
+        if(name === 'State'){
+            this.setState({
+                [name]: event.target.value,
+            });
+        }
+        const iStatus = this.props.insertPayload;
+        console.log('insertPayload = ',iStatus);
+        iStatus[name] = event.target.value;
+        this.props.franchiseeUpdateInsertPayload(iStatus)
+    };
+
+    handleInitialUpdate (name , value){
+        const iStatus = this.props.insertPayload;
+        console.log('insertPayload = ',iStatus);
+        iStatus[name] = value;
+        this.props.franchiseeUpdateInsertPayload(iStatus)
     }
 
     componentDidMount() {
@@ -671,27 +638,31 @@ class FranchiseesCreateForm extends Component {
             });
         }
     }
+
     handleSignDateChange = date => {
         this.setState({ selectedSignDate: date });
-        this.props.updateDate(UPDATE_DATE_SIGN_FRANCHISEE, moment(date).format("MM/DD/YYYY"));
+        this.handleInitialUpdate("AgreementDateSigned" ,moment(date).format("MM/DD/YYYY"));
     };
+
     handleRenewDateChange = date => {
         this.setState({ selectedRenewDate: date });
-        this.props.updateDate(UPDATE_RENEW_DATE_FRANCHISEE, moment(date).format("MM/DD/YYYY"));
+        this.handleInitialUpdate("AgreementLatestRenewDate" ,moment(date).format("MM/DD/YYYY"));
     };
+
     handleExpDateChange = date => {
         this.setState({ selectedExpDate: date });
-        this.props.updateDate(UPDATE_EXP_DATE_FRANCHISEE, moment(date).format("MM/DD/YYYY"));
+        this.handleInitialUpdate("AgreementExpirationDate" ,moment(date).format("MM/DD/YYYY"));
     };
-    handleRadioChange = event => {
-        this.setState({ selectedValue: event.target.value });
-    };
+
     handleCheckboxChange = name => event => {
         this.setState({ [name]: event.target.checked });
+        this.handleInitialUpdate([name],event.target.value);
     };
+
     canBeSubmitted() {
         return true;
     }
+
     handleStateChange = name => event => {
         let val = event.target.value;
         if(name === 'defaultPlanType'){
@@ -705,6 +676,15 @@ class FranchiseesCreateForm extends Component {
                             downPayment: x.DownPayment,
                             ibAmount: x.BusinessAmount
                         });
+                        this.handleInitialUpdate("AgreementPlanAmount",x.Price);
+                        this.handleInitialUpdate("AgreementDaysToFullfill",x.DaysToFulfill);
+                        this.handleInitialUpdate("AgreementTotalPayments",x.NoOfPayments);
+                        this.handleInitialUpdate("AgreementInterestrate",x.Interest);
+                        this.handleInitialUpdate("AgreementPlanTypeid",x.FranchiseeContractTypeListId);
+                        this.handleInitialUpdate("AgreementDownPayment",x.DownPayment);
+                        this.handleInitialUpdate("AgreementInitialBusinessAmount",x.BusinessAmount);
+                        this.handleInitialUpdate("AgreementPlanType",x.Name);
+                        this.handleInitialUpdate("AgreementMonthlyPayment",x.PaymentAmount);
                     }
                 }
             )
@@ -713,11 +693,28 @@ class FranchiseesCreateForm extends Component {
             [name]: val,
         });
     };
+
     handleTextChange = name => event => {
         this.setState({
             [name]: event.target.value,
         });
+        this.handleInitialUpdate([name],event.target.value);
     };
+
+    handleAddressFormChange = (name) => event => {
+
+       this.setState({
+           [name]: event.target.value,
+       });
+
+        const originStatus = this.props.insertPayload;
+        const AddressStatus = originStatus.Addresses[1];
+        console.log('insertPayload = ',AddressStatus);
+        AddressStatus[name] = event.target.value;
+        originStatus.Addresses[1] = AddressStatus;
+        this.props.franchiseeUpdateInsertPayload(originStatus)
+    };
+
     //////////////////////
     totalSteps = () => {
         return getSteps().length;
@@ -739,7 +736,9 @@ class FranchiseesCreateForm extends Component {
     handleTab = (event, activeStep) => {
         this.setState({ activeStep });
     };
+
     //////////////////////
+
     render() {
         const { classes} = this.props;
 
@@ -842,7 +841,8 @@ function mapDispatchToProps(dispatch) {
         getFranchiseeFormPlanType: Actions.getFranchiseeFormPlanType,
         getFranchiseeDocumentsList: Actions.getFranchiseeDocumentsList,
         getFranchiseeFeeMaintenance: Actions.getFranchiseeFeeMaintenance,
-        getFranchiseeStateList: Actions.getFranchiseeStateList
+        getFranchiseeStateList: Actions.getFranchiseeStateList,
+        franchiseeUpdateInsertPayload: Actions.franchiseeUpdateInsertPayload,
     }, dispatch);
 }
 
@@ -854,7 +854,11 @@ function mapStateToProps({ franchisees, auth }) {
         user: auth.login,
         documentsList: franchisees.documentsList,
         franchiseeFees: franchisees.franchiseeFees,
-        stateList: franchisees.StateList
+        stateList: franchisees.StateList,
+        selectedSignDate: franchisees.selectedSignDate,
+        selectedExpDate: franchisees.selectedExpDate,
+        selectedRenewDate: franchisees.selectedRenewDate,
+        insertPayload: franchisees.insertPayload
     }
 }
 

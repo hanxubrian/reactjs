@@ -145,17 +145,19 @@ class FilterPanel extends Component {
         this.props.updateFranchiseeStatus(iStatus)
     };
 
-    handleFormChange = (name) => event => {
+    handleAddressFormChange = (name) => event => {
 
         if(name === 'State'){
             this.setState({
                 [name]: event.target.value,
             });
         }
-        const iStatus = this.props.insertPayload;
-        console.log('insertPayload = ',iStatus);
-        iStatus[name] = event.target.value;
-        this.props.franchiseeUpdateInsertPayload(iStatus)
+        const originStatus = this.props.insertPayload;
+        const AddressStatus = originStatus.Addresses[0];
+        console.log('insertPayload = ',AddressStatus);
+        AddressStatus[name] = event.target.value;
+        originStatus.Addresses[0] = AddressStatus;
+        this.props.franchiseeUpdateInsertPayload(originStatus)
     };
 
     handleLocationChange = name => event => {
@@ -334,7 +336,7 @@ class FilterPanel extends Component {
                                                 id="lf_name"
                                                 label="Name"
                                                 className={classes.textField}
-                                                onChange={this.handleFormChange('Name')}
+                                                onChange={this.handleAddressFormChange('Name')}
                                                 margin="dense"
                                                 variant="outlined"
                                                 required
@@ -347,7 +349,7 @@ class FilterPanel extends Component {
                                                 id="lf_address1"
                                                 label="Address"
                                                 className={classes.textField}
-                                                onChange={this.handleFormChange('AddressLine1')}
+                                                onChange={this.handleAddressFormChange('AddressLine1')}
                                                 margin="dense"
                                                 variant="outlined"
                                                 fullWidth
@@ -359,7 +361,7 @@ class FilterPanel extends Component {
                                                 id="lf_address2"
                                                 label="Address2"
                                                 className={classes.textField}
-                                                onChange={this.handleFormChange('AddressLine2')}
+                                                onChange={this.handleAddressFormChange('AddressLine2')}
                                                 margin="dense"
                                                 variant="outlined"
                                                 fullWidth
@@ -370,7 +372,7 @@ class FilterPanel extends Component {
                                                 id="lf_city"
                                                 label="City"
                                                 className={classes.textField}
-                                                onChange={this.handleFormChange('City')}
+                                                onChange={this.handleAddressFormChange('City')}
                                                 margin="dense"
                                                 variant="outlined"
                                                 fullWidth
@@ -384,7 +386,7 @@ class FilterPanel extends Component {
                                                 select
                                                 className={classes.textField}
                                                 value={this.state.State}
-                                                onChange={this.handleFormChange('State')}
+                                                onChange={this.handleAddressFormChange('State')}
                                                 margin="dense"
                                                 variant="outlined"
                                                 required
@@ -402,7 +404,7 @@ class FilterPanel extends Component {
                                                id="lf_county"
                                                label="County"
                                                className={classes.textField}
-                                               onChange={this.handleFormChange('County')}
+                                               onChange={this.handleAddressFormChange('County')}
                                                margin="dense"
                                                variant="outlined"
                                                fullWidth
@@ -414,7 +416,7 @@ class FilterPanel extends Component {
                                                 id="lf_zip"
                                                 label="Zip"
                                                 className={classes.textField}
-                                                onChange={this.handleFormChange('Zip')}
+                                                onChange={this.handleAddressFormChange('Zip')}
                                                 margin="dense"
                                                 variant="outlined"
                                                 fullWidth

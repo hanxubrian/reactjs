@@ -6,7 +6,7 @@ import * as Actions from 'store/actions';
 //Material UI core and icons
 import {
     Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
-    Toolbar, Typography, Paper, Icon, IconButton, Tooltip, Fab, MenuItem
+    Toolbar, Typography, Paper, Icon, IconButton, Tooltip, Fab, MenuItem, FormControlLabel
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -18,6 +18,7 @@ import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import {withRouter} from "react-router-dom";
 import Button from "@material-ui/core/Button/Button";
+import Checkbox from "@material-ui/core/Checkbox/Checkbox";
 
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -252,12 +253,18 @@ class FranchiseesMaintenanceTable extends React.Component {
     componentWillMount() {
 
         if(this.props.franchiseeFees != null){
+            const feeList = this.props.franchiseeFees.FranchiseeFees;
             this.setState({
-                franchiseeFees: this.props.franchiseeFees.FranchiseeFees
-            })
+                franchiseeFees: feeList,
+            });
         }
     }
 
+    handleCheckboxChange = name => {
+
+
+
+    }
 
     render() {
         const { classes } = this.props;
@@ -265,16 +272,22 @@ class FranchiseesMaintenanceTable extends React.Component {
 
         const headers = [
             {
-                id: 'name',
+                id: 'Fee',
                 numeric: false,
                 disablePadding: false,
-                label: 'Name'
+                label: 'Fee'
             },
             {
-                id: 'value',
+                id: 'Rate',
                 numeric: false,
                 disablePadding: false,
-                label: 'Value'
+                label: 'Rate'
+            },
+            {
+                id: 'Deduct',
+                numeric: false,
+                disablePadding: false,
+                label: 'Deduct'
             }
         ];
 
@@ -314,6 +327,15 @@ class FranchiseesMaintenanceTable extends React.Component {
                                                         {n.FeeRateTypeList.Rate ==="Percentage" && (
                                                             <span>&nbsp;%</span>
                                                         )}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <FormControlLabel
+                                                            control={
+                                                                <Checkbox checked={n["Deduct" + n.FranchiseeFeeList.FranchiseeFeeListId]} />
+                                                            }
+                                                            onChange={this.handleCheckboxChange(["Deduct" + n.FranchiseeFeeList.FranchiseeFeeListId])}
+                                                            value="Y"
+                                                        />
                                                     </TableCell>
                                                 </TableRow>
                                             )
