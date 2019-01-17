@@ -27,7 +27,6 @@ class InvoiceReport extends Component {
     }
     render()
     {
-
         if(!this.props.show) {
             return null;
         }
@@ -145,7 +144,7 @@ class InvoiceReport extends Component {
                             </tr>
                             </tbody>
                         </table>
-                        <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+                        <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)'}}></div>
                         <table style={{width:'85%'}} align="center">
                             <tbody>
                             <tr>
@@ -301,15 +300,7 @@ class InvoiceReport extends Component {
     }
 }
 
-const backdropStyle = {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    padding: 50
-};
+
 
 // The modal "window"
 const modalStyle = {
