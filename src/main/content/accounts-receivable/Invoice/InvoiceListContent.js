@@ -386,12 +386,6 @@ class InvoiceListContent extends Component {
                                     className: classNames(classes.invoiceNo, "flex items-center  justify-center text-12")
                                 },
                                 {
-                                    Header: "Description",
-                                    accessor: "InvoiceDescription",
-                                    className: classNames(classes.descr,"flex items-center justify-start p-12-impor"),
-                                    width: '100%'
-                                },
-                                {
                                     Header: "Customer #",
                                     accessor: "CustomerNo",
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
@@ -402,6 +396,12 @@ class InvoiceListContent extends Component {
                                     accessor: "CustomerName",
                                     width: 200,
                                     className: classNames("flex items-center  justify-start pl-12-impor")
+                                },
+                                {
+                                    Header: "Description",
+                                    accessor: "InvoiceDescription",
+                                    className: classNames(classes.descr,"flex items-center justify-start p-12-impor"),
+                                    width: '100%'
                                 },
                                 {
                                     Header: "Balance",
