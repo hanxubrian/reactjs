@@ -6,8 +6,14 @@ import {FuseUtils, FuseAnimate} from '@fuse';
 import {Avatar, Checkbox, Icon, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, MenuList, Typography} from '@material-ui/core';
 import {bindActionCreators} from 'redux';
 import * as Actions from './store/actions';
+import * as ChatActions from '../../../chatPanel/store/actions';
 import ReactTable from "react-table";
 import classNames from 'classnames';
+
+// import withReducer from 'store/withReducer';
+// import reducer from './store/reducers';
+import IndividualChat from '../../../chatPanel/individualChat';
+import "../../../chatPanel/individualChat.css";
 
 const styles = theme => ({
     mailList: {
@@ -20,6 +26,13 @@ const styles = theme => ({
     labels  : {},
     chatIcon : {
         padding: 8
+    },
+    individualChat: {
+        position: 'fixed',
+        bottom: 70,
+        right: 360,
+        zIndex: 10,
+        display: 'flex'
     }
 
 });
@@ -27,9 +40,93 @@ const styles = theme => ({
 class ContactsList extends Component {
 
     state = {
-        selectedContactsMenu: null
+        selectedContactsMenu   : null,
+        isOpen                 : false,
+        chatDetail             : null,
+        individualchatDetail   : null,
+        chatUser               : null,
+        chatId                 : null,
+        currentSeletedchatId   : null,
+        selectedUserDetail     : null,
+        contacts               : null,
+        user                   : null,
+        currentRoom            : null,
     };
+    componentWillMount(){
+        this.setState({
+            chatDetail: this.props.chatDetail,
+            chatUser  : this.props.chatUser,
+            contacts  : this.props.contacts,
+            // currentRoom: this.props.chatDetail.currentRoom,
+        });
+    }
+    componentWillReceiveProps(nextProps) {
 
+        if(nextProps.chatDetail && nextProps.chatUser) {
+            console.log('chatDetail', nextProps.chatDetail)
+            this.setState({
+                chatDetail: nextProps.chatDetail,
+                chatUser  : nextProps.chatUser,
+                user      : nextProps.chatUser,
+                contacts  : nextProps.contacts,
+                // currentRoom: nextProps.chatDetail.currentRoom,
+            });
+        }
+    }
+    componentDidUpdate(prevProps, prevState, snapshot){
+        if(this.props.chatDetail!==prevProps.chatDetail){
+            this.setState({
+                chatDetail: this.props.chatDetail,
+            });
+        }
+        if(this.props.chatUser!==prevProps.chatUser){
+            this.setState({
+                chatUser  : this.props.chatUser,
+                user      : this.props.chatUser,
+                contacts  : this.props.contacts,
+            });
+        }
+        if(this.props.chatDetail.currentRoom !== prevProps.chatDetail.currentRoom){
+            // this.setState({
+            //     currentRoom: this.props.chatDetail.currentRoom,
+            // });
+        }
+        if(this.props.chatUser.chatList !== prevProps.chatUser.chatList && this.state.currentSeletedchatId && this.state.currentSeletedchatId!=null){
+            this.props.chatUser.chatList.map((item)=>{
+                if(item['contactId']==this.state.currentSeletedchatId){
+                    this.setState({
+                        chatId : item['chatId'],
+                    });
+                }
+            });
+        }
+        if(!this.state.isOpen && this.state.chatId && this.state.chatId !==null){
+            this.openChat();
+            console.log("chatID=============",this.state.chatId);
+        }
+        if(this.props !== prevProps && this.state.chatId && this.state.chatId !== null){
+                let msg = this.state.chatDetail.messages;
+                console.log("====================this.state.chatDetail.messages",msg[this.state.chatId]);
+                this.setState({
+                    individualchatDetail:msg[this.state.chatId],
+                })
+        }
+        console.log("==1==rooms",this.state.chatDetail.rooms);
+        console.log("==1==chatID",this.state.chatId);
+        console.log("==1==currentRoom",this.state.currentRoom);
+        if(this.state.currentRoom == null || this.state.chatId != prevState.chatId){
+                this.state.chatDetail.rooms.map((item, index)=>{
+                   if(item.id === this.state.chatId){
+                       if(this.state.currentRoom !==item){
+                           this.setState({
+                               currentRoom:item,
+                           });
+                           console.log("cuurent room",this.state.currentRoom);
+                       }
+                   }
+                });
+        }
+    }
     getFilteredArray = (entities, searchText) => {
         const arr = Object.keys(entities).map((id) => entities[id]);
         if ( searchText.length === 0 )
@@ -46,13 +143,41 @@ class ContactsList extends Component {
     closeSelectedContactsMenu = () => {
         this.setState({selectedContactsMenu: null});
     };
-
+    openChat = () => {
+        if(!this.state.isOpen)
+            this.setState({
+                isOpen: !this.state.isOpen
+            });
+    };
+    toggleChat = () => {
+        if(!this.state.isOpen)
+            this.setState({
+                isOpen: !this.state.isOpen
+            });
+    };
+    getMsgInfo=(userId,userInfo)=>{
+        if(userId && userId !=null){
+            this.setState({
+                currentSeletedchatId: userId,
+                selectedUserDetail  : userInfo,
+            });
+            let msg      = this.state.chatDetail.messages;
+            let chatlist = this.state.chatUser.chatList;
+            chatlist.map((item)=>{
+                if(item['contactId']==userId){
+                    this.setState({
+                        chatId : item['chatId'],
+                    });
+                }
+            });
+        }
+    }
     render()
     {
-        const {classes, contacts, user, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred, openChat} = this.props;
+        const {classes, contacts, user, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred,state, openChat} = this.props;
         const data = this.getFilteredArray(contacts, searchText);
         const {selectedContactsMenu} = this.state;
-
+        console.log("chatDetal====",this.state.chatDetail);
         if ( !data && data.length === 0 )
         {
             return (
@@ -65,13 +190,18 @@ class ContactsList extends Component {
         }
 
         return (
+            <div>
             <FuseAnimate animation="transition.slideUpIn" delay={300}>
                 <ReactTable
                     className={classNames(classes.root, "-striped -highlight border-0")}
                     getTrProps={(state, rowInfo, column) => {
                         return {
                             onClick: (e)=>{
-                                alert(JSON.stringify(rowInfo)+"=======");
+                                e.stopPropagation();
+                                // this.openChat();
+                                console.log("rowinfo",rowInfo);
+                                openChat(rowInfo.original.id);
+                                this.getMsgInfo(rowInfo.original.name,rowInfo.original);
                             },
                             className: "cursor-pointer",
 
@@ -251,7 +381,26 @@ class ContactsList extends Component {
                     defaultPageSize={10}
                     noDataText="No contacts found"
                 />
+
             </FuseAnimate>
+
+                {this.state.isOpen && (
+                    <div className={classNames(classes.individualChat, {'closeIndvidualchat': !state})}>
+                        {
+
+                            <IndividualChat show ={this.state.isOpen} onClose={this.toggleChat}
+                            message ={this.state.individualchatDetail} userdetail = {this.state.selectedUserDetail}
+                                            currentUser ={this.state.chatDetail.currentUser}
+                                            contacts ={this.state.contacts} user={this.state.chatUser}
+                                            currentRoom={this.state.currentRoom}
+                            />
+
+                        }
+
+                    </div>
+                )}
+
+            </div>
         );
     }
 }
@@ -272,17 +421,26 @@ function mapDispatchToProps(dispatch)
         toggleStarredContact    : Actions.toggleStarredContact,
         toggleStarredContacts   : Actions.toggleStarredContacts,
         setContactsStarred      : Actions.setContactsStarred,
-        setContactsUnstarred    : Actions.setContactsUnstarred
+        setContactsUnstarred    : Actions.setContactsUnstarred,
+
+        openChatPanel : ChatActions.openChatPanel,
+        closeChatPanel: ChatActions.closeChatPanel
     }, dispatch);
 }
 
-function mapStateToProps({contactsApp})
+function mapStateToProps({contactsApp,chatPanel})
 {
     return {
-        contacts          : contactsApp.contacts.entities,
-        selectedContactIds: contactsApp.contacts.selectedContactIds,
-        searchText        : contactsApp.contacts.searchText,
-        user              : contactsApp.user
+        contacts                   : contactsApp.contacts.entities,
+        selectedContactIds         : contactsApp.contacts.selectedContactIds,
+        searchText                 : contactsApp.contacts.searchText,
+        user                       : contactsApp.user,
+        // contacts                : chatPanel.contacts.entities,
+        selectedContactId          : chatPanel.contacts.selectedContactId,
+        state                      : chatPanel.state,
+        chatDetail                 : chatPanel.chat,
+        chatUser                   : chatPanel.user,
+        currentRoom                :chatPanel.chat.currentRoom,
     }
 }
 

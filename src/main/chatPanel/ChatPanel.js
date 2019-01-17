@@ -8,6 +8,12 @@ import ContactList from './ContactList';
 import Chat from './Chat';
 import classNames from 'classnames';
 
+import withReducer from 'store/withReducer';
+import reducer from './store/reducers';
+import IndividualChat from './individualChat';
+import "./individualChat.css";
+
+
 const styles = theme => ({
     root : {
         width                         : 70,
@@ -47,11 +53,32 @@ const styles = theme => ({
         '&.opened'                    : {
             transform: 'translateX(0)'
         }
+    },
+    chartAddButton: {
+        display: 'flex',
+        width: 50,
+        height: 50,
+        background: '#F44336',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: 25,
+        fontWeight: 'bold',
+        cursor: 'pointer'
+    },
+    individualChat: {
+        position: 'fixed',
+        bottom: 0,
+        right: 360,
+        zIndex: 10,
+        display: 'flex'
     }
 });
 
 class ChatPanel extends Component {
 
+    state = {
+        individualchats: []
+    };
     componentDidMount()
     {
         this.props.getUserData();
@@ -85,11 +112,14 @@ class ChatPanel extends Component {
             this.props.closeChatPanel();
         }
     };
-
+    addIndividualChat = () => {
+        this.state.individualchats.push('aaa');
+        this.setState({individualchats: this.state.individualchats});
+    }
     render()
     {
         const {classes, openChatPanel, closeChatPanel, contacts, selectedContactId, state} = this.props;
-
+        const {individualchats} = this.state;
         const selectedContact = contacts.find(_contact => _contact.id === selectedContactId);
 
         return (

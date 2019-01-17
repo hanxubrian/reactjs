@@ -307,3 +307,16 @@ export function sendMessage(messageText, chatId, userId)
     }
 
 }
+
+export function sendMsg(messageText, currentroom)
+{
+    return (dispatch, getState) =>{
+        const currentUser = getState().chatPanel.chat.currentUser;
+        const currentRoom = currentroom;
+        currentUser.sendMessage({
+            text: messageText,
+            roomId: currentRoom.id
+        });
+    }
+
+}

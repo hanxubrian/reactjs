@@ -76,3 +76,12 @@
     display: flex;
     justify-content: space-between;
 }
+.chat-message-right{
+    margin-left: auto;
+    color: rgba(0, 0, 0, 0.87);
+    margin-left: auto;
+    background-color: #e0e0e0;
+}
+.chat-message-time{
+    font-size: 10px;
+}

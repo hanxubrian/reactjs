@@ -72,7 +72,7 @@ export function checkChatUserData()
         const chatuser = getState().chatPanel.user;
 
         return chatService.getUserData(userId, name, avatar).then((user) =>{
-            if (user && user.chatList && chatuser.chatList.length !== user.chatList.length)
+            if (user && user.chatList && chatuser.chatList && chatuser.chatList.length &&  chatuser.chatList.length !== user.chatList.length)
             {
                 Promise.all([
                     dispatch({
