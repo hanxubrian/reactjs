@@ -260,8 +260,6 @@ class InvoiceListContent extends Component {
         this.setState({
             isOpen: !this.state.isOpen
         });
-
-
     };
 
     toggleModal = () => {
@@ -448,18 +446,18 @@ class InvoiceListContent extends Component {
                                     Cell  : row => (
                                         <div className="flex items-center actions justify-center w-full">
                                             <IconButton style={{padding: 8}}
-                                                onClick={(ev) => {
-                                                    ev.stopPropagation();
-                                                    this.handleOpenRemoveDialog(row.original.InvoiceId);
-                                                }}
+                                                        onClick={(ev) => {
+                                                            ev.stopPropagation();
+                                                            this.handleOpenRemoveDialog(row.original.InvoiceId);
+                                                        }}
                                             >
                                                 <Icon fontSize={"small"}>delete</Icon>
                                             </IconButton>
                                             <IconButton style={{padding: 8}}
-                                                onClick={(ev) => {
-                                                    ev.stopPropagation();
-                                                    this.props.openEditInvoiceForm(row.original);
-                                                }}
+                                                        onClick={(ev) => {
+                                                            ev.stopPropagation();
+                                                            this.props.openEditInvoiceForm(row.original);
+                                                        }}
                                             >
                                                 <Icon fontSize={"small"}>edit</Icon>
                                             </IconButton>

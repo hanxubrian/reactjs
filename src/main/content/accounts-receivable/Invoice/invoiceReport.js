@@ -24,7 +24,6 @@ class InvoiceReport extends Component {
                 Region: nextProps.Detail.Data.Region,
             });
         }
-
     }
     render()
     {
@@ -202,7 +201,7 @@ class InvoiceReport extends Component {
                                 <th width="15%" style={{border:'solid 1px'}} className="text-center">Invoice No</th>
                                 <th width="10%" style={{border:'solid 1px'}} className="text-center">Date</th>
                                 <th width="10%" style={{border:'solid 1px'}} className="text-center">Cust No</th>
-                                <th width="15%" style={{border:'solid 1px'}} className="text-center">Sismn No</th>
+                                <th width="15%" style={{border:'solid 1px'}} className="text-center">Slsmn No</th>
                                 <th width="15%" style={{border:'solid 1px'}} className="text-center">PO Number</th>
                                 <th width="25%" style={{border:'solid 1px'}} className="text-center">Franchisee</th>
                                 <th width="10%" style={{border:'solid 1px'}} className="text-center">Due Date</th>
@@ -210,16 +209,15 @@ class InvoiceReport extends Component {
                             </thead>
                             <tbody>
 
-                                 <tr >
-                                     <td width="15%" style={{border:'solid 1px'}} className="text-center">1</td>
-                                     <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.InvoiceDate}</td>
-                                     <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.CustomerNumber}</td>
-                                     <td width="15%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.slsmn_no}</td>
-                                     <td width="15%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.PONumber}</td>
-                                     <td width="25%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.apply_fran}</td>
-                                     <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.DueDate}</td>
-                                 </tr>
-
+                            <tr >
+                                <td width="15%" style={{border:'solid 1px'}} className="text-center">1</td>
+                                <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.InvoiceDate}</td>
+                                <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.CustomerNumber}</td>
+                                <td width="15%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.slsmn_no}</td>
+                                <td width="15%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.PONumber}</td>
+                                <td width="25%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.apply_fran}</td>
+                                <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.DueDate}</td>
+                            </tr>
                             </tbody>
                         </table>
                         <table style={{width:'100%',borderCollapse: 'collapse',border:'solid 1px'}}>

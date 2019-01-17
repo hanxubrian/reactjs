@@ -272,7 +272,6 @@ class InvoiceApp extends Component {
         ) {
             this.props.getInvoices([regionId] ,StatusId, FromDate, ToDate, PeriodId,
                 OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText);
-
         }
 
         if(prevState.s!==this.state.s) {
