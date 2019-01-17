@@ -8,7 +8,7 @@ import {bindActionCreators} from 'redux';
 import {FuseScrollbars} from '@fuse';
 import Input from '@material-ui/core/Input';
 import axios from 'axios/index';
-import Pusher from 'pusher-js';
+// import Pusher from 'pusher-js';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import moment from 'moment/moment';
@@ -155,38 +155,32 @@ class IndividualChat extends Component {
         if(this.props !=prevProps){
             let msg = this.props.message;
             if(this.props.message && this.props.message !==null){
-                console.log("get ================================",msg);
                 this.setState({
                     messages:   this.props.message,
                 })
 
             }
             if(this.props.userdetail && this.props.userdetail !== null){
-                console.log("userdetail ================================",this.props.userdetail);
                 this.setState({
                     userdetail:   this.props.userdetail,
                 })
             }
             if(this.props.currentUser && this.props.currentUser !== null){
-                console.log("currentUser ================================",this.props.currentUser);
                 this.setState({
                     currentUser:   this.props.currentUser,
                 })
             }
             if(this.props.user && this.props.user !== null){
-                console.log("user ================================",this.props.user);
                 this.setState({
                     user:   this.props.user,
                 })
             }
             if(this.props.contacts && this.props.contacts !== null){
-                console.log("contacts ================================",this.props.contacts);
                 this.setState({
                     user:   this.props.contacts,
                 })
             }
             if(this.props.currentRoom && this.props.currentRoom !== null){
-                console.log("contacts ================================",this.props.currentRoom);
                 this.setState({
                     currentRoom:   this.props.currentRoom,
                 })
@@ -194,21 +188,7 @@ class IndividualChat extends Component {
         }
     }
     componentDidMount() {
-        // Pusher.logToConsole = true;
-        //
-        // const pusher = new Pusher('64a9f0ddad38c595ba94', {
-        //     cluster: 'us2',
-        //     forceTLS: true
-        // });
-        //
-        // const channel = pusher.subscribe('ChatChannel_69');
-        // var me = this;
-        // channel.bind('my-event', function (data) {
-        //     me.state.messages.push(data);
-        //     me.setState({
-        //         messages: me.state.messages
-        //     });
-        // });
+
     }
     isFirstMessageOfGroup = (item, i) => {
         return (i === 0 || (this.props.message[i - 1] && this.props.message[i - 1].who !== item.who));
@@ -221,8 +201,7 @@ class IndividualChat extends Component {
         this.setState({
             sendMSG: e.target.value
         });
-        console.log("e.target.value",e.target.value);
-        console.log("e.==sendMSG",this.state.sendMSG);
+
     }
 
     _handleKeyPress = (e) => {
@@ -231,13 +210,6 @@ class IndividualChat extends Component {
         }
     }
     onMessageSubmit = (ev) => {
-        // ev.stopPropagation();
-        console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",this.state.sendMSG);
-        console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^this.state.currentRoom^^^^^^^^^^^^^^^^^^^^^^^^^",this.state.currentRoom);
-        console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^this.props.currentUser^^^^^^^^^^^^^^^^^^^^^^^^^",this.props.currentUser);
-
-
-
         if ( this.state.sendMSG === '' )
         {
             return;
@@ -250,29 +222,7 @@ class IndividualChat extends Component {
         }
 
     };
-    // sendMSG = (e) => {
-    //     if (this.state.sendMSG == "") {
-    //         return;
-    //     }
-    //
-    //     const sendmessage = {
-    //         sender: "",
-    //         receiver: "",
-    //         message: this.state.sendMSG
-    //     }
-    //     this.state.sendMSG = "";
-    //     this.setState({
-    //         sendMSG: this.state.sendMSG,
-    //     });
-    //
-    //     axios({
-    //         method: 'post',
-    //         url: 'https://apifmsplus_c.jkdev.com/Messenger/Create?userid=69',
-    //         data: sendmessage
-    //     }).then(function (res) {
-    //         console.log(res);
-    //     });
-    // }
+
     scrollToBottom = () => {
         this.chatScroll.scrollTop = this.chatScroll.scrollHeight;
     };
@@ -314,37 +264,6 @@ class IndividualChat extends Component {
                             if(item.who === this.state.userdetail.name){
                                 contact =this.state.userdetail.avatar;
                             }
-                            // if(messageItem.who === this.state.userdetail.name){
-                            //    return(
-                            //        <div key={index}>
-                            //            <div  className="chat-item chat-item-other">
-                            //                <div className="chat-avatar">
-                            //                    <img src={this.state.userdetail.avatar} />
-                            //                </div>
-                            //                <div className="chat-message">
-                            //                    {messageItem.message}
-                            //                </div>
-                            //            </div>
-                            //            <div  className="chat-item chat-item-other">
-                            //                <div className="chat-message-time">{moment(messageItem.time).format('MMMM Do YYYY, h:mm:ss a')}</div>
-                            //            </div>
-                            //        </div>
-                            //    )
-                            // }else{
-                            //     return(
-                            //         <div key={index}>
-                            //             <div  className="chat-item chat-item-other">
-                            //                 <div className="chat-message-right">
-                            //                     {messageItem.message}
-                            //                 </div>
-                            //
-                            //             </div>
-                            //             <div  className="chat-item chat-item-other">
-                            //                 <div className="chat-message-right chat-message-time">{moment(messageItem.time).format('MMMM Do YYYY, h:mm:ss a')}</div>
-                            //             </div>
-                            //         </div>
-                            //     )
-                            // }
                                 return (
                                     <div
                                         key={item.time}
@@ -367,35 +286,10 @@ class IndividualChat extends Component {
                                     </div>
                                 )
                         }
-
-
-                            // <div key={index} className="chat-item chat-item-other">
-                            //     <div className="chat-avatar">
-                            //         <img src="assets/images/avatars/Barrera.jpg" />
-                            //     </div>
-                            //     <div className="chat-message">
-                            //         {messageItem.message}
-                            //     </div>
-                            // </div>
                         )
                     }
                 </div>
                 </FuseScrollbars>
-                {/*<div className="chat-message-input">*/}
-                    {/*<Input*/}
-                        {/*placeholder="Send Message"*/}
-                        {/*inputProps={{*/}
-                            {/*'aria-label': 'Description'*/}
-                        {/*}}*/}
-                        {/*value={this.state.sendMSG}*/}
-                        {/*onChange={this.handleChange}*/}
-                        {/*onKeyPress={this._handleKeyPress}*/}
-                    {/*/>*/}
-                    {/*<IconButton color="inherit" onClick={this.sendMSG}>*/}
-                        {/*<Icon>send</Icon>*/}
-                    {/*</IconButton>*/}
-                {/*</div>*/}
-
                 <div  className={classNames(classes.bottom, "py-16 px-8")}>
                     <Paper className={classNames(classes.inputWrapper, "flex items-center relative")}>
                         <TextField

@@ -163,13 +163,16 @@ class ContactsList extends Component {
             });
             let msg      = this.state.chatDetail.messages;
             let chatlist = this.state.chatUser.chatList;
-            chatlist.map((item)=>{
-                if(item['contactId']==userId){
-                    this.setState({
-                        chatId : item['chatId'],
-                    });
-                }
-            });
+            if(chatlist  && chatlist != null){
+                chatlist.map((item)=>{
+                    if(item['contactId']==userId){
+                        this.setState({
+                            chatId : item['chatId'],
+                        });
+                    }
+                });
+            }
+
         }
     }
     render()
