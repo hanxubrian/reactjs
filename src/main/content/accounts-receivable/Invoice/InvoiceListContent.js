@@ -255,7 +255,6 @@ class InvoiceListContent extends Component {
 
     invoiceReport =(ev,InvoiceId, RegionId)=>{
         ev.stopPropagation();
-        console.log(InvoiceId+"+invoice id+"+RegionId);
         this.props.getInvoiceDetail(InvoiceId, RegionId);
         this.setState({
             isOpen: !this.state.isOpen
@@ -498,7 +497,9 @@ class InvoiceListContent extends Component {
                     </DialogActions>
                 </Dialog>
 
-                <InvoiceReport show={this.state.isOpen} onClose={this.toggleModal} getData={this.state.invoiceDetail} />
+                {this.state.invoiceDetail!==null && (
+                    <InvoiceReport show={this.state.isOpen} onClose={this.toggleModal} Detail={this.state.invoiceDetail} />
+                )}
             </div>
         );
     }

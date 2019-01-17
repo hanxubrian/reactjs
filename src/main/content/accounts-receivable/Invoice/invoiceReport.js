@@ -16,11 +16,12 @@ class InvoiceReport extends Component {
     };
     componentWillReceiveProps(nextProps) {
 
-        if(nextProps.getData) {
+        if(nextProps.Detail) {
+            console.log('Detail', nextProps.Detail)
             this.setState({
-                invoiceDetail:nextProps.getData.Data,
-                Items: nextProps.getData.Data.Items,
-                Region: nextProps.getData.Data.Region,
+                invoiceDetail:nextProps.Detail.Data,
+                Items: nextProps.Detail.Data.Items,
+                Region: nextProps.Detail.Data.Region,
             });
         }
 
@@ -316,8 +317,7 @@ InvoiceReport.propTypes = {
     onClose: PropTypes.func.isRequired,
     show: PropTypes.bool,
     children: PropTypes.node,
-    getData: PropTypes.object,
-
+    Detail: PropTypes.object,
 };
 
 export default InvoiceReport;
