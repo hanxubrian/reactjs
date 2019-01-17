@@ -24,7 +24,6 @@ class InvoiceReport extends Component {
                 Region: nextProps.Detail.Data.Region,
             });
         }
-
     }
     render()
     {
@@ -209,8 +208,7 @@ class InvoiceReport extends Component {
                             </tr>
                             </thead>
                             <tbody>
-                            {/*{this.state.Items !=null && this.state.Items && this.state.Items.map((item,index)=>{*/}
-                                {/*return (*/}
+
                             <tr >
                                 <td width="15%" style={{border:'solid 1px'}} className="text-center">1</td>
                                 <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.InvoiceDate}</td>
@@ -220,8 +218,6 @@ class InvoiceReport extends Component {
                                 <td width="25%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.apply_fran}</td>
                                 <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.DueDate}</td>
                             </tr>
-                                {/*)*/}
-                            {/*})}*/}
                             </tbody>
                         </table>
                         <table style={{width:'100%',borderCollapse: 'collapse',border:'solid 1px'}}>

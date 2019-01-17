@@ -259,8 +259,6 @@ class InvoiceListContent extends Component {
         this.setState({
             isOpen: !this.state.isOpen
         });
-
-
     };
 
     toggleModal = () => {
