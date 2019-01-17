@@ -27,6 +27,7 @@ import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
 import InvoiceLineTable from "./InvoiceLine"
 
+
 // for store
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
@@ -42,6 +43,7 @@ import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
 import moment from 'moment'
 import PropTypes from 'prop-types';
+import NumberFormat from 'react-number-format';
 
 //Utility
 import {escapeRegexCharacters} from 'services/utils'
@@ -800,7 +802,7 @@ class InvoiceForm extends Component {
                                                 <div className="flex flex-row items-center">
                                                     <Icon fontSize={"small"} className="mr-4">smartphone</Icon>
                                                     <Typography variant="subtitle1" color="inherit">
-                                                        {this.state.selectedCustomer.Phone}
+                                                        <NumberFormat value={this.state.selectedCustomer.Phone} displayType={'text'}  format="+1 (###) ###-####" mask="_" renderText={value => <div>{value}</div>} />
                                                     </Typography>
                                                 </div>
                                             </div>
@@ -835,7 +837,7 @@ class InvoiceForm extends Component {
                                                 <div className="flex flex-row items-center">
                                                     <Icon fontSize={"small"} className="mr-4">smartphone</Icon>
                                                     <Typography variant="subtitle1" color="inherit">
-                                                        {this.state.selectedCustomer.Phone}
+                                                        <NumberFormat value={this.state.selectedCustomer.Phone} displayType={'text'}  format="+1 (###) ###-####" mask="_" renderText={value => <div>{value}</div>} />
                                                     </Typography>
                                                 </div>
                                                 <div>
