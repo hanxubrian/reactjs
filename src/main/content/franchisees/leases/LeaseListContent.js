@@ -1068,13 +1068,13 @@ const AddButton = ({ onExecute }) => (
 
 const EditButton = ({ onExecute }) => (
 	<IconButton onClick={onExecute} title="Edit row">
-		<EditIcon />
+		{/* <EditIcon /> */}
 	</IconButton>
 );
 
 const DeleteButton = ({ onExecute }) => (
 	<IconButton onClick={onExecute} title="Delete row">
-		<DeleteIcon />
+		{/* <DeleteIcon /> */}
 	</IconButton>
 );
 
