@@ -255,6 +255,7 @@ class InvoiceListContent extends Component {
 
     invoiceReport =(ev,InvoiceId, RegionId)=>{
         ev.stopPropagation();
+        // console.log(InvoiceId+"===id===="+RegionId);
         this.props.getInvoiceDetail(InvoiceId, RegionId);
         this.setState({
             isOpen: !this.state.isOpen

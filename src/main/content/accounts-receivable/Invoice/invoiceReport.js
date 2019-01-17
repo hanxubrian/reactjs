@@ -25,6 +25,13 @@ class InvoiceReport extends Component {
             });
         }
     }
+    componentWillMount(){
+        this.setState({
+            invoiceDetail:this.props.Detail.Data,
+            Items: this.props.Detail.Data.Items,
+            Region: this.props.Detail.Data.Region,
+        });
+    }
     render()
     {
         if(!this.props.show) {
@@ -208,9 +215,10 @@ class InvoiceReport extends Component {
                             </tr>
                             </thead>
                             <tbody>
-
-                            <tr >
-                                <td width="15%" style={{border:'solid 1px'}} className="text-center">1</td>
+                            {this.state.Items !=null && this.state.Items && this.state.Items.map((item,index)=>{
+                                return (
+                            <tr key={index}>
+                                <td width="15%" style={{border:'solid 1px'}} className="text-center">{item.inv_no}</td>
                                 <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.InvoiceDate}</td>
                                 <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.CustomerNumber}</td>
                                 <td width="15%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.slsmn_no}</td>
@@ -218,6 +226,8 @@ class InvoiceReport extends Component {
                                 <td width="25%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.apply_fran}</td>
                                 <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.DueDate}</td>
                             </tr>
+                                )
+                            })}
                             </tbody>
                         </table>
                         <table style={{width:'100%',borderCollapse: 'collapse',border:'solid 1px'}}>
