@@ -144,8 +144,8 @@ const newInvoiceState = {
     "RegionId": "",
     "RegionName": "",
     "InvoiceId": "",
-    "InvoiceDate": new Date(),
-    "DueDate": new Date(),
+    "InvoiceDate": moment(),
+    "DueDate": moment(),
     "CustomerId": "",
     "CustomerNo": "",
     "CustomerName": "",
@@ -371,7 +371,17 @@ class InvoiceForm extends Component {
 
     getSuggestionValue =  (suggestion) =>{
         this.setState({selectedCustomer: suggestion});
-        this.setState({PO_number: suggestion.CustomerNo})
+        this.setState({PO_number: suggestion.CustomerNo});
+
+        let year = moment().year();
+        let month = moment().month();
+        let invoiceDate = moment().year(year).month(month).endOf('month');
+
+        if(suggestion.InvoiceDayPreference==='BOM')
+            invoiceDate = moment().year(year).month(month).startOf('month');
+
+        this.setState({InvoiceDate: invoiceDate});
+
         return suggestion.CustomerName;
     };
 
@@ -427,8 +437,6 @@ class InvoiceForm extends Component {
                 this.setState({InvoiceNo: nextProps.invoiceForm.customer.InvoiceNo});
             this.setState({value: nextProps.invoiceForm.customer.CustomerName});
             this.setState({CustomerNo: nextProps.invoiceForm.customer.CustomerNo});
-            this.setState({InvoiceDate: moment(nextProps.invoiceForm.customer.InvoiceDate)});
-            this.setState({DueDate: moment(nextProps.invoiceForm.customer.DueDate)});
         }
 
         if(nextProps.newInvoice!==null && nextProps.newInvoice!==this.props.newInvoice){
@@ -485,7 +493,7 @@ class InvoiceForm extends Component {
                 Commission: 0,
                 CommissionTotal: 0,
                 ExtraWork: 1,
-                TaxExcempt: this.state.taxExempt ? 1 : 0,
+                TaxExcempt: this.state.selectedCustomer.TaxExempt,
                 Distribution: [],
             };
             let franchisees = [];
@@ -533,7 +541,7 @@ class InvoiceForm extends Component {
             GrandTotal: this.state.total,
             TransactionStatusListId: 2,
             Status: 2,
-            SysCust: 2,
+            SysCust: this.state.selectedCustomer.SysCust,
             Items: items
         };
         this.props.addInvoice(this.props.regionId, result);
@@ -625,6 +633,8 @@ class InvoiceForm extends Component {
 
         let bReadonly = false;
         if(this.props.invoiceForm.type === 'new') bReadonly = true;
+
+        console.log('state=', this.state);
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
@@ -819,7 +829,7 @@ class InvoiceForm extends Component {
                                             <div className="flex flex-row">
                                                 <Icon fontSize={"small"} className="mr-4">account_circle</Icon>
                                                 <Typography variant="subtitle1" color="inherit">
-                                                    <strong>{this.state.selectedCustomer ? this.state.selectedCustomer.CustomerName: this.state.value}</strong>
+                                                    <strong>{this.state.selectedCustomer ? this.state.selectedCustomer.BillingCustomerName: this.state.value}</strong>
                                                 </Typography>
                                             </div>
                                         </div>
@@ -828,7 +838,7 @@ class InvoiceForm extends Component {
                                                 <div className="flex flex-row items-center">
                                                     <Icon fontSize={"small"} className="mr-4">place</Icon>
                                                     <Typography variant="subtitle1" color="inherit">
-                                                        {this.state.selectedCustomer.Address}, {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
+                                                        {this.state.selectedCustomer.BillingAddress}, {this.state.selectedCustomer.BillingCity}, {this.state.selectedCustomer.BillingState} {this.state.selectedCustomer.BillingPostalCode}
                                                     </Typography>
                                                 </div>
                                             </div>
@@ -846,7 +856,7 @@ class InvoiceForm extends Component {
                                                         control={
                                                             <Checkbox
                                                                 name="taxExempt"
-                                                                checked={this.state.taxExempt}
+                                                                checked={this.state.selectedCustomer.TaxExempt==='Y' ? true : false}
                                                                 onChange={this.handleChange}
                                                                 value="checkedB"
                                                                 color="primary"

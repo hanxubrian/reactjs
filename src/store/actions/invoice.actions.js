@@ -1,6 +1,5 @@
 import axios from "axios";
 import {invoiceService} from "../../services"
-import {GET_ALL_CUSTOMERS, GET_CUSTOMERS_FETCH_START} from "./customers.actions";
 
 export const GET_ALL_INVOICES = "[INVOICES] GETS ALL";
 export const GET_INVOICE_STATUS = "[INVOICES] GETS INVOICE STATUS";
