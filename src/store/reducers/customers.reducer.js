@@ -36,6 +36,8 @@ const initialState = {
 	accountExecutiveList: [],
 	customerStatusList: [],
 	accountTypesGroups: [],
+
+	bOpenEmailToCustomerDialog: false,
 };
 
 
@@ -108,6 +110,12 @@ const customers = function (state = initialState, action) {
 			{
 				return {
 					...state, bOpenedMapView: !state.bOpenedMapView
+				}
+			}
+		case Actions.OPEN_EMAIL_TO_CUSTOMER_DIALOG:
+			{
+				return {
+					...state, bOpenEmailToCustomerDialog: action.payload
 				}
 			}
 		case Actions.TOGGLE_FILTER_STATUS: {

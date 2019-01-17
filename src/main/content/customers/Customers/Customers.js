@@ -33,6 +33,7 @@ import classNames from 'classnames';
 
 import CustomerForm from './CustomerForm';
 import CustomerListContent from './CustomerListContent';
+import DialogEmailToCustomer from './DialogEmailToCustomer';
 
 const headerHeight = 80;
 
@@ -584,6 +585,14 @@ class Customers extends Component {
 	closeContactMenu = () => {
 		this.setState({ anchorContactMenu: null });
 	}
+	onClickEmailToCustomer = () => {
+		this.setState({
+			anchorContactMenu: null,
+		});
+
+		this.props.openEmailToCustomerDialog(true);
+	}
+
 	render() {
 		console.log(this.props.documents)
 		console.log(this.props)
@@ -722,7 +731,7 @@ class Customers extends Component {
 												<MenuItem onClick={this.closeContactMenu}>Chat with Account Executive</MenuItem>
 												<MenuItem onClick={this.closeContactMenu}>Email to Account Executive</MenuItem>
 												<MenuItem onClick={this.closeContactMenu}>SMS to Customer</MenuItem>
-												<MenuItem onClick={this.closeContactMenu}>Email to Customer</MenuItem>
+												<MenuItem onClick={this.onClickEmailToCustomer}>Email to Customer</MenuItem>
 											</Menu>
 											<Tooltip title="Discard">
 												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
@@ -755,7 +764,9 @@ class Customers extends Component {
 					}
 					content={
 						<div className="flex-1 flex-col absolute w-full h-full">
-
+							
+							<DialogEmailToCustomer />
+							
 							{this.state.temp && (
 								<Fragment>
 									{customerForm.props.open ?
@@ -839,6 +850,8 @@ function mapDispatchToProps(dispatch) {
 		getAccountExecutiveList: Actions.getAccountExecutiveList,
 		getCustomerStatusList: Actions.getCustomerStatusList,
 		getAccountTypesGroups: Actions.getAccountTypesGroups,
+
+		openEmailToCustomerDialog: Actions.openEmailToCustomerDialog,
 	}, dispatch);
 }
 

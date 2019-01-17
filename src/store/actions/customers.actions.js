@@ -27,6 +27,8 @@ export const GET_ACCOUNT_TYPE_LIST = "[CUSTOMERS APP] GET ACCOUNT TYPE LIST";
 export const GET_ACCOUNT_EXCUTIVE_LIST = "[CUSTOMERS APP] GET ACCOUNT EXCUTIVE LIST";
 export const GET_CUSTOMER_STATUS_LIST = "[CUSTOMERS APP] GET CUSTOMER STATUS LIST";
 export const GET_ACCOUNT_TYPES_GROUPS = "[CUSTOMERS APP] GET ACCOUNT TYPES GROUPS";
+export const OPEN_EMAIL_TO_CUSTOMER_DIALOG = "[CUSTOMERS APP] OPEN_EMAIL_TO_CUSTOMER_DIALOG";
+
 
 export function getCustomers(regionId, statusId = 0, location = "all", latitude = "", longitude = "", searchText = "") {
 	// return dispatch => {
@@ -208,6 +210,15 @@ export function closeEditCustomerForm() {
 		type: CLOSE_EDIT_CUSTOMER_FORM
 	}
 }
+
+export function openEmailToCustomerDialog(open) {
+	return {
+		type: OPEN_EMAIL_TO_CUSTOMER_DIALOG,
+		payload: open
+	}
+}
+
+
 export function addCustomer(newCustomer) {
 	return (dispatch, getState) => {
 
