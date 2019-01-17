@@ -32,11 +32,7 @@ import { MuiPickersUtilsProvider,  DatePicker } from 'material-ui-pickers';
 import moment from "moment";
 import FranchiseesMaintenanceTable from "./maintenanceTableLine";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
-import {
-    UPDATE_DATE_SIGN_FRANCHISEE,
-    UPDATE_EXP_DATE_FRANCHISEE,
-    UPDATE_RENEW_DATE_FRANCHISEE
-} from "../../../../../store/actions";
+
 import FranchiseesDocumentUploadTable from "./documentUploadTable";
 const styles = theme => ({
 
@@ -67,7 +63,7 @@ const styles = theme => ({
 
 
 function getSteps() {
-    return ["Company Information", "Franchisee Agreement", "Fees","Upload Required Document"];
+    return ["Company Information", "Franchisee Agreement", "Upload Required Document"];
 }
 
 function getStepContent(franchiseeForm, step) {
@@ -498,18 +494,12 @@ function getStepContent(franchiseeForm, step) {
                             />
                         </GridItem>
                     </GridContainer>
+                    <div style={{ marginTop: '30px' }}></div>
+                    <h3>Fees</h3>
+                    <FranchiseesMaintenanceTable/>
                 </Fragment>
             );
-
         case 2:
-            return(
-                <Fragment>
-                    <div className="flex">
-                        <FranchiseesMaintenanceTable/>
-                    </div>
-                </Fragment>
-            );
-        case 3:
             return(
                 <Fragment>
                     <div style={{ marginTop: '30px' }}></div>
@@ -759,7 +749,6 @@ class FranchiseesCreateForm extends Component {
                     >
                         <Tab label="Company Information" />
                         <Tab label="Franchisee Agreement" />
-                        <Tab label="Fees" />
                         <Tab label="Upload Required Document" />
                     </Tabs>
                 </AppBar>
