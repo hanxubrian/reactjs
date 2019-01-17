@@ -404,10 +404,10 @@ class InvoiceListContent extends Component {
                                     width: '100%'
                                 },
                                 {
-                                    Header: "Balance",
-                                    accessor: "InvoiceBalanceAmount",
+                                    Header: "Tax",
+                                    accessor: "InvoiceTax",
                                     Cell     : row => {
-                                        return '$'+parseFloat(row.original.InvoiceBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+                                        return '$'+parseFloat(row.original.InvoiceTax).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
                                     },
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor"),
                                     width: 80
