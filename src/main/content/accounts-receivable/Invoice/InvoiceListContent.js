@@ -210,21 +210,11 @@ class InvoiceListContent extends Component {
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.props.data!==prevProps.data)
             this.setState({data: this.props.data});
-<<<<<<< HEAD
-        if(this.props.invoiceDetail!==prevProps.invoiceDetail){
-=======
-
         if(this.props.invoiceDetail!==prevProps.invoiceDetail) {
->>>>>>> fc4354af06588b6ac572dae7e244bf2c2f79c703
             this.setState({
                 invoiceDetail: this.props.invoiceDetail,
             });
         }
-<<<<<<< HEAD
-
-
-=======
->>>>>>> fc4354af06588b6ac572dae7e244bf2c2f79c703
     }
 
     componentDidMount(){
