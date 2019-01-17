@@ -253,6 +253,18 @@ const CurrencyTypeProvider = props => (
 	/>
 );
 //
+// table cell phone number formatter
+//
+const PhoneNumberFormatter = ({ value }) => {
+	return value.replace(/(\d{3})(\d{3})(\d{4})/, '+1 ($1) $2 - $3')
+};
+const PhoneNumberTypeProvider = props => (
+	<DataTypeProvider
+		formatterComponent={PhoneNumberFormatter}
+		{...props}
+	/>
+);
+//
 // table cell date formatter
 //
 const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1');
@@ -549,7 +561,7 @@ class CustomerListContent extends Component {
 					title: "Name",
 					name: "CustomerName",
 					columnName: "CustomerName",
-					width: 200,
+					width: 250,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -560,7 +572,7 @@ class CustomerListContent extends Component {
 					title: "Address",
 					name: "Address",
 					columnName: "Address",
-					width: 200,
+					width: 250,
 					wordWrapEnabled: true,
 					sortingEnabled: false,
 					filteringEnabled: true,
@@ -580,7 +592,7 @@ class CustomerListContent extends Component {
 					title: "State",
 					name: "StateName",
 					columnName: 'StateName',
-					width: 50,
+					width: 80,
 					align: 'center',
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -599,7 +611,7 @@ class CustomerListContent extends Component {
 					title: "Phone",
 					name: "Phone",
 					columnName: "Phone",
-					width: 100,
+					width: 150,
 					sortingEnabled: false,
 					filteringEnabled: true,
 					groupingEnabled: false,
@@ -624,7 +636,7 @@ class CustomerListContent extends Component {
 					groupingEnabled: true,
 				},
 				{
-					title: "Contract Amount",
+					title: "Contract",
 					name: "Amount",
 					columnName: 'Amount',
 					width: 120,
@@ -648,6 +660,9 @@ class CustomerListContent extends Component {
 			],
 			currencyColumns: [
 				'Amount'
+			],
+			phoneNumberColumns: [
+				'Phone'
 			],
 			dateColumns: ['saleDate'],
 			// groupingColumns: [
@@ -1176,6 +1191,7 @@ class CustomerListContent extends Component {
 			sorting,
 			editingColumnExtensions,
 			currencyColumns,
+			phoneNumberColumns,
 			pageSize,
 			pageSizes,
 			amountFilterOperations,
@@ -1308,8 +1324,14 @@ class CustomerListContent extends Component {
 
 									<CurrencyTypeProvider
 										for={currencyColumns}
-										availableFilterOperations={amountFilterOperations}
-										editorComponent={AmountEditor}
+										// availableFilterOperations={amountFilterOperations}
+										// editorComponent={AmountEditor}
+									/>
+
+									<PhoneNumberTypeProvider
+										for={phoneNumberColumns}
+										// availableFilterOperations={amountFilterOperations}
+										// editorComponent={AmountEditor}
 									/>
 									{/* <DateTypeProvider
 									for={dateColumns}
@@ -1330,7 +1352,7 @@ class CustomerListContent extends Component {
 									<TableSelection showSelectAll selectByRowClick highlightRow />
 
 									<TableEditRow />
-									<TableEditColumn
+									{/* <TableEditColumn
 										// showAddCommand
 										showEditCommand
 										showDeleteCommand
@@ -1347,7 +1369,8 @@ class CustomerListContent extends Component {
 											return result;
 										}
 										}
-									/>
+									/> */}
+
 									{/* <TableColumnReordering
 										defaultOrder={tableColumnExtensions.map(x => x.columnName)}
 									/> */}
