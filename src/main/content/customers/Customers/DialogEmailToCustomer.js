@@ -72,7 +72,7 @@ class DialogEmailToCustomer extends React.Component {
 
 						<TextField id="Message" label="Message" multiline rows="3" rowsMax="3" margin="dense" variant="outlined" fullWidth />
 
-						<Tooltip title="Discard">
+						<Tooltip title="Attachment">
 							<IconButton
 								className={classes.button}
 								aria-label="Attachment"

@@ -760,7 +760,7 @@ class FilterPanel extends Component {
 											className={classes.textField}
 											// value={customerForm.state.name}
 											onChange={this.handleChange('Name')}
-											margin="normal"
+											margin="dense"
 											variant="outlined"
 											autoFocus
 											fullWidth />
@@ -773,7 +773,7 @@ class FilterPanel extends Component {
 											className={classes.textField}
 											// value={customerForm.state.name}
 											onChange={this.handleChange('Address')}
-											margin="normal"
+											margin="dense"
 											variant="outlined"
 											fullWidth />
 									</GridItem>
@@ -784,7 +784,7 @@ class FilterPanel extends Component {
 											className={classes.textField}
 											// value={customerForm.state.name}
 											onChange={this.handleChange('Address2')}
-											margin="normal"
+											margin="dense"
 											variant="outlined"
 											fullWidth />
 									</GridItem>
@@ -795,7 +795,7 @@ class FilterPanel extends Component {
 											className={classNames(classes.textField, 'mr-6')}
 											// value={customerForm.state.name}
 											onChange={this.handleChange('City')}
-											margin="normal"
+											margin="dense"
 											variant="outlined"
 											style={{ width: '40%' }}
 										/>
@@ -808,7 +808,7 @@ class FilterPanel extends Component {
 											className={classNames(classes.textField, 'mr-6 ml-6')}
 											value={this.state.State === undefined ? "" : this.state.State}
 											onChange={this.handleChange('State')}
-											margin="normal"
+											margin="dense"
 											variant="outlined"
 											style={{ width: '25%' }}
 										>
@@ -825,7 +825,7 @@ class FilterPanel extends Component {
 											className={classNames(classes.textField, 'ml-6')}
 											// value={customerForm.state.name}
 											onChange={this.handleChange('Zip')}
-											margin="normal"
+											margin="dense"
 											variant="outlined"
 											style={{ width: '35%' }}
 										/>
@@ -838,7 +838,7 @@ class FilterPanel extends Component {
 											className={classNames(classes.textField, 'mr-6')}
 											// value={customerForm.state.name}
 											onChange={this.handleChange('Phone')}
-											margin="normal"
+											margin="dense"
 											variant="outlined"
 											style={{ width: '100%' }}
 										/>
@@ -849,7 +849,7 @@ class FilterPanel extends Component {
 											className={classNames(classes.textField, 'ml-6')}
 											// value={customerForm.state.name}
 											onChange={this.handleChange('Fax')}
-											margin="normal"
+											margin="dense"
 											variant="outlined"
 
 											style={{ width: '100%' }}
@@ -864,7 +864,7 @@ class FilterPanel extends Component {
 											className={classNames(classes.textField, 'mr-6')}
 											// value={customerForm.state.name}
 											onChange={this.handleChange('Email')}
-											margin="normal"
+											margin="dense"
 											variant="outlined"
 											style={{ width: '100%' }}
 										/>
@@ -875,7 +875,7 @@ class FilterPanel extends Component {
 											className={classNames(classes.textField, 'ml-6')}
 											// value={customerForm.state.name}
 											onChange={this.handleChange('Website')}
-											margin="normal"
+											margin="dense"
 											variant="outlined"
 											style={{ width: '100%' }}
 										/>
@@ -889,7 +889,7 @@ class FilterPanel extends Component {
 											className={classNames(classes.textField, 'mr-6')}
 											value={this.state.AccountTypeGroup === undefined ? 0 : this.state.AccountTypeGroup}
 											onChange={this.handleChange('AccountTypeGroup')}
-											margin="normal"
+											margin="dense"
 											variant="outlined"
 											fullWidth
 										// style={{ minWidth: "100px", width: "30%" }}
@@ -909,7 +909,7 @@ class FilterPanel extends Component {
 											className={classNames(classes.textField, 'ml-6')}
 											value={this.state.AccountType === undefined ? 0 : this.state.AccountType}
 											onChange={this.handleChange('AccountType')}
-											margin="normal"
+											margin="dense"
 											variant="outlined"
 											fullWidth
 										// style={{ minWidth: "100px", width: "30%" }}
@@ -948,16 +948,6 @@ class FilterPanel extends Component {
 
 										{this.state.ChildAccount && (
 											<div className="flex flex-col">
-												{/* <TextField
-													id="CustomerName"
-													label="Customer Name"
-													className={classes.textField}
-													onChange={this.handleChange('CustomerName')}
-													margin="normal"
-													variant="outlined"
-													autoFocus
-													fullWidth /> */}
-
 												<Autosuggest
 													style={{ width: "100%" }}
 													className={classNames(classes.textfield)}
@@ -987,7 +977,7 @@ class FilterPanel extends Component {
 													label="Store Number"
 													className={classes.textField}
 													onChange={this.handleChange('StoreNumber')}
-													margin="normal"
+													margin="dense"
 													variant="outlined"
 													fullWidth />
 											</div>
@@ -1034,7 +1024,7 @@ class FilterPanel extends Component {
 												}}
 												value={this.props.locationFilterValue.miles}
 												onChange={this.handleChange('NearbyRadius')}
-												margin="normal"
+												margin="dense"
 												variant="outlined"
 												fullWidth
 											>
@@ -1056,7 +1046,7 @@ class FilterPanel extends Component {
 													label="Address"
 													className={classes.textField}
 													onChange={this.handleChange('SpecificAddress')}
-													margin="normal"
+													margin="dense"
 													variant="outlined"
 													fullWidth
 												/>
@@ -1071,7 +1061,7 @@ class FilterPanel extends Component {
 													}}
 													value={this.props.locationFilterValue.miles}
 													onChange={this.handleChange('AddressZipcodeRadius')}
-													margin="normal"
+													margin="dense"
 													variant="outlined"
 													fullWidth
 												>
@@ -1104,7 +1094,7 @@ class FilterPanel extends Component {
 										}}
 										value={this.state.AccountType === undefined ? 0 : this.state.AccountType}
 										onChange={this.handleChange('AccountType')}
-										margin="normal"
+										margin="dense"
 										variant="outlined"
 										fullWidth
 									>
@@ -1140,7 +1130,7 @@ class FilterPanel extends Component {
 										}}
 										value={this.state.AccountExecutive === undefined ? 0 : this.state.AccountExecutive}
 										onChange={this.handleChange('AccountExecutive')}
-										margin="normal"
+										margin="dense"
 										variant="outlined"
 										fullWidth
 									>

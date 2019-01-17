@@ -699,7 +699,7 @@ class CustomerForm extends Component {
 									}}
 									value={this.state.Amount}
 									onChange={this.handleChange('Amount')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ minWidth: "100px", width: "30%" }}
 									InputProps={{
@@ -712,11 +712,12 @@ class CustomerForm extends Component {
 									id="Description"
 									label="Description"
 									multiline
-									rowsMax="4"
+									rows="2"
+									rowsMax="2"
 									className={classes.textField}
 									value={this.state.Description}
 									onChange={this.handleChange('Description')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ width: '100%' }}
 								/>
@@ -729,10 +730,10 @@ class CustomerForm extends Component {
 									InputLabelProps={{
 										shrink: true
 									}}
-									className={classes.textField}
+									className={classNames(classes.textField, "mr-6")}
 									value={this.state.ContractType === undefined ? 0 : this.state.ContractType}
 									onChange={this.handleChange('ContractType')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ minWidth: "100px", width: "30%" }}
 								>
@@ -753,10 +754,10 @@ class CustomerForm extends Component {
 									InputLabelProps={{
 										shrink: true
 									}}
-									className={classNames(classes.textField, "ml-12")}
+									className={classNames(classes.textField, "ml-6")}
 									value={this.state.TermMonths}
 									onChange={this.handleChange('TermMonths')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ width: '10%', minWidth: '110px' }}
 								/>
@@ -770,13 +771,11 @@ class CustomerForm extends Component {
 									InputLabelProps={{
 										shrink: true
 									}}
-									className={classes.textField}
+									className={classNames(classes.textField, "mr-6")}
 									value={this.state.AgreementType === undefined ? 1 : this.state.AgreementType}
 									onChange={this.handleChange('AgreementType')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
-									// style={{ minWidth: "100px", width: "30%" }}
-									style={{ marginRight: "2%" }}
 									fullWidth
 								>
 									{[{ value: 0, label: "Customer" }
@@ -796,12 +795,11 @@ class CustomerForm extends Component {
 									InputLabelProps={{
 										shrink: true
 									}}
-									className={classes.textField}
+									className={classNames(classes.textField, "ml-6")}
 									value={this.state.AcctExec === undefined ? 0 : this.state.AcctExec}
 									onChange={this.handleChange('AcctExec')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
-									style={{ marginLeft: "2%" }}
 									fullWidth
 								>
 									{
@@ -820,13 +818,13 @@ class CustomerForm extends Component {
 									type="date"
 									id="SignDate"
 									label="Sign Date *"
-									className={classNames(classes.textField, "mr-12")}
+									className={classNames(classes.textField, "mr-6")}
 									InputLabelProps={{
 										shrink: true
 									}}
 									value={this.state.SignDate}
 									onChange={this.handleChange('SignDate')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ width: "20%", minWidth: "180px" }}
 								/>
@@ -834,13 +832,13 @@ class CustomerForm extends Component {
 									type="date"
 									id="StartDate"
 									label="Start Date *"
-									className={classNames(classes.textField, "mr-12 ml-12")}
+									className={classNames(classes.textField, "mr-6 ml-6")}
 									InputLabelProps={{
 										shrink: true
 									}}
 									value={this.state.StartDate}
 									onChange={this.handleChange('StartDate')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ width: "20%", minWidth: "180px" }}
 								/>
@@ -849,13 +847,13 @@ class CustomerForm extends Component {
 									type="date"
 									id="ExpirationDate"
 									label="Expiration Date *"
-									className={classNames(classes.textField, "ml-12")}
+									className={classNames(classes.textField, "ml-6")}
 									InputLabelProps={{
 										shrink: true
 									}}
 									value={this.state.ExpirationDate}
 									onChange={this.handleChange('ExpirationDate')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ width: "20%", minWidth: "180px" }}
 								/>
@@ -879,7 +877,7 @@ class CustomerForm extends Component {
 										}}
 										value={this.state.EffectiveDate}
 										onChange={this.handleChange('EffectiveDate')}
-										margin="normal"
+										margin="dense"
 										variant="outlined"
 										style={{ width: "20%", minWidth: "180px" }}
 
@@ -892,7 +890,7 @@ class CustomerForm extends Component {
 										className={classes.textField}
 										value={this.state.PONumer}
 										onChange={this.handleChange('PONumer')}
-										margin="normal"
+										margin="dense"
 										variant="outlined"
 										style={{ width: "20%", minWidth: "180px" }}
 									/>
@@ -932,14 +930,14 @@ class CustomerForm extends Component {
 								<TextField
 									id="InvoiceDate"
 									label="Invoice Date"
-									className={classNames(classes.textField, "mr-12")}
+									className={classNames(classes.textField, "mr-6")}
 									select
 									InputLabelProps={{
 										shrink: true
 									}}
 									value={this.state.InvoiceDate === undefined ? "" : this.state.InvoiceDate}
 									onChange={this.handleChange('InvoiceDate')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ width: "100%" }}
 								>
@@ -958,10 +956,10 @@ class CustomerForm extends Component {
 									InputLabelProps={{
 										shrink: true
 									}}
-									className={classNames(classes.textField, "ml-12")}
+									className={classNames(classes.textField, "ml-6")}
 									value={this.state.BillingFrequency === undefined ? "" : this.state.BillingFrequency}
 									onChange={this.handleChange('BillingFrequency')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ width: "100%" }}
 								>
@@ -996,7 +994,7 @@ class CustomerForm extends Component {
 										className={classes.textField}
 										value={this.state.Email}
 										onChange={this.handleChange('Email')}
-										margin="normal"
+										margin="dense"
 										variant="outlined"
 										style={{ width: '60%' }}
 									/>
@@ -1005,16 +1003,16 @@ class CustomerForm extends Component {
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
-									id="outlined-name"
+									id="Term"
 									label="Term"
 									select
 									InputLabelProps={{
 										shrink: true
 									}}
-									className={classNames(classes.textField, "mr-12")}
+									className={classNames(classes.textField, "mr-6")}
 									value={this.state.Term === undefined ? "" : this.state.Term}
 									onChange={this.handleChange('Term')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ width: '100%' }}
 								>
@@ -1034,13 +1032,13 @@ class CustomerForm extends Component {
 									id="ARStatus"
 									label="AR Status"
 									select
-									className={classNames(classes.textField, "ml-12")}
+									className={classNames(classes.textField, "ml-6")}
 									InputLabelProps={{
 										shrink: true
 									}}
 									value={this.state.ARStatus === undefined ? "" : this.state.ARStatus}
 									onChange={this.handleChange('ARStatus')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ width: '100%' }}
 								>
@@ -1066,11 +1064,12 @@ class CustomerForm extends Component {
 									id="Notes"
 									label="Notes"
 									multiline
-									rowsMax="4"
+									rows="2"
+									rowsMax="2"
 									className={classes.textField}
 									value={this.state.Notes}
 									onChange={this.handleChange('Notes')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ width: '100%' }}
 								/>
@@ -1095,7 +1094,7 @@ class CustomerForm extends Component {
 									className={classes.textField}
 									value={this.state.ServiceType === undefined ? "" : this.state.ServiceType}
 									onChange={this.handleChange('ServiceType')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ minWidth: "100px", width: "30%" }}
 								>
@@ -1116,7 +1115,7 @@ class CustomerForm extends Component {
 									className={classes.textField}
 									value={this.state.SquareFootage}
 									onChange={this.handleChange('SquareFootage')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ minWidth: "100px", width: "30%" }}
 								/>
@@ -1128,29 +1127,29 @@ class CustomerForm extends Component {
 									type="time"
 									id="StartTime"
 									label="Start Time *"
-									className={classes.textField}
+									className={classNames(classes.textField, "mr-6")}
 									InputLabelProps={{
 										shrink: true
 									}}
 									value={this.state.StartTime}
 									onChange={this.handleChange('StartTime')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
-									style={{ width: '100%', marginRight: "2%" }}
+									style={{ width: '100%'}}
 								/>
 								<TextField
 									type="time"
 									id="EndTime"
 									label="End Time *"
-									className={classes.textField}
+									className={classNames(classes.textField, "ml-6")}
 									InputLabelProps={{
 										shrink: true
 									}}
 									value={this.state.EndTime}
 									onChange={this.handleChange('EndTime')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
-									style={{ width: '100%', marginLeft: "2%" }}
+									style={{ width: '100%' }}
 								/>
 							</GridItem>
 
@@ -1165,7 +1164,7 @@ class CustomerForm extends Component {
 									}}
 									value={this.state.Amount}
 									onChange={this.handleChange('Amount')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ minWidth: "100px", width: "30%" }}
 									InputProps={{
@@ -1179,12 +1178,12 @@ class CustomerForm extends Component {
 									type="number"
 									id="CleanTimes"
 									label="Clean Times *"
-									className={classes.textField}
+									className={classNames(classes.textField, "mr-6")}
 									value={this.state.CleanTimes}
 									onChange={this.handleChange('CleanTimes')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
-									style={{ width: '100%', marginRight: "2%" }}
+									style={{ width: '100%' }}
 								/>
 
 								<TextField
@@ -1192,15 +1191,16 @@ class CustomerForm extends Component {
 
 									id="CleanFrequency"
 									label="Clean Frequency *"
-									className={classes.textField}
+									className={classNames(classes.textField, "ml-6")}
 									InputLabelProps={{
 										shrink: true
 									}}
 									value={this.state.CleanFrequency === undefined ? "" : this.state.CleanFrequency}
 									onChange={this.handleChange('CleanFrequency')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
-									style={{ width: '100%', marginLeft: "2%" }}>
+									style={{ width: '100%' }}
+									>
 									{[{ value: 0, label: "Monthly" }].map(option => (
 										<MenuItem key={option.value} value={option.value}>
 											{option.label}
@@ -1298,11 +1298,12 @@ class CustomerForm extends Component {
 									id="Description"
 									label="Description"
 									multiline
-									rowsMax="4"
+									rows="2"
+									rowsMax="2"
 									className={classes.textField}
 									value={this.state.Description}
 									onChange={this.handleChange('Description')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ width: '100%' }}
 								/>
@@ -1322,13 +1323,13 @@ class CustomerForm extends Component {
 									type="date"
 									id="Date"
 									label="Date"
-									className={classNames(classes.textField, "mr-12")}
+									className={classNames(classes.textField, "mr-6")}
 									InputLabelProps={{
 										shrink: true
 									}}
 									value={this.state.Date}
 									onChange={this.handleChange('Date')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									fullWidth
 									style={{ width: "20%", minWidth: "180px" }}
@@ -1337,13 +1338,13 @@ class CustomerForm extends Component {
 									type="date"
 									id="WalkThroughDate"
 									label="Walk Through Date"
-									className={classNames(classes.textField, "mr-12 ml-12")}
+									className={classNames(classes.textField, "mr-6 ml-6")}
 									InputLabelProps={{
 										shrink: true
 									}}
 									value={this.state.WalkThroughDate}
 									onChange={this.handleChange('WalkThroughDate')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									fullWidth
 									style={{ width: "20%", minWidth: "180px" }}
@@ -1352,13 +1353,13 @@ class CustomerForm extends Component {
 									type="date"
 									id="StartDate"
 									label="Start Date"
-									className={classNames(classes.textField, "ml-12")}
+									className={classNames(classes.textField, "ml-6")}
 									InputLabelProps={{
 										shrink: true
 									}}
 									value={this.state.StartDate}
 									onChange={this.handleChange('StartDate')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									fullWidth
 									style={{ width: "20%", minWidth: "180px" }}
@@ -1372,7 +1373,7 @@ class CustomerForm extends Component {
 									className={classes.textField}
 									value={this.state.FranchiseName}
 									onChange={this.handleChange('FranchiseName')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ minWidth: '100px', width: '30%' }}
 								/>
@@ -1465,7 +1466,7 @@ class CustomerForm extends Component {
 									className={classes.textField}
 									value={this.state.SecurityProcedures}
 									onChange={this.handleChange('SecurityProcedures')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ width: '100%' }}
 								/>
@@ -1477,7 +1478,7 @@ class CustomerForm extends Component {
 									className={classes.textField}
 									value={this.state.EmergencyNamesAndTelephoneNumbers1}
 									onChange={this.handleChange('EmergencyNamesAndTelephoneNumbers1')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ width: '100%' }}
 								/>
@@ -1489,7 +1490,7 @@ class CustomerForm extends Component {
 									className={classes.textField}
 									value={this.state.EmergencyNamesAndTelephoneNumbers2}
 									onChange={this.handleChange('EmergencyNamesAndTelephoneNumbers2')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ width: '100%' }}
 								/>
@@ -1500,11 +1501,12 @@ class CustomerForm extends Component {
 									id="ProblemConnernsAreasNeedingImprovment"
 									label="Problem, connerns, areas needing improvment and general comments?"
 									multiline
-									rowsMax="4"
+									rows="2"
+									rowsMax="2"
 									className={classes.textField}
 									value={this.state.ProblemConnernsAreasNeedingImprovment}
 									onChange={this.handleChange('ProblemConnernsAreasNeedingImprovment')}
-									margin="normal"
+									margin="dense"
 									variant="outlined"
 									style={{ width: '100%' }}
 								/>
@@ -1552,7 +1554,7 @@ class CustomerForm extends Component {
 										className={classes.textField}
 										value={this.state.SignatureAE}
 										onChange={this.handleChange('SignatureAE')}
-										margin="normal"
+										margin="dense"
 										variant="outlined"
 										style={{ width: '100%' }}
 									/>
@@ -1562,7 +1564,7 @@ class CustomerForm extends Component {
 										className={classes.textField}
 										value={this.state.SignatureOPS}
 										onChange={this.handleChange('SignatureOPS')}
-										margin="normal"
+										margin="dense"
 										variant="outlined"
 										style={{ width: '100%' }}
 									/>
@@ -1572,7 +1574,7 @@ class CustomerForm extends Component {
 										className={classes.textField}
 										value={this.state.SignatureRD}
 										onChange={this.handleChange('SignatureRD')}
-										margin="normal"
+										margin="dense"
 										variant="outlined"
 										style={{ width: '100%' }}
 									/>
@@ -1582,7 +1584,7 @@ class CustomerForm extends Component {
 										className={classes.textField}
 										value={this.state.SignatureFO}
 										onChange={this.handleChange('SignatureFO')}
-										margin="normal"
+										margin="dense"
 										variant="outlined"
 										style={{ width: '100%' }}
 									/>
