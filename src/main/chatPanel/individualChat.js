@@ -149,6 +149,7 @@ class IndividualChat extends Component {
             user        : null,
             contacts    : null,
             currentRoom : null,
+            isOpen      : true,
         }
     }
     componentDidUpdate(prevProps, prevState, snapshot){
@@ -184,6 +185,9 @@ class IndividualChat extends Component {
                 this.setState({
                     currentRoom:   this.props.currentRoom,
                 })
+            }
+            if(this.props.show !=null){
+                this.setState({isOpen: this.props.show});
             }
         }
     }
@@ -222,15 +226,21 @@ class IndividualChat extends Component {
         }
 
     };
-
+    closeChat = () => {
+            this.setState({
+                isOpen: !this.state.isOpen
+            });
+    };
     scrollToBottom = () => {
         this.chatScroll.scrollTop = this.chatScroll.scrollHeight;
     };
     render() {
         const {classes, chat, contacts, user, className} = this.props;
         const {sendMSG} = this.state;
-        return (
+        if(this.state.isOpen){
 
+
+            return (
             <div className="individual-chat-item">
                 <div className="header">
                     <div>
@@ -245,8 +255,8 @@ class IndividualChat extends Component {
 
                     </div>
                     <div>
-                        <IconButton color="inherit">
-                            <Icon>more_vert</Icon>
+                        <IconButton color="inherit" onClick={this.closeChat}>
+                            <Icon>close</Icon>
                         </IconButton>
                     </div>
                 </div>
@@ -319,6 +329,10 @@ class IndividualChat extends Component {
                 </div>
             </div>
         );
+        }
+        else{
+            return null;
+        }
     }
 }
 IndividualChat.propTypes = {

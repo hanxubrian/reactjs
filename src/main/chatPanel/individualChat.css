@@ -6,7 +6,7 @@
     height: 400px;
     width: 300px;
     margin: 0 10px;
-    border: solid 2px #f44336;
+    border: solid 2px #42474c;
     background: white;
     display: flex;
     flex-direction: column;
@@ -14,7 +14,7 @@
 
 .individual-chat-item .header{
     height: 80px;
-    background: #f44336;
+    background: #42474c;
     color: white;
     display: flex;
     align-items: center;
