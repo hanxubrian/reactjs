@@ -116,8 +116,6 @@ const leases = function (state = initialState, action) {
 			{
 				return {
 					...state,
-					bOpenedFilterPanel: true,
-					bOpenedSummaryPanel: true,
 					leaseForm: {
 						type: 'new',
 						props: {
