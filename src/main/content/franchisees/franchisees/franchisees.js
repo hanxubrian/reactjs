@@ -866,9 +866,9 @@ class Franchisees extends Component {
                                         </div>
                                     </div>
                                     <div className="flex flex-shrink items-center">
-                                        <IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleFilterPanelFranchisees()}>
-                                            <Icon>person_outline</Icon>
-                                        </IconButton>
+                                        {/*<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleFilterPanelFranchisees()}>*/}
+                                            {/*<Icon>person_outline</Icon>*/}
+                                        {/*</IconButton>*/}
 
                                         <IconButton
                                             // className={classNames(classes.button, classes.validationMenu)}

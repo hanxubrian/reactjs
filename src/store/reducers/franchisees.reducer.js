@@ -218,7 +218,7 @@ const franchisees = function(state = initialState, action) {
             if(action.payload.FranchiseeFees.length>0) {
                 franchiseeFee = action.payload.FranchiseeFees.map(iv => {
                     return {
-                        ["Deduct"+iv.FranchiseeFeeList.FranchiseeFeeListId]: false,
+                        ["Deduct"+iv.FranchiseeFeeList.FranchiseeFeeListId]: true,
                         ...iv
                     }
                 });

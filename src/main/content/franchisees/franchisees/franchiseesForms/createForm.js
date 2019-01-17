@@ -263,6 +263,163 @@ function getStepContent(franchiseeForm, step) {
                     <div style={{ marginTop: '30px' }}></div>
                     <h3>Contract</h3>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <TextField
+                                id="selectPlanType"
+                                select
+                                label="Plan Type"
+                                margin="dense"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={franchiseeForm.state.defaultPlanType}
+                                onChange={franchiseeForm.handleStateChange('defaultPlanType')}
+                                SelectProps={{
+                                    MenuProps: {
+                                        className: classes.menu,
+                                    },
+                                }}
+                            >
+                                {franchiseeForm.props.planType &&(
+                                    franchiseeForm.props.planType.Data.map(option => (
+                                        <MenuItem key={option.FranchiseeContractTypeListId} value={option.FranchiseeContractTypeListId}>
+                                            {option.Name}
+                                        </MenuItem>
+                                    ))
+                                )}
+                            </TextField>
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <TextField
+                                id="planAmount"
+                                label="Plan Amount"
+                                value={franchiseeForm.state.planAmount}
+                                onChange={franchiseeForm.handleTextChange('BusinessAmount')}
+                                className={classes.textField}
+                                variant="outlined"
+                                margin="dense"
+                                style={{ marginRight: '1%'}}
+                                required
+                            />
+                            <TextField
+                                id="termYrs"
+                                label="Term(Yrs)"
+                                type="number"
+                                margin="dense"
+                                variant="outlined"
+                                onChange={franchiseeForm.handleFormChange('AgreementTerm')}
+                                className={classes.textField}
+                                required
+                                style={{marginLeft: '1%'}}
+                            />
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <TextField
+                                id="ibAmount"
+                                label="IB Amount"
+                                className={classes.textField}
+                                onChange={franchiseeForm.handleTextChange('BusinessAmount')}
+                                margin="dense"
+                                value={franchiseeForm.state.ibAmount}
+                                InputProps={{
+                                    readOnly: true
+                                }}
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
+                                variant="outlined"
+                                style={{marginRight: '1%'}}
+                                required
+                            />
+                            <TextField
+                                id="daysToFullFill"
+                                label="Days To Fullfill"
+                                className={classes.textField}
+                                onChange={franchiseeForm.handleTextChange('DaysToFulfill')}
+                                value={franchiseeForm.state.daysToFullfill}
+                                variant="outlined"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
+                                style={{marginLeft: '1%'}}
+                                margin="dense"
+                                required
+                            />
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <TextField
+                                id="downPayment"
+                                label="Down Payment"
+                                className={classes.textField}
+                                onChange={franchiseeForm.handleTextChange('DownPayment')}
+                                value={franchiseeForm.state.downPayment}
+                                InputProps={{
+                                    readOnly: true
+                                }}
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
+                                variant="outlined"
+                                margin="dense"
+                                style={{marginRight: '1%'}}
+                                required
+                            />
+                            <TextField
+                                id="interest"
+                                label="Interest"
+                                className={classes.textField}
+                                onChange={franchiseeForm.handleTextChange('Interest')}
+                                variant="outlined"
+                                value={franchiseeForm.state.interest}
+                                InputProps={{
+                                    readOnly: true
+                                }}
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
+                                style={{marginLeft: '1%', marginRight: '1%'}}
+                                margin="dense"
+                                required
+                            />
+
+                            <TextField
+                                id="paymentAmount"
+                                label="Payment Amount"
+                                className={classNames(classes.textField)}
+                                onChange={franchiseeForm.handleTextChange('BusinessAmount')}
+                                value={franchiseeForm.state.paymentAmount}
+                                variant="outlined"
+                                margin="dense"
+                                InputProps={{
+                                    readOnly: true
+                                }}
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
+                                style={{marginLeft: '1%', marginRight: '1%'}}
+                                required
+                            />
+                            <TextField
+                                id="noOfPayments"
+                                label="No Of Payments"
+                                className={classes.textField}
+                                onChange={franchiseeForm.handleTextChange('NoOfPayments')}
+                                value={franchiseeForm.state.noOfPayments}
+                                variant="outlined"
+                                margin="dense"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
+                                style={{marginLeft: '1%'}}
+                                required
+                            />
+                        </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <MuiPickersUtilsProvider utils={MomentUtils}>
                                 <DatePicker
@@ -288,19 +445,6 @@ function getStepContent(franchiseeForm, step) {
                                     style={{marginLeft: '1%', marginRight: '1%'}}
                                 />
                             </MuiPickersUtilsProvider>
-                            <TextField
-                                id="termYrs"
-                                label="Term(Yrs)"
-                                type="number"
-                                margin="dense"
-                                variant="outlined"
-                                onChange={franchiseeForm.handleFormChange('AgreementTerm')}
-                                className={classes.textField}
-                                required
-                                style={{marginLeft: '1%'}}
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <MuiPickersUtilsProvider utils={MomentUtils}>
                                 <DatePicker
                                     label="EXP. Date"
@@ -310,150 +454,9 @@ function getStepContent(franchiseeForm, step) {
                                     className={classes.textField}
                                     variant="outlined"
                                     margin="dense"
-                                    style={{marginRight: '1%'}}
+                                    style={{marginLeft: '1%'}}
                                 />
                             </MuiPickersUtilsProvider>
-                            <TextField
-                                id="selectPlanType"
-                                select
-                                label="Plan Type"
-                                margin="dense"
-                                variant="outlined"
-                                className={classes.textField}
-                                style={{marginLeft: '1%', marginRight: '1%'}}
-                                value={franchiseeForm.state.defaultPlanType}
-                                onChange={franchiseeForm.handleStateChange('defaultPlanType')}
-                                SelectProps={{
-                                    MenuProps: {
-                                        className: classes.menu,
-                                    },
-                                }}
-                            >
-                                {franchiseeForm.props.planType &&(
-                                    franchiseeForm.props.planType.Data.map(option => (
-                                            <MenuItem key={option.FranchiseeContractTypeListId} value={option.FranchiseeContractTypeListId}>
-                                                {option.Name}
-                                            </MenuItem>
-                                        ))
-                                )}
-                            </TextField>
-                            <TextField
-                                id="planAmount"
-                                label="Plan Amount"
-                                value={franchiseeForm.state.planAmount}
-                                onChange={franchiseeForm.handleTextChange('BusinessAmount')}
-                                className={classes.textField}
-                                variant="outlined"
-                                margin="dense"
-                                style={{marginLeft: '1%'}}
-                                required
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="ibAmount"
-                                label="IB Amount"
-                                className={classes.textField}
-                                onChange={franchiseeForm.handleTextChange('BusinessAmount')}
-                                margin="dense"
-                                value={franchiseeForm.state.ibAmount}
-                                InputProps={{
-                                    readOnly: true
-                                }}
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                                variant="outlined"
-                                style={{marginRight: '1%'}}
-                                required
-                            />
-                            <TextField
-                                id="downPayment"
-                                label="Down Payment"
-                                className={classes.textField}
-                                onChange={franchiseeForm.handleTextChange('DownPayment')}
-                                value={franchiseeForm.state.downPayment}
-                                InputProps={{
-                                    readOnly: true
-                                }}
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                                variant="outlined"
-                                margin="dense"
-                                style={{marginLeft: '1%', marginRight: '1%'}}
-                                required
-                            />
-                            <TextField
-                                id="interest"
-                                label="Interest"
-                                className={classes.textField}
-                                onChange={franchiseeForm.handleTextChange('Interest')}
-                                variant="outlined"
-                                value={franchiseeForm.state.interest}
-                                InputProps={{
-                                    readOnly: true
-                                }}
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                                style={{marginLeft: '1%'}}
-                                margin="dense"
-                                required
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="paymentAmount"
-                                label="Payment Amount"
-                                className={classNames(classes.textField)}
-                                onChange={franchiseeForm.handleTextChange('BusinessAmount')}
-                                value={franchiseeForm.state.paymentAmount}
-                                variant="outlined"
-                                margin="dense"
-                                InputProps={{
-                                    readOnly: true
-                                }}
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                                style={{marginRight: '1%'}}
-                                required
-                            />
-                            <TextField
-                                id="noOfPayments"
-                                label="No Of Payments"
-                                className={classes.textField}
-                                onChange={franchiseeForm.handleTextChange('NoOfPayments')}
-                                value={franchiseeForm.state.noOfPayments}
-                                variant="outlined"
-                                margin="dense"
-                                InputProps={{
-                                    readOnly: true,
-                                }}
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                                style={{marginLeft: '1%', marginRight: '1%'}}
-                                required
-                            />
-                            <TextField
-                                id="daysToFullFill"
-                                label="Days To Fullfill"
-                                className={classes.textField}
-                                onChange={franchiseeForm.handleTextChange('DaysToFulfill')}
-                                value={franchiseeForm.state.daysToFullfill}
-                                variant="outlined"
-                                InputProps={{
-                                    readOnly: true,
-                                }}
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                                style={{marginLeft: '1%'}}
-                                margin="dense"
-                                required
-                            />
                         </GridItem>
                     </GridContainer>
                     <div style={{ marginTop: '30px' }}></div>
