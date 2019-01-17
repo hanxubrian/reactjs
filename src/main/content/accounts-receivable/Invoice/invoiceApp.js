@@ -342,9 +342,6 @@ class InvoiceApp extends Component {
     }
 
     getInvoicesFromStatus =(rawData=this.props.invoices) =>{
-        let temp=[];
-        let all_temp=[];
-
         if(rawData===null) return;
         if(rawData.Data.Region.length===0) return;
 
