@@ -383,8 +383,6 @@ class InvoiceForm extends Component {
             dueDate = moment().year(year).month(month).startOf('month').add(suggestion.PaymentTerm, 'days');
         }
 
-        console.log('dueDate=', dueDate);
-
         this.setState({InvoiceDate: invoiceDate});
         this.setState({DueDate: dueDate});
 
@@ -454,11 +452,14 @@ class InvoiceForm extends Component {
                 this.setState({selectedCustomer: null});
                 this.setState({value: ''});
                 this.setState({CustomerNo: ''});
+                this.props.updatedInvoices();
             }
             else if(this.state.buttonOption===1) {
+                this.props.updatedInvoices();
                 this.closeComposeForm();
             }
             else if(this.state.buttonOption===2) {
+                this.props.updatedInvoices();
                 this.closeComposeForm();
             }
         }
@@ -577,7 +578,6 @@ class InvoiceForm extends Component {
 
     onSaveAndClose = () => {
         this.onSaveInvoice(1);
-        this.closeComposeForm();
     };
 
     onSubmitForApproval=()=>{
@@ -639,8 +639,6 @@ class InvoiceForm extends Component {
 
         let bReadonly = false;
         if(this.props.invoiceForm.type === 'new') bReadonly = true;
-
-        console.log('state=', this.state);
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
@@ -1059,7 +1057,8 @@ function mapDispatchToProps(dispatch)
         closeNewInvoiceForm : Actions.closeNewInvoiceForm,
         selectCustomer: Actions.selectCustomer,
         resetInvoiceForm: Actions.resetInvoiceForm,
-        addInvoice: Actions.addInvoice
+        addInvoice: Actions.addInvoice,
+        updatedInvoices: Actions.updatedInvoices,
     }, dispatch);
 }
 
@@ -1071,7 +1070,7 @@ function mapStateToProps({invoices, auth})
         newInvoice: invoices.newInvoice,
         user: auth.login,
         regionId: auth.login.defaultRegionId,
-        bStartingSaveFormData: invoices.bStartingSaveFormData
+        bStartingSaveFormData: invoices.bStartingSaveFormData,
     }
 }
 

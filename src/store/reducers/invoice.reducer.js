@@ -39,7 +39,8 @@ const initialState = {
     newInvoice: null,
     customersDB: null,
     bSuggestCustomersFetchStart: false,
-    bLoadedSuggestCustomers: false
+    bLoadedSuggestCustomers: false,
+    bInvoicesUpdated: false
 };
 
 
@@ -50,7 +51,7 @@ const invoices = function(state = initialState, action) {
         {
             return {
                 ...state,
-                invoicesDB: action.payload, bLoadedInvoices: true, bInvoiceStart: false
+                invoicesDB: action.payload, bLoadedInvoices: true, bInvoiceStart: false, bInvoicesUpdated: false
             };
         }
         case Actions.GET_ALL_SUGGEST_CUSTOMERS:
@@ -245,6 +246,9 @@ const invoices = function(state = initialState, action) {
         case Actions.ADD_INVOICE:
         {
             return {...state, newInvoice: action.payload}
+        }
+        case Actions.UPDATED_INVOICES: {
+            return {...state, bInvoicesUpdated: true, bInvoiceStart: true}
         }
         default:
         {

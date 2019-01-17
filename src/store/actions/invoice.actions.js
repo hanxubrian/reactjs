@@ -26,7 +26,7 @@ export const CLOSE_NEW_INVOICE_FORM = '[INVOICES APP] CLOSE NEW INVOICE FORM';
 export const OPEN_EDIT_INVOICE_FORM = '[INVOICES APP] OPEN EDIT INVOICE FORM';
 export const CLOSE_EDIT_INVOICE_FORM = '[INVOICES APP] CLOSE EDIT INVOICE FORM';
 export const ADD_INVOICE = '[INVOICES APP] ADD INVOICE';
-export const UPDATE_INVOICE = '[INVOICES APP] UPDATE INVOICE';
+export const UPDATED_INVOICES = '[INVOICES APP] UPDATED INVOICES';
 export const UPDATE_INVOICE_STATUS = '[INVOICES APP] UPDATE INVOICE STATUS';
 export const UPDATE_INVOICE_LINE = '[INVOICES APP] UPDATE INVOICE LINE';
 export const UPDATE_INVOICE_DATE_OPTION = '[INVOICES APP] UPDATE INVOICE DATE OPTION';
@@ -205,26 +205,6 @@ export function addInvoice(regionId, data)
     };
 }
 
-export function updateInvoice(invoice)
-{
-    return (dispatch, getState) => {
-
-        // const {routeParams} = getState().contactsApp.contacts;
-
-        const request = axios.post('/api/contacts-app/update-contact', {
-            invoice
-        });
-
-        return request.then((response) =>
-            Promise.all([
-                dispatch({
-                    type: UPDATE_INVOICE
-                })
-            ]).then(() => dispatch(getInvoices()))
-        );
-    };
-}
-
 export function updateInvoiceLine(data) {
     return {
         type: UPDATE_INVOICE_LINE,
@@ -325,5 +305,12 @@ export function getSuggestCustomersList(regionId, statusId = 0, location = "all"
                 payload: res
             });
         })();
+    }
+}
+
+
+export function updatedInvoices() {
+    return {
+        type: UPDATED_INVOICES,
     }
 }

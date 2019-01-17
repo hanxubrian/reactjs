@@ -274,6 +274,10 @@ class InvoiceApp extends Component {
                 OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText);
         }
 
+        if(this.props.bInvoicesUpdated && this.props.bInvoicesUpdated!==prevProps.bInvoicesUpdated)
+            this.props.getInvoices([regionId] ,StatusId, FromDate, ToDate, PeriodId,
+                OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText);
+
         if(prevState.s!==this.state.s) {
             this.search(this.state.s);
         }
@@ -672,6 +676,7 @@ function mapStateToProps({invoices, auth, customers, franchisees})
         ToPrintOrToEmail: invoices.ToPrintOrToEmail,
         SearchText: invoices.SearchText,
         bInvoiceStart: invoices.bInvoiceStart,
+        bInvoicesUpdated: invoices.bInvoicesUpdated,
 
         customers: invoices.customersDB,
         bLoadedCustomers: invoices.bLoadedSuggestCustomers,
