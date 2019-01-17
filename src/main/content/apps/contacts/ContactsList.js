@@ -70,6 +70,9 @@ class ContactsList extends Component {
                     className={classNames(classes.root, "-striped -highlight border-0")}
                     getTrProps={(state, rowInfo, column) => {
                         return {
+                            onClick: (e)=>{
+                                alert(JSON.stringify(rowInfo)+"=======");
+                            },
                             className: "cursor-pointer",
 
                         }

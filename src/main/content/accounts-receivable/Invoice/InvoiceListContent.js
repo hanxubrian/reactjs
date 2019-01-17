@@ -129,7 +129,6 @@ class InvoiceListContent extends Component {
         data: [],
         selection: [],
         selectAll: false,
-
         isOpen: false,
         invoiceDetail: null,
         CustomerFor: [],
@@ -211,6 +210,13 @@ class InvoiceListContent extends Component {
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.props.data!==prevProps.data)
             this.setState({data: this.props.data});
+        if(this.props.invoiceDetail!==prevProps.invoiceDetail){
+            this.setState({
+                invoiceDetail: this.props.invoiceDetail,
+            });
+        }
+
+
     }
 
     componentDidMount(){
@@ -256,9 +262,7 @@ class InvoiceListContent extends Component {
         this.setState({
             isOpen: !this.state.isOpen
         });
-        this.setState({
-            invoiceDetail: this.props.invoiceDetail,
-        });
+
 
     };
 

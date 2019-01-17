@@ -245,7 +245,7 @@ class Chat extends Component {
                                         root : "flex flex-grow flex-no-shrink ml-16 mr-48 my-8",
                                         input: ""
                                     },
-                                    placeholder     : "Type your message"
+                                    placeholder     : "Type your message 2"
                                 }}
                                 InputLabelProps={{
                                     shrink   : false,

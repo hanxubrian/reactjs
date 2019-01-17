@@ -9,6 +9,7 @@ class InvoiceReport extends Component {
         isOpen: false,
         invoiceDetail: [],
         Items: [],
+        Region: [],
         CustomerSoldTo:[],
         CustomerFor:[],
 
@@ -19,6 +20,7 @@ class InvoiceReport extends Component {
             this.setState({
                 invoiceDetail:nextProps.getData.Data,
                 Items: nextProps.getData.Data.Items,
+                Region: nextProps.getData.Data.Region,
             });
         }
 
@@ -58,10 +60,10 @@ class InvoiceReport extends Component {
                                 </th>
                                 <th width='50%' className="text-left">
                                     Remit To:
-                                    <Typography>JANI-KING OF BUFFALO, INC</Typography>
+                                    <Typography>{this.state.Region.Displayname}</Typography>
                                     <Typography>P.O.BOX 415291</Typography>
-                                    <Typography>BOSTON <span style={{paddingLeft:150}}>MA</span>  <span style={{paddingLeft:50}}>02241-5291</span> </Typography>
-                                    <Typography>(716) 636-4840</Typography>
+                                    <Typography>{this.state.Region.Address}</Typography>
+                                    <Typography>{this.state.Region.Phone}</Typography>
                                 </th>
                                 <th>
                                     <table style={{width:'100%',borderCollapse: 'collapse',border:'solid 1px'}}>
@@ -110,13 +112,13 @@ class InvoiceReport extends Component {
                             <tr>
                                 <td width='60%' className="text-left">
                                     <Typography><strong>Sold To:</strong></Typography>
-                                    <Typography>{this.state.CustomerSoldTo.Name}</Typography>
+                                    <Typography>{this.state.invoiceDetail.CustomerName}</Typography>
                                     <Typography><br/></Typography>
                                     <Typography>ONE BILLS DRIVE</Typography>
                                 </td>
                                 <td width='40%' className="text-left">
                                     <Typography><strong>For:</strong></Typography>
-                                    <Typography>{this.state.CustomerFor.Name}</Typography>
+                                    <Typography>{this.state.invoiceDetail.CustomerName}</Typography>
                                     <Typography>OPERATIONS CENTER</Typography>
                                     <Typography>ONE BILLS DRIVE</Typography>
                                 </td>
@@ -207,19 +209,17 @@ class InvoiceReport extends Component {
                             </tr>
                             </thead>
                             <tbody>
-                            {this.state.Items !=null && this.state.Items && this.state.Items.map((item,index)=>{
-                             return (
-                                 <tr key={index}>
-                                     <td width="15%" style={{border:'solid 1px'}} className="text-center">{item.inv_no}</td>
+
+                                 <tr >
+                                     <td width="15%" style={{border:'solid 1px'}} className="text-center">1</td>
                                      <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.InvoiceDate}</td>
-                                     <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.CustomerNo}</td>
-                                     <td width="15%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.SismnNo}</td>
-                                     <td width="15%" style={{border:'solid 1px'}} className="text-center">63356B</td>
-                                     <td width="25%" style={{border:'solid 1px'}} className="text-center">KMBURNS.LLC</td>
-                                     <td width="10%" style={{border:'solid 1px'}} className="text-center">112/31/2018</td>
+                                     <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.CustomerNumber}</td>
+                                     <td width="15%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.slsmn_no}</td>
+                                     <td width="15%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.PONumber}</td>
+                                     <td width="25%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.apply_fran}</td>
+                                     <td width="10%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.DueDate}</td>
                                  </tr>
-                             )
-                            })}
+
                             </tbody>
                         </table>
                         <table style={{width:'100%',borderCollapse: 'collapse',border:'solid 1px'}}>
@@ -230,17 +230,22 @@ class InvoiceReport extends Component {
                                 <td width="15%" style={{border:'solid 1px'}} className="text-center"><strong>Unit Price</strong></td>
                                 <td width="15%" style={{border:'solid 1px'}} className="text-center"><strong>Extended Price</strong></td>
                             </tr>
-                            <tr>
-                                <td width="10%" style={{border:'solid 1px'}} className="text-center">1</td>
-                                <td width="60%" style={{border:'solid 1px'}} className="text-center">{this.state.invoiceDetail.Description}</td>
-                                <td width="15%" style={{border:'solid 1px'}} className="text-center">
-                                    {this.state.invoiceDetail.TRX_Amount}
-                                </td>
-                                <td rowSpan="1" width="15%" style={{border:'solid 1px'}} className="text-center">
-                                    {this.state.invoiceDetail.TRX_Amount}
-                                </td>
+                            {this.state.Items !=null && this.state.Items && this.state.Items.map((item,index)=>{
+                                return (
+                                    <tr key={index}>
+                                        <td width="10%" style={{border:'solid 1px'}} className="text-center">{item.LineNo}</td>
+                                        <td width="60%" style={{border:'solid 1px'}} className="text-center">{item.Description}</td>
+                                        <td width="15%" style={{border:'solid 1px'}} className="text-center">
+                                            {item.UnitPrice}
+                                        </td>
+                                        <td rowSpan="1" width="15%" style={{border:'solid 1px'}} className="text-center">
+                                            {item.ExtendedPrice}
+                                        </td>
 
-                            </tr>
+                                    </tr>
+                                )
+                            })}
+
                             <tr>
                                 <td style={{borderRight:'solid 1px'}}>
                                     <Typography><br/></Typography> <Typography><br/></Typography> <Typography><br/></Typography> <Typography><br/></Typography> <Typography><br/></Typography>

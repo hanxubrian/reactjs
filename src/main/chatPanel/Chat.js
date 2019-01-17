@@ -218,6 +218,7 @@ class Chat extends Component {
                                                 {this.shouldShowContactAvatar(item, i) && (
                                                     <Avatar className={classes.avatar} src={contact.avatar}/>
                                                 )}
+
                                                 <div className={classes.bubble}>
                                                     <div className={classes.message}>{item.message}</div>
                                                     <Typography className={classes.time} color="textSecondary">{moment(item.time).format('MMMM Do YYYY, h:mm:ss a')}</Typography>
@@ -252,7 +253,7 @@ class Chat extends Component {
                                         root : "flex flex-grow flex-no-shrink ml-16 mr-48 my-8",
                                         input: ""
                                     },
-                                    placeholder     : "Type your message"
+                                    placeholder     : "Type your message 3"
                                 }}
                                 InputLabelProps={{
                                     shrink   : false,
