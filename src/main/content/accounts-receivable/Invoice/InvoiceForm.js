@@ -383,6 +383,7 @@ class InvoiceForm extends Component {
     };
 
     getTotal = () => {
+        console.log('getTotal===',this.props.invoiceForm.data);
         let subTotal = 0.0;
         let markup = 0.0;
         let tax = 0.0;
@@ -408,7 +409,7 @@ class InvoiceForm extends Component {
     };
 
     componentDidUpdate(prevProps, prevState, snapshot){
-        if(this.props.invoiceForm!== prevProps.invoiceForm) {
+        if(this.props.invoiceForm.data!== prevProps.invoiceForm.data) {
             this.getTotal();
         }
         if(this.state.selectedCustomer!== null && JSON.stringify(this.state.selectedCustomer)!== JSON.stringify(this.props.invoiceForm.customer)) {

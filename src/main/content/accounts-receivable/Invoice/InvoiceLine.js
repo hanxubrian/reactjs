@@ -372,6 +372,9 @@ class InvoiceLineTable extends React.Component {
         // this.addInvoiceLineFunction = this.addInvoiceLineFunction.bind(this);
     }
 
+    componentWillMount() {
+        this.props.updateInvoiceLine(this.state.data);
+    }
     componentWillUnmount() {
         // document.removeEventListener("keydown", this.addInvoiceLineFunction, false);
     }
@@ -407,7 +410,9 @@ class InvoiceLineTable extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot){
-        if(this.state.data!==null && JSON.stringify(prevState.data)!==JSON.stringify(this.state.data)){
+        if(this.state.data!==null && prevState.data!==this.state.data) {
+            console.log('prev',prevState.data);
+            console.log('this',this.state.data);
             this.props.updateInvoiceLine(this.state.data);
         }
         if(JSON.stringify(this.state.customerTaxAmountLine)!== JSON.stringify(prevState.customerTaxAmountLine)){
@@ -419,6 +424,8 @@ class InvoiceLineTable extends React.Component {
         if(JSON.stringify(this.props.customerTaxAmountLine)!==JSON.stringify(nextProps.customerTaxAmountLine)){
             this.setState({customerTaxAmountLine: nextProps.customerTaxAmountLine})
         }
+
+        //for save & add more
         if(nextProps.invoiceForm.data===null && JSON.stringify(nextProps.invoiceForm.data)!==JSON.stringify(this.props.invoiceForm.data)){
             let newData = createData("Regular Billing", "Adjust-Balance", '','');
             this.setState({data: [{...newData, id: 0}]});
@@ -428,7 +435,7 @@ class InvoiceLineTable extends React.Component {
     updateTaxFromLine = ()=> {
         const data = [...this.state.data];
         const {taxRowId, customerTaxAmountLine} = this.state;
-        data[taxRowId].tax = customerTaxAmountLine.TaxAmount;
+        data[taxRowId].tax = customerTaxAmountLine.TotalTaxAmount;
         data[taxRowId].extended = customerTaxAmountLine.ExtendedPrice;
         data[taxRowId].total = customerTaxAmountLine.TotalAmount;
         this.setState({data: data});

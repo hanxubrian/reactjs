@@ -184,7 +184,7 @@ const invoices = function(state = initialState, action) {
                         open: true
                     },
                     data : null,
-                    customer: action.data
+                    customer: null
                 }
             };
         }
