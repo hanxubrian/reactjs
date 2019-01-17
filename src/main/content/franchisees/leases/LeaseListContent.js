@@ -1247,14 +1247,23 @@ class LeaseListContent extends Component {
 			tableColumnExtensions: [
 				{
 					title: "Name",
-					name: "Franchisee",
-					columnName: "Franchisee",
+					name: "FranchiseeName",
+					columnName: "FranchiseeName",
 					width: 250,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
-					groupingEnabled: false,
-					togglingEnabled: false,
+					groupingEnabled: true,
+					togglingEnabled: true,
+				},
+				{
+					title: "Franchisee No",
+					name: "FranchiseeNo",
+					columnName: "FranchiseeNo",
+					width: 200,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: true
 				},
 				{
 					title: "Lease No",
@@ -1263,7 +1272,7 @@ class LeaseListContent extends Component {
 					width: 200,
 					sortingEnabled: true,
 					filteringEnabled: true,
-					groupingEnabled: false,
+					groupingEnabled: true
 				},
 				{
 					title: "Serial No",
@@ -1272,7 +1281,7 @@ class LeaseListContent extends Component {
 					width: 200,
 					sortingEnabled: true,
 					filteringEnabled: true,
-					groupingEnabled: false,
+					groupingEnabled: true
 				},
 				{
 					title: "Monthly Payment Amount",
@@ -1283,7 +1292,7 @@ class LeaseListContent extends Component {
 					wordWrapEnabled: true,
 					sortingEnabled: false,
 					filteringEnabled: true,
-					groupingEnabled: false,
+					groupingEnabled: true
 				},
 				{
 					title: "Total Amount Paid",
@@ -1293,7 +1302,7 @@ class LeaseListContent extends Component {
 					align: 'right',
 					sortingEnabled: true,
 					filteringEnabled: true,
-					groupingEnabled: true,
+					groupingEnabled: true
 				},
 				{
 					title: "Total Balance",
@@ -1303,7 +1312,7 @@ class LeaseListContent extends Component {
 					align: 'right',
 					sortingEnabled: false,
 					filteringEnabled: true,
-					groupingEnabled: false,
+					groupingEnabled: true
 				},
 				// {
 				// 	title: "Phone",
@@ -1331,7 +1340,7 @@ class LeaseListContent extends Component {
 					align: 'center',
 					sortingEnabled: true,
 					filteringEnabled: true,
-					groupingEnabled: true,
+					groupingEnabled: true
 				},
 				{
 					title: "Status",
@@ -1341,7 +1350,7 @@ class LeaseListContent extends Component {
 					align: 'center',
 					sortingEnabled: true,
 					filteringEnabled: true,
-					groupingEnabled: true,
+					groupingEnabled: true
 				},
 				// {
 				// 	title: "Contract Amount",
@@ -1581,7 +1590,7 @@ class LeaseListContent extends Component {
 		console.log("componentWillMount");
 		this.initRowsFromRawJson();
 
-		this.getLocation();
+		// this.getLocation();
 
 		// this.setState({ rows: this.props.data })
 		// this.setState({ data: this.props.data })
@@ -1643,40 +1652,40 @@ class LeaseListContent extends Component {
 		return str.join(" ");
 	}
 
-	getLocation() {
-		console.log("getLocation");
+	// getLocation() {
+	// 	console.log("getLocation");
 
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(
-				(position) => {
-					console.log(position.coords);
-					this.setState({
-						current_lat: position.coords.latitude,
-						current_long: position.coords.longitude
-					})
+	// 	if (navigator.geolocation) {
+	// 		navigator.geolocation.getCurrentPosition(
+	// 			(position) => {
+	// 				console.log(position.coords);
+	// 				this.setState({
+	// 					current_lat: position.coords.latitude,
+	// 					current_long: position.coords.longitude
+	// 				})
 
 					// this.setState({
 					// 	current_lat: 42.910772,
 					// 	current_long: -78.74557
 					// })
 
-					if (this.state.addrLat == undefined) {
-						this.setState({
-							addrLat: position.coords.latitude,
-							addrLng: position.coords.longitude
-						})
+					// if (this.state.addrLat == undefined) {
+					// 	this.setState({
+					// 		addrLat: position.coords.latitude,
+					// 		addrLng: position.coords.longitude
+					// 	})
 						// this.setState({
 						// 	addrLat: 42.910772,
 						// 	addrLng: -78.74557
 						// })
-					}
-					if (this.props.locationFilterValue) {
-						this.initRowsFromRawJson();
-					}
-				}
-			);
-		}
-	}
+					// }
+					// if (this.props.locationFilterValue) {
+					// 	this.initRowsFromRawJson();
+					// }
+	// 			}
+	// 		);
+	// 	}
+	// }
 
 	generateRows() {
 		console.log("generateRows");
@@ -2014,17 +2023,25 @@ class LeaseListContent extends Component {
 										onCommitChanges={this.commitChanges}
 									/>
 
-
-
 									<GroupingState
+										grouping={[{ columnName: 'FranchiseeName' }]}
+									/>
+									<IntegratedGrouping />
+									<Table />
+									<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
+									<TableHeaderRow />
+									<DataTypeProvider for={grouping}/>
+									<TableGroupRow />
+
+									{/* <GroupingState
 										// grouping={grouping}
 										// onGroupingChange={this.changeGrouping}
 									    defaultGrouping={[{ columnName: 'Franchisee' }]}
-									    defaultExpandedGroups={[ 'Franchisee' ]}
+									    defaultExpandedGroups={[ 'LeaseNumber' ]}
 									    columnExtensions={tableColumnExtensions}
-									/>
+									/> */}
 
-									<IntegratedGrouping />
+									{/* <IntegratedGrouping /> */}
 
 									{/* <BooleanTypeProvider
 									for={booleanColumns}
@@ -2041,8 +2058,8 @@ class LeaseListContent extends Component {
 
 
 									{/* <Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} /> */}
-									<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
-									<TableHeaderRow showSortingControls />
+									{/* <TableColumnResizing defaultColumnWidths={tableColumnExtensions} /> */}
+									{/* <TableHeaderRow showSortingControls={true} /> */}
 									{/* showGroupingControls */}
 
 
@@ -2081,7 +2098,6 @@ class LeaseListContent extends Component {
 										defaultHiddenColumnNames={[]}
 										columnExtensions={tableColumnExtensions}
 									/> */}
-									{/* <Toolbar /> */}
 									{/* <SearchPanel /> */}
 									{/* Column Visibility */}
 									{/* <ColumnChooser /> */}
@@ -2095,7 +2111,8 @@ class LeaseListContent extends Component {
 									)} */}
 
 									{/* <TableGroupRow /> */}
-									{/* <GroupingPanel showSortingControls={true} /> */}
+									<Toolbar />
+									<GroupingPanel showSortingControls={true} />
 
 								</Grid>
 
