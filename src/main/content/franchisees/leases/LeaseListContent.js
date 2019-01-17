@@ -1246,19 +1246,10 @@ class LeaseListContent extends Component {
 			rows: [],
 			tableColumnExtensions: [
 				{
-					title: "No",
-					name: "FranchiseeNo",
-					columnName: "FranchiseeNo",
-					width: 80,
-					sortingEnabled: true,
-					filteringEnabled: true,
-					groupingEnabled: false,
-				},
-				{
 					title: "Name",
-					name: "FranchiseeName",
-					columnName: "FranchiseeName",
-					width: 200,
+					name: "Franchisee",
+					columnName: "Franchisee",
+					width: 250,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -1266,13 +1257,20 @@ class LeaseListContent extends Component {
 					togglingEnabled: false,
 				},
 				{
-					title: "No. of Lease",
-					name: "LeaseCount",
-					columnName: "LeaseCount",
-					width: 100,
-					align: 'center',
-					wordWrapEnabled: true,
-					sortingEnabled: false,
+					title: "Lease No",
+					name: "LeaseNumber",
+					columnName: "LeaseNumber",
+					width: 200,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "Serial No",
+					name: "SerialNumber",
+					columnName: "SerialNumber",
+					width: 200,
+					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
@@ -1325,6 +1323,16 @@ class LeaseListContent extends Component {
 				// 	filteringEnabled: true,
 				// 	groupingEnabled: true,
 				// },
+				{
+					title: "Payment No",
+					name: "Payments",
+					columnName: 'Payments',
+					width: 90,
+					align: 'center',
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: true,
+				},
 				{
 					title: "Status",
 					name: "Status",
@@ -2008,13 +2016,15 @@ class LeaseListContent extends Component {
 
 
 
-									{/* <GroupingState
-										grouping={grouping}
-										onGroupingChange={this.changeGrouping}
-									// defaultGrouping={[]}
-									// columnExtensions={tableColumnExtensions}
+									<GroupingState
+										// grouping={grouping}
+										// onGroupingChange={this.changeGrouping}
+									    defaultGrouping={[{ columnName: 'Franchisee' }]}
+									    defaultExpandedGroups={[ 'Franchisee' ]}
+									    columnExtensions={tableColumnExtensions}
 									/>
-									<IntegratedGrouping /> */}
+
+									<IntegratedGrouping />
 
 									{/* <BooleanTypeProvider
 									for={booleanColumns}
@@ -2085,7 +2095,7 @@ class LeaseListContent extends Component {
 									)} */}
 
 									{/* <TableGroupRow /> */}
-									{/* <GroupingPanel showSortingControls showGroupingControls /> */}
+									{/* <GroupingPanel showSortingControls={true} /> */}
 
 								</Grid>
 
