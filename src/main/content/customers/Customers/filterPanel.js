@@ -32,6 +32,10 @@ import AutosuggestHighlightParse from 'autosuggest-highlight/parse'
 
 import Utils from './Utils'
 
+import PropTypes from 'prop-types';
+import MaskedInput from 'react-text-mask';
+import { Input, InputLabel, FormControl } from '@material-ui/core';
+
 Geocode.setApiKey("AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA");
 
 const styles = theme => ({
@@ -162,88 +166,208 @@ const styles = theme => ({
 
 const stateNames = [
 	{
-		value: 2,
-		label: "Buffalo"
+		Value: "AL",
+		Text: "Alabama"
 	},
 	{
-		value: 7,
-		label: "Detroit"
+		Value: "AK",
+		Text: "Alaska"
 	},
 	{
-		value: 9,
-		label: "Hartford"
+		Value: "AZ",
+		Text: "Arizona"
 	},
 	{
-		value: 13,
-		label: "Las Vegas"
+		Value: "AR",
+		Text: "Arkansas"
 	},
 	{
-		value: 14,
-		label: "Los Angeles/Colton"
+		Value: "CA",
+		Text: "California"
 	},
 	{
-		value: 16,
-		label: "Miami"
+		Value: "CO",
+		Text: "Colorado"
 	},
 	{
-		value: 18,
-		label: "Minneapolis"
+		Value: "CT",
+		Text: "Connecticut"
 	},
 	{
-		value: 20,
-		label: "New Jersey"
+		Value: "DE",
+		Text: "Delaware"
 	},
 	{
-		value: 21,
-		label: "New York"
+		Value: "FL",
+		Text: "Florida"
 	},
 	{
-		value: 22,
-		label: "San Francisco/Oakland"
+		Value: "GA",
+		Text: "Georgia"
 	},
 	{
-		value: 23,
-		label: "Oklahoma City"
+		Value: "HI",
+		Text: "Hawaii"
 	},
 	{
-		value: 24,
-		label: "Philadelphia"
+		Value: "ID",
+		Text: "Idaho"
 	},
 	{
-		value: 25,
-		label: "Sacramento"
+		Value: "IL",
+		Text: "Illinois"
 	},
 	{
-		value: 26,
-		label: "Washington DC"
+		Value: "IN",
+		Text: "Indiana"
 	},
 	{
-		value: 28,
-		label: "Jani-King Int'l, Inc."
+		Value: "IA",
+		Text: "Iowa"
 	},
 	{
-		value: 29,
-		label: "JANI-KING OF NEW MEXICO, INC"
+		Value: "KS",
+		Text: "Kansas"
 	},
 	{
-		value: 31,
-		label: "New Mexico"
+		Value: "KY",
+		Text: "Kentucky"
 	},
 	{
-		value: 46,
-		label: "Houston"
+		Value: "LA",
+		Text: "Louisiana"
 	},
 	{
-		value: 55,
-		label: "Pittsburgh"
+		Value: "ME",
+		Text: "Maine"
 	},
 	{
-		value: 64,
-		label: "Tulsa"
+		Value: "MD",
+		Text: "Maryland"
 	},
 	{
-		value: 82,
-		label: "Reno"
+		Value: "MA",
+		Text: "Massachusetts"
+	},
+	{
+		Value: "MI",
+		Text: "Michigan"
+	},
+	{
+		Value: "MN",
+		Text: "Minnesota"
+	},
+	{
+		Value: "MS",
+		Text: "Mississippi"
+	},
+	{
+		Value: "MO",
+		Text: "Missouri"
+	},
+	{
+		Value: "MT",
+		Text: "Montana"
+	},
+	{
+		Value: "NE",
+		Text: "Nebraska"
+	},
+	{
+		Value: "NV",
+		Text: "Nevada"
+	},
+	{
+		Value: "NH",
+		Text: "New Hampshire"
+	},
+	{
+		Value: "NJ",
+		Text: "New Jersey"
+	},
+	{
+		Value: "NM",
+		Text: "New Mexico"
+	},
+	{
+		Value: "NY",
+		Text: "New York"
+	},
+	{
+		Value: "NC",
+		Text: "North Carolina"
+	},
+	{
+		Value: "ND",
+		Text: "North Dakota"
+	},
+	{
+		Value: "OH",
+		Text: "Ohio"
+	},
+	{
+		Value: "OK",
+		Text: "Oklahoma"
+	},
+	{
+		Value: "OR",
+		Text: "Oregon"
+	},
+	{
+		Value: "PA",
+		Text: "Pennsylvania"
+	},
+	{
+		Value: "RI",
+		Text: "Rhode Island"
+	},
+	{
+		Value: "SC",
+		Text: "South Carolina"
+	},
+	{
+		Value: "SD",
+		Text: "South Dakota"
+	},
+	{
+		Value: "TN",
+		Text: "Tennessee"
+	},
+	{
+		Value: "TX",
+		Text: "Texas"
+	},
+	{
+		Value: "UT",
+		Text: "Utah"
+	},
+	{
+		Value: "VT",
+		Text: "Vermont"
+	},
+	{
+		Value: "VA",
+		Text: "Virginia"
+	},
+	{
+		Value: "WA",
+		Text: "Washington"
+	},
+	{
+		Value: "DC",
+		Text: "Washington D.C."
+	},
+	{
+		Value: "WV",
+		Text: "West Virginia"
+	},
+	{
+		Value: "WI",
+		Text: "Wisconsin"
+	},
+	{
+		Value: "WY",
+		Text: "Wyoming"
 	}
 ];
 const address_headers = [
@@ -318,6 +442,25 @@ const billing_headers = [
 	},
 ];
 
+function TextMaskPhone(props) {
+	const { inputRef, ...other } = props;
+
+	return (
+		<MaskedInput
+			{...other}
+			ref={ref => {
+				inputRef(ref ? ref.inputElement : null);
+			}}
+			mask={['+', '1', ' ', '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+			placeholderChar={'\u2000'}
+			showMask
+		/>
+	);
+}
+
+TextMaskPhone.propTypes = {
+	inputRef: PropTypes.func.isRequired,
+};
 
 const WAIT_INTERVAL = 1000
 const ENTER_KEY = 13
@@ -740,7 +883,7 @@ class FilterPanel extends Component {
 			}).sort();
 		}
 
-		
+
 		return (
 			<div className={classNames(classes.root, "flex flex-col")}>
 				{/* <div className={classNames("flex flex-col")}> */}
@@ -797,7 +940,7 @@ class FilterPanel extends Component {
 											onChange={this.handleChange('City')}
 											margin="dense"
 											variant="outlined"
-											style={{ width: '40%' }}
+											style={{ width: '50%' }}
 										/>
 
 
@@ -810,11 +953,11 @@ class FilterPanel extends Component {
 											onChange={this.handleChange('State')}
 											margin="dense"
 											variant="outlined"
-											style={{ width: '25%' }}
+											style={{ width: '15%' }}
 										>
-											{stateNames.map(option => (
-												<MenuItem key={option.value} value={option.value}>
-													{option.label}
+											{stateNames.map((option, index) => (
+												<MenuItem key={index} value={option.Value}>
+													{option.Value}
 												</MenuItem>
 											))}
 										</TextField>
@@ -832,7 +975,7 @@ class FilterPanel extends Component {
 									</GridItem>
 
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
+										{/* <TextField
 											id="outlined-name"
 											label="Phone *"
 											className={classNames(classes.textField, 'mr-6')}
@@ -841,9 +984,22 @@ class FilterPanel extends Component {
 											margin="dense"
 											variant="outlined"
 											style={{ width: '100%' }}
-										/>
+										/> */}
+										<FormControl className={classNames(classes.formControl, 'mr-6')} style={{flex:1}}>
+											<InputLabel htmlFor="Phone">Phone</InputLabel>
+											<Input
+												// className={classNames(classes.textField, 'mr-6')}
+												value={this.state.Phone}
+												onChange={this.handleChange('Phone')}
+												id="Phone"
+												inputComponent={TextMaskPhone}
+												variant="outlined"
+												margin="normal"
+												fullWidth
+											/>
+										</FormControl>
 
-										<TextField
+										{/* <TextField
 											id="outlined-name"
 											label="Fax"
 											className={classNames(classes.textField, 'ml-6')}
@@ -853,7 +1009,22 @@ class FilterPanel extends Component {
 											variant="outlined"
 
 											style={{ width: '100%' }}
-										/>
+										/> */}
+
+										<FormControl className={classNames(classes.formControl, 'ml-6')} style={{flex:1}}>
+											<InputLabel htmlFor="Fax">Fax</InputLabel>
+											<Input
+												// className={classNames(classes.textField, 'ml-6')}
+												value={this.state.Fax}
+												onChange={this.handleChange('Fax')}
+												id="Fax"
+												inputComponent={TextMaskPhone}
+												variant="outlined"
+												margin="normal"
+												fullWidth
+											/>
+										</FormControl>
+
 									</GridItem>
 
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
