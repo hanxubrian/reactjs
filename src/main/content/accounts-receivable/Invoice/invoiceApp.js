@@ -647,7 +647,7 @@ function mapDispatchToProps(dispatch)
         toggleSummaryPanel: Actions.toggleSummaryPanel,
         openNewInvoiceForm: Actions.openNewInvoiceForm,
         openEditInvoiceForm: Actions.openEditInvoiceForm,
-        getCustomers: Actions.getCustomers,
+        getCustomers: Actions.getSuggestCustomersList,
         getFranchisees: Actions.getFranchisees,
     }, dispatch);
 }
@@ -672,10 +672,13 @@ function mapStateToProps({invoices, auth, customers, franchisees})
         ToPrintOrToEmail: invoices.ToPrintOrToEmail,
         SearchText: invoices.SearchText,
         bInvoiceStart: invoices.bInvoiceStart,
-        customers: customers.customersDB,
-        bLoadedCustomers: customers.bLoadedCustomers,
-        bCustomerFetchStart: customers.bCustomerFetchStart,
+
+        customers: invoices.customersDB,
+        bLoadedCustomers: invoices.bLoadedSuggestCustomers,
+        bCustomerFetchStart: invoices.bSuggestCustomersFetchStart,
+
         regionId: auth.login.defaultRegionId,
+
         franchisees: franchisees.franchiseesDB,
         bLoadedFranchisees: franchisees.bLoadedFranchisees,
         fstatusId: franchisees.statusId,

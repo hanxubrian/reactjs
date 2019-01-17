@@ -1,5 +1,6 @@
 import axios from "axios";
 import {invoiceService} from "../../services"
+import {GET_ALL_CUSTOMERS, GET_CUSTOMERS_FETCH_START} from "./customers.actions";
 
 export const GET_ALL_INVOICES = "[INVOICES] GETS ALL";
 export const GET_INVOICE_STATUS = "[INVOICES] GETS INVOICE STATUS";
@@ -17,6 +18,8 @@ export const UPDATE_INVOICE_PERIOD_OPTION = "[INVOICES] UPDATE PERIOD OPTION";
 export const SELECT_INVOICE_CUSTOMER = "[INVOICES] SELECT CUSTOMER";
 export const RESET_INVOICE_FORM = "[INVOICES] RESET INVOICE FORM";
 export const STARTING_SAVE_INVOICE_FORM_DATA = "[INVOICES] STARTING SAVE INVOICE FORM DATA";
+export const GET_ALL_SUGGEST_CUSTOMERS = "[INVOICES] GET ALL SUGGEST CUSTOMERS";
+export const GET_SUGGEST_CUSTOMERS_FETCH_START = "[INVOICES] GET SUGGEST CUSTOMERS FETCH START";
 
 // for Add/Edit
 export const OPEN_NEW_INVOICE_FORM = '[INVOICES APP] OPEN NEW INVOICE FORM';
@@ -306,4 +309,22 @@ export function resetInvoiceForm(){
                 });
         })();
     };
+}
+
+export function getSuggestCustomersList(regionId, statusId = 0, location = "all", latitude = "", longitude = "", searchText = "") {
+    return (dispatch) => {
+
+        dispatch({
+            type: GET_SUGGEST_CUSTOMERS_FETCH_START,
+        });
+
+        (async () => {
+
+            let res = await invoiceService.getSuggestCustomersList([regionId], [statusId], location, latitude, longitude, searchText);
+            dispatch({
+                type: GET_ALL_SUGGEST_CUSTOMERS,
+                payload: res
+            });
+        })();
+    }
 }

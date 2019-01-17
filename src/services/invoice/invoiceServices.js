@@ -158,6 +158,41 @@ class invoiceService {
                 })
         });
     }
+
+    /**
+     * get customer suggest list
+     * @param regionId
+     * @param statusId
+     * @param location
+     * @param latitude
+     * @param longitude
+     * @param searchText
+     * @returns {Promise<any>}
+     */
+    getSuggestCustomersList = (regionId, statusId, location, latitude, longitude , searchText) => {
+        const data = {
+            "RegionId": regionId,
+            "StatusId": statusId,
+            "Location": location,
+            "Latitude": latitude,
+            "Longitude": longitude,
+            "SearchText": searchText
+        };
+        return new Promise((resolve, reject) => {
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/Customer/SuggestCustomer`, data)
+                .then(res => {
+                    if (res.status === 200) {
+                        resolve(res.data);
+                    }
+                    else if (res.status !== 200) {
+                        reject(res.data);
+                    }
+                })
+                .catch(error => {
+                    resolve(error);
+                })
+        });
+    };
 }
 
 const instance = new invoiceService();

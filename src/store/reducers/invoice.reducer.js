@@ -5,6 +5,7 @@ import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 import {STARTING_SAVE_INVOICE_FORM_DATA} from "../actions/";
+import {GET_SUGGEST_CUSTOMERS_FETCH_START} from "../actions/";
 
 
 let today = new Date();
@@ -28,7 +29,6 @@ const initialState = {
     ToDate: moment(today).format("MM/DD/YYYY"),
     StatusId: [],
     PeriodId: [220],
-    OpenOrClosed: "N",
     InvoiceTypeId: 1,
     ToPrintOrToEmail: "print",
     SearchText: "",
@@ -36,7 +36,10 @@ const initialState = {
     bInvoiceStart: false,
     customerTaxAmountLine: null,
     invoiceDateOption: 3,
-    newInvoice: null
+    newInvoice: null,
+    customersDB: null,
+    bSuggestCustomersFetchStart: false,
+    bLoadedSuggestCustomers: false
 };
 
 
@@ -49,6 +52,21 @@ const invoices = function(state = initialState, action) {
                 ...state,
                 invoicesDB: action.payload, bLoadedInvoices: true, bInvoiceStart: false
             };
+        }
+        case Actions.GET_ALL_SUGGEST_CUSTOMERS:
+        {
+            return {
+                ...state,
+                customersDB: action.payload,
+                bLoadedSuggestCustomers: true,
+                bSuggestCustomersFetchStart: false
+            };
+        }
+        case Actions.GET_SUGGEST_CUSTOMERS_FETCH_START:
+        {
+            return {
+                ...state, bSuggestCustomersFetchStart: false
+            }
         }
         case Actions.GET_INVOICE_STATUS:
         {
