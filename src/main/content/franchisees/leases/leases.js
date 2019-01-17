@@ -406,19 +406,21 @@ class Leases extends Component {
 		// const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
 		// const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
 		if (rawData === null) return;
-		// debugger
-		let regions = rawData.Data.Region.filter(x => {
-			return this.props.regionId === 24 || x.Id === this.props.regionId;
-		});
 
-		regions.forEach(x => {
-			all_temp = [...all_temp, ...x.LeaseList];
-		});
+		// let regions = rawData.Data.filter(x => {
+		// 	return this.props.regionId === 24 || x.Id === this.props.regionId;
+		// });
+
+		// regions.forEach(x => {
+		// 	all_temp = [...all_temp, ...x.LeaseList];
+		// });
 
 		// regions.map(x => {
 		// 	all_temp = [...all_temp, ...x.Leases];
 		// 	return;
 		// });
+		let regions = rawData.Data[0].LeaseList.filter(x => x)
+		all_temp = regions
 
 		this.setState({ temp: all_temp });
 		this.setState({ data: all_temp });
