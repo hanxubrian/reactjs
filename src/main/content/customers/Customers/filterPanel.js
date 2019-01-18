@@ -34,7 +34,7 @@ import Utils from './Utils'
 
 import PropTypes from 'prop-types';
 import MaskedInput from 'react-text-mask';
-import { Input, InputLabel, FormControl } from '@material-ui/core';
+import { Input, InputLabel, FormControl, InputAdornment } from '@material-ui/core';
 
 Geocode.setApiKey("AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA");
 
@@ -940,7 +940,7 @@ class FilterPanel extends Component {
 											onChange={this.handleChange('City')}
 											margin="dense"
 											variant="outlined"
-											style={{ width: '50%' }}
+											style={{ width: '55%' }}
 										/>
 
 
@@ -953,7 +953,7 @@ class FilterPanel extends Component {
 											onChange={this.handleChange('State')}
 											margin="dense"
 											variant="outlined"
-											style={{ width: '15%' }}
+											style={{ width: '20%' }}
 										>
 											{stateNames.map((option, index) => (
 												<MenuItem key={index} value={option.Value}>
@@ -970,7 +970,7 @@ class FilterPanel extends Component {
 											onChange={this.handleChange('Zip')}
 											margin="dense"
 											variant="outlined"
-											style={{ width: '35%' }}
+											style={{ width: '25%' }}
 										/>
 									</GridItem>
 
@@ -985,7 +985,7 @@ class FilterPanel extends Component {
 											variant="outlined"
 											style={{ width: '100%' }}
 										/> */}
-										<FormControl className={classNames(classes.formControl, 'mr-6')} style={{flex:1}}>
+										<FormControl className={classNames(classes.formControl, 'mr-6')} style={{ flex: 1 }}>
 											<InputLabel htmlFor="Phone">Phone</InputLabel>
 											<Input
 												// className={classNames(classes.textField, 'mr-6')}
@@ -1011,7 +1011,7 @@ class FilterPanel extends Component {
 											style={{ width: '100%' }}
 										/> */}
 
-										<FormControl className={classNames(classes.formControl, 'ml-6')} style={{flex:1}}>
+										<FormControl className={classNames(classes.formControl, 'ml-6')} style={{ flex: 1 }}>
 											<InputLabel htmlFor="Fax">Fax</InputLabel>
 											<Input
 												// className={classNames(classes.textField, 'ml-6')}
@@ -1251,6 +1251,42 @@ class FilterPanel extends Component {
 
 
 								</div>
+
+								<div className="mt-36 flex flex-col" style={{ width: '200px' }}>
+									<h3>Billing Amount</h3>
+									<div className="flex flex-row" >
+										<TextField
+											type="number"
+											id="BillingFrom"
+											label="From"
+											className={classNames(classes.textField, "mr-6")}
+											onChange={this.handleChange('BillingFrom')}
+											margin="dense"
+											variant="outlined"
+											InputProps={{
+												startAdornment: <InputAdornment position="start">$</InputAdornment>,
+											}}
+											inputProps={{ min: "0", precision:"2" }}
+											fullWidth
+										/>
+										<TextField
+											type="number"
+											id="BillingTo"
+											label="To"
+											className={classNames(classes.textField, "ml-6")}
+											onChange={this.handleChange('BillingTo')}
+											margin="dense"
+											variant="outlined"
+											InputProps={{
+												startAdornment: <InputAdornment position="start">$</InputAdornment>,
+												min: "0",
+											}}
+											inputProps={{ min: "0", precision:"2"  }}
+											fullWidth
+										/>
+									</div>
+								</div>
+
 
 								<div className="mt-0 flex flex-col" style={{ width: '200px' }}>
 									<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
