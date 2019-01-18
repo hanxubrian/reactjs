@@ -635,6 +635,8 @@ class InvoiceLineTable extends React.Component {
             });
         });
 
+        console.log('qqqq', this.props.fn);
+
         return (
             <Paper className={classNames(classes.root)}>
                 <div className={classNames(classes.tableWrapper, "flex flex-col h-full")}>

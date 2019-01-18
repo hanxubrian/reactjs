@@ -144,7 +144,7 @@ class invoiceService {
 
     deleteInvoice = (regionId, id) => {
         return new Promise((resolve, reject) => {
-            axios_instance.delete(`${BASE_MONGO_API_URL}/v1/accountsreceivable/invoice/delete/${id}?regionId=${regionId}`)
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/invoice/delete/${id}?regionId=${regionId}`)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);
@@ -157,7 +157,7 @@ class invoiceService {
                     resolve(error);
                 })
         });
-    }
+    };
 
     /**
      * get customer suggest list

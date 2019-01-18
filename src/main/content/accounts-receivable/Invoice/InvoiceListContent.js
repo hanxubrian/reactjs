@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 
-// core components
+// Material-UI core components
 import {
-    Hidden, Icon, IconButton, Input, Paper, Button, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog
+    Checkbox, Icon, IconButton, Button, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog
 } from '@material-ui/core';
 
 //Janiking
@@ -343,37 +343,37 @@ class InvoiceListContent extends Component {
                         }
                     }}
                     columns={[
-                        // {
-                        //     columns: [
-                        //         {
-                        //             Header   : (instance) => (
-                        //                 <Checkbox
-                        //                     onClick={(event) => {
-                        //                         event.stopPropagation();
-                        //                     }}
-                        //                     onChange={(event) => toggleAll(instance) }
-                        //                     checked={this.state.selectAll}
-                        //                     style={{color: 'white'}}
-                        //                 />
-                        //             ),
-                        //             accessor : "",
-                        //             Cell     : row => {
-                        //                 return (<Checkbox
-                        //                         onClick={(event) => {
-                        //                             event.stopPropagation();
-                        //                         }}
-                        //                         checked={isSelected(row.value.InvoiceId)}
-                        //                         onChange={() => toggleSelection(row.value.InvoiceId)}
-                        //                     />
-                        //                 )
-                        //             },
-                        //             className: "justify-center",
-                        //             sortable : false,
-                        //             width    : 56
-                        //         }
-                        //     ],
-                        //     className: classNames("justify-center")
-                        // },
+                        {
+                            columns: [
+                                {
+                                    Header   : (instance) => (
+                                        <Checkbox
+                                            onClick={(event) => {
+                                                event.stopPropagation();
+                                            }}
+                                            onChange={(event) => toggleAll(instance) }
+                                            checked={this.state.selectAll}
+                                            style={{color: 'white'}}
+                                        />
+                                    ),
+                                    accessor : "",
+                                    Cell     : row => {
+                                        return (<Checkbox
+                                                onClick={(event) => {
+                                                    event.stopPropagation();
+                                                }}
+                                                checked={isSelected(row.value.InvoiceId)}
+                                                onChange={() => toggleSelection(row.value.InvoiceId)}
+                                            />
+                                        )
+                                    },
+                                    className: "justify-center",
+                                    sortable : false,
+                                    width    : 56
+                                }
+                            ],
+                            className: classNames("justify-center")
+                        },
                         {
                             columns: [
                                 {
@@ -402,6 +402,15 @@ class InvoiceListContent extends Component {
                                     accessor: "InvoiceDescription",
                                     className: classNames(classes.descr,"flex items-center justify-start p-12-impor"),
                                     width: '100%'
+                                },
+                                {
+                                    Header: "Amount",
+                                    accessor: "InvoiceAmount",
+                                    Cell     : row => {
+                                        return '$'+parseFloat(row.original.InvoiceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+                                    },
+                                    className: classNames(classes.tableTdEven, "flex items-center  justify-end p-12-impor"),
+                                    width: 100
                                 },
                                 {
                                     Header: "Tax",
