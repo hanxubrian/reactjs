@@ -194,7 +194,8 @@ const styles = theme => ({
                 borderRadius: 6,
                 display: 'flex',
                 alignItems: 'center',
-                marginTop: 4
+                marginTop: 4,
+                height: 32
             },
             '& .f2': {
                 width: '100%',
@@ -266,7 +267,7 @@ const styles = theme => ({
     distribution: {
         '& span': {
             backgroundColor: 'lightgrey',
-            padding: '8px 12px',
+            padding: '6px 12px',
             borderRadius: 20
         }
     },
