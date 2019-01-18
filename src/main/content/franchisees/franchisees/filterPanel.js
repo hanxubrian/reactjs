@@ -339,6 +339,9 @@ class FilterPanel extends Component {
                                                 onChange={this.handleAddressFormChange('Name')}
                                                 margin="dense"
                                                 variant="outlined"
+                                                inputProps={{
+                                                    maxLength:60
+                                                }}
                                                 required
                                                 fullWidth
                                             />
@@ -351,6 +354,9 @@ class FilterPanel extends Component {
                                                 className={classes.textField}
                                                 onChange={this.handleAddressFormChange('AddressLine1')}
                                                 margin="dense"
+                                                inputProps={{
+                                                    maxLength:100
+                                                }}
                                                 variant="outlined"
                                                 fullWidth
                                                 required
@@ -362,6 +368,9 @@ class FilterPanel extends Component {
                                                 label="Address2"
                                                 className={classes.textField}
                                                 onChange={this.handleAddressFormChange('AddressLine2')}
+                                                inputProps={{
+                                                    maxLength:100
+                                                }}
                                                 margin="dense"
                                                 variant="outlined"
                                                 fullWidth
@@ -375,6 +384,9 @@ class FilterPanel extends Component {
                                                 onChange={this.handleAddressFormChange('City')}
                                                 margin="dense"
                                                 variant="outlined"
+                                                inputProps={{
+                                                    maxLength:100
+                                                }}
                                                 fullWidth
                                                 required
                                             />
@@ -407,6 +419,9 @@ class FilterPanel extends Component {
                                                onChange={this.handleAddressFormChange('County')}
                                                margin="dense"
                                                variant="outlined"
+                                               inputProps={{
+                                                   maxLength:100
+                                               }}
                                                fullWidth
                                                required
                                            />
@@ -417,6 +432,9 @@ class FilterPanel extends Component {
                                                 label="Zip"
                                                 className={classes.textField}
                                                 onChange={this.handleAddressFormChange('Zip')}
+                                                inputProps={{
+                                                    maxLength:10
+                                                }}
                                                 margin="dense"
                                                 variant="outlined"
                                                 fullWidth
@@ -431,6 +449,9 @@ class FilterPanel extends Component {
                                                 className={classes.textField}
                                                 onChange={this.handleFormChange('Phone1')}
                                                 margin="dense"
+                                                inputProps={{
+                                                    maxLength:40
+                                                }}
                                                 variant="outlined"
                                                 fullWidth
                                                 required
@@ -443,6 +464,9 @@ class FilterPanel extends Component {
                                                className={classes.textField}
                                                onChange={this.handleFormChange('Phone2')}
                                                margin="dense"
+                                               inputProps={{
+                                                   maxLength:40
+                                               }}
                                                variant="outlined"
                                                fullWidth
                                                required
@@ -454,6 +478,9 @@ class FilterPanel extends Component {
                                                 label="E-mail"
                                                 className={classes.textField}
                                                 onChange={this.handleFormChange('Email')}
+                                                inputProps={{
+                                                    maxLength:100
+                                                }}
                                                 margin="dense"
                                                 variant="outlined"
                                                 fullWidth
