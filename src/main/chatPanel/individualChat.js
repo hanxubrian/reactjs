@@ -204,17 +204,6 @@ class IndividualChat extends Component {
         }
     }
     componentWillMount(){
-        //|| (!this.props.show && this.props.individualcurrentRoom && !this.state.isOpen)
-        // if(this.props.show || (this.props.show === "undefined" && this.props.individualcurrentRoom && this.props.individualcurrentRoom != null)){
-        //     this.setState({
-        //         isOpen: true,
-        //     })
-        // }
-        // if(this.props.individualcurrentRoom && this.props.individualcurrentRoom != null && !this.props.show){
-        //     this.setState({
-        //         isOpen: true,
-        //     })
-        // }
 
         this.individualChatRoom();
     }
