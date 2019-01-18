@@ -11,6 +11,7 @@ import {FuseScrollbars, FuseAnimateGroup} from '@fuse';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as Actions from './store/actions';
+import ReactPlayer from 'react-player'
 
 const styles = theme => ({
     root         : {
@@ -80,12 +81,31 @@ const styles = theme => ({
 
 class ContactList extends Component {
 
+    constructor() {
+        super();
+        this.state = {
+            flage       : false,
+        }
+    }
     componentDidMount(){
         this.props.initChat();
 
         setInterval(this.tick, 5000);
     }
+    componentDidUpdate(prevProps){
+        if(this.props.contacts !== prevProps.contacts){
+            this.props.contacts.map((item,index)=>{
+                if(item.unread && item.unread>0 && !this.state.flage){
+                    this.setState({flage: !this.state.flage});
+                    this.messagenotification();
+                }
+            });
+        }
+    }
+    messagenotification=()=>{
+        this.setState({flage: !this.state.flage});
 
+    }
     tick = () => {
         this.props.checkChatUserData();
     };
@@ -127,6 +147,7 @@ class ContactList extends Component {
         };
 
         return (
+            <div>
             <FuseScrollbars
                 className={classNames(classes.root, "flex flex-no-shrink flex-col overflow-y-auto py-8")}
                 containerRef={(ref) => {
@@ -156,7 +177,15 @@ class ContactList extends Component {
                         </FuseAnimateGroup>
                     </React.Fragment>
                 )}
+
             </FuseScrollbars>
+                {this.state.flage && (
+                    <div style={{width:'0px',height:'0px',}}>
+                        <ReactPlayer url='/assets/audios/message.mp3' playing />
+                    </div>
+
+                )}
+                </div>
         );
     };
 }

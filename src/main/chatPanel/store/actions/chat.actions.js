@@ -175,6 +175,7 @@ export function setCurrentRoom(currentRoom)
 
 export function appendNewRoom(room)
 {
+
     return  (dispatch, getState) => {
         const rooms = getState().chatPanel.chat.rooms;
         const contacts = getState().chatPanel.user.chatList;

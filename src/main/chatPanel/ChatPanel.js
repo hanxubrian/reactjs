@@ -95,6 +95,8 @@ class ChatPanel extends Component {
     {
         this.props.getUserData();
         this.props.getContacts();
+
+        // console.log("###########messages1",this.props.chatDetail.messages);
     }
 
     componentDidUpdate(prevProps,prevState)
@@ -127,6 +129,9 @@ class ChatPanel extends Component {
             this.setState({
                 isOpen : true,
             });
+        }
+        if(this.props.chatDetail.messages !== prevProps.chatDetail.messages){
+            // console.log("###############################################new message2",this.props.chatDetail.messages);
         }
 
     }
