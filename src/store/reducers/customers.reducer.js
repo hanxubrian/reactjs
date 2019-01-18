@@ -38,6 +38,9 @@ const initialState = {
 	accountTypesGroups: [],
 
 	bOpenEmailToCustomerDialog: false,
+
+	createCustomerResponse: [],
+	bCreateCustomerStart: false,
 };
 
 
@@ -78,6 +81,21 @@ const customers = function (state = initialState, action) {
 				return {
 					...state,
 					accountTypesGroups: action.payload
+				}
+			}
+		case Actions.CREATE_CUSTOMER:
+			{
+				return {
+					...state,
+					createCustomerResponse: action.payload,
+					bCreateCustomerStart: false,
+				}
+			}
+		case Actions.CREATE_CUSTOMER_START:
+			{
+				return {
+					...state,
+					bCreateCustomerStart: true,
 				}
 			}
 		case Actions.GET_ALL_DOCUMENTS:

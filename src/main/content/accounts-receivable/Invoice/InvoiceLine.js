@@ -120,7 +120,7 @@ function createFranchisee(parent_id,id, fnumber="", name="", amount=0) {
     }
 }
 
-function createData(billing='Regular Billing', service='Adjust-Balance', description='', quantity='', amount='', tax=0, markup='', extended=0, total=0, fTotal=0)
+function createData(billing='Regular Billing', service='Adjust-Balance', description='', quantity='', amount='', tax=0, markup='', extended=0, total=0, fTotal=0, markupAmount=0, markupTax=0)
 {
     return {
         id: counter++,
@@ -131,6 +131,8 @@ function createData(billing='Regular Billing', service='Adjust-Balance', descrip
         amount,
         tax,
         markup,
+        markupAmount,
+        markupTax,
         extended,
         total,
         fTotal,
@@ -176,6 +178,9 @@ const styles = theme => ({
         '& .ReactTable .rt-tr-group':{
             flex: '0 0 auto'
         },
+        '& .ReactTable .rt-td':{
+            padding: '0 5px'
+        },
         '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
             justifyContent: 'center'
         },
@@ -184,19 +189,26 @@ const styles = theme => ({
         },
         '& .franchiRow': {
             '& .f1': {
-                width: '25%',
+                width: '100px',
                 minWidth: 100,
-                padding: 10,
+                padding: '0 10px',
                 border: '1px solid lightgray',
-                borderRadius: 6
+                borderRadius: 6,
+                display: 'flex',
+                alignItems: 'center',
+                marginTop: 4,
+                height: 32
             },
             '& .f2': {
-                width: '75%',
+                width: '100%',
                 padding: '4px 8px',
                 border: '0px solid lightgray',
                 borderRadius: 6,
                 marginLeft: 10
             }
+        },
+        '& .taxColumn': {
+          maxWidth: '160px!important'
         },
         InvoiceLineHeadRoot:{
             backgroundColor: 'lightgray',
@@ -206,7 +218,7 @@ const styles = theme => ({
         }
     },
     outlined: {
-        padding: "12px 24px 12px 12px!important"
+        padding: "6px 24px 6px 12px!important"
     },
     billing:{
         width: 170,
@@ -257,7 +269,7 @@ const styles = theme => ({
     distribution: {
         '& span': {
             backgroundColor: 'lightgrey',
-            padding: '8px 12px',
+            padding: '6px 12px',
             borderRadius: 20
         }
     },
@@ -341,30 +353,9 @@ class InvoiceLineTable extends React.Component {
         nameValue19: '',
         nameValue20: '',
         nameSuggestions: [],
-        numberValue0: '',
-        numberValue1: '',
-        numberValue2: '',
-        numberValue3: '',
-        numberValue4: '',
-        numberValue5: '',
-        numberValue6: '',
-        numberValue7: '',
-        numberValue8: '',
-        numberValue9: '',
-        numberValue10: '',
-        numberValue11: '',
-        numberValue12: '',
-        numberValue13: '',
-        numberValue14: '',
-        numberValue15: '',
-        numberValue16: '',
-        numberValue17: '',
-        numberValue18: '',
-        numberValue19: '',
-        numberValue20: '',
         numberSuggestions: [],
         taxRowId: 0,
-        customerTaxAmountLine: null
+        customerTaxAmountLine: null,
     };
 
     constructor(props) {
@@ -411,12 +402,32 @@ class InvoiceLineTable extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.state.data!==null && prevState.data!==this.state.data) {
-            console.log('prev',prevState.data);
-            console.log('this',this.state.data);
             this.props.updateInvoiceLine(this.state.data);
         }
         if(JSON.stringify(this.state.customerTaxAmountLine)!== JSON.stringify(prevState.customerTaxAmountLine)){
             this.updateTaxFromLine();
+        }
+
+        if(this.props.fn!==null && prevProps.fn!==this.props.fn){
+            let selectedFranchiess =[];
+            let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList;
+            this.props.fn.forEach(f=>{
+                selectedFranchiess = _.filter(franchisees, franchisee=>f.Number===franchisee.Number && f.Name===franchisee.Name);
+               });
+
+            if(selectedFranchiess.length>0) {
+                const data = [...this.state.data];
+
+                let f_row = data[0];
+
+                let findex = 0;
+                selectedFranchiess.forEach(sf=>{
+                    let fline = createFranchisee(0, findex, sf.Number, sf.Name, sf.DistributionAmount);
+                    f_row.franchisees = [...f_row.franchisees, fline];
+                    this.setState({["nameValue"+findex]: sf.Name});
+                    findex++;
+                });
+            }
         }
     }
 
@@ -438,6 +449,8 @@ class InvoiceLineTable extends React.Component {
         data[taxRowId].tax = customerTaxAmountLine.TotalTaxAmount;
         data[taxRowId].extended = customerTaxAmountLine.ExtendedPrice;
         data[taxRowId].total = customerTaxAmountLine.TotalAmount;
+        data[taxRowId].markupAmount = customerTaxAmountLine.MarkupAmount;
+        data[taxRowId].markupTax = customerTaxAmountLine.MarkupTax;
         this.setState({data: data});
     };
 
@@ -579,7 +592,9 @@ class InvoiceLineTable extends React.Component {
 
     getInvoiceLineTaxAmount = row =>{
         if(!this.isDisable(row)) {
-            this.props.getCustomerTaxAmount(this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity);
+            let markup = 0.0;
+            if(row.markup!=='') markup = row.markup;
+            this.props.getCustomerTaxAmount(this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity, markup);
             this.setState({taxRowId: row.id})
         }
     };
@@ -667,7 +682,7 @@ class InvoiceLineTable extends React.Component {
                         }}
                         getTdProps={(state, rowInfo, column, instance) =>{
                             if(rowInfo.original.type==='franch'){
-                                if(column.Header==='Quantity' || column.Header==='Amount' || column.Header==='Tax')
+                                if(column.Header==='Qty' || column.Header==='Amount' || column.Header==='Markup(%)')
                                     return {
                                         style: {display: 'none'},
                                         className: {}
@@ -677,6 +692,7 @@ class InvoiceLineTable extends React.Component {
                                         {"justify-end": column.Header==='Service'},
                                         {"justify-start": column.id==='extended'},
                                         {"franchiRow": column.id==='description'},
+                                        {"taxColumn": column.id==='tax'},
                                     )
                                 };
                             }
@@ -822,7 +838,7 @@ class InvoiceLineTable extends React.Component {
                                                         </div>
                                                         <div className="f2">
                                                             <Autosuggest
-                                                                renderInputComponent = {this.renderInputComponent}
+                                                                renderInputComponent = {renderInputComponent}
                                                                 suggestions={nameSuggestions}
                                                                 onSuggestionsFetchRequested={this.onNameSuggestionsFetchRequested}
                                                                 onSuggestionsClearRequested={this.onNameSuggestionsClearRequested}
@@ -920,9 +936,18 @@ class InvoiceLineTable extends React.Component {
                                                     }}
                                                 />
                                             }
-                                                // return ("$"+parseFloat(row.original.tax).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
                                             else
-                                                return (<div/>)
+                                                return ( <div className={classNames("flex flex-row w-full justify-end")}>
+                                                    <TextField
+                                                        className={classes.fInput}
+                                                        placeholder="Amount"
+                                                        value={row.original.amount}
+                                                        onChange={this.handleChange(row.original)}
+                                                        InputProps={{
+                                                            inputComponent: NumberFormatCustom,
+                                                        }}
+                                                    />
+                                                </div>)
                                         },
                                         className: classNames(classes.tableTdEven, "flex items-center  justify-end text-right"),
                                         width: 80
@@ -948,17 +973,7 @@ class InvoiceLineTable extends React.Component {
                                             }
                                             else
                                                 return (
-                                                    <div className="flex flex-wrap">
-                                                        <TextField
-                                                            className={classes.fInput}
-                                                            placeholder="Amount"
-                                                            value={row.original.amount}
-                                                            onChange={this.handleChange(row.original)}
-                                                            InputProps={{
-                                                                inputComponent: NumberFormatCustom,
-                                                            }}
-                                                        />
-                                                    </div>)
+                                                    <div/>)
                                         },
                                         className: classNames(classes.tableTdEven, "flex items-center  text-right justify-end"),
                                         width: 80

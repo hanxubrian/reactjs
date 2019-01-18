@@ -288,6 +288,10 @@ class InvoiceApp extends Component {
         if(prevProps.invoices===null && this.props.invoices!==null){
             this.getInvoicesFromStatus();
         }
+
+        if(this.props.removedId!==undefined && this.props.removedId!==prevProps.removedId)
+            this.props.getInvoices([regionId], StatusId, FromDate, ToDate, PeriodId,
+                OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText);
     }
 
     search(val) {
@@ -324,6 +328,8 @@ class InvoiceApp extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        const {regionId, StatusId, FromDate, ToDate,PeriodId, OpenOrClosed,InvoiceTypeId, ToPrintOrToEmail, SearchText} = this.props;
+
         if (this.props.invoices === null && nextProps.invoices !== null)
             this.getInvoicesFromStatus(nextProps.invoices);
         if (this.props.invoices !== nextProps.invoices)
@@ -343,6 +349,7 @@ class InvoiceApp extends Component {
         if(nextProps.franchisees!==null && this.props.franchisees!==nextProps.franchisees){
             this.setState({franchisees: nextProps.franchisees.Data.Region[0].FranchiseeList});
         }
+
     }
 
     getInvoicesFromStatus =(rawData=this.props.invoices) =>{
@@ -681,6 +688,7 @@ function mapStateToProps({invoices, auth, customers, franchisees})
         customers: invoices.customersDB,
         bLoadedCustomers: invoices.bLoadedSuggestCustomers,
         bCustomerFetchStart: invoices.bSuggestCustomersFetchStart,
+        removedId: invoices.removedId,
 
         regionId: auth.login.defaultRegionId,
 

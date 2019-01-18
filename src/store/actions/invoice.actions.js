@@ -136,7 +136,7 @@ export function removeInvoice(regionId, id) {
             if (res.IsSuccess) {
                 dispatch({
                     type: REMOVE_SELECTED_INVOICE,
-                    payload: res
+                    payload: res.Data
                 });
             } else {
 
@@ -218,13 +218,14 @@ export function updateInvoiceLine(data) {
  * @param CustomerId
  * @param Amount
  * @param Quantity
+ * @param Markup
  * @param TaxTypeId
  * @returns {Function}
  */
-export function getCustomerTaxAmount(RegionId,CustomerId, Amount, Quantity, TaxTypeId=1) {
+export function getCustomerTaxAmount(RegionId,CustomerId, Amount, Quantity, Markup=0.0, TaxTypeId=1 ) {
     return (dispatch) => {
         (async () => {
-            let res = await invoiceService.getCustomerTaxAmount(RegionId,CustomerId, Amount, Quantity, TaxTypeId);
+            let res = await invoiceService.getCustomerTaxAmount(RegionId,CustomerId, Amount, Quantity, Markup, TaxTypeId);
             if (res.IsSuccess) {
                 dispatch({
                     type: GET_CUSTOMER_TAX_AMOUNT,

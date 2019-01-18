@@ -169,7 +169,8 @@ const newInvoiceState = {
     "ConsolidatedInvoiceNo": "",
     "CreditId": "",
     "Service":"",
-    "notes": ""
+    "notes": "",
+
 };
 
 function renderSuggestion(suggestion, { query, isHighlighted }) {
@@ -269,33 +270,6 @@ MySnackbarContent.propTypes = {
 
 const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
 
-function renderInputComponent (inputProps ) {
-    const { classes, inputRef = () => {}, ref, ...other } = inputProps ;
-
-    return (
-        <TextField
-            fullWidth
-            variant="outlined"
-            label="Customer:"
-            InputProps={{
-                inputRef: node => {
-                    ref(node);
-                    inputRef(node);
-                },
-                classes: {
-                    input: classes.input,
-                },
-            }}
-            InputLabelProps = {{
-                classes: {outlined: classes.label}
-            }}
-            required
-            {...other}
-            autoFocus={true}
-        />
-    );
-};
-
 class InvoiceForm extends Component {
     state = {
         customers: [],
@@ -319,7 +293,8 @@ class InvoiceForm extends Component {
         period: moment(),
         taxExempt: false,
         bAlertNewInvoice: false,
-        buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval
+        buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval,
+        franchiseeFromCustomer: null
     };
 
     renderInputComponent = (inputProps ) => {
@@ -372,6 +347,7 @@ class InvoiceForm extends Component {
     getSuggestionValue =  (suggestion) =>{
         this.setState({selectedCustomer: suggestion});
         this.setState({PO_number: suggestion.CustomerNo});
+        this.setState({franchiseeFromCustomer: suggestion.Franchisees});
 
         let year = moment().year();
         let month = moment().month();
@@ -386,6 +362,8 @@ class InvoiceForm extends Component {
         this.setState({InvoiceDate: invoiceDate});
         this.setState({DueDate: dueDate});
 
+
+
         return suggestion.CustomerName;
     };
 
@@ -397,7 +375,6 @@ class InvoiceForm extends Component {
     };
 
     getTotal = () => {
-        console.log('getTotal===',this.props.invoiceForm.data);
         let subTotal = 0.0;
         let markup = 0.0;
         let tax = 0.0;
@@ -413,7 +390,7 @@ class InvoiceForm extends Component {
             if(n.markup!=='') mk = n.markup;
             subTotal += parseFloat(n.extended);
             tax += parseFloat(n.tax);
-            markup += parseFloat(n.extended*qty*parseFloat(mk)/100);
+            markup += parseFloat(n.markupAmount)
         });
 
         this.setState({subTotal: subTotal});
@@ -631,7 +608,6 @@ class InvoiceForm extends Component {
 
         const autosuggestProps = {
             renderInputComponent: this.renderInputComponent,
-            // renderInputComponent,
             suggestions: suggestions,
             onSuggestionsFetchRequested: this.onSuggestionsFetchRequested,
             onSuggestionsClearRequested: this.onSuggestionsClearRequested,
@@ -903,7 +879,7 @@ class InvoiceForm extends Component {
                         </div>
                         <Grid container className={classNames(classes.formControl)} style={{flex: "9999 1 0"}}>
                             <Grid item xs={12} sm={12} md={12} className="flex flex-row xs:flex-col xs:mb-24">
-                                <InvoiceLineTable />
+                                <InvoiceLineTable fn={this.state.franchiseeFromCustomer}/>
                             </Grid>
                         </Grid>
                         <Divider variant="middle"/>
@@ -1064,7 +1040,7 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({invoices, auth})
+function mapStateToProps({invoices, auth, franchisees})
 {
     return {
         invoiceForm: invoices.invoiceForm,
@@ -1073,6 +1049,7 @@ function mapStateToProps({invoices, auth})
         user: auth.login,
         regionId: auth.login.defaultRegionId,
         bStartingSaveFormData: invoices.bStartingSaveFormData,
+        franchisees: franchisees.franchiseesDB,
     }
 }
 

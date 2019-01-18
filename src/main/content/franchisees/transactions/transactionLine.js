@@ -171,7 +171,7 @@ const styles = theme => ({
         }
     },
     outlined: {
-        padding: "12px 24px 12px 12px!important"
+        padding: "6px 24px 6px 12px!important"
     },
     billing:{
         width: 170,
@@ -546,7 +546,7 @@ class TransactionTable extends React.Component {
                                             return (
                                                 <TextField
                                                     id="description"
-                                                    style={{ margin: 8 }}
+                                                    style={{ margin: 0 }}
                                                     placeholder="Description"
                                                     fullWidth
                                                     value={row.original.description}

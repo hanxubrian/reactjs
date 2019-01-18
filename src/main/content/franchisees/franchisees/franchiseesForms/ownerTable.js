@@ -5,8 +5,8 @@ import { withStyles } from '@material-ui/core/styles';
 
 //Material UI core and icons
 import {
-	Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
-	Toolbar, Typography, Paper, Icon, IconButton, Tooltip, Fab
+    Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
+    Toolbar, Typography, Paper, Icon, IconButton, Tooltip, Fab, MenuItem, FormControlLabel
 } from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -14,8 +14,21 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 // third party
-import _ from 'lodash';
+
 import TextField from "@material-ui/core/TextField/TextField";
+import Button from "@material-ui/core/Button/Button";
+import DialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent/DialogContent";
+import GridContainer from "../../../../../Commons/Grid/GridContainer";
+import GridItem from "../../../../../Commons/Grid/GridItem";
+import DialogActions from "@material-ui/core/DialogActions/DialogActions";
+import CancelIcon from '@material-ui/icons/Cancel';
+import Dialog from "@material-ui/core/Dialog/Dialog";
+import SaveIcon from '@material-ui/icons/Save';
+import Person from '@material-ui/icons/Person';
+import Phone from '@material-ui/icons/Phone';
+import Title from '@material-ui/icons/Title';
+import InputAdornment from "@material-ui/core/InputAdornment/InputAdornment";
 
 let counter = 0;
 
@@ -224,7 +237,16 @@ const styles = theme => ({
 		'&:hover': {
 			backgroundColor: '#ff2a32',
 		}
-	}
+	},
+	btnAddOwners: {
+        marginBottom: '20px'
+    },
+	leftIcon: {
+        marginRight: theme.spacing.unit,
+    },
+    iconSmall: {
+        fontSize: 20,
+    },
 });
 
 class FranchiseesOwnerTable extends React.Component {
@@ -235,8 +257,13 @@ class FranchiseesOwnerTable extends React.Component {
 		rowsPerPage: 10,
 		labelWidth: 0,
 		data: [
-			createData('','', '', '')
-		]
+			createData('Lizhu','Lu', '123-456-7890', 'React Dev')
+		],
+        openDialog: false,
+        dialogFirstName: "",
+		dialogLastName: "",
+		dialogPhone: "",
+		dialogTitle: ""
 	};
 
 	handleRequestSort = (event, property) => {
@@ -271,36 +298,30 @@ class FranchiseesOwnerTable extends React.Component {
 		this.setState({ data: newData })
 	}
 
-	AddLineData = () => {
-		const data = [...this.state.data, createData()];
-		let id = 0;
-		let newData = data.map(record => {
-			record.id = id++;
-			return record;
-		});
-		this.setState({ data: newData })
-	};
+    handleClickOpen = () => {
+        this.setState({ openDialog: true });
+    };
 
-	removeLineData = (line) => {
-		const data = [...this.state.data];
-		_.remove(data, function (row) {
-			return row.id === line.id;
-		});
-		let id = 0;
-		let newData = data.map(record => {
-			record.id = id++;
-			return record;
-		});
+    handleClose = () => {
+        this.setState({ openDialog: false });
+    };
 
-		this.setState({ data: newData })
-	};
+    handleChangeAddOwnerSelect = (name) => event => {
+        this.setState({
+            [name]: event.target.value
+        })
+    }
 
 	render() {
 		const { classes } = this.props;
 		const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
 		console.log("this.props.tableType", this.props.tableType)
 		return (
-			<Paper className={classes.root}>
+			<div className={classes.root}>
+                <Button variant="contained" color="primary" onClick={this.handleClickOpen} className={classNames(classes.button,classes.btnAddOwners)}>
+                    <Icon  className={classes.leftIcon}>add Owner</Icon>
+                    add
+                </Button>
 				<div className={classes.tableWrapper}>
 					<Table className={classes.table} aria-labelledby="tableTitle">
 						<CustomerLineTableHead
@@ -319,55 +340,24 @@ class FranchiseesOwnerTable extends React.Component {
 										return (
 											<TableRow hover key={n.id} >
 												<TableCell component="td" scope="row" >
-													<TextField
-														id={"firstName" + n.id}
-														className={classes.textField}
-														variant="outlined"
-														margin="dense"
-														fullWidth
-													/>
+													{n.firstName}
 												</TableCell>
                                                 <TableCell component="td" scope="row" >
-                                                    <TextField
-                                                        id={"lastName" + n.id}
-                                                        className={classes.textField}
-                                                        variant="outlined"
-                                                        margin="dense"
-                                                        fullWidth
-                                                    />
+                                                    {n.lastName}
                                                 </TableCell>
 												<TableCell>
-													<TextField
-														id={"phone" + n.id}
-														className={classes.textField}
-														variant="outlined"
-														margin="dense"
-														fullWidth
-													/>
+                                                    {n.phone}
 												</TableCell>
 												<TableCell>
-													<TextField
-														id={"title" + n.id}
-														className={classes.textField}
-														variant="outlined"
-														margin="dense"
-														fullWidth
-													/>
+                                                    {n.title}
 												</TableCell>
 												<TableCell padding="checkbox">
-													<Fab color="secondary" aria-label="add"
-														className={classNames(classes.lineButton, "mr-12")}
-														onClick={() => this.AddLineData()}
-													>
-														<Icon>add</Icon>
-													</Fab>
-													{this.state.data.length > 1 && (
-														<Fab aria-label="add"
-															onClick={() => this.removeLineData(n)}
-															className={classNames(classes.lineCancelButton, "mr-12")}>
-															<Icon>close</Icon>
-														</Fab>
-													)}
+                                                    <IconButton>
+                                                        <Icon>delete</Icon>
+                                                    </IconButton>
+                                                    <IconButton>
+                                                        <Icon>edit</Icon>
+                                                    </IconButton>
 												</TableCell>
 											</TableRow>
 										)
@@ -376,7 +366,105 @@ class FranchiseesOwnerTable extends React.Component {
 						</TableBody>
 					</Table>
 				</div>
-			</Paper>
+                <Dialog
+                    open={this.state.openDialog}
+                    onClose={this.handleClose}
+                    aria-labelledby="form-dialog-title"
+                    maxWidth={"sm"}
+                    fullWidth
+                >
+                    <DialogTitle id="form-dialog-title">ADD OWNER</DialogTitle>
+                    <DialogContent>
+                        <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                <TextField
+                                    id="dialogFirstName"
+                                    label="First Name"
+                                    className={classes.textField}
+                                    value={this.state.dialogFirstName}
+                                    onChange={this.handleChangeAddOwnerSelect("dialogFirstName")}
+                                    margin="dense"
+                                    fullWidth
+									style={{marginRight: "1%"}}
+                                    required
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <Person style={{color:"gray"}} />
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
+                                <TextField
+                                    id="dialogLastName"
+                                    label="Last Name"
+                                    className={classes.textField}
+                                    value={this.state.dialogLastName}
+                                    onChange={this.handleChangeAddOwnerSelect("dialogLastName")}
+                                    margin="dense"
+                                    InputLabelProps={{
+                                        shrink: true
+                                    }}
+                                    style={{marginLeft: "1%"}}
+                                    fullWidth
+                                    required
+                                />
+                            </GridItem>
+                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+
+                            </GridItem>
+                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                <TextField
+                                    id="dialogPhone"
+                                    label="Phone"
+                                    className={classes.textField}
+                                    value={this.state.dialogPhone}
+                                    onChange={this.handleChangeAddOwnerSelect("dialogPhone")}
+                                    margin="dense"
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <Phone style={{color:"gray"}} />
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                    fullWidth
+                                    required
+                                />
+                            </GridItem>
+                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                <TextField
+                                    id="dialogTitle"
+                                    label="Title"
+                                    className={classes.textField}
+                                    value={this.state.dialogTitle}
+                                    onChange={this.handleChangeAddOwnerSelect("dialogTitle")}
+                                    margin="dense"
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <Title style={{color:"gray"}}/>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                    fullWidth
+                                    required
+                                />
+                            </GridItem>
+                        </GridContainer>
+                    </DialogContent>
+                    <DialogActions style={{padding:"2%"}}>
+                        <Button onClick={this.handleClose} variant="contained"  size="small" className={classes.button}>
+                            <CancelIcon style={{color:"gray"}} className={classNames(classes.leftIcon, classes.iconSmall)} />
+                            Cancel
+                        </Button>
+                        <Button onClick={this.handleClose} variant="contained" size="small" className={classes.button}>
+                            <SaveIcon style={{color:"gray"}} className={classNames(classes.leftIcon, classes.iconSmall)} />
+                            Save
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+			</div>
 		);
 	}
 }

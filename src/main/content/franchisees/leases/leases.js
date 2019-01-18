@@ -18,7 +18,7 @@ import {
 } from '@material-ui/core';
 
 // theme components
-import { FusePageCustomSidebarScroll, FuseAnimate } from '@fuse';
+import { FusePageCustomSidebarScroll, FuseAnimate, FusePageCustom } from '@fuse';
 
 // for store
 import connect from "react-redux/es/connect/connect";
@@ -245,7 +245,7 @@ class Leases extends Component {
 		// regionId: [2, 24],
 		// statusId: [21, 24],
 		// searchText: '',
-
+		selectedLease: null,
 		current_lat: 0,
 		current_long: 0,
 	};
@@ -460,6 +460,12 @@ class Leases extends Component {
 		this.setState({ temp: temp });
 	}
 
+	onNewLease = ()=>{
+        if(this.props.filterState) this.props.toggleFilterPanel();
+
+        this.props.openNewLeaseForm();
+    };
+
 	handleChange = prop => event => {
 		this.setState({ [prop]: event.target.value });
 
@@ -524,7 +530,7 @@ class Leases extends Component {
         console.log('props=', this.props);
         return (
             <React.Fragment >
-				<FusePageCustomSidebarScroll
+				<FusePageCustom
 					classes={{
 						root: classNames(classes.layoutRoot, 'test123'),
 						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': summaryState }),
@@ -549,34 +555,24 @@ class Leases extends Component {
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
-											{/* <IconButton
-												className={classNames(classes.button, "mr-12")}
-												aria-label="Add an alarm"
-												onClick={(ev) => toggleMapView()}>
-												<Icon>{mapViewState ? 'list' : 'location_on'}</Icon>
-											</IconButton> */}
-
-											<FuseAnimate animation="transition.expandIn" delay={300}>
-												<Fab
-													color="secondary"
-													aria-label="add" 
-													className={classNames(classes.sideButton, "mr-12")} 
-													onClick={openNewLeaseForm}>
-													<Icon>add</Icon>
-												</Fab>
-											</FuseAnimate>
-											<FuseAnimate animation="transition.expandIn" delay={300}>
-												<Fab color="secondary" aria-label="add"
-													className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-													<Icon>mail_outline</Icon>
-												</Fab>
-											</FuseAnimate>
-											<FuseAnimate animation="transition.expandIn" delay={300}>
-												<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-													<Icon>print</Icon>
-												</Fab>
-											</FuseAnimate>
-										</div>
+                                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                <Fab color="secondary" aria-label="add"
+                                                     className={classNames(classes.sideButton, "mr-12")} onClick={()=>this.onNewLease()}>
+                                                    <Icon>add</Icon>
+                                                </Fab>
+                                            </FuseAnimate>
+                                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                <Fab color="secondary" aria-label="add"
+                                                     className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
+                                                    <Icon>mail_outline</Icon>
+                                                </Fab>
+                                            </FuseAnimate>
+                                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
+                                                    <Icon>print</Icon>
+                                                </Fab>
+                                            </FuseAnimate>
+                                        </div>
 									</div>
 									<div className="flex flex-none items-end" style={{ display: 'none' }}>
 										<FuseAnimate animation="transition.expandIn" delay={600}>
@@ -597,7 +593,7 @@ class Leases extends Component {
 										</FuseAnimate>
 										{selection.length > 0 && (
 											<FuseAnimate animation="transition.expandIn" delay={600}>
-												<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeInvoices()}>
+												<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeLeases()}>
 													<Icon>delete</Icon>
 												</Fab>
 											</FuseAnimate>
@@ -623,7 +619,7 @@ class Leases extends Component {
 										</div>
 										<div className="flex flex-shrink items-center">
 
-											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleFilterPanel()}>
+											{/* <IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleFilterPanel()}>
 												<Icon>person_outline</Icon>
 											</IconButton>
 
@@ -633,7 +629,7 @@ class Leases extends Component {
 
 											<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
 												<Icon>close</Icon>
-											</IconButton>
+											</IconButton> */}
 
 											{/* <FuseAnimate animation="transition.expandIn" delay={300}>
 												<Button
@@ -691,7 +687,7 @@ class Leases extends Component {
 										</FuseAnimate>
 										{selection.length > 0 && (
 											<FuseAnimate animation="transition.expandIn" delay={600}>
-												<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeInvoices()}>
+												<Fab color="secondary" aria-label="delete" className={classes.removeButton} onClick={() => this.removeLeases()}>
 													<Icon>delete</Icon>
 												</Fab>
 											</FuseAnimate>
@@ -771,32 +767,24 @@ class Leases extends Component {
                                 </div>
                             )}
                             {(this.state.temp && leaseForm.props.open) && (
-                                <LeaseForm customers={this.state.customers} selectedInvoice={this.state.selectedInvoice}/>
+                                <LeaseForm customers={this.state.customers} selectedLease={this.state.selectedLease}/>
                             )}
                         </div>
                     }
 					leftSidebarHeader={
-						<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
-							{/* <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", { 'filteropen': filterState })}> */}
-							{/* <div className="flex flex-row w-full h-full justify-between p-24 align-middle pr-0"> */}
-
-							{leaseForm.props.open ? (
-								<h2 style={{ marginBlockStart: '1em' }}>Lease Information</h2>
-							) : (
-									<h2 style={{ marginBlockStart: '1em' }}>Filters</h2>
-								)}
-
-							<FuseAnimate animation="transition.expandIn" delay={200}>
-								<div>
-									<Hidden xsDown>
-										<IconButton onClick={(ev) => toggleFilterPanel()}>
-											<Icon>close</Icon>
-										</IconButton>
-									</Hidden>
-								</div>
-							</FuseAnimate>
-						</div>
-					}
+                        <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", {'filteropen': filterState})}>
+                            <h4 style={{marginBlockStart: '1em'}}>Filter Panel</h4>
+                            <FuseAnimate animation="transition.expandIn" delay={200}>
+                                <div>
+                                    <Hidden xsDown>
+                                        <IconButton onClick={(ev)=>toggleFilterPanel()}>
+                                            <Icon>close</Icon>
+                                        </IconButton>
+                                    </Hidden>
+                                </div>
+                            </FuseAnimate>
+                        </div>
+                    }
 					leftSidebarContent={
 						<FilterPanel />
 					}
@@ -828,8 +816,12 @@ class Leases extends Component {
 						this.pageLayout = instance;
 					}}
 				>
-				</FusePageCustomSidebarScroll>
-				{/* <LeaseDialog leases={this.state.leases}/> */}
+				</FusePageCustom>
+				{(this.props.bLeaseStart || this.props.bCustomerFetchStart || this.props.bFranchiseesFetchStart) && (
+                    <div className={classes.overlay}>
+                        <CircularProgress className={classes.progress} color="secondary"  />
+                    </div>
+                )}
 			</React.Fragment >
         );
     }

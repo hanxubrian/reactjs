@@ -165,12 +165,17 @@ class CustomerSearchBar extends Component {
 		}
 	};
 
-	triggerChange = () => {
-		const { s } = this.state;
+	triggerChange = (s = this.state.s) => {
 
 		console.log("start to search", s)
 
 		this.props.applySearchText(s);
+	}
+
+	clearSearch = () => {
+		clearTimeout(this.timer)
+		this.setState({ s: '' });
+		this.triggerChange('')
 	}
 
 	render() {
@@ -192,6 +197,7 @@ class CustomerSearchBar extends Component {
 				</div>
 
 				<Paper className={"flex items-center w-full h-44 mr-0"} elevation={1}>
+					<Icon color="action" className="ml-16">search</Icon>
 					<Input
 						placeholder="Search..."
 						className={classNames(classes.search, 'pl-16')}
@@ -204,7 +210,15 @@ class CustomerSearchBar extends Component {
 						}}
 					// onKeyDown={this.handleKeyDown}
 					/>
-					<Icon color="action" className="mr-16">search</Icon>
+
+					<IconButton
+						className={classNames(classes.button)}
+						// className={classNames(classes.button)}
+						aria-label="Add an alarm"
+						onClick={this.clearSearch}>
+						<Icon color="action">close</Icon>
+					</IconButton>
+
 				</Paper>
 
 				<div className="flex items-center justify-end p-12">
