@@ -480,6 +480,9 @@ class FilterPanel extends Component {
 
 			customerName: "",
 			suggestions: [],
+
+			BillingAmountFrom: "",
+			BillingAmountTo: ""
 		}
 	}
 
@@ -551,27 +554,41 @@ class FilterPanel extends Component {
 	};
 
 	handleChange = name => event => {
+
+
+		let value = event.target.value
+		let onLocationFilter = this.onLocationFilter
+
+		switch (name) {
+			case "SpecificAddress":
+				clearTimeout(this.timer)
+				this.timer = setTimeout(
+					function () {
+						onLocationFilter(name, value);
+					},
+					WAIT_INTERVAL)
+				break;
+
+			case "Location":
+			case "NearbyRadius":
+			case "AddressZipcodeRadius":
+				this.onLocationFilter(name, value)
+				break;
+
+			case "BillingAmountFrom":
+			case "BillingAmountTo":
+				value = parseFloat("0" + value).toLocaleString(undefined, { maximumFractionDigits: 0 })
+				console.log("value", value)
+				break;
+			default:
+				break;
+
+		}
+
 		this.setState({
-			[name]: event.target.value
+			[name]: value
 		});
 
-		let val = event.target.value
-		let onLocationFilter = this.onLocationFilter
-		if (name === "SpecificAddress") {
-			clearTimeout(this.timer)
-			this.timer = setTimeout(
-				function () {
-					onLocationFilter(name, val);
-				},
-				WAIT_INTERVAL)
-		}
-		else if (
-			name === "Location"
-			|| name === "NearbyRadius"
-			|| name === "AddressZipcodeRadius"
-		) {
-			this.onLocationFilter(name, val)
-		}
 	};
 
 	onLocationFilter = (name, value) => {
@@ -1257,31 +1274,33 @@ class FilterPanel extends Component {
 									<div className="flex flex-row" >
 										<TextField
 											type="number"
-											id="BillingFrom"
+											id="BillingAmountFrom"
 											label="From"
+											value={this.state.BillingAmountFrom}
 											className={classNames(classes.textField, "mr-6")}
-											onChange={this.handleChange('BillingFrom')}
+											onChange={this.handleChange('BillingAmountFrom')}
 											margin="dense"
 											variant="outlined"
 											InputProps={{
 												startAdornment: <InputAdornment position="start">$</InputAdornment>,
 											}}
-											inputProps={{ min: "0", precision:"2" }}
+											inputProps={{ min: "0", precision: "2", step: "1" }}
 											fullWidth
 										/>
 										<TextField
 											type="number"
-											id="BillingTo"
+											id="BillingAmountTo"
+											value={this.state.BillingAmountTo}
 											label="To"
 											className={classNames(classes.textField, "ml-6")}
-											onChange={this.handleChange('BillingTo')}
+											onChange={this.handleChange('BillingAmountTo')}
 											margin="dense"
 											variant="outlined"
 											InputProps={{
 												startAdornment: <InputAdornment position="start">$</InputAdornment>,
 												min: "0",
 											}}
-											inputProps={{ min: "0", precision:"2"  }}
+											inputProps={{ min: "0", precision: "2" }}
 											fullWidth
 										/>
 									</div>
