@@ -26,6 +26,7 @@ import {ReportsConfig} from "./franchisees/reports/reportsConfig";
 import {FindersFeesConfig} from "./franchisees/findersfees/findersFeesConfig";
 import {PaymentListConfig} from "./payments/payment-list/payment-listConfig";
 import {DashboardConfig} from "./dashboard/DashboardConfig";
+import {PaymentsConfig} from "./accounts-receivable/payments/paymentsConfig";
 
 
 export const pagesConfigs = [
@@ -57,5 +58,6 @@ export const pagesConfigs = [
     AccountsReceivableConfig,
     FindersFeesConfig,
     PaymentListConfig,
-	DashboardConfig
+	DashboardConfig,
+    PaymentsConfig
 ];

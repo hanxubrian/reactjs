@@ -373,7 +373,7 @@ class FranchiseesOwnerTable extends React.Component {
                     maxWidth={"sm"}
                     fullWidth
                 >
-                    <DialogTitle id="form-dialog-title">ADD Owner</DialogTitle>
+                    <DialogTitle id="form-dialog-title">ADD OWNER</DialogTitle>
                     <DialogContent>
                         <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                             <GridItem xs={12} sm={12} md={12} className="flex flex-row">

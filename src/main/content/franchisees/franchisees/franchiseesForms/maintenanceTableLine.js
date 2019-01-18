@@ -321,7 +321,7 @@ class FranchiseesMaintenanceTable extends React.Component {
     render() {
         const { classes } = this.props;
         const {  franchiseeFees,order, orderBy, selected, rowsPerPage, page } = this.state;
-
+        let markup = 0.0;
         const headers = [
             {
                 id: 'Fee',
@@ -466,11 +466,11 @@ class FranchiseesMaintenanceTable extends React.Component {
                         </GridContainer>
                     </DialogContent>
                     <DialogActions style={{padding:"2%"}}>
-                        <Button onClick={this.handleClose} variant="contained"  size="small" className={classes.button}>
+                        <Button style={{color:"gray"}} onClick={this.handleClose} variant="contained"  size="small" className={classes.button}>
                             <CancelIcon className={classNames(classes.leftIcon, classes.iconSmall)} />
                             Cancel
                         </Button>
-                        <Button onClick={this.handleClose} variant="contained" size="small" className={classes.button}>
+                        <Button style={{color:"gray"}} onClick={this.handleClose} variant="contained" size="small" className={classes.button}>
                             <SaveIcon className={classNames(classes.leftIcon, classes.iconSmall)} />
                             Save
                         </Button>
