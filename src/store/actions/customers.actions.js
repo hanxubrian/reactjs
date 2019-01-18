@@ -30,6 +30,9 @@ export const GET_ACCOUNT_TYPES_GROUPS = "[CUSTOMERS APP] GET ACCOUNT TYPES GROUP
 export const OPEN_EMAIL_TO_CUSTOMER_DIALOG = "[CUSTOMERS APP] OPEN_EMAIL_TO_CUSTOMER_DIALOG";
 
 
+export const CREATE_CUSTOMER = "[CUSTOMERS APP] CREATE_CUSTOMER";
+export const CREATE_CUSTOMER_START = "[CUSTOMERS APP] CREATE_CUSTOMER_START";
+
 export function getCustomers(regionId, statusId = 0, location = "all", latitude = "", longitude = "", searchText = "") {
 	// return dispatch => {
 	// const request = axios.get("/api/customers/gets");
@@ -104,6 +107,24 @@ export function getAccountTypesGroups() {
 			let response = await customersService.getAccountTypesGroups();
 			dispatch({
 				type: GET_ACCOUNT_TYPES_GROUPS,
+				payload: response
+			});
+		})();
+	}
+}
+export function createCustomer(regionId, param) {
+
+
+	return (dispatch) => {
+		dispatch({
+			type: CREATE_CUSTOMER_START,
+			payload: true
+		});
+
+		(async () => {
+			let response = await customersService.createCustomer(regionId, param);
+			dispatch({
+				type: CREATE_CUSTOMER,
 				payload: response
 			});
 		})();
