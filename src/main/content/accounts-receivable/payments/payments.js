@@ -198,7 +198,7 @@ class Payments extends Component {
                                         <Icon className="text-32 mr-12">account_box</Icon>
                                     </FuseAnimate>
                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                        <Typography variant="h6" className="hidden sm:flex">Accounts Receivable | Bill Run</Typography>
+                                        <Typography variant="h6" className="hidden sm:flex">Accounts Receivable | Payments</Typography>
                                     </FuseAnimate>
                                 </div>
                             </div>
@@ -332,7 +332,7 @@ class Payments extends Component {
                                         ),
                                         columns: [
                                             {
-                                                Header: "Bill Run Batch #",
+                                                Header: "Payment No",
                                                 accessor: "Id",
                                                 filterAll: true,
                                                 className: classNames(classes.tableTdEven, "flex items-center  justify-center p-24")
@@ -373,7 +373,7 @@ class Payments extends Component {
                                                             }}
                                                         >
                                                             <Icon>delete</Icon>
-                                                        </IconButton>,
+                                                        </IconButton>
                                                         <IconButton
                                                             onClick={(ev) => {
                                                                 ev.stopPropagation();
