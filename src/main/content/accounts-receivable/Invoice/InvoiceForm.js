@@ -390,7 +390,7 @@ class InvoiceForm extends Component {
             if(n.markup!=='') mk = n.markup;
             subTotal += parseFloat(n.extended);
             tax += parseFloat(n.tax);
-            markup += parseFloat(n.extended*qty*parseFloat(mk)/100);
+            markup += parseFloat(n.markupAmount)
         });
 
         this.setState({subTotal: subTotal});

@@ -98,12 +98,13 @@ class invoiceService {
      * @param Amount
      * @param Quantity
      * @param TaxTypeId = 1, for now
+     * @param Markup
      * @returns {Promise<any>}
      */
-    getCustomerTaxAmount = (RegionId, CustomerId, Amount, Quantity, TaxTypeId) => {
+    getCustomerTaxAmount = (RegionId, CustomerId, Amount, Quantity, Markup, TaxTypeId) => {
         return new Promise((resolve, reject) => {
             axios_instance.get(`${BASE_MONGO_API_URL}/api/Tax/GetCustomerTaxAmount`,
-                { params: {RegionId, CustomerId, Amount, Quantity, TaxTypeId}}
+                { params: {RegionId, CustomerId, Amount, Quantity, Markup, TaxTypeId }}
             )
                 .then( res => {
                     if(res.status===200) {

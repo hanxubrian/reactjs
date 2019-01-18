@@ -120,7 +120,7 @@ function createFranchisee(parent_id,id, fnumber="", name="", amount=0) {
     }
 }
 
-function createData(billing='Regular Billing', service='Adjust-Balance', description='', quantity='', amount='', tax=0, markup='', extended=0, total=0, fTotal=0)
+function createData(billing='Regular Billing', service='Adjust-Balance', description='', quantity='', amount='', tax=0, markup='', extended=0, total=0, fTotal=0, markupAmount=0, markupTax=0)
 {
     return {
         id: counter++,
@@ -131,6 +131,8 @@ function createData(billing='Regular Billing', service='Adjust-Balance', descrip
         amount,
         tax,
         markup,
+        markupAmount,
+        markupTax,
         extended,
         total,
         fTotal,
@@ -447,6 +449,8 @@ class InvoiceLineTable extends React.Component {
         data[taxRowId].tax = customerTaxAmountLine.TotalTaxAmount;
         data[taxRowId].extended = customerTaxAmountLine.ExtendedPrice;
         data[taxRowId].total = customerTaxAmountLine.TotalAmount;
+        data[taxRowId].markupAmount = customerTaxAmountLine.MarkupAmount;
+        data[taxRowId].markupTax = customerTaxAmountLine.MarkupTax;
         this.setState({data: data});
     };
 
@@ -588,7 +592,9 @@ class InvoiceLineTable extends React.Component {
 
     getInvoiceLineTaxAmount = row =>{
         if(!this.isDisable(row)) {
-            this.props.getCustomerTaxAmount(this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity);
+            let markup = 0.0;
+            if(row.markup!=='') markup = row.markup;
+            this.props.getCustomerTaxAmount(this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity, markup);
             this.setState({taxRowId: row.id})
         }
     };
