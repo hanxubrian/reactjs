@@ -822,7 +822,7 @@ class InvoiceLineTable extends React.Component {
                                                         </div>
                                                         <div className="f2">
                                                             <Autosuggest
-                                                                renderInputComponent = {this.renderInputComponent}
+                                                                renderInputComponent = {renderInputComponent}
                                                                 suggestions={nameSuggestions}
                                                                 onSuggestionsFetchRequested={this.onNameSuggestionsFetchRequested}
                                                                 onSuggestionsClearRequested={this.onNameSuggestionsClearRequested}
