@@ -2,8 +2,8 @@ import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import Geocode from "react-geocode";
 
-import { Paper, withStyles, Checkbox } from '@material-ui/core';
-import { TextField, Divider, Toolbar, Typography } from '@material-ui/core';
+import { Paper, withStyles, Checkbox, TextField, Divider, Button, IconButton } from '@material-ui/core';
+
 import keycode from 'keycode';
 
 //Material UI core
@@ -35,6 +35,53 @@ import Utils from './Utils'
 import PropTypes from 'prop-types';
 import MaskedInput from 'react-text-mask';
 import { Input, InputLabel, FormControl, InputAdornment } from '@material-ui/core';
+
+import {
+	SelectionState,
+	PagingState,
+	IntegratedPaging,
+	IntegratedSelection,
+	SortingState,
+	IntegratedSorting,
+	EditingState,
+	GroupingState,
+	IntegratedGrouping,
+	DataTypeProvider,
+	FilteringState,
+	IntegratedFiltering,
+	SearchState,
+} from '@devexpress/dx-react-grid';
+
+import { SelectionPanel } from "./selection-panel";
+
+import {
+	Grid,
+	Table,
+	TableHeaderRow,
+	TableSelection,
+	PagingPanel,
+	TableEditRow,
+	TableEditColumn,
+	GroupingPanel,
+	Toolbar,
+	TableGroupRow,
+	TableFilterRow,
+	SearchPanel,
+	DragDropProvider,
+	TableColumnReordering,
+	TableColumnResizing,
+	ColumnChooser,
+	TableColumnVisibility,
+	TableFixedColumns,
+	VirtualTable,
+
+} from '@devexpress/dx-react-grid-material-ui';
+import { Getter } from '@devexpress/dx-react-core';
+import NewIcon from '@material-ui/icons/PersonAdd';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import SaveIcon from '@material-ui/icons/Save';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 Geocode.setApiKey("AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA");
 
@@ -165,281 +212,57 @@ const styles = theme => ({
 });
 
 const stateNames = [
-	{
-		Value: "AL",
-		Text: "Alabama"
-	},
-	{
-		Value: "AK",
-		Text: "Alaska"
-	},
-	{
-		Value: "AZ",
-		Text: "Arizona"
-	},
-	{
-		Value: "AR",
-		Text: "Arkansas"
-	},
-	{
-		Value: "CA",
-		Text: "California"
-	},
-	{
-		Value: "CO",
-		Text: "Colorado"
-	},
-	{
-		Value: "CT",
-		Text: "Connecticut"
-	},
-	{
-		Value: "DE",
-		Text: "Delaware"
-	},
-	{
-		Value: "FL",
-		Text: "Florida"
-	},
-	{
-		Value: "GA",
-		Text: "Georgia"
-	},
-	{
-		Value: "HI",
-		Text: "Hawaii"
-	},
-	{
-		Value: "ID",
-		Text: "Idaho"
-	},
-	{
-		Value: "IL",
-		Text: "Illinois"
-	},
-	{
-		Value: "IN",
-		Text: "Indiana"
-	},
-	{
-		Value: "IA",
-		Text: "Iowa"
-	},
-	{
-		Value: "KS",
-		Text: "Kansas"
-	},
-	{
-		Value: "KY",
-		Text: "Kentucky"
-	},
-	{
-		Value: "LA",
-		Text: "Louisiana"
-	},
-	{
-		Value: "ME",
-		Text: "Maine"
-	},
-	{
-		Value: "MD",
-		Text: "Maryland"
-	},
-	{
-		Value: "MA",
-		Text: "Massachusetts"
-	},
-	{
-		Value: "MI",
-		Text: "Michigan"
-	},
-	{
-		Value: "MN",
-		Text: "Minnesota"
-	},
-	{
-		Value: "MS",
-		Text: "Mississippi"
-	},
-	{
-		Value: "MO",
-		Text: "Missouri"
-	},
-	{
-		Value: "MT",
-		Text: "Montana"
-	},
-	{
-		Value: "NE",
-		Text: "Nebraska"
-	},
-	{
-		Value: "NV",
-		Text: "Nevada"
-	},
-	{
-		Value: "NH",
-		Text: "New Hampshire"
-	},
-	{
-		Value: "NJ",
-		Text: "New Jersey"
-	},
-	{
-		Value: "NM",
-		Text: "New Mexico"
-	},
-	{
-		Value: "NY",
-		Text: "New York"
-	},
-	{
-		Value: "NC",
-		Text: "North Carolina"
-	},
-	{
-		Value: "ND",
-		Text: "North Dakota"
-	},
-	{
-		Value: "OH",
-		Text: "Ohio"
-	},
-	{
-		Value: "OK",
-		Text: "Oklahoma"
-	},
-	{
-		Value: "OR",
-		Text: "Oregon"
-	},
-	{
-		Value: "PA",
-		Text: "Pennsylvania"
-	},
-	{
-		Value: "RI",
-		Text: "Rhode Island"
-	},
-	{
-		Value: "SC",
-		Text: "South Carolina"
-	},
-	{
-		Value: "SD",
-		Text: "South Dakota"
-	},
-	{
-		Value: "TN",
-		Text: "Tennessee"
-	},
-	{
-		Value: "TX",
-		Text: "Texas"
-	},
-	{
-		Value: "UT",
-		Text: "Utah"
-	},
-	{
-		Value: "VT",
-		Text: "Vermont"
-	},
-	{
-		Value: "VA",
-		Text: "Virginia"
-	},
-	{
-		Value: "WA",
-		Text: "Washington"
-	},
-	{
-		Value: "DC",
-		Text: "Washington D.C."
-	},
-	{
-		Value: "WV",
-		Text: "West Virginia"
-	},
-	{
-		Value: "WI",
-		Text: "Wisconsin"
-	},
-	{
-		Value: "WY",
-		Text: "Wyoming"
-	}
-];
-const address_headers = [
-	{
-		id: 'billing',
-		numeric: false,
-		disablePadding: false,
-		label: 'Type'
-	},
-	{
-		id: 'service',
-		numeric: false,
-		disablePadding: false,
-		label: 'Address'
-	},
-	{
-		id: 'description',
-		numeric: false,
-		disablePadding: false,
-		label: 'City'
-	},
-	{
-		id: 'quantity',
-		numeric: true,
-		disablePadding: false,
-		label: 'State'
-	},
-	{
-		id: 'amount',
-		numeric: true,
-		disablePadding: false,
-		label: 'Zip / Postal'
-	}
-];
-
-const billing_headers = [
-	{
-		id: 'billing',
-		numeric: false,
-		disablePadding: false,
-		label: 'First'
-	},
-	{
-		id: 'service',
-		numeric: false,
-		disablePadding: false,
-		label: 'Last'
-	},
-	{
-		id: 'description',
-		numeric: false,
-		disablePadding: false,
-		label: 'Title'
-	},
-	{
-		id: 'quantity',
-		numeric: true,
-		disablePadding: false,
-		label: 'Office Phone'
-	},
-	{
-		id: 'amount',
-		numeric: true,
-		disablePadding: false,
-		label: 'Mobile Phone'
-	},
-	{
-		id: 'email',
-		numeric: true,
-		disablePadding: false,
-		label: 'Email'
-	},
+	{ Value: "AL", Text: "Alabama" },
+	{ Value: "AK", Text: "Alaska" },
+	{ Value: "AZ", Text: "Arizona" },
+	{ Value: "AR", Text: "Arkansas" },
+	{ Value: "CA", Text: "California" },
+	{ Value: "CO", Text: "Colorado" },
+	{ Value: "CT", Text: "Connecticut" },
+	{ Value: "DE", Text: "Delaware" },
+	{ Value: "FL", Text: "Florida" },
+	{ Value: "GA", Text: "Georgia" },
+	{ Value: "HI", Text: "Hawaii" },
+	{ Value: "ID", Text: "Idaho" },
+	{ Value: "IL", Text: "Illinois" },
+	{ Value: "IN", Text: "Indiana" },
+	{ Value: "IA", Text: "Iowa" },
+	{ Value: "KS", Text: "Kansas" },
+	{ Value: "KY", Text: "Kentucky" },
+	{ Value: "LA", Text: "Louisiana" },
+	{ Value: "ME", Text: "Maine" },
+	{ Value: "MD", Text: "Maryland" },
+	{ Value: "MA", Text: "Massachusetts" },
+	{ Value: "MI", Text: "Michigan" },
+	{ Value: "MN", Text: "Minnesota" },
+	{ Value: "MS", Text: "Mississippi" },
+	{ Value: "MO", Text: "Missouri" },
+	{ Value: "MT", Text: "Montana" },
+	{ Value: "NE", Text: "Nebraska" },
+	{ Value: "NV", Text: "Nevada" },
+	{ Value: "NH", Text: "New Hampshire" },
+	{ Value: "NJ", Text: "New Jersey" },
+	{ Value: "NM", Text: "New Mexico" },
+	{ Value: "NY", Text: "New York" },
+	{ Value: "NC", Text: "North Carolina" },
+	{ Value: "ND", Text: "North Dakota" },
+	{ Value: "OH", Text: "Ohio" },
+	{ Value: "OK", Text: "Oklahoma" },
+	{ Value: "OR", Text: "Oregon" },
+	{ Value: "PA", Text: "Pennsylvania" },
+	{ Value: "RI", Text: "Rhode Island" },
+	{ Value: "SC", Text: "South Carolina" },
+	{ Value: "SD", Text: "South Dakota" },
+	{ Value: "TN", Text: "Tennessee" },
+	{ Value: "TX", Text: "Texas" },
+	{ Value: "UT", Text: "Utah" },
+	{ Value: "VT", Text: "Vermont" },
+	{ Value: "VA", Text: "Virginia" },
+	{ Value: "WA", Text: "Washington" },
+	{ Value: "DC", Text: "Washington D.C." },
+	{ Value: "WV", Text: "West Virginia" },
+	{ Value: "WI", Text: "Wisconsin" },
+	{ Value: "WY", Text: "Wyoming" }
 ];
 
 function TextMaskPhone(props) {
@@ -462,6 +285,66 @@ TextMaskPhone.propTypes = {
 	inputRef: PropTypes.func.isRequired,
 };
 
+
+//
+// table row edit command buttons
+//
+const AddButton = ({ onExecute }) => (
+	<div style={{ textAlign: 'center' }}>
+		{/* <Button
+			color="primary"
+			onClick={onExecute}
+			title="New Address"
+		>
+			New
+	  </Button> */}
+		<IconButton onClick={onExecute} title="New Address">
+			<NewIcon />
+		</IconButton>
+	</div>
+);
+
+const EditButton = ({ onExecute }) => (
+	<IconButton onClick={onExecute} title="Edit">
+		<EditIcon />
+	</IconButton>
+);
+
+const DeleteButton = ({ onExecute }) => (
+	<IconButton onClick={onExecute} title="Delete">
+		<DeleteIcon />
+	</IconButton>
+);
+
+const CommitButton = ({ onExecute }) => (
+	<IconButton onClick={onExecute} title="Save">
+		<SaveIcon />
+	</IconButton>
+);
+
+const CancelButton = ({ onExecute }) => (
+	<IconButton color="secondary" onClick={onExecute} title="Cancel">
+		<CancelIcon />
+	</IconButton>
+);
+
+const commandComponents = {
+	add: AddButton,
+	edit: EditButton,
+	delete: DeleteButton,
+	commit: CommitButton,
+	cancel: CancelButton,
+};
+
+const Command = ({ id, onExecute }) => {
+	const CommandButton = commandComponents[id];
+	return (
+		<CommandButton
+			onExecute={onExecute}
+		/>
+	);
+};
+
 const WAIT_INTERVAL = 1000
 const ENTER_KEY = 13
 
@@ -482,7 +365,88 @@ class FilterPanel extends Component {
 			suggestions: [],
 
 			BillingAmountFrom: "",
-			BillingAmountTo: ""
+			BillingAmountTo: "",
+
+
+			addressColumns: [
+				{
+					title: "Type",
+					name: "Type",
+					columnName: "Type",
+					width: 50,
+				},
+				{
+					title: "Address",
+					name: "Address",
+					columnName: "Address",
+					width: 80,
+				},
+				{
+					title: "City",
+					name: "City",
+					columnName: "City",
+					width: 80,
+				},
+				{
+					title: "State",
+					name: "State",
+					columnName: "State",
+					width: 50,
+				},
+				{
+					title: "Zip / Postal",
+					name: "ZipPostal",
+					columnName: "ZipPostal",
+					width: 80,
+				},
+			],
+			addressRows: [{
+				Type: "Sample Type",
+				Address: "Sample Address",
+				City: "Sample City",
+				State: "Sample State",
+				ZipPostal: "Sample ZipPostal",
+			}],
+
+			contactsColumns: [
+				{
+					title: "First",
+					name: "First",
+					columnName: "First",
+					width: 80,
+				},
+				{
+					title: "Last",
+					name: "Last",
+					columnName: "Last",
+					width: 80,
+				},
+				{
+					title: "Office Phone",
+					name: "OfficePhone",
+					columnName: "OfficePhone",
+					width: 80,
+				},
+				{
+					title: "Mobile Phone",
+					name: "MobilePhone",
+					columnName: "MobilePhone",
+					width: 80,
+				},
+				{
+					title: "Email",
+					name: "Email",
+					columnName: "Email",
+					width: 80,
+				},
+			],
+			contactsRows: [{
+				First: "Sample First",
+				Last: "Sample Last",
+				OfficePhone: "Sample OfficePhone",
+				MobilePhone: "Sample MobilePhone",
+				Email: "Sample Email",
+			}],
 		}
 	}
 
@@ -831,8 +795,33 @@ class FilterPanel extends Component {
 			/>
 		);
 	};
+
+	commitChanges = ({ added, changed, deleted }) => {
+		let rows = this.state.addressRows;
+		if (added) {
+			const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
+			rows = [
+				...rows,
+				...added.map((row, index) => ({
+					id: startingAddedId + index,
+					...row,
+				})),
+			];
+		}
+		if (changed) {
+			rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+		}
+		if (deleted) {
+			const deletedSet = new Set(deleted);
+			rows = rows.filter(row => !deletedSet.has(row.id));
+		}
+		this.setState({ addressRows: rows });
+	}
+
 	render() {
 		const { classes, customerForm, customers } = this.props;
+
+		const { addressRows, addressColumns, contactsRows, contactsColumns } = this.state;
 
 		const { customerName, suggestions } = this.state;
 		// Autosuggest will pass through all these props to the input.
@@ -1176,10 +1165,83 @@ class FilterPanel extends Component {
 
 									<GridItem xs={12} sm={12} md={12} className="flex flex-col">
 										<h3 className="mt-24">Addresses</h3>
-										<CustomerLineTable tableType="ADDRESS" headers={address_headers} />
+										{/* <CustomerLineTable tableType="ADDRESS" headers={address_headers} /> */}
+										<Paper>
+											<Grid
+												rows={addressRows}
+												columns={addressColumns}
+											>
+
+												<EditingState
+													// columnExtensions={editingColumnExtensions}
+													onCommitChanges={this.commitChanges}
+												/>
+
+												<Table />
+												<TableHeaderRow />
+												<TableEditRow />
+												<TableEditColumn
+													showAddCommand
+													showEditCommand
+													showDeleteCommand
+													commandComponent={Command}
+												/>
+												{/* <Getter
+													name="tableColumns"
+													computed={({ tableColumns }) => {
+														// debugger
+														const result = [
+															...tableColumns.filter(c => c.type !== TableEditColumn.COLUMN_TYPE),
+															{ key: 'editCommand', type: TableEditColumn.COLUMN_TYPE, width: 100 }
+														];
+														return result;
+													}
+													}
+												/> */}
+
+
+											</Grid>
+										</Paper>
+
 
 										<h3 className="mt-24">Contacts</h3>
-										<CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} />
+										{/* <CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} /> */}
+										<Paper>
+											<Grid
+												rows={contactsRows}
+												columns={contactsColumns}
+											>
+
+												<EditingState
+													// columnExtensions={editingColumnExtensions}
+													onCommitChanges={this.commitChanges}
+												/>
+
+												<Table />
+												<TableHeaderRow />
+												<TableEditRow />
+												<TableEditColumn
+													showAddCommand
+													showEditCommand
+													showDeleteCommand
+													commandComponent={Command}
+												/>
+												{/* <Getter
+													name="tableColumns"
+													computed={({ tableColumns }) => {
+														// debugger
+														const result = [
+															...tableColumns.filter(c => c.type !== TableEditColumn.COLUMN_TYPE),
+															{ key: 'editCommand', type: TableEditColumn.COLUMN_TYPE, width: 100 }
+														];
+														return result;
+													}
+													}
+												/> */}
+
+
+											</Grid>
+										</Paper>
 									</GridItem>
 
 
