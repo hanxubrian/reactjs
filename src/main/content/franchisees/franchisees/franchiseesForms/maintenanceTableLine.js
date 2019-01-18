@@ -466,11 +466,11 @@ class FranchiseesMaintenanceTable extends React.Component {
                         </GridContainer>
                     </DialogContent>
                     <DialogActions style={{padding:"2%"}}>
-                        <Button variant="contained"  size="small" className={classes.button}>
+                        <Button onClick={this.handleClose} variant="contained"  size="small" className={classes.button}>
                             <CancelIcon className={classNames(classes.leftIcon, classes.iconSmall)} />
                             Cancel
                         </Button>
-                        <Button variant="contained" size="small" className={classes.button}>
+                        <Button onClick={this.handleClose} variant="contained" size="small" className={classes.button}>
                             <SaveIcon className={classNames(classes.leftIcon, classes.iconSmall)} />
                             Save
                         </Button>
