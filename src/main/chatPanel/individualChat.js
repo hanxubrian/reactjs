@@ -227,12 +227,6 @@ class IndividualChat extends Component {
                     }
                 });
             }
-            // console.log("#############ChatId",ChatId);
-            // console.log("#############msg",msg);
-            // console.log("#############this.props.chat.messages",this.props.chat.messages);
-            // console.log("#############userId",userId);
-            // console.log("#############this.props.contact",this.props.contact);
-            // console.log("#############userDetail",userDetail);
             if(msg && msg != null && userDetail && userDetail != null){
                 this.setState({
                     messages    :   msg,
@@ -312,7 +306,6 @@ class IndividualChat extends Component {
                         <span>
                             {this.state.userdetail && this.state.userdetail !==null  && this.state.userdetail.nickname && this.state.userdetail.nickname !=null && (
                                 this.state.userdetail.nickname
-                                // this.state.userdetail.name
                             )}
                             {this.state.userdetail && this.state.userdetail !==null  && this.state.userdetail.name && this.state.userdetail.name !=null && (
                                 this.state.userdetail.name
