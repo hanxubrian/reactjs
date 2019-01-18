@@ -365,7 +365,6 @@ class InvoiceForm extends Component {
         this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
 
 
-
         return suggestion.CustomerName;
     };
 

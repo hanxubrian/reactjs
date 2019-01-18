@@ -67,7 +67,7 @@ const invoices = function(state = initialState, action) {
         case Actions.GET_SUGGEST_CUSTOMERS_FETCH_START:
         {
             return {
-                ...state, bSuggestCustomersFetchStart: false
+                ...state, bSuggestCustomersFetchStart: true
             }
         }
         case Actions.GET_INVOICE_STATUS:
