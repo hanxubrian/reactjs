@@ -14,9 +14,9 @@ import ContactDialog from 'main/content/apps/contacts/ContactDialog';
 
 const styles = theme => ({
     addButton: {
-        position: 'absolute',
-        right   : 12,
-        bottom  : 12,
+        position: 'fixed',
+        left   : 453,
+        bottom  : 90,
         zIndex  : 99
     }
 });

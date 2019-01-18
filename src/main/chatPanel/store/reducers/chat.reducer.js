@@ -1,5 +1,7 @@
 import * as Actions from '../actions';
 
+import storage from 'redux-persist/lib/storage';
+import { persistReducer } from 'redux-persist';
 
 const initialState = {
     loading: true,

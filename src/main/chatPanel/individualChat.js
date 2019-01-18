@@ -142,14 +142,15 @@ class IndividualChat extends Component {
 
         this.state = {
             sendMSG     : "",
-            messages    : [],
+            messages    : null,
             seletedUser : null,
             userdetail  : null,
             currentUser : null,
             user        : null,
             contacts    : null,
             currentRoom : null,
-            isOpen      : true,
+            isOpen      : false,
+            flage       : false,
         }
     }
     componentDidUpdate(prevProps, prevState, snapshot){
@@ -186,20 +187,87 @@ class IndividualChat extends Component {
                     currentRoom:   this.props.currentRoom,
                 })
             }
-            if(this.props.show !=null){
+            if(this.props.user !=prevProps.user && this.props.user && this.props.user != null){
+                this.setState({user: this.props.user});
+
+            }
+            if(this.props.show !=null && this.props.show !== prevProps.show){
                 this.setState({isOpen: this.props.show});
             }
+            if(!this.props.show && this.props.individualcurrentRoom && this.props.individualcurrentRoom != null && !this.state.flage){
+                this.setState({
+                    flage   : true,
+                })
+            }
+
+            this.individualChatRoom();
         }
+    }
+    componentWillMount(){
+        //|| (!this.props.show && this.props.individualcurrentRoom && !this.state.isOpen)
+        // if(this.props.show || (this.props.show === "undefined" && this.props.individualcurrentRoom && this.props.individualcurrentRoom != null)){
+        //     this.setState({
+        //         isOpen: true,
+        //     })
+        // }
+        // if(this.props.individualcurrentRoom && this.props.individualcurrentRoom != null && !this.props.show){
+        //     this.setState({
+        //         isOpen: true,
+        //     })
+        // }
+
+        this.individualChatRoom();
+    }
+    individualChatRoom=()=>{
+        if(this.props.individualcurrentRoom && this.props.individualcurrentRoom != null){
+            let ChatId = this.props.individualcurrentRoom.id;
+            let createdBy = this.props.individualcurrentRoom.createdByUserId;
+            let msg = this.props.chat.messages[ChatId];
+            let currentUserName = this.props.chat.currentUser.id;
+            let userDetail = null;
+            let userId ='';
+            this.props.individualcurrentRoom.userIds.map((item,index)=>{
+                if(item!==currentUserName){
+                    userId = item;
+                }
+            });
+            if(userId && userId !=null){
+                this.props.contact.map((item)=>{
+                    if(item['id']==userId){
+                        userDetail = item;
+                    }
+                });
+            }
+            // console.log("#############ChatId",ChatId);
+            // console.log("#############msg",msg);
+            // console.log("#############this.props.chat.messages",this.props.chat.messages);
+            // console.log("#############userId",userId);
+            // console.log("#############this.props.contact",this.props.contact);
+            // console.log("#############userDetail",userDetail);
+            if(msg && msg != null && userDetail && userDetail != null){
+                this.setState({
+                    messages    :   msg,
+                    userdetail  :   userDetail,
+                    currentRoom :   this.props.individualcurrentRoom,
+                    user        :   this.props.Chatuser,
+                });
+            }
+
+        }
+        // console.log("#############isopen",this.state.isOpen);
     }
     componentDidMount() {
 
     }
+    componentWillUnmount(){
+
+    }
     isFirstMessageOfGroup = (item, i) => {
-        return (i === 0 || (this.props.message[i - 1] && this.props.message[i - 1].who !== item.who));
+        return (i === 0 || (this.state.messages[i - 1] && this.state.messages[i - 1].who !== item.who));
     };
 
     isLastMessageOfGroup = (item, i) => {
-        return (i === this.props.message.length - 1 || (this.props.message[i + 1] && this.props.message[i + 1].who !== item.who));
+        return (i === this.state.messages.length - 1 || (this.state.messages[i + 1] && this.state.messages[i + 1].who !== item.who));
     };
     handleChange = (e) => {
         this.setState({
@@ -220,6 +288,12 @@ class IndividualChat extends Component {
         }
         if(this.state.sendMSG && this.state.sendMSG != null && this.state.currentUser && this.state.currentUser !=null && this.state.currentRoom && this.state.currentRoom != null ){
             // this.props.sendMessage(this.state.sendMSG, this.props.currentUser, this.props.userdetail.id)
+
+            this.props.sendMessage(this.state.sendMSG, this.state.currentRoom);
+            this.setState({sendMSG: ''});
+            this.scrollToBottom();
+        }
+        else if(this.props.individualcurrentRoom && this.props.individualcurrentRoom !==null){
             this.props.sendMessage(this.state.sendMSG, this.state.currentRoom);
             this.setState({sendMSG: ''});
             this.scrollToBottom();
@@ -227,6 +301,7 @@ class IndividualChat extends Component {
 
     };
     closeChat = () => {
+
             this.setState({
                 isOpen: !this.state.isOpen
             });
@@ -235,11 +310,12 @@ class IndividualChat extends Component {
         this.chatScroll.scrollTop = this.chatScroll.scrollHeight;
     };
     render() {
-        const {classes, chat, contacts, user, className} = this.props;
-        const {sendMSG} = this.state;
-        if(this.state.isOpen){
-
-
+        const {classes, chat, contacts, className} = this.props;
+        const {sendMSG,user} = this.state;
+        // console.log("====================isopen",this.state.isOpen);
+        // console.log("==================================show",this.props.show);
+        // console.log("##################this.props.individualcurrentRoom",this.props.individualcurrentRoom);
+        if(this.props.individualcurrentRoom && this.props.individualcurrentRoom != null ){
             return (
             <div className="individual-chat-item">
                 <div className="header">
@@ -248,9 +324,14 @@ class IndividualChat extends Component {
                             <Icon>arrow_back</Icon>
                         </IconButton>
                         <span>
-                            {this.state.userdetail && this.state.userdetail !==null && this.state.userdetail.nickname && this.state.userdetail.nickname !==null && (
+                            {this.state.userdetail && this.state.userdetail !==null  && this.state.userdetail.nickname && this.state.userdetail.nickname !=null && (
                                 this.state.userdetail.nickname
+                                // this.state.userdetail.name
                             )}
+                            {this.state.userdetail && this.state.userdetail !==null  && this.state.userdetail.name && this.state.userdetail.name !=null && (
+                                this.state.userdetail.name
+                            )}
+
                         </span>
 
                     </div>
@@ -267,11 +348,11 @@ class IndividualChat extends Component {
                     className="flex flex-1 flex-col overflow-y-auto"
                 >
                 <div className="chat-content">
-                    {
+                    { this.state.messages !=null &&
                         this.state.messages.map((item,i) =>{
                                 // const contact = item.who === user.id ? user : contacts.find(_contact => _contact.id === item.who);
                             let contact = '';
-                            if(item.who === this.state.userdetail.name){
+                            if(item.who === this.state.userdetail.name || item.who === this.state.userdetail.id){
                                 contact =this.state.userdetail.avatar;
                             }
                                 return (
@@ -336,7 +417,7 @@ class IndividualChat extends Component {
     }
 }
 IndividualChat.propTypes = {
-    onClose     : PropTypes.func.isRequired,
+    onClose     : PropTypes.func,
     show        : PropTypes.bool,
     children    : PropTypes.node,
     Detail      : PropTypes.object,
@@ -350,16 +431,17 @@ IndividualChat.propTypes = {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        sendMessage: Actions.sendMsg
+        sendMessage             : Actions.sendMsg,
     }, dispatch);
 }
 function mapStateToProps({chatPanel})
 {
     return {
-        // contacts         : chatPanel.contacts.entities,
-        selectedContactId: chatPanel.contacts.selectedContactId,
-        // chat             : chatPanel.chat,
-        // user             : chatPanel.user
+        contact          :  chatPanel.contacts.entities,
+        selectedContactId:  chatPanel.contacts.selectedContactId,
+        chat             :  chatPanel.chat,
+        Chatuser             : chatPanel.user,
+        individualcurrentRoom   : chatPanel.IndividualChat.individualChatcurrentRoom,
     }
 }
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(IndividualChat));

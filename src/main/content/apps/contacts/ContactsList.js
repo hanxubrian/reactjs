@@ -41,7 +41,7 @@ class ContactsList extends Component {
 
     state = {
         selectedContactsMenu   : null,
-        isOpen                 : false,
+        isOpen                 : true,
         chatDetail             : null,
         individualchatDetail   : null,
         chatUser               : null,
@@ -63,7 +63,7 @@ class ContactsList extends Component {
     componentWillReceiveProps(nextProps) {
 
         if(nextProps.chatDetail && nextProps.chatUser) {
-            console.log('chatDetail', nextProps.chatDetail)
+            // console.log('chatDetail', nextProps.chatDetail)
             this.setState({
                 chatDetail: nextProps.chatDetail,
                 chatUser  : nextProps.chatUser,
@@ -102,18 +102,17 @@ class ContactsList extends Component {
         }
         if(!this.state.isOpen && this.state.chatId && this.state.chatId !==null){
             this.openChat();
-            console.log("chatID=============",this.state.chatId);
+            // console.log("chatID=============",this.state.chatId);
         }
         if(this.props !== prevProps && this.state.chatId && this.state.chatId !== null){
                 let msg = this.state.chatDetail.messages;
-                console.log("====================this.state.chatDetail.messages",msg[this.state.chatId]);
                 this.setState({
                     individualchatDetail:msg[this.state.chatId],
                 })
         }
-        console.log("==1==rooms",this.state.chatDetail.rooms);
-        console.log("==1==chatID",this.state.chatId);
-        console.log("==1==currentRoom",this.state.currentRoom);
+        // console.log("==1==rooms",this.state.chatDetail.rooms);
+        // console.log("==1==chatID",this.state.chatId);
+        // console.log("==1==currentRoom",this.state.currentRoom);
         if(this.state.currentRoom == null || this.state.chatId != prevState.chatId){
                 this.state.chatDetail.rooms.map((item, index)=>{
                    if(item.id === this.state.chatId){
@@ -121,11 +120,12 @@ class ContactsList extends Component {
                            this.setState({
                                currentRoom:item,
                            });
-                           console.log("cuurent room",this.state.currentRoom);
+                           this.props.individualcurrentChat(item);
                        }
                    }
                 });
         }
+
     }
     getFilteredArray = (entities, searchText) => {
         const arr = Object.keys(entities).map((id) => entities[id]);
@@ -163,12 +163,15 @@ class ContactsList extends Component {
             });
             let msg      = this.state.chatDetail.messages;
             let chatlist = this.state.chatUser.chatList;
+            console.log("chatId",chatlist);
             if(chatlist  && chatlist != null){
                 chatlist.map((item)=>{
                     if(item['contactId']==userId){
                         this.setState({
                             chatId : item['chatId'],
                         });
+
+
                     }
                 });
             }
@@ -180,7 +183,7 @@ class ContactsList extends Component {
         const {classes, contacts, user, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred,state, openChat} = this.props;
         const data = this.getFilteredArray(contacts, searchText);
         const {selectedContactsMenu} = this.state;
-        console.log("chatDetal====",this.state.chatDetail);
+        // console.log("chatDetal====",this.state.chatDetail);
         if ( !data && data.length === 0 )
         {
             return (
@@ -387,7 +390,7 @@ class ContactsList extends Component {
 
             </FuseAnimate>
 
-                {this.state.isOpen && (
+                {this.state.isOpen && !1 && (
                     <div className={classNames(classes.individualChat, {'closeIndvidualchat': !state})}>
                         {
 
@@ -402,6 +405,7 @@ class ContactsList extends Component {
 
                     </div>
                 )}
+
 
             </div>
         );
@@ -425,9 +429,9 @@ function mapDispatchToProps(dispatch)
         toggleStarredContacts   : Actions.toggleStarredContacts,
         setContactsStarred      : Actions.setContactsStarred,
         setContactsUnstarred    : Actions.setContactsUnstarred,
-
-        openChatPanel : ChatActions.openChatPanel,
-        closeChatPanel: ChatActions.closeChatPanel
+        individualcurrentChat   : ChatActions.IndividualsetCurrentRoom,
+        openChatPanel           : ChatActions.openChatPanel,
+        closeChatPanel          : ChatActions.closeChatPanel
     }, dispatch);
 }
 
@@ -443,7 +447,7 @@ function mapStateToProps({contactsApp,chatPanel})
         state                      : chatPanel.state,
         chatDetail                 : chatPanel.chat,
         chatUser                   : chatPanel.user,
-        currentRoom                :chatPanel.chat.currentRoom,
+        currentRoom                : chatPanel.chat.currentRoom,
     }
 }
 
