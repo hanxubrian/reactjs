@@ -312,9 +312,7 @@ class IndividualChat extends Component {
     render() {
         const {classes, chat, contacts, className} = this.props;
         const {sendMSG,user} = this.state;
-        // console.log("====================isopen",this.state.isOpen);
-        // console.log("==================================show",this.props.show);
-        // console.log("##################this.props.individualcurrentRoom",this.props.individualcurrentRoom);
+
         if(this.props.individualcurrentRoom && this.props.individualcurrentRoom != null ){
             return (
             <div className="individual-chat-item">
