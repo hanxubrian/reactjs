@@ -204,6 +204,9 @@ const styles = theme => ({
                 marginLeft: 10
             }
         },
+        '& .taxColumn': {
+          maxWidth: '160px!important'
+        },
         InvoiceLineHeadRoot:{
             backgroundColor: 'lightgray',
         },
@@ -640,8 +643,6 @@ class InvoiceLineTable extends React.Component {
             });
         });
 
-        console.log('qqqq1', this.props.fn);
-
         return (
             <Paper className={classNames(classes.root)}>
                 <div className={classNames(classes.tableWrapper, "flex flex-col h-full")}>
@@ -674,7 +675,7 @@ class InvoiceLineTable extends React.Component {
                         }}
                         getTdProps={(state, rowInfo, column, instance) =>{
                             if(rowInfo.original.type==='franch'){
-                                if(column.Header==='Quantity' || column.Header==='Amount' || column.Header==='Tax')
+                                if(column.Header==='Qty' || column.Header==='Amount' || column.Header==='Markup(%)')
                                     return {
                                         style: {display: 'none'},
                                         className: {}
@@ -684,6 +685,7 @@ class InvoiceLineTable extends React.Component {
                                         {"justify-end": column.Header==='Service'},
                                         {"justify-start": column.id==='extended'},
                                         {"franchiRow": column.id==='description'},
+                                        {"taxColumn": column.id==='tax'},
                                     )
                                 };
                             }
@@ -927,9 +929,18 @@ class InvoiceLineTable extends React.Component {
                                                     }}
                                                 />
                                             }
-                                                // return ("$"+parseFloat(row.original.tax).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
                                             else
-                                                return (<div/>)
+                                                return ( <div className={classNames("flex flex-row w-full justify-end")}>
+                                                    <TextField
+                                                        className={classes.fInput}
+                                                        placeholder="Amount"
+                                                        value={row.original.amount}
+                                                        onChange={this.handleChange(row.original)}
+                                                        InputProps={{
+                                                            inputComponent: NumberFormatCustom,
+                                                        }}
+                                                    />
+                                                </div>)
                                         },
                                         className: classNames(classes.tableTdEven, "flex items-center  justify-end text-right"),
                                         width: 80
@@ -955,17 +966,7 @@ class InvoiceLineTable extends React.Component {
                                             }
                                             else
                                                 return (
-                                                    <div className="flex flex-wrap">
-                                                        <TextField
-                                                            className={classes.fInput}
-                                                            placeholder="Amount"
-                                                            value={row.original.amount}
-                                                            onChange={this.handleChange(row.original)}
-                                                            InputProps={{
-                                                                inputComponent: NumberFormatCustom,
-                                                            }}
-                                                        />
-                                                    </div>)
+                                                    <div/>)
                                         },
                                         className: classNames(classes.tableTdEven, "flex items-center  text-right justify-end"),
                                         width: 80
