@@ -352,7 +352,6 @@ class FranchiseesMaintenanceTable extends React.Component {
         return (
             <div className={classes.root}>
                 <Button variant="contained" color="primary" onClick={this.handleClickOpen} className={classNames(classes.button,classes.btnAddFees)}>
-                    {/* This Button uses a Font Icon, see the installation instructions in the docs. */}
                     <Icon  className={classes.leftIcon}>add fees</Icon>
                     add
                 </Button>
