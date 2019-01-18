@@ -1011,7 +1011,7 @@ class FilterPanel extends Component {
 												id="Phone"
 												inputComponent={TextMaskPhone}
 												variant="outlined"
-												margin="normal"
+												margin="dense"
 												fullWidth
 											/>
 										</FormControl>
@@ -1037,7 +1037,7 @@ class FilterPanel extends Component {
 												id="Fax"
 												inputComponent={TextMaskPhone}
 												variant="outlined"
-												margin="normal"
+												margin="dense"
 												fullWidth
 											/>
 										</FormControl>

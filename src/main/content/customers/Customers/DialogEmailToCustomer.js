@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import { Icon, IconButton, Tooltip } from '@material-ui/core';
+import { Icon, IconButton, Tooltip, Slide } from '@material-ui/core';
 
 // for store
 import { bindActionCreators } from "redux";
@@ -21,6 +21,9 @@ const styles = theme => ({
 		margin: theme.spacing.unit,
 	},
 })
+function Transition(props) {
+	return <Slide direction="up" {...props} />;
+}
 class DialogEmailToCustomer extends React.Component {
 
 	constructor(props) {
@@ -32,9 +35,9 @@ class DialogEmailToCustomer extends React.Component {
 
 	UNSAFE_componentWillReceiveProps(nextProps) {
 		console.log("bOpenEmailToCustomerDialog", nextProps.bOpenEmailToCustomerDialog)
-		this.state = {
+		this.setState({
 			bOpenEmailToCustomerDialog: nextProps.bOpenEmailToCustomerDialog
-		}
+		})
 	}
 
 	handleClose = () => {
@@ -49,6 +52,7 @@ class DialogEmailToCustomer extends React.Component {
 				<Dialog
 					open={this.state.bOpenEmailToCustomerDialog}
 					onClose={this.handleClose}
+					TransitionComponent={Transition}
 					aria-labelledby="form-dialog-title"
 				>
 					<DialogTitle id="form-dialog-title">New Message</DialogTitle>
