@@ -574,7 +574,7 @@ class CustomerListContent extends Component {
 					columnName: "Address",
 					width: 250,
 					wordWrapEnabled: true,
-					sortingEnabled: false,
+					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
@@ -584,7 +584,7 @@ class CustomerListContent extends Component {
 					columnName: "City",
 					width: 130,
 					wordWrapEnabled: true,
-					sortingEnabled: false,
+					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
@@ -603,7 +603,7 @@ class CustomerListContent extends Component {
 					name: "PostalCode",
 					columnName: "PostalCode",
 					width: 90,
-					sortingEnabled: false,
+					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
@@ -612,7 +612,7 @@ class CustomerListContent extends Component {
 					name: "Phone",
 					columnName: "Phone",
 					width: 150,
-					sortingEnabled: false,
+					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
@@ -1255,7 +1255,7 @@ class CustomerListContent extends Component {
 								style={{ height: "calc(100% - 110px)" }}
 							>
 								<Grid
-									rootComponent={GridRootComponent}
+									// rootComponent={GridRootComponent}
 									rows={rows}
 									columns={tableColumnExtensions}
 								>
@@ -1278,18 +1278,14 @@ class CustomerListContent extends Component {
 									{/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
 									<IntegratedSelection />
 
-									<IntegratedPaging />
-
-									<VirtualTable
-										height="auto"
-									/>
-
 									<SortingState
 										sorting={sorting}
 										onSortingChange={this.changeSorting}
 										columnExtensions={tableColumnExtensions}
 									/>
 									<IntegratedSorting />
+
+									<IntegratedPaging />
 
 									<SearchState
 										// defaultValue="Paris"
@@ -1324,19 +1320,22 @@ class CustomerListContent extends Component {
 
 									<CurrencyTypeProvider
 										for={currencyColumns}
-										// availableFilterOperations={amountFilterOperations}
-										// editorComponent={AmountEditor}
+									// availableFilterOperations={amountFilterOperations}
+									// editorComponent={AmountEditor}
 									/>
 
 									<PhoneNumberTypeProvider
 										for={phoneNumberColumns}
-										// availableFilterOperations={amountFilterOperations}
-										// editorComponent={AmountEditor}
+									// availableFilterOperations={amountFilterOperations}
+									// editorComponent={AmountEditor}
 									/>
 									{/* <DateTypeProvider
 									for={dateColumns}
 								/> */}
 
+									<VirtualTable
+										height="auto"
+									/>
 
 									{/* <Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} /> */}
 									<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />

@@ -1135,7 +1135,7 @@ class CustomerForm extends Component {
 									onChange={this.handleChange('StartTime')}
 									margin="dense"
 									variant="outlined"
-									style={{ width: '100%'}}
+									style={{ width: '100%' }}
 								/>
 								<TextField
 									type="time"
@@ -1200,7 +1200,7 @@ class CustomerForm extends Component {
 									margin="dense"
 									variant="outlined"
 									style={{ width: '100%' }}
-									>
+								>
 									{[{ value: 0, label: "Monthly" }].map(option => (
 										<MenuItem key={option.value} value={option.value}>
 											{option.label}
@@ -1665,17 +1665,22 @@ class CustomerForm extends Component {
 							/>
 							<IntegratedSelection />
 
-							<IntegratedPaging />
-							<Table />
-							{/* <VirtualTable
-								height="auto"
-							/> */}
+
+
 							<SortingState
 								sorting={sorting}
 								onSortingChange={this.changeSorting}
 								columnExtensions={account_offering_columns}
 							/>
 							<IntegratedSorting />
+
+							<IntegratedPaging />
+
+							<Table />
+							{/* <VirtualTable
+								height="auto"
+							/> */}
+
 
 							<SearchState
 								value={searchValue}
