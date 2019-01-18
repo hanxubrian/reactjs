@@ -20,13 +20,14 @@ import {CustomerServiceCallListConfig} from "./customer-service/call-list/call-l
 import {PlansConfig} from "./comissions/plans/plansConfig";
 import {ComissionsConfig} from "./comissions/comissions/comissionsConfig";
 import {AccountsReceivableConfig} from "./accounts-receivable/accounts-receivable/accounts-receivableConfig";
+import {PaymentsConfig} from "./accounts-receivable/payments/paymentsConfig";
 import {BillRunConfig} from "./accounts-receivable/bill-run/bill-runConfig";
 import {InvoiceConfig} from "./accounts-receivable/Invoice/invoiceConfig";
 import {ReportsConfig} from "./franchisees/reports/reportsConfig";
 import {FindersFeesConfig} from "./franchisees/findersfees/findersFeesConfig";
 import {PaymentListConfig} from "./payments/payment-list/payment-listConfig";
 import {DashboardConfig} from "./dashboard/DashboardConfig";
-import {PaymentsConfig} from "./accounts-receivable/payments/paymentsConfig";
+
 
 
 export const pagesConfigs = [
@@ -52,12 +53,12 @@ export const pagesConfigs = [
     PlansConfig,
     ComissionsConfig,
     InvoiceConfig,
+    PaymentsConfig,
     BillRunConfig,
     AccountsReceivableConfig,
     ReportsConfig,
     AccountsReceivableConfig,
     FindersFeesConfig,
     PaymentListConfig,
-	DashboardConfig,
-    PaymentsConfig
+	DashboardConfig
 ];
