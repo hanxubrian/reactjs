@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles/index';
 import {Button, Card, CardContent, Checkbox, FormControl, FormControlLabel, TextField, Typography, CircularProgress} from '@material-ui/core';
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
+import keycode from 'keycode';
 import classNames from 'classnames';
 import {Link} from 'react-router-dom';
 import _ from '@lodash';
@@ -45,11 +46,18 @@ class SigninPage extends Component {
         password: '',
         remember: true,
         alertOpen: false,
+        commandKeyPressed: false,
         url: window.location.host.split(':')[0]
     };
 
     componentDidMount() {
         this.handleAppStart(this.state.url);
+        document.addEventListener("keydown", this.handleDocumentKeyDown);
+    }
+
+    componentWillUnmount()
+    {
+        document.removeEventListener('keydown', this.handleDocumentKeyDown);
     }
 
     handleAppStart = (url) => {
@@ -82,11 +90,18 @@ class SigninPage extends Component {
         this.props.closeAlertDialog();
     };
 
+    handleDocumentKeyDown = (event) => {
+        const {email, password, url} = this.state;
+        if ( keycode(event) === 'enter' ) {
+            this.props.signinUser(email, password, url);
+        }
+    };
 
-    onLogin(){
+    onLogin = () => {
         const {email, password, url} = this.state;
         this.props.signinUser(email, password, url);
     }
+
     render() {
        const styles = ({
             root: {
@@ -215,8 +230,8 @@ class SigninPage extends Component {
                                     </div>
 
                                     <Button variant="contained" color="primary" className="w-224 mx-auto mt-16 w-full" aria-label="LOG IN"
-                                            disabled={!this.canBeSubmitted()}
-                                            onClick={this.onLogin.bind(this)}
+                                            // disabled={!this.canBeSubmitted()}
+                                            onClick={this.onLogin || this.handleDocumentKeyDown}
                                     >
                                         SIGN IN
                                     </Button>

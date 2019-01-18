@@ -1224,6 +1224,13 @@ const MapWithAMarkerClusterer2 = compose(
 	</GoogleMap>
 );
 
+// const GroupCellContent = ({ row, ...restProps }) => (
+// 	<TableGroupRow.Content {...restProps}>
+// 	  {row.value.columnName}
+// 	</TableGroupRow.Content>
+//   );
+
+
 class LeaseListContent extends Component {
 
 
@@ -1255,6 +1262,7 @@ class LeaseListContent extends Component {
 					filteringEnabled: true,
 					groupingEnabled: true,
 					togglingEnabled: true,
+					showWhenGrouped: true
 				},
 				{
 					title: "Franchisee No",
@@ -1263,7 +1271,8 @@ class LeaseListContent extends Component {
 					width: 200,
 					sortingEnabled: true,
 					filteringEnabled: true,
-					groupingEnabled: true
+					groupingEnabled: true,
+					showWhenGrouped: true
 				},
 				{
 					title: "Lease No",
@@ -1272,7 +1281,8 @@ class LeaseListContent extends Component {
 					width: 200,
 					sortingEnabled: true,
 					filteringEnabled: true,
-					groupingEnabled: true
+					groupingEnabled: true,
+					showWhenGrouped: true
 				},
 				{
 					title: "Serial No",
@@ -1281,7 +1291,8 @@ class LeaseListContent extends Component {
 					width: 200,
 					sortingEnabled: true,
 					filteringEnabled: true,
-					groupingEnabled: true
+					groupingEnabled: true,
+					showWhenGrouped: true
 				},
 				{
 					title: "Monthly Payment Amount",
@@ -1292,7 +1303,8 @@ class LeaseListContent extends Component {
 					wordWrapEnabled: true,
 					sortingEnabled: false,
 					filteringEnabled: true,
-					groupingEnabled: true
+					groupingEnabled: true,
+					showWhenGrouped: true
 				},
 				{
 					title: "Total Amount Paid",
@@ -1302,7 +1314,8 @@ class LeaseListContent extends Component {
 					align: 'right',
 					sortingEnabled: true,
 					filteringEnabled: true,
-					groupingEnabled: true
+					groupingEnabled: true,
+					showWhenGrouped: true
 				},
 				{
 					title: "Total Balance",
@@ -1312,7 +1325,8 @@ class LeaseListContent extends Component {
 					align: 'right',
 					sortingEnabled: false,
 					filteringEnabled: true,
-					groupingEnabled: true
+					groupingEnabled: true,
+					showWhenGrouped: true
 				},
 				// {
 				// 	title: "Phone",
@@ -1340,7 +1354,8 @@ class LeaseListContent extends Component {
 					align: 'center',
 					sortingEnabled: true,
 					filteringEnabled: true,
-					groupingEnabled: true
+					groupingEnabled: true,
+					showWhenGrouped: true
 				},
 				{
 					title: "Status",
@@ -1350,7 +1365,8 @@ class LeaseListContent extends Component {
 					align: 'center',
 					sortingEnabled: true,
 					filteringEnabled: true,
-					groupingEnabled: true
+					groupingEnabled: true,
+					showWhenGrouped: true
 				},
 				// {
 				// 	title: "Contract Amount",
@@ -1366,6 +1382,53 @@ class LeaseListContent extends Component {
 				// },
 				// { title: "Actions", name: "Actions", columnName: "Actions", width: 110, sortingEnabled: true, filteringEnabled: false, }
 			],
+			tableGroupColumnExtension: [
+				{
+					columnName: "FranchiseeName",
+					showWhenGrouped: true,
+					showColumnsWhenGrouped: true
+				},
+				{
+					columnName: "FranchiseeNo",
+					showWhenGrouped: true,
+					showColumnsWhenGrouped: true
+				},
+				{
+					columnName: "LeaseNumber",
+					showWhenGrouped: true,
+					showColumnsWhenGrouped: true
+				},
+				{
+					columnName: "SerialNumber",
+					showWhenGrouped: true,
+					showColumnsWhenGrouped: true
+				},
+				{
+					columnName: "TotalMonthlyPaymentAmount",
+					showWhenGrouped: true,
+					showColumnsWhenGrouped: true
+				},
+				{
+					columnName: 'TotalPaidAmount',
+					showWhenGrouped: true,
+					showColumnsWhenGrouped: true
+				},
+				{
+					columnName: "TotalBalance",
+					showWhenGrouped: true,
+					showColumnsWhenGrouped: true
+				},
+				{
+					columnName: 'Payments',
+					showWhenGrouped: true,
+					showColumnsWhenGrouped: true
+				},
+				{
+					columnName: 'Status',
+					showWhenGrouped: true,
+					showColumnsWhenGrouped: true
+				},
+			  ],
 			sorting: [
 				{ columnName: 'LeaseNo', direction: 'asc' }
 			],
@@ -1903,6 +1966,7 @@ class LeaseListContent extends Component {
 			columns,
 			selection,
 			tableColumnExtensions,
+			tableGroupColumnExtension,
 			sorting,
 			editingColumnExtensions,
 			currencyColumns,
@@ -1981,7 +2045,7 @@ class LeaseListContent extends Component {
 										// onCurrentPageChange={this.changeCurrentPage}
 										// pageSize={pageSize}
 										// onPageSizeChange={this.changePageSize}
-										defaultPageSize={20}
+										defaultPageSize={100}
 									/>
 
 									<PagingPanel pageSizes={pageSizes} />
@@ -2025,13 +2089,19 @@ class LeaseListContent extends Component {
 
 									<GroupingState
 										grouping={[{ columnName: 'FranchiseeName' }]}
+										defaultExpandedGroups={[ 'FranchiseeName' ]}
+										defaultGrouping={[{ columnName: 'Franchisee' }]}
+										columnExtensions={tableColumnExtensions}
 									/>
 									<IntegratedGrouping />
 									<Table />
 									<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
 									<TableHeaderRow />
 									<DataTypeProvider for={grouping}/>
-									<TableGroupRow />
+									<TableGroupRow
+										columnExtensions={tableGroupColumnExtension}
+										// contentComponent={GroupCellContent}
+									/>
 
 									{/* <GroupingState
 										// grouping={grouping}
