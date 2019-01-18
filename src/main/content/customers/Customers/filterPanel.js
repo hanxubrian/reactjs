@@ -1164,7 +1164,7 @@ class FilterPanel extends Component {
 									</GridItem>
 
 									<GridItem xs={12} sm={12} md={12} className="flex flex-col">
-										<h3 className="mt-24">Addresses</h3>
+										<h3 className="mt-24 mb-12">Addresses</h3>
 										{/* <CustomerLineTable tableType="ADDRESS" headers={address_headers} /> */}
 										<Paper>
 											<Grid
@@ -1204,7 +1204,7 @@ class FilterPanel extends Component {
 										</Paper>
 
 
-										<h3 className="mt-24">Contacts</h3>
+										<h3 className="mt-24 mb-12">Contacts</h3>
 										{/* <CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} /> */}
 										<Paper>
 											<Grid
@@ -1252,7 +1252,7 @@ class FilterPanel extends Component {
 							<div>
 								{/* <RadioGroup */}
 								<div className="mt-0 flex flex-col" style={{ width: '200px' }}>
-									<h3>Location</h3>
+									<h3 className="mb-12">Location</h3>
 									<RadioGroup
 										aria-label="Location"
 										name="Location"
@@ -1332,7 +1332,7 @@ class FilterPanel extends Component {
 								</div>
 
 								<div className="mt-36 flex flex-col" style={{ width: '200px' }}>
-									<h3>Billing Amount</h3>
+									<h3 className="mb-12">Billing Amount</h3>
 									<div className="flex flex-row" >
 										<TextField
 											type="number"
@@ -1442,7 +1442,7 @@ class FilterPanel extends Component {
 								</div>
 
 								<div className="mt-36 flex flex-col" style={{ width: '200px' }}>
-									<h3>Customer Status</h3>
+									<h3 className="mb-12">Customer Status</h3>
 									<FormControlLabel
 										control={
 											<Switch checked={this.state['customerStatusList0']}
