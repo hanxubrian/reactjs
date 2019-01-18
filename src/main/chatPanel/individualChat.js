@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import withReducer from 'store/withReducer';
 import {AppBar, Toolbar, Icon, IconButton, ClickAwayListener,TextField, Paper, Avatar, Typography, withStyles} from '@material-ui/core';
 import * as Actions from './store/actions';
+
 import reducer from './store/reducers';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -235,8 +236,15 @@ class IndividualChat extends Component {
                     user        :   this.props.Chatuser,
                 });
             }
-
+            if(!this.state.isOpen){
+                this.setState({isOpen: !this.state.isOpen});
+            }
+        }else{
+            if(this.state.isOpen){
+                this.setState({isOpen: !this.state.isOpen});
+            }
         }
+
 
     }
     componentDidMount() {
@@ -283,7 +291,7 @@ class IndividualChat extends Component {
 
     };
     closeChat = () => {
-
+            this.props.IndividualdeleteCurrentRoom();
             this.setState({
                 isOpen: !this.state.isOpen
             });
@@ -295,7 +303,7 @@ class IndividualChat extends Component {
         const {classes, chat, contacts, className} = this.props;
         const {sendMSG,user} = this.state;
 
-        if(this.props.individualcurrentRoom && this.props.individualcurrentRoom != null ){
+        if(this.state.isOpen ){
             return (
             <div className="individual-chat-item">
                 <div className="header">
@@ -410,17 +418,18 @@ IndividualChat.propTypes = {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        sendMessage             : Actions.sendMsg,
+        sendMessage                         : Actions.sendMsg,
+        IndividualdeleteCurrentRoom         :Actions.IndividualdeleteCurrentRoom,
     }, dispatch);
 }
 function mapStateToProps({chatPanel})
 {
     return {
-        contact          :  chatPanel.contacts.entities,
-        selectedContactId:  chatPanel.contacts.selectedContactId,
-        chat             :  chatPanel.chat,
-        Chatuser             : chatPanel.user,
-        individualcurrentRoom   : chatPanel.IndividualChat.individualChatcurrentRoom,
+        contact                 :   chatPanel.contacts.entities,
+        selectedContactId       :   chatPanel.contacts.selectedContactId,
+        chat                    :   chatPanel.chat,
+        Chatuser                :   chatPanel.user,
+        individualcurrentRoom   :   chatPanel.IndividualChat.individualChatcurrentRoom,
     }
 }
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(IndividualChat));

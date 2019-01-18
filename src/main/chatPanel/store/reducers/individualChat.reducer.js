@@ -22,6 +22,12 @@ const IndividualChat = function (state = initialState, action) {
         {
             return {...state, status: false}
         }
+        case Actions.DELETE_INDIVIDUAL_CURRENT_ROOM_SUCCESS:
+        {
+            return {...state,
+                individualChatcurrentRoom: null,status: true
+            }
+        }
         default:
         {
             return state
