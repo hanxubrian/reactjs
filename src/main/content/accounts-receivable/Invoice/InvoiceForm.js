@@ -375,7 +375,6 @@ class InvoiceForm extends Component {
     };
 
     getTotal = () => {
-        console.log('getTotal===',this.props.invoiceForm.data);
         let subTotal = 0.0;
         let markup = 0.0;
         let tax = 0.0;
