@@ -19,6 +19,16 @@ import connect from "react-redux/es/connect/connect";
 import {withRouter} from "react-router-dom";
 import Button from "@material-ui/core/Button/Button";
 import Checkbox from "@material-ui/core/Checkbox/Checkbox";
+import DialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent/DialogContent";
+import TextField from "@material-ui/core/TextField/TextField";
+import DialogActions from "@material-ui/core/DialogActions/DialogActions";
+import Dialog from "@material-ui/core/Dialog/Dialog";
+import GridContainer from "../../../../../Commons/Grid/GridContainer";
+import GridItem from "../../../../../Commons/Grid/GridItem";
+import SaveIcon from '@material-ui/icons/Save';
+import CancelIcon from '@material-ui/icons/Cancel';
+
 
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -217,7 +227,10 @@ const styles = theme => ({
     },
     btnAddFees: {
         marginBottom: '20px'
-    }
+    },
+    iconSmall: {
+        fontSize: 20,
+    },
 });
 
 class FranchiseesMaintenanceTable extends React.Component {
@@ -228,6 +241,10 @@ class FranchiseesMaintenanceTable extends React.Component {
         rowsPerPage: 10,
         labelWidth: 0,
         franchiseeFees: [],
+        openDialog: false,
+        feesList: "",
+        feeAmount:"",
+        feeActive: false,
     };
     constructor(props)
     {
@@ -262,8 +279,26 @@ class FranchiseesMaintenanceTable extends React.Component {
 
     handleCheckboxChange = name => event=> {
 
+        if(name === "feeActive"){
+            this.setState({[name]:event.target.checked});
+        }
+
         this.handleInitialUpdate(name,event.target.checked);
 
+    }
+
+    handleClickOpen = () => {
+        this.setState({ openDialog: true });
+    };
+
+    handleClose = () => {
+        this.setState({ openDialog: false });
+    };
+
+    handleChangeAddFeesSelect = (name) => event => {
+        this.setState({
+            [name]: event.target.value
+        })
     }
 
     handleInitialUpdate (name , value){
@@ -309,9 +344,9 @@ class FranchiseesMaintenanceTable extends React.Component {
 
         return (
             <div className={classes.root}>
-                <Button variant="contained" color="primary" className={classNames(classes.button,classes.btnAddFees)}>
+                <Button variant="contained" color="primary" onClick={this.handleClickOpen} className={classNames(classes.button,classes.btnAddFees)}>
                     {/* This Button uses a Font Icon, see the installation instructions in the docs. */}
-                    <Icon className={classes.leftIcon}>add fees</Icon>
+                    <Icon  className={classes.leftIcon}>add fees</Icon>
                     add
                 </Button>
             <Paper>
@@ -361,6 +396,71 @@ class FranchiseesMaintenanceTable extends React.Component {
                     </Table>
                 </div>
             </Paper>
+                <Dialog
+                    open={this.state.openDialog}
+                    onClose={this.handleClose}
+                    aria-labelledby="form-dialog-title"
+                    maxWidth={"sm"}
+                    fullWidth
+                >
+                    <DialogTitle id="form-dialog-title">ADD FRANCHISEE FEE</DialogTitle>
+                    <DialogContent>
+                        <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                <TextField
+                                    id="dialogFeeName"
+                                    label="Fee Names"
+                                    select
+                                    className={classes.textField}
+                                    value={this.state.feesList}
+                                    onChange={this.handleChangeAddFeesSelect('feesList')}
+                                    margin="dense"
+                                    required
+                                    fullWidth
+                                >
+                                    {this.state.franchiseeFees.map(option => (
+                                        <MenuItem key={option.FranchiseeFeeList.FranchiseeFeeListId} value={option.FranchiseeFeeList.FranchiseeFeeListId}>
+                                            {option.FranchiseeFeeList.Name}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            </GridItem>
+                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                <TextField
+                                    id="dialogFeeAmount"
+                                    label="Amount"
+                                    className={classes.textField}
+                                    value={this.state.feeAmount}
+                                    onChange={this.handleChangeAddFeesSelect("feeAmount")}
+                                    margin="dense"
+                                    fullWidth
+                                    required
+                                />
+                            </GridItem>
+                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox checked={this.state.feeActive} />
+                                    }
+                                    onChange={this.handleCheckboxChange('feeActive')}
+                                    className={classes.textField}
+                                    label="Active"
+                                    margin="dense"
+                                />
+                            </GridItem>
+                        </GridContainer>
+                    </DialogContent>
+                    <DialogActions style={{padding:"2%"}}>
+                        <Button variant="contained"  size="small" className={classes.button}>
+                            <CancelIcon className={classNames(classes.leftIcon, classes.iconSmall)} />
+                            Cancel
+                        </Button>
+                        <Button variant="contained" size="small" className={classes.button}>
+                            <SaveIcon className={classNames(classes.leftIcon, classes.iconSmall)} />
+                            Save
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         );
     }
@@ -377,7 +477,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps({ franchisees, auth }) {
     return {
         regionId: auth.login.defaultRegionId,
-        franchiseeFees: franchisees.franchiseeFees
+        franchiseeFees: franchisees.franchiseeFees,
     }
 }
 
