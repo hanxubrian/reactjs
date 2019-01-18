@@ -244,8 +244,6 @@ class IndividualChat extends Component {
                 this.setState({isOpen: !this.state.isOpen});
             }
         }
-
-
     }
     componentDidMount() {
 
