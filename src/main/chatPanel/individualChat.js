@@ -254,7 +254,7 @@ class IndividualChat extends Component {
             }
 
         }
-        // console.log("#############isopen",this.state.isOpen);
+
     }
     componentDidMount() {
 
@@ -287,7 +287,6 @@ class IndividualChat extends Component {
             return;
         }
         if(this.state.sendMSG && this.state.sendMSG != null && this.state.currentUser && this.state.currentUser !=null && this.state.currentRoom && this.state.currentRoom != null ){
-            // this.props.sendMessage(this.state.sendMSG, this.props.currentUser, this.props.userdetail.id)
 
             this.props.sendMessage(this.state.sendMSG, this.state.currentRoom);
             this.setState({sendMSG: ''});
