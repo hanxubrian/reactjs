@@ -71,6 +71,7 @@ const styles = theme => ({
     textField: {
         marginLeft: 0,
         marginRight: theme.spacing.unit,
+        // padding: '0 0'
     },
     summary: {
         fontSize: 15,
@@ -135,7 +136,7 @@ const styles = theme => ({
     picker: {
         padding: '0 6px'
     }
-})
+});
 
 const chance = new Chance();
 
@@ -619,8 +620,6 @@ class InvoiceForm extends Component {
         let bReadonly = false;
         if(this.props.invoiceForm.type === 'new') bReadonly = true;
 
-        console.log('dddd', this.state.InvoiceDate);
-
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="h-full flex flex-col relative">
@@ -657,6 +656,7 @@ class InvoiceForm extends Component {
                                         name="InvoicePeriod"
                                         variant="outlined"
                                         format="MM/YYYY"
+                                        className={classes.textField}
                                         value={this.state.period}
                                         onChange={this.handlePeriodChange}
                                         fullWidth
@@ -682,6 +682,7 @@ class InvoiceForm extends Component {
                                         onChange={this.handleChange}
                                         fullWidth
                                         required
+                                        className={classes.textField}
                                         InputProps={{
                                             classes: {
                                                 input: classes.input1,
