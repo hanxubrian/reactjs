@@ -144,8 +144,10 @@ const newInvoiceState = {
     "RegionId": "",
     "RegionName": "",
     "InvoiceId": "",
-    "InvoiceDate": moment(),
-    "DueDate": moment(),
+    "InvoiceDate": moment().format('YYYY-MM-DD'),
+    "DueDate": moment().format('YYYY-MM-DD'),
+    // "InvoiceDate": new Date(),
+    // "DueDate": new Date(),
     "CustomerId": "",
     "CustomerNo": "",
     "CustomerName": "",
@@ -359,8 +361,8 @@ class InvoiceForm extends Component {
             dueDate = moment().year(year).month(month).startOf('month').add(suggestion.PaymentTerm, 'days');
         }
 
-        this.setState({InvoiceDate: invoiceDate});
-        this.setState({DueDate: dueDate});
+        this.setState({InvoiceDate: invoiceDate.format('YYYY-MM-DD')});
+        this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
 
 
 
@@ -618,6 +620,8 @@ class InvoiceForm extends Component {
         let bReadonly = false;
         if(this.props.invoiceForm.type === 'new') bReadonly = true;
 
+        console.log('dddd', this.state.InvoiceDate);
+
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="h-full flex flex-col relative">
@@ -647,7 +651,7 @@ class InvoiceForm extends Component {
                                 />
                             </Grid>
                             <MuiPickersUtilsProvider utils={MomentUtils}>
-                                <Grid item xs={12} sm={1} md={1} className="flex flex-row pl-16 pr-4">
+                                <Grid item xs={12} sm={4} md={4} className="flex flex-row pl-16 pr-4">
                                     <DatePicker
                                         margin="none"
                                         label="Period"
@@ -669,16 +673,34 @@ class InvoiceForm extends Component {
                                         }}
                                         openToYearSelection={true}
                                     />
-                                </Grid>
-                                <Grid item xs={12} sm={1} md={1} className="flex flex-row xs:flex-col xs:mb-24 pr-4 pl-4" style={{padding: '0 6px!important'}}>
-                                    <DatePicker
+                                    <TextField
                                         margin="none"
                                         label="Invoice Date"
                                         name="InvoiceDate"
+                                        type="date"
                                         variant="outlined"
-                                        format="MM/DD/YYYY"
                                         value={this.state.InvoiceDate}
-                                        onChange={this.handleInvoiceDateChange}
+                                        onChange={this.handleChange}
+                                        fullWidth
+                                        required
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input1,
+                                            },
+                                        }}
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                    />
+                                    <TextField
+                                        margin="none"
+                                        label="Due Date"
+                                        name="DueDate"
+                                        type="date"
+                                        variant="outlined"
+                                        value={this.state.DueDate}
+                                        onChange={this.handleChange}
                                         fullWidth
                                         required
                                         InputProps={{
@@ -692,8 +714,31 @@ class InvoiceForm extends Component {
                                         }}
                                     />
                                 </Grid>
+                                <Grid item xs={12} sm={1} md={1} className="flex flex-row xs:flex-col xs:mb-24 pr-4 pl-4" style={{display: 'none', padding: '0 6px!important'}}>
+                                    {/*<DatePicker*/}
+                                        {/*margin="none"*/}
+                                        {/*label="Invoice Date"*/}
+                                        {/*name="InvoiceDate"*/}
+                                        {/*variant="outlined"*/}
+                                        {/*format="MM/DD/YYYY"*/}
+                                        {/*value={this.state.InvoiceDate}*/}
+                                        {/*onChange={this.handleInvoiceDateChange}*/}
+                                        {/*fullWidth*/}
+                                        {/*required*/}
+                                        {/*InputProps={{*/}
+                                            {/*classes: {*/}
+                                                {/*input: classes.input1,*/}
+                                            {/*},*/}
+                                        {/*}}*/}
+                                        {/*InputLabelProps = {{*/}
+                                            {/*shrink: true,*/}
+                                            {/*classes: {outlined: classes.label}*/}
+                                        {/*}}*/}
+                                    {/*/>*/}
+
+                                </Grid>
                                 <Grid item xs={12} sm={1} md={1} className="flex flex-row xs:flex-col pr-4 pl-4"
-                                      style={{padding: '0 6px!important'}}>
+                                      style={{padding: '0 6px!important', display: 'none'}}>
                                     <DatePicker
                                         margin="none"
                                         label="Due Date"
@@ -716,7 +761,7 @@ class InvoiceForm extends Component {
                                     />
                                 </Grid>
                             </MuiPickersUtilsProvider>
-                            <Grid item xs={12} sm={3} md={3} className="flex flex-row xs:flex-col pl-4" >
+                            <Grid item xs={12} sm={2} md={2} className="flex flex-row xs:flex-col pl-4" >
                                 <TextField
                                     margin="none"
                                     label="P.O #"
