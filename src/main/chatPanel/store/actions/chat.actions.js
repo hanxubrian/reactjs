@@ -11,16 +11,18 @@ import {updateUser} from './user.actions'
 import {checkChatUserData} from './user.actions'
 import _ from '@lodash';
 
-export const GET_CHAT = '[CHAT PANEL] GET CHAT';
-export const REMOVE_CHAT = '[CHAT PANEL] REMOVE CHAT';
-export const SEND_MESSAGE = '[CHAT PANEL] SEND MESSAGE';
-export const CURRENT_USER = '[CHAT PANEL] CURRENT USER';
-export const CURRENT_ROOM = '[CHAT PANEL] CURRENT ROOM';
-export const ON_MESSAGE = '[CHAT PANEL] ON MESSAGE';
-export const APPEND_MESSAGE = '[CHAT PANEL] APPEND MESSAGE';
-export const ADD_MESSAGE = '[CHAT PANEL] ADD MESSAGE';
-export const READ_MESSAGE = '[CHAT PANEL] READ MESSAGE';
-export const GET_ROOMS = '[CHAT PANEL] GET ROOMS';
+export const GET_CHAT           = '[CHAT PANEL] GET CHAT';
+export const REMOVE_CHAT        = '[CHAT PANEL] REMOVE CHAT';
+export const SEND_MESSAGE       = '[CHAT PANEL] SEND MESSAGE';
+export const CURRENT_USER       = '[CHAT PANEL] CURRENT USER';
+export const CURRENT_ROOM       = '[CHAT PANEL] CURRENT ROOM';
+export const ON_MESSAGE         = '[CHAT PANEL] ON MESSAGE';
+export const APPEND_MESSAGE     = '[CHAT PANEL] APPEND MESSAGE';
+export const ADD_MESSAGE        = '[CHAT PANEL] ADD MESSAGE';
+export const READ_MESSAGE       = '[CHAT PANEL] READ MESSAGE';
+export const GET_ROOMS          = '[CHAT PANEL] GET ROOMS';
+
+
 
 export function initChat()
 {

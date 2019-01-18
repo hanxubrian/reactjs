@@ -4,6 +4,7 @@ export const TOGGLE_CHAT_PANEL = '[CHAT PANEL] TOGGLE CHAT PANEL';
 export const OPEN_CHAT_PANEL = '[CHAT PANEL] OPEN CHAT PANEL';
 export const CLOSE_CHAT_PANEL = '[CHAT PANEL] CLOSE CHAT PANEL';
 
+
 export function toggleChatPanel()
 {
     return {

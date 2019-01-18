@@ -77,7 +77,19 @@ const styles = theme => ({
 class ChatPanel extends Component {
 
     state = {
-        individualchats: []
+        individualchats: [],
+        selectedContactsMenu   : null,
+        isOpen                 : true,
+        chatDetail             : null,
+        individualchatDetail   : null,
+        chatUser               : null,
+        chatId                 : null,
+        currentSeletedchatId   : null,
+        selectedUserDetail     : null,
+        contacts               : null,
+        user                   : null,
+        currentRoom            : null,
+        individualcurrentRoom  :null,
     };
     componentDidMount()
     {
@@ -85,7 +97,7 @@ class ChatPanel extends Component {
         this.props.getContacts();
     }
 
-    componentDidUpdate(prevProps)
+    componentDidUpdate(prevProps,prevState)
     {
         if ( this.props.state !== prevProps.state )
         {
@@ -99,6 +111,24 @@ class ChatPanel extends Component {
                 document.removeEventListener('keydown', this.handleDocumentKeyDown);
             }
         }
+        if(this.props !== prevProps && this.state.chatId && this.state.chatId !== null){
+            let msg = this.state.chatDetail.messages;
+            this.setState({
+                individualchatDetail:msg[this.state.chatId],
+            })
+        }
+        if(this.props.individualcurrentRoom !== prevProps.individualcurrentRoom){
+            this.setState({
+                individualcurrentRoom   :this.props.individualcurrentRoom,
+            });
+
+        }
+        if(this.state.individualcurrentRoom && this.state.individualcurrentRoom != null && !this.state.isOpen ){
+            this.setState({
+                isOpen : true,
+            });
+        }
+
     }
 
     componentWillUnmount()
@@ -146,6 +176,7 @@ class ChatPanel extends Component {
                                         </React.Fragment>
                                     )}
                                 </div>
+                                {/*<span className={classes.chartAddButton} onClick={this.addIndividualChat}>D</span>*/}
                                 <IconButton onClick={closeChatPanel} color="inherit">
                                     <Icon>close</Icon>
                                 </IconButton>
@@ -157,6 +188,16 @@ class ChatPanel extends Component {
                         </Paper>
                     </div>
                 </ClickAwayListener>
+                {this.state.isOpen && (
+                    <div className={classNames(classes.individualChat, {'closeIndvidualchat': !state})}>
+                        {
+                            // this.state.individualchats.map((chatItem,index) =>
+                            <IndividualChat />
+                            // )
+                        }
+                    </div>
+                )}
+
             </div>
         );
     }
@@ -173,12 +214,19 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({chatPanel})
+function mapStateToProps({chatPanel,contactsApp})
 {
     return {
-        contacts         : chatPanel.contacts.entities,
-        selectedContactId: chatPanel.contacts.selectedContactId,
-        state            : chatPanel.state
+        contacts                    : chatPanel.contacts.entities,
+        selectedContactId           : chatPanel.contacts.selectedContactId,
+        state                       : chatPanel.state,
+        chatDetail                  : chatPanel.chat,
+        chatUser                    : chatPanel.user,
+        currentRoom                 : chatPanel.chat.currentRoom,
+        selectedContactIds          : contactsApp.contacts.selectedContactIds,
+        searchText                  : contactsApp.contacts.searchText,
+        user                        : contactsApp.user,
+        individualcurrentRoom       : chatPanel.IndividualChat.individualChatcurrentRoom,
     }
 }
 

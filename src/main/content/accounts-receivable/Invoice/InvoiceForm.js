@@ -935,7 +935,7 @@ class InvoiceForm extends Component {
                                 <div className="w-full">
                                     <TextField
                                         id="note"
-                                        name="note"
+                                        name="noteq"
                                         label="Note"
                                         className={classes.textField}
                                         value={this.state.note}
