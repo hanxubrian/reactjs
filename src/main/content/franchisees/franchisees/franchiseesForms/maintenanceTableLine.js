@@ -28,6 +28,7 @@ import GridContainer from "../../../../../Commons/Grid/GridContainer";
 import GridItem from "../../../../../Commons/Grid/GridItem";
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
+import _ from "lodash";
 
 
 function desc(a, b, orderBy) {
@@ -339,6 +340,12 @@ class FranchiseesMaintenanceTable extends React.Component {
                 numeric: false,
                 disablePadding: false,
                 label: 'Deduct'
+            },
+            {
+                id: 'Action',
+                numeric: false,
+                disablePadding: false,
+                label: 'Action'
             }
         ];
 
@@ -366,7 +373,7 @@ class FranchiseesMaintenanceTable extends React.Component {
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((n,index) => {
                                             return (
-                                                <TableRow hover key={n.FranchiseeFeeList.FranchiseeFeeListId} >
+                                                <TableRow hover key={n.FranchiseeFeeList.FranchiseeFeeListId}>
                                                     <TableCell>
                                                         {n.FranchiseeFeeList.Name}
                                                     </TableCell>
@@ -387,6 +394,14 @@ class FranchiseesMaintenanceTable extends React.Component {
                                                             onChange={this.handleCheckboxChange(["Deduct" + n.FranchiseeFeeList.FranchiseeFeeListId])}
                                                             value="Y"
                                                         />
+                                                    </TableCell>
+                                                    <TableCell>
+                                                            <IconButton>
+                                                                <Icon>delete</Icon>
+                                                            </IconButton>
+                                                            <IconButton>
+                                                                <Icon>edit</Icon>
+                                                            </IconButton>
                                                     </TableCell>
                                                 </TableRow>
                                             )
@@ -430,6 +445,7 @@ class FranchiseesMaintenanceTable extends React.Component {
                                     id="dialogFeeAmount"
                                     label="Amount"
                                     className={classes.textField}
+                                    type={"number"}
                                     value={this.state.feeAmount}
                                     onChange={this.handleChangeAddFeesSelect("feeAmount")}
                                     margin="dense"
