@@ -40,7 +40,8 @@ const initialState = {
     customersDB: null,
     bSuggestCustomersFetchStart: false,
     bLoadedSuggestCustomers: false,
-    bInvoicesUpdated: false
+    bInvoicesUpdated: false,
+    removedId: undefined
 };
 
 
@@ -155,7 +156,7 @@ const invoices = function(state = initialState, action) {
         }
         case Actions.REMOVE_SELECTED_INVOICE:
         {
-            return {...state, invoicesDB: action.payload}
+            return {...state, removedId: action.payload}
 
         }
         case UserActions.USER_LOGGED_OUT:

@@ -136,7 +136,7 @@ export function removeInvoice(regionId, id) {
             if (res.IsSuccess) {
                 dispatch({
                     type: REMOVE_SELECTED_INVOICE,
-                    payload: res
+                    payload: res.Data
                 });
             } else {
 
