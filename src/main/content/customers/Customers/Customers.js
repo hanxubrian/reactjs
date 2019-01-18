@@ -845,13 +845,15 @@ class Customers extends Component {
 				>
 				</FusePageCustomSidebarScroll>
 				{(this.props.bCustomerFetchStart) && (
-					<div className={classes.overlay}>
+					<div className={classNames(classes.overlay, "flex-col")}>
 						<CircularProgress className={classes.progress} color="secondary" />
+						<Typography variant="body2" color="primary">Fetching all customers...</Typography>
 					</div>
 				)}
 				{(this.props.bCreateCustomerStart) && (
-					<div className={classes.overlay}>
+					<div className={classNames(classes.overlay, "flex-col")}>
 						<CircularProgress className={classes.progress} color="secondary" />
+						<Typography variant="body2" color="primary">Submitting new customer data...</Typography>
 					</div>
 				)}
 			</React.Fragment >
