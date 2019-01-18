@@ -33,6 +33,7 @@ import moment from "moment";
 import FranchiseesMaintenanceTable from "./maintenanceTableLine";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import FranchiseesDocumentUploadTable from "./documentUploadTable";
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 
 
@@ -145,7 +146,7 @@ function getStepContent(franchiseeForm, step) {
                                 onChange={franchiseeForm.handleAddressFormChange("Name")}
                                 value={franchiseeForm.state.Name}
                                 variant="outlined"
-                                inputProps={{
+                                InputProps={{
                                     maxLength:60
                                 }}
                                 className={classes.textField}
@@ -160,7 +161,7 @@ function getStepContent(franchiseeForm, step) {
                                 label="Address 1"
                                 onChange={franchiseeForm.handleAddressFormChange('AddressLine1')}
                                 variant="outlined"
-                                inputProps={{
+                                InputProps={{
                                     maxLength:100
                                 }}
                                 value={franchiseeForm.state.AddressLine1}
@@ -172,7 +173,7 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="financeAddress2"
                                 label="Address 2"
-                                inputProps={{
+                                InputProps={{
                                     maxLength:100
                                 }}
                                 onChange={franchiseeForm.handleAddressFormChange('AddressLine2')}
@@ -189,7 +190,7 @@ function getStepContent(franchiseeForm, step) {
                                 id="outlined-city"
                                 label="City"
                                 onChange={franchiseeForm.handleAddressFormChange('City')}
-                                inputProps={{
+                                InputProps={{
                                     maxLength:100
                                 }}
                                 variant="outlined"
@@ -222,7 +223,7 @@ function getStepContent(franchiseeForm, step) {
                                 label="Zip"
                                 variant="outlined"
                                 onChange={franchiseeForm.handleAddressFormChange('Zip')}
-                                inputProps={{
+                                InputProps={{
                                     maxLength:20
                                 }}
                                 value={franchiseeForm.state.Zip}
@@ -237,7 +238,7 @@ function getStepContent(franchiseeForm, step) {
                                 id="financeCounty"
                                 label="County"
                                 onChange={franchiseeForm.handleAddressFormChange('County')}
-                                inputProps={{
+                                InputProps={{
                                     maxLength:100
                                 }}
                                 variant="outlined"
@@ -264,7 +265,7 @@ function getStepContent(franchiseeForm, step) {
                                 label="1099 Name"
                                 value={franchiseeForm.state.NameOn1099}
                                 onChange={franchiseeForm.handleAddressFormChange('NameOn1099')}
-                                inputProps={{
+                                InputProps={{
                                     maxLength:60
                                 }}
                                 className={classes.textField}
@@ -318,11 +319,12 @@ function getStepContent(franchiseeForm, step) {
                                 label="Plan Amount"
                                 value={franchiseeForm.state.planAmount}
                                 type={"number"}
-                                onChange={franchiseeForm.handleTextChange('BusinessAmount')}
+                                onChange={franchiseeForm.handleTextChange('PlanAmount')}
                                 className={classes.textField}
                                 variant="outlined"
-                                inputProps={{
-                                    maxLength:60
+                                InputProps={{
+                                    maxLength:60,
+                                    startAdornment: <InputAdornment position="start">$</InputAdornment>
                                 }}
                                 margin="dense"
                                 style={{ marginRight: '1%'}}
@@ -334,7 +336,7 @@ function getStepContent(franchiseeForm, step) {
                                 type="number"
                                 margin="dense"
                                 variant="outlined"
-                                inputProps={{
+                                InputProps={{
                                     maxLength:60
                                 }}
                                 onChange={franchiseeForm.handleFormChange('AgreementTerm')}
@@ -353,7 +355,8 @@ function getStepContent(franchiseeForm, step) {
                                 value={franchiseeForm.state.ibAmount}
                                 InputProps={{
                                     readOnly: true,
-                                    maxLength:60
+                                    maxLength:60,
+                                    startAdornment: <InputAdornment position="start">$</InputAdornment>
                                 }}
                                 InputLabelProps={{
                                     shrink: true
@@ -390,7 +393,8 @@ function getStepContent(franchiseeForm, step) {
                                 value={franchiseeForm.state.downPayment}
                                 InputProps={{
                                     readOnly: true,
-                                    maxLength: 60
+                                    maxLength: 60,
+                                    startAdornment: <InputAdornment position="start">$</InputAdornment>
                                 }}
                                 InputLabelProps={{
                                     shrink: true
@@ -409,7 +413,8 @@ function getStepContent(franchiseeForm, step) {
                                 value={franchiseeForm.state.interest}
                                 InputProps={{
                                     readOnly: true,
-                                    maxLength: 60
+                                    maxLength: 60,
+                                    startAdornment: <InputAdornment position="start">$</InputAdornment>
                                 }}
                                 InputLabelProps={{
                                     shrink: true
@@ -429,7 +434,8 @@ function getStepContent(franchiseeForm, step) {
                                 margin="dense"
                                 InputProps={{
                                     readOnly: true,
-                                    maxLength: 60
+                                    maxLength: 60,
+                                    startAdornment: <InputAdornment position="start">$</InputAdornment>
                                 }}
                                 InputLabelProps={{
                                     shrink: true
@@ -447,7 +453,8 @@ function getStepContent(franchiseeForm, step) {
                                 margin="dense"
                                 InputProps={{
                                     readOnly: true,
-                                    maxLength: 60
+                                    maxLength: 60,
+                                    startAdornment: <InputAdornment position="start">$</InputAdornment>
                                 }}
                                 InputLabelProps={{
                                     shrink: true
