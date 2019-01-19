@@ -40,7 +40,6 @@ export function chatnotificationstatus(){
     }
 }
 export  function changechatpanelshowstatus () {
-    console.log("**************************************************************changechatpanelshowstatus")
     return (dispatch)=>{
         dispatch({
             type    : SET_CHATPANEL_SHOW_STATUS,

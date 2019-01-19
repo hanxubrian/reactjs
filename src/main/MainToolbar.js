@@ -371,10 +371,10 @@ class MainToolbar extends Component {
                     </Popover>
 
                     <div className={classes.separator}/>
-                    <FuseSearch/>
+                    {/*<FuseSearch/>*/}
 
                     {/*<Hidden lgUp>*/}
-                        <div className={classes.separator}/>
+                        {/*<div className={classes.separator}/>*/}
                         <div onClick={this.shownotification}>
                                 <div className={classes.unreadBadge}>
                                     {this.state.unreadMSGnum && this.state.unreadMSGnum !=="0" && (
