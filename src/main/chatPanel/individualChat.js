@@ -239,6 +239,7 @@ class IndividualChat extends Component {
             if(!this.state.isOpen){
                 this.setState({isOpen: !this.state.isOpen});
             }
+            this.scrollToBottom();
         }else{
             if(this.state.isOpen){
                 this.setState({isOpen: !this.state.isOpen});
@@ -295,7 +296,10 @@ class IndividualChat extends Component {
             });
     };
     scrollToBottom = () => {
-        this.chatScroll.scrollTop = this.chatScroll.scrollHeight;
+        if(this.chatScroll && this.chatScroll !==null && this.chatScroll.scrollTop && this.chatScroll.scrollTop !=null && this.chatScroll.scrollHeight && this.chatScroll.scrollHeight != null){
+            this.chatScroll.scrollTop = this.chatScroll.scrollHeight;
+        }
+
     };
     render() {
         const {classes, chat, contacts, className} = this.props;

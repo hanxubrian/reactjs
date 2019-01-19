@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Avatar, Paper, Typography, withStyles, TextField, IconButton, Icon} from '@material-ui/core';
+import {Avatar, Paper, Typography, withStyles,Button, TextField, IconButton, Icon} from '@material-ui/core';
 import classNames from 'classnames';
 import {FuseScrollbars} from '@fuse';
 import moment from 'moment/moment';
@@ -238,11 +238,23 @@ class Chat extends Component {
                                 </div>
                             )
                     }
-
                 </FuseScrollbars>
                 {chat && (
                     <form onSubmit={this.onMessageSubmit} className={classNames(classes.bottom, "py-16 px-8")}>
                         <Paper className={classNames(classes.inputWrapper, "flex items-center relative")}>
+                            {/*<input*/}
+                                {/*accept="image/*"*/}
+                                {/*className={classes.input}*/}
+                                {/*style={{ display: 'none' }}*/}
+                                {/*id="raised-button-file"*/}
+                                {/*multiple*/}
+                                {/*type="file"*/}
+                            {/*/>*/}
+                            {/*<label htmlFor="raised-button-file">*/}
+                                {/*<IconButton variant="raised" component="span" className={classes.button}>*/}
+                                    {/*<Icon className="text-24" color="action">attach_file</Icon>*/}
+                                {/*</IconButton>*/}
+                            {/*</label>*/}
                             <TextField
                                 autoFocus={false}
                                 id="message-input"
@@ -250,7 +262,7 @@ class Chat extends Component {
                                 InputProps={{
                                     disableUnderline: true,
                                     classes         : {
-                                        root : "flex flex-grow flex-no-shrink ml-16 mr-48 my-8",
+                                        root : "flex flex-grow flex-no-shrink ml-16 mr-48  my-8",
                                         input: ""
                                     },
                                     placeholder     : "Type your message "
@@ -262,6 +274,8 @@ class Chat extends Component {
                                 onChange={this.onInputChange}
                                 value={messageText}
                             />
+
+
                             <IconButton className="absolute pin-r pin-t" type="submit">
                                 <Icon className="text-24" color="action">send</Icon>
                             </IconButton>

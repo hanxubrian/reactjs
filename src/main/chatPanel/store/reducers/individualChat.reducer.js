@@ -1,6 +1,7 @@
 import * as Actions from '../actions';
 import storage from "redux-persist/lib/storage";
 import {persistReducer} from "redux-persist";
+import {SET_CHATPANEL_SHOW_STATUS, SET_NOTIFICATION_STATUS} from "../actions/individualChat.actions";
 
 
 
@@ -8,6 +9,8 @@ const initialState = {
     loading                     : true,
     status                      : false,
     individualChatcurrentRoom   : null,
+    chatnotificationstatus      : false,
+    chatpanelshowstatus         : true,
 };
 const IndividualChat = function (state = initialState, action) {
     switch ( action.type )
@@ -26,6 +29,18 @@ const IndividualChat = function (state = initialState, action) {
         {
             return {...state,
                 individualChatcurrentRoom: null,status: true
+            }
+        }
+        case Actions.SET_NOTIFICATION_STATUS:
+        {
+            return {...state,
+                chatnotificationstatus: !state.chatnotificationstatus,status: true
+            }
+        }
+        case Actions.SET_CHATPANEL_SHOW_STATUS:
+        {
+            return {
+                chatpanelshowstatus: !state.chatpanelshowstatus,
             }
         }
         default:

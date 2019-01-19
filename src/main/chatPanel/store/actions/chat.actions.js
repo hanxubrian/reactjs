@@ -71,9 +71,10 @@ export function assignRooms(currentUser)
                     hooks : {
                         onMessage: message=>{
                             const newmsg = {
-                                'who'    : message.sender.id,
-                                'message': message.text,
-                                'time'   : message.createdAt
+                                'who'           : message.sender.id,
+                                'message'       : message.text,
+                                'time'          : message.createdAt,
+                                'attachment'    : message.attachment,
                             };
                            
                             return dispatch(addMessage(chat.chatId, newmsg)) 
@@ -318,7 +319,11 @@ export function sendMsg(messageText, currentroom)
         const currentRoom = currentroom;
         currentUser.sendMessage({
             text: messageText,
-            roomId: currentRoom.id
+            roomId: currentRoom.id,
+            attachment: {
+                link: "http://cataas.com/cat",
+                type: "image"
+            }
         });
     }
 

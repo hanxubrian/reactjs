@@ -16,31 +16,30 @@ import "./individualChat.css";
 
 const styles = theme => ({
     root : {
-        width                         : 70,
-        maxWidth                      : 70,
-        minWidth                      : 70,
+        width                         : 0,
+        maxWidth                      : 0,
+        minWidth                      : 0,
         [theme.breakpoints.down('md')]: {
             width   : 0,
             maxWidth: 0,
             minWidth: 0
         }
     },
-    panel: {
-        position                      : 'absolute',
-        width                         : 360,
+    panel: {        position                      : 'absolute',
+        width                         : 700,
         backgroundColor               : theme.palette.background.paper,
         boxShadow                     : theme.shadows[3],
-        top                           : 0,
-        height                        : '100%',
-        minHeight                     : '100%',
+        top                           : 'auto',
+        height                        : '70%',
+        minHeight                     : '70%',
         bottom                        : 0,
         right                         : 0,
         margin                        : 0,
         zIndex                        : 1000,
-        transform                     : 'translate3d(290px,0,0)',
+        transform                     : 'translate3d(0,100%,0)',
         overflow                      : 'hidden',
         [theme.breakpoints.down('md')]: {
-            transform : 'translate3d(360px,0,0)',
+            transform : 'translate3d(0,70%,0)',
             boxShadow : 'none',
             '&.opened': {
                 boxShadow: theme.shadows[5]
@@ -51,7 +50,8 @@ const styles = theme => ({
             duration: theme.transitions.duration.standard
         }),
         '&.opened'                    : {
-            transform: 'translateX(0)'
+            transform   : 'translateX(0)',
+            width       : '700px',
         }
     },
     chartAddButton: {
@@ -71,7 +71,9 @@ const styles = theme => ({
         right: 360,
         zIndex: 10,
         display: 'flex'
-    }
+    },
+
+
 });
 
 class ChatPanel extends Component {
@@ -89,14 +91,13 @@ class ChatPanel extends Component {
         contacts               : null,
         user                   : null,
         currentRoom            : null,
-        individualcurrentRoom  :null,
+        individualcurrentRoom  : null,
+
     };
     componentDidMount()
     {
         this.props.getUserData();
         this.props.getContacts();
-
-        // console.log("###########messages1",this.props.chatDetail.messages);
     }
 
     componentDidUpdate(prevProps,prevState)
@@ -123,15 +124,14 @@ class ChatPanel extends Component {
             this.setState({
                 individualcurrentRoom   :this.props.individualcurrentRoom,
             });
-
         }
+
         if(this.state.individualcurrentRoom && this.state.individualcurrentRoom != null && !this.state.isOpen ){
             this.setState({
                 isOpen : true,
             });
         }
         if(this.props.chatDetail.messages !== prevProps.chatDetail.messages){
-            // console.log("###############################################new message2",this.props.chatDetail.messages);
         }
 
     }
@@ -151,6 +151,15 @@ class ChatPanel extends Component {
         this.state.individualchats.push('aaa');
         this.setState({individualchats: this.state.individualchats});
     }
+
+    openchatpanel=()=>{
+        this.props.changechatpanelshowstatus();
+        this.props.openChatPanel();
+    }
+    closechatpanel=()=>{
+        this.props.changechatpanelshowstatus();
+        this.props.closeChatPanel();
+    }
     render()
     {
         const {classes, openChatPanel, closeChatPanel, contacts, selectedContactId, state} = this.props;
@@ -158,6 +167,9 @@ class ChatPanel extends Component {
         const selectedContact = contacts.find(_contact => _contact.id === selectedContactId);
 
         return (
+            <div>
+
+                {this.props.getchatnotification && (
             <div className={classes.root}>
                 <ClickAwayListener onClickAway={() => state && closeChatPanel()}>
                     <div className={classNames(classes.panel, {'opened': state}, "flex flex-col")}>
@@ -192,17 +204,20 @@ class ChatPanel extends Component {
                             <Chat className="flex flex-1 z-10"/>
                         </Paper>
                     </div>
+
+
                 </ClickAwayListener>
+
+
                 {this.state.isOpen && (
                     <div className={classNames(classes.individualChat, {'closeIndvidualchat': !state})}>
                         {
-                            // this.state.individualchats.map((chatItem,index) =>
                             <IndividualChat />
-                            // )
                         }
                     </div>
                 )}
-
+            </div>
+                )}
             </div>
         );
     }
@@ -211,11 +226,12 @@ class ChatPanel extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        initChat       : Actions.initChat,
-        getUserData   : Actions.getUserData,
-        getContacts   : Actions.getContacts,
-        openChatPanel : Actions.openChatPanel,
-        closeChatPanel: Actions.closeChatPanel
+        initChat                        : Actions.initChat,
+        getUserData                     : Actions.getUserData,
+        getContacts                     : Actions.getContacts,
+        openChatPanel                   : Actions.openChatPanel,
+        closeChatPanel                  : Actions.closeChatPanel,
+        chatnotificationstatus          : Actions.chatnotificationstatus,
     }, dispatch);
 }
 
@@ -228,10 +244,12 @@ function mapStateToProps({chatPanel,contactsApp})
         chatDetail                  : chatPanel.chat,
         chatUser                    : chatPanel.user,
         currentRoom                 : chatPanel.chat.currentRoom,
+        getchatnotification         : chatPanel.IndividualChat.chatnotificationstatus,
         selectedContactIds          : contactsApp.contacts.selectedContactIds,
         searchText                  : contactsApp.contacts.searchText,
         user                        : contactsApp.user,
         individualcurrentRoom       : chatPanel.IndividualChat.individualChatcurrentRoom,
+
     }
 }
 
