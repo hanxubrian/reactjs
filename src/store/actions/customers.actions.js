@@ -33,6 +33,10 @@ export const OPEN_EMAIL_TO_CUSTOMER_DIALOG = "[CUSTOMERS APP] OPEN_EMAIL_TO_CUST
 export const CREATE_CUSTOMER = "[CUSTOMERS APP] CREATE_CUSTOMER";
 export const CREATE_CUSTOMER_START = "[CUSTOMERS APP] CREATE_CUSTOMER_START";
 
+export const GET_CUSTOMER = "[CUSTOMERS APP] GET_CUSTOMER";
+export const GET_CUSTOMER_START = "[CUSTOMERS APP] GET_CUSTOMER_START";
+
+
 export function getCustomers(regionId, statusId = 0, location = "all", latitude = "", longitude = "", searchText = "") {
 	// return dispatch => {
 	// const request = axios.get("/api/customers/gets");
@@ -113,8 +117,6 @@ export function getAccountTypesGroups() {
 	}
 }
 export function createCustomer(regionId, param) {
-
-
 	return (dispatch) => {
 		dispatch({
 			type: CREATE_CUSTOMER_START,
@@ -125,6 +127,22 @@ export function createCustomer(regionId, param) {
 			let response = await customersService.createCustomer(regionId, param);
 			dispatch({
 				type: CREATE_CUSTOMER,
+				payload: response
+			});
+		})();
+	}
+}
+export function getCustomer(regionId, customerId) {
+	return (dispatch) => {
+		dispatch({
+			type: GET_CUSTOMER_START,
+			payload: true
+		});
+
+		(async () => {
+			let response = await customersService.getCustomer(regionId, customerId);
+			dispatch({
+				type: GET_CUSTOMER,
 				payload: response
 			});
 		})();
@@ -219,10 +237,20 @@ export function closeNewCustomerForm() {
 	}
 }
 
-export function openEditCustomerForm(data) {
-	return {
-		type: OPEN_EDIT_CUSTOMER_FORM,
-		data
+export function openEditCustomerForm(regionId, customerId) {
+	return (dispatch) => {
+		dispatch({
+			type: GET_CUSTOMER_START,
+			payload: true
+		});
+
+		(async () => {
+			let response = await customersService.getCustomer(regionId, customerId);
+			dispatch({
+				type: OPEN_EDIT_CUSTOMER_FORM,
+				payload: response
+			});
+		})();
 	}
 }
 

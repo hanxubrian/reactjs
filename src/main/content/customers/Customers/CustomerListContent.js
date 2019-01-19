@@ -1185,6 +1185,7 @@ class CustomerListContent extends Component {
 		let timer = 0;
 		let delay = 200;
 		let prevent = false;
+		delete restProps.selectByRowClick
 		const handleClick = () => {
 			timer = setTimeout(() => {
 				if (!prevent) {
@@ -1197,7 +1198,8 @@ class CustomerListContent extends Component {
 			clearTimeout(timer);
 			prevent = true;
 			// alert(JSON.stringify(tableRow.row));
-			this.props.openNewCustomerForm();
+			console.log(restProps);
+			this.props.openEditCustomerForm(this.props.regionId, tableRow.row.CustomerId);
 		}
 		return (
 			<Table.Row
@@ -1497,6 +1499,8 @@ function mapDispatchToProps(dispatch) {
 		closeEditCustomerForm: Actions.closeEditCustomerForm,
 
 		openNewCustomerForm: Actions.openNewCustomerForm,
+
+		getCustomer: Actions.getCustomer,
 	}, dispatch);
 }
 

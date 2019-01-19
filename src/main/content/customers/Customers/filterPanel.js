@@ -274,9 +274,11 @@ function TextMaskPhone(props) {
 			ref={ref => {
 				inputRef(ref ? ref.inputElement : null);
 			}}
-			mask={['+', '1', ' ', '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
-			placeholderChar={'\u2000'}
+			mask={['+', '1', ' ', '(', /\d/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+			// placeholderChar={'\u2000'}
+			placeholderChar={'∗'}
 			showMask
+			guide
 		/>
 	);
 }
@@ -361,7 +363,7 @@ class FilterPanel extends Component {
 			NearbyRadius: this.props.locationFilterValue.miles,
 			AddressZipcodeRadius: this.props.locationFilterValue.miles,
 
-			customerName: "",
+			childCustomerName: "",
 			suggestions: [],
 
 			BillingAmountFrom: "",
@@ -447,7 +449,22 @@ class FilterPanel extends Component {
 				MobilePhone: "Sample MobilePhone",
 				Email: "Sample Email",
 			}],
+
+			customerName:  "",
+			customerAddress: "",
+			customerCity: "",
+			customerState: "",
+			customerZip: "",
+
+			customerPhone: "",
+			customerFax: "",
+
+			customerEmail: "",
+			customerWeb: "",
+
 		}
+
+
 	}
 
 
@@ -464,13 +481,33 @@ class FilterPanel extends Component {
 
 	}
 	componentWillReceiveProps(nextProps) {
-		const { customers } = this.props;
+		const { customers, customerForm } = this.props;
 		if (nextProps.customers !== customers) {
 			this.setState({
-				rows: Utils.getCustomerListFromDb(nextProps.customers)
+				rows: Utils.getCustomerListFromDb(nextProps.customers),
 			});
 		}
 
+		if (nextProps.customerForm !== customerForm) {
+			if (nextProps.customerForm.data !== null) {
+				console.log("nextProps.customerForm.data.Data.cus_phone", nextProps.customerForm.data.Data.cus_phone,)
+				this.setState({
+					customerName:  nextProps.customerForm.data.Data.cus_name,
+					customerAddress: nextProps.customerForm.data.Data.cus_addr,
+					customerCity: nextProps.customerForm.data.Data.cus_city,
+					customerState: nextProps.customerForm.data.Data.cus_state,
+					customerZip: nextProps.customerForm.data.Data.cus_zip,
+
+					customerPhone: "+1" + nextProps.customerForm.data.Data.cus_phone,
+					customerFax: "+1" + nextProps.customerForm.data.Data.cus_fax,
+
+					customerEmail: nextProps.customerForm.data.Data.email1,
+					customerWeb: nextProps.customerForm.data.Data.cus_zip,
+					
+				});
+			}
+
+		}
 		// if (nextProps.locationFilterValue !== this.props.locationFilterValue) {
 		// 	this.setState({
 		// 		Location: nextProps.locationFilterValue.id,
@@ -518,7 +555,6 @@ class FilterPanel extends Component {
 	};
 
 	handleChange = name => event => {
-
 
 		let value = event.target.value
 		let onLocationFilter = this.onLocationFilter
@@ -754,7 +790,7 @@ class FilterPanel extends Component {
 
 	onChange = (event, { newValue, method }) => {
 		this.setState({
-			customerName: newValue
+			childCustomerName: newValue
 		});
 	};
 
@@ -823,12 +859,12 @@ class FilterPanel extends Component {
 
 		const { addressRows, addressColumns, contactsRows, contactsColumns } = this.state;
 
-		const { customerName, suggestions } = this.state;
+		const { childCustomerName, suggestions } = this.state;
 		// Autosuggest will pass through all these props to the input.
 		const inputProps = {
 			classes,
 			placeholder: 'Type a customer name...',
-			value: customerName,
+			value: childCustomerName,
 			onChange: this.onChange
 		};
 
@@ -907,8 +943,8 @@ class FilterPanel extends Component {
 											id="Name"
 											label="Name *"
 											className={classes.textField}
-											// value={customerForm.state.name}
-											onChange={this.handleChange('Name')}
+											value={this.state.customerName}
+											onChange={this.handleChange('customerName')}
 											margin="dense"
 											variant="outlined"
 											autoFocus
@@ -920,8 +956,8 @@ class FilterPanel extends Component {
 											id="outlined-name"
 											label="Address *"
 											className={classes.textField}
-											// value={customerForm.state.name}
-											onChange={this.handleChange('Address')}
+											value={this.state.customerAddress}
+											onChange={this.handleChange('customerAddress')}
 											margin="dense"
 											variant="outlined"
 											fullWidth />
@@ -942,8 +978,8 @@ class FilterPanel extends Component {
 											id="outlined-name"
 											label="City *"
 											className={classNames(classes.textField, 'mr-6')}
-											// value={customerForm.state.name}
-											onChange={this.handleChange('City')}
+											value={this.state.customerCity}
+											onChange={this.handleChange('customerCity')}
 											margin="dense"
 											variant="outlined"
 											style={{ width: '55%' }}
@@ -955,8 +991,8 @@ class FilterPanel extends Component {
 											label="State *"
 											select
 											className={classNames(classes.textField, 'mr-6 ml-6')}
-											value={this.state.State === undefined ? "" : this.state.State}
-											onChange={this.handleChange('State')}
+											value={this.state.customerState}
+											onChange={this.handleChange('customerState')}
 											margin="dense"
 											variant="outlined"
 											style={{ width: '20%' }}
@@ -972,8 +1008,8 @@ class FilterPanel extends Component {
 											id="outlined-name"
 											label="Zip *"
 											className={classNames(classes.textField, 'ml-6')}
-											// value={customerForm.state.name}
-											onChange={this.handleChange('Zip')}
+											value={this.state.customerZip}
+											onChange={this.handleChange('customerZip')}
 											margin="dense"
 											variant="outlined"
 											style={{ width: '25%' }}
@@ -986,13 +1022,16 @@ class FilterPanel extends Component {
 												id="Phone"
 												label="Phone"
 												className={classes.textField}
-												onChange={this.handleChange('Phone')}
+												// onChange={this.handleChange('customerPhone')}
 												margin="dense"
+												InputLabelProps={{
+													shrink: true
+												}}
 												InputProps={{
 													inputComponent: TextMaskPhone,
 													maxLength: 40,
-													value: this.state.Phone,
-													onChange: this.handleChange('Phone')
+													value: this.state.customerPhone,
+													onChange: this.handleChange('customerPhone')
 												}}
 												variant="outlined"
 												fullWidth
@@ -1005,13 +1044,16 @@ class FilterPanel extends Component {
 												id="Fax"
 												label="Fax"
 												className={classes.textField}
-												onChange={this.handleChange('Fax')}
+												// onChange={this.handleChange('customerFax')}
 												margin="dense"
+												InputLabelProps={{
+													shrink: true
+												}}
 												InputProps={{
 													inputComponent: TextMaskPhone,
 													maxLength: 40,
-													value: this.state.Phone,
-													onChange: this.handleChange('Fax')
+													value: this.state.customerFax,
+													onChange: this.handleChange('customerFax')
 												}}
 												variant="outlined"
 												fullWidth
@@ -1027,8 +1069,8 @@ class FilterPanel extends Component {
 											label="Email"
 											type="email"
 											className={classNames(classes.textField, 'mr-6')}
-											// value={customerForm.state.name}
-											onChange={this.handleChange('Email')}
+											value={this.state.customerEmail}
+											onChange={this.handleChange('customerEmail')}
 											margin="dense"
 											variant="outlined"
 											style={{ width: '100%' }}
@@ -1038,8 +1080,8 @@ class FilterPanel extends Component {
 											id="outlined-name"
 											label="Website"
 											className={classNames(classes.textField, 'ml-6')}
-											// value={customerForm.state.name}
-											onChange={this.handleChange('Website')}
+											value={this.state.customerWebsite}
+											onChange={this.handleChange('customerWebsite')}
 											margin="dense"
 											variant="outlined"
 											style={{ width: '100%' }}

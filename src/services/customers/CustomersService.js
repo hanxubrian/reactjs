@@ -107,6 +107,22 @@ class CustomersService {
 				})
 		});
 	}
+	getCustomer(regionId, customerId) {
+		return new Promise((resolve, reject) => {
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Customer/${customerId}?RegionId=${regionId}`)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
 	getCustomerDocuments() {
 		return new Promise((resolve, reject) => {
 			axios_instance.get(`${BASE_API_URL}/v1/lists/GetCustomerDocumentsRequiredList?RegionId=2`)

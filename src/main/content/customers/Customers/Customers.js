@@ -856,6 +856,12 @@ class Customers extends Component {
 						<Typography variant="body2" color="primary">Submitting new customer data...</Typography>
 					</div>
 				)}
+				{(this.props.bGetCustomerStart) && (
+					<div className={classNames(classes.overlay, "flex-col")}>
+						<CircularProgress className={classes.progress} color="secondary" />
+						<Typography variant="body2" color="primary">Fetching the customer data...</Typography>
+					</div>
+				)}
 			</React.Fragment >
 		);
 	}
@@ -911,6 +917,8 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		bCreateCustomerStart: customers.bCreateCustomerStart,
 		createCustomerResponse: customers.createCustomerResponse,
 		bCreateCustomerStart: customers.bCreateCustomerStart,
+
+		bGetCustomerStart: customers.bGetCustomerStart,
 	}
 }
 

@@ -41,6 +41,9 @@ const initialState = {
 
 	createCustomerResponse: [],
 	bCreateCustomerStart: false,
+
+	getCustomerResponse: [],
+	bGetCustomerStart: false,
 };
 
 
@@ -96,6 +99,21 @@ const customers = function (state = initialState, action) {
 				return {
 					...state,
 					bCreateCustomerStart: true,
+				}
+			}
+		case Actions.GET_CUSTOMER:
+			{
+				return {
+					...state,
+					getCustomerResponse: action.payload,
+					bGetCustomerStart: false,
+				}
+			}
+		case Actions.GET_CUSTOMER_START:
+			{
+				return {
+					...state,
+					bGetCustomerStart: true,
 				}
 			}
 		case Actions.GET_ALL_DOCUMENTS:
@@ -199,12 +217,15 @@ const customers = function (state = initialState, action) {
 			{
 				return {
 					...state,
+					bOpenedFilterPanel: true,
+					bOpenedSummaryPanel: false,
+					bGetCustomerStart: false,
 					customerForm: {
-						type: 'create',
+						type: 'edit',
 						props: {
 							open: true
 						},
-						data: action.data
+						data: action.payload
 					}
 				};
 			}
@@ -213,7 +234,7 @@ const customers = function (state = initialState, action) {
 				return {
 					...state,
 					customerForm: {
-						type: 'create',
+						type: 'edit',
 						props: {
 							open: false
 						},
