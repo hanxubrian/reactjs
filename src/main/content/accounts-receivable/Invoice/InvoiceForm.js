@@ -425,6 +425,7 @@ class InvoiceForm extends Component {
         if(nextProps.newInvoice!==null && nextProps.newInvoice!==this.props.newInvoice){
             this.setState({bAlertNewInvoice: false});
             if(this.state.buttonOption===0){
+                this.props.updatedInvoices();
                 this.props.resetInvoiceForm();
                 this.setState({InvoiceDescription: ''});
                 this.setState({note: ''});
@@ -518,8 +519,8 @@ class InvoiceForm extends Component {
             Notes: this.state.note,
             RegionId: this.props.regionId,
             BillRunId: 999,
-            InvoiceDate: this.state.InvoiceDate,
-            DueDate: this.state.DueDate,
+            InvoiceDate: moment(this.state.InvoiceDate),
+            DueDate: moment(this.state.DueDate),
             CreatedById: this.props.user.UserId,
             CreatedDate: moment(),
             SubTotal: this.state.subTotal,
@@ -739,26 +740,26 @@ class InvoiceForm extends Component {
                                 </Grid>
                                 <Grid item xs={12} sm={1} md={1} className="flex flex-row xs:flex-col pr-4 pl-4"
                                       style={{padding: '0 6px!important', display: 'none'}}>
-                                    <DatePicker
-                                        margin="none"
-                                        label="Due Date"
-                                        format="MM/DD/YYYY"
-                                        name="DueDate"
-                                        variant="outlined"
-                                        value={this.state.DueDate}
-                                        onChange={this.handleDueDateChange}
-                                        required
-                                        fullWidth
-                                        InputProps={{
-                                            classes: {
-                                                input: classes.input1,
-                                            },
-                                        }}
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                    />
+                                    {/*<DatePicker*/}
+                                        {/*margin="none"*/}
+                                        {/*label="Due Date"*/}
+                                        {/*format="MM/DD/YYYY"*/}
+                                        {/*name="DueDate"*/}
+                                        {/*variant="outlined"*/}
+                                        {/*value={this.state.DueDate}*/}
+                                        {/*onChange={this.handleDueDateChange}*/}
+                                        {/*required*/}
+                                        {/*fullWidth*/}
+                                        {/*InputProps={{*/}
+                                            {/*classes: {*/}
+                                                {/*input: classes.input1,*/}
+                                            {/*},*/}
+                                        {/*}}*/}
+                                        {/*InputLabelProps = {{*/}
+                                            {/*shrink: true,*/}
+                                            {/*classes: {outlined: classes.label}*/}
+                                        {/*}}*/}
+                                    {/*/>*/}
                                 </Grid>
                             </MuiPickersUtilsProvider>
                             <Grid item xs={12} sm={2} md={2} className="flex flex-row xs:flex-col pl-4" >

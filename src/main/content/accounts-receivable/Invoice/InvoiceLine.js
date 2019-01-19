@@ -3,8 +3,8 @@ import {withRouter} from 'react-router-dom';
 
 //Material UI core and icons
 import {
-    Snackbar, SnackbarContent, TextField,
-    Paper, Icon, IconButton, Select, OutlinedInput, MenuItem, FormControl, Fab
+    Snackbar, SnackbarContent, TextField,Select,NoSsr,
+    Paper, Icon, IconButton, OutlinedInput, MenuItem, FormControl, Fab
 } from '@material-ui/core'
 import {withStyles} from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
@@ -14,6 +14,7 @@ import ErrorIcon from '@material-ui/icons/Error';
 import InfoIcon from '@material-ui/icons/Info';
 import CloseIcon from '@material-ui/icons/Close';
 import WarningIcon from '@material-ui/icons/Warning';
+// import { useTheme } from '@material-ui/styles';
 
 // third party
 import _ from 'lodash';
@@ -22,6 +23,8 @@ import PropTypes from 'prop-types';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import Autosuggest from 'react-autosuggest';
+import Select1 from 'react-select';
+import {Control,Menu, SingleValue, Placeholder, ValueContainer, inputComponent,NoOptionsMessage,Option, useStyles} from './selectUtils';
 
 //Store
 import {bindActionCreators} from "redux";
@@ -31,6 +34,7 @@ import keycode from "keycode";
 
 //Utility
 import {NumberFormatCustom, escapeRegexCharacters, NumberFormatCustom1, NumberFormatCustomPercent} from '../../../../services/utils'
+import {emphasize} from "@material-ui/core/styles/colorManipulator";
 
 
 //Snackbar
@@ -208,7 +212,7 @@ const styles = theme => ({
             }
         },
         '& .taxColumn': {
-          maxWidth: '160px!important'
+            maxWidth: '160px!important'
         },
         InvoiceLineHeadRoot:{
             backgroundColor: 'lightgray',
@@ -309,6 +313,52 @@ const styles = theme => ({
         padding: 0,
         listStyleType: 'none',
     },
+    root1: {
+        flexGrow: 1,
+        height: 150,
+    },
+    input1: {
+        display: 'flex',
+        padding: 0,
+    },
+    valueContainer: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        flex: 1,
+        alignItems: 'center',
+        overflow: 'hidden',
+    },
+    chip: {
+        margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
+    },
+    chipFocused: {
+        backgroundColor: emphasize(
+            theme.palette.type === 'light' ? theme.palette.grey[300] : theme.palette.grey[700],
+            0.08,
+        ),
+    },
+    noOptionsMessage: {
+        padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
+    },
+    singleValue: {
+        fontSize: 13,
+    },
+    placeholder: {
+        position: 'absolute',
+        left: 6,
+        fontSize: 13,
+    },
+    paper: {
+        position: 'absolute',
+        zIndex: 1,
+        marginTop: theme.spacing.unit,
+        left: 0,
+        right: 0,
+        fontSize: 13
+    },
+    divider: {
+        height: theme.spacing.unit * 2,
+    },
 });
 
 function renderSuggestion (suggestion,  { isHighlighted }) {
@@ -356,6 +406,7 @@ class InvoiceLineTable extends React.Component {
         numberSuggestions: [],
         taxRowId: 0,
         customerTaxAmountLine: null,
+        selectedBillingOption: null
     };
 
     constructor(props) {
@@ -413,7 +464,7 @@ class InvoiceLineTable extends React.Component {
             let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList;
             this.props.fn.forEach(f=>{
                 selectedFranchiess = _.filter(franchisees, franchisee=>f.Number===franchisee.Number && f.Name===franchisee.Name);
-               });
+            });
 
             if(selectedFranchiess.length>0) {
                 const data = [...this.state.data];
@@ -629,10 +680,35 @@ class InvoiceLineTable extends React.Component {
         if(row.amount==='') return true;
     };
 
+    handleBillingChange = (selectedBillingOption) => {
+        this.setState({selectedBillingOption});
+        console.log(`Option selected:`, selectedBillingOption);
+    };
+
     render()
     {
         const {classes} = this.props;
         const {data} = this.state;
+
+        const components = {
+            Control,
+            Menu,
+            NoOptionsMessage,
+            Option,
+            Placeholder,
+            SingleValue,
+            ValueContainer,
+        };
+
+        const selectStyles = {
+            input: base => ({
+                ...base,
+                // color: ,
+                '& input': {
+                    font: 'inherit',
+                },
+            }),
+        };
 
         const {
             nameSuggestions,
@@ -649,6 +725,26 @@ class InvoiceLineTable extends React.Component {
                 all_data.push({f_index: f_index++,...f});
             });
         });
+
+        const billingSuggestions = [
+            {label: 'Regular Billing'},{label: 'Additional Billing Office'}, {label: 'Extra Work'},{label: 'Client Supplies'}
+        ].map(suggestion => ({
+            value: suggestion.label,
+            label: suggestion.label,
+        }));
+
+        console.log('billingSuggestions', billingSuggestions);
+        const serviceSuggestions =[
+            {label: "Adjust-Balance"}, {label: "Adjust-Refund"}, {label: "Adjust-WriteOff"}, {label: "Buffing"},
+            {label: "Carpet Clean"}, {label: "Customer Suppliers"}, {label: "Emergency Clean"}, {label: "Event Center"},
+            {label: "Floor Services"}, {label: "Furniture Cleaning Service"}, {label: "High Dusting"}, {label: "Hotel"},
+            {label: "In-House Work"}, {label: "Initial and Deep Clean"}, {label: "Initial One-Time Clean"}, {label: "Make Ready"},
+            {label: "Miscellaneous - Special"}, {label: "Other"}, {label: "Porter Services"}, {label: "Power Washing"},
+            {label: "Regular Billing"}, {label: "Regular Cleaning - Day"}, {label: "Regular Cleaning - Night"}
+        ].map(suggestion => ({
+            value: suggestion.label,
+            label: suggestion.label,
+        }));
 
         return (
             <Paper className={classNames(classes.root)}>
