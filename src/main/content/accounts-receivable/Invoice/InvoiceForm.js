@@ -284,7 +284,8 @@ class InvoiceForm extends Component {
         subTotal: 0.0,
         tax: 0,
         markup: 0.0,
-        InvoiceNo: "",
+        // InvoiceNo: this.props.invoiceForm.type === 'new' ? "PENDING": '',
+        InvoiceNo: this.props.invoiceForm.type === 'new' ? "PENDING": '',
         snackMessage: "",
         openSnack: false,
         PO_number: '',
@@ -294,6 +295,10 @@ class InvoiceForm extends Component {
         buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval,
         franchiseeFromCustomer: null
     };
+
+    constructor(props) {
+        super(props);
+    }
 
     renderInputComponent = (inputProps ) => {
         const { classes, inputRef = () => {}, ref, ...other } = inputProps ;
@@ -397,10 +402,11 @@ class InvoiceForm extends Component {
     };
 
     componentDidUpdate(prevProps, prevState, snapshot){
-        if(this.props.invoiceForm.data!== prevProps.invoiceForm.data) {
+        if(this.props.invoiceForm.data!==null && this.props.invoiceForm.data!== prevProps.invoiceForm.data) {
             this.getTotal();
         }
         if(this.state.selectedCustomer!== null && JSON.stringify(this.state.selectedCustomer)!== JSON.stringify(this.props.invoiceForm.customer)) {
+            console.log('fired');
             this.props.selectCustomer(this.state.selectedCustomer);
         }
     }
@@ -409,10 +415,11 @@ class InvoiceForm extends Component {
 
     }
 
+
     componentWillReceiveProps(nextProps) {
         if(nextProps.invoiceForm.customer!==null){
             if(nextProps.invoiceForm.type==='edit')
-                this.setState({InvoiceNo: nextProps.invoiceForm.customer.InvoiceNo});
+                this.setState({InvoiceNo: nextProps.invoices.invoiceDetail.Data.inv_no});
             this.setState({value: nextProps.invoiceForm.customer.CustomerName});
             this.setState({CustomerNo: nextProps.invoiceForm.customer.CustomerNo});
         }
@@ -443,11 +450,16 @@ class InvoiceForm extends Component {
     }
 
     componentDidMount(){
-        if(this.props.invoiceForm.type === 'new')
-            this.setState({InvoiceNo: "PENDING"});
-
         if(this.input) {
             setTimeout(() => {this.input.focus()}, 500);
+        }
+
+        if(this.props.invoices.invoiceDetail){
+            let invoiceDetail = this.props.invoices.invoiceDetail.Data;
+            let customer = this.props.customers.filter(customer => customer.CustomerName===invoiceDetail.CustomerName && customer.CustomerNo===invoiceDetail.CustomerNumber);
+            if(customer.length>0) {
+                this.setState({selectedCustomer: customer[0]});
+            }
         }
     }
 

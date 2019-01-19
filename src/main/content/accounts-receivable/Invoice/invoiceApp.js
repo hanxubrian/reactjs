@@ -330,8 +330,6 @@ class InvoiceApp extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const {regionId, StatusId, FromDate, ToDate,PeriodId, OpenOrClosed,InvoiceTypeId, ToPrintOrToEmail, SearchText} = this.props;
-
         if (this.props.invoices === null && nextProps.invoices !== null)
             this.getInvoicesFromStatus(nextProps.invoices);
         if (this.props.invoices !== nextProps.invoices)

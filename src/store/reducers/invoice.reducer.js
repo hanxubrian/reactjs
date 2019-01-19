@@ -189,7 +189,8 @@ const invoices = function(state = initialState, action) {
                     data : null,
                     customer: null
                 },
-                newInvoice: null
+                newInvoice: null,
+                invoiceDetail: null
             };
         }
         case Actions.OPEN_EDIT_INVOICE_FORM:
@@ -219,7 +220,8 @@ const invoices = function(state = initialState, action) {
                     data : null,
                     customer: null
                 },
-                newInvoice: null
+                newInvoice: null,
+                invoiceDetail: null
             };
         }
         case Actions.UPDATE_INVOICE_LINE:
