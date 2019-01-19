@@ -300,10 +300,16 @@ class FranchiseesOwnerTable extends React.Component {
     }
 
     handleAddOwner = () => {
-        this.handleUpdateOwnerInsertPayload(this.state.dialogForm);
+        this.handleUpdateOwnerInsertPayload(this.state.dialogForm , "add");
 		this.handleResetDialog();
         this.setState({openDialog: false});
 	}
+
+    handleRemoveOwner = (index) => {
+        const payloadData = this.state.insertPayload.Owners;
+        let removedData = payloadData.slice(0, index).concat(payloadData.slice(index+1, payloadData.length));
+        this.handleUpdateOwnerInsertPayload(removedData,"remove");
+    }
 
 	handleResetDialog = () =>{
         this.setState({dialogForm:{
@@ -314,10 +320,14 @@ class FranchiseesOwnerTable extends React.Component {
         }});
 	}
 
-	handleUpdateOwnerInsertPayload = (param) => {
+	handleUpdateOwnerInsertPayload = (param, actionType) => {
     	const payloadData = this.state.insertPayload;
-        payloadData.Owners.push(param);
-        //alert(payloadData);
+        if(actionType === "add"){
+            payloadData.Owners.push(param);
+        }
+        if(actionType === "remove"){
+            payloadData.Owners = param;
+        }
         this.setState({data: payloadData.Owners});
         this.setState({insertPayload: payloadData})
     	this.props.franchiseeUpdateInsertPayload(payloadData);
@@ -359,7 +369,7 @@ class FranchiseesOwnerTable extends React.Component {
 														{n.Title}
 													</TableCell>
 													<TableCell padding="checkbox">
-														<IconButton>
+														<IconButton onClick={()=>this.handleRemoveOwner(index)}>
 															<Icon>delete</Icon>
 														</IconButton>
 														<IconButton>
