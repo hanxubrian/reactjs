@@ -92,6 +92,14 @@ const customers = function (state = initialState, action) {
 					...state,
 					createCustomerResponse: action.payload,
 					bCreateCustomerStart: false,
+					customerForm: {
+						type: 'new',
+						props: {
+							open: false
+						},
+						data: null
+					}
+
 				}
 			}
 		case Actions.CREATE_CUSTOMER_START:

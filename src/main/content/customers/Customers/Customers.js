@@ -381,7 +381,14 @@ class Customers extends Component {
 	};
 
 	closeComposeForm = () => {
-		this.props.customerForm.type === 'create' ? this.props.closeEditCustomerForm() : this.props.closeNewCustomerForm();
+		switch (this.props.customerForm.type) {
+			case "new":
+				this.props.closeNewCustomerForm()
+				break;
+			case "edit":
+				this.props.closeEditCustomerForm()
+				break;
+		}
 	};
 
 
@@ -401,8 +408,14 @@ class Customers extends Component {
 				{ Amount: 1.1, Description: "sample string 2", ContractType: "sample string 3", AgreementType: "sample string 4", AccountExecutiveUserId: "sample string 5", SignDate: "sample string 6", StartDate: "sample string 7", Term: "sample string 8", ExpirationDate: "sample string 9" }
 			]
 		}
-
-		this.props.createCustomer(this.props.regionId, payload)
+		switch (this.props.customerForm.type) {
+			case "new":
+				this.props.createCustomer(this.props.regionId, payload)
+				break;
+			case "edit":
+				this.props.createCustomer(this.props.regionId, payload)
+				break;
+		}
 	}
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
@@ -855,7 +868,7 @@ class Customers extends Component {
 				{(this.props.bCreateCustomerStart) && (
 					<div className={classNames(classes.overlay, "flex-col")}>
 						<CircularProgress className={classes.progress} color="secondary" />
-						<Typography variant="body2" color="primary">Submitting new customer data...</Typography>
+						<Typography variant="body2" color="primary">Submitting customer data...</Typography>
 					</div>
 				)}
 				{(this.props.bGetCustomerStart) && (
