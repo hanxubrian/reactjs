@@ -29,18 +29,36 @@ import Person from '@material-ui/icons/Person';
 import Phone from '@material-ui/icons/Phone';
 import Title from '@material-ui/icons/Title';
 import InputAdornment from "@material-ui/core/InputAdornment/InputAdornment";
+import MaskedInput from "react-text-mask";
+import connect from "react-redux/es/connect/connect";
+import {withRouter} from "react-router-dom";
+import {bindActionCreators} from "redux";
+import * as Actions from 'store/actions';
+
+
+
+
 
 let counter = 0;
 
-function createData(firstName = '',lastName='', phone = '', title = 'description') {
-	return {
-		id: counter++,
-		firstName,
-		lastName,
-		phone,
-		title
-	};
+const TextMaskCustom = (props) => {
+    const { inputRef, ...other } = props;
+
+    return (
+        <MaskedInput
+            {...other}
+            ref={inputRef}
+            mask={['+',/[1-9]/,'(',/\d/,/\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+            placeholderChar={'\u2000'}
+            showMask
+        />
+    );
 }
+
+TextMaskCustom.propTypes = {
+    inputRef: PropTypes.func.isRequired,
+};
+
 
 function desc(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
@@ -67,10 +85,6 @@ function getSorting(order, orderBy) {
 }
 
 class CustomerLineTableHead extends React.Component {
-	createSortHandler = property => event => {
-		this.props.onRequestSort(event, property);
-	};
-
 	render() {
 		const { order, orderBy, headers } = this.props;
 		let rows = headers;
@@ -82,23 +96,9 @@ class CustomerLineTableHead extends React.Component {
 						return (
 							<TableCell
 								key={row.id}
-								numeric={row.numeric}
 								padding={row.disablePadding ? 'none' : 'default'}
-								sortDirection={orderBy === row.id ? order : false}
 							>
-								<Tooltip
-									title="Sort"
-									placement={row.numeric ? 'bottom-end' : 'bottom-start'}
-									enterDelay={300}
-								>
-									<TableSortLabel
-										active={orderBy === row.id}
-										direction={order}
-										onClick={this.createSortHandler(row.id)}
-									>
-										{row.label}
-									</TableSortLabel>
-								</Tooltip>
+								{row.label}
 							</TableCell>
 						);
 					}, this)}
@@ -110,15 +110,6 @@ class CustomerLineTableHead extends React.Component {
 		);
 	}
 }
-
-
-CustomerLineTableHead.propTypes = {
-	numSelected: PropTypes.number.isRequired,
-	onRequestSort: PropTypes.func.isRequired,
-	onSelectAllClick: PropTypes.func.isRequired,
-	order: PropTypes.string.isRequired,
-	rowCount: PropTypes.number.isRequired
-};
 
 const toolbarStyles = theme => ({
 	root: {
@@ -256,47 +247,42 @@ class FranchiseesOwnerTable extends React.Component {
 		page: 0,
 		rowsPerPage: 10,
 		labelWidth: 0,
-		data: [
-			createData('Lizhu','Lu', '123-456-7890', 'React Dev')
-		],
+		data: [],
         openDialog: false,
         dialogFirstName: "",
 		dialogLastName: "",
-		dialogPhone: "",
-		dialogTitle: ""
-	};
-
-	handleRequestSort = (event, property) => {
-		const orderBy = property;
-		let order = 'desc';
-
-		if (this.state.orderBy === property && this.state.order === 'desc') {
-			order = 'asc';
+		dialogPhone: "+1(  )    -    ",
+		dialogTitle: "",
+        insertPayload: null,
+		dialogForm: {
+			FirstName: "",
+			LastName: "",
+			Phone: "",
+			Title: ""
 		}
-
-		this.setState({
-			order,
-			orderBy
-		});
 	};
+    constructor (props){
+        super(props);
+    }
 
-	handleSelectAllClick = event => {
-		if (event.target.checked) {
-			this.setState(state => ({ selected: state.data.map(n => n.id) }));
-			return;
-		}
-		this.setState({ selected: [] });
-	};
 
 	componentDidMount() {
-		let id = 0;
-		const data = [...this.state.data];
-		let newData = data.map(record => {
-			record.id = id++;
-			return record;
-		});
-		this.setState({ data: newData })
+		// let id = 0;
+		// const data = [...this.state.data];
+		// let newData = data.map(record => {
+		// 	record.id = id++;
+		// 	return record;
+		// });
+		// this.setState({ data: newData })
 	}
+
+	componentWillMount() {
+        this.setState({
+            data: this.props.insertPayload.Owners,
+            insertPayload: this.props.insertPayload
+        });
+    }
+
 
     handleClickOpen = () => {
         this.setState({ openDialog: true });
@@ -309,13 +295,43 @@ class FranchiseesOwnerTable extends React.Component {
     handleChangeAddOwnerSelect = (name) => event => {
         this.setState({
             [name]: event.target.value
-        })
+        });
+        this.setState({dialogForm:{
+                FirstName: this.state.dialogFirstName,
+                LastName: this.state.dialogLastName,
+                Phone: this.state.dialogPhone,
+                Title: this.state.dialogTitle
+        }});
     }
+
+    handleAddOwner = () => {
+        this.handleUpdateOwnerInsertPayload(this.state.dialogForm);
+		this.handleResetDialog();
+        this.setState({openDialog: false});
+	}
+
+	handleResetDialog = () =>{
+    	this.setState({
+			dialogFirstName:"",
+			dialogLastName: "",
+			dialogPhone: "",
+			dialogTitle: ""
+    	})
+	}
+
+	handleUpdateOwnerInsertPayload = (param) => {
+    	const payloadData = this.state.insertPayload;
+        payloadData.Owners.push(param);
+        //alert(payloadData);
+        this.setState({data: payloadData.Owners});
+        this.setState({insertPayload: payloadData})
+    	this.props.franchiseeUpdateInsertPayload(payloadData);
+	}
 
 	render() {
 		const { classes } = this.props;
 		const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
-		console.log("this.props.tableType", this.props.tableType)
+
 		return (
 			<div className={classes.root}>
                 <Button variant="contained" color="primary" onClick={this.handleClickOpen} className={classNames(classes.button,classes.btnAddOwners)}>
@@ -326,44 +342,50 @@ class FranchiseesOwnerTable extends React.Component {
 					<Table className={classes.table} aria-labelledby="tableTitle">
 						<CustomerLineTableHead
 							className={classNames(classes.CustomerLineHeadRoot)}
-							numSelected={selected.length}
-							order={order}
-							onSelectAllClick={this.handleSelectAllClick}
-							onRequestSort={this.handleRequestSort}
-							rowCount={data.length}
 							headers={this.props.headers}
 						/>
-						<TableBody>
-							{stableSort(data, getSorting(order, orderBy))
-								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-								.map(n => {
-										return (
-											<TableRow hover key={n.id} >
-												<TableCell component="td" scope="row" >
-													{n.firstName}
-												</TableCell>
-                                                <TableCell component="td" scope="row" >
-                                                    {n.lastName}
-                                                </TableCell>
-												<TableCell>
-                                                    {n.phone}
-												</TableCell>
-												<TableCell>
-                                                    {n.title}
-												</TableCell>
-												<TableCell padding="checkbox">
-                                                    <IconButton>
-                                                        <Icon>delete</Icon>
-                                                    </IconButton>
-                                                    <IconButton>
-                                                        <Icon>edit</Icon>
-                                                    </IconButton>
-												</TableCell>
-											</TableRow>
-										)
-								}
-								)}
-						</TableBody>
+                        {data.length > 0 && (
+							<TableBody>
+								{stableSort(data, getSorting(order, orderBy))
+									.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+									.map((n,index) => {
+											return (
+												<TableRow hover key={index} >
+													<TableCell component="td" scope="row" >
+														{n.FirstName}
+													</TableCell>
+													<TableCell component="td" scope="row" >
+														{n.LastName}
+													</TableCell>
+													<TableCell>
+														{n.Phone}
+													</TableCell>
+													<TableCell>
+														{n.Title}
+													</TableCell>
+													<TableCell padding="checkbox">
+														<IconButton>
+															<Icon>delete</Icon>
+														</IconButton>
+														<IconButton>
+															<Icon>edit</Icon>
+														</IconButton>
+													</TableCell>
+												</TableRow>
+											)
+									}
+									)}
+							</TableBody>
+                        )}
+                        {data.length === 0 && (
+							<TableBody>
+								<TableRow>
+									<TableCell>
+										No Data
+									</TableCell>
+								</TableRow>
+							</TableBody>
+						)}
 					</Table>
 				</div>
                 <Dialog
@@ -373,96 +395,111 @@ class FranchiseesOwnerTable extends React.Component {
                     maxWidth={"sm"}
                     fullWidth
                 >
-                    <DialogTitle id="form-dialog-title">ADD OWNER</DialogTitle>
-                    <DialogContent>
-                        <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                <TextField
-                                    id="dialogFirstName"
-                                    label="First Name"
-                                    className={classes.textField}
-                                    value={this.state.dialogFirstName}
-                                    onChange={this.handleChangeAddOwnerSelect("dialogFirstName")}
-                                    margin="dense"
-                                    fullWidth
-									style={{marginRight: "1%"}}
-                                    required
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <Person style={{color:"gray"}} />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                                <TextField
-                                    id="dialogLastName"
-                                    label="Last Name"
-                                    className={classes.textField}
-                                    value={this.state.dialogLastName}
-                                    onChange={this.handleChangeAddOwnerSelect("dialogLastName")}
-                                    margin="dense"
-                                    InputLabelProps={{
-                                        shrink: true
-                                    }}
-                                    style={{marginLeft: "1%"}}
-                                    fullWidth
-                                    required
-                                />
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+					<form action="/" method={"POST"} onSubmit={(e) => {e.preventDefault();this.handleAddOwner();}}>
+						<DialogTitle id="form-dialog-title">ADD OWNER</DialogTitle>
+						<DialogContent>
+							<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+								<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+									<TextField
+										id="dialogFirstName"
+										label="First Name"
+										className={classes.textField}
+										value={this.state.dialogFirstName}
+										onChange={this.handleChangeAddOwnerSelect("dialogFirstName")}
+										margin="dense"
+										inputProps={{
+											maxLength: 20
+										}}
+										fullWidth
+										style={{marginRight: "1%"}}
+										required
+										InputProps={{
+											startAdornment: (
+												<InputAdornment position="start">
+													<Person style={{color:"gray"}} />
+												</InputAdornment>
+											),
+										}}
+									/>
+									<TextField
+										id="dialogLastName"
+										label="Last Name"
+										className={classes.textField}
+										value={this.state.dialogLastName}
+										onChange={this.handleChangeAddOwnerSelect("dialogLastName")}
+										margin="dense"
+										inputProps={{
+											maxLength: 20
+										}}
+										InputLabelProps={{
+											shrink: true
+										}}
+										style={{marginLeft: "1%"}}
+										fullWidth
+										required
+									/>
+								</GridItem>
+								<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                <TextField
-                                    id="dialogPhone"
-                                    label="Phone"
-                                    className={classes.textField}
-                                    value={this.state.dialogPhone}
-                                    onChange={this.handleChangeAddOwnerSelect("dialogPhone")}
-                                    margin="dense"
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <Phone style={{color:"gray"}} />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                    fullWidth
-                                    required
-                                />
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                <TextField
-                                    id="dialogTitle"
-                                    label="Title"
-                                    className={classes.textField}
-                                    value={this.state.dialogTitle}
-                                    onChange={this.handleChangeAddOwnerSelect("dialogTitle")}
-                                    margin="dense"
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <Title style={{color:"gray"}}/>
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                    fullWidth
-                                    required
-                                />
-                            </GridItem>
-                        </GridContainer>
-                    </DialogContent>
-                    <DialogActions style={{padding:"2%"}}>
-                        <Button onClick={this.handleClose} variant="contained"  size="small" className={classes.button}>
-                            <CancelIcon style={{color:"gray"}} className={classNames(classes.leftIcon, classes.iconSmall)} />
-                            Cancel
-                        </Button>
-                        <Button onClick={this.handleClose} variant="contained" size="small" className={classes.button}>
-                            <SaveIcon style={{color:"gray"}} className={classNames(classes.leftIcon, classes.iconSmall)} />
-                            Save
-                        </Button>
-                    </DialogActions>
+								</GridItem>
+								<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+									<TextField
+										id="dialogPhone"
+										label="Phone"
+										className={classes.textField}
+										margin="dense"
+										InputProps={{
+											startAdornment: (
+												<InputAdornment position="start">
+													<Phone style={{color:"gray"}} />
+												</InputAdornment>
+											),
+											inputComponent: TextMaskCustom,
+											value:this.state.dialogPhone,
+											onChange:this.handleChangeAddOwnerSelect("dialogPhone"),
+										}}
+										inputProps={{
+											maxLength: 20
+										}}
+										fullWidth
+										required
+									/>
+								</GridItem>
+								<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+									<TextField
+										id="dialogTitle"
+										label="Title"
+										className={classes.textField}
+										value={this.state.dialogTitle}
+										onChange={this.handleChangeAddOwnerSelect("dialogTitle")}
+										margin="dense"
+										InputProps={{
+											startAdornment: (
+												<InputAdornment position="start">
+													<Title style={{color:"gray"}}/>
+												</InputAdornment>
+											),
+										}}
+										inputProps={{
+											maxLength: 20
+										}}
+										fullWidth
+										required
+									/>
+								</GridItem>
+							</GridContainer>
+						</DialogContent>
+						<DialogActions style={{padding:"2%"}}>
+							<Button onClick={this.handleClose} variant="contained"  size="small" className={classes.button}>
+								<CancelIcon style={{color:"gray"}} className={classNames(classes.leftIcon, classes.iconSmall)} />
+								Cancel
+							</Button>
+							<Button type="submit" variant="contained" size="small" className={classes.button}>
+								<SaveIcon style={{color:"gray"}} className={classNames(classes.leftIcon, classes.iconSmall)} />
+								Save
+							</Button>
+						</DialogActions>
+					</form>
                 </Dialog>
 			</div>
 		);
@@ -473,4 +510,18 @@ FranchiseesOwnerTable.propTypes = {
 	classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(FranchiseesOwnerTable);
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        franchiseeUpdateInsertPayload: Actions.franchiseeUpdateInsertPayload,
+    }, dispatch);
+}
+
+function mapStateToProps({ franchisees, auth }) {
+    return {
+    	insertPayload: franchisees.insertPayload
+    }
+}
+
+// export default withStyles(styles)(FranchiseesOwnerTable);
+
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(FranchiseesOwnerTable)));

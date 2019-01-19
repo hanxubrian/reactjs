@@ -161,6 +161,7 @@ export function closeCreateFranchisees(data)
         data
     }
 }
+
 export function showEditFranchisees(data)
 {
     return {
@@ -175,6 +176,7 @@ export function closeEditFranchisees()
         type: CLOSE_EDIT_FRANCHISEES_FORM
     }
 }
+
 export function addFranchisees(newFranchisees)
 {
     return (dispatch, getState) => {
@@ -243,6 +245,7 @@ export function franchiseeUpdateInsertPayload(newStatus){
         payload: newStatus
     }
 }
+
 export function updateDate(key, date) {
     return {
         type: key,

@@ -357,11 +357,13 @@ function getStepContent(franchiseeForm, step) {
                                 value={franchiseeForm.state.ibAmount}
                                 inputProps={{
                                     readOnly: true,
-                                    maxLength:60,
+                                    maxLength:60
+                                }}
+                                InputProps={{
                                     startAdornment: <InputAdornment position="start">$</InputAdornment>
                                 }}
                                 InputLabelProps={{
-                                    shrink: true
+                                    shrink: true,
                                 }}
                                 variant="outlined"
                                 style={{marginRight: '1%'}}

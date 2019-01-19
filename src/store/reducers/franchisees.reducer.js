@@ -3,6 +3,7 @@ import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 import moment from "moment";
+import {ADD_FRANCHISEE_OWNER_ROW} from "../actions/";
 
 const initialState = {
     franchiseesDB: null,
@@ -79,14 +80,7 @@ const initialState = {
         Phone2: "",
         CheckPayee1: "",
         CheckPayee2: "",
-        Owners: [
-            {
-                FirstName: "",
-                LastName: "",
-                Title: "",
-                Phone: ""
-            }
-        ],
+        Owners: [],
         LegalId:"SSN",
         LegalIdNum: "57547120",
         DATE_1: "",
@@ -368,7 +362,8 @@ const franchisees = function(state = initialState, action) {
         case Actions.UPLOAD_INSERT_PAYLOAD: {
             return{
                 ...state,
-                insertPayload: action.payload
+                // insertPayload: action.payload,
+                insertPayload:{...state.insertPayload,...action.payload}
             }
         }
         case Actions.GET_FRANCHISEE_STATE_LIST: {
