@@ -39,7 +39,7 @@ import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerC
 import { compose, withProps, withHandlers, lifecycle } from "recompose";
 
 import {
-	Getter,
+	Getter, Template, TemplateConnector
 } from '@devexpress/dx-react-core';
 import {
 	SelectionState,
@@ -395,6 +395,18 @@ const Command = ({ id, onExecute }) => {
 };
 const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 
+// const TableRow = ({ row, ...restProps }) => (
+// 	<Table.Row
+// 		{...restProps}
+// 		// eslint-disable-next-line no-alert
+// 		onClick={() => alert(JSON.stringify(row))}
+// 		style={{
+// 			cursor: 'pointer',
+// 			// ...styles[row.sector.toLowerCase()],
+// 		}}
+// 	/>
+// );
+
 const DEFAULT_ZOOM = 8
 let map_zoom = DEFAULT_ZOOM
 
@@ -512,9 +524,6 @@ const MapWithAMarkerClusterer2 = compose(
 );
 
 class CustomerListContent extends Component {
-
-
-
 
 	constructor(props) {
 		super(props);
@@ -731,67 +740,67 @@ class CustomerListContent extends Component {
 		});
 	};
 
-	toggleSelection = (key, shift, row) => {
-		console.log("toggleSelection");
+	// toggleSelection = (key, shift, row) => {
+	// 	console.log("toggleSelection");
 
-		/*
-		  https://react-table.js.org/#/story/select-table-hoc
-		  Implementation of how to manage the selection state is up to the developer.
-		  This implementation uses an array stored in the component state.
-		  Other implementations could use object keys, a Javascript Set, or Redux... etc.
-		*/
-		// start off with the existing state
-		let selection = [...this.state.selection];
-		const keyIndex = selection.indexOf(key);
-		// check to see if the key exists
-		if (keyIndex >= 0) {
-			// it does exist so we will remove it using destructing
-			selection = [
-				...selection.slice(0, keyIndex),
-				...selection.slice(keyIndex + 1)
-			];
-		} else {
-			// it does not exist so add it
-			selection.push(key);
-		}
-		// update the state
-		this.setState({ selection });
-	};
+	// 	/*
+	// 	  https://react-table.js.org/#/story/select-table-hoc
+	// 	  Implementation of how to manage the selection state is up to the developer.
+	// 	  This implementation uses an array stored in the component state.
+	// 	  Other implementations could use object keys, a Javascript Set, or Redux... etc.
+	// 	*/
+	// 	// start off with the existing state
+	// 	let selection = [...this.state.selection];
+	// 	const keyIndex = selection.indexOf(key);
+	// 	// check to see if the key exists
+	// 	if (keyIndex >= 0) {
+	// 		// it does exist so we will remove it using destructing
+	// 		selection = [
+	// 			...selection.slice(0, keyIndex),
+	// 			...selection.slice(keyIndex + 1)
+	// 		];
+	// 	} else {
+	// 		// it does not exist so add it
+	// 		selection.push(key);
+	// 	}
+	// 	// update the state
+	// 	this.setState({ selection });
+	// };
 
-	toggleAll = (instance) => {
-		console.log("toggleAll");
+	// toggleAll = (instance) => {
+	// 	console.log("toggleAll");
 
-		const selectAll = this.state.selectAll ? false : true;
-		const selection = [];
-		if (selectAll) {
-			let currentRecords = instance.data;
-			// we just push all the IDs onto the selection array
-			let page = this.state.page;
-			let pageSize = this.state.pageSize;
-			let start_index = page * pageSize;
-			let end_index = start_index + pageSize;
-			currentRecords.forEach(item => {
-				if (item._index >= start_index && item._index < end_index)
-					selection.push(item._original.CustomerId);
-			});
-		}
-		this.setState({ selectAll, selection });
-	};
+	// 	const selectAll = this.state.selectAll ? false : true;
+	// 	const selection = [];
+	// 	if (selectAll) {
+	// 		let currentRecords = instance.data;
+	// 		// we just push all the IDs onto the selection array
+	// 		let page = this.state.page;
+	// 		let pageSize = this.state.pageSize;
+	// 		let start_index = page * pageSize;
+	// 		let end_index = start_index + pageSize;
+	// 		currentRecords.forEach(item => {
+	// 			if (item._index >= start_index && item._index < end_index)
+	// 				selection.push(item._original.CustomerId);
+	// 		});
+	// 	}
+	// 	this.setState({ selectAll, selection });
+	// };
 
-	isSelected = key => {
-		console.log("isSelected");
+	// isSelected = key => {
+	// 	console.log("isSelected");
 
-		/*
-		  Instead of passing our external selection state we provide an 'isSelected'
-		  callback and detect the selection state ourselves. This allows any implementation
-		  for selection (either an array, object keys, or even a Javascript Set object).
-		*/
-		return this.state.selection.includes(key);
-	};
+	// 	/*
+	// 	  Instead of passing our external selection state we provide an 'isSelected'
+	// 	  callback and detect the selection state ourselves. This allows any implementation
+	// 	  for selection (either an array, object keys, or even a Javascript Set object).
+	// 	*/
+	// 	return this.state.selection.includes(key);
+	// };
 
-	logSelection = () => {
-		console.log("logSelection", this.state.selection);
-	};
+	// logSelection = () => {
+	// 	console.log("logSelection", this.state.selection);
+	// };
 
 	shouldComponentUpdate(nextProps, nextState) {
 		console.log("shouldComponentUpdate", this.state !== nextState);
@@ -1167,6 +1176,40 @@ class CustomerListContent extends Component {
 		// return _nearbys
 	}
 
+	//
+	// row click
+	//
+	TableRow = ({ tableRow, selected, onToggle, ...restProps }) => {
+		// workaround for using the click & doubleClick events at the same time
+		// from https://stackoverflow.com/questions/25777826/onclick-works-but-ondoubleclick-is-ignored-on-react-component
+		let timer = 0;
+		let delay = 200;
+		let prevent = false;
+		const handleClick = () => {
+			timer = setTimeout(() => {
+				if (!prevent) {
+					onToggle();
+				}
+				prevent = false;
+			}, delay);
+		};
+		const handleDoubleClick = () => {
+			clearTimeout(timer);
+			prevent = true;
+			// alert(JSON.stringify(tableRow.row));
+			this.props.openNewCustomerForm();
+		}
+		return (
+			<Table.Row
+				{...restProps}
+				className={selected ? 'active' : ''}
+				style={{ color: 'green', cursor: 'pointer' }}
+				onClick={handleClick}
+				onDoubleClick={handleDoubleClick}
+			/>
+		);
+	};
+
 	render() {
 		const {
 			classes,
@@ -1335,11 +1378,13 @@ class CustomerListContent extends Component {
 
 									<VirtualTable
 										height="auto"
+										rowComponent={this.TableRow}
 									/>
 
-									{/* <Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} /> */}
+									{/* <Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} rowComponent={TableRow} /> */}
+
 									<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
-									<TableHeaderRow showSortingControls />
+
 									{/* showGroupingControls */}
 
 
@@ -1348,9 +1393,12 @@ class CustomerListContent extends Component {
 									rightColumns={rightColumns}
 								/> */}
 
-									<TableSelection showSelectAll selectByRowClick highlightRow />
+									{/* <TableSelection showSelectAll selectByRowClick highlightRow /> */}
+									<TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
 
-									<TableEditRow />
+									<TableHeaderRow showSortingControls />
+
+									{/* <TableEditRow /> */}
 									{/* <TableEditColumn
 										// showAddCommand
 										showEditCommand
@@ -1394,7 +1442,7 @@ class CustomerListContent extends Component {
 
 									{/* <TableGroupRow /> */}
 									{/* <GroupingPanel showSortingControls showGroupingControls /> */}
-									<SelectionPanel selection={selection} />
+
 									{/* <div
 									className={classNames(classes.layoutTable, "flex flex-row")}
 									style={{ justifyContent: "space-between" }}
@@ -1407,6 +1455,26 @@ class CustomerListContent extends Component {
 										Total Rows: <strong>{rows.length}</strong>
 									</span>
 								</div> */}
+
+									<Template
+										name="tableRow"
+										predicate={({ tableRow }) => tableRow.type === 'data'}
+									>
+										{params => (
+											<TemplateConnector>
+												{({ selection }, { toggleSelection }) => (
+													<this.TableRow
+														{...params}
+														selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
+														onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
+													/>
+												)}
+											</TemplateConnector>
+										)}
+									</Template>
+
+									<SelectionPanel selection={selection} />
+
 								</Grid>
 							</div>
 
@@ -1427,6 +1495,8 @@ function mapDispatchToProps(dispatch) {
 		removeCustomerAction: Actions.removeCustomer,
 		openEditCustomerForm: Actions.openEditCustomerForm,
 		closeEditCustomerForm: Actions.closeEditCustomerForm,
+
+		openNewCustomerForm: Actions.openNewCustomerForm,
 	}, dispatch);
 }
 

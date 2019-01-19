@@ -981,53 +981,41 @@ class FilterPanel extends Component {
 									</GridItem>
 
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										{/* <TextField
-											id="outlined-name"
-											label="Phone *"
-											className={classNames(classes.textField, 'mr-6')}
-											// value={customerForm.state.name}
-											onChange={this.handleChange('Phone')}
-											margin="dense"
-											variant="outlined"
-											style={{ width: '100%' }}
-										/> */}
 										<FormControl className={classNames(classes.formControl, 'mr-6')} style={{ flex: 1 }}>
-											<InputLabel htmlFor="Phone">Phone</InputLabel>
-											<Input
-												// className={classNames(classes.textField, 'mr-6')}
-												value={this.state.Phone}
-												onChange={this.handleChange('Phone')}
+											<TextField
 												id="Phone"
-												inputComponent={TextMaskPhone}
-												variant="outlined"
+												label="Phone"
+												className={classes.textField}
+												onChange={this.handleChange('Phone')}
 												margin="dense"
+												InputProps={{
+													inputComponent: TextMaskPhone,
+													maxLength: 40,
+													value: this.state.Phone,
+													onChange: this.handleChange('Phone')
+												}}
+												variant="outlined"
 												fullWidth
+												required
 											/>
 										</FormControl>
 
-										{/* <TextField
-											id="outlined-name"
-											label="Fax"
-											className={classNames(classes.textField, 'ml-6')}
-											// value={customerForm.state.name}
-											onChange={this.handleChange('Fax')}
-											margin="dense"
-											variant="outlined"
-
-											style={{ width: '100%' }}
-										/> */}
-
 										<FormControl className={classNames(classes.formControl, 'ml-6')} style={{ flex: 1 }}>
-											<InputLabel htmlFor="Fax">Fax</InputLabel>
-											<Input
-												// className={classNames(classes.textField, 'ml-6')}
-												value={this.state.Fax}
-												onChange={this.handleChange('Fax')}
+											<TextField
 												id="Fax"
-												inputComponent={TextMaskPhone}
-												variant="outlined"
+												label="Fax"
+												className={classes.textField}
+												onChange={this.handleChange('Fax')}
 												margin="dense"
+												InputProps={{
+													inputComponent: TextMaskPhone,
+													maxLength: 40,
+													value: this.state.Phone,
+													onChange: this.handleChange('Fax')
+												}}
+												variant="outlined"
 												fullWidth
+												required
 											/>
 										</FormControl>
 
