@@ -18,6 +18,9 @@ import FormControl from "@material-ui/core/FormControl/FormControl";
 import RadioGroup from "@material-ui/core/RadioGroup/RadioGroup";
 import Radio from "@material-ui/core/Radio/Radio";
 import Geocode from "react-geocode";
+import MaskedInput from "react-text-mask";
+import * as PropTypes from "prop-types";
+
 
 const styles = theme => ({
     root : {
@@ -53,6 +56,25 @@ const styles = theme => ({
     }
 });
 
+
+const TextMaskCustom = (props) => {
+    const { inputRef, ...other } = props;
+
+    return (
+        <MaskedInput
+            {...other}
+            ref={inputRef}
+            mask={['+',/[1-9]/,'(',/\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+            placeholderChar={'\u2000'}
+            showMask
+        />
+    );
+}
+
+TextMaskCustom.propTypes = {
+    inputRef: PropTypes.func.isRequired,
+};
+
 const WAIT_INTERVAL = 1000;
 
 class FilterPanel extends Component {
@@ -75,7 +97,8 @@ class FilterPanel extends Component {
         NearbyRadius: this.props.locationFilterValue.miles,
         AddressZipcodeRadius: this.props.locationFilterValue.miles,
         franchiseeStatus: [],
-        stateList: []
+        stateList: [],
+        Phone1: '+1(  )    -    ',
     };
 
     constructor(props){
@@ -125,7 +148,7 @@ class FilterPanel extends Component {
 
     handleFormChange = (name) => event => {
 
-        if(name === 'State'){
+        if(name === 'State' || name === 'Phone1'){
             this.setState({
                 [name]: event.target.value,
             });
@@ -215,7 +238,7 @@ class FilterPanel extends Component {
                             this.state.AddressZipcodeRadius :
                             this.props.locationFilterValue.miles),
                 }
-                if (value != "locationNearSpecificAddress") {
+                if (value !== "locationNearSpecificAddress") {
 
                 } else {
                     Geocode.fromAddress(this.state.SpecificAddress).then(
@@ -447,15 +470,18 @@ class FilterPanel extends Component {
                                                 id="lf_phone1"
                                                 label="Phone"
                                                 className={classes.textField}
-                                                onChange={this.handleFormChange('Phone1')}
                                                 margin="dense"
-                                                inputProps={{
-                                                    maxLength:40
+                                                InputProps={{
+                                                    inputComponent: TextMaskCustom,
+                                                    maxLength:40,
+                                                    value:this.state.Phone1,
+                                                    onChange: this.handleFormChange('Phone1')
                                                 }}
                                                 variant="outlined"
                                                 fullWidth
                                                 required
                                             />
+                                            {/*<NumberFormat value={this.state.Phone1} displayType={'text'}  format="+1 (###) ###-####" mask="_" renderText={value => <div>{value}</div>} />*/}
                                         </GridItem>
                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                            <TextField
