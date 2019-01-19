@@ -379,7 +379,7 @@ class InvoiceLineTable extends React.Component {
         order      : 'asc',
         selected   : [],
         data       : [
-            createData("Regular Billing", "Adjust-Balance", '',''),
+            createData({label: this.props.billingLists[0].Name, value:this.props.billingLists[0].BillingTypeId}, "Adjust-Balance", '',''),
         ],
         page       : 0,
         rowsPerPage: 10,
@@ -411,7 +411,7 @@ class InvoiceLineTable extends React.Component {
         numberSuggestions: [],
         taxRowId: 0,
         customerTaxAmountLine: null,
-        selectedBillingOption0: null,selectedBillingOption1: null,selectedBillingOption2: null,selectedBillingOption3: null,
+        selectedBillingOption0: {label: this.props.billingLists[0].Name, value:this.props.billingLists[0].BillingTypeId},selectedBillingOption1: null,selectedBillingOption2: null,selectedBillingOption3: null,
         selectedBillingOption4: null,selectedBillingOption5: null,selectedBillingOption6: null,selectedBillingOption7: null,
         selectedBillingOption8: null,selectedBillingOption9: null,selectedBillingOption10: null,selectedBillingOption11: null,
         selectedBillingOption12: null,selectedBillingOption13: null,selectedBillingOption14: null,selectedBillingOption15: null,
@@ -502,7 +502,7 @@ class InvoiceLineTable extends React.Component {
 
         //for save & add more
         if(nextProps.invoiceForm.data===null && JSON.stringify(nextProps.invoiceForm.data)!==JSON.stringify(this.props.invoiceForm.data)){
-            let newData = createData("Regular Billing", "Adjust-Balance", '','');
+            let newData = createData({label: this.props.billingLists[0].Name, value:this.props.billingLists[0].BillingTypeId}, "Adjust-Balance", '','');
             this.setState({data: [{...newData, id: 0}]});
         }
     }
@@ -591,7 +591,12 @@ class InvoiceLineTable extends React.Component {
             return;
         }
 
-        const data = [...this.state.data, createData()];
+        const data = [...this.state.data, createData({label: this.props.billingLists[0].Name, value:this.props.billingLists[0].BillingTypeId})];
+        console.log('length=', data.length);
+        this.setState({
+            ["selectedBillingOption"+parseInt(data.length-1)]: {label: this.props.billingLists[0].Name, value:this.props.billingLists[0].BillingTypeId}
+        });
+
         let id = 0;
         let newData = data.map(record=>{
             record.id = id++;
@@ -715,6 +720,8 @@ class InvoiceLineTable extends React.Component {
     {
         const {classes} = this.props;
         const {data} = this.state;
+
+        console.log('aaaa', this.state);
 
         const components = {
             Control,
@@ -1039,7 +1046,7 @@ class InvoiceLineTable extends React.Component {
                                                     onChange={this.handleChangeInvoiceLine(row.original, 'markup')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustomPercent,
-                                                        readOnly: row.original.billing!=="Client Supplies",
+                                                        readOnly: row.original.billing.value!==2,
                                                         classes: {
                                                             input: classes.input,
                                                         },

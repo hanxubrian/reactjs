@@ -463,8 +463,8 @@ class InvoiceForm extends Component {
                 Inv_No: inv_no,
                 ServiceTypeListId: 0,
                 Description: line.description,
-                Billing: line.billing,
-                Service: line.service,
+                Billing: line.billing.label,
+                Service: line.service.label,
                 LineNo: 1,
                 UnitPrice: parseFloat(line.amount),
                 Quantity: parseInt(line.quantity),
@@ -526,7 +526,7 @@ class InvoiceForm extends Component {
             SysCust: this.state.selectedCustomer.SysCust,
             Items: items
         };
-        // this.props.addInvoice(this.props.regionId, result);
+        this.props.addInvoice(this.props.regionId, result);
         console.log('result', JSON.stringify(result));
     };
 
