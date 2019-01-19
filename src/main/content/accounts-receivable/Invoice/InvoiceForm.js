@@ -526,7 +526,7 @@ class InvoiceForm extends Component {
             SysCust: this.state.selectedCustomer.SysCust,
             Items: items
         };
-        this.props.addInvoice(this.props.regionId, result);
+        // this.props.addInvoice(this.props.regionId, result);
         console.log('result', JSON.stringify(result));
     };
 
