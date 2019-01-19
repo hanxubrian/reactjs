@@ -189,12 +189,20 @@ class MainToolbar extends Component {
         if(this.state.contacts && this.state.contacts !== null && this.state.messages && this.state.messages !== null && this.state.chatUser.id && this.state.chatUser.id !== null){
             let msg = Object.values(this.state.messages);
             let chatMSG =[];
+            let midMSG = '';
             msg.map((item)=>{
+                let checkMSG=[];
                 item.map((subitem)=>{
                     if(subitem['who'] !== this.state.chatUser.id && subitem['message']){
-                        chatMSG.push(subitem);
+                        // chatMSG.push(subitem);
+                        checkMSG.push(subitem);
                     }
                 });
+                checkMSG.sort(function (a,b) {
+                    return (new Date(b['time']))-(new Date(a['time']));
+                });
+                if(checkMSG.length)
+                    chatMSG.push(checkMSG[0]);
             });
             if(chatMSG && chatMSG.length && JSON.stringify(chatMSG) !== JSON.stringify(this.state.chatMSG)){
                 chatMSG.sort(function (a,b) {
