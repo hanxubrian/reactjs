@@ -4,9 +4,6 @@ import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
-import {STARTING_SAVE_INVOICE_FORM_DATA} from "../actions/";
-import {GET_SUGGEST_CUSTOMERS_FETCH_START} from "../actions/";
-
 
 let today = new Date();
 const initialState = {
@@ -41,7 +38,8 @@ const initialState = {
     bSuggestCustomersFetchStart: false,
     bLoadedSuggestCustomers: false,
     bInvoicesUpdated: false,
-    removedId: undefined
+    removedId: undefined,
+    billingLists: null
 };
 
 
@@ -251,6 +249,8 @@ const invoices = function(state = initialState, action) {
         case Actions.UPDATED_INVOICES: {
             return {...state, bInvoicesUpdated: true, bInvoiceStart: true}
         }
+        case Actions.GET_BILLING_LIST:
+            return {...state, billingLists: action.payload};
         default:
         {
             return state;

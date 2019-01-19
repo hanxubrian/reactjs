@@ -36,7 +36,6 @@ import * as Actions from 'store/actions';
 // third party
 import "react-table/react-table.css";
 import _ from 'lodash';
-import Chance from 'chance'
 import Autosuggest from 'react-autosuggest';
 import classNames from 'classnames';
 import match from "autosuggest-highlight/match";
@@ -137,8 +136,6 @@ const styles = theme => ({
         padding: '0 6px'
     }
 });
-
-const chance = new Chance();
 
 const newInvoiceState = {
     "MasterTrxTypeListId": "",
@@ -386,10 +383,6 @@ class InvoiceForm extends Component {
         const data = [...this.props.invoiceForm.data.line];
 
         data.forEach(n => {
-            let mk = 0.;
-            let qty = 0;
-            if(n.quantity!=='') qty = n.quantity;
-            if(n.markup!=='') mk = n.markup;
             subTotal += parseFloat(n.extended);
             tax += parseFloat(n.tax);
             markup += parseFloat(n.markupAmount)

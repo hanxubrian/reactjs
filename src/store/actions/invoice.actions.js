@@ -19,6 +19,7 @@ export const RESET_INVOICE_FORM = "[INVOICES] RESET INVOICE FORM";
 export const STARTING_SAVE_INVOICE_FORM_DATA = "[INVOICES] STARTING SAVE INVOICE FORM DATA";
 export const GET_ALL_SUGGEST_CUSTOMERS = "[INVOICES] GET ALL SUGGEST CUSTOMERS";
 export const GET_SUGGEST_CUSTOMERS_FETCH_START = "[INVOICES] GET SUGGEST CUSTOMERS FETCH START";
+export const GET_BILLING_LIST = "[INVOICES] GET BILLING LIST";
 
 // for Add/Edit
 export const OPEN_NEW_INVOICE_FORM = '[INVOICES APP] OPEN NEW INVOICE FORM';
@@ -132,7 +133,6 @@ export function removeInvoice(regionId, id) {
     return (dispatch) => {
         (async () => {
             let res = await invoiceService.deleteInvoice(regionId, id);
-            console.log('remove result=', res);
             if (res.IsSuccess) {
                 dispatch({
                     type: REMOVE_SELECTED_INVOICE,
@@ -192,7 +192,6 @@ export function addInvoice(regionId, data)
 
         (async () => {
             let res = await invoiceService.createNewInvoice(regionId, data);
-            console.log('result=', res);
             if (res.IsSuccess) {
                 dispatch({
                     type: ADD_INVOICE,
@@ -314,4 +313,20 @@ export function updatedInvoices() {
     return {
         type: UPDATED_INVOICES,
     }
+}
+
+export function getBillingLists (regionId) {
+    return (dispatch) => {
+        (async () => {
+            let res = await invoiceService.getBillingLists(regionId);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: GET_BILLING_LIST,
+                    payload: res.Data
+                });
+            } else {
+
+            }
+        })();
+    };
 }

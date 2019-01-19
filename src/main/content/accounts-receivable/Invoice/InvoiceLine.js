@@ -315,7 +315,6 @@ const styles = theme => ({
     },
     root1: {
         flexGrow: 1,
-        height: 150,
     },
     input1: {
         display: 'flex',
@@ -327,6 +326,9 @@ const styles = theme => ({
         flex: 1,
         alignItems: 'center',
         overflow: 'hidden',
+        '&+div':{
+
+        }
     },
     chip: {
         margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
@@ -341,24 +343,27 @@ const styles = theme => ({
         padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
     },
     singleValue: {
-        fontSize: 13,
+        fontSize: 12,
     },
     placeholder: {
         position: 'absolute',
         left: 6,
-        fontSize: 13,
+        fontSize: 12,
     },
     paper: {
-        position: 'absolute',
-        zIndex: 1,
+        position: 'fixed',
+        zIndex: '9999!important',
         marginTop: theme.spacing.unit,
-        left: 0,
-        right: 0,
-        fontSize: 13
+        fontSize: 12
     },
     divider: {
         height: theme.spacing.unit * 2,
     },
+    billingSuggestion:{
+        '& >div':{
+            width: '100%'
+        }
+    }
 });
 
 function renderSuggestion (suggestion,  { isHighlighted }) {
@@ -406,7 +411,15 @@ class InvoiceLineTable extends React.Component {
         numberSuggestions: [],
         taxRowId: 0,
         customerTaxAmountLine: null,
-        selectedBillingOption: null
+        selectedBillingOption0: null,selectedBillingOption1: null,selectedBillingOption2: null,selectedBillingOption3: null,
+        selectedBillingOption4: null,selectedBillingOption5: null,selectedBillingOption6: null,selectedBillingOption7: null,
+        selectedBillingOption8: null,selectedBillingOption9: null,selectedBillingOption10: null,selectedBillingOption11: null,
+        selectedBillingOption12: null,selectedBillingOption13: null,selectedBillingOption14: null,selectedBillingOption15: null,
+        selectedServiceOption0: null,selectedServiceOption1: null,selectedServiceOption2: null,selectedServiceOption3: null,
+        selectedServiceOption4: null,selectedServiceOption5: null,selectedServiceOption6: null,selectedServiceOption7: null,
+        selectedServiceOption8: null,selectedServiceOption9: null,selectedServiceOption10: null,selectedServiceOption11: null,
+        selectedServiceOption12: null,selectedServiceOption13: null,selectedServiceOption14: null,selectedServiceOption15: null,
+
     };
 
     constructor(props) {
@@ -680,9 +693,22 @@ class InvoiceLineTable extends React.Component {
         if(row.amount==='') return true;
     };
 
-    handleBillingChange = (selectedBillingOption) => {
-        this.setState({selectedBillingOption});
-        console.log(`Option selected:`, selectedBillingOption);
+    handleBillingChange = (newValue, row) => {
+        this.setState({
+            ["selectedBillingOption"+row.id]: newValue
+        });
+        const data = [...this.state.data];
+        data[row.id].billing = newValue;
+        this.setState({data: data});
+    };
+
+    handleServiceChange = (newValue, row) => {
+        this.setState({
+            ["selectedServiceOption"+row.id]: newValue
+        });
+        const data = [...this.state.data];
+        data[row.id].service = newValue;
+        this.setState({data: data});
     };
 
     render()
@@ -726,14 +752,13 @@ class InvoiceLineTable extends React.Component {
             });
         });
 
-        const billingSuggestions = [
-            {label: 'Regular Billing'},{label: 'Additional Billing Office'}, {label: 'Extra Work'},{label: 'Client Supplies'}
-        ].map(suggestion => ({
-            value: suggestion.label,
-            label: suggestion.label,
-        }));
+        let billingSuggestions = [];
+        if(this.props.billingLists!==null && this.props.billingLists.length>0) {
+            billingSuggestions = this.props.billingLists.map(b => ({
+                value: b.BillingTypeId, label: b.Name
+            }));
+        }
 
-        console.log('billingSuggestions', billingSuggestions);
         const serviceSuggestions =[
             {label: "Adjust-Balance"}, {label: "Adjust-Refund"}, {label: "Adjust-WriteOff"}, {label: "Buffing"},
             {label: "Carpet Clean"}, {label: "Customer Suppliers"}, {label: "Emergency Clean"}, {label: "Event Center"},
@@ -808,39 +833,26 @@ class InvoiceLineTable extends React.Component {
                                         Cell: row=>{
                                             if(row.original.type==='line')
                                                 return (
-                                                    <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl)} style={{marginBottom: '0!important', display: row.original.type!=='line'?'none':'block'}}>
-                                                        <Select
-                                                            classes={{
-                                                                outlined: classNames(classes.outlined, classes.billing),
-                                                            }}
-                                                            value={row.original.billing}
-                                                            onChange={(ev)=>this.handleChangeBilling(ev, row.original)}
-                                                            input={
-                                                                <OutlinedInput
-                                                                    labelWidth={this.state.labelWidth}
-                                                                    name="billing"
-                                                                    id="billing"
-                                                                />
-                                                            }
-                                                            MenuProps = {{
-                                                                classes:{paper: classes.dropdownMenu},
-                                                            }}
-                                                        >
-                                                            <MenuItem value="">
-                                                                <em>Select</em>
-                                                            </MenuItem>
-                                                            <MenuItem value="Regular Billing">Regular Billing</MenuItem>
-                                                            <MenuItem value="Additional Billing Office">Additional Billing Office</MenuItem>
-                                                            <MenuItem value="Extra Work">Extra Work</MenuItem>
-                                                            <MenuItem value="Client Supplies">Client Supplies</MenuItem>
-                                                        </Select>
-                                                    </FormControl>
+                                                    <div className={classes.root1}>
+                                                        <NoSsr>
+                                                            <Select1
+                                                                classes={classes}
+                                                                styles={selectStyles}
+                                                                // value={this.state.selectedBillingOption}
+                                                                value={this.state['selectedBillingOption'+row.original.id]}
+                                                                components={components}
+                                                                onChange={(v)=>this.handleBillingChange(v, row.original)}
+                                                                options={billingSuggestions}
+                                                                placeholder="Select a billing"
+                                                            />
+                                                        </NoSsr>
+                                                    </div>
                                                 );
                                             else
                                                 return (<div/>)
                                         },
-                                        width: 180,
-                                        className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+                                        width: 200,
+                                        className: classNames(classes.billingSuggestion, "flex items-center justify-center"),
                                     },
                                     {
                                         Header: "Service",
@@ -848,57 +860,24 @@ class InvoiceLineTable extends React.Component {
                                         Cell: row=>{
                                             if(row.original.type==='line')
                                                 return (
-                                                    <FormControl variant="outlined" className={classes.formControl} style={{marginBottom: '0!important'}}>
-                                                        <Select
-                                                            classes={{
-                                                                outlined: classNames(classes.outlined,classes.services)
-                                                            }}
-                                                            value={row.original.service}
-                                                            onChange={(ev)=>this.handleChangeBilling(ev, row.original)}
-                                                            input={
-                                                                <OutlinedInput
-                                                                    labelWidth={this.state.labelWidth}
-                                                                    name="service"
-                                                                    id="service"
-                                                                />
-                                                            }
-                                                            MenuProps = {{
-                                                                classes:{paper: classes.dropdownMenu},
-                                                            }}
-                                                        >
-                                                            <MenuItem value="">
-                                                                <em>Select</em>
-                                                            </MenuItem>
-                                                            <MenuItem value="Adjust-Balance">Adjust - Balance</MenuItem>
-                                                            <MenuItem value="Adjust-Refund">Adjust - Refund</MenuItem>
-                                                            <MenuItem value="Adjust-WriteOff">Adjust - WriteOff</MenuItem>
-                                                            <MenuItem value="Buffing">Buffing</MenuItem>
-                                                            <MenuItem value="Carpet Clean">Carpet Clean</MenuItem>
-                                                            <MenuItem value="Customer Suppliers">Customer Suppliers</MenuItem>
-                                                            <MenuItem value="Emergency Clean">Emergency Clean</MenuItem>
-                                                            <MenuItem value="Event Center">Event Center</MenuItem>
-                                                            <MenuItem value="Floor Services">Floor Services</MenuItem>
-                                                            <MenuItem value="Furniture Cleaning Service">Furniture Cleaning Service</MenuItem>
-                                                            <MenuItem value="High Dusting">High Dusting</MenuItem>
-                                                            <MenuItem value="Hotel">Hotel</MenuItem>
-                                                            <MenuItem value="In-House Work">In-House Work</MenuItem>
-                                                            <MenuItem value="Initial and Deep Clean">Initial and Deep Clean</MenuItem>
-                                                            <MenuItem value="Initial One-Time Clean">Initial One-Time Clean</MenuItem>
-                                                            <MenuItem value="Make Ready">Make Ready</MenuItem>
-                                                            <MenuItem value="Miscellaneous - Special">Miscellaneous - Special</MenuItem>
-                                                            <MenuItem value="Other">Other</MenuItem>
-                                                            <MenuItem value="Porter Services">Porter Services</MenuItem>
-                                                            <MenuItem value="Power Washing">Power Washing</MenuItem>
-                                                            <MenuItem value="Regular Billing">Regular Billing</MenuItem>
-                                                            <MenuItem value="Regular Cleaning - Day">Regular Cleaning - Day</MenuItem>
-                                                            <MenuItem value="Regular Cleaning - Night">Regular Cleaning - Night</MenuItem>
-                                                        </Select>
-                                                    </FormControl>
+                                                    <div className={classes.root1}>
+                                                        <NoSsr>
+                                                            <Select1
+                                                                classes={classes}
+                                                                styles={selectStyles}
+                                                                value={this.state['selectedServiceOption'+row.original.id]}
+                                                                components={components}
+                                                                onChange={(v)=>this.handleServiceChange(v, row.original)}
+                                                                options={serviceSuggestions}
+                                                                placeholder="Select a service"
+                                                            />
+                                                        </NoSsr>
+                                                    </div>
                                                 );
                                             else
                                                 return (<div className={classNames(classes.distribution)}><span>Distribution</span></div>)
                                         },
-                                        width: 180,
+                                        width: 200,
                                         className: classNames(classes.tableTdEven, "flex items-center"),
                                     },
                                     {
@@ -1176,7 +1155,8 @@ function mapStateToProps({invoices, franchisees, auth})
         franchisees: franchisees.franchiseesDB,
         regionId: auth.login.defaultRegionId,
         customerTaxAmountLine: invoices.customerTaxAmountLine,
-        bStartingSaveFormData: invoices.bStartingSaveFormData
+        bStartingSaveFormData: invoices.bStartingSaveFormData,
+        billingLists: invoices.billingLists
     }
 }
 

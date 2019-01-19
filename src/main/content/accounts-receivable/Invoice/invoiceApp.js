@@ -231,6 +231,7 @@ class InvoiceApp extends Component {
             props.getInvoiceStatus(props.regionId);
             props.getInvoices([props.regionId] ,props.StatusId, props.FromDate, props.ToDate, props.PeriodId,
                 props.OpenOrClosed, props.InvoiceTypeId, props.ToPrintOrToEmail, props.SearchText);
+            props.getBillingLists(props.regionId);
         }
 
         if (!props.bLoadedCustomers) {
@@ -262,6 +263,7 @@ class InvoiceApp extends Component {
 
         if(regionId !== prevProps.regionId){
             this.props.getCustomers(regionId);
+            this.props.getBillingLists(regionId);
         }
         if(regionId !== prevProps.regionId){
             this.props.getFranchisees(regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText);
@@ -660,6 +662,7 @@ function mapDispatchToProps(dispatch)
         openEditInvoiceForm: Actions.openEditInvoiceForm,
         getCustomers: Actions.getSuggestCustomersList,
         getFranchisees: Actions.getFranchisees,
+        getBillingLists: Actions.getBillingLists
     }, dispatch);
 }
 
