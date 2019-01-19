@@ -35,6 +35,8 @@ import CustomerForm from './CustomerForm';
 import CustomerListContent from './CustomerListContent';
 import DialogEmailToCustomer from './DialogEmailToCustomer';
 
+import Utils from './Utils'
+
 const headerHeight = 80;
 
 const hexToRgb = (hex) => {
@@ -817,7 +819,7 @@ class Customers extends Component {
 										<Toolbar className="pl-12 pr-0">
 											<img className="mr-12" alt="" src="assets/images/invoices/invoice-icon-white.png" style={{ width: 32, height: 32 }} />
 										</Toolbar>
-										<Typography variant="h6" className="hidden sm:flex">Customers | New Customers</Typography>
+										<Typography variant="h6" className="hidden sm:flex">Customers | {Utils.capital_letter(customerForm.type)} Customer</Typography>
 									</div>
 								</div>
 							) : (
