@@ -347,6 +347,33 @@ const Command = ({ id, onExecute }) => {
 	);
 };
 
+
+const editing_cell_styles = theme => ({
+	cell: {
+		padding: 0,
+	}
+});
+const EditingHeaderCellComponentBase = props => {
+	return (<TableEditColumn.Cell {...props}
+
+	/>);
+};
+
+const EditingHeaderCellComponent = withStyles(editing_cell_styles, { name: "EditingCell" })(
+	EditingHeaderCellComponentBase
+);
+
+const EditingCellComponentBase = props => {
+	return (<TableEditColumn.Cell {...props}
+
+	/>);
+};
+
+const EditingCellComponent = withStyles(editing_cell_styles, { name: "EditingCell" })(
+	EditingCellComponentBase
+);
+
+
 const WAIT_INTERVAL = 1000
 const ENTER_KEY = 13
 
@@ -450,7 +477,7 @@ class FilterPanel extends Component {
 				Email: "Sample Email",
 			}],
 
-			customerName:  "",
+			customerName: "",
 			customerAddress: "",
 			customerCity: "",
 			customerState: "",
@@ -490,9 +517,9 @@ class FilterPanel extends Component {
 
 		if (nextProps.customerForm !== customerForm) {
 			if (nextProps.customerForm.data !== null) {
-				console.log("nextProps.customerForm.data.Data.cus_phone", nextProps.customerForm.data.Data.cus_phone,)
+				console.log("nextProps.customerForm.data.Data.cus_phone", nextProps.customerForm.data.Data.cus_phone)
 				this.setState({
-					customerName:  nextProps.customerForm.data.Data.cus_name,
+					customerName: nextProps.customerForm.data.Data.cus_name,
 					customerAddress: nextProps.customerForm.data.Data.cus_addr,
 					customerCity: nextProps.customerForm.data.Data.cus_city,
 					customerState: nextProps.customerForm.data.Data.cus_state,
@@ -503,7 +530,7 @@ class FilterPanel extends Component {
 
 					customerEmail: nextProps.customerForm.data.Data.email1,
 					customerWeb: nextProps.customerForm.data.Data.cus_zip,
-					
+
 				});
 			}
 
@@ -1211,6 +1238,9 @@ class FilterPanel extends Component {
 												<TableHeaderRow />
 												<TableEditRow />
 												<TableEditColumn
+													width={110}
+													cellComponent={EditingCellComponent}
+													headerCellComponent={EditingHeaderCellComponent}
 													showAddCommand
 													showEditCommand
 													showDeleteCommand
@@ -1251,6 +1281,9 @@ class FilterPanel extends Component {
 												<TableHeaderRow />
 												<TableEditRow />
 												<TableEditColumn
+													width={110}
+													cellComponent={EditingCellComponent}
+													headerCellComponent={EditingHeaderCellComponent}
 													showAddCommand
 													showEditCommand
 													showDeleteCommand
