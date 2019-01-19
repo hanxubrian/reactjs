@@ -272,8 +272,6 @@ const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
 
 class InvoiceForm extends Component {
     state = {
-        customers: [],
-        franchisees: [],
         ...newInvoiceState,
         value: '',
         suggestions: [],
@@ -489,7 +487,7 @@ class InvoiceForm extends Component {
                     franchisees.push(
                         {
                             FranchiseeId: 12,
-                            FranchiseNumber: f.fnumber,
+                            FranchiseeNumber: f.fnumber,
                             LineNo: 1,
                             Name: f.name,
                             Description: "Work done",

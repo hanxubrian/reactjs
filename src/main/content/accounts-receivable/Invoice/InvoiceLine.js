@@ -377,9 +377,9 @@ class InvoiceLineTable extends React.Component {
     state = {
         order      : 'asc',
         selected   : [],
-        data       : [
+        data       :  this.props.invoiceForm.type === 'new' ? [
             createData({label: this.props.billingLists[0].Name, value:this.props.billingLists[0].BillingTypeId}, "Adjust-Balance", '',''),
-        ],
+        ] : [],
         page       : 0,
         rowsPerPage: 10,
         labelWidth: 0,

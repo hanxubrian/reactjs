@@ -203,7 +203,8 @@ const invoices = function(state = initialState, action) {
                     },
                     data : null,
                     customer: null
-                }
+                },
+                bInvoiceStart: false
             };
         }
         case Actions.CLOSE_EDIT_INVOICE_FORM:

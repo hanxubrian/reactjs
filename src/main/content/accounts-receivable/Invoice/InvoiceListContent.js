@@ -338,7 +338,7 @@ class InvoiceListContent extends Component {
                                 {
                                     if(this.props.filterState) this.props.toggleFilterPanel();
                                     if(this.props.summaryState) this.props.toggleSummaryPanel();
-                                    this.props.openEditInvoiceForm(rowInfo.original);
+                                    this.props.openEditInvoiceForm(rowInfo.original.InvoiceId, this.props.regionId);
                                 }
                             }
                         }

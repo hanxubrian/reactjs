@@ -159,12 +159,28 @@ export function closeNewInvoiceForm()
     }
 }
 
-export function openEditInvoiceForm(data)
+export function openEditInvoiceForm(invoiceId, regionId)
 {
-    return {
-        type: OPEN_EDIT_INVOICE_FORM,
-        data
-    }
+    return (dispatch) => {
+        dispatch({
+            type: GET_INVOICES_FETCH_START,
+            payload: true
+        });
+        (async () => {
+            let res = await invoiceService.getInvoiceDetailList(invoiceId, regionId);
+            if (res) {
+                dispatch({
+                    type: GET_INVOICE_DETAIL,
+                    payload: res
+                });
+                dispatch({
+                    type: OPEN_EDIT_INVOICE_FORM,
+                });
+            } else {
+
+            }
+        })();
+    };
 }
 
 export function closeEditInvoiceForm()

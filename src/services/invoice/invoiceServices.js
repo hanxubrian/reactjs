@@ -73,10 +73,8 @@ class invoiceService {
 
     getInvoiceDetailList = (InvoiceId,RegionId) => {
         return new Promise((resolve, reject) => {
-            axios_instance.get(`${BASE_MONGO_API_URL}/v1/accountsreceivable/Invoice/`+InvoiceId,{
+            axios_instance.get(`${BASE_MONGO_API_URL}/v1/accountsreceivable/Invoice/${InvoiceId}`,{
                 params: {RegionId: RegionId}})
-            //     { params: {RegionId, InvoiceTypeId}}
-            // )
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);
