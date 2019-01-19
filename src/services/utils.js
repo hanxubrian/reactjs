@@ -29,14 +29,14 @@ NumberFormatCustom.propTypes = {
 };
 
 export function NumberFormatCustom1(props) {
-    const { inputRef, onChange, ...other } = props;
+    const { inputRef, onBlur, onChange, ...other } = props;
 
     return (
         <NumberFormat
             {...other}
             getInputRef={inputRef}
             onValueChange={values => {
-                onChange({
+                onBlur({
                     target: {
                         value: values.value,
                     },
@@ -67,4 +67,48 @@ export function NumberFormatCustomPercent(props) {
 
 export function escapeRegexCharacters(str) {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+
+
+export function NumberFormatCustom2(props) {
+    const { inputRef, onBlur, onChange, ...other } = props;
+
+    return (
+        <NumberFormat
+            {...other}
+            getInputRef={inputRef}
+            onValueChange={values => {
+                onBlur({
+                    target: {
+                        value: values.value,
+                    },
+                });
+            }}
+            thousandSeparator
+            decimalScale={2}
+            prefix="$"
+        />
+    );
+}
+
+export function NumberFormatCustomFocus(props) {
+    const { inputRef, onFocus, ...other } = props;
+
+    return (
+        <NumberFormat
+            {...other}
+            getInputRef={inputRef}
+            onValueChange={values => {
+                onFocus({
+                    target: {
+                        value: values.value,
+                    },
+                });
+            }}
+            thousandSeparator
+            decimalScale={2}
+            prefix="$"
+        />
+    );
 }

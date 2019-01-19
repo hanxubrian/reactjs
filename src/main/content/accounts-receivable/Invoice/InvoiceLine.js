@@ -3,8 +3,8 @@ import {withRouter} from 'react-router-dom';
 
 //Material UI core and icons
 import {
-    Snackbar, SnackbarContent, TextField,Select,NoSsr,
-    Paper, Icon, IconButton, OutlinedInput, MenuItem, FormControl, Fab
+    Snackbar, SnackbarContent, TextField, NoSsr, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText,
+    Paper, Icon, IconButton, MenuItem, Fab, Button
 } from '@material-ui/core'
 import {withStyles} from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
@@ -14,7 +14,6 @@ import ErrorIcon from '@material-ui/icons/Error';
 import InfoIcon from '@material-ui/icons/Info';
 import CloseIcon from '@material-ui/icons/Close';
 import WarningIcon from '@material-ui/icons/Warning';
-// import { useTheme } from '@material-ui/styles';
 
 // third party
 import _ from 'lodash';
@@ -33,7 +32,7 @@ import * as Actions from 'store/actions';
 import keycode from "keycode";
 
 //Utility
-import {NumberFormatCustom, escapeRegexCharacters, NumberFormatCustom1, NumberFormatCustomPercent} from '../../../../services/utils'
+import {NumberFormatCustom, escapeRegexCharacters, NumberFormatCustom1, NumberFormatCustomPercent, NumberFormatCustom2} from '../../../../services/utils'
 import {emphasize} from "@material-ui/core/styles/colorManipulator";
 
 
@@ -419,7 +418,9 @@ class InvoiceLineTable extends React.Component {
         selectedServiceOption4: null,selectedServiceOption5: null,selectedServiceOption6: null,selectedServiceOption7: null,
         selectedServiceOption8: null,selectedServiceOption9: null,selectedServiceOption10: null,selectedServiceOption11: null,
         selectedServiceOption12: null,selectedServiceOption13: null,selectedServiceOption14: null,selectedServiceOption15: null,
-
+        bTaxAlert: false,
+        bTaxAlertReduction: false,
+        bAllowAlertReduction: false
     };
 
     constructor(props) {
@@ -516,6 +517,7 @@ class InvoiceLineTable extends React.Component {
         data[taxRowId].markupAmount = customerTaxAmountLine.MarkupAmount;
         data[taxRowId].markupTax = customerTaxAmountLine.MarkupTax;
         this.setState({data: data});
+        this.setState({bAllowAlertReduction: true});
     };
 
     // For Franchisee suggestion
@@ -566,6 +568,14 @@ class InvoiceLineTable extends React.Component {
         this.setState({ openSnack: false });
     };
 
+    handleTaxAlertClose = () => {
+        this.setState({ bTaxAlert: false });
+    };
+
+    handleTaxAlertReductionClose = () => {
+        this.setState({ bTaxAlertReduction: false });
+    };
+
     addLineData=(row)=>{
         if(this.props.invoiceForm.customer===null) {
             this.setState({snackMessage: 'Please choose customer from Invoice suggestion'});
@@ -592,7 +602,6 @@ class InvoiceLineTable extends React.Component {
         }
 
         const data = [...this.state.data, createData({label: this.props.billingLists[0].Name, value:this.props.billingLists[0].BillingTypeId})];
-        console.log('length=', data.length);
         this.setState({
             ["selectedBillingOption"+parseInt(data.length-1)]: {label: this.props.billingLists[0].Name, value:this.props.billingLists[0].BillingTypeId}
         });
@@ -682,9 +691,35 @@ class InvoiceLineTable extends React.Component {
 
     handleChangeInvoiceLine = (row, name) => event => {
         const data = [...this.state.data];
+        let value = event.target.value;
+        if (name==='amount')  value = parseFloat(value);
+        if (name==='quantity')  value = parseInt(value);
+
+        data[row.id][name] = value;
+        this.setState({data: data});
+
+        if(!this.isDisable(row) && name!=='tax')
+            this.getInvoiceLineTaxAmount(row)
+    };
+
+    handleChangeInvoiceTaxLine = (row, name) => event => {
+        const data = [...this.state.data];
+
+        if(this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(event.target.value)===0) {
+            this.setState({bTaxAlert: true});
+            return;
+        }
+        if(this.state.bAllowAlertReduction && this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(event.target.value)!==0 &&
+            parseFloat(event.target.value)<parseFloat(data[row.id][name])
+        ) {
+            // this.setState({bTaxAlertReduction: true});
+            // return;
+        }
+
         data[row.id][name] = event.target.value;
         this.setState({data: data});
-        if(!this.isDisable(row))
+
+        if(!this.isDisable(row) && name!=='tax')
             this.getInvoiceLineTaxAmount(row)
     };
 
@@ -720,8 +755,6 @@ class InvoiceLineTable extends React.Component {
     {
         const {classes} = this.props;
         const {data} = this.state;
-
-        console.log('aaaa', this.state);
 
         const components = {
             Control,
@@ -961,7 +994,7 @@ class InvoiceLineTable extends React.Component {
                                                     className={classes.fInput}
                                                     placeholder="Qty"
                                                     value={row.original.quantity}
-                                                    onChange={this.handleChangeInvoiceLine(row.original, 'quantity')}
+                                                    onBlur={this.handleChangeInvoiceLine(row.original, 'quantity')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustom1,
                                                         classes: {
@@ -985,9 +1018,9 @@ class InvoiceLineTable extends React.Component {
                                                     className={classes.fInput}
                                                     placeholder="Amount"
                                                     value={row.original.amount}
-                                                    onChange={this.handleChangeInvoiceLine(row.original, 'amount')}
+                                                    onBlur={this.handleChangeInvoiceLine(row.original, 'amount')}
                                                     InputProps={{
-                                                        inputComponent: NumberFormatCustom,
+                                                        inputComponent: NumberFormatCustom2,
                                                         classes: {
                                                             input: classes.input,
                                                         },
@@ -1009,9 +1042,9 @@ class InvoiceLineTable extends React.Component {
                                                     className={classes.fInput}
                                                     placeholder="Tax"
                                                     value={row.original.tax}
-                                                    onChange={this.handleChangeInvoiceLine(row.original, 'tax')}
+                                                    onBlur={this.handleChangeInvoiceTaxLine(row.original, 'tax')}
                                                     InputProps={{
-                                                        inputComponent: NumberFormatCustom,
+                                                        inputComponent: NumberFormatCustom2,
                                                         classes: {
                                                             input: classes.input,
                                                         },
@@ -1138,6 +1171,42 @@ class InvoiceLineTable extends React.Component {
                         message={this.state.snackMessage}
                     />
                 </Snackbar>
+                <Dialog
+                    open={this.state.bTaxAlert}
+                    onClose={this.handleTaxAlertClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Customer is not Tax Exempt"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Customer is not Tax Exempt, but will be allowed as transaction is ???"
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleTaxAlertClose} color="primary" autoFocus>
+                            Close
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={this.state.bTaxAlertReduction}
+                    onClose={this.handleTaxAlertReductionClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Tax Editing is not allowed"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Tax Editing is not allowed. Tax is calculated based on Customer Tax Settings
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleTaxAlertReductionClose} color="primary" autoFocus>
+                            Close
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </Paper>
         );
     }

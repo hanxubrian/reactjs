@@ -374,6 +374,8 @@ class InvoiceForm extends Component {
     };
 
     getTotal = () => {
+        if(!this.validateNewInvoice()) return;
+
         let subTotal = 0.0;
         let markup = 0.0;
         let tax = 0.0;
@@ -387,6 +389,8 @@ class InvoiceForm extends Component {
             tax += parseFloat(n.tax);
             markup += parseFloat(n.markupAmount)
         });
+
+        if(this.state.selectedCustomer.TaxExempt!=='N') tax = 0;
 
         this.setState({subTotal: subTotal});
         this.setState({markup: markup});
