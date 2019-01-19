@@ -99,6 +99,7 @@ class FilterPanel extends Component {
         franchiseeStatus: [],
         stateList: [],
         Phone1: '+1(  )    -    ',
+        Phone2: '+1(  )    -    ',
     };
 
     constructor(props){
@@ -148,7 +149,7 @@ class FilterPanel extends Component {
 
     handleFormChange = (name) => event => {
 
-        if(name === 'State' || name === 'Phone1'){
+        if(name === 'State' || name === 'Phone1'|| name === 'Phone2'){
             this.setState({
                 [name]: event.target.value,
             });
@@ -456,7 +457,7 @@ class FilterPanel extends Component {
                                                 className={classes.textField}
                                                 onChange={this.handleAddressFormChange('Zip')}
                                                 inputProps={{
-                                                    maxLength:10
+                                                    maxLength:20
                                                 }}
                                                 margin="dense"
                                                 variant="outlined"
@@ -471,9 +472,11 @@ class FilterPanel extends Component {
                                                 label="Phone"
                                                 className={classes.textField}
                                                 margin="dense"
+                                                inputProps={{
+                                                    maxLength:40
+                                                }}
                                                 InputProps={{
                                                     inputComponent: TextMaskCustom,
-                                                    maxLength:40,
                                                     value:this.state.Phone1,
                                                     onChange: this.handleFormChange('Phone1')
                                                 }}
@@ -492,6 +495,11 @@ class FilterPanel extends Component {
                                                margin="dense"
                                                inputProps={{
                                                    maxLength:40
+                                               }}
+                                               InputProps={{
+                                                   inputComponent: TextMaskCustom,
+                                                   value:this.state.Phone2,
+                                                   onChange: this.handleFormChange('Phone2')
                                                }}
                                                variant="outlined"
                                                fullWidth
@@ -530,7 +538,6 @@ class FilterPanel extends Component {
                                        {this.state.Location === "locationNearBy" && (
                                            <TextField
                                                select
-
                                                id="NearbyRadius"
                                                label="Radius"
                                                className={classes.textField}
@@ -569,7 +576,6 @@ class FilterPanel extends Component {
                                             />
                                             <TextField
                                                 select
-
                                                 id="AddressZipcodeRadius"
                                                 label="Radius"
                                                 className={classes.textField}
