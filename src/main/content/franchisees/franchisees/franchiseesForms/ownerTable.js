@@ -249,15 +249,11 @@ class FranchiseesOwnerTable extends React.Component {
 		labelWidth: 0,
 		data: [],
         openDialog: false,
-        dialogFirstName: "",
-		dialogLastName: "",
-		dialogPhone: "+1(  )    -    ",
-		dialogTitle: "",
         insertPayload: null,
 		dialogForm: {
 			FirstName: "",
 			LastName: "",
-			Phone: "",
+			Phone: "+1(  )    -    ",
 			Title: ""
 		}
 	};
@@ -267,13 +263,7 @@ class FranchiseesOwnerTable extends React.Component {
 
 
 	componentDidMount() {
-		// let id = 0;
-		// const data = [...this.state.data];
-		// let newData = data.map(record => {
-		// 	record.id = id++;
-		// 	return record;
-		// });
-		// this.setState({ data: newData })
+
 	}
 
 	componentWillMount() {
@@ -293,15 +283,20 @@ class FranchiseesOwnerTable extends React.Component {
     };
 
     handleChangeAddOwnerSelect = (name) => event => {
-        this.setState({
-            [name]: event.target.value
-        });
-        this.setState({dialogForm:{
-                FirstName: this.state.dialogFirstName,
-                LastName: this.state.dialogLastName,
-                Phone: this.state.dialogPhone,
-                Title: this.state.dialogTitle
-        }});
+        const dialogForm = this.state.dialogForm;
+        if(name === "FirstName"){
+            dialogForm.FirstName = event.target.value;
+        }
+        if(name === "LastName"){
+            dialogForm.LastName = event.target.value;
+        }
+        if(name === "Title"){
+            dialogForm.Title = event.target.value;
+        }
+        if(name === "Phone"){
+            dialogForm.Phone = event.target.value;
+        }
+        this.setState({dialogForm: dialogForm});
     }
 
     handleAddOwner = () => {
@@ -311,12 +306,12 @@ class FranchiseesOwnerTable extends React.Component {
 	}
 
 	handleResetDialog = () =>{
-    	this.setState({
-			dialogFirstName:"",
-			dialogLastName: "",
-			dialogPhone: "",
-			dialogTitle: ""
-    	})
+        this.setState({dialogForm:{
+                FirstName: "",
+                LastName: "",
+                Title: "",
+                Phone: "+1(  )    -    "
+        }});
 	}
 
 	handleUpdateOwnerInsertPayload = (param) => {
@@ -404,8 +399,8 @@ class FranchiseesOwnerTable extends React.Component {
 										id="dialogFirstName"
 										label="First Name"
 										className={classes.textField}
-										value={this.state.dialogFirstName}
-										onChange={this.handleChangeAddOwnerSelect("dialogFirstName")}
+										value={this.state.dialogForm.FirstName}
+										onChange={this.handleChangeAddOwnerSelect("FirstName")}
 										margin="dense"
 										inputProps={{
 											maxLength: 20
@@ -425,8 +420,8 @@ class FranchiseesOwnerTable extends React.Component {
 										id="dialogLastName"
 										label="Last Name"
 										className={classes.textField}
-										value={this.state.dialogLastName}
-										onChange={this.handleChangeAddOwnerSelect("dialogLastName")}
+										value={this.state.dialogForm.LastName}
+										onChange={this.handleChangeAddOwnerSelect("LastName")}
 										margin="dense"
 										inputProps={{
 											maxLength: 20
@@ -455,8 +450,8 @@ class FranchiseesOwnerTable extends React.Component {
 												</InputAdornment>
 											),
 											inputComponent: TextMaskCustom,
-											value:this.state.dialogPhone,
-											onChange:this.handleChangeAddOwnerSelect("dialogPhone"),
+											value:this.state.dialogForm.Phone,
+											onChange:this.handleChangeAddOwnerSelect("Phone"),
 										}}
 										inputProps={{
 											maxLength: 20
@@ -470,8 +465,8 @@ class FranchiseesOwnerTable extends React.Component {
 										id="dialogTitle"
 										label="Title"
 										className={classes.textField}
-										value={this.state.dialogTitle}
-										onChange={this.handleChangeAddOwnerSelect("dialogTitle")}
+										value={this.state.dialogForm.Title}
+										onChange={this.handleChangeAddOwnerSelect("Title")}
 										margin="dense"
 										InputProps={{
 											startAdornment: (
