@@ -147,7 +147,7 @@ class ContactList extends Component {
         };
 
         return (
-            <div>
+            <div className="chatcontactview">
             <FuseScrollbars
                 className={classNames(classes.root, "flex flex-no-shrink flex-col overflow-y-auto py-8")}
                 containerRef={(ref) => {

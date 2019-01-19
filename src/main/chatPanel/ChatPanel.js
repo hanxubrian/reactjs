@@ -27,6 +27,8 @@ const styles = theme => ({
     },
     panel: {        position                      : 'absolute',
         width                         : 700,
+        maxWidth                      : 700,
+        minWidth                      : 370,
         backgroundColor               : theme.palette.background.paper,
         boxShadow                     : theme.shadows[3],
         top                           : 'auto',
@@ -39,7 +41,7 @@ const styles = theme => ({
         transform                     : 'translate3d(0,100%,0)',
         overflow                      : 'hidden',
         [theme.breakpoints.down('md')]: {
-            transform : 'translate3d(0,70%,0)',
+            transform : 'translate3d(0,100%,0)',
             boxShadow : 'none',
             '&.opened': {
                 boxShadow: theme.shadows[5]
@@ -52,7 +54,10 @@ const styles = theme => ({
         '&.opened'                    : {
             transform   : 'translateX(0)',
             width       : '700px',
-        }
+            maxWidth    : '700px',
+            minWidth    : '370px',
+        },
+
     },
     chartAddButton: {
         display: 'flex',
@@ -172,7 +177,7 @@ class ChatPanel extends Component {
                 {this.props.getchatnotification && (
             <div className={classes.root}>
                 <ClickAwayListener onClickAway={() => state && closeChatPanel()}>
-                    <div className={classNames(classes.panel, {'opened': state}, "flex flex-col")}>
+                    <div className={classNames(classes.panel, {'opened': state},"chatpanelview", "flex flex-col")}>
                         <AppBar position="static" elevation={1}>
                             <Toolbar className="pl-12 pr-8">
                                 <div className="flex flex-1 items-center">

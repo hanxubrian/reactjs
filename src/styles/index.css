@@ -79,8 +79,21 @@ a[role=button] {
         box-shadow: inset 0 0 0 20px rgba(0, 0, 0, 0.37);
         border-radius: 20px;
     }
+    .chatcontactview{
+        overflow-y: scroll;
+    }
 }
-
+@media only screen and (max-width: 992px) {
+    .chatpanelview{
+        width: 90% !important;
+    }
+    .chatcontactview{
+        overflow-y: scroll;
+    }
+    .chattogglebtnview{
+        right: 35px !important;
+    }
+}
 form label {
     z-index: 99;
 }
@@ -154,3 +167,4 @@ form label {
 .react-autosuggest__suggestion--highlighted {
     background-color: #ddd;
 }
+

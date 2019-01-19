@@ -98,7 +98,7 @@ const styles = theme => ({
     },
     mainnotificationbtns:{
         backgroundColor         : theme.palette.secondary.main,
-        width                   : '33%',
+        width                   : '33.333333333%',
         color                   : 'white',
         borderRadius            : '0',
     },
@@ -459,7 +459,7 @@ class MainToolbar extends Component {
                 </div>
                 {1 && (
 
-                    <div className={classes.chattogglebtn}>
+                    <div className={classNames(classes.chattogglebtn,"chattogglebtnview")}>
                         <Button onClick={this.chatPanelshowbtn} style={{
                             backgroundColor: '#3c93ec',
                             borderRadius: '50%',
