@@ -39,7 +39,8 @@ const initialState = {
     bLoadedSuggestCustomers: false,
     bInvoicesUpdated: false,
     removedId: undefined,
-    billingLists: null
+    billingLists: null,
+    serviceLists: null,
 };
 
 
@@ -254,6 +255,8 @@ const invoices = function(state = initialState, action) {
         }
         case Actions.GET_BILLING_LIST:
             return {...state, billingLists: action.payload};
+        case Actions.GET_SERVICE_LIST:
+            return {...state, serviceLists: action.payload};
         default:
         {
             return state;

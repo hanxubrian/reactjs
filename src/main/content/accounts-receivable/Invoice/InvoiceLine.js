@@ -421,7 +421,10 @@ class InvoiceLineTable extends React.Component {
         bTaxAlertReduction: false,
         bAllowAlertReduction: false,
         billingSuggestions: this.props.billingLists.map(b => ({
-            value: b.BillingTypeId, label: b.Name}))
+            value: b.BillingTypeId, label: b.Name})),
+        serviceSuggestions: this.props.serviceLists.map(s=>({
+            BillingTypeId: s.BillingTypeId, label: s.Name, value: s.Name
+        }))
     };
 
     constructor(props) {
@@ -468,21 +471,16 @@ class InvoiceLineTable extends React.Component {
         else {//For Edit
             let items = this.props.invoiceDetail.Data.Items;
 
-            console.log('suggestions=', this.state.billingSuggestions);
-
             if(items.length>0){
                 let newData = items.map((item, index)=>{
                     let billing = this.state.billingSuggestions.filter(b=>b.value===parseInt(item.Billing));
-                    console.log('billing=', billing, index);
                     this.setState({[`selectedBillingOption${index}`]: billing});
                     return createData(billing[0], 'Adjust-Balance', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 5, item.ExtendedPrice, item.Total, item.MarkUpTotal)
                 });
 
                 this.setState({data: newData});
             }
-            console.log('fired', items);
         }
-
     }
 
     componentDidUpdate(prevProps, prevState, snapshot){
@@ -1240,7 +1238,8 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         updateInvoiceLine: Actions.updateInvoiceLine,
-        getCustomerTaxAmount: Actions.getCustomerTaxAmount
+        getCustomerTaxAmount: Actions.getCustomerTaxAmount,
+        getServiceLists: Actions.getServiceLists
     }, dispatch);
 }
 
@@ -1253,7 +1252,8 @@ function mapStateToProps({invoices, franchisees, auth})
         regionId: auth.login.defaultRegionId,
         customerTaxAmountLine: invoices.customerTaxAmountLine,
         bStartingSaveFormData: invoices.bStartingSaveFormData,
-        billingLists: invoices.billingLists
+        billingLists: invoices.billingLists,
+        serviceLists: invoices.serviceLists
     }
 }
 
