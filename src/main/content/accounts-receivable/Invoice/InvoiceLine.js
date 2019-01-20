@@ -419,7 +419,9 @@ class InvoiceLineTable extends React.Component {
         selectedServiceOption12: null,selectedServiceOption13: null,selectedServiceOption14: null,selectedServiceOption15: null,
         bTaxAlert: false,
         bTaxAlertReduction: false,
-        bAllowAlertReduction: false
+        bAllowAlertReduction: false,
+        billingSuggestions: this.props.billingLists.map(b => ({
+            value: b.BillingTypeId, label: b.Name}))
     };
 
     constructor(props) {
@@ -463,12 +465,17 @@ class InvoiceLineTable extends React.Component {
             });
             this.setState({data: newData});
         }
-        else {
+        else {//For Edit
             let items = this.props.invoiceDetail.Data.Items;
 
+            console.log('suggestions=', this.state.billingSuggestions);
+
             if(items.length>0){
-                let newData = items.map(item=>{
-                    return createData('Regular Billing', 'Adjust-Balance', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 5, item.ExtendedPrice, item.Total, item.MarkUpTotal)
+                let newData = items.map((item, index)=>{
+                    let billing = this.state.billingSuggestions.filter(b=>b.value===parseInt(item.Billing));
+                    console.log('billing=', billing, index);
+                    this.setState({[`selectedBillingOption${index}`]: billing});
+                    return createData(billing[0], 'Adjust-Balance', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 5, item.ExtendedPrice, item.Total, item.MarkUpTotal)
                 });
 
                 this.setState({data: newData});
