@@ -123,7 +123,7 @@ function createFranchisee(parent_id,id, fnumber="", name="", amount=0) {
     }
 }
 
-function createData(billing='Regular Billing', service='Adjust-Balance', description='', quantity='', amount='', tax=0, markup='', extended=0, total=0, fTotal=0, markupAmount=0, markupTax=0)
+function createData(billing='Regular Billing', service='Adjust-Balance', description='', quantity='', amount='', tax=0, markup='', extended=0, total=0, markupAmount=0, markupTax=0)
 {
     return {
         id: counter++,
@@ -138,7 +138,6 @@ function createData(billing='Regular Billing', service='Adjust-Balance', descrip
         markupTax,
         extended,
         total,
-        fTotal,
         franchisees: [],
         type: 'line'
     };
@@ -455,14 +454,28 @@ class InvoiceLineTable extends React.Component {
 
     componentDidMount(){
         document.addEventListener("keydown", this.addInvoiceLineFunction, false);
+        if(this.props.invoiceForm.type === 'new') {
+            let id = 0;
+            const data = [...this.state.data];
+            let newData = data.map(record=>{
+                record.id = id++;
+                return record;
+            });
+            this.setState({data: newData});
+        }
+        else {
+            let items = this.props.invoiceDetail.Data.Items;
 
-        let id = 0;
-        const data = [...this.state.data];
-        let newData = data.map(record=>{
-            record.id = id++;
-            return record;
-        });
-        this.setState({data: newData})
+            if(items.length>0){
+                let newData = items.map(item=>{
+                    return createData('Regular Billing', 'Adjust-Balance', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 5, item.ExtendedPrice, item.Total, item.MarkUpTotal)
+                });
+
+                this.setState({data: newData});
+            }
+            console.log('fired', items);
+        }
+
     }
 
     componentDidUpdate(prevProps, prevState, snapshot){
@@ -1228,6 +1241,7 @@ function mapStateToProps({invoices, franchisees, auth})
 {
     return {
         invoiceForm: invoices.invoiceForm,
+        invoiceDetail: invoices.invoiceDetail,
         franchisees: franchisees.franchiseesDB,
         regionId: auth.login.defaultRegionId,
         customerTaxAmountLine: invoices.customerTaxAmountLine,

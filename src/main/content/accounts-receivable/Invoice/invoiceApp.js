@@ -338,6 +338,7 @@ class InvoiceApp extends Component {
 
         if (nextProps.customers !== null && this.props.customers !== nextProps.customers) {
             let temp = [];
+            console.log('customers', nextProps.customers);
             let regions = nextProps.customers.Data.Regions;
 
             regions.map(x => {

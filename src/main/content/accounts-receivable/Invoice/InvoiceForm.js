@@ -377,7 +377,7 @@ class InvoiceForm extends Component {
     };
 
     getTotal = () => {
-        if(!this.validateNewInvoice()) return;
+        console.log('getTotal fired');
 
         let subTotal = 0.0;
         let markup = 0.0;
@@ -406,7 +406,6 @@ class InvoiceForm extends Component {
             this.getTotal();
         }
         if(this.state.selectedCustomer!== null && JSON.stringify(this.state.selectedCustomer)!== JSON.stringify(this.props.invoiceForm.customer)) {
-            console.log('fired');
             this.props.selectCustomer(this.state.selectedCustomer);
         }
     }
@@ -415,13 +414,16 @@ class InvoiceForm extends Component {
 
     }
 
-
     componentWillReceiveProps(nextProps) {
         if(nextProps.invoiceForm.customer!==null){
             if(nextProps.invoiceForm.type==='edit')
                 this.setState({InvoiceNo: nextProps.invoices.invoiceDetail.Data.inv_no});
             this.setState({value: nextProps.invoiceForm.customer.CustomerName});
             this.setState({CustomerNo: nextProps.invoiceForm.customer.CustomerNo});
+            this.setState({InvoiceDescription: nextProps.invoices.invoiceDetail.Data.Description});
+            this.setState({notes: nextProps.invoices.invoiceDetail.Data.Notes});
+            this.setState({InvoiceDate: moment(nextProps.invoices.invoiceDetail.Data.InvoiceDate).format('YYYY-MM-DD')});
+            this.setState({DueDate: moment(nextProps.invoices.invoiceDetail.Data.DueDate).format('YYYY-MM-DD')});
         }
 
         if(nextProps.newInvoice!==null && nextProps.newInvoice!==this.props.newInvoice){
@@ -430,7 +432,7 @@ class InvoiceForm extends Component {
                 this.props.updatedInvoices();
                 this.props.resetInvoiceForm();
                 this.setState({InvoiceDescription: ''});
-                this.setState({note: ''});
+                this.setState({notes: ''});
                 this.setState({selectedCustomer: null});
                 this.setState({value: ''});
                 this.setState({CustomerNo: ''});
@@ -523,11 +525,12 @@ class InvoiceForm extends Component {
             PeriodMonth: moment(this.state.period).month()+1,
             PeriodYear: moment(this.state.period).year(),
             Description: this.state.InvoiceDescription,
-            Notes: this.state.note,
+            Notes: this.state.notes,
             RegionId: this.props.regionId,
             BillRunId: 999,
             InvoiceDate: moment(this.state.InvoiceDate),
             DueDate: moment(this.state.DueDate),
+            PONumber: this.state.PO_number,
             CreatedById: this.props.user.UserId,
             CreatedDate: moment(),
             SubTotal: this.state.subTotal,
@@ -942,11 +945,11 @@ class InvoiceForm extends Component {
                             <GridItem xs={12} sm={9} md={9} className="flex flex-col xs:flex-col xs:mb-24">
                                 <div className="w-full">
                                     <TextField
-                                        id="note"
-                                        name="noteq"
+                                        id="notes"
+                                        name="notes"
                                         label="Note"
                                         className={classes.textField}
-                                        value={this.state.note}
+                                        value={this.state.notes}
                                         onChange={this.handleChange}
                                         margin="dense"
                                         variant="outlined"
