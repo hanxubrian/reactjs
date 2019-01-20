@@ -252,6 +252,29 @@ class MainToolbar extends Component {
         this.props.changechatpanelshowstatus();
         this.props.closeChatPanel();
     }
+    handleContactClick = (contactId) => {
+        if(contactId && contactId != null){
+            let contactid =contactId;
+            let chatid = null;
+            this.state.chatUser.chatList.map((item)=>{
+                if(item.contactId ===contactid){
+                    chatid = item.chatId;
+                }
+            });
+            if(chatid && chatid !=null){
+                this.props.openChatPanel();
+                this.props.getChat(chatid, contactid);
+                // this.scrollToTop();
+            }
+            console.log ("chatId",chatid);
+            console.log ("contactId",contactid);
+
+        }
+        else{
+            return null;
+        }
+
+    };
     render()
     {
         const {classes, user, logout, openChatPanel} = this.props;
@@ -379,7 +402,7 @@ class MainToolbar extends Component {
                     </Popover>
 
                     <div className={classes.separator}/>
-                    {/*<FuseSearch/>*/}
+                    {/*<FuseSearch className="searchbtnview"/>*/}
 
                     {/*<Hidden lgUp>*/}
                         {/*<div className={classes.separator}/>*/}
@@ -398,17 +421,17 @@ class MainToolbar extends Component {
                         <div className={classes.notificationbody}>
                             <div>
                                 <Button className={classes.mainnotificationbtns} onClick={this.mailnotificationchat}><Icon>chat</Icon></Button>
-                                <Button className={classes.mainnotificationbtns}><Icon>mail</Icon></Button>
-                                <Button className={classes.mainnotificationbtns}><Icon>laptop_mac</Icon></Button>
+                                <Button component={Link} to="/apps/mail" className={classes.mainnotificationbtns}><Icon>mail</Icon></Button>
+                                <Button component={Link} to="/apps/contacts/all" className={classes.mainnotificationbtns}><Icon>account_box</Icon></Button>
                             </div>
                             <Paper style={{maxHeight: 350, overflow: 'auto'}}>
-                            <List component="nav" className={classes.notificationroot}>
+                            <List component="nav" className={classes.notificationroot} >
                                 {this.state.chatMSG && this.state.chatMSG.length &&  (
                                     this.state.chatMSG.map((item, index)=>{
                                         if(index < 15)
                                         return (
                                             <div key={index}>
-                                                <ListItem button style ={{height:'55px'}}>
+                                                <ListItem button style ={{height:'55px'}} onClick={() => this.handleContactClick(item.who)}>
                                                     <React.Fragment>
                                                     {this.state.contacts && this.state.contacts !== null && (
                                                         this.state.contacts.map((contact,i)=>{
@@ -484,6 +507,7 @@ function mapDispatchToProps(dispatch)
         logout                          : authActions.logoutUser,
         setRegionId                     : authActions.changeRegionId,
         openChatPanel                   : chatPanelActions.openChatPanel,
+        getChat                         : chatPanelActions.getChat,
         loadedMenu                      : authActions.loadedMenu,
         chatnotificationstatus          : Actions.chatnotificationstatus,
         closeChatPanel                   : chatPanelActions.closeChatPanel,

@@ -111,6 +111,8 @@ class ContactList extends Component {
     };
 
     handleContactClick = (chatId, contactId) => {
+        console.log ("chatId",chatId);
+        console.log ("contactId",contactId);
         this.props.openChatPanel();
         this.props.getChat(chatId, contactId);
         this.scrollToTop();
@@ -183,7 +185,6 @@ class ContactList extends Component {
                     <div style={{width:'0px',height:'0px',}}>
                         <ReactPlayer url='/assets/audios/message.mp3' playing />
                     </div>
-
                 )}
                 </div>
         );

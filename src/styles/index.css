@@ -93,6 +93,9 @@ a[role=button] {
     .chattogglebtnview{
         right: 35px !important;
     }
+    .searchbtnview{
+        display: none !important;
+    }
 }
 form label {
     z-index: 99;
