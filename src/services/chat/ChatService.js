@@ -45,7 +45,7 @@ class chatService {
                     }
                 })
                 .catch(error=>{
-                    resolve(error);
+                    
                 })
         });
     }
@@ -68,7 +68,7 @@ class chatService {
                     }
                 })
                 .catch(error=>{
-                    resolve(error);
+                    
                 })
         });
     }
@@ -85,7 +85,7 @@ class chatService {
                     }
                 })
                 .catch(error=>{
-                    resolve(error);
+                   
                 })
         });
     }
