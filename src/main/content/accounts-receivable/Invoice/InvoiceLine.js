@@ -469,6 +469,7 @@ class InvoiceLineTable extends React.Component {
             this.setState({data: newData});
         }
         else {//For Edit
+            console.log('edit');
             let items = this.props.invoiceDetail.Data.Items;
 
             let billingSuggestions = this.props.billingLists.map(b => ({
@@ -477,8 +478,6 @@ class InvoiceLineTable extends React.Component {
             let serviceSuggestions = this.props.serviceLists.map(s=>({
                 label: s.Name, value: s.Name
             }));
-
-            console.log('service=', serviceSuggestions);
 
             if(items.length>0){
                 let newData = items.map((item, index)=>{
@@ -489,7 +488,7 @@ class InvoiceLineTable extends React.Component {
                     if(service.length)
                         this.setState({[`selectedServiceOption${index}`]: service[0].label});
 
-                    let line = createData(billing[0], service.length ? service[0].label : '', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 5, item.ExtendedPrice, item.Total, item.MarkUpTotal)
+                    let line = createData(billing[0], service.length ? service[0].label : '', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 5, item.ExtendedPrice, item.Total, item.MarkUpTotal);
                     let distributions = [];
                     if(item.Distribution.length>0){
                         distributions = item.Distribution.map((d,fid)=>{
@@ -916,8 +915,7 @@ class InvoiceLineTable extends React.Component {
                                                             <Select1
                                                                 classes={classes}
                                                                 styles={selectStyles}
-                                                                // value={this.state.selectedBillingOption}
-                                                                value={this.state['selectedBillingOption'+row.original.id]}
+                                                                value={this.state["selectedBillingOption"+row.original.id]}
                                                                 components={components}
                                                                 onChange={(v)=>this.handleBillingChange(v, row.original)}
                                                                 options={billingSuggestions}

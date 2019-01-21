@@ -549,8 +549,8 @@ class InvoiceForm extends Component {
         };
         if(this.props.invoiceForm.type === 'new')
             this.props.addInvoice(this.props.regionId, result);
-        // else
-        //     this.props.updateInvoice(this.props.invoices.invoiceDetail.Data._id, this.props.regionId, result);
+        else
+            this.props.updateInvoice(this.props.invoices.invoiceDetail.Data._id, this.props.regionId, result);
 
         console.log('result', JSON.stringify(result));
     };
@@ -1090,10 +1090,23 @@ class InvoiceForm extends Component {
                         aria-labelledby="alert-dialog-title"
                         aria-describedby="alert-dialog-description"
                     >
-                        <DialogTitle id="alert-dialog-title">{"Create New Invoice"}</DialogTitle>
+                        <DialogTitle id="alert-dialog-title">
+                            {this.props.invoiceForm.type === 'new' && (
+                                <span>Create New Invoice</span>
+                            )}
+                            {this.props.invoiceForm.type === 'edit' && (
+                                <span>Update The Invoice</span>
+                            )}
+
+                        </DialogTitle>
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
-                                Do you really want to insert the new invoice?
+                                {this.props.invoiceForm.type === 'new' && (
+                                    <span>Do you really want to insert the new invoice?</span>
+                                )}
+                                {this.props.invoiceForm.type !== 'new' && (
+                                    <span>Do you really want to update the invoice?</span>
+                                )}
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
@@ -1101,7 +1114,8 @@ class InvoiceForm extends Component {
                                 Close
                             </Button>
                             <Button onClick={()=>this.addNewInvoice()} color="primary" autoFocus>
-                                Create
+                                {this.props.invoiceForm.type === 'new' && (<span>Create</span>)}
+                                {this.props.invoiceForm.type === 'edit' && (<span>Update</span>)}
                             </Button>
                         </DialogActions>
                     </Dialog>
