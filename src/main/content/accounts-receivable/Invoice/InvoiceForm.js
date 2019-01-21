@@ -416,14 +416,15 @@ class InvoiceForm extends Component {
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.invoiceForm.customer!==null){
-            if(nextProps.invoiceForm.type==='edit')
+            if(nextProps.invoiceForm.type==='edit') {
                 this.setState({InvoiceNo: nextProps.invoices.invoiceDetail.Data.inv_no});
-            this.setState({value: nextProps.invoiceForm.customer.CustomerName});
-            this.setState({CustomerNo: nextProps.invoiceForm.customer.CustomerNo});
-            this.setState({InvoiceDescription: nextProps.invoices.invoiceDetail.Data.Description});
-            this.setState({notes: nextProps.invoices.invoiceDetail.Data.Notes});
-            this.setState({InvoiceDate: moment(nextProps.invoices.invoiceDetail.Data.InvoiceDate).format('YYYY-MM-DD')});
-            this.setState({DueDate: moment(nextProps.invoices.invoiceDetail.Data.DueDate).format('YYYY-MM-DD')});
+                this.setState({value: nextProps.invoiceForm.customer.CustomerName});
+                this.setState({CustomerNo: nextProps.invoiceForm.customer.CustomerNo});
+                this.setState({InvoiceDescription: nextProps.invoices.invoiceDetail.Data.Description});
+                this.setState({notes: nextProps.invoices.invoiceDetail.Data.Notes});
+                this.setState({InvoiceDate: moment(nextProps.invoices.invoiceDetail.Data.InvoiceDate).format('YYYY-MM-DD')});
+                this.setState({DueDate: moment(nextProps.invoices.invoiceDetail.Data.DueDate).format('YYYY-MM-DD')});
+            }
         }
 
         if(nextProps.newInvoice!==null && nextProps.newInvoice!==this.props.newInvoice){
