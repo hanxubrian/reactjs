@@ -560,58 +560,50 @@ class AccountOfferingPage extends Component {
 		console.log("activeRow", this.state.activeRow)
 		return (
 			<Fragment>
-				{
-					step === 0 &&
-					(<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-						<Button
-							variant="contained"
-							color="primary"
-							className={classNames(classes.button, "pr-24 pl-24")}
-							onClick={() => {
-								this.offerThisAccount();
-							}}
-						> Offer this account... </Button>
-					</div>)
-				}
+				<div className={classNames("mb-12 w-full")}>
+					{
+						step === 0 && (
+							<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+								<Button
+									variant="contained"
+									color="primary"
+									className={classNames(classes.button, "pr-24 pl-24")}
+									onClick={() => {
+										this.offerThisAccount();
+									}}
+								> Offer this account... </Button>
+							</div>
+						)}
 
-				{step === 1 &&
-					(<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-						<Button
-							variant="contained"
-							color="secondary"
-							className={classNames(classes.button, "pr-24 pl-24")}
-							onClick={() => {
-								this.backToAccountOfferingHome();
-							}}
-						> Back </Button>
-					</div>)
-				}
+					{
+						step === 1 && (
+							<div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+								<IconButton onClick={this.backToAccountOfferingHome}>
+									<Icon>arrow_back</Icon>
+								</IconButton>
+								Back
+						</div>
+						)}
 
-				{step === 2 &&
-					(<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-						<Button
-							variant="contained"
-							color="secondary"
-							className={classNames(classes.button, "mr-12 pr-24 pl-24")}
-							onClick={() => {
-								this.backToFranchiseeList();
-							}}
-						> Back </Button>
-
-						<Button
-							variant="contained"
-							color="primary"
-							className={classNames(classes.button, "pr-36 pl-36")}
-							onClick={() => {
-								this.backToAccountOfferingHome();
-							}}
-						> Send </Button>
-					</div>
-
-					)
-
-				}
-
+					{step === 2 && (
+						<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+							<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+								<IconButton onClick={this.backToFranchiseeList}>
+									<Icon>arrow_back</Icon>
+								</IconButton>
+								Back
+							</div>
+							<Button
+								variant="contained"
+								color="primary"
+								className={classNames(classes.button, "pr-36 pl-36")}
+								onClick={() => {
+									this.backToAccountOfferingHome();
+								}}
+							> Send </Button>
+						</div>
+					)}
+				</div>
 
 				{(step === 2) && (
 					<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
@@ -626,7 +618,7 @@ class AccountOfferingPage extends Component {
 											className={classNames(classes.textField, "mr-6")}
 											InputProps={{
 												readOnly: true,
-											  }}
+											}}
 											value={this.state.activeRow.Number || ""}
 											onChange={this.handleChange('FranchiseeNumber')}
 											margin="dense"
@@ -642,8 +634,8 @@ class AccountOfferingPage extends Component {
 											className={classNames(classes.textField, "ml-6")}
 											InputProps={{
 												readOnly: true,
-											  }}
-											  value={this.state.activeRow.Phone || ""}
+											}}
+											value={this.state.activeRow.Phone || ""}
 											onChange={this.handleChange('FranchiseePhone')}
 											margin="dense"
 											fullWidth
@@ -663,8 +655,8 @@ class AccountOfferingPage extends Component {
 											className={classNames(classes.textField, "mr-6")}
 											InputProps={{
 												readOnly: true,
-											  }}
-											  value={this.state.activeRow.Name || ""}
+											}}
+											value={this.state.activeRow.Name || ""}
 											onChange={this.handleChange('FranchiseeName')}
 											margin="dense"
 											fullWidth
@@ -678,7 +670,7 @@ class AccountOfferingPage extends Component {
 											className={classNames(classes.textField, "ml-6")}
 											InputProps={{
 												readOnly: true,
-											  }}
+											}}
 											value={this.state.FranchiseeEmail}
 											onChange={this.handleChange('FranchiseeEmail')}
 											margin="dense"
@@ -696,7 +688,7 @@ class AccountOfferingPage extends Component {
 									className={classes.textField}
 									InputProps={{
 										readOnly: true,
-									  }}
+									}}
 									value={this.state.activeRow.Address || ""}
 									onChange={this.handleChange('Address1')}
 									margin="dense"
@@ -710,7 +702,7 @@ class AccountOfferingPage extends Component {
 									className={classes.textField}
 									InputProps={{
 										readOnly: true,
-									  }}
+									}}
 									value={this.state.Address2}
 									onChange={this.handleChange('Address2')}
 									margin="dense"
@@ -726,7 +718,7 @@ class AccountOfferingPage extends Component {
 											className={classNames(classes.textField, "mr-6")}
 											InputProps={{
 												readOnly: true,
-											  }}
+											}}
 											value={this.state.activeRow.City || ""}
 											onChange={this.handleChange('City')}
 											margin="dense"
@@ -741,7 +733,7 @@ class AccountOfferingPage extends Component {
 											className={classNames(classes.textField, "mr-6 ml-6")}
 											InputProps={{
 												readOnly: true,
-											  }}
+											}}
 											value={this.state.State}
 											onChange={this.handleChange('State')}
 											margin="dense"
@@ -756,8 +748,8 @@ class AccountOfferingPage extends Component {
 											className={classNames(classes.textField, "ml-6")}
 											InputProps={{
 												readOnly: true,
-											  }}
-											  value={this.state.activeRow.PostalCode || ""}
+											}}
+											value={this.state.activeRow.PostalCode || ""}
 											onChange={this.handleChange('Zip')}
 											margin="dense"
 											fullWidth
@@ -776,7 +768,7 @@ class AccountOfferingPage extends Component {
 									className={classes.textField}
 									InputProps={{
 										readOnly: true,
-									  }}
+									}}
 									value={this.state.CustomerNumber}
 									onChange={this.handleChange('CustomerNumber')}
 									margin="dense"
@@ -790,7 +782,7 @@ class AccountOfferingPage extends Component {
 									className={classes.textField}
 									InputProps={{
 										readOnly: true,
-									  }}
+									}}
 									value={this.state.CustomerName}
 									onChange={this.handleChange('CustomerName')}
 									margin="dense"
@@ -804,7 +796,7 @@ class AccountOfferingPage extends Component {
 									className={classes.textField}
 									InputProps={{
 										readOnly: true,
-									  }}
+									}}
 									value={this.state.Address1}
 									onChange={this.handleChange('Address1')}
 									margin="dense"
@@ -818,7 +810,7 @@ class AccountOfferingPage extends Component {
 									className={classes.textField}
 									InputProps={{
 										readOnly: true,
-									  }}
+									}}
 									value={this.state.Address2}
 									onChange={this.handleChange('Address2')}
 									margin="dense"
@@ -834,7 +826,7 @@ class AccountOfferingPage extends Component {
 											className={classNames(classes.textField, "mr-6")}
 											InputProps={{
 												readOnly: true,
-											  }}
+											}}
 											value={this.state.City}
 											onChange={this.handleChange('City')}
 											margin="dense"
@@ -848,7 +840,7 @@ class AccountOfferingPage extends Component {
 											className={classNames(classes.textField, "mr-6 ml-6")}
 											InputProps={{
 												readOnly: true,
-											  }}
+											}}
 											value={this.state.State}
 											onChange={this.handleChange('State')}
 											margin="dense"
@@ -862,7 +854,7 @@ class AccountOfferingPage extends Component {
 											className={classNames(classes.textField, "ml-6")}
 											InputProps={{
 												readOnly: true,
-											  }}
+											}}
 											value={this.state.Zip}
 											onChange={this.handleChange('Zip')}
 											margin="dense"
@@ -878,7 +870,7 @@ class AccountOfferingPage extends Component {
 									className={classes.textField}
 									InputProps={{
 										readOnly: true,
-									  }}
+									}}
 									value={this.state.AccountType}
 									onChange={this.handleChange('AccountType')}
 									margin="dense"
@@ -893,7 +885,7 @@ class AccountOfferingPage extends Component {
 									className={classes.textField}
 									InputProps={{
 										readOnly: true,
-									  }}
+									}}
 									value={this.state.MonthlyBussinessAmount}
 									onChange={this.handleChange('MonthlyBussinessAmount')}
 									margin="dense"
@@ -914,7 +906,7 @@ class AccountOfferingPage extends Component {
 											className={classNames(classes.textField, "mr-6")}
 											InputProps={{
 												readOnly: true,
-											  }}
+											}}
 											value={this.state.ServiceType === undefined ? "" : this.state.ServiceType}
 											onChange={this.handleChange('ServiceType')}
 											margin="dense"
@@ -937,17 +929,17 @@ class AccountOfferingPage extends Component {
 											className={classNames(classes.textField, "ml-6")}
 											InputProps={{
 												readOnly: true,
-											  }}
+											}}
 											value={this.state.SquareFootage}
 											onChange={this.handleChange('SquareFootage')}
 											margin="dense"
 											// variant="outlined"
 											fullWidth
-											// style={{ minWidth: "100px", width: "30%" }}
+										// style={{ minWidth: "100px", width: "30%" }}
 										/>
 									</GridItem>
 
-									
+
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 										<TextField
 											type="time"
@@ -956,7 +948,7 @@ class AccountOfferingPage extends Component {
 											className={classNames(classes.textField, "mr-6")}
 											InputProps={{
 												readOnly: true,
-											  }}
+											}}
 											InputLabelProps={{
 												shrink: true
 											}}
@@ -973,7 +965,7 @@ class AccountOfferingPage extends Component {
 											className={classNames(classes.textField, "ml-6")}
 											InputProps={{
 												readOnly: true,
-											  }}
+											}}
 											InputLabelProps={{
 												shrink: true
 											}}
@@ -993,7 +985,7 @@ class AccountOfferingPage extends Component {
 											className={classes.textField}
 											InputProps={{
 												readOnly: true,
-											  }}
+											}}
 											InputLabelProps={{
 												shrink: true
 											}}
@@ -1016,7 +1008,7 @@ class AccountOfferingPage extends Component {
 											className={classNames(classes.textField, "mr-6")}
 											InputProps={{
 												readOnly: true,
-											  }}
+											}}
 											value={this.state.CleanTimes}
 											onChange={this.handleChange('CleanTimes')}
 											margin="dense"
@@ -1032,7 +1024,7 @@ class AccountOfferingPage extends Component {
 											className={classNames(classes.textField, "ml-6")}
 											InputProps={{
 												readOnly: true,
-											  }}
+											}}
 											InputLabelProps={{
 												shrink: true
 											}}
@@ -1144,7 +1136,7 @@ class AccountOfferingPage extends Component {
 											className={classes.textField}
 											InputProps={{
 												readOnly: true,
-											  }}
+											}}
 											value={this.state.Description}
 											onChange={this.handleChange('Description')}
 											margin="dense"
@@ -1245,7 +1237,7 @@ class AccountOfferingPage extends Component {
 										<Button
 											variant="contained"
 											color="primary"
-											className={classNames(classes.button, "pr-36 pl-36")}
+											className={classNames(classes.button, "pr-36 pl-36 mt-6")}
 											onClick={() => {
 												this.backToAccountOfferingHome();
 											}}
