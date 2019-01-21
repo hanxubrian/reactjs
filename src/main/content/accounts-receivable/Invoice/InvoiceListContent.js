@@ -467,7 +467,7 @@ class InvoiceListContent extends Component {
                                             <IconButton style={{padding: 8}}
                                                         onClick={(ev) => {
                                                             ev.stopPropagation();
-                                                            this.props.openEditInvoiceForm(row.original);
+                                                            this.props.openEditInvoiceForm(row.original.InvoiceId, this.props.regionId);
                                                         }}
                                             >
                                                 <Icon fontSize={"small"}>edit</Icon>

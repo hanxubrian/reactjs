@@ -471,11 +471,23 @@ class InvoiceLineTable extends React.Component {
         else {//For Edit
             let items = this.props.invoiceDetail.Data.Items;
 
+            let billingSuggestions =this.props.billingLists.map(b => ({
+                value: b.BillingTypeId, label: b.Name}));
+
             if(items.length>0){
                 let newData = items.map((item, index)=>{
-                    let billing = this.state.billingSuggestions.filter(b=>b.value===parseInt(item.Billing));
+                    let billing = billingSuggestions.filter(b=>b.value===parseInt(item.Billing));
                     this.setState({[`selectedBillingOption${index}`]: billing});
-                    return createData(billing[0], 'Adjust-Balance', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 5, item.ExtendedPrice, item.Total, item.MarkUpTotal)
+                    let line = createData(billing[0], 'Adjust-Balance', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 5, item.ExtendedPrice, item.Total, item.MarkUpTotal)
+                    let distributions = [];
+                    if(item.Distribution.length>0){
+                        distributions = item.Distribution.map((d,fid)=>{
+                            return {id: index, fid, fnumber: d.FranchiseeNumber, amount: d.Amount, name: d.name, type: 'franch'}
+                        })
+                    }
+                    line.franchisees = distributions;
+
+                    return line;
                 });
 
                 this.setState({data: newData});
@@ -498,6 +510,7 @@ class InvoiceLineTable extends React.Component {
                 selectedFranchiess = _.filter(franchisees, franchisee=>f.Number===franchisee.Number && f.Name===franchisee.Name);
             });
 
+            //in case of selection any customer from auto suggestion
             if(selectedFranchiess.length>0) {
                 const data = [...this.state.data];
 

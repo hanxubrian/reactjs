@@ -284,7 +284,6 @@ class InvoiceForm extends Component {
         subTotal: 0.0,
         tax: 0,
         markup: 0.0,
-        // InvoiceNo: this.props.invoiceForm.type === 'new' ? "PENDING": '',
         InvoiceNo: this.props.invoiceForm.type === 'new' ? "PENDING": '',
         snackMessage: "",
         openSnack: false,
@@ -427,6 +426,7 @@ class InvoiceForm extends Component {
             }
         }
 
+        //in time of Saving
         if(nextProps.newInvoice!==null && nextProps.newInvoice!==this.props.newInvoice){
             this.setState({bAlertNewInvoice: false});
             if(this.state.buttonOption===0){
@@ -480,7 +480,7 @@ class InvoiceForm extends Component {
                 Inv_No: inv_no,
                 ServiceTypeListId: 0,
                 Description: line.description,
-                Billing: line.billing.label,
+                Billing: line.billing.value,
                 Service: line.service.label,
                 LineNo: 1,
                 UnitPrice: parseFloat(line.amount),
