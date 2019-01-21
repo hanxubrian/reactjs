@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {withRouter} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 
 // core components
 import {
@@ -1203,7 +1203,7 @@ class InvoiceForm extends Component {
                             <Button onClick={()=>this.handleCloseNewCustomer()} color="primary">
                                 Close
                             </Button>
-                            <Button onClick={()=>this.addNewCustomer()} color="primary" autoFocus>
+                            <Button component={Link} to="/customers/list"  color="primary" autoFocus>
                                 Create New Customer
                             </Button>
                         </DialogActions>
