@@ -23,6 +23,26 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 import classNames from 'classnames';
 
+import {
+    Template,
+    TemplateConnector,
+    SelectionState,
+    PagingState,
+    IntegratedPaging,
+    IntegratedSelection,
+    SortingState,
+    IntegratedSorting,
+    EditingState,
+    GroupingState,
+    IntegratedGrouping,
+    DataTypeProvider,
+    FilteringState,
+    IntegratedFiltering,
+    SearchState,
+} from '@devexpress/dx-react-grid';
+
+
+
 const hexToRgb = (hex) =>{
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? {

@@ -236,7 +236,7 @@ class FilterPanel extends Component {
                 <div className={classNames("flex flex-col")}>
                     <Paper className="flex flex-1 flex-col min-h-px p-20">
                         <FormControl className={classes.formControl} style={{width: 200}}>
-                            <h3 className="mb-20">Invoice Date</h3>
+                            <h3 className="mb-20">Payments Date</h3>
                             <Select
                                 value={this.state.invoiceDateOption}
                                 onChange={this.handleChange1}
@@ -325,7 +325,7 @@ class FilterPanel extends Component {
                         )}
 
                         <div style={{marginTop: 20, display: 'flex', flexDirection: 'column'}}>
-                            <h3>Invoice Status</h3>
+                            <h3>Payments Status</h3>
                             {this.state.invoiceStatus.length>0 && this.state.invoiceStatus.map((iv, index)=> {
                                 return (
                                     <FormControlLabel
