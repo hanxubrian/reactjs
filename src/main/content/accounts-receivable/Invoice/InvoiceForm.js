@@ -547,8 +547,8 @@ class InvoiceForm extends Component {
             SysCust: this.state.selectedCustomer.SysCust,
             Items: items
         };
-        // if(this.props.invoiceForm.type === 'new')
-        //     this.props.addInvoice(this.props.regionId, result);
+        if(this.props.invoiceForm.type === 'new')
+            this.props.addInvoice(this.props.regionId, result);
         // else
         //     this.props.updateInvoice(this.props.invoices.invoiceDetail.Data._id, this.props.regionId, result);
 
@@ -624,7 +624,7 @@ class InvoiceForm extends Component {
     };
 
     focusDescriptionInputField = input => {
-        if (this.props.invoiceForm.type === 'edit') {
+        if ( input && this.props.invoiceForm.type === 'edit') {
             setTimeout(() => {input.focus()}, 500);
         }
     };
