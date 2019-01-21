@@ -4,10 +4,10 @@ import {withRouter} from 'react-router-dom';
 // core components
 import {
     Paper, TextField, Typography, MenuItem, Card,  CardHeader, CardContent, Divider, Button,
-    Snackbar, SnackbarContent, IconButton
+    Snackbar, SnackbarContent, IconButton, Icon
 } from '@material-ui/core';
 import 'date-fns'
-import DateFnsUtils from '@date-io/date-fns';
+import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 import green from '@material-ui/core/colors/green';
 import amber from '@material-ui/core/colors/amber';
@@ -42,6 +42,7 @@ import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
 import moment from 'moment'
 import PropTypes from 'prop-types';
+import LeaseTable from './leaseTable'
 
 //Utility
 import {escapeRegexCharacters} from 'services/utils'
@@ -94,7 +95,7 @@ const styles = theme => ({
     divider: {
         height: theme.spacing.unit * 2,
     },
-    cardHeader       : {
+    cardHeader: {
         backgroundColor: theme.palette.secondary.main,
         padding: '8px 24px',
         '& span': {
@@ -128,37 +129,23 @@ const newLeaseState = {
     "RegionId": "",
     "RegionName": "",
     "LeaseId": "",
-    "LeaseDate": new Date(),
-    "DueDate": new Date(),
-    "CustomerId": "",
-    "CustomerNo": "",
-    "CustomerName": "",
-    "EBill": "",
-    "PrintLease": "",
-    "LeaseDescription": "",
+    "DateSigned": moment().format('YYYY-MM-DD'),
+    "PaymentStart": moment().format('YYYY-MM-DD'),
+    "Make": "",
+    "Model": "",
+    "SerialNo": "",
     "LeaseAmount": "",
-    "LeaseTax": "",
-    "LeaseTotal": "",
-    "CPI": "",
-    "TransactionStatusListId": "",
-    "TransactionStatus": "",
-    "LeaseBalanceAmount": "",
-    "LeaseBalanceTax": "",
-    "LeaseBalanceTotal": "",
-    "EBillText": "",
-    "PrintLeaseText": "",
-    "IsOpen": "",
-    "ConsolidatedLease": "",
-    "ConsolidatedLeaseId": "",
-    "ConsolidatedLeaseNo": "",
-    "CreditId": "",
-    "Service":"",
-    "notes": ""
+    "LeaseTerm": "",
+    "TotalTax": "",
+    "TotalLease": "",
+    "Description": "",
+    "PrintLease": "",
+    "LeaseDescription": ""
 };
 
 function renderSuggestion(suggestion, { query, isHighlighted }) {
-    const matches = match(suggestion.CustomerName, query);
-    const parts = parse(suggestion.CustomerName, matches);
+    const matches = match(suggestion.Name, query);
+    const parts = parse(suggestion.Name, matches);
 
     return (
         <MenuItem selected={isHighlighted} component="div">
@@ -256,11 +243,11 @@ const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
 
 class LeaseForm extends Component {
     state = {
-        customers: [],
         franchisees: [],
         ...newLeaseState,
         value: '',
         suggestions: [],
+        PO_number: '',
         selectedCustomer: null,
         fSuggestions: [],
         selectedFranchisee: null,
@@ -272,7 +259,15 @@ class LeaseForm extends Component {
         markup: 0.0,
         LeaseNo: "",
         snackMessage: "",
-        openSnack: false
+        openSnack: false,
+        make: '',
+        model: '',
+        serialNo: '',
+        leaseAmount: '',
+        leaseTerm: '',
+        totalTax: '',
+        totalLease: '',
+        buttonOption: 0
     };
 
     renderInputComponent = (inputProps ) => {
@@ -309,8 +304,6 @@ class LeaseForm extends Component {
     };
 
     onSuggestionsFetchRequested = ({ value }) => {
-        if(value.length<2) return;
-
         this.setState({
             suggestions: this.getSuggestions(value)
         });
@@ -323,15 +316,16 @@ class LeaseForm extends Component {
     };
 
     getSuggestionValue =  (suggestion) =>{
-        this.setState({selectedCustomer: suggestion});
-        return suggestion.CustomerName;
+        this.setState({selectedFranchisee: suggestion});
+        this.setState({PO_number: suggestion.franchiseeNo});
+        return suggestion.Name;
     };
 
     getSuggestions = (value) => {
         const escapedValue = escapeRegexCharacters(value.trim());
         const regex = new RegExp(escapedValue, 'i');
-        if(this.props.customers!==null)
-            return this.props.customers.filter(customer => regex.test(customer.CustomerName));
+        if(this.props.franchisees!==null)
+            return this.props.franchisees.Data.Region[0].FranchiseeList.filter(f => regex.test(f.Name));
     };
 
     getTotal = () => {
@@ -352,6 +346,8 @@ class LeaseForm extends Component {
             tax += parseFloat(n.tax);
             markup += parseFloat(n.extended*qty*parseFloat(mk)/100);
         });
+        
+        console.log('aaaaa', subTotal, markup, tax, subTotal+tax+markup);
 
         this.setState({subTotal: subTotal});
         this.setState({markup: markup});
@@ -361,10 +357,11 @@ class LeaseForm extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.props.leaseForm!== prevProps.leaseForm) {
+            console.log('pppppp');
             this.getTotal();
         }
-        if(this.state.selectedCustomer!== null && JSON.stringify(this.state.selectedCustomer)!== JSON.stringify(this.props.leaseForm.customer)) {
-            this.props.selectCustomer(this.state.selectedCustomer);
+        if(this.state.selectedFranchisee!== null && JSON.stringify(this.state.selectedFranchisee)!== JSON.stringify(this.props.leaseForm.franchisee)) {
+            this.props.selectFranchisee(this.state.selectedFranchisee);
         }
     }
 
@@ -372,7 +369,7 @@ class LeaseForm extends Component {
 
     }
 
-    // componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps) {
     //     if(nextProps.leaseForm.customer!==null){
     //         if(nextProps.leaseForm.type==='edit')
     //             this.setState({LeaseNo: nextProps.leaseForm.customer.LeaseNo});
@@ -380,8 +377,33 @@ class LeaseForm extends Component {
     //         this.setState({CustomerNo: nextProps.leaseForm.customer.CustomerNo});
     //         this.setState({LeaseDate: moment(nextProps.leaseForm.customer.LeaseDate).format('MM/DD/YYYY')});
     //         this.setState({DueDate: moment(nextProps.leaseForm.customer.DueDate).format('MM/DD/YYYY')});
-    //     }
     // }
+
+        //in time of Saving
+        // if(nextProps.newLease!==null && nextProps.newLease!==this.props.newLease){
+        //     this.setState({bAlertNewLease: false});
+        //     if(this.state.buttonOption===0){
+        //         this.props.updatedLeases();
+        //         this.props.resetLeaseForm();
+        //         this.setState({LeaseDescription: ''});
+        //         this.setState({selectedCustomer: null});
+        //         this.setState({value: ''});
+        //         this.setState({CustomerNo: ''});
+        //         if(this.input) {
+        //             if(this.props.invoiceForm.type === 'new')
+        //                 setTimeout(() => {this.input.focus()}, 500);
+        //         }
+        //     }
+        //     else if(this.state.buttonOption===1) {
+        //         this.props.updatedLeases();
+        //         this.closeComposeForm();
+        //     }
+        //     else if(this.state.buttonOption===2) {
+        //         this.props.updatedLeases();
+        //         this.closeComposeForm();
+        //     }
+        // }
+    }
 
     componentDidMount(){
         if(this.props.leaseForm.type === 'new')
@@ -396,81 +418,120 @@ class LeaseForm extends Component {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
     };
 
-    onSaveLease = () => {
-        if(this.state.selectedCustomer===null){
-            this.setState({snackMessage: 'Please choose customer from Lease suggestion'});
-            this.setState({openSnack: true});
-            return;
-        }
-
-
+    addNewLease = () => {
+        let lease_no = 'PENDING';
         let items = [];
-        let lines = this.props.leaseForm.data.line;
-        //
-        lines.forEach(line=>{
-            let item = {
-                ServiceTypeListId: 0,
-                Descrption: line.description,
-                LineNo: 1,
-                UnitPrice: line.amount,
-                Quantity: parseInt(line.quantity),
-                TaxRate: line.tax,
-                ExtendedPrice: line.extended,
-                Total: line.total,
-                MarkUpTotal: line.markup,
-                Commission: 0,
-                CommissionTotal: 0,
-                ExtraWork: 1,
-                TaxExcempt: 1,
-                Distribution: []
-            };
+
+        let lines = this.props.leaseForm.data;
+
+        // lines.forEach(line=>{
+        //     let item = {
+        //         Lease_no: lease_no,
+        //         ServiceTypeListId: 0,
+        //         Description: line.description,
+        //         Billing: line.billing.value,
+        //         Service: line.service.label,
+        //         LineNo: 1,
+        //         UnitPrice: parseFloat(line.amount),
+        //         Quantity: parseInt(line.quantity),
+        //         TaxRate: line.tax,
+        //         ExtendedPrice: line.extended,
+        //         Total: line.total,
+        //         MarkUpTotal: line.markup,
+        //         Commission: 0,
+        //         CommissionTotal: 0,
+        //         ExtraWork: 1,
+        //         TaxExcempt: this.state.selectedCustomer.TaxExempt,
+        //         Distribution: [],
+        //     };
+            let item = {};
             let franchisees = [];
 
-            if(line.franchisees.length>0) {
-                line.franchisees.forEach(f=>{
+            if(lines) {
+                lines.franchisees.forEach(f=>{
                     franchisees.push(
                         {
                             FranchiseeId: 12,
-                            FranchiseNumber: f.fnumber,
+                            FranchiseeNumber: f.fnumber,
                             LineNo: 1,
                             Name: f.name,
                             Description: "Work done",
                             Amount: f.amount
                         }
                     )
-
                 })
             }
-            item.Distribution.push(franchisees);
+            item.Distribution = franchisees;
 
             items.push(item);
-        });
+        ;
 
-        let result = {
-            CustomerId: this.state.selectedCustomer.CustomerId,
-            PeriodId: this.props.leases.PeriodId[0],
-            PeriodMonth: moment().month()+1,
-            PeriodYear: moment().year(),
-            Description: this.state.LeaseDescription,
-            Notes: this.state.note,
-            RegionId: this.props.regionId,
-            BillRunId: 999,
-            LeaseDate: this.state.LeaseDate,
-            CreatedById: this.props.user.UserId,
-            CreatedDate: moment().format('MM/DD/YYYY'),
-            SubTotal: this.state.subTotal,
-            MarkupAmountTotal :this.state.markup,
-            CPIIncrease: 0.00,
-            TaxTotal: this.state.tax,
-            GrandTotal: this.state.total,
-            LeaseItems: [
-                {
-                    Inv_No: chance.guid()+'_pending',
-                    Items: items
-                }
-            ]
-        };
+        if(this.props.leaseForm.type === 'edit') {
+
+        }
+
+        let result;
+
+        if(this.props.leaseForm.type === 'new') {
+            result = {
+                "_id": "",
+                "RegionId": 2,
+                "CreatedBy": 0,
+                "company_no": "BUF701",
+                "dlr_code": "701036",
+                "lease_no": "70-7777",
+                "descripton": this.state.LeaseDescription,
+                "make": this.state.make,
+                "model": this.state.model,
+                "date_sign": moment(this.state.DateSigned),
+                "orig_cost": 500.00,
+                "paymnt_amt": 31.28,
+                "paymnt_tax": 8.75,
+                "pymnt_adv": 2,
+                "pymnt_begn": "12/27/2018",
+                "pymnt_bill": 2,
+                "pymnt_totl": 16.00,
+                "serial": this.state.serialNo,
+                "year": 2019,
+                "stop": "N",
+                "stop_mon": 0,
+                "stop_year": 0,
+                "tofran": "",
+                "fromfran": ""
+            };
+            this.props.addLease(result);
+        }
+        else {
+            result = {
+                ...this.props.leases.leaseDetail.Data,
+                DateSigned: this.state.DateSigned,
+                PaymentStart: this.state.PaymentStart,
+                Make: this.state.make,
+                Model: this.state.model,
+                SerialNo: this.state.serialNo,
+                LeaseAmount: this.state.leaseAmount,
+                LeaseTerm: this.state.leaseTerm,
+                TotalTax: this.state.totalTax,
+                TotalLease: this.state.totalLease,
+                Description: this.state.LeaseDescription,
+                RegionId: this.props.regionId,
+                LeaseDate: moment(this.state.LeaseDate),
+                CreatedById: this.props.user.UserId,
+                CreatedDate: this.props.leaseForm.type === 'new' ? moment() : this.props.leases.leaseDetail.Data.CreatedDate,
+                Items: items
+            };
+
+            this.props.updateLease(this.props.leases.leaseDetail.Data._id, this.props.regionId, result);
+        }
+
         console.log('result', JSON.stringify(result));
+    };
+
+    onSaveLease = (buttonOption) => {
+        if(this.validateNewInvoice()){
+            this.setState({bAlertNewInvoice: true});
+            this.setState({buttonOption: buttonOption});
+        }
     };
 
     onSaveAndAddMore=()=>{
@@ -533,6 +594,58 @@ class LeaseForm extends Component {
             renderSuggestion,
         };
 
+        const Lease_headers = [
+            {
+                    id: 'make',
+                    numeric: false,
+                    disablePadding: false,
+                    label: 'Make'
+            },
+            {
+                    id: 'model',
+                    numeric: false,
+                    disablePadding: false,
+                    label: 'Model'
+            },
+            {
+                    id: 'serialNo',
+                    numeric: false,
+                    disablePadding: false,
+                    label: 'Serial No'
+            },
+            {
+                    id: 'leaseAmount',
+                    numeric: false,
+                    disablePadding: false,
+                    label: 'Lease Amount'
+            },
+            {
+                    id: 'totalTax',
+                    numeric: false,
+                    disablePadding: false,
+                    label: 'Total Tax'
+            },
+            {
+                    id: 'leaseTerm',
+                    numeric: false,
+                    disablePadding: false,
+                    label: 'Lease Term'
+            },
+            {
+                    id: 'totalLease',
+                    numeric: false,
+                    disablePadding: false,
+                    label: 'Total Lease'
+            },
+            {
+                    id: 'paymentNumber',
+                    numeric: false,
+                    disablePadding: false,
+                    label: '# of Payment'
+            }
+        ];
+
+
 
         let bReadonly = false;
         if(this.props.leaseForm.type === 'new') bReadonly = true;
@@ -541,7 +654,7 @@ class LeaseForm extends Component {
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="h-full flex flex-col relative">
                     <div className="flex flex-col p-24 pt-12 pb-0" style={{flex: "1"}}>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <MuiPickersUtilsProvider utils={MomentUtils}>
                             <GridContainer className={classNames(classes.formControl)}>
                                 <GridItem xs={12} sm={6} md={6} className="flex flex-row">
                                     <Autosuggest
@@ -566,7 +679,77 @@ class LeaseForm extends Component {
                                         ref={this.storeInputReference}
                                     />
                                 </GridItem>
-								<GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                            </GridContainer>
+                        </MuiPickersUtilsProvider>
+                        <GridContainer className={classNames(classes.formControl, "mb-0")}>
+                            <GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col">
+                                <Card className={classes.card}>
+                                    <CardHeader title="Franchisee Transaction" className={classNames(classes.cardHeader, "flex-1")} />
+                                    <CardContent className={classNames(classes.cardContent)}>
+                                        <div className="flex flex-row justify-between mb-4">
+                                            <div className="flex flex-row">
+                                                <Icon fontSize={"small"} className="mr-4">account_circle</Icon>
+                                                <Typography variant="subtitle1" color="inherit">
+                                                    <strong>{this.state.selectedFranchisee ? this.state.selectedFranchisee.Name: this.state.value}</strong>
+                                                </Typography>
+                                            </div>
+                                            <Typography variant="subtitle1" color="inherit">
+                                                <strong>Franchisee #: {this.state.selectedFranchisee? this.state.selectedFranchisee.Number: this.state.franchiseeNo}</strong>
+                                            </Typography>
+                                        </div>
+                                        {this.state.selectedFranchisee && (
+                                            <div className="flex flex-row justify-start mb-4">
+                                                <div className="flex flex-row items-center">
+                                                    <Icon fontSize={"small"} className="mr-4">place</Icon>
+                                                    <Typography variant="subtitle1" color="inherit">
+                                                        {this.state.selectedFranchisee.Address}
+                                                    </Typography>
+                                                </div>
+                                            </div>
+                                        )}
+                                        {this.state.selectedFranchisee && (
+                                            <div className="flex flex-row justify-between mb-4">
+                                                <div className="flex flex-row items-center">
+                                                    <Icon fontSize={"small"} className="mr-4">smartphone</Icon>
+                                                    <Typography variant="subtitle1" color="inherit">
+                                                        {this.state.selectedFranchisee.Phone}
+                                                    </Typography>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </CardContent>
+                                </Card>
+                            </GridItem>
+                        </GridContainer>
+                        <div className="w-full mt-4">
+                            <TextField
+                                id="LeaseDescription"
+                                name="LeaseDescription"
+                                label="Description"
+                                className={classes.textField}
+                                value={this.state.LeaseDescription}
+                                onChange={this.handleChange}
+                                margin="dense"
+                                variant="outlined"
+                                fullWidth
+                                InputLabelProps = {{
+                                    shrink: true,
+                                    classes: {outlined: classes.label}
+                                }}
+                                InputProps={{
+                                    classes: {
+                                        input: classes.input, multiline: classes.input
+                                    },
+                                }}
+                            />
+                        </div>
+                        <br></br>
+                        <GridContainer className={classNames(classes.formControl)} style={{flex: "9999 1 0"}}>
+                            {/* <GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col xs:mb-24"> */}
+                                {/* <h3>Lease</h3> */}
+                                {/* <LeaseTable tableType="LEASE" headers={Lease_headers} /> */}
+                                <MuiPickersUtilsProvider utils={MomentUtils}>
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
                                     <TextField
                                         margin="none"
                                         label="Lease #"
@@ -598,7 +781,7 @@ class LeaseForm extends Component {
                                         label="Date Signed"
                                         name="DateSigned"
                                         variant="outlined"
-                                        format="MM/dd/YYYY"
+                                        format="MM/DD/YYYY"
                                         value={this.state.LeaseDate}
                                         onChange={this.handleLeaseDateChange}
                                         fullWidth
@@ -618,7 +801,7 @@ class LeaseForm extends Component {
                                     <DatePicker
                                         margin="none"
                                         label="Payment Starts"
-                                        format="MM/dd/YYYY"
+                                        format="MM/DD/YYYY"
                                         name="PaymentStarts"
                                         variant="outlined"
                                         value={this.state.DueDate}
@@ -636,84 +819,198 @@ class LeaseForm extends Component {
                                         }}
                                     />
                                 </GridItem>
-                            </GridContainer>
+                                <div className="w-full mt-4">
+                                </div>
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                    <TextField
+                                        id="make"
+                                        name="make"
+                                        label="Make"
+                                        placeholder="Make"
+                                        className={classes.textField}
+                                        value={this.state.make}
+                                        onChange={this.handleChange}
+                                        margin="none"
+                                        variant="outlined"
+                                        fullWidth
+                                        style = {{fontSize: this.props.leaseForm.type === 'new' ? '18px!important': 'inherit',
+                                        fontWeight: this.props.leaseForm.type === 'new' ? 700: 'inherit'
+                                        }}
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input,
+                                            },
+                                        }}
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                    />
+                                </GridItem>
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                    <TextField
+                                        id="model"
+                                        name="model"
+                                        label="Model"
+                                        placeholder="Model"
+                                        className={classes.textField}
+                                        value={this.state.model}
+                                        onChange={this.handleChange}
+                                        margin="none"
+                                        variant="outlined"
+                                        fullWidth
+                                        style = {{fontSize: this.props.leaseForm.type === 'new' ? '18px!important': 'inherit',
+                                        fontWeight: this.props.leaseForm.type === 'new' ? 700: 'inherit'
+                                        }}
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input,
+                                            },
+                                        }}
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                    />
+                                </GridItem>
+                            {/* </GridItem> */}
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                <TextField
+                                    id="serialNo"
+                                    name="serialNo"
+                                    label="Serial No"
+                                    placeholder="Serial No"
+                                    className={classes.textField}
+                                    value={this.state.serialNo}
+                                    onChange={this.handleChange}
+                                    margin="none"
+                                    variant="outlined"
+                                    fullWidth
+                                    style = {{fontSize: this.props.leaseForm.type === 'new' ? '18px!important': 'inherit',
+                                    fontWeight: this.props.leaseForm.type === 'new' ? 700: 'inherit'
+                                    }}
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input,
+                                        },
+                                    }}
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                />
+                                </GridItem>
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                <TextField
+                                    id="leaseAmount"
+                                    name="leaseAmount"
+                                    label="Lease Amount"
+                                    placeholder="Lease Amount"
+                                    className={classes.textField}
+                                    value={this.state.leaseAmount}
+                                    onChange={this.handleChange}
+                                    margin="none"
+                                    variant="outlined"
+                                    fullWidth
+                                    style = {{fontSize: this.props.leaseForm.type === 'new' ? '18px!important': 'inherit',
+                                    fontWeight: this.props.leaseForm.type === 'new' ? 700: 'inherit'
+                                    }}
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input,
+                                        },
+                                    }}
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                />
+                                </GridItem>
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                <TextField
+                                    id="leaseTerm"
+                                    name="leaseTerm"
+                                    label="Lease Term"
+                                    placeholder="Lease Term"
+                                    className={classes.textField}
+                                    value={this.state.leaseTerm}
+                                    onChange={this.handleChange}
+                                    margin="none"
+                                    variant="outlined"
+                                    fullWidth
+                                    style = {{fontSize: this.props.leaseForm.type === 'new' ? '18px!important': 'inherit',
+                                    fontWeight: this.props.leaseForm.type === 'new' ? 700: 'inherit'
+                                    }}
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input,
+                                        },
+                                    }}
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                />
+                                </GridItem>
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                <TextField
+                                    id="totalTax"
+                                    name="totalTax"
+                                    label="Total Tax"
+                                    placeholder="Total Tax"
+                                    className={classes.textField}
+                                    value={this.state.totalTax}
+                                    onChange={this.handleChange}
+                                    margin="none"
+                                    variant="outlined"
+                                    fullWidth
+                                    style = {{fontSize: this.props.leaseForm.type === 'new' ? '18px!important': 'inherit',
+                                    fontWeight: this.props.leaseForm.type === 'new' ? 700: 'inherit'
+                                    }}
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input,
+                                        },
+                                    }}
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                />
+                                </GridItem>
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                <TextField
+                                    id="totalLease"
+                                    name="totalLease"
+                                    label="Total Lease"
+                                    placeholder="Total Lease"
+                                    className={classes.textField}
+                                    value={this.state.totalLease}
+                                    onChange={this.handleChange}
+                                    margin="none"
+                                    variant="outlined"
+                                    fullWidth
+                                    style = {{fontSize: this.props.leaseForm.type === 'new' ? '18px!important': 'inherit',
+                                    fontWeight: this.props.leaseForm.type === 'new' ? 700: 'inherit'
+                                    }}
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input,
+                                        },
+                                    }}
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                />
+                                </GridItem>
                         </MuiPickersUtilsProvider>
-                        <GridContainer className={classNames(classes.formControl, "mb-0")}>
-                            <GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col">
-                                <Card className={classes.card}>
-                                    <CardHeader title="Franchisee" className={classNames(classes.cardHeader, "flex-1")} />
-                                    <CardContent className={classNames(classes.cardContent)}>
-                                        <Typography variant="subtitle1" color="inherit">
-                                            <strong>Franchisee Name: {this.state.selectedCustomer ? this.state.selectedCustomer.CustomerName: this.state.value}</strong>
-                                        </Typography>
-                                        <Typography variant="subtitle1" color="inherit">
-                                            Franchisee No: {this.state.selectedCustomer? this.state.selectedCustomer.CustomerNo: this.state.CustomerNo}
-                                        </Typography>
-                                        <Typography variant="subtitle1" color="inherit">
-                                            Address: {this.state.selectedCustomer ? this.state.selectedCustomer.Address: ''}
-                                        </Typography>
-                                        {this.state.selectedCustomer && (
-                                            <Typography variant="subtitle1" color="inherit">
-                                                {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
-                                            </Typography>
-                                        )}
-                                    </CardContent>
-                                </Card>
-                            </GridItem>
-                            <GridItem xs={12} sm={6} md={6} className= "flex flex-row justify-end xs:flex-col">
-                                <Card className={classes.card}>
-                                    <CardHeader title="Billing" className={classNames(classes.cardHeader, "flex-1")} />
-                                    <CardContent className={classNames(classes.cardContent)}>
-                                        <Typography variant="subtitle1" color="inherit">
-                                            <strong>Billing Name: {this.state.selectedCustomer ? this.state.selectedCustomer.CustomerName: this.state.value}</strong>
-                                        </Typography>
-                                        <Typography variant="subtitle1" color="inherit">
-                                            Customer No: {this.state.selectedCustomer ? this.state.selectedCustomer.CustomerNo: this.state.CustomerNo}
-                                        </Typography>
-                                        <Typography variant="subtitle1" color="inherit">
-                                            Address: {this.state.selectedCustomer ? this.state.selectedCustomer.Address: ''}
-                                        </Typography>
-                                        {this.state.selectedCustomer && (
-                                            <Typography variant="subtitle1" color="inherit">
-                                                {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
-                                            </Typography>
-                                        )}
-                                    </CardContent>
-                                </Card>
-                            </GridItem>
-                        </GridContainer>
-                        <div className="w-full mt-4">
-                            <TextField
-                                id="LeaseDescription"
-                                name="LeaseDescription"
-                                label="Description"
-                                className={classes.textField}
-                                value={this.state.LeaseDescription}
-                                onChange={this.handleChange}
-                                margin="dense"
-                                variant="outlined"
-                                fullWidth
-                                InputLabelProps = {{
-                                    shrink: true,
-                                    classes: {outlined: classes.label}
-                                }}
-                                InputProps={{
-                                    classes: {
-                                        input: classes.input, multiline: classes.input
-                                    },
-                                }}
-                            />
-                        </div>
-                        <GridContainer className={classNames(classes.formControl)} style={{flex: "9999 1 0"}}>
-                            <GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col xs:mb-24">
-                                <LeaseLine />
-                            </GridItem>
                         </GridContainer>
                         <Divider variant="middle"/>
                     </div>
                     <div className="flex flex-shrink flex-col w-full pl-24 pr-24 pt-0 pb-12">
                         <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
-                            <GridItem xs={12} sm={9} md={9} className="flex flex-col xs:flex-col xs:mb-24">
+                            {/* <GridItem xs={12} sm={9} md={9} className="flex flex-col xs:flex-col xs:mb-24">
                                 <div className="w-full">
                                     <TextField
                                         id="note"
@@ -738,8 +1035,8 @@ class LeaseForm extends Component {
                                         rows={3}
                                     />
                                 </div>
-                            </GridItem>
-                            <GridItem xs={12} sm={3} md={3} className="flex flex-col xs:flex-col xs:mb-24">
+                            </GridItem> */}
+                            {/* <GridItem xs={12} sm={3} md={3} className="flex flex-col xs:flex-col xs:mb-24">
                                 <div className="w-full p-12 flex justify-end pb-0">
                                     <span className={classes.summary}><strong>Subtotal: </strong>${this.state.subTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
@@ -752,7 +1049,7 @@ class LeaseForm extends Component {
                                 <div className="w-full p-12 flex justify-end  pt-6 pb-6">
                                     <span className={classes.summary}><strong>Grand Total: </strong>${this.state.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
-                            </GridItem>
+                            </GridItem> */}
                         </GridContainer>
                         <div className="flex flex-1 flex-row justify-between items-center">
                             <div className="flex flex-row justify-start">
@@ -791,9 +1088,11 @@ class LeaseForm extends Component {
                                         color="primary"
                                         className={classNames(classes.button, "mr-12")}
                                         onClick={() => {
-                                            this.onSubmitForApproval();
+                                            this.addNewLease();
                                         }}
                                     >
+                                    {/* {this.props.leaseForm.type === 'new' && (<span>Create</span>)}
+                                    {this.props.leaseForm.type === 'edit' && (<span>Update</span>)} */}
                                         Submit for Approval
                                     </Button>
                                 </FuseAnimate>
@@ -840,18 +1139,24 @@ function mapDispatchToProps(dispatch)
         closeEditLeaseForm: Actions.closeEditLeaseForm,
         closeNewLeaseForm : Actions.closeNewLeaseForm,
         selectCustomer: Actions.selectCustomer,
-        resetLeaseForm: Actions.resetLeaseForm
+        resetLeaseForm: Actions.resetLeaseForm,
+        selectFranchisee: Actions.selectFranchisee,
+        addLease: Actions.addLease,
+        updateLease: Actions.updateLease,
+        updatedLeases: Actions.updatedLeases,
     }, dispatch);
 }
 
-function mapStateToProps({leases, auth})
+function mapStateToProps({leases, auth, franchisees})
 {
     return {
         leaseForm: leases.leaseForm,
         leases: leases,
+        newLease: leases.newLease,
         user: auth.login,
         regionId: auth.login.defaultRegionId,
-        bStartingSaveFormData: leases.bStartingSaveFormData
+        bStartingSaveFormData: leases.bStartingSaveFormData,
+        franchisees: franchisees.franchiseesDB,
     }
 }
 

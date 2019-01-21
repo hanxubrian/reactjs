@@ -248,6 +248,7 @@ class Leases extends Component {
 		selectedLease: null,
 		current_lat: 0,
 		current_long: 0,
+		franchisees: null
 	};
 
 	constructor(props) {
@@ -256,6 +257,10 @@ class Leases extends Component {
 		if (!props.bLoadedLeases) {
 			props.getLeases(this.props.regionId, this.props.statusId, this.props.searchText);
 		}
+
+		if (!props.bLoadedFranchisees) {
+            props.getFranchisees(props.regionId, props.fstatusId, props.fLocation, props.fLongitude, props.fLatitude, props.fSearchText);
+        }
 		this.fetchData = this.fetchData.bind(this);
 		this.escFunction = this.escFunction.bind(this);
     }
@@ -342,6 +347,8 @@ class Leases extends Component {
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		let bChanged = false;
+		const {fstatusId, fLocation, fLongitude, fLatitude, fSearchText} = this.props;
+
 		if (this.props.transactionStatus.checkedPaid !== prevProps.transactionStatus.checkedPaid) {
 			this.setState({ checkedPaid: !this.state.checkedPaid });
 			bChanged = true;
@@ -362,11 +369,9 @@ class Leases extends Component {
 			bChanged = true;
 		}
 
-		if (this.props.regionId !== prevProps.regionId) {
-			this.setState({ regionId: prevProps.regionId });
-			this.props.getLeases(this.props.regionId, this.props.statusId, this.props.searchText);
-			bChanged = true;
-		}
+		if(this.props.regionId !== prevProps.regionId){
+            this.props.getFranchisees(this.props.regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText);
+        }
 
 		if (bChanged)
 			this.getLeasesFromStatus();
@@ -381,13 +386,15 @@ class Leases extends Component {
 	}
 
 	componentWillMount() {
+		const {regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText} = this.props;
+
 		this.setState({ checkedPaid: this.props.transactionStatus.checkedPaid });
 		this.setState({ checkedPP: this.props.transactionStatus.checkedPP });
 		this.setState({ checkedComplete: this.props.transactionStatus.checkedComplete });
 		this.setState({ checkedOpen: this.props.transactionStatus.checkedOpen });
 
 		this.getLeasesFromStatus()
-
+		this.props.getFranchisees(regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText);
 
 	}
 
@@ -396,6 +403,9 @@ class Leases extends Component {
 			this.getLeasesFromStatus(nextProps.leases);
 		if (this.props.leases !== nextProps.leases)
 			this.getLeasesFromStatus(nextProps.leases);
+		if(nextProps.franchisees!==null && this.props.franchisees!==nextProps.franchisees){
+			this.setState({franchisees: nextProps.franchisees.Data.Region[0].FranchiseeList});
+		}
 	}
 
 
@@ -469,9 +479,9 @@ class Leases extends Component {
 	handleChange = prop => event => {
 		this.setState({ [prop]: event.target.value });
 
-		if (prop === 's') {
-			// this.search(event.target.value.toLowerCase());
-		}
+		// if (prop === 's') {
+		// 	// this.search(event.target.value.toLowerCase());
+		// }
 	};
 
 	handleSearchChange = prop => event => {
@@ -733,7 +743,7 @@ class Leases extends Component {
                                                     disableUnderline
                                                     fullWidth
                                                     value={this.state.s}
-                                                    onChange={this.handleSearchChange('s')}
+                                                    onChange={this.handleChange('s')}
                                                     inputProps={{
                                                         'aria-label': 'Search'
                                                     }}
@@ -767,7 +777,7 @@ class Leases extends Component {
                                 </div>
                             )}
                             {(this.state.temp && leaseForm.props.open) && (
-                                <LeaseForm customers={this.state.customers} selectedLease={this.state.selectedLease}/>
+                                <LeaseForm franchisees={this.state.franchisees} selectedLease={this.state.selectedLease}/>
                             )}
                         </div>
                     }
@@ -840,10 +850,11 @@ function mapDispatchToProps(dispatch) {
 		openEditLeaseForm: Actions.openEditLeaseForm,
 		closeEditLeaseForm: Actions.closeEditLeaseForm,
 		closeNewLeaseForm: Actions.closeNewLeaseForm,
+		getFranchisees: Actions.getFranchisees,
 	}, dispatch);
 }
 
-function mapStateToProps({ leases, auth }) {
+function mapStateToProps({ leases, auth, franchisees }) {
 	return {
 		leases: leases.leasesDB,
 		bLoadedLeases: leases.bLoadedLeases,
@@ -855,6 +866,15 @@ function mapStateToProps({ leases, auth }) {
 		regionId: auth.login.defaultRegionId,
 		statusId: leases.statusId,
 		searchText: leases.searchText,
+
+		bLoadedFranchisees: franchisees.bLoadedFranchisees,
+        franchisees: franchisees.franchiseesDB,
+        fstatusId: franchisees.statusId,
+        fLocation: franchisees.Location,
+        fLongitude: franchisees.Longitude,
+        fLatitude: franchisees.Latitude,
+        fSearchText: franchisees.SearchText,
+        bFranchiseesFetchStart: franchisees.bFranchiseesFetchStart,
 	}
 }
 

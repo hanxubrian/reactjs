@@ -15,6 +15,8 @@ const initialState = {
 	FromDate: moment("01/01/2018").format("MM/DD/YYYY"),
     ToDate: moment(today).format("MM/DD/YYYY"),
 	bLoadedLeases: false,
+	bLeaseStart: false,
+	bLeasesUpdated: false,
 	bOpenedSummaryPanel: false,
 	bOpenedFilterPanel: false,
 	bOpenedMapView: false,
@@ -164,7 +166,7 @@ const leases = function (state = initialState, action) {
 					}
 				};
 			}
-		case Actions.STARTING_SAVE_LEASE_FORM_DATA: 
+		case Actions.STARTING_SAVE_LEASE_FORM_DATA:
 			{
 				return {
 					...state,
@@ -179,6 +181,13 @@ const leases = function (state = initialState, action) {
 					leaseForm: {...state.leaseForm, data: null, customer: null}
 				}
 			}
+		case Actions.SELECT_TRANSACTION_FRANCHISEE:
+        {
+            return {
+                ...state,
+                leaseForm: {...state.leaseForm, franchisee: action.payload}
+            }
+        }
 		case Actions.UPDATE_LEASE_DATE_OPTION:
 			{
 				return {
@@ -186,6 +195,13 @@ const leases = function (state = initialState, action) {
 					leaseDateOption: action.payload
 				}
 			}
+		case Actions.ADD_LEASE:
+        	{
+            return {...state, newLease: action.payload}
+        	}
+        case Actions.UPDATED_LEASES: {
+            return {...state, bLeasesUpdated: true, bLeaseStart: true}
+        	}
 		default:
 			{
 				return state;

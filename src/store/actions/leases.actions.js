@@ -13,6 +13,7 @@ export const TOGGLE_FILTER_PANEL = "[LEASES] TOGGLE FILTER PANEL";
 export const TOGGLE_MAP_VIEW = '[LEASES] TOGGLE MAP VIEW';
 export const RESET_LEASE_FORM = "[LEASES] RESET LEASE FORM";
 export const STARTING_SAVE_LEASE_FORM_DATA = "[LEASES] STARTING SAVE LEASE FORM DATA";
+export const SELECT_TRANSACTION_FRANCHISEE = '[FRANCHISEE-TRANSACTION] SELECT TRANSACTION FRANCHISEE';
 
 
 // for Add/Edit
@@ -22,6 +23,7 @@ export const OPEN_EDIT_LEASE_FORM = '[LEASES APP] OPEN EDIT LEASE FORM';
 export const CLOSE_EDIT_LEASE_FORM = '[LEASES APP] CLOSE EDIT LEASE FORM';
 export const ADD_LEASE = '[LEASES APP] ADD LEASE';
 export const UPDATE_LEASE = '[LEASES APP] UPDATE LEASE';
+export const UPDATED_LEASES = '[LEASES APP] UPDATED LEASES';
 export const UPDATE_LEASE_STATUS = '[LEASES APP] UPDATE LEASE STATUS';
 export const UPDATE_LEASE_DATE_OPTION = '[LEASES APP] UPDATE LEASE DATE OPTION';
 
@@ -193,25 +195,25 @@ export function closeEditLeaseForm()
         type: CLOSE_EDIT_LEASE_FORM
     }
 }
-export function addLease(newLease)
+export function addLease(data)
 {
-    return (dispatch, getState) => {
+    return (dispatch) => {
+        // dispatch({
+        //     type: GET_INVOICES_FETCH_START,
+        //     payload: true
+        // });
 
-        console.log('state', getState());
-
-        // const {routeParams} = getState().contactsApp.contacts;
-
-        const request = axios.post('/api/contacts-app/add-contact', {
-            newLease
-        });
-
-        return request.then((response) =>
-            Promise.all([
+        (async () => {
+            let res = await leaseService.createNewLease(data);
+            if (res.IsSuccess) {
                 dispatch({
-                    type: ADD_LEASE
-                })
-            ]).then(() => dispatch(getLeases()))
-        );
+                    type: ADD_LEASE,
+                    payload: res
+                });
+            } else {
+
+            }
+        })();
     };
 }
 
@@ -235,6 +237,13 @@ export function updateLease(lease)
     };
 }
 
+export function updatedLeases() {
+    return {
+        type: UPDATED_LEASES,
+    }
+}
+
+
 export function resetLeaseForm(){
     return (dispatch) => {
 
@@ -249,6 +258,13 @@ export function resetLeaseForm(){
                 });
         })();
     };
+}
+
+export function selectFranchisee(obj) {
+    return {
+        type: SELECT_TRANSACTION_FRANCHISEE,
+        payload: obj
+    }
 }
 
 export function updateLeaseStatus(newStatus){

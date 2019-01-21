@@ -99,6 +99,46 @@ class leaseService {
                 })
         });
     };
+
+    /**
+     * create new invoice
+     * @param regionId
+     * @param data
+     * @returns {Promise<any>}
+     */
+    createNewLease = (data) => {
+        return new Promise((resolve, reject) => {
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/Lease/Create`,data)
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    };
+
+    deleteLease = (regionId, id) => {
+        return new Promise((resolve, reject) => {
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/Lease/Create/${id}?regionId=${regionId}`)
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    };
 }
 
 const instance = new leaseService();
