@@ -417,6 +417,8 @@ class AccountOfferingPage extends Component {
 		if (!props.bLoadedFranchisees) {
 			props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
 		}
+
+		this.changeSearchValue = value => this.setState({ searchValue: value });
 	}
 
 
@@ -1283,12 +1285,7 @@ class AccountOfferingPage extends Component {
 							{step === 1 && (
 								<PagingPanel pageSizes={pageSizes} />
 							)}
-							{step === 1 && (
-								<SelectionState
-									selection={selection}
-									onSelectionChange={this.changeSelection}
-								/>
-							)}
+
 							{step === 1 && (
 								<IntegratedSelection />
 							)}
