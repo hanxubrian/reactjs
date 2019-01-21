@@ -527,6 +527,4 @@ function mapStateToProps({ franchisees, auth }) {
     }
 }
 
-// export default withStyles(styles)(FranchiseesOwnerTable);
-
 export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(FranchiseesOwnerTable)));

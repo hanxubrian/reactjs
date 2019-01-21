@@ -138,8 +138,6 @@ const styles = theme => ({
     }
 });
 
-const chance = new Chance();
-
 const newInvoiceState = {
     "MasterTrxTypeListId": "",
     "RegionId": "",
@@ -147,8 +145,6 @@ const newInvoiceState = {
     "InvoiceId": "",
     "InvoiceDate": moment().format('YYYY-MM-DD'),
     "DueDate": moment().format('YYYY-MM-DD'),
-    // "InvoiceDate": new Date(),
-    // "DueDate": new Date(),
     "CustomerId": "",
     "CustomerNo": "",
     "CustomerName": "",
@@ -715,26 +711,6 @@ class PaymentsForm extends Component {
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={1} md={1} className="flex flex-row xs:flex-col xs:mb-24 pr-4 pl-4" style={{display: 'none', padding: '0 6px!important'}}>
-                                    {/*<DatePicker*/}
-                                    {/*margin="none"*/}
-                                    {/*label="Invoice Date"*/}
-                                    {/*name="InvoiceDate"*/}
-                                    {/*variant="outlined"*/}
-                                    {/*format="MM/DD/YYYY"*/}
-                                    {/*value={this.state.InvoiceDate}*/}
-                                    {/*onChange={this.handleInvoiceDateChange}*/}
-                                    {/*fullWidth*/}
-                                    {/*required*/}
-                                    {/*InputProps={{*/}
-                                    {/*classes: {*/}
-                                    {/*input: classes.input1,*/}
-                                    {/*},*/}
-                                    {/*}}*/}
-                                    {/*InputLabelProps = {{*/}
-                                    {/*shrink: true,*/}
-                                    {/*classes: {outlined: classes.label}*/}
-                                    {/*}}*/}
-                                    {/*/>*/}
 
                                 </Grid>
                                 <Grid item xs={12} sm={1} md={1} className="flex flex-row xs:flex-col pr-4 pl-4"

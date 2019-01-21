@@ -5,7 +5,6 @@ import { withStyles,Paper,Icon, IconButton, Fab, Typography,Button, Input, Circu
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import {withRouter} from 'react-router-dom';
 
-//Custom Components
 
 // theme components
 import {FusePageCustom,FusePageCustomSidebarScroll, FuseAnimate} from '@fuse';
@@ -370,20 +369,6 @@ class PaymentList extends Component {
                                             <Icon>print</Icon>
                                         </IconButton>
 
-                                        {/* <Fab
-												color="secondary"
-												aria-label="add"
-												className={classNames(classes.sideButton, "mr-12")}
-												onClick={openNewCustomerForm}>
-												<Icon>add</Icon>
-											</Fab>
-											<Fab color="secondary" aria-label="add"
-												className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-												<Icon>mail_outline</Icon>
-											</Fab>
-											<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-												<Icon>print</Icon>
-											</Fab> */}
                                     </div>
                                 </div>
 
@@ -411,12 +396,9 @@ class PaymentList extends Component {
                                             className={classNames(classes.search, 'pl-16')}
                                             disableUnderline
                                             fullWidth
-                                            // value={this.state.s}
-                                            // onChange={this.handleChange('s')}
                                             inputProps={{
                                                 'aria-label': 'Search'
                                             }}
-                                            // onKeyDown={this.handleKeyDown}
                                         />
                                         <Icon color="action" className="mr-16">search</Icon>
                                     </Paper>
@@ -437,10 +419,6 @@ class PaymentList extends Component {
                                     rootComponent={GridRootComponent}
                                     rows={
                                         rows
-                                        // Array.from({length: 1000 })
-                                        // 	.map((item, index) => (
-                                        //         {resion: index, product: 'Product' + index, payment: 'owner' + index}
-                                        // 	))
                                     }
                                     columns={columns}
                                 >

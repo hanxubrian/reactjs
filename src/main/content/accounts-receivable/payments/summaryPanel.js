@@ -156,11 +156,7 @@ class SummaryPanel extends Component {
                         ],
                         yAxes: [
                             {
-                                display: true,
-                                ticks  : {
-                                    // min: 100,
-                                    // max: 500
-                                }
+                                display: true
                             }
                         ]
                     }
@@ -185,7 +181,6 @@ class SummaryPanel extends Component {
                                         Lifetime sum of your sale
                                     </Typography>
                                     <Typography variant="h5" component="h2" style={{color: 'white'}}>
-                                        {/*{this.props.invoices.headerData.totalInvoice}*/}
                                     </Typography>
 
                                 </CardContent>

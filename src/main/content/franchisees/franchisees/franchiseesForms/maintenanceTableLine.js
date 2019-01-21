@@ -246,6 +246,8 @@ class FranchiseesMaintenanceTable extends React.Component {
         feesList: "",
         feeAmount:"",
         feeActive: false,
+        insertPayload: null,
+
     };
     constructor(props)
     {
@@ -274,6 +276,7 @@ class FranchiseesMaintenanceTable extends React.Component {
             const feeList = this.props.franchiseeFees.FranchiseeFees;
             this.setState({
                 franchiseeFees: feeList,
+                insertPayload: this.props.insertPayload,
             });
         }
     }
@@ -484,7 +487,8 @@ class FranchiseesMaintenanceTable extends React.Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getFranchiseeFeeMaintenance: Actions.getFranchiseeFeeMaintenance,
-        franchiseeFeeUpdateCheckbox: Actions. franchiseeFeeUpdateCheckbox
+        franchiseeFeeUpdateCheckbox: Actions. franchiseeFeeUpdateCheckbox,
+        franchiseeUpdateInsertPayload: Actions.franchiseeUpdateInsertPayload
     }, dispatch);
 }
 
@@ -493,6 +497,7 @@ function mapStateToProps({ franchisees, auth }) {
     return {
         regionId: auth.login.defaultRegionId,
         franchiseeFees: franchisees.franchiseeFees,
+        insertPayload: franchisees.insertPayload
     }
 }
 

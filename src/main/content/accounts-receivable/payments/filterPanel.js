@@ -20,19 +20,12 @@ import classNames from 'classnames';
 
 //third party
 import moment from "moment"
-import _ from "lodash"
 
 import {UPDATE_FROM_DATE_INVOICE, UPDATE_TO_DATE_INVOICE} from "../../../../store/actions";
 
 
 const styles = theme => ({
     root : {
-        '& input, & label': {
-            // color: 'white'
-        },
-        '& fieldset': {
-            // borderColor: 'white!important'
-        },
         '& white': {
             color: 'white!important'
         }

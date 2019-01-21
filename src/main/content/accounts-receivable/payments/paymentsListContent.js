@@ -121,6 +121,65 @@ const styles = theme => ({
     }
 });
 
+const Payments =
+{
+        "Payments": [
+            {
+                "PaymentId": 1,
+                "PaymentNo": "Move",
+                "CreatedDate": "9999-99-99",
+                "CustomerName": "ENTERPRISE RENT-A-CAR",
+                "CustomerNo": "085017",
+                "PaymentType": "Move",
+                "CheckNo": "Move",
+                "InvoiceNo": "04180083",
+                "InvoiceAmount": 314.53,
+                "InvoiceBalance": 0.00,
+                "InvoiceBalanceOR": 0,
+                "PaymentAmount": 117.95,
+                "PaymentAmountOR": -117.95,
+                "Reference": "Move to 70099870",
+                "RegionName": "BUF",
+                "CheckAmount": 0.00
+            },
+            {
+                "PaymentId": 1,
+                "PaymentNo": "Lockbox",
+                "CreatedDate": "9999-99-99",
+                "CustomerName": "ENTERPRISE RENT-A-CAR",
+                "CustomerNo": "085017",
+                "PaymentType": "Lockbox",
+                "CheckNo": "Lockbox",
+                "InvoiceNo": "04180083",
+                "InvoiceAmount": 314.53,
+                "InvoiceBalance": 0.00,
+                "InvoiceBalanceOR": 0,
+                "PaymentAmount": 117.95,
+                "PaymentAmountOR": -117.95,
+                "Reference": "70099870",
+                "RegionName": "BUF",
+                "CheckAmount": 0.00
+            },
+            {
+                "PaymentId": 1,
+                "PaymentNo": "Lockbox",
+                "CreatedDate": "9999-99-99",
+                "CustomerName": "ENTERPRISE RENT-A-CAR",
+                "CustomerNo": "085017",
+                "PaymentType": "Lockbox",
+                "CheckNo": "Lockbox",
+                "InvoiceNo": "04180083",
+                "InvoiceAmount": 314.53,
+                "InvoiceBalance": 0.00,
+                "InvoiceBalanceOR": 0,
+                "PaymentAmount": 117.95,
+                "PaymentAmountOR": -117.95,
+                "Reference": "70099870",
+                "RegionName": "BUF",
+                "CheckAmount": 0.00
+            }]
+}
+
 class PaymentsListContent extends Component {
     state = {
         s: '',
@@ -144,12 +203,6 @@ class PaymentsListContent extends Component {
     };
 
     toggleSelection = (key, shift, row) => {
-        /*
-          https://react-table.js.org/#/story/select-table-hoc
-          Implementation of how to manage the selection state is up to the developer.
-          This implementation uses an array stored in the component state.
-          Other implementations could use object keys, a Javascript Set, or Redux... etc.
-        */
         // start off with the existing state
         let selection = [...this.state.selection];
         const keyIndex = selection.indexOf(key);
@@ -173,7 +226,6 @@ class PaymentsListContent extends Component {
         const selection = [];
         if (selectAll) {
             let currentRecords = instance.data;
-            // we just push all the IDs onto the selection array
             let page = this.state.page;
             let pageSize = this.state.pageSize;
             let start_index = page * pageSize;
@@ -187,11 +239,6 @@ class PaymentsListContent extends Component {
     };
 
     isSelected = key => {
-        /*
-          Instead of passing our external selection state we provide an 'isSelected'
-          callback and detect the selection state ourselves. This allows any implementation
-          for selection (either an array, object keys, or even a Javascript Set object).
-        */
         return this.state.selection.includes(key);
     };
 
@@ -506,9 +553,6 @@ class PaymentsListContent extends Component {
                     </DialogActions>
                 </Dialog>
 
-                {/*{this.state.invoiceDetail!==null && (*/}
-                    {/*<InvoiceReport show={this.state.isOpen} onClose={this.toggleModal} Detail={this.state.invoiceDetail} />*/}
-                {/*)}*/}
             </div>
         );
     }
