@@ -708,7 +708,7 @@ class InvoiceForm extends Component {
         let bReadonly = false;
         if(this.props.invoiceForm.type === 'new') bReadonly = true;
 
-        console.log('customer=', JSON.stringify(this.props.invoiceForm.customer));
+        // console.log('state=', JSON.stringify(this.props.invoiceForm.customer));
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
@@ -737,11 +737,13 @@ class InvoiceForm extends Component {
                                     )}
                                     ref={this.storeInputReference}
                                 />
+                                {this.props.invoiceForm.type === 'new' && (
                                 <Fab aria-label="remove" color="primary"
                                      onClick={this.openNewCustomerDialog}
                                      className={classNames(classes.addCustomer, "ml-12")} style={{width: 36, height: 36, minHeight: 36}}>
                                     <Icon>person_add</Icon>
                                 </Fab>
+                                )}
                             </Grid>
                             <MuiPickersUtilsProvider utils={MomentUtils}>
                                 <Grid item xs={12} sm={4} md={4} className="flex flex-row pl-16 pr-4">

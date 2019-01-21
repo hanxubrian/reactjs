@@ -481,7 +481,7 @@ class InvoiceLineTable extends React.Component {
 
             let f_index = 0;
 
-            if(items.length>0){
+            if(items!==null && items.length>0){
                 let newData = items.map((item, index)=>{
                     let billing = billingSuggestions.filter(b=>b.value===parseInt(item.Billing));
                     this.setState({[`selectedBillingOption${index}`]: billing[0]});
@@ -494,7 +494,7 @@ class InvoiceLineTable extends React.Component {
 
                     let line = createData(billing[0], service.length ? service[0] : '', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 0, item.ExtendedPrice, item.Total, item.MarkUpTotal);
                     let distributions = [];
-                    if(item.Distribution.length>0){
+                    if(item.Distribution!==null && item.Distribution.length>0){
                         distributions = item.Distribution.map((d,fid)=>{
                             if(d.Name!==null)
                                 this.setState({['nameValue'+f_index++]: d.Name});
@@ -852,6 +852,9 @@ class InvoiceLineTable extends React.Component {
             value: suggestion.Name,
             label: suggestion.Name
         }));
+
+        console.log('selectedBillingOption0=', this.state.selectedBillingOption0);
+        console.log('selectedBillingOption1=', this.state.selectedBillingOption1);
 
         return (
             <Paper className={classNames(classes.root)}>
