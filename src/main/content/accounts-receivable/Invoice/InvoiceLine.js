@@ -507,7 +507,13 @@ class InvoiceLineTable extends React.Component {
                     return line;
                 });
 
-                this.setState({data: newData});
+                let id = 0;
+                let data = newData.map(record=>{
+                    record.id = id++;
+                    return record;
+                });
+
+                this.setState({data: data});
             }
         }
     }
@@ -796,6 +802,8 @@ class InvoiceLineTable extends React.Component {
             ["selectedServiceOption"+row.id]: newValue
         });
         const data = [...this.state.data];
+        console.log('data=', data, newValue);
+        // if(data[row.id].service)
         data[row.id].service = newValue;
         this.setState({data: data});
     };
@@ -853,6 +861,7 @@ class InvoiceLineTable extends React.Component {
             label: suggestion.Name
         }));
 
+        console.log('all_data=', all_data);
         console.log('selectedBillingOption0=', this.state.selectedBillingOption0);
         console.log('selectedBillingOption1=', this.state.selectedBillingOption1);
 

@@ -247,6 +247,7 @@ const invoices = function(state = initialState, action) {
             }
         }
         case Actions.ADD_INVOICE:
+        case Actions.UPDATE_AN_INVOICE:
         {
             return {...state, newInvoice: action.payload}
         }
