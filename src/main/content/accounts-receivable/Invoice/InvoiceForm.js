@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 // core components
 import {
     Paper, TextField, Typography, MenuItem, Card, CardHeader, CardContent, Divider, Button, Snackbar, SnackbarContent,
-    IconButton, Icon, Grid, FormControlLabel, Checkbox, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog
+    IconButton, Icon, Grid, FormControlLabel, Checkbox, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog,Fab
 } from '@material-ui/core';
 import 'date-fns'
 import MomentUtils from '@date-io/moment';
@@ -134,6 +134,9 @@ const styles = theme => ({
     },
     picker: {
         padding: '0 6px'
+    },
+    addCustomer: {
+
     }
 });
 
@@ -291,6 +294,7 @@ class InvoiceForm extends Component {
         period: moment(),
         taxExempt: false,
         bAlertNewInvoice: false,
+        bCustomerNotFound: false,
         buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval,
         franchiseeFromCustomer: null
     };
@@ -372,8 +376,18 @@ class InvoiceForm extends Component {
     getSuggestions = (value) => {
         const escapedValue = escapeRegexCharacters(value.trim());
         const regex = new RegExp(escapedValue, 'i');
-        if(this.props.customers!==null)
-            return this.props.customers.filter(customer => regex.test(customer.CustomerName));
+        if(this.props.customers!==null) {
+            let suggestions = this.props.customers.filter(customer => regex.test(customer.CustomerName));
+            if(this.state.bCustomerNotFound)
+                return suggestions;
+
+            if(!this.state.bCustomerNotFound && suggestions.length===0) {
+                this.setState({bCustomerNotFound: true});
+                this.setState({value: ''});
+            }
+
+            return suggestions;
+        }
     };
 
     getTotal = () => {
@@ -592,6 +606,11 @@ class InvoiceForm extends Component {
 
     };
 
+
+    addNewCustomer = () => {
+        this.setState({bCustomerNotFound: false})
+    };
+
     validateNewInvoice = () => {
         if(this.state.selectedCustomer===null){
             this.setState({snackMessage: 'Please choose customer from Invoice suggestion'});
@@ -647,6 +666,10 @@ class InvoiceForm extends Component {
         this.setState({bAlertNewInvoice: false})
     };
 
+    handleCloseNewCustomer = ()=>{
+        this.setState({bCustomerNotFound: false})
+    };
+
 
     handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -660,6 +683,10 @@ class InvoiceForm extends Component {
         if ( input && this.props.invoiceForm.type === 'edit') {
             setTimeout(() => {input.focus()}, 500);
         }
+    };
+
+    openNewCustomerDialog =() => {
+      this.setState({bCustomerNotFound: true})
     };
 
     render()
@@ -686,7 +713,7 @@ class InvoiceForm extends Component {
                 <div className="h-full flex flex-col relative">
                     <div className="flex flex-col p-24 pt-12 pb-0" style={{flex: "1"}}>
                         <Grid container className={classNames(classes.formControl)}>
-                            <Grid item xs={12} sm={6} md={6} className="flex flex-row pr-16">
+                            <Grid item xs={12} sm={6} md={6} className="flex flex-row pr-16 items-center">
                                 <Autosuggest
                                     {...autosuggestProps}
                                     inputProps={{
@@ -708,6 +735,11 @@ class InvoiceForm extends Component {
                                     )}
                                     ref={this.storeInputReference}
                                 />
+                                <Fab aria-label="remove" color="primary"
+                                     onClick={this.openNewCustomerDialog}
+                                     className={classNames(classes.addCustomer, "ml-12")} style={{width: 36, height: 36, minHeight: 36}}>
+                                    <Icon>person_add</Icon>
+                                </Fab>
                             </Grid>
                             <MuiPickersUtilsProvider utils={MomentUtils}>
                                 <Grid item xs={12} sm={4} md={4} className="flex flex-row pl-16 pr-4">
@@ -777,48 +809,48 @@ class InvoiceForm extends Component {
                                 </Grid>
                                 <Grid item xs={12} sm={1} md={1} className="flex flex-row xs:flex-col xs:mb-24 pr-4 pl-4" style={{display: 'none', padding: '0 6px!important'}}>
                                     {/*<DatePicker*/}
-                                        {/*margin="none"*/}
-                                        {/*label="Invoice Date"*/}
-                                        {/*name="InvoiceDate"*/}
-                                        {/*variant="outlined"*/}
-                                        {/*format="MM/DD/YYYY"*/}
-                                        {/*value={this.state.InvoiceDate}*/}
-                                        {/*onChange={this.handleInvoiceDateChange}*/}
-                                        {/*fullWidth*/}
-                                        {/*required*/}
-                                        {/*InputProps={{*/}
-                                            {/*classes: {*/}
-                                                {/*input: classes.input1,*/}
-                                            {/*},*/}
-                                        {/*}}*/}
-                                        {/*InputLabelProps = {{*/}
-                                            {/*shrink: true,*/}
-                                            {/*classes: {outlined: classes.label}*/}
-                                        {/*}}*/}
+                                    {/*margin="none"*/}
+                                    {/*label="Invoice Date"*/}
+                                    {/*name="InvoiceDate"*/}
+                                    {/*variant="outlined"*/}
+                                    {/*format="MM/DD/YYYY"*/}
+                                    {/*value={this.state.InvoiceDate}*/}
+                                    {/*onChange={this.handleInvoiceDateChange}*/}
+                                    {/*fullWidth*/}
+                                    {/*required*/}
+                                    {/*InputProps={{*/}
+                                    {/*classes: {*/}
+                                    {/*input: classes.input1,*/}
+                                    {/*},*/}
+                                    {/*}}*/}
+                                    {/*InputLabelProps = {{*/}
+                                    {/*shrink: true,*/}
+                                    {/*classes: {outlined: classes.label}*/}
+                                    {/*}}*/}
                                     {/*/>*/}
 
                                 </Grid>
                                 <Grid item xs={12} sm={1} md={1} className="flex flex-row xs:flex-col pr-4 pl-4"
                                       style={{padding: '0 6px!important', display: 'none'}}>
                                     {/*<DatePicker*/}
-                                        {/*margin="none"*/}
-                                        {/*label="Due Date"*/}
-                                        {/*format="MM/DD/YYYY"*/}
-                                        {/*name="DueDate"*/}
-                                        {/*variant="outlined"*/}
-                                        {/*value={this.state.DueDate}*/}
-                                        {/*onChange={this.handleDueDateChange}*/}
-                                        {/*required*/}
-                                        {/*fullWidth*/}
-                                        {/*InputProps={{*/}
-                                            {/*classes: {*/}
-                                                {/*input: classes.input1,*/}
-                                            {/*},*/}
-                                        {/*}}*/}
-                                        {/*InputLabelProps = {{*/}
-                                            {/*shrink: true,*/}
-                                            {/*classes: {outlined: classes.label}*/}
-                                        {/*}}*/}
+                                    {/*margin="none"*/}
+                                    {/*label="Due Date"*/}
+                                    {/*format="MM/DD/YYYY"*/}
+                                    {/*name="DueDate"*/}
+                                    {/*variant="outlined"*/}
+                                    {/*value={this.state.DueDate}*/}
+                                    {/*onChange={this.handleDueDateChange}*/}
+                                    {/*required*/}
+                                    {/*fullWidth*/}
+                                    {/*InputProps={{*/}
+                                    {/*classes: {*/}
+                                    {/*input: classes.input1,*/}
+                                    {/*},*/}
+                                    {/*}}*/}
+                                    {/*InputLabelProps = {{*/}
+                                    {/*shrink: true,*/}
+                                    {/*classes: {outlined: classes.label}*/}
+                                    {/*}}*/}
                                     {/*/>*/}
                                 </Grid>
                             </MuiPickersUtilsProvider>
@@ -1149,6 +1181,30 @@ class InvoiceForm extends Component {
                             <Button onClick={()=>this.addNewInvoice()} color="primary" autoFocus>
                                 {this.props.invoiceForm.type === 'new' && (<span>Create</span>)}
                                 {this.props.invoiceForm.type === 'edit' && (<span>Update</span>)}
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Dialog
+                        open={this.state.bCustomerNotFound}
+                        onClose={()=>this.handleCloseNewCustomer()}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            Customer Alert
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                The customer doesn't exist.<br/>
+                                Do you want to create new customer?
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={()=>this.handleCloseNewCustomer()} color="primary">
+                                Close
+                            </Button>
+                            <Button onClick={()=>this.addNewCustomer()} color="primary" autoFocus>
+                                Create New Customer
                             </Button>
                         </DialogActions>
                     </Dialog>

@@ -846,8 +846,6 @@ class InvoiceLineTable extends React.Component {
             label: suggestion.Name
         }));
 
-        console.log('state====', this.state);
-
         return (
             <Paper className={classNames(classes.root)}>
                 <div className={classNames(classes.tableWrapper, "flex flex-col h-full")}>
