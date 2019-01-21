@@ -243,7 +243,32 @@ class invoiceService {
                     resolve(error);
                 })
         });
-    }
+    };
+
+    /**
+     * update an invoice
+     * @method PUT
+     * @param id
+     * @param regionId
+     * @param data
+     * @returns {Promise<any>}
+     */
+    updateInvoice = (id,regionId, data) => {
+        return new Promise((resolve, reject) => {
+            axios_instance.put(`${BASE_MONGO_API_URL}/v1/accountsreceivable/invoice/update/${id}/regionId=${regionId}`,data)
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    };
 }
 
 const instance = new invoiceService();

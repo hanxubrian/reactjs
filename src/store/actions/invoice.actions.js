@@ -21,6 +21,7 @@ export const GET_ALL_SUGGEST_CUSTOMERS = "[INVOICES] GET ALL SUGGEST CUSTOMERS";
 export const GET_SUGGEST_CUSTOMERS_FETCH_START = "[INVOICES] GET SUGGEST CUSTOMERS FETCH START";
 export const GET_BILLING_LIST = "[INVOICES] GET BILLING LIST";
 export const GET_SERVICE_LIST = "[INVOICES] GET SERVICE LIST";
+export const UPDATE_AN_INVOICE = "[INVOICES] GET AN INVOICE";
 
 // for Add/Edit
 export const OPEN_NEW_INVOICE_FORM = '[INVOICES APP] OPEN NEW INVOICE FORM';
@@ -355,6 +356,22 @@ export function getServiceLists (regionId, BillingTypeId=4) {
             if (res.IsSuccess) {
                 dispatch({
                     type: GET_SERVICE_LIST,
+                    payload: res.Data
+                });
+            } else {
+
+            }
+        })();
+    };
+}
+
+export function updateInvoice(id, regionId, data) {
+    return (dispatch) => {
+        (async () => {
+            let res = await invoiceService.updateInvoice(id, regionId, data);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: UPDATE_AN_INVOICE,
                     payload: res.Data
                 });
             } else {
