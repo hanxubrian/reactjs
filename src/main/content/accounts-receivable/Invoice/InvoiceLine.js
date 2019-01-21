@@ -479,6 +479,8 @@ class InvoiceLineTable extends React.Component {
                 label: s.Name, value: s.Name
             }));
 
+            let f_index = 0;
+
             if(items.length>0){
                 let newData = items.map((item, index)=>{
                     let billing = billingSuggestions.filter(b=>b.value===parseInt(item.Billing));
@@ -486,13 +488,16 @@ class InvoiceLineTable extends React.Component {
 
                     let service = serviceSuggestions.filter(s=>s.value===item.Service);
                     if(service.length)
-                        this.setState({[`selectedServiceOption${index}`]: service[0].label});
+                        this.setState({[`selectedServiceOption${index}`]: service[0]});
 
-                    let line = createData(billing[0], service.length ? service[0].label : '', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 5, item.ExtendedPrice, item.Total, item.MarkUpTotal);
+                    console.log('service=', service);
+
+                    let line = createData(billing[0], service.length ? service[0] : '', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 0, item.ExtendedPrice, item.Total, item.MarkUpTotal);
                     let distributions = [];
                     if(item.Distribution.length>0){
                         distributions = item.Distribution.map((d,fid)=>{
-                            return {id: index, fid, fnumber: d.FranchiseeNumber, amount: d.Amount, name: d.name, type: 'franch'}
+                            this.setState({['nameValue'+f_index++]: d.Name});
+                            return {id: index, fid, fnumber: d.FranchiseeNumber, amount: d.Amount, name: d.Name, type: 'franch'}
                         })
                     }
                     line.franchisees = distributions;
