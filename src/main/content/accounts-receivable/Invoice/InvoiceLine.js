@@ -471,14 +471,25 @@ class InvoiceLineTable extends React.Component {
         else {//For Edit
             let items = this.props.invoiceDetail.Data.Items;
 
-            let billingSuggestions =this.props.billingLists.map(b => ({
+            let billingSuggestions = this.props.billingLists.map(b => ({
                 value: b.BillingTypeId, label: b.Name}));
+
+            let serviceSuggestions = this.props.serviceLists.map(s=>({
+                label: s.Name, value: s.Name
+            }));
+
+            console.log('service=', serviceSuggestions);
 
             if(items.length>0){
                 let newData = items.map((item, index)=>{
                     let billing = billingSuggestions.filter(b=>b.value===parseInt(item.Billing));
-                    this.setState({[`selectedBillingOption${index}`]: billing});
-                    let line = createData(billing[0], 'Adjust-Balance', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 5, item.ExtendedPrice, item.Total, item.MarkUpTotal)
+                    this.setState({[`selectedBillingOption${index}`]: billing[0]});
+
+                    let service = serviceSuggestions.filter(s=>s.value===item.Service);
+                    if(service.length)
+                        this.setState({[`selectedServiceOption${index}`]: service[0].label});
+
+                    let line = createData(billing[0], service.length ? service[0].label : '', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 5, item.ExtendedPrice, item.Total, item.MarkUpTotal)
                     let distributions = [];
                     if(item.Distribution.length>0){
                         distributions = item.Distribution.map((d,fid)=>{
@@ -831,17 +842,12 @@ class InvoiceLineTable extends React.Component {
             }));
         }
 
-        const serviceSuggestions =[
-            {label: "Adjust-Balance"}, {label: "Adjust-Refund"}, {label: "Adjust-WriteOff"}, {label: "Buffing"},
-            {label: "Carpet Clean"}, {label: "Customer Suppliers"}, {label: "Emergency Clean"}, {label: "Event Center"},
-            {label: "Floor Services"}, {label: "Furniture Cleaning Service"}, {label: "High Dusting"}, {label: "Hotel"},
-            {label: "In-House Work"}, {label: "Initial and Deep Clean"}, {label: "Initial One-Time Clean"}, {label: "Make Ready"},
-            {label: "Miscellaneous - Special"}, {label: "Other"}, {label: "Porter Services"}, {label: "Power Washing"},
-            {label: "Regular Billing"}, {label: "Regular Cleaning - Day"}, {label: "Regular Cleaning - Night"}
-        ].map(suggestion => ({
-            value: suggestion.label,
-            label: suggestion.label,
+        const serviceSuggestions =this.props.serviceLists.map(suggestion => ({
+            value: suggestion.Name,
+            label: suggestion.Name
         }));
+
+        console.log('state====', this.state);
 
         return (
             <Paper className={classNames(classes.root)}>

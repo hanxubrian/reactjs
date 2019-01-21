@@ -1000,7 +1000,12 @@ class InvoiceForm extends Component {
                                             this.onSaveAndAddMore();
                                         }}
                                     >
-                                        Save & Add more
+                                        { this.props.invoiceForm.type === 'new' && (
+                                            <span>Save & Add more</span>
+                                        )}
+                                        { this.props.invoiceForm.type === 'edit' && (
+                                            <span>Update & Add more</span>
+                                        )}
                                     </Button>
                                 </FuseAnimate>
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
@@ -1012,7 +1017,12 @@ class InvoiceForm extends Component {
                                             this.onSaveAndClose();
                                         }}
                                     >
-                                        Save & Close
+                                        { this.props.invoiceForm.type === 'new' && (
+                                            <span>Save & Close</span>
+                                        )}
+                                        { this.props.invoiceForm.type !== 'new' && (
+                                            <span>Update & Close</span>
+                                        )}
                                     </Button>
                                 </FuseAnimate>
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
