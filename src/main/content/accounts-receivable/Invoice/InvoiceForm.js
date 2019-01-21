@@ -419,7 +419,7 @@ class InvoiceForm extends Component {
             if(nextProps.invoiceForm.type==='edit') {
                 this.setState({InvoiceNo: nextProps.invoices.invoiceDetail.Data.inv_no});
                 this.setState({value: nextProps.invoiceForm.customer.CustomerName});
-                this.setState({CustomerNo: nextProps.invoiceForm.customer.CustomerNo});
+                this.setState({PO_number: nextProps.invoiceForm.customer.CustomerNo});
                 this.setState({InvoiceDescription: nextProps.invoices.invoiceDetail.Data.Description});
                 this.setState({notes: nextProps.invoices.invoiceDetail.Data.Notes});
                 this.setState({InvoiceDate: moment(nextProps.invoices.invoiceDetail.Data.InvoiceDate).format('YYYY-MM-DD')});
@@ -519,38 +519,71 @@ class InvoiceForm extends Component {
             items.push(item);
         });
 
-        let result = {
-            Inv_No: inv_no,
-            Apply_to: 'Apply To',
-            CustomerId: this.state.selectedCustomer.CustomerId,
-            CustomerNumber: this.state.PO_number,
-            CustomerName: this.state.selectedCustomer.CustomerName,
-            PeriodId: this.props.invoices.PeriodId[0],
-            PeriodMonth: moment(this.state.period).month()+1,
-            PeriodYear: moment(this.state.period).year(),
-            Description: this.state.InvoiceDescription,
-            Notes: this.state.notes,
-            RegionId: this.props.regionId,
-            BillRunId: 999,
-            InvoiceDate: moment(this.state.InvoiceDate),
-            DueDate: moment(this.state.DueDate),
-            PONumber: this.state.PO_number,
-            CreatedById: this.props.user.UserId,
-            CreatedDate: this.props.invoiceForm.type === 'new' ? moment() : this.props.invoices.invoiceDetail.Data.CreatedDate,
-            SubTotal: this.state.subTotal,
-            MarkupAmountTotal :this.state.markup,
-            CPIIncrease: 0.00,
-            TaxTotal: this.state.tax,
-            GrandTotal: this.state.total,
-            TransactionStatusListId: 2,
-            Status: 2,
-            SysCust: this.state.selectedCustomer.SysCust,
-            Items: items
-        };
-        if(this.props.invoiceForm.type === 'new')
+        if(this.props.invoiceForm.type === 'edit') {
+
+        }
+
+        let result;
+
+        if(this.props.invoiceForm.type === 'new') {
+            result = {
+                Inv_No: inv_no,
+                Apply_to: 'Apply To',
+                CustomerId: this.state.selectedCustomer.CustomerId,
+                CustomerNumber: this.state.PO_number,
+                CustomerName: this.state.selectedCustomer.CustomerName,
+                PeriodId: this.props.invoices.PeriodId[0],
+                PeriodMonth: moment(this.state.period).month()+1,
+                PeriodYear: moment(this.state.period).year(),
+                Description: this.state.InvoiceDescription,
+                Notes: this.state.notes,
+                RegionId: this.props.regionId,
+                BillRunId: 999,
+                InvoiceDate: moment(this.state.InvoiceDate),
+                DueDate: moment(this.state.DueDate),
+                PONumber: this.state.PO_number,
+                CreatedById: this.props.user.UserId,
+                CreatedDate: this.props.invoiceForm.type === 'new' ? moment() : this.props.invoices.invoiceDetail.Data.CreatedDate,
+                SubTotal: this.state.subTotal,
+                MarkupAmountTotal :this.state.markup,
+                CPIIncrease: 0.00,
+                TaxTotal: this.state.tax,
+                GrandTotal: this.state.total,
+                TransactionStatusListId: 2,
+                Status: 2,
+                SysCust: this.state.selectedCustomer.SysCust,
+                Items: items
+            };
             this.props.addInvoice(this.props.regionId, result);
-        else
+        }
+        else {
+            result = {
+                ...this.props.invoices.invoiceDetail.Data,
+                CustomerId: this.state.selectedCustomer.CustomerId,
+                CustomerNumber: this.state.PO_number,
+                CustomerName: this.state.selectedCustomer.CustomerName,
+                PeriodId: this.props.invoices.PeriodId[0],
+                PeriodMonth: moment(this.state.period).month()+1,
+                PeriodYear: moment(this.state.period).year(),
+                Description: this.state.InvoiceDescription,
+                Notes: this.state.notes,
+                RegionId: this.props.regionId,
+                InvoiceDate: moment(this.state.InvoiceDate),
+                DueDate: moment(this.state.DueDate),
+                PONumber: this.state.PO_number,
+                CreatedById: this.props.user.UserId,
+                CreatedDate: this.props.invoiceForm.type === 'new' ? moment() : this.props.invoices.invoiceDetail.Data.CreatedDate,
+                SubTotal: this.state.subTotal,
+                MarkupAmountTotal :this.state.markup,
+                TaxTotal: this.state.tax,
+                GrandTotal: this.state.total,
+                TransactionStatusListId: 2,
+                Status: 2,
+                Items: items
+            };
+
             this.props.updateInvoice(this.props.invoices.invoiceDetail.Data._id, this.props.regionId, result);
+        }
 
         console.log('result', JSON.stringify(result));
     };

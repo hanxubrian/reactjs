@@ -255,7 +255,7 @@ class invoiceService {
      */
     updateInvoice = (id,regionId, data) => {
         return new Promise((resolve, reject) => {
-            axios_instance.put(`${BASE_MONGO_API_URL}/v1/accountsreceivable/invoice/update/${id}/regionId=${regionId}`,data)
+            axios_instance.put(`${BASE_MONGO_API_URL}/v1/accountsreceivable/invoice/update/${id}?regionId=${regionId}`,data)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);
