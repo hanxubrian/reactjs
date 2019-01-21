@@ -377,7 +377,7 @@ class InvoiceForm extends Component {
     };
 
     getTotal = () => {
-        console.log('getTotal fired');
+        if(this.state.selectedCustomer===null) return;
 
         let subTotal = 0.0;
         let markup = 0.0;
