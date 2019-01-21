@@ -315,6 +315,7 @@ class InvoiceForm extends Component {
                     classes: {
                         input: classes.input,
                     },
+                    readOnly: this.props.invoiceForm.type !== 'new' ? true : false
                 }}
                 InputLabelProps = {{
                     classes: {outlined: classes.label}
@@ -438,7 +439,8 @@ class InvoiceForm extends Component {
                 this.setState({value: ''});
                 this.setState({CustomerNo: ''});
                 if(this.input) {
-                    setTimeout(() => {this.input.focus()}, 500);
+                    if(this.props.invoiceForm.type === 'new')
+                        setTimeout(() => {this.input.focus()}, 500);
                 }
             }
             else if(this.state.buttonOption===1) {
@@ -454,7 +456,8 @@ class InvoiceForm extends Component {
 
     componentDidMount(){
         if(this.input) {
-            setTimeout(() => {this.input.focus()}, 500);
+            if(this.props.invoiceForm.type === 'new')
+                setTimeout(() => {this.input.focus()}, 500);
         }
 
         if(this.props.invoices.invoiceDetail){
@@ -533,7 +536,7 @@ class InvoiceForm extends Component {
             DueDate: moment(this.state.DueDate),
             PONumber: this.state.PO_number,
             CreatedById: this.props.user.UserId,
-            CreatedDate: moment(),
+            CreatedDate: this.props.invoiceForm.type === 'new' ? moment() : this.props.invoices.invoiceDetail.Data.CreatedDate,
             SubTotal: this.state.subTotal,
             MarkupAmountTotal :this.state.markup,
             CPIIncrease: 0.00,
@@ -544,8 +547,16 @@ class InvoiceForm extends Component {
             SysCust: this.state.selectedCustomer.SysCust,
             Items: items
         };
-        this.props.addInvoice(this.props.regionId, result);
+        // if(this.props.invoiceForm.type === 'new')
+        //     this.props.addInvoice(this.props.regionId, result);
+        // else
+        //     this.props.updateInvoice(this.props.invoices.invoiceDetail.Data._id, this.props.regionId, result);
+
         console.log('result', JSON.stringify(result));
+    };
+
+    updateInvoice = () => {
+
     };
 
     validateNewInvoice = () => {
@@ -612,6 +623,11 @@ class InvoiceForm extends Component {
         this.setState({ openSnack: false });
     };
 
+    focusDescriptionInputField = input => {
+        if (this.props.invoiceForm.type === 'edit') {
+            setTimeout(() => {input.focus()}, 500);
+        }
+    };
 
     render()
     {
@@ -932,6 +948,7 @@ class InvoiceForm extends Component {
                                         input: classes.input, multiline: classes.input
                                     },
                                 }}
+                                inputRef={this.focusDescriptionInputField}
                             />
                         </div>
                         <Grid container className={classNames(classes.formControl)} style={{flex: "9999 1 0"}}>
@@ -1103,6 +1120,7 @@ function mapDispatchToProps(dispatch)
         selectCustomer: Actions.selectCustomer,
         resetInvoiceForm: Actions.resetInvoiceForm,
         addInvoice: Actions.addInvoice,
+        updateInvoice: Actions.updateInvoice,
         updatedInvoices: Actions.updatedInvoices,
     }, dispatch);
 }
