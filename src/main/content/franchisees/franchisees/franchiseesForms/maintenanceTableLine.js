@@ -321,6 +321,14 @@ class FranchiseesMaintenanceTable extends React.Component {
         this.props.franchiseeFeeUpdateCheckbox(originalStatus);
     }
 
+    handleAddFees = () => {
+        // this.handleUpdateOwnerInsertPayload(this.state.dialogForm , "add");
+        // this.handleResetDialog();
+        // this.setState({openDialog: false});
+        alert("submitted");
+        this.setState({openDialog: false});
+    }
+
     render() {
         const { classes } = this.props;
         const {  franchiseeFees,order, orderBy, selected, rowsPerPage, page } = this.state;
@@ -420,64 +428,66 @@ class FranchiseesMaintenanceTable extends React.Component {
                     maxWidth={"sm"}
                     fullWidth
                 >
-                    <DialogTitle id="form-dialog-title">ADD FRANCHISEE FEE</DialogTitle>
-                    <DialogContent>
-                        <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                <TextField
-                                    id="dialogFeeName"
-                                    label="Fee Names"
-                                    select
-                                    className={classes.textField}
-                                    value={this.state.feesList}
-                                    onChange={this.handleChangeAddFeesSelect('feesList')}
-                                    margin="dense"
-                                    required
-                                    fullWidth
-                                >
-                                    {this.state.franchiseeFees.map(option => (
-                                        <MenuItem key={option.FranchiseeFeeList.FranchiseeFeeListId} value={option.FranchiseeFeeList.FranchiseeFeeListId}>
-                                            {option.FranchiseeFeeList.Name}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                <TextField
-                                    id="dialogFeeAmount"
-                                    label="Amount"
-                                    className={classes.textField}
-                                    type={"number"}
-                                    value={this.state.feeAmount}
-                                    onChange={this.handleChangeAddFeesSelect("feeAmount")}
-                                    margin="dense"
-                                    fullWidth
-                                    required
-                                />
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox checked={this.state.feeActive} />
-                                    }
-                                    onChange={this.handleCheckboxChange('feeActive')}
-                                    className={classes.textField}
-                                    label="Active"
-                                    margin="dense"
-                                />
-                            </GridItem>
-                        </GridContainer>
-                    </DialogContent>
-                    <DialogActions style={{padding:"2%"}}>
-                        <Button style={{color:"gray"}} onClick={this.handleClose} variant="contained"  size="small" className={classes.button}>
-                            <CancelIcon className={classNames(classes.leftIcon, classes.iconSmall)} />
-                            Cancel
-                        </Button>
-                        <Button style={{color:"gray"}} onClick={this.handleClose} variant="contained" size="small" className={classes.button}>
-                            <SaveIcon className={classNames(classes.leftIcon, classes.iconSmall)} />
-                            Save
-                        </Button>
-                    </DialogActions>
+                    <form action="/" method={"POST"} onSubmit={(e) => {e.preventDefault();this.handleAddFees();}}>
+                        <DialogTitle id="form-dialog-title">ADD FRANCHISEE FEE</DialogTitle>
+                        <DialogContent>
+                            <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+                                <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                    <TextField
+                                        id="dialogFeeName"
+                                        label="Fee Names"
+                                        select
+                                        className={classes.textField}
+                                        value={this.state.feesList}
+                                        onChange={this.handleChangeAddFeesSelect('feesList')}
+                                        margin="dense"
+                                        required
+                                        fullWidth
+                                    >
+                                        {this.state.franchiseeFees.map(option => (
+                                            <MenuItem key={option.FranchiseeFeeList.FranchiseeFeeListId} value={option.FranchiseeFeeList.FranchiseeFeeListId}>
+                                                {option.FranchiseeFeeList.Name}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                    <TextField
+                                        id="dialogFeeAmount"
+                                        label="Amount"
+                                        className={classes.textField}
+                                        type={"number"}
+                                        value={this.state.feeAmount}
+                                        onChange={this.handleChangeAddFeesSelect("feeAmount")}
+                                        margin="dense"
+                                        fullWidth
+                                        required
+                                    />
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox checked={this.state.feeActive} />
+                                        }
+                                        onChange={this.handleCheckboxChange('feeActive')}
+                                        className={classes.textField}
+                                        label="Active"
+                                        margin="dense"
+                                    />
+                                </GridItem>
+                            </GridContainer>
+                        </DialogContent>
+                        <DialogActions style={{padding:"2%"}}>
+                            <Button style={{color:"gray"}} onClick={this.handleClose} variant="contained"  size="small" className={classes.button}>
+                                <CancelIcon className={classNames(classes.leftIcon, classes.iconSmall)} />
+                                Cancel
+                            </Button>
+                            <Button style={{color:"gray"}} type={"submit"} variant="contained" size="small" className={classes.button}>
+                                <SaveIcon className={classNames(classes.leftIcon, classes.iconSmall)} />
+                                Save
+                            </Button>
+                        </DialogActions>
+                    </form>
                 </Dialog>
             </div>
         );
