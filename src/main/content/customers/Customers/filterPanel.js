@@ -300,7 +300,7 @@ const AddButton = ({ onExecute }) => (
 		>
 			New
 	  </Button> */}
-		<IconButton onClick={onExecute} title="New Address">
+		<IconButton onClick={onExecute} title="Add New">
 			<NewIcon />
 		</IconButton>
 	</div>

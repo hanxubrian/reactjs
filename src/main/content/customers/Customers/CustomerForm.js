@@ -443,27 +443,66 @@ const account_offering_columns = [
 		title: "No.",
 		name: "Number",
 		columnName: "Number",
+		width: 90,
 	},
 	{
 		title: "Franchisees Name",
 		name: "Name",
 		columnName: "Name",
+		width: 220,
+	},
+	// {
+	// 	title: "Address",
+	// 	name: "Address",
+	// 	columnName: "Address",
+	// },
+	// {
+	// 	title: "Phone",
+	// 	name: "Phone",
+	// 	columnName: "Phone",
+	// },
+	// {
+	// 	title: "Status",
+	// 	name: "StatusName",
+	// 	columnName: "StatusName",
+	// },
+	{
+		title: "Offer Date",
+		name: "OfferDate",
+		columnName: "OfferDate",
+		width: 130,
 	},
 	{
-		title: "Address",
-		name: "Address",
-		columnName: "Address",
+		title: "Response",
+		name: "Response",
+		columnName: "Response",
+		width: 100,
 	},
 	{
-		title: "Phone",
-		name: "Phone",
-		columnName: "Phone",
+		title: "User",
+		name: "User",
+		columnName: "User",
+		width: 120,
 	},
 	{
-		title: "Status",
-		name: "StatusName",
-		columnName: "StatusName",
+		title: "Response Date",
+		name: "ResponseDate",
+		columnName: "ResponseDate",
+		width: 130,
 	},
+	{
+		title: "Result",
+		name: "Result",
+		columnName: "Result",
+		width: 100,
+	},
+	{
+		title: "Offer Sent",
+		name: "OfferSent",
+		columnName: "OfferSent",
+		width: 100,
+	},
+
 ];
 
 
@@ -536,7 +575,7 @@ class CustomerForm extends Component {
 		labelWidth: 0,
 		selectedWork: "",
 
-		activeStep: 0,
+		activeStep: 4,
 		completed: new Set(),
 		skipped: new Set(),
 
@@ -1630,6 +1669,9 @@ class CustomerForm extends Component {
 					</Fragment>
 				);
 			case 5:
+				//
+				// Account Offering
+				//
 				const {
 					searchValue,
 					pageSizes,
@@ -1650,6 +1692,13 @@ class CustomerForm extends Component {
 							columns={account_offering_columns}
 							rootComponent={GridRootComponent}
 						>
+
+							<SearchState
+								value={searchValue}
+								onValueChange={this.changeSearchValue}
+							/>
+							<IntegratedFiltering />
+
 							<SelectionState
 								selection={selection}
 								onSelectionChange={this.changeSelection}
@@ -1682,10 +1731,8 @@ class CustomerForm extends Component {
 							/> */}
 
 
-							<SearchState
-								value={searchValue}
-								onValueChange={this.changeSearchValue}
-							/>
+
+							<TableColumnResizing defaultColumnWidths={account_offering_columns} />
 
 							<TableHeaderRow showSortingControls />
 							<TableSelection showSelectAll selectByRowClick highlightRow />
@@ -1701,7 +1748,7 @@ class CustomerForm extends Component {
 									columnExtensions={[]}
 									onCommitChanges={this.commitChanges}
 								/>
-								<TableColumnResizing defaultColumnWidths={account_offering_columns} />
+								
 								<TableHeaderRow showSortingControls />
 								
 								<TableEditRow />
@@ -2072,7 +2119,7 @@ class CustomerForm extends Component {
 								onClick={() => {
 									this.sendOffer();
 								}}
-							> Send Offer </Button>
+							> Offer this account </Button>
 						</div>) :
 						(<h2>{steps[activeStep]}</h2>)}
 
