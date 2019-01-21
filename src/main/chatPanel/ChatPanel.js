@@ -41,7 +41,7 @@ const styles = theme => ({
         transform                     : 'translate3d(0,100%,0)',
         overflow                      : 'hidden',
         [theme.breakpoints.down('md')]: {
-            transform : 'translate3d(0,100%,0)',
+            transform : 'translate3d(0,70%,0)',
             boxShadow : 'none',
             '&.opened': {
                 boxShadow: theme.shadows[5]
@@ -103,6 +103,7 @@ class ChatPanel extends Component {
     {
         this.props.getUserData();
         this.props.getContacts();
+        console.log("#################################################");
     }
 
     componentDidUpdate(prevProps,prevState)
@@ -174,10 +175,11 @@ class ChatPanel extends Component {
         return (
             <div>
 
-                {this.props.getchatnotification && (
+                { 1 && (
             <div className={classes.root}>
                 <ClickAwayListener onClickAway={() => state && closeChatPanel()}>
                     <div className={classNames(classes.panel, {'opened': state},"chatpanelview", "flex flex-col")}>
+
                         <AppBar position="static" elevation={1}>
                             <Toolbar className="pl-12 pr-8">
                                 <div className="flex flex-1 items-center">
