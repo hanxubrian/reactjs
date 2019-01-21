@@ -23,7 +23,6 @@ class chatService {
                     }
                 })
                 .catch(error=>{
-                    resolve(error);
                 })
         }); 
     }
