@@ -128,6 +128,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 
+import AccountOfferingPage from './AccountOfferingPage';
+
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 	return result ? {
@@ -312,93 +314,6 @@ function getSteps() {
 	return ['Service Agreement', 'Billing', 'Service Settings', "Walk-Thru", "Account Offering", "Documents", "Marketing", "Account History"];
 }
 
-const stateNames = [
-	{
-		value: 2,
-		label: "Buffalo"
-	},
-	{
-		value: 7,
-		label: "Detroit"
-	},
-	{
-		value: 9,
-		label: "Hartford"
-	},
-	{
-		value: 13,
-		label: "Las Vegas"
-	},
-	{
-		value: 14,
-		label: "Los Angeles/Colton"
-	},
-	{
-		value: 16,
-		label: "Miami"
-	},
-	{
-		value: 18,
-		label: "Minneapolis"
-	},
-	{
-		value: 20,
-		label: "New Jersey"
-	},
-	{
-		value: 21,
-		label: "New York"
-	},
-	{
-		value: 22,
-		label: "San Francisco/Oakland"
-	},
-	{
-		value: 23,
-		label: "Oklahoma City"
-	},
-	{
-		value: 24,
-		label: "Philadelphia"
-	},
-	{
-		value: 25,
-		label: "Sacramento"
-	},
-	{
-		value: 26,
-		label: "Washington DC"
-	},
-	{
-		value: 28,
-		label: "Jani-King Int'l, Inc."
-	},
-	{
-		value: 29,
-		label: "JANI-KING OF NEW MEXICO, INC"
-	},
-	{
-		value: 31,
-		label: "New Mexico"
-	},
-	{
-		value: 46,
-		label: "Houston"
-	},
-	{
-		value: 55,
-		label: "Pittsburgh"
-	},
-	{
-		value: 64,
-		label: "Tulsa"
-	},
-	{
-		value: 82,
-		label: "Reno"
-	}
-];
-
 const Upload_Document_headers = [
 	// {
 	// 	id: 'doc_type',
@@ -436,73 +351,6 @@ const Upload_Document_headers = [
 	// 	disablePadding: false,
 	// 	label: 'View'
 	// }
-];
-
-const account_offering_columns = [
-	{
-		title: "No.",
-		name: "Number",
-		columnName: "Number",
-		width: 90,
-	},
-	{
-		title: "Franchisees Name",
-		name: "Name",
-		columnName: "Name",
-		width: 220,
-	},
-	// {
-	// 	title: "Address",
-	// 	name: "Address",
-	// 	columnName: "Address",
-	// },
-	// {
-	// 	title: "Phone",
-	// 	name: "Phone",
-	// 	columnName: "Phone",
-	// },
-	// {
-	// 	title: "Status",
-	// 	name: "StatusName",
-	// 	columnName: "StatusName",
-	// },
-	{
-		title: "Offer Date",
-		name: "OfferDate",
-		columnName: "OfferDate",
-		width: 130,
-	},
-	{
-		title: "Response",
-		name: "Response",
-		columnName: "Response",
-		width: 100,
-	},
-	{
-		title: "User",
-		name: "User",
-		columnName: "User",
-		width: 120,
-	},
-	{
-		title: "Response Date",
-		name: "ResponseDate",
-		columnName: "ResponseDate",
-		width: 130,
-	},
-	{
-		title: "Result",
-		name: "Result",
-		columnName: "Result",
-		width: 100,
-	},
-	{
-		title: "Offer Sent",
-		name: "OfferSent",
-		columnName: "OfferSent",
-		width: 100,
-	},
-
 ];
 
 
@@ -561,7 +409,7 @@ const Command = ({ id, onExecute }) => {
 		/>
 	);
 };
-const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
+// const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 class CustomerForm extends Component {
 	state = {
 		temp: [],
@@ -588,7 +436,7 @@ class CustomerForm extends Component {
 			{ columnName: 'Number', direction: 'asc' }
 		],
 
-
+		account_offering_step: 0,
 
 	};
 
@@ -648,78 +496,6 @@ class CustomerForm extends Component {
 				return x.FirstName + " " + x.LastName
 			}).sort();
 		}
-
-		const address_headers = [
-			{
-				id: 'billing',
-				numeric: false,
-				disablePadding: false,
-				label: 'Type'
-			},
-			{
-				id: 'service',
-				numeric: false,
-				disablePadding: false,
-				label: 'Address'
-			},
-			{
-				id: 'description',
-				numeric: false,
-				disablePadding: false,
-				label: 'City'
-			},
-			{
-				id: 'quantity',
-				numeric: true,
-				disablePadding: false,
-				label: 'State'
-			},
-			{
-				id: 'amount',
-				numeric: true,
-				disablePadding: false,
-				label: 'Zip / Postal'
-			}
-		];
-
-		const billing_headers = [
-			{
-				id: 'billing',
-				numeric: false,
-				disablePadding: false,
-				label: 'First'
-			},
-			{
-				id: 'service',
-				numeric: false,
-				disablePadding: false,
-				label: 'Last'
-			},
-			{
-				id: 'description',
-				numeric: false,
-				disablePadding: false,
-				label: 'Title'
-			},
-			{
-				id: 'quantity',
-				numeric: true,
-				disablePadding: false,
-				label: 'Office Phone'
-			},
-			{
-				id: 'amount',
-				numeric: true,
-				disablePadding: false,
-				label: 'Mobile Phone'
-			},
-			{
-				id: 'email',
-				numeric: true,
-				disablePadding: false,
-				label: 'Email'
-			}
-		];
 
 		switch (step + 1) {
 			case 1:
@@ -1669,110 +1445,9 @@ class CustomerForm extends Component {
 					</Fragment>
 				);
 			case 5:
-				//
-				// Account Offering
-				//
-				const {
-					searchValue,
-					pageSizes,
-					sorting,
-					selection,
-				} = this.state;
+				const {account_offering_step} = this.state
 
-				// let rows = this.props.franchisees.Data.Region.filter(x => x.Id == this.props.regionId)[0].FranchiseeList
-				let rows = this.state.data;
-				console.log("this.props.franchisees.Data", rows, account_offering_columns)
-				// account offering
-				return (
-					<Paper
-						className={classNames(classes.layoutTable, "flex flex-col h-full")}
-					>
-						<Grid
-							rows={rows}
-							columns={account_offering_columns}
-							rootComponent={GridRootComponent}
-						>
-
-							<SearchState
-								value={searchValue}
-								onValueChange={this.changeSearchValue}
-							/>
-							<IntegratedFiltering />
-
-							<SelectionState
-								selection={selection}
-								onSelectionChange={this.changeSelection}
-							/>
-							<PagingState
-								defaultCurrentPage={0}
-								defaultPageSize={10}
-							/>
-							<PagingPanel pageSizes={pageSizes} />
-							<SelectionState
-								selection={selection}
-								onSelectionChange={this.changeSelection}
-							/>
-							<IntegratedSelection />
-
-
-
-							<SortingState
-								sorting={sorting}
-								onSortingChange={this.changeSorting}
-								columnExtensions={account_offering_columns}
-							/>
-							<IntegratedSorting />
-
-							<IntegratedPaging />
-
-							<Table />
-							{/* <VirtualTable
-								height="auto"
-							/> */}
-
-
-
-							<TableColumnResizing defaultColumnWidths={account_offering_columns} />
-
-							<TableHeaderRow showSortingControls />
-							<TableSelection showSelectAll selectByRowClick highlightRow />
-
-							<Toolbar />
-							<SearchPanel />
-							{/* 
-								
-
-
-								
-								<EditingState
-									columnExtensions={[]}
-									onCommitChanges={this.commitChanges}
-								/>
-								
-								<TableHeaderRow showSortingControls />
-								
-								<TableEditRow />
-								<TableEditColumn
-									showAddCommand
-									showEditCommand
-									showDeleteCommand
-									commandComponent={Command}
-								/> */}
-						</Grid>
-						<div
-							className={classNames(classes.layoutTable, "flex flex-row")}
-							style={{ justifyContent: "space-between" }}
-						>
-							<span className={"p-6"}>
-								Rows Selected: <strong>{selection.length}</strong>
-							</span>
-
-							<span className={"p-6"}>
-								Total Rows: <strong>{rows.length}</strong>
-							</span>
-						</div>
-					</Paper>
-				)
+				return (<AccountOfferingPage step = {account_offering_step}/>)
 			case 6:
 				return (
 					<Fragment>
@@ -1825,27 +1500,24 @@ class CustomerForm extends Component {
 		//this.props.this.type === 'create' ? this.props.closeEditCustomerForm() : this.props.closeNewCustomerForm();
 		this.type === 'create' ? this.props.closeEditCustomerForm() : this.props.closeNewCustomerForm();
 	};
-	sendOffer = () => {
-
-	}
 	// constructor(props) {
 	// 	super(props);
 	// }
 	constructor(props) {
 		super(props);
 
-		if (!props.bLoadedFranchisees) {
-			props.getFranchisees();
-		}
+		// if (!props.bLoadedFranchisees) {
+		// 	props.getFranchisees();
+		// }
 		if (!props.documents) {
 			props.getDocuments();
 		}
 		this.fetchData = this.fetchData.bind(this);
-		this.escFunction = this.escFunction.bind(this);
+		// this.escFunction = this.escFunction.bind(this);
 
-		if (!props.bLoadedFranchisees) {
-			props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
-		}
+		// if (!props.bLoadedFranchisees) {
+		// 	props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
+		// }
 
 		this.changeSelection = selection => this.setState({ selection });
 		this.changeSorting = sorting => this.setState({ sorting });
@@ -1857,49 +1529,49 @@ class CustomerForm extends Component {
 			page: state.page,
 		});
 	}
-	escFunction(event) {
-		if (event.keyCode === 27) {
-			this.setState({ s: '' });
-			this.getFranchiseesFromStatus();
-		}
-	}
+	// escFunction(event) {
+	// 	if (event.keyCode === 27) {
+	// 		this.setState({ s: '' });
+	// 		this.getFranchiseesFromStatus();
+	// 	}
+	// }
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
 	}
 
 	componentWillMount() {
-		this.getFranchiseesFromStatus();
+		// this.getFranchiseesFromStatus();
 	}
 
-	componentWillReceiveProps(nextProps) {
-		console.log("this.props.franchisees")
-		console.log(this.props.franchisees)
-		if (this.props.franchisees === null && nextProps.franchisees !== null)
-			this.getFranchiseesFromStatus(nextProps.franchisees);
-		if (this.props.franchisees !== nextProps.franchisees)
-			this.getFranchiseesFromStatus(nextProps.franchisees);
-	}
+	// componentWillReceiveProps(nextProps) {
+	// 	console.log("this.props.franchisees")
+	// 	console.log(this.props.franchisees)
+	// 	if (this.props.franchisees === null && nextProps.franchisees !== null)
+	// 		this.getFranchiseesFromStatus(nextProps.franchisees);
+	// 	if (this.props.franchisees !== nextProps.franchisees)
+	// 		this.getFranchiseesFromStatus(nextProps.franchisees);
+	// }
 
 
-	getFranchiseesFromStatus = (rawData = this.props.franchisees) => {
-		let data = [];
-		let tempData = [];
-		if (rawData === null) return;
+	// getFranchiseesFromStatus = (rawData = this.props.franchisees) => {
+	// 	let data = [];
+	// 	let tempData = [];
+	// 	if (rawData === null) return;
 
-		if (rawData.Data.Region.length === 0) {
-			data = [];
-			this.setState({ temp: data });
-			this.setState({ data: data });
-			return;
-		} else {
-			for (let i = 0; i < rawData.Data.Region.length; i++) {
-				tempData = rawData.Data.Region[i].FranchiseeList;
-				data = data.concat(tempData);
-			}
-		}
-		this.setState({ temp: data });
-		this.setState({ data: data });
-	};
+	// 	if (rawData.Data.Region.length === 0) {
+	// 		data = [];
+	// 		this.setState({ temp: data });
+	// 		this.setState({ data: data });
+	// 		return;
+	// 	} else {
+	// 		for (let i = 0; i < rawData.Data.Region.length; i++) {
+	// 			tempData = rawData.Data.Region[i].FranchiseeList;
+	// 			data = data.concat(tempData);
+	// 		}
+	// 	}
+	// 	this.setState({ temp: data });
+	// 	this.setState({ data: data });
+	// };
 
 	componentDidMount() {
 		// this.getDocuments()
@@ -2075,7 +1747,7 @@ class CustomerForm extends Component {
 
 		// const {classes} = this.props;
 		const steps = getSteps();
-		const { activeStep,
+		const { activeStep,account_offering_step
 		} = this.state;
 
 
@@ -2109,19 +1781,40 @@ class CustomerForm extends Component {
 					}}
 				>
 
-					{activeStep === 4 ?
-						(<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+					{/* {activeStep === 4 ?
+						(<Fragment>
+							{account_offering_step === 0 &&
+							(<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+								<h2>{steps[activeStep]}</h2>
+								<Button
+									variant="contained"
+									color="primary"
+									className={classes.button}
+									onClick={() => {
+										this.offerThisAccount();
+									}}
+								> Offer this account </Button>
+							</div>)
+							}
+							{account_offering_step === 1 &&
+							(<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+								<h2>{steps[activeStep]}</h2>
+								<Button
+									variant="contained"
+									color="primary"
+									className={classes.button}
+									onClick={() => {
+										this.backToAccountOfferingHome();
+									}}
+								> Back </Button>
+							</div>)
+							}
+						</Fragment>)
+						: */}
+						{/* ( */}
 							<h2>{steps[activeStep]}</h2>
-							<Button
-								variant="contained"
-								color="primary"
-								className={classes.button}
-								onClick={() => {
-									this.sendOffer();
-								}}
-							> Offer this account </Button>
-						</div>) :
-						(<h2>{steps[activeStep]}</h2>)}
+							{/* ) */}
+						{/* } */}
 
 
 					<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
@@ -2202,7 +1895,7 @@ function mapStateToProps({ customers, franchisees, auth }) {
 	return {
 		bLoadedFranchisees: franchisees.bLoadedFranchisees,
 		regionId: auth.login.defaultRegionId,
-		CustomerForm: customers.CustomerForm,
+		// CustomerForm: customers.CustomerForm,
 		documents: customers.customersDocuments,
 
 		statusId: franchisees.statusId,
