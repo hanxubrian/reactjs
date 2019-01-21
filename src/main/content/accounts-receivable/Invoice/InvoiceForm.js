@@ -708,6 +708,8 @@ class InvoiceForm extends Component {
         let bReadonly = false;
         if(this.props.invoiceForm.type === 'new') bReadonly = true;
 
+        console.log('customer=', JSON.stringify(this.props.invoiceForm.customer));
+
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="h-full flex flex-col relative">

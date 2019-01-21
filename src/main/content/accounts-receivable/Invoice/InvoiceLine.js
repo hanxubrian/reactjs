@@ -496,7 +496,9 @@ class InvoiceLineTable extends React.Component {
                     let distributions = [];
                     if(item.Distribution.length>0){
                         distributions = item.Distribution.map((d,fid)=>{
-                            this.setState({['nameValue'+f_index++]: d.Name});
+                            if(d.Name!==null)
+                                this.setState({['nameValue'+f_index++]: d.Name});
+
                             return {id: index, fid, fnumber: d.FranchiseeNumber, amount: d.Amount, name: d.Name, type: 'franch'}
                         })
                     }
