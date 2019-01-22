@@ -296,7 +296,8 @@ class InvoiceForm extends Component {
         bAlertNewInvoice: false,
         bCustomerNotFound: false,
         buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval,
-        franchiseeFromCustomer: null
+        franchiseeFromCustomer: null,
+        bInvoiceFormClose: false,
     };
 
     constructor(props) {
@@ -693,6 +694,15 @@ class InvoiceForm extends Component {
 
     openNewCustomerDialog =() => {
       this.setState({bCustomerNotFound: true})
+    };
+
+
+    handleInvoiceFormClose = () => {
+        this.setState({ bInvoiceFormClose: false });
+    };
+
+    confirmCloseForm = () => {
+        this.setState({ bInvoiceFormClose: true });
     };
 
     render()
@@ -1134,9 +1144,8 @@ class InvoiceForm extends Component {
                                         variant="contained"
                                         color="primary"
                                         className={classes.button}
-                                        onClick={() => {
-                                            this.closeComposeForm();
-                                        }}
+                                        onClick={()=>this.confirmCloseForm()}
+                                        // onClick={this.closeComposeForm()}
                                     >
                                         Close
                                     </Button>
@@ -1215,6 +1224,27 @@ class InvoiceForm extends Component {
                             </Button>
                             <Button component={Link} to="/customers/list"  color="secondary" autoFocus>
                                 Create New Customer
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Dialog
+                        open={this.state.bInvoiceFormClose}
+                        onClose={this.handleInvoiceFormClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Tax Editing is not allowed"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Do you really want to close the invoice form without saving?
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={()=>this.handleInvoiceFormClose} color="primary" autoFocus>
+                                No
+                            </Button>
+                            <Button onClick={()=>this.closeComposeForm()} color="primary" autoFocus>
+                                Yes
                             </Button>
                         </DialogActions>
                     </Dialog>

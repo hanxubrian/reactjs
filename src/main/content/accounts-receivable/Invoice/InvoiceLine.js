@@ -420,6 +420,7 @@ class InvoiceLineTable extends React.Component {
         bTaxAlert: false,
         bTaxAlertReduction: false,
         bAllowAlertReduction: false,
+
         billingSuggestions: this.props.billingLists.map(b => ({
             value: b.BillingTypeId, label: b.Name})),
         serviceSuggestions: this.props.serviceLists.map(s=>({
@@ -732,9 +733,7 @@ class InvoiceLineTable extends React.Component {
     };
 
     handleChange = row => event => {
-        console.log('row=', row);
         const data = [...this.state.data];
-        console.log('line', data[row.id]);
 
         let d_total = 0;
         let distributions = data[row.id].franchisees;
@@ -747,9 +746,6 @@ class InvoiceLineTable extends React.Component {
                 d_total += parseFloat(d_amount);
             })
         }
-
-        console.log('d_total=', d_total);
-
 
         if(d_total>data[row.id].total) {
             this.setState({snackMessage: "Distribution amount can\'t be greater than Line amount"});
@@ -1279,6 +1275,7 @@ class InvoiceLineTable extends React.Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
+
             </Paper>
         );
     }
