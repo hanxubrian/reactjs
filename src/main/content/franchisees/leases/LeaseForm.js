@@ -131,6 +131,9 @@ const newLeaseState = {
     "LeaseId": "",
     "DateSigned": moment().format('YYYY-MM-DD'),
     "PaymentStart": moment().format('YYYY-MM-DD'),
+    "FranchiseeId": "",
+    "FranchiseeNo": "",
+    "FranchiseeName": "",
     "Make": "",
     "Model": "",
     "SerialNo": "",
@@ -243,14 +246,13 @@ const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
 
 class LeaseForm extends Component {
     state = {
-        franchisees: [],
         ...newLeaseState,
+        franchisees: [],
         value: '',
         suggestions: [],
         PO_number: '',
         selectedFranchisee: null,
         fSuggestions: [],
-        selectedFranchisee: null,
         labelWidth: 0,
         selectedWork: "",
         total: 0.0,
@@ -381,13 +383,13 @@ class LeaseForm extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-    //     if(nextProps.leaseForm.customer!==null){
+    //     if(nextProps.leaseForm.lease!==null){
     //         if(nextProps.leaseForm.type==='edit')
-    //             this.setState({LeaseNo: nextProps.leaseForm.customer.LeaseNo});
-    //         this.setState({value: nextProps.leaseForm.customer.FranchiseeName});
-    //         this.setState({FranchiseeNo: nextProps.leaseForm.customer.FranchiseeNo});
-    //         this.setState({LeaseDate: moment(nextProps.leaseForm.customer.LeaseDate).format('MM/DD/YYYY')});
-    //         this.setState({DueDate: moment(nextProps.leaseForm.customer.DueDate).format('MM/DD/YYYY')});
+    //             this.setState({LeaseNo: nextProps.leaseForm.lease.LeaseNo});
+    //         this.setState({value: nextProps.leaseForm.lease.FranchiseeName});
+    //         this.setState({FranchiseeNo: nextProps.leaseForm.lease.FranchiseeNo});
+    //         this.setState({LeaseDate: moment(nextProps.leaseForm.lease.LeaseDate).format('MM/DD/YYYY')});
+    //         this.setState({DueDate: moment(nextProps.leaseForm.lease.DueDate).format('MM/DD/YYYY')});
     // }
 
         //in time of Saving
@@ -417,11 +419,18 @@ class LeaseForm extends Component {
     }
 
     componentDidMount(){
-        if(this.props.leaseForm.type === 'new')
-            this.setState({LeaseNo: "PENDING"});
-
         if(this.input) {
-            setTimeout(() => {this.input.focus()}, 500);
+            if(this.props.leaseForm.type === 'new')
+                this.setState({LeaseNo: "PENDING"});
+                setTimeout(() => {this.input.focus()}, 500);
+        }
+
+        if(this.props.leases.leaseDetail){
+            let leaseDetail = this.props.leases.leaseDetail.Data;
+            let lease = this.props.leases.filter(lease => lease.LeaseName===leaseDetail.LeaseName && lease.LeaseNo===leaseDetail.LeaseNumber);
+            if(lease.length>0) {
+                this.setState({selectedLease: lease[0]});
+            }
         }
     }
 
@@ -489,9 +498,15 @@ class LeaseForm extends Component {
                 "RegionId": 2,
                 "CreatedBy": 0,
                 "company_no": "BUF701",
-                "dlr_code": "701036",
+                DateSigned: this.state.DateSigned,
+                PaymentStart: this.state.PaymentStart,
+                FranchiseeId: this.state.selectedFranchisee.Id,
+                // FranchiseeNumber: this.state.PO_number,
+                FranchiseeName: this.state.selectedFranchisee.Name,
+                FranchiseeNo: this.state.selectedFranchisee.Number,
+                "dlr_code": this.state.selectedFranchisee.Number,
                 "lease_no": "70-7777",
-                "descripton": this.state.LeaseDescription,
+                "description": this.state.LeaseDescription,
                 "make": this.state.make,
                 "model": this.state.model,
                 "date_sign": moment(this.state.DateSigned),
@@ -534,7 +549,7 @@ class LeaseForm extends Component {
 
             this.props.updateLease(this.props.leases.leaseDetail.Data._id, this.props.regionId, result);
         }
-
+        console.log(this.state.selectedFranchisee.FranchiseeId)
         console.log('result', JSON.stringify(result));
     };
 
