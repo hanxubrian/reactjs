@@ -1233,14 +1233,14 @@ class InvoiceForm extends Component {
                         aria-labelledby="alert-dialog-title"
                         aria-describedby="alert-dialog-description"
                     >
-                        <DialogTitle id="alert-dialog-title">{"Tax Editing is not allowed"}</DialogTitle>
+                        <DialogTitle id="alert-dialog-title">{"Invoice Form"}</DialogTitle>
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
                                 Do you really want to close the invoice form without saving?
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={()=>this.handleInvoiceFormClose} color="primary" autoFocus>
+                            <Button onClick={()=>this.handleInvoiceFormClose()} color="primary" autoFocus>
                                 No
                             </Button>
                             <Button onClick={()=>this.closeComposeForm()} color="primary" autoFocus>
