@@ -267,7 +267,9 @@ class LeaseForm extends Component {
         leaseTerm: '',
         totalTax: '',
         totalLease: '',
-        buttonOption: 0
+        buttonOption: 0,
+        bFranchiseeNotFound: false,
+        bAlertNewLease: false
     };
 
     renderInputComponent = (inputProps ) => {
@@ -324,8 +326,17 @@ class LeaseForm extends Component {
     getSuggestions = (value) => {
         const escapedValue = escapeRegexCharacters(value.trim());
         const regex = new RegExp(escapedValue, 'i');
-        if(this.props.franchisees!==null)
-            return this.props.franchisees.Data.Region[0].FranchiseeList.filter(f => regex.test(f.Name));
+        if(this.props.franchisees!==null) {
+            let suggestions = this.props.franchisees.Data.Region[0].FranchiseeList.filter(f => regex.test(f.Name));
+            if(this.state.bFranchiseeNotFound)
+                return suggestions;
+
+            if(!this.state.bFranchiseeNotFound && suggestions.length===0) {
+                this.setState({bFranchiseeNotFound: true});
+                this.setState({value: ''});
+            }
+            return suggestions;
+        }
     };
 
     getTotal = () => {
@@ -527,6 +538,10 @@ class LeaseForm extends Component {
         console.log('result', JSON.stringify(result));
     };
 
+    addNewFranchisee = () => {
+        this.setState({bFranchiseeNotFound: false})
+    };
+
     validateNewLease = () => {
         if(this.state.selectedFranchisee===null){
             this.setState({snackMessage: 'Please choose Franchisee from Lease suggestion'});
@@ -580,6 +595,14 @@ class LeaseForm extends Component {
         }
     };
 
+    handleCloseNewLease = ()=>{
+        this.setState({bAlertNewLease: false})
+    };
+
+    handleCloseNewFranchisee = ()=>{
+        this.setState({bFranchiseeNotFound: false})
+    }
+
     handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -587,6 +610,10 @@ class LeaseForm extends Component {
 
         this.setState({ openSnack: false });
     };
+
+    openNewFranchiseeDialog =() => {
+        this.setState({bFranchiseeNotFound: true})
+      };
 
     render()
     {
@@ -1178,8 +1205,8 @@ class LeaseForm extends Component {
                         </DialogTitle>
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
-                                The customer doesn't exist.<br/>
-                                Do you want to create new customer?
+                                The franchisee doesn't exist.<br/>
+                                Do you want to create new franchisee?
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>

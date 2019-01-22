@@ -430,8 +430,8 @@ class Leases extends Component {
 		// 	return;
 		// });
 
-		let regions = rawData.Data[0].LeaseList.filter(x => x)
-		all_temp = regions
+		// let regions = rawData.Data[0].LeaseList.filter(x => x)
+		// all_temp = regions
 
 		this.setState({ temp: all_temp });
 		this.setState({ data: all_temp });
