@@ -4,7 +4,12 @@ import { persistReducer } from 'redux-persist';
 
 
 const initialState = {
-    ACC_payments: []
+    ACC_payments: [],
+    getPaymentsParam: {
+        searchText: "",
+        fromDate: "",
+        toDate: "",
+    }
 };
 
 
