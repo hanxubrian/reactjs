@@ -16,6 +16,7 @@ export function NumberFormatCustom(props) {
                     },
                 });
             }}
+            fixedDecimalScale={true}
             thousandSeparator
             decimalScale={2}
             prefix="$"
