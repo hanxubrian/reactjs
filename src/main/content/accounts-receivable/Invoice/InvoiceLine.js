@@ -861,10 +861,6 @@ class InvoiceLineTable extends React.Component {
             label: suggestion.Name
         }));
 
-        console.log('all_data=', all_data);
-        console.log('selectedBillingOption0=', this.state.selectedBillingOption0);
-        console.log('selectedBillingOption1=', this.state.selectedBillingOption1);
-
         return (
             <Paper className={classNames(classes.root)}>
                 <div className={classNames(classes.tableWrapper, "flex flex-col h-full")}>

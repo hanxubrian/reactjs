@@ -566,6 +566,7 @@ class InvoiceForm extends Component {
                 TransactionStatusListId: 2,
                 Status: 2,
                 SysCust: this.state.selectedCustomer.SysCust,
+                Fees: this.state.selectedCustomer.Fees,
                 Items: items
             };
             this.props.addInvoice(this.props.regionId, result);
@@ -593,6 +594,7 @@ class InvoiceForm extends Component {
                 GrandTotal: this.state.total,
                 TransactionStatusListId: 2,
                 Status: 2,
+                Fees: this.state.selectedCustomer.Fees,
                 Items: items
             };
 
