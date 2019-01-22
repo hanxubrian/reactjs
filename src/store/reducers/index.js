@@ -11,12 +11,14 @@ import contactsApp from '../../main/content/apps/contacts/store/reducers/';
 import franchisees from'./franchisees.reducer';
 import transactions from'./franchisee.transaction.reducer';
 import franchiseeReports from'./franchisee.reports.reducer';
-import customers from './customers.reducer'
-import leases from './leases.reducer'
-import leads from './leads.reducer'
-import findersFees from './findersfees.reducer'
-import payments from './payment.reducer'
-import dashboard from './dashboard.reducer'
+import customers from './customers.reducer';
+import leases from './leases.reducer';
+import leads from './leads.reducer';
+import findersFees from './findersfees.reducer';
+import payments from './payment.reducer';
+import dashboard from './dashboard.reducer';
+import homepage from './homepage.reducer';
+
 
 const createReducer = (asyncReducers) =>
     combineReducers({
@@ -38,6 +40,7 @@ const createReducer = (asyncReducers) =>
         findersFees,
         payments,
 		dashboard,
+        homepage,
         ...asyncReducers
     });
 

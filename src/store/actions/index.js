@@ -10,3 +10,4 @@ export * from './franchisee.transaction.action';
 export * from './franchisee.reports.action';
 export * from './payment.list.actions';
 export * from './dashboard.actions';
+export * from './homepage.actions';
