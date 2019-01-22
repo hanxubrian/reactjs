@@ -10,6 +10,8 @@ import _contactService from './customers/ContactService';
 import _chatService from './chat/ChatService';
 import _paymentService from './payment/paymentListService';
 import _dashboardService from './dashboard/dashboardService';
+import _invoicePaymentService from './invoice/paymentsServices'
+
 export const authService = _authService;
 export const menuService = _menuService;
 export const franchiseesService = _franchiseesService;
@@ -22,3 +24,4 @@ export const chatService = _chatService;
 export const contactService = _contactService;
 export const paymentService = _paymentService;
 export const dashboardService = _dashboardService;
+export const invoicePaymentService = _invoicePaymentService;
