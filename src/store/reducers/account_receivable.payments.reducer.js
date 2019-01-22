@@ -5,10 +5,11 @@ import { persistReducer } from 'redux-persist';
 
 const initialState = {
     ACC_payments: [],
+    bACC_fechStart: true,
     getPaymentsParam: {
         searchText: "",
-        fromDate: "",
-        toDate: "",
+        fromDate: "2019-01-22T06:15:42.6082822-06:00",
+        toDate: "2019-01-22T06:15:42.6082822-06:00",
     }
 };
 
@@ -20,7 +21,8 @@ const accountReceivablePayments = function(state = initialState, action) {
         case Actions.GET_ALL_RECEIVABLE_PAYMENTS: {
             return{
                 ...state,
-                ACC_payments: action.payload
+                ACC_payments: action.payload,
+                bACC_fechStart: false
             }
         }
         default:

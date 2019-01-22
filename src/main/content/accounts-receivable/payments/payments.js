@@ -638,7 +638,7 @@ class Payments extends Component {
                     }}
                 >
                 </FusePageCustom>
-                {(this.props.bInvoiceStart || this.props.bCustomerFetchStart || this.props.bFranchiseesFetchStart) && (
+                {(this.props.bACC_fechStart) && (
                     <div className={classes.overlay}>
                         <CircularProgress className={classes.progress} color="secondary"  />
                     </div>
@@ -663,9 +663,10 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({invoices, auth, customers, franchisees})
+function mapStateToProps({invoices, auth, customers, franchisees, accountReceivablePayments})
 {
     return {
+        bACC_fechStart: accountReceivablePayments.bACC_fechStart,
         invoices: invoices.invoicesDB,
         invoiceDetail: invoices.invoiceDetail,
         bLoadedInvoices: invoices.bLoadedInvoices,
