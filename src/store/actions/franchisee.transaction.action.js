@@ -13,6 +13,8 @@ export const CLOSE_EDIT_TRANSACTION_FORM = '[FRANCHISEE-TRANSACTION] CLOSE EDIT 
 export const SELECT_TRANSACTION_FRANCHISEE = '[FRANCHISEE-TRANSACTION] SELECT TRANSACTION FRANCHISEE';
 export const UPDATE_TRANSACTION_LINE = '[FRANCHISEE-TRANSACTION] UPDATE TRANSACTION LINE';
 export const START_FETCH_TRANSACTIONS = '[FRANCHISEE-TRANSACTION] START FETCH TRANSACTIONS';
+export const SHOW_VENDOR_DIALOG_BOX = '[FRANCHISEE-TRANSACTION] SHOW VENDOR DIALOG BOX';
+export const HIDE_VENDOR_DIALOG_BOX = '[FRANCHISEE-TRANSACTION] HIDE VENDOR DIALOG BOX';
 
 export function getTransactions(regionId) {
     return (dispatch) => {
@@ -102,5 +104,17 @@ export function updateTransactionLine(data) {
     return {
         type: UPDATE_TRANSACTION_LINE,
         payload: data
+    }
+}
+
+export function showVendorDialogBox() {
+    return {
+        type: SHOW_VENDOR_DIALOG_BOX
+    }
+}
+
+export function hideVendorDialogBox() {
+    return {
+        type: HIDE_VENDOR_DIALOG_BOX
     }
 }

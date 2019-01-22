@@ -15,9 +15,10 @@ const initialState = {
             open: false
         },
         data : null,
-        franchisee: null
+        franchisee: null,
+        bVendorBox: false
     },
-    newTransaction: null
+    newTransaction: null,
 };
 
 const transactions = function(state = initialState, action) {
@@ -126,6 +127,14 @@ const transactions = function(state = initialState, action) {
                 transactionForm: {...state.transactionForm, data: {line: action.payload}}
             }
         }
+        case Actions.SHOW_VENDOR_DIALOG_BOX:
+            return {...state,
+                transactionForm: {...state.transactionForm, bVendorBox: true}
+            };
+        case Actions.HIDE_VENDOR_DIALOG_BOX:
+            return {...state,
+                transactionForm: {...state.transactionForm, bVendorBox: false}
+            };
         default:
         {
             return state;

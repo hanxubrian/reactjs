@@ -289,7 +289,7 @@ class TransactionForm extends Component {
         period: moment(),
         taxExempt: false,
         bAlertNewTransaction: false,
-        buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval
+        buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval,
     };
 
     renderInputComponent = (inputProps ) => {
@@ -379,7 +379,6 @@ class TransactionForm extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.props.transactionForm!== prevProps.transactionForm) {
-            console.log('pppppp');
             this.getTotal();
         }
         if(this.state.selectedFranchisee!== null && JSON.stringify(this.state.selectedFranchisee)!== JSON.stringify(this.props.transactionForm.franchisee)) {
@@ -895,7 +894,7 @@ function mapDispatchToProps(dispatch)
         selectCustomer: Actions.selectCustomer,
         resetInvoiceForm: Actions.resetInvoiceForm,
         addInvoice: Actions.addInvoice,
-        selectFranchisee: Actions.selectFranchisee
+        selectFranchisee: Actions.selectFranchisee,
     }, dispatch);
 }
 
@@ -906,7 +905,6 @@ function mapStateToProps({transactions, auth})
         newTransaction: transactions.newTransaction,
         user: auth.login,
         regionId: auth.login.defaultRegionId,
-        // bStartingSaveFormData: invoices.bStartingSaveFormData
     }
 }
 

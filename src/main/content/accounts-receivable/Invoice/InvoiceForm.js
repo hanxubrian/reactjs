@@ -452,6 +452,10 @@ class InvoiceForm extends Component {
                 this.setState({selectedCustomer: null});
                 this.setState({value: ''});
                 this.setState({CustomerNo: ''});
+                this.setState({subTotal: 0});
+                this.setState({markup: 0});
+                this.setState({tax: 0});
+                this.setState({total: 0});
                 if(this.input) {
                     if(this.props.invoiceForm.type === 'new')
                         setTimeout(() => {this.input.focus()}, 500);

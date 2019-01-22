@@ -27,6 +27,8 @@ import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import * as Actions from '../../../../store/actions';
 
+//Custom component
+import VendorDialogBox from './vendorDialogBox'
 
 //Utility
 import {NumberFormatCustom, NumberFormatCustom1, NumberFormatCustomPercent} from '../../../../services/utils'
@@ -108,7 +110,7 @@ const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
 
 let counter = 0;
 
-function createData(type='Regular Billing', frequency='Adjust-Balance', description='', quantity='', amount='', tax=0, markup='', extended=0, total=0)
+function createData(type=82, frequency='1', description='', quantity='', amount='', tax=0, markup='', extended=0, total=0)
 {
     return {
         id: counter++,
@@ -269,7 +271,7 @@ class TransactionTable extends React.Component {
         order      : 'asc',
         selected   : [],
         data       : [
-            createData("Regular Billing", "Adjust-Balance", '',''),
+            createData(82, "1", '',''),
         ],
         page       : 0,
         labelWidth: 0,
@@ -277,7 +279,7 @@ class TransactionTable extends React.Component {
         snackMessage: 'Please fill the data',
     };
 
-    handleChangeBilling = (event, n) => {
+    handleChangeLine = (event, n) => {
         let newData = this.state.data.map(row=>{
             let temp = row;
             if(n.id===row.id){
@@ -285,6 +287,9 @@ class TransactionTable extends React.Component {
             }
             return temp;
         });
+
+        if(event.target.name==='type' && event.target.value===18)
+            this.props.showVendorDialogBox();
 
         this.setState({data: newData})
     };
@@ -308,7 +313,7 @@ class TransactionTable extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.transactionForm.data===null && JSON.stringify(nextProps.transactionForm.data)!==JSON.stringify(this.props.transactionForm.data)){
-            let newData = createData("Regular Billing", "Adjust-Balance", '','');
+            let newData = createData(82, '1');
             this.setState({data: [{...newData, id: 0}]});
         }
     }
@@ -401,10 +406,23 @@ class TransactionTable extends React.Component {
         if(row.amount==='') return true;
     };
 
+
+
     render()
     {
         const {classes} = this.props;
         const {data} = this.state;
+
+        let aTypes = [
+            {value: 82, label:'Advance Fee'},            {value: 81, label: 'Advance Interest'},
+            {value: 20, label: 'Advance to Franchisee'}, {value: 78, label: 'Child support'},
+            {value: 5, label: 'Equipment Rental'},       {value: 6, label: 'Franchisee Note'},
+            {value: 18, label: 'Franchisee Supplies'},   {value: 79, label: 'Garnishment'},
+            {value: 80, label: 'Levy'},                  {value: 14, label: 'Misc. R. O.'},
+            {value: 7, label: 'Negative Due Roll-Due'},  {value: 51, label: 'Negative Dues'},
+            {value: 90, label: 'Purchase from Office'},  {value: 72, label: 'Tax Credit'}
+            ];
+
 
         return (
             <Paper className={classNames(classes.root)}>
@@ -437,11 +455,11 @@ class TransactionTable extends React.Component {
                             }
                         }}
                         getTdProps={(state, rowInfo, column, instance) =>{
-                                return {
-                                    className: classNames(
-                                        {"justify-end": column.id==='extended'},
-                                        {"justify-end": rowInfo.original.type!=='line'})
-                                }
+                            return {
+                                className: classNames(
+                                    {"justify-end": column.id==='extended'},
+                                    {"justify-end": rowInfo.original.type!=='line'})
+                            }
                         }}
                         columns={[
                             {
@@ -457,7 +475,7 @@ class TransactionTable extends React.Component {
                                                             outlined: classNames(classes.outlined, classes.billing),
                                                         }}
                                                         value={row.original.type}
-                                                        onChange={(ev)=>this.handleChangeBilling(ev, row.original)}
+                                                        onChange={(ev)=>this.handleChangeLine(ev, row.original)}
                                                         input={
                                                             <OutlinedInput
                                                                 labelWidth={this.state.labelWidth}
@@ -469,13 +487,7 @@ class TransactionTable extends React.Component {
                                                             classes:{paper: classes.dropdownMenu},
                                                         }}
                                                     >
-                                                        <MenuItem value="">
-                                                            <em>Select</em>
-                                                        </MenuItem>
-                                                        <MenuItem value="Regular Billing">Regular Billing</MenuItem>
-                                                        <MenuItem value="Additional Billing Office">Additional Billing Office</MenuItem>
-                                                        <MenuItem value="Extra Work">Extra Work</MenuItem>
-                                                        <MenuItem value="Client Supplies">Client Supplies</MenuItem>
+                                                        {aTypes.map(t=> <MenuItem key={t.value} value={t.value}>{t.label}</MenuItem>)}
                                                     </Select>
                                                 </FormControl>
                                             );
@@ -494,7 +506,7 @@ class TransactionTable extends React.Component {
                                                             outlined: classNames(classes.outlined,classes.services)
                                                         }}
                                                         value={row.original.frequency}
-                                                        onChange={(ev)=>this.handleChangeBilling(ev, row.original)}
+                                                        onChange={(ev)=>this.handleChangeLine(ev, row.original)}
                                                         input={
                                                             <OutlinedInput
                                                                 labelWidth={this.state.labelWidth}
@@ -506,32 +518,11 @@ class TransactionTable extends React.Component {
                                                             classes:{paper: classes.dropdownMenu},
                                                         }}
                                                     >
-                                                        <MenuItem value="">
+                                                        <MenuItem value="-1">
                                                             <em>Select</em>
                                                         </MenuItem>
-                                                        <MenuItem value="Adjust-Balance">Adjust - Balance</MenuItem>
-                                                        <MenuItem value="Adjust-Refund">Adjust - Refund</MenuItem>
-                                                        <MenuItem value="Adjust-WriteOff">Adjust - WriteOff</MenuItem>
-                                                        <MenuItem value="Buffing">Buffing</MenuItem>
-                                                        <MenuItem value="Carpet Clean">Carpet Clean</MenuItem>
-                                                        <MenuItem value="Customer Suppliers">Customer Suppliers</MenuItem>
-                                                        <MenuItem value="Emergency Clean">Emergency Clean</MenuItem>
-                                                        <MenuItem value="Event Center">Event Center</MenuItem>
-                                                        <MenuItem value="Floor Services">Floor Services</MenuItem>
-                                                        <MenuItem value="Furniture Cleaning Service">Furniture Cleaning Service</MenuItem>
-                                                        <MenuItem value="High Dusting">High Dusting</MenuItem>
-                                                        <MenuItem value="Hotel">Hotel</MenuItem>
-                                                        <MenuItem value="In-House Work">In-House Work</MenuItem>
-                                                        <MenuItem value="Initial and Deep Clean">Initial and Deep Clean</MenuItem>
-                                                        <MenuItem value="Initial One-Time Clean">Initial One-Time Clean</MenuItem>
-                                                        <MenuItem value="Make Ready">Make Ready</MenuItem>
-                                                        <MenuItem value="Miscellaneous - Special">Miscellaneous - Special</MenuItem>
-                                                        <MenuItem value="Other">Other</MenuItem>
-                                                        <MenuItem value="Porter Services">Porter Services</MenuItem>
-                                                        <MenuItem value="Power Washing">Power Washing</MenuItem>
-                                                        <MenuItem value="Regular Billing">Regular Billing</MenuItem>
-                                                        <MenuItem value="Regular Cleaning - Day">Regular Cleaning - Day</MenuItem>
-                                                        <MenuItem value="Regular Cleaning - Night">Regular Cleaning - Night</MenuItem>
+                                                        <MenuItem value="1">Single</MenuItem>
+                                                        <MenuItem value="2">Recurring</MenuItem>
                                                     </Select>
                                                 </FormControl>
                                             );
@@ -660,23 +651,23 @@ class TransactionTable extends React.Component {
                                         Header: "Action",
                                         width: 130,
                                         Cell: row=>{
-                                                return (
-                                                    <div className="flex flex-row items-center w-full justify-center">
-                                                        <Fab color="secondary" aria-label="add"
-                                                             className={classNames(classes.lineButton, "mr-8")}
-                                                             onClick={()=>this.addLineData(row.original)}
-                                                        >
-                                                            <Icon>add</Icon>
+                                            return (
+                                                <div className="flex flex-row items-center w-full justify-center">
+                                                    <Fab color="secondary" aria-label="add"
+                                                         className={classNames(classes.lineButton, "mr-8")}
+                                                         onClick={()=>this.addLineData(row.original)}
+                                                    >
+                                                        <Icon>add</Icon>
+                                                    </Fab>
+                                                    {this.state.data.length>1 && (
+                                                        <Fab aria-label="remove"
+                                                             onClick={()=>this.removeLineData(row.original)}
+                                                             className={classNames(classes.lineCancelButton, "mr-0")}>
+                                                            <Icon>close</Icon>
                                                         </Fab>
-                                                        {this.state.data.length>1 && (
-                                                            <Fab aria-label="remove"
-                                                                 onClick={()=>this.removeLineData(row.original)}
-                                                                 className={classNames(classes.lineCancelButton, "mr-0")}>
-                                                                <Icon>close</Icon>
-                                                            </Fab>
-                                                        )}
-                                                    </div>
-                                                );
+                                                    )}
+                                                </div>
+                                            );
                                         }
                                     },
                                 ]
@@ -704,6 +695,7 @@ class TransactionTable extends React.Component {
                         message={this.state.snackMessage}
                     />
                 </Snackbar>
+                <VendorDialogBox />
             </Paper>
         );
     }
@@ -717,7 +709,8 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         getCustomerTaxAmount: Actions.getCustomerTaxAmount,
-        updateTransactionLine: Actions.updateTransactionLine
+        updateTransactionLine: Actions.updateTransactionLine,
+        showVendorDialogBox: Actions.showVendorDialogBox,
     }, dispatch);
 }
 
