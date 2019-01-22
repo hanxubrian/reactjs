@@ -221,9 +221,9 @@
 
 // 		if (rawData === null) return;
 
-// 		let regions = rawData.Data.Region.filter(x => {
-// 			return this.props.regionId === 0 || x.Id === this.props.regionId;
-// 		});
+		// let regions = rawData.Data.Region.filter(x => {
+		// 	return this.props.regionId === 0 || x.Id === this.props.regionId;
+		// });
 
 // 		regions.forEach(x => {
 // 			all_temp = [...all_temp, ...x.Leases];
@@ -1232,10 +1232,6 @@ const MapWithAMarkerClusterer2 = compose(
 
 
 class LeaseListContent extends Component {
-
-
-
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -1243,7 +1239,7 @@ class LeaseListContent extends Component {
 			locationFilterValue: [],
 			pins: [],
 			pins2: [],
-
+			leaseDetail: null,
 			s: '',
 			temp: [],
 			data: [],
@@ -1610,18 +1606,14 @@ class LeaseListContent extends Component {
 	} // deprecate 
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
-		console.log("componentDidUpdate", "LeaseListContent.js", this.props.locationFilterValue, this.props.leases);
-		if (this.props.data !== prevProps.data) {
-			// this.setState({ data: this.props.data });
-			// this.setState({ rows: this.props.data });
-			// this.setState({ pins: this.props.pins })
-			// this.setState({ pins: this.props.pins })
-			// this.setState({ locationFilterValue: this.props.locationFilterValue })
-		}
+		if(this.props.data!==prevProps.data)
+            this.setState({data: this.props.data});
 
-		// if (prevState.s !== this.state.s) {
-		// 	this.search(this.state.s);
-		// }
+        if(this.props.leaseDetail!==prevProps.leaseDetail){
+            this.setState({
+                leaseDetail: this.props.leaseDetail,
+            });
+        }
 	}
 
 	search(val) {
@@ -1774,8 +1766,8 @@ class LeaseListContent extends Component {
 		// 	all_temp = [...all_temp, ...x.LeaseList];
 		// });
 
-		// let regions = rawData.Data[0].LeaseList.filter(x => x)
-		// all_temp = regions
+		let regions = rawData.Data[0].LeaseList.filter(x => x)
+		all_temp = regions
 
 		// let _pins_temp = [];
 		// regions.forEach(x => {
@@ -2218,6 +2210,7 @@ function mapDispatchToProps(dispatch) {
 		removeLeaseAction: Actions.removeLease,
 		openEditLeaseForm: Actions.openEditLeaseForm,
 		closeEditLeaseForm: Actions.closeEditLeaseForm,
+		getLeaseDetail: Actions.getLeaseDetail
 	}, dispatch);
 }
 

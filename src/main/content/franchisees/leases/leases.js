@@ -429,9 +429,8 @@ class Leases extends Component {
 		// 	all_temp = [...all_temp, ...x.Leases];
 		// 	return;
 		// });
-
-		// let regions = rawData.Data[0].LeaseList.filter(x => x)
-		// all_temp = regions
+		let regions = rawData.Data[0].LeaseList.filter(x => x)
+		all_temp = regions
 
 		this.setState({ temp: all_temp });
 		this.setState({ data: all_temp });
@@ -514,6 +513,8 @@ class Leases extends Component {
 			page: state.page,
 		});
 	}
+
+
 	getLocation() {
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(
@@ -852,6 +853,7 @@ function mapDispatchToProps(dispatch) {
 		closeEditLeaseForm: Actions.closeEditLeaseForm,
 		closeNewLeaseForm: Actions.closeNewLeaseForm,
 		getFranchisees: Actions.getFranchisees,
+		getLeaseDetail: Actions.getLeaseDetail,
 	}, dispatch);
 }
 
