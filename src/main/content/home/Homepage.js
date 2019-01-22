@@ -27,24 +27,34 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import {Avatar,Card , Button,Fab, Icon,ClickAwayListener, IconButton,Divider, Paper,List, ListItem , ListItemIcon, ListItemText, Popover, MenuItem, Typography, Hidden} from '@material-ui/core';
-
-
+import  Iconcus from "./icon";
+import classNames from 'classnames';
 const styles = theme => ({
     root: {
         width: '100%'
     },
-    paperitem: {
-        padding     : '16px',
-        margin      : '5px',
+    paperitem  :{
+        padding         : '16px',
+        margin          : '5px',
     },
-    mainitem:{
-        border      : '1px solid ' + theme.palette.divider,
-        boxShadow   : 'none',
-        borderRadius: 25
-    }
+    mainitem   :{
+        border          : '1px solid ' + theme.palette.divider,
+        boxShadow       : 'none',
+        borderRadius    : 25
+    },
+    cusbtnitem :{
+        paddingTop      :"20px !important",
+    },
 });
 
 class Homepage extends Component {
+
+    state = {
+        checkurl        : "../../../../assets/images/icons/checkbox.png",
+        checkedurl      : "../../../../assets/images/icons/checked.png",
+
+    };
+
 
     constructor(props)
     {
@@ -110,7 +120,6 @@ class Homepage extends Component {
 
     componentDidMount()
     {
-        console.log("widgets",this.props.widgets);
         this.props.getWidgets();
     }
 
@@ -131,118 +140,197 @@ class Homepage extends Component {
                     <div className="flex flex-col md:flex-row sm:p-16">
 
                         <div className="flex flex-1 flex-col min-w-0">
-                            <div className="flex flex-col sm:flex sm:flex-row pb-32">
-                                <div className="widget flex w-full sm:w-1/3 p-16">
-                                    <div className={classes.mainitem} >
-                                        <div  className={classes.paperitem} elevation={1}>
-                                            <Typography variant="h5" component="h3">
+
+                            <div className="flex flex-col sm:flex sm:flex-row pb-2">
+                                <div className="widget flex w-full sm:w-1/2 p-6">
+                                    <div className="widget flex w-full sm:w-1/6 pl-40">
+                                            <FormControlLabel
+                                                checked={true}
+                                                control={<Checkbox icon={<Iconcus src={this.state.checkurl} size="60"/>} checkedIcon={<Iconcus src={this.state.checkedurl} size="60" />} value="checked1" />}
+                                            />
+                                    </div>
+                                    <div  className={classNames(classes.cusbtnitem, "widget flex w-full sm:w-5/6 p-16 " )} >
+                                        <div   elevation={1}>
+                                            <Typography  component="h6" style={{fontSize:"21px"}}>
                                                 Bill Run
                                             </Typography>
-                                            <div component="p">
-                                                <Widget2 data={widgets.widget2}/>
-                                                <FormControlLabel
-                                                    control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} value="checkedH" />}
-                                                    label="128 invoice Created On 1/3/2019"
-                                                />
-                                                    <a href="/apps/mail">View Detail</a>
-                                            </div>
+                                            <Typography >
+                                                128 invoice Created On 1/3/2019
+                                            </Typography>
+                                            <a href="/apps/mail">View Detail</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="widget flex w-full sm:w-1/2 p-6">
+                                    <div className="widget flex w-full sm:w-1/6 pl-40">
+                                        <FormControlLabel checked={true}
+                                            control={<Checkbox icon={<Iconcus src={this.state.checkurl} size="60"/>} checkedIcon={<Iconcus src={this.state.checkedurl} size="60" />} value="checked2" />}
+                                        />
+                                    </div>
+                                    <div  className={classNames(classes.cusbtnitem, "widget flex w-full sm:w-5/6 p-16 " )} >
+                                        <div   elevation={1}>
+                                            <Typography  component="h6" style={{fontSize:"21px"}}>
+                                                Turn Around Checks
+                                            </Typography>
+                                            <Typography >
+                                                Nothing Processed
+                                            </Typography>
+                                            {/*<a href="/apps/mail">View Detail</a>*/}
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="widget flex w-full sm:w-1/3 p-16">
-                                    <div className={classes.mainitem}>
-                                        <div className={classes.paperitem} elevation={1}>
-                                            <Typography variant="h5" component="h3">
+                            </div>
+                            <div className="flex flex-col sm:flex sm:flex-row pb-2">
+                                <div className="widget flex w-full sm:w-1/2 p-6">
+                                    <div className="widget flex w-full sm:w-1/6 pl-40">
+                                        <FormControlLabel checked={true}
+                                            control={<Checkbox icon={<Iconcus src={this.state.checkurl} size="60"/>} checkedIcon={<Iconcus src={this.state.checkedurl} size="60" />} value="checked3" />}
+                                        />
+                                    </div>
+                                    <div  className={classNames(classes.cusbtnitem, "widget flex w-full sm:w-5/6 p-16 " )} >
+                                        <div   elevation={1}>
+                                            <Typography  component="h6" style={{fontSize:"21px"}}>
                                                 E-Billing
                                             </Typography>
-                                            <div component="p">
-                                                <Widget3 data={widgets.widget3}/>
-                                                <FormControlLabel
-                                                    control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} value="checkedH" />}
-                                                    label="65 invoice Emailed On 1/5/2019"
-                                                />
-                                                <a href="/apps/mail">View Detail</a>
-                                            </div>
+                                            <Typography >
+                                                65 invoice Emailed On 1/5/2019
+                                            </Typography>
+                                            <a href="/apps/mail">View Detail</a>
                                         </div>
                                     </div>
-
+                                </div>
+                                <div className="widget flex w-full sm:w-1/2 p-6">
+                                    <div className="widget flex w-full sm:w-1/6 pl-40">
+                                        <FormControlLabel
+                                            control={<Checkbox icon={<Iconcus src={this.state.checkurl} size="60"/>} checkedIcon={<Iconcus src={this.state.checkedurl} size="60" />} value="checked4" />}
+                                        />
+                                    </div>
+                                    <div  className={classNames(classes.cusbtnitem, "widget flex w-full sm:w-5/6 p-16 " )} >
+                                        <div   elevation={1}>
+                                            <Typography  component="h6" style={{fontSize:"21px"}}>
+                                                Franchisee Reports
+                                            </Typography>
+                                            <Typography >
+                                                Nothing Processed
+                                            </Typography>
+                                            <a href="/apps/mail">Generate | Print</a>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div className="widget w-full sm:w-1/3 p-16">
-                                    <div className={classes.mainitem}>
-                                        <div className={classes.paperitem} elevation={1}>
-                                            <Typography variant="h5" component="h3">
+                            </div>
+                            <div className="flex flex-col sm:flex sm:flex-row pb-2">
+                                <div className="widget flex w-full sm:w-1/2 p-6">
+                                    <div className="widget flex w-full sm:w-1/6 pl-40">
+                                        <FormControlLabel
+                                            control={<Checkbox icon={<Iconcus src={this.state.checkurl} size="60"/>} checkedIcon={<Iconcus src={this.state.checkedurl} size="60" />} value="checked3" />}
+                                        />
+                                    </div>
+                                    <div  className={classNames(classes.cusbtnitem, "widget flex w-full sm:w-5/6 p-16 " )} >
+                                        <div   elevation={1}>
+                                            <Typography  component="h6" style={{fontSize:"21px"}}>
                                                 Lockbox Process
                                             </Typography>
-                                            <div component="p">
-                                                <Widget4 data={widgets.widget4}/>
-                                                <FormControlLabel
-                                                    control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} value="checkedH" />}
-                                                    label="125 Payments Received and Processed On 1/7/2019"
-                                                />
-                                                <a href="/apps/mail">View Detail</a>
-                                            </div>
+                                            <Typography >
+                                                125 Payments Received and Processed On 1/5/2019
+                                            </Typography>
+                                            <a href="/apps/mail">View Payments | Enter Payment</a>
                                         </div>
                                     </div>
                                 </div>
+                                <div className="widget flex w-full sm:w-1/2 p-6">
+                                    <div className="widget flex w-full sm:w-1/6 pl-40">
+                                        <FormControlLabel
+                                            control={<Checkbox icon={<Iconcus src={this.state.checkurl} size="60"/>} checkedIcon={<Iconcus src={this.state.checkedurl} size="60" />} value="checked4" />}
+                                        />
+                                    </div>
+                                    <div  className={classNames(classes.cusbtnitem, "widget flex w-full sm:w-5/6 p-16 " )} >
+                                        <div   elevation={1}>
+                                            <Typography  component="h6" style={{fontSize:"21px"}}>
+                                                Due Franchisee Checks
+                                            </Typography>
+                                            <Typography >
+                                                Nothing Processed
+                                            </Typography>
+                                            {/*<a href="/apps/mail">Generate | Print</a>*/}
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
-                            <div className="flex flex-col sm:flex sm:flex-row pb-32">
-                                <div className="widget w-full sm:w-1/3 p-16">
-                                    <div className={classes.mainitem}>
-                                        <div className={classes.paperitem} elevation={1}>
-                                            <Typography variant="h5" component="h3">
+                            <div className="flex flex-col sm:flex sm:flex-row pb-2">
+                                <div className="widget flex w-full sm:w-1/2 p-6">
+                                    <div className="widget flex w-full sm:w-1/6 pl-40">
+                                        <FormControlLabel
+                                            control={<Checkbox icon={<Iconcus src={this.state.checkurl} size="60"/>} checkedIcon={<Iconcus src={this.state.checkedurl} size="60" />} value="checked3" />}
+                                        />
+                                    </div>
+                                    <div  className={classNames(classes.cusbtnitem, "widget flex w-full sm:w-5/6 p-16 " )} >
+                                        <div   elevation={1}>
+                                            <Typography  component="h6" style={{fontSize:"21px"}}>
                                                 Manual Payments
                                             </Typography>
-                                            <div component="p">
-                                                <Widget3 data={widgets.widget3}/>
-                                                <FormControlLabel
-                                                    control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} value="checkedH" />}
-                                                    label="105 Payments Received and Processed On 1/9/2019"
-                                                />
-                                                <a href="/apps/mail">View Detail</a>
-                                            </div>
+                                            <Typography >
+                                                125 Payments Received and Processed On 1/7/2019
+                                            </Typography>
+                                            <a href="/apps/mail">View Payments | Enter Payment</a>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="widget w-full sm:w-1/3 p-16">
-                                    <div className={classes.mainitem}>
-                                        <div className={classes.paperitem} elevation={1}>
-                                            <Typography variant="h5" component="h3">
-                                                Frachisee Tansactions
-                                            </Typography>
-                                            <div component="p">
-                                                <Widget4 data={widgets.widget4}/>
-                                                <FormControlLabel
-                                                    control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} value="checkedH" />}
-                                                    label="105 Transactions Entered On from 1/3/2019"
-                                                />
-                                                <a href="/apps/mail">View Detail</a>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div className="widget flex w-full sm:w-1/2 p-6">
+
                                 </div>
 
-                                <div className="widget w-full sm:w-1/3 p-16">
-                                    <div className={classes.mainitem}>
-                                        <div className={classes.paperitem} elevation={1}>
-                                            <Typography variant="h5" component="h3">
+                            </div>
+                            <div className="flex flex-col sm:flex sm:flex-row pb-2">
+                                <div className="widget flex w-full sm:w-1/2 p-6">
+                                    <div className="widget flex w-full sm:w-1/6 pl-40">
+                                        <FormControlLabel
+                                            control={<Checkbox icon={<Iconcus src={this.state.checkurl} size="60"/>} checkedIcon={<Iconcus src={this.state.checkedurl} size="60" />} value="checked3" />}
+                                        />
+                                    </div>
+                                    <div  className={classNames(classes.cusbtnitem, "widget flex w-full sm:w-5/6 p-16 " )} >
+                                        <div   elevation={1}>
+                                            <Typography  component="h6" style={{fontSize:"21px"}}>
+                                                Frachisee Transactions
+                                            </Typography>
+                                            <Typography >
+                                                125 Transactions Entered on from 1/3/2019 - 1/7/2019
+                                            </Typography>
+                                            <a href="/apps/mail">View | Add</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="widget flex w-full sm:w-1/2 p-6">
+
+                                </div>
+
+                            </div>
+                            <div className="flex flex-col sm:flex sm:flex-row pb-2">
+                                <div className="widget flex w-full sm:w-1/2 p-6">
+                                    <div className="widget flex w-full sm:w-1/6 pl-40">
+                                        <FormControlLabel
+                                            control={<Checkbox  icon={<Iconcus src={this.state.checkurl} size="60"/>}  checkedIcon={<Iconcus src={this.state.checkedurl} size="60" />} value="checked3" />}
+                                        />
+                                    </div>
+                                    <div  className={classNames(classes.cusbtnitem, "widget flex w-full sm:w-5/6 p-16 " )} >
+                                        <div   elevation={1}>
+                                            <Typography  component="h6" style={{fontSize:"21px"}}>
                                                 Charge Backs
                                             </Typography>
-                                            <div component="p">
-                                                <Widget2 data={widgets.widget2}/>
-                                                <FormControlLabel
-                                                    control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} value="checkedH" />}
-                                                    label="Nothing Processed Yet"
-                                                />
-                                                <a href="/apps/mail">View Detail</a>
-                                            </div>
+                                            <Typography >
+                                                Nothing Processd Yet
+                                            </Typography>
+                                            {/*<a href="/apps/mail">View | Add</a>*/}
                                         </div>
                                     </div>
                                 </div>
+                                <div className="widget flex w-full sm:w-1/2 p-6">
+
+                                </div>
+
                             </div>
-
-
                         </div>
 
                         <div className="flex flex-wrap w-full md:w-320 pt-16">
