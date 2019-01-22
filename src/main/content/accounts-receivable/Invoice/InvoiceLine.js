@@ -732,7 +732,30 @@ class InvoiceLineTable extends React.Component {
     };
 
     handleChange = row => event => {
+        console.log('row=', row);
         const data = [...this.state.data];
+        console.log('line', data[row.id]);
+
+        let d_total = 0;
+        let distributions = data[row.id].franchisees;
+        if(distributions.length>0){
+            distributions.forEach(d=>{
+                let d_amount = d.amount;
+                if(d.id===row.id && d.fid===row.fid)
+                    d_amount = parseFloat(event.target.value);
+
+                d_total += parseFloat(d_amount);
+            })
+        }
+
+        console.log('d_total=', d_total);
+
+
+        if(d_total>data[row.id].total) {
+            this.setState({snackMessage: "Distribution amount can\'t be greater than Line amount"});
+            this.setState({openSnack: true});
+            return ;
+        }
         data[row.id].franchisees[row.fid].amount = parseFloat(event.target.value);
         this.setState({data: data});
     };
