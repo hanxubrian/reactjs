@@ -285,7 +285,11 @@ class FranchiseesMaintenanceTable extends React.Component {
     };
 
     componentDidMount() {
-
+        if(this.props.insertPayload.Fees.length === 0){
+            this.state.dialogForm.map(x=>{
+                this.handleUpdateFeeInsertPayload(x,"add");
+            });
+        }
     }
     componentWillMount() {
 
@@ -308,7 +312,7 @@ class FranchiseesMaintenanceTable extends React.Component {
                 dialogForm: tempDialogForm,
                 insertPayload: this.props.insertPayload,
             });
-            //this.handleUpdateFeeInsertPayload(dialogForm,"add");
+
         }
     }
 
@@ -382,12 +386,14 @@ class FranchiseesMaintenanceTable extends React.Component {
 
     handleUpdateFeeInsertPayload = (param , actionType) => {
         const payloadData = this.state.insertPayload;
+
         if(actionType === "add"){
             payloadData.Fees.push(param);
         }
         if(actionType === "remove"){
             payloadData.Fees = param;
         }
+
         this.setState({dialogForm: payloadData.Fees});
         this.setState({insertPayload: payloadData});
         this.props.franchiseeUpdateInsertPayload(payloadData);
