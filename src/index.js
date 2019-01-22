@@ -46,7 +46,7 @@ ReactDOM.render(
                             <FuseLayout
                                 routes={routes}
                                 toolbar={
-                                    <MainToolbar/>
+                                    <MainToolbar style ={{zIndex: '99'}} />
                                 }
                                 navbarHeader={
                                     <MainNavbarHeader />

@@ -41,7 +41,7 @@ const styles = theme => ({
         transform                     : 'translate3d(0,100%,0)',
         overflow                      : 'hidden',
         [theme.breakpoints.down('md')]: {
-            transform : 'translate3d(0,70%,0)',
+            transform : 'translate3d(0,100%,0)',
             boxShadow : 'none',
             '&.opened': {
                 boxShadow: theme.shadows[5]
@@ -103,7 +103,6 @@ class ChatPanel extends Component {
     {
         this.props.getUserData();
         this.props.getContacts();
-        console.log("#################################################");
     }
 
     componentDidUpdate(prevProps,prevState)

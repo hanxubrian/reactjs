@@ -24,7 +24,8 @@ const styles = theme => ({
     root     : {
         display   : 'flex',
         alignItems: 'center',
-        width     : '100%'
+        width     : '100%',
+        zIndex    : 10,
     },
     separator: {
         width          : 1,
@@ -104,7 +105,7 @@ const styles = theme => ({
     },
     chattogglebtn:{
         position: 'fixed',
-        bottom: '80px',
+        bottom: '5px',
         right: '90px',
         zIndex: 999999,
     },
@@ -266,8 +267,8 @@ class MainToolbar extends Component {
                 this.props.getChat(chatid, contactid);
                 // this.scrollToTop();
             }
-            console.log ("chatId",chatid);
-            console.log ("contactId",contactid);
+            // console.log ("chatId",chatid);
+            // console.log ("contactId",contactid);
 
         }
         else{

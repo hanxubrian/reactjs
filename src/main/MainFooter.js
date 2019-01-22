@@ -11,7 +11,7 @@ function MainFooter({classes})
 {
     return (
         <div className={classNames(classes.root, "flex flex-1 items-center px-24")}>
-            <Typography>Footer</Typography>
+            <span>Footer</span>
         </div>
     );
 }

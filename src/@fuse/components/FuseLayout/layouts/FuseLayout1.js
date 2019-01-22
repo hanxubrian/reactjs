@@ -242,7 +242,7 @@ const styles = theme => ({
     toolbarWrapper     : {
         display : 'flex',
         position: 'relative',
-        zIndex  : 5
+        zIndex  : 6
     },
     toolbar            : {
         display: 'flex',
