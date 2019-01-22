@@ -168,6 +168,10 @@ const styles = theme => ({
 			backgroundColor: 'fade(' + theme.palette.primary.secondary + ', 0.03)',
 		},
 	},
+	franchiseeGridToolbar:
+	{
+		// backgroundColor: "lightyellow"
+	}
 });
 
 const account_offering_columns = [
@@ -397,6 +401,7 @@ class AccountOfferingPage extends Component {
 		super(props)
 
 		this.state = {
+			openSideBar: false, 
 			temp: [],
 			data: [],
 			customers: [],
@@ -521,6 +526,25 @@ class AccountOfferingPage extends Component {
 			[name]: event.target.value
 		});
 	};
+
+	toggleSideBar = () => {
+		this.setState({
+			openSideBar: !this.state.openSideBar
+		})
+	}
+	ToolbarRootBase = ({ children, classes, className, ...restProps }) => (
+		<Toolbar.Root
+			className={classNames(className, classes.franchiseeGridToolbar)}
+			{...restProps}
+
+		>
+			<IconButton onClick={this.toggleSideBar}>
+				<Icon>menu</Icon>
+			</IconButton>
+			{children}
+		</Toolbar.Root>
+	);
+	ToolbarRoot = withStyles(styles)(this.ToolbarRootBase);
 
 	render() {
 		const {
@@ -1272,7 +1296,7 @@ class AccountOfferingPage extends Component {
 				{(step === 0 || step === 1) && (
 					<GridContainer style={{ alignItems: 'center' }} className={classNames("flex flex-col h-full")} style={{ backgroundColor: "" }}>
 						<GridItem xs={12} sm={12} md={12} className="flex flex-row" style={{ backgroundColor: "" }}>
-							{(step === 1) && (
+							{(step === 1 && this.state.openSideBar) && (
 								<Paper sm={6} className={classNames("flex flex-col h-full pl-24 pr-12 mr-12")} style={{ backgroundColor: "", height: "auto", minWidth: 250 }}>
 									<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
 										<GridItem xs={12} sm={12} md={12} className="flex flex-col">
@@ -1460,7 +1484,7 @@ class AccountOfferingPage extends Component {
 									)}
 
 									{step === 1 && (
-										<Toolbar />
+										<Toolbar rootComponent={this.ToolbarRoot} />
 									)}
 									{step === 1 && (
 										<SearchPanel />
