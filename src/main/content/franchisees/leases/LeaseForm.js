@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import {withRouter} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 
 // core components
 import {
     Paper, TextField, Typography, MenuItem, Card,  CardHeader, CardContent, Divider, Button,
-    Snackbar, SnackbarContent, IconButton, Icon
+    Snackbar, SnackbarContent, IconButton, Icon, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog,Fab
 } from '@material-ui/core';
 import 'date-fns'
 import MomentUtils from '@date-io/moment';
@@ -248,7 +248,7 @@ class LeaseForm extends Component {
         value: '',
         suggestions: [],
         PO_number: '',
-        selectedCustomer: null,
+        selectedFranchisee: null,
         fSuggestions: [],
         selectedFranchisee: null,
         labelWidth: 0,
@@ -373,36 +373,36 @@ class LeaseForm extends Component {
     //     if(nextProps.leaseForm.customer!==null){
     //         if(nextProps.leaseForm.type==='edit')
     //             this.setState({LeaseNo: nextProps.leaseForm.customer.LeaseNo});
-    //         this.setState({value: nextProps.leaseForm.customer.CustomerName});
-    //         this.setState({CustomerNo: nextProps.leaseForm.customer.CustomerNo});
+    //         this.setState({value: nextProps.leaseForm.customer.FranchiseeName});
+    //         this.setState({FranchiseeNo: nextProps.leaseForm.customer.FranchiseeNo});
     //         this.setState({LeaseDate: moment(nextProps.leaseForm.customer.LeaseDate).format('MM/DD/YYYY')});
     //         this.setState({DueDate: moment(nextProps.leaseForm.customer.DueDate).format('MM/DD/YYYY')});
     // }
 
         //in time of Saving
-        // if(nextProps.newLease!==null && nextProps.newLease!==this.props.newLease){
-        //     this.setState({bAlertNewLease: false});
-        //     if(this.state.buttonOption===0){
-        //         this.props.updatedLeases();
-        //         this.props.resetLeaseForm();
-        //         this.setState({LeaseDescription: ''});
-        //         this.setState({selectedCustomer: null});
-        //         this.setState({value: ''});
-        //         this.setState({CustomerNo: ''});
-        //         if(this.input) {
-        //             if(this.props.invoiceForm.type === 'new')
-        //                 setTimeout(() => {this.input.focus()}, 500);
-        //         }
-        //     }
-        //     else if(this.state.buttonOption===1) {
-        //         this.props.updatedLeases();
-        //         this.closeComposeForm();
-        //     }
-        //     else if(this.state.buttonOption===2) {
-        //         this.props.updatedLeases();
-        //         this.closeComposeForm();
-        //     }
-        // }
+        if(nextProps.newLease!==null && nextProps.newLease!==this.props.newLease){
+            this.setState({bAlertNewLease: false});
+            if(this.state.buttonOption===0){
+                this.props.updatedLeases();
+                this.props.resetLeaseForm();
+                this.setState({LeaseDescription: ''});
+                this.setState({selectedFranchisee: null});
+                this.setState({value: ''});
+                this.setState({FranchiseeNo: ''});
+                if(this.input) {
+                    if(this.props.leaseForm.type === 'new')
+                        setTimeout(() => {this.input.focus()}, 500);
+                }
+            }
+            else if(this.state.buttonOption===1) {
+                this.props.updatedLeases();
+                this.closeComposeForm();
+            }
+            else if(this.state.buttonOption===2) {
+                this.props.updatedLeases();
+                this.closeComposeForm();
+            }
+        }
     }
 
     componentDidMount(){
@@ -441,7 +441,7 @@ class LeaseForm extends Component {
         //         Commission: 0,
         //         CommissionTotal: 0,
         //         ExtraWork: 1,
-        //         TaxExcempt: this.state.selectedCustomer.TaxExempt,
+        //         TaxExcempt: this.state.selectedFranchisee.TaxExempt,
         //         Distribution: [],
         //     };
             let item = {};
@@ -527,30 +527,40 @@ class LeaseForm extends Component {
         console.log('result', JSON.stringify(result));
     };
 
+    validateNewLease = () => {
+        if(this.state.selectedFranchisee===null){
+            this.setState({snackMessage: 'Please choose Franchisee from Lease suggestion'});
+            this.setState({openSnack: true});
+            return false;
+        }
+
+        return true;
+    };
+
     onSaveLease = (buttonOption) => {
-        if(this.validateNewInvoice()){
-            this.setState({bAlertNewInvoice: true});
+        if(this.validateNewLease()){
+            this.setState({bAlertNewLease: true});
             this.setState({buttonOption: buttonOption});
         }
     };
 
     onSaveAndAddMore=()=>{
-        this.onSaveLease();
-        this.props.resetLeaseForm();
-        this.setState({LeaseDescription: ''});
-        this.setState({note: ''});
-        this.setState({selectedCustomer: null});
-        this.setState({value: ''});
-        this.setState({CustomerNo: ''});
+        this.onSaveLease(0);
+        // this.props.resetLeaseForm();
+        // this.setState({LeaseDescription: ''});
+        // this.setState({note: ''});
+        // this.setState({selectedFranchisee: null});
+        // this.setState({value: ''});
+        // this.setState({FranchiseeNo: ''});
     };
 
     onSubmitForApproval=()=>{
-        this.onSaveLease();
+        this.onSaveLease(2);
     };
 
     onSaveAndClose = () => {
-        this.onSaveLease();
-        this.closeComposeForm();
+        this.onSaveLease(1);
+        // this.closeComposeForm();
     };
 
     closeComposeForm = () => {
@@ -720,8 +730,8 @@ class LeaseForm extends Component {
                                     </CardContent>
                                 </Card>
                             </GridItem>
-                        </GridContainer>
-                        <div className="w-full mt-4">
+                            <div className="w-full mt-4">
+                            <GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col">
                             <TextField
                                 id="LeaseDescription"
                                 name="LeaseDescription"
@@ -742,14 +752,10 @@ class LeaseForm extends Component {
                                     },
                                 }}
                             />
-                        </div>
-                        <br></br>
-                        <GridContainer className={classNames(classes.formControl)} style={{flex: "9999 1 0"}}>
-                            {/* <GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col xs:mb-24"> */}
-                                {/* <h3>Lease</h3> */}
-                                {/* <LeaseTable tableType="LEASE" headers={Lease_headers} /> */}
-                                <MuiPickersUtilsProvider utils={MomentUtils}>
-                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                            </GridItem>
+                            </div>
+                            <MuiPickersUtilsProvider utils={MomentUtils}>
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col mt-6">
                                     <TextField
                                         margin="none"
                                         label="Lease #"
@@ -775,7 +781,7 @@ class LeaseForm extends Component {
                                         }}
                                     />
                                 </GridItem>
-                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col xs:mb-24">
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col xs:mb-24 mt-6">
                                     <DatePicker
                                         margin="none"
                                         label="Date Signed"
@@ -797,7 +803,7 @@ class LeaseForm extends Component {
                                         }}
                                     />
                                 </GridItem>
-                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col mt-6">
                                     <DatePicker
                                         margin="none"
                                         label="Payment Starts"
@@ -821,7 +827,7 @@ class LeaseForm extends Component {
                                 </GridItem>
                                 <div className="w-full mt-4">
                                 </div>
-                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                <GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col mt-6">
                                     <TextField
                                         id="make"
                                         name="make"
@@ -846,8 +852,6 @@ class LeaseForm extends Component {
                                             classes: {outlined: classes.label}
                                         }}
                                     />
-                                </GridItem>
-                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
                                     <TextField
                                         id="model"
                                         name="model"
@@ -873,8 +877,10 @@ class LeaseForm extends Component {
                                         }}
                                     />
                                 </GridItem>
+                                <div className="w-full mt-4">
+                                </div>
                             {/* </GridItem> */}
-                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col mt-6">
                                 <TextField
                                     id="serialNo"
                                     name="serialNo"
@@ -900,7 +906,7 @@ class LeaseForm extends Component {
                                     }}
                                 />
                                 </GridItem>
-                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col mt-6">
                                 <TextField
                                     id="leaseAmount"
                                     name="leaseAmount"
@@ -926,7 +932,7 @@ class LeaseForm extends Component {
                                     }}
                                 />
                                 </GridItem>
-                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col mt-6">
                                 <TextField
                                     id="leaseTerm"
                                     name="leaseTerm"
@@ -952,7 +958,9 @@ class LeaseForm extends Component {
                                     }}
                                 />
                                 </GridItem>
-                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                <div className="w-full mt-4">
+                                </div>
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col mt-6">
                                 <TextField
                                     id="totalTax"
                                     name="totalTax"
@@ -978,7 +986,7 @@ class LeaseForm extends Component {
                                     }}
                                 />
                                 </GridItem>
-                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col">
+                                <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col mt-6">
                                 <TextField
                                     id="totalLease"
                                     name="totalLease"
@@ -1006,7 +1014,7 @@ class LeaseForm extends Component {
                                 </GridItem>
                         </MuiPickersUtilsProvider>
                         </GridContainer>
-                        <Divider variant="middle"/>
+                        {/* <Divider variant="middle"/> */}
                     </div>
                     <div className="flex flex-shrink flex-col w-full pl-24 pr-24 pt-0 pb-12">
                         <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
@@ -1088,12 +1096,10 @@ class LeaseForm extends Component {
                                         color="primary"
                                         className={classNames(classes.button, "mr-12")}
                                         onClick={() => {
-                                            this.addNewLease();
+                                            this.onSubmitForApproval();
                                         }}
                                     >
-                                    {/* {this.props.leaseForm.type === 'new' && (<span>Create</span>)}
-                                    {this.props.leaseForm.type === 'edit' && (<span>Update</span>)} */}
-                                        Submit for Approval
+                                    Submit for Approval
                                     </Button>
                                 </FuseAnimate>
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
@@ -1126,6 +1132,65 @@ class LeaseForm extends Component {
                             message={this.state.snackMessage}
                         />
                     </Snackbar>
+                    <Dialog
+                        open={this.state.bAlertNewLease}
+                        onClose={()=>this.handleCloseNewLease()}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            {this.props.leaseForm.type === 'new' && (
+                                <span>Create New Lease</span>
+                            )}
+                            {this.props.leaseForm.type === 'edit' && (
+                                <span>Update The Lease</span>
+                            )}
+
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                {this.props.leaseForm.type === 'new' && (
+                                    <span>Do you really want to insert the new lease?</span>
+                                )}
+                                {this.props.leaseForm.type !== 'new' && (
+                                    <span>Do you really want to update the lease?</span>
+                                )}
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={()=>this.handleCloseNewLease()} color="primary">
+                                Close
+                            </Button>
+                            <Button onClick={()=>this.addNewLease()} color="primary" autoFocus>
+                                {this.props.leaseForm.type === 'new' && (<span>Create</span>)}
+                                {this.props.leaseForm.type === 'edit' && (<span>Update</span>)}
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Dialog
+                        open={this.state.bFranchiseeNotFound}
+                        onClose={()=>this.handleCloseNewFranchisee()}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            Franchisee Alert
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                The customer doesn't exist.<br/>
+                                Do you want to create new customer?
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={()=>this.handleCloseNewFranchisee()} color="primary">
+                                Close
+                            </Button>
+                            <Button component={Link} to="/leases/list"  color="secondary" autoFocus>
+                                Create New Franchisee
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                 </div>
             </FuseAnimate>
         );
@@ -1138,7 +1203,7 @@ function mapDispatchToProps(dispatch)
         openEditLeaseForm: Actions.openEditLeaseForm,
         closeEditLeaseForm: Actions.closeEditLeaseForm,
         closeNewLeaseForm : Actions.closeNewLeaseForm,
-        selectCustomer: Actions.selectCustomer,
+        selectFranchisee: Actions.selectFranchisee,
         resetLeaseForm: Actions.resetLeaseForm,
         selectFranchisee: Actions.selectFranchisee,
         addLease: Actions.addLease,

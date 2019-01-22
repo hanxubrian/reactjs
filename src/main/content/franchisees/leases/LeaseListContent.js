@@ -1773,6 +1773,7 @@ class LeaseListContent extends Component {
 		// regions.forEach(x => {
 		// 	all_temp = [...all_temp, ...x.LeaseList];
 		// });
+		
 		let regions = rawData.Data[0].LeaseList.filter(x => x)
 		all_temp = regions
 

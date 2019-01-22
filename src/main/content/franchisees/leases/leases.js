@@ -429,6 +429,7 @@ class Leases extends Component {
 		// 	all_temp = [...all_temp, ...x.Leases];
 		// 	return;
 		// });
+
 		let regions = rawData.Data[0].LeaseList.filter(x => x)
 		all_temp = regions
 
