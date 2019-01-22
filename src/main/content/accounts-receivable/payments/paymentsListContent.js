@@ -243,7 +243,8 @@ class PaymentsListContent extends Component {
         CustomerSoldTo:[],
         selectedInvoice: null,
         alertOpen: false,
-        selectedId: ''
+        selectedId: '',
+        payments: []
     };
 
     onChange = (event, { newValue, method }) => {
@@ -319,7 +320,8 @@ class PaymentsListContent extends Component {
     }
 
     componentWillMount(){
-        this.setState({data: this.props.data})
+        this.setState({data: this.props.data});
+        this.setState({payments: this.props.getAccountReceivablePayments(this.props.regionId , "2019-01-22T06:15:42.6082822-06:00" , "2019-01-22T06:15:42.6082822-06:00" , "")});
     }
     componentWillUnmount(){
         document.removeEventListener("keydown", this.escFunction, false);
@@ -618,12 +620,14 @@ function mapDispatchToProps(dispatch)
         getInvoiceDetail: Actions.getInvoiceDetail,
         toggleFilterPanel: Actions.toggleFilterPanel,
         toggleSummaryPanel: Actions.toggleSummaryPanel,
+        getAccountReceivablePayments: Actions.getAccountReceivablePaymentsList
     }, dispatch);
 }
 
-function mapStateToProps({invoices, auth})
+function mapStateToProps({invoices, auth, accountReceivablePayments})
 {
     return {
+        payments: accountReceivablePayments.ACC_payments,
         invoices: invoices.invoicesDB,
         invoiceDetail: invoices.invoiceDetail,
         transactionStatus: invoices.transactionStatus,

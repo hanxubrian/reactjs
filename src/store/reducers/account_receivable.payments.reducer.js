@@ -4,18 +4,18 @@ import { persistReducer } from 'redux-persist';
 
 
 const initialState = {
-    ACC_Payments: []
+    ACC_payments: []
 };
 
 
-const AccountReceivablePayments = function(state = initialState, action) {
+const accountReceivablePayments = function(state = initialState, action) {
 
     switch ( action.type )
     {
         case Actions.GET_ALL_RECEIVABLE_PAYMENTS: {
             return{
                 ...state,
-                ACC_Payments: action.payload
+                ACC_payments: action.payload
             }
         }
         default:
@@ -29,4 +29,4 @@ const persistConfig = {
     key: 'account_receivable_payments',
     storage: storage,
 };
-export default persistReducer(persistConfig, AccountReceivablePayments);
+export default persistReducer(persistConfig, accountReceivablePayments);

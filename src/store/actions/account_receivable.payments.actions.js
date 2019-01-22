@@ -1,4 +1,4 @@
-import {franchiseesService} from "services";
+import {invoicePaymentsService} from "services";
 
 export const GET_ALL_RECEIVABLE_PAYMENTS = "[ACCOUNT_RECEIVABLE PAYMENTS] GETS ALL";
 
@@ -9,7 +9,7 @@ export function getAccountReceivablePaymentsList(RegionId, FromDate,ToDate, Sear
 
     return (dispatch) => {
         (async () => {
-            let paymentsList = await franchiseesService.getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText);
+            let paymentsList = await invoicePaymentsService.getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText);
             dispatch({
                 type: GET_ALL_RECEIVABLE_PAYMENTS,
                 payload: paymentsList
