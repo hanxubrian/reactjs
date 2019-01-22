@@ -123,7 +123,7 @@ function createFranchisee(parent_id,id, fnumber="", name="", amount=0) {
     }
 }
 
-function createData(billing='Regular Billing', service='Adjust-Balance', description='', quantity='', amount='', tax=0, markup='', extended=0, total=0, markupAmount=0, markupTax=0)
+function createData(billing='Regular Billing', service='Adjust-Balance', description='', quantity=1, amount='', tax=0, markup='', extended=0, total=0, markupAmount=0, markupTax=0)
 {
     return {
         id: counter++,
@@ -377,7 +377,7 @@ class InvoiceLineTable extends React.Component {
         order      : 'asc',
         selected   : [],
         data       :  this.props.invoiceForm.type === 'new' ? [
-            createData({label: this.props.billingLists[0].Name, value:this.props.billingLists[0].BillingTypeId}, "Adjust-Balance", '',''),
+            createData({label: this.props.billingLists[0].Name, value:this.props.billingLists[0].BillingTypeId}, "Adjust-Balance", '',1),
         ] : [],
         page       : 0,
         rowsPerPage: 10,
@@ -541,7 +541,8 @@ class InvoiceLineTable extends React.Component {
                 let findex = 0;
                 selectedFranchiess.forEach(sf=>{
                     let fline = createFranchisee(0, findex, sf.Number, sf.Name, sf.DistributionAmount);
-                    f_row.franchisees = [...f_row.franchisees, fline];
+                    // f_row.franchisees[0] = [...f_row.franchisees, fline];
+                    f_row.franchisees[0] = fline;
                     this.setState({["nameValue"+findex]: sf.Name});
                     findex++;
                 });
