@@ -131,7 +131,7 @@ class TransactionsApp extends Component {
         super(props);
 
         if(!props.bLoadedTransactions) {
-            props.getTransactions();
+            props.getTransactions(props.regionId);
         }
 
         if (!props.bLoadedFranchisees) {
@@ -220,27 +220,29 @@ class TransactionsApp extends Component {
     getTransactions =(rawData=this.props.transactions) =>{
         if(rawData.transactionsDB===null) return;
 
-        let temp0 = rawData.transactionsDB.Data.FranchiseeTransactions;
+        let temp0 = rawData.transactionsDB.Data;
         let temp=[];
         let all_temp=[];
         const statusStrings = ['Open', 'Completed'];
         const keys=['checkedOpen', 'checkedCompleted'];
 
-        keys.map((key, index)=> {
-
-            if(this.props.transactionStatus[key]){
-                temp = temp0.filter(d => {
-                    // if(this.props.regionId===0)
-                    return d.Status.toLowerCase() === statusStrings[index].toLowerCase();
-                    // else
-                    //     return d.Status.toLowerCase() === statusStrings[index] && d.RegionId === this.props.regionId
-                });
-            }
-            all_temp =_.uniq([...all_temp, ...temp]);
-            return true;
-        });
-        this.setState({temp: all_temp});
-        this.setState({data: all_temp});
+        // keys.map((key, index)=> {
+        //
+        //     if(this.props.transactionStatus[key]){
+        //         temp = temp0.filter(d => {
+        //             // if(this.props.regionId===0)
+        //             return d.Status.toLowerCase() === statusStrings[index].toLowerCase();
+        //             // else
+        //             //     return d.Status.toLowerCase() === statusStrings[index] && d.RegionId === this.props.regionId
+        //         });
+        //     }
+        //     all_temp =_.uniq([...all_temp, ...temp]);
+        //     return true;
+        // });
+        // this.setState({temp: all_temp});
+        // this.setState({data: all_temp});
+        this.setState({temp: temp0});
+        this.setState({data: temp0});
     };
 
     render()
@@ -398,7 +400,7 @@ class TransactionsApp extends Component {
                     }}
                 >
                 </FusePageCustom>
-                {(this.props.bFranchiseesFetchStart) && (
+                {(this.props.bFranchiseesFetchStart || this.props.bStartFetchTransactions) && (
                     <div className={classes.overlay}>
                         <CircularProgress className={classes.progress} color="secondary"  />
                     </div>
@@ -425,6 +427,7 @@ function mapStateToProps({transactions, auth, franchisees})
         transactions: transactions,
         transactionForm: transactions.transactionForm,
         bLoadedTransactions: transactions.bLoadedTransactions,
+        bStartFetchTransactions: transactions.bStartFetchTransactions,
         filterState: transactions.bOpenedTransactionFilterPanel,
         transactionStatus: transactions.transactionStatus,
         regionId: auth.login.defaultRegionId,

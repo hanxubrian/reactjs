@@ -241,12 +241,10 @@ class franchiseesService {
      * @returns {Promise<any>}
      */
     getFranchiseesTransactionList =  (regionId ) => {
-        const data = {
-            "RegionId": regionId,
-        };
         return new Promise((resolve, reject) => {
-            axios_instance.post(`${BASE_API_URL}/v1/franchiseetransaction/seeList`, data)
+            axios_instance.get(`${BASE_MONGO_API_URL}/v1/franchiseetransactionList?regionId=${regionId}`)
                 .then( res => {
+                    console.log('transaction=', res);
                     if(res.status===200) {
                         resolve(res.data);
                     }

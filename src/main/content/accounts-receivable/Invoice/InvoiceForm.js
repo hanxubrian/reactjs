@@ -1209,7 +1209,7 @@ class InvoiceForm extends Component {
                             <Button onClick={()=>this.handleCloseNewCustomer()} color="primary">
                                 Close
                             </Button>
-                            <Button component={Link} to="/customers/list"  color="primary" autoFocus>
+                            <Button component={Link} to="/customers/list"  color="secondary" autoFocus>
                                 Create New Customer
                             </Button>
                         </DialogActions>

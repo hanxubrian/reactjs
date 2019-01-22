@@ -333,8 +333,8 @@ class TransactionsLists extends Component {
                                 {
                                     Header: "Name",
                                     accessor: "Name",
-                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-                                    width: 160
+                                    className: classNames(classes.tableTdEven, "flex items-center  justify-start"),
+                                    width: 180
                                 },
                                 {
                                     Header: "Ext. Price",
@@ -379,10 +379,10 @@ class TransactionsLists extends Component {
                                     width: 100
                                 },
                                 {
-                                    Header: "TrxType",
+                                    Header: "Type",
                                     accessor: "TrxType",
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-                                    width: 70
+                                    width: 50
                                 },
                                 {
                                     Header: "Status",

@@ -1,4 +1,5 @@
 import axios from "axios";
+import {franchiseesService} from "../../services"
 
 
 export const GET_ALL_FRANCHISEE_TRANSACTIONS = "[FRANCHISEE-TRANSACTIONS] GETS ALL";
@@ -11,17 +12,25 @@ export const OPEN_EDIT_TRANSACTION_FORM = '[FRANCHISEE-TRANSACTION] OPEN EDIT TR
 export const CLOSE_EDIT_TRANSACTION_FORM = '[FRANCHISEE-TRANSACTION] CLOSE EDIT TRANSACTION FORM';
 export const SELECT_TRANSACTION_FRANCHISEE = '[FRANCHISEE-TRANSACTION] SELECT TRANSACTION FRANCHISEE';
 export const UPDATE_TRANSACTION_LINE = '[FRANCHISEE-TRANSACTION] UPDATE TRANSACTION LINE';
+export const START_FETCH_TRANSACTIONS = '[FRANCHISEE-TRANSACTION] START FETCH TRANSACTIONS';
 
-export function getTransactions() {
-    return dispatch => {
-        const request = axios.get("/api/transactions/gets");
-
-        return request.then(response => {
-            return dispatch({
-                type: GET_ALL_FRANCHISEE_TRANSACTIONS,
-                payload: response.data
-            });
+export function getTransactions(regionId) {
+    return (dispatch) => {
+        dispatch({
+            type: START_FETCH_TRANSACTIONS,
         });
+
+        (async () => {
+            let res = await franchiseesService.getFranchiseesTransactionList(regionId);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: GET_ALL_FRANCHISEE_TRANSACTIONS,
+                    payload: res
+                });
+            } else {
+
+            }
+        })();
     };
 }
 

@@ -6,6 +6,7 @@ import { persistReducer } from 'redux-persist';
 const initialState = {
     transactionsDB: null,
     bLoadedTransactions: false,
+    bStartFetchTransactions: false,
     bOpenedTransactionFilterPanel: false,
     transactionStatus:{checkedCompleted: true, checkedOpen: true},
     transactionForm: {
@@ -26,13 +27,15 @@ const transactions = function(state = initialState, action) {
         {
             return {
                 ...initialState,
-                transactionsDB: action.payload, bLoadedTransactions: true
+                transactionsDB: action.payload, bLoadedTransactions: true, bStartFetchTransactions: false
             };
         }
         case Actions.REMOVE_SELECTED_FRANCHISEE_TRANSACTION:
         {
             return {...state, transactionsDB: action.payload}
         }
+        case Actions.START_FETCH_TRANSACTIONS:
+            return {...state,bStartFetchTransactions: true};
         case Actions.TOGGLE_TRANSACTION_FILTER_PANEL:
         {
             return {
