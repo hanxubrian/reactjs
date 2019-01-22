@@ -459,7 +459,6 @@ class InvoiceLineTable extends React.Component {
     };
 
     componentDidMount(){
-        document.addEventListener("keydown", this.addInvoiceLineFunction, false);
         if(this.props.invoiceForm.type === 'new') {
             let id = 0;
             const data = [...this.state.data];
@@ -470,7 +469,6 @@ class InvoiceLineTable extends React.Component {
             this.setState({data: newData});
         }
         else {//For Edit
-            console.log('edit');
             let items = this.props.invoiceDetail.Data.Items;
 
             let billingSuggestions = this.props.billingLists.map(b => ({
@@ -1133,7 +1131,7 @@ class InvoiceLineTable extends React.Component {
                                                 </div>)
                                         },
                                         className: classNames(classes.tableTdEven, "flex items-center  justify-end text-right"),
-                                        width: 80
+                                        width: 100
                                     },
                                     {
                                         Header: "Markup(%)",

@@ -177,8 +177,8 @@ const newInvoiceState = {
 };
 
 function renderSuggestion(suggestion, { query, isHighlighted }) {
-    const matches = match(suggestion.CustomerName, query);
-    const parts = parse(suggestion.CustomerName, matches);
+    const matches = match(suggestion.CustomerName+'-'+suggestion.CustomerNo, query);
+    const parts = parse(suggestion.CustomerName+'-'+suggestion.CustomerNo, matches);
 
     return (
         <MenuItem selected={isHighlighted} component="div">
@@ -378,7 +378,7 @@ class InvoiceForm extends Component {
         const escapedValue = escapeRegexCharacters(value.trim());
         const regex = new RegExp(escapedValue, 'i');
         if(this.props.customers!==null) {
-            let suggestions = this.props.customers.filter(customer => regex.test(customer.CustomerName));
+            let suggestions = this.props.customers.filter(customer => regex.test(customer.CustomerName) || regex.test(customer.CustomerNo));
             if(this.state.bCustomerNotFound)
                 return suggestions;
 
@@ -725,6 +725,8 @@ class InvoiceForm extends Component {
         if(this.props.invoiceForm.type === 'new') bReadonly = true;
 
         // console.log('state=', JSON.stringify(this.props.invoiceForm.customer));
+
+        console.log('this.state.franchiseeFromCustomer=', this.state.franchiseeFromCustomer);
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
