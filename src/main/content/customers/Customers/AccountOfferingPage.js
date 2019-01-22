@@ -60,6 +60,16 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
 
+import {
+	withScriptjs,
+	withGoogleMap,
+	GoogleMap,
+	Marker,
+} from "react-google-maps";
+import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
+import { compose, withProps, withHandlers, lifecycle } from "recompose";
+
+
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 	return result ? {
@@ -392,6 +402,126 @@ const EditingHeaderCellComponent = withStyles(editing_cell_styles, { name: "Edit
 );
 
 
+//
+// Google Map
+//
+
+
+const DEFAULT_ZOOM = 8
+let map_zoom = DEFAULT_ZOOM
+
+const MapWithAMarkerClusterer = compose(
+	withProps({
+		googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA&v=3.exp&libraries=geometry,drawing,places",
+		loadingElement: <div style={{ height: `100%` }} />,
+		containerElement: <div style={{ height: `100%` }} />,
+		mapElement: <div style={{ height: `100%` }} />,
+	}),
+	withHandlers({
+		onMarkerClustererClick: () => (markerClusterer) => {
+			const clickedMarkers = markerClusterer.getMarkers()
+			console.log(`Current clicked markers length: ${clickedMarkers.length}`)
+			console.log(clickedMarkers)
+		},
+	}),
+	// lifecycle({
+	// 	componentDidMount() {
+
+	// 		this.setState({
+
+	// 			zoomToMarkers: map => {
+	// 				console.log("Zoom to markers");
+	// 				const bounds = new window.google.maps.LatLngBounds();
+	// 				props.markers.forEach((child) => {
+	// 					if (child.type === Marker) {
+	// 						bounds.extend(new window.google.maps.LatLng(child.props.position.lat, child.props.position.lng));
+	// 					}
+	// 				})
+	// 				map.fitBounds(bounds);
+	// 			}
+	// 		})
+	// 	},
+	// }),
+	withScriptjs,
+	withGoogleMap
+)(props =>
+	<GoogleMap
+		// ref={props.markers}
+		defaultZoom={map_zoom}
+		defaultCenter={{ lat: props.center.lat, lng: props.center.lng }}
+	>
+		<MarkerClusterer
+			onClick={props.onMarkerClustererClick}
+			averageCenter
+			enableRetinaIcons
+			gridSize={60}
+		>
+			{props.markers.map((x, index) => (
+				<Marker
+					key={index}
+					position={{ lat: x.lat, lng: x.lng }}
+				/>
+			))}
+		</MarkerClusterer>
+	</GoogleMap>
+);
+
+
+const MapWithAMarkerClusterer2 = compose(
+	withProps({
+		googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA&v=3.exp&libraries=geometry,drawing,places",
+		loadingElement: <div style={{ height: `100%` }} />,
+		containerElement: <div style={{ height: `100%` }} />,
+		mapElement: <div style={{ height: `100%` }} />,
+	}),
+	withHandlers({
+		onMarkerClustererClick: () => (markerClusterer) => {
+			const clickedMarkers = markerClusterer.getMarkers()
+			console.log(`Current clicked markers length: ${clickedMarkers.length}`)
+			console.log(clickedMarkers)
+		},
+	}),
+	// lifecycle({
+	// 	componentDidMount() {
+
+	// 		this.setState({
+
+	// 			zoomToMarkers: map => {
+	// 				console.log("Zoom to markers");
+	// 				const bounds = new window.google.maps.LatLngBounds();
+	// 				props.markers.forEach((child) => {
+	// 					if (child.type === Marker) {
+	// 						bounds.extend(new window.google.maps.LatLng(child.props.position.lat, child.props.position.lng));
+	// 					}
+	// 				})
+	// 				map.fitBounds(bounds);
+	// 			}
+	// 		})
+	// 	},
+	// }),
+	withScriptjs,
+	withGoogleMap
+)(props =>
+	<GoogleMap
+		// ref={props.zoomToMarkers}
+		defaultZoom={map_zoom}
+		defaultCenter={{ lat: props.center.lat, lng: props.center.lng }}
+	>
+		<MarkerClusterer
+			onClick={props.onMarkerClustererClick}
+			averageCenter
+			enableRetinaIcons
+			gridSize={60}
+		>
+			{props.markers.map((x, index) => (
+				<Marker
+					key={index}
+					position={{ lat: x.lat, lng: x.lng }}
+				/>
+			))}
+		</MarkerClusterer>
+	</GoogleMap>
+);
 
 
 class AccountOfferingPage extends Component {
@@ -401,7 +531,15 @@ class AccountOfferingPage extends Component {
 		super(props)
 
 		this.state = {
-			openSideBar: false, 
+			openSideBar: false,
+			showMapView: false,
+
+			gmapVisible: false,
+
+			pins: [],
+			pins2: [],
+
+
 			temp: [],
 			data: [],
 			customers: [],
@@ -455,6 +593,8 @@ class AccountOfferingPage extends Component {
 	}
 	componentWillMount() {
 		this.getFranchiseesFromStatus();
+
+		this.getLocation();
 	}
 	componentDidMount() {
 		console.log("componentDidMount");
@@ -493,7 +633,10 @@ class AccountOfferingPage extends Component {
 		this.setState({ step: 1 })
 	}
 	backToAccountOfferingHome = () => {
-		this.setState({ step: 0 })
+		this.setState({
+			step: 0,
+			showMapView: false
+		})
 	}
 	backToFranchiseeList = () => {
 		this.setState({ step: 1 })
@@ -532,19 +675,59 @@ class AccountOfferingPage extends Component {
 			openSideBar: !this.state.openSideBar
 		})
 	}
+	toggleMapView = () => {
+		this.setState({
+			showMapView: !this.state.showMapView
+		})
+	}
 	ToolbarRootBase = ({ children, classes, className, ...restProps }) => (
 		<Toolbar.Root
 			className={classNames(className, classes.franchiseeGridToolbar)}
 			{...restProps}
 
 		>
-			<IconButton onClick={this.toggleSideBar}>
+			{/* <IconButton onClick={this.toggleSideBar}>
 				<Icon>menu</Icon>
-			</IconButton>
+			</IconButton> */}
 			{children}
 		</Toolbar.Root>
 	);
 	ToolbarRoot = withStyles(styles)(this.ToolbarRootBase);
+
+	getLocation() {
+		console.log("getLocation");
+
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(
+				(position) => {
+					console.log(position.coords);
+					this.setState({
+						current_lat: position.coords.latitude,
+						current_long: position.coords.longitude
+					})
+
+					// this.setState({
+					// 	current_lat: 42.910772,
+					// 	current_long: -78.74557
+					// })
+
+					if (this.state.addrLat == undefined) {
+						this.setState({
+							addrLat: position.coords.latitude,
+							addrLng: position.coords.longitude
+						})
+						// this.setState({
+						// 	addrLat: 42.910772,
+						// 	addrLng: -78.74557
+						// })
+					}
+					if (this.props.locationFilterValue) {
+						this.initRowsFromRawJson();
+					}
+				}
+			);
+		}
+	}
 
 	render() {
 		const {
@@ -561,6 +744,12 @@ class AccountOfferingPage extends Component {
 			sorting,
 			selection,
 			step,
+
+			pins,
+			pins2,
+			gmapVisible,
+			showMapView,
+
 		} = this.state;
 
 		let rows = []
@@ -612,19 +801,24 @@ class AccountOfferingPage extends Component {
 									</IconButton>
 									Back
 								</div>
-
-								<Tooltip title="Map view">
-									<IconButton
-										// className={classNames(classes.summaryPanelButton, "mr-12")}
-										className={classNames(classes.button, "mr-12")}
-									// aria-label="Add an alarm"
-									// onClick={this.props.toggleMapView}
-									>
-										{/* <Icon>{this.props.mapViewState ? 'list' : 'location_on'}</Icon> */}
-										<Icon>location_on</Icon>
-									</IconButton>
-								</Tooltip>
-
+								<div>
+									<Tooltip title="Location Filter">
+										<IconButton onClick={this.toggleSideBar}>
+											<Icon>menu</Icon>
+										</IconButton>
+									</Tooltip>
+									<Tooltip title={showMapView ? "Grid View" : "Map view"}>
+										<IconButton
+											// className={classNames(classes.summaryPanelButton, "mr-12")}
+											className={classNames(classes.button, "mr-12")}
+											// aria-label="Add an alarm"
+											onClick={this.toggleMapView}
+										>
+											{/* <Icon>{this.props.mapViewState ? 'list' : 'location_on'}</Icon> */}
+											<Icon>location_on</Icon>
+										</IconButton>
+									</Tooltip>
+								</div>
 							</div>
 						)}
 
@@ -647,6 +841,220 @@ class AccountOfferingPage extends Component {
 						</div>
 					)}
 				</div>
+
+				{(step === 0 || step === 1) && (
+					<GridContainer style={{ alignItems: 'center' }} className={classNames("flex flex-col", showMapView ? "h-full" : "")} style={{ backgroundColor: "" }}>
+						<GridItem xs={12} sm={12} md={12} className="flex flex-row" style={{ backgroundColor: "" }}>
+							{(step === 1 && this.state.openSideBar) && (
+								<Paper className={classNames("flex flex-col h-full pl-24 pr-12 mr-12")} style={{ backgroundColor: "", height: "auto", minWidth: 250 }}>
+									<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+										<GridItem xs={12} sm={12} md={12} className="flex flex-col">
+											<h3 className={classNames("mt-24 mb-12")} >Location Filter</h3>
+											<RadioGroup
+												aria-label="Location"
+												name="Location"
+												className={classes.group}
+												// value={this.props.locationFilterValue && this.props.locationFilterValue.id || ""}
+												value={this.state.Location || ""}
+											>
+												<FormControlLabel value="locationAll" control={<Radio onChange={this.handleChange('Location')} />} label="All" />
+												<FormControlLabel value="locationNearResidingCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Near Residing Customer" />
+												{this.state.Location === "locationNearResidingCustomer" && (
+													<TextField
+														select
+
+														id="locationNearResidingCustomerRadius"
+														label="Radius"
+														className={classes.textField}
+														InputLabelProps={{
+															shrink: true
+														}}
+														value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
+														onChange={this.handleChange('locationNearResidingCustomerRadius')}
+														margin="dense"
+														variant="outlined"
+														fullWidth
+													>
+														{
+															Array.from({ length: 15 })
+																.map((val, index) => (
+																	<MenuItem key={index} value={(index + 1) * 5}>
+																		{(index + 1) * 5} Miles
+													</MenuItem>
+																))
+														}
+													</TextField>)}
+
+												<FormControlLabel value="locationNearCleaningCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Near Cleaning Customer" />
+												{this.state.Location === "locationNearCleaningCustomer" && (
+													<TextField
+														select
+
+														id="locationNearCleaningCustomerRadius"
+														label="Radius"
+														className={classes.textField}
+														InputLabelProps={{
+															shrink: true
+														}}
+														value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
+														onChange={this.handleChange('locationNearCleaningCustomerRadius')}
+														margin="dense"
+														variant="outlined"
+														fullWidth
+													>
+														{
+															Array.from({ length: 15 })
+																.map((val, index) => (
+																	<MenuItem key={index} value={(index + 1) * 5}>
+																		{(index + 1) * 5} Miles
+													</MenuItem>
+																))
+														}
+													</TextField>)}
+
+												<FormControlLabel value="locationNearSpecificAddress" control={<Radio onChange={this.handleChange('Location')} />} label="Near Specific Address" />
+												{this.state.Location === "locationNearSpecificAddress" && (
+													<Fragment>
+														<TextField
+															id="SpecificAddress"
+															label="Address"
+															className={classes.textField}
+															onChange={this.handleChange('SpecificAddress')}
+															margin="dense"
+															variant="outlined"
+															fullWidth
+														/>
+														<TextField
+															select
+
+															id="AddressZipcodeRadius"
+															label="Radius"
+															className={classes.textField}
+															InputLabelProps={{
+																shrink: true
+															}}
+															value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
+															onChange={this.handleChange('AddressZipcodeRadius')}
+															margin="dense"
+															variant="outlined"
+															fullWidth
+														>
+															{
+																Array.from({ length: 15 })
+																	.map((val, index) => (
+																		<MenuItem key={index} value={(index + 1) * 5}>
+																			{(index + 1) * 5} Miles
+																</MenuItem>
+																	))
+															}
+														</TextField>
+													</Fragment>
+												)}
+											</RadioGroup>
+										</GridItem>
+									</GridContainer>
+								</Paper>
+							)}
+							<Paper className={classNames("flex flex-col h-full p-6 w-full")} style={{ height: "auto", overflowX: "scroll" }}>
+
+								{showMapView ? (
+									<div className="w-full h-full">
+										{/* map area */}
+										{gmapVisible && (<MapWithAMarkerClusterer
+											markers={pins}
+											center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
+										/>)}
+
+										{!gmapVisible && (<MapWithAMarkerClusterer2
+											markers={pins2}
+											center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
+										/>)}
+									</div>
+								) : (
+										<div>
+											{/* grid area */}
+											<Grid rows={rows} columns={columns}>
+												{step === 1 && (
+													<SearchState value={searchValue} onValueChange={this.changeSearchValue} />
+												)}
+												{step === 1 && (
+													<IntegratedFiltering />
+												)}
+
+												{step === 1 && (
+													<SelectionState selection={selection} onSelectionChange={this.changeSelection} />
+												)}
+												{step === 1 && (
+													<PagingState defaultCurrentPage={0} defaultPageSize={10} />
+												)}
+												{step === 1 && (
+													<PagingPanel pageSizes={pageSizes} />
+												)}
+
+												{step === 1 && (
+													<IntegratedSelection />
+												)}
+												<SortingState sorting={sorting} onSortingChange={this.changeSorting} columnExtensions={columns} />
+												<IntegratedSorting />
+												{step === 1 && (
+													<IntegratedPaging />
+												)}
+												{step === 1 && (
+													<EditingState
+														// columnExtensions={editingColumnExtensions}
+														onCommitChanges={this.commitChanges} />
+												)}
+												<Table />
+												{/* <VirtualTable height="auto" /> */}
+
+												{/* <TableColumnResizing defaultColumnWidths={columns} /> */}
+
+												<TableHeaderRow showSortingControls />
+												{step === 1 && (
+													<TableEditRow />
+												)}
+												{step === 1 && (
+													<TableEditColumn width={60} cellComponent={this.EditingCellComponent} headerCellComponent={EditingHeaderCellComponent}
+													// showAddCommand
+													// showEditCommand
+													// showDeleteCommand
+													// commandComponent={Command}
+													/>
+												)}
+
+												{step === 1 && (
+													<TableSelection showSelectAll selectByRowClick highlightRow />
+												)}
+
+												{step === 1 && (
+													<Toolbar rootComponent={this.ToolbarRoot} />
+												)}
+												{step === 1 && (
+													<SearchPanel />
+												)}
+
+											</Grid>
+
+											{(step === 1) && (
+												<div className={classNames(classes.layoutTable, "flex flex-row")} style={{ justifyContent: "space-between" }}>
+													<span className={"p-6"}>
+														Rows Selected: <strong>{selection.length}</strong>
+													</span>
+
+													<span className={"p-6"}>
+														Total Rows: <strong>{rows.length}</strong>
+													</span>
+												</div>
+											)}
+										</div>
+									)}
+
+
+
+							</Paper>
+						</GridItem>
+					</GridContainer>
+				)}
 
 				{(step === 2) && (
 					<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
@@ -1287,225 +1695,6 @@ class AccountOfferingPage extends Component {
 										> Send </Button>
 									</GridItem>
 								</GridContainer>
-							</Paper>
-						</GridItem>
-					</GridContainer>
-
-				)}
-
-				{(step === 0 || step === 1) && (
-					<GridContainer style={{ alignItems: 'center' }} className={classNames("flex flex-col h-full")} style={{ backgroundColor: "" }}>
-						<GridItem xs={12} sm={12} md={12} className="flex flex-row" style={{ backgroundColor: "" }}>
-							{(step === 1 && this.state.openSideBar) && (
-								<Paper sm={6} className={classNames("flex flex-col h-full pl-24 pr-12 mr-12")} style={{ backgroundColor: "", height: "auto", minWidth: 250 }}>
-									<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-										<GridItem xs={12} sm={12} md={12} className="flex flex-col">
-											<h3 className={classNames("mt-24 mb-12")} >Location Filter</h3>
-											<RadioGroup
-												aria-label="Location"
-												name="Location"
-												className={classes.group}
-												value={this.props.locationFilterValue && this.props.locationFilterValue.id || ""}
-											>
-												<FormControlLabel value="locationAll" control={<Radio onChange={this.handleChange('Location')} />} label="All" />
-												<FormControlLabel value="locationNearResidingCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Near Residing Customer" />
-												{this.state.Location === "locationNearResidingCustomer" && (
-													<TextField
-														select
-
-														id="locationNearResidingCustomerRadius"
-														label="Radius"
-														className={classes.textField}
-														InputLabelProps={{
-															shrink: true
-														}}
-														value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
-														onChange={this.handleChange('locationNearResidingCustomerRadius')}
-														margin="dense"
-														variant="outlined"
-														fullWidth
-													>
-														{
-															Array.from({ length: 15 })
-																.map((val, index) => (
-																	<MenuItem key={index} value={(index + 1) * 5}>
-																		{(index + 1) * 5} Miles
-													</MenuItem>
-																))
-														}
-													</TextField>)}
-
-												<FormControlLabel value="locationNearCleaningCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Near Cleaning Customer" />
-												{this.state.Location === "locationNearCleaningCustomer" && (
-													<TextField
-														select
-
-														id="locationNearCleaningCustomerRadius"
-														label="Radius"
-														className={classes.textField}
-														InputLabelProps={{
-															shrink: true
-														}}
-														value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
-														onChange={this.handleChange('locationNearCleaningCustomerRadius')}
-														margin="dense"
-														variant="outlined"
-														fullWidth
-													>
-														{
-															Array.from({ length: 15 })
-																.map((val, index) => (
-																	<MenuItem key={index} value={(index + 1) * 5}>
-																		{(index + 1) * 5} Miles
-													</MenuItem>
-																))
-														}
-													</TextField>)}
-
-												<FormControlLabel value="locationNearSpecificAddress" control={<Radio onChange={this.handleChange('Location')} />} label="Near Specific Address" />
-												{this.state.Location === "locationNearSpecificAddress" && (
-													<Fragment>
-														<TextField
-															id="SpecificAddress"
-															label="Address"
-															className={classes.textField}
-															onChange={this.handleChange('SpecificAddress')}
-															margin="dense"
-															variant="outlined"
-															fullWidth
-														/>
-														<TextField
-															select
-
-															id="AddressZipcodeRadius"
-															label="Radius"
-															className={classes.textField}
-															InputLabelProps={{
-																shrink: true
-															}}
-															value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
-															onChange={this.handleChange('AddressZipcodeRadius')}
-															margin="dense"
-															variant="outlined"
-															fullWidth
-														>
-															{
-																Array.from({ length: 15 })
-																	.map((val, index) => (
-																		<MenuItem key={index} value={(index + 1) * 5}>
-																			{(index + 1) * 5} Miles
-																</MenuItem>
-																	))
-															}
-														</TextField>
-													</Fragment>
-												)}
-											</RadioGroup>
-										</GridItem>
-									</GridContainer>
-								</Paper>
-							)}
-							<Paper sm={6} className={classNames("flex flex-col h-full p-6")} style={{ backgroundColor: "", overflowX: "scroll" }}>
-								<Grid
-									rows={rows}
-									columns={columns}
-								>
-									{step === 1 && (
-										<SearchState
-											value={searchValue}
-											onValueChange={this.changeSearchValue}
-										/>
-									)}
-									{step === 1 && (
-										<IntegratedFiltering />
-									)}
-
-									{step === 1 && (
-										<SelectionState
-											selection={selection}
-											onSelectionChange={this.changeSelection}
-										/>
-									)}
-									{step === 1 && (
-										<PagingState
-											defaultCurrentPage={0}
-											defaultPageSize={10}
-										/>
-									)}
-									{step === 1 && (
-										<PagingPanel pageSizes={pageSizes} />
-									)}
-
-									{step === 1 && (
-										<IntegratedSelection />
-									)}
-									<SortingState
-										sorting={sorting}
-										onSortingChange={this.changeSorting}
-										columnExtensions={columns}
-									/>
-									<IntegratedSorting />
-									{step === 1 && (
-										<IntegratedPaging />
-									)}
-									{step === 1 && (
-										<EditingState
-											// columnExtensions={editingColumnExtensions}
-											onCommitChanges={this.commitChanges}
-										/>
-									)}
-									<Table />
-									{/* <VirtualTable
-								height="auto"
-							/> */}
-
-
-
-									{/* <TableColumnResizing defaultColumnWidths={columns} /> */}
-
-									<TableHeaderRow showSortingControls />
-									{step === 1 && (
-										<TableEditRow />
-									)}
-									{step === 1 && (
-										<TableEditColumn
-											width={60}
-											cellComponent={this.EditingCellComponent}
-											headerCellComponent={EditingHeaderCellComponent}
-										// showAddCommand
-										// showEditCommand
-										// showDeleteCommand
-										// commandComponent={Command}
-										/>
-									)}
-
-									{step === 1 && (
-										<TableSelection showSelectAll selectByRowClick highlightRow />
-									)}
-
-									{step === 1 && (
-										<Toolbar rootComponent={this.ToolbarRoot} />
-									)}
-									{step === 1 && (
-										<SearchPanel />
-									)}
-
-								</Grid>
-
-								{(step === 1) && (
-									<div
-										className={classNames(classes.layoutTable, "flex flex-row")}
-										style={{ justifyContent: "space-between" }}
-									>
-										<span className={"p-6"}>
-											Rows Selected: <strong>{selection.length}</strong>
-										</span>
-
-										<span className={"p-6"}>
-											Total Rows: <strong>{rows.length}</strong>
-										</span>
-									</div>
-								)}
 							</Paper>
 						</GridItem>
 					</GridContainer>

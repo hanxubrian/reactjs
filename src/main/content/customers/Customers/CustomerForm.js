@@ -1445,9 +1445,9 @@ class CustomerForm extends Component {
 					</Fragment>
 				);
 			case 5:
-				const {account_offering_step} = this.state
+				const { account_offering_step } = this.state
 
-				return (<AccountOfferingPage step = {account_offering_step}/>)
+				return (<AccountOfferingPage step={account_offering_step} />)
 			case 6:
 				return (
 					<Fragment>
@@ -1747,7 +1747,7 @@ class CustomerForm extends Component {
 
 		// const {classes} = this.props;
 		const steps = getSteps();
-		const { activeStep,account_offering_step
+		const { activeStep, account_offering_step
 		} = this.state;
 
 
@@ -1811,17 +1811,17 @@ class CustomerForm extends Component {
 							}
 						</Fragment>)
 						: */}
-						{/* ( */}
-							<h2>{steps[activeStep]}</h2>
-							{/* ) */}
-						{/* } */}
+					{/* ( */}
+					<h2>{steps[activeStep]}</h2>
+					{/* ) */}
+					{/* } */}
 
 
 					<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
 
-					<div>
-						{this.getStepContent(activeStep)}
-					</div>
+					{/* <div> */}
+					{this.getStepContent(activeStep)}
+					{/* </div> */}
 				</div>
 
 

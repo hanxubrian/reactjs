@@ -104,7 +104,8 @@ const styles = theme => ({
 		backgroundColor: theme.palette.background.paper
 	},
 	content: {
-		flex: '1 0 auto'
+		flex: '1 0 auto',
+		overflowY: 'scroll'
 	},
 	sidebarWrapper: {
 		overflow: 'hidden',

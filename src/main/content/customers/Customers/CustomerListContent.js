@@ -1236,16 +1236,14 @@ class CustomerListContent extends Component {
 
 		return (
 			<Fragment>
-				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
+				<div className={classNames(classes.layoutTable, "flex flex-col", mapViewState ? "h-full" : "")}>
 
-					<CustomerSearchBar>
-
-					</CustomerSearchBar>
+					<CustomerSearchBar />
 
 					{/* Mapview */}
-					{mapViewState && (<div className="w-full h-full">
-						<div className="w-full h-full">
-							{/* <GoogleMap
+					{mapViewState && (<div className={classNames("w-full h-full p-1")} style={{ borderColor: 'lightgray', borderWidth: '1px' }}>
+						{/* <div className="w-full h-full"> */}
+						{/* <GoogleMap
 								bootstrapURLKeys={{
 									key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
 								}}
@@ -1264,24 +1262,25 @@ class CustomerListContent extends Component {
 								}
 							</GoogleMap> */}
 
-							{gmapVisible && (<MapWithAMarkerClusterer
-								markers={pins}
-								center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
-							/>)}
+						{gmapVisible && (<MapWithAMarkerClusterer
+							markers={pins}
+							center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
+						/>)}
 
-							{!gmapVisible && (<MapWithAMarkerClusterer2
-								markers={pins2}
-								center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
-							/>)}
+						{!gmapVisible && (<MapWithAMarkerClusterer2
+							markers={pins2}
+							center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
+						/>)}
 
-						</div>
+						{/* </div> */}
 					</div>)}
 
 					{/* Girdview */}
 					{!mapViewState &&
 						(
-							<div className={classNames(classes.layoutTable, "flex flex-col")}
-								style={{ height: "calc(100% - 110px)" }}
+							<div className={classNames("flex flex-col")}
+								// style={{ height: "calc(100% - 110px)" }}
+								// style={{ overflowY: 'scroll' }}
 							>
 								<Grid
 									// rootComponent={GridRootComponent}
@@ -1362,12 +1361,13 @@ class CustomerListContent extends Component {
 									for={dateColumns}
 								/> */}
 
-									<VirtualTable
+									{/* <VirtualTable
 										height="auto"
 										rowComponent={this.TableRow}
-									/>
+									/> */}
 
 									{/* <Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} rowComponent={TableRow} /> */}
+									<Table rowComponent={this.TableRow} />
 
 									<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
 
