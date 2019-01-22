@@ -1102,26 +1102,36 @@ class LeaseForm extends Component {
                                             this.onSaveAndAddMore();
                                         }}
                                     >
-                                        Save & Add more
+                                        { this.props.leaseForm.type === 'new' && (
+                                            <span>Save & Add more</span>
+                                        )}
+                                        { this.props.leaseForm.type === 'edit' && (
+                                            <span>Update & Add more</span>
+                                        )}
                                     </Button>
                                 </FuseAnimate>
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
                                     <Button
                                         variant="contained"
                                         color="primary"
-                                        className={classNames(classes.button, "mr-12")}
+                                        className={classNames(classes.button, "mr-12 hidden")}
                                         onClick={() => {
                                             this.onSaveAndClose();
                                         }}
                                     >
-                                        Save & Close
+                                        { this.props.leaseForm.type === 'new' && (
+                                            <span>Save & Close</span>
+                                        )}
+                                        { this.props.leaseForm.type !== 'new' && (
+                                            <span>Update & Close</span>
+                                        )}
                                     </Button>
                                 </FuseAnimate>
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
                                     <Button
                                         variant="contained"
                                         color="primary"
-                                        className={classNames(classes.button, "mr-12")}
+                                        className={classNames(classes.button, "mr-12 hidden")}
                                         onClick={() => {
                                             this.onSubmitForApproval();
                                         }}
