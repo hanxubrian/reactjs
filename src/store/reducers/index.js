@@ -18,6 +18,8 @@ import findersFees from './findersfees.reducer';
 import payments from './payment.reducer';
 import dashboard from './dashboard.reducer';
 import homepage from './homepage.reducer';
+import accountReceivablePayments from'./account_receivable.payments.reducer';
+
 
 
 const createReducer = (asyncReducers) =>
@@ -41,6 +43,7 @@ const createReducer = (asyncReducers) =>
         payments,
 		dashboard,
         homepage,
+        accountReceivablePayments,
         ...asyncReducers
     });
 

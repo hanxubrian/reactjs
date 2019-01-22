@@ -17,7 +17,7 @@ class paymentsService {
      * @param SearchText
      * @returns {Promise<any>}
      */
-    getInvoicePaymentList = (RegionId, FromDate,ToDate, SearchText) => {
+    getAccountReceivablePaymentsList = (RegionId, FromDate,ToDate, SearchText) => {
         const data = {
             "RegionId": RegionId,
             "FromDate": FromDate,
