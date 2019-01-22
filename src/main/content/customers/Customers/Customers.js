@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 
 // core components
-import { Icon, IconButton, Fab, Typography, Toolbar, CircularProgress, Menu, MenuItem, Checkbox, FormControlLabel, Tooltip } from '@material-ui/core';
+import { Icon, IconButton, Fab, Typography, Toolbar, CircularProgress, Menu, MenuItem, Checkbox, FormControlLabel, Tooltip, Button } from '@material-ui/core';
 import { green } from '@material-ui/core/colors';
 // theme components
 import { FusePageCustomSidebarScroll, FuseAnimate } from '@fuse';
@@ -36,6 +36,12 @@ import CustomerListContent from './CustomerListContent';
 import DialogEmailToCustomer from './DialogEmailToCustomer';
 
 import Utils from './Utils'
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const headerHeight = 80;
 
@@ -290,6 +296,7 @@ class Customers extends Component {
 			location: this.props.location,
 			searchText: this.props.searchText,
 			// loading: false,
+			isSubmittingForApproval: false,
 		};
 		console.log("constructor, Customer.js")
 
@@ -391,8 +398,17 @@ class Customers extends Component {
 		}
 	};
 
-
+	trySubmitForApproval = () => {
+		this.setState({
+			isSubmittingForApproval: true
+		})
+		
+	}
 	submitForApproval = () => {
+		this.setState({
+			isSubmittingForApproval: false
+		})
+
 		let payload = {
 			CustomerId: "vaaa4v5432v34b235", agreeused: "sample string 5", arstatdate: "sample string 6", arstatus: "sample string 7", atrisk: "sample string 8", bill_addr: "sample string 9", bill_addr2: "sample string 10", bill_city: "sample string 11", bill_ext: "sample string 12", bill_fax: "sample string 13", bill_name: "sample string 14", bill_name2: "sample string 15", bill_phone: "sample string 16", bill_state: "sample string 17", bill_zip: "sample string 18", business: "sample string 19", callbdate: "sample string 20", canc_date: "sample string 21", candescr: "sample string 22", canentdat: "sample string 23", canreason: "sample string 24", claimstat: "sample string 25", class_type: "sample string 26", coll_rep: "sample string 27", company_no: "sample string 28", cleantimes: "sample string 29", cleanper: "sample string 30", cont_1: "sample string 31", cont_2: "sample string 32", cont_bill: "sample string 33", cont_tax: "sample string 34", cpiadj: "sample string 35", crteinv: "sample string 36", cs_rep: "sample string 37", cscallbdat: "sample string 38", cus_addr: "sample string 39", cus_addr2: "sample string 40", cus_city: "sample string 41", cus_county: "sample string 42", cus_ext: "sample string 43", cus_fax: "sample string 44", cus_name: "sample string 45", cus_name2: "sample string 46", cus_phone: "sample string 47", cus_state: "sample string 48", cus_zip: "sample string 49", CustomerNo: "sample string 50", date_offer: "sample string 51", date_sign: "2019-01-18T03:12:26.1440384-06:00", date_start: "2019-01-18T03:12:26.1440384-06:00", dlr_code: "sample string 54", Ebilling: "sample string 55", email1: "sample string 56", email2: "sample string 57", exp_date: "2019-01-18T03:12:26.1450367-06:00", firstdate: "2019-01-18T03:12:26.1450367-06:00", firstfran: "sample string 60", flag: "sample string 61", fri: "sample string 62", inv_msg: "sample string 63", masteracct: "sample string 64", misc_info: "sample string 65", misc_info2: "sample string 66", mon: "sample string 67", natacct: "sample string 68", notes: "sample string 69", ops_mgr: "sample string 70", parent: "sample string 71", po_1: "sample string 72", prntinv: "sample string 73", prntpd: "sample string 74", resume_d: "sample string 75", royalty: "sample string 76", sales_tax: "sample string 77", sat: "sample string 78", seconddate: "sample string 79", secondfran: "sample string 80", slsmn_no: "sample string 81", SquareFootage: "sample string 82", sun: "sample string 83", sys_cust: "sample string 84", tax_exempt: "sample string 85", tech_pct: "sample string 86", thu: "sample string 87", tue: "sample string 88", wed: "sample string 89", xregionid: "sample string 90", xsys_cust: "sample string 91",
 			Addresses: [
@@ -628,7 +644,11 @@ class Customers extends Component {
 
 		this.props.openEmailToCustomerDialog(true);
 	}
-
+	handleCloseConfirmDialog= () => {
+		this.setState({
+			isSubmittingForApproval: false
+		})
+	}
 	render() {
 		console.log(this.props.documents)
 		console.log(this.props)
@@ -741,7 +761,7 @@ class Customers extends Component {
 												</IconButton>
 											</Tooltip>
 											<Tooltip title="Submit for Approval">
-												<IconButton className={classes.button} aria-label="Add an alarm" onClick={this.submitForApproval}>
+												<IconButton className={classes.button} aria-label="Add an alarm" onClick={this.trySubmitForApproval}>
 													<Icon>cloud_upload</Icon>
 												</IconButton>
 											</Tooltip>
@@ -802,6 +822,27 @@ class Customers extends Component {
 						<div className="flex-1 flex-col absolute w-full h-full">
 
 							<DialogEmailToCustomer />
+
+							{/* 
+							Confirm Dialog for submitting
+							 */}
+							<Dialog
+								open={this.state.isSubmittingForApproval}
+								onClose={this.handleCloseConfirmDialog}
+								aria-labelledby="alert-dialog-title"
+								aria-describedby="alert-dialog-description"
+							>
+								<DialogTitle id="alert-dialog-title">{"You are submitting customer data for approval."}</DialogTitle>
+								<DialogContent>
+									<DialogContentText id="alert-dialog-description">There are still some incompleted items. Are you sure to sumit anyway?</DialogContentText>
+								</DialogContent>
+								<DialogActions>
+									<Button onClick={this.handleCloseConfirmDialog} color="primary">No</Button>
+									<Button onClick={this.submitForApproval} color="primary" autoFocus>Yes</Button>
+								</DialogActions>
+							</Dialog>
+
+
 
 							{this.state.temp && (
 								<Fragment>
