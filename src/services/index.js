@@ -10,7 +10,7 @@ import _contactService from './customers/ContactService';
 import _chatService from './chat/ChatService';
 import _paymentService from './payment/paymentListService';
 import _dashboardService from './dashboard/dashboardService';
-import _invoicePaymentService from './invoice/paymentsServices'
+import _invoicePaymentService from './invoice/paymentsService'
 import _homepageService from './home/HomepageService';
 
 
