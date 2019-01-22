@@ -18,9 +18,6 @@ const initialState = {
     franchiseeFilterList: null,
     bLoadedFilterList: false,
     franchiseeStatus: [],
-    // selectedSignDate: new Date(),
-    // selectedRenewDate: new Date(),
-    // selectedExpDate: new Date(),
     bFranchiseesFetchStart: false,
     planType: [],
     documentsList: [],
@@ -101,38 +98,7 @@ const initialState = {
         AgreementDaysToFulfill:200,
         MoralObligation: 0.00,
         CurrentBusiness: 0.00,
-        Fees: [
-            {
-                FeeName: "Royalty",
-                Amount: 10.00,
-                Deduct:1
-            },
-            {
-                FeeName: "AdvertisingFee",
-                Amount: 10.00,
-                Deduct:1
-            },
-            {
-                FeeName: "AccountingFee",
-                Amount: 5.00,
-                Deduct:1
-            },
-            {
-                FeeName: "TechnologyFee",
-                Amount: 10.00,
-                Deduct:1
-            },
-            {
-                FeeName: "AdditionalBillingComission",
-                Amount: 10.00,
-                Deduct:1
-            },
-            {
-                FeeName: "BusinessProtection",
-                Amount: 6.75,
-                Deduct:1
-            }
-        ],
+        Fees: [],
         AllowBppAdminFee: "Y",
         AllowChargeBack: "Y",
         AllowAccountRebate: "Y",

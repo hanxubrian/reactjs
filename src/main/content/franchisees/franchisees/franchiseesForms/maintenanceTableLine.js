@@ -234,6 +234,14 @@ const styles = theme => ({
     },
 });
 
+const feeTypeList = [
+    {FeeName:"Accounting Fee"},
+    {FeeName:"Advertising Fee"},
+    {FeeName:"Royalty Fee"},
+    {FeeName:"Additional Billing (R.O.) Commission Fee"},
+    {FeeName:"Business Protection Fee"}
+]
+
 class FranchiseesMaintenanceTable extends React.Component {
     state = {
         order: 'asc',
@@ -247,11 +255,20 @@ class FranchiseesMaintenanceTable extends React.Component {
         feeAmount:"",
         feeActive: false,
         insertPayload: null,
-
+        dialogForm:[],
+        tempDialogForm:
+        {
+          FeeName: "",
+          Amount: 0,
+          Deduct: true
+        }
     };
     constructor(props)
     {
         super(props);
+        this.setState({
+            insertPayload: props.insertPayload
+        })
     }
     handleRequestSort = (event, property) => {
         const orderBy = property;
@@ -274,18 +291,28 @@ class FranchiseesMaintenanceTable extends React.Component {
 
         if(this.props.franchiseeFees != null){
             const feeList = this.props.franchiseeFees.FranchiseeFees;
+            const dialogForm = this.state.dialogForm;
+            const insertPayload = this.props.insertPayload;
+
+            feeList.map(x=>{
+                dialogForm.push({
+                    FeeName: x.FranchiseeFeeList.Name,
+                    Amount: x.FranchiseeFeeList.Amount,
+                    Deduct:x.FranchiseeFeeList.IsActive
+                })
+            });
+
+            let tempDialogForm = insertPayload.Fees.concat(dialogForm);
+
             this.setState({
-                franchiseeFees: feeList,
+                dialogForm: tempDialogForm,
                 insertPayload: this.props.insertPayload,
             });
+            //this.handleUpdateFeeInsertPayload(dialogForm,"add");
         }
     }
 
     handleCheckboxChange = name => event=> {
-
-        if(name === "feeActive"){
-            this.setState({[name]:event.target.checked});
-        }
 
         this.handleInitialUpdate(name,event.target.checked);
 
@@ -299,12 +326,6 @@ class FranchiseesMaintenanceTable extends React.Component {
         this.setState({ openDialog: false });
     };
 
-    handleChangeAddFeesSelect = (name) => event => {
-        this.setState({
-            [name]: event.target.value
-        })
-    }
-
     handleInitialUpdate (name , value){
         let originalStatus = this.props.franchiseeFees;
         const iStatus = this.props.franchiseeFees.FranchiseeFees;
@@ -314,24 +335,67 @@ class FranchiseesMaintenanceTable extends React.Component {
            }
            return x;
         });
-        // console.log(originalStatus);
+
         this.setState({
             franchiseeFees: originalStatus.FranchiseeFees,
         });
         this.props.franchiseeFeeUpdateCheckbox(originalStatus);
     }
 
+    handleChangeFeeTableCheckbox = (index) => event => {
+         const dialogForm = this.state.dialogForm;
+         dialogForm[index].Deduct = event.target.checked;
+         this.setState({dialogForm: dialogForm});
+    }
+
+    handleChangeAddFeesSelect = (name) => event => {
+        const tempDialogForm = this.state.tempDialogForm;
+        if(name === "FeeName"){
+            tempDialogForm.FeeName = event.target.value;
+        }
+        if(name === "Amount"){
+            tempDialogForm.Amount = event.target.value;
+        }
+        if(name === "Deduct"){
+            tempDialogForm.Deduct = event.target.checked;
+        }
+
+        this.setState({tempDialogForm: tempDialogForm});
+    }
+
     handleAddFees = () => {
-        // this.handleUpdateOwnerInsertPayload(this.state.dialogForm , "add");
-        // this.handleResetDialog();
-        // this.setState({openDialog: false});
-        alert("submitted");
+        // this.handleUpdateFeeInsertPayload(this.state.dialogForm,"add");
+        this.handleUpdateFeeInsertPayload(this.state.tempDialogForm , "add");
+        this.handleResetDialog();
         this.setState({openDialog: false});
+    }
+
+    handleResetDialog = () =>{
+        this.setState({
+            tempDialogForm:{
+                FeeName: "",
+                Amount: 0,
+                Deduct:true
+            }
+        });
+    }
+
+    handleUpdateFeeInsertPayload = (param , actionType) => {
+        const payloadData = this.state.insertPayload;
+        if(actionType === "add"){
+            payloadData.Fees.push(param);
+        }
+        if(actionType === "remove"){
+            payloadData.Fees = param;
+        }
+        this.setState({dialogForm: payloadData.Fees});
+        this.setState({insertPayload: payloadData});
+        this.props.franchiseeUpdateInsertPayload(payloadData);
     }
 
     render() {
         const { classes } = this.props;
-        const {  franchiseeFees,order, orderBy, selected, rowsPerPage, page } = this.state;
+        const {  dialogForm,order, orderBy, selected, rowsPerPage, page } = this.state;
         let markup = 0.0;
         const headers = [
             {
@@ -374,34 +438,29 @@ class FranchiseesMaintenanceTable extends React.Component {
                             numSelected={selected.length}
                             order={order}
                             onRequestSort={this.handleRequestSort}
-                            rowCount={franchiseeFees.length}
+                            rowCount={dialogForm.length}
                             headers={headers}
                         />
                         <TableBody>
-                            {franchiseeFees.length > 0 && (
-                                stableSort(franchiseeFees, getSorting(order, orderBy))
+                            {dialogForm.length > 0 && (
+                                stableSort(dialogForm, getSorting(order, orderBy))
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((n,index) => {
                                             return (
-                                                <TableRow hover key={n.FranchiseeFeeList.FranchiseeFeeListId}>
+                                                <TableRow hover key={index}>
                                                     <TableCell>
-                                                        {n.FranchiseeFeeList.Name}
+                                                        {n.FeeName}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {n.FeeRateTypeList.Rate ==="Value" && (
-                                                            <span>$&nbsp;</span>
-                                                        )}
-                                                        {n.FranchiseeFeeList.Amount}
-                                                        {n.FeeRateTypeList.Rate ==="Percentage" && (
-                                                            <span>&nbsp;%</span>
-                                                        )}
+                                                        {n.Amount}
+                                                        <span>&nbsp;%</span>
                                                     </TableCell>
                                                     <TableCell>
                                                         <FormControlLabel
                                                             control={
-                                                                <Checkbox checked={franchiseeFees[index]["Deduct" + n.FranchiseeFeeList.FranchiseeFeeListId]} />
+                                                                <Checkbox checked={dialogForm[index]["Deduct"]} />
                                                             }
-                                                            onChange={this.handleCheckboxChange(["Deduct" + n.FranchiseeFeeList.FranchiseeFeeListId])}
+                                                            onChange={this.handleChangeFeeTableCheckbox(index)}
                                                             value="Y"
                                                         />
                                                     </TableCell>
@@ -438,15 +497,15 @@ class FranchiseesMaintenanceTable extends React.Component {
                                         label="Fee Names"
                                         select
                                         className={classes.textField}
-                                        value={this.state.feesList}
-                                        onChange={this.handleChangeAddFeesSelect('feesList')}
+                                        value={this.state.tempDialogForm.FeeName}
+                                        onChange={this.handleChangeAddFeesSelect('FeeName')}
                                         margin="dense"
                                         required
                                         fullWidth
                                     >
-                                        {this.state.franchiseeFees.map(option => (
-                                            <MenuItem key={option.FranchiseeFeeList.FranchiseeFeeListId} value={option.FranchiseeFeeList.FranchiseeFeeListId}>
-                                                {option.FranchiseeFeeList.Name}
+                                        {feeTypeList.map((option, index) => (
+                                            <MenuItem key={index} value={option.FeeName}>
+                                                {option.FeeName}
                                             </MenuItem>
                                         ))}
                                     </TextField>
@@ -457,8 +516,8 @@ class FranchiseesMaintenanceTable extends React.Component {
                                         label="Amount"
                                         className={classes.textField}
                                         type={"number"}
-                                        value={this.state.feeAmount}
-                                        onChange={this.handleChangeAddFeesSelect("feeAmount")}
+                                        value={this.state.tempDialogForm.Amount}
+                                        onChange={this.handleChangeAddFeesSelect("Amount")}
                                         margin="dense"
                                         fullWidth
                                         required
@@ -467,9 +526,9 @@ class FranchiseesMaintenanceTable extends React.Component {
                                 <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                     <FormControlLabel
                                         control={
-                                            <Checkbox checked={this.state.feeActive} />
+                                            <Checkbox checked={this.state.tempDialogForm.Deduct} />
                                         }
-                                        onChange={this.handleCheckboxChange('feeActive')}
+                                        onChange={this.handleChangeAddFeesSelect('Deduct')}
                                         className={classes.textField}
                                         label="Active"
                                         margin="dense"
