@@ -829,7 +829,7 @@ class Leases extends Component {
 					}}
 				>
 				</FusePageCustom>
-				{(this.props.bLeaseStart || this.props.bCustomerFetchStart || this.props.bFranchiseesFetchStart) && (
+				{(this.props.bLeaseStart || this.props.bFranchiseeFetchStart || this.props.bFranchiseesFetchStart) && (
                     <div className={classes.overlay}>
                         <CircularProgress className={classes.progress} color="secondary"  />
                     </div>

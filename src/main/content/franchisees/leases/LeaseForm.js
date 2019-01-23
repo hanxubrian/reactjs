@@ -824,14 +824,15 @@ class LeaseForm extends Component {
                                     />
                                 </GridItem>
                                 <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col xs:mb-24 mt-6">
-                                    <DatePicker
+                                    <TextField
                                         margin="none"
                                         label="Date Signed"
                                         name="DateSigned"
+                                        type="date"
                                         variant="outlined"
                                         format="MM/DD/YYYY"
-                                        value={this.state.LeaseDate}
-                                        onChange={this.handleLeaseDateChange}
+                                        value={this.state.DateSigned}
+                                        onChange={this.handleChange}
                                         fullWidth
                                         required
                                         InputProps={{
@@ -846,14 +847,15 @@ class LeaseForm extends Component {
                                     />
                                 </GridItem>
                                 <GridItem xs={12} sm={2} md={2} className="flex flex-row xs:flex-col mt-6">
-                                    <DatePicker
+                                    <TextField
                                         margin="none"
                                         label="Payment Starts"
-                                        format="MM/DD/YYYY"
-                                        name="PaymentStarts"
+                                        name="PaymentStart"
+                                        type="date"
                                         variant="outlined"
-                                        value={this.state.DueDate}
-                                        onChange={this.handleDueDateChange}
+                                        format="MM/DD/YYYY"
+                                        value={this.state.PaymentStart}
+                                        onChange={this.handleChange}
                                         required
                                         fullWidth
                                         InputProps={{
