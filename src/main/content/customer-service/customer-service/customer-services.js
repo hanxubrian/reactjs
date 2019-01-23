@@ -274,6 +274,8 @@ class CustomerServices extends Component {
 			searchText: this.props.searchText,
 			// loading: false,
 			isSubmittingForApproval: false,
+
+			showRightSidePanel: true,
 		};
 		console.log("constructor, Customer.js")
 
@@ -418,6 +420,11 @@ class CustomerServices extends Component {
 			isSubmittingForApproval: false
 		})
 	}
+	toggleRightSidePanel = () => {
+		this.setState({
+			showRightSidePanel: !this.state.showRightSidePanel
+		})
+	}
 
 
 
@@ -431,7 +438,7 @@ class CustomerServices extends Component {
 				<FusePageCustomSidebarScroll
 					classes={{
 						root: classNames(classes.layoutRoot, 'test123'),
-						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': summaryState }),
+						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': this.state.showRightSidePanel }),
 						leftSidebar: classNames(classes.layoutLeftSidebar, { 'openFilter': filterState }),
 						sidebarHeader: classes.layoutSidebarHeader,
 						header: classes.layoutHeader,
@@ -562,7 +569,7 @@ class CustomerServices extends Component {
 
 										<div className="flex">
 											<Tooltip title="Left Side Panel">
-												<IconButton className={classes.button} aria-label="Add an alarm">
+												<IconButton className={classes.button} aria-label="Add an alarm" onClick={this.toggleRightSidePanel}>
 													<Icon>event_note</Icon>
 												</IconButton>
 											</Tooltip>
@@ -616,7 +623,7 @@ Confirm Dialog for submitting
 						<Fragment>
 
 							<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
-								<h2 style={{ marginBlockStart: '1em' }}>{customerForm.props.open ? this.props.customerForm.data.Data.cus_name : "Filters"}</h2>
+								<h2 style={{ marginBlockStart: '1em' }}>{customerForm.props.open ? (this.props.customerForm.data===null ? "" : this.props.customerForm.data.Data.cus_name) : "Filters"}</h2>
 							</div>
 						</Fragment>
 					}
@@ -625,13 +632,19 @@ Confirm Dialog for submitting
 					}
 					rightSidebarHeader={
 						<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
-							<h2 style={{ marginBlockStart: '1em' }}>Summary</h2>
+							<h2 style={{ marginBlockStart: '1em' }}>{customerForm.props.open ? "Agreement & Cleaning Schedule" : "Summary"}</h2>
 						</div>
 					}
 					rightSidebarContent={
-						<SummaryPanel />
+						<Fragment>
+							{!customerForm.props.open && (
+								<SummaryPanel />
+							)}
+							{this.state.showRightSidePanel && (
+								<SummaryPanel />
+							)}
+						</Fragment>
 					}
-
 					onRef={instance => {
 						this.pageLayout = instance;
 					}}

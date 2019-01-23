@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import {Paper, Typography, withStyles } from '@material-ui/core';
+import React, { Component, Fragment } from 'react';
+import { Paper, Typography, withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { FuseAnimate } from '@fuse';
 
@@ -9,14 +9,16 @@ import Checkbox from '@material-ui/core/Checkbox';
 import green from '@material-ui/core/colors/green';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
+import {Card, CardContent, TextField, InputAdornment, MenuItem} from '@material-ui/core';
 // import * as Actions from 'store/actions';
 import Widget8 from './widget8';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
+
+import GridContainer from "Commons/Grid/GridContainer";
+import GridItem from "Commons/Grid/GridItem";
 
 function TabContainer(props) {
 	return (
@@ -100,6 +102,12 @@ class SummaryPanel extends Component {
 		value: 0,
 	};
 
+	handleChange = name => event => {
+		this.setState({
+			[name]: event.target.value
+		});
+	};
+	
 	render() {
 		const { classes, customerForm } = this.props;
 		// const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteCustomersAction, openNewCustomerForm, customerForm } = this.props;
@@ -186,119 +194,192 @@ class SummaryPanel extends Component {
 			<div>
 				<div className={classNames("flex flex-col p-16")}>
 					{this.props.customers && (
-						<Paper className="flex flex-1 flex-col min-h-px shadow-none" style={{ alignItems: 'center', flexDirection: 'column' }}>
+						<Fragment className="flex flex-1 flex-col min-h-px shadow-none" style={{ alignItems: 'center', flexDirection: 'column' }}>
 
 							{customerForm && customerForm.props.open
 								? (
 									<div style={{ marginTop: 50, display: 'flex', flexDirection: 'column' }}>
-										<h3>Validation Status</h3>
-										<FormControlLabel
-											control={
-												<Checkbox
-													checked={true}
-													// onChange={this.handleChange('checkedG')}
-													value="checkedG"
-													classes={{
-														root: classes.root,
-														checked: classes.checked
-													}}
-												/>
-											}
-											label="Company Information"
-										/>
-										<FormControlLabel
-											control={
-												<Checkbox
-													checked={true}
-													// onChange={this.handleChange('checkedG')}
-													value="checkedG"
-													classes={{
-														root: classes.root,
-														checked: classes.checked
-													}}
-												/>
-											}
-											label="Billing Address"
-										/><FormControlLabel
-											control={
-												<Checkbox
-													checked={true}
-													// onChange={this.handleChange('checkedG')}
-													value="checkedG"
-													classes={{
-														root: classes.root,
-														checked: classes.checked
-													}}
-												/>
-											}
-											label="Billing Settings"
-										/><FormControlLabel
-											control={
-												<Checkbox
-													checked={true}
-													// onChange={this.handleChange('checkedG')}
-													value="checkedG"
-													classes={{
-														root: classes.root,
-														checked: classes.checked
-													}}
-												/>
-											}
-											label="Company Contacts"
-										/><FormControlLabel
-											control={
-												<Checkbox
-													checked={true}
-													// onChange={this.handleChange('checkedG')}
-													value="checkedG"
-													classes={{
-														root: classes.root,
-														checked: classes.checked
-													}}
-												/>
-											}
-											label="Contract Details"
-										/><FormControlLabel
-											control={
-												<Checkbox
-													checked={true}
-													// onChange={this.handleChange('checkedG')}
-													value="checkedG"
-													classes={{
-														root: classes.root,
-														checked: classes.checked
-													}}
-												/>
-											}
-											label="Contract Signed"
-										/><FormControlLabel
-											control={
-												<Checkbox
-													checked={true}
-													// onChange={this.handleChange('checkedG')}
-													value="checkedG"
-													classes={{
-														root: classes.root,
-														checked: classes.checked
-													}}
-												/>
-											}
-											label="Service Location Info"
-										/><FormControlLabel
-											control={
-												<Checkbox
-													checked={true}
-													// onChange={this.handleChange('checkedG')}
-													value="checkedG"
-													classes={{
-														root: classes.root,
-														checked: classes.checked
-													}}
-												/>
-											}
-											label="Verified & Approved"
-										/>
 
+										<Paper className="flex flex-col p-12">
+											<h3>Service Agreement</h3>
+
+											<Fragment>
+												<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+													<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+														<TextField
+															type="number"
+															id="Amount"
+															label="Amount *"
+															className={classes.textField}
+															InputLabelProps={{
+																shrink: true
+															}}
+															value={this.state.Amount || ""}
+															// onChange={this.handleChange('Amount')}
+															margin="dense"
+															variant="outlined"
+															style={{ minWidth: "100px", width: "30%" }}
+															InputProps={{
+																startAdornment: <InputAdornment position="start">$</InputAdornment>
+															}}
+														/>
+													</GridItem>
+													<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+														<TextField
+															id="Description"
+															label="Description"
+															multiline
+															rows="2"
+															rowsMax="2"
+															className={classes.textField}
+															value={this.state.Description}
+															// onChange={this.handleChange('Description')}
+															margin="dense"
+															variant="outlined"
+															style={{ width: '100%' }}
+														/>
+													</GridItem>
+													<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+														<TextField
+															id="ContractType"
+															label="Contract Type *"
+															select
+															InputLabelProps={{
+																shrink: true
+															}}
+															className={classNames(classes.textField, "mr-6")}
+															value={this.state.ContractType === undefined ? 0 : this.state.ContractType}
+															// onChange={this.handleChange('ContractType')}
+															margin="dense"
+															variant="outlined"
+															style={{ minWidth: "100px", width: "30%" }}
+														>
+															{[{ value: 0, label: "Recurring" }
+																, { value: 1, label: "One-Time" }
+																, { value: 2, label: "Variable" }].map(option => (
+																	<MenuItem key={option.value} value={option.value}>
+																		{option.label}
+																	</MenuItem>
+																))}
+														</TextField>
+
+														<TextField
+															type="number"
+															inputProps={{ min: "0", max: "99", step: "1" }}
+															id="TermMonths"
+															label="Term Months *"
+															InputLabelProps={{
+																shrink: true
+															}}
+															className={classNames(classes.textField, "ml-6")}
+															value={this.state.TermMonths}
+															// onChange={this.handleChange('TermMonths')}
+															margin="dense"
+															variant="outlined"
+															style={{ width: '10%', minWidth: '110px' }}
+														/>
+													</GridItem>
+
+													<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+														<TextField
+															id="AgreementType"
+															label="Agreement Type *"
+															select
+															InputLabelProps={{
+																shrink: true
+															}}
+															className={classNames(classes.textField, "mr-6")}
+															value={this.state.AgreementType === undefined ? 1 : this.state.AgreementType}
+															// onChange={this.handleChange('AgreementType')}
+															margin="dense"
+															variant="outlined"
+															fullWidth
+														>
+															{[{ value: 0, label: "Customer" }
+																, { value: 1, label: "Jani-King" }
+																, { value: 2, label: "General" }
+															].map(option => (
+																<MenuItem key={option.value} value={option.value}>
+																	{option.label}
+																</MenuItem>
+															))}
+														</TextField>
+
+														<TextField
+															id="AcctExec"
+															label="Acct Exec"
+															select
+															InputLabelProps={{
+																shrink: true
+															}}
+															className={classNames(classes.textField, "ml-6")}
+															value={this.state.AcctExec === undefined ? 0 : this.state.AcctExec}
+															// onChange={this.handleChange('AcctExec')}
+															margin="dense"
+															variant="outlined"
+															fullWidth
+														>
+															
+														</TextField>
+													</GridItem>
+
+
+
+
+													<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+														<TextField
+															type="date"
+															id="SignDate"
+															label="Sign Date *"
+															className={classNames(classes.textField, "mr-6")}
+															InputLabelProps={{
+																shrink: true
+															}}
+															value={this.state.SignDate}
+															// onChange={this.handleChange('SignDate')}
+															margin="dense"
+															variant="outlined"
+															style={{ width: "20%", minWidth: "180px" }}
+														/>
+														<TextField
+															type="date"
+															id="StartDate"
+															label="Start Date *"
+															className={classNames(classes.textField, "mr-6 ml-6")}
+															InputLabelProps={{
+																shrink: true
+															}}
+															value={this.state.StartDate}
+															// onChange={this.handleChange('StartDate')}
+															margin="dense"
+															variant="outlined"
+															style={{ width: "20%", minWidth: "180px" }}
+														/>
+
+														<TextField
+															type="date"
+															id="ExpirationDate"
+															label="Expiration Date *"
+															className={classNames(classes.textField, "ml-6")}
+															InputLabelProps={{
+																shrink: true
+															}}
+															value={this.state.ExpirationDate}
+															// onChange={this.handleChange('ExpirationDate')}
+															margin="dense"
+															variant="outlined"
+															style={{ width: "20%", minWidth: "180px" }}
+														/>
+													</GridItem>
+												</GridContainer>
+											</Fragment>
+
+										</Paper>
+
+										<Paper className="flex flex-col p-12">
+											<h3>Cleaning Schedule</h3>
+
+										</Paper>
 									</div>)
 								: (<div>
 									<Card className={classes.card} >
@@ -329,7 +410,7 @@ class SummaryPanel extends Component {
 									</Card>
 								</div>
 								)}
-						</Paper>
+						</Fragment>
 					)}
 				</div>
 			</div>
