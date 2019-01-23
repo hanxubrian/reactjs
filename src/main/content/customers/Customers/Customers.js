@@ -693,17 +693,10 @@ class Customers extends Component {
 								<Fragment>
 									{customerForm.props.open ?
 										(
-											<CustomerForm
-												customers={this.props.customers}
-												franchisees={this.props.franchisees}
-												selectedCustomer={this.state.selectedCustomer} />
+											<CustomerForm />
 										) :
 										(
-											<CustomerListContent
-											// data={this.state.temp}
-											// loading={this.state.loading}
-											// pins={this.state.pins}
-											/>
+											<CustomerListContent />
 										)}
 								</Fragment>
 							)}
