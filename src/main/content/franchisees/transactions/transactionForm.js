@@ -26,7 +26,6 @@ import {withStyles} from "@material-ui/core";
 //Custom components
 import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
-import TransactionTable from "./transactionLine"
 import Select1 from 'react-select';
 import VendorDialogBox from "./vendorDialogBox";
 
@@ -976,8 +975,71 @@ class TransactionForm extends Component {
                             />
                         </div>
                         {this.state.transactionType.value===18 && this.props.transactionForm.vendor!==null && ( // Franchisee Supplies
-                            <div className="w-full mt-4">
-
+                            <div className="flex flex-row w-full mt-4 items-center">
+                                <TextField
+                                    label="Vendor"
+                                    className={classNames(classes.textField, 'mr-24')}
+                                    style={{minWidth: 300}}
+                                    value={this.props.vendor.vendor.label}
+                                    margin="normal"
+                                    variant="outlined"
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                    InputProps={{
+                                        readOnly: true,
+                                        classes: {
+                                            input: classes.inputReadonly
+                                        },
+                                    }}
+                                />
+                                <TextField
+                                    label="Vendor No"
+                                    className={classNames(classes.textField, 'mr-24')}
+                                    value={this.props.vendor.vendor_no}
+                                    margin="normal"
+                                    variant="outlined"
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                    InputProps={{
+                                        readOnly: true,
+                                        classes: {
+                                            input: classes.inputReadonly
+                                        },
+                                    }}
+                                />
+                                <TextField
+                                    label="Vendor Date"
+                                    className={classNames(classes.textField, 'mr-24')}
+                                    value={this.props.vendor.vendorDate}
+                                    margin="normal"
+                                    variant="outlined"
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                    InputProps={{
+                                        readOnly: true,
+                                        classes: {
+                                            input: classes.inputReadonly
+                                        },
+                                    }}
+                                />
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        className={classes.button}
+                                        onClick={() => {
+                                            this.props.showVendorDialogBox();
+                                        }}
+                                    >
+                                        Edit Vendor
+                                    </Button>
+                                </FuseAnimate>
                             </div>
                         )}
 
@@ -1003,7 +1065,6 @@ class TransactionForm extends Component {
                                 }}
                             />
                         </div>
-                        <Divider variant="middle"/>
                     </div>
                     <div className="flex flex-shrink flex-col w-full pl-24 pr-24 pt-0 pb-12">
                         <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
@@ -1141,6 +1202,7 @@ function mapStateToProps({transactions, auth})
 {
     return {
         transactionForm: transactions.transactionForm,
+        vendor: transactions.transactionForm.vendor,
         newTransaction: transactions.newTransaction,
         user: auth.login,
         regionId: auth.login.defaultRegionId,

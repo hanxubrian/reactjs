@@ -370,7 +370,7 @@ class InvoiceForm extends Component {
         this.setState({InvoiceDate: invoiceDate.format('YYYY-MM-DD')});
         this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
 
-        return suggestion.CustomerName;
+        return suggestion.CustomerName + ' - ' + suggestion.CustomerNo;
     };
 
     getSuggestions = (value) => {
@@ -382,8 +382,8 @@ class InvoiceForm extends Component {
                 return suggestions;
 
             if(!this.state.bCustomerNotFound && suggestions.length===0) {
-                this.setState({bCustomerNotFound: true});
-                this.setState({value: ''});
+                // this.setState({bCustomerNotFound: true});
+                // this.setState({value: ''});
             }
 
             return suggestions;
@@ -432,7 +432,7 @@ class InvoiceForm extends Component {
         if(nextProps.invoiceForm.customer!==null){
             if(nextProps.invoiceForm.type==='edit') {
                 this.setState({InvoiceNo: nextProps.invoices.invoiceDetail.Data.inv_no});
-                this.setState({value: nextProps.invoiceForm.customer.CustomerName});
+                this.setState({value: nextProps.invoiceForm.customer.CustomerName + ' - ' + nextProps.invoiceForm.customer.CustomerNo});
                 this.setState({PO_number: nextProps.invoiceForm.customer.CustomerNo});
                 this.setState({InvoiceDescription: nextProps.invoices.invoiceDetail.Data.Description});
                 this.setState({notes: nextProps.invoices.invoiceDetail.Data.Notes});
@@ -692,7 +692,7 @@ class InvoiceForm extends Component {
     };
 
     openNewCustomerDialog =() => {
-      this.setState({bCustomerNotFound: true})
+        this.setState({bCustomerNotFound: true})
     };
 
 
@@ -723,6 +723,21 @@ class InvoiceForm extends Component {
         let bReadonly = false;
         if(this.props.invoiceForm.type === 'new') bReadonly = true;
 
+        const customerStatus = [
+            {key: 'A', label: 'Active'}, {key: 'C', label: 'Cancelled'}, {key: 'I', label: 'InActive'},
+            {key: 'S', label: 'Suspended'}, {key: 'O', label: 'One Time Clean Account'}, {key: 'T', label: 'Transferred'}
+        ];
+
+        let statusName = '';
+
+        if(this.state.selectedCustomer!==null) {
+            let status = this.state.selectedCustomer.StatusName;
+            let customerStatusObj = customerStatus.filter(c=>c.key===status);
+            if(customerStatusObj.length>0) {
+                statusName = customerStatusObj[0].label;
+            }
+        }
+
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="h-full flex flex-col relative">
@@ -751,11 +766,11 @@ class InvoiceForm extends Component {
                                     ref={this.storeInputReference}
                                 />
                                 {this.props.invoiceForm.type === 'new' && (
-                                <Fab aria-label="remove" color="primary"
-                                     onClick={this.openNewCustomerDialog}
-                                     className={classNames(classes.addCustomer, "ml-12")} style={{width: 36, height: 36, minHeight: 36}}>
-                                    <Icon>person_add</Icon>
-                                </Fab>
+                                    <Fab aria-label="remove" color="primary"
+                                         onClick={this.openNewCustomerDialog}
+                                         className={classNames(classes.addCustomer, "ml-12")} style={{width: 36, height: 36, minHeight: 36}}>
+                                        <Icon>person_add</Icon>
+                                    </Fab>
                                 )}
                             </Grid>
                             <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -936,13 +951,16 @@ class InvoiceForm extends Component {
                                             </Typography>
                                         </div>
                                         {this.state.selectedCustomer && (
-                                            <div className="flex flex-row justify-start mb-4">
+                                            <div className="flex flex-row justify-between mb-4">
                                                 <div className="flex flex-row items-center">
                                                     <Icon fontSize={"small"} className="mr-4">place</Icon>
                                                     <Typography variant="subtitle1" color="inherit">
                                                         {this.state.selectedCustomer.Address}, {this.state.selectedCustomer.City}, {this.state.selectedCustomer.StateName} {this.state.selectedCustomer.PostalCode}
                                                     </Typography>
                                                 </div>
+                                                <Typography variant="subtitle1" color="inherit">
+                                                    <strong>Customer Status: {statusName}</strong>
+                                                </Typography>
                                             </div>
                                         )}
                                         {this.state.selectedCustomer && (
