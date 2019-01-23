@@ -561,6 +561,11 @@ class CustomerServices extends Component {
 										</div>
 
 										<div className="flex">
+											<Tooltip title="Left Side Panel">
+												<IconButton className={classes.button} aria-label="Add an alarm">
+													<Icon>event_note</Icon>
+												</IconButton>
+											</Tooltip>
 											<Tooltip title="Close">
 												<IconButton className={classes.button} aria-label="Add an alarm" onClick={this.closeComposeForm}>
 													<Icon>close</Icon>

@@ -972,7 +972,7 @@ class FilterPanel extends Component {
 											}}
 											onChange={this.handleChange('customerName')}
 											margin="dense"
-											variant="outlined"
+											// variant="outlined"
 											autoFocus
 											fullWidth />
 
@@ -988,7 +988,7 @@ class FilterPanel extends Component {
 											}}
 											onChange={this.handleChange('customerAddress')}
 											margin="dense"
-											variant="outlined"
+											// variant="outlined"
 											fullWidth />
 									</GridItem>
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -1002,7 +1002,7 @@ class FilterPanel extends Component {
 											}}
 											onChange={this.handleChange('Address2')}
 											margin="dense"
-											variant="outlined"
+											// variant="outlined"
 											fullWidth />
 									</GridItem>
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -1016,8 +1016,8 @@ class FilterPanel extends Component {
 											}}
 											onChange={this.handleChange('customerCity')}
 											margin="dense"
-											variant="outlined"
-											style={{ width: '55%' }}
+											// variant="outlined"
+											style={{ width: '60%' }}
 										/>
 
 
@@ -1032,8 +1032,8 @@ class FilterPanel extends Component {
 											}}
 											onChange={this.handleChange('customerState')}
 											margin="dense"
-											variant="outlined"
-											style={{ width: '20%' }}
+											// variant="outlined"
+											style={{ width: '15%' }}
 										>
 											{stateNames.map((option, index) => (
 												<MenuItem key={index} value={option.Value}>
@@ -1052,7 +1052,7 @@ class FilterPanel extends Component {
 											}}
 											onChange={this.handleChange('customerZip')}
 											margin="dense"
-											variant="outlined"
+											// variant="outlined"
 											style={{ width: '25%' }}
 										/>
 									</GridItem>
@@ -1075,7 +1075,7 @@ class FilterPanel extends Component {
 													value: this.state.customerPhone,
 													onChange: this.handleChange('customerPhone')
 												}}
-												variant="outlined"
+												// variant="outlined"
 												fullWidth
 												required
 											/>
@@ -1098,7 +1098,7 @@ class FilterPanel extends Component {
 													value: this.state.customerFax,
 													onChange: this.handleChange('customerFax')
 												}}
-												variant="outlined"
+												// variant="outlined"
 												fullWidth
 												required
 											/>
@@ -1118,7 +1118,7 @@ class FilterPanel extends Component {
 											}}
 											onChange={this.handleChange('customerEmail')}
 											margin="dense"
-											variant="outlined"
+											// variant="outlined"
 											style={{ width: '100%' }}
 										/>
 
@@ -1132,7 +1132,7 @@ class FilterPanel extends Component {
 											}}
 											onChange={this.handleChange('customerWebsite')}
 											margin="dense"
-											variant="outlined"
+											// variant="outlined"
 											style={{ width: '100%' }}
 										/>
 									</GridItem>
@@ -1149,7 +1149,7 @@ class FilterPanel extends Component {
 											}}
 											onChange={this.handleChange('AccountTypeGroup')}
 											margin="dense"
-											variant="outlined"
+											// variant="outlined"
 											fullWidth
 										// style={{ minWidth: "100px", width: "30%" }}
 										>
@@ -1172,7 +1172,7 @@ class FilterPanel extends Component {
 											}}
 											onChange={this.handleChange('AccountType')}
 											margin="dense"
-											variant="outlined"
+											// variant="outlined"
 											fullWidth
 										// style={{ minWidth: "100px", width: "30%" }}
 										>
@@ -1246,7 +1246,7 @@ class FilterPanel extends Component {
 													className={classes.textField}
 													onChange={this.handleChange('StoreNumber')}
 													margin="dense"
-													variant="outlined"
+													// variant="outlined"
 													fullWidth />
 											</div>
 										)}
