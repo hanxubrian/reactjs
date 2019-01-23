@@ -629,21 +629,21 @@ Confirm Dialog for submitting
 					leftSidebarContent={
 						<FilterPanel />
 					}
-					rightSidebarHeader={
-						<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
-							<h2 style={{ marginBlockStart: '1em' }}>{customerForm.props.open ? "Agreement & Cleaning Schedule" : "Summary"}</h2>
-						</div>
-					}
-					rightSidebarContent={
-						<Fragment>
-							{/* {!customerForm.props.open && summaryState && (<SummaryPanel />)} */}
-							{/* {customerForm.props.open && this.state.showRightSidePanel && (<SummaryPanel />)} */}
-							<SummaryPanel />
-						</Fragment>
-					}
-					onRef={instance => {
-						this.pageLayout = instance;
-					}}
+					// rightSidebarHeader={
+					// 	<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
+					// 		<h2 style={{ marginBlockStart: '1em' }}>{customerForm.props.open ? "Agreement & Cleaning Schedule" : "Summary"}</h2>
+					// 	</div>
+					// }
+					// rightSidebarContent={
+					// 	<Fragment>
+					// 		{/* {!customerForm.props.open && summaryState && (<SummaryPanel />)} */}
+					// 		{/* {customerForm.props.open && this.state.showRightSidePanel && (<SummaryPanel />)} */}
+					// 		<SummaryPanel />
+					// 	</Fragment>
+					// }
+					// onRef={instance => {
+					// 	this.pageLayout = instance;
+					// }}
 				>
 				</FusePageCustomSidebarScroll>
 				{(this.props.bCustomerFetchStart) && (
