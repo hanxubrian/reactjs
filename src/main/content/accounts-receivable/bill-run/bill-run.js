@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 
 // core components
-import {Icon, IconButton, Fab,ClickAwayListener, Input, Paper, Typography,CircularProgress} from '@material-ui/core';
+import {Icon, IconButton, Fab,ClickAwayListener, Input, Paper, Typography,CircularProgress,MenuItem,InputLabel ,OutlinedInput , FormControl, Select} from '@material-ui/core';
+import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
@@ -23,6 +24,8 @@ import "react-table/react-table.css";
 import _ from 'lodash';
 import classNames from 'classnames';
 import BillRunDialog from './bill-run-create';
+import {UPDATE_FROM_DATE_INVOICE, UPDATE_TO_DATE_INVOICE} from "../../../../store/actions";
+import MomentUtils from "@date-io/moment/build/index";
 
 const headerHeight = 100;
 
@@ -94,10 +97,11 @@ const styles = theme => ({
         position: 'relative'
     },
     search: {
-        width: 360,
+        // width: 360,
         [theme.breakpoints.down('sm')]: {
             width: '100%'
-        }
+        },
+        minWidth:360,
     },
     sideButton          : {
         backgroundColor: theme.palette.primary.light,
@@ -130,8 +134,26 @@ const styles = theme => ({
     progress: {
         margin: theme.spacing.unit * 2,
     },
+    formControl: {
+        margin: theme.spacing.unit,
+        minWidth: 120,
+    },
 });
-
+const THIS_WEEK = 1;
+const THIS_WEEK_TO_DATE = 2;
+const THIS_MONTH = 3;
+const THIS_MONTH_TO_DATE = 4;
+const THIS_QUARTER = 5;
+const THIS_QUARTER_TO_DATE = 6;
+const THIS_YEAR = 7;
+const THIS_YEAR_TO_DATE = 8;
+const TODAY = 9;
+const YESTERDAY = 10;
+const LAST_QUARTER = 11;
+const LAST_YEAR = 12;
+const CUSTOM_DATE = 13;
+const PERIOD = 14;
+// const inputLabelRef = React.useRef(null);
 class BillRun extends Component {
     state = {
         s: '',
@@ -141,6 +163,10 @@ class BillRun extends Component {
         regionId: 0,
         open: false,
         flag: false,
+        FromDate: undefined,
+        ToDate: undefined,
+        billrunDateOption: THIS_MONTH,
+        billrunDatePeriod: moment(),
     };
 
     constructor(props){
@@ -217,6 +243,104 @@ class BillRun extends Component {
         //     this.setState({flag: !this.state.flag});
         // }
     }
+    handleChange1 = event => {
+        this.setState({[event.target.name]: event.target.value});
+        let startDate, endDate, quarter, year;
+
+        switch (event.target.value) {
+            case THIS_WEEK:
+                startDate = moment().day(0);
+                endDate = moment().day(6);
+                break;
+            case THIS_WEEK_TO_DATE:
+                startDate = moment().day(0);
+                endDate = moment();
+                break;
+            case THIS_MONTH:
+                startDate = moment().date(1);
+                endDate = moment(moment().date(1)).endOf('month');
+                break;
+            case THIS_MONTH_TO_DATE:
+                startDate = moment().date(1);
+                endDate = moment();
+                break;
+            case THIS_QUARTER:
+                quarter = moment().quarter();
+                startDate = moment().quarter(quarter).startOf('quarter');
+                endDate = moment().quarter(quarter).endOf('quarter');
+                break;
+            case THIS_QUARTER_TO_DATE:
+                quarter = moment().quarter();
+                startDate = moment().quarter(quarter).startOf('quarter');
+                endDate = moment();
+                break;
+            case THIS_YEAR:
+                year = moment().year();
+                startDate = moment().startOf('year');
+                endDate = moment().endOf('year');
+                break;
+            case THIS_YEAR_TO_DATE:
+                year = moment().year();
+                startDate = moment().startOf('year');
+                endDate = moment();
+                break;
+            case TODAY:
+                startDate = moment();
+                endDate = startDate;
+                break;
+            case YESTERDAY:
+                startDate = moment().subtract(1, 'days');
+                endDate = startDate;
+                break;
+            case LAST_QUARTER:
+                quarter = moment().quarter();
+                if(quarter===1)
+                    startDate = moment().subtract(1, 'years').quarter(4).startOf('quarter');
+                else
+                    startDate = moment().quarter(quarter-1).startOf('quarter');
+
+                if(quarter===1)
+                    endDate = moment().quarter(quarter).startOf('quarter').subtract(1, 'days');
+                else
+                    endDate = moment().quarter(quarter-1).endOf('quarter');
+                break;
+            case LAST_YEAR:
+                year = moment().year();
+                startDate = moment().subtract(1, 'years').startOf('year');
+                endDate = moment().subtract(1, 'years').startOf('year').add(1,'years').subtract(1,'days');
+                break;
+            case PERIOD:
+                year = moment(this.state.billrunDatePeriod).year();
+                let month = moment(this.state.billrunDatePeriod).month();
+                startDate = moment().year(year).month(month).startOf('month');
+                endDate = moment().year(year).month(month).endOf('month');
+        }
+        console.log("startDate",startDate);
+        console.log("endDate",endDate);
+        // if(event.target.value!==CUSTOM_DATE){
+        //     this.props.updateDate(UPDATE_FROM_DATE_INVOICE, startDate.format("MM/DD/YYYY"));
+        //     this.props.updateDate(UPDATE_TO_DATE_INVOICE, endDate.format("MM/DD/YYYY"));
+        // }
+    };
+    handleInvoiceFromDateChange = date => {
+        this.setState({FromDate: date});
+        // this.props.updateDate(UPDATE_FROM_DATE_INVOICE, moment(date).format("MM/DD/YYYY"));
+    };
+
+    handleInvoiceToDateChange = date => {
+        this.setState({ ToDate: date });
+        // this.props.updateDate(UPDATE_TO_DATE_INVOICE, moment(date).format("MM/DD/YYYY"));
+    };
+    handlePeriodChange = date => {
+        this.setState({ billrunDatePeriod: date });
+        let year = moment(date).year();
+        let month = moment(date).month();
+        let startDate = moment().year(year).month(month).startOf('month').format("MM/DD/YYYY");
+        let endDate = moment().year(year).month(month).endOf('month').format("MM/DD/YYYY");
+
+        // this.props.updateDate(UPDATE_FROM_DATE_INVOICE, startDate);
+        // this.props.updateDate(UPDATE_TO_DATE_INVOICE, endDate);
+    };
     render()
     {
         const {classes} = this.props;
@@ -355,6 +479,7 @@ class BillRun extends Component {
                                     columns={[
                                         {
                                             Header: ()=>(
+                                                <div>
                                                 <div className="flex items-center pr-0 lg:pr-12">
                                                     <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
                                                         <Input
@@ -371,7 +496,112 @@ class BillRun extends Component {
                                                         />
                                                         <Icon color="action" className="mr-16">search</Icon>
                                                     </Paper>
+                                                    <div className="flex items-center pr-0 lg:pr-12">
+                                                        {/*<Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>*/}
+                                                        <FormControl variant="outlined" className={classes.formControl}>
+                                                            <InputLabel  htmlFor="outlined-age-simple">
+                                                                Date
+                                                            </InputLabel>
+                                                        <Select
+                                                            value={this.state.billrunDateOption}
+                                                            onChange={this.handleChange1}
+                                                            input={
+                                                                <OutlinedInput
+                                                                    name="date"
+                                                                    labelWidth={50}
+                                                                    id="outlined-age-native-simple"
+                                                                />
+                                                            }
+                                                            inputProps={{
+                                                                name: 'billrunDateOption',
+                                                                id  : 'billrunDateOption'
+                                                            }}
+                                                        >
+                                                            <MenuItem value={THIS_WEEK}>This Week</MenuItem>
+                                                            <MenuItem value={THIS_WEEK_TO_DATE}>This Week-to-date</MenuItem>
+                                                            <MenuItem value={THIS_MONTH}>This Month</MenuItem>
+                                                            <MenuItem value={THIS_MONTH_TO_DATE}>This Month-to-date</MenuItem>
+                                                            <MenuItem value={THIS_QUARTER}>This Quarter</MenuItem>
+                                                            <MenuItem value={THIS_QUARTER_TO_DATE}>This Quarter-to-Date</MenuItem>
+                                                            <MenuItem value={THIS_YEAR}>This Year</MenuItem>
+                                                            <MenuItem value={THIS_YEAR_TO_DATE}>This Year-to-date</MenuItem>
+                                                            <MenuItem value={TODAY}>Today</MenuItem>
+                                                            <MenuItem value={YESTERDAY}>Yesterday</MenuItem>
+                                                            <MenuItem value={LAST_QUARTER}>Last Quarter</MenuItem>
+                                                            <MenuItem value={LAST_YEAR}>Last Year</MenuItem>
+                                                            <MenuItem value={CUSTOM_DATE}>Custom Date</MenuItem>
+                                                            <MenuItem value={PERIOD}>Period</MenuItem>
+                                                        </Select>
+                                                        </FormControl>
+                                                        {/*</Paper>*/}
+                                                        { this.state.billrunDateOption===CUSTOM_DATE && (
+                                                            <div className="flex items-center pr-0 lg:pr-12">
+                                                                <MuiPickersUtilsProvider utils={MomentUtils}>
+                                                                    <div className="flex flex-row">
+
+                                                                        <DatePicker
+                                                                            margin="none"
+                                                                            label="From Date"
+                                                                            name="FromDate"
+                                                                            variant="outlined"
+                                                                            format="MM/DD/YYYY"
+                                                                            value={this.state.FromDate}
+                                                                            onChange={this.handleInvoiceFromDateChange}
+                                                                            fullWidth
+                                                                            required
+                                                                            color="secondary"
+                                                                        />
+                                                                        <br></br>
+                                                                        <DatePicker
+                                                                            margin="none"
+                                                                            label="To Date"
+                                                                            name="ToDate"
+                                                                            variant="outlined"
+                                                                            format="MM/DD/YYYY"
+                                                                            value={this.state.ToDate}
+                                                                            onChange={this.handleInvoiceToDateChange}
+                                                                            fullWidth
+                                                                            required
+                                                                            color="secondary"
+                                                                            style={{marginTop: '30px!important'}}
+                                                                        />
+                                                                    </div>
+                                                                </MuiPickersUtilsProvider>
+                                                            </div>
+                                                        )}
+                                                        { this.state.billrunDateOption===PERIOD && (
+                                                            <div>
+                                                                <MuiPickersUtilsProvider utils={MomentUtils}>
+                                                                    <div className="flex flex-row">
+
+                                                                        <DatePicker
+                                                                            margin="none"
+                                                                            label="Period"
+                                                                            name="invoiceDatePeriod"
+                                                                            variant="outlined"
+                                                                            format="MM/YYYY"
+                                                                            value={this.state.billrunDatePeriod}
+                                                                            onChange={this.handlePeriodChange}
+                                                                            fullWidth
+                                                                            InputProps={{
+                                                                                classes: {
+                                                                                    input: classes.input,
+                                                                                },
+                                                                            }}
+                                                                            InputLabelProps = {{
+                                                                                shrink: true,
+                                                                                classes: {outlined: classes.label}
+                                                                            }}
+                                                                            openToYearSelection={true}
+                                                                        />
+                                                                    </div>
+                                                                </MuiPickersUtilsProvider>
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </div>
+                                                </div>
+
                                             ),
                                             columns: [
                                                 {

@@ -44,6 +44,33 @@ class BillrunService {
                 })
         });
     }
+    getallbillrun=( RegionIds, UserIds ,isBillPeriod,BillMonth,BillYear,FromDate,ToDate,SearchText)=>{
+        const data ={
+            'RegionIds'                             :RegionIds,
+            'UserIds'                               :UserIds,
+            'isBillPeriod'                          :isBillPeriod,
+            'BillMonth'                             :BillMonth,
+            'BillYear'                              :BillYear,
+            'FromDate'                              :FromDate,
+            'ToDate'                                :ToDate,
+            'SearchText'                            :SearchText,
+
+        }
+        return new Promise((resolve, reject) => {
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/billrunlist`,data)
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    }
 
 }
 
