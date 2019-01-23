@@ -59,7 +59,7 @@ export function removeBillrun(key, invoices) {
 }
 
 
-export  function createbillrun(RegionId, BillRunDate, UserId, Message) {
+export  function createbillrun(RegionId, Year ,Month,User, UserId,Message) {
     return (dispatch) => {
 
         dispatch({
@@ -68,7 +68,7 @@ export  function createbillrun(RegionId, BillRunDate, UserId, Message) {
         });
 
         (async () => {
-            let res = await billrunService.createbillrun(RegionId, BillRunDate, UserId, Message);
+            let res = await billrunService.createbillrun(RegionId, Year ,Month,User, UserId,Message);
             if (res.IsSuccess) {
                 dispatch({
                     type: CREATE_BILLRUN_SUCCESS,

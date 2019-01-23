@@ -23,7 +23,7 @@ import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-
+import  {CircularProgress} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, TimePicker, DatePicker } from 'material-ui-pickers';
@@ -117,13 +117,28 @@ const styles = theme => ({
         '&.opened1'                    : {
             transform: 'translateX(250px)'
         }
-    }
+    },
+    overlay: {
+        position: 'absolute',
+        top: -104,
+        left: -65,
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: 'rgba(0,0,0, .6)',
+        zIndex: 1000,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex'
+    },
+    progress: {
+        margin: theme.spacing.unit * 2,
+    },
 });
 
 class BillRunDialog extends Component {
     state = {
         open                    : false,
-        selectedDate            : "2019-01",
+        selectedDate            : moment(),
         message                 : "",
         userId                  : null,
         regionId                : null,
@@ -158,6 +173,7 @@ class BillRunDialog extends Component {
         this.setState({ open: false });
     };
     handleDateChange = date => {
+        console.log("date",date);
         this.setState({ selectedDate: date });
     };
     onchangeDate=(event)=>{
@@ -166,22 +182,40 @@ class BillRunDialog extends Component {
 
     }
     handleBillrunDateChange = date => {
-        this.setState({selectedDate:date})
+        console.log("date",date);
+        this.setState({selectedDate:date});
+
 
     };
     onchangeMessage=(e)=>{
+
         this.setState({message:e.target.value})
 
     }
     billrun=()=>{
         // console.log("this.state.auth",this.props.auth);
         if(this.props.auth && this.props.auth !==null){
+            let date = this.state.selectedDate;
+            let year = moment(date).year();
+            let month = moment(date).month()+1;
+            let user = this.props.auth.Username;
             let userid   = this.props.auth.UserId;
             let regionid = this.props.auth.defaultRegionId;
             console.log("userid==",userid);
             console.log("regionid==",regionid);
-            if(userid && userid != null && regionid && regionid != null ){
-                let getres = this.props.createbillrun(regionid,this.state.selectedDate,userid,this.state.message);
+            console.log("year==",year);
+            console.log("month==",month);
+            console.log("user==",user);
+            if(userid && userid != null && regionid && regionid != null && year && year != null && month && month !=null ){
+                let getres = this.props.createbillrun(
+                    regionid,
+                    year,
+                    month,
+                    user,
+                    userid,
+                    this.state.message
+                );
+                //RegionId, Year ,Month,User, UserId,Message
                 console.log("getres====================",getres);
             }
         }
@@ -190,10 +224,16 @@ class BillRunDialog extends Component {
     }
     render() {
 
-        const { classes } = this.props;
+        const { classes,loading } = this.props;
         const { selectedDate ,auth,billruns} = this.state;
         return (
             <div>
+                {loading && loading !==null && (
+                    <div className={classes.overlay}>
+                        <CircularProgress className={classes.progress} color="secondary"  />
+                    </div>
+                )}
+
                 <Dialog
                     onClose={this.handleClose}
                     aria-labelledby="customized-dialog-title"
@@ -211,11 +251,11 @@ class BillRunDialog extends Component {
                                     <DatePicker
                                         margin="none"
                                         label="Period"
-                                        name="invoiceDatePeriod"
+                                        name="selectedDate"
                                         variant="outlined"
                                         format="MM/YYYY"
                                         value={selectedDate}
-                                        onChange={this.handleBillrunDateChange}
+                                        onChange={this.handleDateChange}
 
                                         InputProps={{
                                             classes: {
@@ -294,6 +334,7 @@ function mapStateToProps({invoices, auth,billruns})
     return {
         invoices: invoices.invoicesDB,
         billruns: billruns.billruncreate,
+        loading : billruns.loadingstatus,
         auth    : auth.login,
     }
 }

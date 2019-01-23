@@ -2,11 +2,13 @@ import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import {CREATE_BILLRUN_FAILD, CREATE_BILLRUN_START} from "../actions/billrun.action";
 
 const initialState = {
-    billrunsDB: null,
-    bLoadedBillruns: false,
-    billruncreate       : null,
+    billrunsDB              : null,
+    bLoadedBillruns         : false,
+    billruncreate           : null,
+    loadingstatus           : false,
 };
 
 
@@ -28,7 +30,19 @@ const billruns = function(state = initialState, action) {
         case Actions.CREATE_BILLRUN_SUCCESS:
         {
             return {
-                ...state,billruncreate: action.payload
+                ...state,billruncreate: action.payload,loadingstatus: false
+            }
+        }
+        case Actions.CREATE_BILLRUN_START:
+        {
+            return {
+                ...state,loadingstatus: true
+            }
+        }
+        case Actions.CREATE_BILLRUN_FAILD:
+        {
+            return {
+                ...state,loadingstatus: false
             }
         }
         case UserActions.USER_LOGGED_OUT:

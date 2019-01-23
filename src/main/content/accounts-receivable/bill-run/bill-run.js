@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 // core components
-import {Icon, IconButton, Fab,ClickAwayListener, Input, Paper, Typography} from '@material-ui/core';
+import {Icon, IconButton, Fab,ClickAwayListener, Input, Paper, Typography,CircularProgress} from '@material-ui/core';
 import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
@@ -114,6 +114,21 @@ const styles = theme => ({
     },
     topbtncus:{
         marginRight: 100,
+    },
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: 'rgba(0,0,0, .6)',
+        zIndex: 1000,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex'
+    },
+    progress: {
+        margin: theme.spacing.unit * 2,
     },
 });
 
