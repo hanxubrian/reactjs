@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import connect from "react-redux/es/connect/connect";
 
 import { FusePageCustomSidebarScroll, FuseAnimate } from '@fuse';
-import { Icon, IconButton, Fab, Typography, Toolbar, CircularProgress, Menu, MenuItem, Checkbox, FormControlLabel, Tooltip, Button } from '@material-ui/core';
+import { Icon, IconButton, Fab, Typography, Toolbar, CircularProgress, Menu, MenuItem, Checkbox, FormControlLabel, Tooltip, Button, ListItemIcon } from '@material-ui/core';
 import classNames from 'classnames';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 
@@ -34,7 +34,10 @@ import CustomerListContent from './CustomerListContent';
 import DialogEmailToCustomer from './DialogEmailToCustomer';
 
 // import FuseUtils from '@fuse/FuseUtils';
-
+import IconEmail from '@material-ui/icons/Email';
+import IconSms from '@material-ui/icons/Sms';
+import IconPhone from '@material-ui/icons/Phone';
+import IconChat from '@material-ui/icons/ChatBubbleOutline';
 
 const headerHeight = 80;
 
@@ -451,31 +454,6 @@ class CustomerServices extends Component {
 										</div>
 										<div className="flex flex-shrink items-center">
 
-											<Tooltip title="Send Email">
-												<IconButton className={classes.button} aria-label="add">
-													<Icon>email</Icon>
-												</IconButton>
-											</Tooltip>
-
-											<Tooltip title="Send SMS">
-												<IconButton className={classes.button} aria-label="add">
-													<Icon>sms</Icon>
-												</IconButton>
-											</Tooltip>
-
-											<Tooltip title="Phone Call">
-												<IconButton className={classes.button} aria-label="add">
-													<Icon>phone_iphone</Icon>
-												</IconButton>
-											</Tooltip>
-
-											<Tooltip title="Chat">
-												<IconButton className={classes.button} aria-label="add">
-													<Icon>chat_bubble_outline</Icon>
-												</IconButton>
-											</Tooltip>
-
-
 											{/* <Tooltip title="Add new customer">
 												<IconButton className={classes.button} aria-label="add" onClick={openNewCustomerForm}>
 													<Icon>add</Icon>
@@ -517,45 +495,7 @@ class CustomerServices extends Component {
 										</div> */}
 										{/* <div className="flex flex-shrink" style={{ justifyContent: "space-between" }}> */}
 										<div className="flex">
-											<IconButton
-												// className={classNames(classes.button, classes.validationMenu)}
-												className={classNames(classes.button, classes.invalidationMenu)}
-												aria-label="Add an alarm"
-												aria-owns={anchorEl ? 'validation-menu' : undefined}
-												aria-haspopup="true"
-												onClick={this.showValidationMenu}
-											>
-												{/* <Icon>check_circle</Icon> */}
-												<Icon>error</Icon>
-											</IconButton>
-											<Menu
-												id="validation-menu"
-												anchorEl={anchorEl}
-												open={Boolean(anchorEl)}
-												onClose={this.closeValidationMenu}
-											>
-												<MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Company Information" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Billing Address" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Billing Settings" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Company Contacts" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Contract Details" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Contract Signed" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Service Location Info" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Verified &amp; Approved" /></MenuItem>
-											</Menu>
-											<Tooltip title="Save">
-												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
-													<Icon>save</Icon>
-												</IconButton>
-											</Tooltip>
-											<Tooltip title="Submit for Approval">
-												<IconButton className={classes.button} aria-label="Add an alarm" onClick={this.trySubmitForApproval}>
-													<Icon>cloud_upload</Icon>
-												</IconButton>
-											</Tooltip>
-										</div>
-										<div className="flex">
-											<Tooltip title="Contact">
+											<Tooltip title="">
 												<IconButton
 													className={classNames(classes.button)}
 													aria-label="Add an alarm"
@@ -563,43 +503,70 @@ class CustomerServices extends Component {
 													aria-haspopup="true"
 													onClick={this.showContactMenu}
 												>
-													<Icon>sms</Icon>
+													<Icon>menu</Icon>
 												</IconButton>
 											</Tooltip>
+
 											<Menu
 												id="title-bar-contact-menu"
 												anchorEl={anchorContactMenu}
 												open={Boolean(anchorContactMenu)}
 												onClose={this.closeContactMenu}
 											>
-												<MenuItem onClick={this.closeContactMenu}>Chat with Account Executive</MenuItem>
-												<MenuItem onClick={this.closeContactMenu}>Email to Account Executive</MenuItem>
-												<MenuItem onClick={this.closeContactMenu}>SMS to Customer</MenuItem>
-												<MenuItem onClick={this.onClickEmailToCustomer}>Email to Customer</MenuItem>
+												<MenuItem onClick={this.closeContactMenu}>
+													<ListItemIcon><IconEmail /></ListItemIcon>
+													<Typography variant="inherit">Send Email</Typography>
+												</MenuItem>
+
+												<MenuItem onClick={this.closeContactMenu}>
+													<ListItemIcon><IconSms /></ListItemIcon>
+													<Typography variant="inherit">Send SMS</Typography>
+												</MenuItem>
+
+												<MenuItem onClick={this.closeContactMenu}>
+													<ListItemIcon><IconPhone /></ListItemIcon>
+													<Typography variant="inherit">Phone Call</Typography>
+												</MenuItem>
+
+												<MenuItem onClick={this.closeContactMenu}>
+													<ListItemIcon><IconChat /></ListItemIcon>
+													<Typography variant="inherit">Send Chat</Typography>
+												</MenuItem>
+
 											</Menu>
-											<Tooltip title="Discard">
-												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
-													<Icon>delete</Icon>
+										</div>
+
+										<div className="flex">
+											<Tooltip title="First Customer">
+												<IconButton className={classes.button} aria-label="add">
+													<Icon>first_page</Icon>
 												</IconButton>
 											</Tooltip>
+											<Tooltip title="Previous Customer">
+												<IconButton className={classes.button} aria-label="add">
+													<Icon>navigate_before</Icon>
+												</IconButton>
+											</Tooltip>
+											<Tooltip title="Next Customer">
+												<IconButton className={classes.button} aria-label="add">
+													<Icon>navigate_next</Icon>
+												</IconButton>
+											</Tooltip>
+
+											<Tooltip title="Last Customer">
+												<IconButton className={classes.button} aria-label="add">
+													<Icon>last_page</Icon>
+												</IconButton>
+											</Tooltip>
+										</div>
+
+										<div className="flex">
 											<Tooltip title="Close">
-												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
+												<IconButton className={classes.button} aria-label="Add an alarm" onClick={this.closeComposeForm}>
 													<Icon>close</Icon>
 												</IconButton>
 											</Tooltip>
 										</div>
-										{/* <IconButton className={classes.button} aria-label="Add an alarm" onClick={toggleFilterPanel}>
-												<Icon>person_outline</Icon>
-											</IconButton> */}
-
-										{/* <IconButton className={classes.button} aria-label="Add an alarm" onClick={toggleSummaryPanel}>
-												<Icon>check_circle</Icon>
-											</IconButton> */}
-
-
-
-
-										{/* </div> */}
 									</div>
 
 								</div>
