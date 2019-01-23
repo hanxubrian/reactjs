@@ -611,7 +611,7 @@ Confirm Dialog for submitting
 						<Fragment>
 
 							<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
-								<h2 style={{ marginBlockStart: '1em' }}>Filters</h2>
+								<h2 style={{ marginBlockStart: '1em' }}>{customerForm.props.open ? this.props.customerForm.data.Data.cus_name : "Filters"}</h2>
 							</div>
 						</Fragment>
 					}

@@ -310,7 +310,8 @@ function escapeRegexCharacters(str) {
 
 
 function getSteps() {
-	return ['Service Agreement', 'Billing', 'Service Settings', "Walk-Thru", "Account Offering", "Documents", "Marketing", "Account History"];
+	// return ['Service Agreement', 'Billing', 'Service Settings', "Walk-Thru", "Account Offering", "Documents", "Marketing", "Account History"];
+	return ['Contact', 'Billing', 'Inspections'];
 }
 
 const Upload_Document_headers = [
