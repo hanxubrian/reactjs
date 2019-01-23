@@ -1,7 +1,7 @@
 class Utils {
 	static getCustomerListFromDb = (customerDb) => {
 		let customerList = [];
-		if (customerDb === null || customerDb === undefined) return;
+		if (customerDb === null || customerDb === undefined || customerDb.Data === undefined) return;
 
 		customerDb.Data.Regions.forEach(x => {
 			customerList = [...customerList, ...x.CustomerList];

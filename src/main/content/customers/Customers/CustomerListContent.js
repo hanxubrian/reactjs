@@ -978,7 +978,7 @@ class CustomerListContent extends Component {
 	initRowsFromRawJson = (rawData = this.props.customers, locationFilterValue = this.props.locationFilterValue) => {
 		console.log("initRowsFromRawJson", "CustomerListContent.js", this.props.regionId, this.props.statusId, rawData)
 		let all_temp = [];
-		if (rawData === null || rawData === undefined) return;
+		if (rawData === null || rawData === undefined || rawData.Data === undefined) return;
 
 		let regions = rawData.Data.Regions.filter(x => {
 			return this.props.regionId === 0 || x.Id === this.props.regionId;

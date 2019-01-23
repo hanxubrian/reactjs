@@ -8,7 +8,7 @@ export const CustomerServicesConfig = {
     },
     routes  : [
         {
-            path     : '/bill-run/dashboard',
+            path     : '/customer-service/customers',
             component: FuseLoadable({
                 loader: () => import('./customer-services')
             })
