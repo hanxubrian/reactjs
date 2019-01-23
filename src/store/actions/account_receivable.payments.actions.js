@@ -1,6 +1,9 @@
 import {invoicePaymentsService} from "services";
+import {TOGGLE_FILTER_PANEL_FRANCHISEES, TOGGLE_SUMMARY_PANEL_FRANCHISEES} from "./franchise.actions";
 
 export const GET_ALL_RECEIVABLE_PAYMENTS = "[ACCOUNT_RECEIVABLE PAYMENTS] GETS ALL";
+export const ACCOUNT_RECEIVABLE_PAYMENTS_TOGGLE_FILTER_PANEL = "[ACCOUNT_RECEIVABLE PAYMENTS FILTER TOGGLE] FILTER PANEL TOGGLE";
+export const ACCOUNT_RECEIVABLE_PAYMENTS_TOGGLE_SUMMARY_PANEL = "[ACCOUNT_RECEIVABLE PAYMENTS SUMMERY TOGGLE] SUMMERY TOGGLE";
 
 
 export function getAccountReceivablePaymentsList(RegionId, FromDate,ToDate, SearchText) {
@@ -15,5 +18,17 @@ export function getAccountReceivablePaymentsList(RegionId, FromDate,ToDate, Sear
                 payload: paymentsList
             });
         })();
+    }
+}
+
+export function toggleFilterPanelAccountReceivablePayments(){
+    return {
+        type: ACCOUNT_RECEIVABLE_PAYMENTS_TOGGLE_FILTER_PANEL
+    }
+}
+
+export function toggleSummaryPanelAccountReceivablePayments(){
+    return {
+        type: ACCOUNT_RECEIVABLE_PAYMENTS_TOGGLE_SUMMARY_PANEL
     }
 }

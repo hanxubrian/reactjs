@@ -512,6 +512,7 @@ class PaymentsListContent extends Component {
             pageSizes: [10, 20, 30, 50, 100],
             amountFilterOperations: ['equal', 'notEqual', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual'],
             searchValue: '',
+            paymentsParam: []
         };
 
         this.fetchData = this.fetchData.bind(this);
@@ -619,7 +620,7 @@ class PaymentsListContent extends Component {
 
     componentWillMount() {
         this.setState({
-            "getPaymentsParam": this.props.getPaymentsParam
+            "paymentsParam": this.props.getPaymentsParam
         });
         this.props.getAccountReceivablePayments(
             this.props.regionId,
