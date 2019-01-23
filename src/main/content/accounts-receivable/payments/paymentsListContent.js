@@ -545,7 +545,7 @@ class PaymentsListContent extends Component {
 		if (nextProps.payments !== this.props.payments) {
 			this.setState({
 				rows: nextProps.payments.Regions === undefined ? [] : nextProps.payments.Regions[0].Payments,
-				expandedGroups: nextProps.payments.Regions === undefined ? [] : [...new Set(nextProps.payments.Regions[0].Payments.map(x=>x.CustomerName))],
+				expandedGroups: nextProps.payments.Regions === undefined ? [] : [...new Set(nextProps.payments.Regions[0].Payments.map(x => x.CustomerName))],
 			})
 		}
 
@@ -597,7 +597,7 @@ class PaymentsListContent extends Component {
 		this.setState({
 			"paymentsParam": this.props.getPaymentsParam,
 			"rows": this.props.payments.Regions === undefined ? [] : this.props.payments.Regions[0].Payments,
-			expandedGroups: this.props.payments.Regions === undefined ? [] : [...new Set(this.props.payments.Regions[0].Payments.map(x=>x.CustomerName))],
+			expandedGroups: this.props.payments.Regions === undefined ? [] : [...new Set(this.props.payments.Regions[0].Payments.map(x => x.CustomerName))],
 		});
 		this.props.getAccountReceivablePayments(
 			this.props.regionId,
@@ -671,7 +671,9 @@ class PaymentsListContent extends Component {
 			/>
 		);
 	};
-
+	expandedGroupsChange = (expandedGroups) => {
+		this.setState({ expandedGroups });
+	};
 	render() {
 		const { classes } = this.props;
 
@@ -727,7 +729,9 @@ class PaymentsListContent extends Component {
 								// grouping={grouping}
 								// onGroupingChange={this.changeGrouping}
 								grouping={groupingColumns}
-								expandedGroups ={expandedGroups}
+								expandedGroups={expandedGroups}
+								onExpandedGroupsChange={this.expandedGroupsChange}
+
 							// columnExtensions={tableColumnExtensions}
 							/>
 							<IntegratedGrouping />
