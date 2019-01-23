@@ -50,6 +50,7 @@ import PropTypes from 'prop-types';
 import {escapeRegexCharacters} from 'services/utils'
 import { Control, Menu, NoOptionsMessage, Option, Placeholder, SingleValue, ValueContainer} from "../../accounts-receivable/Invoice/selectUtils";
 import {emphasize} from "@material-ui/core/styles/colorManipulator";
+import {NumberFormatCustom, NumberFormatCustom1, NumberFormatCustom2} from "../../../../services/utils";
 
 
 const styles = theme => ({
@@ -118,6 +119,10 @@ const styles = theme => ({
     },
     input: {
         padding: '12px 14px'
+    },
+    inputReadonly:{
+        padding: '12px 14px',
+        backgroundColor: '#eee'
     },
     label: {
         transform: 'translate(14px, 14px) scale(1)'
@@ -330,9 +335,6 @@ class TransactionForm extends Component {
         selectedFranchisee: null,
         labelWidth: 0,
         selectedWork: "",
-        total: 0.0,
-        subTotal: 0.0,
-        tax: 0,
         InvoiceNo: "",
         snackMessage: "",
         openSnack: false,
@@ -343,7 +345,12 @@ class TransactionForm extends Component {
         buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval,
         transactionType: 82,
         transactionFrequency: "1",
-        reSell: false
+        reSell: false,
+        quantity: 1,
+        unitPrice: 0,
+        subTotal: 0,
+        total: 0.0,
+        tax: 0,
     };
 
     renderInputComponent = (inputProps ) => {
@@ -861,6 +868,113 @@ class TransactionForm extends Component {
                                 />
                             </Grid>
                         </Grid>
+                        <div className="flex flex-row w-full mt-4 justify-between">
+                            <TextField
+                                id="quantity"
+                                name="quantity"
+                                label="Quantity"
+                                className={classes.textField}
+                                value={this.state.quantity}
+                                onChange={this.handleChange}
+                                margin="dense"
+                                variant="outlined"
+                                InputLabelProps = {{
+                                    shrink: true,
+                                    classes: {outlined: classes.label}
+                                }}
+                                InputProps={{
+                                    inputComponent: NumberFormatCustom1,
+                                    classes: {
+                                        input: classes.input
+                                    },
+                                }}
+                                required
+                            />
+                            <TextField
+                                id="unitPrice"
+                                name="unitPrice"
+                                label="Item Amount"
+                                className={classes.textField}
+                                value={this.state.unitPrice}
+                                onChange={this.handleChange}
+                                margin="dense"
+                                variant="outlined"
+                                InputLabelProps = {{
+                                    shrink: true,
+                                    classes: {outlined: classes.label}
+                                }}
+                                InputProps={{
+                                    inputComponent: NumberFormatCustom,
+                                    classes: {
+                                        input: classes.input
+                                    },
+                                }}
+                                required
+                            />
+                            <TextField
+                                id="subTotal"
+                                name="subTotal"
+                                label="Sub-Total"
+                                className={classes.textField}
+                                value={this.state.subTotal}
+                                onChange={this.handleChange}
+                                margin="dense"
+                                variant="outlined"
+                                InputLabelProps = {{
+                                    shrink: true,
+                                    classes: {outlined: classes.label}
+                                }}
+                                InputProps={{
+                                    inputComponent: NumberFormatCustom,
+                                    readOnly: true,
+                                    classes: {
+                                        input: classes.inputReadonly
+                                    },
+                                }}
+                            />
+                            <TextField
+                                id="tax"
+                                name="tax"
+                                label="Tax"
+                                className={classes.textField}
+                                value={this.state.tax}
+                                onChange={this.handleChange}
+                                margin="dense"
+                                variant="outlined"
+                                InputLabelProps = {{
+                                    shrink: true,
+                                    classes: {outlined: classes.label}
+                                }}
+                                InputProps={{
+                                    inputComponent: NumberFormatCustom,
+                                    readOnly: true,
+                                    classes: {
+                                        input: classes.inputReadonly
+                                    },
+                                }}
+                            />
+                            <TextField
+                                id="total"
+                                name="total"
+                                label="Total"
+                                className={classes.textField}
+                                value={this.state.total}
+                                onChange={this.handleChange}
+                                margin="dense"
+                                variant="outlined"
+                                InputLabelProps = {{
+                                    shrink: true,
+                                    classes: {outlined: classes.label}
+                                }}
+                                InputProps={{
+                                    inputComponent: NumberFormatCustom,
+                                    readOnly: true,
+                                    classes: {
+                                        input: classes.inputReadonly
+                                    },
+                                }}
+                            />
+                        </div>
 
                         <div className="w-full mt-4">
                             <TextField

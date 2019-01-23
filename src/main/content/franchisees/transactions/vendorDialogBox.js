@@ -306,9 +306,6 @@ class VendorDialogBox extends Component {
 
         const components = { Control, Menu, NoOptionsMessage, Option, Placeholder, SingleValue, ValueContainer };
 
-        console.log('status=', this.props.transactions);
-        console.log('status=', this.props.bVendorBox);
-
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="">
@@ -402,7 +399,6 @@ function mapDispatchToProps(dispatch)
 function mapStateToProps({transactions})
 {
     return {
-        transactions: transactions,
         transactionForm: transactions.transactionForm,
         bVendorBox: transactions.transactionForm.bVendorBox
     }
