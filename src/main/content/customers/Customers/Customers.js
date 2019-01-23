@@ -15,7 +15,7 @@ import { withRouter } from 'react-router-dom';
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
 import SummaryPanel from './SummaryPanel';
-import FilterPanel from './filterPanel';
+import FilterPanel from './FilterPanel';
 
 // third party
 // import moment from 'moment'
@@ -35,7 +35,7 @@ import CustomerForm from './CustomerForm';
 import CustomerListContent from './CustomerListContent';
 import DialogEmailToCustomer from './DialogEmailToCustomer';
 
-import Utils from './Utils'
+import FuseUtils from '@fuse/FuseUtils';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -313,80 +313,6 @@ class Customers extends Component {
 		this.props.getAccountTypesGroups();
 	}
 
-	toggleSelection = (key, shift, row) => {
-        /*
-          https://react-table.js.org/#/story/select-table-hoc
-          Implementation of how to manage the selection state is up to the developer.
-          This implementation uses an array stored in the component state.
-          Other implementations could use object keys, a Javascript Set, or Redux... etc.
-        */
-		// start off with the existing state
-		let selection = [...this.state.selection];
-		const keyIndex = selection.indexOf(key);
-		// check to see if the key exists
-		if (keyIndex >= 0) {
-			// it does exist so we will remove it using destructing
-			selection = [
-				...selection.slice(0, keyIndex),
-				...selection.slice(keyIndex + 1)
-			];
-		} else {
-			// it does not exist so add it
-			selection.push(key);
-		}
-		// update the state
-		this.setState({ selection });
-	};
-
-	toggleAll = (instance) => {
-        /*
-          'toggleAll' is a tricky concept with any filterable table
-          do you just select ALL the records that are in your data?
-          OR
-          do you only select ALL the records that are in the current filtered data?
-
-          The latter makes more sense because 'selection' is a visual thing for the user.
-          This is especially true if you are going to implement a set of external functions
-          that act on the selected information (you would not want to DELETE the wrong thing!).
-
-          So, to that end, access to the internals of ReactTable are required to get what is
-          currently visible in the table (either on the current page or any other page).
-
-          The HOC provides a method call 'getWrappedInstance' to get a ref to the wrapped
-          ReactTable and then get the internal state and the 'sortedData'.
-          That can then be iterated to get all the currently visible records and set
-          the selection state.
-        */
-		const selectAll = this.state.selectAll ? false : true;
-		const selection = [];
-		if (selectAll) {
-			let currentRecords = instance.data;
-			// we just push all the IDs onto the selection array
-			let page = this.state.page;
-			let pageSize = this.state.pageSize;
-			let start_index = page * pageSize;
-			let end_index = start_index + pageSize;
-			currentRecords.forEach(item => {
-				if (item._index >= start_index && item._index < end_index)
-					selection.push(item._original.CustomerId);
-			});
-		}
-		this.setState({ selectAll, selection });
-	};
-
-	isSelected = key => {
-        /*
-          Instead of passing our external selection state we provide an 'isSelected'
-          callback and detect the selection state ourselves. This allows any implementation
-          for selection (either an array, object keys, or even a Javascript Set object).
-        */
-		return this.state.selection.includes(key);
-	};
-
-	logSelection = () => {
-		console.log("selection:", this.state.selection);
-	};
-
 	closeComposeForm = () => {
 		switch (this.props.customerForm.type) {
 			case "new":
@@ -402,8 +328,9 @@ class Customers extends Component {
 		this.setState({
 			isSubmittingForApproval: true
 		})
-		
+
 	}
+
 	submitForApproval = () => {
 		this.setState({
 			isSubmittingForApproval: false
@@ -437,25 +364,6 @@ class Customers extends Component {
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		console.log("componentDidUpdate", "Customer.js")
 		let bChanged = false;
-		// if (this.props.transactionStatus.checkedPaid !== prevProps.transactionStatus.checkedPaid) {
-		// 	this.setState({ checkedPaid: !this.state.checkedPaid });
-		// 	bChanged = true;
-		// }
-
-		// if (this.props.transactionStatus.checkedPP !== prevProps.transactionStatus.checkedPP) {
-		// 	this.setState({ checkedPP: !this.state.checkedPP });
-		// 	bChanged = true;
-		// }
-
-		// if (this.props.transactionStatus.checkedComplete !== prevProps.transactionStatus.checkedComplete) {
-		// 	this.setState({ checkedComplete: !this.state.checkedComplete });
-		// 	bChanged = true;
-		// }
-
-		// if (this.props.transactionStatus.checkedOpen !== prevProps.transactionStatus.checkedOpen) {
-		// 	this.setState({ checkedOpen: !this.state.checkedOpen });
-		// 	bChanged = true;
-		// }
 
 		if (this.props.regionId !== prevProps.regionId ||
 			this.props.statusId !== prevProps.statusId) {
@@ -469,31 +377,9 @@ class Customers extends Component {
 			this.props.getCustomers(this.props.regionId, this.props.statusId, this.props.location, this.props.latitude, this.props.longitude, this.props.searchText);
 			bChanged = true;
 		}
-
-
-
-		// if (this.props.customers === null && prevProps.customers !== this.props.customers) {
-		// 	bChanged = true;
-		// }
-
-		// if (bChanged)
-		// 	this.getCustomersFromStatus();
-
-		// if (this.props.documents === null && prevProps.documents !== this.props.documents) {
-		// 	bChanged = true;
-		// }
-
-
-
 	}
 
 	componentWillMount() {
-		// this.setState({ checkedPaid: this.props.transactionStatus.checkedPaid });
-		// this.setState({ checkedPP: this.props.transactionStatus.checkedPP });
-		// this.setState({ checkedComplete: this.props.transactionStatus.checkedComplete });
-		// this.setState({ checkedOpen: this.props.transactionStatus.checkedOpen });
-		// this.getCustomersFromStatus()
-
 		if (this.props.customers === null) {
 			this.props.getCustomers(this.props.regionId, this.props.statusId, this.props.location, this.props.latitude, this.props.longitude, this.props.searchText);
 		}
@@ -559,53 +445,14 @@ class Customers extends Component {
 	// };
 
 	componentDidMount() {
-		// document.addEventListener("keydown", this.escFunction, false);
 	}
 
 	componentWillUnmount() {
-		// document.removeEventListener("keydown", this.escFunction, false);
 	}
 
-	// escFunction(event) {
-	// 	if (event.keyCode === 27) {
-	// 		this.setState({ s: '' });
-	// 		this.getCustomersFromStatus();
-	// 	}
-	// }
-	// search(val) {
-	// 	if (val === '') {
-	// 		this.getCustomersFromStatus();
-	// 		return;
-	// 	}
-	// 	const temp = this.state.data.filter(d => {
-	// 		return (d.CustomerNo && d.CustomerNo.toString().indexOf(val) !== -1) || !val ||
-	// 			(d.CustomerName && d.CustomerName.toString().indexOf(val) !== -1) ||
-	// 			(d.Address && d.Address.toString().indexOf(val) !== -1) ||
-	// 			(d.Phone && d.Phone.toString().indexOf(val) !== -1) ||
-	// 			(d.AccountTypeListName && d.AccountTypeListName.toString().indexOf(val) !== -1) ||
-	// 			(d.CustomerDescription && d.CustomerDescription.toString().toLowerCase().indexOf(val) !== -1) ||
-	// 			(d.Amount && d.Amount.toString().toLowerCase().indexOf(val) !== -1) ||
-	// 			(d.StatusName && d.StatusName.toString().indexOf(val) !== -1)
-	// 	});
-
-	// 	this.setState({ temp: temp });
-	// }
-
-	handleChange = prop => event => {
-		this.setState({ [prop]: event.target.value });
-
-		// if (prop === 's') {
-		// 	// this.search(event.target.value.toLowerCase());
-		// }
+	handleChange = name => event => {
+		this.setState({ [name]: event.target.value });
 	};
-
-	canBeSubmitted() {
-		return true;
-		// const { name } = this.state;
-		// return (
-		// 	name.length > 0
-		// );
-	}
 
 	removeCustomers = () => {
 		if (this.state.selection.length === 0) {
@@ -644,7 +491,7 @@ class Customers extends Component {
 
 		this.props.openEmailToCustomerDialog(true);
 	}
-	handleCloseConfirmDialog= () => {
+	handleCloseConfirmDialog = () => {
 		this.setState({
 			isSubmittingForApproval: false
 		})
@@ -653,8 +500,6 @@ class Customers extends Component {
 		console.log(this.props.documents)
 		console.log(this.props)
 		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, openNewCustomerForm, customerForm, mapViewState, toggleMapView } = this.props;
-
-		// const { toggleSelection, toggleAll, isSelected, logSelection } = this;
 
 		const { selection, anchorEl, anchorContactMenu } = this.state;
 
@@ -683,7 +528,7 @@ class Customers extends Component {
 												<Icon className="text-32 mr-12">account_box</Icon>
 												{/* </FuseAnimate> */}
 												{/* <FuseAnimate animation="transition.slideLeftIn" delay={300}> */}
-												<Typography variant="h6" className="hidden sm:flex">Customers | Customers</Typography>
+												<Typography variant="h6" className="hidden sm:flex">Customers | Customer List</Typography>
 												{/* </FuseAnimate> */}
 											</div>
 										</div>
@@ -873,7 +718,7 @@ class Customers extends Component {
 										<Toolbar className="pl-12 pr-0">
 											<img className="mr-12" alt="" src="assets/images/invoices/invoice-icon-white.png" style={{ width: 32, height: 32 }} />
 										</Toolbar>
-										<Typography variant="h6" className="hidden sm:flex">Customers | {Utils.capital_letter(customerForm.type)} Customer</Typography>
+										<Typography variant="h6" className="hidden sm:flex">Customers | {FuseUtils.capital_letter(customerForm.type)} Customer</Typography>
 									</div>
 								</div>
 							) : (

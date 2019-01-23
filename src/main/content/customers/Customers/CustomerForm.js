@@ -38,7 +38,6 @@ import { withRouter } from 'react-router-dom';
 //Custom components
 import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
-import CustomerLineTable from "./CustomerLine"
 
 // for store
 import { bindActionCreators } from "redux";

@@ -24,13 +24,11 @@ import GridItem from "Commons/Grid/GridItem";
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 
-import CustomerLineTable from "./CustomerLine"
-
 import Autosuggest from "react-autosuggest"
 import AutosuggestHighlightMatch from 'autosuggest-highlight/match'
 import AutosuggestHighlightParse from 'autosuggest-highlight/parse'
 
-import Utils from './Utils'
+import FuseUtils from '@fuse/FuseUtils';
 
 import PropTypes from 'prop-types';
 import MaskedInput from 'react-text-mask';
@@ -51,8 +49,6 @@ import {
 	IntegratedFiltering,
 	SearchState,
 } from '@devexpress/dx-react-grid';
-
-import { SelectionPanel } from "./selection-panel";
 
 import {
 	Grid,
@@ -500,7 +496,7 @@ class FilterPanel extends Component {
 	componentDidMount() {
 		const { customers } = this.props;
 		this.setState({
-			rows: Utils.getCustomerListFromDb(customers)
+			rows: FuseUtils.getCustomerListFromDb(customers)
 		});
 	}
 
@@ -511,7 +507,7 @@ class FilterPanel extends Component {
 		const { customers, customerForm } = this.props;
 		if (nextProps.customers !== customers) {
 			this.setState({
-				rows: Utils.getCustomerListFromDb(nextProps.customers),
+				rows: FuseUtils.getCustomerListFromDb(nextProps.customers),
 			});
 		}
 

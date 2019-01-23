@@ -17,7 +17,7 @@ const styles = {
   }
 };
 
-export const SelectionPanelBase = ({ selection, classes }) => (
+export const CustomizedDxGridSelectionPanelBase = ({ selection, classes }) => (
   <Plugin name="SelectionPanel">
     <Template name="footer">
       <div className={classes.container}>
@@ -30,4 +30,4 @@ export const SelectionPanelBase = ({ selection, classes }) => (
   </Plugin>
 );
 
-export const SelectionPanel = withStyles(styles)(SelectionPanelBase);
+export const CustomizedDxGridSelectionPanel = withStyles(styles)(CustomizedDxGridSelectionPanelBase);

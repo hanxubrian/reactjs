@@ -300,8 +300,18 @@ class FuseUtils {
         });
 
         return str.join(" ");
-    }
-}
+	}
+	static getCustomerListFromDb = (customerDb) => {
+		let customerList = [];
+		if (customerDb === null || customerDb === undefined || customerDb.Data === undefined) return;
+
+		customerDb.Data.Regions.forEach(x => {
+			customerList = [...customerList, ...x.CustomerList];
+		});
+
+		return customerList;
+	};
+}	
 
 
 export default FuseUtils;
