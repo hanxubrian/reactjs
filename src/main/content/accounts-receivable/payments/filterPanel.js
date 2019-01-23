@@ -325,8 +325,16 @@ class FilterPanel extends Component {
                         )}
 
                         <div style={{marginTop: 20, display: 'flex', flexDirection: 'column'}}>
-                            <h3>Payments Status</h3>
-                            {this.state.invoiceStatus.length>0 && this.state.invoiceStatus.map((iv, index)=> {
+                            <h3>Type</h3>
+							{[
+								{Name: "Check"},
+								{Name: "Credit Card"},
+								{Name: "EFT"},
+								{Name: "Lockbox"},
+								{Name: "Credit From Overpayment"},
+								{Name: "Manual Credit Card"},
+
+							].map((iv, index)=> {
                                 return (
                                     <FormControlLabel
                                         key={index}
@@ -341,7 +349,7 @@ class FilterPanel extends Component {
                                     />
                                 )
                             })}
-                            <br></br>
+                            {/* <br></br>
                             <h3>Delivery Method</h3>
                             <FormControlLabel
                                 control={
@@ -362,7 +370,7 @@ class FilterPanel extends Component {
                                     />
                                 }
                                 label="Print"
-                            />
+                            /> */}
                         </div>
                     </Paper>
                 </div>

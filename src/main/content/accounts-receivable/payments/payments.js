@@ -455,7 +455,7 @@ class Payments extends Component {
                                                     <Icon>add</Icon>
                                                 </Fab>
                                             </FuseAnimate>
-                                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                            {/* <FuseAnimate animation="transition.expandIn" delay={300}>
                                                 <Fab color="secondary" aria-label="add"
                                                      className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
                                                     <Icon>mail_outline</Icon>
@@ -465,7 +465,7 @@ class Payments extends Component {
                                                 <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
                                                     <Icon>print</Icon>
                                                 </Fab>
-                                            </FuseAnimate>
+                                            </FuseAnimate> */}
                                         </div>
                                     </div>
                                     <div className="flex flex-none items-end" style={{display: 'none'}}>
