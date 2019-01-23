@@ -3,8 +3,7 @@ import {withRouter} from 'react-router-dom';
 
 // core components
 import {
-    Paper, TextField, Typography, MenuItem, Divider, Button,
-    IconButton, Icon, Grid, Dialog, NoSsr
+    TextField, Typography, Button, IconButton, Grid, Dialog, NoSsr
 } from '@material-ui/core';
 
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -26,18 +25,12 @@ import * as Actions from '../../../../store/actions';
 // third party
 import _ from 'lodash';
 import moment from 'moment'
-import PropTypes from 'prop-types';
 import Select from 'react-select';
 
 //Utility
 import {escapeRegexCharacters} from 'services/utils'
 import {
-    Control,
-    Menu,
-    NoOptionsMessage,
-    Option,
-    Placeholder,
-    SingleValue, ValueContainer
+    Control, Menu, NoOptionsMessage, Option,  Placeholder,  SingleValue, ValueContainer
 } from "../../accounts-receivable/Invoice/selectUtils";
 import {emphasize} from "@material-ui/core/styles/colorManipulator";
 
@@ -129,7 +122,7 @@ const styles = theme => ({
     },
     input1: {
         display: 'flex',
-        padding: '6px 12px'
+        padding: '12px 12px'
     },
     valueContainer: {
         display: 'flex',
@@ -159,6 +152,7 @@ const styles = theme => ({
         fontSize: 14,
     },
 });
+
 const DialogTitle = withStyles(theme => ({
     root: {
         borderBottom: `1px solid ${theme.palette.divider}`,
@@ -296,26 +290,17 @@ class VendorDialogBox extends Component {
         const selectStyles = {
             input: base => ({
                 ...base,
-                // color: ,
                 '& input': {
                     font: 'inherit',
                 },
             }),
         };
 
-        const components = {
-            Control,
-            Menu,
-            NoOptionsMessage,
-            Option,
-            Placeholder,
-            SingleValue,
-            ValueContainer,
-        };
+        const components = { Control, Menu, NoOptionsMessage, Option, Placeholder, SingleValue, ValueContainer };
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
-                <div className="h-full flex flex-col relative">
+                <div className="">
                     <Dialog
                         open={this.props.bVendorBox}
                         onClose={()=> this.props.hideVendorDialogBox()}

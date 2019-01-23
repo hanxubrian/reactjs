@@ -110,7 +110,7 @@ const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
 
 let counter = 0;
 
-function createData(type=82, frequency='1', description='', quantity='', amount='', tax=0, markup='', extended=0, total=0)
+function createData(type=82, frequency='1', description='', quantity=1, amount='', tax=0, extended=0, total=0)
 {
     return {
         id: counter++,
@@ -120,7 +120,6 @@ function createData(type=82, frequency='1', description='', quantity='', amount=
         quantity,
         amount,
         tax,
-        markup,
         extended,
         total,
     };
@@ -271,7 +270,7 @@ class TransactionTable extends React.Component {
         order      : 'asc',
         selected   : [],
         data       : [
-            createData(82, "1", '',''),
+            createData(82, "1", '',1),
         ],
         page       : 0,
         labelWidth: 0,
@@ -313,7 +312,7 @@ class TransactionTable extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.transactionForm.data===null && JSON.stringify(nextProps.transactionForm.data)!==JSON.stringify(this.props.transactionForm.data)){
-            let newData = createData(82, '1');
+            let newData = createData(82, '1','',1);
             this.setState({data: [{...newData, id: 0}]});
         }
     }
@@ -613,36 +612,13 @@ class TransactionTable extends React.Component {
                                             />
                                         },
                                         className: classNames(classes.tableTdEven, "flex items-center  justify-end text-right"),
-                                        width: 80
-                                    },
-                                    {
-                                        Header: "Markup(%)",
-                                        accessor: "markup",
-                                        Cell: row=>{
-                                            return <TextField
-                                                className={classes.fInput}
-                                                placeholder="Markup"
-                                                value={row.original.markup}
-                                                onChange={this.handleChangeTransactionLine(row.original, 'markup')}
-                                                InputProps={{
-                                                    inputComponent: NumberFormatCustomPercent,
-                                                    readOnly: row.original.billing!=="Client Supplies",
-                                                    classes: {
-                                                        input: classes.input,
-                                                    },
-                                                }}
-                                            />
-                                        },
-                                        className: classNames(classes.tableTdEven, "flex items-center  text-right justify-end"),
-                                        width: 80
+                                        width: 100
                                     },
                                     {
                                         Header: "Ext. Amount",
                                         accessor: "extended",
                                         Cell: row=>{
-                                            let markup = 0.0;
-                                            if(row.original.markup!=='') markup = row.original.markup;
-                                            return ("$" + parseFloat(row.original.extended * (1 + parseFloat(markup) / 100)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+                                            return ("$" + parseFloat(row.original.extended ).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
                                         },
                                         className: classNames(classes.tableTdEven, "flex items-center  w-full text-center pr-12"),
                                         width: 100

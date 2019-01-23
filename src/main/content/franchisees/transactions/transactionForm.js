@@ -3,8 +3,8 @@ import {withRouter} from 'react-router-dom';
 
 // core components
 import {
-    Paper, TextField, Typography, MenuItem, Card, CardHeader, CardContent, Divider, Button, Snackbar, SnackbarContent,
-    IconButton, Icon, Grid, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog
+    Paper, TextField, Typography, MenuItem, Card, CardHeader, CardContent, Divider, Button, Snackbar, SnackbarContent,Select,
+    IconButton, Icon, Grid, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog, OutlinedInput, FormControl, NoSsr
 } from '@material-ui/core';
 import 'date-fns'
 import MomentUtils from '@date-io/moment';
@@ -26,6 +26,8 @@ import {withStyles} from "@material-ui/core";
 import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
 import TransactionTable from "./transactionLine"
+import Select1 from 'react-select';
+import VendorDialogBox from "./vendorDialogBox";
 
 // for store
 import {bindActionCreators} from "redux";
@@ -45,6 +47,9 @@ import PropTypes from 'prop-types';
 
 //Utility
 import {escapeRegexCharacters} from 'services/utils'
+import { Control, Menu, NoOptionsMessage, Option, Placeholder, SingleValue, ValueContainer} from "../../accounts-receivable/Invoice/selectUtils";
+import {emphasize} from "@material-ui/core/styles/colorManipulator";
+
 
 const styles = theme => ({
     layoutForm: {
@@ -113,10 +118,6 @@ const styles = theme => ({
     input: {
         padding: '12px 14px'
     },
-    input1: {
-        padding: '12px 6px'
-    },
-
     label: {
         transform: 'translate(14px, 14px) scale(1)'
     },
@@ -132,8 +133,58 @@ const styles = theme => ({
     },
     picker: {
         padding: '0 6px'
+    },
+    root1: {
+        flexGrow: 1,
+    },
+    input2: {
+        display: 'flex',
+        padding: '12px 12px'
+    },
+    input1: {
+        display: 'flex',
+        padding: '0px 12px'
+    },
+
+    valueContainer: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        flex: 1,
+        alignItems: 'center',
+        overflow: 'hidden',
+    },
+    chip: {
+        margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
+    },
+    chipFocused: {
+        backgroundColor: emphasize(
+            theme.palette.type === 'light' ? theme.palette.grey[300] : theme.palette.grey[700],
+            0.08,
+        ),
+    },
+    noOptionsMessage: {
+        padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
+    },
+    singleValue: {
+        fontSize: 14,
+    },
+    placeholder: {
+        position: 'absolute',
+        left: 6,
+        fontSize: 14,
+    },
+    paper: {
+        position: 'absolute',
+        zIndex: '9999!important',
+        marginTop: theme.spacing.unit,
+        fontSize: 14,
+        left: 0,
+        right: 0
+    },
+    inputMenu: {
+        padding: '10px 16px'
     }
-})
+});
 
 const chance = new Chance();
 
@@ -149,7 +200,7 @@ const newInvoiceState = {
     "CustomerName": "",
     "EBill": "",
     "PrintInvoice": "",
-    "FranchiseeDescription": "",
+    "transactionDescription": "",
     "InvoiceAmount": "",
     "InvoiceTax": "",
     "InvoiceTotal": "",
@@ -171,8 +222,8 @@ const newInvoiceState = {
 };
 
 function renderSuggestion(suggestion, { query, isHighlighted }) {
-    const matches = match(suggestion.Name, query);
-    const parts = parse(suggestion.Name, matches);
+    const matches = match(suggestion.Name + ' - ' + suggestion.Number, query);
+    const parts = parse(suggestion.Name + ' - ' + suggestion.Number, matches);
 
     return (
         <MenuItem selected={isHighlighted} component="div">
@@ -281,7 +332,6 @@ class TransactionForm extends Component {
         total: 0.0,
         subTotal: 0.0,
         tax: 0,
-        markup: 0.0,
         InvoiceNo: "",
         snackMessage: "",
         openSnack: false,
@@ -290,6 +340,8 @@ class TransactionForm extends Component {
         taxExempt: false,
         bAlertNewTransaction: false,
         buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval,
+        transactionType: 82,
+        transactionFrequency: "1",
     };
 
     renderInputComponent = (inputProps ) => {
@@ -347,12 +399,11 @@ class TransactionForm extends Component {
         const escapedValue = escapeRegexCharacters(value.trim());
         const regex = new RegExp(escapedValue, 'i');
         if(this.props.franchisees!==null)
-            return this.props.franchisees.filter(f => regex.test(f.Name));
+            return this.props.franchisees.filter(f => regex.test(f.Name) || regex.test(f.Number));
     };
 
     getTotal = () => {
         let subTotal = 0.0;
-        let markup = 0.0;
         let tax = 0.0;
 
         if(this.props.transactionForm.data===null) return;
@@ -363,18 +414,13 @@ class TransactionForm extends Component {
             let mk = 0.;
             let qty = 0;
             if(n.quantity!=='') qty = n.quantity;
-            if(n.markup!=='') mk = n.markup;
             subTotal += parseFloat(n.extended);
             tax += parseFloat(n.tax);
-            markup += parseFloat(n.extended*qty*parseFloat(mk)/100);
         });
 
-        console.log('aaaaa', subTotal, markup, tax, subTotal+tax+markup);
-
         this.setState({subTotal: subTotal});
-        this.setState({markup: markup});
         this.setState({tax: tax});
-        this.setState({total: subTotal+tax+markup});
+        this.setState({total: subTotal+tax});
     };
 
     componentDidUpdate(prevProps, prevState, snapshot){
@@ -404,7 +450,7 @@ class TransactionForm extends Component {
         //     this.setState({bAlertNewTransaction: false});
         //     if(this.state.buttonOption===0){
         //         this.props.resetInvoiceForm();
-        //         this.setState({FranchiseeDescription: ''});
+        //         this.setState({transactionDescription: ''});
         //         this.setState({note: ''});
         //         this.setState({selectedFranchisee: null});
         //         this.setState({value: ''});
@@ -450,7 +496,6 @@ class TransactionForm extends Component {
                 TaxRate: line.tax,
                 ExtendedPrice: line.extended,
                 Total: line.total,
-                MarkUpTotal: line.markup,
                 Commission: 0,
                 CommissionTotal: 0,
                 ExtraWork: 1,
@@ -463,7 +508,7 @@ class TransactionForm extends Component {
             Inv_No: inv_no,
             Apply_to: 'Apply To',
             PeriodId: this.props.invoices.PeriodId[0],
-            Description: this.state.FranchiseeDescription,
+            Description: this.state.transactionDescription,
             Notes: this.state.note,
             RegionId: this.props.regionId,
             BillRunId: 999,
@@ -472,7 +517,6 @@ class TransactionForm extends Component {
             CreatedById: this.props.user.UserId,
             CreatedDate: moment(),
             SubTotal: this.state.subTotal,
-            MarkupAmountTotal :this.state.markup,
             TaxTotal: this.state.tax,
             GrandTotal: this.state.total,
             TransactionStatusListId: 2,
@@ -531,7 +575,7 @@ class TransactionForm extends Component {
         }
     };
 
-    handleCloseNewInvoice = ()=>{
+    handleCloseNewTransaction = ()=>{
         this.setState({bAlertNewTransaction: false})
     };
 
@@ -542,6 +586,16 @@ class TransactionForm extends Component {
         }
 
         this.setState({ openSnack: false });
+    };
+
+    handleTransactionTypeChange = (newValue)=> {
+        this.setState({transactionType: newValue});
+
+        console.log('type=', newValue);
+
+        if(newValue.value===18)
+            this.props.showVendorDialogBox();
+
     };
 
 
@@ -564,6 +618,36 @@ class TransactionForm extends Component {
         let bReadonly = false;
         if(this.props.transactionForm.type === 'new') bReadonly = true;
 
+        let aTypes = [
+            {value: 82, label:'Advance Fee'},            {value: 81, label: 'Advance Interest'},
+            {value: 20, label: 'Advance to Franchisee'}, {value: 78, label: 'Child support'},
+            {value: 5, label: 'Equipment Rental'},       {value: 6, label: 'Franchisee Note'},
+            {value: 18, label: 'Franchisee Supplies'},   {value: 79, label: 'Garnishment'},
+            {value: 80, label: 'Levy'},                  {value: 14, label: 'Misc. R. O.'},
+            {value: 7, label: 'Negative Due Roll-Due'},  {value: 51, label: 'Negative Dues'},
+            {value: 90, label: 'Purchase from Office'},  {value: 72, label: 'Tax Credit'}
+        ];
+
+        const components = {
+            Control,
+            Menu,
+            NoOptionsMessage,
+            Option,
+            Placeholder,
+            SingleValue,
+            ValueContainer,
+        };
+
+        const selectStyles = {
+            input: base => ({
+                ...base,
+                // color: ,
+                '& input': {
+                    font: 'inherit',
+                },
+            }),
+        };
+
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="h-full flex flex-col relative">
@@ -575,7 +659,7 @@ class TransactionForm extends Component {
                                         {...autosuggestProps}
                                         inputProps={{
                                             classes,
-                                            placeholder: 'Search Franchisee Name',
+                                            placeholder: 'Search Franchisee Name or Number',
                                             value: value,
                                             onChange: this.onChange,
                                         }}
@@ -606,7 +690,7 @@ class TransactionForm extends Component {
                                         required
                                         InputProps={{
                                             classes: {
-                                                input: classes.input1,
+                                                input: classes.input2,
                                             },
                                         }}
                                         InputLabelProps = {{
@@ -629,7 +713,7 @@ class TransactionForm extends Component {
                                         fullWidth
                                         InputProps={{
                                             classes: {
-                                                input: classes.input1,
+                                                input: classes.input2,
                                             },
                                         }}
                                         InputLabelProps = {{
@@ -714,13 +798,64 @@ class TransactionForm extends Component {
                                 </Card>
                             </GridItem>
                         </GridContainer>
+                        <Grid container className={classNames(classes.formControl, "mb-0")} >
+                            <Grid item xs={12} sm={6} md={6} className="flex flex-1 flex-row pt-16 w-full items-center">
+                                <div>Frequency: </div>
+                                <FormControl variant="outlined" className={classNames(classes.formControl, "ml-24 w-full")}>
+                                    <Select
+                                        classes={{
+                                            outlined: classNames(classes.outlined,classes.services),
+                                            selectMenu: classNames(classes.inputMenu)
+                                        }}
+                                        name="transactionFrequency"
+                                        value={this.state.transactionFrequency}
+                                        onChange={this.handleChange}
+                                        input={
+                                            <OutlinedInput
+                                                labelWidth={this.state.labelWidth}
+                                                name="frequency"
+                                                id="frequency"
+                                            />
+                                        }
+                                        MenuProps = {{
+                                            classes:{paper: classes.dropdownMenu},
+                                        }}
+                                    >
+                                        <MenuItem value="-1">
+                                            <em>Select</em>
+                                        </MenuItem>
+                                        <MenuItem value="1">Single</MenuItem>
+                                        <MenuItem value="2">Recurring</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={12} sm={6} md={6} className="flex flex-row  items-center pl-24 pt-16 mr-12 pr-0">
+                                <div>Type: </div>
+                                <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl, "ml-24 w-full")}>
+                                    <div className={classes.root1}>
+                                        <NoSsr>
+                                            <Select1
+                                                classes={classes}
+                                                styles={selectStyles}
+                                                value={this.state.transactionType}
+                                                components={components}
+                                                onChange={(v)=>this.handleTransactionTypeChange(v)}
+                                                options={aTypes}
+                                                placeholder="Select a type"
+                                            />
+                                        </NoSsr>
+                                    </div>
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+
                         <div className="w-full mt-4">
                             <TextField
-                                id="FranchiseeDescription"
-                                name="FranchiseeDescription"
+                                id="transactionDescription"
+                                name="transactionDescription"
                                 label="Description"
                                 className={classes.textField}
-                                value={this.state.FranchiseeDescription}
+                                value={this.state.transactionDescription}
                                 onChange={this.handleChange}
                                 margin="dense"
                                 variant="outlined"
@@ -738,7 +873,7 @@ class TransactionForm extends Component {
                         </div>
                         <Grid container className={classNames(classes.formControl)} style={{flex: "9999 1 0"}}>
                             <Grid item xs={12} sm={12} md={12} className="flex flex-row xs:flex-col xs:mb-24">
-                                <TransactionTable />
+                                {/*<TransactionTable />*/}
                             </Grid>
                         </Grid>
                         <Divider variant="middle"/>
@@ -775,9 +910,6 @@ class TransactionForm extends Component {
                                 <div className="w-full p-12 flex justify-end pb-0">
                                     <span className={classes.summary}><strong>Subtotal: </strong>${this.state.subTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
-                                <div className="w-full p-12 flex justify-end pb-0 pt-6 ">
-                                    <span className={classes.summary}><strong>Markup Total: </strong>${this.state.markup.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
-                                </div>
                                 <div className="w-full p-12 flex justify-end pt-6 pb-6">
                                     <span className={classes.summary}><strong>Tax: </strong>${this.state.tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
@@ -809,32 +941,9 @@ class TransactionForm extends Component {
                                     <Button
                                         variant="contained"
                                         color="primary"
-                                        className={classNames(classes.button, "mr-12")}
-                                        onClick={() => {
-                                            this.onSaveAndClose();
-                                        }}
-                                    >
-                                        Save & Close
-                                    </Button>
-                                </FuseAnimate>
-                                <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        className={classNames(classes.button, "mr-12")}
-                                        onClick={() => {
-                                            this.onSubmitForApproval();
-                                        }}
-                                    >
-                                        Submit for Approval
-                                    </Button>
-                                </FuseAnimate>
-                                <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
                                         className={classes.button}
                                         onClick={() => {
+                                            this.props.hideVendorDialogBox();
                                             this.closeComposeForm();
                                         }}
                                     >
@@ -861,7 +970,7 @@ class TransactionForm extends Component {
                     </Snackbar>
                     <Dialog
                         open={this.state.bAlertNewTransaction}
-                        onClose={()=>this.handleCloseNewInvoice()}
+                        onClose={()=>this.handleCloseNewTransaction()}
                         aria-labelledby="alert-dialog-title"
                         aria-describedby="alert-dialog-description"
                     >
@@ -872,7 +981,7 @@ class TransactionForm extends Component {
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={()=>this.handleCloseNewInvoice()} color="primary">
+                            <Button onClick={()=>this.handleCloseNewTransaction()} color="primary">
                                 Close
                             </Button>
                             <Button onClick={()=>this.addNewInvoice()} color="primary" autoFocus>
@@ -880,6 +989,7 @@ class TransactionForm extends Component {
                             </Button>
                         </DialogActions>
                     </Dialog>
+                    <VendorDialogBox />
                 </div>
             </FuseAnimate>
         );
@@ -895,6 +1005,8 @@ function mapDispatchToProps(dispatch)
         resetInvoiceForm: Actions.resetInvoiceForm,
         addInvoice: Actions.addInvoice,
         selectFranchisee: Actions.selectFranchisee,
+        showVendorDialogBox: Actions.showVendorDialogBox,
+        hideVendorDialogBox: Actions.hideVendorDialogBox,
     }, dispatch);
 }
 
