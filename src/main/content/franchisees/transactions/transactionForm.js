@@ -3,8 +3,9 @@ import {withRouter} from 'react-router-dom';
 
 // core components
 import {
-    Paper, TextField, Typography, MenuItem, Card, CardHeader, CardContent, Divider, Button, Snackbar, SnackbarContent,Select,
-    IconButton, Icon, Grid, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog, OutlinedInput, FormControl, NoSsr
+    Paper, TextField, Typography, MenuItem, Card, CardHeader, CardContent, Divider, Button, Snackbar, SnackbarContent,Select, Checkbox,
+    IconButton, Icon, Grid, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog, OutlinedInput, FormControl, NoSsr,
+    FormControlLabel
 } from '@material-ui/core';
 import 'date-fns'
 import MomentUtils from '@date-io/moment';
@@ -342,6 +343,7 @@ class TransactionForm extends Component {
         buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval,
         transactionType: 82,
         transactionFrequency: "1",
+        reSell: false
     };
 
     renderInputComponent = (inputProps ) => {
@@ -641,7 +643,6 @@ class TransactionForm extends Component {
         const selectStyles = {
             input: base => ({
                 ...base,
-                // color: ,
                 '& input': {
                     font: 'inherit',
                 },
@@ -831,7 +832,7 @@ class TransactionForm extends Component {
                             </Grid>
                             <Grid item xs={12} sm={6} md={6} className="flex flex-row  items-center pl-24 pt-16 mr-12 pr-0">
                                 <div>Type: </div>
-                                <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl, "ml-24 w-full")}>
+                                <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl, "ml-24 w-full mr-24")}>
                                     <div className={classes.root1}>
                                         <NoSsr>
                                             <Select1
@@ -846,6 +847,18 @@ class TransactionForm extends Component {
                                         </NoSsr>
                                     </div>
                                 </FormControl>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={this.state.reSell}
+                                            onChange={this.handleChange}
+                                            value="resell"
+                                            color="primary"
+                                            name="reSell"
+                                        />
+                                    }
+                                    label="ReSell"
+                                />
                             </Grid>
                         </Grid>
 

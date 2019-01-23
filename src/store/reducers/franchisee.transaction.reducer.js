@@ -65,7 +65,8 @@ const transactions = function(state = initialState, action) {
                         open: true
                     },
                     data : null,
-                    franchisee: null
+                    franchisee: null,
+                    bVendorBox: false
                 },
             };
         }
@@ -79,7 +80,8 @@ const transactions = function(state = initialState, action) {
                         open: false
                     },
                     data : null,
-                    franchisee: null
+                    franchisee: null,
+                    bVendorBox: false
                 },
                 newTransaction: null
             };
@@ -94,7 +96,8 @@ const transactions = function(state = initialState, action) {
                         open: true
                     },
                     data : null,
-                    franchisee: action.payload
+                    franchisee: action.payload,
+                    bVendorBox: false
                 },
             };
         }
@@ -108,7 +111,8 @@ const transactions = function(state = initialState, action) {
                         open: false
                     },
                     data : null,
-                    franchisee: action.payload
+                    franchisee: action.payload,
+                    bVendorBox: false
                 },
                 newTransaction: null
             };
@@ -145,6 +149,6 @@ const transactions = function(state = initialState, action) {
 const persistConfig = {
     key: 'transactions',
     storage: storage,
-    blacklist: ["bOpenedTransactionFilterPanel"]
+    blacklist: ["bOpenedTransactionFilterPanel", "transactionForm"]
 };
 export default persistReducer(persistConfig, transactions);
