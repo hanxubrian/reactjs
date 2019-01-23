@@ -6,6 +6,7 @@ import { persistReducer } from 'redux-persist';
 const initialState = {
     billrunsDB: null,
     bLoadedBillruns: false,
+    billruncreate       : null,
 };
 
 
@@ -23,6 +24,12 @@ const billruns = function(state = initialState, action) {
         {
             return {...state, billrunsDB: action.payload}
 
+        }
+        case Actions.CREATE_BILLRUN_SUCCESS:
+        {
+            return {
+                ...state,billruncreate: action.payload
+            }
         }
         case UserActions.USER_LOGGED_OUT:
         {

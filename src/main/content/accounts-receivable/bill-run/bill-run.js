@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 // core components
-import {Icon, IconButton, Fab, Input, Paper, Typography} from '@material-ui/core';
+import {Icon, IconButton, Fab,ClickAwayListener, Input, Paper, Typography} from '@material-ui/core';
 import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
@@ -22,7 +22,7 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 import _ from 'lodash';
 import classNames from 'classnames';
-
+import BillRunDialog from './bill-run-create';
 
 const headerHeight = 100;
 
@@ -112,6 +112,9 @@ const styles = theme => ({
         backgroundColor: theme.palette.primary.main,
         padding: 12
     },
+    topbtncus:{
+        marginRight: 100,
+    },
 });
 
 class BillRun extends Component {
@@ -120,7 +123,9 @@ class BillRun extends Component {
         temp: [],
         data: [],
         selection: [],
-        regionId: 0
+        regionId: 0,
+        open: false,
+        flag: false,
     };
 
     constructor(props){
@@ -178,11 +183,32 @@ class BillRun extends Component {
         this.setState({data: rawData});
     };
 
+    btnbillrun=(event)=>{
+        this.setState({open: !this.state.open});
+        if(!this.state.flag){
+
+            this.setState({flag: !this.state.flag});
+        }
+
+
+    }
+    opendialogwin=()=>{
+        // this.refs.child.handleClickOpen();
+        this.child.handleClickOpen();
+    }
+    closeDialog=()=>{
+        // if(this.state.flag){
+        //     this.setState({open: !this.state.open});
+        //     this.setState({flag: !this.state.flag});
+        // }
+    }
     render()
     {
         const {classes} = this.props;
         const { selection } = this.state;
         return (
+
+
             <FusePageCustom
                 classes={{
                     root: classes.layoutRoot,
@@ -202,24 +228,25 @@ class BillRun extends Component {
                                     </FuseAnimate>
                                 </div>
                             </div>
-                            <div className="flex flex-shrink items-center">
-                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                            <div className={classNames(classes.topbtncus,"flex flex-shrink items-center")}>
+                                <FuseAnimate animation="transition.expandIn" delay={300} >
                                     <Fab color="secondary" aria-label="add"
-                                         className={classNames(classes.sideButton, "mr-12")} onClick={() => alert('ok')}>
+                                         className={classNames(classes.sideButton, "mr-12")}  onClick={this.opendialogwin}>
                                         <Icon>add</Icon>
                                     </Fab>
                                 </FuseAnimate>
+
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
                                     <Fab color="secondary" aria-label="add"
                                          className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-                                        <Icon>mail_outline</Icon>
+                                        <Icon>delete</Icon>
                                     </Fab>
                                 </FuseAnimate>
-                                <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-                                        <Icon>print</Icon>
-                                    </Fab>
-                                </FuseAnimate>
+                                {/*<FuseAnimate animation="transition.expandIn" delay={300}>*/}
+                                {/*<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>*/}
+                                {/*<Icon>print</Icon>*/}
+                                {/*</Fab>*/}
+                                {/*</FuseAnimate>*/}
                             </div>
                         </div>
                         <div className="flex flex-none items-end" style={{display: 'none'}}>
@@ -239,169 +266,174 @@ class BillRun extends Component {
                     </div>
                 }
                 content={
-                    <div className="flex-1 flex-col absolute w-full h-full">
-                        {this.state.temp && (
-                            <ReactTable
-                                data={this.state.temp}
-                                PaginationComponent={JanikingPagination}
-                                minRows = {0}
-                                onFetchData={this.fetchData}
-                                getTheadGroupProps={(state, rowInfo, column, instance) =>{
-                                    return {
-                                        style:{
-                                            padding: "10px 10px",
-                                            fontSize: 16,
-                                            fontWeight: 700
-                                        },
-                                    }
-                                }}
-                                getTheadGroupThProps={(state, rowInfo, column, instance) => {
-                                    return {
-                                        style:{
-                                            padding: "10px 10px",
-                                            fontSize: 18,
-                                            fontWeight: 700,
-                                        },
-                                        className: classNames("flex items-center justify-start")
-                                    }
-                                }}
-                                getTheadThProps={(state, rowInfo, column, instance) =>{
-                                    let border = '1px solid rgba(255,255,255,.6)';
-                                    if(column.Header==='Actions') border = 'none';
-                                    return {
-                                        style:{
-                                            fontSize: '1.6rem',
-                                            fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
-                                            fontWeight: 400,
-                                            lineHeight: 1.75,
-                                            color: 'white',
-                                            borderRight: border
-                                        },
-                                    }
-                                }}
-                                getTheadProps={(state, rowInfo, column, instance) =>{
-                                    return {
-                                        style:{
-                                            fontSize: 13,
-                                        },
-                                        className: classes.tableTheadRow
-                                    }
-                                }}
-                                getTdProps={(state, rowInfo, column, instance) =>{
-                                    return {
-                                        style:{
-                                            textAlign: 'center',
-                                            flexDirection: 'row',
-                                            fontSize: 13,
-                                            padding: "0",
-                                        },
-                                    }
-                                }}
-                                getTrProps={(state, rowInfo, column) => {
-                                    return {
-                                        className: "cursor-pointer",
-                                        onClick  : (e, handleOriginal) => {
-                                            if ( rowInfo )
-                                            {
-                                                alert('ok');
-                                                // openEditContactDialog(rowInfo.original);
+                    <ClickAwayListener onClickAway={this.closeDialog}>
+                        <div className="flex-1 flex-col absolute w-full h-full">
+                            {this.state.temp && (
+                                <ReactTable
+                                    data={this.state.temp}
+                                    PaginationComponent={JanikingPagination}
+                                    minRows = {0}
+                                    onFetchData={this.fetchData}
+                                    getTheadGroupProps={(state, rowInfo, column, instance) =>{
+                                        return {
+                                            style:{
+                                                padding: "10px 10px",
+                                                fontSize: 16,
+                                                fontWeight: 700
+                                            },
+                                        }
+                                    }}
+                                    getTheadGroupThProps={(state, rowInfo, column, instance) => {
+                                        return {
+                                            style:{
+                                                padding: "10px 10px",
+                                                fontSize: 18,
+                                                fontWeight: 700,
+                                            },
+                                            className: classNames("flex items-center justify-start")
+                                        }
+                                    }}
+                                    getTheadThProps={(state, rowInfo, column, instance) =>{
+                                        let border = '1px solid rgba(255,255,255,.6)';
+                                        if(column.Header==='Actions') border = 'none';
+                                        return {
+                                            style:{
+                                                fontSize: '1.6rem',
+                                                fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
+                                                fontWeight: 400,
+                                                lineHeight: 1.75,
+                                                color: 'white',
+                                                borderRight: border
+                                            },
+                                        }
+                                    }}
+                                    getTheadProps={(state, rowInfo, column, instance) =>{
+                                        return {
+                                            style:{
+                                                fontSize: 13,
+                                            },
+                                            className: classes.tableTheadRow
+                                        }
+                                    }}
+                                    getTdProps={(state, rowInfo, column, instance) =>{
+                                        return {
+                                            style:{
+                                                textAlign: 'center',
+                                                flexDirection: 'row',
+                                                fontSize: 13,
+                                                padding: "0",
+                                            },
+                                        }
+                                    }}
+                                    getTrProps={(state, rowInfo, column) => {
+                                        return {
+                                            className: "cursor-pointer",
+                                            onClick  : (e, handleOriginal) => {
+                                                if ( rowInfo )
+                                                {
+                                                    alert('ok');
+                                                    // openEditContactDialog(rowInfo.original);
+                                                }
                                             }
                                         }
-                                    }
-                                }}
-                                columns={[
-                                    {
-                                        Header: ()=>(
-                                            <div className="flex items-center pr-0 lg:pr-12">
-                                                <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
-                                                    <Input
-                                                        placeholder="Search..."
-                                                        className={classNames(classes.search, 'pl-16')}
-                                                        // className="pl-16"
-                                                        disableUnderline
-                                                        fullWidth
-                                                        value={this.state.s}
-                                                        onChange={this.handleChange('s')}
-                                                        inputProps={{
-                                                            'aria-label': 'Search'
-                                                        }}
-                                                    />
-                                                    <Icon color="action" className="mr-16">search</Icon>
-                                                </Paper>
-                                            </div>
-                                        ),
-                                        columns: [
-                                            {
-                                                Header: "Bill Run Batch #",
-                                                accessor: "Id",
-                                                filterAll: true,
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center p-24")
-                                            },
-                                            {
-                                                Header: "Message",
-                                                accessor: "Message",
-                                                width: 360,
-                                                className: classNames("flex items-center  justify-start p-12-impor p-24")
-                                            },
-                                            {
-                                                Header: "Invoice Date",
-                                                id: "InvoiceDate",
-                                                accessor: d => moment(d.InvoiceDate).format('MM/DD/YYYY'),
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center")
-                                            },
-                                            {
-                                                Header: "User",
-                                                accessor: "CreateBy",
-                                                className: classNames(classes.tableTdEven, "flex items-center  justify-center")
-                                            },
-                                            {
-                                                Header: "Actions",
-                                                width : 128,
-                                                Cell  : row => (
-                                                    <div className="flex items-center actions">
-                                                        <IconButton
-                                                            onClick={(ev) => {
-                                                                ev.stopPropagation();
-                                                                if (window.confirm("Do you really want to remove this invoice")) {
-                                                                    this.props.removeInvoiceAction(row.original.InvoiceId, this.props.invoices);
-                                                                    if(this.state.selection.length>0){
-                                                                        _.remove(this.state.selection, function(id) {
-                                                                            return id === row.original.InvoiceId;
-                                                                        });
+                                    }}
+                                    columns={[
+                                        {
+                                            Header: ()=>(
+                                                <div className="flex items-center pr-0 lg:pr-12">
+                                                    <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
+                                                        <Input
+                                                            placeholder="Search..."
+                                                            className={classNames(classes.search, 'pl-16')}
+                                                            // className="pl-16"
+                                                            disableUnderline
+                                                            fullWidth
+                                                            value={this.state.s}
+                                                            onChange={this.handleChange('s')}
+                                                            inputProps={{
+                                                                'aria-label': 'Search'
+                                                            }}
+                                                        />
+                                                        <Icon color="action" className="mr-16">search</Icon>
+                                                    </Paper>
+                                                </div>
+                                            ),
+                                            columns: [
+                                                {
+                                                    Header: "Bill Run Batch #",
+                                                    accessor: "Id",
+                                                    filterAll: true,
+                                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center p-24")
+                                                },
+                                                {
+                                                    Header: "Message",
+                                                    accessor: "Message",
+                                                    width: 360,
+                                                    className: classNames("flex items-center  justify-start p-12-impor p-24")
+                                                },
+                                                {
+                                                    Header: "Invoice Date",
+                                                    id: "InvoiceDate",
+                                                    accessor: d => moment(d.InvoiceDate).format('MM/DD/YYYY'),
+                                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+                                                },
+                                                {
+                                                    Header: "User",
+                                                    accessor: "CreateBy",
+                                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+                                                },
+                                                {
+                                                    Header: "Actions",
+                                                    width : 128,
+                                                    Cell  : row => (
+                                                        <div className="flex items-center actions">
+                                                            <IconButton
+                                                                onClick={(ev) => {
+                                                                    ev.stopPropagation();
+                                                                    if (window.confirm("Do you really want to remove this invoice")) {
+                                                                        this.props.removeInvoiceAction(row.original.InvoiceId, this.props.invoices);
+                                                                        if(this.state.selection.length>0){
+                                                                            _.remove(this.state.selection, function(id) {
+                                                                                return id === row.original.InvoiceId;
+                                                                            });
+                                                                        }
                                                                     }
-                                                                }
-                                                            }}
-                                                        >
-                                                            <Icon>delete</Icon>
-                                                        </IconButton>,
-                                                        <IconButton
-                                                            onClick={(ev) => {
-                                                                ev.stopPropagation();
-                                                                // removeContact(row.original.id);
-                                                            }}
-                                                        >
-                                                            <Icon>edit</Icon>
-                                                        </IconButton>
-                                                    </div>
-                                                )
-                                            }
-                                        ]
-                                    }
-                                ]}
-                                defaultPageSize={100}
-                                className={classNames( "-striped -highlight")}
-                                totalRecords = {this.state.temp.length}
-                                style={{
-                                    height: "100%",
-                                }}
-                            />
-                        )}
-                    </div>
+                                                                }}
+                                                            >
+                                                                <Icon>delete</Icon>
+                                                            </IconButton>
+                                                            <IconButton
+                                                                onClick={(ev) => {
+                                                                    ev.stopPropagation();
+                                                                    // removeContact(row.original.id);
+                                                                }}
+                                                            >
+                                                                <Icon>edit</Icon>
+                                                            </IconButton>
+                                                        </div>
+                                                    )
+                                                }
+                                            ]
+                                        }
+                                    ]}
+                                    defaultPageSize={100}
+                                    className={classNames( "-striped -highlight")}
+                                    totalRecords = {this.state.temp.length}
+                                    style={{
+                                        height: "100%",
+                                    }}
+                                />
+                            )}
+                            {/*<BillRunDialog open={this.state.open} childCall={this.opendialogwin.bind(this)} ref="child"/>*/}
+                            <BillRunDialog open={this.state.open} onRef={ref => (this.child = ref)}/>
+                        </div>
+                    </ClickAwayListener>
                 }
                 onRef={instance => {
                     this.pageLayout = instance;
                 }}
             >
+                {/*<BillRunDialog></BillRunDialog>*/}
             </FusePageCustom>
         );
     }
