@@ -435,6 +435,9 @@ class CustomerForm extends Component {
 		sorting: [
 			{ columnName: 'Number', direction: 'asc' }
 		],
+		rows: [],
+		columns: [],
+		tableColumnExtensions: [],
 
 		account_offering_step: 0,
 
@@ -497,189 +500,223 @@ class CustomerForm extends Component {
 			}).sort();
 		}
 
+		const {
+			pins,
+			// locationFilterValue,
+			pins2,
+			gmapVisible,
+			// mapViewState,
+			rows,
+			columns,
+			selection,
+			tableColumnExtensions,
+			tableGroupColumnExtension,
+			sorting,
+			editingColumnExtensions,
+			currencyColumns,
+			pageSize,
+			pageSizes,
+			amountFilterOperations,
+			// groupingColumns,
+			// booleanColumns,
+			searchValue,
+			grouping,
+			// leftColumns,
+			// rightColumns,
+		} = this.state;
+
 		switch (step + 1) {
 			case 1:
 				// return 'Step 2: What is an ad group anyways?';
 				return (
+					// <Fragment>
+					// 	<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+					// 		<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+					// 			<TextField
+					// 				type="number"
+					// 				id="Amount"
+					// 				label="Amount *"
+					// 				className={classes.textField}
+					// 				InputLabelProps={{
+					// 					shrink: true
+					// 				}}
+					// 				value={this.state.Amount}
+					// 				onChange={this.handleChange('Amount')}
+					// 				margin="dense"
+					// 				variant="outlined"
+					// 				style={{ minWidth: "100px", width: "30%" }}
+					// 				InputProps={{
+					// 					startAdornment: <InputAdornment position="start">$</InputAdornment>
+					// 				}}
+					// 			/>
+					// 		</GridItem>
+					// 		<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+					// 			<TextField
+					// 				id="Description"
+					// 				label="Description"
+					// 				multiline
+					// 				rows="2"
+					// 				rowsMax="2"
+					// 				className={classes.textField}
+					// 				value={this.state.Description}
+					// 				onChange={this.handleChange('Description')}
+					// 				margin="dense"
+					// 				variant="outlined"
+					// 				style={{ width: '100%' }}
+					// 			/>
+					// 		</GridItem>
+					// 		<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+					// 			<TextField
+					// 				id="ContractType"
+					// 				label="Contract Type *"
+					// 				select
+					// 				InputLabelProps={{
+					// 					shrink: true
+					// 				}}
+					// 				className={classNames(classes.textField, "mr-6")}
+					// 				value={this.state.ContractType === undefined ? 0 : this.state.ContractType}
+					// 				onChange={this.handleChange('ContractType')}
+					// 				margin="dense"
+					// 				variant="outlined"
+					// 				style={{ minWidth: "100px", width: "30%" }}
+					// 			>
+					// 				{[{ value: 0, label: "Recurring" }
+					// 					, { value: 1, label: "One-Time" }
+					// 					, { value: 2, label: "Variable" }].map(option => (
+					// 						<MenuItem key={option.value} value={option.value}>
+					// 							{option.label}
+					// 						</MenuItem>
+					// 					))}
+					// 			</TextField>
+
+					// 			<TextField
+					// 				type="number"
+					// 				inputProps={{ min: "0", max: "99", step: "1" }}
+					// 				id="TermMonths"
+					// 				label="Term Months *"
+					// 				InputLabelProps={{
+					// 					shrink: true
+					// 				}}
+					// 				className={classNames(classes.textField, "ml-6")}
+					// 				value={this.state.TermMonths}
+					// 				onChange={this.handleChange('TermMonths')}
+					// 				margin="dense"
+					// 				variant="outlined"
+					// 				style={{ width: '10%', minWidth: '110px' }}
+					// 			/>
+					// 		</GridItem>
+
+					// 		<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+					// 			<TextField
+					// 				id="AgreementType"
+					// 				label="Agreement Type *"
+					// 				select
+					// 				InputLabelProps={{
+					// 					shrink: true
+					// 				}}
+					// 				className={classNames(classes.textField, "mr-6")}
+					// 				value={this.state.AgreementType === undefined ? 1 : this.state.AgreementType}
+					// 				onChange={this.handleChange('AgreementType')}
+					// 				margin="dense"
+					// 				variant="outlined"
+					// 				fullWidth
+					// 			>
+					// 				{[{ value: 0, label: "Customer" }
+					// 					, { value: 1, label: "Jani-King" }
+					// 					, { value: 2, label: "General" }
+					// 				].map(option => (
+					// 					<MenuItem key={option.value} value={option.value}>
+					// 						{option.label}
+					// 					</MenuItem>
+					// 				))}
+					// 			</TextField>
+
+					// 			<TextField
+					// 				id="AcctExec"
+					// 				label="Acct Exec"
+					// 				select
+					// 				InputLabelProps={{
+					// 					shrink: true
+					// 				}}
+					// 				className={classNames(classes.textField, "ml-6")}
+					// 				value={this.state.AcctExec === undefined ? 0 : this.state.AcctExec}
+					// 				onChange={this.handleChange('AcctExec')}
+					// 				margin="dense"
+					// 				variant="outlined"
+					// 				fullWidth
+					// 			>
+					// 				{
+					// 					execTitles.map((x, index) => {
+					// 						return (<MenuItem key={index} value={index}>{x}</MenuItem>)
+					// 					})
+					// 				}
+					// 			</TextField>
+					// 		</GridItem>
+
+
+
+
+					// 		<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+					// 			<TextField
+					// 				type="date"
+					// 				id="SignDate"
+					// 				label="Sign Date *"
+					// 				className={classNames(classes.textField, "mr-6")}
+					// 				InputLabelProps={{
+					// 					shrink: true
+					// 				}}
+					// 				value={this.state.SignDate}
+					// 				onChange={this.handleChange('SignDate')}
+					// 				margin="dense"
+					// 				variant="outlined"
+					// 				style={{ width: "20%", minWidth: "180px" }}
+					// 			/>
+					// 			<TextField
+					// 				type="date"
+					// 				id="StartDate"
+					// 				label="Start Date *"
+					// 				className={classNames(classes.textField, "mr-6 ml-6")}
+					// 				InputLabelProps={{
+					// 					shrink: true
+					// 				}}
+					// 				value={this.state.StartDate}
+					// 				onChange={this.handleChange('StartDate')}
+					// 				margin="dense"
+					// 				variant="outlined"
+					// 				style={{ width: "20%", minWidth: "180px" }}
+					// 			/>
+
+					// 			<TextField
+					// 				type="date"
+					// 				id="ExpirationDate"
+					// 				label="Expiration Date *"
+					// 				className={classNames(classes.textField, "ml-6")}
+					// 				InputLabelProps={{
+					// 					shrink: true
+					// 				}}
+					// 				value={this.state.ExpirationDate}
+					// 				onChange={this.handleChange('ExpirationDate')}
+					// 				margin="dense"
+					// 				variant="outlined"
+					// 				style={{ width: "20%", minWidth: "180px" }}
+					// 			/>
+					// 		</GridItem>
+					// 	</GridContainer>
+					// </Fragment>
 					<Fragment>
-						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									type="number"
-									id="Amount"
-									label="Amount *"
-									className={classes.textField}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.Amount}
-									onChange={this.handleChange('Amount')}
-									margin="dense"
-									variant="outlined"
-									style={{ minWidth: "100px", width: "30%" }}
-									InputProps={{
-										startAdornment: <InputAdornment position="start">$</InputAdornment>
-									}}
-								/>
-							</GridItem>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="Description"
-									label="Description"
-									multiline
-									rows="2"
-									rowsMax="2"
-									className={classes.textField}
-									value={this.state.Description}
-									onChange={this.handleChange('Description')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: '100%' }}
-								/>
-							</GridItem>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="ContractType"
-									label="Contract Type *"
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classNames(classes.textField, "mr-6")}
-									value={this.state.ContractType === undefined ? 0 : this.state.ContractType}
-									onChange={this.handleChange('ContractType')}
-									margin="dense"
-									variant="outlined"
-									style={{ minWidth: "100px", width: "30%" }}
-								>
-									{[{ value: 0, label: "Recurring" }
-										, { value: 1, label: "One-Time" }
-										, { value: 2, label: "Variable" }].map(option => (
-											<MenuItem key={option.value} value={option.value}>
-												{option.label}
-											</MenuItem>
-										))}
-								</TextField>
+		                <div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
+		
+		                     <div className={classNames("flex flex-col")}
+		                        >
 
-								<TextField
-									type="number"
-									inputProps={{ min: "0", max: "99", step: "1" }}
-									id="TermMonths"
-									label="Term Months *"
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classNames(classes.textField, "ml-6")}
-									value={this.state.TermMonths}
-									onChange={this.handleChange('TermMonths')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: '10%', minWidth: '110px' }}
-								/>
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="AgreementType"
-									label="Agreement Type *"
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classNames(classes.textField, "mr-6")}
-									value={this.state.AgreementType === undefined ? 1 : this.state.AgreementType}
-									onChange={this.handleChange('AgreementType')}
-									margin="dense"
-									variant="outlined"
-									fullWidth
-								>
-									{[{ value: 0, label: "Customer" }
-										, { value: 1, label: "Jani-King" }
-										, { value: 2, label: "General" }
-									].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-
-								<TextField
-									id="AcctExec"
-									label="Acct Exec"
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classNames(classes.textField, "ml-6")}
-									value={this.state.AcctExec === undefined ? 0 : this.state.AcctExec}
-									onChange={this.handleChange('AcctExec')}
-									margin="dense"
-									variant="outlined"
-									fullWidth
-								>
-									{
-										execTitles.map((x, index) => {
-											return (<MenuItem key={index} value={index}>{x}</MenuItem>)
-										})
-									}
-								</TextField>
-							</GridItem>
-
-
-
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									type="date"
-									id="SignDate"
-									label="Sign Date *"
-									className={classNames(classes.textField, "mr-6")}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.SignDate}
-									onChange={this.handleChange('SignDate')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: "20%", minWidth: "180px" }}
-								/>
-								<TextField
-									type="date"
-									id="StartDate"
-									label="Start Date *"
-									className={classNames(classes.textField, "mr-6 ml-6")}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.StartDate}
-									onChange={this.handleChange('StartDate')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: "20%", minWidth: "180px" }}
-								/>
-
-								<TextField
-									type="date"
-									id="ExpirationDate"
-									label="Expiration Date *"
-									className={classNames(classes.textField, "ml-6")}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.ExpirationDate}
-									onChange={this.handleChange('ExpirationDate')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: "20%", minWidth: "180px" }}
-								/>
-							</GridItem>
-						</GridContainer>
-					</Fragment>
+		                        </div>
+		                </div>
+		            </Fragment>
 				);
 			case 2:
 				return (
 					<Fragment>
-						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+						{/* <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between">
 								<div className="flex flex-col">
 									<TextField
@@ -799,7 +836,6 @@ class CustomerForm extends Component {
 											/>
 										}
 										label="E-Billing"
-									// style={{ width: '40%' }}
 									/>
 
 									<TextField
@@ -1123,7 +1159,7 @@ class CustomerForm extends Component {
 									style={{ width: '100%' }}
 								/>
 							</GridItem>
-						</GridContainer>
+						</GridContainer> */}
 
 					</Fragment>
 				);
@@ -1564,7 +1600,7 @@ class CustomerForm extends Component {
 	// 		this.setState({ data: data });
 	// 		return;
 	// 	} else {
-	// 		for (let i = 0; i < rawData.Data.Region.length; i++) {
+	// 		for (let i = 0; i < rawData.Data.Region.length) {
 	// 			tempData = rawData.Data.Region[i].FranchiseeList;
 	// 			data = data.concat(tempData);
 	// 		}
@@ -1582,17 +1618,17 @@ class CustomerForm extends Component {
 		}
 	}
 
-	getDocuments = (rawData = this.props.documents) => {
-		console.log("DOCUMENTS" + "" + rawData)
-		let all_docs = [];
-		if (rawData === null || rawData === undefined) return;
-		let documents = rawData.Data.filter(x => x);
+	// getDocuments = (rawData = this.props.documents) => {
+	// 	console.log("DOCUMENT  rawData)
+	// 	let all_docs = [];
+	// 	if (rawData === null || rawData === undefined) return;
+	// 	let documents = rawData.Data.filter(x => x);
 
-		all_docs = [...all_docs, ...rawData.Data]
-		this.setState({
-			docs: all_docs
-		});
-	};
+	// 	all_docs = [...all_docs, ...rawData.Data]
+	// 	this.setState({
+	// 		docs: all_docs
+	// 	});
+	// };
 
 	handleChange = (event) => {
 		this.setState(_.set({ ...this.state }, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
@@ -1623,40 +1659,40 @@ class CustomerForm extends Component {
 		return false;
 	};
 
-	handleSkip = () => {
-		const { activeStep } = this.state;
-		if (!this.isStepOptional(activeStep)) {
-			// You probably want to guard against something like this
-			// it should never occur unless someone's actively trying to break something.
-			throw new Error("You can't skip a step that isn't optional.");
-		}
+	// handleSkip = () => {
+	// 	const { activeStep } = this.state;
+	// 	if (!this.isStepOptional(activeStep)) {
+	// 		// You probably want to guard against something like this
+	// 		// it should never occur unless someone's actively trying to break something.
+	// 		throw new Error("You can't skip a step that isn't optional.");
+	// 	}
 
-		this.setState(state => {
-			const skipped = new Set(state.skipped.values());
-			skipped.add(activeStep);
-			return {
-				activeStep: state.activeStep + 1,
-				skipped
-			};
-		});
-	};
+	// 	this.setState(state => {
+	// 		const skipped = new Set(state.skipped.values());
+	// 		skipped.add(activeStep);
+	// 		return {
+	// 			activeStep: state.activeSt 1,
+	// 			skipped
+	// 		};
+	// 	});
+	// };
 
-	handleNext = () => {
-		let activeStep;
+	// handleNext = () => {
+	// 	let activeStep;
 
-		if (this.isLastStep() && !this.allStepsCompleted()) {
-			// It's the last step, but not all steps have been completed
-			// find the first step that has been completed
-			const steps = getSteps();
-			activeStep = steps.findIndex((step, i) => !this.state.completed.has(i));
-		}
-		else {
-			activeStep = this.state.activeStep + 1;
-		}
-		this.setState({
-			activeStep
-		});
-	};
+	// 	if (this.isLastStep() && !this.allStepsCompleted()) {
+	// 		// It's the last step, but not all steps have been completed
+	// 		// find the first step that has been completed
+	// 		const steps = getSteps();
+	// 		activeStep = steps.findIndex((step, i) => !this.state.completed.has(i));
+	// 	}
+	// 	else {
+	// 		activeStep = this.state.activeSt 1;
+	// 	}
+	// 	this.setState({
+	// 		activeStep
+	// 	});
+	// };
 
 	handleBack = () => {
 		this.setState(state => ({
@@ -1750,7 +1786,30 @@ class CustomerForm extends Component {
 		const { activeStep, account_offering_step
 		} = this.state;
 
-
+		const {
+			pins,
+			// locationFilterValue,
+			pins2,
+			gmapVisible,
+			// mapViewState,
+			rows,
+			columns,
+			selection,
+			tableColumnExtensions,
+			tableGroupColumnExtension,
+			sorting,
+			editingColumnExtensions,
+			currencyColumns,
+			pageSize,
+			pageSizes,
+			amountFilterOperations,
+			// groupingColumns,
+			// booleanColumns,
+			searchValue,
+			grouping,
+			// leftColumns,
+			// rightColumns,
+		} = this.state;
 
 		return (
 			<Fragment>

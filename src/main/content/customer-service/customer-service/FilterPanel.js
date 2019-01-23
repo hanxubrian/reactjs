@@ -105,8 +105,8 @@ const styles = theme => ({
         paddingTop: 12,
         paddingBottom: '12px!important',
         '& h6':{
-            lineHeight: 2,
-            fontSize: 16
+            lineHeight: 1.5,
+            fontSize: 14
         }
     },
 	panel: {
@@ -991,64 +991,69 @@ class FilterPanel extends Component {
                                                 <Icon fontSize={"small"} className="mr-4">account_circle</Icon>
                                             </div>
                                             <Typography variant="subtitle1" color="inherit">
-                                                <strong>Name: {this.state.customerName}</strong>
+                                                <strong>{this.state.customerName}</strong>
                                             </Typography>
+											<Icon fontSize={"small"} className="mr-4">phone</Icon>
+                                                <Typography variant="subtitle1" color="inherit" className="mr-4">
+														{this.state.customerPhone}
+                                                </Typography>
                                         </div>
+
+										{/* <div className="flex flex-row justify-end mb-4">
+                                                <div className="flex flex-row items-center">
+                                                    <Icon fontSize={"small"} className="mr-4">phone</Icon>
+                                                    <Typography variant="subtitle1" color="inherit">
+														{this.state.customerPhone}
+                                                    </Typography>
+                                                </div>
+                                            </div>
+
+											<div className="flex flex-row justify-end mb-4">
+                                                <div className="flex flex-row items-center">
+                                                    <Icon fontSize={"small"} className="mr-4">phone</Icon>
+                                                    <Typography variant="subtitle1" color="inherit">
+														{this.state.customerFax}
+                                                    </Typography>
+                                                </div>
+                                            </div> */}
 
                                             <div className="flex flex-row justify-start mb-4">
                                                 <div className="flex flex-row items-center">
                                                     <Icon fontSize={"small"} className="mr-4">place</Icon>
                                                     <Typography variant="subtitle1" color="inherit">
-														Address: {this.state.customerAddress}
+														{this.state.customerAddress}
                                                     </Typography>
+													<Icon fontSize={"small"} className="mr-4">phone</Icon>
+													<Typography variant="subtitle1" color="inherit">
+															{this.state.customerFax}
+													</Typography>
                                                 </div>
                                             </div>
 
-											<div className="flex flex-row justify-start mb-4">
+											{/* <div className="flex flex-row justify-start mb-4">
                                                 <div className="flex flex-row items-center">
                                                     <Icon fontSize={"small"} className="mr-4">place</Icon>
                                                     <Typography variant="subtitle1" color="inherit">
 														Address2:
                                                     </Typography>
                                                 </div>
-                                            </div>
+                                            </div> */}
 
 											<div className="flex flex-row justify-start mb-4">
                                                 <div className="flex flex-row items-center">
                                                     <Icon fontSize={"small"} className="mr-4"></Icon>
                                                     <Typography variant="subtitle1" color="inherit">
-														City: {this.state.customerCity}
-														<br></br>
-														State: {this.state.customerState}
-														<br></br>
-														Zip: {this.state.customerZip}
+														{this.state.customerCity} {this.state.customerState} {this.state.customerZip}
                                                     </Typography>
                                                 </div>
                                             </div>
-
-											<div className="flex flex-row justify-start mb-4">
-                                                <div className="flex flex-row items-center">
-                                                    <Icon fontSize={"small"} className="mr-4">phone</Icon>
-                                                    <Typography variant="subtitle1" color="inherit">
-														Phone: {this.state.customerPhone}
-                                                    </Typography>
-                                                </div>
-                                            </div>
-
-											<div className="flex flex-row justify-start mb-4">
-                                                <div className="flex flex-row items-center">
-                                                    <Icon fontSize={"small"} className="mr-4">phone</Icon>
-                                                    <Typography variant="subtitle1" color="inherit">
-														Fax: {this.state.customerFax}
-                                                    </Typography>
-                                                </div>
-                                            </div>
+											<Divider variant="middle" style={{ marginTop: 5, marginBottom: 5 }} />
 
 											<div className="flex flex-row justify-start mb-4">
                                                 <div className="flex flex-row items-center">
                                                     <Icon fontSize={"small"} className="mr-4">email</Icon>
                                                     <Typography variant="subtitle1" color="inherit">
-														Email: {this.state.customerEmail}
+														{this.state.customerEmail}
                                                     </Typography>
                                                 </div>
                                             </div>
@@ -1057,7 +1062,7 @@ class FilterPanel extends Component {
                                                 <div className="flex flex-row items-center">
                                                     <Icon fontSize={"small"} className="mr-4">website</Icon>
                                                     <Typography variant="subtitle1" color="inherit">
-														Website: {this.state.customerWebsite}
+														{this.state.customerWebsite}
                                                     </Typography>
                                                 </div>
                                             </div>
@@ -1375,10 +1380,260 @@ class FilterPanel extends Component {
 
 									</GridItem>
 
+										<GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col">
+										<Card className={classes.card}>
+											<CardHeader title="Contract" className={classNames(classes.cardHeader, "flex-1")} />
+											<CardContent className={classNames(classes.cardContent)}>
+												<div className="flex flex-row justify-start mb-4">
+													<div className="flex flex-row">
+														<Icon fontSize={"small"} className="mr-4">money</Icon>
+													</div>
+													<Typography variant="subtitle1" color="inherit">
+														<strong>Amount:</strong>
+													</Typography>
+												</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4">description</Icon>
+															<Typography variant="subtitle1" color="inherit">
+																Description:
+															</Typography>
+														</div>
+													</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4"></Icon>
+															<Typography variant="subtitle1" color="inherit">
+																Contract Type:
+															</Typography>
+														</div>
+													</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4"></Icon>
+															<Typography variant="subtitle1" color="inherit">
+																Term Months:
+															</Typography>
+														</div>
+													</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4"></Icon>
+															<Typography variant="subtitle1" color="inherit">
+																Agreement Type:
+															</Typography>
+														</div>
+													</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4"></Icon>
+															<Typography variant="subtitle1" color="inherit">
+																Acct Exec:
+															</Typography>
+														</div>
+													</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4">date</Icon>
+															<Typography variant="subtitle1" color="inherit">
+																Sign Date:
+															</Typography>
+														</div>
+													</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4">date</Icon>
+															<Typography variant="subtitle1" color="inherit">
+																Start Date:
+															</Typography>
+														</div>
+													</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4">date</Icon>
+															<Typography variant="subtitle1" color="inherit">
+																Expiration Date:
+															</Typography>
+														</div>
+													</div>
+
+											</CardContent>
+										</Card>
+									</GridItem>
+
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col">
+										<Card className={classes.card}>
+											<CardHeader title="Billing" className={classNames(classes.cardHeader, "flex-1")} />
+											<CardContent className={classNames(classes.cardContent)}>
+												<div className="flex flex-row justify-start mb-4">
+													<div className="flex flex-row">
+														<Icon fontSize={"small"} className="mr-4">date</Icon>
+													</div>
+													<Typography variant="subtitle1" color="inherit">
+														<strong>Effective Date:</strong>
+													</Typography>
+												</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4">number</Icon>
+															<Typography variant="subtitle1" color="inherit">
+																PO number:
+															</Typography>
+														</div>
+													</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4">date</Icon>
+															<Typography variant="subtitle1" color="inherit">
+																Invoice Date:
+															</Typography>
+														</div>
+													</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4"></Icon>
+															<Typography variant="subtitle1" color="inherit">
+																Billing Frequency:
+															</Typography>
+														</div>
+													</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4"></Icon>
+															<Typography variant="subtitle1" color="inherit">
+																Email:
+															</Typography>
+														</div>
+													</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4"></Icon>
+															<Typography variant="subtitle1" color="inherit">
+																Term:
+															</Typography>
+														</div>
+													</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4">date</Icon>
+															<Typography variant="subtitle1" color="inherit">
+																AR Status:
+															</Typography>
+														</div>
+													</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4">date</Icon>
+															<Typography variant="subtitle1" color="inherit">
+																Notes:
+															</Typography>
+														</div>
+													</div>
+
+											</CardContent>
+										</Card>
+									</GridItem>
+
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col">
+										<Card className={classes.card}>
+											<CardHeader title="Inspections" className={classNames(classes.cardHeader, "flex-1")} />
+											<CardContent className={classNames(classes.cardContent)}>
+												<div className="flex flex-row justify-start mb-4">
+													<div className="flex flex-row">
+														<Icon fontSize={"small"} className="mr-4"></Icon>
+													</div>
+													<Typography variant="subtitle1" color="inherit">
+														<strong>Service Type:</strong>
+													</Typography>
+												</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4"></Icon>
+															<Typography variant="subtitle1" color="inherit">
+																Square Footage:
+															</Typography>
+														</div>
+													</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4">time</Icon>
+															<Typography variant="subtitle1" color="inherit">
+																Start Time:
+															</Typography>
+														</div>
+													</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4">time</Icon>
+															<Typography variant="subtitle1" color="inherit">
+																End Time:
+															</Typography>
+														</div>
+													</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4">amount</Icon>
+															<Typography variant="subtitle1" color="inherit">
+																Amount:
+															</Typography>
+														</div>
+													</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4"></Icon>
+															<Typography variant="subtitle1" color="inherit">
+																Clean Times:
+															</Typography>
+														</div>
+													</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4"></Icon>
+															<Typography variant="subtitle1" color="inherit">
+																Clean Frequency:
+															</Typography>
+														</div>
+													</div>
+
+													<div className="flex flex-row justify-start mb-4">
+														<div className="flex flex-row items-center">
+															<Icon fontSize={"small"} className="mr-4">description</Icon>
+															<Typography variant="subtitle1" color="inherit">
+																Description:
+															</Typography>
+														</div>
+													</div>
+
+
+											</CardContent>
+										</Card>
+									</GridItem>
+
 									<GridItem xs={12} sm={12} md={12} className="flex flex-col">
-										<h3 className="mt-24 mb-12">Addresses</h3>
+										{/* <h3 className="mt-24 mb-12">Addresses</h3> */}
 										{/* <CustomerLineTable tableType="ADDRESS" headers={address_headers} /> */}
-										<Paper>
+										{/* <Paper>
 											<Grid
 												rows={addressRows}
 												columns={addressColumns}
@@ -1400,7 +1655,7 @@ class FilterPanel extends Component {
 													showEditCommand
 													showDeleteCommand
 													commandComponent={Command}
-												/>
+												/> */}
 												{/* <Getter
 													name="tableColumns"
 													computed={({ tableColumns }) => {
@@ -1415,13 +1670,13 @@ class FilterPanel extends Component {
 												/> */}
 
 
-											</Grid>
-										</Paper>
+											{/* </Grid>
+										</Paper> */}
 
 
-										<h3 className="mt-24 mb-12">Contacts</h3>
+										{/* <h3 className="mt-24 mb-12">Contacts</h3> */}
 										{/* <CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} /> */}
-										<Paper>
+										{/* <Paper>
 											<Grid
 												rows={contactsRows}
 												columns={contactsColumns}
@@ -1443,7 +1698,7 @@ class FilterPanel extends Component {
 													showEditCommand
 													showDeleteCommand
 													commandComponent={Command}
-												/>
+												/> */}
 												{/* <Getter
 													name="tableColumns"
 													computed={({ tableColumns }) => {
@@ -1458,8 +1713,8 @@ class FilterPanel extends Component {
 												/> */}
 
 
-											</Grid>
-										</Paper>
+											{/* </Grid>
+										</Paper> */}
 									</GridItem>
 
 
