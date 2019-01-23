@@ -39,7 +39,6 @@ export function getAllBillruns(RegionIds, UserIds ,isBillPeriod,BillMonth,BillYe
 
         (async () => {
             let res = await billrunService.getallbillrun(RegionIds, UserIds ,isBillPeriod,BillMonth,BillYear,FromDate,ToDate,SearchText);
-            console.log("res========all billrun",res);
             if (res.IsSuccess) {
                 dispatch({
                     type: GET_ALL_BILLRUN_SUCCESS,

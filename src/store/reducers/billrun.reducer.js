@@ -29,8 +29,12 @@ const billruns = function(state = initialState, action) {
         }
         case Actions.CREATE_BILLRUN_SUCCESS:
         {
+            let middb = state.billrunsDB;
+            middb.unshift(action.payload.Data);
+            // console.log("#########middb",middb);
             return {
-                ...state,billruncreate: action.payload,loadingstatus: false
+                ...state,billruncreate: action.payload,loadingstatus: false,
+
             }
         }
         case Actions.CREATE_BILLRUN_START:

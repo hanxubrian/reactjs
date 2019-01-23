@@ -225,6 +225,10 @@ class BillRun extends Component {
         if(JSON.stringify(this.state) !== JSON.stringify(prevState) && !this.props.loading){
             this.getBillRunList();
         }
+        if(this.props.loading === false && prevProps.loading===true){
+            // this.getBillRunList();
+        }
+
     }
 
     componentWillReceiveProps(nextProps) {
@@ -425,7 +429,7 @@ class BillRun extends Component {
                                 <FuseAnimate animation="transition.expandIn" delay={300} >
                                     <Fab color="secondary" aria-label="add"
                                          className={classNames(classes.sideButton, "mr-12")}  onClick={this.opendialogwin}>
-                                        <Icon>add</Icon>
+                                        <Icon>attach_money</Icon>
                                     </Fab>
                                 </FuseAnimate>
 
@@ -667,14 +671,14 @@ class BillRun extends Component {
                                                 {
                                                     Header: "Message",
                                                     accessor: "Message",
-                                                    width: 360,
+                                                    width: 560,
                                                     className: classNames("flex items-center  justify-start p-12-impor p-24")
                                                 },
                                                 {
                                                     Header: "Period",
                                                     id: "Period",
                                                     accessor: d => moment(d.InvoiceDate).format('MM/YYYY'),
-                                                    className: classNames("flex items-center  justify-start p-12-impor p-24")
+                                                    className: classNames("flex items-center  justify-center")
                                                 },
                                                 {
                                                     Header: "Invoice Date",
