@@ -967,6 +967,9 @@ class FilterPanel extends Component {
 											label="Name *"
 											className={classes.textField}
 											value={this.state.customerName}
+											InputProps={{
+												readOnly: true,
+											}}
 											onChange={this.handleChange('customerName')}
 											margin="dense"
 											variant="outlined"
@@ -980,6 +983,9 @@ class FilterPanel extends Component {
 											label="Address *"
 											className={classes.textField}
 											value={this.state.customerAddress}
+											InputProps={{
+												readOnly: true,
+											}}
 											onChange={this.handleChange('customerAddress')}
 											margin="dense"
 											variant="outlined"
@@ -991,6 +997,9 @@ class FilterPanel extends Component {
 											label="Address2"
 											className={classes.textField}
 											// value={customerForm.state.name}
+											InputProps={{
+												readOnly: true,
+											}}
 											onChange={this.handleChange('Address2')}
 											margin="dense"
 											variant="outlined"
@@ -1002,6 +1011,9 @@ class FilterPanel extends Component {
 											label="City *"
 											className={classNames(classes.textField, 'mr-6')}
 											value={this.state.customerCity}
+											InputProps={{
+												readOnly: true,
+											}}
 											onChange={this.handleChange('customerCity')}
 											margin="dense"
 											variant="outlined"
@@ -1015,6 +1027,9 @@ class FilterPanel extends Component {
 											select
 											className={classNames(classes.textField, 'mr-6 ml-6')}
 											value={this.state.customerState}
+											InputProps={{
+												readOnly: true,
+											}}
 											onChange={this.handleChange('customerState')}
 											margin="dense"
 											variant="outlined"
@@ -1032,6 +1047,9 @@ class FilterPanel extends Component {
 											label="Zip *"
 											className={classNames(classes.textField, 'ml-6')}
 											value={this.state.customerZip}
+											InputProps={{
+												readOnly: true,
+											}}
 											onChange={this.handleChange('customerZip')}
 											margin="dense"
 											variant="outlined"
@@ -1051,6 +1069,7 @@ class FilterPanel extends Component {
 													shrink: true
 												}}
 												InputProps={{
+													readOnly: true,
 													inputComponent: TextMaskPhone,
 													maxLength: 40,
 													value: this.state.customerPhone,
@@ -1073,6 +1092,7 @@ class FilterPanel extends Component {
 													shrink: true
 												}}
 												InputProps={{
+													readOnly: true,
 													inputComponent: TextMaskPhone,
 													maxLength: 40,
 													value: this.state.customerFax,
@@ -1093,6 +1113,9 @@ class FilterPanel extends Component {
 											type="email"
 											className={classNames(classes.textField, 'mr-6')}
 											value={this.state.customerEmail}
+											InputProps={{
+												readOnly: true,
+											}}
 											onChange={this.handleChange('customerEmail')}
 											margin="dense"
 											variant="outlined"
@@ -1104,6 +1127,9 @@ class FilterPanel extends Component {
 											label="Website"
 											className={classNames(classes.textField, 'ml-6')}
 											value={this.state.customerWebsite}
+											InputProps={{
+												readOnly: true,
+											}}
 											onChange={this.handleChange('customerWebsite')}
 											margin="dense"
 											variant="outlined"
@@ -1118,6 +1144,9 @@ class FilterPanel extends Component {
 											select
 											className={classNames(classes.textField, 'mr-6')}
 											value={this.state.AccountTypeGroup === undefined ? 0 : this.state.AccountTypeGroup}
+											InputProps={{
+												readOnly: true,
+											}}
 											onChange={this.handleChange('AccountTypeGroup')}
 											margin="dense"
 											variant="outlined"
@@ -1138,6 +1167,9 @@ class FilterPanel extends Component {
 											select
 											className={classNames(classes.textField, 'ml-6')}
 											value={this.state.AccountType === undefined ? 0 : this.state.AccountType}
+											InputProps={{
+												readOnly: true,
+											}}
 											onChange={this.handleChange('AccountType')}
 											margin="dense"
 											variant="outlined"
@@ -1160,6 +1192,9 @@ class FilterPanel extends Component {
 														checked={this.state.NationalAccount}
 														onChange={this.handleChangeChecked('NationalAccount')}
 														value="NationalAccount"
+														InputProps={{
+															readOnly: true,
+														}}
 													/>
 												}
 												label="National Account"
@@ -1170,6 +1205,9 @@ class FilterPanel extends Component {
 														checked={this.state.ChildAccount}
 														onChange={this.handleChangeChecked('ChildAccount')}
 														value="ChildAccount"
+														InputProps={{
+															readOnly: true,
+														}}
 													/>
 												}
 												label="Child Account"
