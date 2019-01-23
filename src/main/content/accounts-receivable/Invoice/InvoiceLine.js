@@ -665,6 +665,10 @@ class InvoiceLineTable extends React.Component {
             record.id = id++;
             return record;
         });
+
+        let lastRow = newData[newData.length-1];
+        lastRow.franchisees = [createFranchisee(lastRow.id, 0)];
+
         this.setState({data: newData})
     };
 
@@ -863,7 +867,7 @@ class InvoiceLineTable extends React.Component {
             let franchisees = d.franchisees;
             all_data.push(d);
             franchisees.forEach(f=>{
-                all_data.push({f_index: f_index++,...f});
+                all_data.push({f_index: f_index++,...f, length: d.franchisees.length});
             });
         });
 
@@ -1169,14 +1173,18 @@ class InvoiceLineTable extends React.Component {
                                                 if(row.original.markup!=='') markup = row.original.markup;
                                                 return ("$" + parseFloat(row.original.total * (1 + parseFloat(markup) / 100)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
                                             }
-                                            else
-                                                return (
-                                                    <Fab aria-label="remove"
-                                                         onClick={()=>this.removeFranch(row.original)}
-                                                         className={classNames(classes.lineCancelButton, "mr-12")} style={{width: 24, height: 24, minHeight: 24}}>
-                                                        <Icon>close</Icon>
-                                                    </Fab>
-                                                )
+                                            else {
+                                                if (row.original.length>1)
+                                                    return (
+                                                        <Fab aria-label="remove"
+                                                             onClick={()=>this.removeFranch(row.original)}
+                                                             className={classNames(classes.lineCancelButton, "mr-12")} style={{width: 24, height: 24, minHeight: 24}}>
+                                                            <Icon>close</Icon>
+                                                        </Fab>
+                                                    );
+                                                else
+                                                    return (<div/>)
+                                            }
                                         },
                                         className: classNames(classes.tableTdEven, "flex items-center  w-full text-center pr-12"),
                                         width: 100
