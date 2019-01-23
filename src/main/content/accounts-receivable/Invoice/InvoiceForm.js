@@ -451,7 +451,6 @@ class InvoiceForm extends Component {
 
         //in time of Saving
         if(nextProps.newInvoice!==null && nextProps.newInvoice!==this.props.newInvoice){
-            this.setState({bAlertNewInvoice: false});
             if(this.state.buttonOption===0){
                 this.props.updatedInvoices();
                 this.props.resetInvoiceForm();
@@ -644,8 +643,8 @@ class InvoiceForm extends Component {
 
     onSaveInvoice = (buttonOption) => {
         if(this.validateNewInvoice()){
-            this.setState({bAlertNewInvoice: true});
             this.setState({buttonOption: buttonOption});
+            this.addNewInvoice();
         }
     };
 
@@ -1175,7 +1174,6 @@ class InvoiceForm extends Component {
                                         color="primary"
                                         className={classes.button}
                                         onClick={()=>this.confirmCloseForm()}
-                                        // onClick={this.closeComposeForm()}
                                     >
                                         Close
                                     </Button>
@@ -1198,41 +1196,6 @@ class InvoiceForm extends Component {
                             message={this.state.snackMessage}
                         />
                     </Snackbar>
-                    <Dialog
-                        open={this.state.bAlertNewInvoice}
-                        onClose={()=>this.handleCloseNewInvoice()}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                    >
-                        <DialogTitle id="alert-dialog-title">
-                            {this.props.invoiceForm.type === 'new' && (
-                                <span>Create New Invoice</span>
-                            )}
-                            {this.props.invoiceForm.type === 'edit' && (
-                                <span>Update The Invoice</span>
-                            )}
-
-                        </DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                                {this.props.invoiceForm.type === 'new' && (
-                                    <span>Do you really want to insert the new invoice?</span>
-                                )}
-                                {this.props.invoiceForm.type !== 'new' && (
-                                    <span>Do you really want to update the invoice?</span>
-                                )}
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={()=>this.handleCloseNewInvoice()} color="primary">
-                                Close
-                            </Button>
-                            <Button onClick={()=>this.addNewInvoice()} color="primary" autoFocus>
-                                {this.props.invoiceForm.type === 'new' && (<span>Create</span>)}
-                                {this.props.invoiceForm.type === 'edit' && (<span>Update</span>)}
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
                     <Dialog
                         open={this.state.bCustomerNotFound}
                         onClose={()=>this.handleCloseNewCustomer()}
