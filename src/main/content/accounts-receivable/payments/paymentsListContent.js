@@ -351,12 +351,10 @@ class PaymentsListContent extends Component {
             locationFilterValue: [],
             pins: [],
             pins2: [],
-
             s: '',
             temp: [],
             data: [],
             selectAll: false,
-
             selection: [],
             rows: [],
             tableColumnExtensions: [
@@ -512,7 +510,8 @@ class PaymentsListContent extends Component {
             pageSizes: [10, 20, 30, 50, 100],
             amountFilterOperations: ['equal', 'notEqual', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual'],
             searchValue: '',
-            paymentsParam: []
+            paymentsParam: [],
+            payments: []
         };
 
         this.fetchData = this.fetchData.bind(this);
@@ -620,7 +619,8 @@ class PaymentsListContent extends Component {
 
     componentWillMount() {
         this.setState({
-            "paymentsParam": this.props.getPaymentsParam
+            "paymentsParam": this.props.getPaymentsParam,
+            "rows": this.props.payments.Regions[0].Payments
         });
         this.props.getAccountReceivablePayments(
             this.props.regionId,
@@ -709,8 +709,9 @@ class PaymentsListContent extends Component {
             getPaymentsParam,
             pageSizes,
             searchValue,
+            payments
         } = this.state;
-
+        console.log('payments------------',this.props.payments.Regions[0].Payments);
         return (
             <Fragment>
                 <div className={classNames(classes.layoutTable, "flex flex-col h-full")}>

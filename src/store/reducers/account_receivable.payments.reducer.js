@@ -8,8 +8,8 @@ const initialState = {
     bACC_fechStart: true,
     getPaymentsParam: {
         searchText: "",
-        fromDate: "2019-01-22T06:15:42.6082822-06:00",
-        toDate: "2019-01-22T06:15:42.6082822-06:00",
+        fromDate: "01/22/2019",
+        toDate: "01/22/2019",
     },
     bOpenedSummaryPanel: false,
     bOpenedFilterPanel: false,
