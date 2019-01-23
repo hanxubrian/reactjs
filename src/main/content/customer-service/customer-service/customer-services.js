@@ -334,7 +334,7 @@ class CustomerServices extends Component {
 				break;
 		}
 	}
-	
+
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		console.log("componentDidUpdate", "Customer.js")
 		let bChanged = false;
@@ -450,7 +450,33 @@ class CustomerServices extends Component {
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
-											<Tooltip title="Add new customer">
+
+											<Tooltip title="Send Email">
+												<IconButton className={classes.button} aria-label="add">
+													<Icon>email</Icon>
+												</IconButton>
+											</Tooltip>
+
+											<Tooltip title="Send SMS">
+												<IconButton className={classes.button} aria-label="add">
+													<Icon>sms</Icon>
+												</IconButton>
+											</Tooltip>
+
+											<Tooltip title="Phone Call">
+												<IconButton className={classes.button} aria-label="add">
+													<Icon>phone_iphone</Icon>
+												</IconButton>
+											</Tooltip>
+
+											<Tooltip title="Chat">
+												<IconButton className={classes.button} aria-label="add">
+													<Icon>chat_bubble_outline</Icon>
+												</IconButton>
+											</Tooltip>
+
+
+											{/* <Tooltip title="Add new customer">
 												<IconButton className={classes.button} aria-label="add" onClick={openNewCustomerForm}>
 													<Icon>add</Icon>
 												</IconButton>
@@ -460,7 +486,7 @@ class CustomerServices extends Component {
 											</IconButton>
 											<IconButton className={classes.button} aria-label="print" onClick={() => alert('ok')}>
 												<Icon>print</Icon>
-											</IconButton>
+											</IconButton> */}
 
 											{/* <Fab
 												color="secondary"
