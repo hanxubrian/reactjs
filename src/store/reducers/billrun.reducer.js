@@ -45,6 +45,24 @@ const billruns = function(state = initialState, action) {
                 ...state,loadingstatus: false
             }
         }
+        case Actions.GET_ALL_BILLRUN_START:
+        {
+            return {
+                ...state,loadingstatus: true
+            }
+        }
+        case Actions.GET_ALL_BILLRUN_SUCCESS:
+        {
+            return {
+                ...state,billrunsDB: action.payload,loadingstatus: false
+            }
+        }
+        case Actions.GET_ALL_BILLRUN_FAILD:
+        {
+            return {
+                ...state,loadingstatus: false
+            }
+        }
         case UserActions.USER_LOGGED_OUT:
         {
             return {

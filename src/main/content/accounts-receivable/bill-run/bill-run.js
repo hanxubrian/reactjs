@@ -153,20 +153,24 @@ const LAST_QUARTER = 11;
 const LAST_YEAR = 12;
 const CUSTOM_DATE = 13;
 const PERIOD = 14;
-// const inputLabelRef = React.useRef(null);
+
+
 class BillRun extends Component {
     state = {
-        s: '',
-        temp: [],
-        data: [],
-        selection: [],
-        regionId: 0,
-        open: false,
-        flag: false,
-        FromDate: undefined,
-        ToDate: undefined,
-        billrunDateOption: THIS_MONTH,
-        billrunDatePeriod: moment(),
+        s                       : '',
+        temp                    : [],
+        data                    : [],
+        selection               : [],
+        regionId                : 0,
+        open                    : false,
+        flag                    : false,
+        FromDate                : moment(),
+        ToDate                  : moment(),
+        startDate               : null,
+        endDate                 : null,
+        billrunDateOption       : THIS_MONTH,
+        billrunDatePeriod       : moment(),
+        status                  : false,
     };
 
     constructor(props){
@@ -188,7 +192,7 @@ class BillRun extends Component {
         this.setState({ [prop]: event.target.value });
     };
     componentWillMount(){
-        this.getBillruns()
+        this.getBillruns();
     }
     componentDidUpdate(prevProps, prevState, snapshot){
         let bChanged = false;
@@ -207,6 +211,19 @@ class BillRun extends Component {
 
         if(prevState.s!==this.state.s) {
             // this.search(this.state.s);
+        }
+        if(!this.state.status && this.state.startDate === null && this.state.endDate === null){
+            this.setState({
+                startDate : moment().date(1),
+                endDate   : moment(moment().date(1)).endOf('month'),
+                FromDate  : moment(),
+                ToDate    : moment(),
+                status    : true,
+            })
+
+        }
+        if(JSON.stringify(this.state) !== JSON.stringify(prevState) && !this.props.loading){
+            this.getBillRunList();
         }
     }
 
@@ -230,9 +247,47 @@ class BillRun extends Component {
 
             this.setState({flag: !this.state.flag});
         }
+    }
+    getBillRunList=()=>{
+        let regisonid       = [];
+        let userids         = [];
+        let isbillperiod    = false;
+        let month           = "";
+        let year            = "";
+        let fromdate        = null;
+        let todate          = null;
+        let searchtext      = "";
+        if(this.props.auth && this.props.auth != null ){
+            regisonid.push(this.props.auth.defaultRegionId);
+            userids.push(this.props.auth.UserId);
+            if(this.state.billrunDateOption !==CUSTOM_DATE && this.state.startDate !== null && this.state.endDate!== null){
+                fromdate    = this.state.startDate.format("MM/DD/YYYY");
+                todate      = this.state.endDate.format("MM/DD/YYYY");
+            }
+            else if(this.state.billrunDateOption ===CUSTOM_DATE && this.state.FromDate && this.state.FromDate !== null && this.state.ToDate !== null){
+                fromdate    = this.state.FromDate.format("MM/DD/YYYY");
+                todate      = this.state.ToDate.format("MM/DD/YYYY");
+            }
+            if(this.state.billrunDateOption ===PERIOD){
+                isbillperiod = true;
+                year = moment(this.state.startDate).year();
+                month = moment(this.state.startDate).month()+1;
+            }
+            if(fromdate && fromdate != null && todate && todate != null){
+
+                if(regisonid && regisonid.length >0 && userids && userids.length >0 && !this.props.loading){
+
+                    console.log("regisonid,userids,isbillperiod,month,year,fromdate,todate",regisonid,userids,isbillperiod,month,year,fromdate,todate);
+                    this.props.getAllBillruns(
+                        regisonid,userids,isbillperiod,month,year,fromdate,todate,searchtext
+                    );
+                }
+            }
+        }
 
 
     }
+
     opendialogwin=()=>{
         // this.refs.child.handleClickOpen();
         this.child.handleClickOpen();
@@ -246,7 +301,7 @@ class BillRun extends Component {
     handleChange1 = event => {
         this.setState({[event.target.name]: event.target.value});
         let startDate, endDate, quarter, year;
-
+        // console.log("changed");
         switch (event.target.value) {
             case THIS_WEEK:
                 startDate = moment().day(0);
@@ -315,21 +370,21 @@ class BillRun extends Component {
                 startDate = moment().year(year).month(month).startOf('month');
                 endDate = moment().year(year).month(month).endOf('month');
         }
-        console.log("startDate",startDate);
-        console.log("endDate",endDate);
-        // if(event.target.value!==CUSTOM_DATE){
-        //     this.props.updateDate(UPDATE_FROM_DATE_INVOICE, startDate.format("MM/DD/YYYY"));
-        //     this.props.updateDate(UPDATE_TO_DATE_INVOICE, endDate.format("MM/DD/YYYY"));
-        // }
+
+        if(event.target.value!==CUSTOM_DATE){
+            this.setState({
+                startDate   : startDate,
+                endDate     : endDate,
+            })
+        }
+
     };
-    handleInvoiceFromDateChange = date => {
+    handleBillRunFromDateChange = date => {
         this.setState({FromDate: date});
-        // this.props.updateDate(UPDATE_FROM_DATE_INVOICE, moment(date).format("MM/DD/YYYY"));
     };
 
-    handleInvoiceToDateChange = date => {
+    handleBillRunToDateChange = date => {
         this.setState({ ToDate: date });
-        // this.props.updateDate(UPDATE_TO_DATE_INVOICE, moment(date).format("MM/DD/YYYY"));
     };
     handlePeriodChange = date => {
         this.setState({ billrunDatePeriod: date });
@@ -337,9 +392,8 @@ class BillRun extends Component {
         let month = moment(date).month();
         let startDate = moment().year(year).month(month).startOf('month').format("MM/DD/YYYY");
         let endDate = moment().year(year).month(month).endOf('month').format("MM/DD/YYYY");
-
-        // this.props.updateDate(UPDATE_FROM_DATE_INVOICE, startDate);
-        // this.props.updateDate(UPDATE_TO_DATE_INVOICE, endDate);
+        this.setState({startDate: date});
+        this.setState({endDate: date });
     };
     render()
     {
@@ -375,12 +429,12 @@ class BillRun extends Component {
                                     </Fab>
                                 </FuseAnimate>
 
-                                <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <Fab color="secondary" aria-label="add"
-                                         className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-                                        <Icon>delete</Icon>
-                                    </Fab>
-                                </FuseAnimate>
+                                {/*<FuseAnimate animation="transition.expandIn" delay={300}>*/}
+                                    {/*<Fab color="secondary" aria-label="add"*/}
+                                         {/*className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>*/}
+                                        {/*<Icon>delete</Icon>*/}
+                                    {/*</Fab>*/}
+                                {/*</FuseAnimate>*/}
                                 {/*<FuseAnimate animation="transition.expandIn" delay={300}>*/}
                                 {/*<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>*/}
                                 {/*<Icon>print</Icon>*/}
@@ -546,7 +600,7 @@ class BillRun extends Component {
                                                                             variant="outlined"
                                                                             format="MM/DD/YYYY"
                                                                             value={this.state.FromDate}
-                                                                            onChange={this.handleInvoiceFromDateChange}
+                                                                            onChange={this.handleBillRunFromDateChange}
                                                                             fullWidth
                                                                             required
                                                                             color="secondary"
@@ -559,7 +613,7 @@ class BillRun extends Component {
                                                                             variant="outlined"
                                                                             format="MM/DD/YYYY"
                                                                             value={this.state.ToDate}
-                                                                            onChange={this.handleInvoiceToDateChange}
+                                                                            onChange={this.handleBillRunToDateChange}
                                                                             fullWidth
                                                                             required
                                                                             color="secondary"
@@ -606,7 +660,7 @@ class BillRun extends Component {
                                             columns: [
                                                 {
                                                     Header: "Bill Run Batch #",
-                                                    accessor: "Id",
+                                                    accessor: "BillRunNo",
                                                     filterAll: true,
                                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center p-24")
                                                 },
@@ -614,6 +668,12 @@ class BillRun extends Component {
                                                     Header: "Message",
                                                     accessor: "Message",
                                                     width: 360,
+                                                    className: classNames("flex items-center  justify-start p-12-impor p-24")
+                                                },
+                                                {
+                                                    Header: "Period",
+                                                    id: "Period",
+                                                    accessor: d => moment(d.InvoiceDate).format('MM/YYYY'),
                                                     className: classNames("flex items-center  justify-start p-12-impor p-24")
                                                 },
                                                 {
@@ -687,16 +747,19 @@ class BillRun extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        getBillruns: Actions.getBillruns,
+        getBillruns         : Actions.getBillruns,
+        getAllBillruns      : Actions.getAllBillruns,
     }, dispatch);
 }
 
 function mapStateToProps({billruns, auth})
 {
     return {
-        billruns: billruns.billrunsDB,
-        bLoadedBillruns: billruns.bLoadedBillruns,
-        regionId: auth.login.defaultRegionId
+        billruns            : billruns.billrunsDB,
+        bLoadedBillruns     : billruns.bLoadedBillruns,
+        regionId            : auth.login.defaultRegionId,
+        loading             : billruns.loadingstatus,
+        auth                : auth.login,
     }
 }
 

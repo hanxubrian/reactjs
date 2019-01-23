@@ -10,11 +10,11 @@ export const TOGGLE_FILTER_PANEL        = "[INVOICES] TOGGLE FILTER PANEL";
 
 
 export const CREATE_BILLRUN_SUCCESS     = "[BILL-RUNS] CREATE NEW BILL RUN SUCCESS";
-export const CREATE_BILLRUN_START       = "[BILL-RUNS] CREATE NEW BILL RUN STATUS";
+export const CREATE_BILLRUN_START       = "[BILL-RUNS] CREATE NEW BILL RUN START";
 export const CREATE_BILLRUN_FAILD       = "[BILL-RUNS] CREATE NEW BILL RUN FAILD";
 
 export const GET_ALL_BILLRUN_SUCCESS    = "[BILL-RUNS] GET ALL BILL RUN SUCCESS";
-export const GET_ALL_BILLRUN_START      = "[BILL-RUNS] GET ALL BILL RUN STATUS";
+export const GET_ALL_BILLRUN_START      = "[BILL-RUNS] GET ALL BILL RUN START";
 export const GET_ALL_BILLRUN_FAILD      = "[BILL-RUNS] GET ALL BILL RUN FAILD";
 
 export function getBillruns() {
@@ -39,10 +39,11 @@ export function getAllBillruns(RegionIds, UserIds ,isBillPeriod,BillMonth,BillYe
 
         (async () => {
             let res = await billrunService.getallbillrun(RegionIds, UserIds ,isBillPeriod,BillMonth,BillYear,FromDate,ToDate,SearchText);
+            console.log("res========all billrun",res);
             if (res.IsSuccess) {
                 dispatch({
                     type: GET_ALL_BILLRUN_SUCCESS,
-                    payload: res
+                    payload: res.Data
                 });
             } else {
                 dispatch({
