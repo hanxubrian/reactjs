@@ -255,7 +255,7 @@ class Leases extends Component {
 		super(props);
 
 		if (!props.bLoadedLeases) {
-			props.getLeases(this.props.regionId, this.props.statusId, this.props.searchText);
+			props.getLeases(props.regionId, props.statusId, props.searchText);
 		}
 
 		if (!props.bLoadedFranchisees) {
@@ -347,7 +347,9 @@ class Leases extends Component {
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		let bChanged = false;
+
 		const {fstatusId, fLocation, fLongitude, fLatitude, fSearchText} = this.props;
+		const {regionId, statusId, searchText} = this.props;
 
 		if (this.props.transactionStatus.checkedPaid !== prevProps.transactionStatus.checkedPaid) {
 			this.setState({ checkedPaid: !this.state.checkedPaid });
@@ -369,9 +371,23 @@ class Leases extends Component {
 			bChanged = true;
 		}
 
-		if(this.props.regionId !== prevProps.regionId){
-            this.props.getFranchisees(this.props.regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText);
-        }
+		if(regionId !== prevProps.regionId){
+            this.props.getFranchisees(regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText);
+		}
+
+		if(regionId !== prevProps.regionId ||
+            statusId !== prevProps.statusId ||
+            searchText !== prevProps.searchText
+        ) {
+            this.props.getLeases(regionId, statusId, searchText);
+		}
+
+		if(this.props.bLeasesUpdated && this.props.bLeasesUpdated!==prevProps.bLeasesUpdated)
+			this.props.getLeases(regionId, statusId, searchText);
+
+		if (prevState.s !== this.state.s) {
+			this.search(this.state.s);
+		}
 
 		if (bChanged)
 			this.getLeasesFromStatus();
@@ -380,13 +396,13 @@ class Leases extends Component {
 			this.getLeasesFromStatus();
 		}
 
-		if (prevState.s !== this.state.s) {
-			this.search(this.state.s);
-		}
+		if(this.props.removedId!==undefined && this.props.removedId!==prevProps.removedId)
+			this.props.getLeases(regionId, statusId, searchText);
 	}
 
 	componentWillMount() {
 		const {regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText} = this.props;
+		const {statusId, searchText} = this.props;
 
 		this.setState({ checkedPaid: this.props.transactionStatus.checkedPaid });
 		this.setState({ checkedPP: this.props.transactionStatus.checkedPP });
@@ -395,6 +411,11 @@ class Leases extends Component {
 
 		this.getLeasesFromStatus()
 		this.props.getFranchisees(regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText);
+
+		if(this.props.leases===null) {
+			this.props.getLeases(regionId, statusId, searchText);
+            this.props.getFranchisees(regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText);
+        }
 
 	}
 
@@ -869,6 +890,8 @@ function mapStateToProps({ leases, auth, franchisees }) {
 		regionId: auth.login.defaultRegionId,
 		statusId: leases.statusId,
 		searchText: leases.searchText,
+
+		removedId: leases.removedId,
 
 		bLoadedFranchisees: franchisees.bLoadedFranchisees,
         franchisees: franchisees.franchiseesDB,

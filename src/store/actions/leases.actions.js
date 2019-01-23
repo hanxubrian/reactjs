@@ -14,7 +14,7 @@ export const TOGGLE_MAP_VIEW = '[LEASES] TOGGLE MAP VIEW';
 export const RESET_LEASE_FORM = "[LEASES] RESET LEASE FORM";
 export const STARTING_SAVE_LEASE_FORM_DATA = "[LEASES] STARTING SAVE LEASE FORM DATA";
 export const SELECT_TRANSACTION_FRANCHISEE = '[FRANCHISEE-TRANSACTION] SELECT TRANSACTION FRANCHISEE';
-
+export const UPDATE_A_LEASE = "[LEASES] GET A LEASE";
 
 // for Add/Edit
 export const OPEN_NEW_LEASE_FORM = '[LEASES APP] OPEN NEW LEASE FORM';
@@ -75,13 +75,17 @@ export function getLeases(regionId, statusId, searchText) {
         });
 
         (async () => {
-            let leaseList = await leaseService.getLeaseList(regionId, statusId, searchText);
-            dispatch({
-                type: GET_ALL_LEASES,
-                payload: leaseList
-            });
+            let res = await leaseService.getLeaseList(regionId, statusId, searchText);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: GET_ALL_LEASES,
+                    payload: res
+                });
+            } else {
+
+            }
         })();
-    }
+    };
 }
 
 export function getLeaseDetail() {
@@ -217,26 +221,21 @@ export function addLease(data)
     };
 }
 
-export function updateLease(lease)
-{
-    return (dispatch, getState) => {
-
-        // const {routeParams} = getState().contactsApp.contacts;
-
-        const request = axios.post('/api/contacts-app/update-contact', {
-            lease
-        });
-
-        return request.then((response) =>
-            Promise.all([
+export function updateLease(data) {
+    return (dispatch) => {
+        (async () => {
+            let res = await leaseService.updateLease(data);
+            if (res.IsSuccess) {
                 dispatch({
-                    type: UPDATE_LEASE
-                })
-            ]).then(() => dispatch(getLeases()))
-        );
+                    type: UPDATE_A_LEASE,
+                    payload: res.Data
+                });
+            } else {
+
+            }
+        })();
     };
 }
-
 export function updatedLeases() {
     return {
         type: UPDATED_LEASES,

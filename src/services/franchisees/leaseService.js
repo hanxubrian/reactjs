@@ -139,6 +139,31 @@ class leaseService {
                 })
         });
     };
+
+     /**
+     * update an invoice
+     * @method PUT
+     * @param id
+     * @param regionId
+     * @param data
+     * @returns {Promise<any>}
+     */
+    updateInvoice = (data) => {
+        return new Promise((resolve, reject) => {
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/Lease/Create`,data)
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    };
 }
 
 const instance = new leaseService();

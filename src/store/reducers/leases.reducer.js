@@ -20,7 +20,7 @@ const initialState = {
 	bOpenedSummaryPanel: false,
 	bOpenedFilterPanel: false,
 	bOpenedMapView: false,
-	bLeasesFetchStart: false,
+	// bLeasesFetchStart: false,
 	bStartingSaveFormData: false,
 	regionId: [2, 24],
     statusId: [21, 24],
@@ -31,8 +31,13 @@ const initialState = {
 		props: {
 			open: false
 		},
-		data: null
-	}
+		data: null,
+		franchisee: null
+	},
+	newLease: null,
+	leaseDetail: null,
+	removedId: undefined
+
 };
 
 
@@ -44,7 +49,9 @@ const leases = function (state = initialState, action) {
 					...state,
 					leasesDB: action.payload,
 					bLoadedLeases: true,
-					bLeasesFetchStart: false
+					// bLeasesFetchStart: false,
+					bLeaseStart: false,
+					bLeasesUpdated: false
 				};
 			}
 			case Actions.GET_LEASE_STATUS:
@@ -64,15 +71,16 @@ const leases = function (state = initialState, action) {
 				return {
 					...state,
 					leaseDetail: action.payload,
-					bLoadedInvoices: true,
-					bInvoiceStart: false
+					bLoadedLeases: true,
+					bLeaseStart: false
 				}
 			}
 		case Actions.GET_LEASES_FETCH_START:
 			{
 				return {
 					...state,
-					bLeasesFetchStart: true
+					// bLeasesFetchStart: true
+					bLeaseStart: true
 				};
 			}
 		case Actions.TOGGLE_FILTER_PANEL:
@@ -105,7 +113,7 @@ const leases = function (state = initialState, action) {
 			}
 		case Actions.REMOVE_SELECTED_LEASE:
 			{
-				return { ...state, leasesDB: action.payload }
+				return { ...state, removedId: action.payload }
 
 			}
 		case UserActions.USER_LOGGED_OUT:
@@ -123,7 +131,8 @@ const leases = function (state = initialState, action) {
 						props: {
 							open: true
 						},
-						data: null
+						data: null,
+						franchisee: null
 					}
 				};
 			}
@@ -136,8 +145,11 @@ const leases = function (state = initialState, action) {
 						props: {
 							open: false
 						},
-						data: null
-					}
+						data: null,
+						franchisee: null
+					},
+					newLease: null,
+                	leaseDetail: null
 				};
 			}
 		case Actions.OPEN_EDIT_LEASE_FORM:
@@ -145,12 +157,14 @@ const leases = function (state = initialState, action) {
 				return {
 					...state,
 					leaseForm: {
-						type: 'create',
+						type: 'edit',
 						props: {
 							open: true
 						},
-						data: action.data
-					}
+						data: null,
+						franchisee: null
+					},
+					bLeaseStart: false
 				};
 			}
 		case Actions.CLOSE_EDIT_LEASE_FORM:
@@ -158,12 +172,15 @@ const leases = function (state = initialState, action) {
 				return {
 					...state,
 					leaseForm: {
-						type: 'create',
+						type: 'edit',
 						props: {
 							open: false
 						},
-						data: null
-					}
+						data: null,
+						franchisee: null
+					},
+					newLease: null,
+					leaseDetail: null
 				};
 			}
 		case Actions.STARTING_SAVE_LEASE_FORM_DATA:
@@ -178,7 +195,8 @@ const leases = function (state = initialState, action) {
 				return {
 					...state,
 					bStartingSaveFormData: false,
-					leaseForm: {...state.leaseForm, data: null, customer: null}
+					leaseForm: {...state.leaseForm, data: null, franchisee: null},
+					newLease: null
 				}
 			}
 		case Actions.SELECT_TRANSACTION_FRANCHISEE:
@@ -196,6 +214,7 @@ const leases = function (state = initialState, action) {
 				}
 			}
 		case Actions.ADD_LEASE:
+		case Actions.UPDATE_A_LEASE:
         	{
             return {...state, newLease: action.payload}
         	}
@@ -212,5 +231,6 @@ const leases = function (state = initialState, action) {
 const persistConfig = {
 	key: 'leases',
 	storage: storage,
+	blacklist: ['leasesDB', 'bLeaseStart', 'bOpenedSummaryPanel', 'bOpenedFilterPanel', 'bLoadedFranchisees', 'leaseForm']
 };
 export default persistReducer(persistConfig, leases);
