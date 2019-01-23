@@ -481,13 +481,19 @@ class TransactionForm extends Component {
     }
 
     handleChange = (event) => {
-        console.log('event=', event);
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
     };
 
     handleChange1 = name =>(event) => {
-        console.log('event=', event);
-        this.setState({[name]: event.target.value})
+        this.setState({[name]: event.target.value});
+        let quantity = name==='quantity' ? event.target.value : this.state.quantity;
+        let unitPrice = name==='unitPrice' ? event.target.value : this.state.unitPrice;
+
+        if(quantity>0 && unitPrice>0) {
+            this.setState({subTotal: quantity * unitPrice});
+            this.setState({tax: quantity * unitPrice*0.085});
+            this.setState({total: quantity * unitPrice*1.085});
+        }
     };
 
     addNewTransaction = () => {
@@ -995,7 +1001,7 @@ class TransactionForm extends Component {
                                     }}
                                 />
                                 <TextField
-                                    label="Vendor No"
+                                    label="Vendor Invoice No"
                                     className={classNames(classes.textField, 'mr-24')}
                                     value={this.props.vendor.vendor_no}
                                     margin="normal"
@@ -1012,9 +1018,9 @@ class TransactionForm extends Component {
                                     }}
                                 />
                                 <TextField
-                                    label="Vendor Date"
+                                    label="Vendor Invoice Date"
                                     className={classNames(classes.textField, 'mr-24')}
-                                    value={this.props.vendor.vendorDate}
+                                    value={moment(this.props.vendor.vendorDate).format("MM/DD/YYYY")}
                                     margin="normal"
                                     variant="outlined"
                                     InputLabelProps = {{

@@ -359,13 +359,14 @@ class InvoiceForm extends Component {
 
         let year = moment().year();
         let month = moment().month();
-        let invoiceDate = moment().year(year).month(month).endOf('month');
-        let dueDate = moment().year(year).month(month).endOf('month').add(suggestion.PaymentTerm, 'days');
+        let invoiceDate = moment();
+        let dueDate = moment().year(year).month(month).endOf('month');
+        // let dueDate = moment().year(year).month(month).endOf('month').add(suggestion.PaymentTerm, 'days');
 
-        if(suggestion.InvoiceDayPreference==='BOM') {
-            invoiceDate = moment().year(year).month(month).startOf('month');
-            dueDate = moment().year(year).month(month).startOf('month').add(suggestion.PaymentTerm, 'days');
-        }
+        // if(suggestion.InvoiceDayPreference==='BOM') {
+        //     invoiceDate = moment().year(year).month(month).startOf('month');
+        //     dueDate = moment().year(year).month(month).startOf('month').add(suggestion.PaymentTerm, 'days');
+        // }
 
         this.setState({InvoiceDate: invoiceDate.format('YYYY-MM-DD')});
         this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
@@ -436,8 +437,15 @@ class InvoiceForm extends Component {
                 this.setState({PO_number: nextProps.invoiceForm.customer.CustomerNo});
                 this.setState({InvoiceDescription: nextProps.invoices.invoiceDetail.Data.Description});
                 this.setState({notes: nextProps.invoices.invoiceDetail.Data.Notes});
-                this.setState({InvoiceDate: moment(nextProps.invoices.invoiceDetail.Data.InvoiceDate).format('YYYY-MM-DD')});
-                this.setState({DueDate: moment(nextProps.invoices.invoiceDetail.Data.DueDate).format('YYYY-MM-DD')});
+                let year = moment().year();
+                let month = moment().month();
+                let invoiceDate = moment();
+                let dueDate = moment().year(year).month(month).endOf('month');
+                this.setState({InvoiceDate: invoiceDate.format('YYYY-MM-DD')});
+                this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
+
+                // this.setState({InvoiceDate: moment(nextProps.invoices.invoiceDetail.Data.InvoiceDate).format('YYYY-MM-DD')});
+                // this.setState({DueDate: moment(nextProps.invoices.invoiceDetail.Data.DueDate).format('YYYY-MM-DD')});
             }
         }
 
@@ -485,6 +493,13 @@ class InvoiceForm extends Component {
                 this.setState({selectedCustomer: customer[0]});
             }
         }
+
+        let year = moment().year();
+        let month = moment().month();
+        let invoiceDate = moment();
+        let dueDate = moment().year(year).month(month).endOf('month');
+        this.setState({InvoiceDate: invoiceDate.format('YYYY-MM-DD')});
+        this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
     }
 
     handleChange = (event) => {
