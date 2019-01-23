@@ -2,7 +2,8 @@ import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import Geocode from "react-geocode";
 
-import { Paper, withStyles, Checkbox, TextField, Divider, Button, IconButton } from '@material-ui/core';
+import { Paper, withStyles, Checkbox, TextField, Divider, Button, IconButton, Card, CardHeader, CardContent, Icon,
+Typography } from '@material-ui/core';
 
 import keycode from 'keycode';
 
@@ -85,6 +86,29 @@ const styles = theme => ({
 	root: {
 
 	},
+	card: {
+        width   : '100%',
+	},
+	formControl: {
+        marginBottom: 12,
+        minWidth: 200,
+	},
+	cardHeader: {
+        backgroundColor: theme.palette.secondary.main,
+        padding: '8px 24px',
+        '& span': {
+            color: 'white',
+            fontSize: 16,
+        }
+    },
+    cardContent: {
+        paddingTop: 12,
+        paddingBottom: '12px!important',
+        '& h6':{
+            lineHeight: 2,
+            fontSize: 16
+        }
+    },
 	panel: {
 		position: 'absolute',
 		width: 300,
@@ -957,8 +981,109 @@ class FilterPanel extends Component {
 					{customerForm && customerForm.props.open
 						? (
 							<div>
-								<GridContainer style={{ alignItems: 'center', width: 500 }} className={classNames(classes.formControl)}>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<GridContainer style={{ alignItems: 'center', width: 500 }} className={classNames(classes.formControl, "mb-0")}>
+								<GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col">
+                                <Card className={classes.card}>
+                                    <CardHeader title="Customer Information" className={classNames(classes.cardHeader, "flex-1")} />
+                                    <CardContent className={classNames(classes.cardContent)}>
+                                        <div className="flex flex-row justify-start mb-4">
+                                            <div className="flex flex-row">
+                                                <Icon fontSize={"small"} className="mr-4">account_circle</Icon>
+                                            </div>
+                                            <Typography variant="subtitle1" color="inherit">
+                                                <strong>Name: {this.state.customerName}</strong>
+                                            </Typography>
+                                        </div>
+
+                                            <div className="flex flex-row justify-start mb-4">
+                                                <div className="flex flex-row items-center">
+                                                    <Icon fontSize={"small"} className="mr-4">place</Icon>
+                                                    <Typography variant="subtitle1" color="inherit">
+														Address: {this.state.customerAddress}
+                                                    </Typography>
+                                                </div>
+                                            </div>
+
+											<div className="flex flex-row justify-start mb-4">
+                                                <div className="flex flex-row items-center">
+                                                    <Icon fontSize={"small"} className="mr-4">place</Icon>
+                                                    <Typography variant="subtitle1" color="inherit">
+														Address2:
+                                                    </Typography>
+                                                </div>
+                                            </div>
+
+											<div className="flex flex-row justify-start mb-4">
+                                                <div className="flex flex-row items-center">
+                                                    <Icon fontSize={"small"} className="mr-4"></Icon>
+                                                    <Typography variant="subtitle1" color="inherit">
+														City: {this.state.customerCity}
+														<br></br>
+														State: {this.state.customerState}
+														<br></br>
+														Zip: {this.state.customerZip}
+                                                    </Typography>
+                                                </div>
+                                            </div>
+
+											<div className="flex flex-row justify-start mb-4">
+                                                <div className="flex flex-row items-center">
+                                                    <Icon fontSize={"small"} className="mr-4">phone</Icon>
+                                                    <Typography variant="subtitle1" color="inherit">
+														Phone: {this.state.customerPhone}
+                                                    </Typography>
+                                                </div>
+                                            </div>
+
+											<div className="flex flex-row justify-start mb-4">
+                                                <div className="flex flex-row items-center">
+                                                    <Icon fontSize={"small"} className="mr-4">phone</Icon>
+                                                    <Typography variant="subtitle1" color="inherit">
+														Fax: {this.state.customerFax}
+                                                    </Typography>
+                                                </div>
+                                            </div>
+
+											<div className="flex flex-row justify-start mb-4">
+                                                <div className="flex flex-row items-center">
+                                                    <Icon fontSize={"small"} className="mr-4">email</Icon>
+                                                    <Typography variant="subtitle1" color="inherit">
+														Email: {this.state.customerEmail}
+                                                    </Typography>
+                                                </div>
+                                            </div>
+
+											<div className="flex flex-row justify-start mb-4">
+                                                <div className="flex flex-row items-center">
+                                                    <Icon fontSize={"small"} className="mr-4">website</Icon>
+                                                    <Typography variant="subtitle1" color="inherit">
+														Website: {this.state.customerWebsite}
+                                                    </Typography>
+                                                </div>
+                                            </div>
+
+											{/* <div className="flex flex-row justify-start mb-4">
+                                                <div className="flex flex-row items-center">
+                                                    <Icon fontSize={"small"} className="mr-4"></Icon>
+                                                    <Typography variant="subtitle1" color="inherit">
+														Account Type Group: {this.state.AccountTypeGroup}
+                                                    </Typography>
+                                                </div>
+                                            </div>
+
+											<div className="flex flex-row justify-start mb-4">
+                                                <div className="flex flex-row items-center">
+                                                    <Icon fontSize={"small"} className="mr-4"></Icon>
+                                                    <Typography variant="subtitle1" color="inherit">
+														Account Type: {this.state.AccountType}
+                                                    </Typography>
+                                                </div>
+                                            </div> */}
+
+                                    </CardContent>
+                                </Card>
+                            </GridItem>
+									{/* <GridItem xs={12} sm={12} md={12} className="flex flex-row">
 										<h3 className="mt-24">Customer Information</h3>
 									</GridItem>
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -1135,7 +1260,7 @@ class FilterPanel extends Component {
 											// variant="outlined"
 											style={{ width: '100%' }}
 										/>
-									</GridItem>
+									</GridItem> */}
 
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 										<TextField
