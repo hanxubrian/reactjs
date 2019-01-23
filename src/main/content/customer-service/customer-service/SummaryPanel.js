@@ -9,7 +9,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import green from '@material-ui/core/colors/green';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-import {Card, CardContent, TextField, InputAdornment, MenuItem} from '@material-ui/core';
+import { Card, CardContent, TextField, InputAdornment, MenuItem } from '@material-ui/core';
 // import * as Actions from 'store/actions';
 import Widget8 from './widget8';
 
@@ -107,7 +107,7 @@ class SummaryPanel extends Component {
 			[name]: event.target.value
 		});
 	};
-	
+
 	render() {
 		const { classes, customerForm } = this.props;
 		// const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, deleteCustomersAction, openNewCustomerForm, customerForm } = this.props;
@@ -190,196 +190,468 @@ class SummaryPanel extends Component {
 			},
 		};
 
+		let execTitles = []
+		if (this.props.accountExecutiveList !== null && this.props.accountExecutiveList.Data !== undefined) {
+			execTitles = this.props.accountExecutiveList.Data.filter(x => {
+				if (x.Title === null) return false
+				return true
+			}).map(x => {
+				return x.FirstName + " " + x.LastName
+			}).sort();
+		}
+
 		return (
 			<div>
 				<div className={classNames("flex flex-col p-16")}>
 					{this.props.customers && (
-						<Fragment className="flex flex-1 flex-col min-h-px shadow-none" style={{ alignItems: 'center', flexDirection: 'column' }}>
+						<Fragment>
 
 							{customerForm && customerForm.props.open
 								? (
-									<div style={{ marginTop: 50, display: 'flex', flexDirection: 'column' }}>
+									<div style={{ marginTop: 20, display: 'flex', flexDirection: 'column' }}>
 
-										<Paper className="flex flex-col p-12">
-											<h3>Service Agreement</h3>
+										{/* <Paper className="flex flex-col p-12"> */}
 
-											<Fragment>
-												<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-													<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-														<TextField
-															type="number"
-															id="Amount"
-															label="Amount *"
-															className={classes.textField}
-															InputLabelProps={{
-																shrink: true
-															}}
-															value={this.state.Amount || ""}
-															// onChange={this.handleChange('Amount')}
-															margin="dense"
-															variant="outlined"
-															style={{ minWidth: "100px", width: "30%" }}
-															InputProps={{
-																startAdornment: <InputAdornment position="start">$</InputAdornment>
-															}}
-														/>
-													</GridItem>
-													<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-														<TextField
-															id="Description"
-															label="Description"
-															multiline
-															rows="2"
-															rowsMax="2"
-															className={classes.textField}
-															value={this.state.Description}
-															// onChange={this.handleChange('Description')}
-															margin="dense"
-															variant="outlined"
-															style={{ width: '100%' }}
-														/>
-													</GridItem>
-													<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-														<TextField
-															id="ContractType"
-															label="Contract Type *"
-															select
-															InputLabelProps={{
-																shrink: true
-															}}
-															className={classNames(classes.textField, "mr-6")}
-															value={this.state.ContractType === undefined ? 0 : this.state.ContractType}
-															// onChange={this.handleChange('ContractType')}
-															margin="dense"
-															variant="outlined"
-															style={{ minWidth: "100px", width: "30%" }}
-														>
-															{[{ value: 0, label: "Recurring" }
-																, { value: 1, label: "One-Time" }
-																, { value: 2, label: "Variable" }].map(option => (
-																	<MenuItem key={option.value} value={option.value}>
-																		{option.label}
-																	</MenuItem>
-																))}
-														</TextField>
+										<Fragment>
+											<h3 className={classNames("mb-20")}>Service Agreement</h3>
 
-														<TextField
-															type="number"
-															inputProps={{ min: "0", max: "99", step: "1" }}
-															id="TermMonths"
-															label="Term Months *"
-															InputLabelProps={{
-																shrink: true
-															}}
-															className={classNames(classes.textField, "ml-6")}
-															value={this.state.TermMonths}
-															// onChange={this.handleChange('TermMonths')}
-															margin="dense"
-															variant="outlined"
-															style={{ width: '10%', minWidth: '110px' }}
-														/>
-													</GridItem>
-
-													<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-														<TextField
-															id="AgreementType"
-															label="Agreement Type *"
-															select
-															InputLabelProps={{
-																shrink: true
-															}}
-															className={classNames(classes.textField, "mr-6")}
-															value={this.state.AgreementType === undefined ? 1 : this.state.AgreementType}
-															// onChange={this.handleChange('AgreementType')}
-															margin="dense"
-															variant="outlined"
-															fullWidth
-														>
-															{[{ value: 0, label: "Customer" }
-																, { value: 1, label: "Jani-King" }
-																, { value: 2, label: "General" }
-															].map(option => (
+											<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+												<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+													<TextField
+														type="number"
+														id="Amount"
+														label="Amount *"
+														className={classes.textField}
+														InputLabelProps={{
+															shrink: true
+														}}
+														value={this.state.Amount || ""}
+														// onChange={this.handleChange('Amount')}
+														margin="dense"
+														// variant="outlined"
+														// style={{ minWidth: "100px", width: "30%" }}
+														fullWidth
+														InputProps={{
+															startAdornment: <InputAdornment position="start">$</InputAdornment>
+														}}
+													/>
+												</GridItem>
+												<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+													<TextField
+														id="Description"
+														label="Description"
+														multiline
+														rows="2"
+														rowsMax="2"
+														className={classes.textField}
+														value={this.state.Description}
+														// onChange={this.handleChange('Description')}
+														margin="dense"
+														// variant="outlined"
+														style={{ width: '100%' }}
+													/>
+												</GridItem>
+												<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+													<TextField
+														id="ContractType"
+														label="Contract Type *"
+														select
+														InputLabelProps={{
+															shrink: true
+														}}
+														className={classNames(classes.textField, "")}
+														value={this.state.ContractType === undefined ? 0 : this.state.ContractType}
+														// onChange={this.handleChange('ContractType')}
+														margin="dense"
+														// variant="outlined"
+														// style={{ minWidth: "100px", width: "30%" }}
+														fullWidth
+													>
+														{[{ value: 0, label: "Recurring" }
+															, { value: 1, label: "One-Time" }
+															, { value: 2, label: "Variable" }].map(option => (
 																<MenuItem key={option.value} value={option.value}>
 																	{option.label}
 																</MenuItem>
 															))}
-														</TextField>
+													</TextField>
+												</GridItem>
 
-														<TextField
-															id="AcctExec"
-															label="Acct Exec"
-															select
-															InputLabelProps={{
-																shrink: true
-															}}
-															className={classNames(classes.textField, "ml-6")}
-															value={this.state.AcctExec === undefined ? 0 : this.state.AcctExec}
-															// onChange={this.handleChange('AcctExec')}
-															margin="dense"
-															variant="outlined"
-															fullWidth
-														>
-															
-														</TextField>
-													</GridItem>
+												<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+													<TextField
+														type="number"
+														inputProps={{ min: "0", max: "99", step: "1" }}
+														id="TermMonths"
+														label="Term Months *"
+														InputLabelProps={{
+															shrink: true
+														}}
+														className={classNames(classes.textField, "")}
+														value={this.state.TermMonths}
+														// onChange={this.handleChange('TermMonths')}
+														margin="dense"
+														// variant="outlined"
+														// style={{ width: '10%', minWidth: '110px' }}
+														fullWidth
+													/>
+												</GridItem>
 
+												<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+													<TextField
+														id="AgreementType"
+														label="Agreement Type *"
+														select
+														InputLabelProps={{
+															shrink: true
+														}}
+														className={classNames(classes.textField, "")}
+														value={this.state.AgreementType === undefined ? 1 : this.state.AgreementType}
+														// onChange={this.handleChange('AgreementType')}
+														margin="dense"
+														// variant="outlined"
+														fullWidth
+													>
+														{[{ value: 0, label: "Customer" }
+															, { value: 1, label: "Jani-King" }
+															, { value: 2, label: "General" }
+														].map(option => (
+															<MenuItem key={option.value} value={option.value}>
+																{option.label}
+															</MenuItem>
+														))}
+													</TextField>
+												</GridItem>
 
+												<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+													<TextField
+														id="AcctExec"
+														label="Acct Exec"
+														select
+														InputLabelProps={{
+															shrink: true
+														}}
+														className={classNames(classes.textField, "")}
+														value={this.state.AcctExec === undefined ? 0 : this.state.AcctExec}
+														// onChange={this.handleChange('AcctExec')}
+														margin="dense"
+														// variant="outlined"
+														fullWidth
+													>
+														{
+															execTitles.map((x, index) => {
+																return (<MenuItem key={index} value={index}>{x}</MenuItem>)
+															})
+														}
+													</TextField>
+												</GridItem>
+												<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+													<TextField
+														type="date"
+														id="SignDate"
+														label="Sign Date *"
+														className={classNames(classes.textField, "")}
+														InputLabelProps={{
+															shrink: true
+														}}
+														value={this.state.SignDate}
+														// onChange={this.handleChange('SignDate')}
+														margin="dense"
+														// variant="outlined"
+														// style={{ width: "20%", minWidth: "180px" }}
+														fullWidth
+													/>
+												</GridItem>
+												<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 
+													<TextField
+														type="date"
+														id="StartDate"
+														label="Start Date *"
+														className={classNames(classes.textField, "")}
+														InputLabelProps={{
+															shrink: true
+														}}
+														value={this.state.StartDate}
+														// onChange={this.handleChange('StartDate')}
+														margin="dense"
+														// variant="outlined"
+														// style={{ width: "20%", minWidth: "180px" }}
+														fullWidth
+													/>
+												</GridItem>
+												<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 
-													<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-														<TextField
-															type="date"
-															id="SignDate"
-															label="Sign Date *"
-															className={classNames(classes.textField, "mr-6")}
-															InputLabelProps={{
-																shrink: true
-															}}
-															value={this.state.SignDate}
-															// onChange={this.handleChange('SignDate')}
-															margin="dense"
-															variant="outlined"
-															style={{ width: "20%", minWidth: "180px" }}
+													<TextField
+														type="date"
+														id="ExpirationDate"
+														label="Expiration Date *"
+														className={classNames(classes.textField, "")}
+														InputLabelProps={{
+															shrink: true
+														}}
+														value={this.state.ExpirationDate}
+														// onChange={this.handleChange('ExpirationDate')}
+														margin="dense"
+														// variant="outlined"
+														// style={{ width: "20%", minWidth: "180px" }}
+														fullWidth
+													/>
+												</GridItem>
+											</GridContainer>
+										</Fragment>
+
+										{/* </Paper> */}
+
+										{/* <Paper className="flex flex-col p-12"> */}
+
+										<Fragment>
+										<h3 className={classNames("mt-36 mb-20")}>Cleaning Schedule</h3>
+											<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+												<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+													<TextField
+														id="ServiceType"
+														label="Service Type *"
+														select
+														InputLabelProps={{
+															shrink: true
+														}}
+														className={classes.textField}
+														value={this.state.ServiceType === undefined ? "" : this.state.ServiceType}
+														// onChange={this.handleChange('ServiceType')}
+														margin="dense"
+														// variant="outlined"
+														// style={{ minWidth: "100px", width: "30%" }}
+														fullWidth
+													>
+														{[{ value: 0, label: "Select" }].map(option => (
+															<MenuItem key={option.value} value={option.value}>
+																{option.label}
+															</MenuItem>
+														))}
+													</TextField>
+												</GridItem>
+												<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+													<TextField
+														type="number"
+														inputProps={{ min: "0", max: "999999", step: "1" }}
+														id="SquareFootage"
+														label="Square Footage"
+														className={classes.textField}
+														value={this.state.SquareFootage}
+														// onChange={this.handleChange('SquareFootage')}
+														margin="dense"
+														// variant="outlined"
+														// style={{ minWidth: "100px", width: "30%" }}
+														fullWidth
+													/>
+
+												</GridItem>
+
+												<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+													<TextField
+														type="time"
+														id="StartTime"
+														label="Start Time *"
+														className={classNames(classes.textField, "")}
+														InputLabelProps={{
+															shrink: true
+														}}
+														value={this.state.StartTime}
+														// onChange={this.handleChange('StartTime')}
+														margin="dense"
+														// variant="outlined"
+														// style={{ width: '100%' }}
+														fullWidth
+													/>
+												</GridItem>
+												<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+
+													<TextField
+														type="time"
+														id="EndTime"
+														label="End Time *"
+														className={classNames(classes.textField, "")}
+														InputLabelProps={{
+															shrink: true
+														}}
+														value={this.state.EndTime}
+														// onChange={this.handleChange('EndTime')}
+														margin="dense"
+														// variant="outlined"
+														// style={{ width: '100%' }}
+														fullWidth
+													/>
+												</GridItem>
+
+												<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+													<TextField
+														type="number"
+														id="Amount"
+														label="Amount *"
+														className={classes.textField}
+														InputLabelProps={{
+															shrink: true
+														}}
+														value={this.state.Amount}
+														// onChange={this.handleChange('Amount')}
+														margin="dense"
+														// variant="outlined"
+														// style={{ minWidth: "100px", width: "30%" }}
+														InputProps={{
+															startAdornment: <InputAdornment position="start">$</InputAdornment>
+														}}
+														fullWidth
+													/>
+												</GridItem>
+
+												<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+													<TextField
+														type="number"
+														id="CleanTimes"
+														label="Clean Times *"
+														className={classNames(classes.textField, "")}
+														value={this.state.CleanTimes}
+														// onChange={this.handleChange('CleanTimes')}
+														margin="dense"
+														// variant="outlined"
+														// style={{ width: '100%' }}
+														fullWidth
+													/>
+												</GridItem>
+												<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+
+													<TextField
+														select
+
+														id="CleanFrequency"
+														label="Clean Frequency *"
+														className={classNames(classes.textField, "")}
+														InputLabelProps={{
+															shrink: true
+														}}
+														value={this.state.CleanFrequency === undefined ? "" : this.state.CleanFrequency}
+														// onChange={this.handleChange('CleanFrequency')}
+														margin="dense"
+														// variant="outlined"
+														// style={{ width: '100%' }}
+														fullWidth
+													>
+														{[{ value: 0, label: "Monthly" }].map(option => (
+															<MenuItem key={option.value} value={option.value}>
+																{option.label}
+															</MenuItem>
+														))}
+													</TextField>
+												</GridItem>
+
+												{/* <GridItem xs={12} sm={12} md={12} className="flex flex-row justify-start">
+														<FormControlLabel
+															control={
+																// <Checkbox onChange={this.handleChange('weekdays')} />
+															}
+															label="Mon"
+															className="mr-36"
+
 														/>
-														<TextField
-															type="date"
-															id="StartDate"
-															label="Start Date *"
-															className={classNames(classes.textField, "mr-6 ml-6")}
-															InputLabelProps={{
-																shrink: true
-															}}
-															value={this.state.StartDate}
-															// onChange={this.handleChange('StartDate')}
-															margin="dense"
-															variant="outlined"
-															style={{ width: "20%", minWidth: "180px" }}
+														<FormControlLabel
+															control={
+																// <Checkbox onChange={this.handleChange('weekdays')} />
+															}
+															label="Tue"
+															className="mr-36"
+
 														/>
+														<FormControlLabel
+															control={
+																// <Checkbox onChange={this.handleChange('weekdays')} />
+															}
+															label="Wed"
+															className="mr-36"
 
-														<TextField
-															type="date"
-															id="ExpirationDate"
-															label="Expiration Date *"
-															className={classNames(classes.textField, "ml-6")}
-															InputLabelProps={{
-																shrink: true
-															}}
-															value={this.state.ExpirationDate}
-															// onChange={this.handleChange('ExpirationDate')}
-															margin="dense"
-															variant="outlined"
-															style={{ width: "20%", minWidth: "180px" }}
 														/>
-													</GridItem>
-												</GridContainer>
-											</Fragment>
+														<FormControlLabel
+															control={
+																// <Checkbox onChange={this.handleChange('weekdays')} />
+															}
+															label="Thu"
+															className="mr-36"
 
-										</Paper>
+														/>
+														<FormControlLabel
+															control={
+																// <Checkbox onChange={this.handleChange('weekdays')} />
+															}
+															label="Fri"
+															className="mr-36"
 
-										<Paper className="flex flex-col p-12">
-											<h3>Cleaning Schedule</h3>
+														/>
+														<FormControlLabel
+															control={
+																// <Checkbox onChange={this.handleChange('weekdays')} />
+															}
+															label="Sat"
+															className="mr-36"
 
-										</Paper>
+														/>
+														<FormControlLabel
+															control={
+																// <Checkbox onChange={this.handleChange('weekdays')} />
+															}
+															label="Sun"
+															className="mr-36"
+														/>
+														<FormControlLabel
+															control={
+																// <Checkbox onChange={this.handleChange('weekdays')} />
+															}
+															label="Weekends"
+
+														/>
+													</GridItem> */}
+
+												<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+													<FormControlLabel
+														control={
+															<Checkbox
+															// onChange={this.handleChange('weekdays')}
+															/>
+														}
+														label="CPI Increase"
+														style={{ marginRight: "30px" }}
+
+													/>
+													<FormControlLabel
+														control={
+															<Checkbox
+															// onChange={this.handleChange('weekdays')}
+															/>
+														}
+														label="Separate Invoice"
+														style={{ marginRight: "30px" }}
+
+													/>
+												</GridItem>
+
+												<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+													<TextField
+														id="Description"
+														label="Description"
+														multiline
+														rows="2"
+														rowsMax="2"
+														className={classes.textField}
+														value={this.state.Description}
+														// onChange={this.handleChange('Description')}
+														margin="dense"
+														// variant="outlined"
+														// style={{ width: '100%' }}
+														fullWidth
+													/>
+												</GridItem>
+											</GridContainer>
+
+										</Fragment>
+										{/* </Paper> */}
 									</div>)
 								: (<div>
 									<Card className={classes.card} >
@@ -426,7 +698,9 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps({ customers }) {
 	return {
 		customers: customers.customersDB,
-		customerForm: customers.customerForm
+		customerForm: customers.customerForm,
+
+		accountExecutiveList: customers.accountExecutiveList,
 	}
 }
 

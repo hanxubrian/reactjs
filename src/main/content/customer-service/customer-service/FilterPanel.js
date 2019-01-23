@@ -1192,9 +1192,7 @@ class FilterPanel extends Component {
 														checked={this.state.NationalAccount}
 														onChange={this.handleChangeChecked('NationalAccount')}
 														value="NationalAccount"
-														InputProps={{
-															readOnly: true,
-														}}
+														// InputProps={{readOnly: true,}}
 													/>
 												}
 												label="National Account"
@@ -1205,9 +1203,7 @@ class FilterPanel extends Component {
 														checked={this.state.ChildAccount}
 														onChange={this.handleChangeChecked('ChildAccount')}
 														value="ChildAccount"
-														InputProps={{
-															readOnly: true,
-														}}
+														// InputProps={{readOnly: true,}}
 													/>
 												}
 												label="Child Account"

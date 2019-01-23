@@ -438,7 +438,7 @@ class CustomerServices extends Component {
 				<FusePageCustomSidebarScroll
 					classes={{
 						root: classNames(classes.layoutRoot, 'test123'),
-						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': this.state.showRightSidePanel }),
+						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': !customerForm.props.open && summaryState ||  customerForm.props.open && this.state.showRightSidePanel}),
 						leftSidebar: classNames(classes.layoutLeftSidebar, { 'openFilter': filterState }),
 						sidebarHeader: classes.layoutSidebarHeader,
 						header: classes.layoutHeader,
@@ -621,9 +621,8 @@ Confirm Dialog for submitting
 					}
 					leftSidebarHeader={
 						<Fragment>
-
 							<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
-								<h2 style={{ marginBlockStart: '1em' }}>{customerForm.props.open ? (this.props.customerForm.data===null ? "" : this.props.customerForm.data.Data.cus_name) : "Filters"}</h2>
+								<h2 style={{ marginBlockStart: '1em' }}>{customerForm.props.open ? (this.props.customerForm.data === null ? "" : this.props.customerForm.data.Data.cus_name) : "Filters"}</h2>
 							</div>
 						</Fragment>
 					}
@@ -637,12 +636,9 @@ Confirm Dialog for submitting
 					}
 					rightSidebarContent={
 						<Fragment>
-							{!customerForm.props.open && (
-								<SummaryPanel />
-							)}
-							{this.state.showRightSidePanel && (
-								<SummaryPanel />
-							)}
+							{/* {!customerForm.props.open && summaryState && (<SummaryPanel />)} */}
+							{/* {customerForm.props.open && this.state.showRightSidePanel && (<SummaryPanel />)} */}
+							<SummaryPanel />
 						</Fragment>
 					}
 					onRef={instance => {
