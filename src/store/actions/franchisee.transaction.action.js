@@ -15,6 +15,7 @@ export const UPDATE_TRANSACTION_LINE = '[FRANCHISEE-TRANSACTION] UPDATE TRANSACT
 export const START_FETCH_TRANSACTIONS = '[FRANCHISEE-TRANSACTION] START FETCH TRANSACTIONS';
 export const SHOW_VENDOR_DIALOG_BOX = '[FRANCHISEE-TRANSACTION] SHOW VENDOR DIALOG BOX';
 export const HIDE_VENDOR_DIALOG_BOX = '[FRANCHISEE-TRANSACTION] HIDE VENDOR DIALOG BOX';
+export const UPDATE_TARNSACTION_VENDOR = '[FRANCHISEE-TRANSACTION] UPDATE TARNSACTION VENDOR';
 
 export function getTransactions(regionId) {
     return (dispatch) => {
@@ -116,5 +117,12 @@ export function showVendorDialogBox() {
 export function hideVendorDialogBox() {
     return {
         type: HIDE_VENDOR_DIALOG_BOX
+    }
+}
+
+export function updateVendor(vendor) {
+    return {
+        type: UPDATE_TARNSACTION_VENDOR,
+        payload: vendor
     }
 }

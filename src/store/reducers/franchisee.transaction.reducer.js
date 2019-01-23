@@ -16,7 +16,8 @@ const initialState = {
         },
         data : null,
         franchisee: null,
-        bVendorBox: false
+        bVendorBox: false,
+        vendor: null
     },
     newTransaction: null,
 };
@@ -66,7 +67,8 @@ const transactions = function(state = initialState, action) {
                     },
                     data : null,
                     franchisee: null,
-                    bVendorBox: false
+                    bVendorBox: false,
+                    vendor: null
                 },
             };
         }
@@ -81,7 +83,8 @@ const transactions = function(state = initialState, action) {
                     },
                     data : null,
                     franchisee: null,
-                    bVendorBox: false
+                    bVendorBox: false,
+                    vendor: null
                 },
                 newTransaction: null
             };
@@ -91,13 +94,14 @@ const transactions = function(state = initialState, action) {
             return {
                 ...state,
                 transactionForm: {
-                    type : 'new',
+                    type : 'edit',
                     props: {
                         open: true
                     },
                     data : null,
                     franchisee: action.payload,
-                    bVendorBox: false
+                    bVendorBox: false,
+                    vendor: null
                 },
             };
         }
@@ -106,13 +110,14 @@ const transactions = function(state = initialState, action) {
             return {
                 ...state,
                 transactionForm: {
-                    type : 'new',
+                    type : 'edit',
                     props: {
                         open: false
                     },
                     data : null,
                     franchisee: action.payload,
-                    bVendorBox: false
+                    bVendorBox: false,
+                    vendor: null
                 },
                 newTransaction: null
             };
@@ -139,6 +144,8 @@ const transactions = function(state = initialState, action) {
             return {...state,
                 transactionForm: {...state.transactionForm, bVendorBox: false}
             };
+        case Actions.UPDATE_TARNSACTION_VENDOR:
+            return {...state, transactionForm: {...state.transactionForm, vendor: action.payload}}
         default:
         {
             return state;

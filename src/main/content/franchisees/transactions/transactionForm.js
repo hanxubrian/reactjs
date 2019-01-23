@@ -50,7 +50,7 @@ import PropTypes from 'prop-types';
 import {escapeRegexCharacters} from 'services/utils'
 import { Control, Menu, NoOptionsMessage, Option, Placeholder, SingleValue, ValueContainer} from "../../accounts-receivable/Invoice/selectUtils";
 import {emphasize} from "@material-ui/core/styles/colorManipulator";
-import {NumberFormatCustom, NumberFormatCustom1, NumberFormatCustom2} from "../../../../services/utils";
+import {NumberFormatCustom, NumberFormatCustom3} from "../../../../services/utils";
 
 
 const styles = theme => ({
@@ -194,16 +194,14 @@ const styles = theme => ({
 
 const chance = new Chance();
 
-const newInvoiceState = {
+const newTransactionState = {
     "MasterTrxTypeListId": "",
     "RegionId": "",
     "RegionName": "",
     "InvoiceId": "",
     "TransactionDate": new Date(),
     "Date": new Date(),
-    "CustomerId": "",
     "franchiseeNo": "",
-    "CustomerName": "",
     "EBill": "",
     "PrintInvoice": "",
     "transactionDescription": "",
@@ -327,8 +325,7 @@ const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
 
 class TransactionForm extends Component {
     state = {
-        franchisees: [],
-        ...newInvoiceState,
+        ...newTransactionState,
         value: '',
         suggestions: [],
         fSuggestions: [],
@@ -343,7 +340,7 @@ class TransactionForm extends Component {
         taxExempt: false,
         bAlertNewTransaction: false,
         buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval,
-        transactionType: 82,
+        transactionType: {label: 'Advance Fee', value:82},
         transactionFrequency: "1",
         reSell: false,
         quantity: 1,
@@ -351,6 +348,7 @@ class TransactionForm extends Component {
         subTotal: 0,
         total: 0.0,
         tax: 0,
+        payments: 1
     };
 
     renderInputComponent = (inputProps ) => {
@@ -484,56 +482,43 @@ class TransactionForm extends Component {
     }
 
     handleChange = (event) => {
+        console.log('event=', event);
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
     };
 
-    addNewInvoice = () => {
-        let inv_no = chance.guid()+'_pending';
-        let items = [];
-        let lines = this.props.transactionForm.data.line;
-        //
-        lines.forEach(line=>{
-            let item = {
-                Inv_No: inv_no,
-                ServiceTypeListId: 0,
-                Description: line.description,
-                Type: line.type,
-                Frequency: line.frequency,
-                LineNo: 1,
-                UnitPrice: parseFloat(line.amount),
-                Quantity: parseInt(line.quantity),
-                TaxRate: line.tax,
-                ExtendedPrice: line.extended,
-                Total: line.total,
-                Commission: 0,
-                CommissionTotal: 0,
-                ExtraWork: 1,
-            };
+    handleChange1 = name =>(event) => {
+        console.log('event=', event);
+        this.setState({[name]: event.target.value})
+    };
 
-            items.push(item);
-        });
+    addNewTransaction = () => {
+        let trx_no = 'pending';
 
         let result = {
-            Inv_No: inv_no,
-            Apply_to: 'Apply To',
-            PeriodId: this.props.invoices.PeriodId[0],
+            trx_no,
+            RegionId: this.props.regionId,
+            frabchisee: this.state.selectedFranchisee,
+            franchiseeNo: this.state.selectedFranchisee.Number,
+            franchiseeName: this.state.selectedFranchisee.Name,
+            CreatedBy: this.props.user.UserId,
+            company_no: '',
+
+            TrxType: this.state.transactionType.value,
+            TrxFrequency: this.state.transactionFrequency,
+            TrxResell: this.state.reSell, //Boolean
+
+            TrxItemAmount: this.state.unitPrice,//decimal
+            TrxExtendedPrice: this.state.subTotal, //decimal
+            TrxTax: this.state.tax,//decimal
+            TotalTrxAmount: this.state.total,//decimal
+            quantity: this.state.quantity,//integer
+
             Description: this.state.transactionDescription,
             Notes: this.state.note,
-            RegionId: this.props.regionId,
-            BillRunId: 999,
-            InvoiceDate: this.state.InvoiceDate,
+            TrxDate: this.state.TransactionDate,
             Date: this.state.Date,
-            CreatedById: this.props.user.UserId,
-            CreatedDate: moment(),
-            SubTotal: this.state.subTotal,
-            TaxTotal: this.state.tax,
-            GrandTotal: this.state.total,
-            TransactionStatusListId: 2,
-            Status: 2,
-            SysCust: 2,
-            Items: items
         };
-        this.props.addInvoice(this.props.regionId, result);
+        // this.props.addInvoice(this.props.regionId, result);
         console.log('result', JSON.stringify(result));
     };
 
@@ -556,15 +541,6 @@ class TransactionForm extends Component {
 
     onSaveAndAddMore=()=>{
         this.onSaveTransaction(0);
-    };
-
-    onSaveAndClose = () => {
-        this.onSaveTransaction(1);
-        this.closeComposeForm();
-    };
-
-    onSubmitForApproval=()=>{
-        this.onSaveTransaction(2);
     };
 
     closeComposeForm = () => {
@@ -869,13 +845,37 @@ class TransactionForm extends Component {
                             </Grid>
                         </Grid>
                         <div className="flex flex-row w-full mt-4 justify-between">
+                            {this.state.transactionFrequency==="2" && (
+                                <TextField
+                                    id="payments"
+                                    name="payments"
+                                    label="Number of Payments"
+                                    className={classes.textField}
+                                    value={this.state.payments}
+                                    onChange={this.handleChange1('payments')}
+                                    margin="dense"
+                                    variant="outlined"
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                    InputProps={{
+                                        inputComponent: NumberFormatCustom3,
+                                        classes: {
+                                            input: classes.input
+                                        },
+                                    }}
+                                    required
+                                />
+                            )}
+
                             <TextField
                                 id="quantity"
                                 name="quantity"
                                 label="Quantity"
                                 className={classes.textField}
                                 value={this.state.quantity}
-                                onChange={this.handleChange}
+                                onChange={this.handleChange1('quantity')}
                                 margin="dense"
                                 variant="outlined"
                                 InputLabelProps = {{
@@ -883,7 +883,7 @@ class TransactionForm extends Component {
                                     classes: {outlined: classes.label}
                                 }}
                                 InputProps={{
-                                    inputComponent: NumberFormatCustom1,
+                                    inputComponent: NumberFormatCustom3,
                                     classes: {
                                         input: classes.input
                                     },
@@ -896,7 +896,7 @@ class TransactionForm extends Component {
                                 label="Item Amount"
                                 className={classes.textField}
                                 value={this.state.unitPrice}
-                                onChange={this.handleChange}
+                                onChange={this.handleChange1('unitPrice')}
                                 margin="dense"
                                 variant="outlined"
                                 InputLabelProps = {{
@@ -917,7 +917,7 @@ class TransactionForm extends Component {
                                 label="Sub-Total"
                                 className={classes.textField}
                                 value={this.state.subTotal}
-                                onChange={this.handleChange}
+                                onChange={this.handleChange1('subTotal')}
                                 margin="dense"
                                 variant="outlined"
                                 InputLabelProps = {{
@@ -938,7 +938,7 @@ class TransactionForm extends Component {
                                 label="Tax"
                                 className={classes.textField}
                                 value={this.state.tax}
-                                onChange={this.handleChange}
+                                onChange={this.handleChange1('tax')}
                                 margin="dense"
                                 variant="outlined"
                                 InputLabelProps = {{
@@ -959,7 +959,7 @@ class TransactionForm extends Component {
                                 label="Total"
                                 className={classes.textField}
                                 value={this.state.total}
-                                onChange={this.handleChange}
+                                onChange={this.handleChange1('total')}
                                 margin="dense"
                                 variant="outlined"
                                 InputLabelProps = {{
@@ -975,6 +975,11 @@ class TransactionForm extends Component {
                                 }}
                             />
                         </div>
+                        {this.state.transactionType.value===18 && this.props.transactionForm.vendor!==null && ( // Franchisee Supplies
+                            <div className="w-full mt-4">
+
+                            </div>
+                        )}
 
                         <div className="w-full mt-4">
                             <TextField
@@ -993,16 +998,11 @@ class TransactionForm extends Component {
                                 }}
                                 InputProps={{
                                     classes: {
-                                        input: classes.input, multiline: classes.input
+                                        input: classes.input
                                     },
                                 }}
                             />
                         </div>
-                        <Grid container className={classNames(classes.formControl)} style={{flex: "9999 1 0"}}>
-                            <Grid item xs={12} sm={12} md={12} className="flex flex-row xs:flex-col xs:mb-24">
-                                {/*<TransactionTable />*/}
-                            </Grid>
-                        </Grid>
                         <Divider variant="middle"/>
                     </div>
                     <div className="flex flex-shrink flex-col w-full pl-24 pr-24 pt-0 pb-12">
@@ -1101,17 +1101,17 @@ class TransactionForm extends Component {
                         aria-labelledby="alert-dialog-title"
                         aria-describedby="alert-dialog-description"
                     >
-                        <DialogTitle id="alert-dialog-title">{"Create New Invoice"}</DialogTitle>
+                        <DialogTitle id="alert-dialog-title">{"Create New Transaction"}</DialogTitle>
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
-                                Do you really want to insert the new invoice?
+                                Do you really want to create the new transaction?
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={()=>this.handleCloseNewTransaction()} color="primary">
                                 Close
                             </Button>
-                            <Button onClick={()=>this.addNewInvoice()} color="primary" autoFocus>
+                            <Button onClick={()=>this.addNewTransaction()} color="primary" autoFocus>
                                 Create
                             </Button>
                         </DialogActions>

@@ -62,15 +62,6 @@ const styles = theme => ({
         fontSize: 15,
         fontWeight: 700
     },
-    suggestionsContainerOpen: {
-        position: 'absolute',
-        zIndex: 10,
-        marginTop: theme.spacing.unit,
-        left: 0,
-        right: 0,
-        maxHeight: 200,
-        overflowY: 'scroll'
-    },
     suggestion: {
         display: 'block',
     },
@@ -81,22 +72,6 @@ const styles = theme => ({
     },
     divider: {
         height: theme.spacing.unit * 2,
-    },
-    cardHeader: {
-        backgroundColor: theme.palette.secondary.main,
-        padding: '8px 24px',
-        '& span': {
-            color: 'white',
-            fontSize: 16,
-        }
-    },
-    cardContent: {
-        paddingTop: 12,
-        paddingBottom: '12px!important',
-        '& h6': {
-            lineHeight: 1.6,
-            fontSize: 14
-        }
     },
     input: {
         padding: '12px 14px'
@@ -207,7 +182,6 @@ const DialogActions = withStyles(theme => ({
 
 class VendorDialogBox extends Component {
     state = {
-        bVendorBox: false,
         vendor_no: '',
         vendorDate: moment().format('YYYY-MM-DD'),
         vendor: null
@@ -229,14 +203,23 @@ class VendorDialogBox extends Component {
 
     handleChange = (event) => {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
+
     };
 
     updateVendor = () => {
+        const {vendor, vendor_no, vendorDate} = this.state;
+        this.props.updateVendor({vendor, vendor_no, vendorDate});
         this.props.hideVendorDialogBox();
+    };
+
+    isDisable = ()=>{
+      if(this.state.vendor===null || this.state.vendor_no==='') return true;
+      return false;
     };
 
     handleVendorChange = (newValue)=> {
         this.setState({vendor: newValue});
+
     };
 
     render()
@@ -303,6 +286,8 @@ class VendorDialogBox extends Component {
                 },
             }),
         };
+
+        console.log('vendor= ', this.state)
 
         const components = { Control, Menu, NoOptionsMessage, Option, Placeholder, SingleValue, ValueContainer };
 
@@ -377,7 +362,9 @@ class VendorDialogBox extends Component {
                             <Button onClick={()=> this.props.hideVendorDialogBox()} color="primary">
                                 Close
                             </Button>
-                            <Button onClick={()=>this.updateVendor()} color="primary" autoFocus>
+                            <Button
+                                disabled={this.isDisable() ? true: false}
+                                onClick={()=>this.updateVendor()} color="primary" autoFocus>
                                 Update
                             </Button>
                         </DialogActions>
@@ -393,6 +380,7 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         showVendorDialogBox: Actions.showVendorDialogBox,
         hideVendorDialogBox: Actions.hideVendorDialogBox,
+        updateVendor: Actions.updateVendor,
     }, dispatch);
 }
 

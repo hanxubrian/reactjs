@@ -113,3 +113,21 @@ export function NumberFormatCustomFocus(props) {
         />
     );
 }
+
+export function NumberFormatCustom3(props) {
+    const { inputRef, onBlur, onChange, ...other } = props;
+
+    return (
+        <NumberFormat
+            {...other}
+            getInputRef={inputRef}
+            onValueChange={values => {
+                onChange({
+                    target: {
+                        value: values.value,
+                    },
+                });
+            }}
+        />
+    );
+}
