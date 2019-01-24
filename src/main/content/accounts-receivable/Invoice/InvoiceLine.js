@@ -796,6 +796,13 @@ class InvoiceLineTable extends React.Component {
     };
 
     handleChangeInvoiceLineOnBlur = (row, name) => event => {
+        if(name==='quantity' && (row.quantity===0 || row.quantity==='')) {
+            this.setState({snackMessage: 'not allowed quantity of 0'});
+            this.setState({openSnack: true});
+            row.quantity = 1;
+            return ;
+        }
+
         if(!this.isDisable(row) && name!=='tax')
             this.getInvoiceLineTaxAmount(row)
     };

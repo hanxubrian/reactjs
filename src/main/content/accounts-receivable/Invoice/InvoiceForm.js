@@ -188,7 +188,6 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
         let customerStatusObj = customerStatus.filter(c=>c.key===status);
         if(customerStatusObj.length>0) {
             statusName = customerStatusObj[0].label;
-            console.log('status = ', statusName);
         }
     }
 
