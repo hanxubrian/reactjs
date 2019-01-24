@@ -1,3 +1,4 @@
+import {VerificationsAppConfig} from "./activity/VerificationsAppConfig";
 import {SigninPageConfig} from './auth/signin/SigninPageConfig';
 import {ProfilePageConfig} from './profile/ProfilePageConfig';
 import {RegionsConfig} from "./regions/regions/regionsConfig";
@@ -28,9 +29,11 @@ import {FindersFeesConfig} from "./franchisees/findersfees/findersFeesConfig";
 import {PaymentListConfig} from "./payments/payment-list/payment-listConfig";
 import {DashboardConfig} from "./dashboard/DashboardConfig";
 import {HomepageConfig} from "./home/HomepageConfig";
-import {UsersAppConfig} from "../users/UsersAppConfig"
+import {UsersAppConfig} from "../users/UsersAppConfig";
+
 
 export const pagesConfigs = [
+    VerificationsAppConfig,
     SigninPageConfig,
     ProfilePageConfig,
     RegionsConfig,
