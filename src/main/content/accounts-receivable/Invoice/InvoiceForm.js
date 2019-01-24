@@ -176,6 +176,11 @@ const newInvoiceState = {
 
 };
 
+const customerStatus = [
+    {key: 'A', label: 'Active'}, {key: 'C', label: 'Cancelled'}, {key: 'I', label: 'InActive'},
+    {key: 'S', label: 'Suspended'}, {key: 'O', label: 'One Time Clean Account'}, {key: 'T', label: 'Transferred'}
+];
+
 function renderSuggestion(suggestion, { query, isHighlighted }) {
     const matches = match(suggestion.CustomerName+'-'+suggestion.CustomerNo, query);
     const parts = parse(suggestion.CustomerName+'-'+suggestion.CustomerNo, matches);
@@ -356,17 +361,6 @@ class InvoiceForm extends Component {
     };
 
     onSuggestionBlur = () =>{
-
-        const customerStatus = [
-            {key: 'A', label: 'Active'}, {key: 'C', label: 'Cancelled'}, {key: 'I', label: 'InActive'},
-            {key: 'S', label: 'Suspended'}, {key: 'O', label: 'One Time Clean Account'}, {key: 'T', label: 'Transferred'}
-        ];
-
-        if(this.state.selectedCustomer!==null) {
-            let status = this.state.selectedCustomer.Status;
-                console.log('status = ', status);
-        }
-
         let statusName = '';
 
         if(this.state.selectedCustomer!==null) {
@@ -377,13 +371,12 @@ class InvoiceForm extends Component {
             }
         }
 
-        this.setState({customerStatusLabel: statusName})
+        this.setState({customerStatusLabel: statusName});
 
         if(this.state.selectedCustomer!==null) {
             let status = this.state.selectedCustomer.Status;
-            console.log('status = ', status);
 
-            if(status!=='A')
+            if(status!=='A' && this.props.invoiceForm.type === 'new')
                 this.setState({bSelectCustomerAgain: true});
         }
 
@@ -779,11 +772,6 @@ class InvoiceForm extends Component {
 
         let bReadonly = false;
         if(this.props.invoiceForm.type === 'new') bReadonly = true;
-
-        const customerStatus = [
-            {key: 'A', label: 'Active'}, {key: 'C', label: 'Cancelled'}, {key: 'I', label: 'InActive'},
-            {key: 'S', label: 'Suspended'}, {key: 'O', label: 'One Time Clean Account'}, {key: 'T', label: 'Transferred'}
-        ];
 
         let statusName = '';
 
