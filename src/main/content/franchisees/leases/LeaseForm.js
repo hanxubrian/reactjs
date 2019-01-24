@@ -1259,7 +1259,6 @@ function mapDispatchToProps(dispatch)
         closeNewLeaseForm : Actions.closeNewLeaseForm,
         selectFranchisee: Actions.selectFranchisee,
         resetLeaseForm: Actions.resetLeaseForm,
-        selectFranchisee: Actions.selectFranchisee,
         addLease: Actions.addLease,
         updateLease: Actions.updateLease,
         updatedLeases: Actions.updatedLeases,
