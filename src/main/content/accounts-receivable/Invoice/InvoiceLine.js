@@ -1051,6 +1051,8 @@ class InvoiceLineTable extends React.Component {
                                                         value={row.original.description}
                                                         onChange={this.handleChangeDesc(row.original)}
                                                         margin="normal"
+                                                        multiline
+                                                        rows={1}
                                                         InputLabelProps={{
                                                             shrink: true,
                                                         }}

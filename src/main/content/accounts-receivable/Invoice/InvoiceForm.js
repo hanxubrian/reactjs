@@ -1180,8 +1180,6 @@ class InvoiceForm extends Component {
                                 margin="dense"
                                 variant="outlined"
                                 fullWidth
-                                multiline
-                                rows={2}
                                 InputLabelProps = {{
                                     shrink: true,
                                     classes: {outlined: classes.label}
