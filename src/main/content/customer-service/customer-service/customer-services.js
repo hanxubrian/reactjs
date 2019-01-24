@@ -227,21 +227,6 @@ const styles = theme => ({
 		display: 'flex',
 		opacity: 0.5
 	},
-	validationMenu: {
-		color: "#07DF07!important",//green[600],
-		'&$checked': {
-			color: "#07DF07!important", //green[500] 00C73F 33FF33 66CC66 07DF07
-		}
-	},
-	invalidationMenu: {
-		color: "#FF557F!important",//green[600],
-		'&$checked': {
-			color: "#FF557F!important", //green[500] FF557F
-		}
-	},
-	validationMenuChecked: {
-
-	}
 });
 
 class CustomerServices extends Component {

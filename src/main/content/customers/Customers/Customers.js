@@ -232,20 +232,11 @@ const styles = theme => ({
 		opacity: 0.5
 	},
 	validationMenu: {
-		color: "#07DF07!important",//green[600],
-		'&$checked': {
-			color: "#07DF07!important", //green[500] 00C73F 33FF33 66CC66 07DF07
-		}
+		color: "#07DF07",//green[600],
 	},
 	invalidationMenu: {
-		color: "#FF557F!important",//green[600],
-		'&$checked': {
-			color: "#FF557F!important", //green[500] FF557F
-		}
+		color: "#FF557F",//green[600],
 	},
-	validationMenuChecked: {
-
-	}
 });
 // const defaultProps = {
 // 	trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
@@ -591,14 +582,14 @@ class Customers extends Component {
 												open={Boolean(anchorEl)}
 												onClose={this.closeValidationMenu}
 											>
-												<MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Company Information" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Billing Address" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Billing Settings" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Company Contacts" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Contract Details" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={false} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Contract Signed" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Service Location Info" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={true} classes={{ root: classes.validationMenu, checked: classes.validationMenuChecked }} />} label="Verified &amp; Approved" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={true} style={{color:'#07df07'}} />} label="Company Information" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={false} style={{color:'#07df07'}} />} label="Billing Address" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={false} style={{color:'#07df07'}} />} label="Billing Settings" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={false} style={{color:'#07df07'}} />} label="Company Contacts" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={true} style={{color:'#07df07'}} />} label="Contract Details" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={false} style={{color:'#07df07'}} />} label="Contract Signed" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={true} style={{color:'#07df07'}} />} label="Service Location Info" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={true} style={{color:'#07df07'}} />} label="Verified &amp; Approved" /></MenuItem>
 											</Menu>
 											<Tooltip title="Save">
 												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>

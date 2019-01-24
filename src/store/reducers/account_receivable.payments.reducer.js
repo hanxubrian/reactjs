@@ -48,6 +48,7 @@ const accountReceivablePayments = function(state = initialState, action) {
 
 const persistConfig = {
     key: 'account_receivable_payments',
-    storage: storage,
+	storage: storage,
+	blacklist: ['ACC_payments']
 };
 export default persistReducer(persistConfig, accountReceivablePayments);
