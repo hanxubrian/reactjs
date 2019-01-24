@@ -388,7 +388,7 @@ class InvoiceForm extends Component {
         if(this.state.selectedCustomer!==null) {
             let status = this.state.selectedCustomer.Status;
 
-            if((status!=='A' || status!=='O') && this.props.invoiceForm.type === 'new')
+            if((status==='C' || status==='S') && this.props.invoiceForm.type === 'new')
                 this.setState({bSelectCustomerAgain: true});
         }
 
