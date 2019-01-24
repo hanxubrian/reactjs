@@ -7,6 +7,9 @@ export const ACCOUNT_RECEIVABLE_PAYMENTS_TOGGLE_SUMMARY_PANEL = "[ACCOUNT_RECEIV
 
 export const GET_ALL_RECEIVABLE_PAYMENTS_START = "[ACCOUNT_RECEIVABLE PAYMENTS] GET_ALL_RECEIVABLE_PAYMENTS_START";
 export const APPLY_SEARCH_TEXT_ARP = "[ARP] APPLY_SEARCH_TEXT_ARP";
+export const OPEN_PAYMENT_DIALOG = "[ARP] OPEN_PAYMENT_DIALOG";
+
+export const SET_ACTIVE_PAYMENT_ROWS = "[ARP] SET_ACTIVE_PAYMENT_ROWS";
 
 export function getAccountReceivablePaymentsList(RegionId, FromDate,ToDate, SearchText, Status) {
 
@@ -44,5 +47,18 @@ export function applySearchText_ARP(s) {
 	return {
 		type: APPLY_SEARCH_TEXT_ARP,
 		payload: s
+	}
+}
+
+export function openPaymentDialog(open) {
+	return {
+		type: OPEN_PAYMENT_DIALOG,
+		payload: open
+	}
+}
+export function setActivePaymentRows(rows) {
+	return {
+		type: SET_ACTIVE_PAYMENT_ROWS,
+		payload: rows
 	}
 }

@@ -27,6 +27,7 @@ import PaymentSearchBar from "./PaymentSearchBar"
 import InvoiceForm from "./paymentsForm"
 import SummaryPanel from './summaryPanel';
 import FilterPanel from './filterPanel';
+import PaymentFormModal from './PaymentFormModal';
 
 // for store
 import { bindActionCreators } from "redux";
@@ -222,7 +223,8 @@ class Payments extends Component {
 		franchisees: null,
 		...newInvoiceState,
 		value: '',
-		selectedInvoice: null
+		selectedInvoice: null,
+
 	};
 
 	constructor(props) {
@@ -419,7 +421,9 @@ class Payments extends Component {
 			this.setState({ selection: [], selectAll: false })
 		}
 	};
-
+	showPaymentFormModal = () => {
+		this.props.openPaymentDialog(true)
+	}
 	render() {
 		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState,
 			openNewInvoiceForm, invoiceForm } = this.props;
@@ -451,12 +455,17 @@ class Payments extends Component {
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
-											<FuseAnimate animation="transition.expandIn" delay={300}>
+											<IconButton onClick={this.showPaymentFormModal}>
+												<Icon>attach_money</Icon>
+											</IconButton>
+
+											{/* <FuseAnimate animation="transition.expandIn" delay={300}>
 												<Fab color="secondary" aria-label="add"
 													className={classNames(classes.sideButton, "mr-12")} onClick={() => this.onNewInvoice()}>
 													<Icon>add</Icon>
 												</Fab>
-											</FuseAnimate>
+											</FuseAnimate> */}
+
 											{/* <FuseAnimate animation="transition.expandIn" delay={300}>
                                                 <Fab color="secondary" aria-label="add"
                                                      className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
@@ -532,71 +541,10 @@ class Payments extends Component {
 						<div className="flex-1 flex-col absolute w-full h-full">
 							{(this.state.temp && !invoiceForm.props.open) && (
 								<div className={classNames("flex flex-col h-full")}>
-									{/* <div className="flex flex-row items-center p-12">
-										<div className="flex justify-start items-center">
-											<Hidden smDown>
-												<Button
-													onClick={(ev) => toggleFilterPanel()}
-													aria-label="toggle filter panel"
-													color="secondary"
-													disabled={filterState ? true : false}
-													className={classNames(classes.filterPanelButton)}
-												>
-													<img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter" />
-												</Button>
-											</Hidden>
-											<Hidden smUp>
-												<Button
-													onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
-													aria-label="toggle filter panel"
-													className={classNames(classes.filterPanelButton)}
-												>
-													<img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter" />
-												</Button>
-											</Hidden>
-										</div>
-										<div className="flex items-center w-full h-44 mr-12 ml-12">
-											<Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
-												<Input
-													placeholder="Search..."
-													className={classNames(classes.search, 'pl-16')}
-													// className="pl-16"
-													disableUnderline
-													fullWidth
-													value={this.state.s}
-													onChange={this.handleSearchChange('s')}
-													inputProps={{
-														'aria-label': 'Search'
-													}}
-												/>
-												<Icon color="action" className="mr-16">search</Icon>
-											</Paper>
-										</div>
-										<div className="flex items-center justify-end pr-12">
-											<Hidden smDown>
-												<Button
-													onClick={(ev) => toggleSummaryPanel()}
-													aria-label="toggle summary panel"
-													disabled={summaryState ? true : false}
-													className={classNames(classes.summaryPanelButton)}
-												>
-													<Icon>insert_chart</Icon>
-												</Button>
-											</Hidden>
-											<Hidden smUp>
-												<Button
-													onClick={(ev) => this.pageLayout.toggleRightSidebar()}
-													aria-label="toggle summary panel"
-													className={classNames(classes.summaryPanelButton)}
-												>
-													<Icon>insert_chart</Icon>
-												</Button>
-											</Hidden>
-										</div>
-									</div> */}
+
+									<PaymentFormModal />
 
 									<PaymentSearchBar />
-									{/* <PaymentListContent data={this.state.temp} /> */}
 									<PaymentListContent />
 								</div>
 							)}
@@ -665,6 +613,8 @@ function mapDispatchToProps(dispatch) {
 		openEditInvoiceForm: Actions.openEditInvoiceForm,
 		getCustomers: Actions.getSuggestCustomersList,
 		getFranchisees: Actions.getFranchisees,
+
+		openPaymentDialog: Actions.openPaymentDialog,
 	}, dispatch);
 }
 
