@@ -250,7 +250,7 @@ class MainToolbar extends Component {
                 this.setState({unreadMSGnum:unreadNum});
                 this.setState({pusherMSGList:PusherList});
                 this.setState({systeunread:sysunread+1});
-                console.log("pusherMSG-create",this.state.pusherMSG);
+                console.log("pusherMSG-create==1",this.state.pusherMSG);
             }
 
 
@@ -609,7 +609,7 @@ class MainToolbar extends Component {
                                                             fontSize:'15px',width:'250px',paddingLeft:'16px',paddingRight:'16px',textOverflow: 'ellipsis',
                                                             whiteSpace: 'nowrap',
                                                             overflow: 'hidden',
-                                                        }}>{this.state.pusherMSG.message}<br/><span style={{fontSize:'9px'}}>{moment().format('MMMM Do YYYY, h:mm:ss a')}</span></span><br/>
+                                                        }}>{item.message}<br/><span style={{fontSize:'9px'}}>{moment().format('MMMM Do YYYY, h:mm:ss a')}</span></span><br/>
                                                     </ListItem>
                                                     <Divider className="my-0.5"/>
                                                 </div>
