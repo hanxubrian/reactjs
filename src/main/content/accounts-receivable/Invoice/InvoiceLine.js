@@ -582,6 +582,8 @@ class InvoiceLineTable extends React.Component {
             data[taxRowId].markupAmount = customerTaxAmountLine[taxRowId].MarkupAmount;
             data[taxRowId].markupTax = customerTaxAmountLine[taxRowId].MarkupTax;
             this.setState({data: data});
+            if(this.props.invoiceForm.type==='edit')
+                this.setState({bAllowAlertReduction: true});
         }
     };
 
@@ -800,7 +802,7 @@ class InvoiceLineTable extends React.Component {
             this.setState({bTaxAlert: true});
             return;
         }
-        if(this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(row.tax)!==0 &&
+        if(this.state.bAllowAlertReduction && this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(row.tax)!==0 &&
             row.tax!==this.props.customerTaxAmountLine[row.id].TotalTaxAmount)
         {
             this.setState({bTaxAlertReduction: true});
@@ -808,6 +810,7 @@ class InvoiceLineTable extends React.Component {
             data[row.id].tax = this.props.customerTaxAmountLine[row.id].TotalTaxAmount;
             this.setState({data: data});
         }
+        if(name==='tax') this.setState({bAllowAlertReduction: true})
     };
 
     isDisable = row =>{
