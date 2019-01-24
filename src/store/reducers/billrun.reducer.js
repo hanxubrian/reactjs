@@ -9,6 +9,7 @@ const initialState = {
     bLoadedBillruns         : false,
     billruncreate           : null,
     loadingstatus           : false,
+    billrunstatus           : 10,
 };
 
 
@@ -33,20 +34,20 @@ const billruns = function(state = initialState, action) {
             middb.unshift(action.payload.Data);
             // console.log("#########middb",middb);
             return {
-                ...state,billruncreate: action.payload,loadingstatus: false,
+                ...state,billruncreate: action.payload,loadingstatus: false,billrunstatus:200,
 
             }
         }
         case Actions.CREATE_BILLRUN_START:
         {
             return {
-                ...state,loadingstatus: true
+                ...state,loadingstatus: true,billrunstatus:100,
             }
         }
         case Actions.CREATE_BILLRUN_FAILD:
         {
             return {
-                ...state,loadingstatus: false
+                ...state,loadingstatus: false,billrunstatus:400,
             }
         }
         case Actions.GET_ALL_BILLRUN_START:

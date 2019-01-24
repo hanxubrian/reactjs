@@ -23,7 +23,7 @@ import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import  {CircularProgress} from '@material-ui/core';
+import  {CircularProgress,LinearProgress} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, TimePicker, DatePicker } from 'material-ui-pickers';
@@ -134,6 +134,9 @@ const styles = theme => ({
         margin: theme.spacing.unit * 2,
     },
 });
+const fakeEvent = {
+    stopPropagation: () => false
+}
 
 class BillRunDialog extends Component {
     state = {
@@ -144,7 +147,11 @@ class BillRunDialog extends Component {
         regionId                : null,
         billruns                : null,
         auth                    : null,
+        completed               : 0,
+        statusMSG               : 10,
+
     };
+
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.props.billruns && this.props.billruns != null && JSON.stringify(prevProps.billruns)!==JSON.stringify(this.props.billruns)){
             this.setState({billruns: this.props.billruns});
@@ -152,9 +159,21 @@ class BillRunDialog extends Component {
         if(this.props.auth && this.props.auth != null && JSON.stringify(prevProps.auth)!==JSON.stringify(this.props.auth)){
             this.setState({auth: this.props.auth});
         }
+        if(this.props.loading ===false && prevProps.loading ===true && this.state.statusMSG===200){
+            if(this.props.billstatus===400){
+                this.setState({statusMSG:10});
+                this.errormessage();
+            }
+            else if(this.props.billstatus===200){
+                this.setState({statusMSG:10});
+                this.successmesssage();
+            }
+
+        }
     }
     componentDidMount() {
-        this.props.onRef(this)
+        this.props.onRef(this);
+        this.timer = setInterval(this.progress, 500);
     }
     componentWillUnmount() {
         this.props.onRef(undefined)
@@ -192,7 +211,32 @@ class BillRunDialog extends Component {
         this.setState({message:e.target.value})
 
     }
+    successmesssage=()=>{
+        this.props.showMessage({
+            message     : 'Created New Bill Run Success!!!',//text or html
+            autoHideDuration: 6000,//ms
+            anchorOrigin: {
+                vertical  : 'top',//top bottom
+                horizontal: 'right'//left center right
+            },
+            variant: 'success'//success error info warning null
+        });
+    }
+    errormessage=()=>{
+        this.props.showMessage({
+            message     : "Error!!!We can't create New Bill Run",//text or html
+            autoHideDuration: 6000,//ms
+            anchorOrigin: {
+                vertical  : 'top',//top bottom
+                horizontal: 'right'//left center right
+            },
+            variant: 'error'//success error info warning null
+        });
+    }
     billrun=()=>{
+
+        // e.stopPropagation();
+        // e.nativeEvent.stopImmediatePropagation();
         // console.log("this.state.auth",this.props.auth);
         if(this.props.auth && this.props.auth !==null){
             let date = this.state.selectedDate;
@@ -201,11 +245,11 @@ class BillRunDialog extends Component {
             let user = this.props.auth.firstName+ this.props.auth.lastName;
             let userid   = this.props.auth.UserId;
             let regionid = this.props.auth.defaultRegionId;
-            console.log("userid==",userid);
-            console.log("regionid==",regionid);
-            console.log("year==",year);
-            console.log("month==",month);
-            console.log("user==",user);
+            // console.log("userid==",userid);
+            // console.log("regionid==",regionid);
+            // console.log("year==",year);
+            // console.log("month==",month);
+            // console.log("user==",user);
             if(userid && userid != null && regionid && regionid != null && year && year != null && month && month !=null ){
                 let getres = this.props.createbillrun(
                     regionid,
@@ -215,24 +259,42 @@ class BillRunDialog extends Component {
                     userid,
                     this.state.message
                 );
+                this.setState({statusMSG:200});
                 //RegionId, Year ,Month,User, UserId,Message
-                console.log("getres====================",getres);
+                // console.log("getres====================",getres);
             }
         }
 
 
     }
+    progress = () => {
+        const {completed} = this.state;
+        if ( completed === 100 )
+        {
+            this.setState({completed: 0});
+        }
+        else
+        {
+            const diff = Math.random() * 10;
+            this.setState({completed: Math.min(completed + diff, 100)});
+        }
+    };
+    test=()=>{
+        console.log("GGGG");
+    }
     render() {
 
-        const { classes,loading } = this.props;
+        const { classes,loading ,billstatus} = this.props;
         const { selectedDate ,auth,billruns} = this.state;
         return (
             <div>
                 {loading && loading !==null && (
                     <div className={classes.overlay}>
                         <CircularProgress className={classes.progress} color="secondary"  />
+
                     </div>
                 )}
+
 
                 <Dialog
                     onClose={this.handleClose}
@@ -299,17 +361,21 @@ class BillRunDialog extends Component {
                                 onChange={this.onchangeMessage}
                             />
                         </div>
-
-
-
                     </DialogContent>
                     <DialogActions>
+                        {/*{1 && (*/}
+                            {/*<div style={{flexGrow: 1}}>*/}
+                                {/*<LinearProgress color="secondary" variant="determinate" value={this.state.completed}/>*/}
+                            {/*</div>*/}
+
+                        {/*)}*/}
                         <Button variant="contained"  style={{width: "150px",
                             marginRight: "50px",
                             marginBottom: "20px",
                             marginTop: "20px"}} onClick={this.billrun} color="primary">
                             Run
                         </Button>
+
                     </DialogActions>
                 </Dialog>
             </div>
@@ -325,17 +391,19 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         createbillrun: Actions.createbillrun,
-
+        showMessage: Actions.showMessage,
+        hideMessage: Actions.hideMessage,
     }, dispatch);
 }
 
 function mapStateToProps({invoices, auth,billruns})
 {
     return {
-        invoices: invoices.invoicesDB,
-        billruns: billruns.billruncreate,
-        loading : billruns.loadingstatus,
-        auth    : auth.login,
+        invoices        : invoices.invoicesDB,
+        billruns        : billruns.billruncreate,
+        loading         : billruns.loadingstatus,
+        auth            : auth.login,
+        billstatus      : billruns.billrunstatus,
     }
 }
 

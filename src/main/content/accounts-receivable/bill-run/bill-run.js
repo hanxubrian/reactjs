@@ -399,6 +399,9 @@ class BillRun extends Component {
         this.setState({startDate: date});
         this.setState({endDate: date });
     };
+    openEditContactDialog=(rowinfo)=>{
+        console.log("rowinfo",rowinfo);
+    }
     render()
     {
         const {classes} = this.props;
@@ -528,8 +531,8 @@ class BillRun extends Component {
                                             onClick  : (e, handleOriginal) => {
                                                 if ( rowInfo )
                                                 {
-                                                    alert('ok');
-                                                    // openEditContactDialog(rowInfo.original);
+                                                    // alert('ok');
+                                                    this.openEditContactDialog(rowInfo.original);
                                                 }
                                             }
                                         }

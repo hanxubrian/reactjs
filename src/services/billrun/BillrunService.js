@@ -57,7 +57,7 @@ class BillrunService {
 
         }
         return new Promise((resolve, reject) => {
-            axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/billrunlist`,data)
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/billrun/list`,data)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);
