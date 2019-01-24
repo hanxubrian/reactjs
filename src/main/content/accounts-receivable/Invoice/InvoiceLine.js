@@ -700,6 +700,11 @@ class InvoiceLineTable extends React.Component {
         let fline = createFranchisee(n.id, n.franchisees.length);
         n.franchisees = [...n.franchisees, fline];
 
+        if(n.extended>0) {
+            let d_amount = n.extended/n.franchisees.length;
+            n.franchisees.forEach(f=>f.amount = d_amount)
+        }
+
         let newData = data.map(record=>{
             if(record.id===n.id)
                 record = n;
