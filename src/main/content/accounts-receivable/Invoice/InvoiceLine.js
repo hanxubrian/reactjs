@@ -924,6 +924,11 @@ class InvoiceLineTable extends React.Component {
             label: suggestion.Name
         }));
 
+        let bReadonly = false;
+
+        if(this.props.invoiceForm.customer!==null && this.props.invoiceForm.customer.TaxExcempt!=='N')
+            bReadonly = true;
+
         return (
             <Paper className={classNames(classes.root)}>
                 <div className={classNames(classes.tableWrapper, "flex flex-col h-full")}>
@@ -1162,6 +1167,7 @@ class InvoiceLineTable extends React.Component {
                                                         classes: {
                                                             input: classes.input,
                                                         },
+                                                        readOnly: bReadonly,
                                                     }}
                                                 />
                                             }

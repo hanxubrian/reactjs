@@ -36,6 +36,7 @@ class invoiceService {
             "Month": moment().month(),
             "Year": moment().year()
         };
+        console.log('invoice service parms = ', JSON.stringify(data));
         return new Promise((resolve, reject) => {
             axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/InvoiceList`,data)
                 .then( res => {

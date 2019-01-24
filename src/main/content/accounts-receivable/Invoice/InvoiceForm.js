@@ -197,17 +197,17 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
     return (
         <MenuItem selected={isHighlighted} component="div">
             {/*<div>*/}
-                {/*{parts.map((part, index) => {*/}
-                    {/*return part.highlight ? (*/}
-                        {/*<span key={String(index)} style={{ fontWeight: 700 }}>*/}
-              {/*{part.text}*/}
+            {/*{parts.map((part, index) => {*/}
+            {/*return part.highlight ? (*/}
+            {/*<span key={String(index)} style={{ fontWeight: 700 }}>*/}
+            {/*{part.text}*/}
             {/*</span>*/}
-                    {/*) : (*/}
-                        {/*<strong key={String(index)} style={{ fontWeight: 300 }}>*/}
-                            {/*{part.text} - Status: {statusName}*/}
-                        {/*</strong>*/}
-                    {/*);*/}
-                {/*})}*/}
+            {/*) : (*/}
+            {/*<strong key={String(index)} style={{ fontWeight: 300 }}>*/}
+            {/*{part.text} - Status: {statusName}*/}
+            {/*</strong>*/}
+            {/*);*/}
+            {/*})}*/}
             {/*</div>*/}
             <span>{suggestion.CustomerName} - {suggestion.CustomerNo} - <strong>{statusName}</strong></span>
         </MenuItem>
@@ -612,7 +612,7 @@ class InvoiceForm extends Component {
                 Inv_No: inv_no,
                 Apply_to: 'Apply To',
                 CustomerId: this.state.selectedCustomer.CustomerId,
-                CustomerNumber: this.state.PO_number,
+                CustomerNo: this.state.selectedCustomer.CustomerNo,
                 CustomerName: this.state.selectedCustomer.CustomerName,
                 PeriodId: this.props.invoices.PeriodId[0],
                 PeriodMonth: moment(this.state.period).month()+1,
@@ -637,13 +637,14 @@ class InvoiceForm extends Component {
                 Fees: this.state.selectedCustomer.Fees,
                 Items: items
             };
+            console.log('result=', JSON.stringify(result));
             this.props.addInvoice(this.props.regionId, result);
         }
         else {
             result = {
                 ...this.props.invoices.invoiceDetail.Data,
                 CustomerId: this.state.selectedCustomer.CustomerId,
-                CustomerNumber: this.state.PO_number,
+                CustomerNo: this.state.selectedCustomer.CustomerNo,
                 CustomerName: this.state.selectedCustomer.CustomerName,
                 PeriodId: this.props.invoices.PeriodId[0],
                 PeriodMonth: moment(this.state.period).month()+1,
@@ -700,29 +701,42 @@ class InvoiceForm extends Component {
         let bLineAmount = true;
         let bLineItemDescription = true;
         let bFrachiseeAmount = true;
+        let bLineFranchAmountEqual = true;
 
         if(data.length) {
             _.forEach(data, line=>{
-               if(line.amount==='' || parseFloat(line.amount)===0) {
-                   bLineAmount = false;
-                   return false
-               }
-
+                if(line.amount==='' || parseFloat(line.amount)===0) {
+                    bLineAmount = false;
+                    return false
+                }
                 if(line.description==='') {
                     bLineItemDescription = false;
                     return false
                 }
 
-               let franchisees = line.franchisees;
-               if(franchisees.length>0) {
-                   _.forEach(franchisees, f=>{
-                       if(f.amount===0) {
-                           bFrachiseeAmount = false;
-                           return false;
-                       }
-                   })
-               }
-               if(!bFrachiseeAmount) return false;
+                let franchisees = line.franchisees;
+                if(franchisees.length>0) {
+                    _.forEach(franchisees, f=>{
+                        if(f.amount===0) {
+                            bFrachiseeAmount = false;
+                            return false;
+                        }
+                    })
+                }
+                if(!bFrachiseeAmount) return false;
+
+                let lineAmount = line.amount;
+                let franchAmount = 0;
+
+                if(franchisees.length>0) {
+                    _.forEach(franchisees, f=>{
+                        franchAmount += f.amount;
+                    })
+                }
+                if(lineAmount!==franchAmount){
+                    bLineFranchAmountEqual = false;
+                    return false
+                }
             });
 
             if(!bLineAmount) {
@@ -739,6 +753,12 @@ class InvoiceForm extends Component {
             }
             if(!bFrachiseeAmount) {
                 this.setState({snackMessage: 'Please add distribution amount(s) to your invoice before saving!'});
+                this.setState({openSnack: true});
+
+                return false;
+            }
+            if(!bLineFranchAmountEqual) {
+                this.setState({snackMessage: 'Distribution Amount needs to be Equal to the Invoice Line Amount.'});
                 this.setState({openSnack: true});
 
                 return false;
@@ -1160,6 +1180,8 @@ class InvoiceForm extends Component {
                                 margin="dense"
                                 variant="outlined"
                                 fullWidth
+                                multiline
+                                rows={2}
                                 InputLabelProps = {{
                                     shrink: true,
                                     classes: {outlined: classes.label}
@@ -1170,6 +1192,7 @@ class InvoiceForm extends Component {
                                     },
                                 }}
                                 inputRef={this.focusDescriptionInputField}
+                                required
                             />
                         </div>
                         <Grid container className={classNames(classes.formControl)} style={{flex: "9999 1 0"}}>
