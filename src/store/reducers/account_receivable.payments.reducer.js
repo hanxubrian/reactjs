@@ -5,14 +5,16 @@ import { persistReducer } from 'redux-persist';
 
 const initialState = {
     ACC_payments: [],
-    bACC_fechStart: true,
+    bACC_fechStart: false,
     getPaymentsParam: {
         searchText: "",
         fromDate: "01/22/2019",
         toDate: "01/22/2019",
     },
     bOpenedSummaryPanel: false,
-    bOpenedFilterPanel: false,
+	bOpenedFilterPanel: false,
+	
+	searchText:"",
 };
 
 
@@ -26,7 +28,13 @@ const accountReceivablePayments = function(state = initialState, action) {
                 ACC_payments: action.payload.Data,
                 bACC_fechStart: false
             }
-        }
+		}
+		case Actions.GET_ALL_RECEIVABLE_PAYMENTS_START: {
+			return{
+                ...state,
+                bACC_fechStart: true
+            }
+		}
         case Actions.ACCOUNT_RECEIVABLE_PAYMENTS_TOGGLE_FILTER_PANEL:
         {
             return {
@@ -38,7 +46,12 @@ const accountReceivablePayments = function(state = initialState, action) {
             return {
                 ...state, bOpenedSummaryPanel: !state.bOpenedSummaryPanel
             }
-        }
+		}
+		case Actions.APPLY_SEARCH_TEXT_ARP: {
+			return {
+				...state, searchText: action.payload
+			}
+		}
         default:
         {
             return state;

@@ -544,9 +544,17 @@ class PaymentsListContent extends Component {
 
 		if (nextProps.payments !== this.props.payments) {
 			this.setState({
-				rows: nextProps.payments.Regions === undefined ? [] : nextProps.payments.Regions[0].Payments,
+				rows: this.getRowData(nextProps),
 				expandedGroups: nextProps.payments.Regions === undefined ? [] : [...new Set(nextProps.payments.Regions[0].Payments.map(x => x.CustomerName))],
 			})
+		}
+
+		if(nextProps.regionId != this.props.regionId) {
+			this.props.getAccountReceivablePayments(
+				nextProps.regionId,
+				nextProps.getPaymentsParam.fromDate,
+				nextProps.getPaymentsParam.toDate,
+				nextProps.getPaymentsParam.searchText);
 		}
 
 		// if (this.props.locationFilterValue !== nextProps.locationFilterValue) {
@@ -556,6 +564,7 @@ class PaymentsListContent extends Component {
 		// }
 
 		if (nextProps.searchText !== this.props.searchText) {
+			console.log("------search text changed-------",nextProps.searchText)
 			this.search(nextProps.searchText);
 		}
 	} // deprecate
@@ -563,24 +572,21 @@ class PaymentsListContent extends Component {
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		console.log("componentDidUpdate", "CustomerListContent.js", this.props.locationFilterValue, this.props.customers);
 	}
-
+	getRowData(props) {
+		return props.payments.Regions === undefined ? [] : props.payments.Regions[0].Payments
+	}
 	search(val) {
 		console.log("---------search---------", val);
 		val = val.toLowerCase();
 		if (val === '') {
-			this.setState({ rows: [...this.state.data] });
+			this.setState({ rows: this.getRowData(this.props) });
 			return;
 		}
-		const temp = this.state.data.filter(d => {
-			return (d.CustomerNo && d.CustomerNo.toString().toLowerCase().indexOf(val) !== -1) ||
+		const temp = this.getRowData(this.props).filter(d => {
+			return (d.CheckNo && d.CheckNo.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.CustomerName && d.CustomerName.toString().toLowerCase().indexOf(val) !== -1) ||
-				(d.Address && d.Address.toString().toLowerCase().indexOf(val) !== -1) ||
-				(d.City && d.City.toString().toLowerCase().indexOf(val) !== -1) ||
-				(d.StateName && d.StateName.toString().toLowerCase().indexOf(val) !== -1) ||
-				(d.PostalCode && d.PostalCode.toString().toLowerCase().indexOf(val) !== -1) ||
-				(d.Phone && d.Phone.toString().toLowerCase().indexOf(val) !== -1) ||
-				(d.AccountTypeListName && d.AccountTypeListName.toString().toLowerCase().indexOf(val) !== -1) ||
-				(d.Amount && d.Amount.toString().toLowerCase().indexOf(val) !== -1)
+				(d.CustomerNo && d.CustomerNo.toString().toLowerCase().indexOf(val) !== -1) ||
+				(d.InvoiceNo && d.InvoiceNo.toString().toLowerCase().indexOf(val) !== -1)
 		});
 		this.setState({ rows: [...temp] });
 	}
@@ -595,11 +601,11 @@ class PaymentsListContent extends Component {
 			"rows": this.props.payments.Regions === undefined ? [] : this.props.payments.Regions[0].Payments,
 			expandedGroups: this.props.payments.Regions === undefined ? [] : [...new Set(this.props.payments.Regions[0].Payments.map(x => x.CustomerName))],
 		});
-		this.props.getAccountReceivablePayments(
-			this.props.regionId,
-			this.props.getPaymentsParam.fromDate,
-			this.props.getPaymentsParam.toDate,
-			this.props.getPaymentsParam.searchText);
+		// this.props.getAccountReceivablePayments(
+		// 	this.props.regionId,
+		// 	this.props.getPaymentsParam.fromDate,
+		// 	this.props.getPaymentsParam.toDate,
+		// 	this.props.getPaymentsParam.searchText);
 		this.timer = null;
 	}
 	componentWillUnmount() {
@@ -808,7 +814,9 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 	return {
 		payments: accountReceivablePayments.ACC_payments,
 		regionId: auth.login.defaultRegionId,
-		getPaymentsParam: accountReceivablePayments.getPaymentsParam
+		getPaymentsParam: accountReceivablePayments.getPaymentsParam,
+
+		searchText: accountReceivablePayments.searchText,
 	}
 }
 

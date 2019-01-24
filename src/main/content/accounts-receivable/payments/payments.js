@@ -22,7 +22,8 @@ import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 
 //Custom components
-import InvoiceListContent from "./paymentsListContent"
+import PaymentListContent from "./paymentsListContent"
+import PaymentSearchBar from "./PaymentSearchBar"
 import InvoiceForm from "./paymentsForm"
 import SummaryPanel from './summaryPanel';
 import FilterPanel from './filterPanel';
@@ -36,7 +37,7 @@ import * as Actions from 'store/actions';
 import "react-table/react-table.css";
 import _ from 'lodash';
 import classNames from 'classnames';
-
+import { FusePageCustomSidebarScroll } from '@fuse';
 const headerHeight = 80;
 
 const styles = theme => ({
@@ -425,7 +426,7 @@ class Payments extends Component {
 		const { selection } = this.state;
 		return (
 			<React.Fragment>
-				<FusePageCustom
+				<FusePageCustomSidebarScroll
 					classes={{
 						root: classNames(classes.layoutRoot),
 						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': summaryState }),
@@ -531,7 +532,7 @@ class Payments extends Component {
 						<div className="flex-1 flex-col absolute w-full h-full">
 							{(this.state.temp && !invoiceForm.props.open) && (
 								<div className={classNames("flex flex-col h-full")}>
-									<div className="flex flex-row items-center p-12">
+									{/* <div className="flex flex-row items-center p-12">
 										<div className="flex justify-start items-center">
 											<Hidden smDown>
 												<Button
@@ -592,8 +593,11 @@ class Payments extends Component {
 												</Button>
 											</Hidden>
 										</div>
-									</div>
-									<InvoiceListContent data={this.state.temp} />
+									</div> */}
+
+									<PaymentSearchBar />
+									{/* <PaymentListContent data={this.state.temp} /> */}
+									<PaymentListContent />
 								</div>
 							)}
 							{(this.state.temp && invoiceForm.props.open) && (
@@ -638,10 +642,11 @@ class Payments extends Component {
 						this.pageLayout = instance;
 					}}
 				>
-				</FusePageCustom>
+				</FusePageCustomSidebarScroll>
 				{(this.props.bACC_fechStart) && (
-					<div className={classes.overlay}>
+					<div className={classNames(classes.overlay, "flex-col")}>
 						<CircularProgress className={classes.progress} color="secondary" />
+						<Typography variant="body2" color="primary">Fetching payments info...</Typography>
 					</div>
 				)}
 			</React.Fragment>
