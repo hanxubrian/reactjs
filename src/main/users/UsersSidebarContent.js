@@ -129,14 +129,12 @@ class UsersSidebarContent extends Component {
                         </div>
                <List>
                             <ListItem
-                                activeClassName="active"
                                 className={classes.listItem}
                             >
                                 <Icon className="list-item-icon text-20 bold" color="action">group</Icon>
                                 <ListItemText className="truncate text-18 bold pr-0" primary="Filter by Group" disableTypography={true}/>
                             </ListItem>
                             <ListItem
-                                activeClassName="active"
                                 className={classes.listItem}
                             >
                                 <TextField
@@ -162,14 +160,12 @@ class UsersSidebarContent extends Component {
                                 </TextField>
                             </ListItem>
                             <ListItem
-                                activeClassName="active"
                                 className={classNames(classes.listItem,classes.marginTopItem)}
                             >
                                 <Icon className="list-item-icon text-20 bold" color="action">location_city</Icon>
                                 <ListItemText className="truncate text-18 bold pr-0" primary="Filter by Region" disableTypography={true}/>
                             </ListItem>
                             <ListItem
-                                activeClassName="active"
                                 className={classes.listItem}
                             >
                                 <TextField
@@ -195,14 +191,12 @@ class UsersSidebarContent extends Component {
                                 </TextField>
                             </ListItem>
                             <ListItem
-                                activeClassName="active"
                                 className={classNames(classes.listItem,classes.marginTopItem)}
                             >
                                 <Icon className="list-item-icon text-20 bold" color="action">person_pin_circle</Icon>
                                 <ListItemText className="truncate pr-0 text-18 bold" primary="Filter by Role" disableTypography={true}/>
                             </ListItem>
                             <ListItem
-                                activeClassName="active"
                                 className={classNames(classes.listItem,classes.marginBottomItem)}
                             >
                                 <TextField

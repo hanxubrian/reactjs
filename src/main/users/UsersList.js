@@ -197,7 +197,7 @@ class UsersList extends Component {
 
         return (
             <div >
-            <FuseAnimate animation="transition.slideUpIn" delay={300}>
+            <FuseAnimate className={ classes.usersLayoutRoot } animation="transition.slideUpIn" delay={300}>
                 <ReactTable
                     className={classNames(classes.root, "-striped -highlight border-0")}
                     getTrProps={(state, rowInfo, column) => {
@@ -370,7 +370,7 @@ class UsersList extends Component {
                             )
                         }
                     ]}
-                    defaultPageSize={10}
+                    defaultPageSize={8}
                     noDataText="No contacts found"
                 />
 

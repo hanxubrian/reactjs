@@ -11,6 +11,8 @@ import {connect} from 'react-redux';
 import classNames from 'classnames';
 import {FuseAnimate, FuseSelectedTheme} from '@fuse';
 
+const headerHeight = 80;
+
 const styles = theme => ({
     root: {},
     sideButton          : {
@@ -27,13 +29,38 @@ const styles = theme => ({
             width: '100%'
         }
     },
+    layoutSidebarHeader: {
+        height   : headerHeight,
+        minHeight: headerHeight,
+        display: 'flex',
+        alignItems: 'center',
+        backgroundColor: theme.palette.secondary.main,
+    }
 });
 
 class UsersHeader extends Component {
 
+    state = {
+        openUsersFormStatus: false
+    }
+
+    componentWillMount() {
+        this.setState({
+            "openUsersFormStatus": this.props.openUsersFormStatus
+        })
+    }
+
+    toggleForm = (param) =>(event) => {
+        this.props.openUsersForm(param);
+        this.setState({
+            "openUsersFormStatus": param
+        })
+    }
+
     render()
     {
-        const {classes, setSearchText, searchText, pageLayout,openNewContactDialog } = this.props;
+        const {classes, setSearchText, searchText, pageLayout } = this.props;
+        const {openUsersFormStatus} = this.state;
         return (
 
         <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
@@ -70,16 +97,30 @@ class UsersHeader extends Component {
                             </div>
                         </div>
                         <div className="flex w-full items-center justify-end">
+                            {! openUsersFormStatus && (
                             <FuseAnimate animation="transition.expandIn" delay={300}>
-                                <Fab
-                                    color="secondary"
-                                    aria-label="add-user"
-                                    className={classNames(classes.sideButton, "mr-12")}
-                                    onClick={openNewContactDialog}
-                                >
-                                    <Icon>person_add</Icon>
-                                </Fab>
+                                    <Fab
+                                        color="secondary"
+                                        aria-label="add-user"
+                                        className={classNames(classes.sideButton, "mr-12")}
+                                        onClick={this.toggleForm(true)}
+                                    >
+                                        <Icon>person_add</Icon>
+                                    </Fab>
                             </FuseAnimate>
+                            )}
+                            { openUsersFormStatus && (
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <Fab
+                                        color="secondary"
+                                        aria-label="close-user-form"
+                                        className={classNames(classes.sideButton, "mr-12")}
+                                        onClick={this.toggleForm(false)}
+                                    >
+                                        <Icon>close</Icon>
+                                    </Fab>
+                                </FuseAnimate>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -93,14 +134,15 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         setSearchText: Actions.setSearchText,
-        openNewContactDialog: Actions.openNewContactDialog
+        openUsersForm : Actions.openUsersForm
     }, dispatch);
 }
 
-function mapStateToProps({contactsApp})
+function mapStateToProps({contactsApp, usersApp})
 {
     return {
-        searchText: contactsApp.contacts.searchText
+        searchText     : contactsApp.contacts.searchText,
+        openUsersFormStatus: usersApp.users.openUsersFormStatus
     }
 }
 
