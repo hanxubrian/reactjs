@@ -17,12 +17,13 @@ class paymentsService {
      * @param SearchText
      * @returns {Promise<any>}
      */
-    getAccountReceivablePaymentsList = (RegionId, FromDate,ToDate, SearchText) => {
+    getAccountReceivablePaymentsList = (RegionId, FromDate,ToDate, SearchText, Status) => {
         const data = {
             "RegionId": RegionId,
             "FromDate": FromDate,
             "ToDate": ToDate,
-            "SearchText": SearchText
+			"SearchText": SearchText,
+			"Status": Status,
         }
         return new Promise((resolve, reject) => {
             axios_instance.post(`${BASE_MONGO_API_URL}/v1/Payment/PaymentList`, data)

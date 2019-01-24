@@ -8,7 +8,7 @@ export const ACCOUNT_RECEIVABLE_PAYMENTS_TOGGLE_SUMMARY_PANEL = "[ACCOUNT_RECEIV
 export const GET_ALL_RECEIVABLE_PAYMENTS_START = "[ACCOUNT_RECEIVABLE PAYMENTS] GET_ALL_RECEIVABLE_PAYMENTS_START";
 export const APPLY_SEARCH_TEXT_ARP = "[ARP] APPLY_SEARCH_TEXT_ARP";
 
-export function getAccountReceivablePaymentsList(RegionId, FromDate,ToDate, SearchText) {
+export function getAccountReceivablePaymentsList(RegionId, FromDate,ToDate, SearchText, Status) {
 
     RegionId = RegionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [RegionId];
 
@@ -19,7 +19,7 @@ export function getAccountReceivablePaymentsList(RegionId, FromDate,ToDate, Sear
 		});
 
         (async () => {
-            let paymentsList = await invoicePaymentsService.getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText);
+            let paymentsList = await invoicePaymentsService.getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status);
             dispatch({
                 type: GET_ALL_RECEIVABLE_PAYMENTS,
                 payload: paymentsList

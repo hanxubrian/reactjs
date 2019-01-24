@@ -373,15 +373,25 @@ class PaymentsListContent extends Component {
 				//     groupingEnabled: false,
 				// },
 				{
-					title: "Name",
-					name: "CustomerName",
-					columnName: "CustomerName",
+					title: "C.Name",
+					name: "CustomerNameNo",
+					columnName: "CustomerNameNo",
 					width: 150,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: true,
 				},
+				// {
+				// 	title: "C.Number",
+				// 	name: "CustomerNo",
+				// 	columnName: "CustomerNo",
+				// 	width: 120,
+				// 	wordWrapEnabled: true,
+				// 	sortingEnabled: true,
+				// 	filteringEnabled: true,
+				// 	groupingEnabled: true,
+				// },
 				{
 					title: "Check No",
 					name: "CheckNo",
@@ -433,7 +443,7 @@ class PaymentsListContent extends Component {
 					title: "Payment Amount",
 					name: "PaymentAmount",
 					columnName: 'PaymentAmount',
-					width: 120,
+					width: 140,
 					align: 'right',
 					wordWrapEnabled: true,
 					sortingEnabled: true,
@@ -457,7 +467,7 @@ class PaymentsListContent extends Component {
 					title: "Check Amount",
 					name: "CheckAmount",
 					columnName: 'CheckAmount',
-					width: 120,
+					width: 140,
 					align: 'right',
 					wordWrapEnabled: true,
 					sortingEnabled: true,
@@ -467,7 +477,7 @@ class PaymentsListContent extends Component {
 				}
 			],
 			sorting: [
-				{ columnName: 'CustomerNo', direction: 'asc' }
+				{ columnName: 'CustomerNo', direction: 'asc' },
 			],
 			editingColumnExtensions: [],
 			currencyColumns: [
@@ -477,8 +487,13 @@ class PaymentsListContent extends Component {
 				'Phone'
 			],
 			dateColumns: ['saleDate'],
-			groupingColumns: [{ columnName: 'CustomerName' }],
-			expandedGroups: ['CustomerName'],
+			groupingColumns: [
+				// { columnName: 'CustomerName' },
+				// { columnName: 'CustomerNo' },
+				{ columnName: 'CustomerNameNo' },
+
+			],
+			expandedGroups: ['CustomerNameNo'],
 			pageSize: 20,
 			pageSizes: [10, 20, 30, 50, 100],
 			amountFilterOperations: ['equal', 'notEqual', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual'],
@@ -545,16 +560,25 @@ class PaymentsListContent extends Component {
 		if (nextProps.payments !== this.props.payments) {
 			this.setState({
 				rows: this.getRowData(nextProps),
-				expandedGroups: nextProps.payments.Regions === undefined ? [] : [...new Set(nextProps.payments.Regions[0].Payments.map(x => x.CustomerName))],
+				expandedGroups: [...new Set(this.getRowData(nextProps).map(x => x.CustomerNameNo))],
 			})
 		}
 
-		if(nextProps.regionId != this.props.regionId) {
-			this.props.getAccountReceivablePayments(
+		if (nextProps.regionId != this.props.regionId) {
+			this.props.getAccountReceivablePaymentsList(
 				nextProps.regionId,
 				nextProps.getPaymentsParam.fromDate,
 				nextProps.getPaymentsParam.toDate,
-				nextProps.getPaymentsParam.searchText);
+				"",
+				nextProps.status);
+		}
+		if (nextProps.status != this.props.status) {
+			this.props.getAccountReceivablePaymentsList(
+				nextProps.regionId,
+				nextProps.getPaymentsParam.fromDate,
+				nextProps.getPaymentsParam.toDate,
+				"",
+				nextProps.status);
 		}
 
 		// if (this.props.locationFilterValue !== nextProps.locationFilterValue) {
@@ -564,7 +588,7 @@ class PaymentsListContent extends Component {
 		// }
 
 		if (nextProps.searchText !== this.props.searchText) {
-			console.log("------search text changed-------",nextProps.searchText)
+			console.log("------search text changed-------", nextProps.searchText)
 			this.search(nextProps.searchText);
 		}
 	} // deprecate
@@ -573,7 +597,16 @@ class PaymentsListContent extends Component {
 		console.log("componentDidUpdate", "CustomerListContent.js", this.props.locationFilterValue, this.props.customers);
 	}
 	getRowData(props) {
-		return props.payments.Regions === undefined ? [] : props.payments.Regions[0].Payments
+		if (props.payments.Regions === undefined)
+			return [];
+		let res = [...props.payments.Regions[0].Payments]
+
+		res.forEach(x=>{
+			x.CustomerNameNo = `${x.CustomerName} - ${x.CustomerNo}`;
+		})
+		console.log("getRowData", res);
+
+		return res;
 	}
 	search(val) {
 		console.log("---------search---------", val);
@@ -598,10 +631,10 @@ class PaymentsListContent extends Component {
 	componentWillMount() {
 		this.setState({
 			"paymentsParam": this.props.getPaymentsParam,
-			"rows": this.props.payments.Regions === undefined ? [] : this.props.payments.Regions[0].Payments,
-			expandedGroups: this.props.payments.Regions === undefined ? [] : [...new Set(this.props.payments.Regions[0].Payments.map(x => x.CustomerName))],
+			"rows": this.getRowData(this.props),
+			expandedGroups: [...new Set(this.getRowData(this.props).map(x => x.CustomerNameNo))],
 		});
-		// this.props.getAccountReceivablePayments(
+		// this.props.getAccountReceivablePaymentsList(
 		// 	this.props.regionId,
 		// 	this.props.getPaymentsParam.fromDate,
 		// 	this.props.getPaymentsParam.toDate,
@@ -677,6 +710,14 @@ class PaymentsListContent extends Component {
 	expandedGroupsChange = (expandedGroups) => {
 		this.setState({ expandedGroups });
 	};
+
+	GroupCellContent = ({ column, row }) => (
+		<span>
+			{/* {column.title} */}
+			<strong>{row.value}</strong>
+		</span>
+	);
+
 	render() {
 		const { classes } = this.props;
 
@@ -695,7 +736,7 @@ class PaymentsListContent extends Component {
 			groupingColumns,
 			expandedGroups,
 		} = this.state;
-		console.log('payments------------', this.props.payments.Regions === undefined ? [] : this.props.payments.Regions[0].Payments);
+		console.log('payments------------', rows);
 		return (
 			<Fragment>
 				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
@@ -714,12 +755,12 @@ class PaymentsListContent extends Component {
 
 							<PagingPanel pageSizes={pageSizes} />
 
-							{/* <SelectionState
-                                    selection={selection}
-                                    onSelectionChange={this.changeSelection}
-                                />
+							<SelectionState
+								selection={selection}
+								onSelectionChange={this.changeSelection}
+							/>
 
-                                <IntegratedSelection /> */}
+							<IntegratedSelection />
 
 							<SortingState
 								sorting={sorting}
@@ -772,7 +813,7 @@ class PaymentsListContent extends Component {
 
 							<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
 
-							{/* <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} /> */}
+							<TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
 
 							<TableHeaderRow showSortingControls />
 
@@ -786,14 +827,14 @@ class PaymentsListContent extends Component {
 											<this.TableRow
 												{...params}
 												selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
-												// onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
+											// onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
 											/>
 										)}
 									</TemplateConnector>
 								)}
 							</Template>
 							{/* <Toolbar />					 */}
-							<TableGroupRow />
+							<TableGroupRow contentComponent={this.GroupCellContent} />
 							{/* <GroupingPanel showSortingControls showGroupingControls /> */}
 						</Grid>
 					</div>
@@ -805,7 +846,7 @@ class PaymentsListContent extends Component {
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
-		getAccountReceivablePayments: Actions.getAccountReceivablePaymentsList,
+		getAccountReceivablePaymentsList: Actions.getAccountReceivablePaymentsList,
 		openNewInvoiceForm: Actions.openNewInvoiceForm,
 	}, dispatch);
 }
