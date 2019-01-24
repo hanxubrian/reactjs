@@ -190,6 +190,7 @@ class MainToolbar extends Component {
         pusherMSGtime           : null,
         systeunread             : 0,
         chatunread              : 0,
+        sysflage                : false,
 
     };
 
@@ -235,6 +236,21 @@ class MainToolbar extends Component {
     }
     componentDidUpdate(prevProps,prevState){
         let midflage = false;
+        if (this.state.sysflage === true){
+            setTimeout(
+                function() {
+                    this.setState({sysflage: false});
+                }
+                    .bind(this),
+                800
+            );
+        }
+        if (this.state.systeunread >0 && this.state.systeunread>prevState.systeunread){
+            this.setState({sysflage:true});
+        }
+        if (this.state.systeunread !==prevState.systeunread && this.state.systeunread<prevState.systeunread){
+            this.setState({sysflage:false});
+        }
         if(this.state.pusherMSG !== prevState.pusherMSG ){
             if(this.state.pusherMSG.user === this.props.login.UserId){
                 let PusherList =[];
@@ -250,7 +266,6 @@ class MainToolbar extends Component {
                 this.setState({unreadMSGnum:unreadNum});
                 this.setState({pusherMSGList:PusherList});
                 this.setState({systeunread:sysunread+1});
-                console.log("pusherMSG-create==1",this.state.pusherMSG);
             }
 
 
@@ -370,7 +385,7 @@ class MainToolbar extends Component {
 
     };
     systemreadmake=()=>{
-        console.log("CCCC");
+
         let M= this.state.unreadMSGnum;
         M -= this.state.systeunread;
         this.setState({unreadMSGnum:M});
@@ -387,7 +402,11 @@ class MainToolbar extends Component {
 
         return (
             <div className={classNames(classes.root, "flex flex-row")}>
-
+                {this.state.sysflage === true && (
+                    <div style={{width:'0px',height:'0px',}}>
+                        <ReactPlayer url='/assets/audios/sysmessage.mp3' playing />
+                    </div>
+                )}
                 <div className="flex flex-1">
                     <FuseShortcuts/>
                 </div>
