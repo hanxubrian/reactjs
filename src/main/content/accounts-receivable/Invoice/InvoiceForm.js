@@ -1136,7 +1136,7 @@ class InvoiceForm extends Component {
                                     <Button
                                         variant="contained"
                                         color="primary"
-                                        className={classNames(classes.button, "mr-12 hidden")}
+                                        className={classNames(classes.button, "mr-12")}
                                         onClick={() => {
                                             this.onSaveAndClose();
                                         }}
