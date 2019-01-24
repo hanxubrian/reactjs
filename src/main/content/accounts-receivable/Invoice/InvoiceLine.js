@@ -519,8 +519,8 @@ class InvoiceLineTable extends React.Component {
         if(this.state.data!==null && prevState.data!==this.state.data) {
             this.props.updateInvoiceLine(this.state.data);
         }
-        console.log('this.state.customerTaxAmountLine', this.state.customerTaxAmountLine);
-        console.log('prevState.customerTaxAmountLine', prevState.customerTaxAmountLine);
+        // console.log('this.state.customerTaxAmountLine', this.state.customerTaxAmountLine);
+        // console.log('prevState.customerTaxAmountLine', prevState.customerTaxAmountLine);
         if(JSON.stringify(this.state.customerTaxAmountLine)!== JSON.stringify(prevState.customerTaxAmountLine)){
             this.updateTaxFromLine();
         }
@@ -765,8 +765,9 @@ class InvoiceLineTable extends React.Component {
         this.setState({data: data});
     };
 
-    handleChangeInvoiceLine = (row, name) => event => {
+    handleChangeInvoiceLine =  (row, name) => event => {
         console.log('fired change event', name);
+
         const data = [...this.state.data];
         let value = event.target.value;
         if (name==='amount')  value = parseFloat(value);
@@ -1261,7 +1262,7 @@ class InvoiceLineTable extends React.Component {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
-                    <DialogTitle id="alert-dialog-title">{"Customer is not Tax Exempt"}</DialogTitle>
+                    <DialogTitle id="alert-dialog-title">{"Tax Validation"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
                             This Customer is Not Tax-Exempt but this transaction will be allowed as Tax-Exempt.

@@ -665,13 +665,6 @@ class InvoiceForm extends Component {
         this.props.invoiceForm.type === 'edit' ? this.props.closeEditInvoiceForm() : this.props.closeNewInvoiceForm();
     };
 
-    handleDueDateChange = date => {
-        this.setState({ DueDate: date});
-    };
-    handleInvoiceDateChange = date => {
-        this.setState({ InvoiceDate: date });
-    };
-
     handlePeriodChange = date => {
         this.setState({ period: date });
     };

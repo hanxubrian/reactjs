@@ -110,6 +110,7 @@ const invoices = function(state = initialState, action) {
             }
         }
         case Actions.GET_CUSTOMER_TAX_AMOUNT:{
+            console.log('== customerTaxAmountLine===', action.payload);
             return {
                 ...state, customerTaxAmountLine: {...action.payload, originalTax: action.payload.TotalTaxAmount}
             }

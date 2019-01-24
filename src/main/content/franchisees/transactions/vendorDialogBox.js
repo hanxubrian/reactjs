@@ -219,7 +219,6 @@ class VendorDialogBox extends Component {
 
     handleVendorChange = (newValue)=> {
         this.setState({vendor: newValue});
-
     };
 
     render()
