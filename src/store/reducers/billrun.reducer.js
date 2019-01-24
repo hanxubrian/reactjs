@@ -10,6 +10,7 @@ const initialState = {
     billruncreate           : null,
     loadingstatus           : false,
     billrunstatus           : 10,
+    billrundelete           : null,
 };
 
 
@@ -66,6 +67,24 @@ const billruns = function(state = initialState, action) {
         {
             return {
                 ...state,loadingstatus: false
+            }
+        }
+        case Actions.DELETE_BILLRUN_SUCCESS:
+        {
+            return {
+                ...state,billrundelete: true,loadingstatus: false,
+            }
+        }
+        case Actions.DELETE_BILLRUN_FAILD:
+        {
+            return {
+                ...state,billrundelete: false,loadingstatus: false,
+            }
+        }
+        case Actions.DELETE_BILLRUN_START:
+        {
+            return {
+                ...state,loadingstatus: true,
             }
         }
         case UserActions.USER_LOGGED_OUT:

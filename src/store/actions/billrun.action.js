@@ -17,6 +17,11 @@ export const GET_ALL_BILLRUN_SUCCESS    = "[BILL-RUNS] GET ALL BILL RUN SUCCESS"
 export const GET_ALL_BILLRUN_START      = "[BILL-RUNS] GET ALL BILL RUN START";
 export const GET_ALL_BILLRUN_FAILD      = "[BILL-RUNS] GET ALL BILL RUN FAILD";
 
+
+export const DELETE_BILLRUN_SUCCESS    = "[BILL-RUNS] DELETE BILL RUN SUCCESS";
+export const DELETE_BILLRUN_START      = "[BILL-RUNS] DELETE BILL RUN START";
+export const DELETE_BILLRUN_FAILD      = "[BILL-RUNS] DELETE BILL RUN FAILD";
+
 export function getBillruns() {
     return dispatch => {
         const request = axios.get("/api/billruns/gets");
@@ -47,6 +52,30 @@ export function getAllBillruns(RegionIds, UserIds ,isBillPeriod,BillMonth,BillYe
             } else {
                 dispatch({
                     type: GET_ALL_BILLRUN_FAILD,
+                    payload: res
+                });
+            }
+        })();
+    };
+}
+export function deleteSeletedBillRun(RegionIds, billrunNo) {
+    return (dispatch) => {
+
+        dispatch({
+            type: DELETE_BILLRUN_START,
+            payload: true
+        });
+
+        (async () => {
+            let res = await billrunService.deletebillrun(RegionIds, billrunNo);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: DELETE_BILLRUN_SUCCESS,
+                    payload: res.Data
+                });
+            } else {
+                dispatch({
+                    type: DELETE_BILLRUN_FAILD,
                     payload: res
                 });
             }

@@ -25,8 +25,8 @@ class BillrunService {
             'RegionId'              :RegionId,
             'Year'                  :Year,
             'Month'                 :Month,
-            'User'                  :User,
-            'UserId'                :UserId,
+            'CreatedBy'                  :User,
+            'CreatedById'                :UserId,
             'Message'               :Message,
         }
         return new Promise((resolve, reject) => {
@@ -58,6 +58,26 @@ class BillrunService {
         }
         return new Promise((resolve, reject) => {
             axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/billrun/list`,data)
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    }
+    deletebillrun=( RegionId, billrunNo)=>{
+        const data ={
+            'RegionId'                              :RegionId,
+            'billrunNo'                             :billrunNo,
+        }
+        return new Promise((resolve, reject) => {
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/billrun/delete/`+billrunNo+`?regionId=`+RegionId)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);

@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
 
 // core components
-import {Icon, IconButton, Fab,ClickAwayListener, Input, Paper, Typography,CircularProgress,MenuItem,InputLabel ,OutlinedInput , FormControl, Select} from '@material-ui/core';
+import {Icon, IconButton,Button, Fab,ClickAwayListener, Input, Paper, Typography,CircularProgress,MenuItem,InputLabel ,OutlinedInput , FormControl, Select} from '@material-ui/core';
+// import {DialogTitle, DialogContent, DialogContentText, DialogActions} from '@material-ui/core';
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+import { Dialog ,DialogTitle, DialogContent, DialogContentText, DialogActions} from '@material-ui/core';
 import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
 // theme components
-import {FusePageCustom, FuseAnimate} from '@fuse';
+import {FusePageCustom, FuseAnimate ,FuseExample, FuseHighlight, FusePageSimple} from '@fuse';
 
 // for store
 import connect from "react-redux/es/connect/connect";
@@ -23,10 +25,13 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 import _ from 'lodash';
 import classNames from 'classnames';
-import BillRunDialog from './bill-run-create';
+import Pusher from 'pusher-js';
+
+
 import {UPDATE_FROM_DATE_INVOICE, UPDATE_TO_DATE_INVOICE} from "../../../../store/actions";
 import MomentUtils from "@date-io/moment/build/index";
-
+// import BillRunInvoiceDetail from "./bill-run-create";
+import BillRunDialog from './bill-run-create';
 const headerHeight = 100;
 
 const hexToRgb = (hex) =>{
@@ -171,6 +176,7 @@ class BillRun extends Component {
         billrunDateOption       : THIS_MONTH,
         billrunDatePeriod       : moment(),
         status                  : false,
+        pusherMSG               : null,
     };
 
     constructor(props){
@@ -191,12 +197,26 @@ class BillRun extends Component {
     handleChange = prop => event => {
         this.setState({ [prop]: event.target.value });
     };
+    componentDidMount(){
+        const pusher = new Pusher('ecf6a4e23b186efa2d44', {
+            cluster: 'us2',
+            forceTLS: true
+        });
+        var channel = pusher.subscribe('billruncreate');
+        channel.bind('message', data => {
+            console.log("pusherdata",data);
+            this.setState({ pusherMSG:data});
+        });
+    }
     componentWillMount(){
         this.getBillruns();
     }
     componentDidUpdate(prevProps, prevState, snapshot){
         let bChanged = false;
 
+        // if(this.state.pusherMSG !== prevState.pusherMSG){
+        //     console.log("pusherMSG",this.state.pusherMSG);
+        // }
         if(this.props.regionId !== prevProps.regionId) {
             this.setState({regionId: prevProps.regionId});
             bChanged = true;
@@ -305,7 +325,6 @@ class BillRun extends Component {
     handleChange1 = event => {
         this.setState({[event.target.name]: event.target.value});
         let startDate, endDate, quarter, year;
-        // console.log("changed");
         switch (event.target.value) {
             case THIS_WEEK:
                 startDate = moment().day(0);
@@ -401,6 +420,30 @@ class BillRun extends Component {
     };
     openEditContactDialog=(rowinfo)=>{
         console.log("rowinfo",rowinfo);
+        this.props.openDialog({
+            children: (
+                <div>
+                <React.Fragment>
+                    <DialogTitle id="alert-dialog-title">Use Google's location service?</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Let Google help apps determine location. This means sending anonymous location data to
+                            Google, even when no apps are running.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.props.closeDialog} color="primary">
+                            Disagree
+                        </Button>
+                        <Button onClick={this.props.closeDialog} color="primary" autoFocus>
+                            Agree
+                        </Button>
+                    </DialogActions>
+
+                </React.Fragment>
+                </div>
+            )
+        });
     }
     render()
     {
@@ -435,18 +478,6 @@ class BillRun extends Component {
                                         <Icon>attach_money</Icon>
                                     </Fab>
                                 </FuseAnimate>
-
-                                {/*<FuseAnimate animation="transition.expandIn" delay={300}>*/}
-                                    {/*<Fab color="secondary" aria-label="add"*/}
-                                         {/*className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>*/}
-                                        {/*<Icon>delete</Icon>*/}
-                                    {/*</Fab>*/}
-                                {/*</FuseAnimate>*/}
-                                {/*<FuseAnimate animation="transition.expandIn" delay={300}>*/}
-                                {/*<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>*/}
-                                {/*<Icon>print</Icon>*/}
-                                {/*</Fab>*/}
-                                {/*</FuseAnimate>*/}
                             </div>
                         </div>
                         <div className="flex flex-none items-end" style={{display: 'none'}}>
@@ -695,32 +726,30 @@ class BillRun extends Component {
                                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center")
                                                 },
                                                 {
+                                                    Header: "Status",
+                                                    accessor: "Status",
+                                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+                                                },
+                                                {
                                                     Header: "Actions",
                                                     width : 128,
                                                     Cell  : row => (
-                                                        <div className="flex items-center actions">
+                                                        <div className="flex items-center  justify-center actions">
                                                             <IconButton
                                                                 onClick={(ev) => {
                                                                     ev.stopPropagation();
                                                                     if (window.confirm("Do you really want to remove this invoice")) {
-                                                                        this.props.removeInvoiceAction(row.original.InvoiceId, this.props.invoices);
-                                                                        if(this.state.selection.length>0){
-                                                                            _.remove(this.state.selection, function(id) {
-                                                                                return id === row.original.InvoiceId;
-                                                                            });
-                                                                        }
+                                                                        this.props.deleteSeletedBillRun(row.original.RegionId,row.original.BillRunNo);
+                                                                        // if(this.state.selection.length>0){
+                                                                        //     _.remove(this.state.selection, function(id) {
+                                                                        //         return id === row.original.InvoiceId;
+                                                                        //     });
+                                                                        // }
+
                                                                     }
                                                                 }}
                                                             >
                                                                 <Icon>delete</Icon>
-                                                            </IconButton>
-                                                            <IconButton
-                                                                onClick={(ev) => {
-                                                                    ev.stopPropagation();
-                                                                    // removeContact(row.original.id);
-                                                                }}
-                                                            >
-                                                                <Icon>edit</Icon>
                                                             </IconButton>
                                                         </div>
                                                     )
@@ -736,16 +765,19 @@ class BillRun extends Component {
                                     }}
                                 />
                             )}
-                            {/*<BillRunDialog open={this.state.open} childCall={this.opendialogwin.bind(this)} ref="child"/>*/}
                             <BillRunDialog open={this.state.open} onRef={ref => (this.child = ref)}/>
+
                         </div>
                     </ClickAwayListener>
                 }
                 onRef={instance => {
                     this.pageLayout = instance;
                 }}
+
             >
                 {/*<BillRunDialog></BillRunDialog>*/}
+
+
             </FusePageCustom>
         );
     }
@@ -754,8 +786,11 @@ class BillRun extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        getBillruns         : Actions.getBillruns,
-        getAllBillruns      : Actions.getAllBillruns,
+        getBillruns             : Actions.getBillruns,
+        getAllBillruns          : Actions.getAllBillruns,
+        deleteSeletedBillRun    : Actions.deleteSeletedBillRun,
+        openDialog              : Actions.openDialog,
+        closeDialog             : Actions.closeDialog
     }, dispatch);
 }
 

@@ -9,21 +9,16 @@ import * as Actions from 'store/actions';
 
 import {withRouter} from 'react-router-dom';
 import {withStyles} from "@material-ui/core";
+import Pusher from 'pusher-js';
 
 import _ from '@lodash';
 
-
-
-
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
-import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import  {CircularProgress,LinearProgress} from '@material-ui/core';
+import  {CircularProgress,LinearProgress,IconButton,Button,Dialog} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, TimePicker, DatePicker } from 'material-ui-pickers';
@@ -149,10 +144,15 @@ class BillRunDialog extends Component {
         auth                    : null,
         completed               : 0,
         statusMSG               : 10,
+        pusherMSG               : null,
+
 
     };
 
     componentDidUpdate(prevProps, prevState, snapshot){
+        if(this.state.pusherMSG !== prevState.pusherMSG){
+            console.log("pusherMSG-create",this.state.pusherMSG);
+        }
         if(this.props.billruns && this.props.billruns != null && JSON.stringify(prevProps.billruns)!==JSON.stringify(this.props.billruns)){
             this.setState({billruns: this.props.billruns});
         }
@@ -174,6 +174,14 @@ class BillRunDialog extends Component {
     componentDidMount() {
         this.props.onRef(this);
         this.timer = setInterval(this.progress, 500);
+        const pusher = new Pusher('ecf6a4e23b186efa2d44', {
+            cluster: 'us2',
+            forceTLS: true
+        });
+        var channel = pusher.subscribe('billruncreate');
+        channel.bind('message', data => {
+            this.setState({ pusherMSG:data});
+        });
     }
     componentWillUnmount() {
         this.props.onRef(undefined)
@@ -332,19 +340,6 @@ class BillRunDialog extends Component {
                                     />
                                 </div>
                             </MuiPickersUtilsProvider>
-                            {/*<TextField*/}
-                            {/*id="date"*/}
-                            {/*label="Period"*/}
-                            {/*type="date"*/}
-                            {/*variant="outlined"*/}
-                            {/*format="MM/YYYY"*/}
-                            {/*defaultValue={selectedDate}*/}
-                            {/*// className={classes.textField}*/}
-                            {/*InputLabelProps={{*/}
-                            {/*shrink: true,*/}
-                            {/*}}*/}
-                            {/*onChange={this.onchangeDate}*/}
-                            {/*/>*/}
                         </div>
 
                         <div>
@@ -363,12 +358,6 @@ class BillRunDialog extends Component {
                         </div>
                     </DialogContent>
                     <DialogActions>
-                        {/*{1 && (*/}
-                            {/*<div style={{flexGrow: 1}}>*/}
-                                {/*<LinearProgress color="secondary" variant="determinate" value={this.state.completed}/>*/}
-                            {/*</div>*/}
-
-                        {/*)}*/}
                         <Button variant="contained"  style={{width: "150px",
                             marginRight: "50px",
                             marginBottom: "20px",
