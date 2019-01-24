@@ -32,6 +32,7 @@ import {UPDATE_FROM_DATE_INVOICE, UPDATE_TO_DATE_INVOICE} from "../../../../stor
 import MomentUtils from "@date-io/moment/build/index";
 // import BillRunInvoiceDetail from "./bill-run-create";
 import BillRunDialog from './bill-run-create';
+import BillRunInvoiceDetail from './bill-run-invoice';
 const headerHeight = 100;
 
 const hexToRgb = (hex) =>{
@@ -420,30 +421,7 @@ class BillRun extends Component {
     };
     openEditContactDialog=(rowinfo)=>{
         console.log("rowinfo",rowinfo);
-        this.props.openDialog({
-            children: (
-                <div>
-                <React.Fragment>
-                    <DialogTitle id="alert-dialog-title">Use Google's location service?</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            Let Google help apps determine location. This means sending anonymous location data to
-                            Google, even when no apps are running.
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.props.closeDialog} color="primary">
-                            Disagree
-                        </Button>
-                        <Button onClick={this.props.closeDialog} color="primary" autoFocus>
-                            Agree
-                        </Button>
-                    </DialogActions>
 
-                </React.Fragment>
-                </div>
-            )
-        });
     }
     render()
     {
@@ -697,7 +675,7 @@ class BillRun extends Component {
                                             ),
                                             columns: [
                                                 {
-                                                    Header: "Bill Run Batch #",
+                                                    Header: "Bill Run #",
                                                     accessor: "BillRunNo",
                                                     filterAll: true,
                                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center p-24")
@@ -766,6 +744,9 @@ class BillRun extends Component {
                                 />
                             )}
                             <BillRunDialog open={this.state.open} onRef={ref => (this.child = ref)}/>
+                            { !1 && (
+                                <BillRunInvoiceDetail/>
+                            )}
 
                         </div>
                     </ClickAwayListener>
@@ -776,6 +757,7 @@ class BillRun extends Component {
 
             >
                 {/*<BillRunDialog></BillRunDialog>*/}
+
 
 
             </FusePageCustom>

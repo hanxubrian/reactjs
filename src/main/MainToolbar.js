@@ -235,21 +235,24 @@ class MainToolbar extends Component {
     }
     componentDidUpdate(prevProps,prevState){
         let midflage = false;
-        if(this.state.pusherMSG !== prevState.pusherMSG){
-            let PusherList =[];
-            let settime = moment();
-            let unreadNum = this.state.unreadMSGnum;
-            let sysunread = this.state.systeunread;
+        if(this.state.pusherMSG !== prevState.pusherMSG ){
+            if(this.state.pusherMSG.user === this.props.login.UserId){
+                let PusherList =[];
+                let settime = moment();
+                let unreadNum = this.state.unreadMSGnum;
+                let sysunread = this.state.systeunread;
 
 
-            PusherList=this.state.pusherMSGList;
-            PusherList.unshift(this.state.pusherMSG);
-            unreadNum += 1;
+                PusherList=this.state.pusherMSGList;
+                PusherList.unshift(this.state.pusherMSG);
+                unreadNum += 1;
 
-            this.setState({unreadMSGnum:unreadNum});
-            this.setState({pusherMSGList:PusherList});
-            this.setState({systeunread:sysunread+1});
-            console.log("pusherMSG-create",this.state.pusherMSG);
+                this.setState({unreadMSGnum:unreadNum});
+                this.setState({pusherMSGList:PusherList});
+                this.setState({systeunread:sysunread+1});
+                console.log("pusherMSG-create",this.state.pusherMSG);
+            }
+
 
 
         }
