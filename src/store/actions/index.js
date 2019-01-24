@@ -11,4 +11,5 @@ export * from './franchisee.reports.action';
 export * from './payment.list.actions';
 export * from './dashboard.actions';
 export * from './homepage.actions';
-export * from './account_receivable.payments.actions'
+export * from './account_receivable.payments.actions';
+export * from './verifications.action';

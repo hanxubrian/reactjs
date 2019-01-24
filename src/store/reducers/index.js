@@ -20,6 +20,7 @@ import payments from './payment.reducer';
 import dashboard from './dashboard.reducer';
 import homepage from './homepage.reducer';
 import accountReceivablePayments from'./account_receivable.payments.reducer';
+import verifications from './verifications.reducer'
 
 
 
@@ -46,6 +47,7 @@ const createReducer = (asyncReducers) =>
         homepage,
         accountReceivablePayments,
         usersApp,
+        verifications,
         ...asyncReducers
     });
 
