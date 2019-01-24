@@ -8,50 +8,54 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import {bindActionCreators} from "redux";
+import * as Actions from "./store/actions";
+import connect from "react-redux/es/connect/connect";
+import {FormControlLabel} from "@material-ui/core";
+import Radio from "@material-ui/core/Radio/Radio";
+import Checkbox from "@material-ui/core/Checkbox/Checkbox";
+import GridContainer from "../../Commons/Grid/GridContainer";
+import GridItem from "../../Commons/Grid/GridItem";
+import Divider from "@material-ui/core/es/Divider/Divider";
 
 const styles = theme => ({
     root     : {
         display : 'flex',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        width   : '80%',
+        margin  : 'auto'
     },
     margin   : {
         margin: theme.spacing.unit
     },
-    textField: {
-        flexBasis: 200
+    userFormSection: {
+        marginBottom : '10px'
     }
 });
 
-const ranges = [
-    {
-        value: '0-20',
-        label: '0 to 20'
-    },
-    {
-        value: '21-50',
-        label: '21 to 50'
-    },
-    {
-        value: '51-100',
-        label: '51 to 100'
-    }
-];
-
 class UsersForm extends React.Component {
     state = {
-        amount      : '',
-        password    : '',
-        weight      : '',
-        weightRange : '',
-        showPassword: false
+        firstName: '',
+        lastName : '',
+        title : '',
+        email : '',
+        department: '',
+        phone : '',
+        address: '',
+        state: '',
+        city : '',
+        zip : '',
+        userName: '',
+        accPassword: '',
+        outlookUserName: '',
+        outlookPassword: '',
+        selectRegion: '',
+        userGroup: '',
+        defaultRegion: ''
     };
 
     handleChange = prop => event => {
         this.setState({[prop]: event.target.value});
-    };
-
-    handleClickShowPassword = () => {
-        this.setState(state => ({showPassword: !state.showPassword}));
     };
 
     render()
@@ -60,83 +64,285 @@ class UsersForm extends React.Component {
 
         return (
             <div className={classes.root}>
-                <TextField
-                    id="outlined-simple-start-adornment"
-                    className={classNames(classes.margin, classes.textField)}
-                    variant="outlined"
-                    label="With outlined TextField"
-                    InputProps={{
-                        startAdornment: <InputAdornment position="start">Kg</InputAdornment>
-                    }}
-                />
-                <TextField
-                    select
-                    className={classNames(classes.margin, classes.textField)}
-                    variant="outlined"
-                    label="With Select"
-                    value={this.state.weightRange}
-                    onChange={this.handleChange('weightRange')}
-                    InputProps={{
-                        startAdornment: <InputAdornment position="start">Kg</InputAdornment>
-                    }}
-                >
-                    {ranges.map(option => (
-                        <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                        </MenuItem>
-                    ))}
-                </TextField>
-                <TextField
-                    id="outlined-adornment-amount"
-                    className={classNames(classes.margin, classes.textField)}
-                    variant="outlined"
-                    label="Amount"
-                    value={this.state.amount}
-                    onChange={this.handleChange('amount')}
-                    InputProps={{
-                        startAdornment: <InputAdornment position="start">$</InputAdornment>
-                    }}
-                />
-                <TextField
-                    id="outlined-adornment-weight"
-                    className={classNames(classes.margin, classes.textField)}
-                    variant="outlined"
-                    label="Weight"
-                    value={this.state.weight}
-                    onChange={this.handleChange('weight')}
-                    helperText="Weight"
-                    InputProps={{
-                        endAdornment: <InputAdornment position="end">Kg</InputAdornment>
-                    }}
-                />
-                <TextField
-                    id="outlined-adornment-password"
-                    className={classNames(classes.margin, classes.textField)}
-                    variant="outlined"
-                    type={this.state.showPassword ? 'text' : 'password'}
-                    label="Password"
-                    value={this.state.password}
-                    onChange={this.handleChange('password')}
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="Toggle password visibility"
-                                    onClick={this.handleClickShowPassword}
-                                >
-                                    {this.state.showPassword ? <VisibilityOff/> : <Visibility/>}
-                                </IconButton>
-                            </InputAdornment>
-                        )
-                    }}
-                />
+                <div className={classNames(classes.userFormSection,"w-full")}>
+                    <h2>User Profile</h2>
+                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <TextField
+                                id="firstName"
+                                label="First Name"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={this.state.firstName}
+                                onChange={this.handleChange("firstName")}
+                                style={{marginRight:'1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
+                            />
+                            <TextField
+                                id="lastName"
+                                label="Last Name"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={this.state.lastName}
+                                onChange={this.handleChange("lastName")}
+                                style={{marginRight:'1%', marginLeft: '1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
+                            />
+                            <TextField
+                                id="title"
+                                label="Title"
+                                onChange={this.handleChange("title")}
+                                value={this.state.title}
+                                variant="outlined"
+                                inputProps={{
+                                    maxLength:60
+                                }}
+                                className={classes.textField}
+                                style={{marginLeft:'1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
+                            />
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <TextField
+                                id="phone"
+                                label="Phone"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={this.state.phone}
+                                onChange={this.handleChange("phone")}
+                                style={{marginRight:'1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
+                            />
+                            <TextField
+                                id="email"
+                                label="E Mail"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={this.state.email}
+                                onChange={this.handleChange("email")}
+                                style={{marginRight:'1%', marginLeft: '1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
+                            />
+                            <TextField
+                                id="department"
+                                label="Department"
+                                onChange={this.handleChange("department")}
+                                value={this.state.department}
+                                variant="outlined"
+                                inputProps={{
+                                    maxLength:60
+                                }}
+                                className={classes.textField}
+                                style={{marginLeft:'1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
+                            />
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <TextField
+                                id="address"
+                                label="Address"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={this.state.address}
+                                onChange={this.handleChange("address")}
+                                style={{marginRight:'1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
+                            />
+                            <TextField
+                                id="city"
+                                label="City"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={this.state.city}
+                                onChange={this.handleChange("city")}
+                                style={{marginRight:'1%', marginLeft: '1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
+                            />
+                            <TextField
+                                id="state"
+                                label="State"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={this.state.state}
+                                onChange={this.handleChange("state")}
+                                style={{marginRight:'1%', marginLeft: '1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
+                            />
+                            <TextField
+                                id="zip"
+                                label="Zip"
+                                onChange={this.handleChange("zip")}
+                                value={this.state.zip}
+                                variant="outlined"
+                                inputProps={{
+                                    maxLength:60
+                                }}
+                                className={classes.textField}
+                                style={{marginLeft:'1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
+                            />
+                        </GridItem>
+                    </GridContainer>
+                </div>
+                <div className={classNames(classes.userFormSection,"w-full")}>
+                    <h2>User Account</h2>
+                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <TextField
+                                id="userName"
+                                label="User Name"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={this.state.userName}
+                                onChange={this.handleChange("userName")}
+                                style={{marginRight:'1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
+                            />
+                            <TextField
+                                id="accPassword"
+                                label="Password"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={this.state.accPassword}
+                                onChange={this.handleChange("accPassword")}
+                                style={{marginLeft: '1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
+                            />
+                        </GridItem>
+                    </GridContainer>
+                </div>
+                <div className={classNames(classes.userFormSection,"w-full")}>
+                    <h2>Outlook Account</h2>
+                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <TextField
+                                id="outlookUserName"
+                                label="User Name"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={this.state.outlookUserName}
+                                onChange={this.handleChange("outlookUserName")}
+                                style={{marginRight:'1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
+                            />
+                            <TextField
+                                id="outlookPassword"
+                                label="Password"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={this.state.outlookPassword}
+                                onChange={this.handleChange("outlookPassword")}
+                                style={{marginLeft: '1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
+                            />
+                        </GridItem>
+                    </GridContainer>
+                </div>
+                <div className={classNames(classes.userFormSection,"w-full")}>
+                    <h2>User Group</h2>
+                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <TextField
+                                id="userGroup"
+                                label="User Group"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={this.state.userGroup}
+                                onChange={this.handleChange("userGroup")}
+                                style={{marginRight:'1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
+                            />
+                            <TextField
+                                id="selectRegion"
+                                label="Select Region"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={this.state.selectRegion}
+                                onChange={this.handleChange("selectRegion")}
+                                style={{marginLeft: '1%', marginRight: '1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
+                            />
+                            <TextField
+                                id="defaultRegion"
+                                label="Default Region"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={this.state.defaultRegion}
+                                onChange={this.handleChange("defaultRegion")}
+                                style={{marginLeft: '1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
+                            />
+                        </GridItem>
+                    </GridContainer>
+                </div>
+                <div className={classNames(classes.userFormSection,"w-full")}>
+                    <h2>User Role</h2>
+                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <TextField
+                                id="userRole"
+                                label="User Role"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={this.state.userRole}
+                                onChange={this.handleChange("userRole")}
+                                margin="dense"
+                                required
+                            />
+                        </GridItem>
+                    </GridContainer>
+                </div>
             </div>
         );
     }
 }
 
-UsersForm.propTypes = {
-    classes: PropTypes.object.isRequired
-};
+function mapDispatchToProps(dispatch)
+{
+    return bindActionCreators({
+        openUsersForm : Actions.openUsersForm
+    }, dispatch);
+}
 
-export default withStyles(styles)(UsersForm);
+function mapStateToProps({usersApp})
+{
+    return {
+        openUsersFormStatus: usersApp.users.openUsersFormStatus
+    }
+}
+
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(UsersForm));

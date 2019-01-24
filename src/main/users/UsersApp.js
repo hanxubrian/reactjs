@@ -11,6 +11,7 @@ import _ from '@lodash';
 import UsersSidebarContent from "./UsersSidebarContent";
 import UsersForm from "./UsersForm";
 import classNames from 'classnames';
+import FusePageUsersCustom from "../../@fuse/components/FusePageLayouts/FusePageUsersCustom";
 
 
 
@@ -65,9 +66,9 @@ class UsersApp extends Component {
 
         return (
             <React.Fragment>
-                <FusePageSimple
+                <FusePageUsersCustom
                     classes={{
-                        contentCardWrapper: "p-16 sm:p-24 pb-80",
+                        contentCardWrapper: "p-16 sm:p-24 pb-80 ",
                         leftSidebar       : classNames({"w-0": openUsersFormStatus}),
                         header            : "min-h-72 h-72 sm:h-136 sm:min-h-136"
                     }}
