@@ -231,6 +231,7 @@ export function updateInvoiceLine(data) {
 
 /**
  * Gets Customer TaxRate, Extended Price, TaxAmount and Total Amount
+ * @param row_index: Invoice Line index
  * @param RegionId
  * @param CustomerId
  * @param Amount
@@ -239,14 +240,14 @@ export function updateInvoiceLine(data) {
  * @param TaxTypeId
  * @returns {Function}
  */
-export function getCustomerTaxAmount(RegionId,CustomerId, Amount, Quantity, Markup=0.0, TaxTypeId=1 ) {
+export function getCustomerTaxAmount(row_index, RegionId,CustomerId, Amount, Quantity, Markup=0.0, TaxTypeId=1 ) {
     return (dispatch) => {
         (async () => {
             let res = await invoiceService.getCustomerTaxAmount(RegionId,CustomerId, Amount, Quantity, Markup, TaxTypeId);
             if (res.IsSuccess) {
                 dispatch({
                     type: GET_CUSTOMER_TAX_AMOUNT,
-                    payload: res.Data
+                    payload: {...res.Data, id: row_index}
                 });
             } else {
 

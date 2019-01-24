@@ -4,6 +4,7 @@ import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import _ from 'lodash';
 
 let today = new Date();
 const initialState = {
@@ -31,7 +32,7 @@ const initialState = {
     SearchText: "",
     invoiceStatus: [],
     bInvoiceStart: false,
-    customerTaxAmountLine: null,
+    customerTaxAmountLine: [],
     invoiceDateOption: 3,
     newInvoice: null,
     customersDB: null,
@@ -41,6 +42,7 @@ const initialState = {
     removedId: undefined,
     billingLists: null,
     serviceLists: null,
+    bTaxChanged: false,
 };
 
 
@@ -110,9 +112,21 @@ const invoices = function(state = initialState, action) {
             }
         }
         case Actions.GET_CUSTOMER_TAX_AMOUNT:{
-            console.log('== customerTaxAmountLine===', action.payload);
-            return {
-                ...state, customerTaxAmountLine: {...action.payload, originalTax: action.payload.TotalTaxAmount}
+            if(state.customerTaxAmountLine.length===0)
+                return {
+                    ...state, customerTaxAmountLine: [{...action.payload, originalTax: action.payload.TotalTaxAmount}]
+                };
+            else {
+                let index = action.payload.id;
+                const data = _.cloneDeep(state.customerTaxAmountLine);
+                let line = state.customerTaxAmountLine.filter(c=>index===c.id);
+                if(line.length)
+                    data[index] = {...action.payload, originalTax: action.payload.TotalTaxAmount};
+                else
+                    data.push({...action.payload, originalTax: action.payload.TotalTaxAmount});
+                return {
+                    ...state, customerTaxAmountLine: data
+                }
             }
         }
         case Actions.UPDATE_INVOICE_DATE_OPTION:{
@@ -192,7 +206,8 @@ const invoices = function(state = initialState, action) {
                     customer: null
                 },
                 newInvoice: null,
-                invoiceDetail: null
+                invoiceDetail: null,
+                customerTaxAmountLine: []
             };
         }
         case Actions.OPEN_EDIT_INVOICE_FORM:
@@ -223,7 +238,8 @@ const invoices = function(state = initialState, action) {
                     customer: null
                 },
                 newInvoice: null,
-                invoiceDetail: null
+                invoiceDetail: null,
+                customerTaxAmountLine: []
             };
         }
         case Actions.UPDATE_INVOICE_LINE:

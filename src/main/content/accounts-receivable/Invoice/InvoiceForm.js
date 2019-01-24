@@ -487,7 +487,7 @@ class InvoiceForm extends Component {
 
         if(this.props.invoices.invoiceDetail){
             let invoiceDetail = this.props.invoices.invoiceDetail.Data;
-            let customer = this.props.customers.filter(customer => customer.CustomerName===invoiceDetail.CustomerName && customer.CustomerNo===invoiceDetail.CustomerNumber);
+            let customer = this.props.customers.filter(customer => customer.CustomerName===invoiceDetail.CustomerName && customer.CustomerNo===invoiceDetail.CustomerNo);
             if(customer.length>0) {
                 this.setState({selectedCustomer: customer[0]});
             }

@@ -469,6 +469,7 @@ class InvoiceLineTable extends React.Component {
             this.setState({data: newData});
         }
         else {//For Edit
+            console.log('cus=',this.props.invoiceForm.customer);
             let items = this.props.invoiceDetail.Data.Items;
 
             let billingSuggestions = this.props.billingLists.map(b => ({
@@ -490,6 +491,7 @@ class InvoiceLineTable extends React.Component {
                         this.setState({[`selectedServiceOption${index}`]: service[0]});
 
                     let line = createData(billing[0], service.length ? service[0] : '', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 0, item.ExtendedPrice, item.Total, item.MarkUpTotal);
+
                     let distributions = [];
                     if(item.Distribution!==null && item.Distribution.length>0){
                         distributions = item.Distribution.map((d,fid)=>{
@@ -519,13 +521,21 @@ class InvoiceLineTable extends React.Component {
         if(this.state.data!==null && prevState.data!==this.state.data) {
             this.props.updateInvoiceLine(this.state.data);
         }
-        // console.log('this.state.customerTaxAmountLine', this.state.customerTaxAmountLine);
-        // console.log('prevState.customerTaxAmountLine', prevState.customerTaxAmountLine);
         if(JSON.stringify(this.state.customerTaxAmountLine)!== JSON.stringify(prevState.customerTaxAmountLine)){
             this.updateTaxFromLine();
         }
 
-        if(this.props.fn!==null && prevProps.fn!==this.props.fn){
+        if(this.props.invoiceForm.customer!==null && this.props.invoiceForm.type==='edit' && this.props.invoiceForm.customer!==prevProps.invoiceForm.customer){
+            console.log('fired',this.props.invoiceForm.customer, this.props.invoiceForm.data.line);
+            let rows = this.props.invoiceForm.data.line;
+            rows.forEach(row=>{
+                let markup = 0.0;
+                if(row.markup!=='') markup = row.markup;
+                this.props.getCustomerTaxAmount(row.id, this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity, markup);
+            });
+        }
+
+        if(this.props.invoiceForm.customer!==null && this.props.fn!==null && prevProps.fn!==this.props.fn){
             let selectedFranchiess =[];
             let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList;
             this.props.fn.forEach(f=>{
@@ -551,7 +561,7 @@ class InvoiceLineTable extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(JSON.stringify(this.props.customerTaxAmountLine)!==JSON.stringify(nextProps.customerTaxAmountLine)){
+        if(this.props.customerTaxAmountLine!==nextProps.customerTaxAmountLine){
             this.setState({customerTaxAmountLine: nextProps.customerTaxAmountLine})
         }
 
@@ -562,16 +572,18 @@ class InvoiceLineTable extends React.Component {
         }
     }
 
+
     updateTaxFromLine = ()=> {
         const data = [...this.state.data];
         const {taxRowId, customerTaxAmountLine} = this.state;
-        data[taxRowId].tax = customerTaxAmountLine.TotalTaxAmount;
-        data[taxRowId].extended = customerTaxAmountLine.ExtendedPrice;
-        data[taxRowId].total = customerTaxAmountLine.TotalAmount;
-        data[taxRowId].markupAmount = customerTaxAmountLine.MarkupAmount;
-        data[taxRowId].markupTax = customerTaxAmountLine.MarkupTax;
-        this.setState({data: data});
-        this.setState({bAllowAlertReduction: true});
+        if(customerTaxAmountLine.length) {
+            data[taxRowId].tax = customerTaxAmountLine[taxRowId].TotalTaxAmount;
+            data[taxRowId].extended = customerTaxAmountLine[taxRowId].ExtendedPrice;
+            data[taxRowId].total = customerTaxAmountLine[taxRowId].TotalAmount;
+            data[taxRowId].markupAmount = customerTaxAmountLine[taxRowId].MarkupAmount;
+            data[taxRowId].markupTax = customerTaxAmountLine[taxRowId].MarkupTax;
+            this.setState({data: data});
+        }
     };
 
     // For Franchisee suggestion
@@ -730,7 +742,7 @@ class InvoiceLineTable extends React.Component {
         if(!this.isDisable(row)) {
             let markup = 0.0;
             if(row.markup!=='') markup = row.markup;
-            this.props.getCustomerTaxAmount(this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity, markup);
+            this.props.getCustomerTaxAmount(row.id, this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity, markup);
             this.setState({taxRowId: row.id})
         }
     };
@@ -766,8 +778,6 @@ class InvoiceLineTable extends React.Component {
     };
 
     handleChangeInvoiceLine =  (row, name) => event => {
-        console.log('fired change event', name);
-
         const data = [...this.state.data];
         let value = event.target.value;
         if (name==='amount')  value = parseFloat(value);
@@ -775,37 +785,30 @@ class InvoiceLineTable extends React.Component {
 
         data[row.id][name] = value;
         this.setState({data: data});
-        if(name==='tax')
-            this.setState({customerTaxAmountLine: {...this.state.customerTaxAmountLine, TotalTaxAmount: parseFloat(event.target.value)}})
+        // if(name==='tax')
+        //     this.setState({customerTaxAmountLine: {...this.state.customerTaxAmountLine, TotalTaxAmount: parseFloat(event.target.value)}})
     };
 
     handleChangeInvoiceLineOnBlur = (row, name) => event => {
-        console.log('fired blur event', name);
-
         if(!this.isDisable(row) && name!=='tax')
             this.getInvoiceLineTaxAmount(row)
     };
 
     handleChangeInvoiceTaxLine = (row, name) => event => {
-        const data = [...this.state.data];
         if(this.props.invoiceForm.customer===null) return;
 
         if(this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(row.tax)===0) {
             this.setState({bTaxAlert: true});
             return;
         }
-        if(this.state.bAllowAlertReduction && this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(row.tax)!==0 &&
-            parseFloat(event.target.value)<parseFloat(data[row.id][name])
-        ) {
-            // this.setState({bTaxAlertReduction: true});
-            // return;
+        if(this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(row.tax)!==0 &&
+            row.tax!==this.props.customerTaxAmountLine[row.id].TotalTaxAmount)
+        {
+            this.setState({bTaxAlertReduction: true});
+            const data = [...this.state.data];
+            data[row.id].tax = this.props.customerTaxAmountLine[row.id].TotalTaxAmount;
+            this.setState({data: data});
         }
-
-        // data[row.id][name] = event.target.value;
-        // this.setState({data: data});
-        //
-        // if(!this.isDisable(row) && name!=='tax')
-        //     this.getInvoiceLineTaxAmount(row)
     };
 
     isDisable = row =>{
@@ -1280,7 +1283,7 @@ class InvoiceLineTable extends React.Component {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
-                    <DialogTitle id="alert-dialog-title">{"Tax Editing is not allowed"}</DialogTitle>
+                    <DialogTitle id="alert-dialog-title">{"Tax Validation"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
                             Tax Editing is not allowed. Tax is calculated based on Customer Tax Settings
