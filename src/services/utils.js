@@ -37,7 +37,7 @@ export function NumberFormatCustom1(props) {
             {...other}
             getInputRef={inputRef}
             onValueChange={values => {
-                onBlur({
+                onChange({
                     target: {
                         value: values.value,
                     },
@@ -73,20 +73,21 @@ export function escapeRegexCharacters(str) {
 
 
 export function NumberFormatCustom2(props) {
-    const { inputRef, onBlur, onChange, ...other } = props;
+    const { inputRef, onChange, ...other } = props;
 
     return (
         <NumberFormat
             {...other}
             getInputRef={inputRef}
             onValueChange={values => {
-                onBlur({
+                onChange({
                     target: {
                         value: values.value,
                     },
                 });
             }}
             thousandSeparator
+            fixedDecimalScale={true}
             decimalScale={2}
             prefix="$"
         />

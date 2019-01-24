@@ -111,7 +111,7 @@ const invoices = function(state = initialState, action) {
         }
         case Actions.GET_CUSTOMER_TAX_AMOUNT:{
             return {
-                ...state, customerTaxAmountLine: action.payload
+                ...state, customerTaxAmountLine: {...action.payload, originalTax: action.payload.TotalTaxAmount}
             }
         }
         case Actions.UPDATE_INVOICE_DATE_OPTION:{

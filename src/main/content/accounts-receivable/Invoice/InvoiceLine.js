@@ -489,8 +489,6 @@ class InvoiceLineTable extends React.Component {
                     if(service.length)
                         this.setState({[`selectedServiceOption${index}`]: service[0]});
 
-                    console.log('service=', service);
-
                     let line = createData(billing[0], service.length ? service[0] : '', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 0, item.ExtendedPrice, item.Total, item.MarkUpTotal);
                     let distributions = [];
                     if(item.Distribution!==null && item.Distribution.length>0){
@@ -521,6 +519,8 @@ class InvoiceLineTable extends React.Component {
         if(this.state.data!==null && prevState.data!==this.state.data) {
             this.props.updateInvoiceLine(this.state.data);
         }
+        console.log('this.state.customerTaxAmountLine', this.state.customerTaxAmountLine);
+        console.log('prevState.customerTaxAmountLine', prevState.customerTaxAmountLine);
         if(JSON.stringify(this.state.customerTaxAmountLine)!== JSON.stringify(prevState.customerTaxAmountLine)){
             this.updateTaxFromLine();
         }
@@ -766,6 +766,7 @@ class InvoiceLineTable extends React.Component {
     };
 
     handleChangeInvoiceLine = (row, name) => event => {
+        console.log('fired change event', name);
         const data = [...this.state.data];
         let value = event.target.value;
         if (name==='amount')  value = parseFloat(value);
@@ -773,6 +774,12 @@ class InvoiceLineTable extends React.Component {
 
         data[row.id][name] = value;
         this.setState({data: data});
+        if(name==='tax')
+            this.setState({customerTaxAmountLine: {...this.state.customerTaxAmountLine, TotalTaxAmount: parseFloat(event.target.value)}})
+    };
+
+    handleChangeInvoiceLineOnBlur = (row, name) => event => {
+        console.log('fired blur event', name);
 
         if(!this.isDisable(row) && name!=='tax')
             this.getInvoiceLineTaxAmount(row)
@@ -782,22 +789,22 @@ class InvoiceLineTable extends React.Component {
         const data = [...this.state.data];
         if(this.props.invoiceForm.customer===null) return;
 
-        if(this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(event.target.value)===0) {
+        if(this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(row.tax)===0) {
             this.setState({bTaxAlert: true});
             return;
         }
-        if(this.state.bAllowAlertReduction && this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(event.target.value)!==0 &&
+        if(this.state.bAllowAlertReduction && this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(row.tax)!==0 &&
             parseFloat(event.target.value)<parseFloat(data[row.id][name])
         ) {
             // this.setState({bTaxAlertReduction: true});
             // return;
         }
 
-        data[row.id][name] = event.target.value;
-        this.setState({data: data});
-
-        if(!this.isDisable(row) && name!=='tax')
-            this.getInvoiceLineTaxAmount(row)
+        // data[row.id][name] = event.target.value;
+        // this.setState({data: data});
+        //
+        // if(!this.isDisable(row) && name!=='tax')
+        //     this.getInvoiceLineTaxAmount(row)
     };
 
     isDisable = row =>{
@@ -1065,9 +1072,9 @@ class InvoiceLineTable extends React.Component {
                                                     className={classes.fInput}
                                                     placeholder="Qty"
                                                     value={row.original.quantity}
-                                                    onBlur={this.handleChangeInvoiceLine(row.original, 'quantity')}
+                                                    onBlur={this.handleChangeInvoiceLineOnBlur(row.original, 'quantity')}
+                                                    onChange={this.handleChangeInvoiceLine(row.original, 'quantity')}
                                                     InputProps={{
-                                                        inputComponent: NumberFormatCustom1,
                                                         classes: {
                                                             input: classes.input,
                                                         },
@@ -1089,7 +1096,8 @@ class InvoiceLineTable extends React.Component {
                                                     className={classes.fInput}
                                                     placeholder="Amount"
                                                     value={row.original.amount}
-                                                    onBlur={this.handleChangeInvoiceLine(row.original, 'amount')}
+                                                    onBlur={this.handleChangeInvoiceLineOnBlur(row.original, 'amount')}
+                                                    onChange={this.handleChangeInvoiceLine(row.original, 'amount')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustom2,
                                                         classes: {
@@ -1113,7 +1121,8 @@ class InvoiceLineTable extends React.Component {
                                                     className={classes.fInput}
                                                     placeholder="Tax"
                                                     value={row.original.tax}
-                                                    onChange={this.handleChangeInvoiceTaxLine(row.original, 'tax')}
+                                                    onChange={this.handleChangeInvoiceLine(row.original, 'tax')}
+                                                    onBlur={this.handleChangeInvoiceTaxLine(row.original, 'tax')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustom,
                                                         classes: {
@@ -1255,7 +1264,7 @@ class InvoiceLineTable extends React.Component {
                     <DialogTitle id="alert-dialog-title">{"Customer is not Tax Exempt"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                            Customer is not Tax Exempt, but will be allowed as transaction is ???"
+                            This Customer is Not Tax-Exempt but this transaction will be allowed as Tax-Exempt.
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
