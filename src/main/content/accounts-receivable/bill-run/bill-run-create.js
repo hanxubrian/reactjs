@@ -145,7 +145,7 @@ class BillRunDialog extends Component {
         completed               : 0,
         statusMSG               : 10,
         pusherMSG               : null,
-
+        showP                   : false,
 
     };
 
@@ -160,6 +160,7 @@ class BillRunDialog extends Component {
             this.setState({auth: this.props.auth});
         }
         if(this.props.loading ===false && prevProps.loading ===true && this.state.statusMSG===200){
+            this.setState({showP: !this.state.showP});
             if(this.props.billstatus===400){
                 this.setState({statusMSG:10});
                 this.errormessage();
@@ -178,8 +179,8 @@ class BillRunDialog extends Component {
             cluster: 'us2',
             forceTLS: true
         });
-        var channel = pusher.subscribe('billruncreate');
-        channel.bind('message', data => {
+        var channel = pusher.subscribe('jk-message-channel');
+        channel.bind('on-message', data => {
             this.setState({ pusherMSG:data});
         });
     }
@@ -253,11 +254,6 @@ class BillRunDialog extends Component {
             let user = this.props.auth.firstName+ this.props.auth.lastName;
             let userid   = this.props.auth.UserId;
             let regionid = this.props.auth.defaultRegionId;
-            // console.log("userid==",userid);
-            // console.log("regionid==",regionid);
-            // console.log("year==",year);
-            // console.log("month==",month);
-            // console.log("user==",user);
             if(userid && userid != null && regionid && regionid != null && year && year != null && month && month !=null ){
                 let getres = this.props.createbillrun(
                     regionid,
@@ -268,8 +264,8 @@ class BillRunDialog extends Component {
                     this.state.message
                 );
                 this.setState({statusMSG:200});
-                //RegionId, Year ,Month,User, UserId,Message
-                // console.log("getres====================",getres);
+                this.setState({showP: !this.state.showP});
+
             }
         }
 
@@ -293,10 +289,10 @@ class BillRunDialog extends Component {
     render() {
 
         const { classes,loading ,billstatus} = this.props;
-        const { selectedDate ,auth,billruns} = this.state;
+        const { selectedDate ,showP,auth,billruns} = this.state;
         return (
             <div>
-                {loading && loading !==null && (
+                {showP === false && loading && loading !==null && (//loading && loading !==null
                     <div className={classes.overlay}>
                         <CircularProgress className={classes.progress} color="secondary"  />
 

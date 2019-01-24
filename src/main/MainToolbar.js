@@ -6,7 +6,7 @@ import {withRouter} from 'react-router-dom';
 
 
 import classNames from 'classnames';
-import {Avatar, Button,Fab, Icon,ClickAwayListener, IconButton,Divider, Paper,List, ListItem , ListItemIcon, ListItemText, Popover, MenuItem, Typography, Hidden} from '@material-ui/core';
+import {Avatar, Button,Fab,Tabs,Tab,Icon, AppBar,ClickAwayListener, IconButton,Divider, Paper,List, ListItem , ListItemIcon, ListItemText, Popover, MenuItem, Typography, Hidden} from '@material-ui/core';
 
 import * as quickPanelActions from 'main/quickPanel/store/actions';
 import * as authActions from '../auth/store/actions/login.actions';
@@ -15,7 +15,7 @@ import {FuseShortcuts, FuseAnimate, FuseSearch} from '@fuse';
 import {Link} from 'react-router-dom';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-
+import Pusher from 'pusher-js';
 import moment from 'moment/moment';
 import ImageIcon from '@material-ui/icons/Image';
 import * as Actions from "./chatPanel/store/actions";
@@ -92,6 +92,63 @@ const styles = theme => ({
         zIndex         : 10,
         cursor         : 'pointer',
     },
+    unreadchatBadge  : {
+        position       : 'absolute',
+        minWidth       : 18,
+        height         : 18,
+        top            : 29,
+        right          : "70%",
+        borderRadius   : 9,
+        padding        : '0 5px',
+        fontSize       : 11,
+        textAlign      : 'center',
+        display        : 'flex',
+        alignItems     : 'center',
+        justifyContent : 'center',
+        backgroundColor: theme.palette.secondary.main,
+        color          : theme.palette.secondary.contrastText,
+        boxShadow      : '0 2px 2px 0 rgba(0, 0, 0, 0.35)',
+        zIndex         : 10,
+        cursor         : 'pointer',
+    },
+    unreadsystemBadge  : {
+        position       : 'absolute',
+        minWidth       : 18,
+        height         : 18,
+        top            : 29,
+        right          : "36%",
+        borderRadius   : 9,
+        padding        : '0 5px',
+        fontSize       : 11,
+        textAlign      : 'center',
+        display        : 'flex',
+        alignItems     : 'center',
+        justifyContent : 'center',
+        backgroundColor: theme.palette.secondary.main,
+        color          : theme.palette.secondary.contrastText,
+        boxShadow      : '0 2px 2px 0 rgba(0, 0, 0, 0.35)',
+        zIndex         : 10,
+        cursor         : 'pointer',
+    },
+    unreademailBadge  : {
+        position       : 'absolute',
+        minWidth       : 18,
+        height         : 18,
+        top            : 29,
+        right          : "5%",
+        borderRadius   : 9,
+        padding        : '0 5px',
+        fontSize       : 11,
+        textAlign      : 'center',
+        display        : 'flex',
+        alignItems     : 'center',
+        justifyContent : 'center',
+        backgroundColor: theme.palette.secondary.main,
+        color          : theme.palette.secondary.contrastText,
+        boxShadow      : '0 2px 2px 0 rgba(0, 0, 0, 0.35)',
+        zIndex         : 10,
+        cursor         : 'pointer',
+    },
     morebtn :   {
         width                   : '100%',
         height                  : '44px',
@@ -117,16 +174,23 @@ const styles = theme => ({
 
 class MainToolbar extends Component {
     state = {
-        userMenu        : null,
-        region          : -1,
-        open            : false,
-        notification    : false,
-        messages        : null,
-        contacts        : null,
-        chatUser        : null,
-        chatMSG         : null,
-        unreadMSGnum    : 0,
-        chatpanelshowstatus    : null,
+        userMenu                : null,
+        region                  : -1,
+        open                    : false,
+        notification            : false,
+        messages                : null,
+        contacts                : null,
+        chatUser                : null,
+        chatMSG                 : null,
+        unreadMSGnum            : 0,
+        chatpanelshowstatus     : null,
+        value                   : 0,
+        pusherMSG               : null,
+        pusherMSGList           : [],
+        pusherMSGtime           : null,
+        systeunread             : 0,
+        chatunread              : 0,
+
     };
 
     userMenuClick = event => {
@@ -155,7 +219,14 @@ class MainToolbar extends Component {
         if(this.props.login.IsSuccess){
             this.setState({region: this.props.login.defaultRegionId});
         }
-
+        const pusher = new Pusher('ecf6a4e23b186efa2d44', {
+            cluster: 'us2',
+            forceTLS: true
+        });
+        var channel = pusher.subscribe('jk-message-channel');
+        channel.bind('on-message', data => {
+            this.setState({ pusherMSG:data});
+        });
     }
     shownotification=()=>{
         // e.stopPropagation();
@@ -164,6 +235,24 @@ class MainToolbar extends Component {
     }
     componentDidUpdate(prevProps,prevState){
         let midflage = false;
+        if(this.state.pusherMSG !== prevState.pusherMSG){
+            let PusherList =[];
+            let settime = moment();
+            let unreadNum = this.state.unreadMSGnum;
+            let sysunread = this.state.systeunread;
+
+
+            PusherList=this.state.pusherMSGList;
+            PusherList.unshift(this.state.pusherMSG);
+            unreadNum += 1;
+
+            this.setState({unreadMSGnum:unreadNum});
+            this.setState({pusherMSGList:PusherList});
+            this.setState({systeunread:sysunread+1});
+            console.log("pusherMSG-create",this.state.pusherMSG);
+
+
+        }
         if(this.props.chat.messages !== prevProps.chat.messages){
             this.setState({messages: this.props.chat.messages});
             midflage = true;
@@ -183,6 +272,7 @@ class MainToolbar extends Component {
                 });
             }
             this.setState({unreadMSGnum: num});
+            this.setState({chatunread: num});
         }
         if(this.props.chatUser !== prevProps.chatUser){
             this.setState({chatUser: this.props.chatUser});
@@ -276,10 +366,21 @@ class MainToolbar extends Component {
         }
 
     };
+    systemreadmake=()=>{
+        console.log("CCCC");
+        let M= this.state.unreadMSGnum;
+        M -= this.state.systeunread;
+        this.setState({unreadMSGnum:M});
+        this.setState({systeunread:0});
+
+    }
+    handleNotificationChange = (event, value) => {
+        this.setState({value});
+    };
     render()
     {
         const {classes, user, logout, openChatPanel} = this.props;
-        const {userMenu} = this.state;
+        const {userMenu,value} = this.state;
 
         return (
             <div className={classNames(classes.root, "flex flex-row")}>
@@ -417,49 +518,106 @@ class MainToolbar extends Component {
                         <ClickAwayListener onClickAway={() => this.shownotification()}>
                         <div className={classes.notificationbody}>
                             <div>
-                                <Button className={classes.mainnotificationbtns} onClick={this.mailnotificationchat}><Icon>chat</Icon></Button>
-                                <Button component={Link} to="/apps/mail" className={classes.mainnotificationbtns}><Icon>mail</Icon></Button>
-                                <Button component={Link} to="/apps/contacts/all" className={classes.mainnotificationbtns}><Icon>account_box</Icon></Button>
+                                {/*<Button className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:0});this.mailnotificationchat()}}><Icon>chat</Icon></Button>*/}
+
+                                {/*<Button component={Link} to="/apps/contacts/all" className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:2})}}><Icon>account_box</Icon></Button>*/}
+                                <Button className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:0})}}><Icon>chat</Icon></Button>
+                                <Button className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:1});this.systemreadmake();}}><Icon>mail</Icon></Button>
+
+                                    <div style={{display: "contents"}} >
+                                        <div className={classes.unreadchatBadge}>
+                                            {this.state.chatunread}
+                                        </div>
+                                    </div>
+
+
+
+
+                                    <div style={{display: "contents"}} >
+                                        <div className={classes.unreadsystemBadge}>
+                                        {this.state.systeunread}
+                                        </div>
+                                    </div>
+
+
+
+                                    <div style={{display: "contents"}} >
+                                        <div className={classes.unreademailBadge}>
+                                           0
+                                        </div>
+                                    </div>
+
+
+                                <Button component={Link} to="/apps/contacts/all" className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:2})}}><Icon>account_box</Icon></Button>
+
+
                             </div>
                             <Paper style={{maxHeight: 350, overflow: 'auto'}}>
-                            <List component="nav" className={classes.notificationroot} >
-                                {this.state.chatMSG && this.state.chatMSG.length &&  (
-                                    this.state.chatMSG.map((item, index)=>{
-                                        if(index < 15)
-                                        return (
-                                            <div key={index}>
-                                                <ListItem button style ={{height:'55px'}} onClick={() => this.handleContactClick(item.who)}>
-                                                    <React.Fragment>
-                                                    {this.state.contacts && this.state.contacts !== null && (
-                                                        this.state.contacts.map((contact,i)=>{
-                                                          if(contact && contact != null && contact.id ==item.who){
-                                                              return(
-                                                                  <div key={i} style ={{height:'40px'}} style={{textAlign: '-webkit-center'}}>
-                                                                      <Avatar className={classes.avatarresize} alt={contact.name} src ={contact.avatar} />
-                                                                      <span style={{fontSize:'12px'}}>{contact.name}</span>
-                                                                  </div>
 
-                                                              )
-                                                          }
-                                                        })
-                                                    )}
-                                                    </React.Fragment>
-                                                    <span style={{
-                                                        fontSize:'15px',width:'250px',paddingLeft:'16px',paddingRight:'16px',textOverflow: 'ellipsis',
-                                                        whiteSpace: 'nowrap',
-                                                        overflow: 'hidden',
-                                                    }}>{item.message}<br/><span style={{fontSize:'9px'}}>{moment(item.time).format('MMMM Do YYYY, h:mm:ss a')}</span></span><br/>
-                                                    {/*<Typography style={{fontSize:'9px'}}>{moment(item.time).format('MMMM Do YYYY, h:mm:ss a')}</Typography>*/}
-                                                    {/*<ListItemText style={{fontSize:'0.7em'}} primary={item.message} secondary={moment(item.time).format('MMMM Do YYYY, h:mm:ss a')}/>*/}
-                                                </ListItem>
-                                                <Divider className="my-0.5"/>
-                                            </div>
-                                            )
-                                    })
+                                    <List component="nav" className={classes.notificationroot} >
+                                        { value === 0 && this.state.chatMSG && this.state.chatMSG.length &&  (
+                                            this.state.chatMSG.map((item, index)=>{
+                                                if(index < 15)
+                                                    return (
+                                                        <div key={index}>
+                                                            <ListItem button style ={{height:'55px'}} onClick={() => this.handleContactClick(item.who)}>
+                                                                <React.Fragment>
+                                                                    {this.state.contacts && this.state.contacts !== null && (
+                                                                        this.state.contacts.map((contact,i)=>{
+                                                                            if(contact && contact != null && contact.id ==item.who){
+                                                                                return(
+                                                                                    <div key={i} style ={{height:'40px'}} style={{textAlign: '-webkit-center'}}>
+                                                                                        <Avatar className={classes.avatarresize} alt={contact.name} src ={contact.avatar} />
+                                                                                        <span style={{fontSize:'12px'}}>{contact.name}</span>
+                                                                                    </div>
 
-                                )
-                                }
-                            </List>
+                                                                                )
+                                                                            }
+                                                                        })
+                                                                    )}
+                                                                </React.Fragment>
+                                                                <span style={{
+                                                                    fontSize:'15px',width:'250px',paddingLeft:'16px',paddingRight:'16px',textOverflow: 'ellipsis',
+                                                                    whiteSpace: 'nowrap',
+                                                                    overflow: 'hidden',
+                                                                }}>{item.message}<br/><span style={{fontSize:'9px'}}>{moment(item.time).format('MMMM Do YYYY, h:mm:ss a')}</span></span><br/>
+                                                                {/*<Typography style={{fontSize:'9px'}}>{moment(item.time).format('MMMM Do YYYY, h:mm:ss a')}</Typography>*/}
+                                                                {/*<ListItemText style={{fontSize:'0.7em'}} primary={item.message} secondary={moment(item.time).format('MMMM Do YYYY, h:mm:ss a')}/>*/}
+                                                            </ListItem>
+                                                            <Divider className="my-0.5"/>
+                                                        </div>
+                                                    )
+                                            })
+
+                                        )
+                                        }
+                                        {value === 1 && this.state.pusherMSG && this.state.pusherMSG != null &&  (
+                                            this.state.pusherMSGList.map((item,index)=>{
+                                                return (
+                                                <div key={index}>
+                                                    <ListItem button style ={{height:'55px'}}>
+                                                        <React.Fragment>
+                                                            <div style ={{height:'40px'}} style={{textAlign: '-webkit-center'}}>
+                                                                <Avatar className={classes.avatarresize} alt={this.props.login.firstName + this.props.login.lastName} src ={this.props.login.profilePhoto} />
+                                                                <span style={{fontSize:'12px'}}>App</span>
+                                                            </div>
+                                                        </React.Fragment>
+                                                        <span style={{
+                                                            fontSize:'15px',width:'250px',paddingLeft:'16px',paddingRight:'16px',textOverflow: 'ellipsis',
+                                                            whiteSpace: 'nowrap',
+                                                            overflow: 'hidden',
+                                                        }}>{this.state.pusherMSG.message}<br/><span style={{fontSize:'9px'}}>{moment().format('MMMM Do YYYY, h:mm:ss a')}</span></span><br/>
+                                                    </ListItem>
+                                                    <Divider className="my-0.5"/>
+                                                </div>
+                                                )
+                                            })
+
+                                        )}
+                                    </List>
+
+
+
 
                             </Paper>
                             {/*<div>*/}
