@@ -69,32 +69,46 @@ class UsersHeader extends Component {
                     <div className="flex flex-row flex-1 justify-between">
 
                         <div className="flex w-full items-center">
-                            <div className="flex items-center">
-                                <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <Icon className="text-32 mr-12">account_box</Icon>
-                                </FuseAnimate>
-                                <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                    <Typography variant="h6" className="hidden sm:flex">Settings | Users</Typography>
-                                </FuseAnimate>
-                            </div>
+                            {!openUsersFormStatus && (
+                                <div className="flex items-center">
+                                    <FuseAnimate animation="transition.expandIn" delay={300}>
+                                        <Icon className="text-32 mr-12">account_box</Icon>
+                                    </FuseAnimate>
+                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                        <Typography variant="h6" className="hidden sm:flex">Settings | Users</Typography>
+                                    </FuseAnimate>
+                                </div>
+                            )}
+                            {openUsersFormStatus && (
+                                <div className="flex items-center">
+                                    <FuseAnimate animation="transition.expandIn" delay={300}>
+                                        <Icon className="text-32 mr-12">account_box</Icon>
+                                    </FuseAnimate>
+                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                        <Typography variant="h6" className="hidden sm:flex">Settings | New User</Typography>
+                                    </FuseAnimate>
+                                </div>
+                            )}
                         </div>
                         <div className="flex w-full items-center">
-                            <div className="flex items-center w-full h-44 mr-12 ml-12">
-                                <Paper className={"flex items-center h-44 w-full xs:mr-0"}>
-                                    <Input
-                                        placeholder="Search for users..."
-                                        className={classNames(classes.search, 'pl-16')}
-                                        disableUnderline
-                                        fullWidth
-                                        //value={this.state.s}
-                                        //onChange={this.handleChange('s')}
-                                        inputProps={{
-                                            'aria-label': 'Search'
-                                        }}
-                                    />
-                                    <Icon color="action" className="flex justify-center mr-12">search</Icon>
-                                </Paper>
-                            </div>
+                            {!openUsersFormStatus && (
+                                <div className="flex items-center w-full h-44 mr-12 ml-12">
+                                    <Paper className={"flex items-center h-44 w-full xs:mr-0"}>
+                                        <Input
+                                            placeholder="Search for users..."
+                                            className={classNames(classes.search, 'pl-16')}
+                                            disableUnderline
+                                            fullWidth
+                                            //value={this.state.s}
+                                            //onChange={this.handleChange('s')}
+                                            inputProps={{
+                                                'aria-label': 'Search'
+                                            }}
+                                        />
+                                        <Icon color="action" className="flex justify-center mr-12">search</Icon>
+                                    </Paper>
+                                </div>
+                            )}
                         </div>
                         <div className="flex w-full items-center justify-end">
                             {! openUsersFormStatus && (
