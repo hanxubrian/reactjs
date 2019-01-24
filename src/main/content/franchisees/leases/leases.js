@@ -459,7 +459,6 @@ class Leases extends Component {
 
 	componentDidMount() {
 		document.addEventListener("keydown", this.escFunction, false);
-		this.getLocation();
 	}
 
 	componentWillUnmount() {
@@ -535,20 +534,6 @@ class Leases extends Component {
 		});
 	}
 
-
-	getLocation() {
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(
-				(position) => {
-					console.log(position.coords);
-					this.setState({
-						current_lat: position.coords.latitude,
-						current_long: position.coords.longitude
-					})
-				}
-			);
-		}
-    }
 
     render() {
 		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState,
@@ -890,6 +875,8 @@ function mapStateToProps({ leases, auth, franchisees }) {
 		regionId: auth.login.defaultRegionId,
 		statusId: leases.statusId,
 		searchText: leases.searchText,
+		bLeaseStart: leases.bLeaseStart,
+        bLeasesUpdated: leases.bLeasesUpdated,
 
 		removedId: leases.removedId,
 
