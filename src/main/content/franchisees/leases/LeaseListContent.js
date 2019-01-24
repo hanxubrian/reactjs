@@ -766,8 +766,11 @@ import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerC
 import { compose, withProps, withHandlers, lifecycle } from "recompose";
 
 import {
-	Getter,
+	Getter, Template, TemplateConnector
   } from '@devexpress/dx-react-core';
+
+import { CustomizedDxGridSelectionPanel } from "./CustomizedDxGridSelectionPanel";
+
 import {
 	SelectionState,
 	PagingState,
@@ -1938,6 +1941,39 @@ class LeaseListContent extends Component {
 		// return _nearbys
 	}
 
+	TableRow = ({ tableRow, selected, onToggle, ...restProps }) => {
+		// workaround for using the click & doubleClick events at the same time
+		// from https://stackoverflow.com/questions/25777826/onclick-works-but-ondoubleclick-is-ignored-on-react-component
+		let timer = 0;
+		let delay = 200;
+		let prevent = false;
+		delete restProps.selectByRowClick
+		const handleClick = () => {
+			timer = setTimeout(() => {
+				if (!prevent) {
+					onToggle();
+				}
+				prevent = false;
+			}, delay);
+		};
+		const handleDoubleClick = () => {
+			clearTimeout(timer);
+			prevent = true;
+			// alert(JSON.stringify(tableRow.row));
+			console.log(restProps);
+			this.props.openEditLeaseForm(tableRow.row.LeaseId);
+		}
+		return (
+			<Table.Row
+				{...restProps}
+				className={selected ? 'active' : ''}
+				style={{ color: 'green', cursor: 'pointer' }}
+				onClick={handleClick}
+				onDoubleClick={handleDoubleClick}
+			/>
+		);
+	};
+
 	render() {
 		const {
 			classes,
@@ -2019,7 +2055,7 @@ class LeaseListContent extends Component {
 						</div>
 					</div>)}
 
-					{/* Girdview */}
+					{/* Gridview */}
 					{!mapViewState &&
 						(
 							<div className={classNames("flex flex-col")}
@@ -2087,7 +2123,7 @@ class LeaseListContent extends Component {
 										columnExtensions={tableColumnExtensions}
 									/>
 									<IntegratedGrouping />
-									<Table />
+									<Table rowComponent={this.TableRow}/>
 									<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
 									<TableHeaderRow />
 									<DataTypeProvider for={grouping}/>
@@ -2131,7 +2167,7 @@ class LeaseListContent extends Component {
 									rightColumns={rightColumns}
 								/> */}
 
-									<TableSelection showSelectAll selectByRowClick highlightRow />
+									<TableSelection showSelectAll selectByRowClick highlightRow  rowComponent={this.TableRow}/>
 
 									<TableEditRow />
 									<TableEditColumn
@@ -2177,9 +2213,28 @@ class LeaseListContent extends Component {
 									<Toolbar />
 									<GroupingPanel showSortingControls={true} />
 
+									<Template
+										name="tableRow"
+										predicate={({ tableRow }) => tableRow.type === 'data'}
+									>
+										{params => (
+											<TemplateConnector>
+												{({ selection }, { toggleSelection }) => (
+													<this.TableRow
+														{...params}
+														selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
+														onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
+													/>
+												)}
+											</TemplateConnector>
+										)}
+									</Template>
+
+									<CustomizedDxGridSelectionPanel selection={selection} />
+
 								</Grid>
 
-								<div
+								{/* <div
 									// className={classNames(classes.layoutTable, "flex flex-row")}
 									style={{ justifyContent: "space-between" }}
 								>
@@ -2190,7 +2245,7 @@ class LeaseListContent extends Component {
 									<span className={"p-6"}>
 										Total Rows: <strong>{rows.length}</strong>
 									</span>
-								</div>
+								</div> */}
 
 							</div>
 						)

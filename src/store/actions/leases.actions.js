@@ -187,10 +187,27 @@ export function closeNewLeaseForm()
 
 export function openEditLeaseForm(data)
 {
-    return {
-        type: OPEN_EDIT_LEASE_FORM,
-        data
-    }
+return (dispatch) => {
+    dispatch({
+        type: GET_LEASES_FETCH_START,
+        payload: true
+    });
+
+    (async () => {
+        let res = await leaseService.getLeaseDetailList(data);
+        if (res) {
+            dispatch({
+                type: GET_LEASE_DETAIL,
+                payload: res
+            });
+            dispatch({
+                type: OPEN_EDIT_LEASE_FORM,
+            });
+        } else {
+
+        }
+    })();
+}
 }
 
 export function closeEditLeaseForm()

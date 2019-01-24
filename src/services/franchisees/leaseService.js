@@ -81,9 +81,9 @@ class leaseService {
         });
     };
 
-    getLeaseDetailList = () => {
+    getLeaseDetailList = (LeaseId) => {
         return new Promise((resolve, reject) => {
-            axios.get("/api/LeaseDetail/gets")
+            axios.get(`${BASE_MONGO_API_URL}/v1/Lease/LeaseList/${LeaseId}`)
             //     { params: {RegionId, LeaseTypeId}}
             // )
                 .then( res => {

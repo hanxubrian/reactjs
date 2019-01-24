@@ -427,6 +427,7 @@ class Leases extends Component {
 			this.getLeasesFromStatus(nextProps.leases);
 		if (this.props.leases !== nextProps.leases)
 			this.getLeasesFromStatus(nextProps.leases);
+
 		if(nextProps.franchisees!==null && this.props.franchisees!==nextProps.franchisees){
 			this.setState({franchisees: nextProps.franchisees.Data.Region[0].FranchiseeList});
 		}
@@ -462,6 +463,16 @@ class Leases extends Component {
 
 	componentDidMount() {
 		document.addEventListener("keydown", this.escFunction, false);
+		if(this.props.franchisees!==null){
+            let temp = [];
+            let regions = this.props.franchisees.Data.Region;
+	
+            regions.map(x => {
+                temp = [...temp, ...x.FranchiseeList];
+                return true;
+            });
+            this.setState({franchisees: temp});
+        }
 	}
 
 	componentWillUnmount() {
@@ -475,12 +486,14 @@ class Leases extends Component {
 		}
 	}
 	search(val) {
-		if (val === '') {
-			this.getLeasesFromStatus();
-			return;
-		}
+		// if (val === '') {
+		// 	this.getLeasesFromStatus();
+		// 	return;
+		// }
 		const temp = this.state.data.filter(d => {
 			return (d.LeaseNo && d.LeaseNo.toString().indexOf(val) !== -1) || !val ||
+				(d.FranchiseeName && d.FranchiseeName.toString().indexOf(val) !== -1) ||
+				(d.FranchiseeNo && d.FranchiseeNo.toString().indexOf(val) !== -1) ||
 				(d.LeaseName && d.LeaseName.toString().indexOf(val) !== -1) ||
 				(d.Address && d.Address.toString().indexOf(val) !== -1) ||
 				(d.Phone && d.Phone.toString().indexOf(val) !== -1) ||
@@ -489,7 +502,6 @@ class Leases extends Component {
 				(d.Amount && d.Amount.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.StatusName && d.StatusName.toString().indexOf(val) !== -1)
 		});
-
 		this.setState({ temp: temp });
 	}
 
@@ -754,7 +766,7 @@ class Leases extends Component {
                                                     disableUnderline
                                                     fullWidth
                                                     value={this.state.s}
-                                                    onChange={this.handleChange('s')}
+                                                    onChange={this.handleSearchChange('s')}
                                                     inputProps={{
                                                         'aria-label': 'Search'
                                                     }}
