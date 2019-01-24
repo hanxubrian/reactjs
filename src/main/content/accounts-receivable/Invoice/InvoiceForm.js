@@ -676,11 +676,55 @@ class InvoiceForm extends Component {
         this.setState({bCustomerNotFound: false})
     };
 
+    isDisableButton = () => {
+        let data = this.props.invoiceForm.data.line;
+        if (data.length) {
+
+
+        }
+
+    };
+
     validateNewInvoice = () => {
         if(this.state.selectedCustomer===null){
             this.setState({snackMessage: 'Please choose customer from Invoice suggestion'});
             this.setState({openSnack: true});
             return false;
+        }
+        let data = this.props.invoiceForm.data.line;
+        let bLineAmount = true;
+        let bFrachiseeAmount = true;
+
+        if(data.length) {
+            _.forEach(data, line=>{
+               if(line.amount==='' || parseFloat(line.amount)===0) {
+                   bLineAmount = false;
+                   return false
+               }
+               let franchisees = line.franchisees;
+               if(franchisees.length>0) {
+                   _.forEach(franchisees, f=>{
+                       if(f.amount===0) {
+                           bFrachiseeAmount = false;
+                           return false;
+                       }
+                   })
+               }
+               if(!bFrachiseeAmount) return false;
+            });
+
+            if(!bLineAmount) {
+                this.setState({snackMessage: 'Please add item amount(s) to your invoice before saving!'});
+                this.setState({openSnack: true});
+
+                return false;
+            }
+            if(!bFrachiseeAmount) {
+                this.setState({snackMessage: 'Please add distribution amount(s) to your invoice before saving!'});
+                this.setState({openSnack: true});
+
+                return false;
+            }
         }
 
         return true;
@@ -1289,7 +1333,7 @@ class InvoiceForm extends Component {
                         <DialogTitle id="alert-dialog-title">{"Invoice Form"}</DialogTitle>
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
-                                Do you really want to close the invoice form without saving?
+                                Proceed to close without saving?
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
