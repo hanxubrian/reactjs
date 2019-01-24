@@ -389,7 +389,7 @@ class InvoiceForm extends Component {
         if(this.state.selectedCustomer!==null) {
             let status = this.state.selectedCustomer.Status;
 
-            if(status!=='A' && this.props.invoiceForm.type === 'new')
+            if((status!=='A' || status!=='O') && this.props.invoiceForm.type === 'new')
                 this.setState({bSelectCustomerAgain: true});
         }
 
@@ -691,8 +691,15 @@ class InvoiceForm extends Component {
             this.setState({openSnack: true});
             return false;
         }
+        if(this.state.InvoiceDescription===''){
+            this.setState({snackMessage: 'Please fill invoice description'});
+            this.setState({openSnack: true});
+            return false;
+        }
+
         let data = this.props.invoiceForm.data.line;
         let bLineAmount = true;
+        let bLineItemDescription = true;
         let bFrachiseeAmount = true;
 
         if(data.length) {
@@ -701,6 +708,12 @@ class InvoiceForm extends Component {
                    bLineAmount = false;
                    return false
                }
+
+                if(line.description==='') {
+                    bLineItemDescription = false;
+                    return false
+                }
+
                let franchisees = line.franchisees;
                if(franchisees.length>0) {
                    _.forEach(franchisees, f=>{
@@ -715,6 +728,12 @@ class InvoiceForm extends Component {
 
             if(!bLineAmount) {
                 this.setState({snackMessage: 'Please add item amount(s) to your invoice before saving!'});
+                this.setState({openSnack: true});
+
+                return false;
+            }
+            if(!bLineItemDescription) {
+                this.setState({snackMessage: 'Please fill item description to your invoice before saving!'});
                 this.setState({openSnack: true});
 
                 return false;
@@ -1354,7 +1373,7 @@ class InvoiceForm extends Component {
                         <DialogTitle id="alert-dialog-title">{"Invoice Form"}</DialogTitle>
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
-                                Customer has a {this.state.customerStatusLabel} Status. Do you still want to create an invoice?
+                                Customer has a {this.state.customerStatusLabel} Status. Proceed to create new invoice?
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
