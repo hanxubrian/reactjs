@@ -466,10 +466,10 @@ class InvoiceLineTable extends React.Component {
                 record.id = id++;
                 return record;
             });
+
             this.setState({data: newData});
         }
         else {//For Edit
-            console.log('cus=',this.props.invoiceForm.customer);
             let items = this.props.invoiceDetail.Data.Items;
 
             let billingSuggestions = this.props.billingLists.map(b => ({
@@ -526,7 +526,6 @@ class InvoiceLineTable extends React.Component {
         }
 
         if(this.props.invoiceForm.customer!==null && this.props.invoiceForm.type==='edit' && this.props.invoiceForm.customer!==prevProps.invoiceForm.customer){
-            console.log('fired',this.props.invoiceForm.customer, this.props.invoiceForm.data.line);
             let rows = this.props.invoiceForm.data.line;
             rows.forEach(row=>{
                 let markup = 0.0;
@@ -535,7 +534,7 @@ class InvoiceLineTable extends React.Component {
             });
         }
 
-        if(this.props.invoiceForm.customer!==null && this.props.fn!==null && prevProps.fn!==this.props.fn){
+        if(this.props.fn!==null && prevProps.fn!==this.props.fn){
             let selectedFranchiess =[];
             let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList;
             this.props.fn.forEach(f=>{
