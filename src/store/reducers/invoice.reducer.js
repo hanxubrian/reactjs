@@ -42,7 +42,6 @@ const initialState = {
     removedId: undefined,
     billingLists: null,
     serviceLists: null,
-    bTaxChanged: false,
 };
 
 

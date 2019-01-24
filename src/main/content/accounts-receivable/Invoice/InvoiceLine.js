@@ -837,8 +837,6 @@ class InvoiceLineTable extends React.Component {
             ["selectedServiceOption"+row.id]: newValue
         });
         const data = [...this.state.data];
-        console.log('data=', data, newValue);
-        // if(data[row.id].service)
         data[row.id].service = newValue;
         this.setState({data: data});
     };

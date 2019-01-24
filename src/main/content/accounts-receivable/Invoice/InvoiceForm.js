@@ -353,6 +353,8 @@ class InvoiceForm extends Component {
     };
 
     getSuggestionValue =  (suggestion) =>{
+        console.log('suggestion=', suggestion);
+
         this.setState({selectedCustomer: suggestion});
         this.setState({PO_number: suggestion.CustomerNo});
         this.setState({franchiseeFromCustomer: suggestion.Franchisees});
@@ -626,7 +628,6 @@ class InvoiceForm extends Component {
 
     };
 
-
     addNewCustomer = () => {
         this.setState({bCustomerNotFound: false})
     };
@@ -738,7 +739,7 @@ class InvoiceForm extends Component {
         let statusName = '';
 
         if(this.state.selectedCustomer!==null) {
-            let status = this.state.selectedCustomer.StatusName;
+            let status = this.state.selectedCustomer.Status;
             let customerStatusObj = customerStatus.filter(c=>c.key===status);
             if(customerStatusObj.length>0) {
                 statusName = customerStatusObj[0].label;
