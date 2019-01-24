@@ -427,15 +427,17 @@ class InvoiceForm extends Component {
         const regex = new RegExp(escapedValue, 'i');
         if(this.props.customers!==null) {
             let suggestions = this.props.customers.filter(customer => regex.test(customer.CustomerName) || regex.test(customer.CustomerNo));
-            if(this.state.bCustomerNotFound)
-                return suggestions;
+            let suggestionsExcludedT = suggestions.filter(c=>c.Status!=='T');
 
-            if(!this.state.bCustomerNotFound && suggestions.length===0) {
+            if(this.state.bCustomerNotFound)
+                return suggestionsExcludedT;
+
+            if(!this.state.bCustomerNotFound && suggestionsExcludedT.length===0) {
                 // this.setState({bCustomerNotFound: true});
                 // this.setState({value: ''});
             }
 
-            return suggestions;
+            return suggestionsExcludedT;
         }
     };
 
