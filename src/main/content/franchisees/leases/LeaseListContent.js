@@ -1985,7 +1985,7 @@ class LeaseListContent extends Component {
 					</LeaseSearchBar> */}
 
 					{/* Mapview */}
-					{mapViewState && (<div className="w-full h-full">
+					{mapViewState && (<div className="w-full h-full" >
 						<div className="w-full h-full">
 							{/* <GoogleMap
 								bootstrapURLKeys={{
@@ -2022,8 +2022,8 @@ class LeaseListContent extends Component {
 					{/* Girdview */}
 					{!mapViewState &&
 						(
-							<Paper
-								className={classNames(classes.layoutTable, "flex flex-col h-full")}
+							<div className={classNames("flex flex-col")}
+								// className={classNames(classes.layoutTable, "flex flex-col h-full")}
 							// style={{ flex: '1', }}
 							>
 								<Grid
@@ -2180,7 +2180,7 @@ class LeaseListContent extends Component {
 								</Grid>
 
 								<div
-									className={classNames(classes.layoutTable, "flex flex-row")}
+									// className={classNames(classes.layoutTable, "flex flex-row")}
 									style={{ justifyContent: "space-between" }}
 								>
 									<span className={"p-6"}>
@@ -2192,7 +2192,7 @@ class LeaseListContent extends Component {
 									</span>
 								</div>
 
-							</Paper>
+							</div>
 						)
 					}
 				</div>
