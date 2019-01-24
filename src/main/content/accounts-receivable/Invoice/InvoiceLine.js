@@ -740,7 +740,7 @@ class InvoiceLineTable extends React.Component {
         });
 
         data.forEach(d=>{
-            if(d.franchisees.length>0 && d.id===row.fid){
+            if(d.franchisees.length>0 && d.id===row.id){
                 let fid=0;
                 let franchisees = d.franchisees;
                 let newData = franchisees.map(record=>{
@@ -750,6 +750,14 @@ class InvoiceLineTable extends React.Component {
                 d.franchisees = newData
             }
         });
+
+        let n = data[row.id];
+
+        if(n.extended>0) {
+            let d_amount = n.extended/n.franchisees.length;
+            n.franchisees.forEach(f=>f.amount = d_amount)
+        }
+
         this.setState({data: data});
         this.setState({['nameValue'+row.f_index]: ''})
     };
