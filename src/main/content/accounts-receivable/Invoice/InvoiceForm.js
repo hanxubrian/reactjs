@@ -182,24 +182,35 @@ const customerStatus = [
 ];
 
 function renderSuggestion(suggestion, { query, isHighlighted }) {
+    let statusName = '';
+    if(suggestion!==null) {
+        let status = suggestion.Status;
+        let customerStatusObj = customerStatus.filter(c=>c.key===status);
+        if(customerStatusObj.length>0) {
+            statusName = customerStatusObj[0].label;
+            console.log('status = ', statusName);
+        }
+    }
+
     const matches = match(suggestion.CustomerName+'-'+suggestion.CustomerNo, query);
     const parts = parse(suggestion.CustomerName+'-'+suggestion.CustomerNo, matches);
 
     return (
         <MenuItem selected={isHighlighted} component="div">
-            <div>
-                {parts.map((part, index) => {
-                    return part.highlight ? (
-                        <span key={String(index)} style={{ fontWeight: 700 }}>
-              {part.text}
-            </span>
-                    ) : (
-                        <strong key={String(index)} style={{ fontWeight: 300 }}>
-                            {part.text}
-                        </strong>
-                    );
-                })}
-            </div>
+            {/*<div>*/}
+                {/*{parts.map((part, index) => {*/}
+                    {/*return part.highlight ? (*/}
+                        {/*<span key={String(index)} style={{ fontWeight: 700 }}>*/}
+              {/*{part.text}*/}
+            {/*</span>*/}
+                    {/*) : (*/}
+                        {/*<strong key={String(index)} style={{ fontWeight: 300 }}>*/}
+                            {/*{part.text} - Status: {statusName}*/}
+                        {/*</strong>*/}
+                    {/*);*/}
+                {/*})}*/}
+            {/*</div>*/}
+            <span>{suggestion.CustomerName} - {suggestion.CustomerNo} - <strong>{statusName}</strong></span>
         </MenuItem>
     );
 }
@@ -295,6 +306,8 @@ class InvoiceForm extends Component {
         InvoiceNo: this.props.invoiceForm.type === 'new' ? "PENDING": '',
         snackMessage: "",
         openSnack: false,
+        snackMessage1: "",
+        openSnack1: false,
         PO_number: '',
         period: moment(),
         taxExempt: false,
@@ -388,8 +401,8 @@ class InvoiceForm extends Component {
         this.setState({bSelectCustomerAgain: false});
 
         if(this.input) {
-            if(this.props.invoiceForm.type === 'new')
-                setTimeout(() => {this.input.focus()}, 500);
+            // if(this.props.invoiceForm.type === 'new')
+            //     setTimeout(() => {this.input.focus()}, 500);
         }
     };
 
@@ -402,12 +415,6 @@ class InvoiceForm extends Component {
         let month = moment().month();
         let invoiceDate = moment();
         let dueDate = moment().year(year).month(month).endOf('month');
-        // let dueDate = moment().year(year).month(month).endOf('month').add(suggestion.PaymentTerm, 'days');
-
-        // if(suggestion.InvoiceDayPreference==='BOM') {
-        //     invoiceDate = moment().year(year).month(month).startOf('month');
-        //     dueDate = moment().year(year).month(month).startOf('month').add(suggestion.PaymentTerm, 'days');
-        // }
 
         this.setState({InvoiceDate: invoiceDate.format('YYYY-MM-DD')});
         this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
@@ -493,6 +500,9 @@ class InvoiceForm extends Component {
         //in time of Saving
         if(nextProps.newInvoice!==null && nextProps.newInvoice!==this.props.newInvoice){
             if(this.state.buttonOption===0){
+                this.setState({snackMessage1: 'Saved!'});
+                this.setState({openSnack1: true});
+
                 this.props.updatedInvoices();
                 this.props.resetInvoiceForm();
                 this.setState({InvoiceDescription: ''});
@@ -511,11 +521,9 @@ class InvoiceForm extends Component {
             }
             else if(this.state.buttonOption===1) {
                 this.props.updatedInvoices();
-                this.closeComposeForm();
-            }
-            else if(this.state.buttonOption===2) {
-                this.props.updatedInvoices();
-                this.closeComposeForm();
+                this.setState({snackMessage1: 'Saved!'});
+                this.setState({openSnack1: true});
+                setTimeout(() => {this.closeComposeForm()}, 3000);
             }
         }
     }
@@ -662,10 +670,6 @@ class InvoiceForm extends Component {
 
     };
 
-    updateInvoice = () => {
-
-    };
-
     addNewCustomer = () => {
         this.setState({bCustomerNotFound: false})
     };
@@ -729,6 +733,13 @@ class InvoiceForm extends Component {
         }
 
         this.setState({ openSnack: false });
+    };
+    handleClose1 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        this.setState({ openSnack1: false });
     };
 
     focusDescriptionInputField = input => {
@@ -1215,8 +1226,8 @@ class InvoiceForm extends Component {
                     </div>
                     <Snackbar
                         anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'left',
+                            vertical: 'top',
+                            horizontal: 'center',
                         }}
                         open={this.state.openSnack}
                         autoHideDuration={3000}
@@ -1226,6 +1237,21 @@ class InvoiceForm extends Component {
                             onClose={this.handleClose}
                             variant="error"
                             message={this.state.snackMessage}
+                        />
+                    </Snackbar>
+                    <Snackbar
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                        }}
+                        open={this.state.openSnack1}
+                        autoHideDuration={3000}
+                        onClose={this.handleClose1}
+                    >
+                        <MySnackbarContentWrapper
+                            onClose={this.handleClose1}
+                            variant="success"
+                            message={this.state.snackMessage1}
                         />
                     </Snackbar>
                     <Dialog

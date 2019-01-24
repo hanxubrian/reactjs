@@ -1246,8 +1246,8 @@ class InvoiceLineTable extends React.Component {
                 </div>
                 <Snackbar
                     anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
+                        vertical: 'top',
+                        horizontal: 'center',
                     }}
                     open={this.state.openSnack}
                     autoHideDuration={3000}
