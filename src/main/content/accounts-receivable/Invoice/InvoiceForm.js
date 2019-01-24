@@ -298,6 +298,8 @@ class InvoiceForm extends Component {
         buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval,
         franchiseeFromCustomer: null,
         bInvoiceFormClose: false,
+        bSelectCustomerAgain: false,
+        customerStatusLabel: ''
     };
 
     constructor(props) {
@@ -332,6 +334,7 @@ class InvoiceForm extends Component {
         );
     };
 
+
     onChange = (event, { newValue, method }) => {
         this.setState({
             value: newValue.toString()
@@ -352,9 +355,52 @@ class InvoiceForm extends Component {
         });
     };
 
-    getSuggestionValue =  (suggestion) =>{
-        console.log('suggestion=', suggestion);
+    onSuggestionBlur = () =>{
 
+        const customerStatus = [
+            {key: 'A', label: 'Active'}, {key: 'C', label: 'Cancelled'}, {key: 'I', label: 'InActive'},
+            {key: 'S', label: 'Suspended'}, {key: 'O', label: 'One Time Clean Account'}, {key: 'T', label: 'Transferred'}
+        ];
+
+        if(this.state.selectedCustomer!==null) {
+            let status = this.state.selectedCustomer.Status;
+                console.log('status = ', status);
+        }
+
+        let statusName = '';
+
+        if(this.state.selectedCustomer!==null) {
+            let status = this.state.selectedCustomer.Status;
+            let customerStatusObj = customerStatus.filter(c=>c.key===status);
+            if(customerStatusObj.length>0) {
+                statusName = customerStatusObj[0].label;
+            }
+        }
+
+        this.setState({customerStatusLabel: statusName})
+
+        if(this.state.selectedCustomer!==null) {
+            let status = this.state.selectedCustomer.Status;
+            console.log('status = ', status);
+
+            if(status!=='A')
+                this.setState({bSelectCustomerAgain: true});
+        }
+
+    };
+
+    onResetCustomerSelection =() =>{
+        this.setState({selectedCustomer: null});
+        this.setState({value: ''});
+        this.setState({bSelectCustomerAgain: false});
+
+        if(this.input) {
+            if(this.props.invoiceForm.type === 'new')
+                setTimeout(() => {this.input.focus()}, 500);
+        }
+    };
+
+    getSuggestionValue =  (suggestion) =>{
         this.setState({selectedCustomer: suggestion});
         this.setState({PO_number: suggestion.CustomerNo});
         this.setState({franchiseeFromCustomer: suggestion.Franchisees});
@@ -621,7 +667,6 @@ class InvoiceForm extends Component {
             this.props.updateInvoice(this.props.invoices.invoiceDetail.Data._id, this.props.regionId, result);
         }
 
-        console.log('result', JSON.stringify(result));
     };
 
     updateInvoice = () => {
@@ -708,6 +753,10 @@ class InvoiceForm extends Component {
         this.setState({ bInvoiceFormClose: false });
     };
 
+    handleCustomerSelectDialogBoxClose = () => {
+        this.setState({ bSelectCustomerAgain: false });
+    };
+
     confirmCloseForm = () => {
         this.setState({ bInvoiceFormClose: true });
     };
@@ -759,6 +808,7 @@ class InvoiceForm extends Component {
                                         placeholder: 'Search Customer Name or Number',
                                         value: value,
                                         onChange: this.onChange,
+                                        onBlur: this.onSuggestionBlur,
                                     }}
                                     theme={{
                                         container: classNames(classes.container),
@@ -1231,6 +1281,27 @@ class InvoiceForm extends Component {
                                 No
                             </Button>
                             <Button onClick={()=>this.closeComposeForm()} color="primary" autoFocus>
+                                Yes
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                    <Dialog
+                        open={this.state.bSelectCustomerAgain}
+                        onClose={this.handleCustomerSelectDialogBoxClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Invoice Form"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Customer has a {this.state.customerStatusLabel} Status. Do you still want to create an invoice?
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={()=>this.onResetCustomerSelection()} color="primary" autoFocus>
+                                No
+                            </Button>
+                            <Button onClick={()=>this.handleCustomerSelectDialogBoxClose()} color="primary" autoFocus>
                                 Yes
                             </Button>
                         </DialogActions>
