@@ -28,7 +28,7 @@ import {FindersFeesConfig} from "./franchisees/findersfees/findersFeesConfig";
 import {PaymentListConfig} from "./payments/payment-list/payment-listConfig";
 import {DashboardConfig} from "./dashboard/DashboardConfig";
 import {HomepageConfig} from "./home/HomepageConfig";
-
+import {UsersAppConfig} from "../users/UsersAppConfig"
 
 export const pagesConfigs = [
     SigninPageConfig,
@@ -61,5 +61,6 @@ export const pagesConfigs = [
     FindersFeesConfig,
     PaymentListConfig,
 	DashboardConfig,
-    HomepageConfig
+    HomepageConfig,
+    UsersAppConfig
 ];
