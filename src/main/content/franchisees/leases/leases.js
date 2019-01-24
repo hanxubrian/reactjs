@@ -217,16 +217,19 @@ const styles = theme => ({
 			backgroundColor: theme.palette.primary.dark,
 		}
 	},
-	summaryPanelButton: {
-		backgroundColor: theme.palette.secondary.main,
-		minWidth: 42,
-		padding: 8,
-		color: 'white',
-		justifyContent: 'center',
-		'&:hover': {
-			backgroundColor: theme.palette.primary.dark,
-		}
-	}
+	overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100vh',
+        backgroundColor: 'rgba(0,0,0, .9)',
+        zIndex: 1000,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
+        opacity: 0.5
+    },
 });
 // const defaultProps = {
 // 	trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
