@@ -539,7 +539,7 @@ class PaymentsListContent extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		console.log("componentWillReceiveProps", "CustomerListContent.js", nextProps.locationFilterValue)
+		console.log("componentWillReceiveProps", "CustomerListContent.js", nextProps.payments)
 
 
 		if (nextProps.payments !== this.props.payments) {
@@ -562,10 +562,6 @@ class PaymentsListContent extends Component {
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		console.log("componentDidUpdate", "CustomerListContent.js", this.props.locationFilterValue, this.props.customers);
-		if (this.props.data !== prevProps.data) {
-
-		}
-
 	}
 
 	search(val) {
@@ -649,7 +645,7 @@ class PaymentsListContent extends Component {
 		const handleClick = () => {
 			timer = setTimeout(() => {
 				if (!prevent) {
-					onToggle();
+					// onToggle();
 				}
 				prevent = false;
 			}, delay);
@@ -659,7 +655,8 @@ class PaymentsListContent extends Component {
 			prevent = true;
 
 			console.log(restProps);
-			this.props.openEditCustomerForm(this.props.regionId, tableRow.row.CustomerId);
+			// this.props.openEditCustomerForm(this.props.regionId, tableRow.row.CustomerId);
+			this.props.openNewInvoiceForm()
 		}
 		return (
 			<Table.Row
@@ -783,7 +780,7 @@ class PaymentsListContent extends Component {
 											<this.TableRow
 												{...params}
 												selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
-												onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
+												// onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
 											/>
 										)}
 									</TemplateConnector>
@@ -802,7 +799,8 @@ class PaymentsListContent extends Component {
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
-		getAccountReceivablePayments: Actions.getAccountReceivablePaymentsList
+		getAccountReceivablePayments: Actions.getAccountReceivablePaymentsList,
+		openNewInvoiceForm: Actions.openNewInvoiceForm,
 	}, dispatch);
 }
 
