@@ -581,6 +581,11 @@ class InvoiceLineTable extends React.Component {
             data[taxRowId].total = customerTaxAmountLine[taxRowId].TotalAmount;
             data[taxRowId].markupAmount = customerTaxAmountLine[taxRowId].MarkupAmount;
             data[taxRowId].markupTax = customerTaxAmountLine[taxRowId].MarkupTax;
+            if(data[taxRowId].franchisees.length){
+                let d_amount = customerTaxAmountLine[taxRowId].ExtendedPrice/data[taxRowId].franchisees.length;
+                data[taxRowId].franchisees.forEach(f=>f.amount = d_amount)
+            }
+
             this.setState({data: data});
             if(this.props.invoiceForm.type==='edit')
                 this.setState({bAllowAlertReduction: true});
@@ -768,7 +773,7 @@ class InvoiceLineTable extends React.Component {
             })
         }
 
-        if(d_total>data[row.id].total) {
+        if(d_total>data[row.id].extended) {
             this.setState({snackMessage: "Distribution amount can\'t be greater than Line amount"});
             this.setState({openSnack: true});
             return ;
@@ -815,7 +820,7 @@ class InvoiceLineTable extends React.Component {
             return;
         }
         if(this.state.bAllowAlertReduction && this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(row.tax)!==0 &&
-            row.tax!==this.props.customerTaxAmountLine[row.id].TotalTaxAmount)
+            parseFloat(row.tax)!==this.props.customerTaxAmountLine[row.id].TotalTaxAmount)
         {
             this.setState({bTaxAlertReduction: true});
             const data = [...this.state.data];
