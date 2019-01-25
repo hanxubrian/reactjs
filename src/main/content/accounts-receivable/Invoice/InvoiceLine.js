@@ -945,9 +945,6 @@ class InvoiceLineTable extends React.Component {
                         getTheadThProps={(state, rowInfo, column, instance) =>{
                             let border = '1px solid rgba(255,255,255,.6)';
                             if(column.Header==='Action') border = 'none';
-                            console.log('column=', column);
-                            console.log('column=', column);
-
                             return {
                                 style:{
                                     fontSize: 13,
@@ -1239,8 +1236,7 @@ class InvoiceLineTable extends React.Component {
                                                     className={classes.fInput}
                                                     placeholder="Commission"
                                                     value={row.original.commission}
-                                                    onChange={this.handleChangeInvoiceLine(row.original, 'Commission')}
-                                                    onBlur={this.handleChangeInvoiceLineOnBlur(row.original, 'Commission')}
+                                                    onChange={this.handleChangeInvoiceLine(row.original, 'commission')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustomPercent,
                                                         readOnly: row.original.billing.value!==1,

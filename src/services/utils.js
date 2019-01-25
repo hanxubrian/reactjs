@@ -149,7 +149,7 @@ export function NumberFormatCustom4(props) {
             }}
             fixedDecimalScale={true}
             thousandSeparator
-            decimalScale={3}
+            decimalScale={2}
             prefix="$"
         />
     );

@@ -338,7 +338,10 @@ class TransactionForm extends Component {
         subTotal: 0,
         total: 0.0,
         tax: 0,
-        payments: 1
+        payments: 1,
+        paymentsDate: new Date(),
+        billedPayments: 0,
+        grossTotal: 0
     };
 
     renderInputComponent = (inputProps ) => {
@@ -491,7 +494,6 @@ class TransactionForm extends Component {
         let result = {
             trx_no,
             RegionId: this.props.regionId,
-            frabchisee: this.state.selectedFranchisee,
             franchiseeNo: this.state.selectedFranchisee.Number,
             franchiseeName: this.state.selectedFranchisee.Name,
             CreatedBy: this.props.user.UserId,
@@ -512,7 +514,8 @@ class TransactionForm extends Component {
             TrxDate: this.state.TransactionDate,
             Date: this.state.Date,
 
-            vendor: this.props.vendor
+            vendor: this.props.vendor,
+            NumberOfPayments: this.state.payments
         };
         // this.props.addInvoice(this.props.regionId, result);
         console.log('result', JSON.stringify(result));
@@ -640,8 +643,6 @@ class TransactionForm extends Component {
                 },
             }),
         };
-
-        console.log('state=', this.state);
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
@@ -819,8 +820,8 @@ class TransactionForm extends Component {
                                         <MenuItem value="-1">
                                             <em>Select</em>
                                         </MenuItem>
-                                        <MenuItem value="1">Single</MenuItem>
-                                        <MenuItem value="2">Recurring</MenuItem>
+                                        <MenuItem value="single">Single</MenuItem>
+                                        <MenuItem value="recurring">Recurring</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Grid>

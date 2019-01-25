@@ -574,8 +574,8 @@ class InvoiceForm extends Component {
                 ExtendedPrice: line.extended,
                 Total: line.total,
                 MarkUpTotal: line.markup,
-                Commission: 0,
-                CommissionTotal: 0,
+                Commission: line.billing.value===1 ? line.commission : 0.00,
+                CommissionTotal: 0.00,
                 ExtraWork: 1,
                 TaxExcempt: this.state.selectedCustomer.TaxExempt,
                 Distribution: [],
@@ -733,7 +733,7 @@ class InvoiceForm extends Component {
                         franchAmount += f.amount;
                     })
                 }
-                if(Math.abs(lineAmount-franchAmount)>0.001){
+                if(Math.abs(lineAmount-franchAmount)>0.01){
                     bLineFranchAmountEqual = false;
                     return false
                 }
