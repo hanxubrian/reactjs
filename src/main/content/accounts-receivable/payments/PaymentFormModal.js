@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import { Icon, IconButton, Tooltip, Slide, RadioGroup, Radio, FormControlLabel, Paper, Typography, InputAdornment } from '@material-ui/core';
+import { Icon, IconButton, Tooltip, Slide, RadioGroup, Radio, FormControlLabel, Paper, Typography, InputAdornment, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 
 // for store
 import { bindActionCreators } from "redux";
@@ -316,7 +316,7 @@ class PaymentFormModal extends React.Component {
 		})
 		if (nextProps.activePaymentRows !== this.props.activePaymentRows) {
 			// this.setState({ rows: [...nextProps.activePaymentRows].map((x, index) => { x.id = index; return x }) })
-			this.setState({ rows: this.getRowData(this.props.payments, nextProps.activePaymentRows)})
+			this.setState({ rows: this.getRowData(this.props.payments, nextProps.activePaymentRows) })
 		}
 	}
 
@@ -361,16 +361,16 @@ class PaymentFormModal extends React.Component {
 			x.CustomerNameNo = `${x.CustomerName} - ${x.CustomerNo}`;
 			x.id = index
 		})
-		res = res.filter(x=>{
-			return activePaymentRows.indexOf(x.id) > -1 
+		res = res.filter(x => {
+			return activePaymentRows.indexOf(x.id) > -1
 		})
 		console.log("getRowData", res);
 
 		return res;
 	}
 	componentWillReceiveProps(nextProps) {
-		if(nextProps.payments !== this.props.payments) {
-			this.setState({row: this.getRowData(nextProps.payments)})
+		if (nextProps.payments !== this.props.payments) {
+			this.setState({ row: this.getRowData(nextProps.payments) })
 		}
 	}
 
@@ -386,7 +386,7 @@ class PaymentFormModal extends React.Component {
 
 					onClose={this.handleClose}
 					scroll="paper"
-					TransitionComponent={Transition}
+					// TransitionComponent={Transition}
 					aria-labelledby="form-dialog-title"
 				>
 					<DialogTitle id="form-dialog-title">Payment</DialogTitle>
@@ -395,18 +395,47 @@ class PaymentFormModal extends React.Component {
 						<div className={classNames("flex flex-col")}>
 							<div className={classNames("flex flex-col")}>
 								<div sm={12} className={classNames("flex justify-between")}>
-									<div className={classNames("flex flex-col")}>
-										<div className="flex flex-col mb-4">
-											<div className="flex" style={{ flex: 2, alignItems: 'center' }}>
-												<Icon fontSize={"small"} className="mr-4">person_outline</Icon>
-												<Typography variant="subtitle1" color="inherit"><strong>Customer Name</strong></Typography>
-											</div>
-											<div className="flex" style={{ flex: 1, alignItems: 'center' }}>
-												<Icon fontSize={"small"} className="mr-4">apps</Icon>
-												<Typography variant="subtitle1" color="inherit">1234567890</Typography>
-											</div>
+									{/* <div className={classNames("flex flex-col")}> */}
+									<div sm={3} className="flex flex-col mb-4">
+										<div className="flex" style={{ flex: 2, alignItems: 'center' }}>
+											<Icon fontSize={"small"} className="mr-4">person_outline</Icon>
+											<Typography variant="subtitle1" color="inherit"><strong>Customer Name</strong></Typography>
+										</div>
+										<div className="flex" style={{ flex: 1, alignItems: 'center' }}>
+											<Icon fontSize={"small"} className="mr-4">apps</Icon>
+											<Typography variant="subtitle1" color="inherit">1234567890</Typography>
 										</div>
 									</div>
+									{/* </div> */}
+
+									{/* <FormControl sm={3}>
+										<InputLabel htmlFor="age-simple">Payment Type</InputLabel>
+										<Select
+											value={this.state.age}
+											onChange={this.handleChange}
+											inputProps={{
+												name: 'age',
+												id: 'age-simple',
+											}}
+										>
+											<MenuItem value={"Check"}>Check</MenuItem>
+											<MenuItem value={"CreditCard"}>Credit Card</MenuItem>
+											<MenuItem value={"EFT"}>EFT</MenuItem>
+											<MenuItem value={"Lockbox"}>Lockbox</MenuItem>
+											<MenuItem value={"CreditFromOverpayment"}>Credit from Overpayment</MenuItem>
+											<MenuItem value={"ManualCreditCard"}>Manual Credit Card</MenuItem>
+										</Select>
+									</FormControl> */}
+									<TextField select margin="dense" id="ReferenceNo" label="Reference No." variant="outlined" style={{ width: "30%" }}
+										value={this.state.PaymentType || ""}
+										onChange={this.handleChange('PaymentType')}>
+										<MenuItem value={"Check"}>Check</MenuItem>
+										<MenuItem value={"CreditCard"}>Credit Card</MenuItem>
+										<MenuItem value={"EFT"}>EFT</MenuItem>
+										<MenuItem value={"Lockbox"}>Lockbox</MenuItem>
+										<MenuItem value={"CreditFromOverpayment"}>Credit from Overpayment</MenuItem>
+										<MenuItem value={"ManualCreditCard"}>Manual Credit Card</MenuItem>
+									</TextField>
 
 									<TextField type="number" autoFocus margin="dense" id="ReferenceNo" label="Reference No." variant="outlined" sm={3} />
 								</div>

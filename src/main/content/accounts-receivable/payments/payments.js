@@ -375,7 +375,7 @@ class Payments extends Component {
 
 	componentDidMount() {
 		document.addEventListener("keydown", this.escFunction);
-		if (this.props.customers !== null) {
+		if (this.props.customers !== null && this.props.customers.Data) {
 			let temp = [];
 			let regions = this.props.customers.Data.Regions;
 
