@@ -2,6 +2,7 @@ import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import {CREATE_NEW_TRANSACTION} from "../actions/";
 
 const initialState = {
     transactionsDB: null,
@@ -14,7 +15,6 @@ const initialState = {
         props: {
             open: false
         },
-        data : null,
         franchisee: null,
         bVendorBox: false,
         vendor: null
@@ -65,7 +65,6 @@ const transactions = function(state = initialState, action) {
                     props: {
                         open: true
                     },
-                    data : null,
                     franchisee: null,
                     bVendorBox: false,
                     vendor: null
@@ -81,7 +80,6 @@ const transactions = function(state = initialState, action) {
                     props: {
                         open: false
                     },
-                    data : null,
                     franchisee: null,
                     bVendorBox: false,
                     vendor: null
@@ -98,7 +96,6 @@ const transactions = function(state = initialState, action) {
                     props: {
                         open: true
                     },
-                    data : null,
                     franchisee: action.payload,
                     bVendorBox: false,
                     vendor: null
@@ -114,7 +111,6 @@ const transactions = function(state = initialState, action) {
                     props: {
                         open: false
                     },
-                    data : null,
                     franchisee: action.payload,
                     bVendorBox: false,
                     vendor: null
@@ -129,13 +125,6 @@ const transactions = function(state = initialState, action) {
                 transactionForm: {...state.transactionForm, franchisee: action.payload}
             }
         }
-        case Actions.UPDATE_TRANSACTION_LINE:
-        {
-            return {
-                ...state,
-                transactionForm: {...state.transactionForm, data: {line: action.payload}}
-            }
-        }
         case Actions.SHOW_VENDOR_DIALOG_BOX:
             return {...state,
                 transactionForm: {...state.transactionForm, bVendorBox: true}
@@ -144,8 +133,23 @@ const transactions = function(state = initialState, action) {
             return {...state,
                 transactionForm: {...state.transactionForm, bVendorBox: false}
             };
-        case Actions.UPDATE_TARNSACTION_VENDOR:
-            return {...state, transactionForm: {...state.transactionForm, vendor: action.payload}}
+        case Actions.UPDATE_TRANSACTION_VENDOR:
+            return {...state, transactionForm: {...state.transactionForm, vendor: action.payload}};
+        case Actions.CREATE_NEW_TRANSACTION:
+            return {...state, newTransaction: action.payload};
+        case Actions.RESET_TRANSACTION_FORM:
+            return {
+                ...state, newTransaction: null,
+                transactionForm: {
+                    type : 'new',
+                    props: {
+                        open: true
+                    },
+                    franchisee: null,
+                    bVendorBox: false,
+                    vendor: null
+                }
+            };
         default:
         {
             return state;

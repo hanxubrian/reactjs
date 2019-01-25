@@ -191,13 +191,11 @@ const styles = theme => ({
     }
 });
 
-const chance = new Chance();
 
 const newTransactionState = {
     "MasterTrxTypeListId": "",
     "RegionId": "",
     "RegionName": "",
-    "InvoiceId": "",
     "TransactionDate": new Date(),
     "Date": new Date(),
     "franchiseeNo": "",
@@ -205,11 +203,7 @@ const newTransactionState = {
     "CPI": "",
     "TransactionStatusListId": "",
     "TransactionStatus": "",
-    "InvoiceBalanceAmount": "",
-    "InvoiceBalanceTax": "",
-    "InvoiceBalanceTotal": "",
     "EBillText": "",
-    "PrintInvoiceText": "",
     "IsOpen": "",
     "Service":"",
     "notes": ""
@@ -322,7 +316,7 @@ class TransactionForm extends Component {
         selectedFranchisee: null,
         labelWidth: 0,
         selectedWork: "",
-        InvoiceNo: "",
+        TransactionNo: "",
         snackMessage: "",
         openSnack: false,
         PO_number: '',
@@ -331,7 +325,7 @@ class TransactionForm extends Component {
         bAlertNewTransaction: false,
         buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval,
         transactionType: {label: 'Advance Fee', value:82},
-        transactionFrequency: "1",
+        transactionFrequency: "single",
         reSell: false,
         quantity: 1,
         unitPrice: 0,
@@ -341,7 +335,8 @@ class TransactionForm extends Component {
         payments: 1,
         paymentsDate: new Date(),
         billedPayments: 0,
-        grossTotal: 0
+        grossTotal: 0,
+        startDate: moment()
     };
 
     renderInputComponent = (inputProps ) => {
@@ -440,7 +435,7 @@ class TransactionForm extends Component {
         if(nextProps.newTransaction!==null && nextProps.newTransaction!==this.props.newTransaction){
             this.setState({bAlertNewTransaction: false});
             if(this.state.buttonOption===0){
-                this.props.resetInvoiceForm();
+                this.props.resetTransactionForm();
                 this.setState({transactionDescription: ''});
                 this.setState({note: ''});
                 this.setState({selectedFranchisee: null});
@@ -455,7 +450,7 @@ class TransactionForm extends Component {
 
     componentDidMount(){
         if(this.props.transactionForm.type === 'new')
-            this.setState({InvoiceNo: "PENDING"});
+            this.setState({TransactionNo: "PENDING"});
 
         if(this.input) {
             setTimeout(() => {this.input.focus()}, 500);
@@ -469,6 +464,8 @@ class TransactionForm extends Component {
     handleChange1 = name =>(event) => {
         if(name==='quantity')
             this.setState({[name]: parseInt(event.target.value)});
+        else if(name==='payments')
+            this.setState({[name]: parseInt(event.target.value)});
         else if(name==='unitPrice')
             this.setState({[name]: parseFloat(event.target.value)});
         else
@@ -478,12 +475,21 @@ class TransactionForm extends Component {
     handleBlurTransaction = name =>(event) => {
         let quantity =  this.state.quantity;
         let unitPrice = this.state.unitPrice;
+        let payments = this.state.payments;
 
         if(quantity>0 && unitPrice>0) {
+            let tax = quantity * unitPrice*0.085;
+            let line_total = parseFloat(quantity * unitPrice+tax);
             this.setState({subTotal: parseFloat(quantity * unitPrice)});
-            this.setState({tax: parseFloat(quantity * unitPrice*0.085)});
-            this.setState({total: parseFloat(quantity * unitPrice*1.085)});
+            this.setState({tax: parseFloat(tax)});
+            this.setState({total: parseFloat(quantity * unitPrice+tax)});
+
+            if(this.state.transactionFrequency==='recurring' && payments>0) {
+                this.setState({billedPayments: line_total});
+                this.setState({grossTotal: parseFloat(payments * line_total)});
+            }
         }
+
     };
 
     addNewTransaction = () => {
@@ -492,12 +498,12 @@ class TransactionForm extends Component {
         console.log('vendor=', this.props.vendor);
 
         let result = {
-            trx_no,
+            Trx_no: trx_no,
             RegionId: this.props.regionId,
-            franchiseeNo: this.state.selectedFranchisee.Number,
-            franchiseeName: this.state.selectedFranchisee.Name,
+            FranchiseeNo: this.state.selectedFranchisee.Number,
+            FranchiseeName: this.state.selectedFranchisee.Name,
             CreatedBy: this.props.user.UserId,
-            company_no: '',
+            Company_no: '',
 
             TrxType: this.state.transactionType.value,
             TrxFrequency: this.state.transactionFrequency,
@@ -507,17 +513,20 @@ class TransactionForm extends Component {
             TrxExtendedPrice: this.state.subTotal, //decimal
             TrxTax: this.state.tax,//decimal
             TotalTrxAmount: this.state.total,//decimal
-            quantity: this.state.quantity,//integer
+            Quantity: this.state.quantity,//integer
 
             Description: this.state.transactionDescription,
             Notes: this.state.note,
             TrxDate: this.state.TransactionDate,
             Date: this.state.Date,
 
-            vendor: this.props.vendor,
-            NumberOfPayments: this.state.payments
+            Vendor: this.props.vendor,
+            NumberOfPayments: this.state.payments,
+            StartDate: this.state.startDate,
+            BilledPayment: this.state.billedPayments,
+            GrossTotal: this.state.grossTotal
         };
-        // this.props.addInvoice(this.props.regionId, result);
+        // this.props.createNewTransaction(this.props.regionId, result);
         console.log('result', JSON.stringify(result));
     };
 
@@ -533,8 +542,16 @@ class TransactionForm extends Component {
             this.setState({openSnack: true});
             return false;
         }
-
-
+        if(this.state.quantity==='' || this.state.quantity<=0){
+            this.setState({snackMessage: 'Please enter quantity correctly'});
+            this.setState({openSnack: true});
+            return false;
+        }
+        if(this.state.unitPrice==='' || this.state.unitPrice<=0){
+            this.setState({snackMessage: 'Please enter item amount correctly'});
+            this.setState({openSnack: true});
+            return false;
+        }
 
         return true;
     };
@@ -561,6 +578,9 @@ class TransactionForm extends Component {
 
     handleDueDateChange = date => {
         this.setState({ Date: date});
+    };
+    handleStartDateChange = date => {
+        this.setState({ startDate: date});
     };
     handleTransactionDateChange = date => {
         this.setState({ TransactionDate: date });
@@ -733,9 +753,9 @@ class TransactionForm extends Component {
                                             shrink: true,
                                             classes: {outlined: classes.label}
                                         }}
-                                        name="InvoiceNo"
+                                        name="TransactionNo"
                                         variant="outlined"
-                                        value={this.state.InvoiceNo}
+                                        value={this.state.TransactionNo}
                                         onChange={this.handleChange}
                                         required
                                         fullWidth
@@ -856,8 +876,32 @@ class TransactionForm extends Component {
                                 />
                             </Grid>
                         </Grid>
+
+                        <div className="w-full mt-4">
+                            <TextField
+                                id="transactionDescription"
+                                name="transactionDescription"
+                                label="Description"
+                                className={classes.textField}
+                                value={this.state.transactionDescription}
+                                onChange={this.handleChange}
+                                margin="dense"
+                                variant="outlined"
+                                fullWidth
+                                required
+                                InputLabelProps = {{
+                                    shrink: true,
+                                    classes: {outlined: classes.label}
+                                }}
+                                InputProps={{
+                                    classes: {
+                                        input: classes.input
+                                    },
+                                }}
+                            />
+                        </div>
                         <div className="flex flex-row w-full mt-4 justify-between">
-                            {this.state.transactionFrequency==="2" && (
+                            {this.state.transactionFrequency==="recurring" && (
                                 <TextField
                                     id="payments"
                                     name="payments"
@@ -865,6 +909,7 @@ class TransactionForm extends Component {
                                     className={classes.textField}
                                     value={this.state.payments}
                                     onChange={this.handleChange1('payments')}
+                                    onBlur={this.handleBlurTransaction('payments')}
                                     margin="dense"
                                     variant="outlined"
                                     InputLabelProps = {{
@@ -872,7 +917,6 @@ class TransactionForm extends Component {
                                         classes: {outlined: classes.label}
                                     }}
                                     InputProps={{
-                                        inputComponent: NumberFormatCustom3,
                                         classes: {
                                             input: classes.input
                                         },
@@ -919,7 +963,7 @@ class TransactionForm extends Component {
                                 InputProps={{
                                     inputComponent: NumberFormatCustom2,
                                     classes: {
-                                        input: classes.input
+                                        input: classNames(classes.input, "text-right")
                                     },
                                 }}
                                 required
@@ -941,7 +985,7 @@ class TransactionForm extends Component {
                                     inputComponent: NumberFormatCustom2,
                                     readOnly: true,
                                     classes: {
-                                        input: classes.inputReadonly
+                                        input: classNames(classes.inputReadonly, "text-right")
                                     },
                                 }}
                             />
@@ -962,7 +1006,7 @@ class TransactionForm extends Component {
                                     inputComponent: NumberFormatCustom2,
                                     readOnly: true,
                                     classes: {
-                                        input: classes.inputReadonly
+                                        input: classNames(classes.inputReadonly, "text-right")
                                     },
                                 }}
                             />
@@ -983,7 +1027,7 @@ class TransactionForm extends Component {
                                     inputComponent: NumberFormatCustom2,
                                     readOnly: true,
                                     classes: {
-                                        input: classes.inputReadonly
+                                        input: classNames(classes.inputReadonly, "text-right")
                                     },
                                 }}
                             />
@@ -1057,29 +1101,83 @@ class TransactionForm extends Component {
                             </div>
                         )}
 
-                        <div className="w-full mt-4">
-                            <TextField
-                                id="transactionDescription"
-                                name="transactionDescription"
-                                label="Description"
-                                className={classes.textField}
-                                value={this.state.transactionDescription}
-                                onChange={this.handleChange}
-                                margin="dense"
-                                variant="outlined"
-                                fullWidth
-                                required
-                                InputLabelProps = {{
-                                    shrink: true,
-                                    classes: {outlined: classes.label}
-                                }}
-                                InputProps={{
-                                    classes: {
-                                        input: classes.input
-                                    },
-                                }}
-                            />
-                        </div>
+                        {this.state.transactionFrequency==='recurring' && (
+                            <div className="flex flex-row mt-4 justify-start items-center">
+                                <Grid container className={classNames(classes.formControl)}>
+                                    <Grid item xs={12} sm={2} className={classNames("pt-12 pr-24")}>
+                                        <MuiPickersUtilsProvider utils={MomentUtils}>
+                                            <DatePicker
+                                                margin="dense"
+                                                label="Start Date"
+                                                format="MM/DD/YYYY"
+                                                name="startDate"
+                                                variant="outlined"
+                                                value={this.state.startDate}
+                                                onChange={this.handleStartDateChange}
+                                                required
+                                                fullWidth
+                                                InputProps={{
+                                                    classes: {
+                                                        input: classes.input2,
+                                                    },
+                                                }}
+                                                InputLabelProps = {{
+                                                    shrink: true,
+                                                    classes: {outlined: classes.label}
+                                                }}
+                                            />
+                                        </MuiPickersUtilsProvider>
+                                    </Grid>
+                                    <Grid item xs={12} sm={2} className={classNames("p-12")}>
+                                        <TextField
+                                            id="billedPayments"
+                                            name="billedPayments"
+                                            label="Payments Billed"
+                                            className={classNames(classes.textField)}
+                                            value={this.state.billedPayments}
+                                            onChange={this.handleChange1('billedPayments')}
+                                            margin="dense"
+                                            variant="outlined"
+                                            InputLabelProps = {{
+                                                shrink: true,
+                                                classes: {outlined: classes.label}
+                                            }}
+                                            InputProps={{
+                                                inputComponent: NumberFormatCustom2,
+                                                readOnly: true,
+                                                classes: {
+                                                    input: classNames(classes.inputReadonly, "text-right")
+                                                },
+                                            }}
+                                            required
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={2} className={classNames("p-12")}>
+                                        <TextField
+                                            id="GrossTotal"
+                                            name="GrossTotal"
+                                            label="Gross Total"
+                                            className={classes.textField}
+                                            value={this.state.grossTotal}
+                                            margin="dense"
+                                            variant="outlined"
+                                            InputLabelProps = {{
+                                                shrink: true,
+                                                classes: {outlined: classes.label}
+                                            }}
+                                            InputProps={{
+                                                inputComponent: NumberFormatCustom2,
+                                                readOnly: true,
+                                                classes: {
+                                                    input: classNames(classes.inputReadonly, "text-right")
+                                                },
+                                            }}
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </div>
+                        )}
+
                     </div>
                     <div className="flex flex-shrink flex-col w-full pl-24 pr-24 pt-0 pb-12">
                         <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
@@ -1216,12 +1314,13 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         closeEditTransactionForm: Actions.closeEditTransactionForm,
         closeNewTransactionForm : Actions.closeNewTransactionForm,
-        selectCustomer: Actions.selectCustomer,
         resetInvoiceForm: Actions.resetInvoiceForm,
-        addInvoice: Actions.addInvoice,
         selectFranchisee: Actions.selectFranchisee,
         showVendorDialogBox: Actions.showVendorDialogBox,
         hideVendorDialogBox: Actions.hideVendorDialogBox,
+        createNewTransaction: Actions.createNewTransaction,
+        resetTransactionForm: Actions.resetTransactionForm,
+
     }, dispatch);
 }
 

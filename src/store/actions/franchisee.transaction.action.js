@@ -1,7 +1,6 @@
 import axios from "axios";
 import {franchiseesService} from "../../services"
 
-
 export const GET_ALL_FRANCHISEE_TRANSACTIONS = "[FRANCHISEE-TRANSACTIONS] GETS ALL";
 export const REMOVE_SELECTED_FRANCHISEE_TRANSACTION = "[FRANCHISEE-TRANSACTION] REMOVE SELECTED";
 export const TOGGLE_TRANSACTION_FILTER_PANEL = "[FRANCHISEE-TRANSACTION] TOGGLE TRANSACTION FILTER PANEL";
@@ -11,11 +10,12 @@ export const CLOSE_NEW_TRANSACTION_FORM = '[FRANCHISEE-TRANSACTION] CLOSE NEW TR
 export const OPEN_EDIT_TRANSACTION_FORM = '[FRANCHISEE-TRANSACTION] OPEN EDIT TRANSACTION FORM';
 export const CLOSE_EDIT_TRANSACTION_FORM = '[FRANCHISEE-TRANSACTION] CLOSE EDIT TRANSACTION FORM';
 export const SELECT_TRANSACTION_FRANCHISEE = '[FRANCHISEE-TRANSACTION] SELECT TRANSACTION FRANCHISEE';
-export const UPDATE_TRANSACTION_LINE = '[FRANCHISEE-TRANSACTION] UPDATE TRANSACTION LINE';
 export const START_FETCH_TRANSACTIONS = '[FRANCHISEE-TRANSACTION] START FETCH TRANSACTIONS';
 export const SHOW_VENDOR_DIALOG_BOX = '[FRANCHISEE-TRANSACTION] SHOW VENDOR DIALOG BOX';
 export const HIDE_VENDOR_DIALOG_BOX = '[FRANCHISEE-TRANSACTION] HIDE VENDOR DIALOG BOX';
-export const UPDATE_TARNSACTION_VENDOR = '[FRANCHISEE-TRANSACTION] UPDATE TARNSACTION VENDOR';
+export const UPDATE_TRANSACTION_VENDOR = '[FRANCHISEE-TRANSACTION] UPDATE TRANSACTION VENDOR';
+export const CREATE_NEW_TRANSACTION = '[FRANCHISEE-TRANSACTION] CREATE NEW TRANSACTION';
+export const RESET_TRANSACTION_FORM = '[FRANCHISEE-TRANSACTION] RESET TRANSACTION FORM';
 
 export function getTransactions(regionId) {
     return (dispatch) => {
@@ -101,13 +101,6 @@ export function selectFranchisee(obj) {
 }
 
 
-export function updateTransactionLine(data) {
-    return {
-        type: UPDATE_TRANSACTION_LINE,
-        payload: data
-    }
-}
-
 export function showVendorDialogBox() {
     return {
         type: SHOW_VENDOR_DIALOG_BOX
@@ -122,7 +115,31 @@ export function hideVendorDialogBox() {
 
 export function updateVendor(vendor) {
     return {
-        type: UPDATE_TARNSACTION_VENDOR,
+        type: UPDATE_TRANSACTION_VENDOR,
         payload: vendor
+    }
+}
+
+export function createNewTransaction(regionId, data)
+{
+    return (dispatch) => {
+        (async () => {
+            let res = await franchiseesService.createFranchiseeTransaction(regionId, data);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: CREATE_NEW_TRANSACTION,
+                    payload: res
+                });
+            } else {
+
+            }
+        })();
+    };
+}
+
+
+export function resetTransactionForm() {
+    return {
+        type: RESET_TRANSACTION_FORM,
     }
 }
