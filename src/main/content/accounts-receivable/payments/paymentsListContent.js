@@ -360,8 +360,8 @@ class PaymentsListContent extends Component {
 			temp: [],
 			data: [],
 			selectAll: false,
-			selection: [],
-			rows: [],
+			selection: this.props.activePaymentRows,
+			rows: this.getRowData(this.props.payments),
 			tableColumnExtensions: [
 				// {
 				//     title: "Payment ID",
@@ -510,19 +510,24 @@ class PaymentsListContent extends Component {
 		this.changeGrouping = grouping => this.setState({ grouping });
 		console.log("constructor");
 
-		this.props.getAccountReceivablePaymentsList(
-			this.props.regionId,
-			this.props.getPaymentsParam.fromDate,
-			this.props.getPaymentsParam.toDate,
-			"",
-			this.props.status);
+		if (this.props.bLoadedPayments) {
+			this.props.getAccountReceivablePaymentsList(
+				this.props.regionId,
+				this.props.getPaymentsParam.fromDate,
+				this.props.getPaymentsParam.toDate,
+				"",
+				this.props.status);
+		}
 	}
 
 	changeSelection = (selection) => {
 		this.setState({ selection })
-		let selectedRows = this.getRowData(this.props).filter((x, index) => { return selection.indexOf(index) > -1 });
-		console.log("selection", selectedRows)
-		this.props.setActivePaymentRows(selectedRows)
+		// let selectedRows = this.state.rows.filter((x, index) => { 
+		// 	x.id = index;
+		// 	return selection.indexOf(index) > -1 
+		// });
+		// console.log("selection", selectedRows)
+		this.props.setActivePaymentRows(selection)
 	}
 	//
 	// to edit table cell
@@ -569,8 +574,8 @@ class PaymentsListContent extends Component {
 
 		if (nextProps.payments !== this.props.payments) {
 			this.setState({
-				rows: this.getRowData(nextProps),
-				expandedGroups: [...new Set(this.getRowData(nextProps).map(x => x.CustomerNameNo))],
+				rows: this.getRowData(nextProps.payments),
+				expandedGroups: [...new Set(this.getRowData(nextProps.payments).map(x => x.CustomerNameNo))],
 			})
 		}
 
@@ -606,12 +611,12 @@ class PaymentsListContent extends Component {
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		console.log("componentDidUpdate", "CustomerListContent.js", this.props.locationFilterValue, this.props.customers);
 	}
-	getRowData(props) {
-		if (props.payments.Regions === undefined)
+	getRowData(payments) {
+		if (payments.Regions === undefined)
 			return [];
-		let res = [...props.payments.Regions[0].Payments]
+		let res = [...payments.Regions[0].Payments]
 
-		res.forEach(x=>{
+		res.forEach(x => {
 			x.CustomerNameNo = `${x.CustomerName} - ${x.CustomerNo}`;
 		})
 		console.log("getRowData", res);
@@ -622,10 +627,10 @@ class PaymentsListContent extends Component {
 		console.log("---------search---------", val);
 		val = val.toLowerCase();
 		if (val === '') {
-			this.setState({ rows: this.getRowData(this.props) });
+			this.setState({ rows: this.getRowData(this.props.payments) });
 			return;
 		}
-		const temp = this.getRowData(this.props).filter(d => {
+		const temp = this.getRowData(this.props.payments).filter(d => {
 			return (d.CheckNo && d.CheckNo.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.CustomerName && d.CustomerName.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.CustomerNo && d.CustomerNo.toString().toLowerCase().indexOf(val) !== -1) ||
@@ -641,8 +646,8 @@ class PaymentsListContent extends Component {
 	componentWillMount() {
 		this.setState({
 			"paymentsParam": this.props.getPaymentsParam,
-			"rows": this.getRowData(this.props),
-			expandedGroups: [...new Set(this.getRowData(this.props).map(x => x.CustomerNameNo))],
+			"rows": this.getRowData(this.props.payments),
+			expandedGroups: [...new Set(this.getRowData(this.props.payments).map(x => x.CustomerNameNo))],
 		});
 		// this.props.getAccountReceivablePaymentsList(
 		// 	this.props.regionId,
@@ -864,11 +869,13 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps({ accountReceivablePayments, auth }) {
 	return {
+		bLoadedPayments: accountReceivablePayments.bLoadedPayments,
 		payments: accountReceivablePayments.ACC_payments,
 		regionId: auth.login.defaultRegionId,
 		getPaymentsParam: accountReceivablePayments.getPaymentsParam,
 
 		searchText: accountReceivablePayments.searchText,
+		activePaymentRows: accountReceivablePayments.activePaymentRows,
 	}
 }
 

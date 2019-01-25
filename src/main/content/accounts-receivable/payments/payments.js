@@ -435,10 +435,11 @@ class Payments extends Component {
 	}
 
 	showPaymentFormModal = () => {
-		if (!this.props.activePaymentRows || this.props.activePaymentRows.length < 1) {
-			this.setState({ showNoSelectionAlertDialog: true })
-		} else {
+		console.log("this.props.activePaymentRows.length", this.props.activePaymentRows)
+		if (this.props.activePaymentRows.length > 0) {
 			this.props.openPaymentDialog(true)
+		} else {
+			this.setState({ showNoSelectionAlertDialog: true })
 		}
 	}
 	render() {

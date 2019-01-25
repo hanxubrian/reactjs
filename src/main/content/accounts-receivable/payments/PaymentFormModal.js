@@ -302,11 +302,12 @@ class PaymentFormModal extends React.Component {
 
 				// }
 			],
-			rows: [...this.props.activePaymentRows].map((x, index)=>{x.id = index; return x}),
+			// rows: [...this.props.activePaymentRows].map((x, index) => { x.id = index; return x }),
+			rows: this.getRowData(this.props.payments),
 
 		}
 
-		this.commitChanges = this.commitChanges.bind(this);
+		// this.commitChanges = this.commitChanges.bind(this);
 	}
 
 	UNSAFE_componentWillReceiveProps(nextProps) {
@@ -314,7 +315,8 @@ class PaymentFormModal extends React.Component {
 			bOpenPaymentDialog: nextProps.bOpenPaymentDialog
 		})
 		if (nextProps.activePaymentRows !== this.props.activePaymentRows) {
-			this.setState({ rows: [...nextProps.activePaymentRows].map((x, index)=>{x.id = index; return x}) })
+			// this.setState({ rows: [...nextProps.activePaymentRows].map((x, index) => { x.id = index; return x }) })
+			this.setState({ rows: this.getRowData(this.props.payments, nextProps.activePaymentRows)})
 		}
 	}
 
@@ -328,27 +330,49 @@ class PaymentFormModal extends React.Component {
 	handleChange = name => event => {
 		this.setState({ [name]: event.target.value });
 	};
-	commitChanges({ added, changed, deleted }) {
+	commitChanges = ({ added, changed, deleted }) => {
 		let { rows } = this.state;
 		if (added) {
-		  const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
-		  rows = [
-			...rows,
-			...added.map((row, index) => ({
-			  id: startingAddedId + index,
-			  ...row,
-			})),
-		  ];
+			const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
+			rows = [
+				...rows,
+				...added.map((row, index) => ({
+					id: startingAddedId + index,
+					...row,
+				})),
+			];
 		}
 		if (changed) {
-		  rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+			rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
 		}
 		if (deleted) {
-		  const deletedSet = new Set(deleted);
-		  rows = rows.filter(row => !deletedSet.has(row.id));
+			const deletedSet = new Set(deleted);
+			rows = rows.filter(row => !deletedSet.has(row.id));
 		}
 		this.setState({ rows });
-	  }
+	}
+
+	getRowData(payments, activePaymentRows = this.props.activePaymentRows) {
+		if (payments.Regions === undefined)
+			return [];
+		let res = [...payments.Regions[0].Payments]
+
+		res.forEach((x, index) => {
+			x.CustomerNameNo = `${x.CustomerName} - ${x.CustomerNo}`;
+			x.id = index
+		})
+		res = res.filter(x=>{
+			return activePaymentRows.indexOf(x.id) > -1 
+		})
+		console.log("getRowData", res);
+
+		return res;
+	}
+	componentWillReceiveProps(nextProps) {
+		if(nextProps.payments !== this.props.payments) {
+			this.setState({row: this.getRowData(nextProps.payments)})
+		}
+	}
 
 	render() {
 		const { classes } = this.props;
@@ -406,6 +430,7 @@ class PaymentFormModal extends React.Component {
 
 
 										<Table />
+										{/* <VirtualTable height="auto" /> */}
 										<TableColumnResizing defaultColumnWidths={columns} />
 										<TableHeaderRow />
 
@@ -445,7 +470,6 @@ class PaymentFormModal extends React.Component {
 	}
 }
 
-
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
 		openPaymentDialog: Actions.openPaymentDialog,
@@ -456,6 +480,8 @@ function mapStateToProps({ accountReceivablePayments }) {
 	return {
 		bOpenPaymentDialog: accountReceivablePayments.bOpenPaymentDialog,
 		activePaymentRows: accountReceivablePayments.activePaymentRows,
+
+		payments: accountReceivablePayments.ACC_payments,
 	}
 }
 

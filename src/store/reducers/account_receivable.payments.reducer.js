@@ -1,10 +1,12 @@
 import * as Actions from "../actions/";
+import * as UserActions from "../../auth/store/actions";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 
 
 const initialState = {
 	ACC_payments: [],
+	bLoadedPayments: false,
 	bACC_fechStart: false,
 	getPaymentsParam: {
 		searchText: "",
@@ -28,7 +30,8 @@ const accountReceivablePayments = function (state = initialState, action) {
 			return {
 				...state,
 				ACC_payments: action.payload.Data,
-				bACC_fechStart: false
+				bACC_fechStart: false,
+				bLoadedPayments: true,
 			}
 		}
 		case Actions.GET_ALL_RECEIVABLE_PAYMENTS_START: {
@@ -64,6 +67,12 @@ const accountReceivablePayments = function (state = initialState, action) {
 			{
 				return {
 					...state, activePaymentRows: action.payload
+				}
+			}
+		case UserActions.USER_LOGGED_OUT:
+			{
+				return {
+					...initialState
 				}
 			}
 		default:

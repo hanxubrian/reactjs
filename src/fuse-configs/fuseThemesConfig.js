@@ -1,7 +1,8 @@
 import {fuseDark} from '@fuse/fuse-colors';
 import lightBlue from '@material-ui/core/colors/lightBlue';
-import blueGrey from '@material-ui/core/colors/blueGrey';
+import blue from '@material-ui/core/colors/blue';
 import red from '@material-ui/core/colors/red';
+import { blueGrey } from '@material-ui/core/colors';
 
 export const fuseThemesConfig = {
     default    : {
@@ -111,7 +112,11 @@ export const fuseThemesConfig = {
     defaultDark: {
         palette: {
             type     : 'dark',
-            primary  : blueGrey,
+            primary  : {
+				light: blue[400],
+                main : blue[500],
+                dark : blue[700]
+			},
             secondary: {
                 light: lightBlue[400],
                 main : lightBlue[500],
