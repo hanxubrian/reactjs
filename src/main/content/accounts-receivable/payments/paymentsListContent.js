@@ -518,7 +518,6 @@ class PaymentsListContent extends Component {
 			"",
 			this.props.status);
 	}
-<<<<<<< HEAD
 
 	changeSelection = (selection) => {
 		this.setState({ selection })
@@ -526,8 +525,6 @@ class PaymentsListContent extends Component {
 		console.log("selection", selectedRows)
 		this.props.setActivePaymentRows(selectedRows)
 	}
-=======
->>>>>>> 1103d444ab52607e0c01a806f1cb0cbf9ea6919d
 	//
 	// to edit table cell
 	//
