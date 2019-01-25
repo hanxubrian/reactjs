@@ -36,7 +36,10 @@ const initialState = {
 	},
 	newLease: null,
 	leaseDetail: null,
-	removedId: undefined
+	removedId: undefined,
+	getLeasesParam: {
+		searchText: ""
+	},
 
 };
 
@@ -83,6 +86,11 @@ const leases = function (state = initialState, action) {
 					bLeaseStart: true
 				};
 			}
+		case Actions.APPLY_SEARCH_TEXT_ARP: {
+			return {
+				...state, searchText: action.payload
+			}
+		}
 		case Actions.TOGGLE_FILTER_PANEL:
 			{
 				return {

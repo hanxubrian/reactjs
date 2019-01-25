@@ -15,6 +15,7 @@ export const RESET_LEASE_FORM = "[LEASES] RESET LEASE FORM";
 export const STARTING_SAVE_LEASE_FORM_DATA = "[LEASES] STARTING SAVE LEASE FORM DATA";
 export const SELECT_TRANSACTION_FRANCHISEE = '[FRANCHISEE-TRANSACTION] SELECT TRANSACTION FRANCHISEE';
 export const UPDATE_A_LEASE = "[LEASES] GET A LEASE";
+export const APPLY_SEARCH_TEXT_ARP = "[ARP] APPLY_SEARCH_TEXT_ARP";
 
 // for Add/Edit
 export const OPEN_NEW_LEASE_FORM = '[LEASES APP] OPEN NEW LEASE FORM';
@@ -131,6 +132,13 @@ export function toggleSummaryPanel(){
     return {
         type: TOGGLE_SUMMARY_PANEL
     }
+}
+
+export function applySearchText_ARP(s) {
+	return {
+		type: APPLY_SEARCH_TEXT_ARP,
+		payload: s
+	}
 }
 
 export function toggleMapView(){

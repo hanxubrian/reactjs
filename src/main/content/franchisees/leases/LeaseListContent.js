@@ -1414,6 +1414,8 @@ class LeaseListContent extends Component {
 			amountFilterOperations: ['equal', 'notEqual', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual'],
 			// defaultFilters: [{ columnName: 'StateName', value: 'PA' }],
 			searchValue: '',
+			leasesParam: [],
+			leases: []
 			// leftColumns: ['LeaseNo', 'LeaseName'],
 			// rightColumns: ['Amount'],
 		};
@@ -1548,8 +1550,8 @@ class LeaseListContent extends Component {
 
 		if (nextProps.leases !== this.props.leases) {
 			this.setState({
-				rows: this.getRowData(nextProps),
-				expandedGroups: [...new Set(this.getRowData(nextProps).map(x => x.FranchiseeName))],
+				rows: this.getRowData(nextProps.leases),
+				expandedGroups: [...new Set(this.getRowData(nextProps.leases).map(x => x.FranchiseeName))],
 			})
 		}
 
@@ -1566,6 +1568,7 @@ class LeaseListContent extends Component {
 
 
 		if (nextProps.searchText !== this.props.searchText) {
+			console.log("------search text changed-------", nextProps.searchText)
 			this.search(nextProps.searchText);
 		}
 	} // deprecate 
@@ -1581,32 +1584,31 @@ class LeaseListContent extends Component {
         }
 	}
 
-	getRowData(props) {
-
-		if (props.data === undefined) {
+	getRowData(leases) {
+		if (leases.data !== undefined) {
 			let res = ''
-			res = props.Data[0].LeaseList
+			res = leases.Data[0].LeaseList
 			return res;
 		} else {
-		let res = [...props.data]
+			let res = [...leases.Data[0].LeaseList]
 
-		res.forEach(x=>{
-			x.FranchiseeNameNo = `${x.FranchiseeName} - ${x.FranchiseeNo}`;
-		})
-		console.log("getRowData", res);
+			res.forEach(x=>{
+				x.FranchiseeNameNo = `${x.FranchiseeName} - ${x.FranchiseeNo}`;
+			})
+			console.log("getRowData", res);
 
-		return res;
-		}
+			return res;
+			}
 	}
 
 	search(val) {
 		console.log("---------search---------", val);
 		val = val.toLowerCase();
 		if (val === '') {
-			this.setState({ rows: [...this.state.data] });
+			this.setState({ rows: this.getRowData(this.props.leases) });
 			return;
 		}
-		const temp = this.state.data.filter(d => {
+		const temp =this.getRowData(this.props.leases).filter(d => {
 			return (d.LeaseNo && d.LeaseNo.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.LeaseName && d.LeaseName.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.Address && d.Address.toString().toLowerCase().indexOf(val) !== -1) ||
@@ -1769,6 +1771,7 @@ class LeaseListContent extends Component {
 		this.setState({
 			rows: all_temp,
 			data: all_temp,
+			"leasesParam": this.props.getLeasesParam,
 			"rows": this.getRowData(this.props.leases),
 			expandedGroups: [...new Set(this.getRowData(this.props.leases).map(x => x.FranchiseeName))]
 		});
@@ -2010,10 +2013,6 @@ class LeaseListContent extends Component {
 		return (
 			<Fragment>
 				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
-
-					{/* <LeaseSearchBar>
-
-					</LeaseSearchBar> */}
 
 					{/* Mapview */}
 					{mapViewState && (<div className="w-full h-full" >
@@ -2276,6 +2275,8 @@ function mapStateToProps({ leases, auth }) {
 		locationFilterValue: leases.locationFilterValue,
 		searchText: leases.searchText,
 		bLeaseFetchStart: leases.bLeaseFetchStart,
+		getLeasesParam: leases.getLeasesParam,
+
 	}
 }
 
