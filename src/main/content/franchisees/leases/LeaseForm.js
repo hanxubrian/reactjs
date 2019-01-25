@@ -4,7 +4,8 @@ import {Link, withRouter} from 'react-router-dom';
 // core components
 import {
     Paper, TextField, Typography, MenuItem, Card,  CardHeader, CardContent, Divider, Button,
-    Snackbar, SnackbarContent, IconButton, Icon, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog,Fab
+    Snackbar, SnackbarContent, IconButton, Icon, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog, Fab,
+    InputAdornment
 } from '@material-ui/core';
 import 'date-fns'
 import MomentUtils from '@date-io/moment';
@@ -929,6 +930,7 @@ class LeaseForm extends Component {
                                     id="serialNo"
                                     name="serialNo"
                                     label="Serial No"
+                                    type="number"
                                     placeholder="Serial No"
                                     className={classes.textField}
                                     value={this.state.serialNo}
@@ -943,6 +945,7 @@ class LeaseForm extends Component {
                                         classes: {
                                             input: classes.input,
                                         },
+                                        startAdornment: <InputAdornment position="start">$</InputAdornment>
                                     }}
                                     InputLabelProps = {{
                                         shrink: true,
@@ -955,6 +958,7 @@ class LeaseForm extends Component {
                                     id="leaseAmount"
                                     name="leaseAmount"
                                     label="Lease Amount"
+                                    type="number"
                                     placeholder="Lease Amount"
                                     className={classes.textField}
                                     value={this.state.leaseAmount}
@@ -969,6 +973,7 @@ class LeaseForm extends Component {
                                         classes: {
                                             input: classes.input,
                                         },
+                                        startAdornment: <InputAdornment position="start">$</InputAdornment>
                                     }}
                                     InputLabelProps = {{
                                         shrink: true,
@@ -981,6 +986,7 @@ class LeaseForm extends Component {
                                     id="leaseTerm"
                                     name="leaseTerm"
                                     label="Lease Term"
+                                    type="number"
                                     placeholder="Lease Term"
                                     className={classes.textField}
                                     value={this.state.leaseTerm}
@@ -1009,6 +1015,7 @@ class LeaseForm extends Component {
                                     id="totalTax"
                                     name="totalTax"
                                     label="Total Tax"
+                                    type="number"
                                     placeholder="Total Tax"
                                     className={classes.textField}
                                     value={this.state.totalTax}
@@ -1023,6 +1030,7 @@ class LeaseForm extends Component {
                                         classes: {
                                             input: classes.input,
                                         },
+                                        startAdornment: <InputAdornment position="start">$</InputAdornment>
                                     }}
                                     InputLabelProps = {{
                                         shrink: true,
@@ -1035,6 +1043,7 @@ class LeaseForm extends Component {
                                     id="totalLease"
                                     name="totalLease"
                                     label="Total Lease"
+                                    type="number"
                                     placeholder="Total Lease"
                                     className={classes.textField}
                                     value={this.state.totalLease}
@@ -1049,6 +1058,7 @@ class LeaseForm extends Component {
                                         classes: {
                                             input: classes.input,
                                         },
+                                        startAdornment: <InputAdornment position="start">$</InputAdornment>
                                     }}
                                     InputLabelProps = {{
                                         shrink: true,
