@@ -926,7 +926,7 @@ class InvoiceLineTable extends React.Component {
 
         let bReadonly = false;
 
-        if(this.props.invoiceForm.customer!==null && this.props.invoiceForm.customer.TaxExcempt!=='N')
+        if(this.props.invoiceForm.customer!==null && this.props.invoiceForm.customer.TaxExempt!=='N')
             bReadonly = true;
 
         return (

@@ -536,6 +536,14 @@ class TransactionForm extends Component {
             return false;
         }
 
+        if(this.state.transactionDescription===''){
+            this.setState({snackMessage: 'Please fill description'});
+            this.setState({openSnack: true});
+            return false;
+        }
+
+
+
         return true;
     };
 
@@ -1068,6 +1076,7 @@ class TransactionForm extends Component {
                                 margin="dense"
                                 variant="outlined"
                                 fullWidth
+                                required
                                 InputLabelProps = {{
                                     shrink: true,
                                     classes: {outlined: classes.label}
@@ -1143,6 +1152,18 @@ class TransactionForm extends Component {
                                     <Button
                                         variant="contained"
                                         color="primary"
+                                        className={classNames(classes.button, "mr-12")}
+                                        onClick={() => {
+                                            this.onSaveAndClose();
+                                        }}
+                                    >
+                                        Save & Close
+                                    </Button>
+                                </FuseAnimate>
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
                                         className={classes.button}
                                         onClick={() => {
                                             this.props.hideVendorDialogBox();
@@ -1157,8 +1178,8 @@ class TransactionForm extends Component {
                     </div>
                     <Snackbar
                         anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'left',
+                            vertical: 'center',
+                            horizontal: 'top',
                         }}
                         open={this.state.openSnack}
                         autoHideDuration={3000}
@@ -1179,7 +1200,7 @@ class TransactionForm extends Component {
                         <DialogTitle id="alert-dialog-title">{"Create New Transaction"}</DialogTitle>
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
-                                Do you really want to create the new transaction?
+                                Proceed to create new transaction?
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
