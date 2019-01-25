@@ -228,11 +228,11 @@ class InvoiceApp extends Component {
         super(props);
 
         if(!props.bLoadedInvoices) {
+            props.getBillingLists(props.regionId);
+            props.getServiceLists(props.regionId);
             props.getInvoiceStatus(props.regionId);
             props.getInvoices([props.regionId] ,props.StatusId, props.FromDate, props.ToDate, props.PeriodId,
                 props.OpenOrClosed, props.InvoiceTypeId, props.ToPrintOrToEmail, props.SearchText);
-            props.getBillingLists(props.regionId);
-            props.getServiceLists(props.regionId);
         }
 
         if (!props.bLoadedCustomers) {
@@ -375,6 +375,10 @@ class InvoiceApp extends Component {
             });
             this.setState({customers: temp});
         }
+        if(this.props.billingLists===null)
+            this.props.getBillingLists(this.props.regionId);
+        if(this.props.serviceLists===null)
+            this.props.getServiceLists(this.props.regionId);
     }
 
     componentWillUnmount(){
@@ -687,6 +691,8 @@ function mapStateToProps({invoices, auth, customers, franchisees})
         SearchText: invoices.SearchText,
         bInvoiceStart: invoices.bInvoiceStart,
         bInvoicesUpdated: invoices.bInvoicesUpdated,
+        billingLists: invoices.billingLists,
+        serviceLists: invoices.serviceLists,
 
         customers: invoices.customersDB,
         bLoadedCustomers: invoices.bLoadedSuggestCustomers,

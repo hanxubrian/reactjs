@@ -498,6 +498,8 @@ class TransactionForm extends Component {
 
     addNewTransaction = () => {
         let trx_no = 'pending';
+        let vendor = {};
+        console.log('vendor=', this.props.vendor);
 
         let result = {
             trx_no,
@@ -541,12 +543,18 @@ class TransactionForm extends Component {
         if(this.validateNewTransaction()){
             this.setState({bAlertNewTransaction: true});
             this.setState({buttonOption: buttonOption});
+            this.addNewTransaction();
         }
     };
 
     onSaveAndAddMore=()=>{
         this.onSaveTransaction(0);
     };
+
+    onSaveAndClose = () => {
+        this.onSaveTransaction(1);
+    };
+
 
     closeComposeForm = () => {
         this.props.transactionForm.type === 'edit' ? this.props.closeEditTransactionForm() : this.props.closeNewTransactionForm();
