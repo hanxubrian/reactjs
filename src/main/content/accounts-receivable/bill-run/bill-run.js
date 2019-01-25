@@ -214,7 +214,8 @@ class BillRun extends Component {
         });
     }
     componentWillMount(){
-        this.getBillruns();
+        if( this._isMounted)
+            this.getBillruns();
     }
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this._isMounted){
@@ -338,6 +339,7 @@ class BillRun extends Component {
         // }
     }
     handleChange1 = event => {
+        if(!this._isMounted){return null;}
         this.setState({[event.target.name]: event.target.value});
         let startDate, endDate, quarter, year;
         switch (event.target.value) {
