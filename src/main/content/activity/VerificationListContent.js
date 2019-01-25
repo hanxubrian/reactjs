@@ -399,7 +399,7 @@ class VerificationListContent extends Component {
                 {
                     "VerificationId": 1,
                     "VerificationName": "Pending",
-                    "UserDate": "6455-98-12",
+                    "UserDate": "01/24/2019",
                     "VerificationNumber": "085017",
                     "Active": "Verified",
                     "Region": "BUF"
@@ -407,7 +407,7 @@ class VerificationListContent extends Component {
                 {
                     "VerificationId": 2,
                     "VerificationName": "Pending",
-                    "UserDate": "1258-78-56",
+                    "UserDate": "01/24/2019",
                     "VerificationNumber": "085017",
                     "Active": "Verified",
                     "Region": "BUF"
@@ -415,7 +415,7 @@ class VerificationListContent extends Component {
                 {
                     "VerificationId": 3,
                     "VerificationName": "Pending",
-                    "UserDate": "2399-39-89",
+                    "UserDate": "01/24/2019",
                     "VerificationNumber": "085017",
                     "Active": "Revise",
                     "Region": "BUF"
