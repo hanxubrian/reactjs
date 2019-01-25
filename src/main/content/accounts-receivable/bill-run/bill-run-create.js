@@ -150,6 +150,7 @@ class BillRunDialog extends Component {
     };
 
     componentDidUpdate(prevProps, prevState, snapshot){
+
         if(this.state.pusherMSG !== prevState.pusherMSG){
             console.log("pusherMSG-create",this.state.pusherMSG);
         }
@@ -185,7 +186,7 @@ class BillRunDialog extends Component {
         });
     }
     componentWillUnmount() {
-        this.props.onRef(undefined)
+        this.props.onRef(undefined);
     }
     componentWillReceiveProps(nextProps){
         this.setState({open: nextProps.open});

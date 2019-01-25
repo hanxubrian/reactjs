@@ -97,7 +97,14 @@ class ContactList extends Component {
             this.props.contacts.map((item,index)=>{
                 if(item.unread && item.unread>0 && !this.state.flage){
                     this.setState({flage: !this.state.flage});
-                    this.messagenotification();
+                    setTimeout(
+                        function() {
+                            this.messagenotification();
+                        }
+                            .bind(this),
+                        800
+                    );
+
                 }
             });
         }

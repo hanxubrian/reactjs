@@ -178,6 +178,8 @@ class BillRun extends Component {
         billrunDatePeriod       : moment(),
         status                  : false,
         pusherMSG               : null,
+        viewinvoiceDetail       : false,
+
     };
 
     constructor(props){
@@ -187,6 +189,7 @@ class BillRun extends Component {
             props.getBillruns();
         }
         this.fetchData = this.fetchData.bind(this);
+        this._isMounted = false;
     }
     fetchData(state, instance) {
         this.setState({
@@ -199,6 +202,7 @@ class BillRun extends Component {
         this.setState({ [prop]: event.target.value });
     };
     componentDidMount(){
+        this._isMounted = true;
         const pusher = new Pusher('ecf6a4e23b186efa2d44', {
             cluster: 'us2',
             forceTLS: true
@@ -213,49 +217,58 @@ class BillRun extends Component {
         this.getBillruns();
     }
     componentDidUpdate(prevProps, prevState, snapshot){
-        let bChanged = false;
+        if(this._isMounted){
+            let bChanged = false;
 
-        // if(this.state.pusherMSG !== prevState.pusherMSG){
-        //     console.log("pusherMSG",this.state.pusherMSG);
-        // }
-        if(this.props.regionId !== prevProps.regionId) {
-            this.setState({regionId: prevProps.regionId});
-            bChanged = true;
+            // if(this.state.pusherMSG !== prevState.pusherMSG){
+            //     console.log("pusherMSG",this.state.pusherMSG);
+            // }
+            if(this.props.regionId !== prevProps.regionId) {
+                this.setState({regionId: prevProps.regionId});
+                bChanged = true;
+            }
+
+            if(bChanged)
+                this.getBillruns();
+
+            if(prevProps.billruns===null && this.props.billruns!==null){
+                this.getBillruns();
+            }
+
+            if(prevState.s!==this.state.s) {
+                // this.search(this.state.s);
+            }
+            if(!this.state.status && this.state.startDate === null && this.state.endDate === null){
+                this.setState({
+                    startDate : moment().date(1),
+                    endDate   : moment(moment().date(1)).endOf('month'),
+                    FromDate  : moment(),
+                    ToDate    : moment(),
+                    status    : true,
+                })
+
+            }
+            if(JSON.stringify(this.state) !== JSON.stringify(prevState) && !this.props.loading){
+                this.getBillRunList();
+            }
+            if(this.props.loading === false && prevProps.loading===true){
+                // this.getBillRunList();
+            }
         }
 
-        if(bChanged)
-            this.getBillruns();
-
-        if(prevProps.billruns===null && this.props.billruns!==null){
-            this.getBillruns();
-        }
-
-        if(prevState.s!==this.state.s) {
-            // this.search(this.state.s);
-        }
-        if(!this.state.status && this.state.startDate === null && this.state.endDate === null){
-            this.setState({
-                startDate : moment().date(1),
-                endDate   : moment(moment().date(1)).endOf('month'),
-                FromDate  : moment(),
-                ToDate    : moment(),
-                status    : true,
-            })
-
-        }
-        if(JSON.stringify(this.state) !== JSON.stringify(prevState) && !this.props.loading){
-            this.getBillRunList();
-        }
-        if(this.props.loading === false && prevProps.loading===true){
-            // this.getBillRunList();
-        }
 
     }
-
+    componentWillUnmount(){
+        this.child=null;
+        this.child1=null;
+        this.pageLayout = undefined;
+        this._isMounted = false;
+        console.log("componentWillUnmount-billrun");
+    }
     componentWillReceiveProps(nextProps) {
-        if(this.props.billruns===null && nextProps.billruns!==null)
+        if(this.props.billruns===null && nextProps.billruns!==null && this._isMounted)
             this.getBillruns(nextProps.billruns);
-        if(this.props.billruns!==nextProps.billruns)
+        if(this.props.billruns!==nextProps.billruns && this._isMounted)
             this.getBillruns(nextProps.billruns);
     }
 
@@ -274,6 +287,7 @@ class BillRun extends Component {
         }
     }
     getBillRunList=()=>{
+        if(!this._isMounted) return ;
         let regisonid       = [];
         let userids         = [];
         let isbillperiod    = false;
@@ -422,6 +436,8 @@ class BillRun extends Component {
     openEditContactDialog=(rowinfo)=>{
         console.log("rowinfo",rowinfo);
 
+        // this.child1.getInfofromParent(rowinfo);
+        // this.setState({viewinvoiceDetail:!this.state.viewinvoiceDetail});
     }
     render()
     {
@@ -743,10 +759,13 @@ class BillRun extends Component {
                                     }}
                                 />
                             )}
-                            <BillRunDialog open={this.state.open} onRef={ref => (this.child = ref)}/>
-                            { !1 && (
-                                <BillRunInvoiceDetail/>
+                            {this._isMounted ===true && (
+                                <BillRunDialog open={this.state.open} onRef={ref => (this.child = ref)}/>
                             )}
+
+
+                            {/*<BillRunInvoiceDetail open={this.state.viewinvoiceDetail} onRef ={ref =>(this.child1=ref)}/>*/}
+
 
                         </div>
                     </ClickAwayListener>
