@@ -1381,53 +1381,13 @@ class LeaseListContent extends Component {
 				// },
 				// { title: "Actions", name: "Actions", columnName: "Actions", width: 110, sortingEnabled: true, filteringEnabled: false, }
 			],
-			tableGroupColumnExtension: [
-				{
-					columnName: "FranchiseeName",
-					showWhenGrouped: true,
-					showColumnsWhenGrouped: true
-				},
-				{
-					columnName: "FranchiseeNo",
-					showWhenGrouped: true,
-					showColumnsWhenGrouped: true
-				},
-				{
-					columnName: "LeaseNumber",
-					showWhenGrouped: true,
-					showColumnsWhenGrouped: true
-				},
-				{
-					columnName: "SerialNumber",
-					showWhenGrouped: true,
-					showColumnsWhenGrouped: true
-				},
-				{
-					columnName: "TotalMonthlyPaymentAmount",
-					showWhenGrouped: true,
-					showColumnsWhenGrouped: true
-				},
-				{
-					columnName: 'TotalPaidAmount',
-					showWhenGrouped: true,
-					showColumnsWhenGrouped: true
-				},
-				{
-					columnName: "TotalBalance",
-					showWhenGrouped: true,
-					showColumnsWhenGrouped: true
-				},
-				{
-					columnName: 'Payments',
-					showWhenGrouped: true,
-					showColumnsWhenGrouped: true
-				},
-				{
-					columnName: 'Status',
-					showWhenGrouped: true,
-					showColumnsWhenGrouped: true
-				},
-			  ],
+			groupingColumns: [
+				// { columnName: 'CustomerName' },
+				// { columnName: 'CustomerNo' },
+				{ columnName: 'FranchiseeName' },
+
+			],
+			expandedGroups: ['FranchiseeName'],
 			sorting: [
 				{ columnName: 'LeaseNo', direction: 'asc' }
 			],
@@ -1588,7 +1548,10 @@ class LeaseListContent extends Component {
 
 
 		if (nextProps.leases !== this.props.leases) {
-			this.initRowsFromRawJson(nextProps.leases);
+			this.setState({
+				rows: this.getRowData(nextProps),
+				expandedGroups: [...new Set(this.getRowData(nextProps).map(x => x.FranchiseeName))],
+			})
 		}
 
 		if (this.props.locationFilterValue !== nextProps.locationFilterValue) {
@@ -1617,6 +1580,20 @@ class LeaseListContent extends Component {
                 leaseDetail: this.props.leaseDetail,
             });
         }
+	}
+
+	getRowData(props) {
+
+		if (props.data === undefined)
+			return [];
+		let res = [...props.data]
+
+		res.forEach(x=>{
+			x.FranchiseeNameNo = `${x.FranchiseeName} - ${x.FranchiseeNo}`;
+		})
+		console.log("getRowData", res);
+
+		return res;
 	}
 
 	search(val) {
@@ -1754,7 +1731,7 @@ class LeaseListContent extends Component {
 
 
 
-	initRowsFromRawJson = (rawData = this.props.leases, locationFilterValue = this.props.locationFilterValue) => {
+	initRowsFromRawJson = (rawData = this.props.leases) => {
 		console.log("initRowsFromRawJson", "LeaseListContent.js", this.props.regionId, this.props.statusId, rawData)
 		let all_temp = [];
 		if (rawData === null || rawData === undefined) return;
@@ -1789,7 +1766,8 @@ class LeaseListContent extends Component {
 		this.setState({
 			rows: all_temp,
 			data: all_temp,
-			// pins: _pins_temp,
+			"rows": this.getRowData(this.props.leases),
+			expandedGroups: [...new Set(this.getRowData(this.props.leases).map(x => x.FranchiseeName))]
 		});
 
 	};
@@ -1974,6 +1952,18 @@ class LeaseListContent extends Component {
 		);
 	};
 
+	expandedGroupsChange = (expandedGroups) => {
+		this.setState({ expandedGroups });
+	};
+
+	GroupCellContent = ({ column, row }) => (
+		<span>
+			{/* {column.title} */}
+			<strong>{row.value}</strong>
+		</span>
+	);
+
+
 	render() {
 		const {
 			classes,
@@ -2006,6 +1996,8 @@ class LeaseListContent extends Component {
 			// booleanColumns,
 			searchValue,
 			grouping,
+			groupingColumns,
+			expandedGroups,
 			// leftColumns,
 			// rightColumns,
 		} = this.state;
@@ -2117,10 +2109,9 @@ class LeaseListContent extends Component {
 									/>
 
 									<GroupingState
-										grouping={[{ columnName: 'FranchiseeName' }]}
-										defaultExpandedGroups={[ 'FranchiseeName' ]}
-										defaultGrouping={[{ columnName: 'Franchisee' }]}
-										columnExtensions={tableColumnExtensions}
+										grouping={groupingColumns}
+										expandedGroups={expandedGroups}
+										onExpandedGroupsChange={this.expandedGroupsChange}
 									/>
 									<IntegratedGrouping />
 									<Table rowComponent={this.TableRow}/>
@@ -2128,7 +2119,7 @@ class LeaseListContent extends Component {
 									<TableHeaderRow />
 									<DataTypeProvider for={grouping}/>
 									<TableGroupRow
-										columnExtensions={tableGroupColumnExtension}
+										 contentComponent={this.GroupCellContent}
 										// contentComponent={GroupCellContent}
 									/>
 

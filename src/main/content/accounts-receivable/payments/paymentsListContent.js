@@ -504,7 +504,7 @@ class PaymentsListContent extends Component {
 
 		this.fetchData = this.fetchData.bind(this);
 
-		// this.changeSelection = selection => this.setState({ selection });
+		this.changeSelection = selection => this.setState({ selection });
 		this.changeSorting = sorting => this.setState({ sorting });
 		this.commitChanges = this.commitChanges.bind(this);
 		this.changeSearchValue = value => this.setState({ searchValue: value });
@@ -518,6 +518,7 @@ class PaymentsListContent extends Component {
 			"",
 			this.props.status);
 	}
+<<<<<<< HEAD
 
 	changeSelection = (selection) => {
 		this.setState({ selection })
@@ -525,6 +526,8 @@ class PaymentsListContent extends Component {
 		console.log("selection", selectedRows)
 		this.props.setActivePaymentRows(selectedRows)
 	}
+=======
+>>>>>>> 1103d444ab52607e0c01a806f1cb0cbf9ea6919d
 	//
 	// to edit table cell
 	//
@@ -612,7 +615,7 @@ class PaymentsListContent extends Component {
 			return [];
 		let res = [...props.payments.Regions[0].Payments]
 
-		res.forEach(x => {
+		res.forEach(x=>{
 			x.CustomerNameNo = `${x.CustomerName} - ${x.CustomerNo}`;
 		})
 		console.log("getRowData", res);
@@ -752,7 +755,8 @@ class PaymentsListContent extends Component {
 			<Fragment>
 				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
 
-					<div className={classNames("flex flex-col")}>
+					<div className={classNames("flex flex-col")}
+					>
 						<Grid
 							rows={rows}
 							columns={tableColumnExtensions}
@@ -858,7 +862,6 @@ function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
 		getAccountReceivablePaymentsList: Actions.getAccountReceivablePaymentsList,
 		openNewInvoiceForm: Actions.openNewInvoiceForm,
-		setActivePaymentRows: Actions.setActivePaymentRows,
 	}, dispatch);
 }
 

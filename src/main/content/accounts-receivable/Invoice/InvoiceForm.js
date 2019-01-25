@@ -725,7 +725,7 @@ class InvoiceForm extends Component {
                 }
                 if(!bFrachiseeAmount) return false;
 
-                let lineAmount = line.amount;
+                let lineAmount = line.extended;
                 let franchAmount = 0;
 
                 if(franchisees.length>0) {
