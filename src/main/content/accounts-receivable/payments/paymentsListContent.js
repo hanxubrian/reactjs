@@ -510,7 +510,7 @@ class PaymentsListContent extends Component {
 		this.changeGrouping = grouping => this.setState({ grouping });
 		console.log("constructor");
 
-		if (this.props.bLoadedPayments) {
+		if (this.props.bLoadedPayments === false) {
 			this.props.getAccountReceivablePaymentsList(
 				this.props.regionId,
 				this.props.getPaymentsParam.fromDate,
