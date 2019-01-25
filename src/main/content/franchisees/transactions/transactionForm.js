@@ -49,7 +49,7 @@ import PropTypes from 'prop-types';
 import {escapeRegexCharacters} from 'services/utils'
 import { Control, Menu, NoOptionsMessage, Option, Placeholder, SingleValue, ValueContainer} from "../../accounts-receivable/Invoice/selectUtils";
 import {emphasize} from "@material-ui/core/styles/colorManipulator";
-import {NumberFormatCustom, NumberFormatCustom3} from "../../../../services/utils";
+import {NumberFormatCustom, NumberFormatCustom2, NumberFormatCustom3} from "../../../../services/utils";
 
 
 const styles = theme => ({
@@ -201,12 +201,7 @@ const newTransactionState = {
     "TransactionDate": new Date(),
     "Date": new Date(),
     "franchiseeNo": "",
-    "EBill": "",
-    "PrintInvoice": "",
     "transactionDescription": "",
-    "InvoiceAmount": "",
-    "InvoiceTax": "",
-    "InvoiceTotal": "",
     "CPI": "",
     "TransactionStatusListId": "",
     "TransactionStatus": "",
@@ -216,10 +211,6 @@ const newTransactionState = {
     "EBillText": "",
     "PrintInvoiceText": "",
     "IsOpen": "",
-    "ConsolidatedInvoice": "",
-    "ConsolidatedInvoiceId": "",
-    "ConsolidatedInvoiceNo": "",
-    "CreditId": "",
     "Service":"",
     "notes": ""
 };
@@ -443,32 +434,20 @@ class TransactionForm extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        // if(nextProps.invoiceForm.customer!==null){
-        //     if(nextProps.invoiceForm.type==='edit')
-        //         this.setState({InvoiceNo: nextProps.invoiceForm.customer.InvoiceNo});
-        //     this.setState({value: nextProps.invoiceForm.customer.CustomerName});
-        //     this.setState({franchiseeNo: nextProps.invoiceForm.customer.franchiseeNo});
-        //     this.setState({InvoiceDate: moment(nextProps.invoiceForm.customer.InvoiceDate)});
-        //     this.setState({Date: moment(nextProps.invoiceForm.customer.Date)});
-        // }
-        //
-        // if(nextProps.newInvoice!==null && nextProps.newInvoice!==this.props.newInvoice){
-        //     this.setState({bAlertNewTransaction: false});
-        //     if(this.state.buttonOption===0){
-        //         this.props.resetInvoiceForm();
-        //         this.setState({transactionDescription: ''});
-        //         this.setState({note: ''});
-        //         this.setState({selectedFranchisee: null});
-        //         this.setState({value: ''});
-        //         this.setState({franchiseeNo: ''});
-        //     }
-        //     else if(this.state.buttonOption===1) {
-        //         this.closeComposeForm();
-        //     }
-        //     else if(this.state.buttonOption===2) {
-        //         this.closeComposeForm();
-        //     }
-        // }
+        if(nextProps.newTransaction!==null && nextProps.newTransaction!==this.props.newTransaction){
+            this.setState({bAlertNewTransaction: false});
+            if(this.state.buttonOption===0){
+                this.props.resetInvoiceForm();
+                this.setState({transactionDescription: ''});
+                this.setState({note: ''});
+                this.setState({selectedFranchisee: null});
+                this.setState({value: ''});
+                this.setState({franchiseeNo: ''});
+            }
+            else if(this.state.buttonOption===1) {
+                this.closeComposeForm();
+            }
+        }
     }
 
     componentDidMount(){
@@ -485,14 +464,22 @@ class TransactionForm extends Component {
     };
 
     handleChange1 = name =>(event) => {
-        this.setState({[name]: event.target.value});
-        let quantity = name==='quantity' ? event.target.value : this.state.quantity;
-        let unitPrice = name==='unitPrice' ? event.target.value : this.state.unitPrice;
+        if(name==='quantity')
+            this.setState({[name]: parseInt(event.target.value)});
+        else if(name==='unitPrice')
+            this.setState({[name]: parseFloat(event.target.value)});
+        else
+            this.setState({[name]: event.target.value});
+    };
+
+    handleBlurTransaction = name =>(event) => {
+        let quantity =  this.state.quantity;
+        let unitPrice = this.state.unitPrice;
 
         if(quantity>0 && unitPrice>0) {
-            this.setState({subTotal: quantity * unitPrice});
-            this.setState({tax: quantity * unitPrice*0.085});
-            this.setState({total: quantity * unitPrice*1.085});
+            this.setState({subTotal: parseFloat(quantity * unitPrice)});
+            this.setState({tax: parseFloat(quantity * unitPrice*0.085)});
+            this.setState({total: parseFloat(quantity * unitPrice*1.085)});
         }
     };
 
@@ -524,6 +511,8 @@ class TransactionForm extends Component {
             Notes: this.state.note,
             TrxDate: this.state.TransactionDate,
             Date: this.state.Date,
+
+            vendor: this.props.vendor
         };
         // this.props.addInvoice(this.props.regionId, result);
         console.log('result', JSON.stringify(result));
@@ -551,7 +540,6 @@ class TransactionForm extends Component {
         if(this.validateNewTransaction()){
             this.setState({bAlertNewTransaction: true});
             this.setState({buttonOption: buttonOption});
-            this.addNewTransaction();
         }
     };
 
@@ -652,6 +640,8 @@ class TransactionForm extends Component {
                 },
             }),
         };
+
+        console.log('state=', this.state);
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
@@ -897,6 +887,7 @@ class TransactionForm extends Component {
                                 className={classes.textField}
                                 value={this.state.quantity}
                                 onChange={this.handleChange1('quantity')}
+                                onBlur={this.handleBlurTransaction('quantity')}
                                 margin="dense"
                                 variant="outlined"
                                 InputLabelProps = {{
@@ -904,7 +895,6 @@ class TransactionForm extends Component {
                                     classes: {outlined: classes.label}
                                 }}
                                 InputProps={{
-                                    inputComponent: NumberFormatCustom3,
                                     classes: {
                                         input: classes.input
                                     },
@@ -918,6 +908,7 @@ class TransactionForm extends Component {
                                 className={classes.textField}
                                 value={this.state.unitPrice}
                                 onChange={this.handleChange1('unitPrice')}
+                                onBlur={this.handleBlurTransaction('unitPrice')}
                                 margin="dense"
                                 variant="outlined"
                                 InputLabelProps = {{
@@ -925,7 +916,7 @@ class TransactionForm extends Component {
                                     classes: {outlined: classes.label}
                                 }}
                                 InputProps={{
-                                    inputComponent: NumberFormatCustom,
+                                    inputComponent: NumberFormatCustom2,
                                     classes: {
                                         input: classes.input
                                     },
@@ -938,7 +929,7 @@ class TransactionForm extends Component {
                                 label="Sub-Total"
                                 className={classes.textField}
                                 value={this.state.subTotal}
-                                onChange={this.handleChange1('subTotal')}
+                                // onChange={this.handleChange1('subTotal')}
                                 margin="dense"
                                 variant="outlined"
                                 InputLabelProps = {{
@@ -946,7 +937,7 @@ class TransactionForm extends Component {
                                     classes: {outlined: classes.label}
                                 }}
                                 InputProps={{
-                                    inputComponent: NumberFormatCustom,
+                                    inputComponent: NumberFormatCustom2,
                                     readOnly: true,
                                     classes: {
                                         input: classes.inputReadonly
@@ -959,7 +950,7 @@ class TransactionForm extends Component {
                                 label="Tax"
                                 className={classes.textField}
                                 value={this.state.tax}
-                                onChange={this.handleChange1('tax')}
+                                // onChange={this.handleChange1('tax')}
                                 margin="dense"
                                 variant="outlined"
                                 InputLabelProps = {{
@@ -967,7 +958,7 @@ class TransactionForm extends Component {
                                     classes: {outlined: classes.label}
                                 }}
                                 InputProps={{
-                                    inputComponent: NumberFormatCustom,
+                                    inputComponent: NumberFormatCustom2,
                                     readOnly: true,
                                     classes: {
                                         input: classes.inputReadonly
@@ -980,7 +971,7 @@ class TransactionForm extends Component {
                                 label="Total"
                                 className={classes.textField}
                                 value={this.state.total}
-                                onChange={this.handleChange1('total')}
+                                // onChange={this.handleChange1('total')}
                                 margin="dense"
                                 variant="outlined"
                                 InputLabelProps = {{
@@ -988,7 +979,7 @@ class TransactionForm extends Component {
                                     classes: {outlined: classes.label}
                                 }}
                                 InputProps={{
-                                    inputComponent: NumberFormatCustom,
+                                    inputComponent: NumberFormatCustom2,
                                     readOnly: true,
                                     classes: {
                                         input: classes.inputReadonly

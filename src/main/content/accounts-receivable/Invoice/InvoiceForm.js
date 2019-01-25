@@ -485,7 +485,7 @@ class InvoiceForm extends Component {
                 this.setState({value: nextProps.invoiceForm.customer.CustomerName + ' - ' + nextProps.invoiceForm.customer.CustomerNo});
                 this.setState({PO_number: nextProps.invoiceForm.customer.CustomerNo});
                 this.setState({InvoiceDescription: nextProps.invoices.invoiceDetail.Data.Description});
-                this.setState({notes: nextProps.invoices.invoiceDetail.Data.Notes});
+                this.setState({notes: nextProps.invoices.invoiceDetail.Data.Notes===null ? '' : nextProps.invoices.invoiceDetail.Data.Notes});
                 let year = moment().year();
                 let month = moment().month();
                 let invoiceDate = moment();
