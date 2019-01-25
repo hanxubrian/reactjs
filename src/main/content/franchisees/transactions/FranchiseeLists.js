@@ -406,6 +406,7 @@ class TransactionsLists extends Component {
                                             <IconButton
                                                 onClick={(ev) => {
                                                     ev.stopPropagation();
+                                                    this.props.openEditTransactionForm(row.original);
                                                 }}
                                             >
                                                 <Icon fontSize={"small"}>edit</Icon>
