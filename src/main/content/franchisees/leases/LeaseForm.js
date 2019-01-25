@@ -803,6 +803,7 @@ class LeaseForm extends Component {
                                         margin="none"
                                         label="Lease #"
                                         placeholder="Lease #"
+                                        className={classes.textField}
                                         InputProps={{
                                             readOnly: bReadonly,
                                             classes: {
@@ -836,6 +837,7 @@ class LeaseForm extends Component {
                                         onChange={this.handleChange}
                                         fullWidth
                                         required
+                                        className={classes.textField}
                                         InputProps={{
                                             classes: {
                                                 input: classes.input,
@@ -859,6 +861,7 @@ class LeaseForm extends Component {
                                         onChange={this.handleChange}
                                         required
                                         fullWidth
+                                        className={classes.textField}
                                         InputProps={{
                                             classes: {
                                                 input: classes.input,
