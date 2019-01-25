@@ -595,7 +595,11 @@ class PaymentsListContent extends Component {
 				"",
 				nextProps.status);
 		}
-
+		if (nextProps.activePaymentRows != this.props.activePaymentRows) {
+			if(JSON.stringify(this.state.selection)!== JSON.stringify(nextProps.activePaymentRows)) {
+				this.setState({selection: [...nextProps.activePaymentRows]})
+			}
+		}
 		// if (this.props.locationFilterValue !== nextProps.locationFilterValue) {
 		// 	this.setState({ locationFilterValue: nextProps.locationFilterValue })
 		// 	console.log("componentWillReceiveProps", "locationFilterValue", nextProps.locationFilterValue, this.props.customers)
@@ -707,10 +711,11 @@ class PaymentsListContent extends Component {
 		const handleDoubleClick = () => {
 			clearTimeout(timer);
 			prevent = true;
-
-			console.log(restProps);
+			console.log("restProps", tableRow);
+			this.props.setActivePaymentRows([tableRow.rowId]);
 			// this.props.openEditCustomerForm(this.props.regionId, tableRow.row.CustomerId);
-			this.props.openNewInvoiceForm()
+			// this.props.openNewInvoiceForm()
+			this.props.openPaymentDialog(true)
 		}
 		return (
 			<Table.Row
@@ -863,7 +868,9 @@ function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
 		getAccountReceivablePaymentsList: Actions.getAccountReceivablePaymentsList,
 		openNewInvoiceForm: Actions.openNewInvoiceForm,
+
 		setActivePaymentRows: Actions.setActivePaymentRows,
+		openPaymentDialog: Actions.openPaymentDialog,
 	}, dispatch);
 }
 
