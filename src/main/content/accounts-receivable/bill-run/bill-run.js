@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 
 // core components
 import {Icon, IconButton,Button, Fab,ClickAwayListener, Input, Paper, Typography,CircularProgress,MenuItem,InputLabel ,OutlinedInput , FormControl, Select} from '@material-ui/core';
-// import {DialogTitle, DialogContent, DialogContentText, DialogActions} from '@material-ui/core';
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 import { Dialog ,DialogTitle, DialogContent, DialogContentText, DialogActions} from '@material-ui/core';
 import {withStyles} from "@material-ui/core";
@@ -30,7 +29,6 @@ import Pusher from 'pusher-js';
 
 import {UPDATE_FROM_DATE_INVOICE, UPDATE_TO_DATE_INVOICE} from "../../../../store/actions";
 import MomentUtils from "@date-io/moment/build/index";
-// import BillRunInvoiceDetail from "./bill-run-create";
 import BillRunDialog from './bill-run-create';
 import BillRunInvoiceDetail from './bill-run-invoice';
 const headerHeight = 100;
@@ -221,9 +219,6 @@ class BillRun extends Component {
         if(this._isMounted){
             let bChanged = false;
 
-            // if(this.state.pusherMSG !== prevState.pusherMSG){
-            //     console.log("pusherMSG",this.state.pusherMSG);
-            // }
             if(this.props.regionId !== prevProps.regionId) {
                 this.setState({regionId: prevProps.regionId});
                 bChanged = true;
@@ -253,7 +248,6 @@ class BillRun extends Component {
                 this.getBillRunList();
             }
             if(this.props.loading === false && prevProps.loading===true){
-                // this.getBillRunList();
             }
         }
 
@@ -264,7 +258,7 @@ class BillRun extends Component {
         this.child1=null;
         this.pageLayout = undefined;
         this._isMounted = false;
-        console.log("componentWillUnmount-billrun");
+
     }
     componentWillReceiveProps(nextProps) {
         if(this.props.billruns===null && nextProps.billruns!==null && this._isMounted)
@@ -333,10 +327,8 @@ class BillRun extends Component {
         this.child.handleClickOpen();
     }
     closeDialog=()=>{
-        // if(this.state.flag){
-        //     this.setState({open: !this.state.open});
-        //     this.setState({flag: !this.state.flag});
-        // }
+
+
     }
     handleChange1 = event => {
         if(!this._isMounted){return null;}
@@ -438,8 +430,11 @@ class BillRun extends Component {
     openEditContactDialog=(rowinfo)=>{
         console.log("rowinfo",rowinfo);
 
-        // this.child1.getInfofromParent(rowinfo);
-        // this.setState({viewinvoiceDetail:!this.state.viewinvoiceDetail});
+        this.child1.getInfofromParent(rowinfo);
+        this.setState({viewinvoiceDetail:!this.state.viewinvoiceDetail});
+    }
+    CloseDetail=()=>{
+        this.setState({viewinvoiceDetail:!this.state.viewinvoiceDetail});
     }
     render()
     {
@@ -766,7 +761,7 @@ class BillRun extends Component {
                             )}
 
 
-                            {/*<BillRunInvoiceDetail open={this.state.viewinvoiceDetail} onRef ={ref =>(this.child1=ref)}/>*/}
+                            <BillRunInvoiceDetail open={this.state.viewinvoiceDetail} Closedetail={this.CloseDetail} onRef ={ref =>(this.child1=ref)}/>
 
 
                         </div>

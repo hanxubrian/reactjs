@@ -22,6 +22,11 @@ export const DELETE_BILLRUN_SUCCESS    = "[BILL-RUNS] DELETE BILL RUN SUCCESS";
 export const DELETE_BILLRUN_START      = "[BILL-RUNS] DELETE BILL RUN START";
 export const DELETE_BILLRUN_FAILD      = "[BILL-RUNS] DELETE BILL RUN FAILD";
 
+
+export const GET_BILLRUN_INVOICE_DETAIL_BILLRUN_SUCCESS    = "[BILL-RUNS] GET BILLRUN INVOICE DETAIL SUCCESS";
+export const GET_BILLRUN_INVOICE_DETAIL_BILLRUN_START      = "[BILL-RUNS] GET BILLRUN INVOICE DETAIL START";
+export const GET_BILLRUN_INVOICE_DETAIL_BILLRUN_FAILD      = "[BILL-RUNS] GET BILLRUN INVOICE DETAIL FAILD";
+
 export function getBillruns() {
     return dispatch => {
         const request = axios.get("/api/billruns/gets");
@@ -134,6 +139,37 @@ export  function createbillrun(RegionId, Year ,Month,User, UserId,Message) {
             } else {
                 dispatch({
                     type: CREATE_BILLRUN_FAILD,
+                    payload: res
+                });
+            }
+        })();
+    };
+}
+
+/**
+ * POST v1/accountsreceivable/GetBillRunByNumber
+ * @param BillRunNo
+ * @param RegionId
+ * @returns {Function}
+ */
+export  function getinvoicedetailfrombillrun(RegionId,BillRunNo) {
+    return (dispatch) => {
+
+        dispatch({
+            type: GET_BILLRUN_INVOICE_DETAIL_BILLRUN_START,
+            payload: true
+        });
+
+        (async () => {
+            let res = await billrunService.getinvoicefrombillrun(RegionId,BillRunNo);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: GET_BILLRUN_INVOICE_DETAIL_BILLRUN_SUCCESS,
+                    payload: res.Data
+                });
+            } else {
+                dispatch({
+                    type: GET_BILLRUN_INVOICE_DETAIL_BILLRUN_FAILD,
                     payload: res
                 });
             }

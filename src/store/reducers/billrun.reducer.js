@@ -5,12 +5,14 @@ import { persistReducer } from 'redux-persist';
 import {CREATE_BILLRUN_FAILD, CREATE_BILLRUN_START} from "../actions/billrun.action";
 
 const initialState = {
-    billrunsDB              : null,
-    bLoadedBillruns         : false,
-    billruncreate           : null,
-    loadingstatus           : false,
-    billrunstatus           : 10,
-    billrundelete           : null,
+    billrunsDB                              : null,
+    bLoadedBillruns                         : false,
+    billruncreate                           : null,
+    loadingstatus                           : false,
+    billrunstatus                           : 10,
+    billrundelete                           : null,
+    billruninvoiceDetail                    : null,
+    billruninvoiceDetailStatus              : false,
 };
 
 
@@ -87,6 +89,25 @@ const billruns = function(state = initialState, action) {
                 ...state,loadingstatus: true,
             }
         }
+        case Actions.GET_BILLRUN_INVOICE_DETAIL_BILLRUN_START:
+        {
+            return {
+                ...state,billruninvoiceDetailStatus: true,
+            }
+        }
+        case Actions.GET_BILLRUN_INVOICE_DETAIL_BILLRUN_SUCCESS:
+        {
+            return {
+                ...state,billruninvoiceDetail: action.payload,billruninvoiceDetailStatus: false,
+            }
+        }
+        case Actions.GET_BILLRUN_INVOICE_DETAIL_BILLRUN_FAILD:
+        {
+            return {
+                ...state,billruninvoiceDetailStatus: false,
+            }
+        }
+
         case UserActions.USER_LOGGED_OUT:
         {
             return {
