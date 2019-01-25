@@ -26,15 +26,9 @@ import "react-table/react-table.css";
 import classNames from 'classnames';
 
 import VerificationListContent from './VerificationListContent';
-// import DialogEmailToCustomer from './DialogEmailToCustomer';
-import FuseUtils from '@fuse/FuseUtils';
-
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import VerifiedDialogForm from "./VerifiedDialogForm";
+import ReviseDialogForm from "./ReviseDialogForms";
+
 
 const headerHeight = 80;
 
@@ -262,7 +256,7 @@ class VerificationsApp extends Component {
             searchText: this.props.searchText,
             isSubmittingForApproval: false,
             selectionLength: [],
-            openDialog: false
+            openDialog: false,
         };
         console.log("constructor, Customer.js")
 
@@ -363,6 +357,9 @@ class VerificationsApp extends Component {
     openVerificationDialog = () => {
         this.props.openVerificationDialog(true);
     }
+    openReviseDialog = () => {
+        this.props.openCloseReviseModal(true);
+    }
 
     render() {
 
@@ -395,11 +392,11 @@ class VerificationsApp extends Component {
                                     <div className="flex flex-shrink items-center">
                                         <Button variant="contained" color="primary" disabled={selectionLength.length === 0}
                                                 className={classNames(classes.button, classes.btntop) } onClick={this.openVerificationDialog}>
-                                            Verified
+                                            Verify
                                             <Icon className={classes.rightIcon}>verified_user</Icon>
                                         </Button>
                                         <Button variant="contained" color="primary" disabled={selectionLength.length === 0}
-                                                className={classNames(classes.button, classes.btntop)}>
+                                                className={classNames(classes.button, classes.btntop)} onClick={this.openReviseDialog}>
                                             Revise
                                             <Icon className={classes.rightIcon}>rotate_90_degrees_ccw</Icon>
                                         </Button>
@@ -419,6 +416,9 @@ class VerificationsApp extends Component {
                                 <Fragment>
                                     <VerifiedDialogForm />
                                 </Fragment>
+                            <Fragment>
+                                <ReviseDialogForm />
+                            </Fragment>
 
                         </div>
                     }
@@ -460,7 +460,8 @@ function mapDispatchToProps(dispatch) {
         toggleSummaryPanel: Actions.toggleVerificationSummaryPanel,
         openNewVerificationForm: Actions.openNewVerificationForm,
         closeNewVerificationForm: Actions.closeNewVerificationForm,
-        openVerificationDialog: Actions.openVerificationDialog
+        openVerificationDialog: Actions.openVerificationDialog,
+        openCloseReviseModal: Actions.openCloseReviseDialog
     }, dispatch);
 }
 
@@ -475,7 +476,8 @@ function mapStateToProps({verifications, auth}) {
         statusId: verifications.statusId,
         searchText: verifications.searchText,
         selectionLength: verifications.selectionLength,
-        verifiedModal: verifications.verifiedModal
+        verifiedModal: verifications.verifiedModal,
+        reviseModal: verifications.reviseModal
     }
 }
 

@@ -9,6 +9,8 @@ export const UPDATE_SELECTION_ROW_LENGTH = "[VERIFICATIONS APP] UPDATE VERIFICAT
 export const OPEN_VERIFICATION_DIALOG = "[VERIFICATIONS APP] OPEN VERIFICATION DIALOG ";
 export const CLOSE_VERIFICATION_DIALOG = "[VERIFICATIONS APP] CLOSE VERIFICATION DIALOG ";
 
+export const OPEN_CLOSE_REVISE_DIALOG = "[VERIFICATIONS APP] OPEN/CLOSE REVISE DIALOG ";
+
 // for Add/Edit
 export const OPEN_NEW_VERIFICATION_FORM = '[VERIFICATIONS APP] OPEN NEW CUSTOMER FORM';
 export const CLOSE_NEW_VERIFICATION_FORM = '[VERIFICATIONS APP] CLOSE NEW CUSTOMER FORM';
@@ -80,4 +82,11 @@ export function openVerificationDialog(flag){
         }
     }
 
+}
+
+export function openCloseReviseDialog(flag){
+    return{
+        type: OPEN_CLOSE_REVISE_DIALOG,
+        payload : flag
+    }
 }
