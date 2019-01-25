@@ -519,7 +519,6 @@ class InvoiceLineTable extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.state.data!==null && prevState.data!==this.state.data) {
-            console.log('fired invoice', this.state.data);
             this.props.updateInvoiceLine(this.state.data);
         }
         if(JSON.stringify(this.state.customerTaxAmountLine)!== JSON.stringify(prevState.customerTaxAmountLine)){
@@ -530,7 +529,7 @@ class InvoiceLineTable extends React.Component {
             let rows = this.props.invoiceForm.data.line;
             rows.forEach(row=>{
                 let markup = 0.0;
-                if(row.markup!=='') markup = row.markup;
+                if(row.markup!=='' && row.billing.value===2) markup = row.markup;
                 this.props.getCustomerTaxAmount(row.id, this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity, markup);
             });
         }
@@ -577,9 +576,9 @@ class InvoiceLineTable extends React.Component {
         const data = [...this.state.data];
         const {taxRowId, customerTaxAmountLine} = this.state;
         if(customerTaxAmountLine.length) {
-            data[taxRowId].tax = customerTaxAmountLine[taxRowId].TotalTaxAmount;
-            data[taxRowId].extended = customerTaxAmountLine[taxRowId].ExtendedPrice;
-            data[taxRowId].total = customerTaxAmountLine[taxRowId].TotalAmount;
+            data[taxRowId].tax = parseFloat(customerTaxAmountLine[taxRowId].TotalTaxAmount);
+            data[taxRowId].extended = parseFloat(customerTaxAmountLine[taxRowId].ExtendedPrice);
+            data[taxRowId].total = parseFloat(customerTaxAmountLine[taxRowId].TotalAmount);
             data[taxRowId].markupAmount = customerTaxAmountLine[taxRowId].MarkupAmount;
             data[taxRowId].markupTax = customerTaxAmountLine[taxRowId].MarkupTax;
             if(data[taxRowId].franchisees.length){
@@ -767,6 +766,7 @@ class InvoiceLineTable extends React.Component {
         if(!this.isDisable(row)) {
             let markup = 0.0;
             if(row.markup!=='') markup = row.markup;
+            if(row.markup!=='' && row.billing.value===2) markup = row.markup;
             this.props.getCustomerTaxAmount(row.id, this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity, markup);
             this.setState({taxRowId: row.id})
         }
@@ -807,6 +807,7 @@ class InvoiceLineTable extends React.Component {
         let value = event.target.value;
         if (name==='amount')  value = parseFloat(value);
         if (name==='quantity')  value = parseInt(value);
+        if (name==='markup')  value = parseFloat(value);
 
         data[row.id][name] = value;
         this.setState({data: data});
@@ -1200,6 +1201,7 @@ class InvoiceLineTable extends React.Component {
                                                     placeholder="Markup"
                                                     value={row.original.markup}
                                                     onChange={this.handleChangeInvoiceLine(row.original, 'markup')}
+                                                    onBlur={this.handleChangeInvoiceLineOnBlur(row.original, 'markup')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustomPercent,
                                                         readOnly: row.original.billing.value!==2,
@@ -1223,7 +1225,7 @@ class InvoiceLineTable extends React.Component {
                                             if(row.original.type==='line') {
                                                 let markup = 0.0;
                                                 if(row.original.markup!=='') markup = row.original.markup;
-                                                return ("$" + parseFloat(row.original.total * (1 + parseFloat(markup) / 100)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+                                                return ("$" + parseFloat(row.original.extended).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
                                             }
                                             else {
                                                 if (row.original.length>1)

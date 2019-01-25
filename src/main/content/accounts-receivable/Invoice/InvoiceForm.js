@@ -481,7 +481,7 @@ class InvoiceForm extends Component {
     componentWillReceiveProps(nextProps) {
         if(nextProps.invoiceForm.customer!==null){
             if(nextProps.invoiceForm.type==='edit') {
-                this.setState({InvoiceNo: nextProps.invoices.invoiceDetail.Data.inv_no});
+                this.setState({InvoiceNo: nextProps.invoices.invoiceDetail.Data.Inv_no});
                 this.setState({value: nextProps.invoiceForm.customer.CustomerName + ' - ' + nextProps.invoiceForm.customer.CustomerNo});
                 this.setState({PO_number: nextProps.invoiceForm.customer.CustomerNo});
                 this.setState({InvoiceDescription: nextProps.invoices.invoiceDetail.Data.Description});
