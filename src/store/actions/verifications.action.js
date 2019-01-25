@@ -5,6 +5,7 @@ export const GET_ALL_VERIFICATIONS = "[VERIFICATIONS APP] GETS ALL";
 export const TOGGLE_VERIFICATION_SUMMARY_PANEL = "[VERIFICATIONS APP] TOGGLE SUMMARY PANEL";
 export const TOGGLE_VERIFICATION_FILTER_STATUS = "[VERIFICATIONS APP] TOGGLE VERIFICATION FILTER STATUS";
 export const TOGGLE_VERIFICATION_FILTER_PANEL = "[VERIFICATIONS APP] TOGGLE VERIFICATION FILTER PANEL";
+export const UPDATE_SELECTION_ROW_LENGTH = "[VERIFICATIONS APP] UPDATE VERIFICATION SELECTION ROWS LENGTH";
 
 // for Add/Edit
 export const OPEN_NEW_VERIFICATION_FORM = '[VERIFICATIONS APP] OPEN NEW CUSTOMER FORM';
@@ -56,5 +57,12 @@ export function openNewVerificationForm() {
 export function closeNewVerificationForm() {
     return {
         type: CLOSE_NEW_VERIFICATION_FORM
+    }
+}
+
+export function updateSelectedRowsLength(length) {
+    return {
+        type: UPDATE_SELECTION_ROW_LENGTH,
+        payload: length
     }
 }

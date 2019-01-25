@@ -2,6 +2,7 @@ import * as Actions from "../actions";
 import * as UserActions from "../../auth/store/actions";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import {UPDATE_SELECTION_ROW_LENGTH} from "../actions";
 
 const initialState = {
     verificationsDB: null,
@@ -18,8 +19,8 @@ const initialState = {
     },
     statusId: 1,
     searchText: "",
-
     bVerificationFetchStart: false,
+    selectionLength: [],
 };
 
 
@@ -84,6 +85,13 @@ const verifications = function (state = initialState, action) {
                     data: null
                 }
             };
+        }
+        case Actions.UPDATE_SELECTION_ROW_LENGTH:
+        {
+            return{
+                ...state,
+                selectionLength: action.payload
+            }
         }
         default:
         {

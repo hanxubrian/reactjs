@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { Icon, IconButton, Input, Paper, Button, Zoom } from '@material-ui/core';
-import { withStyles, Checkbox } from "@material-ui/core";
+import { IconButton, Input, Button } from '@material-ui/core';
+import { withStyles} from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from "redux";
 import connect from "react-redux/es/connect/connect";
@@ -10,7 +10,7 @@ import classNames from 'classnames';
 
 
 import {
-    Getter, Template, TemplateConnector
+    Template, TemplateConnector
 } from '@devexpress/dx-react-core';
 import {
     SelectionState,
@@ -341,14 +341,14 @@ class VerificationListContent extends Component {
             temp: [],
             data: [],
             selectAll: false,
-            selection: [],
+            selection: [...this.props.selectionLength],
             //rows: [],
             tableColumnExtensions: [
                 {
                     title: "Name",
                     name: "VerificationName",
                     columnName: "VerificationName",
-                    width: 'auto',
+                    //width: 'auto',
                     sortingEnabled: true,
                     filteringEnabled: true,
                     groupingEnabled: false,
@@ -357,7 +357,7 @@ class VerificationListContent extends Component {
                     title: "Number",
                     name: "VerificationNumber",
                     columnName: "VerificationNumber",
-                    width: 'auto',
+                    //width: 'auto',
                     wordWrapEnabled: true,
                     sortingEnabled: true,
                     filteringEnabled: true,
@@ -368,7 +368,7 @@ class VerificationListContent extends Component {
                     title: "User Date",
                     name: "UserDate",
                     columnName: "UserDate",
-                    width: 'auto',
+                    //width: 'auto',
                     wordWrapEnabled: true,
                     sortingEnabled: true,
                     filteringEnabled: true,
@@ -378,7 +378,7 @@ class VerificationListContent extends Component {
                     title: "Region",
                     name: "Region",
                     columnName: "Region",
-                    width: 'auto',
+                    //width: 'auto',
                     wordWrapEnabled: true,
                     sortingEnabled: true,
                     filteringEnabled: true,
@@ -388,7 +388,7 @@ class VerificationListContent extends Component {
                     title: "Active",
                     name: "Active",
                     columnName: 'Active',
-                    width: 'auto',
+                    //width: 'auto',
                     align: 'center',
                     sortingEnabled: true,
                     filteringEnabled: true,
@@ -441,11 +441,17 @@ class VerificationListContent extends Component {
             pageSizes: [10, 20, 30, 50, 100],
             amountFilterOperations: ['equal', 'notEqual', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual'],
             searchValue: '',
+
+
         };
 
         this.fetchData = this.fetchData.bind(this);
 
-        this.changeSelection = selection => this.setState({ selection });
+        this.changeSelection = selection =>{
+            this.setState({ selection });
+            this.props.updateSelectedRowsLength(selection);
+            console.log('selectionLength',selection);
+        }
         this.changeSorting = sorting => this.setState({ sorting });
         this.commitChanges = this.commitChanges.bind(this);
         this.changeSearchValue = value => this.setState({ searchValue: value });
@@ -516,6 +522,12 @@ class VerificationListContent extends Component {
     componentDidMount() {
         console.log("componentDidMount");
     }
+    // componentWillReceiveProps(nextProps, nextContext) {
+    //     if(nextProps.selectionLength !== this.props.selectionLength) {
+    //         if(JSON.stringify(this.state.selection) !== JSON.stringify(nextProps.selectionLength))
+    //             this.setState({ selection: [...nextProps.selectionLength] });
+    //     }
+    // }
 
     componentWillMount() {
         console.log("componentWillMount");
@@ -608,10 +620,10 @@ class VerificationListContent extends Component {
 
         return (
             <Fragment>
-                <div className={classNames(classes.layoutTable, "flex flex-col", mapViewState ? "h-full" : "")}>
+                <div className={classNames(classes.layoutTable, "flex flex-col")}>
 
                         <VerificationSearchBar />
-                        <div className={classNames("flex flex-col")} >
+                        <div className={classNames("flex flex-col", classes.layoutTable)} >
                             <Grid
                                 rows={rows}
                                 columns={tableColumnExtensions}
@@ -664,7 +676,7 @@ class VerificationListContent extends Component {
                                 />
                                 <Table rowComponent={this.TableRow} />
 
-                                <TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
+                                {/*<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />*/}
 
                                 <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
 
@@ -701,6 +713,7 @@ function mapDispatchToProps(dispatch) {
         toggleFilterPanel: Actions.toggleVerificationFilterPanel,
         toggleSummaryPanel: Actions.toggleVerificationSummaryPanel,
         getVerifications: Actions.getVerifications,
+        updateSelectedRowsLength: Actions.updateSelectedRowsLength
     }, dispatch);
 }
 
@@ -713,7 +726,8 @@ function mapStateToProps({ customers, auth, verifications }) {
         summaryState: verifications.bOpenedSummaryPanel,
         regionId: auth.login.defaultRegionId,
         verificationForm: verifications.verificationForm,
-        searchText: verifications.searchText
+        searchText: verifications.searchText,
+        selectionLength: verifications.selectionLength
     }
 }
 
