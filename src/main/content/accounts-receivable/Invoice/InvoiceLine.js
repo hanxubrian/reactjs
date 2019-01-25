@@ -32,7 +32,7 @@ import * as Actions from 'store/actions';
 import keycode from "keycode";
 
 //Utility
-import {NumberFormatCustom, escapeRegexCharacters, NumberFormatCustom1, NumberFormatCustomPercent, NumberFormatCustom2} from '../../../../services/utils'
+import {NumberFormatCustom, escapeRegexCharacters, NumberFormatCustom4, NumberFormatCustomPercent, NumberFormatCustom2} from '../../../../services/utils'
 import {emphasize} from "@material-ui/core/styles/colorManipulator";
 
 
@@ -519,6 +519,7 @@ class InvoiceLineTable extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.state.data!==null && prevState.data!==this.state.data) {
+            console.log('fired invoice', this.state.data);
             this.props.updateInvoiceLine(this.state.data);
         }
         if(JSON.stringify(this.state.customerTaxAmountLine)!== JSON.stringify(prevState.customerTaxAmountLine)){
@@ -1181,7 +1182,7 @@ class InvoiceLineTable extends React.Component {
                                                         value={row.original.amount}
                                                         onChange={this.handleChange(row.original)}
                                                         InputProps={{
-                                                            inputComponent: NumberFormatCustom,
+                                                            inputComponent: NumberFormatCustom4,
                                                         }}
                                                     />
                                                 </div>)

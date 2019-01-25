@@ -733,7 +733,7 @@ class InvoiceForm extends Component {
                         franchAmount += f.amount;
                     })
                 }
-                if(lineAmount!==franchAmount){
+                if(Math.abs(lineAmount-franchAmount)>0.001){
                     bLineFranchAmountEqual = false;
                     return false
                 }

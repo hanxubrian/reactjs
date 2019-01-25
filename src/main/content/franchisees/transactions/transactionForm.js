@@ -1178,8 +1178,8 @@ class TransactionForm extends Component {
                     </div>
                     <Snackbar
                         anchorOrigin={{
-                            vertical: 'center',
-                            horizontal: 'top',
+                            vertical: 'top',
+                            horizontal: 'center',
                         }}
                         open={this.state.openSnack}
                         autoHideDuration={3000}

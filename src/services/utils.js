@@ -132,3 +132,25 @@ export function NumberFormatCustom3(props) {
         />
     );
 }
+
+export function NumberFormatCustom4(props) {
+    const { inputRef, onChange, ...other } = props;
+
+    return (
+        <NumberFormat
+            {...other}
+            getInputRef={inputRef}
+            onValueChange={values => {
+                onChange({
+                    target: {
+                        value: values.value,
+                    },
+                });
+            }}
+            fixedDecimalScale={true}
+            thousandSeparator
+            decimalScale={3}
+            prefix="$"
+        />
+    );
+}
