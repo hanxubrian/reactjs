@@ -50,6 +50,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 import VerificationSearchBar from './VerificationSearchBar';
+import Icon from '@material-ui/core/Icon';
 
 const hexToRgb = (hex) => {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -345,6 +346,51 @@ class VerificationListContent extends Component {
             //rows: [],
             tableColumnExtensions: [
                 {
+                    title: "Invoice",
+                    name: "Invoice",
+                    columnName: "Invoice",
+                    //width: 'auto',
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                },
+                {
+                    title: "Customer",
+                    name: "Customer",
+                    columnName: "Customer",
+                    //width: 'auto',
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                },
+                {
+                    title: "Transfer",
+                    name: "Transfer",
+                    columnName: "Transfer",
+                    //width: 'auto',
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                },
+                {
+                    title: "Transactions",
+                    name: "Transactions",
+                    columnName: "Transactions",
+                    //width: 'auto',
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                },
+                {
+                    title: "Franchisee",
+                    name: "Franchisee",
+                    columnName: "Franchisee",
+                    //width: 'auto',
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                },
+                {
                     title: "Name",
                     name: "VerificationName",
                     columnName: "VerificationName",
@@ -397,6 +443,11 @@ class VerificationListContent extends Component {
             ],
             rows : [
                 {
+                    "Invoice": "45679445213",
+                    "Customer": "Lizhu",
+                    "Transfer": "12313546",
+                    "Franchisee": "GF-12456",
+                    "Transactions": "546546",
                     "VerificationId": 1,
                     "VerificationName": "Pending",
                     "UserDate": "01/24/2019",
@@ -405,6 +456,11 @@ class VerificationListContent extends Component {
                     "Region": "BUF"
                 },
                 {
+                    "Invoice": "45679445213",
+                    "Customer": "Lizhu",
+                    "Transfer": "12313546",
+                    "Franchisee": "GF-12456",
+                    "Transactions": "546546",
                     "VerificationId": 2,
                     "VerificationName": "Pending",
                     "UserDate": "01/24/2019",
@@ -413,6 +469,11 @@ class VerificationListContent extends Component {
                     "Region": "BUF"
                 },
                 {
+                    "Invoice": "45679445213",
+                    "Customer": "Lizhu",
+                    "Transfer": "12313546",
+                    "Franchisee": "GF-12456",
+                    "Transactions": "546546",
                     "VerificationId": 3,
                     "VerificationName": "Pending",
                     "UserDate": "01/24/2019",
@@ -557,6 +618,35 @@ class VerificationListContent extends Component {
     }
 
 
+    getCell = (props) => {
+
+        const { classes }= this.props;
+
+        if(this.state.rows !== undefined) {
+            if (props.column.name.includes('Active')) {
+                let thisCol = this.state.rows.filter(d => {
+                    if (d.name === props.column.name) {
+                        return d;
+                    }
+                    return false;
+                });
+                return (
+                    <Table.Cell>
+                        <IconButton color="secondary" onClick={this.openVerificationDialog} className={classes.button} aria-label="Add an verify icon">
+                            <Icon>verified_user</Icon>
+                        </IconButton>
+                        <IconButton color="secondary" onClick={this.openReviseDialog} className={classes.button} aria-label="Add an revise icon">
+                            <Icon>rotate_90_degrees_ccw</Icon>
+                        </IconButton>
+                    </Table.Cell>
+                )
+            }
+        }
+
+        return <Table.Cell {...props} />;
+
+    };
+
     //
     // row click
     //
@@ -590,16 +680,17 @@ class VerificationListContent extends Component {
         );
     };
 
+    openVerificationDialog = () => {
+        this.props.openVerificationDialog(true);
+    };
+    openReviseDialog = () => {
+        this.props.openCloseReviseDialog(true);
+    };
+
     render() {
-        const {
-            classes,
-            mapViewState,
-            locationFilterValue,
-        } = this.props;
+        const { classes } = this.props;
 
         const {
-            pins,
-            pins2,
             rows,
             selection,
             tableColumnExtensions,
@@ -611,7 +702,6 @@ class VerificationListContent extends Component {
             searchValue,
         } = this.state;
 
-        console.log("-------render-------", locationFilterValue, pins, pins2)
 
         return (
             <Fragment>
@@ -669,7 +759,7 @@ class VerificationListContent extends Component {
                                 <PhoneNumberTypeProvider
                                     for={phoneNumberColumns}
                                 />
-                                <Table rowComponent={this.TableRow} />
+                                <Table rowComponent={this.TableRow} cellComponent={this.getCell} />
 
                                 {/*<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />*/}
 
@@ -708,7 +798,9 @@ function mapDispatchToProps(dispatch) {
         toggleFilterPanel: Actions.toggleVerificationFilterPanel,
         toggleSummaryPanel: Actions.toggleVerificationSummaryPanel,
         getVerifications: Actions.getVerifications,
-        updateSelectedRowsLength: Actions.updateSelectedRowsLength
+        updateSelectedRowsLength: Actions.updateSelectedRowsLength,
+        openCloseReviseDialog: Actions.openCloseReviseDialog,
+        openVerificationDialog: Actions.openVerificationDialog
     }, dispatch);
 }
 
@@ -722,7 +814,9 @@ function mapStateToProps({ customers, auth, verifications }) {
         regionId: auth.login.defaultRegionId,
         verificationForm: verifications.verificationForm,
         searchText: verifications.searchText,
-        selectionLength: verifications.selectionLength
+        selectionLength: verifications.selectionLength,
+        verifiedModal: verifications.verifiedModal,
+        reviseModal: verifications.reviseModal
     }
 }
 

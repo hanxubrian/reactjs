@@ -397,7 +397,7 @@ class VerificationsApp extends Component {
                                         </Button>
                                         <Button variant="contained" color="primary" disabled={selectionLength.length === 0}
                                                 className={classNames(classes.button, classes.btntop)} onClick={this.openReviseDialog}>
-                                            Revise
+                                            Request Changes
                                             <Icon className={classes.rightIcon}>rotate_90_degrees_ccw</Icon>
                                         </Button>
                                     </div>
