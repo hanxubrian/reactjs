@@ -853,6 +853,7 @@ class Leases extends Component {
 				{(this.props.bLeaseStart || this.props.bFranchiseeFetchStart || this.props.bFranchiseesFetchStart) && (
                     <div className={classes.overlay}>
                         <CircularProgress className={classes.progress} color="secondary"  />
+						<Typography variant="body2" color="primary">Fetching leases info...</Typography>
                     </div>
                 )}
 			</React.Fragment >
