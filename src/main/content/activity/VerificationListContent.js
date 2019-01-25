@@ -165,6 +165,10 @@ const styles = theme => ({
         justifyContent: 'center',
         display: 'flex',
         opacity: 0.5
+    },
+    actionButton: {
+        padding: 0,
+        marginRight: 5
     }
 });
 //
@@ -349,7 +353,7 @@ class VerificationListContent extends Component {
                     title: "Invoice",
                     name: "Invoice",
                     columnName: "Invoice",
-                    //width: 'auto',
+                    width: 150,
                     sortingEnabled: true,
                     filteringEnabled: true,
                     groupingEnabled: false,
@@ -358,7 +362,7 @@ class VerificationListContent extends Component {
                     title: "Customer",
                     name: "Customer",
                     columnName: "Customer",
-                    //width: 'auto',
+                    width: 100,
                     sortingEnabled: true,
                     filteringEnabled: true,
                     groupingEnabled: false,
@@ -367,7 +371,7 @@ class VerificationListContent extends Component {
                     title: "Transfer",
                     name: "Transfer",
                     columnName: "Transfer",
-                    //width: 'auto',
+                    width: 100,
                     sortingEnabled: true,
                     filteringEnabled: true,
                     groupingEnabled: false,
@@ -376,7 +380,7 @@ class VerificationListContent extends Component {
                     title: "Transactions",
                     name: "Transactions",
                     columnName: "Transactions",
-                    //width: 'auto',
+                    width: 150,
                     sortingEnabled: true,
                     filteringEnabled: true,
                     groupingEnabled: false,
@@ -385,7 +389,7 @@ class VerificationListContent extends Component {
                     title: "Franchisee",
                     name: "Franchisee",
                     columnName: "Franchisee",
-                    //width: 'auto',
+                    width: 150,
                     sortingEnabled: true,
                     filteringEnabled: true,
                     groupingEnabled: false,
@@ -394,7 +398,7 @@ class VerificationListContent extends Component {
                     title: "Name",
                     name: "VerificationName",
                     columnName: "VerificationName",
-                    //width: 'auto',
+                    width: 100,
                     sortingEnabled: true,
                     filteringEnabled: true,
                     groupingEnabled: false,
@@ -403,7 +407,7 @@ class VerificationListContent extends Component {
                     title: "Number",
                     name: "VerificationNumber",
                     columnName: "VerificationNumber",
-                    //width: 'auto',
+                    width: 100,
                     wordWrapEnabled: true,
                     sortingEnabled: true,
                     filteringEnabled: true,
@@ -414,7 +418,7 @@ class VerificationListContent extends Component {
                     title: "User Date",
                     name: "UserDate",
                     columnName: "UserDate",
-                    //width: 'auto',
+                    width: 150,
                     wordWrapEnabled: true,
                     sortingEnabled: true,
                     filteringEnabled: true,
@@ -424,7 +428,7 @@ class VerificationListContent extends Component {
                     title: "Region",
                     name: "Region",
                     columnName: "Region",
-                    //width: 'auto',
+                    width: 100,
                     wordWrapEnabled: true,
                     sortingEnabled: true,
                     filteringEnabled: true,
@@ -434,7 +438,7 @@ class VerificationListContent extends Component {
                     title: "Active",
                     name: "Active",
                     columnName: 'Active',
-                    //width: 'auto',
+                    width: 150,
                     align: 'center',
                     sortingEnabled: true,
                     filteringEnabled: true,
@@ -632,10 +636,10 @@ class VerificationListContent extends Component {
                 });
                 return (
                     <Table.Cell>
-                        <IconButton color="secondary" onClick={this.openVerificationDialog} className={classes.button} aria-label="Add an verify icon">
+                        <IconButton onClick={this.openVerificationDialog} className={classes.actionButton} aria-label="Add an verify icon">
                             <Icon>verified_user</Icon>
                         </IconButton>
-                        <IconButton color="secondary" onClick={this.openReviseDialog} className={classes.button} aria-label="Add an revise icon">
+                        <IconButton onClick={this.openReviseDialog} className={classes.actionButton} aria-label="Add an revise icon">
                             <Icon>rotate_90_degrees_ccw</Icon>
                         </IconButton>
                     </Table.Cell>
@@ -761,7 +765,7 @@ class VerificationListContent extends Component {
                                 />
                                 <Table rowComponent={this.TableRow} cellComponent={this.getCell} />
 
-                                {/*<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />*/}
+                                <TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
 
                                 <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
 
