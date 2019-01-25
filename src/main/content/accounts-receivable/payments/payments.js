@@ -39,6 +39,10 @@ import "react-table/react-table.css";
 import _ from 'lodash';
 import classNames from 'classnames';
 import { FusePageCustomSidebarScroll } from '@fuse';
+
+import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
+
+
 const headerHeight = 80;
 
 const styles = theme => ({
@@ -421,8 +425,19 @@ class Payments extends Component {
 			this.setState({ selection: [], selectAll: false })
 		}
 	};
+
+	handleCloseNoSelectionAlertDialog = () => {
+		this.setState({
+			showNoSelectionAlertDialog: false
+		})
+	}
+
 	showPaymentFormModal = () => {
-		this.props.openPaymentDialog(true)
+		if (!this.props.activePaymentRows || this.props.activePaymentRows.length < 1) {
+			this.setState({ showNoSelectionAlertDialog: true })
+		} else {
+			this.props.openPaymentDialog(true)
+		}
 	}
 	render() {
 		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState,
@@ -542,6 +557,26 @@ class Payments extends Component {
 							{(this.state.temp && !invoiceForm.props.open) && (
 								<div className={classNames("flex flex-col h-full")}>
 
+
+
+									<Dialog
+										open={this.state.showNoSelectionAlertDialog}
+										onClose={this.handleCloseNoSelectionAlertDialog}
+										aria-labelledby="alert-dialog-title"
+										aria-describedby="alert-dialog-description"
+									>
+										<DialogTitle id="alert-dialog-title">Warning</DialogTitle>
+										<DialogContent>
+											<DialogContentText id="alert-dialog-description">Nothing selected for invoices. Please choose one at least</DialogContentText>
+										</DialogContent>
+										<DialogActions>
+											<Button onClick={this.handleCloseNoSelectionAlertDialog} color="primary" autoFocus>OK</Button>
+										</DialogActions>
+									</Dialog>
+
+
+
+
 									<PaymentFormModal />
 
 									<PaymentSearchBar />
@@ -655,6 +690,8 @@ function mapStateToProps({ invoices, auth, customers, franchisees, accountReceiv
 		fLatitude: franchisees.Latitude,
 		fSearchText: franchisees.SearchText,
 		bFranchiseesFetchStart: franchisees.bFranchiseesFetchStart,
+
+		activePaymentRows: accountReceivablePayments.activePaymentRows,
 	}
 }
 

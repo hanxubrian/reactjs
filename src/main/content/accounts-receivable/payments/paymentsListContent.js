@@ -511,9 +511,14 @@ class PaymentsListContent extends Component {
 		this.changeGrouping = grouping => this.setState({ grouping });
 		console.log("constructor");
 
-
-
+		this.props.getAccountReceivablePaymentsList(
+			this.props.regionId,
+			this.props.getPaymentsParam.fromDate,
+			this.props.getPaymentsParam.toDate,
+			"",
+			this.props.status);
 	}
+
 	changeSelection = (selection) => {
 		this.setState({ selection })
 		let selectedRows = this.getRowData(this.props).filter((x, index) => { return selection.indexOf(index) > -1 });
