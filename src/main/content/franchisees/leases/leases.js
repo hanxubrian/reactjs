@@ -735,7 +735,7 @@ class Leases extends Component {
                         <div className="flex-1 flex-col absolute w-full h-full">
                             {(this.state.temp && !leaseForm.props.open) && (
                                 <div className={classNames("flex flex-col h-full")}>
-                                    <div className="flex flex-row items-center p-12">
+                                    <div className="flex flex-row items-center ">
                                         {/* <div className="flex justify-start items-center">
                                             <Hidden smDown>
                                                 <Button
