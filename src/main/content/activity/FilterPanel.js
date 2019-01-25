@@ -191,21 +191,6 @@ class FilterPanel extends Component {
                             />
                         </GridItem>
                     </GridContainer>
-                    <GridContainer  className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={this.state.checkedInvoices}
-                                        onChange={this.handleChange('checkedInvoices')}
-                                        value="checkedInvoices"
-                                        color="primary"
-                                    />
-                                }
-                                label="Invoices"
-                            />
-                        </GridItem>
-                    </GridContainer>
             </div >
         );
     }

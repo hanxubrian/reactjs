@@ -216,6 +216,15 @@ const styles = theme => ({
     invalidationMenu: {
         color: "#FF557F",
     },
+    rightIcon: {
+        marginLeft: theme.spacing.unit,
+    },
+    btntop: {
+        marginRight: 20
+    },
+    iconSmall: {
+        fontSize: 20,
+    }
 });
 
 class VerificationsApp extends Component {
@@ -391,17 +400,14 @@ class VerificationsApp extends Component {
                                             </div>
                                         </div>
                                         <div className="flex flex-shrink items-center">
-                                            <Tooltip title="Add new customer">
-                                                <IconButton className={classes.button} aria-label="add" onClick={openNewVerificationForm}>
-                                                    <Icon>add</Icon>
-                                                </IconButton>
-                                            </Tooltip>
-                                            <IconButton className={classes.button} aria-label="mail" onClick={() => this.props.history.push('/apps/mail/inbox')}>
-                                                <Icon>mail_outline</Icon>
-                                            </IconButton>
-                                            <IconButton className={classes.button} aria-label="print" onClick={() => alert('ok')}>
-                                                <Icon>print</Icon>
-                                            </IconButton>
+                                            <Button variant="contained" color="primary" disabled  className={classNames(classes.button,classes.btntop)}>
+                                                Verified
+                                                <Icon className={classes.rightIcon}>verified_user</Icon>
+                                            </Button>
+                                            <Button variant="contained" color="primary" disabled  className={classNames(classes.button, classes.btntop)}>
+                                                Revise
+                                                <Icon className={classes.rightIcon}>rotate_90_degrees_ccw</Icon>
+                                            </Button>
                                         </div>
                                     </div>
 

@@ -13,7 +13,7 @@ const styles = {
         alignItems: "baseline"
     },
     selectionPanel: {
-        // padding: "12px"
+        marginLeft: "12px"
     }
 };
 
@@ -21,9 +21,9 @@ export const CustomizedDxGridSelectionPanelBase = ({ selection, classes }) => (
     <Plugin name="SelectionPanel">
         <Template name="footer">
             <div className={classes.container}>
-                {/* <div className={classes.selectionPanel}> */}
-                Rows selected: {selection.length}
-                {/* </div> */}
+                 <div className={classes.selectionPanel}>
+                    Rows selected: {selection.length}
+                 </div>
                 <TemplatePlaceholder />
             </div>
         </Template>
