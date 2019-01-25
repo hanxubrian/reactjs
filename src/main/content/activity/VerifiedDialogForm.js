@@ -92,7 +92,7 @@ class VerifiedDialogForm extends React.Component {
                     fullWidth
                 >
                     <form action="/" method={"POST"} onSubmit={(e) => {e.preventDefault();this.handleAddOwner();}}>
-                        <DialogTitle id="form-dialog-title">Verified Form</DialogTitle>
+                        <DialogTitle id="form-dialog-title">Verify Form</DialogTitle>
                         <DialogContent>
                             <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                                 <GridItem xs={12} sm={12} md={12} className="flex flex-row">
