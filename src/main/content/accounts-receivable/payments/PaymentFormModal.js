@@ -115,9 +115,9 @@ const CancelButton = ({ onExecute }) => (
 );
 
 const commandComponents = {
-	add: AddButton,
+	// add: AddButton,
 	edit: EditButton,
-	delete: DeleteButton,
+	// delete: DeleteButton,
 	commit: CommitButton,
 	cancel: CancelButton,
 };
@@ -304,7 +304,8 @@ class PaymentFormModal extends React.Component {
 			],
 			// rows: [...this.props.activePaymentRows].map((x, index) => { x.id = index; return x }),
 			rows: this.getRowData(this.props.payments),
-
+			customerName: "",
+			customerNumber: "",
 		}
 
 		// this.commitChanges = this.commitChanges.bind(this);
@@ -365,7 +366,12 @@ class PaymentFormModal extends React.Component {
 			return activePaymentRows.indexOf(x.id) > -1
 		})
 		console.log("getRowData", res);
-
+		if (res.length > 0) {
+			this.setState({
+				customerName: res[0].CustomerName,
+				customerNumber: res[0].CustomerNo,
+			})
+		}
 		return res;
 	}
 	componentWillReceiveProps(nextProps) {
@@ -376,7 +382,7 @@ class PaymentFormModal extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		const { rows, columns } = this.state;
+		const { rows, columns, customerName, customerNumber } = this.state;
 		return (
 			<div>
 				<Dialog
@@ -394,50 +400,52 @@ class PaymentFormModal extends React.Component {
 						{/* <DialogContentText>Payment Description</DialogContentText> */}
 						<div className={classNames("flex flex-col")}>
 							<div className={classNames("flex flex-col")}>
-								<div sm={12} className={classNames("flex justify-between")}>
-									{/* <div className={classNames("flex flex-col")}> */}
-									<div sm={3} className="flex flex-col mb-4">
+								<div className={classNames("flex")} sm={12} >
+									<div sm={3} className="flex flex-col w-full pr-6">
 										<div className="flex" style={{ flex: 2, alignItems: 'center' }}>
 											<Icon fontSize={"small"} className="mr-4">person_outline</Icon>
-											<Typography variant="subtitle1" color="inherit"><strong>Customer Name</strong></Typography>
+											<Typography variant="subtitle1" color="inherit"><strong>{customerName}</strong></Typography>
 										</div>
 										<div className="flex" style={{ flex: 1, alignItems: 'center' }}>
 											<Icon fontSize={"small"} className="mr-4">apps</Icon>
-											<Typography variant="subtitle1" color="inherit">1234567890</Typography>
+											<Typography variant="subtitle1" color="inherit">{customerNumber}</Typography>
 										</div>
 									</div>
-									{/* </div> */}
 
-									{/* <FormControl sm={3}>
-										<InputLabel htmlFor="age-simple">Payment Type</InputLabel>
-										<Select
-											value={this.state.age}
-											onChange={this.handleChange}
-											inputProps={{
-												name: 'age',
-												id: 'age-simple',
-											}}
-										>
-											<MenuItem value={"Check"}>Check</MenuItem>
-											<MenuItem value={"CreditCard"}>Credit Card</MenuItem>
-											<MenuItem value={"EFT"}>EFT</MenuItem>
-											<MenuItem value={"Lockbox"}>Lockbox</MenuItem>
-											<MenuItem value={"CreditFromOverpayment"}>Credit from Overpayment</MenuItem>
-											<MenuItem value={"ManualCreditCard"}>Manual Credit Card</MenuItem>
-										</Select>
-									</FormControl> */}
-									<TextField select margin="dense" id="ReferenceNo" label="Reference No." variant="outlined" style={{ width: "30%" }}
+									<TextField sm={3} select margin="dense" id="PaymentType" label="Payment Type" variant="outlined"
+										// style={{ width: "30%" }}
+										className={classNames(classes.textField, "pr-6")}
 										value={this.state.PaymentType || ""}
-										onChange={this.handleChange('PaymentType')}>
+										onChange={this.handleChange('PaymentType')}
+										fullWidth>
 										<MenuItem value={"Check"}>Check</MenuItem>
 										<MenuItem value={"CreditCard"}>Credit Card</MenuItem>
 										<MenuItem value={"EFT"}>EFT</MenuItem>
 										<MenuItem value={"Lockbox"}>Lockbox</MenuItem>
 										<MenuItem value={"CreditFromOverpayment"}>Credit from Overpayment</MenuItem>
 										<MenuItem value={"ManualCreditCard"}>Manual Credit Card</MenuItem>
+
 									</TextField>
 
-									<TextField type="number" autoFocus margin="dense" id="ReferenceNo" label="Reference No." variant="outlined" sm={3} />
+									<TextField sm={3} type="number" autoFocus margin="dense" id="ReferenceNo" label="Reference No." variant="outlined"
+										className={classNames(classes.textField, "pr-6")}
+										fullWidth />
+
+									<TextField sm={3}
+										type="date"
+										id="PaymentDate"
+										label="Payment Date"
+										className={classNames(classes.textField, "")}
+										InputLabelProps={{
+											shrink: true
+										}}
+										value={this.state.SignDate}
+										onChange={this.handleChange('PaymentDate')}
+										margin="dense"
+										variant="outlined"
+										fullWidth
+									// style={{ width: "20%", minWidth: "180px" }}
+									/>
 								</div>
 								<div className={classNames("flex")} sm={12}>
 									<TextField type="number" InputLabelProps={{ shrink: true }} InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }} margin="dense" variant="outlined" fullWidth className={classNames("pr-6")} id="Amount" label="Amount" sm={3} />
@@ -469,7 +477,6 @@ class PaymentFormModal extends React.Component {
 											cellComponent={EditingCellComponentBase}
 											headerCellComponent={EditingHeaderCellComponent}
 											showEditCommand
-											showDeleteCommand
 											commandComponent={Command}
 										/>
 										<Getter
@@ -491,7 +498,7 @@ class PaymentFormModal extends React.Component {
 					</DialogContent>
 
 					<DialogActions>
-						<Button variant="contained" onClick={this.handleClose} color="primary"> Send&nbsp;&nbsp;&nbsp;<Icon className={classes.rightIcon}>send</Icon> </Button>
+						<Button variant="contained" onClick={this.handleClose} color="primary">&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;</Button>
 					</DialogActions>
 				</Dialog>
 			</div>
