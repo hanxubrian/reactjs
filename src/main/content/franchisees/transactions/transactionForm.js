@@ -446,6 +446,10 @@ class TransactionForm extends Component {
                 this.setState({selectedFranchisee: franchisee[0]});
                 this.setState({value: trxRow.Name});
                 this.setState({TransactionNo: trxRow.Number});
+                this.setState({subTotal: parseFloat(trxRow.ExtendedPrice)});
+                this.setState({tax: parseFloat(trxRow.Tax)});
+                this.setState({total: parseFloat(trxRow.TotalTrxAmount)});
+                this.setState({TransactionDate: moment(trxRow.TrxDate)});
             }
         }
 
