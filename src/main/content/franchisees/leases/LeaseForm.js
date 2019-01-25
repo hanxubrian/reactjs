@@ -58,7 +58,7 @@ const styles = theme => ({
         }
     },
     card: {
-        width   : '100%',
+        width   : '100%'
     },
     container: {
         position: 'relative',
@@ -106,10 +106,10 @@ const styles = theme => ({
     },
     cardContent: {
         paddingTop: 12,
-        paddingBottom: '12px!important',
+        paddingBottom: '70px!important',
         '& h6':{
             lineHeight: 1.6,
-            fontSize: 14
+            fontSize: 16
         }
     },
     input: {
