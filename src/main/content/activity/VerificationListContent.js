@@ -610,7 +610,7 @@ class VerificationListContent extends Component {
             <Fragment>
                 <div className={classNames(classes.layoutTable, "flex flex-col", mapViewState ? "h-full" : "")}>
 
-                    <VerificationSearchBar />
+                        <VerificationSearchBar />
                         <div className={classNames("flex flex-col")} >
                             <Grid
                                 rows={rows}

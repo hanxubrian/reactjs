@@ -148,34 +148,40 @@ class BillRunDialog extends Component {
         showP                   : false,
 
     };
+    constructor(props){
+        super(props);
 
+
+    }
     componentDidUpdate(prevProps, prevState, snapshot){
 
-        if(this.state.pusherMSG !== prevState.pusherMSG){
-            console.log("pusherMSG-create",this.state.pusherMSG);
-        }
-        if(this.props.billruns && this.props.billruns != null && JSON.stringify(prevProps.billruns)!==JSON.stringify(this.props.billruns)){
-            this.setState({billruns: this.props.billruns});
-        }
-        if(this.props.auth && this.props.auth != null && JSON.stringify(prevProps.auth)!==JSON.stringify(this.props.auth)){
-            this.setState({auth: this.props.auth});
-        }
-        if(this.props.loading ===false && prevProps.loading ===true && this.state.statusMSG===200){
-            this.setState({showP: !this.state.showP});
-            if(this.props.billstatus===400){
-                this.setState({statusMSG:10});
-                this.errormessage();
+            if(this.state.pusherMSG !== prevState.pusherMSG){
+                console.log("pusherMSG-create",this.state.pusherMSG);
             }
-            else if(this.props.billstatus===200){
-                this.setState({statusMSG:10});
-                this.successmesssage();
+            if(this.props.billruns && this.props.billruns != null && JSON.stringify(prevProps.billruns)!==JSON.stringify(this.props.billruns)){
+                this.setState({billruns: this.props.billruns});
+            }
+            if(this.props.auth && this.props.auth != null && JSON.stringify(prevProps.auth)!==JSON.stringify(this.props.auth)){
+                this.setState({auth: this.props.auth});
+            }
+            if(this.props.loading ===false && prevProps.loading ===true && this.state.statusMSG===200){
+                this.setState({showP: !this.state.showP});
+                if(this.props.billstatus===400){
+                    this.setState({statusMSG:10});
+                    this.errormessage();
+                }
+                else if(this.props.billstatus===200){
+                    this.setState({statusMSG:10});
+                    this.successmesssage();
+                }
+
             }
 
-        }
+
     }
     componentDidMount() {
+
         this.props.onRef(this);
-        this.timer = setInterval(this.progress, 500);
         const pusher = new Pusher('ecf6a4e23b186efa2d44', {
             cluster: 'us2',
             forceTLS: true
@@ -186,6 +192,7 @@ class BillRunDialog extends Component {
         });
     }
     componentWillUnmount() {
+
         this.props.onRef(undefined);
     }
     componentWillReceiveProps(nextProps){
@@ -202,24 +209,17 @@ class BillRunDialog extends Component {
         this.setState({ open: false });
     };
     handleDateChange = date => {
-        console.log("date",date);
         this.setState({ selectedDate: date });
     };
     onchangeDate=(event)=>{
-        console.log("event.target.value",event.target.value);
         this.setState({selectedDate:event.target.value})
 
     }
     handleBillrunDateChange = date => {
-        console.log("date",date);
         this.setState({selectedDate:date});
-
-
     };
     onchangeMessage=(e)=>{
-
         this.setState({message:e.target.value})
-
     }
     successmesssage=()=>{
         this.props.showMessage({
