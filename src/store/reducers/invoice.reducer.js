@@ -5,12 +5,16 @@ import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 import _ from 'lodash';
+import {GET_ALL_INVOICES_ERR} from "../actions/";
 
 let today = new Date();
 const initialState = {
     invoicesDB: null,
     invoiceDetail: null,
     bLoadedInvoices: false,
+    bInvoiceErr: false,
+    invoiceErrMsg: '',
+
     bOpenedSummaryPanel: false,
     bOpenedFilterPanel: false,
     bStartingSaveFormData: false,
@@ -35,9 +39,13 @@ const initialState = {
     customerTaxAmountLine: [],
     invoiceDateOption: 3,
     newInvoice: null,
+
     customersDB: null,
     bSuggestCustomersFetchStart: false,
     bLoadedSuggestCustomers: false,
+    customerErrMsg: '',
+    bCustomerErr: false,
+
     bInvoicesUpdated: false,
     removedId: undefined,
     billingLists: null,
@@ -52,7 +60,21 @@ const invoices = function(state = initialState, action) {
         {
             return {
                 ...state,
-                invoicesDB: action.payload, bLoadedInvoices: true, bInvoiceStart: false, bInvoicesUpdated: false
+                invoicesDB: action.payload, bLoadedInvoices: true, bInvoiceStart: false, bInvoicesUpdated: false, bInvoiceErr: false,invoiceErrMsg:''
+            };
+        }
+        case Actions.GET_ALL_INVOICES_ERR:
+        {
+            return {
+                ...state,
+                invoicesDB: null, bLoadedInvoices: true, bInvoiceStart: false, bInvoicesUpdated: false, invoiceErrMsg: action.payload,bInvoiceErr: true,
+            };
+        }
+        case Actions.CLOSE_INVOICE_ERROR_DIALOG:
+        {
+            return {
+                ...state,
+                invoiceErrMsg: '', bInvoiceErr: false,
             };
         }
         case Actions.GET_ALL_SUGGEST_CUSTOMERS:
@@ -61,7 +83,26 @@ const invoices = function(state = initialState, action) {
                 ...state,
                 customersDB: action.payload,
                 bLoadedSuggestCustomers: true,
-                bSuggestCustomersFetchStart: false
+                bSuggestCustomersFetchStart: false,
+                customerErrMsg: '',
+                bCustomerErr: false,
+            };
+        }
+        case Actions.GET_ALL_SUGGEST_CUSTOMERS_ERROR:
+        {
+            return {
+                ...state,
+                customersDB: null,
+                bLoadedSuggestCustomers: true,
+                bSuggestCustomersFetchStart: false,
+                customerErrMsg: action.payload,
+                bCustomerErr: true,
+            };
+        }
+        case Actions.CLOSE_CUSTOMER_ERROR_DIALOG:
+        {
+            return {
+                ...state, customerErrMsg: '', bCustomerErr: false,
             };
         }
         case Actions.GET_SUGGEST_CUSTOMERS_FETCH_START:
@@ -284,6 +325,7 @@ const invoices = function(state = initialState, action) {
 const persistConfig = {
     key: 'invoices',
     storage: storage,
-    blacklist: ['invoicesDB', 'bInvoiceStart', 'bOpenedSummaryPanel', 'bOpenedFilterPanel', 'bLoadedCustomers','customerTaxAmountLine', 'invoiceForm']
+    blacklist: ['invoicesDB', 'bInvoiceStart', 'bOpenedSummaryPanel', 'bOpenedFilterPanel', 'bLoadedCustomers',
+        'customerTaxAmountLine', 'invoiceForm', 'bCustomerErr', 'bInvoiceErr']
 };
 export default persistReducer(persistConfig, invoices);

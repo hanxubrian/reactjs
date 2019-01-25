@@ -123,7 +123,7 @@ function createFranchisee(parent_id,id, fnumber="", name="", amount=0) {
     }
 }
 
-function createData(billing='Regular Billing', service='Adjust-Balance', description='', quantity=1, amount='', tax=0, markup='', extended=0, total=0, markupAmount=0, markupTax=0)
+function createData(billing='Regular Billing', service='Adjust-Balance', description='', quantity=1, amount='', tax=0, markup='', extended=0, total=0, markupAmount=0, markupTax=0, commission=0)
 {
     return {
         id: counter++,
@@ -138,6 +138,7 @@ function createData(billing='Regular Billing', service='Adjust-Balance', descrip
         markupTax,
         extended,
         total,
+        commission,
         franchisees: [],
         type: 'line'
     };
@@ -181,7 +182,10 @@ const styles = theme => ({
             flex: '0 0 auto'
         },
         '& .ReactTable .rt-td':{
-            padding: '0 5px'
+            padding: '0 5px',
+            '&.hidden': {
+                display: 'none!important'
+            }
         },
         '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
             justifyContent: 'center'
@@ -941,6 +945,8 @@ class InvoiceLineTable extends React.Component {
                         getTheadThProps={(state, rowInfo, column, instance) =>{
                             let border = '1px solid rgba(255,255,255,.6)';
                             if(column.Header==='Action') border = 'none';
+                            console.log('column=', column);
+                            console.log('column=', column);
 
                             return {
                                 style:{
@@ -951,6 +957,9 @@ class InvoiceLineTable extends React.Component {
                                     color: 'white',
                                     borderRight: border
                                 },
+                                // className: classNames(
+                                //     {"hidden": column.id==='commission' && rowInfo.original.billing.value!==1},
+                                //     {"hidden": column.id==='markup' && rowInfo.original.billing.value===1}),
                             }
                         }}
                         getTheadProps={(state, rowInfo, column, instance) =>{
@@ -977,12 +986,15 @@ class InvoiceLineTable extends React.Component {
                                     )
                                 };
                             }
-                            else
+                            else {
                                 return {
                                     className: classNames(
                                         {"justify-end": column.id==='extended'},
                                         {"justify-end": rowInfo.original.type!=='line'})
+                                        // {"hidden": column.id==='commission' && rowInfo.original.billing.value!==1},
+                                        // {"hidden": column.id==='markup' && rowInfo.original.billing.value===1}),
                                 }
+                            }
                         }}
                         columns={[
                             {
@@ -1189,7 +1201,7 @@ class InvoiceLineTable extends React.Component {
                                                 </div>)
                                         },
                                         className: classNames(classes.tableTdEven, "flex items-center  justify-end text-right"),
-                                        width: 100
+                                        width: 80
                                     },
                                     {
                                         Header: "Markup(%)",
@@ -1217,6 +1229,33 @@ class InvoiceLineTable extends React.Component {
                                         },
                                         className: classNames(classes.tableTdEven, "flex items-center  text-right justify-end"),
                                         width: 80
+                                    },
+                                    {
+                                        Header: "Commission(%)",
+                                        accessor: "commission",
+                                        Cell: row=>{
+                                            if(row.original.type==='line') {
+                                                return <TextField
+                                                    className={classes.fInput}
+                                                    placeholder="Commission"
+                                                    value={row.original.commission}
+                                                    onChange={this.handleChangeInvoiceLine(row.original, 'Commission')}
+                                                    onBlur={this.handleChangeInvoiceLineOnBlur(row.original, 'Commission')}
+                                                    InputProps={{
+                                                        inputComponent: NumberFormatCustomPercent,
+                                                        readOnly: row.original.billing.value!==1,
+                                                        classes: {
+                                                            input: classes.input,
+                                                        },
+                                                    }}
+                                                />
+                                            }
+                                            else
+                                                return (
+                                                    <div/>)
+                                        },
+                                        className: classNames(classes.tableTdEven, "flex items-center  text-right justify-end"),
+                                        width: 110
                                     },
                                     {
                                         Header: "Ext. Amount",

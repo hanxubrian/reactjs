@@ -12,7 +12,7 @@ import {
     CircularProgress,
     Button,
     Input,
-    Paper
+    Paper, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog
 } from '@material-ui/core';
 
 // theme components
@@ -221,7 +221,9 @@ class InvoiceApp extends Component {
         franchisees: null,
         ...newInvoiceState,
         value: '',
-        selectedInvoice: null
+        selectedInvoice: null,
+        bOpenInvoiceAlert: false,
+        bOpenCustomerAlert: false,
     };
 
     constructor(props){
@@ -295,6 +297,12 @@ class InvoiceApp extends Component {
         if(this.props.removedId!==undefined && this.props.removedId!==prevProps.removedId)
             this.props.getInvoices([regionId], StatusId, FromDate, ToDate, PeriodId,
                 OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText);
+
+        if(this.props.bCustomerErr && this.state.bOpenCustomerAlert!==this.props.bCustomerErr)
+            this.setState({bOpenCustomerAlert: true});
+
+        if(this.props.bInvoiceErr && this.state.bOpenInvoiceAlert!==this.props.bInvoiceErr)
+            this.setState({bOpenInvoiceAlert: true})
     }
 
     search(val) {
@@ -420,6 +428,16 @@ class InvoiceApp extends Component {
             this.props.deleteInvoicesAction(this.state.selection, this.props.invoices);
             this.setState({selection: [], selectAll: false})
         }
+    };
+
+    handleClose = () => {
+        this.setState({ bOpenInvoiceAlert: false });
+        this.props.closeInvoiceAlertDialog();
+    };
+
+    handleCloseCustomerAlertDialog = () => {
+        this.setState({bOpenCustomerAlert: false });
+        this.props.closeCustomerAlertDialog();
     };
 
     render()
@@ -603,6 +621,43 @@ class InvoiceApp extends Component {
                             {(this.state.temp && invoiceForm.props.open) && (
                                 <InvoiceForm customers={this.state.customers} selectedInvoice={this.state.selectedInvoice}/>
                             )}
+
+                            <Dialog
+                                open={this.state.bOpenInvoiceAlert}
+                                onClose={this.handleClose}
+                                aria-labelledby="alert-dialog-title"
+                                aria-describedby="alert-dialog-description"
+                            >
+                                <DialogTitle id="alert-dialog-title">{"Invoice List Reading Failure"}</DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText id="alert-dialog-description">
+                                        {this.props.invoiceErrMsg}
+                                    </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={this.handleClose} color="secondary" autoFocus>
+                                        Close
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
+                            <Dialog
+                                open={this.state.bOpenCustomerAlert}
+                                onClose={this.handleCloseCustomerAlertDialog}
+                                aria-labelledby="alert-dialog-title"
+                                aria-describedby="alert-dialog-description"
+                            >
+                                <DialogTitle id="alert-dialog-title">{"Customer List Reading Failure"}</DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText id="alert-dialog-description">
+                                        {this.props.customerErrMsg}
+                                    </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={this.handleCloseCustomerAlertDialog} color="secondary" autoFocus>
+                                        Close
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
                         </div>
                     }
                     leftSidebarHeader={
@@ -667,6 +722,9 @@ function mapDispatchToProps(dispatch)
         getFranchisees: Actions.getFranchisees,
         getBillingLists: Actions.getBillingLists,
         getServiceLists: Actions.getServiceLists,
+
+        closeInvoiceAlertDialog: Actions.closeInvoiceAlertDialog,
+        closeCustomerAlertDialog: Actions.closeCustomerAlertDialog,
     }, dispatch);
 }
 
@@ -675,6 +733,7 @@ function mapStateToProps({invoices, auth, customers, franchisees})
     return {
         invoices: invoices.invoicesDB,
         invoiceDetail: invoices.invoiceDetail,
+        invoiceErrMsg: invoices.invoiceErrMsg,
         bLoadedInvoices: invoices.bLoadedInvoices,
         transactionStatus: invoices.transactionStatus,
         invoiceStatus: invoices.invoiceStatus,
@@ -693,6 +752,10 @@ function mapStateToProps({invoices, auth, customers, franchisees})
         bInvoicesUpdated: invoices.bInvoicesUpdated,
         billingLists: invoices.billingLists,
         serviceLists: invoices.serviceLists,
+
+        bCustomerErr: invoices.bCustomerErr,
+        bInvoiceErr: invoices.bInvoiceErr,
+        customerErrMsg: invoices.customerErrMsg,
 
         customers: invoices.customersDB,
         bLoadedCustomers: invoices.bLoadedSuggestCustomers,

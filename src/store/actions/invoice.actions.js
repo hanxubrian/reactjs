@@ -2,6 +2,8 @@ import axios from "axios";
 import {invoiceService} from "../../services"
 
 export const GET_ALL_INVOICES = "[INVOICES] GETS ALL";
+export const GET_ALL_INVOICES_ERR = "[INVOICES] GETS ALL ERROR";
+export const CLOSE_INVOICE_ERROR_DIALOG = "[INVOICES] CLOSE INVOICE ERROR DIALOG";
 export const GET_INVOICE_STATUS = "[INVOICES] GETS INVOICE STATUS";
 export const GET_INVOICE_DETAIL = "[INVOICES] GETS INVOICE DETAIL";
 export const GET_INVOICES_FETCH_START = "[INVOICES] GETS STARTED FETCH";
@@ -18,6 +20,8 @@ export const SELECT_INVOICE_CUSTOMER = "[INVOICES] SELECT CUSTOMER";
 export const RESET_INVOICE_FORM = "[INVOICES] RESET INVOICE FORM";
 export const STARTING_SAVE_INVOICE_FORM_DATA = "[INVOICES] STARTING SAVE INVOICE FORM DATA";
 export const GET_ALL_SUGGEST_CUSTOMERS = "[INVOICES] GET ALL SUGGEST CUSTOMERS";
+export const GET_ALL_SUGGEST_CUSTOMERS_ERROR = "[INVOICES] GET ALL SUGGEST CUSTOMERS ERROR";
+export const CLOSE_CUSTOMER_ERROR_DIALOG = "[INVOICES] CLOSE CUSTOMER ERROR DIALOG";
 export const GET_SUGGEST_CUSTOMERS_FETCH_START = "[INVOICES] GET SUGGEST CUSTOMERS FETCH START";
 export const GET_BILLING_LIST = "[INVOICES] GET BILLING LIST";
 export const GET_SERVICE_LIST = "[INVOICES] GET SERVICE LIST";
@@ -54,7 +58,10 @@ export function getInvoices(RegionId, StatusId, FromDate, ToDate, PeriodId,OpenO
                     payload: res
                 });
             } else {
-
+                dispatch({
+                    type: GET_ALL_INVOICES_ERR,
+                    payload: res.message
+                });
             }
         })();
     };
@@ -316,13 +323,22 @@ export function getSuggestCustomersList(regionId, statusId = 0, location = "all"
             type: GET_SUGGEST_CUSTOMERS_FETCH_START,
         });
 
-        (async () => {
 
+
+        (async () => {
             let res = await invoiceService.getSuggestCustomersList([regionId], [statusId], location, latitude, longitude, searchText);
-            dispatch({
-                type: GET_ALL_SUGGEST_CUSTOMERS,
-                payload: res
-            });
+
+            if (res.IsSuccess) {
+                dispatch({
+                    type: GET_ALL_SUGGEST_CUSTOMERS,
+                    payload: res
+                });
+            } else {
+                dispatch({
+                    type: GET_ALL_SUGGEST_CUSTOMERS_ERROR,
+                    payload: res.message
+                });
+            }
         })();
     }
 }
@@ -380,4 +396,16 @@ export function updateInvoice(id, regionId, data) {
             }
         })();
     };
+}
+
+export function closeInvoiceAlertDialog(){
+    return {
+        type: CLOSE_INVOICE_ERROR_DIALOG,
+    }
+}
+
+export function closeCustomerAlertDialog(){
+    return {
+        type: CLOSE_CUSTOMER_ERROR_DIALOG,
+    }
 }
