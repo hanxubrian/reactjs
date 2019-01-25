@@ -3,6 +3,7 @@ import * as UserActions from "../../auth/store/actions";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 import {UPDATE_SELECTION_ROW_LENGTH} from "../actions";
+import {OPEN_VERIFICATION_DIALOG} from "../actions";
 
 const initialState = {
     verificationsDB: null,
@@ -21,6 +22,7 @@ const initialState = {
     searchText: "",
     bVerificationFetchStart: false,
     selectionLength: [],
+    verifiedModal: false
 };
 
 
@@ -91,6 +93,20 @@ const verifications = function (state = initialState, action) {
             return{
                 ...state,
                 selectionLength: action.payload
+            }
+        }
+        case Actions.OPEN_VERIFICATION_DIALOG:
+        {
+            return{
+                ...state,
+                verifiedModal: true,
+            }
+        }
+        case Actions.CLOSE_VERIFICATION_DIALOG:
+        {
+            return{
+                ...state,
+                verifiedModal: false,
             }
         }
         default:

@@ -522,12 +522,7 @@ class VerificationListContent extends Component {
     componentDidMount() {
         console.log("componentDidMount");
     }
-    // componentWillReceiveProps(nextProps, nextContext) {
-    //     if(nextProps.selectionLength !== this.props.selectionLength) {
-    //         if(JSON.stringify(this.state.selection) !== JSON.stringify(nextProps.selectionLength))
-    //             this.setState({ selection: [...nextProps.selectionLength] });
-    //     }
-    // }
+
 
     componentWillMount() {
         console.log("componentWillMount");
