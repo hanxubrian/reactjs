@@ -42,6 +42,7 @@ import classNames from 'classnames';
 
 import LeaseForm from './LeaseForm';
 import LeaseListContent from './LeaseListContent';
+import LeaseSearchBar from "./LeaseSearchBar"
 
 // import GoogleMap from 'google-map-react';
 
@@ -735,7 +736,7 @@ class Leases extends Component {
                             {(this.state.temp && !leaseForm.props.open) && (
                                 <div className={classNames("flex flex-col h-full")}>
                                     <div className="flex flex-row items-center p-12">
-                                        <div className="flex justify-start items-center">
+                                        {/* <div className="flex justify-start items-center">
                                             <Hidden smDown>
                                                 <Button
                                                     onClick={(ev) => toggleFilterPanel()}
@@ -756,8 +757,8 @@ class Leases extends Component {
                                                     <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
                                                 </Button>
                                             </Hidden>
-                                        </div>
-                                        <div className="flex items-center w-full h-44 mr-12 ml-12">
+                                        </div> */}
+                                        {/* <div className="flex items-center w-full h-44 mr-12 ml-12">
                                             <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
                                                 <Input
                                                     placeholder="Search..."
@@ -771,9 +772,9 @@ class Leases extends Component {
                                                         'aria-label': 'Search'
                                                     }}
                                                 />
-                                                {/* <Icon color="action" className="mr-16">search</Icon> */}
+                                                <Icon color="action" className="mr-16">search</Icon>
                                             </Paper>
-                                        </div>
+                                        </div> */}
                                         {/* <div className="flex items-center justify-end pr-12">
                                             <Hidden smDown>
                                                 <Button
@@ -796,6 +797,7 @@ class Leases extends Component {
                                             </Hidden>
                                         </div> */}
                                     </div>
+									<LeaseSearchBar />
                                     <LeaseListContent data={this.state.temp}/>
                                 </div>
                             )}

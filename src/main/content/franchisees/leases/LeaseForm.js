@@ -5,7 +5,7 @@ import {Link, withRouter} from 'react-router-dom';
 import {
     Paper, TextField, Typography, MenuItem, Card,  CardHeader, CardContent, Divider, Button,
     Snackbar, SnackbarContent, IconButton, Icon, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog, Fab,
-    InputAdornment
+    InputAdornment, Table
 } from '@material-ui/core';
 import 'date-fns'
 import MomentUtils from '@date-io/moment';
@@ -731,6 +731,13 @@ class LeaseForm extends Component {
                                         )}
                                         ref={this.storeInputReference}
                                     />
+                                </GridItem>
+                                <GridItem xs={12} sm={6} md={6} className="flex flex-row">
+                                    <Paper >
+                                        <Table>
+                                            {/* More Lease Info Here */}
+                                        </Table>
+                                    </Paper>
                                 </GridItem>
                             </GridContainer>
                         </MuiPickersUtilsProvider>
