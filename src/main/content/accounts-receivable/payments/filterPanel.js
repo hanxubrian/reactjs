@@ -86,9 +86,9 @@ class FilterPanel extends Component {
 		invoiceDateOption: THIS_MONTH,
 		invoiceDatePeriod: moment(),
 
-		PaymentStatusAll:true,
-		PaymentStatusOpen:true,
-		PaymentStatusPaid:true,
+		PaymentStatusAll: true,
+		PaymentStatusOpen: true,
+		PaymentStatusPaid: true,
 	};
 
 	componentDidMount() {
@@ -259,158 +259,158 @@ class FilterPanel extends Component {
 	render() {
 		const { classes } = this.props;
 		return (
-			<div className={classNames(classes.root)}>
-				<div className={classNames("flex flex-col")}>
-					<Paper className="flex flex-1 flex-col min-h-px p-20">
-						<FormControl className={classes.formControl} style={{ width: 200 }}>
-							<h3 className="mb-20">Payments Date</h3>
-							<Select
-								value={this.state.invoiceDateOption}
-								onChange={this.handleChange1}
-								inputProps={{
-									name: 'invoiceDateOption',
-									id: 'invoiceDateOption'
-								}}
-							>
-								<MenuItem value={THIS_WEEK}>This Week</MenuItem>
-								<MenuItem value={THIS_WEEK_TO_DATE}>This Week-to-date</MenuItem>
-								<MenuItem value={THIS_MONTH}>This Month</MenuItem>
-								<MenuItem value={THIS_MONTH_TO_DATE}>This Month-to-date</MenuItem>
-								<MenuItem value={THIS_QUARTER}>This Quarter</MenuItem>
-								<MenuItem value={THIS_QUARTER_TO_DATE}>This Quarter-to-Date</MenuItem>
-								<MenuItem value={THIS_YEAR}>This Year</MenuItem>
-								<MenuItem value={THIS_YEAR_TO_DATE}>This Year-to-date</MenuItem>
-								<MenuItem value={TODAY}>Today</MenuItem>
-								<MenuItem value={YESTERDAY}>Yesterday</MenuItem>
-								<MenuItem value={LAST_QUARTER}>Last Quarter</MenuItem>
-								<MenuItem value={LAST_YEAR}>Last Year</MenuItem>
-								<MenuItem value={CUSTOM_DATE}>Custom Date</MenuItem>
-								<MenuItem value={PERIOD}>Period</MenuItem>
-							</Select>
-						</FormControl>
-						<br></br>
+			<div className={classNames(classes.root, "flex flex-col p-24")}>
+				{/* <div className={classNames()}> */}
+				{/* <Paper className="flex flex-1 flex-col min-h-px p-20"> */}
+				<FormControl className={classes.formControl} style={{ width: 200 }}>
+					<h3 className="mb-20">Payments Date</h3>
+					<Select
+						value={this.state.invoiceDateOption}
+						onChange={this.handleChange1}
+						inputProps={{
+							name: 'invoiceDateOption',
+							id: 'invoiceDateOption'
+						}}
+					>
+						<MenuItem value={THIS_WEEK}>This Week</MenuItem>
+						<MenuItem value={THIS_WEEK_TO_DATE}>This Week-to-date</MenuItem>
+						<MenuItem value={THIS_MONTH}>This Month</MenuItem>
+						<MenuItem value={THIS_MONTH_TO_DATE}>This Month-to-date</MenuItem>
+						<MenuItem value={THIS_QUARTER}>This Quarter</MenuItem>
+						<MenuItem value={THIS_QUARTER_TO_DATE}>This Quarter-to-Date</MenuItem>
+						<MenuItem value={THIS_YEAR}>This Year</MenuItem>
+						<MenuItem value={THIS_YEAR_TO_DATE}>This Year-to-date</MenuItem>
+						<MenuItem value={TODAY}>Today</MenuItem>
+						<MenuItem value={YESTERDAY}>Yesterday</MenuItem>
+						<MenuItem value={LAST_QUARTER}>Last Quarter</MenuItem>
+						<MenuItem value={LAST_YEAR}>Last Year</MenuItem>
+						<MenuItem value={CUSTOM_DATE}>Custom Date</MenuItem>
+						<MenuItem value={PERIOD}>Period</MenuItem>
+					</Select>
+				</FormControl>
+				<br></br>
 
-						{this.state.invoiceDateOption === CUSTOM_DATE && (
-							<MuiPickersUtilsProvider utils={MomentUtils}>
-								<div className="flex flex-col mt-20">
-									<h3 className="mb-20">Custom Date</h3>
-									<DatePicker
-										margin="none"
-										label="From Date"
-										name="FromDate"
-										variant="outlined"
-										format="MM/DD/YYYY"
-										value={this.state.FromDate}
-										onChange={this.handleInvoiceFromDateChange}
-										fullWidth
-										required
-										color="secondary"
-									/>
-									<br></br>
-									<DatePicker
-										margin="none"
-										label="To Date"
-										name="ToDate"
-										variant="outlined"
-										format="MM/DD/YYYY"
-										value={this.state.ToDate}
-										onChange={this.handleInvoiceToDateChange}
-										fullWidth
-										required
-										color="secondary"
-										style={{ marginTop: '30px!important' }}
-									/>
-								</div>
-							</MuiPickersUtilsProvider>
-						)}
-						{this.state.invoiceDateOption === PERIOD && (
-							<MuiPickersUtilsProvider utils={MomentUtils}>
-								<div className="flex flex-col mt-20">
-									<h3 className="mb-20">Choose a Period</h3>
-									<DatePicker
-										margin="none"
-										label="Period"
-										name="invoiceDatePeriod"
-										variant="outlined"
-										format="MM/YYYY"
-										value={this.state.invoiceDatePeriod}
-										onChange={this.handlePeriodChange}
-										fullWidth
-										InputProps={{
-											classes: {
-												input: classes.input,
-											},
-										}}
-										InputLabelProps={{
-											shrink: true,
-											classes: { outlined: classes.label }
-										}}
-										openToYearSelection={true}
-									/>
-								</div>
-							</MuiPickersUtilsProvider>
-						)}
-
-						<div style={{ marginTop: 20, display: 'flex', flexDirection: 'column' }}>
-							<h3>Type</h3>
-							{[
-								{ Name: "Check" },
-								{ Name: "Credit Card" },
-								{ Name: "EFT" },
-								{ Name: "Lockbox" },
-								{ Name: "Credit From Overpayment" },
-								{ Name: "Manual Credit Card" },
-
-							].map((iv, index) => {
-								return (
-									<FormControlLabel
-										key={index}
-										control={
-											<Switch
-												checked={iv['checked' + iv.TransactionStatusListId]}
-												onChange={this.handleChange(index, iv.TransactionStatusListId)}
-												value="checkedPaid"
-											/>
-										}
-										label={iv.Name}
-									/>
-								)
-							})}
+				{this.state.invoiceDateOption === CUSTOM_DATE && (
+					<MuiPickersUtilsProvider utils={MomentUtils}>
+						<div className="flex flex-col mt-20">
+							<h3 className="mb-20">Custom Date</h3>
+							<DatePicker
+								margin="none"
+								label="From Date"
+								name="FromDate"
+								variant="outlined"
+								format="MM/DD/YYYY"
+								value={this.state.FromDate}
+								onChange={this.handleInvoiceFromDateChange}
+								fullWidth
+								required
+								color="secondary"
+							/>
 							<br></br>
-							<h3>Payment Status</h3>
-							<FormControlLabel
-								control={
-									<Switch
-										checked={this.state.PaymentStatusAll}
-										onChange={this.handleChangeChecked('PaymentStatusAll')}
-										value="PaymentStatusAll"
-									/>
-								}
-								label="All"
-							/>
-							<FormControlLabel
-								control={
-									<Switch
-										checked={this.state.PaymentStatusOpen}
-										onChange={this.handleChangeChecked('PaymentStatusOpen')}
-										value="PaymentStatusOpen"
-									/>
-								}
-								label="Open"
-							/>
-							<FormControlLabel
-								control={
-									<Switch
-										checked={this.state.PaymentStatusPaid}
-										onChange={this.handleChangeChecked('PaymentStatusPaid')}
-										value="PaymentStatusPaid"
-									/>
-								}
-								label="Paid"
+							<DatePicker
+								margin="none"
+								label="To Date"
+								name="ToDate"
+								variant="outlined"
+								format="MM/DD/YYYY"
+								value={this.state.ToDate}
+								onChange={this.handleInvoiceToDateChange}
+								fullWidth
+								required
+								color="secondary"
+								style={{ marginTop: '30px!important' }}
 							/>
 						</div>
-					</Paper>
+					</MuiPickersUtilsProvider>
+				)}
+				{this.state.invoiceDateOption === PERIOD && (
+					<MuiPickersUtilsProvider utils={MomentUtils}>
+						<div className="flex flex-col mt-20">
+							<h3 className="mb-20">Choose a Period</h3>
+							<DatePicker
+								margin="none"
+								label="Period"
+								name="invoiceDatePeriod"
+								variant="outlined"
+								format="MM/YYYY"
+								value={this.state.invoiceDatePeriod}
+								onChange={this.handlePeriodChange}
+								fullWidth
+								InputProps={{
+									classes: {
+										input: classes.input,
+									},
+								}}
+								InputLabelProps={{
+									shrink: true,
+									classes: { outlined: classes.label }
+								}}
+								openToYearSelection={true}
+							/>
+						</div>
+					</MuiPickersUtilsProvider>
+				)}
+
+				<div style={{ marginTop: 20, display: 'flex', flexDirection: 'column' }}>
+					<h3>Type</h3>
+					{[
+						{ Name: "Check" },
+						{ Name: "Credit Card" },
+						{ Name: "EFT" },
+						{ Name: "Lockbox" },
+						{ Name: "Credit From Overpayment" },
+						{ Name: "Manual Credit Card" },
+
+					].map((iv, index) => {
+						return (
+							<FormControlLabel
+								key={index}
+								control={
+									<Switch
+										checked={iv['checked' + iv.TransactionStatusListId]}
+										onChange={this.handleChange(index, iv.TransactionStatusListId)}
+										value="checkedPaid"
+									/>
+								}
+								label={iv.Name}
+							/>
+						)
+					})}
+					<br></br>
+					<h3>Payment Status</h3>
+					<FormControlLabel
+						control={
+							<Switch
+								checked={this.state.PaymentStatusAll}
+								onChange={this.handleChangeChecked('PaymentStatusAll')}
+								value="PaymentStatusAll"
+							/>
+						}
+						label="All"
+					/>
+					<FormControlLabel
+						control={
+							<Switch
+								checked={this.state.PaymentStatusOpen}
+								onChange={this.handleChangeChecked('PaymentStatusOpen')}
+								value="PaymentStatusOpen"
+							/>
+						}
+						label="Open"
+					/>
+					<FormControlLabel
+						control={
+							<Switch
+								checked={this.state.PaymentStatusPaid}
+								onChange={this.handleChangeChecked('PaymentStatusPaid')}
+								value="PaymentStatusPaid"
+							/>
+						}
+						label="Paid"
+					/>
 				</div>
+				{/* </Paper> */}
+				{/* </div> */}
 			</div>
 		);
 	}

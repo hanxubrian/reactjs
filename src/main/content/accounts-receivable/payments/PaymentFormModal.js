@@ -353,7 +353,7 @@ class PaymentFormModal extends React.Component {
 	}
 
 	getRowData(payments, activePaymentRows = this.props.activePaymentRows) {
-		if (payments.Regions === undefined)
+		if (!payments || payments.Regions === undefined)
 			return [];
 		let res = [...payments.Regions[0].Payments]
 
