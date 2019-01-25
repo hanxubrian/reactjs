@@ -616,7 +616,7 @@ class PaymentsListContent extends Component {
 		console.log("componentDidUpdate", "CustomerListContent.js", this.props.locationFilterValue, this.props.customers);
 	}
 	getRowData(payments) {
-		if (payments.Regions === undefined)
+		if (!payments || payments.Regions === undefined)
 			return [];
 		let res = [...payments.Regions[0].Payments]
 
