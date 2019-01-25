@@ -1546,7 +1546,6 @@ class LeaseListContent extends Component {
 		// this.setState({ mapViewState: nextProps.mapViewState });
 		console.log("componentWillReceiveProps", "LeaseListContent.js", nextProps.locationFilterValue)
 
-
 		if (nextProps.leases !== this.props.leases) {
 			this.setState({
 				rows: this.getRowData(nextProps),
@@ -1554,11 +1553,11 @@ class LeaseListContent extends Component {
 			})
 		}
 
-		if (this.props.locationFilterValue !== nextProps.locationFilterValue) {
-			this.setState({ locationFilterValue: nextProps.locationFilterValue })
-			console.log("componentWillReceiveProps", "locationFilterValue", nextProps.locationFilterValue, this.props.leases)
-			this.initRowsFromRawJson(this.props.leases, nextProps.locationFilterValue);
-		}
+		// if (this.props.locationFilterValue !== nextProps.locationFilterValue) {
+		// 	this.setState({ locationFilterValue: nextProps.locationFilterValue })
+		// 	console.log("componentWillReceiveProps", "locationFilterValue", nextProps.locationFilterValue, this.props.leases)
+		// 	this.initRowsFromRawJson(this.props.leases, nextProps.locationFilterValue);
+		// }
 
 		// if (this.props.pins !== nextProps.pins) {
 		// 	// this.setState({ pins: nextProps.pins })
@@ -1584,8 +1583,11 @@ class LeaseListContent extends Component {
 
 	getRowData(props) {
 
-		if (props.data === undefined)
-			return [];
+		if (props.data === undefined) {
+			let res = ''
+			res = props.Data[0].LeaseList
+			return res;
+		} else {
 		let res = [...props.data]
 
 		res.forEach(x=>{
@@ -1594,6 +1596,7 @@ class LeaseListContent extends Component {
 		console.log("getRowData", res);
 
 		return res;
+		}
 	}
 
 	search(val) {
