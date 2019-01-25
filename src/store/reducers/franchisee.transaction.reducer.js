@@ -2,7 +2,6 @@ import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
-import {CREATE_NEW_TRANSACTION} from "../actions/";
 
 const initialState = {
     transactionsDB: null,
@@ -96,7 +95,8 @@ const transactions = function(state = initialState, action) {
                     props: {
                         open: true
                     },
-                    franchisee: action.payload,
+                    franchisee: null,
+                    trxRowInfo: action.payload,
                     bVendorBox: false,
                     vendor: null
                 },
@@ -111,7 +111,8 @@ const transactions = function(state = initialState, action) {
                     props: {
                         open: false
                     },
-                    franchisee: action.payload,
+                    franchisee: null,
+                    trxRowInfo: null,
                     bVendorBox: false,
                     vendor: null
                 },

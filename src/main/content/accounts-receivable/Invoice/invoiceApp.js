@@ -619,7 +619,7 @@ class InvoiceApp extends Component {
                                 </div>
                             )}
                             {(this.state.temp && invoiceForm.props.open) && (
-                                <InvoiceForm customers={this.state.customers} selectedInvoice={this.state.selectedInvoice}/>
+                                <InvoiceForm customers={this.state.customers}/>
                             )}
 
                             <Dialog

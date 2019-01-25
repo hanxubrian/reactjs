@@ -286,8 +286,6 @@ class VendorDialogBox extends Component {
             }),
         };
 
-        console.log('vendor= ', this.state)
-
         const components = { Control, Menu, NoOptionsMessage, Option, Placeholder, SingleValue, ValueContainer };
 
         return (

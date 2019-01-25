@@ -279,7 +279,7 @@ class TransactionsLists extends Component {
                             onClick  : (e, handleOriginal) => {
                                 if ( rowInfo )
                                 {
-                                    // this.props.openEditInvoiceForm(rowInfo.original);
+                                    this.props.openEditTransactionForm(rowInfo.original);
                                 }
                             }
                         }
@@ -453,7 +453,8 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         toggleFilterPanel: Actions.toggleTransactionFilterPanel,
-        removeTransaction: Actions.removeTransaction
+        removeTransaction: Actions.removeTransaction,
+        openEditTransactionForm: Actions.openEditTransactionForm
     }, dispatch);
 }
 

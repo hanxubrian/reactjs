@@ -355,6 +355,7 @@ class TransactionForm extends Component {
                     classes: {
                         input: classes.input,
                     },
+                    readOnly: this.props.transactionForm.type === 'edit'
                 }}
                 InputLabelProps = {{
                     classes: {outlined: classes.label}
@@ -401,21 +402,6 @@ class TransactionForm extends Component {
         let subTotal = 0.0;
         let tax = 0.0;
 
-        if(this.props.transactionForm.data===null) return;
-
-        const data = [...this.props.transactionForm.data.line];
-        console.log('line=', this.props.transactionForm.data.line);
-        data.forEach(n => {
-            let mk = 0.;
-            let qty = 0;
-            if(n.quantity!=='') qty = n.quantity;
-            subTotal += parseFloat(n.extended);
-            tax += parseFloat(n.tax);
-        });
-
-        this.setState({subTotal: subTotal});
-        this.setState({tax: tax});
-        this.setState({total: subTotal+tax});
     };
 
     componentDidUpdate(prevProps, prevState, snapshot){
@@ -451,6 +437,17 @@ class TransactionForm extends Component {
     componentDidMount(){
         if(this.props.transactionForm.type === 'new')
             this.setState({TransactionNo: "PENDING"});
+
+        if(this.props.transactionForm.type === 'edit') {
+            let trxRow = this.props.trxRowInfo;
+            let franchisee = _.filter(this.props.franchisees, franchisee=>trxRow.FranchiseeNo===franchisee.Number && trxRow.Name===franchisee.Name);
+            console.log('result=',franchisee);
+            if(franchisee.length>0) {
+                this.setState({selectedFranchisee: franchisee[0]});
+                this.setState({value: trxRow.Name});
+                this.setState({TransactionNo: trxRow.Number});
+            }
+        }
 
         if(this.input) {
             setTimeout(() => {this.input.focus()}, 500);
@@ -514,17 +511,21 @@ class TransactionForm extends Component {
             TrxTax: this.state.tax,//decimal
             TotalTrxAmount: this.state.total,//decimal
             Quantity: this.state.quantity,//integer
+            Fees: 0.00,
 
             Description: this.state.transactionDescription,
             Notes: this.state.note,
             TrxDate: this.state.TransactionDate,
             Date: this.state.Date,
 
-            Vendor: this.props.vendor,
+            VendorValue: this.props.vendor!==null ? this.props.vendor.vendor.value: '', //vendor, vendor_no, vendorDate
+            VendorLabel: this.props.vendor!==null ? this.props.vendor.vendor.label: '', //vendor, vendor_no, vendorDate
+            VendorNo: this.props.vendor!==null ? this.props.vendor.vendor_no : '',
+            VendorDate: this.props.vendor!==null ? moment(this.props.vendor.vendorDate) : moment(),
             NumberOfPayments: this.state.payments,
             StartDate: this.state.startDate,
             BilledPayment: this.state.billedPayments,
-            GrossTotal: this.state.grossTotal
+            GrossTotal: this.state.grossTotal,
         };
         // this.props.createNewTransaction(this.props.regionId, result);
         console.log('result', JSON.stringify(result));
@@ -1324,7 +1325,7 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({transactions, auth})
+function mapStateToProps({transactions, auth, franchisees})
 {
     return {
         transactionForm: transactions.transactionForm,
@@ -1332,6 +1333,7 @@ function mapStateToProps({transactions, auth})
         newTransaction: transactions.newTransaction,
         user: auth.login,
         regionId: auth.login.defaultRegionId,
+        trxRowInfo: transactions.transactionForm.trxRowInfo,
     }
 }
 

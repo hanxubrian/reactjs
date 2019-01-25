@@ -81,7 +81,7 @@ export function openEditTransactionForm(data)
 {
     return {
         type: OPEN_EDIT_TRANSACTION_FORM,
-        data
+        payload: data
     }
 }
 
