@@ -504,7 +504,6 @@ class PaymentsListContent extends Component {
 
 		this.fetchData = this.fetchData.bind(this);
 
-		this.changeSelection = selection => this.setState({ selection });
 		this.changeSorting = sorting => this.setState({ sorting });
 		this.commitChanges = this.commitChanges.bind(this);
 		this.changeSearchValue = value => this.setState({ searchValue: value });
@@ -859,6 +858,7 @@ function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
 		getAccountReceivablePaymentsList: Actions.getAccountReceivablePaymentsList,
 		openNewInvoiceForm: Actions.openNewInvoiceForm,
+		setActivePaymentRows: Actions.setActivePaymentRows,
 	}, dispatch);
 }
 

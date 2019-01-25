@@ -229,6 +229,8 @@ class Payments extends Component {
 		value: '',
 		selectedInvoice: null,
 
+		showNoSelectionAlertDialog: false,
+
 	};
 
 	constructor(props) {
