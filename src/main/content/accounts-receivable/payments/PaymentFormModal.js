@@ -131,9 +131,10 @@ const Command = ({ id, onExecute }) => {
 	);
 };
 
-
 const editing_cell_styles = theme => ({
 	cell: {
+		background: "#989898",
+		color: "white",
 		padding: 0,
 	}
 });
@@ -161,6 +162,25 @@ const EditingCellComponentBase = props => {
 			})}
 	</TableEditColumn.Cell>)
 };
+
+//
+// header cell style
+//
+const header_cell_styles = theme => ({
+	cell: {
+		background: "#989898",
+		color: "white",
+	}
+});
+const tableHeaderCellComponentBase = props => {
+	return (<TableHeaderRow.Cell {...props}
+
+	/>);
+};
+const tableHeaderCellComponent = withStyles(header_cell_styles)(
+	tableHeaderCellComponentBase
+);
+
 
 const EditingCellComponent = withStyles(editing_cell_styles, { name: "EditingCell" })(
 	EditingCellComponentBase
@@ -302,8 +322,7 @@ class PaymentFormModal extends React.Component {
 
 				// }
 			],
-			// rows: [...this.props.activePaymentRows].map((x, index) => { x.id = index; return x }),
-			rows: this.getRowData(this.props.payments),
+			rows: [],
 			customerName: "",
 			customerNumber: "",
 		}
@@ -317,7 +336,7 @@ class PaymentFormModal extends React.Component {
 		})
 		if (nextProps.activePaymentRows !== this.props.activePaymentRows) {
 			// this.setState({ rows: [...nextProps.activePaymentRows].map((x, index) => { x.id = index; return x }) })
-			this.setState({ rows: this.getRowData(this.props.payments, nextProps.activePaymentRows) })
+			this.setRowData(this.props.payments, nextProps.activePaymentRows)
 		}
 	}
 
@@ -353,7 +372,7 @@ class PaymentFormModal extends React.Component {
 		this.setState({ rows });
 	}
 
-	getRowData(payments, activePaymentRows = this.props.activePaymentRows) {
+	setRowData(payments, activePaymentRows = this.props.activePaymentRows) {
 		if (!payments || payments.Regions === undefined)
 			return [];
 		let res = [...payments.Regions[0].Payments]
@@ -365,18 +384,19 @@ class PaymentFormModal extends React.Component {
 		res = res.filter(x => {
 			return activePaymentRows.indexOf(x.id) > -1
 		})
-		console.log("getRowData", res);
+		console.log("setRowData", res);
 		if (res.length > 0) {
 			this.setState({
 				customerName: res[0].CustomerName,
 				customerNumber: res[0].CustomerNo,
 			})
 		}
-		return res;
+		this.setState({ rows: res })
 	}
+
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.payments !== this.props.payments) {
-			this.setState({ row: this.getRowData(nextProps.payments) })
+			this.setRowData(nextProps.payments)
 		}
 	}
 
@@ -401,7 +421,7 @@ class PaymentFormModal extends React.Component {
 						<div className={classNames("flex flex-col")}>
 							<div className={classNames("flex flex-col")}>
 								<div className={classNames("flex")} sm={12} >
-									<div sm={3} className="flex flex-col w-full pr-6">
+									{/* <div sm={3} className="flex flex-col w-full pr-6">
 										<div className="flex" style={{ flex: 2, alignItems: 'center' }}>
 											<Icon fontSize={"small"} className="mr-4">person_outline</Icon>
 											<Typography variant="subtitle1" color="inherit"><strong>{customerName}</strong></Typography>
@@ -410,10 +430,23 @@ class PaymentFormModal extends React.Component {
 											<Icon fontSize={"small"} className="mr-4">apps</Icon>
 											<Typography variant="subtitle1" color="inherit">{customerNumber}</Typography>
 										</div>
-									</div>
+									</div> */}
+
+									<TextField sm={2} type="text" value={customerName} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">person_outline</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerName" label="CustomerName" />
+									<TextField sm={2} type="text" value={customerNumber} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerNumber" label="CustomerNumber" />
+
+									<TextField sm={2} type="number" InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start">$</InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerCreditBalance" label="Customer Credit Balance" />
+									<TextField sm={2} type="number" InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start">$</InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="Credit" label="Credit" />
+									<TextField sm={2} type="number" InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start">$</InputAdornment> }} margin="dense" fullWidth className={classNames("")} id="Balance" label="Balance" />
+								</div>
+
+								<div className={classNames("flex")} sm={12}>
+
+
 
 									<TextField sm={3} select margin="dense" id="PaymentType" label="Payment Type" variant="outlined"
 										// style={{ width: "30%" }}
+										autoFocus
 										className={classNames(classes.textField, "pr-6")}
 										value={this.state.PaymentType || ""}
 										onChange={this.handleChange('PaymentType')}
@@ -427,7 +460,7 @@ class PaymentFormModal extends React.Component {
 
 									</TextField>
 
-									<TextField sm={3} type="number" autoFocus margin="dense" id="ReferenceNo" label="Reference No." variant="outlined"
+									<TextField sm={3} type="number" margin="dense" id="ReferenceNo" label="Reference No." variant="outlined"
 										className={classNames(classes.textField, "pr-6")}
 										fullWidth />
 
@@ -435,7 +468,7 @@ class PaymentFormModal extends React.Component {
 										type="date"
 										id="PaymentDate"
 										label="Payment Date"
-										className={classNames(classes.textField, "")}
+										className={classNames(classes.textField, "pr-6")}
 										InputLabelProps={{
 											shrink: true
 										}}
@@ -446,22 +479,29 @@ class PaymentFormModal extends React.Component {
 										fullWidth
 									// style={{ width: "20%", minWidth: "180px" }}
 									/>
-								</div>
-								<div className={classNames("flex")} sm={12}>
-									<TextField type="number" InputLabelProps={{ shrink: true }} InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }} margin="dense" variant="outlined" fullWidth className={classNames("pr-6")} id="Amount" label="Amount" sm={3} />
-									<TextField type="number" InputLabelProps={{ shrink: true }} InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }} margin="dense" variant="outlined" fullWidth className={classNames("pr-6")} id="CustomerCreditBalance" label="Customer Credit Balance" sm={3} />
-									<TextField type="number" InputLabelProps={{ shrink: true }} InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }} margin="dense" variant="outlined" fullWidth className={classNames("pr-6")} id="Credit" label="Credit" sm={3} />
-									<TextField type="number" InputLabelProps={{ shrink: true }} InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }} margin="dense" variant="outlined" fullWidth className={classNames("")} id="Balance" label="Balance" sm={3} />
+
+									<TextField
+										type="number"
+										InputLabelProps={{ shrink: true }} InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+										margin="dense"
+										variant="outlined"
+										fullWidth
+										className={classNames("")}
+										id="Amount"
+										label="Amount" sm={3}
+									/>
 								</div>
 
 								<TextField margin="dense" variant="outlined" fullWidth id="Notes" label="Notes" multiline rows="2" rowsMax="2" />
 
 							</div>
-							<div className={classNames("flex flex-col flex-1")}>
+							<div className={classNames("flex flex-col flex-1 mt-12")}>
 								<Paper>
 									<Grid rows={rows} columns={columns} getRowId={getRowId}>
 										<EditingState
 											onCommitChanges={this.commitChanges}
+											// defaultEditingRowIds={rows.map((x,index)=>index)}
+											defaultEditingRowIds={rows.map(x=>x.id)}
 											columnExtensions={columns}
 										/>
 
@@ -469,7 +509,8 @@ class PaymentFormModal extends React.Component {
 										<Table />
 										{/* <VirtualTable height="auto" /> */}
 										<TableColumnResizing defaultColumnWidths={columns} />
-										<TableHeaderRow />
+										<TableHeaderRow cellComponent={tableHeaderCellComponent} />
+										{/* <TableHeaderRow/> */}
 
 										<TableEditRow />
 										<TableEditColumn
@@ -485,7 +526,7 @@ class PaymentFormModal extends React.Component {
 												// debugger
 												const result = [
 													...tableColumns.filter(c => c.type !== TableEditColumn.COLUMN_TYPE),
-													{ key: 'editCommand', type: TableEditColumn.COLUMN_TYPE, width: 50 }
+													{ key: 'editCommand', type: TableEditColumn.COLUMN_TYPE }
 												];
 												return result;
 											}
