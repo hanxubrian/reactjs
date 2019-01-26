@@ -22,6 +22,7 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 import classNames from 'classnames';
 import _ from 'lodash';
+import moment from 'moment';
 
 const hexToRgb = (hex) =>{
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -200,12 +201,7 @@ class TransactionsLists extends Component {
     };
 
     removeSelectedTransaction = ()=>{
-        this.props.removeTransaction(this.state.keyToBeRemoved, this.props.transactions);
-        if(this.state.selection.length>0){
-            _.remove(this.state.selection, function(id) {
-                return id === this.state.keyToBeRemoved;
-            });
-        }
+        this.props.removeTransaction(this.props.regionId, this.state.keyToBeRemoved);
         this.setState({alertOpen: false})
     };
     render()
@@ -375,6 +371,9 @@ class TransactionsLists extends Component {
                                 {
                                     Header: "Trx Date",
                                     accessor: "TrxDate",
+                                    Cell     : row => {
+                                        return moment(row.TrxDate).format('MM/DD/YYYY');
+                                    },
                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
                                     width: 100
                                 },
@@ -398,7 +397,7 @@ class TransactionsLists extends Component {
                                             <IconButton
                                                 onClick={(ev) => {
                                                     ev.stopPropagation();
-                                                    this.handleOpen(row.original.key);
+                                                    this.handleOpen(row.original.Id);
                                                 }}
                                             >
                                                 <Icon fontSize={"small"}>delete</Icon>
@@ -433,7 +432,7 @@ class TransactionsLists extends Component {
                     <DialogTitle id="alert-dialog-title">{"Remove Transaction"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                            Do you really want to remove the selected transaction?
+                            Proceed to remove the selected transaction?
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>

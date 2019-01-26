@@ -1,5 +1,6 @@
 import axios from "axios";
-import {franchiseesService} from "../../services"
+import {franchiseesService, invoiceService} from "../../services"
+import {REMOVE_SELECTED_INVOICE} from "./invoice.actions";
 
 export const GET_ALL_FRANCHISEE_TRANSACTIONS = "[FRANCHISEE-TRANSACTIONS] GETS ALL";
 export const REMOVE_SELECTED_FRANCHISEE_TRANSACTION = "[FRANCHISEE-TRANSACTION] REMOVE SELECTED";
@@ -38,16 +39,19 @@ export function getTransactions(regionId) {
     };
 }
 
-export function removeTransaction(key, transactions) {
-    return dispatch => {
-        const request = axios.post("/api/transactions/remove", { key: key, transactions: transactions });
+export function removeTransaction(regionId, id) {
+    return (dispatch) => {
+        (async () => {
+            let res = await franchiseesService.removeFranchiseeTransaction(regionId, id);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: REMOVE_SELECTED_FRANCHISEE_TRANSACTION,
+                    payload: res.Data
+                });
+            } else {
 
-        return request.then(response => {
-            return dispatch({
-                type: REMOVE_SELECTED_FRANCHISEE_TRANSACTION,
-                payload: response.data
-            });
-        });
+            }
+        })();
     };
 }
 
@@ -86,7 +90,7 @@ export function openEditTransactionForm(regionId, data)
             payload: true
         });
         (async () => {
-            let res = await franchiseesService.getTransactionDetail(data._id, regionId);
+            let res = await franchiseesService.getTransactionDetail(data.Id, regionId);
             if (res) {
                 dispatch({
                     type: GET_TRANSACTION_DETAIL,

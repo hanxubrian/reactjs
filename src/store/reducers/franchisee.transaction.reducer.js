@@ -21,6 +21,7 @@ const initialState = {
         vendor: null
     },
     newTransaction: null,
+    removedTrxKey: undefined,
 };
 
 const transactions = function(state = initialState, action) {
@@ -35,7 +36,7 @@ const transactions = function(state = initialState, action) {
         }
         case Actions.REMOVE_SELECTED_FRANCHISEE_TRANSACTION:
         {
-            return {...state, transactionsDB: action.payload}
+            return {...state, removedTrxKey: action.payload}
         }
         case Actions.START_FETCH_TRANSACTIONS:
             return {...state,bStartFetchTransactions: true};
@@ -70,6 +71,7 @@ const transactions = function(state = initialState, action) {
                     bVendorBox: false,
                     vendor: null
                 },
+
             };
         }
         case Actions.CLOSE_NEW_TRANSACTION_FORM:
@@ -102,6 +104,7 @@ const transactions = function(state = initialState, action) {
                     bVendorBox: false,
                     vendor: null
                 },
+                bStartFetchTransactions: false
             };
         }
         case Actions.CLOSE_EDIT_TRANSACTION_FORM:

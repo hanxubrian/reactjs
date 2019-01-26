@@ -304,6 +304,26 @@ class franchiseesService {
                 })
         });
     };
+
+
+    removeFranchiseeTransaction = (regionId, id) => {
+        return new Promise((resolve, reject) => {
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/franchiseetransaction/delete/${id}?regionId=${regionId}`)
+                .then( res => {
+                    console.log('remove API = ', res);
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    };
+
 }
 
 const instance = new franchiseesService();
