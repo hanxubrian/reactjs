@@ -693,7 +693,7 @@ class VerificationListContent extends Component {
                 {...restProps}
                 className={selected ? 'active' : ''}
                 style={{ color: 'green', cursor: 'pointer' }}
-                onClick={handleClick}
+                //onClick={handleClick}
                 onDoubleClick={handleDoubleClick}
             />
         );
