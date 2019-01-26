@@ -123,7 +123,7 @@ function createFranchisee(parent_id,id, fnumber="", name="", amount=0) {
     }
 }
 
-function createData(billing='Regular Billing', service='Adjust-Balance', description='', quantity=1, amount='', tax=0, markup='', extended=0, total=0, markupAmount=0, markupTax=0, commission=0)
+function createData(billing={label:'Regular Billing', value: 4}, service='Adjust-Balance', description='', quantity=1, amount='', tax=0, markup='', extended=0, total=0, markupAmount=0, markupTax=0, commission=0)
 {
     return {
         id: counter++,
@@ -381,7 +381,7 @@ class InvoiceLineTable extends React.Component {
         order      : 'asc',
         selected   : [],
         data       :  this.props.invoiceForm.type === 'new' ? [
-            createData({label: this.props.billingLists[0].Name, value:this.props.billingLists[0].BillingTypeId}, {value: "Buffing", label: "Buffing"}, '',1),
+            createData({label: this.props.billingLists[3].Name, value:this.props.billingLists[3].BillingTypeId}, {value: "Buffing", label: "Buffing"}, '',1),
         ] : [],
         page       : 0,
         rowsPerPage: 10,
@@ -413,7 +413,7 @@ class InvoiceLineTable extends React.Component {
         numberSuggestions: [],
         taxRowId: 0,
         customerTaxAmountLine: null,
-        selectedBillingOption0: {label: this.props.billingLists[0].Name, value:this.props.billingLists[0].BillingTypeId},selectedBillingOption1: null,selectedBillingOption2: null,selectedBillingOption3: null,
+        selectedBillingOption0: {label: this.props.billingLists[3].Name, value:this.props.billingLists[3].BillingTypeId},selectedBillingOption1: null,selectedBillingOption2: null,selectedBillingOption3: null,
         selectedBillingOption4: null,selectedBillingOption5: null,selectedBillingOption6: null,selectedBillingOption7: null,
         selectedBillingOption8: null,selectedBillingOption9: null,selectedBillingOption10: null,selectedBillingOption11: null,
         selectedBillingOption12: null,selectedBillingOption13: null,selectedBillingOption14: null,selectedBillingOption15: null,
@@ -494,7 +494,7 @@ class InvoiceLineTable extends React.Component {
                     if(service.length)
                         this.setState({[`selectedServiceOption${index}`]: service[0]});
 
-                    let line = createData(billing[0], service.length ? service[0] : '', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 0, item.ExtendedPrice, item.Total, item.MarkUpTotal, item.Commission);
+                    let line = createData(billing[3], service.length ? service[0] : '', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 0, item.ExtendedPrice, item.Total, item.MarkUpTotal, item.Commission);
 
                     let distributions = [];
                     if(item.Distribution!==null && item.Distribution.length>0){
@@ -570,7 +570,7 @@ class InvoiceLineTable extends React.Component {
 
         //for save & add more
         if(nextProps.invoiceForm.data===null && JSON.stringify(nextProps.invoiceForm.data)!==JSON.stringify(this.props.invoiceForm.data)){
-            let newData = createData({label: this.props.billingLists[0].Name, value:this.props.billingLists[0].BillingTypeId}, {value: "Buffing", label: "Buffing"}, '','');
+            let newData = createData({label: this.props.billingLists[3].Name, value:this.props.billingLists[3].BillingTypeId}, {value: "Buffing", label: "Buffing"}, '','');
             this.setState({data: [{...newData, id: 0}]});
         }
     }
@@ -677,9 +677,9 @@ class InvoiceLineTable extends React.Component {
             return;
         }
 
-        const data = [...this.state.data, createData({label: this.props.billingLists[0].Name, value:this.props.billingLists[0].BillingTypeId},{value: "Buffing", label: "Buffing"})];
+        const data = [...this.state.data, createData({label: this.props.billingLists[3].Name, value:this.props.billingLists[3].BillingTypeId},{value: "Buffing", label: "Buffing"})];
         this.setState({
-            ["selectedBillingOption"+parseInt(data.length-1)]: {label: this.props.billingLists[0].Name, value:this.props.billingLists[0].BillingTypeId,
+            ["selectedBillingOption"+parseInt(data.length-1)]: {label: this.props.billingLists[3].Name, value:this.props.billingLists[3].BillingTypeId,
             }
         });
 
