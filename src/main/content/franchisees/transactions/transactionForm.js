@@ -440,11 +440,12 @@ class TransactionForm extends Component {
 
         if(this.props.transactionForm.type === 'edit') {
             let trxRow = this.props.trxRowInfo;
-            let franchisee = _.filter(this.props.franchisees, franchisee=>trxRow.FranchiseeNo===franchisee.Number && trxRow.Name===franchisee.Name);
+            console.log('result=',trxRow);
+            let franchisee = _.filter(this.props.franchisees, franchisee=>trxRow.FranchiseeNo===franchisee.Number && trxRow.FranchiseeName===franchisee.Name);
             console.log('result=',franchisee);
             if(franchisee.length>0) {
                 this.setState({selectedFranchisee: franchisee[0]});
-                this.setState({value: trxRow.Name});
+                this.setState({value: trxRow.FranchiseeName});
                 this.setState({TransactionNo: trxRow.Number});
                 this.setState({subTotal: parseFloat(trxRow.ExtendedPrice)});
                 this.setState({tax: parseFloat(trxRow.Tax)});
