@@ -28,8 +28,8 @@ const transactions = function(state = initialState, action) {
         case Actions.GET_ALL_FRANCHISEE_TRANSACTIONS:
         {
             return {
-                ...initialState,
-                transactionsDB: action.payload, bLoadedTransactions: true, bInvoicesUpdated: false, bStartFetchTransactions: false
+                ...state,
+                transactionsDB: action.payload, bLoadedTransactions: true, bTransactionsUpdated: false, bStartFetchTransactions: false
             };
         }
         case Actions.REMOVE_SELECTED_FRANCHISEE_TRANSACTION:
@@ -142,7 +142,7 @@ const transactions = function(state = initialState, action) {
             return {
                 ...state,
                 newTransaction: action.payload,
-                bTransactionsUpdated: true, bTrInvoiceStart: true
+                bTransactionsUpdated: true, bStartFetchTransactions: true
             };
         }
 
@@ -150,10 +150,7 @@ const transactions = function(state = initialState, action) {
             return {
                 ...state, newTransaction: null,
                 transactionForm: {
-                    type : 'new',
-                    props: {
-                        open: true
-                    },
+                    ...state.transactionForm,
                     franchisee: null,
                     bVendorBox: false,
                     vendor: null
