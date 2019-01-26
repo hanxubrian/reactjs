@@ -190,6 +190,9 @@ class TransactionsApp extends Component {
             this.props.getFranchisees(this.props.regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText);
         }
 
+        if(this.props.bTransactionsUpdated && this.props.bTransactionsUpdated!==prevProps.bTransactionsUpdated)
+            this.props.getTransactions(this.props.regionId);
+
         if(bChanged)
             this.getTransactions();
 
@@ -427,6 +430,7 @@ function mapStateToProps({transactions, auth, franchisees})
         transactions: transactions,
         transactionForm: transactions.transactionForm,
         bLoadedTransactions: transactions.bLoadedTransactions,
+        bTransactionsUpdated: transactions.bTransactionsUpdated,
         bStartFetchTransactions: transactions.bStartFetchTransactions,
         filterState: transactions.bOpenedTransactionFilterPanel,
         transactionStatus: transactions.transactionStatus,

@@ -8,6 +8,7 @@ const initialState = {
     bLoadedTransactions: false,
     bStartFetchTransactions: false,
     bOpenedTransactionFilterPanel: false,
+    bTransactionsUpdated: false,
     transactionStatus:{checkedCompleted: true, checkedOpen: true},
     transactionForm: {
         type : 'new',
@@ -28,7 +29,7 @@ const transactions = function(state = initialState, action) {
         {
             return {
                 ...initialState,
-                transactionsDB: action.payload, bLoadedTransactions: true, bStartFetchTransactions: false
+                transactionsDB: action.payload, bLoadedTransactions: true, bInvoicesUpdated: false, bStartFetchTransactions: false
             };
         }
         case Actions.REMOVE_SELECTED_FRANCHISEE_TRANSACTION:
@@ -137,7 +138,14 @@ const transactions = function(state = initialState, action) {
         case Actions.UPDATE_TRANSACTION_VENDOR:
             return {...state, transactionForm: {...state.transactionForm, vendor: action.payload}};
         case Actions.CREATE_NEW_TRANSACTION:
-            return {...state, newTransaction: action.payload};
+        {
+            return {
+                ...state,
+                newTransaction: action.payload,
+                bTransactionsUpdated: true, bTrInvoiceStart: true
+            };
+        }
+
         case Actions.RESET_TRANSACTION_FORM:
             return {
                 ...state, newTransaction: null,
