@@ -174,6 +174,7 @@ class VerifiedDialogForm extends React.Component {
                                         onChange={this.handleChangeForm("Message")}
                                         multiline
                                         margin={"dense"}
+                                        autoFocus={true}
                                         rows={5}
                                         fullWidth
                                         required

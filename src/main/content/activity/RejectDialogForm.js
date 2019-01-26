@@ -175,6 +175,7 @@ class RejectDialogForm extends React.Component {
                                         className={classes.textField}
                                         value={this.state.dialogForm.Message}
                                         onChange={this.handleChangeForm("Message")}
+                                        autoFocus={true}
                                         multiline
                                         margin={"dense"}
                                         rows={5}

@@ -173,6 +173,7 @@ class ReviseDialogForm extends React.Component {
                                         value={this.state.dialogForm.Message}
                                         onChange={this.handleChangeForm("Message")}
                                         multiline
+                                        autoFocus={true}
                                         margin={"dense"}
                                         rows={5}
                                         fullWidth
