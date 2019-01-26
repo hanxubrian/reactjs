@@ -121,7 +121,7 @@ const styles = theme => ({
     },
     inputReadonly:{
         padding: '12px 14px',
-        backgroundColor: '#eee'
+        // backgroundColor: '#eee'
     },
     label: {
         transform: 'translate(14px, 14px) scale(1)'
