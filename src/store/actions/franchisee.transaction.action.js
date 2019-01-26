@@ -1,6 +1,4 @@
-import axios from "axios";
-import {franchiseesService, invoiceService} from "../../services"
-import {REMOVE_SELECTED_INVOICE} from "./invoice.actions";
+import {franchiseesService} from "../../services"
 
 export const GET_ALL_FRANCHISEE_TRANSACTIONS = "[FRANCHISEE-TRANSACTIONS] GETS ALL";
 export const REMOVE_SELECTED_FRANCHISEE_TRANSACTION = "[FRANCHISEE-TRANSACTION] REMOVE SELECTED";

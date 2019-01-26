@@ -203,6 +203,10 @@ class TransactionsApp extends Component {
         if(prevState.s!==this.state.s) {
             this.search(this.state.s);
         }
+
+        if(this.props.removedTrxKey!==undefined && this.props.removedTrxKey!==prevProps.removedTrxKey)
+            this.props.getTransactions(this.props.regionId);
+
     }
 
     componentWillReceiveProps(nextProps) {
@@ -434,6 +438,8 @@ function mapStateToProps({transactions, auth, franchisees})
         bStartFetchTransactions: transactions.bStartFetchTransactions,
         filterState: transactions.bOpenedTransactionFilterPanel,
         transactionStatus: transactions.transactionStatus,
+        removedTrxKey: transactions.removedTrxKey,
+
         regionId: auth.login.defaultRegionId,
 
         bLoadedFranchisees: franchisees.bLoadedFranchisees,
