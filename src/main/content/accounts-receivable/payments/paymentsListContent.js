@@ -63,7 +63,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 
-
+import { CustomizedDxGridSelectionPanel } from "./../../common/CustomizedDxGridSelectionPanel";
 
 
 
@@ -867,6 +867,8 @@ class PaymentsListContent extends Component {
 							</Template>
 							{/* <Toolbar />					 */}
 							<TableGroupRow contentComponent={this.GroupCellContent} />
+
+							<CustomizedDxGridSelectionPanel selection={selection} />
 							{/* <GroupingPanel showSortingControls showGroupingControls /> */}
 						</Grid>
 					</div>

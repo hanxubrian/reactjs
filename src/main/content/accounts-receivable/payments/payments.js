@@ -40,7 +40,7 @@ import _ from 'lodash';
 import classNames from 'classnames';
 import { FusePageCustomSidebarScroll } from '@fuse';
 
-import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 
 
 const headerHeight = 80;
@@ -436,10 +436,20 @@ class Payments extends Component {
 
 	showPaymentFormModal = () => {
 		console.log("this.props.activePaymentRows.length", this.props.activePaymentRows)
-		if (this.props.activePaymentRows.length > 0) {
+		if (this.props.activePaymentRows.length > 100) {
+			this.setState({
+				showNoSelectionAlertDialog: true,
+				alertTitle: "Warning",
+				alertContent: "Too many rows selected. Please try to reduce them."
+			})
+		} else if (this.props.activePaymentRows.length > 0) {
 			this.props.openPaymentDialog(true)
 		} else {
-			this.setState({ showNoSelectionAlertDialog: true })
+			this.setState({
+				showNoSelectionAlertDialog: true,
+				alertTitle: "Warning",
+				alertContent: "Nothing selected for invoices. Please choose one at least."
+			})
 		}
 	}
 	render() {
@@ -568,9 +578,9 @@ class Payments extends Component {
 										aria-labelledby="alert-dialog-title"
 										aria-describedby="alert-dialog-description"
 									>
-										<DialogTitle id="alert-dialog-title">Warning</DialogTitle>
+										<DialogTitle id="alert-dialog-title">{this.state.alertTitle}</DialogTitle>
 										<DialogContent>
-											<DialogContentText id="alert-dialog-description">Nothing selected for invoices. Please choose one at least</DialogContentText>
+											<DialogContentText id="alert-dialog-description">{this.state.alertContent}</DialogContentText>
 										</DialogContent>
 										<DialogActions>
 											<Button onClick={this.handleCloseNoSelectionAlertDialog} color="primary" autoFocus>OK</Button>
