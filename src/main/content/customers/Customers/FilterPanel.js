@@ -50,8 +50,6 @@ import {
 	SearchState,
 } from '@devexpress/dx-react-grid';
 
-import { SelectionPanel } from "./CustomizedDxGridSelectionPanel";
-
 import {
 	Grid,
 	Table,

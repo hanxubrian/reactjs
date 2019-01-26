@@ -57,7 +57,7 @@ import {
 	SearchState,
 } from '@devexpress/dx-react-grid';
 
-import { CustomizedDxGridSelectionPanel } from "./CustomizedDxGridSelectionPanel";
+import { CustomizedDxGridSelectionPanel } from "./../../common/CustomizedDxGridSelectionPanel";
 
 import {
 	Grid,
