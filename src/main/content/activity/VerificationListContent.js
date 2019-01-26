@@ -166,9 +166,9 @@ const styles = theme => ({
         display: 'flex',
         opacity: 0.5
     },
-    actionButton: {
+    iconButton: {
         padding: 0,
-        marginRight: 5
+        marginRight: 10
     }
 });
 //
@@ -350,140 +350,152 @@ class VerificationListContent extends Component {
             //rows: [],
             tableColumnExtensions: [
                 {
-                    title: "Invoice",
-                    name: "Invoice",
-                    columnName: "Invoice",
-                    width: 150,
+                    title: "Region",
+                    name: "Region",
+                    columnName: "Region",
+                    // width: 100,
+                    wordWrapEnabled: true,
                     sortingEnabled: true,
                     filteringEnabled: true,
                     groupingEnabled: false,
                 },
                 {
-                    title: "Customer",
-                    name: "Customer",
-                    columnName: "Customer",
-                    width: 100,
+                    title: "Type",
+                    name: "Type",
+                    columnName: "Type",
+                    // width: 150,
                     sortingEnabled: true,
                     filteringEnabled: true,
                     groupingEnabled: false,
                 },
                 {
-                    title: "Transfer",
-                    name: "Transfer",
-                    columnName: "Transfer",
-                    width: 100,
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: false,
-                },
-                {
-                    title: "Transactions",
-                    name: "Transactions",
-                    columnName: "Transactions",
-                    width: 150,
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: false,
-                },
-                {
-                    title: "Franchisee",
-                    name: "Franchisee",
-                    columnName: "Franchisee",
-                    width: 150,
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: false,
-                },
-                {
-                    title: "Name",
-                    name: "VerificationName",
-                    columnName: "VerificationName",
-                    width: 100,
+                    title: "Description",
+                    name: "Description",
+                    columnName: "Description",
+                    // width: 250,
                     sortingEnabled: true,
                     filteringEnabled: true,
                     groupingEnabled: false,
                 },
                 {
                     title: "Number",
-                    name: "VerificationNumber",
-                    columnName: "VerificationNumber",
-                    width: 100,
+                    name: "Number",
+                    columnName: "Number",
+                    // width: 120,
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                },
+                {
+                    title: "User",
+                    name: "User",
+                    columnName: "User",
+                    // width: 120,
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                },
+                {
+                    title: "Status",
+                    name: "Status",
+                    columnName: "Status",
+                    // width: 120,
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                },
+                {
+                    title: "Date",
+                    name: "Date",
+                    columnName: "Date",
+                    // width: 120,
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                },
+                {
+                    title: "Action",
+                    name: "Action",
+                    columnName: "Action",
+                    // width: 300,
                     wordWrapEnabled: true,
                     sortingEnabled: true,
                     filteringEnabled: true,
                     groupingEnabled: false,
                     togglingEnabled: false,
-                },
-                {
-                    title: "User Date",
-                    name: "UserDate",
-                    columnName: "UserDate",
-                    width: 150,
-                    wordWrapEnabled: true,
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: false,
-                },
-                {
-                    title: "Region",
-                    name: "Region",
-                    columnName: "Region",
-                    width: 100,
-                    wordWrapEnabled: true,
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: false,
-                },
-                {
-                    title: "Active",
-                    name: "Active",
-                    columnName: 'Active',
-                    width: 150,
                     align: 'center',
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: true,
                 }
             ],
             rows : [
                 {
-                    "Invoice": "45679445213",
-                    "Customer": "Lizhu",
-                    "Transfer": "12313546",
-                    "Franchisee": "GF-12456",
-                    "Transactions": "546546",
-                    "VerificationId": 1,
-                    "VerificationName": "Pending",
-                    "UserDate": "01/24/2019",
-                    "VerificationNumber": "085017",
-                    "Active": "Verified",
-                    "Region": "BUF"
+                    "Region": "BUF",
+                    "Type": "Customer",
+                    "Description": "Midas Auto Care, Inc",
+                    "Number": "PENDING",
+                    "User": "German Sosa",
+                    "Status": "Pending",
+                    "Date": "01/21/2019",
+                    "Action": "",
                 },
                 {
-                    "Invoice": "45679445213",
-                    "Customer": "Lizhu",
-                    "Transfer": "12313546",
-                    "Franchisee": "GF-12456",
-                    "Transactions": "546546",
-                    "VerificationId": 2,
-                    "VerificationName": "Pending",
-                    "UserDate": "01/24/2019",
-                    "VerificationNumber": "085017",
-                    "Active": "Verified",
-                    "Region": "BUF"
+                    "Region": "BUF",
+                    "Type": "Transaction",
+                    "Description": "Child Support Added",
+                    "Number": "PENDING",
+                    "User": "German Sosa",
+                    "Status": "Pending",
+                    "Date": "01/21/2019",
+                    "Action": "",
                 },
                 {
-                    "Invoice": "45679445213",
-                    "Customer": "Lizhu",
-                    "Transfer": "12313546",
-                    "Franchisee": "GF-12456",
-                    "Transactions": "546546",
-                    "VerificationId": 3,
-                    "VerificationName": "Pending",
-                    "UserDate": "01/24/2019",
-                    "VerificationNumber": "085017",
-                    "Active": "Revise",
-                    "Region": "BUF"
+                    "Region": "BUF",
+                    "Type": "Invoice",
+                    "Description": "Midas Auto Care, Inc",
+                    "Number": "PENDING",
+                    "User": "German Sosa",
+                    "Status": "Pending",
+                    "Date": "01/21/2019",
+                    "Action": "",
+                },
+                {
+                    "Region": "BUF",
+                    "Type": "Transfer",
+                    "Description": "Midas Auto Care, Inc",
+                    "Number": "PENDING",
+                    "User": "Lizhu Lu",
+                    "Status": "Pending",
+                    "Date": "01/21/2019",
+                    "Action": "",
+                },
+                {
+                    "Region": "BUF",
+                    "Type": "Customer",
+                    "Description": "Added Lines",
+                    "Number": "PENDING",
+                    "User": "Wanzhe",
+                    "Status": "Pending",
+                    "Date": "01/21/2019",
+                    "Action": "",
+                },
+                {
+                    "Region": "BUF",
+                    "Type": "New Lease",
+                    "Description": "Midas CC payment Added",
+                    "Number": "PENDING",
+                    "User": "German Sosa",
+                    "Status": "Pending",
+                    "Date": "01/21/2019",
+                    "Action": "",
+                },
+                {
+                    "Region": "BUF",
+                    "Type": "Customer",
+                    "Description": "Midas Auto Care, Inc",
+                    "Number": "PENDING",
+                    "User": "German Sosa",
+                    "Status": "Pending",
+                    "Date": "01/21/2019",
+                    "Action": "",
                 }
             ],
             sorting: [
@@ -627,7 +639,7 @@ class VerificationListContent extends Component {
         const { classes }= this.props;
 
         if(this.state.rows !== undefined) {
-            if (props.column.name.includes('Active')) {
+            if (props.column.name.includes('Action')) {
                 let thisCol = this.state.rows.filter(d => {
                     if (d.name === props.column.name) {
                         return d;
@@ -636,10 +648,13 @@ class VerificationListContent extends Component {
                 });
                 return (
                     <Table.Cell>
-                        <IconButton onClick={this.openVerificationDialog} className={classes.actionButton} aria-label="Add an verify icon">
+                        <IconButton className={classes.iconButton} aria-label="Verify">
                             <Icon>verified_user</Icon>
                         </IconButton>
-                        <IconButton onClick={this.openReviseDialog} className={classes.actionButton} aria-label="Add an revise icon">
+                        <IconButton className={classes.iconButton} aria-label="Reject">
+                            <Icon>close</Icon>
+                        </IconButton>
+                        <IconButton className={classes.iconButton} aria-label="Request Changes">
                             <Icon>rotate_90_degrees_ccw</Icon>
                         </IconButton>
                     </Table.Cell>
@@ -765,7 +780,7 @@ class VerificationListContent extends Component {
                                 />
                                 <Table rowComponent={this.TableRow} cellComponent={this.getCell} />
 
-                                <TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
+                                {/*<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />*/}
 
                                 <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
 
