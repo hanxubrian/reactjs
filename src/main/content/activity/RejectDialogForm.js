@@ -12,8 +12,6 @@ import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
 import GridContainer from "../../../Commons/Grid/GridContainer";
 import GridItem from "../../../Commons/Grid/GridItem";
-import Rotate90DegreesCcw from '@material-ui/icons/Rotate90DegreesCcw';
-
 
 import Button from '@material-ui/core/Button';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -21,9 +19,11 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import HighlightOff from "@material-ui/icons/HighlightOff";
 import Typography from '@material-ui/core/Typography';
 import SendIcon from '@material-ui/icons/Send';
-import Check from "@material-ui/icons/Check";
+import Close from "@material-ui/icons/Close";
+
 
 
 const styles = theme => ({
@@ -83,7 +83,11 @@ const DialogActions = withStyles(theme => ({
     },
 }))(MuiDialogActions);
 
-class ReviseDialogForm extends React.Component {
+
+
+
+
+class RejectDialogForm extends React.Component {
     state = {
         openDialog: false,
         insertPayload: null,
@@ -103,20 +107,20 @@ class ReviseDialogForm extends React.Component {
     }
 
     componentWillMount() {
-        this.setState({openDialog:this.props.reviseModal});
+        this.setState({openDialog:this.props.rejectModal});
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        if(nextProps.reviseModal !== this.props.reviseModal) {
-            if(JSON.stringify(this.state.openDialog) !== JSON.stringify(nextProps.reviseModal)){
-                this.setState({openDialog:nextProps.reviseModal});
+        if(nextProps.rejectModal !== this.props.rejectModal) {
+            if(JSON.stringify(this.state.openDialog) !== JSON.stringify(nextProps.rejectModal)){
+                this.setState({openDialog:nextProps.rejectModal});
             }
         }
     }
 
     handleClose = () => {
         this.setState({ openDialog: false });
-        this.props.openCloseReviseDialog(false);
+        this.props.openCloseRejectDialog(false);
     };
 
     handleChangeForm = (name) => event => {
@@ -146,22 +150,21 @@ class ReviseDialogForm extends React.Component {
                     fullWidth
                 >
                     <form action="/" method={"POST"} onSubmit={(e) => {e.preventDefault();this.handleAddOwner();}}>
-                        <DialogTitle id="form-dialog-title" onClose={this.handleClose }>
+                        <DialogTitle id="form-dialog-title" onClose={this.handleClose } >
                             <h2 className={classes.dialogH2}>
-                                <Rotate90DegreesCcw  className={classNames(classes.leftIcon)} />
-                                Request Change Form
-                            </h2>
-                        </DialogTitle>
+                                <HighlightOff  className={classNames(classes.leftIcon)} />
+                            Reject Form
+                        </h2></DialogTitle>
                         <DialogContent>
                             <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                                 <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                     <Typography>To: German Sosa</Typography>
                                 </GridItem>
                                 <GridItem xs={12} sm={12} md={12}  className="flex flex-row justify-between mt-16">
-                                    <Typography className="justify-start">Request Changed By: {this.props.user.firstName} {this.props.user.lastName}</Typography>
+                                    <Typography className="justify-start">Rejected By: {this.props.user.firstName} {this.props.user.lastName}</Typography>
                                     <Typography className="justify-end flex align-center">
-                                        <Rotate90DegreesCcw  className={classNames(classes.leftIcon, classes.iconSmall)} />
-                                        Request Changed
+                                        <Close  className={classNames(classes.leftIcon, classes.iconSmall)} />
+                                        Rejected
                                     </Typography>
                                 </GridItem>
                                 <GridItem xs={12} sm={12} md={12} className="flex flex-row mt-48">
@@ -197,15 +200,15 @@ class ReviseDialogForm extends React.Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        openCloseReviseDialog: Actions.openCloseReviseDialog
+        openCloseRejectDialog: Actions.openCloseRejectDialog
     }, dispatch);
 }
 
-function mapStateToProps({ verifications, auth}) {
+function mapStateToProps({ verifications, auth }) {
     return {
-        reviseModal: verifications.reviseModal,
+        rejectModal: verifications.rejectModal,
         user: auth.login,
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(ReviseDialogForm)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(RejectDialogForm)));

@@ -22,7 +22,8 @@ const initialState = {
     bVerificationFetchStart: false,
     selectionLength: [],
     verifiedModal: false,
-    reviseModal: false
+    reviseModal: false,
+    rejectModal: false,
 };
 
 
@@ -114,6 +115,14 @@ const verifications = function (state = initialState, action) {
             return{
                 ...state,
                 reviseModal: action.payload,
+            }
+        }
+
+        case Actions.OPEN_CLOSE_REJECT_DIALOG:
+        {
+            return{
+                ...state,
+                rejectModal: action.payload,
             }
         }
         default:

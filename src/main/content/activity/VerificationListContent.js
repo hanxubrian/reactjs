@@ -648,13 +648,13 @@ class VerificationListContent extends Component {
                 });
                 return (
                     <Table.Cell>
-                        <IconButton className={classes.iconButton} aria-label="Verify">
+                        <IconButton className={classes.iconButton} onClick={this.openVerificationDialog} aria-label="Verify">
                             <Icon>verified_user</Icon>
                         </IconButton>
-                        <IconButton className={classes.iconButton} aria-label="Reject">
+                        <IconButton className={classes.iconButton} onClick={this.openRejectDialog} aria-label="Reject">
                             <Icon>close</Icon>
                         </IconButton>
-                        <IconButton className={classes.iconButton} aria-label="Request Changes">
+                        <IconButton className={classes.iconButton} onClick={this.openReviseDialog} aria-label="Request Changes">
                             <Icon>rotate_90_degrees_ccw</Icon>
                         </IconButton>
                     </Table.Cell>
@@ -704,6 +704,9 @@ class VerificationListContent extends Component {
     };
     openReviseDialog = () => {
         this.props.openCloseReviseDialog(true);
+    };
+    openRejectDialog = () => {
+        this.props.openCloseRejectDialog(true);
     };
 
     render() {
@@ -819,7 +822,8 @@ function mapDispatchToProps(dispatch) {
         getVerifications: Actions.getVerifications,
         updateSelectedRowsLength: Actions.updateSelectedRowsLength,
         openCloseReviseDialog: Actions.openCloseReviseDialog,
-        openVerificationDialog: Actions.openVerificationDialog
+        openVerificationDialog: Actions.openVerificationDialog,
+        openCloseRejectDialog: Actions.openCloseRejectDialog
     }, dispatch);
 }
 
@@ -835,7 +839,8 @@ function mapStateToProps({ customers, auth, verifications }) {
         searchText: verifications.searchText,
         selectionLength: verifications.selectionLength,
         verifiedModal: verifications.verifiedModal,
-        reviseModal: verifications.reviseModal
+        reviseModal: verifications.reviseModal,
+        rejectModal: verifications.rejectModal
     }
 }
 

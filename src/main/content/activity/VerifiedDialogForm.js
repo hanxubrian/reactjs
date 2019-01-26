@@ -5,13 +5,10 @@ import { withStyles } from '@material-ui/core/styles';
 // third party
 
 import TextField from "@material-ui/core/TextField/TextField";
-import Button from "@material-ui/core/Button/Button";
-import DialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions/DialogActions";
-import CancelIcon from '@material-ui/icons/Cancel';
+import Check from '@material-ui/icons/Check';
 import Dialog from "@material-ui/core/Dialog/Dialog";
-import SaveIcon from '@material-ui/icons/Save';
+import SendIcon from '@material-ui/icons/Send';
+import VerifiedUser from '@material-ui/icons/VerifiedUser';
 import connect from "react-redux/es/connect/connect";
 import {withRouter} from "react-router-dom";
 import {bindActionCreators} from "redux";
@@ -19,15 +16,72 @@ import * as Actions from 'store/actions';
 import GridContainer from "../../../Commons/Grid/GridContainer";
 import GridItem from "../../../Commons/Grid/GridItem";
 
+import Button from '@material-ui/core/Button';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import MuiDialogActions from '@material-ui/core/DialogActions';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Typography from '@material-ui/core/Typography';
+
 
 const styles = theme => ({
     leftIcon: {
         marginRight: theme.spacing.unit,
     },
+    dialogH2: {
+        display: "flex",
+        alignItems: "center",
+        color: "white"
+    },
     iconSmall: {
-        fontSize: 20,
+      fontSize: 20
     }
 });
+
+
+const DialogTitle = withStyles(theme => ({
+    root: {
+        borderBottom: `1px solid ${theme.palette.divider}`,
+        backgroundColor: "#3c93ec",
+        margin: 0,
+        padding: theme.spacing.unit * 2,
+    },
+    closeButton: {
+        position: 'absolute',
+        right: theme.spacing.unit,
+        top: theme.spacing.unit,
+        color: "white",
+    },
+}))(props => {
+    const { children, classes, onClose } = props;
+    return (
+        <MuiDialogTitle disableTypography className={classes.root}>
+            {children}
+            {onClose ? (
+                <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
+                    <CloseIcon />
+                </IconButton>
+            ) : null}
+        </MuiDialogTitle>
+    );
+});
+
+const DialogContent = withStyles(theme => ({
+    root: {
+        margin: 0,
+        padding: theme.spacing.unit * 2,
+    },
+}))(MuiDialogContent);
+
+const DialogActions = withStyles(theme => ({
+    root: {
+        borderTop: `1px solid ${theme.palette.divider}`,
+        margin: 0,
+        padding: theme.spacing.unit,
+    },
+}))(MuiDialogActions);
+
 
 class VerifiedDialogForm extends React.Component {
     state = {
@@ -92,42 +146,25 @@ class VerifiedDialogForm extends React.Component {
                     fullWidth
                 >
                     <form action="/" method={"POST"} onSubmit={(e) => {e.preventDefault();this.handleAddOwner();}}>
-                        <DialogTitle id="form-dialog-title">Verify Form</DialogTitle>
+                        <DialogTitle  id="form-dialog-title" onClose={this.handleClose }>
+                            <h2 className={classes.dialogH2}>
+                                <VerifiedUser  className={classNames(classes.leftIcon)} />
+                                Verify Form
+                            </h2>
+                        </DialogTitle>
                         <DialogContent>
                             <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                                 <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                    <TextField
-                                        id="dialogSubject"
-                                        label="Subject"
-                                        className={classes.textField}
-                                        value={this.state.dialogForm.Subject}
-                                        variant={"outlined"}
-                                        onChange={this.handleChangeForm("Subject")}
-                                        margin="dense"
-                                        inputProps={{
-                                            maxLength: 20
-                                        }}
-                                        fullWidth
-                                        required
-                                    />
+                                    <Typography>To: German Sosa</Typography>
                                 </GridItem>
-                                <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                    <TextField
-                                        id="dialogEmail"
-                                        label="E-mail"
-                                        className={classes.textField}
-                                        value={this.state.dialogForm.Email}
-                                        variant={"outlined"}
-                                        onChange={this.handleChangeForm("Email")}
-                                        margin="dense"
-                                        inputProps={{
-                                            maxLength: 20
-                                        }}
-                                        fullWidth
-                                        required
-                                    />
+                                <GridItem xs={12} sm={12} md={12}  className="flex flex-row justify-between mt-16">
+                                    <Typography className="justify-start">Verified By: {this.props.user.firstName} {this.props.user.lastName}</Typography>
+                                    <Typography className="justify-end flex align-center">
+                                        <Check  className={classNames(classes.leftIcon, classes.iconSmall)} />
+                                        Verified
+                                    </Typography>
                                 </GridItem>
-                                <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                <GridItem xs={12} sm={12} md={12} className="flex flex-row mt-48">
                                     <TextField
                                         id="dialogMessage"
                                         label="Message"
@@ -145,13 +182,9 @@ class VerifiedDialogForm extends React.Component {
                             </GridContainer>
                         </DialogContent>
                         <DialogActions style={{padding:"2%"}}>
-                            <Button onClick={this.handleClose} variant="contained"  size="small" className={classes.button}>
-                                <CancelIcon style={{color:"gray"}} className={classNames(classes.leftIcon, classes.iconSmall)} />
-                                Cancel
-                            </Button>
-                            <Button type="submit" variant="contained" size="small" className={classes.button}>
-                                <SaveIcon style={{color:"gray"}} className={classNames(classes.leftIcon, classes.iconSmall)} />
-                                Save
+                            <Button type="submit" color={"primary"} variant="contained" size="small" className={classes.button}>
+                                <SendIcon  className={classNames(classes.leftIcon, classes.iconSmall)} />
+                                Send
                             </Button>
                         </DialogActions>
                     </form>
@@ -168,9 +201,10 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-function mapStateToProps({ verifications }) {
+function mapStateToProps({ verifications, auth}) {
     return {
-        verifiedModal: verifications.verifiedModal
+        verifiedModal: verifications.verifiedModal,
+        user: auth.login
     }
 }
 

@@ -10,6 +10,7 @@ export const OPEN_VERIFICATION_DIALOG = "[VERIFICATIONS APP] OPEN VERIFICATION D
 export const CLOSE_VERIFICATION_DIALOG = "[VERIFICATIONS APP] CLOSE VERIFICATION DIALOG ";
 
 export const OPEN_CLOSE_REVISE_DIALOG = "[VERIFICATIONS APP] OPEN/CLOSE REVISE DIALOG ";
+export const OPEN_CLOSE_REJECT_DIALOG = "[VERIFICATIONS APP] OPEN/CLOSE REJECT DIALOG ";
 
 // for Add/Edit
 export const OPEN_NEW_VERIFICATION_FORM = '[VERIFICATIONS APP] OPEN NEW CUSTOMER FORM';
@@ -87,6 +88,13 @@ export function openVerificationDialog(flag){
 export function openCloseReviseDialog(flag){
     return{
         type: OPEN_CLOSE_REVISE_DIALOG,
+        payload : flag
+    }
+}
+
+export function openCloseRejectDialog(flag){
+    return{
+        type: OPEN_CLOSE_REJECT_DIALOG,
         payload : flag
     }
 }

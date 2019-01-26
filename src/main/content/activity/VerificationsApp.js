@@ -28,6 +28,7 @@ import classNames from 'classnames';
 import VerificationListContent from './VerificationListContent';
 import VerifiedDialogForm from "./VerifiedDialogForm";
 import ReviseDialogForm from "./ReviseDialogForms";
+import RejectDialogForm from "./RejectDialogForm";
 
 
 const headerHeight = 80;
@@ -363,9 +364,9 @@ class VerificationsApp extends Component {
 
     render() {
 
-        const {classes, filterState, summaryState, openNewVerificationForm, verificationForm, mapViewState, toggleMapView} = this.props;
+        const {classes, filterState, summaryState} = this.props;
 
-        const {anchorEl, anchorContactMenu, selectionLength} = this.state;
+        const {selectionLength} = this.state;
 
         return (
             <React.Fragment>
@@ -413,11 +414,14 @@ class VerificationsApp extends Component {
                                    <VerificationListContent/>
                                 </Fragment>
                             )}
-                                <Fragment>
-                                    <VerifiedDialogForm />
-                                </Fragment>
+                            <Fragment>
+                               <VerifiedDialogForm />
+                            </Fragment>
                             <Fragment>
                                 <ReviseDialogForm />
+                            </Fragment>
+                            <Fragment>
+                                <RejectDialogForm />
                             </Fragment>
 
                         </div>
@@ -461,7 +465,8 @@ function mapDispatchToProps(dispatch) {
         openNewVerificationForm: Actions.openNewVerificationForm,
         closeNewVerificationForm: Actions.closeNewVerificationForm,
         openVerificationDialog: Actions.openVerificationDialog,
-        openCloseReviseModal: Actions.openCloseReviseDialog
+        openCloseReviseModal: Actions.openCloseReviseDialog,
+        openCloseRejectModal: Actions.openCloseRejectDialog
     }, dispatch);
 }
 
@@ -477,7 +482,8 @@ function mapStateToProps({verifications, auth}) {
         searchText: verifications.searchText,
         selectionLength: verifications.selectionLength,
         verifiedModal: verifications.verifiedModal,
-        reviseModal: verifications.reviseModal
+        reviseModal: verifications.reviseModal,
+        rejectModal: verifications.rejectModal
     }
 }
 
