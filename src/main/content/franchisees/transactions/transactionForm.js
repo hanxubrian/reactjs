@@ -531,7 +531,7 @@ class TransactionForm extends Component {
             BilledPayment: this.state.billedPayments,
             GrossTotal: this.state.grossTotal,
         };
-        // this.props.createNewTransaction(this.props.regionId, result);
+        this.props.createNewTransaction(this.props.regionId, result);
         console.log('result', JSON.stringify(result));
     };
 
