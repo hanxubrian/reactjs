@@ -655,14 +655,15 @@ class MainToolbar extends Component {
                 {1 && (
 
                     <div className={classNames(classes.chattogglebtn,"chattogglebtnview")}>
-                        <Button onClick={this.chatPanelshowbtn} style={{
+                        <IconButton onClick={this.chatPanelshowbtn} style={{
                             backgroundColor: '#3c93ec',
                             borderRadius: '50%',
                             color: 'white',
-                            width: '64px',
-                            height: '64px',}}>
+                            // width: '64px',
+                            // height: '64px',
+                        }}>
                             <Icon>forum</Icon>
-                        </Button>
+                        </IconButton>
                     </div>
 
 
