@@ -235,6 +235,7 @@ class MainToolbar extends Component {
         this.setState({notification: !this.state.notification});
     }
     componentDidUpdate(prevProps,prevState){
+        console.log("this.state.pusherMSG",this.state.pusherMSG);
         let midflage = false;
         if (this.state.sysflage === true){
             setTimeout(
@@ -242,17 +243,19 @@ class MainToolbar extends Component {
                     this.setState({sysflage: false});
                 }
                     .bind(this),
-                800
+                1000
             );
         }
         if (this.state.systeunread >0 && this.state.systeunread>prevState.systeunread){
             this.setState({sysflage:true});
         }
+
         if (this.state.systeunread !==prevState.systeunread && this.state.systeunread<prevState.systeunread){
             this.setState({sysflage:false});
         }
+
         if(this.state.pusherMSG !== prevState.pusherMSG ){
-            if(this.state.pusherMSG.user === this.props.login.UserId){
+            if(this.state.pusherMSG.user === this.props.login.UserId.toString()){
                 let PusherList =[];
                 let settime = moment();
                 let unreadNum = this.state.unreadMSGnum;
@@ -267,9 +270,6 @@ class MainToolbar extends Component {
                 this.setState({pusherMSGList:PusherList});
                 this.setState({systeunread:sysunread+1});
             }
-
-
-
         }
         if(this.props.chat.messages !== prevProps.chat.messages){
             this.setState({messages: this.props.chat.messages});
@@ -303,7 +303,6 @@ class MainToolbar extends Component {
                 let checkMSG=[];
                 item.map((subitem)=>{
                     if(subitem['who'] !== this.state.chatUser.id && subitem['message']){
-                        // chatMSG.push(subitem);
                         checkMSG.push(subitem);
                     }
                 });
@@ -373,11 +372,7 @@ class MainToolbar extends Component {
             if(chatid && chatid !=null){
                 this.props.openChatPanel();
                 this.props.getChat(chatid, contactid);
-                // this.scrollToTop();
             }
-            // console.log ("chatId",chatid);
-            // console.log ("contactId",contactid);
-
         }
         else{
             return null;

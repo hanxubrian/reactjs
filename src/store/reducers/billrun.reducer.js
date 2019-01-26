@@ -13,6 +13,8 @@ const initialState = {
     billrundelete                           : null,
     billruninvoiceDetail                    : null,
     billruninvoiceDetailStatus              : false,
+    billruninvoiceDetailStatusF             : false,
+
 };
 
 
@@ -92,19 +94,19 @@ const billruns = function(state = initialState, action) {
         case Actions.GET_BILLRUN_INVOICE_DETAIL_BILLRUN_START:
         {
             return {
-                ...state,billruninvoiceDetailStatus: true,
+                ...state,billruninvoiceDetailStatus: true,billruninvoiceDetailStatusF : false,
             }
         }
         case Actions.GET_BILLRUN_INVOICE_DETAIL_BILLRUN_SUCCESS:
         {
             return {
-                ...state,billruninvoiceDetail: action.payload,billruninvoiceDetailStatus: false,
+                ...state,billruninvoiceDetail: action.payload,billruninvoiceDetailStatus: false,billruninvoiceDetailStatusF : true,
             }
         }
         case Actions.GET_BILLRUN_INVOICE_DETAIL_BILLRUN_FAILD:
         {
             return {
-                ...state,billruninvoiceDetailStatus: false,
+                ...state,billruninvoiceDetailStatus: false,billruninvoiceDetailStatusF : false,
             }
         }
 

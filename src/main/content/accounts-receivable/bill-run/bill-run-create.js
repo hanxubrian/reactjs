@@ -172,7 +172,10 @@ class BillRunDialog extends Component {
                 }
                 else if(this.props.billstatus===200){
                     this.setState({statusMSG:10});
-                    this.successmesssage();
+                    if(this.state.pusherMSG.user === this.props.auth.UserId.toString()){
+                        this.successmesssage();
+                    }
+
                 }
 
             }
@@ -222,8 +225,9 @@ class BillRunDialog extends Component {
         this.setState({message:e.target.value})
     }
     successmesssage=()=>{
+
         this.props.showMessage({
-            message     : 'Created New Bill Run Success!!!',//text or html
+            message     : this.state.pusherMSG.message,//text or html
             autoHideDuration: 6000,//ms
             anchorOrigin: {
                 vertical  : 'top',//top bottom

@@ -21,7 +21,7 @@ import dashboard from './dashboard.reducer';
 import homepage from './homepage.reducer';
 import accountReceivablePayments from'./account_receivable.payments.reducer';
 import verifications from './verifications.reducer'
-
+import paymentlockbox from './paymentlockbox.reducer';
 
 
 const createReducer = (asyncReducers) =>
@@ -48,6 +48,7 @@ const createReducer = (asyncReducers) =>
         accountReceivablePayments,
         usersApp,
         verifications,
+        paymentlockbox,
         ...asyncReducers
     });
 

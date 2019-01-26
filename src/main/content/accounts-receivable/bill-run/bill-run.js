@@ -488,7 +488,7 @@ class BillRun extends Component {
                     </div>
                 }
                 content={
-                    <ClickAwayListener onClickAway={this.closeDialog}>
+
                         <div className="flex-1 flex-col absolute w-full h-full">
                             {this.state.temp && (
                                 <ReactTable
@@ -765,7 +765,7 @@ class BillRun extends Component {
 
 
                         </div>
-                    </ClickAwayListener>
+
                 }
                 onRef={instance => {
                     this.pageLayout = instance;

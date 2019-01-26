@@ -13,6 +13,7 @@ import _dashboardService from './dashboard/dashboardService';
 import _invoicePaymentService from './invoice/paymentsService'
 import _homepageService from './home/HomepageService';
 import _billrunService from './billrun/BillrunService';
+import _paymentlockboxservice from './paymentlockbox/paymentlockboxService';
 
 
 export const authService = _authService;
@@ -30,3 +31,4 @@ export const paymentService = _paymentService;
 export const dashboardService = _dashboardService;
 export const homepageService = _homepageService;
 export const billrunService = _billrunService;
+export const paymentlockboxservice = _paymentlockboxservice;

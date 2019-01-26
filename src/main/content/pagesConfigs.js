@@ -30,7 +30,7 @@ import {PaymentListConfig} from "./payments/payment-list/payment-listConfig";
 import {DashboardConfig} from "./dashboard/DashboardConfig";
 import {HomepageConfig} from "./home/HomepageConfig";
 import {UsersAppConfig} from "../users/UsersAppConfig";
-
+import {PaymentLockBoxReportConfig} from "./PaymentLockBoxReport/PaymentLockBoxReportConfig";
 
 export const pagesConfigs = [
     VerificationsAppConfig,
@@ -65,5 +65,6 @@ export const pagesConfigs = [
     PaymentListConfig,
 	DashboardConfig,
     HomepageConfig,
-    UsersAppConfig
+    UsersAppConfig,
+    PaymentLockBoxReportConfig
 ];

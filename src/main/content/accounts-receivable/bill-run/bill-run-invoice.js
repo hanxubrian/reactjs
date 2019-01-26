@@ -209,7 +209,7 @@ class BillRunInvoiceDetail extends Component {
     }
     render()
     {
-        const { classes,loading ,open} = this.props;
+        const { classes,loading ,open,billruninvoiceDetailStatus} = this.props;
         const { invoices }        = this.state;
         if (this.props.open  && invoices && invoices !== null && open){
             return (
@@ -218,7 +218,7 @@ class BillRunInvoiceDetail extends Component {
                     {loading && (
                         <CircularProgress className={classes.progress} color="secondary"  />
                     )}
-                    { !loading && (
+                    { !loading &&  billruninvoiceDetailStatus && (
                     <ClickAwayListener onClickAway={this.closeDialog}>
                     <FuseAnimate
                         animation="transition.expandIn"
@@ -354,6 +354,9 @@ class BillRunInvoiceDetail extends Component {
                     </FuseAnimate>
                         </ClickAwayListener>
                     )}
+                    {!loading && !billruninvoiceDetailStatus &&(
+                        this.closeDialog()
+                    )}
                 </div>
             )
         }
@@ -386,12 +389,13 @@ function mapDispatchToProps(dispatch)
 function mapStateToProps({billruns, auth})
 {
     return {
-        billruns            : billruns.billrunsDB,
-        invoices            : billruns.billruninvoiceDetail,
-        bLoadedBillruns     : billruns.bLoadedBillruns,
-        regionId            : auth.login.defaultRegionId,
-        loading             : billruns.billruninvoiceDetailStatus,
-        auth                : auth.login,
+        billruns                    : billruns.billrunsDB,
+        invoices                    : billruns.billruninvoiceDetail,
+        bLoadedBillruns             : billruns.bLoadedBillruns,
+        regionId                    : auth.login.defaultRegionId,
+        loading                     : billruns.billruninvoiceDetailStatus,
+        auth                        : auth.login,
+        billruninvoiceDetailStatus  : billruns.billruninvoiceDetailStatusF,
     }
 }
 // export default withStyles(styles, {withTheme: true})(BillRunInvoiceDetail);
