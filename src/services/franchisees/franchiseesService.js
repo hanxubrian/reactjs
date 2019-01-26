@@ -258,9 +258,39 @@ class franchiseesService {
         });
     };
 
+    /**
+     * create new franchisee transaction.
+     * @param regionId
+     * @param data
+     * @returns {Promise<any>}
+     */
     createFranchiseeTransaction =  (regionId, data ) => {
         return new Promise((resolve, reject) => {
             axios_instance.post(`${BASE_MONGO_API_URL}/v1/franchiseetransaction/create/${regionId}`, data)
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    };
+
+    /**
+     * gets a transaction detail from _id.
+     * @param transactionId
+     * @param regionId
+     * @returns {Promise<any>}
+     */
+    getTransactionDetail = (transactionId, regionId) => {
+        return new Promise((resolve, reject) => {
+            axios_instance.get(`${BASE_MONGO_API_URL}/v1/franchiseetransaction/${transactionId}`,{
+                params: {regionId: regionId}})
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);

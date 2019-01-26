@@ -15,6 +15,7 @@ export const SHOW_VENDOR_DIALOG_BOX = '[FRANCHISEE-TRANSACTION] SHOW VENDOR DIAL
 export const HIDE_VENDOR_DIALOG_BOX = '[FRANCHISEE-TRANSACTION] HIDE VENDOR DIALOG BOX';
 export const UPDATE_TRANSACTION_VENDOR = '[FRANCHISEE-TRANSACTION] UPDATE TRANSACTION VENDOR';
 export const CREATE_NEW_TRANSACTION = '[FRANCHISEE-TRANSACTION] CREATE NEW TRANSACTION';
+export const GET_TRANSACTION_DETAIL = '[FRANCHISEE-TRANSACTION] GET TRANSACTION DETAIL';
 export const RESET_TRANSACTION_FORM = '[FRANCHISEE-TRANSACTION] RESET TRANSACTION FORM';
 
 export function getTransactions(regionId) {
@@ -77,12 +78,29 @@ export function closeNewTransactionForm()
     }
 }
 
-export function openEditTransactionForm(data)
+export function openEditTransactionForm(regionId, data)
 {
-    return {
-        type: OPEN_EDIT_TRANSACTION_FORM,
-        payload: data
-    }
+    return (dispatch) => {
+        dispatch({
+            type: START_FETCH_TRANSACTIONS,
+            payload: true
+        });
+        (async () => {
+            let res = await franchiseesService.getTransactionDetail(data._id, regionId);
+            if (res) {
+                dispatch({
+                    type: GET_TRANSACTION_DETAIL,
+                    payload: res
+                });
+                dispatch({
+                    type: OPEN_EDIT_TRANSACTION_FORM,
+                    payload: data
+                });
+            } else {
+
+            }
+        })();
+    };
 }
 
 export function closeEditTransactionForm()
@@ -128,6 +146,23 @@ export function createNewTransaction(regionId, data)
             if (res.IsSuccess) {
                 dispatch({
                     type: CREATE_NEW_TRANSACTION,
+                    payload: res
+                });
+            } else {
+
+            }
+        })();
+    };
+}
+
+export function getTransactionDetail(transactionId, regionId)
+{
+    return (dispatch) => {
+        (async () => {
+            let res = await franchiseesService.getTransactionDetail(transactionId, regionId);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: GET_TRANSACTION_DETAIL,
                     payload: res
                 });
             } else {

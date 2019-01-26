@@ -1330,7 +1330,7 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({transactions, auth, franchisees})
+function mapStateToProps({transactions, auth})
 {
     return {
         transactionForm: transactions.transactionForm,
@@ -1339,6 +1339,7 @@ function mapStateToProps({transactions, auth, franchisees})
         user: auth.login,
         regionId: auth.login.defaultRegionId,
         trxRowInfo: transactions.transactionForm.trxRowInfo,
+        transactionDetail: transactions.transactionDetail,
     }
 }
 

@@ -5,6 +5,7 @@ import { persistReducer } from 'redux-persist';
 
 const initialState = {
     transactionsDB: null,
+    transactionDetail: null,
     bLoadedTransactions: false,
     bStartFetchTransactions: false,
     bOpenedTransactionFilterPanel: false,
@@ -125,6 +126,13 @@ const transactions = function(state = initialState, action) {
             return {
                 ...state,
                 transactionForm: {...state.transactionForm, franchisee: action.payload}
+            }
+        }
+        case Actions.GET_TRANSACTION_DETAIL:
+        {
+            return {
+                ...state, transactionDetail: action.payload
+
             }
         }
         case Actions.SHOW_VENDOR_DIALOG_BOX:

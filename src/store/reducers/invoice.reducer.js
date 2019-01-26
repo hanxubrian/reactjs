@@ -5,7 +5,6 @@ import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 import _ from 'lodash';
-import {GET_ALL_INVOICES_ERR} from "../actions/";
 
 let today = new Date();
 const initialState = {

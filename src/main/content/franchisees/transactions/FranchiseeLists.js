@@ -279,7 +279,7 @@ class TransactionsLists extends Component {
                             onClick  : (e, handleOriginal) => {
                                 if ( rowInfo )
                                 {
-                                    this.props.openEditTransactionForm(rowInfo.original);
+                                    this.props.openEditTransactionForm(this.props.regionId, rowInfo.original);
                                 }
                             }
                         }
@@ -406,7 +406,7 @@ class TransactionsLists extends Component {
                                             <IconButton
                                                 onClick={(ev) => {
                                                     ev.stopPropagation();
-                                                    this.props.openEditTransactionForm(row.original);
+                                                    this.props.openEditTransactionForm(this.props.regionId, row.original);
                                                 }}
                                             >
                                                 <Icon fontSize={"small"}>edit</Icon>
