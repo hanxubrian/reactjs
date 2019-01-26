@@ -596,8 +596,8 @@ class PaymentsListContent extends Component {
 				nextProps.status);
 		}
 		if (nextProps.activePaymentRows != this.props.activePaymentRows) {
-			if(JSON.stringify(this.state.selection)!== JSON.stringify(nextProps.activePaymentRows)) {
-				this.setState({selection: [...nextProps.activePaymentRows]})
+			if (JSON.stringify(this.state.selection) !== JSON.stringify(nextProps.activePaymentRows)) {
+				this.setState({ selection: [...nextProps.activePaymentRows] })
 			}
 		}
 		// if (this.props.locationFilterValue !== nextProps.locationFilterValue) {
@@ -703,7 +703,15 @@ class PaymentsListContent extends Component {
 		const handleClick = () => {
 			timer = setTimeout(() => {
 				if (!prevent) {
-					// onToggle();
+					onToggle();
+					// let selection = [...this.state.selection];
+					// let rowIndexInSelection = selection.indexOf(tableRow.rowId)
+					// if (selected) {
+					// 	selection.splice(rowIndexInSelection, 1)
+					// } else {
+					// 	selection = [...selection, tableRow.rowId]
+					// }
+					// this.changeSelection(selection)
 				}
 				prevent = false;
 			}, delay);
@@ -721,7 +729,14 @@ class PaymentsListContent extends Component {
 			<Table.Row
 				{...restProps}
 				className={selected ? 'active' : ''}
-				style={{ color: 'green', cursor: 'pointer' }}
+				style={selected ?
+					{
+						background: '#3c93ec45',
+						cursor: 'pointer'
+					} :
+					{
+						cursor: 'pointer'
+					}}
 				onClick={handleClick}
 				onDoubleClick={handleDoubleClick}
 			/>
@@ -756,7 +771,6 @@ class PaymentsListContent extends Component {
 			groupingColumns,
 			expandedGroups,
 		} = this.state;
-		console.log('payments------------', rows);
 		return (
 			<Fragment>
 				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
@@ -827,9 +841,7 @@ class PaymentsListContent extends Component {
 								for={phoneNumberColumns}
 							/>
 
-
-
-							<Table rowComponent={this.TableRow} />
+							<Table />
 
 							<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
 
@@ -847,7 +859,7 @@ class PaymentsListContent extends Component {
 											<this.TableRow
 												{...params}
 												selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
-											// onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
+												onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
 											/>
 										)}
 									</TemplateConnector>
