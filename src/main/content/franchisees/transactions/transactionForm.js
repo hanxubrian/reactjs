@@ -49,7 +49,7 @@ import PropTypes from 'prop-types';
 import {escapeRegexCharacters} from 'services/utils'
 import { Control, Menu, NoOptionsMessage, Option, Placeholder, SingleValue, ValueContainer} from "../../accounts-receivable/Invoice/selectUtils";
 import {emphasize} from "@material-ui/core/styles/colorManipulator";
-import {NumberFormatCustom, NumberFormatCustom2, NumberFormatCustom3} from "../../../../services/utils";
+import {NumberFormatCustom1, NumberFormatCustom2} from "../../../../services/utils";
 
 
 const styles = theme => ({
@@ -946,6 +946,7 @@ class TransactionForm extends Component {
                                     classes: {outlined: classes.label}
                                 }}
                                 InputProps={{
+                                    inputComponent: NumberFormatCustom1,
                                     classes: {
                                         input: classes.input
                                     },
