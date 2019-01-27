@@ -93,8 +93,8 @@ const styles = theme => ({
         }
     },
     layoutHeader       : {
-        height   : headerHeight,
-        minHeight: headerHeight,
+        height   : 80,
+        minHeight: 80,
         backgroundColor: theme.palette.secondary.main
     },
     content:{
@@ -245,6 +245,11 @@ class BillRun extends Component {
 
             }
             if(JSON.stringify(this.state) !== JSON.stringify(prevState) && !this.props.loading){
+                if(JSON.stringify(this.state.viewinvoiceDetail) !== JSON.stringify(prevState.viewinvoiceDetail)){
+                    return;
+                }
+                console.log("this.state",this.state);
+                console.log("prevState",prevState);
                 this.getBillRunList();
             }
             if(this.props.loading === false && prevProps.loading===true){
@@ -450,7 +455,7 @@ class BillRun extends Component {
                     content: classes.content
                 }}
                 header={
-                    <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
+                    <div className="flex row flex-1  p-8 sm:p-12 relative justify-between" >
                         <div className="flex flex-row flex-1 justify-between">
                             <div className="flex flex-shrink items-center">
                                 <div className="flex items-center">

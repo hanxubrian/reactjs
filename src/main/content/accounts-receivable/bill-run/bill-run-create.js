@@ -296,9 +296,13 @@ class BillRunDialog extends Component {
         const { classes,loading ,billstatus} = this.props;
         const { selectedDate ,showP,auth,billruns} = this.state;
         return (
-            <div>
+            <div style={{
+
+            }}>
                 {showP === false && loading && loading !==null && (//loading && loading !==null
-                    <div className={classes.overlay}>
+                    <div className={classes.overlay} style={{
+
+                    }}>
                         <CircularProgress className={classes.progress} color="secondary"  />
 
                     </div>

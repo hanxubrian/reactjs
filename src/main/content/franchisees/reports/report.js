@@ -202,10 +202,10 @@ class Report extends Component {
         }
 
         return (
+
             <div className={classNames(classes.root, "p-0 sm:p-64  print:p-0")}>
                 <Card className={classNames(classes.card, "mx-auto")}>
                     <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
-
                         <div>
                             <table align="">
                                 <tbody>
@@ -616,10 +616,10 @@ class Report extends Component {
 
 
                                 <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}>
-                                <table style={{width:'100%'}}>
-                                    <tbody>
+                                <table style={{width:'100%' ,fontSize:'11px'}}>
+                                    <tbody >
                                     <tr >
-                                        <td width="65"><Typography >Customer</Typography></td>
+                                        <td width="65">Customer</td>
                                         <td width ="227"></td>
                                         <td width ="25">I/C</td>
                                         <td width ="74">Invoice</td>
@@ -632,7 +632,7 @@ class Report extends Component {
                                 </table>
                                 </div>
                                 <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}>
-                                <table className="" style={{width:'100%'}}>
+                                <table className="" style={{width:'100%',fontSize:'11px'}}>
                                     <tbody>
                                     <tr >
                                         <td width="65"><Typography ></Typography></td>
@@ -649,13 +649,13 @@ class Report extends Component {
                                         return (
                                             <tr key={index}>
                                             <td>
-                                                <Typography >{ct.CUST_NO}</Typography>
+                                                {ct.CUST_NO}
                                             </td>
                                                 <td width ="227">
-                                                    <Typography >{FuseUtils.capital_letter(ct.CUS_NAME)}</Typography>
+                                                    {FuseUtils.capital_letter(ct.CUS_NAME)}
                                                 </td>
                                                 <td width ="25">{ct.TRX_TYPE}</td>
-                                                <td width ="74"><Typography >{ct.CUST_NO}</Typography></td>
+                                                <td width ="74">{ct.CUST_NO}</td>
 
                                             <td className="text-left" width ="345">{FuseUtils.capital_letter(ct.DESCR)}</td>
                                             <td className="text-right" width ="73">${parseFloat(ct.TRX_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
@@ -739,55 +739,57 @@ class Report extends Component {
                                 <h2>Customer Account Totals</h2>
                                 <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
                                 <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}>
-                                    <table style={{width:'100%'}}>
+                                    <table style={{width:'100%',fontSize:'11px'}}>
                                         <tbody>
                                         <tr>
                                             <td width="65">
-                                                <Typography >Customer</Typography>
+                                                <Typography style={{fontSize:'11px'}}>Customer</Typography>
                                             </td>
                                             <td width="253">
 
                                             </td>
                                             <td className="text-right" width="70">
-                                                <Typography >Contract</Typography>
-                                                <Typography >Billing</Typography>
+                                                <Typography style={{fontSize:'11px'}}>Contract</Typography>
+                                                <Typography style={{fontSize:'11px'}}>Billing</Typography>
                                             </td>
                                             <td className="text-right" width="70">
-                                                <Typography >Current</Typography>
-                                                <Typography >Month</Typography>
+                                                <Typography style={{fontSize:'11px'}}>Current</Typography>
+                                                <Typography style={{fontSize:'11px'}}>Month</Typography>
                                             </td>
                                             <td className="text-right" width="70">
-                                                <Typography >Addtl Bill</Typography>
-                                                <Typography >Franchisee</Typography>
+                                                <Typography style={{fontSize:'11px'}}>Addtl Bill</Typography>
+                                                <Typography style={{fontSize:'11px'}}>Franchisee</Typography>
                                             </td>
                                             <td className="text-right" width="70">
-                                                Client Supplies
+                                                <Typography style={{fontSize:'11px'}}>Client</Typography>
+                                                <Typography style={{fontSize:'11px'}}>Supplies</Typography>
                                             </td>
                                             <td className="text-right" width="70">
-                                                Additional Bill Office
+                                                <Typography style={{fontSize:'11px'}}>Additional</Typography>
+                                                <Typography style={{fontSize:'11px'}}>Bill Office</Typography>
                                             </td>
                                             <td className="text-right" width="70">
-                                                <Typography >Finders</Typography>
-                                                <Typography >Fee Nbr</Typography>
+                                                <Typography style={{fontSize:'11px'}}>Finders</Typography>
+                                                <Typography style={{fontSize:'11px'}}>Fee Nbr</Typography>
                                             </td>
                                             <td className="text-right" width="70">
-                                                <Typography >Finders</Typography>
-                                                <Typography >Fee</Typography>
+                                                <Typography style={{fontSize:'11px'}}>Finders</Typography>
+                                                <Typography style={{fontSize:'11px'}}>Fee</Typography>
                                             </td>
                                         </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                                <table className="" style={{width:'100%'}}>
+                                <table className="" style={{width:'100%',fontSize:"11px"}}>
                                     <tbody>
                                     {CUST_ACCT_TOTALS !=null && (CUST_ACCT_TOTALS.map((ct, index)=>{
                                         return (
                                             <tr key={index}>
                                                 <td width="65">
-                                                    <Typography >{ct.CUST_NO}</Typography>
+                                                    <Typography style={{fontSize:'11px'}}>{ct.CUST_NO}</Typography>
                                                 </td>
                                                 <td width="250">
-                                                    <Typography >{FuseUtils.capital_letter(ct.CUS_NAME)}</Typography>
+                                                    <Typography style={{fontSize:'11px'}}>{FuseUtils.capital_letter(ct.CUS_NAME)}</Typography>
                                                 </td>
                                                 <td className="text-right" width="70">${parseFloat(ct.CONT_BILL).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                                 <td className="text-right" width="70">${parseFloat(ct.CUR_MONTH).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
@@ -875,7 +877,7 @@ class Report extends Component {
                                 <h2>Supply Transactions</h2>
                                 <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
                                 <div style ={{width:'100%'}}>
-                                    <table style ={{width:'100%'}}>
+                                    <table style ={{width:'100%',fontSize:'11px'}}>
                                         <tbody>
                                         <tr>
                                             <td className="text-left" width="350">
@@ -904,13 +906,13 @@ class Report extends Component {
                                 {SUPPLY_TRXS != null && (
                                     <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
                                 )}
-                                <table className="" style={{width:'100%',}}>
+                                <table className="" style={{width:'100%',fontSize:'11px'}}>
                                     <tbody>
                                     { SUPPLY_TRXS != null && (SUPPLY_TRXS.map((st, index)=>{
                                         return (
                                             <tr key={index}>
                                                 <td width="350">
-                                                    <Typography >{FuseUtils.capital_letter(st.DESCR)}</Typography>
+                                                    <Typography  style={{fontSize:'11px'}}>{FuseUtils.capital_letter(st.DESCR)}</Typography>
                                                 </td>
                                                 <td className="text-right" width="70">{st.QUANTITY}</td>
                                                 <td className="text-right" width="70">${parseFloat(st["UNIT COST"]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
@@ -992,26 +994,26 @@ class Report extends Component {
                                 </div>
 
                                 <div className="mt-64">
-                                    <table className="simple invoice-table">
+                                    <table className="simple invoice-table"  style={{fontSize:'11px'}}>
                                         <thead>
                                         <tr>
                                             <th>
-                                                <h2>Charge Backs</h2>
+                                                <h2 >Charge Backs</h2>
                                             </th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr >
                                             <td>
-                                                <Typography >Description</Typography>
+                                                <Typography style={{fontSize:'11px'}}>Description</Typography>
                                             </td>
                                             <td className="text-center">
                                                 Tax Amt
                                             </td>
-                                            <td className="text-center">
+                                            <td className="text-center" style={{fontSize:'11px'}}>
                                                 Tax
                                             </td>
-                                            <td className="text-center">
+                                            <td className="text-center" style={{fontSize:'11px'}}>
                                                 Total Amt
                                             </td>
                                         </tr>
@@ -1021,7 +1023,7 @@ class Report extends Component {
                                             return (
                                                 <tr key={index} >
                                                     <td>
-                                                        <Typography >{FuseUtils.capital_letter(cb.DESCR)}</Typography>
+                                                        <Typography style={{fontSize:'11px'}}>{FuseUtils.capital_letter(cb.DESCR)}</Typography>
                                                     </td>
                                                     <td className="text-right">${parseFloat(cb.TRX_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                                     <td className="text-right">${parseFloat(cb.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
@@ -1096,7 +1098,7 @@ class Report extends Component {
                             </div>
                             <h2>Leases</h2>
                             <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
-                            <table style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}>
+                            <table style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',fontSize:'11px'}}>
                                 <tbody>
                                 <tr>
                                     <td width="100" className="text-left">Lease Date</td>
@@ -1110,13 +1112,13 @@ class Report extends Component {
                                 </tbody>
                             </table>
                             <div className="">
-                                <table className="" style={{width:'100%'}}>
+                                <table className="" style={{width:'100%',fontSize:'11px'}}>
                                     <tbody>
                                     {LEASE_PAYMENTS != null && (LEASE_PAYMENTS.map((lp, index)=> {
                                         return (
                                             <tr key={index}>
                                                 <td width="100" className="text-left">
-                                                    <Typography>{lp.LEASE_DATE}</Typography>
+                                                    <Typography style={{fontSize:'11px'}}>{lp.LEASE_DATE}</Typography>
                                                 </td>
                                                 <td width="100" className="text-right">{lp.LEASE_NO}</td>
                                                 <td width="300" className="text-right">{FuseUtils.capital_letter(lp.DESCR)}</td>
@@ -1135,7 +1137,7 @@ class Report extends Component {
                                     <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
 
                                 )}
-                                <table style={{width:'100%'}}>
+                                <table style={{width:'100%',fontSize:'11px'}}>
                                     <tbody>
                                     <tr>
                                         <td width="100" className="text-left">
@@ -1208,11 +1210,11 @@ class Report extends Component {
                                 <div className="">
                                     <h2>Regular Misc</h2>
                                     <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
-                                    <table style={{width:'100%'}}>
+                                    <table style={{width:'100%',fontSize:'11px'}}>
                                         <tbody>
                                         <tr>
                                             <td width="100" className="text-left">
-                                                <Typography >Type</Typography>
+                                                <Typography style={{fontSize:'11px'}}>Type</Typography>
                                             </td>
                                             <td  width="400" className="text-left">
                                                 Description
@@ -1232,7 +1234,7 @@ class Report extends Component {
                                     {REG_MISC!==null &&(
                                         <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
                                     )}
-                                    <table className="" style={{width:'100%'}}>
+                                    <table className="" style={{width:'100%',fontSize:'11px'}}>
                                         <tbody>
 
                                         {REG_MISC!==null && REG_MISC.map((sm, index)=>{
@@ -1240,7 +1242,7 @@ class Report extends Component {
                                                 <tr key={index} >
                                                     <td width="100" className="text-left">{sm.TYPE}</td>
                                                     <td width="400" className="text-left">
-                                                        <Typography >{FuseUtils.capital_letter(sm.DESCR)}</Typography>
+                                                        <Typography style={{fontSize:'11px'}}>{FuseUtils.capital_letter(sm.DESCR)}</Typography>
                                                     </td>
                                                     <td width="100" className="text-right">{parseFloat(sm.TRX_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                                     <td width="100" className="text-right">{parseFloat(sm.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
