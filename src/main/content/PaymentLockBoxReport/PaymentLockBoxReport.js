@@ -19,9 +19,11 @@ import {
 // theme components
 import {FusePageCustom, FuseAnimate} from '@fuse';
 
-import {withStyles} from "@material-ui/core";
+import {withStyles,Card} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
-
+import LinearProgress from '@material-ui/core/LinearProgress';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import SaveIcon from '@material-ui/icons/Save';
 //Custom components
 
 
@@ -34,6 +36,16 @@ import * as Actions from 'store/actions';
 import "react-table/react-table.css";
 import _ from 'lodash';
 import classNames from 'classnames';
+
+import axios from 'axios';
+
+const axios_instance = axios.create({
+    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+    withCredentials: false
+});
+
+const BASE_API_URL = 'https://apifmsplus.jkdev.com';
+const BASE_MONGO_API_URL = 'https://apifmsplusplus_mongo.jkdev.com';
 
 const headerHeight = 80;
 
@@ -172,6 +184,12 @@ const styles = theme => ({
     },
     imageIcon: {
         width: 24
+    },
+    filebutton: {
+        boxShadow: "0px 3px 5px -1px rgba(0, 0, 0, 0.2),0px 6px 10px 0px rgba(0, 0, 0, 0.14),0px 1px 18px 0px rgba(0, 0, 0, 0.12)",
+    },
+    lineprogresroot: {
+        flexGrow: 1
     }
 });
 class PaymentLockBoxReport extends Component {
@@ -179,12 +197,99 @@ class PaymentLockBoxReport extends Component {
     state ={
         OpenLeftPanelStatus             : false,
         OpenRightPanelStatus            : false,
+        selectedFile                    : null,
+        fileload                        : null,
+        completed                       : 0,
+        fileuploadstatus                : false,
+        filestatus                      : false,
     };
     OpenLeftPanel=()=>{
         this.setState({OpenLeftPanelStatus: !this.state.OpenLeftPanelStatus});
     }
     OpenRightPanel =()=>{
         this.setState({OpenRightPanelStatus: !this.state.OpenRightPanelStatus});
+    }
+    handleselectedFile = event => {
+        this.setState({
+            selectedFile: event.target.files[0],
+            fileload: 0,
+        });
+        console.log("this.state.selectedfile",this.state.selectedFile);
+    }
+    progress = () => {
+        const {completed} = this.state;
+        if ( completed === 100 )
+        {
+            this.setState({completed: 0});
+        }
+        else
+        {
+            const diff = Math.random() * 10;
+            this.setState({completed: Math.min(completed + diff, 100)});
+        }
+    };
+    fileuploadstart=()=>{
+        if(this.state.selectedFile && this.state.selectedFile !== null ){
+            const formData = new FormData();
+            formData.append(
+                'myFile',
+                this.state.selectedFile,
+                this.state.selectedFile.name
+            );
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/payment/lockbox/upload`, formData, {
+                onUploadProgress: progressEvent => {
+                    this.setState({fileload:Math.round(progressEvent.loaded / progressEvent.total*10000)/100});
+                    console.log(progressEvent.loaded / progressEvent.total)
+                }
+            })
+            .then(res => {
+                if(this.state.fileload === 100 && res.statusText ===""){
+                        this.setState({fileload: 0});
+                        this.setState({selectedFile:null});
+                        this.setState({fileuploadstatus:false});
+                        this.successmesssage();
+                }
+                else if(res.statusText || this.state.fileload < 100){
+                    this.errormessage(res.statusText);
+                }
+
+            })
+        }
+    }
+    successmesssage=()=>{
+
+        this.props.showMessage({
+            message     : "File Upload Finished Successfully!!!",//text or html
+            autoHideDuration: 6000,//ms
+            anchorOrigin: {
+                vertical  : 'top',//top bottom
+                horizontal: 'right'//left center right
+            },
+            variant: 'success'//success error info warning null
+        });
+    }
+    errormessage=(msg)=>{
+        this.props.showMessage({
+            message     : "File Upload Faild!!!"+msg,//text or html
+            autoHideDuration: 6000,//ms
+            anchorOrigin: {
+                vertical  : 'top',//top bottom
+                horizontal: 'right'//left center right
+            },
+            variant: 'error'//success error info warning null
+        });
+    }
+    componentDidUpdate(prevProps,prevState){
+
+        // console.log("this.state.selectedfile",this.state.selectedFile);
+        if(this.state.selectedFile && this.state.selectedFile !== null && !this.state.fileuploadstatus && this.state.fileload ===0){
+            this.setState({fileuploadstatus: !this.state.fileuploadstatus});
+        }
+        if(this.state.fileload && this.state.fileload>0 && this.state.fileuploadstatus){
+            this.setState({fileuploadstatus:false});
+        }
+
+        clearInterval(this.timer);
     }
     render()
     {
@@ -217,12 +322,30 @@ class PaymentLockBoxReport extends Component {
                                             </div>
                                         </div>
                                         <div className="flex flex-shrink items-center" style={{marginRight:"5%"}}>
-                                            <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                <Fab color="secondary" aria-label="add"
-                                                     className={classNames(classes.sideButton, "mr-12")} onClick={()=>{alert("Ok")}}>
-                                                    <Icon>add</Icon>
-                                                </Fab>
-                                            </FuseAnimate>
+                                            <div>
+                                                <input
+                                                    accept="image/*,video/*,pdf/*"
+                                                    className={classes.input}
+                                                    style={{ display: 'none' }}
+                                                    id="raised-button-file"
+                                                    onChange={this.handleselectedFile}
+                                                    type="file"
+                                                />
+                                                <label htmlFor="raised-button-file">
+                                                    <IconButton variant="raised"  component="span" className={classes.filebutton}>
+                                                        <Icon className="text-24" color="action">attach_file</Icon>
+                                                    </IconButton>
+                                                </label>
+                                                {this.state.fileload !==null && this.state.fileload>0 && (
+                                                    this.state.fileload +"%"
+                                                )}
+                                                <IconButton  variant="raised" disabled={!this.state.fileuploadstatus} aria-label="add" onClick={() => {this.fileuploadstart()}}>
+
+                                                     <CloudUploadIcon  className={classes.rightIcon}/>
+
+
+                                                </IconButton>
+                                            </div>
 
                                         </div>
                                     </div>
@@ -251,6 +374,10 @@ class PaymentLockBoxReport extends Component {
                                             </FuseAnimate>
                                         )}
                                     </div>
+
+
+
+
                                 </div>
                             )}
 
@@ -378,5 +505,23 @@ class PaymentLockBoxReport extends Component {
         )
     }
 }
+function mapDispatchToProps(dispatch)
+{
+    return bindActionCreators({
+        getBillruns             : Actions.getBillruns,
+        fileupload              : Actions.paymentlockboxfileupload,
+        showMessage             : Actions.showMessage,
+        hideMessage             : Actions.hideMessage,
+    }, dispatch);
+}
 
-export default withStyles(styles, {withTheme: true})(PaymentLockBoxReport);
+function mapStateToProps({billruns, auth})
+{
+    return {
+
+        regionId            : auth.login.defaultRegionId,
+        auth                : auth.login,
+    }
+}
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(PaymentLockBoxReport)));
+

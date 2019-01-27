@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {withStyles,Card, CardContent, Typography, TextField, Checkbox} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
-
+import moment from 'moment';
 
 class InvoiceReport extends Component {
     state = {
@@ -17,7 +17,7 @@ class InvoiceReport extends Component {
     componentWillReceiveProps(nextProps) {
 
         if(nextProps.Detail) {
-            console.log('Detail', nextProps.Detail)
+
             this.setState({
                 invoiceDetail:nextProps.Detail.Data,
                 Items: nextProps.Detail.Data.Items,
@@ -25,18 +25,35 @@ class InvoiceReport extends Component {
             });
         }
     }
+    componentDidMount(){
+
+    }
     componentWillMount(){
         this.setState({
             invoiceDetail:this.props.Detail.Data,
             Items: this.props.Detail.Data.Items,
-            Region: this.props.Detail.Data.Region,
+            Region: this.props.Detail.Data.RegionId,
         });
+    }
+    componentDidUpdate(prevProps, prevState,){
+        if(this.props.Detail.Data.RegionId && this.props.Detail.Data.RegionId !== null && JSON.stringify(this.props.Detail.Data.RegionId) !== JSON.stringify(prevProps.Detail.Data.RegionId)){
+            this.setState({
+                Region: this.props.Detail.Data.RegionId,
+            });
+        }
+        if(this.props.Detail && this.props.Detail !== null && JSON.stringify(this.props.Detail) !== JSON.stringify(prevProps.Detail)){
+            this.setState({
+                invoiceDetail:this.props.Detail.Data,
+                Items: this.props.Detail.Data.Items,
+                Region: this.props.Detail.Data.RegionId,
+            });
+        }
     }
     render() {
         if (!this.props.show) {
             return null;
         }
-        if (this.state.Region && this.state.Region !== null) {
+        if (this.props.Detail && this.props.Detail !== null) {
         return (
 
             <div onClick={this.props.onClose} className="backdrop" style={{
@@ -71,10 +88,10 @@ class InvoiceReport extends Component {
                                 </th>
                                 <th width='50%' className="text-left">
                                     Remit To:
-                                    <Typography>{this.state.Region.Displayname}</Typography>
+                                    <Typography>{this.state.invoiceDetail.CustomerName}</Typography>
                                     <Typography>P.O.BOX 415291</Typography>
-                                    <Typography>{this.state.Region.Address}</Typography>
-                                    <Typography>{this.state.Region.Phone}</Typography>
+                                    {/*<Typography>{this.state.Region.Address}</Typography>*/}
+                                    {/*<Typography>{this.state.Region.Phone}</Typography>*/}
                                 </th>
                                 <th>
                                     <table style={{width: '100%', borderCollapse: 'collapse', border: 'solid 1px'}}>
@@ -85,32 +102,32 @@ class InvoiceReport extends Component {
                                         <tr>
                                             <td style={{border: 'solid 1px'}}>
                                                 <Typography> <strong>Date</strong> </Typography>
-                                                <Typography>{this.state.invoiceDetail.InvoiceDate}</Typography>
+                                                <Typography>{moment(this.state.invoiceDetail.InvoiceDate).format('MM/DD/YYYY')}</Typography>
                                             </td>
                                             <td style={{border: 'solid 1px'}}>
                                                 <Typography><strong>Number</strong></Typography>
-                                                <Typography>{this.state.invoiceDetail.CompanyNo}</Typography>
+                                                <Typography>{this.state.invoiceDetail.BillRunNo}</Typography>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td style={{border: 'solid 1px'}}>
                                                 <Typography><strong>Due Date</strong></Typography>
-                                                <Typography>{this.state.invoiceDetail.DueDate}</Typography>
+                                                <Typography>{moment(this.state.invoiceDetail.DueDate).format('MM/DD/YYYY')}</Typography>
                                             </td>
                                             <td style={{border: 'solid 1px'}}>
                                                 <Typography><strong>Cust#</strong></Typography>
-                                                <Typography>{this.state.invoiceDetail.CustomerNumber}</Typography>
+                                                <Typography>{this.state.invoiceDetail.CustomerNo}</Typography>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td style={{border: 'solid 1px'}}>
                                                 <Typography><strong style={{fontSize: '11px'}}>Invoice
                                                     Amount</strong></Typography>
-                                                <Typography>$31,180.55</Typography>
+                                                <Typography>{this.state.invoiceDetail.GrandTotal}</Typography>
                                             </td>
                                             <td style={{border: 'solid 1px'}}>
                                                 <Typography><strong style={{fontSize: '11px'}}>Amount Remitted</strong></Typography>
-                                                <Typography><br/></Typography>
+                                                <Typography>{this.state.invoiceDetail.SubTotal}</Typography>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -193,13 +210,13 @@ class InvoiceReport extends Component {
                             <tr>
                                 <td width='60%' className="text-left">
                                     <Typography><strong>Sold To:</strong></Typography>
-                                    <Typography>{this.state.CustomerSoldTo.Name}</Typography>
+                                    <Typography>{this.state.invoiceDetail.CustomerName}</Typography>
                                     <Typography><br/></Typography>
                                     <Typography>ONE BILLS DRIVE</Typography>
                                 </td>
                                 <td width='40%' className="text-left">
                                     <Typography><strong>For:</strong></Typography>
-                                    <Typography>{this.state.CustomerFor.Name}</Typography>
+                                    <Typography>{this.state.invoiceDetail.CustomerName}</Typography>
                                     <Typography>OPERATIONS CENTER</Typography>
                                     <Typography>ONE BILLS DRIVE</Typography>
                                 </td>
@@ -233,15 +250,15 @@ class InvoiceReport extends Component {
                             </tr>
                             </thead>
                             <tbody>
-                            {this.state.Items != null && this.state.Items && this.state.Items.map((item, index) => {
-                                return (
-                                    <tr key={index}>
+                            {/*{this.state.Items != null && this.state.Items && this.state.Items.map((item, index) => {*/}
+                                {/*return (*/}
+                                    <tr >
                                         <td width="15%" style={{border: 'solid 1px'}}
-                                            className="text-center">{item.inv_no}</td>
+                                            className="text-center">{this.state.invoiceDetail.Inv_no}</td>
                                         <td width="10%" style={{border: 'solid 1px'}}
-                                            className="text-center">{this.state.invoiceDetail.InvoiceDate}</td>
+                                            className="text-center">{moment(this.state.invoiceDetail.InvoiceDate).format('MM/DD/YYYY') }</td>
                                         <td width="10%" style={{border: 'solid 1px'}}
-                                            className="text-center">{this.state.invoiceDetail.CustomerNumber}</td>
+                                            className="text-center">{this.state.invoiceDetail.CustomerNo}</td>
                                         <td width="15%" style={{border: 'solid 1px'}}
                                             className="text-center">{this.state.invoiceDetail.slsmn_no}</td>
                                         <td width="15%" style={{border: 'solid 1px'}}
@@ -249,10 +266,10 @@ class InvoiceReport extends Component {
                                         <td width="25%" style={{border: 'solid 1px'}}
                                             className="text-center">{this.state.invoiceDetail.apply_fran}</td>
                                         <td width="10%" style={{border: 'solid 1px'}}
-                                            className="text-center">{this.state.invoiceDetail.DueDate}</td>
+                                            className="text-center">{moment(this.state.invoiceDetail.DueDate).format('MM/DD/YYYY')}</td>
                                     </tr>
-                                )
-                            })}
+                                {/*)*/}
+                            {/*})}*/}
                             </tbody>
                         </table>
                         <table style={{width: '100%', borderCollapse: 'collapse', border: 'solid 1px'}}>
