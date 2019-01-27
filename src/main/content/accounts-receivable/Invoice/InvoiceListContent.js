@@ -480,10 +480,10 @@ class InvoiceListContent extends Component {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
-                    <DialogTitle id="alert-dialog-title">{"Remove an Invoice"}</DialogTitle>
+                    <DialogTitle id="alert-dialog-title">{"Remove Invoice"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                            Do you really want to remove the selected invoice?
+                            Proceed to remove the selected invoice?
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
