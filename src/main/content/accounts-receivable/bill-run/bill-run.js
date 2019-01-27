@@ -719,7 +719,13 @@ class BillRun extends Component {
                                                 {
                                                     Header: "Status",
                                                     accessor: "Status",
-                                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+                                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+                                                    Cell    : row=>{
+                                                        if(row.original.Status===null){
+                                                            return "Preliminary";
+                                                        }
+                                                    }
+
                                                 },
                                                 {
                                                     Header: "Actions",
@@ -731,6 +737,7 @@ class BillRun extends Component {
                                                                     ev.stopPropagation();
                                                                     if (window.confirm("Do you really want to remove this invoice")) {
                                                                         this.props.deleteSeletedBillRun(row.original.RegionId,row.original.BillRunNo);
+                                                                        // row.original.Status = "Deleted";
                                                                         // if(this.state.selection.length>0){
                                                                         //     _.remove(this.state.selection, function(id) {
                                                                         //         return id === row.original.InvoiceId;
