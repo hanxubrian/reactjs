@@ -1,19 +1,75 @@
-import React, {Component} from 'react';
-import {withStyles} from '@material-ui/core/styles';
-import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
-import {FuseUtils, FuseAnimate} from '@fuse';
-import {Avatar, Checkbox, Icon, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, MenuList, Typography} from '@material-ui/core';
-import {bindActionCreators} from 'redux';
+import React, { Component, Fragment } from 'react';
+import { withStyles} from "@material-ui/core";
+import { withRouter } from 'react-router-dom';
+import { bindActionCreators } from "redux";
 import * as Actions from './store/actions';
-import * as ChatActions from '../chatPanel/store/actions/index';
-import ReactTable from "react-table";
+import "react-table/react-table.css";
 import classNames from 'classnames';
 
-// import withReducer from 'store/withReducer';
-// import reducer from './store/reducers';
+
+import {
+    Template, TemplateConnector
+} from '@devexpress/dx-react-core';
+import {
+    SelectionState,
+    PagingState,
+    IntegratedPaging,
+    IntegratedSelection,
+    SortingState,
+    IntegratedSorting,
+    EditingState,
+    DataTypeProvider,
+    FilteringState,
+    IntegratedFiltering,
+    SearchState,
+} from '@devexpress/dx-react-grid';
+
+import { CustomizedDxGridSelectionPanel } from "./CustomizedDxGridSelectionPanel";
+
+import {
+    Grid,
+    Table,
+    TableHeaderRow,
+    TableSelection,
+    PagingPanel,
+    TableFilterRow,
+    DragDropProvider
+
+} from '@devexpress/dx-react-grid-material-ui';
+
+import * as PropTypes from 'prop-types';
+
+import Chip from '@material-ui/core/Chip';
+import Select from '@material-ui/core/Select';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import SaveIcon from '@material-ui/icons/Save';
+import CancelIcon from '@material-ui/icons/Cancel';
+
+import {connect} from 'react-redux';
+import {FuseUtils, FuseAnimate} from '@fuse';
+import {
+    Avatar,
+    Checkbox,
+    Icon,
+    IconButton,
+    ListItemIcon,
+    ListItemText,
+    Menu,
+    MenuItem,
+    MenuList,
+    Typography,
+    Button,
+    Input
+} from '@material-ui/core';
+import * as ChatActions from '../chatPanel/store/actions/index';
+import ReactTable from "react-table";
 import IndividualChat from '../chatPanel/individualChat';
 import "../chatPanel/individualChat.css";
+
+
+
+
 
 const styles = theme => ({
     mailList: {
@@ -37,364 +93,538 @@ const styles = theme => ({
 
 });
 
+//
+// table content rows stle
+//
+const TableComponentBase = ({ classes, ...restProps }) => (
+    <Table.Table
+        {...restProps}
+        className={classes.tableStriped}
+    />
+);
+export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
+//
+// table cell currency formatter
+//
+const CurrencyFormatter = ({ value }) => (<span>$ {value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
+const CurrencyTypeProvider = props => (
+    <DataTypeProvider
+        formatterComponent={CurrencyFormatter}
+        {...props}
+    />
+);
+//
+// table cell phone number formatter
+//
+const PhoneNumberFormatter = ({ value }) => {
+    return value.replace(/(\d{3})(\d{3})(\d{4})/, '+1 ($1) $2 - $3')
+};
+const PhoneNumberTypeProvider = props => (
+    <DataTypeProvider
+        formatterComponent={PhoneNumberFormatter}
+        {...props}
+    />
+);
+//
+// table cell date formatter
+//
+const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1');
+const DateTypeProvider = props => (
+    <DataTypeProvider
+        formatterComponent={DateFormatter}
+        {...props}
+    />
+);
+//
+// table cell boolean edit formatter
+//
+const BooleanFormatter = ({ value }) => <Chip label={value ? 'Yes' : 'No'} />;
+const BooleanEditor = ({ value, onValueChange }) => (
+    <Select
+        input={<Input />}
+        value={value ? 'Yes' : 'No'}
+        onChange={event => onValueChange(event.target.value === 'Yes')}
+        style={{ width: '100%' }}
+    >
+        <MenuItem value="Yes">Yes</MenuItem>
+        <MenuItem value="No">No</MenuItem>
+    </Select>
+);
+const BooleanTypeProvider = props => (
+    <DataTypeProvider
+        formatterComponent={BooleanFormatter}
+        editorComponent={BooleanEditor}
+        {...props}
+    />
+);
+//
+// filter icon
+//
+const FilterIcon = ({ type, ...restProps }) => {
+    return <TableFilterRow.Icon type={type} {...restProps} />;
+};
+
+//
+// amount filter editor component
+//
+const AmountEditorBase = ({ value, onValueChange, classes }) => {
+    const handleChange = (event) => {
+        const { value: targetValue } = event.target;
+        if (targetValue.trim() === '') {
+            onValueChange();
+            return;
+        }
+        onValueChange(parseFloat(targetValue));
+    };
+    return (
+        <Input
+            type="number"
+            classes={{
+                input: classes.numericInput,
+            }}
+            fullWidth
+            value={value === undefined ? '' : value}
+            inputProps={{
+                min: 0,
+                placeholder: 'Filter...',
+            }}
+            onChange={handleChange}
+        />
+    );
+};
+AmountEditorBase.propTypes = {
+    value: PropTypes.number,
+    onValueChange: PropTypes.func.isRequired,
+    classes: PropTypes.object.isRequired,
+};
+AmountEditorBase.defaultProps = { value: undefined, };
+const AmountEditor = withStyles(styles)(AmountEditorBase);
+//
+// table row edit command buttons
+//
+const AddButton = ({ onExecute }) => (
+    <div style={{ textAlign: 'center' }}>
+        <Button
+            color="primary"
+            onClick={onExecute}
+            title="Create new row"
+        >
+            New
+        </Button>
+    </div>
+);
+
+const EditButton = ({ onExecute }) => (
+    <IconButton onClick={onExecute} title="Edit row">
+        <EditIcon />
+    </IconButton>
+);
+
+const DeleteButton = ({ onExecute }) => (
+    <IconButton onClick={onExecute} title="Delete row">
+        <DeleteIcon />
+    </IconButton>
+);
+
+const CommitButton = ({ onExecute }) => (
+    <IconButton onClick={onExecute} title="Save changes">
+        <SaveIcon />
+    </IconButton>
+);
+
+const CancelButton = ({ onExecute }) => (
+    <IconButton color="secondary" onClick={onExecute} title="Cancel changes">
+        <CancelIcon />
+    </IconButton>
+);
+
+const commandComponents = {
+    add: AddButton,
+    edit: EditButton,
+    delete: DeleteButton,
+    commit: CommitButton,
+    cancel: CancelButton,
+};
+
+const Command = ({ id, onExecute }) => {
+    const CommandButton = commandComponents[id];
+    return (
+        <CommandButton
+            onExecute={onExecute}
+        />
+    );
+};
+const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
+
+
+
+
 class UsersList extends Component {
 
-    state = {
-        selectedContactsMenu   : null,
-        isOpen                 : true,
-        chatDetail             : null,
-        individualchatDetail   : null,
-        chatUser               : null,
-        chatId                 : null,
-        currentSeletedchatId   : null,
-        selectedUserDetail     : null,
-        contacts               : null,
-        user                   : null,
-        currentRoom            : null,
-    };
-    componentWillMount(){
+    constructor(props) {
+        super(props);
+        this.state = {
+            s: '',
+            temp: [],
+            data: [],
+            selectAll: false,
+            selection: [],
+            rows: [],
+            tableColumnExtensions: [
+                {
+                    title: "First Name",
+                    name: "firstName",
+                    columnName: "firstName",
+                    // width: 100,
+                    wordWrapEnabled: true,
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                },
+                {
+                    title: "Last Name",
+                    name: "lastName",
+                    columnName: "lastName",
+                    // width: 150,
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                },
+                {
+                    title: "Email",
+                    name: "email",
+                    columnName: "email",
+                    // width: 250,
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                },
+                {
+                    title: "Address",
+                    name: "address",
+                    columnName: "address",
+                    // width: 120,
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                }
+            ],
+            sorting: [
+                { columnName: 'CustomerNo', direction: 'asc' }
+            ],
+            editingColumnExtensions: [
+
+            ],
+            currencyColumns: [
+                'Amount'
+            ],
+            phoneNumberColumns: [
+                'Phone'
+            ],
+            dateColumns: ['saleDate'],
+            grouping: [
+                // { columnName: 'AccountTypeListName' },
+            ],
+            pageSize: 20,
+            pageSizes: [10, 20, 30, 50, 100],
+            amountFilterOperations: ['equal', 'notEqual', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual'],
+            searchValue: '',
+
+
+        };
+
+        this.fetchData = this.fetchData.bind(this);
+
+        this.changeSelection = selection =>{
+            this.setState({ selection });
+            this.props.updateSelectRows(selection);
+            console.log('selectionLength',selection);
+        }
+        this.changeSorting = sorting => this.setState({ sorting });
+        this.commitChanges = this.commitChanges.bind(this);
+        this.changeSearchValue = value => this.setState({ searchValue: value });
+        this.changeGrouping = grouping => this.setState({ grouping });
+        console.log("constructor");
+    }
+    //
+    // to edit table cell
+    //
+    commitChanges({ added, changed, deleted }) {
+        console.log("commitChanges");
+        let { rows } = this.state;
+        if (added) {
+            const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
+            rows = [
+                ...rows,
+                ...added.map((row, index) => ({
+                    id: startingAddedId + index,
+                    ...row,
+                })),
+            ];
+        }
+        if (changed) {
+            rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+        }
+        if (deleted) {
+            const deletedSet = new Set(deleted);
+            rows = rows.filter(row => !deletedSet.has(row.id));
+        }
+        this.setState({ rows });
+    }
+
+    onChange = (event, { newValue, method }) => {
+        console.log("onChange");
+
         this.setState({
-            chatDetail: this.props.chatDetail,
-            chatUser  : this.props.chatUser,
-            contacts  : this.props.contacts,
-            // currentRoom: this.props.chatDetail.currentRoom,
+            value: newValue.toString()
+        });
+    };
+
+    shouldComponentUpdate(nextProps, nextState) {
+        console.log("shouldComponentUpdate", this.state !== nextState);
+        return true;
+    }
+
+
+    search(val) {
+        console.log("---------search---------", val);
+        val = val.toLowerCase();
+        if (val === '') {
+            this.setState({ rows: [...this.state.data] });
+            return;
+        }
+        const temp = this.state.data.filter(d => {
+            return (d.CustomerNo && d.CustomerNo.toString().toLowerCase().indexOf(val) !== -1) ||
+                (d.CustomerName && d.CustomerName.toString().toLowerCase().indexOf(val) !== -1) ||
+                (d.Address && d.Address.toString().toLowerCase().indexOf(val) !== -1) ||
+                (d.City && d.City.toString().toLowerCase().indexOf(val) !== -1) ||
+                (d.StateName && d.StateName.toString().toLowerCase().indexOf(val) !== -1) ||
+                (d.PostalCode && d.PostalCode.toString().toLowerCase().indexOf(val) !== -1) ||
+                (d.Phone && d.Phone.toString().toLowerCase().indexOf(val) !== -1) ||
+                (d.AccountTypeListName && d.AccountTypeListName.toString().toLowerCase().indexOf(val) !== -1) ||
+                (d.Amount && d.Amount.toString().toLowerCase().indexOf(val) !== -1)
+        });
+        this.setState({ rows: [...temp] });
+    }
+
+    componentDidMount() {
+        console.log("componentDidMount");
+    }
+
+
+    componentWillMount() {
+        //this.timer = null;
+        let obj = this.props.contacts;
+        this.setState({
+            rows: Object.values(obj)
+        });
+        //console.log("componentWillMount",Object.values(obj));
+    }
+    componentWillUnmount() {
+        console.log("componentWillUnmount");
+    }
+
+
+    handleChange = prop => event => {
+        console.log("handleChange");
+        this.setState({ [prop]: event.target.value });
+    };
+
+
+
+    fetchData(state, instance) {
+        console.log("fetchData");
+
+        this.setState({
+            pageSize: state.pageSize,
+            page: state.page,
         });
     }
-    componentWillReceiveProps(nextProps) {
 
-        if(nextProps.chatDetail && nextProps.chatUser) {
-            // console.log('chatDetail', nextProps.chatDetail)
-            this.setState({
-                chatDetail: nextProps.chatDetail,
-                chatUser  : nextProps.chatUser,
-                user      : nextProps.chatUser,
-                contacts  : nextProps.contacts,
-                // currentRoom: nextProps.chatDetail.currentRoom,
-            });
-        }
+    generateRows() {
+        console.log("generateRows");
+
+        console.log(this.props.data.slice(0, 15));
+        return this.props.data;
     }
-    componentDidUpdate(prevProps, prevState, snapshot){
-        if(this.props.chatDetail!==prevProps.chatDetail){
-            this.setState({
-                chatDetail: this.props.chatDetail,
-            });
-        }
-        if(this.props.chatUser!==prevProps.chatUser){
-            this.setState({
-                chatUser  : this.props.chatUser,
-                user      : this.props.chatUser,
-                contacts  : this.props.contacts,
-            });
-        }
-        if(this.props.chatDetail.currentRoom !== prevProps.chatDetail.currentRoom){
-            // this.setState({
-            //     currentRoom: this.props.chatDetail.currentRoom,
-            // });
-        }
-        if(this.props.chatUser.chatList !== prevProps.chatUser.chatList && this.state.currentSeletedchatId && this.state.currentSeletedchatId!=null){
-            this.props.chatUser.chatList.map((item)=>{
-                if(item['contactId']==this.state.currentSeletedchatId){
-                    this.setState({
-                        chatId : item['chatId'],
-                    });
-                }
-            });
-        }
-        if(!this.state.isOpen && this.state.chatId && this.state.chatId !==null){
-            this.openChat();
-            // console.log("chatID=============",this.state.chatId);
-        }
-        if(this.props !== prevProps && this.state.chatId && this.state.chatId !== null){
-                let msg = this.state.chatDetail.messages;
-                this.setState({
-                    individualchatDetail:msg[this.state.chatId],
-                })
-        }
-        // console.log("==1==rooms",this.state.chatDetail.rooms);
-        // console.log("==1==chatID",this.state.chatId);
-        // console.log("==1==currentRoom",this.state.currentRoom);
-        if(this.state.currentRoom == null || this.state.chatId != prevState.chatId){
-                this.state.chatDetail.rooms.map((item, index)=>{
-                   if(item.id === this.state.chatId){
-                       if(this.state.currentRoom !==item){
-                           this.setState({
-                               currentRoom:item,
-                           });
-                           this.props.individualcurrentChat(item);
-                       }
-                   }
-                });
-        }
-
-    }
-    getFilteredArray = (entities, searchText) => {
-        const arr = Object.keys(entities).map((id) => entities[id]);
-        if ( searchText.length === 0 )
-        {
-            return arr;
-        }
-        return FuseUtils.filterArrayByString(arr, searchText);
-    };
-
-    openSelectedContactMenu = (event) => {
-        this.setState({selectedContactsMenu: event.currentTarget});
-    };
-
-    closeSelectedContactsMenu = () => {
-        this.setState({selectedContactsMenu: null});
-    };
-    openChat = () => {
-        if(!this.state.isOpen)
-            this.setState({
-                isOpen: !this.state.isOpen
-            });
-    };
-    toggleChat = () => {
-        if(!this.state.isOpen)
-            this.setState({
-                isOpen: !this.state.isOpen
-            });
-    };
-    getMsgInfo=(userId,userInfo)=>{
-        if(userId && userId !=null){
-            this.setState({
-                currentSeletedchatId: userId,
-                selectedUserDetail  : userInfo,
-            });
-            let msg      = this.state.chatDetail.messages;
-            let chatlist = this.state.chatUser.chatList;
-            console.log("chatId",chatlist);
-            if(chatlist  && chatlist != null){
-                chatlist.map((item)=>{
-                    if(item['contactId']==userId){
-                        this.setState({
-                            chatId : item['chatId'],
-                        });
 
 
+    getCell = (props) => {
+
+        const { classes }= this.props;
+
+        if(this.state.rows !== undefined) {
+            if (props.column.name.includes('Action')) {
+                let thisCol = this.state.rows.filter(d => {
+                    if (d.name === props.column.name) {
+                        return d;
                     }
+                    return false;
                 });
+                return (
+                    <Table.Cell>
+                        <IconButton className={classes.iconButton} onClick={this.openVerificationDialog} aria-label="Verify">
+                            <Icon>verified_user</Icon>
+                        </IconButton>
+                        <IconButton className={classes.iconButton} onClick={this.openRejectDialog} aria-label="Reject">
+                            <Icon>close</Icon>
+                        </IconButton>
+                        <IconButton className={classes.iconButton} onClick={this.openReviseDialog} aria-label="Request Changes">
+                            <Icon>rotate_90_degrees_ccw</Icon>
+                        </IconButton>
+                    </Table.Cell>
+                )
             }
+        }
 
+        return <Table.Cell {...props} />;
+
+    };
+
+    //
+    // row click
+    //
+    TableRow = ({ tableRow, selected, onToggle, ...restProps }) => {
+        let timer = 0;
+        let delay = 200;
+        let prevent = false;
+        delete restProps.selectByRowClick
+        const handleClick = () => {
+            timer = setTimeout(() => {
+                if (!prevent) {
+                    onToggle();
+                }
+                prevent = false;
+            }, delay);
+        };
+        const handleDoubleClick = () => {
+            clearTimeout(timer);
+            prevent = true;
+            console.log(restProps);
+            //this.props.openEditCustomerForm(this.props.regionId, tableRow.row.CustomerId);
         }
-    }
-    render()
-    {
-        const {classes, contacts, user, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred,state, openChat} = this.props;
-        const data = this.getFilteredArray(contacts, searchText);
-        const {selectedContactsMenu} = this.state;
-        // console.log("chatDetal====",this.state.chatDetail);
-        if ( !data && data.length === 0 )
-        {
-            return (
-                <div className="flex items-center justify-center h-full">
-                    <Typography color="textSecondary" variant="h5">
-                        There are no contacts!
-                    </Typography>
-                </div>
-            );
-        }
+        return (
+            <Table.Row
+                {...restProps}
+                className={selected ? 'active' : ''}
+                style={{ color: 'green', cursor: 'pointer' }}
+                //onClick={handleClick}
+                onDoubleClick={handleDoubleClick}
+            />
+        );
+    };
+
+    openVerificationDialog = () => {
+        this.props.openVerificationDialog(true);
+    };
+    openReviseDialog = () => {
+        this.props.openCloseReviseDialog(true);
+    };
+    openRejectDialog = () => {
+        this.props.openCloseRejectDialog(true);
+    };
+
+    render() {
+        const { classes } = this.props;
+
+        const {
+            rows,
+            selection,
+            tableColumnExtensions,
+            sorting,
+            editingColumnExtensions,
+            currencyColumns,
+            phoneNumberColumns,
+            pageSizes,
+            searchValue,
+        } = this.state;
+
 
         return (
-            <div >
-            <FuseAnimate className={ classes.usersLayoutRoot } animation="transition.slideUpIn" delay={300}>
-                <ReactTable
-                    className={classNames(classes.root, "-striped -highlight border-0")}
-                    getTrProps={(state, rowInfo, column) => {
-                        return {
-                            onClick: (e)=>{
-                                e.stopPropagation();
-                                // this.openChat();
-                                console.log("rowinfo",rowInfo);
-                                openChat(rowInfo.original.id);
-                                this.getMsgInfo(rowInfo.original.name,rowInfo.original);
-                            },
-                            className: "cursor-pointer",
-
-                        }
-                    }}
-                    data={data}
-                    columns={[
-                        {
-                            Header   : () => (
-                                <Checkbox
-                                    onClick={(event) => {
-                                        event.stopPropagation();
-                                    }}
-                                    onChange={(event) => {
-                                        event.target.checked ? selectAllContacts() : deSelectAllContacts();
-                                    }}
-                                    checked={selectedContactIds.length === Object.keys(contacts).length && selectedContactIds.length > 0}
-                                    indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
-                                />
-                            ),
-                            accessor : "",
-                            Cell     : row => {
-                                return (<Checkbox
-                                        onClick={(event) => {
-                                            event.stopPropagation();
-                                        }}
-                                        checked={selectedContactIds.includes(row.value.id)}
-                                        onChange={() => toggleInSelectedContacts(row.value.id)}
-                                    />
-                                )
-                            },
-                            className: "justify-center",
-                            sortable : false,
-                            width    : 64
-                        },
-                        {
-                            Header   : () => (
-                                selectedContactIds.length > 0 && (
-                                    <React.Fragment>
-                                        <IconButton
-                                            aria-owns={selectedContactsMenu ? 'selectedContactsMenu' : null}
-                                            aria-haspopup="true"
-                                            onClick={this.openSelectedContactMenu}
-                                        >
-                                            <Icon>more_horiz</Icon>
-                                        </IconButton>
-                                        <Menu
-                                            id="selectedContactsMenu"
-                                            anchorEl={selectedContactsMenu}
-                                            open={Boolean(selectedContactsMenu)}
-                                            onClose={this.closeSelectedContactsMenu}
-                                        >
-                                            <MenuList>
-                                                <MenuItem
-                                                    onClick={() => {
-                                                        removeContacts(selectedContactIds);
-                                                        this.closeSelectedContactsMenu();
-                                                    }}
-                                                >
-                                                    <ListItemIcon className={classes.icon}>
-                                                        <Icon>delete</Icon>
-                                                    </ListItemIcon>
-                                                    <ListItemText inset primary="Remove"/>
-                                                </MenuItem>
-                                                <MenuItem
-                                                    onClick={() => {
-                                                        setContactsStarred(selectedContactIds);
-                                                        this.closeSelectedContactsMenu();
-                                                    }}
-                                                >
-                                                    <ListItemIcon className={classes.icon}>
-                                                        <Icon>star</Icon>
-                                                    </ListItemIcon>
-                                                    <ListItemText inset primary="Starred"/>
-                                                </MenuItem>
-                                                <MenuItem
-                                                    onClick={() => {
-                                                        setContactsUnstarred(selectedContactIds);
-                                                        this.closeSelectedContactsMenu();
-                                                    }}
-                                                >
-                                                    <ListItemIcon className={classes.icon}>
-                                                        <Icon>star_border</Icon>
-                                                    </ListItemIcon>
-                                                    <ListItemText inset primary="Unstarred"/>
-                                                </MenuItem>
-                                            </MenuList>
-                                        </Menu>
-                                    </React.Fragment>
-                                )
-                            ),
-                            accessor : "avatar",
-                            Cell     : row => (
-                                <Avatar className="mr-8" alt={row.original.name} src={row.value}/>
-                            ),
-                            className: "justify-center",
-                            width    : 64,
-                            sortable : false
-                        },
-                        {
-                            Header    : "First Name",
-                            accessor  : "name",
-                            className : "font-bold",
-                            width    : 200,
-                        },
-                        {
-                            Header    : "Last Name",
-                            accessor  : "lastName",
-                            className : "font-bold",
-                            width    : 150,
-                        },
-                        {
-                            Header    : "Email",
-                            accessor  : "email",
-                            width    : 300,
-                        },
-                        {
-                            Header    : "Phone",
-                            accessor  : "phone"
-                        },
-                        {
-                            Header: "",
-                            width : 128,
-                            Cell  : row => (
-                                <div className="flex items-center">
-                                    <IconButton
-                                        onClick={(ev) => {
-                                            ev.stopPropagation();
-                                            toggleStarredContact(row.original.id)
-                                        }}
-                                        className={classes.chatIcon}
-                                    >
-                                        {user.starred && user.starred.includes(row.original.id) ? (
-                                            <Icon>star</Icon>
-                                        ) : (
-                                            <Icon>star_border</Icon>
-                                        )}
-                                    </IconButton>
-                                    <IconButton
-                                        onClick={(ev) => {
-                                            ev.stopPropagation();
-                                            removeContact(row.original.id);
-                                        }}
-                                        className={classes.chatIcon}
-                                    >
-                                        <Icon>delete</Icon>
-                                       
-                                    </IconButton>
-
-                                    <IconButton
-                                        onClick={(ev) => {
-                                            ev.stopPropagation();
-                                            openChat(row.original.id);
-                                        }}
-                                        className={classes.chatIcon}
-                                    >
-                                        <Icon>chat</Icon>
-                                    </IconButton>
-                                </div>
-                            )
-                        }
-                    ]}
-                    defaultPageSize={8}
-                    noDataText="No contacts found"
-                />
-
-            </FuseAnimate>
-
-                {this.state.isOpen && !1 && (
-                    <div className={classNames(classes.individualChat, {'closeIndvidualchat': !state})}>
-                        {
-
-                            <IndividualChat show ={this.state.isOpen} onClose={this.toggleChat}
-                            message ={this.state.individualchatDetail} userdetail = {this.state.selectedUserDetail}
-                                            currentUser ={this.state.chatDetail.currentUser}
-                                            contacts ={this.state.contacts} user={this.state.chatUser}
-                                            currentRoom={this.state.currentRoom}
+            <Fragment>
+                <div className={classNames(classes.layoutTable, "flex flex-col")}>
+                    <div className={classNames("flex flex-col", classes.layoutTable)} >
+                        <Grid
+                            rows={rows}
+                            columns={tableColumnExtensions}
+                        >
+                            <DragDropProvider />
+                            <PagingState
+                                defaultCurrentPage={0}
+                                defaultPageSize={20}
                             />
 
-                        }
+                            <PagingPanel pageSizes={pageSizes} />
 
+                            <SelectionState
+                                selection={selection}
+                                onSelectionChange={this.changeSelection}
+                            />
+                            <IntegratedSelection />
+
+                            <SortingState
+                                sorting={sorting}
+                                onSortingChange={this.changeSorting}
+                                columnExtensions={tableColumnExtensions}
+                            />
+                            <IntegratedSorting />
+
+                            <IntegratedPaging />
+
+                            <SearchState
+                                value={searchValue}
+                                onValueChange={this.changeSearchValue}
+                            />
+
+                            <FilteringState
+                                defaultFilters={[]}
+                                columnExtensions={tableColumnExtensions}
+                            />
+                            <IntegratedFiltering />
+
+                            <EditingState
+                                columnExtensions={editingColumnExtensions}
+                                onCommitChanges={this.commitChanges}
+                            />
+
+                            <CurrencyTypeProvider
+                                for={currencyColumns}
+                            />
+
+                            {/*<PhoneNumberTypeProvider*/}
+                                {/*for={phoneNumberColumns}*/}
+                            {/*/>*/}
+                            <Table rowComponent={this.TableRow} cellComponent={this.getCell} />
+
+                            {/*<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />*/}
+
+                            <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
+
+                            <TableHeaderRow showSortingControls />
+                            <Template
+                                name="tableRow"
+                                predicate={({ tableRow }) => tableRow.type === 'data'}
+                            >
+                                {params => (
+                                    <TemplateConnector>
+                                        {({ selection }, { toggleSelection }) => (
+                                            <this.TableRow
+                                                {...params}
+                                                selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
+                                                onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
+                                            />
+                                        )}
+                                    </TemplateConnector>
+                                )}
+                            </Template>
+
+                            <CustomizedDxGridSelectionPanel selection={selection} />
+
+                        </Grid>
                     </div>
-                )}
-
-
-            </div>
-        );
+                </div>
+            </Fragment>
+        )
     }
 }
 
@@ -403,37 +633,16 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         getContacts             : Actions.getContacts,
-        getUserData             : Actions.getUserData,
-        toggleInSelectedContacts: Actions.toggleInSelectedContacts,
-        selectAllContacts       : Actions.selectAllContacts,
-        deSelectAllContacts     : Actions.deSelectAllContacts,
-        openEditContactDialog   : Actions.openEditContactDialog,
-        removeContacts          : Actions.removeContacts,
-        openChat                : Actions.openChat,
-        removeContact           : Actions.removeContact,
-        toggleStarredContact    : Actions.toggleStarredContact,
-        toggleStarredContacts   : Actions.toggleStarredContacts,
-        setContactsStarred      : Actions.setContactsStarred,
-        setContactsUnstarred    : Actions.setContactsUnstarred,
-        individualcurrentChat   : ChatActions.IndividualsetCurrentRoom,
-        openChatPanel           : ChatActions.openChatPanel,
-        closeChatPanel          : ChatActions.closeChatPanel
+        updateSelectRows: Actions.updateSelectRows
+
     }, dispatch);
 }
 
-function mapStateToProps({contactsApp,chatPanel})
+function mapStateToProps({usersApp})
 {
     return {
-        contacts                   : contactsApp.contacts.entities,
-        selectedContactIds         : contactsApp.contacts.selectedContactIds,
-        searchText                 : contactsApp.contacts.searchText,
-        user                       : contactsApp.user,
-        // contacts                : chatPanel.contacts.entities,
-        selectedContactId          : chatPanel.contacts.selectedContactId,
-        state                      : chatPanel.state,
-        chatDetail                 : chatPanel.chat,
-        chatUser                   : chatPanel.user,
-        currentRoom                : chatPanel.chat.currentRoom,
+        contacts                   : usersApp.contacts.entities,
+        selectedRows               : usersApp.users.selectedRows
     }
 }
 

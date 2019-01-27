@@ -70,7 +70,7 @@ class UsersApp extends Component {
                     classes={{
                         contentCardWrapper: "p-16 sm:p-24 pb-80 ",
                         leftSidebar       : classNames({"w-0": openUsersFormStatus}),
-                        header            : "min-h-72 h-72 sm:h-136 sm:min-h-136"
+                        header            : "min-h-80 h-80 sm:h-80 sm:min-h-80"
                     }}
                     header={
                         <UsersHeader pageLayout={() => this.pageLayout}/>
