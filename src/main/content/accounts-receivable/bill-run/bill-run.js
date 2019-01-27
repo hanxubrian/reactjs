@@ -468,12 +468,17 @@ class BillRun extends Component {
                                 </div>
                             </div>
                             <div className={classNames(classes.topbtncus,"flex flex-shrink items-center")}>
-                                <FuseAnimate animation="transition.expandIn" delay={300} >
-                                    <Fab color="secondary" aria-label="add"
-                                         className={classNames(classes.sideButton, "mr-12")}  onClick={this.opendialogwin}>
-                                        <Icon>attach_money</Icon>
-                                    </Fab>
-                                </FuseAnimate>
+                                <Button variant="contained" color="primary"
+                                        className={classNames(classes.button, classes.btntop) } onClick={this.opendialogwin}>
+                                    Execute Bill Run
+                                    <Icon className={classes.rightIcon}>attach_money</Icon>
+                                </Button>
+                                {/*<FuseAnimate animation="transition.expandIn" delay={300} >*/}
+                                    {/*<Fab color="secondary" aria-label="add"*/}
+                                         {/*className={classNames(classes.sideButton, "mr-12")}  onClick={this.opendialogwin}>*/}
+                                        {/*<Icon>attach_money</Icon>*/}
+                                    {/*</Fab>*/}
+                                {/*</FuseAnimate>*/}
                             </div>
                         </div>
                         <div className="flex flex-none items-end" style={{display: 'none'}}>
@@ -711,7 +716,7 @@ class BillRun extends Component {
                                                     className: classNames("flex items-center  justify-center")
                                                 },
                                                 {
-                                                    Header: "Invoice Date",
+                                                    Header: "Create Date",
                                                     id: "InvoiceDate",
                                                     accessor: d => moment(d.InvoiceDate).format('MM/DD/YYYY'),
                                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center")
@@ -740,22 +745,22 @@ class BillRun extends Component {
                                                     width : 128,
                                                     Cell  : row => (
                                                         <div className="flex items-center  justify-center actions">
-                                                            <IconButton disabled={row.original.Status==="Deleted"?true:false}
+                                                            <IconButton style ={{left: "71%"}} disabled={row.original.Status==="Deleted"?true:false}
                                                                 onClick={(ev) => {
                                                                     ev.stopPropagation();
                                                                     if (window.confirm("Do you really want to remove this invoice")) {
                                                                         this.props.deleteSeletedBillRun(row.original.RegionId,row.original.BillRunNo);
-                                                                        // row.original.Status = "Deleted";
-                                                                        // if(this.state.selection.length>0){
-                                                                        //     _.remove(this.state.selection, function(id) {
-                                                                        //         return id === row.original.InvoiceId;
-                                                                        //     });
-                                                                        // }
-
                                                                     }
                                                                 }}
                                                             >
-                                                                <Icon>delete</Icon>
+                                                                    {row.original.Status !=="Deleted" && (
+                                                                        <Icon>delete</Icon>
+                                                                    )}
+                                                                    {row.original.Status ==="Deleted" && (
+                                                                        <Icon>remove_red_eye</Icon>
+                                                                    )}
+
+
                                                             </IconButton>
                                                         </div>
                                                     )

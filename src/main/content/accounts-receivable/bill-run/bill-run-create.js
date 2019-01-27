@@ -295,6 +295,10 @@ class BillRunDialog extends Component {
 
         const { classes,loading ,billstatus} = this.props;
         const { selectedDate ,showP,auth,billruns} = this.state;
+        let date = this.state.selectedDate;
+        let year = moment(date).year();
+        let month = moment(date).month()+1;
+        let defMSG = `MONTHLY CONTRACT BILLING FOR `+month+`/`+year;
         return (
             <div style={{
 
@@ -350,10 +354,10 @@ class BillRunDialog extends Component {
                         <div>
                             <TextField
                                 id="outlined-multiline-static"
-                                label="Message"
+                                label="Invoice Message"
                                 multiline
                                 rows="10"
-                                defaultValue=""
+                                defaultValue={defMSG}
 
                                 margin="normal"
                                 variant="outlined"
