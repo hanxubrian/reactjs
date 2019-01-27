@@ -740,7 +740,7 @@ class BillRun extends Component {
                                                     width : 128,
                                                     Cell  : row => (
                                                         <div className="flex items-center  justify-center actions">
-                                                            <IconButton
+                                                            <IconButton disabled={row.original.Status==="Deleted"?true:false}
                                                                 onClick={(ev) => {
                                                                     ev.stopPropagation();
                                                                     if (window.confirm("Do you really want to remove this invoice")) {
