@@ -256,7 +256,7 @@ class BillRunDialog extends Component {
             let date = this.state.selectedDate;
             let year = moment(date).year();
             let month = moment(date).month()+1;
-            let user = this.props.auth.firstName+ this.props.auth.lastName;
+            let user = this.props.auth.firstName+"  "+ this.props.auth.lastName;
             let userid   = this.props.auth.UserId;
             let regionid = this.props.auth.defaultRegionId;
             if(userid && userid != null && regionid && regionid != null && year && year != null && month && month !=null ){
