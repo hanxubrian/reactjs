@@ -729,6 +729,9 @@ class BillRun extends Component {
                                                         if(row.original.Status===null){
                                                             return "Preliminary";
                                                         }
+                                                        else{
+                                                            return row.original.Status;
+                                                        }
                                                     }
 
                                                 },

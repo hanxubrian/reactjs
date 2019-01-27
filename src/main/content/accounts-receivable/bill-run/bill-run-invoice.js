@@ -233,10 +233,10 @@ class BillRunInvoiceDetail extends Component {
                     { !loading &&  billruninvoiceDetailStatus && (
                     <ClickAwayListener onClickAway={this.closeDialog}>
                     <div
-                        // animation="transition.expandIn"
-                        // duration={400}
-                        // delay={0}
-                        // style={{marginLeft:100,}}
+                        animation="transition.expandIn"
+                        duration={400}
+                        delay={0}
+                        style={{marginLeft:100,}}
                     >
                         <Paper >
                             <div className={classNames(classes.tableWrapper, "flex flex-col h-full")} style={{
