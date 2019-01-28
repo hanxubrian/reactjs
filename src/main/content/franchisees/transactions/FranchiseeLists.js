@@ -293,8 +293,8 @@ class TransactionsLists extends Component {
                                                 onClick={(event) => {
                                                     event.stopPropagation();
                                                 }}
-                                                checked={isSelected(row.value.key)}
-                                                onChange={() => toggleSelection(row.value.key)}
+                                                checked={isSelected(row.value.Id)}
+                                                onChange={() => toggleSelection(row.value.Id)}
                                             />
                                         )
                                     },

@@ -21,6 +21,8 @@ import * as Actions from '../../../../store/actions';
 // third party
 import classNames from 'classnames';
 import TransactionLists from './FranchiseeLists';
+import TransactionDxGridLists from './transactionDxGridLists';
+
 import _ from "lodash";
 import InvoiceForm from "../../accounts-receivable/Invoice/InvoiceForm";
 
@@ -394,7 +396,8 @@ class TransactionsApp extends Component {
                                             </Paper>
                                         </div>
                                     </div>
-                                    <TransactionLists data={this.state.temp}/>
+                                    {/*<TransactionLists data={this.state.temp}/>*/}
+                                    <TransactionDxGridLists data={this.state.temp}/>
                                 </div>
                             )}
                             {(this.state.temp && transactionForm.props.open) && (

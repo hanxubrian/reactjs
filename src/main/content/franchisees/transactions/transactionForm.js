@@ -37,7 +37,6 @@ import * as Actions from '../../../../store/actions';
 // third party
 import "react-table/react-table.css";
 import _ from 'lodash';
-import Chance from 'chance'
 import Autosuggest from 'react-autosuggest';
 import classNames from 'classnames';
 import match from "autosuggest-highlight/match";
@@ -46,10 +45,9 @@ import moment from 'moment'
 import PropTypes from 'prop-types';
 
 //Utility
-import {escapeRegexCharacters} from 'services/utils'
 import { Control, Menu, NoOptionsMessage, Option, Placeholder, SingleValue, ValueContainer} from "../../accounts-receivable/Invoice/selectUtils";
 import {emphasize} from "@material-ui/core/styles/colorManipulator";
-import {NumberFormatCustom1, NumberFormatCustom2} from "../../../../services/utils";
+import {escapeRegexCharacters, NumberFormatCustom1, NumberFormatCustom2} from "../../../../services/utils";
 
 
 const styles = theme => ({
