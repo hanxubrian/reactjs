@@ -420,6 +420,9 @@ class PaymentFormModal extends React.Component {
 	componentWillMount() {
 		this.setRowData(this.props.payments)
 	}
+	componentDidMount() {
+		this.checkValidations('', '')
+	}
 	UNSAFE_componentWillReceiveProps(nextProps) {
 		// this.setState({
 		// 	bOpenPaymentDialog: nextProps.bOpenPaymentDialog
@@ -443,11 +446,6 @@ class PaymentFormModal extends React.Component {
 			}
 		})
 
-		let isZeroPaymentAll = false
-		PayItems.forEach(x => {
-			isZeroPaymentAll = isZeroPaymentAll || x.Amount !== 0
-		})
-
 		if (!this.state.PaymentType) {
 			this.setState({ errorMsg: "Payment type not selected" })
 		} else if (this.state.ReferenceNo <= 0) {
@@ -456,7 +454,7 @@ class PaymentFormModal extends React.Component {
 			this.setState({ errorMsg: "Payment date not selected" })
 		} else if (this.state.PaymentAmount <= 0) {
 			this.setState({ errorMsg: "Amount is invalid" })
-		} else if (!isZeroPaymentAll) {
+		} else if (!this.isNonEmptyPayment(this.state.rows)) {
 			this.setState({ errorMsg: "Either of payments amount is not settled" })
 		} else {
 
@@ -495,7 +493,10 @@ class PaymentFormModal extends React.Component {
 
 	handleChange = name => event => {
 		this.setState({ [name]: event.target.value });
-		console.log(name)
+
+		this.checkValidations(name, event.target.value)
+
+
 		if (name === "PaymentAmount") {
 			let totalPaymentAmount = 0
 			let floatPaymentAmount = parseFloat(`0${event.target.value}`)
@@ -576,7 +577,9 @@ class PaymentFormModal extends React.Component {
 			for (let i = fromRow; i <= toRow; i++) {
 				rows[i] = { ...rows[i], ...updated };
 			}
-
+			//
+			// overpayment
+			//
 			let totalPaymentAmount = 0, floatPaymentAmount = 0
 			rows.forEach(x => {
 				totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
@@ -585,7 +588,8 @@ class PaymentFormModal extends React.Component {
 
 			return {
 				rows,
-				overpayment: totalPaymentAmount - floatPaymentAmount
+				overpayment: totalPaymentAmount - floatPaymentAmount,
+				errorMsg: this.isNonEmptyPayment(rows) ? "" : "Neither of payments amount is settled"
 			};
 		});
 	};
@@ -610,7 +614,8 @@ class PaymentFormModal extends React.Component {
 
 			return {
 				rows: rows,
-				overpayment: floatPaymentAmount
+				overpayment: floatPaymentAmount,
+				errorMsg: this.isNonEmptyPayment(rows) ? "" : "Neither of payments amount is settled"
 			}
 		})
 	}
@@ -624,9 +629,36 @@ class PaymentFormModal extends React.Component {
 
 			return {
 				rows: rows,
-				overpayment: 0
+				overpayment: 0,
+				errorMsg: this.isNonEmptyPayment(rows) ? "" : "Neither of payments amount is settled"
 			}
 		})
+	}
+	isNonEmptyPayment(rows) {
+		//
+		// check row for payment amount
+		//
+		let isNonEmptyPayment = false
+		rows.forEach(x => {
+			isNonEmptyPayment = isNonEmptyPayment || x.PaymentAmount > 0
+		})
+		return isNonEmptyPayment;
+	}
+
+	checkValidations(name, value) {
+		if (name === "PaymentType" && !value || name !== "PaymentType" && !this.state.PaymentType) {
+			this.setState({ errorMsg: "Payment type not selected" })
+		} else if (name === "ReferenceNo" && value <= 0 || name !== "ReferenceNo" && this.state.ReferenceNo <= 0) {
+			this.setState({ errorMsg: "Refernce number is invalid" })
+		} else if (name === "PaymentDate" && !value || name !== "PaymentDate" && !this.state.PaymentDate) {
+			this.setState({ errorMsg: "Payment date not selected" })
+		} else if (name === "PaymentAmount" && value <= 0 || name !== "PaymentAmount" && this.state.PaymentAmount <= 0) {
+			this.setState({ errorMsg: "Amount is invalid" })
+		} else if (!this.isNonEmptyPayment(this.state.rows)) {
+			this.setState({ errorMsg: "Neither of payments amount is settled" })
+		} else {
+			this.setState({ errorMsg: "" })
+		}
 	}
 
 	render() {
@@ -811,7 +843,7 @@ class PaymentFormModal extends React.Component {
 					</DialogContent>
 
 					<DialogActions>
-						<Button variant="contained" onClick={this.handleCreatePayment} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Save</Button>
+						<Button disabled={this.state.errorMsg !== ''} variant="contained" onClick={this.handleCreatePayment} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Save</Button>
 					</DialogActions>
 				</Dialog>
 			</div>
