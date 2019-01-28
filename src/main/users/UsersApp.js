@@ -1,80 +1,3 @@
-// import React, {Component} from 'react';
-// import {withStyles} from '@material-ui/core/styles';
-// import {FusePageSimple, FuseAnimate} from '@fuse';
-// import {bindActionCreators} from 'redux';
-// import {withRouter} from 'react-router-dom';
-// import {connect} from 'react-redux';
-// import * as Actions from './store/actions';
-// import UsersList from 'main/users/UsersList';
-// import UsersHeader from 'main/users/UsersHeader';
-// import _ from '@lodash';
-// import UsersSidebarContent from "./UsersSidebarContent";
-// import UsersForm from "./UsersForm";
-// import classNames from 'classnames';
-// import FusePageUsersCustom from "../../@fuse/components/FusePageLayouts/FusePageUsersCustom";
-//
-//
-//
-// const styles = theme => ({
-//     addButton: {
-//         position: 'fixed',
-//         left   : 453,
-//         bottom  : 90,
-//         zIndex  : 99
-//     },
-//     leftFilterPanel: {
-//         display: 'none',
-//         width: '0px'
-//     }
-// });
-//
-// class UsersApp extends Component {
-//
-
-//
-//     render()
-//     {
-//         const {classes} = this.props;
-//         const {openUsersFormStatus} = this.state;
-//
-//         return (
-//             <React.Fragment>
-//                 <FusePageUsersCustom
-//                     classes={{
-//                         contentCardWrapper: "p-16 sm:p-24 pb-80 ",
-//                         leftSidebar       : classNames({"w-0": openUsersFormStatus}),
-//                         header            : "min-h-80 h-80 sm:h-80 sm:min-h-80"
-//                     }}
-//                     header={
-//                         <UsersHeader pageLayout={() => this.pageLayout}/>
-//                     }
-//                     content={
-//                         <div>
-//                             {!openUsersFormStatus && (
-//                                <UsersList/>
-//                             )}
-//                             {openUsersFormStatus && (
-//                                <UsersForm/>
-//                             )}
-//                         </div>
-//
-//                     }
-//                     leftSidebarContent={
-//                         <UsersSidebarContent />
-//                     }
-//                     sidebarInner
-//                     onRef={instance => {
-//                         this.pageLayout = instance;
-//                     }}
-//                     innerScroll
-//                 />
-//             </React.Fragment>
-//         )
-//     };
-// }
-//
-
-
 import React, {Component, Fragment} from 'react';
 import {
     Icon,
@@ -318,12 +241,18 @@ class UsersApp extends Component {
 
 
     state = {
-       openUsersFormStatus: false
+       openUsersFormStatus: false,
+        HeaderIcon : null
     };
 
     componentWillMount() {
         this.setState({
            "openUsersFormStatus": this.props.openUsersFormStatus
+        });
+        this.props.nav.map(item=>{
+            if(item.TabName==="Settings"){
+                this.setState({HeaderIcon: item.Icon});
+            }
         });
     }
 
@@ -348,7 +277,7 @@ class UsersApp extends Component {
 
         const {classes, filterState, summaryState} = this.props;
 
-        const {openUsersFormStatus} = this.state;
+        const {openUsersFormStatus,HeaderIcon} = this.state;
 
         return (
             <React.Fragment>
@@ -367,7 +296,7 @@ class UsersApp extends Component {
                                 <div className="flex flex-row flex-1 justify-between">
                                     <div className="flex flex-shrink items-center">
                                         <div className="flex items-center">
-                                            <Icon className="text-32 mr-12">account_box</Icon>
+                                            <Icon className="text-32 mr-12">{HeaderIcon}</Icon>
                                             <Typography variant="h6" className="hidden sm:flex">Settings |
                                                 Users</Typography>
                                         </div>
@@ -429,11 +358,12 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({ usersApp})
+function mapStateToProps({ usersApp,fuse})
 {
     return {
         openUsersFormStatus  : usersApp.users.openUsersFormStatus,
-        filterState: usersApp.users.fpStatus
+        filterState: usersApp.users.fpStatus,
+        nav: fuse.navigation
     }
 }
 

@@ -15,7 +15,7 @@ const usersReducer = function (state = initialState, action) {
                 fpStatus: false,
             }
         }
-        case Actions.UPDATE_SELECT_ROWS:{
+        case Actions.UPDATE_USER_SELECT_ROWS:{
             return{
                 ...state,
                 selectedRows: action.payload

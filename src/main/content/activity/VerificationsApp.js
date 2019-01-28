@@ -304,6 +304,12 @@ class VerificationsApp extends Component {
         }
         this.setState({"selectionLength": this.props.selectionLength});
         this.setState({openDialog: this.props.verifiedModal});
+
+        this.props.nav.map(item=>{
+            if(item.TabName==="Activity"){
+                this.setState({HeaderIcon: item.Icon});
+            }
+        });
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
@@ -362,11 +368,14 @@ class VerificationsApp extends Component {
         this.props.openCloseReviseModal(true);
     }
 
+
+
+
     render() {
 
         const {classes, filterState, summaryState} = this.props;
 
-        const {selectionLength} = this.state;
+        const {selectionLength, HeaderIcon} = this.state;
 
         return (
             <React.Fragment>
@@ -385,7 +394,7 @@ class VerificationsApp extends Component {
                                 <div className="flex flex-row flex-1 justify-between">
                                     <div className="flex flex-shrink items-center">
                                         <div className="flex items-center">
-                                            <Icon className="text-32 mr-12">account_box</Icon>
+                                            <Icon className="text-32 mr-12">{HeaderIcon}</Icon>
                                             <Typography variant="h6" className="hidden sm:flex">Activity |
                                                 Verifications</Typography>
                                         </div>
@@ -470,7 +479,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-function mapStateToProps({verifications, auth}) {
+function mapStateToProps({verifications, auth, fuse}) {
     return {
         verifications: verifications.verificationsDB,
         bLoadedVerifications: verifications.bLoadedVerifications,
@@ -483,7 +492,8 @@ function mapStateToProps({verifications, auth}) {
         selectionLength: verifications.selectionLength,
         verifiedModal: verifications.verifiedModal,
         reviseModal: verifications.reviseModal,
-        rejectModal: verifications.rejectModal
+        rejectModal: verifications.rejectModal,
+        nav: fuse.navigation
     }
 }
 
