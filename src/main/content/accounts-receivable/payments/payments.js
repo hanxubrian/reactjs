@@ -567,28 +567,28 @@ class Payments extends Component {
 					}
 					content={
 						<div className="flex-1 flex-col absolute w-full h-full">
-								<div className={classNames("flex flex-col h-full")}>
-									<Dialog
-										open={this.state.showNoSelectionAlertDialog}
-										onClose={this.handleCloseNoSelectionAlertDialog}
-										aria-labelledby="alert-dialog-title"
-										aria-describedby="alert-dialog-description"
-									>
-										<DialogTitle id="alert-dialog-title">{this.state.alertTitle}</DialogTitle>
-										<DialogContent>
-											<DialogContentText id="alert-dialog-description">{this.state.alertContent}</DialogContentText>
-										</DialogContent>
-										<DialogActions>
-											<Button onClick={this.handleCloseNoSelectionAlertDialog} color="primary" autoFocus>OK</Button>
-										</DialogActions>
-									</Dialog>
+							<div className={classNames("flex flex-col h-full")}>
+								<Dialog
+									open={this.state.showNoSelectionAlertDialog}
+									onClose={this.handleCloseNoSelectionAlertDialog}
+									aria-labelledby="alert-dialog-title"
+									aria-describedby="alert-dialog-description"
+								>
+									<DialogTitle id="alert-dialog-title">{this.state.alertTitle}</DialogTitle>
+									<DialogContent>
+										<DialogContentText id="alert-dialog-description">{this.state.alertContent}</DialogContentText>
+									</DialogContent>
+									<DialogActions>
+										<Button onClick={this.handleCloseNoSelectionAlertDialog} color="primary" autoFocus>OK</Button>
+									</DialogActions>
+								</Dialog>
 
-									<PaymentFormModal />
+								<PaymentFormModal />
 
-									<PaymentSearchBar />
+								<PaymentSearchBar />
 
-									<PaymentListContent />
-								</div>
+								<PaymentListContent />
+							</div>
 						</div>
 					}
 					leftSidebarHeader={
@@ -633,6 +633,12 @@ class Payments extends Component {
 					<div className={classNames(classes.overlay, "flex-col")}>
 						<CircularProgress className={classes.progress} color="secondary" />
 						<Typography variant="body2" color="primary">Fetching payments info...</Typography>
+					</div>
+				)}
+				{(this.props.isStartedPaymentsCreated) && (
+					<div className={classNames(classes.overlay, "flex-col")}>
+						<CircularProgress className={classes.progress} color="secondary" />
+						<Typography variant="body2" color="primary">Saving payment for invoices...</Typography>
 					</div>
 				)}
 			</React.Fragment>
@@ -695,6 +701,7 @@ function mapStateToProps({ invoices, auth, customers, franchisees, accountReceiv
 		bFranchiseesFetchStart: franchisees.bFranchiseesFetchStart,
 
 		activePaymentRows: accountReceivablePayments.activePaymentRows,
+		isStartedPaymentsCreated: accountReceivablePayments.isStartedPaymentsCreated,
 	}
 }
 

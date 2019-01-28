@@ -23,6 +23,7 @@ const initialState = {
 
 	isStartedPaymentsCreated: false,
 	paymentsCreated: [],
+	NoDataString: "Empty Data",
 };
 
 
@@ -52,12 +53,17 @@ const accountReceivablePayments = function (state = initialState, action) {
 			return {
 				...state,
 				paymentsCreated: action.payload,
-				isStartedPaymentsCreated: true,
+				isStartedPaymentsCreated: false,
 			}
 		case Actions.CREATE_AR_PAYMENTS_START:
 			return {
 				...state,
-				isStartedPaymentsCreated: false,
+				isStartedPaymentsCreated: true,
+			}
+		case Actions.FAILED_GET_ALL_RECEIVABLE_PAYMENTS:
+			return {
+				...state,
+				NoDataString: action.payload,
 			}
 		//
 		// TOGGLE SIDE PANELS

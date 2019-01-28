@@ -13,6 +13,7 @@ export const SET_ACTIVE_PAYMENT_ROWS = "[A.R.Payments] SET_ACTIVE_PAYMENT_ROWS";
 
 export const CREATE_AR_PAYMENTS = "[A.R.Payments] CREATE_AR_PAYMENTS";
 export const CREATE_AR_PAYMENTS_START = "[A.R.Payments] CREATE_AR_PAYMENTS_START";
+export const FAILED_GET_ALL_RECEIVABLE_PAYMENTS = "[A.R.Payments] FAILED_GET_ALL_RECEIVABLE_PAYMENTS";
 
 
 export function getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status) {
@@ -27,6 +28,12 @@ export function getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, Sea
 
 		(async () => {
 			let paymentsList = await invoicePaymentsService.getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status);
+			if (!paymentsList.IsSuccess) {
+				dispatch({
+					type: FAILED_GET_ALL_RECEIVABLE_PAYMENTS,
+					payload: paymentsList.message
+				});
+			}
 			dispatch({
 				type: GET_ALL_RECEIVABLE_PAYMENTS,
 				payload: paymentsList
@@ -46,6 +53,8 @@ export function createAccountReceivablePayment(RegionId, PaymentType, ReferenceN
 		});
 
 		(async () => {
+			await sleep(2000)
+			// let paymentCreated = [];
 			let paymentCreated = await invoicePaymentsService.createAccountReceivablePayment(RegionId, PaymentType, ReferenceNo, PaymentDate, Note, PayItems);
 			dispatch({
 				type: CREATE_AR_PAYMENTS,
@@ -53,6 +62,9 @@ export function createAccountReceivablePayment(RegionId, PaymentType, ReferenceN
 			});
 		})();
 	}
+}
+const sleep = (milliseconds) => {
+	return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
 
 export function toggleFilterPanelAccountReceivablePayments() {

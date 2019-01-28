@@ -40,6 +40,7 @@ import {
 import {
 	Grid,
 	Table,
+	VirtualTable,
 	TableHeaderRow,
 	TableSelection,
 	GroupingPanel,
@@ -875,7 +876,16 @@ class PaymentsListContent extends Component {
 								for={phoneNumberColumns}
 							/>
 
-							<Table />
+							{/* <Table /> */}
+							<VirtualTable height='auto'
+								noDataCellComponent={
+									({ colSpan }) => (
+										<td colSpan={colSpan} style={{ textAlign: 'center' }}>
+											<big className="TableNoDataCell">{this.props.NoDataString}</big>
+										</td>
+									)
+								}
+							/>
 
 							<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
 
@@ -931,6 +941,7 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 
 		searchText: accountReceivablePayments.searchText,
 		activePaymentRows: accountReceivablePayments.activePaymentRows,
+		NoDataString: accountReceivablePayments.NoDataString,
 	}
 }
 

@@ -63,6 +63,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 
+import ReactDataGrid from "react-data-grid";
+
 const styles = theme => ({
 	button: {
 		margin: theme.spacing.unit,
@@ -330,17 +332,31 @@ class PaymentFormModal extends React.Component {
 
 				// }
 			],
+			columnsForReactDataGrid: [
+				{ key: "InvoiceNo", name: "Invoice No", editable: false },
+				{ key: "InvoiceAmount", name: "Invoice Amount", editable: false },
+				{ key: "InvoiceBalance", name: "Invoice Balance", editable: false },
+				{ key: "PaymentAmount", name: "Payment Amount", editable: true }
+			],
 			rows: [],
 			currencyColumns: [
 				'InvoiceAmount', 'InvoiceBalance', 'PaymentAmount'
 			],
 			customerName: "",
 			customerNumber: "",
-		}
 
+			PaymentType: "",
+			ReferenceNo: "",
+			PaymentDate: "",
+			PaymentNote: "",
+			PaymentAmount: 0,
+		}
 		// this.commitChanges = this.commitChanges.bind(this);
 	}
 
+	componentWillMount() {
+		this.setRowData()
+	}
 	UNSAFE_componentWillReceiveProps(nextProps) {
 		this.setState({
 			bOpenPaymentDialog: nextProps.bOpenPaymentDialog
@@ -354,6 +370,28 @@ class PaymentFormModal extends React.Component {
 	handleClose = () => {
 		this.props.openPaymentDialog(false);
 	};
+
+	handleCreatePayment = () => {
+		
+		let PayItems = this.state.rows.map(x => {
+			return {
+				InvoiceNo: x.InvoiceNo,
+				Amount: x.PaymentAmount
+			}
+		})
+
+		const params = {
+			RegionId: this.props.regionId,
+			PaymentType: this.state.PaymentType,
+			ReferenceNo: this.state.ReferenceNo,
+			PaymentDate: this.state.PaymentDate,
+			Note: this.state.PaymentNote,
+			PayItems: PayItems,
+		}
+		console.log("handleCreatePayment", params);
+		this.handleClose();
+		this.props.createAccountReceivablePayment(this.props.regionId, this.state.PaymentType, this.state.ReferenceNo, this.state.PaymentDate, this.state.PaymentNote, PayItems)
+	}
 
 	handleChangeChecked = name => event => {
 		this.setState({ [name]: event.target.checked });
@@ -384,6 +422,15 @@ class PaymentFormModal extends React.Component {
 	}
 
 	setRowData(payments, activePaymentRows = this.props.activePaymentRows) {
+		console.log("----------------------------------------")
+		const temp_rows = [
+			{ id: 0, InvoiceNo: 1, InvoiceAmount: 1351.51, InvoiceBalance: 216.36, PaymentAmount: 0 },
+			{ id: 1, InvoiceNo: 2, InvoiceAmount: 56.30, InvoiceBalance: 548.24, PaymentAmount: 0 },
+			{ id: 2, InvoiceNo: 3, InvoiceAmount: 215.28, InvoiceBalance: 1654.36, PaymentAmount: 0 },
+
+		];
+		this.setState({ rows: temp_rows })
+
 		if (!payments || payments.Regions === undefined || payments.Regions.length < 1)
 			return [];
 		let res = [...payments.Regions[0].Payments]
@@ -411,9 +458,20 @@ class PaymentFormModal extends React.Component {
 		}
 	}
 
+	onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
+		this.setState(state => {
+			const rows = state.rows.slice();
+			for (let i = fromRow; i <= toRow; i++) {
+				rows[i] = { ...rows[i], ...updated };
+			}
+			return { rows };
+		});
+
+	};
+
 	render() {
 		const { classes } = this.props;
-		const { rows, columns, customerName, customerNumber, currencyColumns } = this.state;
+		const { rows, columns, customerName, customerNumber, currencyColumns, columnsForReactDataGrid } = this.state;
 		return (
 			<div>
 				<Dialog
@@ -453,15 +511,14 @@ class PaymentFormModal extends React.Component {
 
 								<div className={classNames("flex")} sm={12}>
 
-
-
 									<TextField sm={3} select margin="dense" id="PaymentType" label="Payment Type" variant="outlined"
 										// style={{ width: "30%" }}
 										autoFocus
 										className={classNames(classes.textField, "pr-6")}
 										value={this.state.PaymentType || ""}
 										onChange={this.handleChange('PaymentType')}
-										fullWidth>
+										fullWidth
+									>
 										<MenuItem value={"Check"}>Check</MenuItem>
 										<MenuItem value={"CreditCard"}>Credit Card</MenuItem>
 										<MenuItem value={"EFT"}>EFT</MenuItem>
@@ -472,10 +529,13 @@ class PaymentFormModal extends React.Component {
 									</TextField>
 
 									<TextField sm={3} type="number" margin="dense" id="ReferenceNo" label="Reference No." variant="outlined"
+										onChange={this.handleChange('ReferenceNo')}
+										value={this.state.ReferenceNo}
 										className={classNames(classes.textField, "pr-6")}
-										fullWidth />
+										fullWidth
+									/>
 
-									<TextField sm={3}
+									<TextField sm={1}
 										type="date"
 										id="PaymentDate"
 										label="Payment Date"
@@ -483,7 +543,7 @@ class PaymentFormModal extends React.Component {
 										InputLabelProps={{
 											shrink: true
 										}}
-										value={this.state.SignDate}
+										value={this.state.PaymentDate}
 										onChange={this.handleChange('PaymentDate')}
 										margin="dense"
 										variant="outlined"
@@ -497,32 +557,43 @@ class PaymentFormModal extends React.Component {
 										margin="dense"
 										variant="outlined"
 										fullWidth
-										className={classNames("")}
-										id="Amount"
-										label="Amount" sm={3}
+										className={classNames(classes.textField, "pr-6")}
+										id="PaymentAmount"
+										value={this.state.PaymentAmount}
+										onChange={this.handleChange('PaymentAmount')}
+										label="Amount" sm={2}
 									/>
+
+									<Button sm={3}
+										className={classNames(classes.button, "m-6")}
+										style={{ width: "50%" }}
+									>
+										<Icon>arrow_downward</Icon>
+										Auto Dist.
+									</Button>
+
 								</div>
 
-								<TextField margin="dense" variant="outlined" fullWidth id="Notes" label="Notes" multiline rows="2" rowsMax="2" />
+								<TextField margin="dense" variant="outlined" fullWidth id="PaymentNote" label="Notes" multiline rows="2" rowsMax="2"
+									value={this.state.PaymentNote}
+									onChange={this.handleChange('PaymentNote')}
+								/>
 
 							</div>
 							<div className={classNames("flex flex-col flex-1 mt-12")}>
 								<Paper>
-									<Grid rows={rows} columns={columns} getRowId={getRowId}>
+									{/* <Grid rows={rows} columns={columns} getRowId={getRowId}>
 										<EditingState
 											onCommitChanges={this.commitChanges}
-											// defaultEditingRowIds={rows.map((x,index)=>index)}
 											defaultEditingRowIds={rows.map(x => x.id)}
 											columnExtensions={columns}
 										/>
 										<CurrencyTypeProvider
 											for={currencyColumns}
 										/>
-										<Table />
-										{/* <VirtualTable height="auto" /> */}
+										<VirtualTable height="auto" />
 										<TableColumnResizing defaultColumnWidths={columns} />
 										<TableHeaderRow cellComponent={tableHeaderCellComponent} />
-										{/* <TableHeaderRow/> */}
 
 										<TableEditRow />
 										<TableEditColumn
@@ -535,7 +606,6 @@ class PaymentFormModal extends React.Component {
 										<Getter
 											name="tableColumns"
 											computed={({ tableColumns }) => {
-												// debugger
 												const result = [
 													...tableColumns.filter(c => c.type !== TableEditColumn.COLUMN_TYPE),
 													{ key: 'editCommand', type: TableEditColumn.COLUMN_TYPE }
@@ -544,14 +614,23 @@ class PaymentFormModal extends React.Component {
 											}
 											}
 										/>
-									</Grid>
+									</Grid> */}
+
+									<ReactDataGrid
+										columns={columnsForReactDataGrid}
+										rowGetter={i => rows[i]}
+										rowsCount={rows.length}
+										onGridRowsUpdated={this.onGridRowsUpdated}
+										enableCellSelect={true}
+									/>
+
 								</Paper>
 							</div>
 						</div>
 					</DialogContent>
 
 					<DialogActions>
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24")}>Save</Button>
+						<Button variant="contained" onClick={this.handleCreatePayment} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Save</Button>
 					</DialogActions>
 				</Dialog>
 			</div>
@@ -562,11 +641,13 @@ class PaymentFormModal extends React.Component {
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
 		openPaymentDialog: Actions.openPaymentDialog,
+		createAccountReceivablePayment: Actions.createAccountReceivablePayment,
 	}, dispatch);
 }
 
-function mapStateToProps({ accountReceivablePayments }) {
+function mapStateToProps({ accountReceivablePayments, auth }) {
 	return {
+		regionId: auth.login.defaultRegionId,
 		bOpenPaymentDialog: accountReceivablePayments.bOpenPaymentDialog,
 		activePaymentRows: accountReceivablePayments.activePaymentRows,
 
