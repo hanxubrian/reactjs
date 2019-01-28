@@ -173,7 +173,7 @@ class InvoiceReport extends Component {
                     const pdf = new jsPDF();
                     pdf.addImage(imgData, 'PNG', 0, 0);
                     pdf.addImage(img, 'PNG', 8, 15, 40, 30);
-                    pdf.addImage(img, 'PNG', 150, 100, 40, 30);
+                    pdf.addImage(img, 'PNG', 150, 102, 40, 30);
                     pdf.save("download.pdf");
                 })
             ;
