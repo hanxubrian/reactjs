@@ -434,9 +434,9 @@ class BillRun extends Component {
     };
     openEditContactDialog=(rowinfo)=>{
         console.log("rowinfo",rowinfo);
-
-        this.child1.getInfofromParent(rowinfo);
-        this.setState({viewinvoiceDetail:!this.state.viewinvoiceDetail});
+        this.props.history.push("/accounts-receivable/invoices");
+        // this.child1.getInfofromParent(rowinfo);
+        // this.setState({viewinvoiceDetail:!this.state.viewinvoiceDetail});
     }
     CloseDetail=()=>{
         this.setState({viewinvoiceDetail:!this.state.viewinvoiceDetail});
