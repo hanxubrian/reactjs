@@ -71,6 +71,7 @@ class UserAvatar extends React.Component {
                             height={250}
                             onCrop={this.onCrop}
                             onClose={this.onClose}
+                            label = {"Choose User Photo"}
                             src={this.state.src ? "" : this.state.src}
                         />
                     )}
