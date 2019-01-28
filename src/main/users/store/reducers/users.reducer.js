@@ -1,4 +1,5 @@
 import * as Actions from '../actions';
+import * as UserActions from "../../../../auth/store/actions";
 const initialState = {
     openUsersFormStatus: false,
     selectedRows: [],
@@ -25,6 +26,12 @@ const usersReducer = function (state = initialState, action) {
             return{
                 ...state,
                 fpStatus: !state.fpStatus
+            }
+        }
+        case UserActions.USER_LOGGED_OUT:
+        {
+            return {
+                ...initialState
             }
         }
         default:

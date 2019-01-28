@@ -46,7 +46,6 @@ class UserAvatar extends React.Component {
     onClose() {
         this.setState({preview: null});
         this.setState({imageChoosed: false});
-        this.setState({preview:null});
     }
 
     onCrop(preview) {
@@ -56,6 +55,7 @@ class UserAvatar extends React.Component {
         this.setState({imageChoosed: true});
     }
     onPhotoChange = (e) => {
+        this.setState({preview: null});
         this.setState({imageChoosed: false});
         console.log(this.state.src);
     }
@@ -67,8 +67,8 @@ class UserAvatar extends React.Component {
                 <div style={{margin: "auto" , textAlign: "center", marginTop: 20,marginBottom: 30, padding: 5}}>
                     {this.state.imageChoosed === false && (
                         <Avatar
-                            width={250}
-                            height={250}
+                            width={200}
+                            height={200}
                             onCrop={this.onCrop}
                             onClose={this.onClose}
                             label = {"Choose User Photo"}

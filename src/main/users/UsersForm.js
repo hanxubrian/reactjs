@@ -8,6 +8,7 @@ import connect from "react-redux/es/connect/connect";
 import GridContainer from "../../Commons/Grid/GridContainer";
 import GridItem from "../../Commons/Grid/GridItem";
 import UserAvatar from"./UserAvatar"
+import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 
 const styles = theme => ({
     root     : {
@@ -15,7 +16,8 @@ const styles = theme => ({
         flexWrap: 'wrap',
         width   : '80%',
         margin  : 'auto',
-        marginTop: '50px'
+        marginTop: '50px',
+        marginBottom: '50px'
     },
     margin   : {
         margin: theme.spacing.unit
@@ -25,26 +27,113 @@ const styles = theme => ({
     }
 });
 
+
+const department = [
+    {
+        value: "DepartMent1",
+        label: "DepartMent1"
+    },
+    {
+        value: "DepartMent2",
+        label: "DepartMent2"
+    },
+    {
+        value: "DepartMent3",
+        label: "DepartMent3"
+    },
+    {
+        value: "DepartMent4",
+        label: "DepartMent4"
+    },
+    {
+        value: "DepartMent5",
+        label: "DepartMent5"
+    },
+    {
+        value: "DepartMent6",
+        label: "DepartMent6"
+    },
+    {
+        value: "DepartMent7",
+        label: "DepartMent7"
+    }
+];
+
+const State = [
+    {
+        value: "Buffalo",
+        label: "Buffalo"
+    },
+    {
+        value: "New York",
+        label: "NewYork"
+    },
+    {
+        value: "Kansas",
+        label: "Kansas"
+    },
+    {
+        value: "Ohio",
+        label: "Ohio"
+    },
+    {
+        value: "Georgia",
+        label: "Georgia"
+    },
+    {
+        value: "Texas",
+        label: "Texas"
+    },
+    {
+        value: "Florida",
+        label: "Florida"
+    }
+];
+
+const Group = [
+    {
+        value: 0,
+        label: 'All Groups',
+    },
+    {
+        value: 1,
+        label: 'Group 1',
+    },
+    {
+        value: 2,
+        label: 'Group 2',
+    },
+    {
+        value: 3,
+        label: 'Group 3',
+    },
+    {
+        value: 4,
+        label: 'Group 4',
+    },
+];
+
+
 class UsersForm extends React.Component {
     state = {
         firstName: '',
         lastName : '',
         title : '',
         email : '',
-        department: '',
+        department: 'DepartMent1',
         phone : '',
         address: '',
-        state: '',
+        state: 'Buffalo',
         city : '',
         zip : '',
         userName: '',
         accPassword: '',
-        outlookUserName: '',
-        outlookPassword: '',
         selectRegion: '',
         userGroup: '',
         defaultRegion: ''
     };
+
+
 
     handleChange = prop => event => {
         this.setState({[prop]: event.target.value});
@@ -59,7 +148,7 @@ class UsersForm extends React.Component {
                 <div className={classNames(classes.userFormSection,"w-full")}>
                     <h2>User Profile</h2>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row justify-center">
                             <UserAvatar/>
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -128,21 +217,30 @@ class UsersForm extends React.Component {
                                 fullWidth
                                 required
                             />
+
                             <TextField
                                 id="department"
-                                label="Department"
-                                onChange={this.handleChange("department")}
-                                value={this.state.department}
-                                variant="outlined"
-                                inputProps={{
-                                    maxLength:60
-                                }}
+                                select
+                                variant={"outlined"}
                                 className={classes.textField}
                                 style={{marginLeft:'1%'}}
+                                value={this.state.department}
+                                label={"Department"}
+                                onChange={this.handleChange('department')}
+                                SelectProps={{
+                                    MenuProps: {
+                                        className: classes.menu,
+                                    },
+                                }}
                                 margin="dense"
                                 fullWidth
-                                required
-                            />
+                            >
+                                {department.map(option => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
@@ -171,16 +269,27 @@ class UsersForm extends React.Component {
                             />
                             <TextField
                                 id="state"
-                                label="State"
-                                variant="outlined"
+                                select
+                                variant={"outlined"}
+                                label={"State"}
                                 className={classes.textField}
-                                value={this.state.state}
-                                onChange={this.handleChange("state")}
                                 style={{marginRight:'1%', marginLeft: '1%'}}
+                                value={this.state.state}
+                                onChange={this.handleChange('state')}
+                                SelectProps={{
+                                    MenuProps: {
+                                        className: classes.menu,
+                                    },
+                                }}
                                 margin="dense"
                                 fullWidth
-                                required
-                            />
+                            >
+                                {State.map(option => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
                             <TextField
                                 id="zip"
                                 label="Zip"
@@ -236,40 +345,73 @@ class UsersForm extends React.Component {
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
                                 id="userGroup"
-                                label="User Group"
-                                variant="outlined"
+                                label={"userGroup"}
+                                select
+                                variant={"outlined"}
                                 className={classes.textField}
                                 value={this.state.userGroup}
-                                onChange={this.handleChange("userGroup")}
-                                style={{marginRight:'1%'}}
+                                onChange={this.handleChange('userGroup')}
+                                style={{marginRight:"1%"}}
+                                SelectProps={{
+                                    MenuProps: {
+                                        className: classes.menu,
+                                    },
+                                }}
                                 margin="dense"
                                 fullWidth
-                                required
-                            />
+                            >
+                                {Group.map(option => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
                             <TextField
                                 id="selectRegion"
-                                label="Select Region"
-                                variant="outlined"
+                                label={"Select Region"}
+                                select
+                                variant={"outlined"}
                                 className={classes.textField}
                                 value={this.state.selectRegion}
-                                onChange={this.handleChange("selectRegion")}
-                                style={{marginLeft: '1%', marginRight: '1%'}}
+                                onChange={this.handleChange('selectRegion')}
+                                style={{marginLeft:"1%",marginRight:"1%"}}
+                                SelectProps={{
+                                    MenuProps: {
+                                        className: classes.menu,
+                                    },
+                                }}
                                 margin="dense"
                                 fullWidth
-                                required
-                            />
+                            >
+                                {State.map(option => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
                             <TextField
                                 id="defaultRegion"
-                                label="Default Region"
-                                variant="outlined"
+                                label={"Default Region"}
+                                select
+                                variant={"outlined"}
                                 className={classes.textField}
                                 value={this.state.defaultRegion}
-                                onChange={this.handleChange("defaultRegion")}
-                                style={{marginLeft: '1%'}}
+                                style={{marginLeft: "1%"}}
+                                onChange={this.handleChange('defaultRegion')}
+                                SelectProps={{
+                                    MenuProps: {
+                                        className: classes.menu,
+                                    },
+                                }}
                                 margin="dense"
                                 fullWidth
-                                required
-                            />
+                            >
+                                {State.map(option => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
                         </GridItem>
                     </GridContainer>
                 </div>
@@ -287,6 +429,23 @@ class UsersForm extends React.Component {
                                 margin="dense"
                                 required
                             />
+                        </GridItem>
+                    </GridContainer>
+                </div>
+                <div className={classNames(classes.userFormSection,"w-full")}>
+                    <h2>User Permission</h2>
+                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            {/*<TextField*/}
+                                {/*id="userRole"*/}
+                                {/*label="User Role"*/}
+                                {/*variant="outlined"*/}
+                                {/*className={classes.textField}*/}
+                                {/*value={this.state.userRole}*/}
+                                {/*onChange={this.handleChange("userRole")}*/}
+                                {/*margin="dense"*/}
+                                {/*required*/}
+                            {/*/>*/}
                         </GridItem>
                     </GridContainer>
                 </div>
