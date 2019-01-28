@@ -132,12 +132,14 @@ const styles = theme => ({
 const fakeEvent = {
     stopPropagation: () => false
 }
-
+const mL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 class BillRunDialog extends Component {
     state = {
         open                    : false,
         selectedDate            : moment(),
         message                 : "",
+        description             : "",
         userId                  : null,
         regionId                : null,
         billruns                : null,
@@ -146,6 +148,9 @@ class BillRunDialog extends Component {
         statusMSG               : 10,
         pusherMSG               : null,
         showP                   : false,
+        year                    : moment().year(),
+        month                   : moment().month(),
+        desMSG                  : `MONTHLY CONTRACT BILLING AMOUNT FOR `+mL[moment().month()].toUpperCase()+`  `+moment().year(),
 
     };
     constructor(props){
@@ -212,7 +217,14 @@ class BillRunDialog extends Component {
         this.setState({ open: false });
     };
     handleDateChange = date => {
+        let defMSG = `MONTHLY CONTRACT BILLING AMOUNT FOR `+mL[moment(date).month()].toUpperCase()+`  `+moment(date).year();
         this.setState({ selectedDate: date });
+        this.setState({
+            year:  moment(date).year(),
+            month: moment(date).month(),
+            desMSG: defMSG
+        });
+
     };
     onchangeDate=(event)=>{
         this.setState({selectedDate:event.target.value})
@@ -224,6 +236,10 @@ class BillRunDialog extends Component {
     onchangeMessage=(e)=>{
         this.setState({message:e.target.value})
     }
+    onchangedescription=(e)=>{
+        this.setState({description:e.target.value})
+    }
+
     successmesssage=()=>{
 
         this.props.showMessage({
@@ -266,7 +282,8 @@ class BillRunDialog extends Component {
                     month,
                     user,
                     userid,
-                    this.state.message
+                    this.state.message,
+                    this.state.description,
                 );
                 this.setState({statusMSG:200});
                 this.setState({showP: !this.state.showP});
@@ -294,11 +311,9 @@ class BillRunDialog extends Component {
     render() {
 
         const { classes,loading ,billstatus} = this.props;
-        const { selectedDate ,showP,auth,billruns} = this.state;
+        const { selectedDate ,showP,auth,billruns,year,month,desMSG} = this.state;
         let date = this.state.selectedDate;
-        let year = moment(date).year();
-        let month = moment(date).month()+1;
-        let defMSG = `MONTHLY CONTRACT BILLING FOR `+month+`/`+year;
+
         return (
             <div style={{
 
@@ -350,14 +365,27 @@ class BillRunDialog extends Component {
                                 </div>
                             </MuiPickersUtilsProvider>
                         </div>
-
                         <div>
+                            <TextField
+                                id="outlined-multiline-static"
+                                label="Invoice Description"
+                                multiline
+                                rows="3"
+                                defaultValue={desMSG}
+                                margin="normal"
+                                variant="outlined"
+                                style={{width: "100%"}}
+                                onChange={this.onchangedescription}
+                            />
+                        </div>
+                        <div>
+
                             <TextField
                                 id="outlined-multiline-static"
                                 label="Invoice Message"
                                 multiline
-                                rows="10"
-                                defaultValue={defMSG}
+                                rows="3"
+                                defaultValue={""}
 
                                 margin="normal"
                                 variant="outlined"

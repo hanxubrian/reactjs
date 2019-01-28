@@ -202,7 +202,6 @@ class Report extends Component {
         }
 
         return (
-
             <div className={classNames(classes.root, "p-0 sm:p-64  print:p-0")}>
                 <Card className={classNames(classes.card, "mx-auto")}>
                     <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>

@@ -248,8 +248,6 @@ class BillRun extends Component {
                 if(JSON.stringify(this.state.viewinvoiceDetail) !== JSON.stringify(prevState.viewinvoiceDetail)){
                     return;
                 }
-                console.log("this.state",this.state);
-                console.log("prevState",prevState);
                 this.getBillRunList();
             }
             if(this.props.loading === false && prevProps.loading===true){
@@ -433,7 +431,6 @@ class BillRun extends Component {
         this.setState({endDate: date });
     };
     openEditContactDialog=(rowinfo)=>{
-        console.log("rowinfo",rowinfo);
         this.props.history.push("/accounts-receivable/invoices");
         // this.child1.getInfofromParent(rowinfo);
         // this.setState({viewinvoiceDetail:!this.state.viewinvoiceDetail});
@@ -704,8 +701,8 @@ class BillRun extends Component {
                                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center p-24")
                                                 },
                                                 {
-                                                    Header: "Message",
-                                                    accessor: "Message",
+                                                    Header: "Description",
+                                                    accessor: "InvoiceDescription",
                                                     width: 560,
                                                     className: classNames("flex items-center  justify-start p-12-impor p-24")
                                                 },
