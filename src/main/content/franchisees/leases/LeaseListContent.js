@@ -2022,7 +2022,7 @@ class LeaseListContent extends Component {
 		} = this.state;
 
 		console.log("-------render-------", locationFilterValue, pins, pins2)
-
+		console.log([expandedGroups[0]])
 		return (
 			<Fragment>
 				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
@@ -2083,7 +2083,6 @@ class LeaseListContent extends Component {
 										// onPageSizeChange={this.changePageSize}
 										defaultPageSize={100}
 									/>
-									
 									<PagingPanel pageSizes={pageSizes} />
 
 									<SelectionState
@@ -2123,7 +2122,7 @@ class LeaseListContent extends Component {
 										grouping={[
 											{columnName: 'FranchiseeNameNo'}
 										]}
-										expandedGroups={expandedGroups}
+										expandedGroups={[expandedGroups[0]]}
 										onExpandedGroupsChange={this.expandedGroupsChange}
 									/>
 									<IntegratedGrouping />
