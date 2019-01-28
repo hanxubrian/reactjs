@@ -36,7 +36,7 @@ const styles = theme => ({
         position       : 'relative',
         flex           : '1 0 auto',
         height         : 'auto',
-        backgroundColor: theme.palette.background.default
+        backgroundColor: theme.palette.background.default,
     },
     innerScroll                   : {
         flex  : '1 1 auto',

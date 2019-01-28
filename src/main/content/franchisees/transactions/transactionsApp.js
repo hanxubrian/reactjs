@@ -291,7 +291,7 @@ class TransactionsApp extends Component {
 
         let bDetailPanel = false;
 
-        if(transactionForm.props.open && transactionForm.type=='edit')
+        if(transactionForm.props.open )
             bDetailPanel = true;
 
         if(bDetailPanel)
@@ -324,14 +324,13 @@ class TransactionsApp extends Component {
                         </div>
                     }
                     leftSidebarContent={
-                        <div style={{overflowY: 'scroll'}}>
+                        <div>
                             {bFilterPanel && (
                                 <FilterPanel/>
                             )}
                             {bDetailPanel && (
                                 <TransactionEditForm franchisees={this.state.franchisees} selectedTransaction={this.state.selectedTransaction}/>
                             )}
-
                         </div>
                     }
                     header={
@@ -443,9 +442,9 @@ class TransactionsApp extends Component {
                                     <TransactionDxGridLists data={this.state.temp}/>
                                 </div>
                             )}
-                            {(this.state.temp && transactionForm.props.open && transactionForm.type==='new' ) && (
-                                <TransactionForm franchisees={this.state.franchisees} selectedTransaction={this.state.selectedTransaction}/>
-                            )}
+                            {/*{(this.state.temp && transactionForm.props.open && transactionForm.type==='new' ) && (*/}
+                                {/*<TransactionForm franchisees={this.state.franchisees} selectedTransaction={this.state.selectedTransaction}/>*/}
+                            {/*)}*/}
 
                             {/*{(this.state.temp && transactionForm.props.open && transactionForm.type==='edit') && (*/}
                             {/*<TransactionDetail />*/}

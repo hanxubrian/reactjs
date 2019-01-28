@@ -651,7 +651,7 @@ class TransactionEditForm extends Component {
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="h-full flex flex-col relative">
-                    <div className="flex flex-col p-12 pt-12 pb-0 pr-16" style={{flex: "1"}}>
+                    <div className="flex flex-col p-12 pb-0" style={{flex: "1"}}>
                         <Grid container className={classNames(classes.formControl)}>
                             <Grid item xs={12} sm={12} md={12} className="flex flex-row">
                                 <Autosuggest
