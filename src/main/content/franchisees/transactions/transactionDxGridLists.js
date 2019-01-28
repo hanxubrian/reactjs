@@ -198,40 +198,6 @@ class TransactionsDxGridLists extends Component {
         });
     };
 
-    toggleSelection = (key, shift, row) => {
-        /*
-          https://react-table.js.org/#/story/select-table-hoc
-          Implementation of how to manage the selection state is up to the developer.
-          This implementation uses an array stored in the component state.
-          Other implementations could use object keys, a Javascript Set, or Redux... etc.
-        */
-        // start off with the existing state
-        let selection = [...this.state.selection];
-        const keyIndex = selection.indexOf(key);
-        // check to see if the key exists
-        if (keyIndex >= 0) {
-            // it does exist so we will remove it using destructing
-            selection = [
-                ...selection.slice(0, keyIndex),
-                ...selection.slice(keyIndex + 1)
-            ];
-        } else {
-            // it does not exist so add it
-            selection.push(key);
-        }
-        // update the state
-        this.setState({selection});
-    };
-
-    isSelected = key => {
-        /*
-          Instead of passing our external selection state we provide an 'isSelected'
-          callback and detect the selection state ourselves. This allows any implementation
-          for selection (either an array, object keys, or even a Javascript Set object).
-        */
-        return this.state.selection.includes(key);
-    };
-
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.data !== prevProps.data)
@@ -294,7 +260,6 @@ class TransactionsDxGridLists extends Component {
 
     GroupCellContent = ({column, row}) => (
         <span>
-			{/* {column.title} */}
             <strong>{row.value}</strong>
 		</span>
     );
@@ -354,8 +319,6 @@ class TransactionsDxGridLists extends Component {
 
     render() {
         const {classes} = this.props;
-        const {toggleSelection, isSelected} = this;
-
         const {expandedGroups} = this.state;
 
         console.log('rows=', this.state.data);
@@ -410,10 +373,10 @@ class TransactionsDxGridLists extends Component {
                             {columnName: 'FranNameNo'},
                             // {columnName: 'TrxType'},
                         ]}
-                        // expandedGroups={expandedGroups}
-                        // onExpandedGroupsChange={this.expandedGroupsChange}
+                        expandedGroups={expandedGroups}
+                        onExpandedGroupsChange={this.expandedGroupsChange}
                     />
-                    <IntegratedSelection />
+                    {/*<IntegratedSelection />*/}
                     <IntegratedPaging/>
                     <IntegratedGrouping/>
                     <VirtualTable height="auto"
@@ -430,7 +393,7 @@ class TransactionsDxGridLists extends Component {
                     <TableColumnVisibility
                         hiddenColumnNames={['FranNameNo']}
                         emptyMessageComponent={this.emptyMessageContent} />
-                    <TableSelection showSelectAll />
+                    {/*<TableSelection showSelectAll />*/}
                     <PagingPanel pageSizes={this.state.pageSizes}/>
                 </Grid>
                 <Dialog
