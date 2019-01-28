@@ -252,6 +252,16 @@ const styles1 = theme => ({
     },
 });
 
+const aTypes = [
+    {value: 82, label:'Advance Fee'},            {value: 81, label: 'Advance Interest'},
+    {value: 20, label: 'Advance to Franchisee'}, {value: 78, label: 'Child support'},
+    {value: 5, label: 'Equipment Rental'},       {value: 6, label: 'Franchisee Note'},
+    {value: 18, label: 'Franchisee Supplies'},   {value: 79, label: 'Garnishment'},
+    {value: 80, label: 'Levy'},                  {value: 14, label: 'Misc. R. O.'},
+    {value: 7, label: 'Negative Due Roll-Due'},  {value: 51, label: 'Negative Dues'},
+    {value: 90, label: 'Purchase from Office'},  {value: 72, label: 'Tax Credit'}
+];
+
 function MySnackbarContent(props) {
     const { classes, className, message, onClose, variant, ...other } = props;
     const Icon = variantIcon[variant];
@@ -423,18 +433,32 @@ class TransactionEditForm extends Component {
         if(this.props.transactionForm.type === 'new')
             this.setState({TransactionNo: "PENDING"});
 
-        if(this.props.transactionForm.type === 'edit') {
-            let trxRow = this.props.trxRowInfo;
-            let franchisee = _.filter(this.props.franchisees, franchisee=>trxRow.FranchiseeNo===franchisee.Number && trxRow.FranchiseeName===franchisee.Name);
+        if(this.props.transactionForm.type === 'edit' && this.props.transactionDetail!==null) {
+            let trxDetail = this.props.transactionDetail.Data;
+            let franchisee = _.filter(this.props.franchisees, franchisee=>trxDetail.FranchiseeNo===franchisee.Number && trxDetail.FranchiseeName===franchisee.Name);
+
 
             if(franchisee.length>0) {
                 this.setState({selectedFranchisee: franchisee[0]});
-                this.setState({value: trxRow.FranchiseeName});
-                this.setState({TransactionNo: trxRow.Number});
-                this.setState({subTotal: parseFloat(trxRow.ExtendedPrice)});
-                this.setState({tax: parseFloat(trxRow.Tax)});
-                this.setState({total: parseFloat(trxRow.TotalTrxAmount)});
-                this.setState({TransactionDate: moment(trxRow.TrxDate)});
+                this.setState({value: trxDetail.FranchiseeName});
+                this.setState({TransactionNo: trxDetail.Number});
+                this.setState({subTotal: parseFloat(trxDetail.TrxExtendedPrice)});
+                this.setState({unitPrice: parseFloat(trxDetail.TrxItemAmount)});
+                this.setState({tax: parseFloat(trxDetail.TrxTax)});
+                this.setState({quantity: parseFloat(trxDetail.quantity)});
+                this.setState({total: parseFloat(trxDetail.TotalTrxAmount)+parseFloat(trxDetail.TrxTax)});
+                this.setState({TransactionDate: moment(trxDetail.TrxDate)});
+
+                let trxType = aTypes.filter(f=>f.value = trxDetail.TrxType);
+                if(trxType.length)
+                    this.setState({transactionType: trxType[0]});
+
+                // this.setState({transactionFrequency: trxDetail.TrxFrequency});
+                this.setState({transactionFrequency: 'single'});
+                this.setState({payments: parseInt(trxDetail.NumberOfPayments)});
+                this.setState({TransactionNo: trxDetail.Trx_no});
+                this.setState({reSell: trxDetail.TrxResell});
+                this.setState({transactionDescription: trxDetail.Description});
             }
         }
 
@@ -618,16 +642,6 @@ class TransactionEditForm extends Component {
 
         let bReadonly = false;
         if(this.props.transactionForm.type === 'new') bReadonly = true;
-
-        let aTypes = [
-            {value: 82, label:'Advance Fee'},            {value: 81, label: 'Advance Interest'},
-            {value: 20, label: 'Advance to Franchisee'}, {value: 78, label: 'Child support'},
-            {value: 5, label: 'Equipment Rental'},       {value: 6, label: 'Franchisee Note'},
-            {value: 18, label: 'Franchisee Supplies'},   {value: 79, label: 'Garnishment'},
-            {value: 80, label: 'Levy'},                  {value: 14, label: 'Misc. R. O.'},
-            {value: 7, label: 'Negative Due Roll-Due'},  {value: 51, label: 'Negative Dues'},
-            {value: 90, label: 'Purchase from Office'},  {value: 72, label: 'Tax Credit'}
-        ];
 
         const components = {
             Control,
