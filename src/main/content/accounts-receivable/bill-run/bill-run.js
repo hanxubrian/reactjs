@@ -712,7 +712,7 @@ class BillRun extends Component {
                                                     accessor: d => moment(d.InvoiceDate).format('MM/YYYY'),
                                                     className: classNames("flex items-center  justify-center"),
                                                     Cell : row=>{
-                                                        return(row.original.Month+"/"+row.original.Year);
+                                                        return((row.original.Month).toString().padStart(2, "0")+"/"+row.original.Year);
                                                     }
                                                 },
                                                 {
