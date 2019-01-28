@@ -28,12 +28,10 @@ export function getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, Sea
 
 		(async () => {
 			let paymentsList = await invoicePaymentsService.getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status);
-			if (!paymentsList.IsSuccess) {
-				dispatch({
-					type: FAILED_GET_ALL_RECEIVABLE_PAYMENTS,
-					payload: paymentsList.message
-				});
-			}
+			dispatch({
+				type: FAILED_GET_ALL_RECEIVABLE_PAYMENTS,
+				payload: paymentsList.IsSuccess ? "Empty Data" : paymentsList.message
+			});
 			dispatch({
 				type: GET_ALL_RECEIVABLE_PAYMENTS,
 				payload: paymentsList
@@ -55,13 +53,31 @@ export function createAccountReceivablePayment(RegionId, PaymentType, ReferenceN
 		(async () => {
 			// await sleep(2000)
 			// let paymentCreated = [];
-			let paymentCreated = await invoicePaymentsService.createAccountReceivablePayment(RegionId, PaymentType, ReferenceNo, PaymentDate, Note, PayItems);
+			let paymentCreated = await invoicePaymentsService.createAccountReceivablePayment(RegionId, PaymentType, ReferenceNo, PaymentDate, Note, PayItems, overpayment);
 			dispatch({
 				type: CREATE_AR_PAYMENTS,
 				payload: paymentCreated
 			});
+			//
+			// re-fetch payment list
+			//
+			dispatch({
+				type: GET_ALL_RECEIVABLE_PAYMENTS_START,
+				payload: true
+			});
 
-			await getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status)
+			RegionId = RegionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [RegionId];
+			let paymentsList = await invoicePaymentsService.getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status);
+
+			dispatch({
+				type: FAILED_GET_ALL_RECEIVABLE_PAYMENTS,
+				payload: paymentsList.IsSuccess ? "Empty Data" : paymentsList.message
+			});
+
+			dispatch({
+				type: GET_ALL_RECEIVABLE_PAYMENTS,
+				payload: paymentsList
+			});
 
 		})();
 	}
