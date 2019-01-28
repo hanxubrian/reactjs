@@ -208,6 +208,33 @@ const getRowId = row => row.id;
 const CurrencyFormatter = ({ value }) => (<span>$ {parseFloat(`0${value}`).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
 const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/, '$2/$3/$1');
 
+const BlueDialogTitle = withStyles(theme => ({
+	root: {
+		borderBottom: `1px solid ${theme.palette.divider}`,
+		backgroundColor: "#3c93ec",
+		margin: 0,
+		padding: theme.spacing.unit * 2,
+	},
+	closeButton: {
+		position: 'absolute',
+		right: theme.spacing.unit,
+		top: theme.spacing.unit,
+		color: "white",
+	},
+}))(props => {
+	const { children, classes, onClose } = props;
+	return (
+		<DialogTitle disableTypography className={classes.root}>
+			{children}
+			{onClose ? (
+				<IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
+					<Icon>close</Icon>
+				</IconButton>
+			) : null}
+		</DialogTitle>
+	);
+});
+
 class PaymentFormModal extends React.Component {
 
 	constructor(props) {
@@ -618,7 +645,12 @@ class PaymentFormModal extends React.Component {
 					// TransitionComponent={Transition}
 					aria-labelledby="form-dialog-title"
 				>
-					<DialogTitle id="form-dialog-title">Payment</DialogTitle>
+					<BlueDialogTitle id="form-dialog-title" onClose={this.handleClose}>
+						<h2 style={{ display: "flex", alignItems: "center", color: "white" }}>
+							<Icon>attach_money</Icon>
+							Payment
+                            </h2>
+					</BlueDialogTitle>
 					<DialogContent>
 						{/* <DialogContentText>Payment Description</DialogContentText> */}
 						<div className={classNames("flex flex-col")}>
@@ -779,7 +811,6 @@ class PaymentFormModal extends React.Component {
 					</DialogContent>
 
 					<DialogActions>
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Cancel</Button>
 						<Button variant="contained" onClick={this.handleCreatePayment} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Save</Button>
 					</DialogActions>
 				</Dialog>
