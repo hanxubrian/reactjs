@@ -66,6 +66,22 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import ReactDataGrid from "react-data-grid";
 
 const styles = theme => ({
+	root: {
+		'& .react-grid-Cell': {
+			background: '#565656',
+			color: 'white',
+		},
+		'& .react-grid-HeaderCell': {
+			background: '#424242',
+			color: 'white',
+		},
+		'& .react-grid-Row:hover .react-grid-Cell': {
+			background: ' #3d6d8a',
+		},
+		'& .react-grid-Canvas, .react-grid-Grid': {
+			background: '#272727',
+		}
+	},
 	button: {
 		margin: theme.spacing.unit,
 	},
@@ -351,6 +367,7 @@ class PaymentFormModal extends React.Component {
 				{ key: "InvoiceNo", name: "Invoice No", editable: false },
 				{ key: "InvoiceDate", name: "Invoice Date", editable: false, formatter: DateFormatter },
 				{ key: "DueDate", name: "Due Date", editable: false, formatter: DateFormatter },
+				{ key: "DaysPastDue", name: "Days Past Due", editable: false },
 				{ key: "InvoiceAmount", name: "Invoice Amount", editable: false, formatter: CurrencyFormatter },
 				{ key: "InvoiceBalance", name: "Invoice Balance", editable: false, formatter: CurrencyFormatter },
 				{ key: "PaymentAmount", name: "Payment Amount", editable: true, formatter: CurrencyFormatter }
@@ -364,9 +381,11 @@ class PaymentFormModal extends React.Component {
 
 			PaymentType: "",
 			ReferenceNo: "",
-			PaymentDate: "",
+			PaymentDate: new Date().toISOString().substr(0, 10),
 			PaymentNote: "",
 			PaymentAmount: 0,
+			overpayment: 0,
+			errorMsg: "",
 		}
 		// this.commitChanges = this.commitChanges.bind(this);
 	}
@@ -397,24 +416,70 @@ class PaymentFormModal extends React.Component {
 			}
 		})
 
-		const params = {
-			RegionId: this.props.regionId,
-			PaymentType: this.state.PaymentType,
-			ReferenceNo: this.state.ReferenceNo,
-			PaymentDate: this.state.PaymentDate,
-			Note: this.state.PaymentNote,
-			PayItems: PayItems,
+		let isZeroPaymentAll = false
+		PayItems.forEach(x => {
+			isZeroPaymentAll = isZeroPaymentAll || x.Amount !== 0
+		})
+
+		if (!this.state.PaymentType) {
+			this.setState({ errorMsg: "Payment type not selected" })
+		} else if (this.state.ReferenceNo <= 0) {
+			this.setState({ errorMsg: "Refernce number is invalid" })
+		} else if (!this.state.PaymentDate) {
+			this.setState({ errorMsg: "Payment date not selected" })
+		} else if (this.state.PaymentAmount <= 0) {
+			this.setState({ errorMsg: "Amount is invalid" })
+		} else if (!isZeroPaymentAll) {
+			this.setState({ errorMsg: "Either of payments amount is not settled" })
+		} else {
+
+			const params = {
+				RegionId: this.props.regionId,
+				PaymentType: this.state.PaymentType,
+				ReferenceNo: this.state.ReferenceNo,
+				PaymentDate: this.state.PaymentDate,
+				Note: this.state.PaymentNote,
+				PayItems: PayItems,
+				overpayment: this.state.overpayment,
+			}
+			console.log("handleCreatePayment", params);
+
+			this.handleClose();
+			this.props.createAccountReceivablePayment(
+				this.props.regionId,
+				this.state.PaymentType,
+				this.state.ReferenceNo,
+				this.state.PaymentDate,
+				this.state.PaymentNote,
+				PayItems,
+				this.state.overpayment,
+
+				this.props.getPaymentsParam.fromDate,
+				this.props.getPaymentsParam.toDate,
+				"",
+				this.props.status
+			)
 		}
-		console.log("handleCreatePayment", params);
-		this.handleClose();
-		this.props.createAccountReceivablePayment(this.props.regionId, this.state.PaymentType, this.state.ReferenceNo, this.state.PaymentDate, this.state.PaymentNote, PayItems)
 	}
 
 	handleChangeChecked = name => event => {
 		this.setState({ [name]: event.target.checked });
 	};
+
 	handleChange = name => event => {
 		this.setState({ [name]: event.target.value });
+		console.log(name)
+		if (name === "PaymentAmount") {
+			let totalPaymentAmount = 0
+			let floatPaymentAmount = parseFloat(`0${event.target.value}`)
+			this.state.rows.forEach(x => {
+				totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
+			})
+
+			this.setState({
+				overpayment: totalPaymentAmount - floatPaymentAmount
+			})
+		}
 	};
 	commitChanges = ({ added, changed, deleted }) => {
 		let { rows } = this.state;
@@ -484,14 +549,63 @@ class PaymentFormModal extends React.Component {
 			for (let i = fromRow; i <= toRow; i++) {
 				rows[i] = { ...rows[i], ...updated };
 			}
-			return { rows };
-		});
 
+			let totalPaymentAmount = 0, floatPaymentAmount = 0
+			rows.forEach(x => {
+				totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
+			})
+			floatPaymentAmount = parseFloat(`0${this.state.PaymentAmount}`)
+
+			return {
+				rows,
+				overpayment: totalPaymentAmount - floatPaymentAmount
+			};
+		});
 	};
+
+	autoDistribute = () => {
+		this.setState(state => {
+			const { PaymentAmount } = this.state
+			let floatPaymentAmount = parseFloat(`0${PaymentAmount}`)
+
+			const rows = state.rows.slice();
+			for (let i = 0; i < rows.length; i++) {
+				let invAmount = parseFloat(`0${rows[i].InvoiceAmount}`)
+
+				if (invAmount <= floatPaymentAmount) {
+					rows[i] = { ...rows[i], PaymentAmount: invAmount };
+					floatPaymentAmount = floatPaymentAmount - invAmount
+				} else {
+					rows[i] = { ...rows[i], PaymentAmount: floatPaymentAmount };
+					floatPaymentAmount = 0
+				}
+			}
+
+			return {
+				rows: rows,
+				overpayment: floatPaymentAmount
+			}
+		})
+	}
+
+	clearDistribute = () => {
+		this.setState(state => {
+			const rows = state.rows.slice();
+			for (let i = 0; i < rows.length; i++) {
+				rows[i] = { ...rows[i], PaymentAmount: 0 };
+			}
+
+			return {
+				rows: rows,
+				overpayment: 0
+			}
+		})
+	}
 
 	render() {
 		const { classes } = this.props;
 		const { rows, columns, customerName, customerNumber, currencyColumns, columnsForReactDataGrid } = this.state;
+		console.log("activeRows", rows)
 		return (
 			<div>
 				<Dialog
@@ -535,7 +649,7 @@ class PaymentFormModal extends React.Component {
 										// style={{ width: "30%" }}
 										autoFocus
 										className={classNames(classes.textField, "pr-6")}
-										value={this.state.PaymentType || "Check"}
+										value={this.state.PaymentType}
 										onChange={this.handleChange('PaymentType')}
 										fullWidth
 									>
@@ -563,7 +677,7 @@ class PaymentFormModal extends React.Component {
 										InputLabelProps={{
 											shrink: true
 										}}
-										value={this.state.PaymentDate || new Date().toISOString().substr(0,10)}
+										value={this.state.PaymentDate}
 										onChange={this.handleChange('PaymentDate')}
 										margin="dense"
 										variant="outlined"
@@ -583,14 +697,23 @@ class PaymentFormModal extends React.Component {
 										onChange={this.handleChange('PaymentAmount')}
 										label="Amount" sm={2}
 									/>
+									<Tooltip title="Auto Distribution">
+										<IconButton
+											className={classNames(classes.button, "m-6")}
+											onClick={this.autoDistribute}
+										>
+											<Icon>equalizer</Icon>
+										</IconButton>
+									</Tooltip>
+									<Tooltip title="Clear Distribution">
+										<IconButton
+											className={classNames(classes.button, "m-6")}
+											onClick={this.clearDistribute}
+										>
+											<Icon>clear</Icon>
+										</IconButton>
+									</Tooltip>
 
-									<Button sm={3}
-										className={classNames(classes.button, "m-6")}
-										style={{ width: "50%" }}
-									>
-										<Icon>arrow_downward</Icon>
-										Auto Dist.
-									</Button>
 
 								</div>
 
@@ -600,7 +723,7 @@ class PaymentFormModal extends React.Component {
 								/>
 
 							</div>
-							<div className={classNames("flex flex-col flex-1 mt-12")}>
+							<div className={classNames(classes.root, "flex flex-col flex-1 mt-12")}>
 								<Paper>
 									{/* <Grid rows={rows} columns={columns} getRowId={getRowId}>
 										<EditingState
@@ -645,11 +768,18 @@ class PaymentFormModal extends React.Component {
 									/>
 
 								</Paper>
+								{this.state.overpayment > 0 &&
+									<span className="p-12" style={{ background: '#efad49', color: 'black', textAlign: 'right' }}><Icon fontSize={"small"} className="mr-4" style={{ verticalAlign: 'text-bottom' }}>error_outline</Icon><strong>Over Payment: $ {this.state.overpayment.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
+								}
+								{this.state.errorMsg &&
+									<span className="p-12" style={{ background: 'red', color: 'white', textAlign: 'right' }}><Icon fontSize={"small"} className="mr-4" style={{ verticalAlign: 'text-bottom' }}>warning</Icon><strong>Error: {this.state.errorMsg}</strong></span>
+								}
 							</div>
 						</div>
 					</DialogContent>
 
 					<DialogActions>
+						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Cancel</Button>
 						<Button variant="contained" onClick={this.handleCreatePayment} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Save</Button>
 					</DialogActions>
 				</Dialog>
@@ -672,6 +802,9 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 		activePaymentRows: accountReceivablePayments.activePaymentRows,
 
 		payments: accountReceivablePayments.ACC_payments,
+
+		getPaymentsParam: accountReceivablePayments.getPaymentsParam,
+		status: accountReceivablePayments.status,
 	}
 }
 

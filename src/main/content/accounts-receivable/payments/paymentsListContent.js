@@ -432,6 +432,16 @@ class PaymentsListContent extends Component {
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
+				{
+					title: "Overpayment",
+					name: "itm_overpayment",
+					columnName: "itm_overpayment",
+					align: 'right',
+					width: 150,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
 				// {
 				// 	title: "InvoiceBalance OR",
 				// 	name: "InvoiceBalanceOR",
@@ -519,7 +529,8 @@ class PaymentsListContent extends Component {
 			editingColumnExtensions: [],
 			currencyColumns: [
 				'InvoiceAmount',
-				'InvoiceBalance'
+				'InvoiceBalance',
+				'Overpayment',
 			],
 			phoneNumberColumns: [
 				'Phone'
@@ -950,10 +961,11 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 		payments: accountReceivablePayments.ACC_payments,
 		regionId: auth.login.defaultRegionId,
 		getPaymentsParam: accountReceivablePayments.getPaymentsParam,
-
+		status: accountReceivablePayments.status,
 		searchText: accountReceivablePayments.searchText,
 		activePaymentRows: accountReceivablePayments.activePaymentRows,
 		NoDataString: accountReceivablePayments.NoDataString,
+		
 	}
 }
 

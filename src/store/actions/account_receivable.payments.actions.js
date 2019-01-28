@@ -42,7 +42,7 @@ export function getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, Sea
 	}
 }
 
-export function createAccountReceivablePayment(RegionId, PaymentType, ReferenceNo, PaymentDate, Note, PayItems) {
+export function createAccountReceivablePayment(RegionId, PaymentType, ReferenceNo, PaymentDate, Note, PayItems, overpayment, FromDate, ToDate, SearchText, Status) {
 
 	// RegionId = RegionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [RegionId];
 
@@ -60,6 +60,9 @@ export function createAccountReceivablePayment(RegionId, PaymentType, ReferenceN
 				type: CREATE_AR_PAYMENTS,
 				payload: paymentCreated
 			});
+
+			await getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status)
+
 		})();
 	}
 }

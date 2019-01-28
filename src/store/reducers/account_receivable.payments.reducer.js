@@ -13,6 +13,7 @@ const initialState = {
 		fromDate: "01/22/2019",
 		toDate: "01/22/2019",
 	},
+	status: '',
 	bOpenedSummaryPanel: false,
 	bOpenedFilterPanel: false,
 
