@@ -446,7 +446,7 @@ class TransactionEditForm extends Component {
                 this.setState({unitPrice: parseFloat(trxDetail.TrxItemAmount)});
                 this.setState({tax: parseFloat(trxDetail.TrxTax)});
                 this.setState({quantity: parseFloat(trxDetail.quantity)});
-                this.setState({total: parseFloat(trxDetail.TotalTrxAmount)+parseFloat(trxDetail.TrxTax)});
+                this.setState({total: parseFloat(trxDetail.TrxExtendedPrice)+parseFloat(trxDetail.TrxTax)});
                 this.setState({TransactionDate: moment(trxDetail.TrxDate)});
 
                 let trxType = aTypes.filter(f=>f.value = trxDetail.TrxType);
