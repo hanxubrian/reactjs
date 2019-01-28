@@ -142,7 +142,9 @@ const styles = theme => ({
         height         : 'auto',
         minHeight      : 'auto'
     },
-    sidebarContent                : {},
+    sidebarContent: {
+        overflowY: 'scroll'
+    },
     backdrop                      : {
         position: 'absolute'
     }

@@ -50,7 +50,12 @@ const styles = theme => ({
             width: 200
         },
         '& .openDetail':{
-            width: 450
+            width: 450,
+            '&>div':{
+                display: 'flex',
+                flex: 1,
+                flexDirection: 'column'
+            }
         },
     },
     layoutHeader       : {
@@ -63,6 +68,9 @@ const styles = theme => ({
         [theme.breakpoints.down('sm')]: {
             width: 'inherit'
         }
+    },
+    sidebarContent: {
+        overflowY: 'scroll'
     },
     layoutSidebarHeader: {
         height   : headerHeight,
@@ -298,6 +306,7 @@ class TransactionsApp extends Component {
                         header: classes.layoutHeader,
                         content: classes.content,
                         leftSidebar : classNames(classes.layoutLeftSidebar, {'openFilter': bFilterPanel, 'openDetail': bDetailPanel }),
+                        layoutSidebarContent: classNames(classes.layoutSidebarContent),
                         sidebarHeader: classes.layoutSidebarHeader,
                     }}
                     leftSidebarHeader={
@@ -315,7 +324,7 @@ class TransactionsApp extends Component {
                         </div>
                     }
                     leftSidebarContent={
-                        <div>
+                        <div style={{overflowY: 'scroll'}}>
                             {bFilterPanel && (
                                 <FilterPanel/>
                             )}
