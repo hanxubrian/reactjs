@@ -211,19 +211,31 @@ class BillRunInvoiceDetail extends Component {
     {
         const { classes,loading ,open,billruninvoiceDetailStatus} = this.props;
         const { invoices }        = this.state;
-        if (this.props.open  && invoices && invoices !== null && open){
+        if (this.props.open  && invoices && invoices !== null && open && !loading &&  billruninvoiceDetailStatus){
             return (
 
-                <div className={classes.overlay}>
-                    {loading && (
+                <div className={classes.overlay} style={{
+                    position: 'absolute',
+                    top: -110,
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    zIndex: 99999,
+                    height: 'fit-content',
+                    width: "100%",
+                    backgroundColor: 'rgba(0,0,0,0.3)',
+                    padding: 50
+
+                }}>
+                    {loading && !1 && (
                         <CircularProgress className={classes.progress} color="secondary"  />
                     )}
                     { !loading &&  billruninvoiceDetailStatus && (
                     <ClickAwayListener onClickAway={this.closeDialog}>
-                    <FuseAnimate
+                    <div
                         animation="transition.expandIn"
                         duration={400}
-                        delay={400}
+                        delay={0}
                         style={{marginLeft:100,}}
                     >
                         <Paper >
@@ -351,7 +363,7 @@ class BillRunInvoiceDetail extends Component {
 
                             </div>
                         </Paper>
-                    </FuseAnimate>
+                    </div>
                         </ClickAwayListener>
                     )}
                     {!loading && !billruninvoiceDetailStatus &&(

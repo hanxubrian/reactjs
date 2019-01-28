@@ -93,8 +93,8 @@ const styles = theme => ({
         }
     },
     layoutHeader       : {
-        height   : headerHeight,
-        minHeight: headerHeight,
+        height   : 80,
+        minHeight: 80,
         backgroundColor: theme.palette.secondary.main
     },
     content:{
@@ -245,6 +245,11 @@ class BillRun extends Component {
 
             }
             if(JSON.stringify(this.state) !== JSON.stringify(prevState) && !this.props.loading){
+                if(JSON.stringify(this.state.viewinvoiceDetail) !== JSON.stringify(prevState.viewinvoiceDetail)){
+                    return;
+                }
+                console.log("this.state",this.state);
+                console.log("prevState",prevState);
                 this.getBillRunList();
             }
             if(this.props.loading === false && prevProps.loading===true){
@@ -450,7 +455,7 @@ class BillRun extends Component {
                     content: classes.content
                 }}
                 header={
-                    <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
+                    <div className="flex row flex-1  p-8 sm:p-12 relative justify-between" >
                         <div className="flex flex-row flex-1 justify-between">
                             <div className="flex flex-shrink items-center">
                                 <div className="flex items-center">
@@ -463,12 +468,17 @@ class BillRun extends Component {
                                 </div>
                             </div>
                             <div className={classNames(classes.topbtncus,"flex flex-shrink items-center")}>
-                                <FuseAnimate animation="transition.expandIn" delay={300} >
-                                    <Fab color="secondary" aria-label="add"
-                                         className={classNames(classes.sideButton, "mr-12")}  onClick={this.opendialogwin}>
-                                        <Icon>attach_money</Icon>
-                                    </Fab>
-                                </FuseAnimate>
+                                <Button variant="contained" color="primary"
+                                        className={classNames(classes.button, classes.btntop) } onClick={this.opendialogwin}>
+                                    Execute Bill Run
+                                    <Icon className={classes.rightIcon}>attach_money</Icon>
+                                </Button>
+                                {/*<FuseAnimate animation="transition.expandIn" delay={300} >*/}
+                                    {/*<Fab color="secondary" aria-label="add"*/}
+                                         {/*className={classNames(classes.sideButton, "mr-12")}  onClick={this.opendialogwin}>*/}
+                                        {/*<Icon>attach_money</Icon>*/}
+                                    {/*</Fab>*/}
+                                {/*</FuseAnimate>*/}
                             </div>
                         </div>
                         <div className="flex flex-none items-end" style={{display: 'none'}}>
@@ -706,7 +716,7 @@ class BillRun extends Component {
                                                     className: classNames("flex items-center  justify-center")
                                                 },
                                                 {
-                                                    Header: "Invoice Date",
+                                                    Header: "Create Date",
                                                     id: "InvoiceDate",
                                                     accessor: d => moment(d.InvoiceDate).format('MM/DD/YYYY'),
                                                     className: classNames(classes.tableTdEven, "flex items-center  justify-center")
@@ -719,28 +729,38 @@ class BillRun extends Component {
                                                 {
                                                     Header: "Status",
                                                     accessor: "Status",
-                                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center")
+                                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
+                                                    Cell    : row=>{
+                                                        if(row.original.Status===null){
+                                                            return "Preliminary";
+                                                        }
+                                                        else{
+                                                            return row.original.Status;
+                                                        }
+                                                    }
+
                                                 },
                                                 {
                                                     Header: "Actions",
                                                     width : 128,
                                                     Cell  : row => (
                                                         <div className="flex items-center  justify-center actions">
-                                                            <IconButton
+                                                            <IconButton style ={{left: "71%"}} disabled={row.original.Status==="Deleted"?true:false}
                                                                 onClick={(ev) => {
                                                                     ev.stopPropagation();
                                                                     if (window.confirm("Do you really want to remove this invoice")) {
                                                                         this.props.deleteSeletedBillRun(row.original.RegionId,row.original.BillRunNo);
-                                                                        // if(this.state.selection.length>0){
-                                                                        //     _.remove(this.state.selection, function(id) {
-                                                                        //         return id === row.original.InvoiceId;
-                                                                        //     });
-                                                                        // }
-
                                                                     }
                                                                 }}
                                                             >
-                                                                <Icon>delete</Icon>
+                                                                    {row.original.Status !=="Deleted" && (
+                                                                        <Icon>delete</Icon>
+                                                                    )}
+                                                                    {row.original.Status ==="Deleted" && (
+                                                                        <Icon>remove_red_eye</Icon>
+                                                                    )}
+
+
                                                             </IconButton>
                                                         </div>
                                                     )

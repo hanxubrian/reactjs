@@ -76,7 +76,8 @@ export function deleteSeletedBillRun(RegionIds, billrunNo) {
             if (res.IsSuccess) {
                 dispatch({
                     type: DELETE_BILLRUN_SUCCESS,
-                    payload: res.Data
+                    payload: {...res.Data,billrunno: billrunNo},
+
                 });
             } else {
                 dispatch({

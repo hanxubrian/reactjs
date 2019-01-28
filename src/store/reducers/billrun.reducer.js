@@ -75,6 +75,13 @@ const billruns = function(state = initialState, action) {
         }
         case Actions.DELETE_BILLRUN_SUCCESS:
         {
+            let billrunNo = action.payload.billrunno;
+            state.billrunsDB.map((item)=>{
+                console.log("item==1",item);
+                if(billrunNo && billrunNo === item.BillRunNo){
+                    item.Status = "Deleted";
+                }
+            });
             return {
                 ...state,billrundelete: true,loadingstatus: false,
             }
@@ -116,6 +123,7 @@ const billruns = function(state = initialState, action) {
                 ...initialState
             }
         }
+
         default:
         {
             return state;

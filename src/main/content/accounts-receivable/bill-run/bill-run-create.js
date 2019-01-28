@@ -256,7 +256,7 @@ class BillRunDialog extends Component {
             let date = this.state.selectedDate;
             let year = moment(date).year();
             let month = moment(date).month()+1;
-            let user = this.props.auth.firstName+ this.props.auth.lastName;
+            let user = this.props.auth.firstName+"     "+ this.props.auth.lastName;
             let userid   = this.props.auth.UserId;
             let regionid = this.props.auth.defaultRegionId;
             if(userid && userid != null && regionid && regionid != null && year && year != null && month && month !=null ){
@@ -295,10 +295,18 @@ class BillRunDialog extends Component {
 
         const { classes,loading ,billstatus} = this.props;
         const { selectedDate ,showP,auth,billruns} = this.state;
+        let date = this.state.selectedDate;
+        let year = moment(date).year();
+        let month = moment(date).month()+1;
+        let defMSG = `MONTHLY CONTRACT BILLING FOR `+month+`/`+year;
         return (
-            <div>
+            <div style={{
+
+            }}>
                 {showP === false && loading && loading !==null && (//loading && loading !==null
-                    <div className={classes.overlay}>
+                    <div className={classes.overlay} style={{
+
+                    }}>
                         <CircularProgress className={classes.progress} color="secondary"  />
 
                     </div>
@@ -346,10 +354,10 @@ class BillRunDialog extends Component {
                         <div>
                             <TextField
                                 id="outlined-multiline-static"
-                                label="Message"
+                                label="Invoice Message"
                                 multiline
                                 rows="10"
-                                defaultValue=""
+                                defaultValue={defMSG}
 
                                 margin="normal"
                                 variant="outlined"

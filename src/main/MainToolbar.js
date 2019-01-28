@@ -235,7 +235,6 @@ class MainToolbar extends Component {
         this.setState({notification: !this.state.notification});
     }
     componentDidUpdate(prevProps,prevState){
-        console.log("this.state.pusherMSG",this.state.pusherMSG);
         let midflage = false;
         if (this.state.sysflage === true){
             setTimeout(
@@ -616,7 +615,7 @@ class MainToolbar extends Component {
                                                         <React.Fragment>
                                                             <div style ={{height:'40px'}} style={{textAlign: '-webkit-center'}}>
                                                                 <Avatar className={classes.avatarresize} alt={this.props.login.firstName + this.props.login.lastName} src ={this.props.login.profilePhoto} />
-                                                                <span style={{fontSize:'12px'}}>App</span>
+                                                                <span style={{fontSize:'12px'}}>{item.subject}</span>
                                                             </div>
                                                         </React.Fragment>
                                                         <span style={{

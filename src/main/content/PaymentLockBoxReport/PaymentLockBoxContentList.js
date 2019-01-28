@@ -393,7 +393,7 @@ class PaymentLockBoxContentList extends Component {
                     groupingEnabled: false,
                 },
                 {
-                    title: "Invoice Amount",
+                    title: "LockBox Number",
                     name: "InvoiceAmount",
                     columnName: "InvoiceAmount",
                     width: 150,
@@ -402,7 +402,7 @@ class PaymentLockBoxContentList extends Component {
                     groupingEnabled: false,
                 },
                 {
-                    title: "Invoice Balance",
+                    title: "Credit Date",
                     name: "InvoiceBalance",
                     columnName: "InvoiceBalance",
                     width: 150,
@@ -411,7 +411,7 @@ class PaymentLockBoxContentList extends Component {
                     groupingEnabled: false,
                 },
                 {
-                    title: "InvoiceBalance OR",
+                    title: "Invoice Number",
                     name: "InvoiceBalanceOR",
                     columnName: 'InvoiceBalanceOR',
                     width: 150,
@@ -421,7 +421,7 @@ class PaymentLockBoxContentList extends Component {
                     groupingEnabled: false,
                 },
                 {
-                    title: "Payment Amount",
+                    title: "Check Number",
                     name: "PaymentAmount",
                     columnName: 'PaymentAmount',
                     width: 140,
@@ -434,8 +434,32 @@ class PaymentLockBoxContentList extends Component {
                 },
                 {
                     title: "Check Amount",
-                    name: "CheckAmount",
-                    columnName: 'CheckAmount',
+                    name: "CheckAmount0",
+                    columnName: 'CheckAmount0',
+                    width: 140,
+                    align: 'right',
+                    wordWrapEnabled: true,
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+
+                },
+                {
+                    title: "Post Result",
+                    name: "CheckAmount1",
+                    columnName: 'CheckAmount1',
+                    width: 140,
+                    align: 'right',
+                    wordWrapEnabled: true,
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+
+                },
+                {
+                    title: "Post Amount",
+                    name: "CheckAmount2",
+                    columnName: 'CheckAmount2',
                     width: 140,
                     align: 'right',
                     wordWrapEnabled: true,

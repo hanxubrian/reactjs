@@ -1,6 +1,7 @@
 import * as Actions from '../actions';
 const initialState = {
     openUsersFormStatus: false,
+    selectedRows: []
 }
 
 const usersReducer = function (state = initialState, action) {
@@ -10,6 +11,12 @@ const usersReducer = function (state = initialState, action) {
             return {
                 ...state,
                 openUsersFormStatus: action.payload
+            }
+        }
+        case Actions.UPDATE_SELECT_ROWS:{
+            return{
+                ...state,
+                selectedRows: action.payload
             }
         }
         default:

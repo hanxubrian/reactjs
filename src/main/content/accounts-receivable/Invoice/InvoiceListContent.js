@@ -211,10 +211,12 @@ class InvoiceListContent extends Component {
         if(this.props.data!==prevProps.data)
             this.setState({data: this.props.data});
 
-        if(this.props.invoiceDetail!==prevProps.invoiceDetail){
+        if(this.props.invoiceDetail!==prevProps.invoiceDetail && this.props.invoiceDetail !== null){
             this.setState({
                 invoiceDetail: this.props.invoiceDetail,
             });
+            console.log("this.props.invoiceDetail",this.props.invoiceDetail);
+            console.log("this.props.open",this.state.isOpen);
         }
     }
 
@@ -245,10 +247,9 @@ class InvoiceListContent extends Component {
 
     invoiceReport =(ev,InvoiceId, RegionId)=>{
         ev.stopPropagation();
-        // console.log(InvoiceId+"===id===="+RegionId);
         this.props.getInvoiceDetail(InvoiceId, RegionId);
         this.setState({
-            isOpen: !this.state.isOpen
+            isOpen: true
         });
     };
 

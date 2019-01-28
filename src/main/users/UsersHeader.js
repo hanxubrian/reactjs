@@ -63,7 +63,7 @@ class UsersHeader extends Component {
         const {openUsersFormStatus} = this.state;
         return (
 
-        <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
+        <div className= { classNames("flex row flex-1  p-8 sm:p-12 relative justify-between")}>
 
                 <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
                     <div className="flex flex-row flex-1 justify-between">
