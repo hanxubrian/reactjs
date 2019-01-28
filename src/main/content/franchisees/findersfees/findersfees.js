@@ -394,7 +394,7 @@ class FindersFees extends Component {
 		// let temp1 = [];
 		// const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
 		// const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
-        if (rawData === null) return;
+		if (rawData === null) return;
 		let regions = rawData.Data.filter(x => x);
         filteredValues = regions.filter(x => x.FF_TOT && x.FF_DWNAMT && x.FF_BALANCE && x.FF_PYAMT !== null)
 		all_temp = [...all_temp, ...filteredValues]

@@ -769,7 +769,7 @@ import {
 	Getter, Template, TemplateConnector
   } from '@devexpress/dx-react-core';
 
-import { CustomizedDxGridSelectionPanel } from "./CustomizedDxGridSelectionPanel";
+// import { CustomizedDxGridSelectionPanel } from "./CustomizedDxGridSelectionPanel";
 
 import {
 	SelectionState,
@@ -1642,11 +1642,6 @@ class LeaseListContent extends Component {
 		this.initRowsFromRawJson();
 		this.processData(this.props.data);
 
-		// this.getLocation();
-
-		// this.setState({ rows: this.props.data })
-		// this.setState({ data: this.props.data })
-
 		this.timer = null;
 	}
 	componentWillUnmount() {
@@ -2236,7 +2231,7 @@ class LeaseListContent extends Component {
 										)}
 									</Template>
 
-									<CustomizedDxGridSelectionPanel selection={selection} />
+									{/* <CustomizedDxGridSelectionPanel selection={selection} /> */}
 
 								</Grid>
 
