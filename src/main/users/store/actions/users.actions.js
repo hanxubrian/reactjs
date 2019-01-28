@@ -1,7 +1,8 @@
 import axios from 'axios/index';
 
 export const OPEN_USERS_FORM = '[USERS APP] OPEN USERS FORM';
-export const UPDATE_SELECT_ROWS = '[USERS APP] UPDATE SELECT ROWS'
+export const UPDATE_SELECT_ROWS = '[USERS APP] UPDATE SELECT ROWS';
+export const TOGGLE_USERS_FILTER_PANEL = '[USERS APP] TOGGLE USERS FILTER_PANEL';
 
 export function openUsersForm(openForm) {
     console.log("open-Form", openForm);
@@ -15,5 +16,11 @@ export function updateSelectRows (row){
     return{
         type: UPDATE_SELECT_ROWS,
         payload: row
+    }
+}
+
+export function toggleUsersFilterPanel() {
+    return{
+        type: TOGGLE_USERS_FILTER_PANEL
     }
 }

@@ -1,7 +1,8 @@
 import * as Actions from '../actions';
 const initialState = {
     openUsersFormStatus: false,
-    selectedRows: []
+    selectedRows: [],
+    fpStatus: false,
 }
 
 const usersReducer = function (state = initialState, action) {
@@ -17,6 +18,12 @@ const usersReducer = function (state = initialState, action) {
             return{
                 ...state,
                 selectedRows: action.payload
+            }
+        }
+        case Actions.TOGGLE_USERS_FILTER_PANEL: {
+            return{
+                ...state,
+                fpStatus: !state.fpStatus
             }
         }
         default:

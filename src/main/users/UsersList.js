@@ -49,23 +49,14 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import {connect} from 'react-redux';
 import {FuseUtils, FuseAnimate} from '@fuse';
 import {
-    Avatar,
-    Checkbox,
     Icon,
     IconButton,
-    ListItemIcon,
-    ListItemText,
-    Menu,
     MenuItem,
-    MenuList,
-    Typography,
     Button,
     Input
 } from '@material-ui/core';
-import * as ChatActions from '../chatPanel/store/actions/index';
-import ReactTable from "react-table";
-import IndividualChat from '../chatPanel/individualChat';
 import "../chatPanel/individualChat.css";
+import UsersHeader from "./UsersHeader";
 
 
 
@@ -89,6 +80,65 @@ const styles = theme => ({
         right: 360,
         zIndex: 10,
         display: 'flex'
+    },
+    content: {
+        position: 'relative'
+    },
+    search: {
+        width: '100%',
+        [theme.breakpoints.down('sm')]: {
+            width: '100%'
+        }
+    },
+    tableTheadRow: {
+        backgroundColor: theme.palette.primary.main
+    },
+    filterPanelButton: {
+        backgroundColor: theme.palette.secondary.main,
+        minWidth: 42,
+        padding: 8,
+        justifyContent: 'center',
+        '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+        }
+    },
+    summaryPanelButton: {
+        backgroundColor: theme.palette.secondary.main,
+        minWidth: 42,
+        padding: 8,
+        color: 'white',
+        justifyContent: 'center',
+        '&:hover': {
+            backgroundColor: theme.palette.primary.dark,
+        }
+    },
+    imageIcon: {
+        width: 24
+    },
+    tableStriped: {
+        '& tbody tr:nth-of-type(odd)': {
+            backgroundColor: 'fade(' + theme.palette.primary.main + ', 0.03)',
+        },
+        '& tbody tr:nth-of-type(even)': {
+            backgroundColor: 'fade(' + theme.palette.primary.secondary + ', 0.03)',
+        },
+    },
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100vh',
+        backgroundColor: 'rgba(0,0,0, .9)',
+        zIndex: 1000,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
+        opacity: 0.5
+    },
+    iconButton: {
+        padding: 0,
+        marginRight: 10
     }
 
 });
@@ -542,6 +592,7 @@ class UsersList extends Component {
 
         return (
             <Fragment>
+                <UsersHeader />
                 <div className={classNames(classes.layoutTable, "flex flex-col")}>
                     <div className={classNames("flex flex-col", classes.layoutTable)} >
                         <Grid
@@ -551,7 +602,7 @@ class UsersList extends Component {
                             <DragDropProvider />
                             <PagingState
                                 defaultCurrentPage={0}
-                                defaultPageSize={20}
+                                defaultPageSize={10}
                             />
 
                             <PagingPanel pageSizes={pageSizes} />
