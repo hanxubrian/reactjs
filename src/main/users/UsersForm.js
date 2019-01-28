@@ -231,37 +231,6 @@ class UsersForm extends React.Component {
                     </GridContainer>
                 </div>
                 <div className={classNames(classes.userFormSection,"w-full")}>
-                    <h2>Outlook Account</h2>
-                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="outlookUserName"
-                                label="User Name"
-                                variant="outlined"
-                                className={classes.textField}
-                                value={this.state.outlookUserName}
-                                onChange={this.handleChange("outlookUserName")}
-                                style={{marginRight:'1%'}}
-                                margin="dense"
-                                fullWidth
-                                required
-                            />
-                            <TextField
-                                id="outlookPassword"
-                                label="Password"
-                                variant="outlined"
-                                className={classes.textField}
-                                value={this.state.outlookPassword}
-                                onChange={this.handleChange("outlookPassword")}
-                                style={{marginLeft: '1%'}}
-                                margin="dense"
-                                fullWidth
-                                required
-                            />
-                        </GridItem>
-                    </GridContainer>
-                </div>
-                <div className={classNames(classes.userFormSection,"w-full")}>
                     <h2>User Group</h2>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">

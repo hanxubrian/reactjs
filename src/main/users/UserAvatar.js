@@ -1,96 +1,111 @@
 import React from "react";
-import ReactDom from "react-dom";
+import Avatar from 'react-avatar-edit'
+import ReactDOM from 'react-dom'
 import {withStyles} from '@material-ui/core/styles';
 import {bindActionCreators} from "redux";
-import AvatarCropper from "react-avatar-cropper";
-import * as Actions from "./store/actions";
 import connect from "react-redux/es/connect/connect";
-
+import Button from "@material-ui/core/Button/Button";
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 const styles = theme => ({
     root     : {
 
+    },
+    leftIcon: {
+        marginRight: theme.spacing.unit,
+    },
+    rightIcon: {
+        marginLeft: theme.spacing.unit,
+    },
+    iconSmall: {
+        fontSize: 20,
+    },
+    button: {
+        textTransform: "none"
     }
 });
 
-class FileUpload extends React.Component{
-
-    handleFile = (e) => {
-        let reader = new FileReader();
-        let file = e.target.files[0];
-
-        if (!file) return;
-
-        reader.onload = (img) => {
-            ReactDom.findDOMNode(this.ref.in).value = '';
-            this.props.handleFileChange(img.target.result);
-        };
-        reader.readAsDataURL(file);
-    }
-
-    render() {
-        return (
-            <input ref="in" type="file" accept="image/*" onChange={this.handleFile} />
-        );
-    }
-}
 
 class UserAvatar extends React.Component {
 
     componentWillMount() {
         console.log("----------------- Hellow-------------------");
     }
-
     state = {
-        cropperOpen: false,
-        img: null,
-        croppedImg: "http://www.fillmurray.com/400/400"
+        preview: null,
+        src: "",
+        image: null,
+        imageChoosed: false
+    }
+    constructor(props) {
+        super(props)
+        this.onCrop = this.onCrop.bind(this)
+        this.onClose = this.onClose.bind(this)
     }
 
-    handleFileChange = (dataURI) => {
-        this.setState({
-            img: dataURI,
-            croppedImg: this.state.croppedImg,
-            cropperOpen: true
-        });
+    onClose() {
+        this.setState({preview: null});
+        this.setState({imageChoosed: false});
+        this.setState({preview:null});
     }
-    handleCrop = (dataURI) => {
-        this.setState({
-            cropperOpen: false,
-            img: null,
-            croppedImg: dataURI
-        });
+
+    onCrop(preview) {
+        this.setState({preview:preview});
     }
-    handleRequestHide = () => {
-        this.setState({
-            cropperOpen: false
-        });
+    onChoosed = (e) => {
+        this.setState({imageChoosed: true});
+    }
+    onPhotoChange = (e) => {
+        this.setState({imageChoosed: false});
+        console.log(this.state.src);
     }
 
     render () {
+        const {classes} = this.props;
         return (
-            <div>
-                <div className="avatar-photo">
-                    <FileUpload handleFileChange={this.handleFileChange} />
-                    <div className="avatar-edit">
-                        <span>Click to Pick Avatar</span>
-                        {/*//<i className="fa fa-camera"></i>*/}
-                    </div>
-                    <img src={this.state.croppedImg} />
+            <div className={"flex justify-between"}>
+                <div style={{margin: "auto" , textAlign: "center", marginTop: 20,marginBottom: 30, padding: 5}}>
+                    {this.state.imageChoosed === false && (
+                        <Avatar
+                            width={250}
+                            height={250}
+                            onCrop={this.onCrop}
+                            onClose={this.onClose}
+                            src={this.state.src ? "" : this.state.src}
+                        />
+                    )}
+                    {this.state.preview && this.state.imageChoosed === false &&(
+                        <Button
+                            variant="contained"
+                            style={{marginTop: 10, marginBottom: 10}}
+                            color="primary"
+                            className={classes.button}
+                            onClick = {this.onChoosed}
+                        >
+                            Choose This Photo
+                            <CloudUploadIcon className={classes.rightIcon} />
+                        </Button>
+                    )}
+                    {this.state.imageChoosed && (
+                        <div style={{width:250, height: 250}}>
+                            <img src={this.state.preview} alt="Preview" />
+                            <Button
+                                variant="contained"
+                                style={{marginTop: 10, marginBottom: 10}}
+                                color="primary"
+                                className={classes.button}
+                                onClick = {this.onPhotoChange}
+                                >
+                                Change This photo
+                                <CloudUploadIcon className={classes.rightIcon} />
+                            </Button>
+                        </div>
+                    )}
                 </div>
-                {this.state.cropperOpen &&
-                <AvatarCropper
-                    onRequestHide={this.handleRequestHide}
-                    cropperOpen={this.state.cropperOpen}
-                    //onCrop={this.handleCrop(this.state.img)}
-                    image={this.state.img}
-                    width={400}
-                    height={400}
-                />
-                }
             </div>
-        );
+        )
     }
+
 }
 
 

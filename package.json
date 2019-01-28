@@ -41,6 +41,7 @@
         "qs": "6.6.0",
         "react": "16.6.3",
         "react-autosuggest": "^9.4.2",
+        "react-avatar-edit": "^0.7.1",
         "react-beautiful-dnd": "10.0.2",
         "react-big-calendar": "0.20.2",
         "react-bootstrap": "^0.32.4",
