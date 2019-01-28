@@ -479,7 +479,7 @@ class PaymentsListContent extends Component {
 					title: "Invoice Date",
 					name: "InvoiceDate",
 					columnName: 'InvoiceDate',
-					width: 140,
+					width: 250,
 					align: 'right',
 					wordWrapEnabled: true,
 					sortingEnabled: true,
@@ -490,7 +490,7 @@ class PaymentsListContent extends Component {
 					title: "Due Date",
 					name: "DueDate",
 					columnName: 'DueDate',
-					width: 140,
+					width: 250,
 					align: 'right',
 					wordWrapEnabled: true,
 					sortingEnabled: true,
@@ -515,7 +515,7 @@ class PaymentsListContent extends Component {
 			],
 			editingColumnExtensions: [],
 			currencyColumns: [
-				'Amount'
+				'InvoiceAmount', 'InvoiceBalance'
 			],
 			phoneNumberColumns: [
 				'Phone'

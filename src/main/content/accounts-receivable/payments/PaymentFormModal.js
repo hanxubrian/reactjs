@@ -187,6 +187,14 @@ const EditingCellComponent = withStyles(editing_cell_styles, { name: "EditingCel
 );
 const getRowId = row => row.id;
 
+const CurrencyFormatter = ({ value }) => (<span>$ {value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
+const CurrencyTypeProvider = props => (
+	<DataTypeProvider
+		formatterComponent={CurrencyFormatter}
+		{...props}
+	/>
+);
+
 class PaymentFormModal extends React.Component {
 
 	constructor(props) {
@@ -323,6 +331,9 @@ class PaymentFormModal extends React.Component {
 				// }
 			],
 			rows: [],
+			currencyColumns: [
+				'InvoiceAmount', 'InvoiceBalance', 'PaymentAmount'
+			],
 			customerName: "",
 			customerNumber: "",
 		}
@@ -402,7 +413,7 @@ class PaymentFormModal extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		const { rows, columns, customerName, customerNumber } = this.state;
+		const { rows, columns, customerName, customerNumber, currencyColumns } = this.state;
 		return (
 			<div>
 				<Dialog
@@ -501,11 +512,12 @@ class PaymentFormModal extends React.Component {
 										<EditingState
 											onCommitChanges={this.commitChanges}
 											// defaultEditingRowIds={rows.map((x,index)=>index)}
-											defaultEditingRowIds={rows.map(x=>x.id)}
+											defaultEditingRowIds={rows.map(x => x.id)}
 											columnExtensions={columns}
 										/>
-
-
+										<CurrencyTypeProvider
+											for={currencyColumns}
+										/>
 										<Table />
 										{/* <VirtualTable height="auto" /> */}
 										<TableColumnResizing defaultColumnWidths={columns} />

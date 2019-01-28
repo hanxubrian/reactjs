@@ -273,7 +273,11 @@ class InvoiceListContent extends Component {
         this.props.removeInvoiceAction(this.props.regionId, this.state.selectedId);
         this.setState({alertOpen: false});
     };
-
+    printDocument=()=> {
+        let imgUrl ='https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
+        const input = document.getElementById('divToPrint');
+        this.refs.child.downloadPDF(input, imgUrl);
+    }
     render()
     {
         const { classes} = this.props;
@@ -496,11 +500,27 @@ class InvoiceListContent extends Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-
                 {this.state.invoiceDetail!==null && (
-                    <InvoiceReport show={this.state.isOpen} onClose={this.toggleModal} Detail={this.state.invoiceDetail} />
+                    <InvoiceReport childCall={this.printDocument.bind(this)} ref="child" show={this.state.isOpen} onClose={this.toggleModal} Detail={this.state.invoiceDetail} />
+                )}
+                {this.state.isOpen && this.state.invoiceDetail!==null &&(
+                <div className="mb5" style={{zIndex:999999}}>
+                    <button onClick={this.printDocument} style={{
+                        left: '46%',
+                        /* right: 50%; */
+                        top: '-30px',
+                        position: 'absolute',
+                        backgroundColor: '#86ce99',
+                        width: '150px',
+                        height: '44px',
+                        borderRadius: '7px',
+                        color: 'white',
+                        fontSize: '20px',
+                    }}>Print</button>
+                </div>
                 )}
             </div>
+
         );
     }
 }
