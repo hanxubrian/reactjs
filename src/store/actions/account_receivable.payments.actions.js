@@ -53,7 +53,7 @@ export function createAccountReceivablePayment(RegionId, PaymentType, ReferenceN
 		});
 
 		(async () => {
-			await sleep(2000)
+			// await sleep(2000)
 			// let paymentCreated = [];
 			let paymentCreated = await invoicePaymentsService.createAccountReceivablePayment(RegionId, PaymentType, ReferenceNo, PaymentDate, Note, PayItems);
 			dispatch({

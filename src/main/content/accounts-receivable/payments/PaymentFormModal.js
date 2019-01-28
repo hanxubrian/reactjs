@@ -202,7 +202,7 @@ class PaymentFormModal extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			bOpenPaymentDialog: props.bOpenPaymentDialog,
+			// bOpenPaymentDialog: props.bOpenPaymentDialog,
 			columns: [
 				// {
 				//     title: "Payment ID",
@@ -259,6 +259,26 @@ class PaymentFormModal extends React.Component {
 					name: "InvoiceNo",
 					columnName: "InvoiceNo",
 					width: 200,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+					editingEnabled: false,
+				},
+				{
+					title: "Invoice Date",
+					name: "InvoiceDate",
+					columnName: "InvoiceDate",
+					width: 300,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+					editingEnabled: false,
+				},
+				{
+					title: "Due Date",
+					name: "DueDate",
+					columnName: "DueDate",
+					width: 300,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
@@ -334,6 +354,8 @@ class PaymentFormModal extends React.Component {
 			],
 			columnsForReactDataGrid: [
 				{ key: "InvoiceNo", name: "Invoice No", editable: false },
+				{ key: "InvoiceDate", name: "Invoice Date", editable: false },
+				{ key: "DueDate", name: "Due Date", editable: false },
 				{ key: "InvoiceAmount", name: "Invoice Amount", editable: false },
 				{ key: "InvoiceBalance", name: "Invoice Balance", editable: false },
 				{ key: "PaymentAmount", name: "Payment Amount", editable: true }
@@ -355,12 +377,12 @@ class PaymentFormModal extends React.Component {
 	}
 
 	componentWillMount() {
-		this.setRowData()
+		this.setRowData(this.props.payments)
 	}
 	UNSAFE_componentWillReceiveProps(nextProps) {
-		this.setState({
-			bOpenPaymentDialog: nextProps.bOpenPaymentDialog
-		})
+		// this.setState({
+		// 	bOpenPaymentDialog: nextProps.bOpenPaymentDialog
+		// })
 		if (nextProps.activePaymentRows !== this.props.activePaymentRows) {
 			// this.setState({ rows: [...nextProps.activePaymentRows].map((x, index) => { x.id = index; return x }) })
 			this.setRowData(this.props.payments, nextProps.activePaymentRows)
@@ -422,7 +444,7 @@ class PaymentFormModal extends React.Component {
 	}
 
 	setRowData(payments, activePaymentRows = this.props.activePaymentRows) {
-		// console.log("----------------------------------------")
+		console.log("----------------------------------------", activePaymentRows, payments)
 		// const temp_rows = [
 		// 	{ id: 0, InvoiceNo: 1, InvoiceAmount: 1351.51, InvoiceBalance: 216.36, PaymentAmount: 0 },
 		// 	{ id: 1, InvoiceNo: 2, InvoiceAmount: 56.30, InvoiceBalance: 548.24, PaymentAmount: 0 },
@@ -456,6 +478,9 @@ class PaymentFormModal extends React.Component {
 		if (nextProps.payments !== this.props.payments) {
 			this.setRowData(nextProps.payments)
 		}
+		if (nextProps.activePaymentRows !== this.props.activePaymentRows) {
+			this.setRowData(this.props.payments, nextProps.activePaymentRows)
+		}
 	}
 
 	onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
@@ -475,7 +500,7 @@ class PaymentFormModal extends React.Component {
 		return (
 			<div>
 				<Dialog
-					open={this.state.bOpenPaymentDialog}
+					open={this.props.bOpenPaymentDialog}
 					fullWidth={true}
 					maxWidth="lg"
 
