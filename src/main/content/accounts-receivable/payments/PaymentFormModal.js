@@ -422,14 +422,14 @@ class PaymentFormModal extends React.Component {
 	}
 
 	setRowData(payments, activePaymentRows = this.props.activePaymentRows) {
-		console.log("----------------------------------------")
-		const temp_rows = [
-			{ id: 0, InvoiceNo: 1, InvoiceAmount: 1351.51, InvoiceBalance: 216.36, PaymentAmount: 0 },
-			{ id: 1, InvoiceNo: 2, InvoiceAmount: 56.30, InvoiceBalance: 548.24, PaymentAmount: 0 },
-			{ id: 2, InvoiceNo: 3, InvoiceAmount: 215.28, InvoiceBalance: 1654.36, PaymentAmount: 0 },
+		// console.log("----------------------------------------")
+		// const temp_rows = [
+		// 	{ id: 0, InvoiceNo: 1, InvoiceAmount: 1351.51, InvoiceBalance: 216.36, PaymentAmount: 0 },
+		// 	{ id: 1, InvoiceNo: 2, InvoiceAmount: 56.30, InvoiceBalance: 548.24, PaymentAmount: 0 },
+		// 	{ id: 2, InvoiceNo: 3, InvoiceAmount: 215.28, InvoiceBalance: 1654.36, PaymentAmount: 0 },
 
-		];
-		this.setState({ rows: temp_rows })
+		// ];
+		// this.setState({ rows: temp_rows })
 
 		if (!payments || payments.Regions === undefined || payments.Regions.length < 1)
 			return [];
