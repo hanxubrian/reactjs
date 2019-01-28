@@ -1253,9 +1253,9 @@ class LeaseListContent extends Component {
 			tableColumnExtensions: [
 				{
 					title: "Name",
-					name: "FranchiseeName",
-					columnName: "FranchiseeName",
-					width: 250,
+					name: "FranchiseeNameNo",
+					columnName: "FranchiseeNameNo",
+					width: 350,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -1263,16 +1263,16 @@ class LeaseListContent extends Component {
 					togglingEnabled: true,
 					showWhenGrouped: true
 				},
-				{
-					title: "Franchisee No",
-					name: "FranchiseeNo",
-					columnName: "FranchiseeNo",
-					width: 200,
-					sortingEnabled: true,
-					filteringEnabled: true,
-					groupingEnabled: true,
-					showWhenGrouped: true
-				},
+				// {
+				// 	title: "Franchisee No",
+				// 	name: "FranchiseeNo",
+				// 	columnName: "FranchiseeNo",
+				// 	width: 200,
+				// 	sortingEnabled: true,
+				// 	filteringEnabled: true,
+				// 	groupingEnabled: true,
+				// 	showWhenGrouped: true
+				// },
 				{
 					title: "Make",
 					name: "Make",
@@ -1395,10 +1395,10 @@ class LeaseListContent extends Component {
 			groupingColumns: [
 				// { columnName: 'CustomerName' },
 				// { columnName: 'CustomerNo' },
-				{ columnName: 'FranchiseeName' },
+				{ columnName: 'FranchiseeNameNo' }
 
 			],
-			expandedGroups: ['FranchiseeName'],
+			expandedGroups: ['FranchiseeNameNo'],
 			sorting: [
 				{ columnName: 'LeaseNo', direction: 'asc' }
 			],
@@ -1562,7 +1562,7 @@ class LeaseListContent extends Component {
 		if (nextProps.leases !== this.props.leases) {
 			this.setState({
 				rows: this.getRowData(nextProps.leases),
-				expandedGroups: [...new Set(this.getRowData(nextProps.leases).map(x => x.FranchiseeName))],
+				expandedGroups: [...new Set(this.getRowData(nextProps.leases).map(x => x.FranchiseeNameNo))],
 			})
 		}
 
