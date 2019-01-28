@@ -152,7 +152,6 @@ class TransactionsDxGridLists extends Component {
         pageSizes: [5, 10, 25, 50, 100],
         currentPage: 0,
         pageSize: 100,
-        // expandedGroups: ['FranNameNo'],
     };
 
     constructor(props) {
@@ -247,7 +246,7 @@ class TransactionsDxGridLists extends Component {
         this.setState({expandedGroups});
     };
 
-    ActionCell =(props)=>{
+    ActionCell =(props, )=>{
         if (props.column.name.includes('Id')) {
             return (
                 <Table.Cell>
@@ -274,6 +273,11 @@ class TransactionsDxGridLists extends Component {
         }
 
         return <Table.Cell {...props} />;
+    };
+
+
+    pagerContainer = (props, ContainerProps)=> {
+        return <div style={{padding: '0 12px'}} {...props}></div>
     };
 
     TableRow = ({ row, ...restProps }) => (
@@ -365,7 +369,7 @@ class TransactionsDxGridLists extends Component {
                         hiddenColumnNames={['FranNameNo']}
                         emptyMessageComponent={this.emptyMessageContent} />
                     {/*<TableSelection showSelectAll />*/}
-                    <PagingPanel pageSizes={this.state.pageSizes}/>
+                    <PagingPanel pageSizes={this.state.pageSizes} />
                 </Grid>
                 <Dialog
                     open={this.state.alertOpen}

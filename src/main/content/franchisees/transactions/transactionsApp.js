@@ -266,7 +266,6 @@ class TransactionsApp extends Component {
     render()
     {
         const {classes, filterState, toggleFilterPanel, transactionForm} = this.props;
-        console.log('navigation=', this.props.navigation);
 
         let menuItem = null;
 

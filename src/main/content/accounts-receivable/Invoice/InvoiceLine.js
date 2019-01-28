@@ -424,6 +424,10 @@ class InvoiceLineTable extends React.Component {
         bTaxAlert: false,
         bTaxAlertReduction: false,
         bAllowAlertReduction: false,
+        bAllowAlertTaxZero: false,
+        bAllowNeverAlertReduction: false,
+        bAllowNeverAlertTaxZero: false,
+
 
         billingSuggestions: this.props.billingLists.map(b => ({
             value: b.BillingTypeId, label: b.Name})),
@@ -646,10 +650,13 @@ class InvoiceLineTable extends React.Component {
 
     handleTaxAlertClose = () => {
         this.setState({ bTaxAlert: false });
+        this.setState({ bAllowNeverAlertTaxZero: true });
+
     };
 
     handleTaxAlertReductionClose = () => {
         this.setState({ bTaxAlertReduction: false });
+        this.setState({ bAllowNeverAlertReduction: true });
     };
 
     addLineData=(row)=>{
@@ -834,19 +841,34 @@ class InvoiceLineTable extends React.Component {
     handleChangeInvoiceTaxLine = (row, name) => event => {
         if(this.props.invoiceForm.customer===null) return;
 
-        if(this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(row.tax)===0) {
+        if(!this.state.bAllowNeverAlertTaxZero && this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(row.tax)===0) {
             this.setState({bTaxAlert: true});
             return;
         }
-        if(this.state.bAllowAlertReduction && this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(row.tax)!==0 &&
+        if(!this.state.bAllowNeverAlertReduction && this.state.bAllowAlertReduction && this.props.invoiceForm.customer.TaxExempt==='N' && name==='tax' && parseFloat(row.tax)!==0 &&
             parseFloat(row.tax)!==this.props.customerTaxAmountLine[row.id].TotalTaxAmount)
         {
             this.setState({bTaxAlertReduction: true});
+            // this.setState({bAllowNeverAlertReduction: true});
             const data = [...this.state.data];
             data[row.id].tax = this.props.customerTaxAmountLine[row.id].TotalTaxAmount;
             this.setState({data: data});
         }
-        if(name==='tax') this.setState({bAllowAlertReduction: true})
+
+        if(name==='tax' &&
+            !this.state.bAllowAlertReduction &&
+            this.props.invoiceForm.customer.TaxExempt==='N' &&
+            parseFloat(row.tax)!==0 &&
+            parseFloat(row.tax)!==this.props.customerTaxAmountLine[row.id].TotalTaxAmount) {
+            setTimeout(() => {this.setState({bAllowAlertReduction: true})}, 1000);
+        }
+
+        if(name==='tax' &&
+            !this.state.bAllowAlertTaxZero &&
+            this.props.invoiceForm.customer.TaxExempt==='N' &&
+            parseFloat(row.tax)===0) {
+            setTimeout(() => {this.setState({bAllowAlertTaxZero: true})}, 1000);
+        }
     };
 
     isDisable = row =>{
@@ -879,6 +901,8 @@ class InvoiceLineTable extends React.Component {
 
     render()
     {
+        console.log('bAllowAlertReduction=', this.state.bAllowAlertReduction);
+        console.log('bAllowAlertTaxZero=', this.state.bAllowAlertTaxZero);
         const {classes} = this.props;
         const {data} = this.state;
 
@@ -988,8 +1012,8 @@ class InvoiceLineTable extends React.Component {
                                     className: classNames(
                                         {"justify-end": column.id==='extended'},
                                         {"justify-end": rowInfo.original.type!=='line'})
-                                        // {"hidden": column.id==='commission' && rowInfo.original.billing.value!==1},
-                                        // {"hidden": column.id==='markup' && rowInfo.original.billing.value===1}),
+                                    // {"hidden": column.id==='commission' && rowInfo.original.billing.value!==1},
+                                    // {"hidden": column.id==='markup' && rowInfo.original.billing.value===1}),
                                 }
                             }
                         }}

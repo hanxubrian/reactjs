@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 
 // core components
 import {
     Hidden,
     Icon,
     IconButton,
-    Fab,
     Typography,
     Toolbar,
     CircularProgress,
@@ -453,14 +451,12 @@ class InvoiceApp extends Component {
     {
         const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState,
             openNewInvoiceForm, invoiceForm} = this.props;
-        const { selection } = this.state;
 
         let menuItem = null;
 
         if(this.props.navigation.length>0){
             let menu = _.filter(this.props.navigation, n=>n.Slug==='accounts-receivable');
             if(menu.length>0) menuItem = menu[0];
-            console.log('menu=', menu);
         }
         return (
             <React.Fragment>
