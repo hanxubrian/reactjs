@@ -1304,10 +1304,10 @@ class LeaseListContent extends Component {
 					showWhenGrouped: true
 				},
 				{
-					title: "Monthly Payment Amount",
+					title: "Monthly Payment",
 					name: "TotalMonthlyPaymentAmount",
 					columnName: "TotalMonthlyPaymentAmount",
-					width: 200,
+					width: 150,
 					align: 'right',
 					wordWrapEnabled: true,
 					sortingEnabled: false,
@@ -1326,17 +1326,6 @@ class LeaseListContent extends Component {
 				// 	groupingEnabled: true,
 				// 	showWhenGrouped: true
 				// },
-				{
-					title: "Balance",
-					name: "TotalBalance",
-					columnName: "TotalBalance",
-					width: 150,
-					align: 'right',
-					sortingEnabled: false,
-					filteringEnabled: true,
-					groupingEnabled: true,
-					showWhenGrouped: true
-				},
 				// {
 				// 	title: "Phone",
 				// 	name: "Phone",
@@ -1359,7 +1348,7 @@ class LeaseListContent extends Component {
 					title: "Payments Made",
 					name: "NumberOfPaymentsMadeSummary",
 					columnName: 'NumberOfPaymentsMadeSummary',
-					width: 150,
+					width: 200,
 					align: 'center',
 					wordWrapEnabled: true,
 					sortingEnabled: true,
@@ -1368,10 +1357,21 @@ class LeaseListContent extends Component {
 					showWhenGrouped: true
 				},
 				{
+					title: "Balance",
+					name: "TotalBalance",
+					columnName: "TotalBalance",
+					width: 100,
+					align: 'right',
+					sortingEnabled: false,
+					filteringEnabled: true,
+					groupingEnabled: true,
+					showWhenGrouped: true
+				},
+				{
 					title: "Status",
 					name: "Status",
 					columnName: 'Status',
-					width: 90,
+					width: 150,
 					align: 'center',
 					sortingEnabled: true,
 					filteringEnabled: true,
