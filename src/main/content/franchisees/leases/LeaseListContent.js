@@ -1565,19 +1565,6 @@ class LeaseListContent extends Component {
 				expandedGroups: [...new Set(this.getRowData(nextProps.leases).map(x => x.FranchiseeNameNo))],
 			})
 		}
-
-		// if (this.props.locationFilterValue !== nextProps.locationFilterValue) {
-		// 	this.setState({ locationFilterValue: nextProps.locationFilterValue })
-		// 	console.log("componentWillReceiveProps", "locationFilterValue", nextProps.locationFilterValue, this.props.leases)
-		// 	this.initRowsFromRawJson(this.props.leases, nextProps.locationFilterValue);
-		// }
-
-		// if (this.props.pins !== nextProps.pins) {
-		// 	// this.setState({ pins: nextProps.pins })
-		// 	this.filterPins(nextProps.pins, this.props.locationFilterValue)
-		// }
-
-
 		if (nextProps.searchText !== this.props.searchText) {
 			console.log("------search text changed-------", nextProps.searchText)
 			this.search(nextProps.searchText);
@@ -1592,8 +1579,21 @@ class LeaseListContent extends Component {
             this.setState({
                 leaseDetail: this.props.leaseDetail,
             });
-        }
+		}
 	}
+
+	processData(data) {
+        let temp = [...data];
+        temp.forEach(x => {
+            x.FranchiseeNameNo = `${x.FranchiseeName} - ${x.FranchiseeNo}`
+        });
+
+
+        this.setState(
+            {data: temp,
+            expandedGroups: [...new Set(temp.map(x => x.FranchiseeNameNo))]},
+        );
+    }
 
 	getRowData(leases) {
 		if (leases.data !== undefined) {
@@ -1640,6 +1640,7 @@ class LeaseListContent extends Component {
 	componentWillMount() {
 		console.log("componentWillMount");
 		this.initRowsFromRawJson();
+		this.processData(this.props.data);
 
 		// this.getLocation();
 

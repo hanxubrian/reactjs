@@ -734,9 +734,9 @@ class LeaseForm extends Component {
                                 </GridItem>
                                 <GridItem xs={12} sm={6} md={6} className="flex flex-row">
                                     <Paper >
-                                        <Table>
-                                            {/* More Lease Info Here */}
-                                        </Table>
+                                        {/* <Table>
+                                            More Lease Info Here
+                                        </Table> */}
                                     </Paper>
                                 </GridItem>
                             </GridContainer>
