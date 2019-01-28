@@ -263,7 +263,7 @@ class BillRunDialog extends Component {
 
         this.props.showMessage({
             message     : `Bill Run Process has started.You will be notified when completed.\n You can continue using the system as usual`,//text or html
-            autoHideDuration: 300000,//ms
+            autoHideDuration: 3000,//ms
             anchorOrigin: {
                 vertical  : 'top',//top bottom
                 horizontal: 'center'//left center right
@@ -297,23 +297,23 @@ class BillRunDialog extends Component {
             let regionid = this.props.auth.defaultRegionId;
             if(userid && userid != null && regionid && regionid != null && year && year != null && month && month !=null ){
                 this.createbillrunmesssage();
-                // setTimeout(
-                //     function() {
-                //         let getres = this.props.createbillrun(
-                //             regionid,
-                //             year,
-                //             month,
-                //             user,
-                //             userid,
-                //             this.state.message,
-                //             this.state.description,
-                //         );
-                //         this.setState({statusMSG:200});
-                //         this.setState({showP: !this.state.showP});
-                //     }
-                //         .bind(this),
-                //     3000
-                // );
+                setTimeout(
+                    function() {
+                        let getres = this.props.createbillrun(
+                            regionid,
+                            year,
+                            month,
+                            user,
+                            userid,
+                            this.state.message,
+                            this.state.description,
+                        );
+                        this.setState({statusMSG:200});
+                        this.setState({showP: !this.state.showP});
+                    }
+                        .bind(this),
+                    3000
+                );
 
 
 
