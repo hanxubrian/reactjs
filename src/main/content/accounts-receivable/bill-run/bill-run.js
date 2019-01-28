@@ -710,7 +710,10 @@ class BillRun extends Component {
                                                     Header: "Period",
                                                     id: "Period",
                                                     accessor: d => moment(d.InvoiceDate).format('MM/YYYY'),
-                                                    className: classNames("flex items-center  justify-center")
+                                                    className: classNames("flex items-center  justify-center"),
+                                                    Cell : row=>{
+                                                        return(row.original.Month+"/"+row.original.Year);
+                                                    }
                                                 },
                                                 {
                                                     Header: "Create Date",

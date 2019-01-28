@@ -23,6 +23,7 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 import classNames from 'classnames';
 import InvoiceReport from './invoiceReport'
+import InvoiceReportLayout from './invoiceReportLayout'
 
 const hexToRgb = (hex) =>{
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -500,9 +501,11 @@ class InvoiceListContent extends Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                {this.state.invoiceDetail!==null && (
+                {this.state.invoiceDetail!==null && 1 && (
                     <InvoiceReport childCall={this.printDocument.bind(this)} ref="child" show={this.state.isOpen} onClose={this.toggleModal} Detail={this.state.invoiceDetail} />
+
                 )}
+
                 {this.state.isOpen && this.state.invoiceDetail!==null &&(
                 <div className="mb5" style={{zIndex:999999}}>
                     <button onClick={this.printDocument} style={{

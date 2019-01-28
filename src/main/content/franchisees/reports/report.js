@@ -5,12 +5,13 @@ import connect from "react-redux/es/connect/connect";
 import classNames from 'classnames';
 
 // core components
-import {Card, CardContent, Typography, TextField} from '@material-ui/core';
+import {Card, CardContent, Typography, TextField,CircularProgress} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles/index';
 
 //Theme component
 import FuseUtils from '@fuse/FuseUtils';
-
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 //Store
 import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
@@ -65,18 +66,109 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
         width: 835
-    }
+    },
+    overlay: {
+        position: 'absolute',
+        top: -104,
+        left: -65,
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: 'rgba(0,0,0, .6)',
+        zIndex: 1000,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex'
+    },
+    progress: {
+        margin: theme.spacing.unit * 2,
+    },
 });
 
+let pdf                             = 0;
+let page_section                    = 0;
+let HTML_Width                      = 0;
+let HTML_Height                     = 0;
+let top_left_margin                 = 0;
+let PDF_Width                       = 0;
+let PDF_Height                      = 0;
+let canvas_image_width              = 0;
+let canvas_image_height             = 0;
+
 class Report extends Component {
+
+
     componentDidMount()
     {
         /**
          * Get the Report Data
          */
+        this.props.onRef(this);
         this.props.getReport(this.props.match.params);
     }
+    componentWillUnmount() {
 
+        this.props.onRef(undefined);
+    }
+    getDataUri=(url, cb)=>
+    {
+        var image = new Image();
+        var log_url = 'https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
+        image.setAttribute('crossOrigin', 'anonymous');
+        image.onload = function () {
+            var canvas = document.createElement('canvas');
+            canvas.width = this.naturalWidth;
+            canvas.height = 2500;
+            var ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#fff';  /// set white fill style
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            canvas.getContext('2d').drawImage(this, 0, 0);
+            cb(canvas.toDataURL('image/png'));
+        };
+        image.src = log_url;
+    }
+    downloadPDF=(input, imgURL)=> {
+        console.log("document.getElementsByClassName length",document.getElementsByClassName("pdfcardcontent").length);
+        let cardlen = document.getElementsByClassName("pdfcardcontent").length;
+        let img = null;
+
+        if (input != null && imgURL != null) {
+            this.getDataUri(imgURL, function (dataUri) {
+                img = dataUri;
+            });
+            html2canvas(input)
+                .then((canvas) => {
+
+                    const imgData = canvas.toDataURL('image/png');
+                    this.calculatePDF_height_width("whole",0);
+                    // const pdf = new jsPDF();
+                    pdf = new jsPDF('p', 'pt', [input.offsetWidth, input.offsetHeight]);
+                    pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, HTML_Width, HTML_Height);
+                    pdf.save("download.pdf");
+
+
+                    // const imgData = canvas.toDataURL('image/png');
+                    // const pdf = new jsPDF();
+                    // pdf.addImage(imgData, 'PNG', 0, 0);
+                    // pdf.addImage(img, 'PNG', 8, 15, 40, 30);
+                    // pdf.addImage(img, 'PNG', 150, 102, 40, 30);
+                    // pdf.save("download.pdf");
+                })
+            ;
+        }
+    }
+    calculatePDF_height_width=(selector,index)=>{
+        // page_section = $(selector).eq(index);
+        page_section = document.getElementsByClassName(selector)[index];
+        console.log("page_section",page_section);
+        HTML_Width = page_section.offsetWidth;
+        console.log("HTML_Width",HTML_Width);
+        HTML_Height = page_section.offsetHeight ;
+        top_left_margin = 15;
+        PDF_Width = HTML_Width + (top_left_margin * 2);
+        PDF_Height = (PDF_Width * 1.2) + (top_left_margin * 2);
+        canvas_image_width = HTML_Width;
+        canvas_image_height = HTML_Height;
+    }
     renderHeader = ()=>{
         const { all_regions} = this.props;
         const {month, year, regionid} = this.props.match.params;
@@ -123,7 +215,15 @@ class Report extends Component {
         console.log('ppp=', this.props.match.params);
 
         if(franchiseeReport===null || all_regions.length===0)
-            return (<div/>);
+            return (
+                <div className={classes.overlay} style={{
+
+                }}>
+                    <CircularProgress className={classes.progress} color="secondary"  />
+
+                </div>
+
+            );
 
         const {DLR_CODE, SUMMARY_PAGE, CUS_TRXS, CUST_ACCT_TOTALS, SUPPLY_TRXS, LEASE_PAYMENTS,REG_MISC, CHARGEBACKS }  = franchiseeReport.Data;
 
@@ -202,8 +302,9 @@ class Report extends Component {
         }
 
         return (
-            <div className={classNames(classes.root, "p-0 sm:p-64  print:p-0")}>
-                <Card className={classNames(classes.card, "mx-auto")}>
+            <div className={classNames(classes.root, "p-0 sm:p-64  whole print:p-0")} id ="wholediv">
+                <div id ="testdiv" className="cardname">
+                <Card className={classNames(classes.card,  "pdfcardcontent mx-auto")}>
                     <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                         <div>
                             <table align="">
@@ -549,8 +650,9 @@ class Report extends Component {
                         </div>
                     </CardContent>
                 </Card>
-
-                <Card className={classNames(classes.card, "mx-auto mt-64")}>
+                </div>
+                <div className="cardname">
+                <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
                     <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                         <div>
                             <table align="">
@@ -686,8 +788,9 @@ class Report extends Component {
                         </div>
                     </CardContent>
                 </Card>
-
-                <Card className={classNames(classes.card, "mx-auto mt-64")}>
+                </div>
+                <div className="cardname">
+                <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
                     <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                         <div>
                             <table align="">
@@ -823,8 +926,10 @@ class Report extends Component {
                         </div>
                     </CardContent>
                 </Card>
+                </div>
 
-                <Card className={classNames(classes.card, "mx-auto mt-64")}>
+                <div className="cardname">
+                <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
                     <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                         <div>
                             <table align="">
@@ -942,9 +1047,10 @@ class Report extends Component {
                         </div>
                     </CardContent>
                 </Card>
-
+                </div>
+                <div className="cardname">
                 {CHARGEBACKS!==null && (
-                    <Card className={classNames(classes.card, "mx-auto mt-64")}>
+                    <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                             <div>
                                 <table align="">
@@ -1045,8 +1151,9 @@ class Report extends Component {
                         </CardContent>
                     </Card>
                 )}
-
-                <Card className={classNames(classes.card, "mx-auto mt-64")}>
+                </div>
+                <div className="cardname">
+                <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
                     <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                         <div>
                             <table align="">
@@ -1155,9 +1262,10 @@ class Report extends Component {
                         </div>
                     </CardContent>
                 </Card>
-
+                </div>
+                <div className="cardname">
                 {REG_MISC!==null && (
-                    <Card className={classNames(classes.card, "mx-auto mt-64")}>
+                    <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
 
                             <div>
@@ -1269,7 +1377,7 @@ class Report extends Component {
                         </CardContent>
                     </Card>
                 )}
-
+                </div>
             </div>
         )
     }

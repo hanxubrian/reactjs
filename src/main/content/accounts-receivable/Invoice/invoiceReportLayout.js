@@ -24,7 +24,7 @@ import * as Actions from 'store/actions';
 // import FilterPanel from './FilterPanel';
 import "react-table/react-table.css";
 import classNames from 'classnames';
-import Report from './report';
+
 
 const headerHeight = 80;
 
@@ -231,7 +231,7 @@ const styles = theme => ({
     }
 });
 
-class ReportLayout extends Component {
+class InvoiceReportLayout extends Component {
     constructor(props) {
         super(props);
 
@@ -257,9 +257,9 @@ class ReportLayout extends Component {
     }
 
     print = () => {
-            let imgUrl ='https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
-            const input = document.getElementById('wholediv');
-            this.child.downloadPDF(input, imgUrl);
+        let imgUrl ='https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
+        const input = document.getElementById('wholediv');
+        this.child.downloadPDF(input, imgUrl);
     }
     email = () => {
         alert("Email");
@@ -270,6 +270,7 @@ class ReportLayout extends Component {
     render() {
 
         const {classes, filterState, summaryState} = this.props;
+    console.log("layout LOg");
 
         // const {selectionLength} = this.state;
 
@@ -289,17 +290,17 @@ class ReportLayout extends Component {
                             <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
                                 <div className="flex flex-row flex-1 justify-between">
 
-                                        <div className="flex flex-shrink items-center" onClick={this.gobackreport} style={{
-                                            cursor: "pointer",
-                                        }}>
+                                    <div className="flex flex-shrink items-center" onClick={this.gobackreport} style={{
+                                        cursor: "pointer",
+                                    }}>
 
-                                            <div className="flex items-center">
-                                                <Icon className="text-32 mr-12">list_alt</Icon>
-                                                <Typography variant="h6" className="hidden sm:flex">Franchisee Report |
-                                                    Detail</Typography>
-                                            </div>
-
+                                        <div className="flex items-center">
+                                            <Icon className="text-32 mr-12">list_alt</Icon>
+                                            <Typography variant="h6" className="hidden sm:flex">Franchisee Report |
+                                                Detail</Typography>
                                         </div>
+
+                                    </div>
 
                                     <div className="flex flex-shrink items-center">
                                         <Button variant="contained" color="primary"
@@ -322,7 +323,7 @@ class ReportLayout extends Component {
                         <div className="flex-1 flex-col absolute w-full h-full">
                             <Fragment>
                                 <div id ="franchiseesprint">
-                                    <Report onRef={ref => (this.child = ref)}/>
+                                    {/*<Report onRef={ref => (this.child = ref)}/>*/}
                                 </div>
                             </Fragment>
                         </div>
@@ -339,33 +340,16 @@ class ReportLayout extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getVerifications: Actions.getVerifications,
-        toggleFilterPanel: Actions.toggleVerificationFilterPanel,
-        toggleSummaryPanel: Actions.toggleVerificationSummaryPanel,
-        openNewVerificationForm: Actions.openNewVerificationForm,
-        closeNewVerificationForm: Actions.closeNewVerificationForm,
-        openVerificationDialog: Actions.openVerificationDialog,
-        openCloseReviseModal: Actions.openCloseReviseDialog,
+
         openCloseRejectModal: Actions.openCloseRejectDialog
     }, dispatch);
 }
 
 function mapStateToProps({verifications, auth}) {
     return {
-        verifications: verifications.verificationsDB,
-        bLoadedVerifications: verifications.bLoadedVerifications,
-        transactionStatus: verifications.transactionStatus,
-        summaryState: verifications.bOpenedSummaryPanel,
-        filterState: verifications.bOpenedFilterPanel,
-        verificationForm: verifications.verificationForm,
-        statusId: verifications.statusId,
-        searchText: verifications.searchText,
-        selectionLength: verifications.selectionLength,
-        verifiedModal: verifications.verifiedModal,
-        reviseModal: verifications.reviseModal,
         rejectModal: verifications.rejectModal
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(ReportLayout)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceReportLayout)));
 
