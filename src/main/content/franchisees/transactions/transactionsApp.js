@@ -321,7 +321,7 @@ class TransactionsApp extends Component {
 
                             {bDetailPanel && this.props.transactionForm.type === 'edit' && (
                                 <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                    <Typography variant="h6" className="hidden sm:flex">Franchisees | Edit Transaction</Typography>
+                                    <Typography variant="h6" className="hidden sm:flex">{this.props.transactionForm.trxRowInfo.FranNameNo}</Typography>
                                 </FuseAnimate>
                             )}
                             {bDetailPanel && this.props.transactionForm.type === 'new' && (
