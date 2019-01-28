@@ -1392,12 +1392,12 @@ class LeaseListContent extends Component {
 				// },
 				// { title: "Actions", name: "Actions", columnName: "Actions", width: 110, sortingEnabled: true, filteringEnabled: false, }
 			],
-			groupingColumns: [
-				// { columnName: 'CustomerName' },
-				// { columnName: 'CustomerNo' },
-				{ columnName: 'FranchiseeNameNo' }
+			// groupingColumns: [
+			// 	// { columnName: 'CustomerName' },
+			// 	// { columnName: 'CustomerNo' },
+			// 	{ columnName: 'FranchiseeNameNo' }
 
-			],
+			// ],
 			expandedGroups: ['FranchiseeNameNo'],
 			sorting: [
 				{ columnName: 'LeaseNo', direction: 'asc' }
@@ -1976,6 +1976,13 @@ class LeaseListContent extends Component {
 		</span>
 	);
 
+	emptyMessageContent = ({column, row}) => (
+        <span>
+			{/* {column.title} */}
+            <strong>{row.value}</strong>
+		</span>
+    );
+
 
 	render() {
 		const {
@@ -2005,7 +2012,6 @@ class LeaseListContent extends Component {
 			pageSize,
 			pageSizes,
 			amountFilterOperations,
-			// groupingColumns,
 			// booleanColumns,
 			searchValue,
 			grouping,
@@ -2077,7 +2083,7 @@ class LeaseListContent extends Component {
 										// onPageSizeChange={this.changePageSize}
 										defaultPageSize={100}
 									/>
-
+									
 									<PagingPanel pageSizes={pageSizes} />
 
 									<SelectionState
@@ -2114,7 +2120,9 @@ class LeaseListContent extends Component {
 									/>
 
 									<GroupingState
-										grouping={groupingColumns}
+										grouping={[
+											{columnName: 'FranchiseeNameNo'}
+										]}
 										expandedGroups={expandedGroups}
 										onExpandedGroupsChange={this.expandedGroupsChange}
 									/>
@@ -2211,8 +2219,8 @@ class LeaseListContent extends Component {
 									)} */}
 
 									{/* <TableGroupRow /> */}
-									<Toolbar />
-									<GroupingPanel showSortingControls={true} />
+									{/* <Toolbar /> */}
+									{/* <GroupingPanel showSortingControls={true} /> */}
 
 									<Template
 										name="tableRow"
@@ -2232,7 +2240,9 @@ class LeaseListContent extends Component {
 									</Template>
 
 									{/* <CustomizedDxGridSelectionPanel selection={selection} /> */}
-
+										{/* <TableColumnVisibility
+                        				hiddenColumnNames={['FranchiseeNameNo']}
+                        				emptyMessageComponent={this.emptyMessageContent} /> */}
 								</Grid>
 
 								{/* <div
