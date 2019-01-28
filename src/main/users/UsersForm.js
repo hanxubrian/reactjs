@@ -1,22 +1,13 @@
 import React from 'react';
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import {bindActionCreators} from "redux";
 import * as Actions from "./store/actions";
 import connect from "react-redux/es/connect/connect";
-import {FormControlLabel} from "@material-ui/core";
-import Radio from "@material-ui/core/Radio/Radio";
-import Checkbox from "@material-ui/core/Checkbox/Checkbox";
 import GridContainer from "../../Commons/Grid/GridContainer";
 import GridItem from "../../Commons/Grid/GridItem";
-import Divider from "@material-ui/core/es/Divider/Divider";
+import UserAvatar from"./UserAvatar"
 
 const styles = theme => ({
     root     : {
@@ -68,6 +59,9 @@ class UsersForm extends React.Component {
                 <div className={classNames(classes.userFormSection,"w-full")}>
                     <h2>User Profile</h2>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <UserAvatar/>
+                        </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
                                 id="firstName"
