@@ -115,6 +115,15 @@ const styles = theme => ({
     progress: {
         margin: theme.spacing.unit * 2,
     },
+    rightIcon: {
+        marginLeft: theme.spacing.unit,
+    },
+    btntop: {
+        marginRight: 20,
+        '& span': {
+            textTransform: 'none'
+        }
+    },
 });
 
 class TransactionsApp extends Component {
@@ -312,21 +321,15 @@ class TransactionsApp extends Component {
                                         </div>
                                         <div className="flex flex-shrink items-center">
                                             <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                <Fab color="secondary" aria-label="add"
-                                                     className={classNames(classes.sideButton, "mr-12")} onClick={() => this.onNewTransaction()}>
-                                                    <Icon>add</Icon>
-                                                </Fab>
-                                            </FuseAnimate>
-                                            <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                <Fab color="secondary" aria-label="add"
-                                                     className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-                                                    <Icon>mail_outline</Icon>
-                                                </Fab>
-                                            </FuseAnimate>
-                                            <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-                                                    <Icon>print</Icon>
-                                                </Fab>
+                                                <Button variant="contained" color="primary"
+                                                        className={classNames(classes.btntop) } onClick={this.onNewTransaction}>
+                                                    New Transaction
+                                                    <Icon className={classes.rightIcon}>add</Icon>
+                                                </Button>
+                                                {/*<Fab color="secondary" aria-label="add"*/}
+                                                {/*className={classNames(classes.sideButton, "mr-12")} onClick={() => this.onNewTransaction()}>*/}
+                                                {/*<Icon>add</Icon>*/}
+                                                {/*</Fab>*/}
                                             </FuseAnimate>
                                         </div>
                                     </div>

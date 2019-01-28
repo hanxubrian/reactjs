@@ -565,9 +565,6 @@ class TransactionForm extends Component {
         this.props.transactionForm.type === 'edit' ? this.props.closeEditTransactionForm() : this.props.closeNewTransactionForm();
     };
 
-    handleDueDateChange = date => {
-        this.setState({ Date: date});
-    };
     handleStartDateChange = date => {
         this.setState({ startDate: date});
     };
@@ -748,26 +745,33 @@ class TransactionForm extends Component {
                                                 <strong>Franchisee #: {this.state.selectedFranchisee? this.state.selectedFranchisee.Number: this.state.franchiseeNo}</strong>
                                             </Typography>
                                         </div>
-                                        {this.state.selectedFranchisee && (
-                                            <div className="flex flex-row justify-start mb-4">
-                                                <div className="flex flex-row items-center">
-                                                    <Icon fontSize={"small"} className="mr-4">place</Icon>
+
+                                        <div className="flex flex-row justify-between mb-4">
+                                            <div className="flex flex-row items-center">
+                                                <Icon fontSize={"small"} className="mr-4">place</Icon>
+                                                {this.state.selectedFranchisee && (
                                                     <Typography variant="subtitle1" color="inherit">
                                                         {this.state.selectedFranchisee.Address}
                                                     </Typography>
-                                                </div>
+                                                )}
                                             </div>
-                                        )}
-                                        {this.state.selectedFranchisee && (
-                                            <div className="flex flex-row justify-between mb-4">
-                                                <div className="flex flex-row items-center">
-                                                    <Icon fontSize={"small"} className="mr-4">smartphone</Icon>
+                                            {this.state.selectedFranchisee && (
+                                                <Typography variant="subtitle1" color="inherit">
+                                                    <strong>Franchisee Status: {this.state.selectedFranchisee.StatusName}</strong>
+                                                </Typography>
+                                            )}
+                                        </div>
+                                        <div className="flex flex-row justify-between mb-4">
+                                            <div className="flex flex-row items-center">
+                                                <Icon fontSize={"small"} className="mr-4">smartphone</Icon>
+                                                {this.state.selectedFranchisee && (
                                                     <Typography variant="subtitle1" color="inherit">
                                                         {this.state.selectedFranchisee.Phone}
                                                     </Typography>
-                                                </div>
+                                                )}
                                             </div>
-                                        )}
+                                        </div>
+
                                     </CardContent>
                                 </Card>
                             </GridItem>
