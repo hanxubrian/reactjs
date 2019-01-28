@@ -744,7 +744,7 @@ class LeaseForm extends Component {
                         <GridContainer className={classNames(classes.formControl, "mb-0")}>
                             <GridItem xs={12} sm={6} md={6} className="flex flex-row xs:flex-col">
                                 <Card className={classes.card}>
-                                    <CardHeader title="Franchisee Transaction" className={classNames(classes.cardHeader, "flex-1")} />
+                                    <CardHeader title="Franchisee" className={classNames(classes.cardHeader, "flex-1")} />
                                     <CardContent className={classNames(classes.cardContent)}>
                                         <div className="flex flex-row justify-between mb-4">
                                             <div className="flex flex-row">
@@ -1076,60 +1076,15 @@ class LeaseForm extends Component {
                                     }}
                                 />
                                 </GridItem>
-                        </MuiPickersUtilsProvider>
-                        </GridContainer>
-                        {/* <Divider variant="middle"/> */}
-                    </div>
-                    <div className="flex flex-shrink flex-col w-full pl-24 pr-24 pt-0 pb-12">
-                        <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
-                            {/* <GridItem xs={12} sm={9} md={9} className="flex flex-col xs:flex-col xs:mb-24">
-                                <div className="w-full">
-                                    <TextField
-                                        id="note"
-                                        name="note"
-                                        label="Note"
-                                        className={classes.textField}
-                                        value={this.state.note}
-                                        onChange={this.handleChange}
-                                        margin="dense"
-                                        variant="outlined"
-                                        fullWidth
-                                        multiline
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                        InputProps={{
-                                            classes: {
-                                                input: classes.input, multiline: classes.input
-                                            },
-                                        }}
-                                        rows={3}
-                                    />
+                                <div className="w-full mt-224">
                                 </div>
-                            </GridItem> */}
-                            {/* <GridItem xs={12} sm={3} md={3} className="flex flex-col xs:flex-col xs:mb-24">
-                                <div className="w-full p-12 flex justify-end pb-0">
-                                    <span className={classes.summary}><strong>Subtotal: </strong>${this.state.subTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
-                                </div>
-                                <div className="w-full p-12 flex justify-end pb-0 pt-6 ">
-                                    <span className={classes.summary}><strong>Markup Total: </strong>${this.state.markup.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
-                                </div>
-                                <div className="w-full p-12 flex justify-end pt-6 pb-6">
-                                    <span className={classes.summary}><strong>Tax: </strong>${this.state.tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
-                                </div>
-                                <div className="w-full p-12 flex justify-end  pt-6 pb-6">
-                                    <span className={classes.summary}><strong>Grand Total: </strong>${this.state.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
-                                </div>
-                            </GridItem> */}
-                        </GridContainer>
-                        <div className="flex flex-1 flex-row justify-between items-center">
+                                <div className="flex flex-1 flex-row justify-between items-center">
                             <div className="flex flex-row justify-start">
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
                                     <span className={classes.summary}><strong>Created By: </strong>{`${this.props.user.firstName} ${this.props.user.lastName}, ${moment(today).format('MM/DD/YYYY')}`}</span>
                                 </FuseAnimate>
                             </div>
-                            <div className="flex flex-1 flex-row justify-end">
+                            <div className="flex flex-1 flex-row justify-start pl-280">
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
                                     <Button
                                         variant="contained"
@@ -1190,6 +1145,120 @@ class LeaseForm extends Component {
                                 </FuseAnimate>
                             </div>
                         </div>
+                        </MuiPickersUtilsProvider>
+                        </GridContainer>
+                        {/* <Divider variant="middle"/> */}
+                    </div>
+                    <div className="flex flex-shrink flex-col w-full pl-24 pt-0 pb-12">
+                        <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
+                            {/* <GridItem xs={12} sm={9} md={9} className="flex flex-col xs:flex-col xs:mb-24">
+                                <div className="w-full">
+                                    <TextField
+                                        id="note"
+                                        name="note"
+                                        label="Note"
+                                        className={classes.textField}
+                                        value={this.state.note}
+                                        onChange={this.handleChange}
+                                        margin="dense"
+                                        variant="outlined"
+                                        fullWidth
+                                        multiline
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input, multiline: classes.input
+                                            },
+                                        }}
+                                        rows={3}
+                                    />
+                                </div>
+                            </GridItem> */}
+                            {/* <GridItem xs={12} sm={3} md={3} className="flex flex-col xs:flex-col xs:mb-24">
+                                <div className="w-full p-12 flex justify-end pb-0">
+                                    <span className={classes.summary}><strong>Subtotal: </strong>${this.state.subTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
+                                </div>
+                                <div className="w-full p-12 flex justify-end pb-0 pt-6 ">
+                                    <span className={classes.summary}><strong>Markup Total: </strong>${this.state.markup.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
+                                </div>
+                                <div className="w-full p-12 flex justify-end pt-6 pb-6">
+                                    <span className={classes.summary}><strong>Tax: </strong>${this.state.tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
+                                </div>
+                                <div className="w-full p-12 flex justify-end  pt-6 pb-6">
+                                    <span className={classes.summary}><strong>Grand Total: </strong>${this.state.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
+                                </div>
+                            </GridItem> */}
+                        </GridContainer>
+                        {/* <div className="flex flex-1 flex-row justify-between items-center">
+                            <div className="flex flex-row justify-start">
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <span className={classes.summary}><strong>Created By: </strong>{`${this.props.user.firstName} ${this.props.user.lastName}, ${moment(today).format('MM/DD/YYYY')}`}</span>
+                                </FuseAnimate>
+                            </div>
+                            <div className="flex flex-1 flex-row justify-start pl-400">
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        className={classNames(classes.button, "mr-12")}
+                                        onClick={() => {
+                                            this.onSaveAndAddMore();
+                                        }}
+                                    >
+                                        { this.props.leaseForm.type === 'new' && (
+                                            <span>Save & Add more</span>
+                                        )}
+                                        { this.props.leaseForm.type === 'edit' && (
+                                            <span>Update & Add more</span>
+                                        )}
+                                    </Button>
+                                </FuseAnimate>
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        className={classNames(classes.button, "mr-12 hidden")}
+                                        onClick={() => {
+                                            this.onSaveAndClose();
+                                        }}
+                                    >
+                                        { this.props.leaseForm.type === 'new' && (
+                                            <span>Save & Close</span>
+                                        )}
+                                        { this.props.leaseForm.type !== 'new' && (
+                                            <span>Update & Close</span>
+                                        )}
+                                    </Button>
+                                </FuseAnimate>
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        className={classNames(classes.button, "mr-12 hidden")}
+                                        onClick={() => {
+                                            this.onSubmitForApproval();
+                                        }}
+                                    >
+                                    Submit for Approval
+                                    </Button>
+                                </FuseAnimate>
+                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        className={classes.button}
+                                        onClick={() => {
+                                            this.closeComposeForm();
+                                        }}
+                                    >
+                                        Close
+                                    </Button>
+                                </FuseAnimate>
+                            </div>
+                        </div> */}
                     </div>
                     <Snackbar
                         anchorOrigin={{
