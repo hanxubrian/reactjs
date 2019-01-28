@@ -213,19 +213,6 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
 
     return (
         <MenuItem selected={isHighlighted} component="div">
-            {/*<div>*/}
-                {/*{parts.map((part, index) => {*/}
-                    {/*return part.highlight ? (*/}
-                        {/*<span key={String(index)} style={{ fontWeight: 700 }}>*/}
-              {/*{part.text}*/}
-            {/*</span>*/}
-                    {/*) : (*/}
-                        {/*<strong key={String(index)} style={{ fontWeight: 300 }}>*/}
-                            {/*{part.text}*/}
-                        {/*</strong>*/}
-                    {/*);*/}
-                {/*})}*/}
-            {/*</div>*/}
             <span>{suggestion.Name} - {suggestion.Number} - <strong>{suggestion.StatusName}</strong></span>
         </MenuItem>
     );
@@ -422,7 +409,6 @@ class TransactionForm extends Component {
             if(this.state.buttonOption===0){
                 this.props.resetTransactionForm();
                 this.setState({transactionDescription: ''});
-                this.setState({note: ''});
                 this.setState({selectedFranchisee: null});
                 this.setState({value: ''});
                 this.setState({franchiseeNo: ''});
@@ -518,9 +504,7 @@ class TransactionForm extends Component {
             Fees: 0.00,
 
             Description: this.state.transactionDescription,
-            Notes: this.state.note,
             TrxDate: this.state.TransactionDate,
-            Date: this.state.Date,
 
             VendorValue: this.props.vendor!==null ? this.props.vendor.vendor.value: '', //vendor, vendor_no, vendorDate
             VendorLabel: this.props.vendor!==null ? this.props.vendor.vendor.label: '', //vendor, vendor_no, vendorDate
@@ -720,29 +704,6 @@ class TransactionForm extends Component {
                                         }}
                                     />
                                 </Grid>
-                                <Grid item xs={12} sm={2} md={2} className="flex flex-row xs:flex-col pr-8 pl-8"
-                                      style={{padding: '0 6px!important'}}>
-                                    <DatePicker
-                                        margin="none"
-                                        label="Due Date"
-                                        format="MM/DD/YYYY"
-                                        name="Date"
-                                        variant="outlined"
-                                        value={this.state.Date}
-                                        onChange={this.handleDueDateChange}
-                                        required
-                                        fullWidth
-                                        InputProps={{
-                                            classes: {
-                                                input: classes.input2,
-                                            },
-                                        }}
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                    />
-                                </Grid>
                                 <Grid item xs={12} sm={2} md={2} className="flex flex-row xs:flex-col pl-4" >
                                     <TextField
                                         margin="none"
@@ -807,14 +768,6 @@ class TransactionForm extends Component {
                                                 </div>
                                             </div>
                                         )}
-                                    </CardContent>
-                                </Card>
-                            </GridItem>
-                            <GridItem xs={12} sm={6} md={6} className= "flex flex-row justify-end xs:flex-col">
-                                <Card className={classes.card}>
-                                    <CardHeader title="Billing" className={classNames(classes.cardHeader, "flex-1")} />
-                                    <CardContent className={classNames(classes.cardContent)}>
-
                                     </CardContent>
                                 </Card>
                             </GridItem>
@@ -1187,32 +1140,6 @@ class TransactionForm extends Component {
                     </div>
                     <div className="flex flex-shrink flex-col w-full pl-24 pr-24 pt-0 pb-12">
                         <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
-                            <GridItem xs={12} sm={9} md={9} className="flex flex-col xs:flex-col xs:mb-24">
-                                <div className="w-full">
-                                    <TextField
-                                        id="note"
-                                        name="note"
-                                        label="Note"
-                                        className={classes.textField}
-                                        value={this.state.note}
-                                        onChange={this.handleChange}
-                                        margin="dense"
-                                        variant="outlined"
-                                        fullWidth
-                                        multiline
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                        InputProps={{
-                                            classes: {
-                                                input: classes.input, multiline: classes.input
-                                            },
-                                        }}
-                                        rows={3}
-                                    />
-                                </div>
-                            </GridItem>
                             <GridItem xs={12} sm={3} md={3} className="flex flex-col xs:flex-col xs:mb-24">
                                 <div className="w-full p-12 flex justify-end pb-0">
                                     <span className={classes.summary}><strong>Subtotal: </strong>${this.state.subTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>

@@ -92,7 +92,7 @@ const styles = theme => ({
     },
     tableStriped: {
         '& tbody tr:nth-of-type(odd)': {
-            backgroundColor: fade(theme.palette.primary.main, 0.15),
+            // backgroundColor: fade(theme.palette.primary.main, 0.15),
         },
     },
 });
@@ -125,34 +125,6 @@ const CurrencyFormatter = ({value}) => (
 const CurrencyTypeProvider = props => (
     <DataTypeProvider
         formatterComponent={CurrencyFormatter}
-        {...props}
-    />
-);
-
-const ActionRender = ({value}) => (
-    <div className="flex items-center actions justify-center w-full">
-        <IconButton
-            onClick={(ev) => {
-                ev.stopPropagation();
-                // this.handleOpen(value);
-            }}
-        >
-            <Icon fontSize={"small"}>delete</Icon>
-        </IconButton>
-        <IconButton
-            onClick={(ev) => {
-                ev.stopPropagation();
-                // this.props.openEditTransactionForm(this.props.regionId, row.original);
-            }}
-        >
-            <Icon fontSize={"small"}>edit</Icon>
-        </IconButton>
-    </div>
-);
-
-const ActionProvider = props => (
-    <DataTypeProvider
-        formatterComponent={ActionRender}
         {...props}
     />
 );
@@ -321,7 +293,6 @@ class TransactionsDxGridLists extends Component {
         const {classes} = this.props;
         const {expandedGroups} = this.state;
 
-        console.log('rows=', this.state.data);
         const columns = [
             {name: "FranNameNo", title: "FranNameNo",},
             {name: "Number", title: "Trx. Number"},

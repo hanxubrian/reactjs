@@ -257,7 +257,17 @@ class TransactionsApp extends Component {
     render()
     {
         const {classes, filterState, toggleFilterPanel, transactionForm} = this.props;
-        const { selection } = this.state;
+        console.log('navigation=', this.props.navigation);
+
+        let menuItem = null;
+
+        if(this.props.navigation.length>0){
+            let menu = _.filter(this.props.navigation, n=>n.Slug==='franchisees');
+            if(menu.length>0) menuItem = menu[0];
+            console.log('menu=', menu);
+        }
+
+
         return (
             <React.Fragment>
                 <FusePageCustom
@@ -293,7 +303,7 @@ class TransactionsApp extends Component {
                                         <div className="flex flex-shrink items-center">
                                             <div className="flex items-center">
                                                 <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                    <Icon className="text-32 mr-12">account_box</Icon>
+                                                    <Icon className="text-32 mr-12">{menuItem!==null ? menuItem.Icon : 'account_box'}</Icon>
                                                 </FuseAnimate>
                                                 <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                                     <Typography variant="h6" className="hidden sm:flex">Franchisees | Transactions</Typography>
@@ -431,7 +441,7 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({transactions, auth, franchisees})
+function mapStateToProps({transactions, auth, franchisees, fuse})
 {
     return {
         transactions: transactions,
@@ -453,6 +463,7 @@ function mapStateToProps({transactions, auth, franchisees})
         fLatitude: franchisees.Latitude,
         fSearchText: franchisees.SearchText,
         bFranchiseesFetchStart: franchisees.bFranchiseesFetchStart,
+        navigation: fuse.navigation
     }
 }
 

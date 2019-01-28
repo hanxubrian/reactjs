@@ -445,6 +445,14 @@ class InvoiceApp extends Component {
         const { classes,toggleFilterPanel, toggleSummaryPanel, filterState, summaryState,
             openNewInvoiceForm, invoiceForm} = this.props;
         const { selection } = this.state;
+
+        let menuItem = null;
+
+        if(this.props.navigation.length>0){
+            let menu = _.filter(this.props.navigation, n=>n.Slug==='accounts-receivable');
+            if(menu.length>0) menuItem = menu[0];
+            console.log('menu=', menu);
+        }
         return (
             <React.Fragment>
                 <FusePageCustom
@@ -464,7 +472,7 @@ class InvoiceApp extends Component {
                                         <div className="flex flex-shrink items-center">
                                             <div className="flex items-center">
                                                 <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                    <Icon className="text-32 mr-12">account_box</Icon>
+                                                    <Icon className="text-32 mr-12">{menuItem!==null ? menuItem.Icon : 'account_box'}</Icon>
                                                 </FuseAnimate>
                                                 <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                                     <Typography variant="h6" className="hidden sm:flex">Accounts Receivable | Invoices</Typography>
@@ -728,7 +736,7 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({invoices, auth, customers, franchisees})
+function mapStateToProps({invoices, auth, customers, franchisees, fuse})
 {
     return {
         invoices: invoices.invoicesDB,
@@ -772,6 +780,7 @@ function mapStateToProps({invoices, auth, customers, franchisees})
         fLatitude: franchisees.Latitude,
         fSearchText: franchisees.SearchText,
         bFranchiseesFetchStart: franchisees.bFranchiseesFetchStart,
+        navigation: fuse.navigation
     }
 }
 
