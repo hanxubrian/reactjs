@@ -69,6 +69,9 @@ const styles = theme => ({
     formControl: {
         marginBottom: 12,
         minWidth: 200,
+        '& .no-padding': {
+            padding: '0!important'
+        }
     },
     textField: {
         marginLeft: 0,
@@ -252,7 +255,7 @@ const styles1 = theme => ({
     },
 });
 
-const aTypes = [
+let aTypes = [
     {value: 82, label:'Advance Fee'},            {value: 81, label: 'Advance Interest'},
     {value: 20, label: 'Advance to Franchisee'}, {value: 78, label: 'Child support'},
     {value: 5, label: 'Equipment Rental'},       {value: 6, label: 'Franchisee Note'},
@@ -528,10 +531,10 @@ class TransactionEditForm extends Component {
             Description: this.state.transactionDescription,
             TrxDate: this.state.TransactionDate,
 
-            VendorValue: this.props.vendor!==null ? this.props.vendor.vendor.value: '', //vendor, vendor_no, vendorDate
-            VendorLabel: this.props.vendor!==null ? this.props.vendor.vendor.label: '', //vendor, vendor_no, vendorDate
-            VendorNo: this.props.vendor!==null ? this.props.vendor.vendor_no : '',
-            VendorDate: this.props.vendor!==null ? moment(this.props.vendor.vendorDate) : moment(),
+            VendorValue: this.state.transactionType.value===18 && this.props.vendor!==null ? this.props.vendor.vendor.value: '', //vendor, vendor_no, vendorDate
+            VendorLabel: this.state.transactionType.value===18 && this.props.vendor!==null ? this.props.vendor.vendor.label: '', //vendor, vendor_no, vendorDate
+            VendorNo: this.state.transactionType.value===18 && this.props.vendor!==null ? this.props.vendor.vendor_no : '',
+            VendorDate: this.state.transactionType.value===18 && this.props.vendor!==null ? moment(this.props.vendor.vendorDate) : moment(),
             NumberOfPayments: this.state.payments,
             StartDate: this.state.startDate,
             BilledPayment: this.state.billedPayments,
@@ -642,6 +645,16 @@ class TransactionEditForm extends Component {
 
         let bReadonly = false;
         if(this.props.transactionForm.type === 'new') bReadonly = true;
+
+        var aTypes0 = [
+            {value: 82, label:'Advance Fee'},            {value: 81, label: 'Advance Interest'},
+            {value: 20, label: 'Advance to Franchisee'}, {value: 78, label: 'Child support'},
+            {value: 5, label: 'Equipment Rental'},       {value: 6, label: 'Franchisee Note'},
+            {value: 18, label: 'Franchisee Supplies'},   {value: 79, label: 'Garnishment'},
+            {value: 80, label: 'Levy'},                  {value: 14, label: 'Misc. R. O.'},
+            {value: 7, label: 'Negative Due Roll-Due'},  {value: 51, label: 'Negative Dues'},
+            {value: 90, label: 'Purchase from Office'},  {value: 72, label: 'Tax Credit'}
+        ];
 
         const components = {
             Control,
@@ -832,7 +845,7 @@ class TransactionEditForm extends Component {
                                                 value={this.state.transactionType}
                                                 components={components}
                                                 onChange={(v)=>this.handleTransactionTypeChange(v)}
-                                                options={aTypes}
+                                                options={aTypes0}
                                                 placeholder="Select a type"
                                             />
                                         </NoSsr>
@@ -947,72 +960,77 @@ class TransactionEditForm extends Component {
                             />
                         </div>
                         {this.state.transactionType.value===18 && this.props.transactionForm.vendor!==null && ( // Franchisee Supplies
-                            <div className="flex flex-row w-full mt-4 items-center">
-                                <TextField
-                                    label="Vendor"
-                                    className={classNames(classes.textField, 'mr-24')}
-                                    style={{minWidth: 300}}
-                                    value={this.props.vendor.vendor.label}
-                                    margin="normal"
-                                    variant="outlined"
-                                    InputLabelProps = {{
-                                        shrink: true,
-                                        classes: {outlined: classes.label}
-                                    }}
-                                    InputProps={{
-                                        readOnly: true,
-                                        classes: {
-                                            input: classes.inputReadonly
-                                        },
-                                    }}
-                                />
-                                <TextField
-                                    label="Vendor Invoice No"
-                                    className={classNames(classes.textField, 'mr-24')}
-                                    value={this.props.vendor.vendor_no}
-                                    margin="normal"
-                                    variant="outlined"
-                                    InputLabelProps = {{
-                                        shrink: true,
-                                        classes: {outlined: classes.label}
-                                    }}
-                                    InputProps={{
-                                        readOnly: true,
-                                        classes: {
-                                            input: classes.inputReadonly
-                                        },
-                                    }}
-                                />
-                                <TextField
-                                    label="Vendor Invoice Date"
-                                    className={classNames(classes.textField, 'mr-24')}
-                                    value={moment(this.props.vendor.vendorDate).format("MM/DD/YYYY")}
-                                    margin="normal"
-                                    variant="outlined"
-                                    InputLabelProps = {{
-                                        shrink: true,
-                                        classes: {outlined: classes.label}
-                                    }}
-                                    InputProps={{
-                                        readOnly: true,
-                                        classes: {
-                                            input: classes.inputReadonly
-                                        },
-                                    }}
-                                />
-                                <FuseAnimate animation="transition.expandIn" delay={300}>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        className={classes.button}
-                                        onClick={() => {
-                                            this.props.showVendorDialogBox();
+                            <Grid container className={classNames(classes.formControl, "mb-0 p-0")} >
+                                <GridItem xs={12} sm={12} md={12} className="flex flex-1 flex-row pt-16 w-full items-center no-padding">
+                                    <TextField
+                                        label="Vendor"
+                                        className={classNames(classes.textField)}
+                                        style={{minWidth: 300}}
+                                        value={this.props.vendor.vendor.label}
+                                        margin="normal"
+                                        variant="outlined"
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
                                         }}
-                                    >
-                                        Edit Vendor
-                                    </Button>
-                                </FuseAnimate>
-                            </div>
+                                        fullWidth
+                                        InputProps={{
+                                            readOnly: true,
+                                            classes: {
+                                                input: classes.inputReadonly
+                                            },
+                                        }}
+                                    />
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={12} className="flex flex-1 flex-row pt-16 w-full items-center no-padding" >
+                                    <TextField
+                                        label="Vendor Invoice No"
+                                        className={classNames(classes.textField, 'mr-12')}
+                                        value={this.props.vendor.vendor_no}
+                                        margin="dense"
+                                        variant="outlined"
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        InputProps={{
+                                            readOnly: true,
+                                            classes: {
+                                                input: classes.inputReadonly
+                                            },
+                                        }}
+                                    />
+                                    <TextField
+                                        label="Vendor Invoice Date"
+                                        className={classNames(classes.textField, 'mr-12')}
+                                        value={moment(this.props.vendor.vendorDate).format("MM/DD/YYYY")}
+                                        margin="dense"
+                                        variant="outlined"
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        InputProps={{
+                                            readOnly: true,
+                                            classes: {
+                                                input: classes.inputReadonly
+                                            },
+                                        }}
+                                    />
+                                    <FuseAnimate animation="transition.expandIn" delay={300}>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            className={classes.button}
+                                            onClick={() => {
+                                                this.props.showVendorDialogBox();
+                                            }}
+                                        >
+                                            Edit
+                                        </Button>
+                                    </FuseAnimate>
+                                </GridItem>
+                            </Grid>
                         )}
 
                         {this.state.transactionFrequency==='recurring' && (
@@ -1084,7 +1102,7 @@ class TransactionEditForm extends Component {
                         )}
 
                     </div>
-                    <div className="flex flex-shrink flex-col w-full pl-24 pr-24 pt-0 pb-12">
+                    <div className="flex flex-shrink flex-col w-full p-12 pt-0">
                         <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
                             <GridItem xs={12} sm={12} md={12} className="flex flex-col xs:flex-col xs:mb-24 justify-end w-full">
                                 <div className="w-full p-12 flex justify-end pb-0">
