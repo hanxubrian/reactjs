@@ -1274,6 +1274,16 @@ class LeaseListContent extends Component {
 					showWhenGrouped: true
 				},
 				{
+					title: "Make",
+					name: "Make",
+					columnName: "Make",
+					width: 200,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: true,
+					showWhenGrouped: true
+				},
+				{
 					title: "Lease No",
 					name: "LeaseNumber",
 					columnName: "LeaseNumber",
@@ -1305,22 +1315,22 @@ class LeaseListContent extends Component {
 					groupingEnabled: true,
 					showWhenGrouped: true
 				},
+				// {
+				// 	title: "Total Amount Paid",
+				// 	name: "TotalPaidAmount",
+				// 	columnName: 'TotalPaidAmount',
+				// 	width: 200,
+				// 	align: 'right',
+				// 	sortingEnabled: true,
+				// 	filteringEnabled: true,
+				// 	groupingEnabled: true,
+				// 	showWhenGrouped: true
+				// },
 				{
-					title: "Total Amount Paid",
-					name: "TotalPaidAmount",
-					columnName: 'TotalPaidAmount',
-					width: 200,
-					align: 'right',
-					sortingEnabled: true,
-					filteringEnabled: true,
-					groupingEnabled: true,
-					showWhenGrouped: true
-				},
-				{
-					title: "Total Balance",
+					title: "Balance",
 					name: "TotalBalance",
 					columnName: "TotalBalance",
-					width: 200,
+					width: 150,
 					align: 'right',
 					sortingEnabled: false,
 					filteringEnabled: true,
@@ -1346,11 +1356,12 @@ class LeaseListContent extends Component {
 				// 	groupingEnabled: true,
 				// },
 				{
-					title: "Payment No",
-					name: "Payments",
-					columnName: 'Payments',
-					width: 90,
+					title: "Payments Made",
+					name: "NumberOfPaymentsMadeSummary",
+					columnName: 'NumberOfPaymentsMadeSummary',
+					width: 150,
 					align: 'center',
+					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: true,
