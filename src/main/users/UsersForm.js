@@ -23,7 +23,8 @@ const styles = theme => ({
         display : 'flex',
         flexWrap: 'wrap',
         width   : '80%',
-        margin  : 'auto'
+        margin  : 'auto',
+        marginTop: '50px'
     },
     margin   : {
         margin: theme.spacing.unit

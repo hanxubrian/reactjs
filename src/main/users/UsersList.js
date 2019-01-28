@@ -57,6 +57,7 @@ import {
 } from '@material-ui/core';
 import "../chatPanel/individualChat.css";
 import UsersHeader from "./UsersHeader";
+import UsersForm from "./UsersForm";
 
 
 
@@ -592,88 +593,95 @@ class UsersList extends Component {
 
         return (
             <Fragment>
-                <UsersHeader />
-                <div className={classNames(classes.layoutTable, "flex flex-col")}>
-                    <div className={classNames("flex flex-col", classes.layoutTable)} >
-                        <Grid
-                            rows={rows}
-                            columns={tableColumnExtensions}
-                        >
-                            <DragDropProvider />
-                            <PagingState
-                                defaultCurrentPage={0}
-                                defaultPageSize={10}
-                            />
-
-                            <PagingPanel pageSizes={pageSizes} />
-
-                            <SelectionState
-                                selection={selection}
-                                onSelectionChange={this.changeSelection}
-                            />
-                            <IntegratedSelection />
-
-                            <SortingState
-                                sorting={sorting}
-                                onSortingChange={this.changeSorting}
-                                columnExtensions={tableColumnExtensions}
-                            />
-                            <IntegratedSorting />
-
-                            <IntegratedPaging />
-
-                            <SearchState
-                                value={searchValue}
-                                onValueChange={this.changeSearchValue}
-                            />
-
-                            <FilteringState
-                                defaultFilters={[]}
-                                columnExtensions={tableColumnExtensions}
-                            />
-                            <IntegratedFiltering />
-
-                            <EditingState
-                                columnExtensions={editingColumnExtensions}
-                                onCommitChanges={this.commitChanges}
-                            />
-
-                            <CurrencyTypeProvider
-                                for={currencyColumns}
-                            />
-
-                            {/*<PhoneNumberTypeProvider*/}
-                                {/*for={phoneNumberColumns}*/}
-                            {/*/>*/}
-                            <Table rowComponent={this.TableRow} cellComponent={this.getCell} />
-
-                            {/*<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />*/}
-
-                            <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
-
-                            <TableHeaderRow showSortingControls />
-                            <Template
-                                name="tableRow"
-                                predicate={({ tableRow }) => tableRow.type === 'data'}
+                {!this.props.openUsersFormStatus && (
+                  <UsersHeader />
+                )}
+                {!this.props.openUsersFormStatus && (
+                    <div className={classNames(classes.layoutTable, "flex flex-col")}>
+                        <div className={classNames("flex flex-col", classes.layoutTable)} >
+                            <Grid
+                                rows={rows}
+                                columns={tableColumnExtensions}
                             >
-                                {params => (
-                                    <TemplateConnector>
-                                        {({ selection }, { toggleSelection }) => (
-                                            <this.TableRow
-                                                {...params}
-                                                selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
-                                                onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
-                                            />
-                                        )}
-                                    </TemplateConnector>
-                                )}
-                            </Template>
+                                <DragDropProvider />
+                                <PagingState
+                                    defaultCurrentPage={0}
+                                    defaultPageSize={10}
+                                />
 
-                            <CustomizedDxGridSelectionPanel selection={selection} />
+                                <PagingPanel pageSizes={pageSizes} />
 
-                        </Grid>
+                                <SelectionState
+                                    selection={selection}
+                                    onSelectionChange={this.changeSelection}
+                                />
+                                <IntegratedSelection />
+
+                                <SortingState
+                                    sorting={sorting}
+                                    onSortingChange={this.changeSorting}
+                                    columnExtensions={tableColumnExtensions}
+                                />
+                                <IntegratedSorting />
+
+                                <IntegratedPaging />
+
+                                <SearchState
+                                    value={searchValue}
+                                    onValueChange={this.changeSearchValue}
+                                />
+
+                                <FilteringState
+                                    defaultFilters={[]}
+                                    columnExtensions={tableColumnExtensions}
+                                />
+                                <IntegratedFiltering />
+
+                                <EditingState
+                                    columnExtensions={editingColumnExtensions}
+                                    onCommitChanges={this.commitChanges}
+                                />
+
+                                <CurrencyTypeProvider
+                                    for={currencyColumns}
+                                />
+
+                                {/*<PhoneNumberTypeProvider*/}
+                                {/*for={phoneNumberColumns}*/}
+                                {/*/>*/}
+                                <Table rowComponent={this.TableRow} cellComponent={this.getCell} />
+
+                                {/*<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />*/}
+
+                                <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
+
+                                <TableHeaderRow showSortingControls />
+                                <Template
+                                    name="tableRow"
+                                    predicate={({ tableRow }) => tableRow.type === 'data'}
+                                >
+                                    {params => (
+                                        <TemplateConnector>
+                                            {({ selection }, { toggleSelection }) => (
+                                                <this.TableRow
+                                                    {...params}
+                                                    selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
+                                                    onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
+                                                />
+                                            )}
+                                        </TemplateConnector>
+                                    )}
+                                </Template>
+
+                                <CustomizedDxGridSelectionPanel selection={selection} />
+
+                            </Grid>
+                        </div>
                     </div>
-                </div>
+                )}
+                {this.props.openUsersFormStatus && (
+                    <UsersForm/>
+                )}
             </Fragment>
         )
     }
@@ -693,7 +701,8 @@ function mapStateToProps({usersApp})
 {
     return {
         contacts                   : usersApp.contacts.entities,
-        selectedRows               : usersApp.users.selectedRows
+        selectedRows               : usersApp.users.selectedRows,
+        openUsersFormStatus  : usersApp.users.openUsersFormStatus,
     }
 }
 

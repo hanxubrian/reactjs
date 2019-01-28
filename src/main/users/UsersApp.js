@@ -374,28 +374,18 @@ class UsersApp extends Component {
                                     </div>
                                     <div className="flex flex-shrink items-center">
                                         {! openUsersFormStatus && (
-                                            <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                    <Fab
-                                                        color="secondary"
-                                                        aria-label="add-user"
-                                                        className={classNames(classes.sideButton, "mr-12")}
-                                                        onClick={this.toggleForm(true)}
-                                                    >
-                                                        <Icon>person_add</Icon>
-                                                    </Fab>
-                                            </FuseAnimate>
+                                            <Button variant="contained" color="primary"
+                                            className={classNames(classes.button, classes.btntop) } onClick={this.toggleForm(true)}>
+                                            Add New User
+                                            <Icon className={classes.rightIcon}>add</Icon>
+                                            </Button>
                                             )}
                                             { openUsersFormStatus && (
-                                                <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                    <Fab
-                                                        color="secondary"
-                                                        aria-label="close-user-form"
-                                                        className={classNames(classes.sideButton, "mr-12")}
-                                                        onClick={this.toggleForm(false)}
-                                                    >
-                                                        <Icon>close</Icon>
-                                                    </Fab>
-                                                </FuseAnimate>
+                                                <Button variant="contained" color="primary"
+                                                        className={classNames(classes.button, classes.btntop) } onClick={this.toggleForm(false)}>
+                                                    Close
+                                                    <Icon className={classes.rightIcon}>close</Icon>
+                                                </Button>
                                             )}
                                     </div>
                                 </div>

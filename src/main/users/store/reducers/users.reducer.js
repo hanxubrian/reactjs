@@ -11,7 +11,8 @@ const usersReducer = function (state = initialState, action) {
         case Actions.OPEN_USERS_FORM: {
             return {
                 ...state,
-                openUsersFormStatus: action.payload
+                openUsersFormStatus: action.payload,
+                fpStatus: false,
             }
         }
         case Actions.UPDATE_SELECT_ROWS:{

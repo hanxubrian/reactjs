@@ -404,7 +404,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps({ usersApp }) {
     return {
-        fpStatus: usersApp.users.fpStatus
+        fpStatus: usersApp.users.fpStatus,
+        openUsersFormStatus  : usersApp.users.openUsersFormStatus,
     }
 }
 
