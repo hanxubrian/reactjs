@@ -221,7 +221,7 @@ const PhoneNumberTypeProvider = props => (
 //
 // table cell date formatter
 //
-const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1');
+const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/, '$2/$3/$1');
 const DateTypeProvider = props => (
 	<DataTypeProvider
 		formatterComponent={DateFormatter}
@@ -416,6 +416,7 @@ class PaymentsListContent extends Component {
 					title: "Invoice Amount",
 					name: "InvoiceAmount",
 					columnName: "InvoiceAmount",
+					align: 'right',
 					width: 150,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -425,6 +426,7 @@ class PaymentsListContent extends Component {
 					title: "Invoice Balance",
 					name: "InvoiceBalance",
 					columnName: "InvoiceBalance",
+					align: 'right',
 					width: 150,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -481,7 +483,7 @@ class PaymentsListContent extends Component {
 					name: "InvoiceDate",
 					columnName: 'InvoiceDate',
 					width: 250,
-					align: 'right',
+					align: 'center',
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -492,7 +494,7 @@ class PaymentsListContent extends Component {
 					name: "DueDate",
 					columnName: 'DueDate',
 					width: 250,
-					align: 'right',
+					align: 'center',
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -503,7 +505,7 @@ class PaymentsListContent extends Component {
 					name: "DaysPastDue",
 					columnName: 'DaysPastDue',
 					width: 140,
-					align: 'right',
+					align: 'center',
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -516,12 +518,16 @@ class PaymentsListContent extends Component {
 			],
 			editingColumnExtensions: [],
 			currencyColumns: [
-				'InvoiceAmount', 'InvoiceBalance'
+				'InvoiceAmount',
+				'InvoiceBalance'
 			],
 			phoneNumberColumns: [
 				'Phone'
 			],
-			dateColumns: ['saleDate'],
+			dateColumns: [
+				'InvoiceDate',
+				'DueDate'
+			],
 			groupingColumns: [
 				// { columnName: 'CustomerName' },
 				// { columnName: 'CustomerNo' },
@@ -799,6 +805,7 @@ class PaymentsListContent extends Component {
 			editingColumnExtensions,
 			currencyColumns,
 			phoneNumberColumns,
+			dateColumns,
 			getPaymentsParam,
 			pageSizes,
 			searchValue,
@@ -876,6 +883,10 @@ class PaymentsListContent extends Component {
 								for={phoneNumberColumns}
 							/>
 
+							<DateTypeProvider
+								for={dateColumns}
+							/>
+
 							{/* <Table /> */}
 							<VirtualTable height='auto'
 								noDataCellComponent={
@@ -885,6 +896,7 @@ class PaymentsListContent extends Component {
 										</td>
 									)
 								}
+								columnExtensions={tableColumnExtensions}
 							/>
 
 							<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />

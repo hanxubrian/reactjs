@@ -189,13 +189,8 @@ const EditingCellComponent = withStyles(editing_cell_styles, { name: "EditingCel
 );
 const getRowId = row => row.id;
 
-const CurrencyFormatter = ({ value }) => (<span>$ {value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
-const CurrencyTypeProvider = props => (
-	<DataTypeProvider
-		formatterComponent={CurrencyFormatter}
-		{...props}
-	/>
-);
+const CurrencyFormatter = ({ value }) => (<span>$ {parseFloat(`0${value}`).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
+const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/, '$2/$3/$1');
 
 class PaymentFormModal extends React.Component {
 
@@ -354,11 +349,11 @@ class PaymentFormModal extends React.Component {
 			],
 			columnsForReactDataGrid: [
 				{ key: "InvoiceNo", name: "Invoice No", editable: false },
-				{ key: "InvoiceDate", name: "Invoice Date", editable: false },
-				{ key: "DueDate", name: "Due Date", editable: false },
-				{ key: "InvoiceAmount", name: "Invoice Amount", editable: false },
-				{ key: "InvoiceBalance", name: "Invoice Balance", editable: false },
-				{ key: "PaymentAmount", name: "Payment Amount", editable: true }
+				{ key: "InvoiceDate", name: "Invoice Date", editable: false, formatter: DateFormatter },
+				{ key: "DueDate", name: "Due Date", editable: false, formatter: DateFormatter },
+				{ key: "InvoiceAmount", name: "Invoice Amount", editable: false, formatter: CurrencyFormatter },
+				{ key: "InvoiceBalance", name: "Invoice Balance", editable: false, formatter: CurrencyFormatter },
+				{ key: "PaymentAmount", name: "Payment Amount", editable: true, formatter: CurrencyFormatter }
 			],
 			rows: [],
 			currencyColumns: [
@@ -394,7 +389,7 @@ class PaymentFormModal extends React.Component {
 	};
 
 	handleCreatePayment = () => {
-		
+
 		let PayItems = this.state.rows.map(x => {
 			return {
 				InvoiceNo: x.InvoiceNo,
@@ -540,7 +535,7 @@ class PaymentFormModal extends React.Component {
 										// style={{ width: "30%" }}
 										autoFocus
 										className={classNames(classes.textField, "pr-6")}
-										value={this.state.PaymentType || ""}
+										value={this.state.PaymentType || "Check"}
 										onChange={this.handleChange('PaymentType')}
 										fullWidth
 									>
@@ -568,7 +563,7 @@ class PaymentFormModal extends React.Component {
 										InputLabelProps={{
 											shrink: true
 										}}
-										value={this.state.PaymentDate}
+										value={this.state.PaymentDate || new Date().toISOString().substr(0,10)}
 										onChange={this.handleChange('PaymentDate')}
 										margin="dense"
 										variant="outlined"
