@@ -208,24 +208,25 @@ const newTransactionState = {
 };
 
 function renderSuggestion(suggestion, { query, isHighlighted }) {
-    const matches = match(suggestion.Name + ' - ' + suggestion.Number, query);
-    const parts = parse(suggestion.Name + ' - ' + suggestion.Number, matches);
+    const matches = match(suggestion.Name + ' - ' + suggestion.Number + ' - ' + suggestion.StatusName, query);
+    const parts = parse(suggestion.Name + ' - ' + suggestion.Number+ ' - ' + suggestion.StatusName, matches);
 
     return (
         <MenuItem selected={isHighlighted} component="div">
-            <div>
-                {parts.map((part, index) => {
-                    return part.highlight ? (
-                        <span key={String(index)} style={{ fontWeight: 700 }}>
-              {part.text}
-            </span>
-                    ) : (
-                        <strong key={String(index)} style={{ fontWeight: 300 }}>
-                            {part.text}
-                        </strong>
-                    );
-                })}
-            </div>
+            {/*<div>*/}
+                {/*{parts.map((part, index) => {*/}
+                    {/*return part.highlight ? (*/}
+                        {/*<span key={String(index)} style={{ fontWeight: 700 }}>*/}
+              {/*{part.text}*/}
+            {/*</span>*/}
+                    {/*) : (*/}
+                        {/*<strong key={String(index)} style={{ fontWeight: 300 }}>*/}
+                            {/*{part.text}*/}
+                        {/*</strong>*/}
+                    {/*);*/}
+                {/*})}*/}
+            {/*</div>*/}
+            <span>{suggestion.Name} - {suggestion.Number} - <strong>{suggestion.StatusName}</strong></span>
         </MenuItem>
     );
 }
@@ -393,7 +394,7 @@ class TransactionForm extends Component {
         const escapedValue = escapeRegexCharacters(value.trim());
         const regex = new RegExp(escapedValue, 'i');
         if(this.props.franchisees!==null)
-            return this.props.franchisees.filter(f => regex.test(f.Name) || regex.test(f.Number));
+            return this.props.franchisees.filter(f => regex.test(f.Name) || regex.test(f.Number)|| regex.test(f.StatusName));
     };
 
     getTotal = () => {
