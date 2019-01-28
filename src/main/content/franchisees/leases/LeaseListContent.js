@@ -866,36 +866,36 @@ const styles = theme => ({
 			paddingLeft: '1.2rem!important',
 			paddingRight: '1.2rem!important',
 		},
-		'& .ReactTable .rt-noData': {
-			top: '250px',
-			border: '1px solid coral'
-		},
-		'& .ReactTable .rt-thead.-headerGroups': {
-			paddingLeft: '0!important',
-			paddingRight: '0!important',
-			minWidth: 'inherit!important'
-		},
-		'& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
-			background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
-			color: 'white!important'
-		},
-		'& .ReactTable .rt-tbody': {
-			overflowY: 'scroll',
-			overflowX: 'hidden'
-		},
-		'& .ReactTable .rt-tr-group': {
-			flex: '0 0 auto'
-		},
-		'& .ReactTable .rt-thead .rt-th:nth-child(1)': {
-			justifyContent: 'center'
-		},
-		'& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
-			width: 'inherit!important',
-			minWidth: 'inherit!important',
-		},
-		'& .ReactTable .rt-thead .rt-th:last-child': {
-			justifyContent: 'flex-end'
-		},
+		// '& .ReactTable .rt-noData': {
+		// 	top: '250px',
+		// 	border: '1px solid coral'
+		// },
+		// '& .ReactTable .rt-thead.-headerGroups': {
+		// 	paddingLeft: '0!important',
+		// 	paddingRight: '0!important',
+		// 	minWidth: 'inherit!important'
+		// },
+		// '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
+		// 	background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
+		// 	color: 'white!important'
+		// },
+		// '& .ReactTable .rt-tbody': {
+		// 	overflowY: 'scroll',
+		// 	overflowX: 'hidden'
+		// },
+		// '& .ReactTable .rt-tr-group': {
+		// 	flex: '0 0 auto'
+		// },
+		// '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
+		// 	justifyContent: 'center'
+		// },
+		// '& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
+		// 	width: 'inherit!important',
+		// 	minWidth: 'inherit!important',
+		// },
+		// '& .ReactTable .rt-thead .rt-th:last-child': {
+		// 	justifyContent: 'flex-end'
+		// },
 	},
 	content: {
 		position: 'relative'
@@ -946,19 +946,19 @@ const styles = theme => ({
 			backgroundColor: 'fade(' + theme.palette.primary.secondary + ', 0.03)',
 		},
 	},
-	overlay: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		width: '100%',
-		height: '100vh',
-		backgroundColor: 'rgba(0,0,0, .9)',
-		zIndex: 1000,
-		alignItems: 'center',
-		justifyContent: 'center',
-		display: 'flex',
-		opacity: 0.5
-	}
+	// overlay: {
+	// 	position: 'absolute',
+	// 	top: 0,
+	// 	left: 0,
+	// 	width: '100%',
+	// 	height: '100vh',
+	// 	backgroundColor: 'rgba(0,0,0, .9)',
+	// 	zIndex: 1000,
+	// 	alignItems: 'center',
+	// 	justifyContent: 'center',
+	// 	display: 'flex',
+	// 	opacity: 0.5
+	// }
 });
 //
 // table content rows stle
@@ -1297,7 +1297,7 @@ class LeaseListContent extends Component {
 					title: "Serial No",
 					name: "SerialNumber",
 					columnName: "SerialNumber",
-					width: 200,
+					width: 150,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: true,
@@ -2093,14 +2093,10 @@ class LeaseListContent extends Component {
 
 									<IntegratedPaging />
 
-									<VirtualTable
-										height="auto"
-									/>
-
 									<SortingState
 										sorting={sorting}
 										onSortingChange={this.changeSorting}
-										columnExtensions={tableColumnExtensions}
+										// columnExtensions={tableColumnExtensions}
 									/>
 									<IntegratedSorting />
 
@@ -2112,7 +2108,7 @@ class LeaseListContent extends Component {
 
 									<FilteringState
 										defaultFilters={[]}
-										columnExtensions={tableColumnExtensions}
+										// columnExtensions={tableColumnExtensions}
 									/>
 									<IntegratedFiltering />
 
@@ -2127,13 +2123,18 @@ class LeaseListContent extends Component {
 										onExpandedGroupsChange={this.expandedGroupsChange}
 									/>
 									<IntegratedGrouping />
-									<Table rowComponent={this.TableRow}/>
-									<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
+									<VirtualTable
+										height="auto"
+										tableComponent={TableComponent}
+										columnExtensions={tableColumnExtensions}
+										rowComponent = {this.TableRow}
+									/>
+
+									{/* <TableColumnResizing defaultColumnWidths={tableColumnExtensions} /> */}
 									<TableHeaderRow />
 									<DataTypeProvider for={grouping}/>
 									<TableGroupRow
-										 contentComponent={this.GroupCellContent}
-										// contentComponent={GroupCellContent}
+										  showColumnsWhenGrouped contentComponent={this.GroupCellContent}
 									/>
 
 									{/* <GroupingState
@@ -2171,7 +2172,7 @@ class LeaseListContent extends Component {
 									rightColumns={rightColumns}
 								/> */}
 
-									<TableSelection showSelectAll selectByRowClick highlightRow  rowComponent={this.TableRow}/>
+									{/* <TableSelection showSelectAll selectByRowClick highlightRow  rowComponent={this.TableRow}/> */}
 
 									<TableEditRow />
 									<TableEditColumn
