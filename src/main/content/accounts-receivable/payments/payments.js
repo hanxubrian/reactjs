@@ -567,11 +567,7 @@ class Payments extends Component {
 					}
 					content={
 						<div className="flex-1 flex-col absolute w-full h-full">
-							{(this.state.temp && !invoiceForm.props.open) && (
 								<div className={classNames("flex flex-col h-full")}>
-
-
-
 									<Dialog
 										open={this.state.showNoSelectionAlertDialog}
 										onClose={this.handleCloseNoSelectionAlertDialog}
@@ -587,18 +583,12 @@ class Payments extends Component {
 										</DialogActions>
 									</Dialog>
 
-
-
-
 									<PaymentFormModal />
 
 									<PaymentSearchBar />
+
 									<PaymentListContent />
 								</div>
-							)}
-							{(this.state.temp && invoiceForm.props.open) && (
-								<InvoiceForm customers={this.state.customers} selectedInvoice={this.state.selectedInvoice} />
-							)}
 						</div>
 					}
 					leftSidebarHeader={

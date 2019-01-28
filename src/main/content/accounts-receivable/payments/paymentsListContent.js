@@ -392,16 +392,16 @@ class PaymentsListContent extends Component {
 				// 	filteringEnabled: true,
 				// 	groupingEnabled: true,
 				// },
-				{
-					title: "Check No",
-					name: "CheckNo",
-					columnName: 'CheckNo',
-					width: 180,
-					align: 'center',
-					sortingEnabled: true,
-					filteringEnabled: true,
-					groupingEnabled: false,
-				},
+				// {
+				// 	title: "Check No",
+				// 	name: "CheckNo",
+				// 	columnName: 'CheckNo',
+				// 	width: 180,
+				// 	align: 'center',
+				// 	sortingEnabled: true,
+				// 	filteringEnabled: true,
+				// 	groupingEnabled: false,
+				// },
 				{
 					title: "Invoice No",
 					name: "InvoiceNo",
@@ -429,28 +429,28 @@ class PaymentsListContent extends Component {
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
-				{
-					title: "InvoiceBalance OR",
-					name: "InvoiceBalanceOR",
-					columnName: 'InvoiceBalanceOR',
-					width: 150,
-					align: 'center',
-					sortingEnabled: true,
-					filteringEnabled: true,
-					groupingEnabled: false,
-				},
-				{
-					title: "Payment Amount",
-					name: "PaymentAmount",
-					columnName: 'PaymentAmount',
-					width: 140,
-					align: 'right',
-					wordWrapEnabled: true,
-					sortingEnabled: true,
-					filteringEnabled: true,
-					groupingEnabled: false,
+				// {
+				// 	title: "InvoiceBalance OR",
+				// 	name: "InvoiceBalanceOR",
+				// 	columnName: 'InvoiceBalanceOR',
+				// 	width: 150,
+				// 	align: 'center',
+				// 	sortingEnabled: true,
+				// 	filteringEnabled: true,
+				// 	groupingEnabled: false,
+				// },
+				// {
+				// 	title: "Payment Amount",
+				// 	name: "PaymentAmount",
+				// 	columnName: 'PaymentAmount',
+				// 	width: 140,
+				// 	align: 'right',
+				// 	wordWrapEnabled: true,
+				// 	sortingEnabled: true,
+				// 	filteringEnabled: true,
+				// 	groupingEnabled: false,
 
-				},
+				// },
 				// {
 				//     title: "Region Name",
 				//     name: "RegionName",
@@ -463,21 +463,55 @@ class PaymentsListContent extends Component {
 				//     groupingEnabled: false,
 
 				// },
+				// {
+				// 	title: "Check Amount",
+				// 	name: "CheckAmount",
+				// 	columnName: 'CheckAmount',
+				// 	width: 140,
+				// 	align: 'right',
+				// 	wordWrapEnabled: true,
+				// 	sortingEnabled: true,
+				// 	filteringEnabled: true,
+				// 	groupingEnabled: false,
+
+				// },
 				{
-					title: "Check Amount",
-					name: "CheckAmount",
-					columnName: 'CheckAmount',
+					title: "Invoice Date",
+					name: "InvoiceDate",
+					columnName: 'InvoiceDate',
 					width: 140,
 					align: 'right',
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
-
-				}
+				},
+				{
+					title: "Due Date",
+					name: "DueDate",
+					columnName: 'DueDate',
+					width: 140,
+					align: 'right',
+					wordWrapEnabled: true,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "Days Past Due",
+					name: "DaysPastDue",
+					columnName: 'DaysPastDue',
+					width: 140,
+					align: 'right',
+					wordWrapEnabled: true,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
 			],
 			sorting: [
-				{ columnName: 'CustomerNo', direction: 'asc' },
+				{ columnName: 'CustomerNameNo', direction: 'asc' },
+				{ columnName: 'DaysPastDue', direction: 'asc' },
 			],
 			editingColumnExtensions: [],
 			currencyColumns: [
@@ -616,7 +650,7 @@ class PaymentsListContent extends Component {
 		console.log("componentDidUpdate", "CustomerListContent.js", this.props.locationFilterValue, this.props.customers);
 	}
 	getRowData(payments) {
-		if (!payments || payments.Regions === undefined)
+		if (!payments || payments.Regions === undefined || payments.Regions.length < 1)
 			return [];
 		let res = [...payments.Regions[0].Payments]
 

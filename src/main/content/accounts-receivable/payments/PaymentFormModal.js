@@ -373,7 +373,7 @@ class PaymentFormModal extends React.Component {
 	}
 
 	setRowData(payments, activePaymentRows = this.props.activePaymentRows) {
-		if (!payments || payments.Regions === undefined)
+		if (!payments || payments.Regions === undefined || payments.Regions.length < 1)
 			return [];
 		let res = [...payments.Regions[0].Payments]
 
@@ -432,12 +432,12 @@ class PaymentFormModal extends React.Component {
 										</div>
 									</div> */}
 
-									<TextField sm={2} type="text" value={customerName} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">person_outline</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerName" label="CustomerName" />
-									<TextField sm={2} type="text" value={customerNumber} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerNumber" label="CustomerNumber" />
+									<TextField sm={3} type="text" value={customerName} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">person_outline</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerName" label="CustomerName" />
+									<TextField sm={3} type="text" value={customerNumber} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerNumber" label="CustomerNumber" />
 
-									<TextField sm={2} type="number" InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start">$</InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerCreditBalance" label="Customer Credit Balance" />
+									{/* <TextField sm={2} type="number" InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start">$</InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerCreditBalance" label="Customer Credit Balance" />
 									<TextField sm={2} type="number" InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start">$</InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="Credit" label="Credit" />
-									<TextField sm={2} type="number" InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start">$</InputAdornment> }} margin="dense" fullWidth className={classNames("")} id="Balance" label="Balance" />
+									<TextField sm={2} type="number" InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start">$</InputAdornment> }} margin="dense" fullWidth className={classNames("")} id="Balance" label="Balance" /> */}
 								</div>
 
 								<div className={classNames("flex")} sm={12}>
@@ -539,7 +539,7 @@ class PaymentFormModal extends React.Component {
 					</DialogContent>
 
 					<DialogActions>
-						<Button variant="contained" onClick={this.handleClose} color="primary">&nbsp;&nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;</Button>
+						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24")}>Save</Button>
 					</DialogActions>
 				</Dialog>
 			</div>

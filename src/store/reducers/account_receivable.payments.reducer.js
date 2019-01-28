@@ -20,65 +20,83 @@ const initialState = {
 
 	bOpenPaymentDialog: false,
 	activePaymentRows: [],
+
+	isStartedPaymentsCreated: false,
+	paymentsCreated: [],
 };
 
 
 const accountReceivablePayments = function (state = initialState, action) {
 
 	switch (action.type) {
-		case Actions.GET_ALL_RECEIVABLE_PAYMENTS: {
+		//
+		// GET ALL PAYMENTS
+		//
+		case Actions.GET_ALL_RECEIVABLE_PAYMENTS:
 			return {
 				...state,
 				ACC_payments: action.payload.Data,
 				bACC_fechStart: false,
 				bLoadedPayments: true,
 			}
-		}
-		case Actions.GET_ALL_RECEIVABLE_PAYMENTS_START: {
+		case Actions.GET_ALL_RECEIVABLE_PAYMENTS_START:
 			return {
 				...state,
 				bACC_fechStart: true
 			}
-		}
+
+		//
+		// PAYMENT CREATE
+		// 
+		case Actions.CREATE_AR_PAYMENTS:
+			return {
+				...state,
+				paymentsCreated: action.payload,
+				isStartedPaymentsCreated: true,
+			}
+		case Actions.CREATE_AR_PAYMENTS_START:
+			return {
+				...state,
+				isStartedPaymentsCreated: false,
+			}
+		//
+		// TOGGLE SIDE PANELS
+		//
 		case Actions.ACCOUNT_RECEIVABLE_PAYMENTS_TOGGLE_FILTER_PANEL:
-			{
-				return {
-					...state, bOpenedFilterPanel: !state.bOpenedFilterPanel
-				}
+			return {
+				...state, bOpenedFilterPanel: !state.bOpenedFilterPanel
 			}
 		case Actions.ACCOUNT_RECEIVABLE_PAYMENTS_TOGGLE_SUMMARY_PANEL:
-			{
-				return {
-					...state, bOpenedSummaryPanel: !state.bOpenedSummaryPanel
-				}
+			return {
+				...state, bOpenedSummaryPanel: !state.bOpenedSummaryPanel
 			}
-		case Actions.APPLY_SEARCH_TEXT_ARP: {
+		//
+		// SEARCH ACTION
+		//
+		case Actions.APPLY_SEARCH_TEXT_ARP:
 			return {
 				...state, searchText: action.payload
 			}
-		}
+		//
+		// OPEN PAYMENT MODAL DIALOG
+		//
 		case Actions.OPEN_PAYMENT_DIALOG:
-			{
-				return {
-					...state, bOpenPaymentDialog: action.payload
-				}
+			return {
+				...state, bOpenPaymentDialog: action.payload
 			}
+		//
+		// SELECT PAYMENTS ON GRID
+		//
 		case Actions.SET_ACTIVE_PAYMENT_ROWS:
-			{
-				return {
-					...state, activePaymentRows: action.payload
-				}
+			return {
+				...state, activePaymentRows: action.payload
 			}
 		case UserActions.USER_LOGGED_OUT:
-			{
-				return {
-					...initialState
-				}
+			return {
+				...initialState
 			}
 		default:
-			{
-				return state;
-			}
+			return state;
 	}
 };
 
