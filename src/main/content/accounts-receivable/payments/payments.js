@@ -483,9 +483,10 @@ class Payments extends Component {
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
-											<IconButton onClick={this.showPaymentFormModal}>
+											<Button variant="contained" color="primary" onClick={this.showPaymentFormModal}>
 												<Icon>attach_money</Icon>
-											</IconButton>
+												Add Payment
+											</Button>
 
 											{/* <FuseAnimate animation="transition.expandIn" delay={300}>
 												<Fab color="secondary" aria-label="add"
