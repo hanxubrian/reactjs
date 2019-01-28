@@ -9,6 +9,12 @@ import GridContainer from "../../Commons/Grid/GridContainer";
 import GridItem from "../../Commons/Grid/GridItem";
 import UserAvatar from"./UserAvatar"
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
+import List from "@material-ui/core/List/List";
+import ListItem from "@material-ui/core/ListItem/ListItem";
+import Checkbox from "@material-ui/core/Checkbox/Checkbox";
+import ListItemText from "@material-ui/core/ListItemText/ListItemText";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction/ListItemSecondaryAction";
+import UsersPermission from "./store/UsersPermission";
 
 const styles = theme => ({
     root     : {
@@ -113,6 +119,29 @@ const Group = [
     },
 ];
 
+const userRole = [
+    {
+        value: 'Admin-User',
+        label: 'Admin-User',
+    },
+    {
+        value: 'Guest',
+        label: 'Guest',
+    },
+    {
+        value: 'Editor',
+        label: 'Editor',
+    },
+    {
+        value: 'Contractor',
+        label: 'Contractor',
+    },
+    {
+        value: 'Subscriber',
+        label: 'Subscriber',
+    },
+];
+
 
 class UsersForm extends React.Component {
     state = {
@@ -130,9 +159,10 @@ class UsersForm extends React.Component {
         accPassword: '',
         selectRegion: '',
         userGroup: '',
-        defaultRegion: ''
+        defaultRegion: '',
+        checked: [1],
+        userRole: ''
     };
-
 
 
     handleChange = prop => event => {
@@ -345,7 +375,7 @@ class UsersForm extends React.Component {
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
                                 id="userGroup"
-                                label={"userGroup"}
+                                label={"User Group"}
                                 select
                                 variant={"outlined"}
                                 className={classes.textField}
@@ -421,33 +451,32 @@ class UsersForm extends React.Component {
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
                                 id="userRole"
-                                label="User Role"
-                                variant="outlined"
+                                label={"User Role"}
+                                select
+                                variant={"outlined"}
                                 className={classes.textField}
                                 value={this.state.userRole}
-                                onChange={this.handleChange("userRole")}
+                                onChange={this.handleChange('userRole')}
+                                SelectProps={{
+                                    MenuProps: {
+                                        className: classes.menu,
+                                    },
+                                }}
                                 margin="dense"
-                                required
-                            />
+                                fullWidth
+                            >
+                                {userRole.map(option => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
                         </GridItem>
                     </GridContainer>
                 </div>
                 <div className={classNames(classes.userFormSection,"w-full")}>
                     <h2>User Permission</h2>
-                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            {/*<TextField*/}
-                                {/*id="userRole"*/}
-                                {/*label="User Role"*/}
-                                {/*variant="outlined"*/}
-                                {/*className={classes.textField}*/}
-                                {/*value={this.state.userRole}*/}
-                                {/*onChange={this.handleChange("userRole")}*/}
-                                {/*margin="dense"*/}
-                                {/*required*/}
-                            {/*/>*/}
-                        </GridItem>
-                    </GridContainer>
+                    <UsersPermission/>
                 </div>
             </div>
         );
@@ -461,10 +490,11 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({usersApp})
+function mapStateToProps({usersApp, fuse})
 {
     return {
-        openUsersFormStatus: usersApp.users.openUsersFormStatus
+        openUsersFormStatus: usersApp.users.openUsersFormStatus,
+        navigation : fuse.navigation
     }
 }
 

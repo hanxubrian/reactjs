@@ -297,24 +297,37 @@ class UsersApp extends Component {
                                     <div className="flex flex-shrink items-center">
                                         <div className="flex items-center">
                                             <Icon className="text-32 mr-12">{HeaderIcon}</Icon>
-                                            <Typography variant="h6" className="hidden sm:flex">Settings |
-                                                Users</Typography>
+                                            {! openUsersFormStatus && (
+                                                <Typography variant="h6" className="hidden sm:flex">Settings |
+                                                    Users</Typography>
+                                            )}
+                                            {openUsersFormStatus && (
+                                                <Typography variant="h6" className="hidden sm:flex">Settings |
+                                                   Add New User</Typography>
+                                            )}
                                         </div>
                                     </div>
                                     <div className="flex flex-shrink items-center">
-                                        {! openUsersFormStatus && (
-                                            <Button variant="contained" color="primary"
-                                            className={classNames(classes.button, classes.btntop) } onClick={this.toggleForm(true)}>
-                                            Add New User
-                                            <Icon className={classes.rightIcon}>add</Icon>
-                                            </Button>
+                                           {! openUsersFormStatus && (
+                                                <Button variant="contained" color="primary"
+                                                className={classNames(classes.button, classes.btntop) } onClick={this.toggleForm(true)}>
+                                                Add New User
+                                                <Icon className={classes.rightIcon}>add</Icon>
+                                                </Button>
                                             )}
                                             { openUsersFormStatus && (
-                                                <Button variant="contained" color="primary"
-                                                        className={classNames(classes.button, classes.btntop) } onClick={this.toggleForm(false)}>
-                                                    Close
-                                                    <Icon className={classes.rightIcon}>close</Icon>
-                                                </Button>
+                                                <div>
+                                                    <Button variant="contained" color="primary"
+                                                            className={classNames(classes.button, classes.btntop) } onClick={this.toggleForm(false)}>
+                                                        Save
+                                                        <Icon className={classes.rightIcon}>save</Icon>
+                                                    </Button>
+                                                    <Button variant="contained" color="primary"
+                                                            className={classNames(classes.button, classes.btntop) } onClick={this.toggleForm(false)}>
+                                                        Close
+                                                        <Icon className={classes.rightIcon}>close</Icon>
+                                                    </Button>
+                                                </div>
                                             )}
                                     </div>
                                 </div>
