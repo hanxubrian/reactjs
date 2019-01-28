@@ -248,6 +248,10 @@ class TransactionsApp extends Component {
         this.props.openNewTransactionForm();
     };
 
+    closeComposeForm = () => {
+        this.props.transactionForm.type === 'edit' ? this.props.closeEditTransactionForm() : this.props.closeNewTransactionForm();
+    };
+
     getTransactions =(rawData=this.props.transactions) =>{
         if(rawData.transactionsDB===null) return;
 
@@ -310,14 +314,35 @@ class TransactionsApp extends Component {
                         sidebarHeader: classes.layoutSidebarHeader,
                     }}
                     leftSidebarHeader={
-                        <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", {'filteropen': filterState})}>
-                            <h4 style={{marginBlockStart: '1em'}}>Filter Panel</h4>
+                        <div className={classNames("flex flex-row w-full h-full justify-between p-12 items-center pr-0", {'filteropen': filterState})}>
+                            {bFilterPanel && (
+                                <h4 style={{marginBlockStart: '1em'}}>Filter Panel</h4>
+                            )}
+
+                            {bDetailPanel && this.props.transactionForm.type === 'edit' && (
+                                <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                    <Typography variant="h6" className="hidden sm:flex">Franchisees | Edit Transaction</Typography>
+                                </FuseAnimate>
+                            )}
+                            {bDetailPanel && this.props.transactionForm.type === 'new' && (
+                                <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                    <Typography variant="h6" className="hidden sm:flex">Franchisees | New Transaction</Typography>
+                                </FuseAnimate>
+                            )}
+
                             <FuseAnimate animation="transition.expandIn" delay={200}>
                                 <div>
                                     <Hidden xsDown>
+                                        {bFilterPanel && (
                                         <IconButton onClick={(ev)=>toggleFilterPanel()}>
                                             <Icon>close</Icon>
                                         </IconButton>
+                                        )}
+                                        {bDetailPanel  && (
+                                            <IconButton onClick={(ev)=>this.closeComposeForm()}>
+                                                <Icon>close</Icon>
+                                            </IconButton>
+                                        )}
                                     </Hidden>
                                 </div>
                             </FuseAnimate>
@@ -474,6 +499,8 @@ function mapDispatchToProps(dispatch)
         openNewTransactionForm: Actions.openNewTransactionForm,
         openEditTransactionForm: Actions.openEditTransactionForm,
         getFranchisees: Actions.getFranchisees,
+        closeEditTransactionForm: Actions.closeEditTransactionForm,
+        closeNewTransactionForm : Actions.closeNewTransactionForm,
     }, dispatch);
 }
 
