@@ -19,14 +19,9 @@ import * as Actions from '../../../../store/actions';
 
 // third party
 import classNames from 'classnames';
-// import TransactionLists from './FranchiseeLists';
 
-//Custom components
-import TransactionForm from './transactionForm'
-import TransactionEditForm from './transactionEditForm'
-import TransactionDetail from './transactionDetail'
 import TransactionDxGridLists from './transactionDxGridLists';
-
+import TransactionForm from './transactionForm'
 import _ from "lodash";
 
 const headerHeight = 80;
@@ -47,10 +42,7 @@ const styles = theme => ({
             height: 64
         },
         '& .openFilter':{
-            width: 200
-        },
-        '& .openDetail':{
-            width: 450
+            width: 'inherit'
         },
     },
     layoutHeader       : {
@@ -132,7 +124,7 @@ const styles = theme => ({
     },
 });
 
-class TransactionsApp extends Component {
+class TransactionDetail extends Component {
     state = {
         s: '',
         data: [],
@@ -158,6 +150,7 @@ class TransactionsApp extends Component {
 
     search = (val)=> {
         const temp = this.state.data.filter( d => {
+            console.log('value=', d);
             return d.Name.indexOf(val) !== -1 || !val ||
                 d.FranchiseeNo.indexOf(val) !== -1 ||
                 // d.TrxType.toString().indexOf(val) !== -1
@@ -249,21 +242,6 @@ class TransactionsApp extends Component {
         const statusStrings = ['Open', 'Completed'];
         const keys=['checkedOpen', 'checkedCompleted'];
 
-        // keys.map((key, index)=> {
-        //
-        //     if(this.props.transactionStatus[key]){
-        //         temp = temp0.filter(d => {
-        //             // if(this.props.regionId===0)
-        //             return d.Status.toLowerCase() === statusStrings[index].toLowerCase();
-        //             // else
-        //             //     return d.Status.toLowerCase() === statusStrings[index] && d.RegionId === this.props.regionId
-        //         });
-        //     }
-        //     all_temp =_.uniq([...all_temp, ...temp]);
-        //     return true;
-        // });
-        // this.setState({temp: all_temp});
-        // this.setState({data: all_temp});
         this.setState({temp: temp0});
         this.setState({data: temp0});
     };
@@ -279,16 +257,6 @@ class TransactionsApp extends Component {
             if(menu.length>0) menuItem = menu[0];
         }
 
-        let bFilterPanel = filterState;
-
-        let bDetailPanel = false;
-
-        if(transactionForm.props.open && transactionForm.type=='edit')
-            bDetailPanel = true;
-
-        if(bDetailPanel)
-            bFilterPanel = false;
-
 
         return (
             <React.Fragment>
@@ -297,7 +265,7 @@ class TransactionsApp extends Component {
                         root: classes.layoutRoot,
                         header: classes.layoutHeader,
                         content: classes.content,
-                        leftSidebar : classNames(classes.layoutLeftSidebar, {'openFilter': bFilterPanel, 'openDetail': bDetailPanel }),
+                        leftSidebar : classNames(classes.layoutLeftSidebar, {'openFilter': filterState}),
                         sidebarHeader: classes.layoutSidebarHeader,
                     }}
                     leftSidebarHeader={
@@ -305,25 +273,16 @@ class TransactionsApp extends Component {
                             <h4 style={{marginBlockStart: '1em'}}>Filter Panel</h4>
                             <FuseAnimate animation="transition.expandIn" delay={200}>
                                 <div>
-                                    <Hidden xsDown>
-                                        <IconButton onClick={(ev)=>toggleFilterPanel()}>
-                                            <Icon>close</Icon>
-                                        </IconButton>
-                                    </Hidden>
+
+                                    <IconButton onClick={(ev)=>toggleFilterPanel()}>
+                                        <Icon>close</Icon>
+                                    </IconButton>
                                 </div>
                             </FuseAnimate>
                         </div>
                     }
                     leftSidebarContent={
-                        <div>
-                            {bFilterPanel && (
-                                <FilterPanel/>
-                            )}
-                            {bDetailPanel && (
-                                <TransactionEditForm franchisees={this.state.franchisees} selectedTransaction={this.state.selectedTransaction}/>
-                            )}
-
-                        </div>
+                        <TransactionForm franchisees={this.state.franchisees} selectedTransaction={this.state.selectedTransaction}/>
                     }
                     header={
                         <div className="flex w-full items-center">
@@ -347,10 +306,6 @@ class TransactionsApp extends Component {
                                                     New Transaction
                                                     <Icon className={classes.rightIcon}>add</Icon>
                                                 </Button>
-                                                {/*<Fab color="secondary" aria-label="add"*/}
-                                                {/*className={classNames(classes.sideButton, "mr-12")} onClick={() => this.onNewTransaction()}>*/}
-                                                {/*<Icon>add</Icon>*/}
-                                                {/*</Fab>*/}
                                             </FuseAnimate>
                                         </div>
                                     </div>
@@ -434,13 +389,9 @@ class TransactionsApp extends Component {
                                     <TransactionDxGridLists data={this.state.temp}/>
                                 </div>
                             )}
-                            {(this.state.temp && transactionForm.props.open && transactionForm.type==='new' ) && (
+                            {(this.state.temp && transactionForm.props.open) && (
                                 <TransactionForm franchisees={this.state.franchisees} selectedTransaction={this.state.selectedTransaction}/>
                             )}
-
-                            {/*{(this.state.temp && transactionForm.props.open && transactionForm.type==='edit') && (*/}
-                            {/*<TransactionDetail />*/}
-                            {/*)}*/}
                         </div>
                     }
                     onRef={instance => {
@@ -495,4 +446,4 @@ function mapStateToProps({transactions, auth, franchisees, fuse})
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(TransactionsApp)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(TransactionDetail)));
