@@ -36,12 +36,16 @@ const DialogTitle = withStyles(theme => ({
         borderBottom: `1px solid ${theme.palette.divider}`,
         margin: 0,
         padding: theme.spacing.unit * 2,
+        backgroundColor: theme.palette.secondary.main,
+        color: "white !important",
+
     },
     closeButton: {
         position: 'absolute',
         right: theme.spacing.unit,
         top: theme.spacing.unit,
-        color: theme.palette.grey[500],
+        // color: theme.palette.grey[500],
+        color:"white",
     },
 }))(props => {
     const { children, classes, onClose } = props;
@@ -81,7 +85,7 @@ const styles = theme => ({
             // borderColor: 'white!important'
         },
         '& white': {
-            color: 'white!important'
+            color: 'white'
         }
     },
     panel: {
@@ -128,6 +132,9 @@ const styles = theme => ({
     progress: {
         margin: theme.spacing.unit * 2,
     },
+    modalheader:{
+        backgroundColor: theme.palette.secondary.main,
+    },
 });
 const fakeEvent = {
     stopPropagation: () => false
@@ -150,7 +157,7 @@ class BillRunDialog extends Component {
         showP                   : false,
         year                    : moment().year(),
         month                   : moment().month(),
-        desMSG                  : `MONTHLY CONTRACT BILLING AMOUNT FOR `+mL[moment().month()].toUpperCase()+`  `+moment().year(),
+        desMSG                  : `MONTHLY CONTRACT BILLING AMOUNT FOR `+mL[moment().month()].toUpperCase()+` `+moment().year(),
 
     };
     constructor(props){
@@ -217,7 +224,7 @@ class BillRunDialog extends Component {
         this.setState({ open: false });
     };
     handleDateChange = date => {
-        let defMSG = `MONTHLY CONTRACT BILLING AMOUNT FOR `+mL[moment(date).month()].toUpperCase()+`  `+moment(date).year();
+        let defMSG = `MONTHLY CONTRACT BILLING AMOUNT FOR `+mL[moment(date).month()].toUpperCase()+` `+moment(date).year();
         this.setState({ selectedDate: date });
         this.setState({
             year:  moment(date).year(),
@@ -252,6 +259,18 @@ class BillRunDialog extends Component {
             variant: 'success'//success error info warning null
         });
     }
+    createbillrunmesssage=()=>{
+
+        this.props.showMessage({
+            message     : `Bill Run Process has started.You will be notified when completed.\n You can continue using the system as usual`,//text or html
+            autoHideDuration: 300000,//ms
+            anchorOrigin: {
+                vertical  : 'top',//top bottom
+                horizontal: 'center'//left center right
+            },
+            variant: 'success'//success error info warning null
+        });
+    }
     errormessage=()=>{
         this.props.showMessage({
             message     : "Error!!!We can't create New Bill Run",//text or html
@@ -263,11 +282,12 @@ class BillRunDialog extends Component {
             variant: 'error'//success error info warning null
         });
     }
-    billrun=()=>{
+    billrun=(e)=>{
 
-        // e.stopPropagation();
+        e.stopPropagation();
         // e.nativeEvent.stopImmediatePropagation();
         // console.log("this.state.auth",this.props.auth);
+
         if(this.props.auth && this.props.auth !==null){
             let date = this.state.selectedDate;
             let year = moment(date).year();
@@ -276,17 +296,26 @@ class BillRunDialog extends Component {
             let userid   = this.props.auth.UserId;
             let regionid = this.props.auth.defaultRegionId;
             if(userid && userid != null && regionid && regionid != null && year && year != null && month && month !=null ){
-                let getres = this.props.createbillrun(
-                    regionid,
-                    year,
-                    month,
-                    user,
-                    userid,
-                    this.state.message,
-                    this.state.description,
-                );
-                this.setState({statusMSG:200});
-                this.setState({showP: !this.state.showP});
+                this.createbillrunmesssage();
+                // setTimeout(
+                //     function() {
+                //         let getres = this.props.createbillrun(
+                //             regionid,
+                //             year,
+                //             month,
+                //             user,
+                //             userid,
+                //             this.state.message,
+                //             this.state.description,
+                //         );
+                //         this.setState({statusMSG:200});
+                //         this.setState({showP: !this.state.showP});
+                //     }
+                //         .bind(this),
+                //     3000
+                // );
+
+
 
             }
         }
@@ -336,7 +365,7 @@ class BillRunDialog extends Component {
                     open={this.state.open}
                 >
                     <DialogTitle id="customized-dialog-title" onClose={this.handleClose}>
-                        Create New Bill Run
+                         <div style={{color:'white'}}>Create New Bill Run</div>
                     </DialogTitle>
                     <DialogContent>
                         <div>
@@ -370,8 +399,8 @@ class BillRunDialog extends Component {
                                 id="outlined-multiline-static"
                                 label="Invoice Description"
                                 multiline
-                                rows="3"
-                                defaultValue={desMSG}
+                                rows="1"
+                                defaultValue={this.state.desMSG}
                                 margin="normal"
                                 variant="outlined"
                                 style={{width: "100%"}}

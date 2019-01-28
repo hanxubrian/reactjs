@@ -19,7 +19,9 @@ import Pusher from 'pusher-js';
 import moment from 'moment/moment';
 import ImageIcon from '@material-ui/icons/Image';
 import * as Actions from "./chatPanel/store/actions";
-import ReactPlayer from 'react-player'
+import ReactPlayer from 'react-player';
+import SystemNotification from './content/notifications/SystemNotification';
+
 const styles = theme => ({
     root     : {
         display   : 'flex',
@@ -170,6 +172,13 @@ const styles = theme => ({
         backgroundColor:'#3c93ec',
         color:'white',
     },
+    sysnotification:{
+        position        : 'absolute',
+        width           : '357px',
+        height          : '386px',
+        right           : '40px',
+        top             : '85%',
+    }
 });
 
 class MainToolbar extends Component {
@@ -545,10 +554,6 @@ class MainToolbar extends Component {
                                             {this.state.chatunread}
                                         </div>
                                     </div>
-
-
-
-
                                     <div style={{display: "contents"}} >
                                         <div className={classes.unreadsystemBadge}>
                                         {this.state.systeunread}
@@ -647,10 +652,12 @@ class MainToolbar extends Component {
                                 {/*</Button>*/}
                             {/*</div>*/}
                         </div>
+
                         </ClickAwayListener>
 
                     )}
                 </div>
+
                 {1 && (
 
                     <div className={classNames(classes.chattogglebtn,"chattogglebtnview")}>
