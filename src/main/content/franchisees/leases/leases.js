@@ -230,6 +230,15 @@ const styles = theme => ({
         justifyContent: 'center',
         display: 'flex',
         opacity: 0.5
+	},
+	rightIcon: {
+        marginLeft: theme.spacing.unit,
+    },
+	btntop: {
+        marginRight: 20,
+        '& span': {
+            textTransform: 'none'
+        }
     },
 });
 // const defaultProps = {
@@ -588,23 +597,21 @@ class Leases extends Component {
 												</FuseAnimate>
 											</div>
 										</div>
-										<div className="flex flex-shrink items-center">
+										{/* <div className="flex flex-shrink items-center">
                                             <FuseAnimate animation="transition.expandIn" delay={300}>
                                                 <Fab color="secondary" aria-label="add"
                                                      className={classNames(classes.sideButton, "mr-12")} onClick={()=>this.onNewLease()}>
                                                     <Icon>add</Icon>
                                                 </Fab>
                                             </FuseAnimate>
+                                        </div> */}
+										<div className="flex flex-shrink items-center">
                                             <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                <Fab color="secondary" aria-label="add"
-                                                     className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-                                                    <Icon>mail_outline</Icon>
-                                                </Fab>
-                                            </FuseAnimate>
-                                            <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-                                                    <Icon>print</Icon>
-                                                </Fab>
+                                                <Button variant="contained" color="primary"
+                                                        className={classNames(classes.btntop) } onClick={()=>this.onNewLease()}>
+                                                    New Lease
+                                                    <Icon className={classes.rightIcon}>add</Icon>
+                                                </Button>
                                             </FuseAnimate>
                                         </div>
 									</div>
