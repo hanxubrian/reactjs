@@ -444,7 +444,6 @@ class TransactionEditForm extends Component {
             if(franchisee.length>0) {
                 this.setState({selectedFranchisee: franchisee[0]});
                 this.setState({value: trxDetail.FranchiseeName});
-                this.setState({TransactionNo: trxDetail.Number});
                 this.setState({subTotal: parseFloat(trxDetail.TrxExtendedPrice)});
                 this.setState({unitPrice: parseFloat(trxDetail.TrxItemAmount)});
                 this.setState({tax: parseFloat(trxDetail.TrxTax)});
@@ -462,6 +461,18 @@ class TransactionEditForm extends Component {
                 this.setState({TransactionNo: trxDetail.Trx_no});
                 this.setState({reSell: trxDetail.TrxResell});
                 this.setState({transactionDescription: trxDetail.Description});
+
+                // for recurring
+                this.setState({grossTotal: trxDetail.GrossTotal});
+                this.setState({billedPayments: trxDetail.BilledPayment});
+                this.setState({startDate: moment(trxDetail.startDate)});
+
+                // for Vendor
+                let vendor = {label: trxDetail.VendorLabel, value: trxDetail.VendorValue};
+                let vendor_no = trxDetail.VendorNo;
+                let vendorDate = trxDetail.VendorDate;
+                this.setState({vendor: {vendor, vendor_no, vendorDate}});
+                this.props.updateVendor({vendor, vendor_no, vendorDate});
             }
         }
 
@@ -505,12 +516,11 @@ class TransactionEditForm extends Component {
     };
 
     addNewTransaction = () => {
-        let trx_no = 'pending';
         let vendor = {};
         console.log('vendor=', this.props.vendor);
 
         let result = {
-            Trx_no: trx_no,
+            Trx_no: this.state.TransactionNo,
             RegionId: this.props.regionId,
             FranchiseeNo: this.state.selectedFranchisee.Number,
             FranchiseeName: this.state.selectedFranchisee.Name,
@@ -540,7 +550,13 @@ class TransactionEditForm extends Component {
             BilledPayment: this.state.billedPayments,
             GrossTotal: this.state.grossTotal,
         };
-        this.props.createNewTransaction(this.props.regionId, result);
+        if(this.props.transactionForm.type==='new') {
+            this.props.createNewTransaction(this.props.regionId, result);
+        }
+        else {
+            result.Trx_no = this.props.transactionDetail.Data.Trx_no;
+            // this.props.updateFranchiseeTransaction(this.props.transactionDetail.Data._id, this.props.regionId, result);
+        }
         console.log('result', JSON.stringify(result));
     };
 
@@ -619,11 +635,8 @@ class TransactionEditForm extends Component {
     handleTransactionTypeChange = (newValue)=> {
         this.setState({transactionType: newValue});
 
-        console.log('type=', newValue);
-
         if(newValue.value===18)
             this.props.showVendorDialogBox();
-
     };
 
 
@@ -674,6 +687,8 @@ class TransactionEditForm extends Component {
                 },
             }),
         };
+
+        console.log('transaction state = ', this.state);
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
@@ -1215,8 +1230,10 @@ function mapDispatchToProps(dispatch)
         selectFranchisee: Actions.selectFranchisee,
         showVendorDialogBox: Actions.showVendorDialogBox,
         hideVendorDialogBox: Actions.hideVendorDialogBox,
+        updateVendor: Actions.updateVendor,
         createNewTransaction: Actions.createNewTransaction,
         resetTransactionForm: Actions.resetTransactionForm,
+        updateFranchiseeTransaction: Actions.updateFranchiseeTransaction,
 
     }, dispatch);
 }

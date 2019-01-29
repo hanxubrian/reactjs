@@ -195,10 +195,21 @@ class VendorDialogBox extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-
+        if(nextProps.transactionForm.vendor!==null && this.props.transactionForm.vendor!==nextProps.transactionForm.vendor) {
+            let vendorDetail = nextProps.transactionForm.vendor;
+            this.setState({vendor: vendorDetail.vendor});
+            this.setState({vendor_no: vendorDetail.vendor_no});
+            this.setState({vendorDate: vendorDetail.vendorDate});
+        }
     }
 
     componentDidMount(){
+        if(this.props.transactionForm.vendor!==null) {
+            let vendorDetail = this.props.transactionForm.vendor;
+            this.setState({vendor: vendorDetail.vendor});
+            this.setState({vendor_no: vendorDetail.vendor_no});
+            this.setState({vendorDate: vendorDetail.vendorDate});
+        }
     }
 
     handleChange = (event) => {
