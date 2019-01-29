@@ -66,7 +66,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 
 import { CustomizedDxGridSelectionPanel } from "./../../common/CustomizedDxGridSelectionPanel";
 
-
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -473,7 +473,9 @@ class PaymentsListContent extends Component {
 			amountFilterOperations: ['equal', 'notEqual', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual'],
 			searchValue: '',
 			paymentsParam: [],
-			payments: []
+			payments: [],
+
+			showNoSelectionAlertDialog: false,
 		};
 
 		this.fetchData = this.fetchData.bind(this);
@@ -494,13 +496,13 @@ class PaymentsListContent extends Component {
 		}
 	}
 
-	changeSingleSelection = (selection) => {
+	changeSelection = (selection) => {
 		if (selection.length > 1) selection = [selection[selection.length - 1]]
 		this.setState({ selection })
 		this.props.setActivePaymentRows(selection)
 	}
 
-	changeSelection = (selection) => {
+	changeGroupSelection = (selection) => {
 
 		if (selection.length < 1) {
 			selection = []
@@ -530,7 +532,6 @@ class PaymentsListContent extends Component {
 		}
 		this.setState({ selection })
 		this.props.setActivePaymentRows(selection)
-
 	}
 
 	onClickGroupCell = (ev, groupTitle) => {
@@ -758,7 +759,16 @@ class PaymentsListContent extends Component {
 			this.props.setActivePaymentRows([tableRow.rowId]);
 			// this.props.openEditCustomerForm(this.props.regionId, tableRow.row.CustomerId);
 			// this.props.openNewInvoiceForm()
-			this.props.openPaymentDialog(true)
+			console.log("handleDoubleClick tableRow", tableRow)
+			if (tableRow.row.InvoiceBalance > 0) {
+				this.props.openPaymentDialog(true)
+			} else {
+				this.props.showErrorDialog({
+					show: true,
+					title: "Warning",
+					message: "The invoice balace is ZERO.",
+				})
+			}
 		}
 		return (
 			<Table.Row
@@ -777,6 +787,11 @@ class PaymentsListContent extends Component {
 			/>
 		);
 	};
+	handleCloseNoSelectionAlertDialog = () => {
+		this.setState({
+			showNoSelectionAlertDialog: false
+		})
+	}
 	expandedGroupsChange = (expandedGroups) => {
 		this.setState({ expandedGroups });
 	};
@@ -939,6 +954,7 @@ function mapDispatchToProps(dispatch) {
 
 		setActivePaymentRows: Actions.setActivePaymentRows,
 		openPaymentDialog: Actions.openPaymentDialog,
+		showErrorDialog: Actions.showErrorDialog,
 	}, dispatch);
 }
 
