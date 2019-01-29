@@ -199,7 +199,7 @@ export const TableComponent = withStyles(styles, { name: 'TableComponent' })(Tab
 //
 // table cell currency formatter
 //
-const CurrencyFormatter = ({ value }) => (<span>$ {value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
+const CurrencyFormatter = ({ value }) => (<span>$ {!value ? "0" : value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
 const CurrencyTypeProvider = props => (
 	<DataTypeProvider
 		formatterComponent={CurrencyFormatter}
@@ -433,9 +433,9 @@ class PaymentsListContent extends Component {
 					groupingEnabled: false,
 				},
 				{
-					title: "Overpayment",
-					name: "itm_overpayment",
-					columnName: "itm_overpayment",
+					title: "OverPayment",
+					name: "OverPayment",
+					columnName: "OverPayment",
 					align: 'right',
 					width: 150,
 					sortingEnabled: true,
@@ -530,7 +530,7 @@ class PaymentsListContent extends Component {
 			currencyColumns: [
 				'InvoiceAmount',
 				'InvoiceBalance',
-				'Overpayment',
+				'OverPayment',
 			],
 			phoneNumberColumns: [
 				'Phone'
