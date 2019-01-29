@@ -169,11 +169,12 @@ class InvoiceReport extends Component {
             });
             html2canvas(input)
                 .then((canvas) => {
-                    const imgData = canvas.toDataURL('image/png');
+                    const imgData = canvas.toDataURL('image/jpeg',1.0);
                     const pdf = new jsPDF();
-                    pdf.addImage(imgData, 'PNG', 0, 0);
-                    pdf.addImage(img, 'PNG', 8, 15, 40, 30);
-                    pdf.addImage(img, 'PNG', 150, 102, 40, 30);
+                    // const pdf = new jsPDF('p', 'pt', [input.offsetWidth, input.offsetHeight]);
+                    pdf.addImage(imgData, 'jpeg', 0, 0);
+                    pdf.addImage(img, 'jpeg', 8, 15, 40, 30);
+                    pdf.addImage(img, 'jpeg', 150, 102, 40, 30);
                     pdf.save("download.pdf");
                 })
             ;

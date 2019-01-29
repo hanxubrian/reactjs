@@ -265,7 +265,7 @@ class BillRunDialog extends Component {
             message     : `Bill Run Process has started.You will be notified when completed.\n You can continue using the system as usual`,//text or html
             autoHideDuration: 3000,//ms
             anchorOrigin: {
-                vertical  : 'top',//top bottom
+                vertical  : 'top',//top  bottom
                 horizontal: 'center'//left center right
             },
             variant: 'success'//success error info warning null
@@ -297,7 +297,7 @@ class BillRunDialog extends Component {
             let regionid = this.props.auth.defaultRegionId;
             if(userid && userid != null && regionid && regionid != null && year && year != null && month && month !=null ){
                 this.createbillrunmesssage();
-                setTimeout(
+                let buggyObject = setTimeout(
                     function() {
                         let getres = this.props.createbillrun(
                             regionid,
@@ -310,13 +310,13 @@ class BillRunDialog extends Component {
                         );
                         this.setState({statusMSG:200});
                         this.setState({showP: !this.state.showP});
+                        clearTimeout(buggyObject);
                     }
                         .bind(this),
                     3000
                 );
 
-
-
+                buggyObject = null;
             }
         }
 

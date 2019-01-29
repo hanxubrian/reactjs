@@ -138,11 +138,11 @@ class Report extends Component {
             html2canvas(input)
                 .then((canvas) => {
 
-                    const imgData = canvas.toDataURL('image/png');
+                    const imgData = canvas.toDataURL('image/jpeg',1.0);
                     this.calculatePDF_height_width("whole",0);
-                    // const pdf = new jsPDF();
+                    // pdf = new jsPDF();
                     pdf = new jsPDF('p', 'pt', [input.offsetWidth, input.offsetHeight]);
-                    pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, HTML_Width, HTML_Height);
+                    pdf.addImage(imgData, 'jpeg', top_left_margin, top_left_margin, HTML_Width, HTML_Height);
                     pdf.save("download.pdf");
 
 

@@ -121,7 +121,7 @@ const styles = theme => ({
         padding: 12
     },
     topbtncus:{
-        marginRight: 100,
+        // marginRight: 100,
     },
     overlay: {
         position: 'absolute',
@@ -139,7 +139,7 @@ const styles = theme => ({
         margin: theme.spacing.unit * 2,
     },
     formControl: {
-        margin: theme.spacing.unit,
+        // margin: theme.spacing.unit,
         minWidth: 120,
     },
 });
@@ -506,7 +506,7 @@ class BillRun extends Component {
                                     getTheadGroupProps={(state, rowInfo, column, instance) =>{
                                         return {
                                             style:{
-                                                padding: "10px 10px",
+                                                // padding: "10px 10px",
                                                 fontSize: 16,
                                                 fontWeight: 700
                                             },
@@ -515,7 +515,7 @@ class BillRun extends Component {
                                     getTheadGroupThProps={(state, rowInfo, column, instance) => {
                                         return {
                                             style:{
-                                                padding: "10px 10px",
+                                                // padding: "10px 10px",
                                                 fontSize: 18,
                                                 fontWeight: 700,
                                             },
@@ -569,7 +569,7 @@ class BillRun extends Component {
                                     columns={[
                                         {
                                             Header: ()=>(
-                                                <div>
+                                                <div style={{width:"100%"}}>
                                                 <div className="flex items-center pr-0 lg:pr-12">
                                                     <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
                                                         <Input
