@@ -400,7 +400,7 @@ class TransactionsApp extends Component {
 
                                                 {this.props.transactionForm.type === 'edit' && (
                                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                                        <Typography variant="h6" className="hidden sm:flex">Franchisees | Edit Transaction</Typography>
+                                                        <Typography variant="h6" className="hidden sm:flex">Franchisees | Summary</Typography>
                                                     </FuseAnimate>
                                                 )}
                                                 {this.props.transactionForm.type === 'new' && (

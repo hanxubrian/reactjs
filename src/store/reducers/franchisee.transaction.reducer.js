@@ -149,6 +149,7 @@ const transactions = function(state = initialState, action) {
         case Actions.UPDATE_TRANSACTION_VENDOR:
             return {...state, transactionForm: {...state.transactionForm, vendor: action.payload}};
         case Actions.CREATE_NEW_TRANSACTION:
+        case Actions.UPDATE_A_FRANCHISEE_TRANSACTION:
         {
             return {
                 ...state,

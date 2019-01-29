@@ -1200,10 +1200,20 @@ class TransactionEditForm extends Component {
                         aria-labelledby="alert-dialog-title"
                         aria-describedby="alert-dialog-description"
                     >
-                        <DialogTitle id="alert-dialog-title">{"Create New Transaction"}</DialogTitle>
+                        <DialogTitle id="alert-dialog-title">
+                            {this.props.transactionForm.type === 'new' ?(
+                                'Create New Transaction?'
+                            ) : (
+                                'Update theTransaction?'
+                            )}
+                        </DialogTitle>
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
-                                Proceed to create new transaction?
+                                {this.props.transactionForm.type === 'new' ?(
+                                    'Proceed to create new transaction?'
+                                ) : (
+                                    'Proceed to update this transaction?'
+                                )}
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
@@ -1211,7 +1221,11 @@ class TransactionEditForm extends Component {
                                 Close
                             </Button>
                             <Button onClick={()=>this.addNewTransaction()} color="primary" autoFocus>
-                                Create
+                                {this.props.transactionForm.type === 'new' ?(
+                                    'Create'
+                                ) : (
+                                    'Update'
+                                )}
                             </Button>
                         </DialogActions>
                     </Dialog>
