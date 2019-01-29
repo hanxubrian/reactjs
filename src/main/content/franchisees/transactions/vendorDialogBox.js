@@ -199,7 +199,7 @@ class VendorDialogBox extends Component {
             let vendorDetail = nextProps.transactionForm.vendor;
             this.setState({vendor: vendorDetail.vendor});
             this.setState({vendor_no: vendorDetail.vendor_no});
-            this.setState({vendorDate: vendorDetail.vendorDate});
+            this.setState({vendorDate: moment(vendorDetail.vendorDate).format('YYYY-MM-DD')});
         }
     }
 
@@ -208,7 +208,7 @@ class VendorDialogBox extends Component {
             let vendorDetail = this.props.transactionForm.vendor;
             this.setState({vendor: vendorDetail.vendor});
             this.setState({vendor_no: vendorDetail.vendor_no});
-            this.setState({vendorDate: vendorDetail.vendorDate});
+            this.setState({vendorDate: moment(vendorDetail.vendorDate).format('YYYY-MM-DD')});
         }
     }
 

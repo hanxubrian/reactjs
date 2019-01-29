@@ -451,7 +451,9 @@ class TransactionEditForm extends Component {
                 this.setState({total: parseFloat(trxDetail.TrxExtendedPrice)+parseFloat(trxDetail.TrxTax)});
                 this.setState({TransactionDate: moment(trxDetail.TrxDate)});
 
-                let trxType = aTypes.filter(f=>f.value = trxDetail.TrxType);
+                let trxType = aTypes.filter(f=>f.value === parseInt(trxDetail.Trxtype));
+
+                console.log('type==', trxType);
                 if(trxType.length)
                     this.setState({transactionType: trxType[0]});
 
@@ -555,7 +557,7 @@ class TransactionEditForm extends Component {
         }
         else {
             result.Trx_no = this.props.transactionDetail.Data.Trx_no;
-            // this.props.updateFranchiseeTransaction(this.props.transactionDetail.Data._id, this.props.regionId, result);
+            this.props.updateFranchiseeTransaction(this.props.transactionDetail.Data._id, this.props.regionId, result);
         }
         console.log('result', JSON.stringify(result));
     };
@@ -687,8 +689,6 @@ class TransactionEditForm extends Component {
                 },
             }),
         };
-
-        console.log('transaction state = ', this.state);
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
