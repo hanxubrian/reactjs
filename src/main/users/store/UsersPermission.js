@@ -56,7 +56,7 @@ class UsersPermission extends React.Component {
                     className={classes.root}
                >
                    <ListItem button onClick={this.handleClick} style={{borderBottom: "1px solid lightgray"}}>
-                       <ListItemText inset primary="" />
+                       <ListItemText primary="Navigation Options" />
                        <ListItemSecondaryAction>
                            <span className={classes.textSpan}>View</span>
                            <span className={classes.textSpan}>Create</span>
