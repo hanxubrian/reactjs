@@ -425,6 +425,19 @@ class TransactionEditForm extends Component {
                 this.setState({selectedFranchisee: null});
                 this.setState({value: ''});
                 this.setState({franchiseeNo: ''});
+                this.setState({transactionType: {label: 'Advance Fee', value:82}});
+                this.setState({transactionFrequency: "single"});
+                this.setState({reSell: false});
+                this.setState({quantity: 1});
+                this.setState({unitPrice: 0});
+                this.setState({subTotal: 0});
+                this.setState({total: 0.0});
+                this.setState({tax: 0.0});
+                this.setState({payments: 1});
+                this.setState({paymentsDate: new Date()});
+                this.setState({billedPayments: 0});
+                this.setState({grossTotal: 0});
+                this.setState({startDate: moment()});
             }
             else if(this.state.buttonOption===1) {
                 this.closeComposeForm();
