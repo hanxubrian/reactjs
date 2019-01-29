@@ -446,18 +446,20 @@ class TransactionEditForm extends Component {
                 this.setState({value: trxDetail.FranchiseeName});
                 this.setState({subTotal: parseFloat(trxDetail.TrxExtendedPrice)});
                 this.setState({unitPrice: parseFloat(trxDetail.TrxItemAmount)});
-                this.setState({tax: parseFloat(trxDetail.TrxTax)});
+
+                let tax = parseFloat(trxDetail.TrxTax);
+                if(parseInt(trxDetail.TrxType)!==18) tax = 0.00;
+
+                this.setState({tax: tax});
                 this.setState({quantity: parseFloat(trxDetail.quantity)});
-                this.setState({total: parseFloat(trxDetail.TrxExtendedPrice)+parseFloat(trxDetail.TrxTax)});
+                this.setState({total: parseFloat(trxDetail.TrxExtendedPrice)+ tax});
                 this.setState({TransactionDate: moment(trxDetail.TrxDate)});
 
                 let trxType = aTypes.filter(f=>f.value === parseInt(trxDetail.Trxtype));
 
-                console.log('type==', trxType);
                 if(trxType.length)
                     this.setState({transactionType: trxType[0]});
 
-                // this.setState({transactionFrequency: trxDetail.TrxFrequency});
                 this.setState({transactionFrequency: 'single'});
                 this.setState({payments: parseInt(trxDetail.NumberOfPayments)});
                 this.setState({TransactionNo: trxDetail.Trx_no});
@@ -505,6 +507,8 @@ class TransactionEditForm extends Component {
 
         if(quantity>0 && unitPrice>0) {
             let tax = quantity * unitPrice*0.085;
+            if(this.state.transactionType.value!==18) tax = 0.0;
+
             let line_total = parseFloat(quantity * unitPrice+tax);
             this.setState({subTotal: parseFloat(quantity * unitPrice)});
             this.setState({tax: parseFloat(tax)});
@@ -518,9 +522,6 @@ class TransactionEditForm extends Component {
     };
 
     addNewTransaction = () => {
-        let vendor = {};
-        console.log('vendor=', this.props.vendor);
-
         let result = {
             Trx_no: this.state.TransactionNo,
             RegionId: this.props.regionId,
