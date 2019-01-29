@@ -9,12 +9,12 @@ import GridContainer from "../../Commons/Grid/GridContainer";
 import GridItem from "../../Commons/Grid/GridItem";
 import UserAvatar from"./UserAvatar"
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
-import List from "@material-ui/core/List/List";
-import ListItem from "@material-ui/core/ListItem/ListItem";
-import Checkbox from "@material-ui/core/Checkbox/Checkbox";
-import ListItemText from "@material-ui/core/ListItemText/ListItemText";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction/ListItemSecondaryAction";
 import UsersPermission from "./store/UsersPermission";
+import FormControl from "@material-ui/core/FormControl/FormControl";
+import InputLabel from "@material-ui/core/InputLabel/InputLabel";
+import Select from "@material-ui/core/Select/Select";
+import Input from "@material-ui/core/Input/Input";
+import OutlinedInput from "@material-ui/core/OutlinedInput/OutlinedInput";
 
 const styles = theme => ({
     root     : {
@@ -30,7 +30,13 @@ const styles = theme => ({
     },
     userFormSection: {
         marginBottom : '10px'
-    }
+    },
+    multiSelectControl: {
+    margin: theme.spacing.unit,
+    marginLeft: 0
+    //minWidth: 120,
+    //maxWidth: 300,
+}
 });
 
 
@@ -67,80 +73,77 @@ const department = [
 
 const State = [
     {
+        label: "Buffalo",
         value: "Buffalo",
-        label: "Buffalo"
     },
     {
+        label: "New York",
         value: "New York",
-        label: "NewYork"
     },
     {
+        label: "Kansas",
         value: "Kansas",
-        label: "Kansas"
     },
     {
+        label: "Ohio",
         value: "Ohio",
-        label: "Ohio"
     },
     {
+        label: "Georgia",
         value: "Georgia",
-        label: "Georgia"
     },
     {
+        label: "Texas",
         value: "Texas",
-        label: "Texas"
     },
     {
+        label: "Florida",
         value: "Florida",
-        label: "Florida"
     }
 ];
 
-const Group = [
-    {
-        value: 0,
-        label: 'All Groups',
-    },
-    {
-        value: 1,
-        label: 'Group 1',
-    },
-    {
-        value: 2,
-        label: 'Group 2',
-    },
-    {
-        value: 3,
-        label: 'Group 3',
-    },
-    {
-        value: 4,
-        label: 'Group 4',
-    },
+
+const UserRegion = [
+    "Buffalo",
+    "New York",
+    "Kansas",
+    "Ohio",
+    "Georgia",
+    "Texas",
+    "Florida",
 ];
 
-const userRole = [
-    {
-        value: 'Admin-User',
-        label: 'Admin-User',
-    },
-    {
-        value: 'Guest',
-        label: 'Guest',
-    },
-    {
-        value: 'Editor',
-        label: 'Editor',
-    },
-    {
-        value: 'Contractor',
-        label: 'Contractor',
-    },
-    {
-        value: 'Subscriber',
-        label: 'Subscriber',
-    },
+const Group = [
+     'Group 1',
+     'Group 2',
+     'Group 3',
+     'Group 4',
 ];
+
+const appList = [
+    'Web APP',
+    'Mobile APP'
+]
+
+
+const userRole = [
+    'Admin-User',
+    'Guest',
+    'Editor',
+    'Contractor',
+    'Subscriber',
+];
+
+const ITEM_HEIGHT = 40;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
 
 
 class UsersForm extends React.Component {
@@ -157,17 +160,20 @@ class UsersForm extends React.Component {
         zip : '',
         userName: '',
         accPassword: '',
-        selectRegion: '',
-        userGroup: '',
+        selectRegion: [],
+        userGroup: [],
         defaultRegion: '',
         checked: [1],
-        userRole: ''
+        userRole: [],
+        appPermission: []
     };
 
 
     handleChange = prop => event => {
         this.setState({[prop]: event.target.value});
     };
+
+
 
     render()
     {
@@ -339,7 +345,7 @@ class UsersForm extends React.Component {
                     </GridContainer>
                 </div>
                 <div className={classNames(classes.userFormSection,"w-full")}>
-                    <h2>User Account</h2>
+                    <h4>User Account</h4>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
@@ -370,55 +376,45 @@ class UsersForm extends React.Component {
                     </GridContainer>
                 </div>
                 <div className={classNames(classes.userFormSection,"w-full")}>
-                    <h2>User Group</h2>
+                    <h4>User Group</h4>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="userGroup"
-                                label={"User Group"}
-                                select
-                                variant={"outlined"}
-                                className={classes.textField}
-                                value={this.state.userGroup}
-                                onChange={this.handleChange('userGroup')}
-                                style={{marginRight:"1%"}}
-                                SelectProps={{
-                                    MenuProps: {
-                                        className: classes.menu,
-                                    },
-                                }}
-                                margin="dense"
-                                fullWidth
-                            >
-                                {Group.map(option => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                            <TextField
-                                id="selectRegion"
-                                label={"Select Region"}
-                                select
-                                variant={"outlined"}
-                                className={classes.textField}
-                                value={this.state.selectRegion}
-                                onChange={this.handleChange('selectRegion')}
-                                style={{marginLeft:"1%",marginRight:"1%"}}
-                                SelectProps={{
-                                    MenuProps: {
-                                        className: classes.menu,
-                                    },
-                                }}
-                                margin="dense"
-                                fullWidth
-                            >
-                                {State.map(option => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
+                            <FormControl style={{width:"100%"}} className={classes.multiSelectControl}>
+                                <InputLabel variant={"outlined"} htmlFor="select-userGroup">User Group</InputLabel>
+                                <Select
+                                    multiple
+                                    value={this.state.userGroup}
+                                    className={classes.textField}
+                                    onChange={this.handleChange('userGroup')}
+                                    input={<OutlinedInput id="select-userGroup" labelWidth={80}/>}
+                                    margin="dense"
+                                    MenuProps={MenuProps}
+                                >
+                                    {Group.map(name => (
+                                        <MenuItem key={name} value={name} >
+                                            {name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                            <FormControl style={{width:"100%"}} className={classes.multiSelectControl}>
+                                <InputLabel variant={"outlined"}  htmlFor="select-userGroup">Select Region</InputLabel>
+                                <Select
+                                    multiple
+                                    value={this.state.selectRegion}
+                                    className={classes.textField}
+                                    onChange={this.handleChange('selectRegion')}
+                                    input={<OutlinedInput id="select-selectRegion" labelWidth={100}/>}
+                                    margin="dense"
+                                    MenuProps={MenuProps}
+                                >
+                                    {UserRegion.map(name => (
+                                        <MenuItem key={name} value={name} >
+                                            {name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                             <TextField
                                 id="defaultRegion"
                                 label={"Default Region"}
@@ -446,36 +442,57 @@ class UsersForm extends React.Component {
                     </GridContainer>
                 </div>
                 <div className={classNames(classes.userFormSection,"w-full")}>
-                    <h2>User Role</h2>
+                    <h4>User Role</h4>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="userRole"
-                                label={"User Role"}
-                                select
-                                variant={"outlined"}
-                                className={classes.textField}
-                                value={this.state.userRole}
-                                onChange={this.handleChange('userRole')}
-                                SelectProps={{
-                                    MenuProps: {
-                                        className: classes.menu,
-                                    },
-                                }}
-                                margin="dense"
-                                fullWidth
-                            >
-                                {userRole.map(option => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
+                            <FormControl style={{width:"100%"}} className={classes.multiSelectControl}>
+                                <InputLabel variant={"outlined"}  htmlFor="select-userRole">User Role</InputLabel>
+                                <Select
+                                    multiple
+                                    value={this.state.userRole}
+                                    className={classes.textField}
+                                    onChange={this.handleChange('userRole')}
+                                    input={<OutlinedInput id="select-userRole" labelWidth={80}/>}
+                                    margin="dense"
+                                    MenuProps={MenuProps}
+                                >
+                                    {userRole.map(name => (
+                                        <MenuItem key={name} value={name} >
+                                            {name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </GridItem>
                     </GridContainer>
                 </div>
                 <div className={classNames(classes.userFormSection,"w-full")}>
-                    <h2>User Permission</h2>
+                    <h4>APP Permission</h4>
+                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <FormControl style={{width:"100%"}} className={classes.multiSelectControl}>
+                                <InputLabel variant={"outlined"}  htmlFor="select-appPermission">Select APP Permission</InputLabel>
+                                <Select
+                                    multiple
+                                    value={this.state.appPermission}
+                                    className={classes.textField}
+                                    onChange={this.handleChange('appPermission')}
+                                    input={<OutlinedInput id="select-appPermission" labelWidth={170}/>}
+                                    margin="dense"
+                                    MenuProps={MenuProps}
+                                >
+                                    {appList.map(name => (
+                                        <MenuItem key={name} value={name} >
+                                            {name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </GridItem>
+                    </GridContainer>
+                </div>
+                <div className={classNames(classes.userFormSection,"w-full")}>
+                    <h4>User Permission</h4>
                     <UsersPermission/>
                 </div>
             </div>
