@@ -398,6 +398,9 @@ class MainToolbar extends Component {
     handleNotificationChange = (event, value) => {
         this.setState({value});
     };
+    systemitemnotification =()=>{
+        alert("SYSNOT");
+    }
     render()
     {
         const {classes, user, logout, openChatPanel} = this.props;
@@ -616,7 +619,7 @@ class MainToolbar extends Component {
                                             this.state.pusherMSGList.map((item,index)=>{
                                                 return (
                                                 <div key={index}>
-                                                    <ListItem button style ={{height:'55px'}}>
+                                                    <ListItem button style ={{height:'55px'}} onClick={this.systemitemnotification}>
                                                         <React.Fragment>
                                                             <div style ={{height:'40px'}} style={{textAlign: '-webkit-center'}}>
                                                                 <Avatar className={classes.avatarresize} alt={this.props.login.firstName + this.props.login.lastName} src ={this.props.login.profilePhoto} />

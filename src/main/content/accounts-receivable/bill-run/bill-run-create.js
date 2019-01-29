@@ -158,7 +158,7 @@ class BillRunDialog extends Component {
         year                    : moment().year(),
         month                   : moment().month(),
         desMSG                  : `MONTHLY CONTRACT BILLING AMOUNT FOR `+mL[moment().month()].toUpperCase()+` `+moment().year(),
-
+        isMounted               : false,
     };
     constructor(props){
         super(props);
@@ -195,7 +195,7 @@ class BillRunDialog extends Component {
 
     }
     componentDidMount() {
-
+        this.setState({isMounted:true});
         this.props.onRef(this);
         const pusher = new Pusher('ecf6a4e23b186efa2d44', {
             cluster: 'us2',
@@ -207,7 +207,7 @@ class BillRunDialog extends Component {
         });
     }
     componentWillUnmount() {
-
+        this.setState({isMounted:false});
         this.props.onRef(undefined);
     }
     componentWillReceiveProps(nextProps){
@@ -282,6 +282,17 @@ class BillRunDialog extends Component {
             variant: 'error'//success error info warning null
         });
     }
+    duplicatederrormessage=()=>{
+        this.props.showMessage({
+            message     : "Error!!!That will prevent it from running",//text or html
+            autoHideDuration: 6000,//ms
+            anchorOrigin: {
+                vertical  : 'top',//top bottom
+                horizontal: 'right'//left center right
+            },
+            variant: 'error'//success error info warning null
+        });
+    }
     billrun=(e)=>{
 
         e.stopPropagation();
@@ -295,7 +306,17 @@ class BillRunDialog extends Component {
             let user = this.props.auth.firstName+"     "+ this.props.auth.lastName;
             let userid   = this.props.auth.UserId;
             let regionid = this.props.auth.defaultRegionId;
-            if(userid && userid != null && regionid && regionid != null && year && year != null && month && month !=null ){
+            let billrunDB = this.props.billrunsDB;
+            let checkflag = true;
+            if(billrunDB && billrunDB !== null){
+                billrunDB.map((item)=>{
+                    if(item.Month === month && item.Year === year && item.Status !== "Deleted"){
+                        checkflag = false;
+                    }
+                });
+            }
+            if(checkflag && this.state.isMounted && userid != null && regionid && regionid != null && year && year != null && month && month !=null ){
+
                 this.createbillrunmesssage();
                 let buggyObject = setTimeout(
                     function() {
@@ -317,6 +338,9 @@ class BillRunDialog extends Component {
                 );
 
                 buggyObject = null;
+            }
+            if(!checkflag){
+                this.duplicatederrormessage();
             }
         }
 
@@ -455,6 +479,7 @@ function mapStateToProps({invoices, auth,billruns})
 {
     return {
         invoices        : invoices.invoicesDB,
+        billrunsDB      : billruns.billrunsDB,
         billruns        : billruns.billruncreate,
         loading         : billruns.loadingstatus,
         auth            : auth.login,
