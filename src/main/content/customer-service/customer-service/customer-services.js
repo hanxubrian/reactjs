@@ -39,6 +39,8 @@ import IconSms from '@material-ui/icons/Sms';
 import IconPhone from '@material-ui/icons/Phone';
 import IconChat from '@material-ui/icons/ChatBubbleOutline';
 
+import CustomerSearchBar from './CustomerSearchBar';
+
 const headerHeight = 80;
 
 const hexToRgb = (hex) => {
@@ -572,12 +574,10 @@ class CustomerServices extends Component {
 					}
 					content={
 						<div className="flex-1 flex-col absolute w-full h-full">
-
+						<div className={classNames("flex flex-col h-full")}>
 							<DialogEmailToCustomer />
 
-							{/* 
-Confirm Dialog for submitting
- */}
+							{/* Confirm Dialog for submitting */}
 							<Dialog
 								open={this.state.isSubmittingForApproval}
 								onClose={this.handleCloseConfirmDialog}
@@ -594,14 +594,11 @@ Confirm Dialog for submitting
 								</DialogActions>
 							</Dialog>
 
-							{customerForm.props.open ?
-								(
-									<CustomerForm />
-								) :
-								(
-									<CustomerListContent />
-								)}
-
+							{customerForm.props.open &&  <CustomerForm />}
+							{!customerForm.props.open &&  <CustomerSearchBar />}
+							{!customerForm.props.open &&  <CustomerListContent />}
+								
+						</div>
 						</div>
 					}
 					leftSidebarHeader={

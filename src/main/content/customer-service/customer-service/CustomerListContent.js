@@ -1236,9 +1236,9 @@ class CustomerListContent extends Component {
 
 		return (
 			<Fragment>
-				<div className={classNames(classes.layoutTable, "flex flex-col", mapViewState ? "h-full" : "")}>
-
-					<CustomerSearchBar />
+				{/* <div className={classNames(classes.layoutTable, "flex flex-col", mapViewState ? "h-full" : "")}> */}
+				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
+					
 
 					{/* Mapview */}
 					{mapViewState && (<div className={classNames("w-full h-full p-1")} style={{ borderColor: 'lightgray', borderWidth: '1px' }}>
@@ -1361,13 +1361,10 @@ class CustomerListContent extends Component {
 									for={dateColumns}
 								/> */}
 
-									{/* <VirtualTable
-										height="auto"
-										rowComponent={this.TableRow}
-									/> */}
+									<VirtualTable height="auto" rowComponent={this.TableRow} />
 
 									{/* <Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} rowComponent={TableRow} /> */}
-									<Table rowComponent={this.TableRow} />
+									{/* <Table rowComponent={this.TableRow} /> */}
 
 									<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
 
