@@ -418,17 +418,19 @@ class PaymentFormModal extends React.Component {
 	}
 
 	componentWillMount() {
+		console.log("componentWillMount")
 		this.setRowData(this.props.payments)
 	}
 	componentDidMount() {
 		this.checkValidations('', '')
 	}
 	UNSAFE_componentWillReceiveProps(nextProps) {
-		// this.setState({
-		// 	bOpenPaymentDialog: nextProps.bOpenPaymentDialog
-		// })
-		if (nextProps.activePaymentRows !== this.props.activePaymentRows) {
-			// this.setState({ rows: [...nextProps.activePaymentRows].map((x, index) => { x.id = index; return x }) })
+		if (nextProps.payments !== this.props.payments) {
+			console.log("componentWillReceiveProps payments")
+			this.setRowData(nextProps.payments)
+		}
+		if (JSON.stringify(nextProps.activePaymentRows) !== JSON.stringify(this.props.activePaymentRows)) {
+			console.log("componentWillReceiveProps activePaymentRows", nextProps.activePaymentRows, this.props.activePaymentRows)
 			this.setRowData(this.props.payments, nextProps.activePaymentRows)
 		}
 	}
@@ -560,15 +562,6 @@ class PaymentFormModal extends React.Component {
 			})
 		}
 		this.setState({ rows: res })
-	}
-
-	componentWillReceiveProps(nextProps) {
-		if (nextProps.payments !== this.props.payments) {
-			this.setRowData(nextProps.payments)
-		}
-		if (nextProps.activePaymentRows !== this.props.activePaymentRows) {
-			this.setRowData(this.props.payments, nextProps.activePaymentRows)
-		}
 	}
 
 	onGridRowsUpdated = ({ fromRow, toRow, updated }) => {

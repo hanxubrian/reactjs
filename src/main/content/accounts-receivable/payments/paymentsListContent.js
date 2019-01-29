@@ -573,6 +573,7 @@ class PaymentsListContent extends Component {
 	}
 
 	changeSelection = (selection) => {
+		if (selection.length > 1) selection = [selection[selection.length - 1]]
 		this.setState({ selection })
 		// let selectedRows = this.state.rows.filter((x, index) => { 
 		// 	x.id = index;
@@ -621,10 +622,8 @@ class PaymentsListContent extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		console.log("componentWillReceiveProps", "CustomerListContent.js", nextProps.payments)
-
-
 		if (nextProps.payments !== this.props.payments) {
+			console.log("componentWillReceiveProps", "nextProps.payments", nextProps.payments)
 			this.setState({
 				rows: this.getRowData(nextProps.payments),
 				expandedGroups: [...new Set(this.getRowData(nextProps.payments).map(x => x.CustomerNameNo))],
@@ -632,6 +631,7 @@ class PaymentsListContent extends Component {
 		}
 
 		if (nextProps.regionId != this.props.regionId) {
+			console.log("componentWillReceiveProps", "nextProps.regionId", nextProps.regionId)
 			this.props.getAccountReceivablePaymentsList(
 				nextProps.regionId,
 				nextProps.getPaymentsParam.fromDate,
@@ -640,6 +640,7 @@ class PaymentsListContent extends Component {
 				nextProps.status);
 		}
 		if (nextProps.status != this.props.status) {
+			console.log("componentWillReceiveProps", "nextProps.status", nextProps.status)
 			this.props.getAccountReceivablePaymentsList(
 				nextProps.regionId,
 				nextProps.getPaymentsParam.fromDate,
@@ -647,7 +648,8 @@ class PaymentsListContent extends Component {
 				"",
 				nextProps.status);
 		}
-		if (nextProps.activePaymentRows != this.props.activePaymentRows) {
+		if (JSON.stringify(nextProps.activePaymentRows) != JSON.stringify(this.props.activePaymentRows)) {
+			console.log("componentWillReceiveProps", "nextProps.activePaymentRows", nextProps.activePaymentRows)
 			if (JSON.stringify(this.state.selection) !== JSON.stringify(nextProps.activePaymentRows)) {
 				this.setState({ selection: [...nextProps.activePaymentRows] })
 			}
@@ -764,6 +766,7 @@ class PaymentsListContent extends Component {
 					// 	selection = [...selection, tableRow.rowId]
 					// }
 					// this.changeSelection(selection)
+					this.changeSelection([tableRow.rowId])
 				}
 				prevent = false;
 			}, delay);
@@ -965,7 +968,7 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 		searchText: accountReceivablePayments.searchText,
 		activePaymentRows: accountReceivablePayments.activePaymentRows,
 		NoDataString: accountReceivablePayments.NoDataString,
-		
+
 	}
 }
 
