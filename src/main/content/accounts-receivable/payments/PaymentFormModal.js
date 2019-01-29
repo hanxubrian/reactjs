@@ -457,7 +457,7 @@ class PaymentFormModal extends React.Component {
 		} else if (this.state.PaymentAmount <= 0) {
 			this.setState({ errorMsg: "Amount is invalid" })
 		} else if (!this.isNonEmptyPayment(this.state.rows)) {
-			this.setState({ errorMsg: "Either of payments amount is not settled" })
+			this.setState({ errorMsg: "Neither of payments amount is settled" })
 		} else {
 
 			const params = {
@@ -608,7 +608,7 @@ class PaymentFormModal extends React.Component {
 			return {
 				rows: rows,
 				overpayment: floatPaymentAmount,
-				errorMsg: this.isNonEmptyPayment(rows) ? this.state.errorMsg : "Neither of payments amount is settled"
+				errorMsg: this.isNonEmptyPayment(rows) ? (this.state.errorMsg === "Neither of payments amount is settled" ? "" : this.state.errorMsg) : "Neither of payments amount is settled"
 			}
 		})
 	}
