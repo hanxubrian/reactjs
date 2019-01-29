@@ -759,7 +759,7 @@ class PaymentFormModal extends React.Component {
 										id="PaymentAmount"
 										value={this.state.PaymentAmount}
 										onChange={this.handleChange('PaymentAmount')}
-										label="Amount" sm={2}
+										label="Amount To Apply" sm={2}
 									/>
 									<Tooltip title="Auto Distribution">
 										<IconButton
