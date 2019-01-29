@@ -236,7 +236,7 @@ class PaymentLockBoxReport extends Component {
                 this.state.selectedFile,
                 this.state.selectedFile.name
             );
-            axios_instance.post(`${BASE_MONGO_API_URL}/v1/payment/lockbox/upload`, formData, {
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/payment/lockbox/upload`, this.state.selectedFile, {
                 onUploadProgress: progressEvent => {
                     this.setState({fileload:Math.round(progressEvent.loaded / progressEvent.total*10000)/100});
                     console.log(progressEvent.loaded / progressEvent.total)

@@ -398,8 +398,8 @@ class MainToolbar extends Component {
     handleNotificationChange = (event, value) => {
         this.setState({value});
     };
-    systemitemnotification =()=>{
-        alert("SYSNOT");
+    systemitemnotification =(e)=>{
+        alert("SYSNOT"+e);
     }
     render()
     {
@@ -618,8 +618,8 @@ class MainToolbar extends Component {
                                         {value === 1 && this.state.pusherMSG && this.state.pusherMSG != null &&  (
                                             this.state.pusherMSGList.map((item,index)=>{
                                                 return (
-                                                <div key={index}>
-                                                    <ListItem button style ={{height:'55px'}} onClick={this.systemitemnotification}>
+                                                <div key={index} >
+                                                    <ListItem button style ={{height:'55px'}} >
                                                         <React.Fragment>
                                                             <div style ={{height:'40px'}} style={{textAlign: '-webkit-center'}}>
                                                                 <Avatar className={classes.avatarresize} alt={this.props.login.firstName + this.props.login.lastName} src ={this.props.login.profilePhoto} />
