@@ -766,7 +766,7 @@ class PaymentsListContent extends Component {
 				this.props.showErrorDialog({
 					show: true,
 					title: "Warning",
-					message: "The invoice balace is ZERO.",
+					message: "A payment can't be applied to an invoice with 0 balance.",
 				})
 			}
 		}
