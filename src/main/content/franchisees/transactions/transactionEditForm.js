@@ -255,15 +255,6 @@ const styles1 = theme => ({
     },
 });
 
-let aTypes = [
-    {value: 82, label:'Advance Fee'},            {value: 81, label: 'Advance Interest'},
-    {value: 20, label: 'Advance to Franchisee'}, {value: 78, label: 'Child support'},
-    {value: 5, label: 'Equipment Rental'},       {value: 6, label: 'Franchisee Note'},
-    {value: 18, label: 'Franchisee Supplies'},   {value: 79, label: 'Garnishment'},
-    {value: 80, label: 'Levy'},                  {value: 14, label: 'Misc. R. O.'},
-    {value: 7, label: 'Negative Due Roll-Due'},  {value: 51, label: 'Negative Dues'},
-    {value: 90, label: 'Purchase from Office'},  {value: 72, label: 'Tax Credit'}
-];
 
 function MySnackbarContent(props) {
     const { classes, className, message, onClose, variant, ...other } = props;
@@ -323,7 +314,7 @@ class TransactionEditForm extends Component {
         taxExempt: false,
         bAlertNewTransaction: false,
         buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval,
-        transactionType: {label: 'Advance Fee', value:82},
+        transactionType: {label: 'Advance Fee', value:'5c41272c4d275d4560e90fa3'},
         transactionFrequency: "single",
         reSell: false,
         quantity: 1,
@@ -425,7 +416,7 @@ class TransactionEditForm extends Component {
                 this.setState({selectedFranchisee: null});
                 this.setState({value: ''});
                 this.setState({franchiseeNo: ''});
-                this.setState({transactionType: {label: 'Advance Fee', value:82}});
+                this.setState({transactionType: {label: 'Advance Fee', value:'5c41272c4d275d4560e90fa3'}});
                 this.setState({transactionFrequency: "single"});
                 this.setState({reSell: false});
                 this.setState({quantity: 1});
@@ -462,14 +453,14 @@ class TransactionEditForm extends Component {
                 this.setState({unitPrice: parseFloat(trxDetail.TrxItemAmount)});
 
                 let tax = parseFloat(trxDetail.TrxTax);
-                if(parseInt(trxDetail.TrxType)!==18) tax = 0.00;
+                if(trxDetail.TrxType!=='5c41272c4d275d4560e90fb9') tax = 0.00;
 
                 this.setState({tax: tax});
                 this.setState({quantity: parseFloat(trxDetail.quantity)});
                 this.setState({total: parseFloat(trxDetail.TrxExtendedPrice)+ tax});
                 this.setState({TransactionDate: moment(trxDetail.TrxDate)});
 
-                let trxType = aTypes.filter(f=>f.value === parseInt(trxDetail.Trxtype));
+                let trxType = this.props.transactionTypeList.filter(f=>f.value === parseInt(trxDetail.Trxtype));
 
                 if(trxType.length)
                     this.setState({transactionType: trxType[0]});
@@ -521,7 +512,7 @@ class TransactionEditForm extends Component {
 
         if(quantity>0 && unitPrice>0) {
             let tax = quantity * unitPrice*0.085;
-            if(this.state.transactionType.value!==18) tax = 0.0;
+            if(this.state.transactionType.value!=='5c41272c4d275d4560e90fb9') tax = 0.0;
 
             let line_total = parseFloat(quantity * unitPrice+tax);
             this.setState({subTotal: parseFloat(quantity * unitPrice)});
@@ -536,6 +527,7 @@ class TransactionEditForm extends Component {
     };
 
     addNewTransaction = () => {
+        let tTypeTaxValue = '5c41272c4d275d4560e90fb9';
         let result = {
             Trx_no: this.state.TransactionNo,
             RegionId: this.props.regionId,
@@ -558,10 +550,10 @@ class TransactionEditForm extends Component {
             Description: this.state.transactionDescription,
             TrxDate: this.state.TransactionDate,
 
-            VendorValue: this.state.transactionType.value===18 && this.props.vendor!==null ? this.props.vendor.vendor.value: '', //vendor, vendor_no, vendorDate
-            VendorLabel: this.state.transactionType.value===18 && this.props.vendor!==null ? this.props.vendor.vendor.label: '', //vendor, vendor_no, vendorDate
-            VendorNo: this.state.transactionType.value===18 && this.props.vendor!==null ? this.props.vendor.vendor_no : '',
-            VendorDate: this.state.transactionType.value===18 && this.props.vendor!==null ? moment(this.props.vendor.vendorDate) : moment(),
+            VendorValue: this.state.transactionType.value===tTypeTaxValue && this.props.vendor!==null ? this.props.vendor.vendor.value: '', //vendor, vendor_no, vendorDate
+            VendorLabel: this.state.transactionType.value===tTypeTaxValue && this.props.vendor!==null ? this.props.vendor.vendor.label: '', //vendor, vendor_no, vendorDate
+            VendorNo: this.state.transactionType.value===tTypeTaxValue && this.props.vendor!==null ? this.props.vendor.vendor_no : '',
+            VendorDate: this.state.transactionType.value===tTypeTaxValue && this.props.vendor!==null ? moment(this.props.vendor.vendorDate) : moment(),
             NumberOfPayments: this.state.payments,
             StartDate: this.state.startDate,
             BilledPayment: this.state.billedPayments,
@@ -652,7 +644,7 @@ class TransactionEditForm extends Component {
     handleTransactionTypeChange = (newValue)=> {
         this.setState({transactionType: newValue});
 
-        if(newValue.value===18)
+        if(newValue.value==='5c41272c4d275d4560e90fb9')
             this.props.showVendorDialogBox();
     };
 
@@ -676,15 +668,13 @@ class TransactionEditForm extends Component {
         let bReadonly = false;
         if(this.props.transactionForm.type === 'new') bReadonly = true;
 
-        var aTypes0 = [
-            {value: 82, label:'Advance Fee'},            {value: 81, label: 'Advance Interest'},
-            {value: 20, label: 'Advance to Franchisee'}, {value: 78, label: 'Child support'},
-            {value: 5, label: 'Equipment Rental'},       {value: 6, label: 'Franchisee Note'},
-            {value: 18, label: 'Franchisee Supplies'},   {value: 79, label: 'Garnishment'},
-            {value: 80, label: 'Levy'},                  {value: 14, label: 'Misc. R. O.'},
-            {value: 7, label: 'Negative Due Roll-Due'},  {value: 51, label: 'Negative Dues'},
-            {value: 90, label: 'Purchase from Office'},  {value: 72, label: 'Tax Credit'}
-        ];
+        var aTypes0 = this.props.transactionTypeList.map(t=>{
+            return {value: t._id, label: t.Name}
+        });
+
+
+
+        console.log(aTypes0);
 
         const components = {
             Control,
@@ -989,7 +979,7 @@ class TransactionEditForm extends Component {
                                 required
                             />
                         </div>
-                        {this.state.transactionType.value===18 && this.props.transactionForm.vendor!==null && ( // Franchisee Supplies
+                        {this.state.transactionType.value==='5c41272c4d275d4560e90fb9' && this.props.transactionForm.vendor!==null && ( // Franchisee Supplies
                             <Grid container className={classNames(classes.formControl, "mb-0 p-0")} >
                                 <GridItem xs={12} sm={12} md={12} className="flex flex-1 flex-row pt-16 w-full items-center no-padding">
                                     <TextField
@@ -1277,6 +1267,7 @@ function mapStateToProps({transactions, auth})
         regionId: auth.login.defaultRegionId,
         trxRowInfo: transactions.transactionForm.trxRowInfo,
         transactionDetail: transactions.transactionDetail,
+        transactionTypeList: transactions.transactionTypeList
     }
 }
 
