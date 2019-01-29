@@ -766,7 +766,8 @@ class PaymentsListContent extends Component {
 					// 	selection = [...selection, tableRow.rowId]
 					// }
 					// this.changeSelection(selection)
-					this.changeSelection([tableRow.rowId])
+					if (!selected)
+						this.changeSelection([tableRow.rowId])
 				}
 				prevent = false;
 			}, delay);
