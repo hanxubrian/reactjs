@@ -24,6 +24,7 @@ import classNames from 'classnames';
 //Custom components
 import TransactionEditForm from './transactionEditForm'
 import TransactionDxGridLists from './transactionDxGridLists';
+import TransactionSummary from './transactionSummary';
 
 import _ from "lodash";
 
@@ -154,6 +155,7 @@ class TransactionsApp extends Component {
         super(props);
 
         if(!props.bLoadedTransactions) {
+            props.getFranchiseeTransactionTypeLists(props.regionId);
             props.getTransactions(props.regionId);
         }
 
@@ -378,10 +380,6 @@ class TransactionsApp extends Component {
                                                     New Transaction
                                                     <Icon className={classes.rightIcon}>add</Icon>
                                                 </Button>
-                                                {/*<Fab color="secondary" aria-label="add"*/}
-                                                {/*className={classNames(classes.sideButton, "mr-12")} onClick={() => this.onNewTransaction()}>*/}
-                                                {/*<Icon>add</Icon>*/}
-                                                {/*</Fab>*/}
                                             </FuseAnimate>
                                         </div>
                                     </div>
@@ -465,6 +463,10 @@ class TransactionsApp extends Component {
                                     <TransactionDxGridLists data={this.state.temp}/>
                                 </div>
                             )}
+
+                            {transactionForm.props.open && (
+                                <TransactionSummary/>
+                            )}
                         </div>
                     }
                     onRef={instance => {
@@ -492,6 +494,7 @@ function mapDispatchToProps(dispatch)
         getFranchisees: Actions.getFranchisees,
         closeEditTransactionForm: Actions.closeEditTransactionForm,
         closeNewTransactionForm : Actions.closeNewTransactionForm,
+        getFranchiseeTransactionTypeLists : Actions.getFranchiseeTransactionTypeLists,
     }, dispatch);
 }
 

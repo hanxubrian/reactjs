@@ -67,8 +67,8 @@ class UserAvatar extends React.Component {
                 <div style={{margin: "auto" , textAlign: "center", marginTop: 20,marginBottom: 30, padding: 5}}>
                     {this.state.imageChoosed === false && (
                         <Avatar
-                            width={200}
-                            height={200}
+                            width={180}
+                            height={180}
                             onCrop={this.onCrop}
                             onClose={this.onClose}
                             label = {"Choose User Photo"}

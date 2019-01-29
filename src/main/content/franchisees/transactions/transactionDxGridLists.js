@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 
-// core components
+// Material-UI core components
 import {
-    Hidden, Icon, IconButton, Input, Paper, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
+    Icon, IconButton, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
 } from '@material-ui/core';
-import {fade} from '@material-ui/core/styles/colorManipulator';
 
 //DevExtreme React-Grid
 import {

@@ -184,7 +184,7 @@ class VendorDialogBox extends Component {
     state = {
         vendor_no: '',
         vendorDate: moment().format('YYYY-MM-DD'),
-        vendor: null
+        vendor: {value:'', label: ''}
     };
 
     componentDidUpdate(prevProps, prevState, snapshot){

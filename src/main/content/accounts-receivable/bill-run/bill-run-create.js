@@ -424,7 +424,8 @@ class BillRunDialog extends Component {
                                 label="Invoice Description"
                                 multiline
                                 rows="1"
-                                defaultValue={this.state.desMSG}
+                                value={this.state.desMSG}
+
                                 margin="normal"
                                 variant="outlined"
                                 style={{width: "100%"}}

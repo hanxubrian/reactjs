@@ -438,6 +438,7 @@ class TransactionEditForm extends Component {
                 this.setState({billedPayments: 0});
                 this.setState({grossTotal: 0});
                 this.setState({startDate: moment()});
+                this.props.updateVendor({vendor: {value:'', label: ''}, vendor_no: '', vendorDate: moment().format('YYYY-MM-DD')});
             }
             else if(this.state.buttonOption===1) {
                 this.closeComposeForm();

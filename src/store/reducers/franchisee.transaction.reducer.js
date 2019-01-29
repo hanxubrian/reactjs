@@ -11,6 +11,7 @@ const initialState = {
     bOpenedTransactionFilterPanel: false,
     bTransactionsUpdated: false,
     transactionStatus:{checkedCompleted: true, checkedOpen: true},
+    transactionTypeList: null,
     transactionForm: {
         type : 'new',
         props: {
@@ -155,6 +156,13 @@ const transactions = function(state = initialState, action) {
                 ...state,
                 newTransaction: action.payload,
                 bTransactionsUpdated: true, bStartFetchTransactions: true
+            };
+        }
+        case Actions.GET_FRANCHISEE_TRANSACTION_TYPE_LIST:
+        {
+            return {
+                ...state,
+                transactionTypeList: action.payload
             };
         }
 
