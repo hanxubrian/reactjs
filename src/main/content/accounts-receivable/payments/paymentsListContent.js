@@ -364,15 +364,6 @@ class PaymentsListContent extends Component {
 			selection: this.props.activePaymentRows,
 			rows: this.getRowData(this.props.payments),
 			tableColumnExtensions: [
-				// {
-				//     title: "Payment ID",
-				//     name: "PaymentId",
-				//     columnName: "PaymentId",
-				//     width: 200,
-				//     sortingEnabled: true,
-				//     filteringEnabled: true,
-				//     groupingEnabled: false,
-				// },
 				{
 					title: "C.Name",
 					name: "CustomerNameNo",
@@ -383,26 +374,6 @@ class PaymentsListContent extends Component {
 					filteringEnabled: true,
 					groupingEnabled: true,
 				},
-				// {
-				// 	title: "C.Number",
-				// 	name: "CustomerNo",
-				// 	columnName: "CustomerNo",
-				// 	width: 120,
-				// 	wordWrapEnabled: true,
-				// 	sortingEnabled: true,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: true,
-				// },
-				// {
-				// 	title: "Check No",
-				// 	name: "CheckNo",
-				// 	columnName: 'CheckNo',
-				// 	width: 180,
-				// 	align: 'center',
-				// 	sortingEnabled: true,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: false,
-				// },
 				{
 					title: "Invoice No",
 					name: "InvoiceNo",
@@ -442,52 +413,6 @@ class PaymentsListContent extends Component {
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
-				// {
-				// 	title: "InvoiceBalance OR",
-				// 	name: "InvoiceBalanceOR",
-				// 	columnName: 'InvoiceBalanceOR',
-				// 	width: 150,
-				// 	align: 'center',
-				// 	sortingEnabled: true,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: false,
-				// },
-				// {
-				// 	title: "Payment Amount",
-				// 	name: "PaymentAmount",
-				// 	columnName: 'PaymentAmount',
-				// 	width: 140,
-				// 	align: 'right',
-				// 	wordWrapEnabled: true,
-				// 	sortingEnabled: true,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: false,
-
-				// },
-				// {
-				//     title: "Region Name",
-				//     name: "RegionName",
-				//     columnName: 'RegionName',
-				//     width: 120,
-				//     align: 'right',
-				//     wordWrapEnabled: true,
-				//     sortingEnabled: true,
-				//     filteringEnabled: true,
-				//     groupingEnabled: false,
-
-				// },
-				// {
-				// 	title: "Check Amount",
-				// 	name: "CheckAmount",
-				// 	columnName: 'CheckAmount',
-				// 	width: 140,
-				// 	align: 'right',
-				// 	wordWrapEnabled: true,
-				// 	sortingEnabled: true,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: false,
-
-				// },
 				{
 					title: "Invoice Date",
 					name: "InvoiceDate",
@@ -523,7 +448,7 @@ class PaymentsListContent extends Component {
 				},
 			],
 			sorting: [
-				{ columnName: 'CustomerNameNo', direction: 'asc' },
+				// { columnName: 'CustomerNameNo', direction: 'asc' },
 				{ columnName: 'DaysPastDue', direction: 'asc' },
 			],
 			editingColumnExtensions: [],
@@ -540,13 +465,10 @@ class PaymentsListContent extends Component {
 				'DueDate'
 			],
 			groupingColumns: [
-				// { columnName: 'CustomerName' },
-				// { columnName: 'CustomerNo' },
 				{ columnName: 'CustomerNameNo' },
-
 			],
 			expandedGroups: ['CustomerNameNo'],
-			pageSize: 20,
+			pageSize: 50,
 			pageSizes: [10, 20, 30, 50, 100],
 			amountFilterOperations: ['equal', 'notEqual', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual'],
 			searchValue: '',
@@ -572,16 +494,68 @@ class PaymentsListContent extends Component {
 		}
 	}
 
-	changeSelection = (selection) => {
+	changeSingleSelection = (selection) => {
 		if (selection.length > 1) selection = [selection[selection.length - 1]]
 		this.setState({ selection })
-		// let selectedRows = this.state.rows.filter((x, index) => { 
-		// 	x.id = index;
-		// 	return selection.indexOf(index) > -1 
-		// });
-		// console.log("selection", selectedRows)
 		this.props.setActivePaymentRows(selection)
 	}
+
+	changeSelection = (selection) => {
+
+		if (selection.length < 1) {
+			selection = []
+		} else {
+			const latestSelectionId = selection[selection.length - 1]
+			const { rows } = this.state
+			//
+			// get lastest selected row
+			//
+			console.log("rows", rows)
+			console.log("latestSelectionId", latestSelectionId)
+			let selectedLastRow = rows.filter((x, index) => x.id === latestSelectionId)
+			// let selectedLastRow = rows[latestSelectionId]
+			console.log("selectedLastRow", selectedLastRow)
+			if (selectedLastRow.length > 0) {
+				selectedLastRow = selectedLastRow[0]
+				console.log("selectedLastRow", selectedLastRow)
+				//
+				// get CustomerNameNo
+				//
+				const customerNameNo = selectedLastRow.CustomerNameNo
+				console.log("customerNameNo", customerNameNo)
+				selection = rows.filter(x => x.CustomerNameNo === customerNameNo).map((x, index) => x.id)
+				// selection = rows.filter(x => x.CustomerNameNo === customerNameNo).map((x, index) => index)
+				console.log("selection", selection)
+			}
+		}
+		this.setState({ selection })
+		this.props.setActivePaymentRows(selection)
+
+	}
+
+	onClickGroupCell = (ev, groupTitle) => {
+		console.log(groupTitle)
+		console.log(ev.target.checked)
+
+		const checked = ev.target.checked
+
+		if (!checked) {
+			this.setState({ selections: [] })
+			this.props.setActivePaymentRows([])
+		} else {
+
+			const { rows } = this.state
+			const groupRows = rows.filter(x => x.CustomerNameNo === groupTitle);
+			console.log("groupRows", groupRows)
+			let selections = groupRows.map(x => rows.indexOf(x))
+			console.log("selections", selections)
+
+			this.setState({ selections })
+			this.props.setActivePaymentRows(selections)
+		}
+		ev.stopPropagation();
+	}
+
 	//
 	// to edit table cell
 	//
@@ -691,6 +665,7 @@ class PaymentsListContent extends Component {
 		const temp = this.getRowData(this.props.payments).filter(d => {
 			return (d.CheckNo && d.CheckNo.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.CustomerName && d.CustomerName.toString().toLowerCase().indexOf(val) !== -1) ||
+				(d.CustomerNameNo && d.CustomerNameNo.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.CustomerNo && d.CustomerNo.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.InvoiceNo && d.InvoiceNo.toString().toLowerCase().indexOf(val) !== -1)
 		});
@@ -757,7 +732,7 @@ class PaymentsListContent extends Component {
 		const handleClick = () => {
 			timer = setTimeout(() => {
 				if (!prevent) {
-					onToggle();
+					// onToggle();
 					// let selection = [...this.state.selection];
 					// let rowIndexInSelection = selection.indexOf(tableRow.rowId)
 					// if (selected) {
@@ -766,8 +741,12 @@ class PaymentsListContent extends Component {
 					// 	selection = [...selection, tableRow.rowId]
 					// }
 					// this.changeSelection(selection)
-					if (!selected)
+					console.log("tableRow", tableRow)
+					if (!selected) {
 						this.changeSelection([tableRow.rowId])
+					} else {
+						this.changeSelection([])
+					}
 				}
 				prevent = false;
 			}, delay);
@@ -805,14 +784,12 @@ class PaymentsListContent extends Component {
 	GroupCellContent = ({ column, row }) => (
 		<span>
 			{/* {column.title} */}
-			<Checkbox onClick={this.onClickGroupCell}></Checkbox>
+			<Checkbox onClick={(ev) => this.onClickGroupCell(ev, row.value)}></Checkbox>
 			<strong>{row.value}</strong>
 		</span>
 	);
 
-	onClickGroupCell = (ev) => {
-		ev.stopPropagation();
-	}
+
 
 	render() {
 		const { classes } = this.props;
@@ -846,7 +823,7 @@ class PaymentsListContent extends Component {
 							<DragDropProvider />
 							<PagingState
 								defaultCurrentPage={0}
-								defaultPageSize={20}
+								defaultPageSize={50}
 							/>
 
 							<PagingPanel pageSizes={pageSizes} />
@@ -921,7 +898,8 @@ class PaymentsListContent extends Component {
 
 							<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
 
-							<TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
+							{/* <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} /> */}
+							<TableSelection highlightRow rowComponent={this.TableRow} />
 
 							<TableHeaderRow showSortingControls />
 

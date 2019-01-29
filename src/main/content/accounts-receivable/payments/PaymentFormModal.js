@@ -79,7 +79,7 @@ const styles = theme => ({
 			background: ' #3d6d8a',
 		},
 		'& .react-grid-Canvas, .react-grid-Grid': {
-			background: '#272727',
+			background: '#7b7b7b',
 		}
 	},
 	button: {
