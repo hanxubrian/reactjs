@@ -183,23 +183,24 @@ const styles = theme => ({
 
 class MainToolbar extends Component {
     state = {
-        userMenu                : null,
-        region                  : -1,
-        open                    : false,
-        notification            : false,
-        messages                : null,
-        contacts                : null,
-        chatUser                : null,
-        chatMSG                 : null,
-        unreadMSGnum            : 0,
-        chatpanelshowstatus     : null,
-        value                   : 0,
-        pusherMSG               : null,
-        pusherMSGList           : [],
-        pusherMSGtime           : null,
-        systeunread             : 0,
-        chatunread              : 0,
-        sysflage                : false,
+        userMenu                    : null,
+        region                      : -1,
+        open                        : false,
+        notification                : false,
+        messages                    : null,
+        contacts                    : null,
+        chatUser                    : null,
+        chatMSG                     : null,
+        unreadMSGnum                : 0,
+        chatpanelshowstatus         : null,
+        value                       : 0,
+        pusherMSG                   : null,
+        pusherMSGList               : [],
+        pusherMSGtime               : null,
+        systeunread                 : 0,
+        chatunread                  : 0,
+        sysflage                    : false,
+        sysnotificationSeletedID    : null,
 
     };
 
@@ -264,6 +265,7 @@ class MainToolbar extends Component {
 
         if(this.state.pusherMSG !== prevState.pusherMSG ){
             if(this.state.pusherMSG.user === this.props.login.UserId.toString()){
+                console.log("pusherMSG-createM",this.state.pusherMSG);
                 let PusherList =[];
                 let settime = moment();
                 let unreadNum = this.state.unreadMSGnum;
@@ -399,7 +401,8 @@ class MainToolbar extends Component {
         this.setState({value});
     };
     systemitemnotification =(e)=>{
-        alert("SYSNOT"+e);
+        // alert("SYSNOT"+e);
+        this.props.history.push('/'+e);
     }
     render()
     {
@@ -619,7 +622,7 @@ class MainToolbar extends Component {
                                             this.state.pusherMSGList.map((item,index)=>{
                                                 return (
                                                 <div key={index} >
-                                                    <ListItem button style ={{height:'55px'}} >
+                                                    <ListItem button key={item._id} onClick={()=>{this.setState({sysnotificationSeletedID:item._id});this.systemitemnotification(item._id)}} style ={{height:'55px'}} >
                                                         <React.Fragment>
                                                             <div style ={{height:'40px'}} style={{textAlign: '-webkit-center'}}>
                                                                 <Avatar className={classes.avatarresize} alt={this.props.login.firstName + this.props.login.lastName} src ={this.props.login.profilePhoto} />

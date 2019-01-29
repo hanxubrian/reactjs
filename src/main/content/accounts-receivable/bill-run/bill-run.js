@@ -457,7 +457,7 @@ class BillRun extends Component {
                             <div className="flex flex-shrink items-center">
                                 <div className="flex items-center">
                                     <FuseAnimate animation="transition.expandIn" delay={300}>
-                                        <Icon className="text-32 mr-12">account_box</Icon>
+                                        <Icon className="text-32 mr-12">payment</Icon>
                                     </FuseAnimate>
                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                         <Typography variant="h6" className="hidden sm:flex">Accounts Receivable | Bill Run</Typography>
@@ -695,18 +695,6 @@ class BillRun extends Component {
                                             ),
                                             columns: [
                                                 {
-                                                    Header: "Bill Run #",
-                                                    accessor: "BillRunNo",
-                                                    filterAll: true,
-                                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center p-24")
-                                                },
-                                                {
-                                                    Header: "Description",
-                                                    accessor: "InvoiceDescription",
-                                                    width: 560,
-                                                    className: classNames("flex items-center  justify-start p-12-impor p-24")
-                                                },
-                                                {
                                                     Header: "Period",
                                                     id: "Period",
                                                     accessor: d => moment(d.InvoiceDate).format('MM/YYYY'),
@@ -715,6 +703,19 @@ class BillRun extends Component {
                                                         return((row.original.Month).toString().padStart(2, "0")+"/"+row.original.Year);
                                                     }
                                                 },
+                                                // {
+                                                //     Header: "Bill Run #",
+                                                //     accessor: "BillRunNo",
+                                                //     filterAll: true,
+                                                //     className: classNames(classes.tableTdEven, "flex items-center  justify-center p-24")
+                                                // },
+                                                {
+                                                    Header: "Description",
+                                                    accessor: "InvoiceDescription",
+                                                    width: 560,
+                                                    className: classNames("flex items-center  justify-start p-12-impor p-24")
+                                                },
+
                                                 {
                                                     Header: "Create Date",
                                                     id: "InvoiceDate",

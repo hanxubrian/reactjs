@@ -40,6 +40,7 @@ import {
 import {
     Grid,
     Table,
+    VirtualTable,
     TableHeaderRow,
     TableSelection,
     GroupingPanel,
@@ -812,6 +813,16 @@ class PaymentLockBoxContentList extends Component {
                             />
                             <Table rowComponent={this.TableRow} />
 
+                            <VirtualTable height='auto'
+                                          noDataCellComponent={
+                                              ({ colSpan }) => (
+                                                  <td colSpan={colSpan} style={{ textAlign: 'center' }}>
+                                                      <big className="TableNoDataCell">{this.props.NoDataString}</big>
+                                                  </td>
+                                              )
+                                          }
+                                          columnExtensions={tableColumnExtensions}
+                            />
                             <TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
 
                             {/*<TableSelection  highlightRow rowComponent={this.TableRow} />*/}
