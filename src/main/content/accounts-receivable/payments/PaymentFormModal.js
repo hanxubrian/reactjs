@@ -594,11 +594,11 @@ class PaymentFormModal extends React.Component {
 
 			const rows = state.rows.slice();
 			for (let i = 0; i < rows.length; i++) {
-				let invAmount = parseFloat(`0${rows[i].InvoiceAmount}`)
+				let invBalance = parseFloat(`0${rows[i].InvoiceBalance}`)
 
-				if (invAmount <= floatPaymentAmount) {
-					rows[i] = { ...rows[i], PaymentAmount: invAmount };
-					floatPaymentAmount = floatPaymentAmount - invAmount
+				if (invBalance <= floatPaymentAmount) {
+					rows[i] = { ...rows[i], PaymentAmount: invBalance };
+					floatPaymentAmount = floatPaymentAmount - invBalance
 				} else {
 					rows[i] = { ...rows[i], PaymentAmount: floatPaymentAmount };
 					floatPaymentAmount = 0
