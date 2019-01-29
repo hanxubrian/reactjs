@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 // core components
-import { Icon, IconButton, Input, Paper, Button, Zoom } from '@material-ui/core';
+import { Icon, IconButton, Input, Paper, Button, Zoom, Checkbox } from '@material-ui/core';
 
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
@@ -805,9 +805,14 @@ class PaymentsListContent extends Component {
 	GroupCellContent = ({ column, row }) => (
 		<span>
 			{/* {column.title} */}
+			<Checkbox onClick={this.onClickGroupCell}></Checkbox>
 			<strong>{row.value}</strong>
 		</span>
 	);
+
+	onClickGroupCell = (ev) => {
+		ev.stopPropagation();
+	}
 
 	render() {
 		const { classes } = this.props;

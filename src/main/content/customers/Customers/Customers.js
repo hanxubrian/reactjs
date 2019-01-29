@@ -43,6 +43,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+import CustomerSearchBar from './CustomerSearchBar';
+
 const headerHeight = 80;
 
 const hexToRgb = (hex) => {
@@ -582,14 +584,14 @@ class Customers extends Component {
 												open={Boolean(anchorEl)}
 												onClose={this.closeValidationMenu}
 											>
-												<MenuItem><FormControlLabel control={<Checkbox checked={true} style={{color:'#07df07'}} />} label="Company Information" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={false} style={{color:'#07df07'}} />} label="Billing Address" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={false} style={{color:'#07df07'}} />} label="Billing Settings" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={false} style={{color:'#07df07'}} />} label="Company Contacts" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={true} style={{color:'#07df07'}} />} label="Contract Details" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={false} style={{color:'#07df07'}} />} label="Contract Signed" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={true} style={{color:'#07df07'}} />} label="Service Location Info" /></MenuItem>
-												<MenuItem><FormControlLabel control={<Checkbox checked={true} style={{color:'#07df07'}} />} label="Verified &amp; Approved" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={true} style={{ color: '#07df07' }} />} label="Company Information" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={false} style={{ color: '#07df07' }} />} label="Billing Address" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={false} style={{ color: '#07df07' }} />} label="Billing Settings" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={false} style={{ color: '#07df07' }} />} label="Company Contacts" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={true} style={{ color: '#07df07' }} />} label="Contract Details" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={false} style={{ color: '#07df07' }} />} label="Contract Signed" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={true} style={{ color: '#07df07' }} />} label="Service Location Info" /></MenuItem>
+												<MenuItem><FormControlLabel control={<Checkbox checked={true} style={{ color: '#07df07' }} />} label="Verified &amp; Approved" /></MenuItem>
 											</Menu>
 											<Tooltip title="Save">
 												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
@@ -656,41 +658,38 @@ class Customers extends Component {
 					}
 					content={
 						<div className="flex-1 flex-col absolute w-full h-full">
+							<div className={classNames("flex flex-col h-full")}>
+								<DialogEmailToCustomer />
 
-							<DialogEmailToCustomer />
-
-							{/* 
+								{/* 
 							Confirm Dialog for submitting
 							 */}
-							<Dialog
-								open={this.state.isSubmittingForApproval}
-								onClose={this.handleCloseConfirmDialog}
-								aria-labelledby="alert-dialog-title"
-								aria-describedby="alert-dialog-description"
-							>
-								<DialogTitle id="alert-dialog-title">{"You are submitting customer data for approval."}</DialogTitle>
-								<DialogContent>
-									<DialogContentText id="alert-dialog-description">There are still some incompleted items. Are you sure to sumit anyway?</DialogContentText>
-								</DialogContent>
-								<DialogActions>
-									<Button onClick={this.handleCloseConfirmDialog} color="primary">No</Button>
-									<Button onClick={this.submitForApproval} color="primary" autoFocus>Yes</Button>
-								</DialogActions>
-							</Dialog>
+								<Dialog
+									open={this.state.isSubmittingForApproval}
+									onClose={this.handleCloseConfirmDialog}
+									aria-labelledby="alert-dialog-title"
+									aria-describedby="alert-dialog-description"
+								>
+									<DialogTitle id="alert-dialog-title">{"You are submitting customer data for approval."}</DialogTitle>
+									<DialogContent>
+										<DialogContentText id="alert-dialog-description">There are still some incompleted items. Are you sure to sumit anyway?</DialogContentText>
+									</DialogContent>
+									<DialogActions>
+										<Button onClick={this.handleCloseConfirmDialog} color="primary">No</Button>
+										<Button onClick={this.submitForApproval} color="primary" autoFocus>Yes</Button>
+									</DialogActions>
+								</Dialog>
 
 
 
-							{this.state.temp && (
-								<Fragment>
-									{customerForm.props.open ?
-										(
-											<CustomerForm />
-										) :
-										(
-											<CustomerListContent />
-										)}
-								</Fragment>
-							)}
+								{this.state.temp && (
+									<Fragment>
+										{customerForm.props.open && <CustomerForm />}
+										{!customerForm.props.open && <CustomerSearchBar />}
+										{!customerForm.props.open && <CustomerListContent />}
+									</Fragment>
+								)}
+							</div>
 						</div>
 					}
 					leftSidebarHeader={
