@@ -247,11 +247,10 @@ class SigninPage extends Component {
 
                                 {this.props.app.hidden && (
                                     <div className="flex flex-col items-center justify-center pt-32 pb-24" hidden={this.props.app.hidden}>
-                                        <span className="font-medium">Closed for scheduled maintenance!</span>
-                                        <span className="font-medium" >Currently Upgrading...</span>
+                                        <span className="font-medium">We are working hard to make new features, revisions and updates available. </span>
                                         <br></br>
                                         <br></br>
-                                        <span className="font-medium" >Please check back later.</span>
+                                        <span className="font-medium" >Please check back later or wait for an email notification.</span>
                                     </div>
                                 )}
                                 {!this.props.app.hidden && (

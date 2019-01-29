@@ -39,7 +39,7 @@ function MainNavbarHeader({classes})
     return (
         <div className={classes.root}>
             <div className={classNames(classes.logo, "flex items-center")}>
-                <Typography className="text-24 ml-8 font-light logo-text" color="inherit">JaniKing Apps</Typography>
+                <Typography className="text-24 ml-8 font-light logo-text" color="inherit">Jani-King Apps</Typography>
             </div>
         </div>
     );

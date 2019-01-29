@@ -1218,27 +1218,6 @@ class TransactionForm extends Component {
                             message={this.state.snackMessage}
                         />
                     </Snackbar>
-                    <Dialog
-                        open={this.state.bAlertNewTransaction}
-                        onClose={()=>this.handleCloseNewTransaction()}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                    >
-                        <DialogTitle id="alert-dialog-title">{"Create New Transaction"}</DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                                Proceed to create new transaction?
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={()=>this.handleCloseNewTransaction()} color="primary">
-                                Close
-                            </Button>
-                            <Button onClick={()=>this.addNewTransaction()} color="primary" autoFocus>
-                                Create
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
                     <VendorDialogBox />
                 </div>
             </FuseAnimate>
