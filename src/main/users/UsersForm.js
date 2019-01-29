@@ -9,7 +9,7 @@ import GridContainer from "../../Commons/Grid/GridContainer";
 import GridItem from "../../Commons/Grid/GridItem";
 import UserAvatar from"./UserAvatar"
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
-import UsersPermission from "./store/UsersPermission";
+import UsersPermission from "./UsersPermission";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Select from "@material-ui/core/Select/Select";
