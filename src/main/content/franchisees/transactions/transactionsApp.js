@@ -22,9 +22,7 @@ import classNames from 'classnames';
 // import TransactionLists from './FranchiseeLists';
 
 //Custom components
-import TransactionForm from './transactionForm'
 import TransactionEditForm from './transactionEditForm'
-import TransactionDetail from './transactionDetail'
 import TransactionDxGridLists from './transactionDxGridLists';
 
 import _ from "lodash";
@@ -467,13 +465,6 @@ class TransactionsApp extends Component {
                                     <TransactionDxGridLists data={this.state.temp}/>
                                 </div>
                             )}
-                            {/*{(this.state.temp && transactionForm.props.open && transactionForm.type==='new' ) && (*/}
-                                {/*<TransactionForm franchisees={this.state.franchisees} selectedTransaction={this.state.selectedTransaction}/>*/}
-                            {/*)}*/}
-
-                            {/*{(this.state.temp && transactionForm.props.open && transactionForm.type==='edit') && (*/}
-                            {/*<TransactionDetail />*/}
-                            {/*)}*/}
                         </div>
                     }
                     onRef={instance => {

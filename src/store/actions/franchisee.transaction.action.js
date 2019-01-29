@@ -16,6 +16,7 @@ export const UPDATE_TRANSACTION_VENDOR = '[FRANCHISEE-TRANSACTION] UPDATE TRANSA
 export const CREATE_NEW_TRANSACTION = '[FRANCHISEE-TRANSACTION] CREATE NEW TRANSACTION';
 export const GET_TRANSACTION_DETAIL = '[FRANCHISEE-TRANSACTION] GET TRANSACTION DETAIL';
 export const RESET_TRANSACTION_FORM = '[FRANCHISEE-TRANSACTION] RESET TRANSACTION FORM';
+export const UPDATE_A_FRANCHISEE_TRANSACTION = '[FRANCHISEE-TRANSACTION] UPDATE A FRANCHISEE TRANSACTION';
 
 export function getTransactions(regionId) {
     return (dispatch) => {
@@ -181,3 +182,25 @@ export function resetTransactionForm() {
     }
 }
 
+/**
+ * update a franchisee transaction
+ * @param id
+ * @param regionId
+ * @param data
+ * @returns {Function}
+ */
+export function updateFranchiseeTransaction(id, regionId, data) {
+    return (dispatch) => {
+        (async () => {
+            let res = await franchiseesService.updateFranchiseeTransaction(id, regionId, data);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: UPDATE_A_FRANCHISEE_TRANSACTION,
+                    payload: res.Data
+                });
+            } else {
+
+            }
+        })();
+    };
+}
