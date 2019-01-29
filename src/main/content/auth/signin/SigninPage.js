@@ -47,7 +47,8 @@ class SigninPage extends Component {
         remember: true,
         alertOpen: false,
         commandKeyPressed: false,
-        url: window.location.host.split(':')[0]
+        url: window.location.host.split(':')[0],
+        hidden: null
     };
 
     componentDidMount() {
@@ -142,7 +143,9 @@ class SigninPage extends Component {
             <div style={{ background: styles.root.background, backgroundSize: styles.root.backgroundSize, backgroundRepeat: styles.root.backgroundRepeat }} className={classNames(classes.root, "flex flex-col flex-auto flex-no-shrink items-center justify-center p-32")}>
 
              <VideoCover style= {{ position: styles.overlay.position, opacity: styles.overlay.opacity }}
-                                videoOptions={videoOptions} />
+                                videoOptions={videoOptions}
+                                hidden={this.props.app.hidden}
+                                />
 
                 {this.props.login.bLoginStart && (
                     <div className={classes.overlay}>
@@ -179,7 +182,7 @@ class SigninPage extends Component {
 
                                 <img className="w-128 mt-16" style={{ width: '280px' }} src={this.props.app.loginLogo} alt="logo"/>
 
-                                <Typography variant="h6" className="mt-16 mb-32">Sign in to your account</Typography>
+                                <Typography variant="h6" className="mt-16 mb-32" hidden={this.props.app.hidden}>Sign in to your account</Typography>
 
                                 <form name="loginForm" noValidate className="flex flex-col justify-center w-full">
 
@@ -195,6 +198,7 @@ class SigninPage extends Component {
                                         required
                                         fullWidth
                                         margin="normal"
+                                        hidden={this.props.app.hidden}
                                     />
 
                                     <TextField
@@ -208,6 +212,7 @@ class SigninPage extends Component {
                                         required
                                         fullWidth
                                         margin="normal"
+                                        hidden={this.props.app.hidden}
                                     />
 
                                     <div className="flex items-center justify-between">
@@ -221,10 +226,11 @@ class SigninPage extends Component {
                                                         onChange={this.handleChange}/>
                                                 }
                                                 label="Remember Me"
+                                                hidden={this.props.app.hidden}
                                             />
                                         </FormControl>
 
-                                        <Link className="font-medium" to="/auth/forgot-password">
+                                        <Link className="font-medium" to="/auth/forgot-password" hidden={this.props.app.hidden}>
                                             Forgot Password?
                                         </Link>
                                     </div>
@@ -232,19 +238,31 @@ class SigninPage extends Component {
                                     <Button variant="contained" color="primary" className="w-224 mx-auto mt-16 w-full" aria-label="LOG IN"
                                             // disabled={!this.canBeSubmitted()}
                                             onClick={this.onLogin || this.handleDocumentKeyDown}
+                                            hidden={this.props.app.hidden}
                                     >
                                         SIGN IN
                                     </Button>
 
                                 </form>
 
-                                <div className="flex flex-col items-center justify-center pt-32 pb-24">
-                                    <span className="font-medium">Don't have an account?</span>
-                                    <Link className="font-medium" to="/auth/register">Register a account</Link>
-                                    <br></br>
-                                    <br></br>
-                                    <span className="font-small">Copyright: {this.props.app.copyRight}</span>
-                                </div>
+                                {this.props.app.hidden && (
+                                    <div className="flex flex-col items-center justify-center pt-32 pb-24" hidden={this.props.app.hidden}>
+                                        <span className="font-medium">Closed for scheduled maintenance!</span>
+                                        <span className="font-medium" >Currently Upgrading...</span>
+                                        <br></br>
+                                        <br></br>
+                                        <span className="font-medium" >Please check back later.</span>
+                                    </div>
+                                )}
+                                {!this.props.app.hidden && (
+                                    <div className="flex flex-col items-center justify-center pt-32 pb-24" hidden={this.props.app.hidden}>
+                                        <span className="font-medium">Don't have an account?</span>
+                                        <Link className="font-medium" to="/auth/register">Register a account</Link>
+                                        <br></br>
+                                        <br></br>
+                                        <span className="font-small">Copyright: {this.props.app.copyRight}</span>
+                                    </div>
+                                )}
 
                             </CardContent>
                         </Card>

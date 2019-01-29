@@ -2122,7 +2122,7 @@ class LeaseListContent extends Component {
 										grouping={[
 											{columnName: 'FranchiseeNameNo'}
 										]}
-										expandedGroups={[expandedGroups[0]]}
+										expandedGroups={expandedGroups}
 										onExpandedGroupsChange={this.expandedGroupsChange}
 									/>
 									<IntegratedGrouping />
