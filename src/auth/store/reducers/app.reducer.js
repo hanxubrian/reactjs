@@ -30,7 +30,8 @@ const app = function (state = initialState, action) {
                     } else {
                         return {
                             loginLogo: action.payload.Settings.local.devices[0].assets.loginLogo,
-                            hidden: 'hidden'
+                            hidden: 'hidden',
+                            loginVideoBackground: 'https://res.cloudinary.com/janiking/video/upload/v1548791261/apps/web/WorkingHard.mp4'
                         }
                     }
                 }
