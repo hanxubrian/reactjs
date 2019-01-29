@@ -25,6 +25,12 @@ const initialState = {
 	isStartedPaymentsCreated: false,
 	paymentsCreated: [],
 	NoDataString: "Empty Data",
+
+	errorInfo: {
+		show: false,
+		title: "",
+		message: "",
+	}
 };
 
 
@@ -97,6 +103,13 @@ const accountReceivablePayments = function (state = initialState, action) {
 		case Actions.SET_ACTIVE_PAYMENT_ROWS:
 			return {
 				...state, activePaymentRows: action.payload
+			}
+		//
+		// SHOW ERROR DIALOG
+		//
+		case Actions.SHOW_ERROR_DIALOG:
+			return {
+				...state, errorInfo: action.payload
 			}
 		case UserActions.USER_LOGGED_OUT:
 			return {

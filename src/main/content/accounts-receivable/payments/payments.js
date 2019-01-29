@@ -229,7 +229,7 @@ class Payments extends Component {
 		value: '',
 		selectedInvoice: null,
 
-		showNoSelectionAlertDialog: false,
+		showAlertDialog: false,
 
 	};
 
@@ -334,6 +334,12 @@ class Payments extends Component {
 			this.props.getCustomers(regionId);
 			this.props.getFranchisees(regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText);
 		}
+
+		this.setState({
+			alertTitle: this.props.errorInfo.title,
+			alertContent: this.props.errorInfo.message,
+			showAlertDialog: this.props.errorInfo.show,
+		})
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -361,6 +367,13 @@ class Payments extends Component {
 			this.setState({ franchisees: nextProps.franchisees.Data.Region[0].FranchiseeList });
 		}
 
+		if (JSON.stringify(this.props.errorInfo) !== JSON.stringify(nextProps.errorInfo)) {
+			this.setState({
+				alertTitle: nextProps.errorInfo.title,
+				alertContent: nextProps.errorInfo.message,
+				showAlertDialog: nextProps.errorInfo.show,
+			})
+		}
 	}
 
 	getInvoicesFromStatus = (rawData = this.props.invoices) => {
@@ -428,29 +441,49 @@ class Payments extends Component {
 		}
 	};
 
-	handleCloseNoSelectionAlertDialog = () => {
-		this.setState({
-			showNoSelectionAlertDialog: false
+	handleCloseAlertDialog = () => {
+		this.props.showErrorDialog({
+			show: false,
+			title: "",
+			message: "",
 		})
 	}
 
 	showPaymentFormModal = () => {
 		console.log("this.props.activePaymentRows.length", this.props.activePaymentRows)
 		if (this.props.activePaymentRows.length > 100) {
-			this.setState({
-				showNoSelectionAlertDialog: true,
-				alertTitle: "Warning",
-				alertContent: "Too many rows selected. Please try to reduce them."
+			this.props.showErrorDialog({
+				show: true,
+				title: "Warning",
+				message: "Too many rows selected. Please try to reduce them.",
+			})
+		} else if (this.props.activePaymentRows.length === 1 && parseFloat(this.getRowData(this.props.payments)[this.props.activePaymentRows].InvoiceBalance) === 0) {
+			this.props.showErrorDialog({
+				show: true,
+				title: "Warning",
+				message: "The invoice balace is ZERO.",
 			})
 		} else if (this.props.activePaymentRows.length > 0) {
 			this.props.openPaymentDialog(true)
 		} else {
-			this.setState({
-				showNoSelectionAlertDialog: true,
-				alertTitle: "Warning",
-				alertContent: "Nothing selected for invoices. Please choose one at least."
+			this.props.showErrorDialog({
+				show: true,
+				title: "Warning",
+				message: "Nothing selected for invoices. Please choose one at least.",
 			})
 		}
+	}
+	getRowData(payments) {
+		if (!payments || payments.Regions === undefined || payments.Regions.length < 1)
+			return [];
+		let res = [...payments.Regions[0].Payments]
+
+		res.forEach(x => {
+			x.CustomerNameNo = `${x.CustomerName} - ${x.CustomerNo}`;
+		})
+		console.log("getRowData", res);
+
+		return res;
 	}
 	render() {
 		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState,
@@ -570,8 +603,8 @@ class Payments extends Component {
 						<div className="flex-1 flex-col absolute w-full h-full">
 							<div className={classNames("flex flex-col h-full")}>
 								<Dialog
-									open={this.state.showNoSelectionAlertDialog}
-									onClose={this.handleCloseNoSelectionAlertDialog}
+									open={this.state.showAlertDialog}
+									onClose={this.handleCloseAlertDialog}
 									aria-labelledby="alert-dialog-title"
 									aria-describedby="alert-dialog-description"
 								>
@@ -580,7 +613,7 @@ class Payments extends Component {
 										<DialogContentText id="alert-dialog-description">{this.state.alertContent}</DialogContentText>
 									</DialogContent>
 									<DialogActions>
-										<Button onClick={this.handleCloseNoSelectionAlertDialog} color="primary" autoFocus>OK</Button>
+										<Button onClick={this.handleCloseAlertDialog} color="primary" autoFocus>OK</Button>
 									</DialogActions>
 								</Dialog>
 
@@ -660,6 +693,8 @@ function mapDispatchToProps(dispatch) {
 		getFranchisees: Actions.getFranchisees,
 
 		openPaymentDialog: Actions.openPaymentDialog,
+		showErrorDialog: Actions.showErrorDialog,
+
 	}, dispatch);
 }
 
@@ -703,6 +738,9 @@ function mapStateToProps({ invoices, auth, customers, franchisees, accountReceiv
 
 		activePaymentRows: accountReceivablePayments.activePaymentRows,
 		isStartedPaymentsCreated: accountReceivablePayments.isStartedPaymentsCreated,
+
+		errorInfo: accountReceivablePayments.errorInfo,
+		payments: accountReceivablePayments.ACC_payments,
 	}
 }
 
