@@ -152,7 +152,7 @@ const styles = theme => ({
     }
 });
 
-
+const TabName =['Versioning','Account','Photos & Videos','Settings Panel'];
 class Admin extends Component {
     state = {
         s                       : '',
@@ -203,6 +203,7 @@ class Admin extends Component {
     {
         const {classes} = this.props;
         const { value } = this.state;
+
         return (
 
 
@@ -221,7 +222,7 @@ class Admin extends Component {
                                         <Icon className="text-32 mr-12">supervisor_account</Icon>
                                     </FuseAnimate>
                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                        <Typography variant="h6" className="hidden sm:flex">Admin | Versioning</Typography>
+                                        <Typography variant="h6" className="hidden sm:flex">Admin | {TabName[value]}</Typography>
                                     </FuseAnimate>
                                 </div>
                             </div>
@@ -284,7 +285,7 @@ class Admin extends Component {
                         )}
                         {value === 1 &&
                         (
-                            <VersionUpgradeDialog/>
+                            <div>test</div>
                         )}
                         {value === 2 && (
                             <div>Photos & Videos</div>

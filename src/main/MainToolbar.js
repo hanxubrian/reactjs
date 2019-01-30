@@ -233,6 +233,10 @@ class MainToolbar extends Component {
     };
 
     componentDidMount() {
+        console.log("this.props.getpusherNotificationDB",this.props.getpusherNotificationDB);
+        if(this.props.getpusherNotificationDB && this.props.getpusherNotificationDB !== null){
+            this.setState({pusherMSGList: this.props.getpusherNotificationDB});
+        }
         if(this.props.login.IsSuccess){
             this.setState({region: this.props.login.defaultRegionId});
         }
@@ -255,9 +259,15 @@ class MainToolbar extends Component {
         this.setState({notification: !this.state.notification});
     }
     componentDidUpdate(prevProps,prevState){
+        console.log("##################this.props.getpusherNotificationDB",this.props.getpusherNotificationDB);
+        console.log("##################this.state.pusherMSGList.length",this.state.pusherMSGList.length);
+
+        // if(this.props.getpusherNotificationDB && this.props.getpusherNotificationDB !== null && this.state.pusherMSGList.length ===0){
+        //     this.setState({pusherMSGList: this.props.getpusherNotificationDB});
+        // }
         let midflage = false;
         if(this.state.adminMSG && this.state.adminMSG !== null && this.state.adminMSG !== prevState.adminMSG){
-            console.log("this.state.adminMSG====================",this.state.adminMSG);
+            console.log("==================adminMSG====================",this.state.adminMSG);
             if(this.state.adminMSG.note && this.state.adminMSG.version){
                 this.setState({adminVersionStatus:true});
 
@@ -641,7 +651,7 @@ class MainToolbar extends Component {
                                             this.state.pusherMSGList.map((item,index)=>{
                                                 return (
                                                 <div key={index} >
-                                                    <ListItem button key={item._id} onClick={()=>{this.setState({sysnotificationSeletedID:item._id});this.systemitemnotification(item._id)}} style ={{height:'55px'}} >
+                                                    <ListItem button key={item._id} onClick={()=>{this.setState({sysnotificationSeletedID:item.id});this.systemitemnotification(item.id)}} style ={{height:'55px'}} >
                                                         <React.Fragment>
                                                             <div style ={{height:'40px'}} style={{textAlign: '-webkit-center'}}>
                                                                 <Avatar className={classes.avatarresize} alt={this.props.login.firstName + this.props.login.lastName} src ={this.props.login.profilePhoto} />
@@ -689,6 +699,13 @@ class MainToolbar extends Component {
                         note ={this.state.adminMSG.note}
                     />
                 )}
+                {/*{ true && (*/}
+                    {/*<VersionUpgradeDialog*/}
+                        {/*show={true}*/}
+                        {/*version={"1.0.2"}*/}
+                        {/*note ={"this is new version note this is new version notethis is new version notethis is new version note"}*/}
+                    {/*/>*/}
+                {/*)}*/}
 
                 {1 && (
 

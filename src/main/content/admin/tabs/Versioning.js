@@ -53,7 +53,9 @@ class VersioningTab extends Component {
     }
     componentDidUpdate(prevProps, prevState){
         if(this.state.postStatus !==prevState.postStatus && this.state.postStatus){
+            console.log("++++++++++++++++++++++postStatus",this.state.postStatus);
             this.versiontrigger();
+            this.setState({postStatus: false});
         }
         if(this.props.adminveriontrigger && this.props.adminveriontrigger !== null && this.props.adminveriontrigger !== prevProps.adminveriontrigger){
             console.log("########################this.props.adminveriontrigger",this.props.adminveriontrigger);
@@ -61,8 +63,10 @@ class VersioningTab extends Component {
     }
     componentWillUnmount(){
         this.setState({is_Mounted: false});
+        this.setState({postStatus: false});
     }
     handleVersionChange = event => {
+        console.log("this.state.version",this.state.version);
         this.setState({version:event.target.value});
     }
     handleNoteChange = event =>{
@@ -70,17 +74,20 @@ class VersioningTab extends Component {
 
     }
     postversionnotification=()=>{
+        console.log("PSOT");
+        console.log("postStatus==post",this.state.postStatus);
         this.setState({postStatus:true});
 
     }
     versiontrigger=()=>{
-        if(this.state.version && this.state.version  !== null && this.state.note && this.state.note !== null){
+        if(this.state.version  !== null && this.state.note && this.state.note !== null){
             let data ={
                 message     :this.state.note,
                 version     : this.state.version
             }
             this.props.adminversionupgradetrigger(data);
-            this.setState({postStatus: false});
+            console.log("OK");
+            // this.setState({postStatus: false});
         }
 
 
@@ -106,7 +113,6 @@ class VersioningTab extends Component {
     {
         const {classes} = this.props;
         const {is_Mounted,version,note} = this.state;
-
         if(is_Mounted)
         return (
             <div className={classNames(classes.root, "md:flex max-w-2xl")}>

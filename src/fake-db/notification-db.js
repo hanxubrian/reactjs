@@ -1,5 +1,17 @@
 import mock from './mock';
+import Pusher from 'pusher';
 
+var adminchannel = new Pusher({
+    appId: '698880',
+    key: 'ecf6a4e23b186efa2d44',
+    secret: '44ce060e1413c8aa227a',
+    cluster: 'us2',
+    encrypted: true
+});
+
+// mock.use(cors());
+// mock.use(bodyParser.urlencoded({extended: false}));
+// mock.use(bodyParser.json());
 const notificationDB = [
     {
         "_id": "5c4f9b72a0ccb01d3463ec15",
@@ -197,4 +209,9 @@ mock.onPost('/v1/api/notification').reply((config) => {
     const data = JSON.parse(config.data);
     const {user} = data;
     return [200, {IsSuccess:true ,Data:notificationDB}];
+});
+mock.onPost('/v1/api/admin/versionupgrade').reply((config) => {
+    const data = JSON.parse(config.data);
+    // let res = adminchannel.trigger('jk-admin-channel', 'on-admin', data);
+    return [200, {IsSuccess:true ,Data:data}];
 });

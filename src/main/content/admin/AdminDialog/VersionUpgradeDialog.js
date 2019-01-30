@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 //store
 import { withStyles } from '@material-ui/core/styles';
+import {Divider} from '@material-ui/core';
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
@@ -22,6 +23,7 @@ import Select from '@material-ui/core/Select';
 import Switch from '@material-ui/core/Switch';
 import * as Actions from "../../../chatPanel/store/actions";
 import * as authActions from "../../../../auth/store/actions/login.actions";
+import ReactPlayer from 'react-player';
 
 const styles = theme => ({
     form: {
@@ -77,8 +79,17 @@ class VersionUpgradeDialog extends React.Component {
                     onClose={this.handleClose}
                     aria-labelledby="max-width-dialog-title"
                 >
-                    <DialogTitle id="max-width-dialog-title">SYSTEM NOTIFICATION</DialogTitle>
+                    <DialogTitle id="max-width-dialog-title">SYSTEM NOTIFICATION <strong style={{
+                        color:"red",
+                        fontSize: "12px",
+                        background: "gray",
+                        marginLeft: "10px",
+                        borderRadius: "4px"}}>new</strong> <span style={{fontSize:"14px"}}>{this.props.version}</span></DialogTitle>
                     <DialogContent>
+                        <DialogContentText>
+                            <strong>Note:</strong>  <span style={{fontSize:"13px"}}>{this.props.note}</span>
+                        </DialogContentText>
+                        <Divider className="my-12"/>
                         <DialogContentText>
                             There is a new version({this.props.version}), click <strong>UPGRAGE</strong>  to log out and delete cache and log back in.
                         </DialogContentText>
@@ -92,6 +103,10 @@ class VersionUpgradeDialog extends React.Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
+                { 1 && (
+                    <ReactPlayer url='/assets/audios/versionupgrade.mp3' playing />
+                )}
+
             </React.Fragment>
         );
     }
