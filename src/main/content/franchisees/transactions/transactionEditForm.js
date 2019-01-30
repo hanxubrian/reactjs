@@ -460,7 +460,7 @@ class TransactionEditForm extends Component {
                 this.setState({total: parseFloat(trxDetail.TrxExtendedPrice)+ tax});
                 this.setState({TransactionDate: moment(trxDetail.TrxDate)});
 
-                let trxType = this.props.transactionTypeList.filter(f=>f.id === parseInt(trxDetail.Trxtype));
+                let trxType = this.props.transactionTypeList.filter(f=>f.value === parseInt(trxDetail.Trxtype));
 
                 if(trxType.length)
                     this.setState({transactionType: trxType[0]});
@@ -527,8 +527,6 @@ class TransactionEditForm extends Component {
     };
 
     addNewTransaction = () => {
-        console.log('id=', this.props.transactionDetail.Data._id);
-
         let tTypeTaxValue = '5c41272c4d275d4560e90fb9';
         let result = {
             Trx_no: this.state.TransactionNo,
@@ -599,8 +597,8 @@ class TransactionEditForm extends Component {
 
     onSaveTransaction = (buttonOption) => {
         if(this.validateNewTransaction()){
+            this.setState({bAlertNewTransaction: true});
             this.setState({buttonOption: buttonOption});
-            this.addNewTransaction()
         }
     };
 
@@ -629,6 +627,11 @@ class TransactionEditForm extends Component {
             this.input = autosuggest.input;
         }
     };
+
+    handleCloseNewTransaction = ()=>{
+        this.setState({bAlertNewTransaction: false})
+    };
+
 
     handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -669,6 +672,9 @@ class TransactionEditForm extends Component {
             return {value: t._id, label: t.Name}
         });
 
+
+
+        console.log(aTypes0);
 
         const components = {
             Control,
@@ -1192,6 +1198,41 @@ class TransactionEditForm extends Component {
                             message={this.state.snackMessage}
                         />
                     </Snackbar>
+                    <Dialog
+                        open={this.state.bAlertNewTransaction}
+                        onClose={()=>this.handleCloseNewTransaction()}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            {this.props.transactionForm.type === 'new' ?(
+                                'Create New Transaction?'
+                            ) : (
+                                'Update theTransaction?'
+                            )}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                {this.props.transactionForm.type === 'new' ?(
+                                    'Proceed to create new transaction?'
+                                ) : (
+                                    'Proceed to update this transaction?'
+                                )}
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={()=>this.handleCloseNewTransaction()} color="primary">
+                                Close
+                            </Button>
+                            <Button onClick={()=>this.addNewTransaction()} color="primary" autoFocus>
+                                {this.props.transactionForm.type === 'new' ?(
+                                    'Create'
+                                ) : (
+                                    'Update'
+                                )}
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                     <VendorDialogBox />
                 </div>
             </FuseAnimate>
