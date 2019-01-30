@@ -348,7 +348,7 @@ class TransactionEditForm extends Component {
         paymentsDate: new Date(),
         grossTotal: 0,
         startDate: moment(),
-        TrxClass: 'C'
+        TrxClass: 'D'
     };
 
     renderInputComponent = (inputProps ) => {
@@ -858,8 +858,8 @@ class TransactionEditForm extends Component {
                                         value={this.state.TrxClass}
                                         onChange={this.handleChange}
                                     >
-                                        <FormControlLabel value="C" control={<Radio />} label="Credit" />
                                         <FormControlLabel value="D" control={<Radio />} label="Deduction" />
+                                        <FormControlLabel value="C" control={<Radio />} label="Credit" />
                                     </RadioGroup>
                                 </FormControl>
 
@@ -889,9 +889,6 @@ class TransactionEditForm extends Component {
                                             classes:{paper: classes.dropdownMenu},
                                         }}
                                     >
-                                        <MenuItem value="-1">
-                                            <em>Select</em>
-                                        </MenuItem>
                                         <MenuItem value="single">Single</MenuItem>
                                         <MenuItem value="recurring">Recurring</MenuItem>
                                     </Select>
