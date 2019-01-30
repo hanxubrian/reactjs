@@ -329,7 +329,6 @@ class TransactionEditForm extends Component {
         tax: 0,
         payments: 1,
         paymentsDate: new Date(),
-        billedPayments: 0,
         grossTotal: 0,
         startDate: moment(),
         trxClass: 'C'
@@ -433,7 +432,6 @@ class TransactionEditForm extends Component {
                 this.setState({tax: 0.0});
                 this.setState({payments: 1});
                 this.setState({paymentsDate: new Date()});
-                this.setState({billedPayments: 0});
                 this.setState({grossTotal: 0});
                 this.setState({startDate: moment()});
                 this.props.updateVendor({vendor: {value:'', label: ''}, vendor_no: '', vendorDate: moment().format('YYYY-MM-DD')});
@@ -486,7 +484,6 @@ class TransactionEditForm extends Component {
 
                     // for recurring
                     this.setState({grossTotal: trxDetail.GrossTotal});
-                    this.setState({billedPayments: trxDetail.BilledPayment});
                     this.setState({startDate: moment(trxDetail.startDate)});
 
                     // for Vendor
@@ -534,7 +531,6 @@ class TransactionEditForm extends Component {
             this.setState({total: parseFloat(quantity * unitPrice+tax)});
 
             if(this.state.transactionFrequency==='recurring' && payments>0) {
-                this.setState({billedPayments: line_total});
                 this.setState({grossTotal: parseFloat(payments * line_total)});
             }
         }
@@ -572,7 +568,6 @@ class TransactionEditForm extends Component {
             VendorDate: this.state.transactionType.value===tTypeTaxValue && this.props.vendor!==null ? moment(this.props.vendor.vendorDate) : moment(),
             NumberOfPayments: this.state.payments,
             StartDate: this.state.startDate,
-            BilledPayment: this.state.billedPayments,
             GrossTotal: this.state.grossTotal,
         };
         if(this.props.transactionForm.type==='new') {
@@ -832,7 +827,26 @@ class TransactionEditForm extends Component {
                             </GridItem>
                         </GridContainer>
                         <Grid container className={classNames(classes.formControl, "mb-0")} >
-                            <Grid item xs={12} sm={12} md={12} className="flex flex-1 flex-row pt-16 w-full items-center">
+                            <Grid item xs={12} sm={12} md={12} className="flex flex-row  justify-start items-center pt-16 mr-12 pr-0">
+                                <FormControl component="fieldset" className={classes.formControl}>
+                                    <FormLabel component="legend">Transaction Class</FormLabel>
+                                    <RadioGroup
+                                        aria-label="Transaction Class"
+                                        name="trxClass"
+                                        className={classes.group}
+                                        classes={{
+                                            root: classes.group
+                                        }}
+                                        value={this.state.trxClass}
+                                        onChange={this.handleChange}
+                                    >
+                                        <FormControlLabel value="C" control={<Radio />} label="Credit" />
+                                        <FormControlLabel value="D" control={<Radio />} label="Deduction" />
+                                    </RadioGroup>
+                                </FormControl>
+
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={12} className="flex flex-1 flex-row pt-0 w-full items-center">
                                 <div>Frequency: </div>
                                 <FormControl variant="outlined" className={classNames(classes.formControl, "ml-24 w-full")}>
                                     <Select
@@ -862,26 +876,7 @@ class TransactionEditForm extends Component {
                                     </Select>
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={12} className="flex flex-row  justify-start items-center pt-16 mr-12 pr-0">
-                                <FormControl component="fieldset" className={classes.formControl}>
-                                    <FormLabel component="legend">Transaction Class</FormLabel>
-                                    <RadioGroup
-                                        aria-label="Transaction Class"
-                                        name="trxClass"
-                                        className={classes.group}
-                                        classes={{
-                                            root: classes.group
-                                        }}
-                                        value={this.state.trxClass}
-                                        onChange={this.handleChange}
-                                    >
-                                        <FormControlLabel value="C" control={<Radio />} label="Credit" />
-                                        <FormControlLabel value="D" control={<Radio />} label="Deduction" />
-                                    </RadioGroup>
-                                </FormControl>
-
-                            </Grid>
-                            <Grid item xs={12} sm={12} md={12} className="flex flex-row  items-center pt-0 mr-12 pr-0">
+                            <Grid item xs={12} sm={12} md={12} className="flex flex-row pt-16 items-center pt-0 mr-12 pr-0">
                                 <div>Type: </div>
                                 <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl, "ml-24 w-full mr-24")}>
                                     <div className={classes.root1}>
@@ -1089,6 +1084,7 @@ class TransactionEditForm extends Component {
                                         format="MM/DD/YYYY"
                                         name="startDate"
                                         variant="outlined"
+                                        className={classNames(classes.textField, 'ml-0 mr-4')}
                                         value={this.state.startDate}
                                         onChange={this.handleStartDateChange}
                                         required
@@ -1104,32 +1100,10 @@ class TransactionEditForm extends Component {
                                     />
                                 </MuiPickersUtilsProvider>
                                 <TextField
-                                    id="billedPayments"
-                                    name="billedPayments"
-                                    label="Payments Billed"
-                                    className={classNames(classes.textField, 'ml-8')}
-                                    value={this.state.billedPayments}
-                                    onChange={this.handleChange1('billedPayments')}
-                                    margin="normal"
-                                    variant="outlined"
-                                    InputLabelProps = {{
-                                        shrink: true,
-                                        classes: {outlined: classes.label}
-                                    }}
-                                    InputProps={{
-                                        inputComponent: NumberFormatCustom2,
-                                        readOnly: true,
-                                        classes: {
-                                            input: classNames(classes.inputReadonly, "text-right")
-                                        },
-                                    }}
-                                    required
-                                />
-                                <TextField
                                     id="GrossTotal"
                                     name="GrossTotal"
                                     label="Gross Total"
-                                    className={classNames(classes.textField, 'mr-0')}
+                                    className={classNames(classes.textField, 'ml-4 mr-0')}
                                     value={this.state.grossTotal}
                                     margin="normal"
                                     variant="outlined"
