@@ -312,7 +312,6 @@ class TransactionEditForm extends Component {
         PO_number: '',
         period: moment(),
         taxExempt: false,
-        bAlertNewTransaction: false,
         buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval,
         transactionType: {label: 'Advance Fee', value:'5c41272c4d275d4560e90fa3'},
         transactionFrequency: "single",
@@ -409,7 +408,6 @@ class TransactionEditForm extends Component {
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.newTransaction!==null && nextProps.newTransaction!==this.props.newTransaction){
-            this.setState({bAlertNewTransaction: false});
             if(this.state.buttonOption===0){
                 this.props.resetTransactionForm();
                 this.setState({transactionDescription: ''});
@@ -465,7 +463,7 @@ class TransactionEditForm extends Component {
                 if(trxType.length)
                     this.setState({transactionType: trxType[0]});
 
-                this.setState({transactionFrequency: 'single'});
+                this.setState({transactionFrequency: trxDetail.TrxFrequency});
                 this.setState({payments: parseInt(trxDetail.NumberOfPayments)});
                 this.setState({TransactionNo: trxDetail.Trx_no});
                 this.setState({reSell: trxDetail.TrxResell});
@@ -597,8 +595,8 @@ class TransactionEditForm extends Component {
 
     onSaveTransaction = (buttonOption) => {
         if(this.validateNewTransaction()){
-            this.setState({bAlertNewTransaction: true});
             this.setState({buttonOption: buttonOption});
+            this.addNewTransaction();
         }
     };
 
@@ -626,10 +624,6 @@ class TransactionEditForm extends Component {
         if (autosuggest !== null) {
             this.input = autosuggest.input;
         }
-    };
-
-    handleCloseNewTransaction = ()=>{
-        this.setState({bAlertNewTransaction: false})
     };
 
 
@@ -1194,41 +1188,6 @@ class TransactionEditForm extends Component {
                             message={this.state.snackMessage}
                         />
                     </Snackbar>
-                    <Dialog
-                        open={this.state.bAlertNewTransaction}
-                        onClose={()=>this.handleCloseNewTransaction()}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                    >
-                        <DialogTitle id="alert-dialog-title">
-                            {this.props.transactionForm.type === 'new' ?(
-                                'Create New Transaction?'
-                            ) : (
-                                'Update theTransaction?'
-                            )}
-                        </DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                                {this.props.transactionForm.type === 'new' ?(
-                                    'Proceed to create new transaction?'
-                                ) : (
-                                    'Proceed to update this transaction?'
-                                )}
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={()=>this.handleCloseNewTransaction()} color="primary">
-                                Close
-                            </Button>
-                            <Button onClick={()=>this.addNewTransaction()} color="primary" autoFocus>
-                                {this.props.transactionForm.type === 'new' ?(
-                                    'Create'
-                                ) : (
-                                    'Update'
-                                )}
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
                     <VendorDialogBox />
                 </div>
             </FuseAnimate>
