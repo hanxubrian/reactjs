@@ -597,8 +597,9 @@ class TransactionEditForm extends Component {
 
     onSaveTransaction = (buttonOption) => {
         if(this.validateNewTransaction()){
-            this.setState({bAlertNewTransaction: true});
+            this.setState({bAlertNewTransaction: false});
             this.setState({buttonOption: buttonOption});
+            this.addNewTransaction();
         }
     };
 
