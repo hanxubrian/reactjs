@@ -15,8 +15,9 @@ const app = function (state = initialState, action) {
             {
                 case Actions.INITIAL_START:
                 {
-                    let dev = state.url.split('.')[1]
-                    if (action.payload.Settings.local.mode !== 0) {
+                    let dev = window.location.host.split('.')[1] ? true : false
+
+                    if (action.payload.Settings.local.mode !== 0 && !dev) {
                         return {
                             ...initialState,
                             loginLogo: action.payload.Settings.local.devices[0].assets.loginLogo,
@@ -28,8 +29,16 @@ const app = function (state = initialState, action) {
                             copyRight: action.payload.Settings.local.copyright,
                             url: window.location.host.split(':')[0]
                         };
-                    } else if (dev) {
-                        return {
+                    }
+                    else if (action.payload.Settings.development.mode === 0) {
+                            return {
+                            ...initialState,
+                            loginLogo: action.payload.Settings.local.devices[0].assets.loginLogo,
+                            hidden: 'hidden',
+                            loginVideoBackground: 'https://res.cloudinary.com/janiking/video/upload/v1548791261/apps/web/WorkingHard.mp4'
+                            }
+                    } else
+                    return {
                             ...initialState,
                             loginLogo: action.payload.Settings.development.devices[0].assets.loginLogo,
                             loginBackground: action.payload.Settings.development.devices[0].assets.hloginBg,
@@ -40,14 +49,7 @@ const app = function (state = initialState, action) {
                             copyRight: action.payload.Settings.development.copyright,
                             url: window.location.host.split(':')[0]
                         };
-                    } else {
-                        return {
-                            loginLogo: action.payload.Settings.local.devices[0].assets.loginLogo,
-                            hidden: 'hidden',
-                            loginVideoBackground: 'https://res.cloudinary.com/janiking/video/upload/v1548791261/apps/web/WorkingHard.mp4'
-                        }
                     }
-                }
                 default:
                 {
                     return state
