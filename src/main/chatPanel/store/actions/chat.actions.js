@@ -61,8 +61,9 @@ export function assignRooms(currentUser)
             currentUser = getState().chatPanel.chat.currentUser;
         }
 
+
         user.chatList.map((chat, i)=>{
-              
+
             var room = rooms.find(_room=>_room.id === chat.chatId)
             if (!room){
                 currentUser.subscribeToRoom({
@@ -76,9 +77,9 @@ export function assignRooms(currentUser)
                                 'time'          : message.createdAt,
                                 'attachment'    : message.attachment,
                             };
-                           
-                            return dispatch(addMessage(chat.chatId, newmsg)) 
-                        
+
+                            return dispatch(addMessage(chat.chatId, newmsg))
+
                          },
                          onPresenceChanged: (state, user) => {
                             return dispatch(updateContactsPresense(user, state));

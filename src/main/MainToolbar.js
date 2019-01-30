@@ -19,8 +19,12 @@ import Pusher from 'pusher-js';
 import moment from 'moment/moment';
 import ImageIcon from '@material-ui/icons/Image';
 import * as Actions from "./chatPanel/store/actions";
+
+import * as MainActions from 'store/actions';
 import ReactPlayer from 'react-player';
 import SystemNotification from './content/notifications/SystemNotification';
+import VersionUpgradeDialog from '../main/content/admin/AdminDialog/VersionUpgradeDialog';
+
 
 const styles = theme => ({
     root     : {
@@ -201,6 +205,8 @@ class MainToolbar extends Component {
         chatunread                  : 0,
         sysflage                    : false,
         sysnotificationSeletedID    : null,
+        adminMSG                    : null,
+        adminVersionStatus          : false,
 
     };
 
@@ -238,6 +244,10 @@ class MainToolbar extends Component {
         channel.bind('on-message', data => {
             this.setState({ pusherMSG:data});
         });
+        var adminchannel = pusher.subscribe('jk-admin-channel');
+        adminchannel.bind('on-admin', data => {
+            this.setState({ adminMSG:data});
+        });
     }
     shownotification=()=>{
         // e.stopPropagation();
@@ -246,6 +256,15 @@ class MainToolbar extends Component {
     }
     componentDidUpdate(prevProps,prevState){
         let midflage = false;
+        if(this.state.adminMSG && this.state.adminMSG !== null && this.state.adminMSG !== prevState.adminMSG){
+            console.log("this.state.adminMSG====================",this.state.adminMSG);
+            if(this.state.adminMSG.note && this.state.adminMSG.version){
+                this.setState({adminVersionStatus:true});
+
+            }
+        }
+
+
         if (this.state.sysflage === true){
             setTimeout(
                 function() {
@@ -263,7 +282,7 @@ class MainToolbar extends Component {
             this.setState({sysflage:false});
         }
 
-        if(this.state.pusherMSG !== prevState.pusherMSG ){
+        if(this.state.pusherMSG !== prevState.pusherMSG && this.state.pusherMSG !== null ){
             if(this.state.pusherMSG.user === this.props.login.UserId.toString()){
                 console.log("pusherMSG-createM",this.state.pusherMSG);
                 let PusherList =[];
@@ -275,7 +294,7 @@ class MainToolbar extends Component {
                 PusherList=this.state.pusherMSGList;
                 PusherList.unshift(this.state.pusherMSG);
                 unreadNum += 1;
-
+                this.props.addpushernotification(this.state.pusherMSG);
                 this.setState({unreadMSGnum:unreadNum});
                 this.setState({pusherMSGList:PusherList});
                 this.setState({systeunread:sysunread+1});
@@ -663,6 +682,13 @@ class MainToolbar extends Component {
 
                     )}
                 </div>
+                { this.state.adminVersionStatus && this.state.adminMSG.version !== null && (
+                    <VersionUpgradeDialog
+                        show={this.state.adminVersionStatus}
+                        version={this.state.adminMSG.version}
+                        note ={this.state.adminMSG.note}
+                    />
+                )}
 
                 {1 && (
 
@@ -695,13 +721,14 @@ function mapDispatchToProps(dispatch)
         getChat                         : chatPanelActions.getChat,
         loadedMenu                      : authActions.loadedMenu,
         chatnotificationstatus          : Actions.chatnotificationstatus,
-        closeChatPanel                   : chatPanelActions.closeChatPanel,
+        closeChatPanel                  : chatPanelActions.closeChatPanel,
         changechatpanelshowstatus       : chatPanelActions.changechatpanelshowstatus,
+        addpushernotification           : MainActions.addnotification,
     }, dispatch);
 }
 
 
-function mapStateToProps({auth,chatPanel,contactsApp})
+function mapStateToProps({auth,chatPanel,contactsApp,notification})
 {
     return {
         user                    : auth.user,
@@ -712,6 +739,7 @@ function mapStateToProps({auth,chatPanel,contactsApp})
         chatUser                : chatPanel.user,
         getchatnotification     : chatPanel.IndividualChat.chatnotificationstatus,
         chatpanelshowstatus     : chatPanel.IndividualChat.chatpanelshowstatus,
+        getpusherNotificationDB : notification.pusherMSGDB,
     }
 }
 

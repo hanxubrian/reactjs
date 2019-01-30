@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Pusher from "pusher-js";
 
 const axios_instance = axios.create({
     headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
@@ -8,7 +9,15 @@ const axios_instance = axios.create({
 const BASE_API_URL = 'https://apifmsplus.jkdev.com';
 const BASE_MONGO_API_URL = 'https://apifmsplusplus_mongo.jkdev.com';
 
+// var adminchannel = new Pusher({
+//     appId: '698880',
+//     key: 'ecf6a4e23b186efa2d44',
+//     secret: '44ce060e1413c8aa227a',
+//     cluster: 'us2',
+//     encrypted: true
+// });
 class NotificationService {
+
     getallsystemnotification=( UserId)=>{
         const data ={
             'UserId'                   : UserId,
@@ -27,6 +36,13 @@ class NotificationService {
                     resolve(error);
                 })
         });
+    }
+    adminversionupgradetrigger=(data)=>{
+
+        // let res = adminchannel.trigger('jk-admin-channel', 'on-version', data);
+        return({IsSuccess:true,data:"res"});
+
+
     }
 }
 

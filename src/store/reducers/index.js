@@ -24,8 +24,15 @@ import verifications from './verifications.reducer'
 import paymentlockbox from './paymentlockbox.reducer';
 import notification from './notification.reducer';
 
+import * as Actions from "../actions/";
+import * as AuthAction from "../../auth/store/actions";
+import storage from 'redux-persist/lib/storage';
+import {USER_LOGGED_OUT} from "../../auth/store/actions";
+import {ADMIN_CLEAN_CACHE_FOR_UPGRADE} from "../../auth/store/actions/login.actions";
 
-const createReducer = (asyncReducers) =>
+const createReducer =
+        (asyncReducers) =>
+        (state, action) =>
     combineReducers({
         auth,
         fuse,
@@ -52,6 +59,9 @@ const createReducer = (asyncReducers) =>
         paymentlockbox,
         notification,
         ...asyncReducers
-    });
+    })
+    (action.type === 'ADMIN_CLEAN_CACHE_FOR_UPGRADE' ? undefined : state, action)
+
 
 export default createReducer;
+

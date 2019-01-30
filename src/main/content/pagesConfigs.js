@@ -32,6 +32,9 @@ import {HomepageConfig} from "./home/HomepageConfig";
 import {UsersAppConfig} from "../users/UsersAppConfig";
 import {PaymentLockBoxReportConfig} from "./PaymentLockBoxReport/PaymentLockBoxReportConfig";
 import {SystemNotificationConfig} from "./notifications/SystemNotificationConfig";
+import {AdminConfig} from "./admin/adminConfig";
+
+
 
 export const pagesConfigs = [
     VerificationsAppConfig,
@@ -68,5 +71,6 @@ export const pagesConfigs = [
     HomepageConfig,
     UsersAppConfig,
     PaymentLockBoxReportConfig,
-    SystemNotificationConfig
+    SystemNotificationConfig,
+    AdminConfig,
 ];

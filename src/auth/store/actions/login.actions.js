@@ -10,6 +10,7 @@ export const LOGIN_START = 'LOGIN_START';
 export const CLOSE_ALERT_DIALOG = 'CLOSE_ALERT_DIALOG';
 export const INITIALIZE_FROM_LOCAL = 'INITIALIZE_FROM_LOCAL';
 export const LOADED_MENU = 'LOADED_MENU';
+export const ADMIN_CLEAN_CACHE_FOR_UPGRADE = 'ADMIN_CLEAN_CACHE_FOR_UPGRADE';
 // export const INITIAL_START = 'INITIAL_START';
 
 
@@ -77,6 +78,14 @@ export function logoutUser () {
     return (dispatch) => {
         dispatch({
             type: USER_LOGGED_OUT
+        });
+    }
+}
+export function adminCleanCache () {
+    authService.logout();
+    return (dispatch) => {
+        dispatch({
+            type: ADMIN_CLEAN_CACHE_FOR_UPGRADE
         });
     }
 }
