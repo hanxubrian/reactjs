@@ -349,7 +349,7 @@ const Command = ({ id, onExecute }) => {
 };
 const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 
-class PaymentsListContent extends Component {
+class paymentsHistoryListContent extends Component {
 
 	constructor(props) {
 		super(props);
@@ -988,5 +988,5 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(PaymentsListContent)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(paymentsHistoryListContent)));
 

@@ -127,25 +127,40 @@ class FilterPanel extends Component {
 
 		switch (name) {
 			case "PaymentStatusOpen":
-				if (this.state.PaymentStatusAll !== (event.target.checked && this.state.PaymentStatusPaid)) {
-					this.setState({ PaymentStatusAll: (event.target.checked && this.state.PaymentStatusPaid) })
+				if (event.target.checked) {
+					this.props.setPaymentStatusFitler(this.state.PaymentStatusPaid ? "All" : "Open")
+				} else {
+					this.props.setPaymentStatusFitler(this.state.PaymentStatusPaid ? "Paid" : "All")
 				}
-				break;
 			case "PaymentStatusPaid":
-				if (this.state.PaymentStatusAll !== (this.state.PaymentStatusOpen && event.target.checked)) {
-					this.setState({ PaymentStatusAll: (this.state.PaymentStatusOpen && event.target.checked) })
+				if (event.target.checked) {
+					this.props.setPaymentStatusFitler(this.state.PaymentStatusOpen ? "All" : "Paid")
+				} else {
+					this.props.setPaymentStatusFitler(this.state.PaymentStatusOpen ? "Open" : "All")
 				}
-				break;
-			case "PaymentStatusAll":
-
-				if (event.target.checked !== this.state.PaymentStatusOpen) {
-					this.setState({ PaymentStatusOpen: event.target.checked })
-				}
-				if (event.target.checked !== this.state.PaymentStatusPaid) {
-					this.setState({ PaymentStatusPaid: event.target.checked })
-				}
-				break;
+				break
 		}
+
+		// switch (name) {
+		// 	case "PaymentStatusOpen":
+		// 		if (this.state.PaymentStatusAll !== (event.target.checked && this.state.PaymentStatusPaid)) {
+		// 			this.setState({ PaymentStatusAll: (event.target.checked && this.state.PaymentStatusPaid) })
+		// 		}
+		// 		break;
+		// 	case "PaymentStatusPaid":
+		// 		if (this.state.PaymentStatusAll !== (this.state.PaymentStatusOpen && event.target.checked)) {
+		// 			this.setState({ PaymentStatusAll: (this.state.PaymentStatusOpen && event.target.checked) })
+		// 		}
+		// 		break;
+		// 	case "PaymentStatusAll":
+		// 		if (event.target.checked !== this.state.PaymentStatusOpen) {
+		// 			this.setState({ PaymentStatusOpen: event.target.checked })
+		// 		}
+		// 		if (event.target.checked !== this.state.PaymentStatusPaid) {
+		// 			this.setState({ PaymentStatusPaid: event.target.checked })
+		// 		}
+		// 		break;
+		// }
 	};
 
 	handleChange = (index, name) => event => {
@@ -378,7 +393,7 @@ class FilterPanel extends Component {
 					})}
 					<br></br>
 					<h3>Payment Status</h3>
-					<FormControlLabel
+					{/* <FormControlLabel
 						control={
 							<Switch
 								checked={this.state.PaymentStatusAll}
@@ -387,7 +402,7 @@ class FilterPanel extends Component {
 							/>
 						}
 						label="All"
-					/>
+					/> */}
 					<FormControlLabel
 						control={
 							<Switch
@@ -422,7 +437,10 @@ function mapDispatchToProps(dispatch) {
 		updateDate: Actions.updateDate,
 		updateInvoiceStatus: Actions.updateInvoiceStatus,
 		updateInvoiceDateOption: Actions.updateInvoiceDateOption,
-		updatePeriodOption: Actions.updatePeriodOption
+		updatePeriodOption: Actions.updatePeriodOption,
+
+		setPaymentStatusFitler: Actions.setPaymentStatusFitler,
+		setViewMode: Actions.setViewMode,
 	}, dispatch);
 }
 

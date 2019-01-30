@@ -23,6 +23,7 @@ import { withRouter } from 'react-router-dom';
 
 //Custom components
 import PaymentListContent from "./paymentsListContent"
+import PaymentsHistoryListContent from "./paymentsHistoryListContent"
 import PaymentSearchBar from "./PaymentSearchBar"
 import InvoiceForm from "./paymentsForm"
 import SummaryPanel from './summaryPanel';
@@ -621,7 +622,9 @@ class Payments extends Component {
 
 								<PaymentSearchBar />
 
-								<PaymentListContent />
+								{this.props.viewMode === "InvoiceView" && <PaymentListContent />}
+								{this.props.viewMode === "PaymentHistoryView" && <paymentsHistoryListContent />}
+								
 							</div>
 						</div>
 					}
@@ -741,6 +744,8 @@ function mapStateToProps({ invoices, auth, customers, franchisees, accountReceiv
 
 		errorInfo: accountReceivablePayments.errorInfo,
 		payments: accountReceivablePayments.ACC_payments,
+
+		viewMode: accountReceivablePayments.viewMode,
 	}
 }
 

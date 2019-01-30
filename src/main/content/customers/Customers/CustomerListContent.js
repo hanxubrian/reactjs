@@ -1454,7 +1454,7 @@ class CustomerListContent extends Component {
 										)}
 									</Template>
 
-									<CustomizedDxGridSelectionPanel selection={selection} />
+									<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
 
 								</Grid>
 							</div>
