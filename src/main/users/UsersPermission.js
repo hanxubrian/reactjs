@@ -83,9 +83,9 @@ class UsersPermission extends React.Component {
                 <div className={classes.tabRoot}>
                     <AppBar color="default" position="static">
                         <Tabs variant="fullWidth" value={step} onChange={this.handleTabChange}>
-                            <LinkTab icon={<Icon>web</Icon>} label="Web"/>
-                            <LinkTab icon={<Icon>phone</Icon>} label="Phone"/>
-                            <LinkTab icon={<Icon>tablet</Icon>} label="Tablet"/>
+                            <LinkTab icon={<Icon>web</Icon>}/>
+                            <LinkTab icon={<Icon>phone</Icon>}/>
+                            <LinkTab icon={<Icon>tablet</Icon>}/>
                         </Tabs>
                     </AppBar>
                     {step === 0 && <TabContainer>

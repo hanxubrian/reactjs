@@ -120,11 +120,6 @@ const Group = [
      'Group 4',
 ];
 
-const appList = [
-    'Web APP',
-    'Mobile APP'
-]
-
 
 const userRole = [
     'Admin-User',
@@ -133,6 +128,33 @@ const userRole = [
     'Contractor',
     'Subscriber',
 ];
+
+const userType = [
+    {
+        label: "Customer",
+        value: "Customer",
+    },
+    {
+        label: "Franchisee",
+        value: "Franchisee",
+    },
+    {
+        label: "Employee",
+        value: "Employee",
+    },
+    {
+        label: "Vendor",
+        value: "Vendor",
+    },
+    {
+        label: "Third-Party",
+        value: "ThirdParty",
+    },
+    {
+        label: "Contractor",
+        value: "Contractor",
+    }
+]
 
 const ITEM_HEIGHT = 40;
 const ITEM_PADDING_TOP = 8;
@@ -165,7 +187,13 @@ class UsersForm extends React.Component {
         defaultRegion: '',
         checked: [1],
         userRole: [],
-        appPermission: []
+        userType: '',
+        userTypeFranchisee: '',
+        userTypeCustomer: '',
+        userTypeVendor: '',
+        userTypeEmployee: '',
+        userTypeThirdParty: '',
+        userTypeContractor: ''
     };
 
 
@@ -184,163 +212,167 @@ class UsersForm extends React.Component {
                 <div className={classNames(classes.userFormSection,"w-full")}>
                     <h2>User Profile</h2>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row justify-center">
+                        <GridItem sm={2} className="flex flex-row">
                             <UserAvatar/>
                         </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="firstName"
-                                label="First Name"
-                                variant="outlined"
-                                className={classes.textField}
-                                value={this.state.firstName}
-                                onChange={this.handleChange("firstName")}
-                                style={{marginRight:'1%'}}
-                                margin="dense"
-                                fullWidth
-                                required
-                            />
-                            <TextField
-                                id="lastName"
-                                label="Last Name"
-                                variant="outlined"
-                                className={classes.textField}
-                                value={this.state.lastName}
-                                onChange={this.handleChange("lastName")}
-                                style={{marginRight:'1%', marginLeft: '1%'}}
-                                margin="dense"
-                                fullWidth
-                                required
-                            />
-                            <TextField
-                                id="title"
-                                label="Title"
-                                onChange={this.handleChange("title")}
-                                value={this.state.title}
-                                variant="outlined"
-                                inputProps={{
-                                    maxLength:60
-                                }}
-                                className={classes.textField}
-                                style={{marginLeft:'1%'}}
-                                margin="dense"
-                                fullWidth
-                                required
-                            />
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="phone"
-                                label="Phone"
-                                variant="outlined"
-                                className={classes.textField}
-                                value={this.state.phone}
-                                onChange={this.handleChange("phone")}
-                                style={{marginRight:'1%'}}
-                                margin="dense"
-                                fullWidth
-                                required
-                            />
-                            <TextField
-                                id="email"
-                                label="E Mail"
-                                variant="outlined"
-                                className={classes.textField}
-                                value={this.state.email}
-                                onChange={this.handleChange("email")}
-                                style={{marginRight:'1%', marginLeft: '1%'}}
-                                margin="dense"
-                                fullWidth
-                                required
-                            />
+                        <GridItem sm={10} className="flex">
+                            <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl,"flex justify-between")}>
+                                <GridItem xs={12} sm={12} md={12} className="flex">
+                                    <TextField
+                                        id="firstName"
+                                        label="First Name"
+                                        variant="outlined"
+                                        className={classes.textField}
+                                        value={this.state.firstName}
+                                        onChange={this.handleChange("firstName")}
+                                        style={{marginRight:'1%'}}
+                                        margin="dense"
+                                        fullWidth
+                                        required
+                                    />
+                                    <TextField
+                                        id="lastName"
+                                        label="Last Name"
+                                        variant="outlined"
+                                        className={classes.textField}
+                                        value={this.state.lastName}
+                                        onChange={this.handleChange("lastName")}
+                                        style={{marginRight:'1%', marginLeft: '1%'}}
+                                        margin="dense"
+                                        fullWidth
+                                        required
+                                    />
+                                    <TextField
+                                        id="title"
+                                        label="Title"
+                                        onChange={this.handleChange("title")}
+                                        value={this.state.title}
+                                        variant="outlined"
+                                        inputProps={{
+                                            maxLength:60
+                                        }}
+                                        className={classes.textField}
+                                        style={{marginLeft:'1%'}}
+                                        margin="dense"
+                                        fullWidth
+                                        required
+                                    />
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={12} className="flex ">
+                                    <TextField
+                                        id="phone"
+                                        label="Phone"
+                                        variant="outlined"
+                                        className={classes.textField}
+                                        value={this.state.phone}
+                                        onChange={this.handleChange("phone")}
+                                        style={{marginRight:'1%'}}
+                                        margin="dense"
+                                        fullWidth
+                                        required
+                                    />
+                                    <TextField
+                                        id="email"
+                                        label="E Mail"
+                                        variant="outlined"
+                                        className={classes.textField}
+                                        value={this.state.email}
+                                        onChange={this.handleChange("email")}
+                                        style={{marginRight:'1%', marginLeft: '1%'}}
+                                        margin="dense"
+                                        fullWidth
+                                        required
+                                    />
 
-                            <TextField
-                                id="department"
-                                select
-                                variant={"outlined"}
-                                className={classes.textField}
-                                style={{marginLeft:'1%'}}
-                                value={this.state.department}
-                                label={"Department"}
-                                onChange={this.handleChange('department')}
-                                SelectProps={{
-                                    MenuProps: {
-                                        className: classes.menu,
-                                    },
-                                }}
-                                margin="dense"
-                                fullWidth
-                            >
-                                {department.map(option => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <TextField
-                                id="address"
-                                label="Address"
-                                variant="outlined"
-                                className={classes.textField}
-                                value={this.state.address}
-                                onChange={this.handleChange("address")}
-                                style={{marginRight:'1%'}}
-                                margin="dense"
-                                fullWidth
-                                required
-                            />
-                            <TextField
-                                id="city"
-                                label="City"
-                                variant="outlined"
-                                className={classes.textField}
-                                value={this.state.city}
-                                onChange={this.handleChange("city")}
-                                style={{marginRight:'1%', marginLeft: '1%'}}
-                                margin="dense"
-                                fullWidth
-                                required
-                            />
-                            <TextField
-                                id="state"
-                                select
-                                variant={"outlined"}
-                                label={"State"}
-                                className={classes.textField}
-                                style={{marginRight:'1%', marginLeft: '1%'}}
-                                value={this.state.state}
-                                onChange={this.handleChange('state')}
-                                SelectProps={{
-                                    MenuProps: {
-                                        className: classes.menu,
-                                    },
-                                }}
-                                margin="dense"
-                                fullWidth
-                            >
-                                {State.map(option => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                            <TextField
-                                id="zip"
-                                label="Zip"
-                                onChange={this.handleChange("zip")}
-                                value={this.state.zip}
-                                variant="outlined"
-                                inputProps={{
-                                    maxLength:60
-                                }}
-                                className={classes.textField}
-                                style={{marginLeft:'1%'}}
-                                margin="dense"
-                                fullWidth
-                                required
-                            />
+                                    <TextField
+                                        id="department"
+                                        select
+                                        variant={"outlined"}
+                                        className={classes.textField}
+                                        style={{marginLeft:'1%'}}
+                                        value={this.state.department}
+                                        label={"Department"}
+                                        onChange={this.handleChange('department')}
+                                        SelectProps={{
+                                            MenuProps: {
+                                                className: classes.menu,
+                                            },
+                                        }}
+                                        margin="dense"
+                                        fullWidth
+                                    >
+                                        {department.map(option => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                    <TextField
+                                        id="address"
+                                        label="Address"
+                                        variant="outlined"
+                                        className={classes.textField}
+                                        value={this.state.address}
+                                        onChange={this.handleChange("address")}
+                                        style={{marginRight:'1%'}}
+                                        margin="dense"
+                                        fullWidth
+                                        required
+                                    />
+                                    <TextField
+                                        id="city"
+                                        label="City"
+                                        variant="outlined"
+                                        className={classes.textField}
+                                        value={this.state.city}
+                                        onChange={this.handleChange("city")}
+                                        style={{marginRight:'1%', marginLeft: '1%'}}
+                                        margin="dense"
+                                        fullWidth
+                                        required
+                                    />
+                                    <TextField
+                                        id="state"
+                                        select
+                                        variant={"outlined"}
+                                        label={"State"}
+                                        className={classes.textField}
+                                        style={{marginRight:'1%', marginLeft: '1%'}}
+                                        value={this.state.state}
+                                        onChange={this.handleChange('state')}
+                                        SelectProps={{
+                                            MenuProps: {
+                                                className: classes.menu,
+                                            },
+                                        }}
+                                        margin="dense"
+                                        fullWidth
+                                    >
+                                        {State.map(option => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                    <TextField
+                                        id="zip"
+                                        label="Zip"
+                                        onChange={this.handleChange("zip")}
+                                        value={this.state.zip}
+                                        variant="outlined"
+                                        inputProps={{
+                                            maxLength:60
+                                        }}
+                                        className={classes.textField}
+                                        style={{marginLeft:'1%'}}
+                                        margin="dense"
+                                        fullWidth
+                                        required
+                                    />
+                                </GridItem>
+                            </GridContainer>
                         </GridItem>
                     </GridContainer>
                 </div>
@@ -467,27 +499,119 @@ class UsersForm extends React.Component {
                     </GridContainer>
                 </div>
                 <div className={classNames(classes.userFormSection,"w-full")}>
-                    <h4>APP Permission</h4>
+                    <h4>User Type</h4>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <FormControl style={{width:"100%"}} className={classes.multiSelectControl}>
-                                <InputLabel variant={"outlined"}  htmlFor="select-appPermission">Select APP Permission</InputLabel>
-                                <Select
-                                    multiple
-                                    value={this.state.appPermission}
+                            <TextField
+                                id="userType"
+                                label={"User Type"}
+                                select
+                                variant={"outlined"}
+                                className={classes.textField}
+                                value={this.state.userType}
+                                style={{marginRight: "1%"}}
+                                onChange={this.handleChange('userType')}
+                                SelectProps={{
+                                    MenuProps: {
+                                        className: classes.menu,
+                                    },
+                                }}
+                                margin="dense"
+                                fullWidth
+                            >
+                                {userType.map(option => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                            {this.state.userType === 'Employee' && (
+                                <TextField
+                                    id="userTypeEmployee"
+                                    label="Employee"
+                                    variant="outlined"
                                     className={classes.textField}
-                                    onChange={this.handleChange('appPermission')}
-                                    input={<OutlinedInput id="select-appPermission" labelWidth={170}/>}
+                                    value={this.state.userTypeEmployee}
+                                    onChange={this.handleChange("userTypeEmployee")}
+                                    style={{marginLeft:'1%'}}
                                     margin="dense"
-                                    MenuProps={MenuProps}
-                                >
-                                    {appList.map(name => (
-                                        <MenuItem key={name} value={name} >
-                                            {name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
+                                    fullWidth
+                                    required
+                                />
+                            )}
+                            {this.state.userType === 'Franchisee' && (
+                                <TextField
+                                    id="userTypeFranchisee"
+                                    label="Franchisee"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={this.state.userTypeFranchisee}
+                                    onChange={this.handleChange("userTypeFranchisee")}
+                                    style={{marginLeft:'1%'}}
+                                    margin="dense"
+                                    fullWidth
+                                    required
+                                />
+                            )}
+                            {this.state.userType === 'Customer' && (
+                                <TextField
+                                    id="userTypeCustomer"
+                                    label="Customer"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={this.state.userTypeCustomer}
+                                    onChange={this.handleChange("userTypeCustomer")}
+                                    style={{marginLeft:'1%'}}
+                                    margin="dense"
+                                    fullWidth
+                                    required
+                                />
+                            )}
+                            {this.state.userType === 'Vendor' && (
+                                <TextField
+                                    id="userTypeVendor"
+                                    label="Vendor"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={this.state.userTypeVendor}
+                                    onChange={this.handleChange("userTypeVendor")}
+                                    style={{marginLeft:'1%'}}
+                                    margin="dense"
+                                    fullWidth
+                                    required
+                                />
+                            )}
+                            {this.state.userType === 'ThirdParty' && (
+                                <TextField
+                                    id="userTypeThirdParty"
+                                    label="Thirty-Party"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={this.state.userTypeThirdParty}
+                                    onChange={this.handleChange("userTypeThirdParty")}
+                                    style={{marginLeft:'1%'}}
+                                    margin="dense"
+                                    fullWidth
+                                    required
+                                />
+                            )}
+                            {this.state.userType === 'Contractor' && (
+                                <TextField
+                                    id="userTypeContractor"
+                                    label="Contractor"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={this.state.userTypeContractor}
+                                    onChange={this.handleChange("userTypeContractor")}
+                                    style={{marginLeft:'1%'}}
+                                    margin="dense"
+                                    fullWidth
+                                    required
+                                />
+                            )}
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+
                         </GridItem>
                     </GridContainer>
                 </div>

@@ -6,6 +6,9 @@ import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import Button from "@material-ui/core/Button/Button";
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import Fab from '@material-ui/core/Fab';
+import CheckIcon from '@material-ui/icons/Check';
+import EditIcon from '@material-ui/icons/Edit';
 
 const styles = theme => ({
     root     : {
@@ -64,42 +67,43 @@ class UserAvatar extends React.Component {
         const {classes} = this.props;
         return (
             <div className={"flex justify-between"}>
-                <div style={{margin: "auto" , textAlign: "center", marginTop: 20,marginBottom: 30, padding: 5}}>
+                <div style={{margin: "auto", position:'relative' , textAlign: "center", marginTop: 20,marginBottom: 30, padding: 5}}>
                     {this.state.imageChoosed === false && (
                         <Avatar
                             width={180}
                             height={180}
+                            imageWidth={180}
+                            imageHeight={180}
                             onCrop={this.onCrop}
                             onClose={this.onClose}
                             label = {"Choose User Photo"}
+                            backgroundColor={"primary"}
                             src={this.state.src ? "" : this.state.src}
                         />
                     )}
                     {this.state.preview && this.state.imageChoosed === false &&(
-                        <Button
-                            variant="contained"
-                            style={{marginTop: 10, marginBottom: 10}}
+                        <Fab
+                            style={{position: 'absolute', bottom: 10, right:10}}
+                            size="small"
                             color="primary"
-                            className={classes.button}
+                            aria-label="check"
                             onClick = {this.onChoosed}
                         >
-                            Choose This Photo
-                            <CloudUploadIcon className={classes.rightIcon} />
-                        </Button>
+                          <CheckIcon />
+                        </Fab>
                     )}
                     {this.state.imageChoosed && (
-                        <div style={{width:250, height: 250}}>
+                        <div style={{width:180, height: 180}}>
                             <img src={this.state.preview} alt="Preview" />
-                            <Button
-                                variant="contained"
-                                style={{marginTop: 10, marginBottom: 10}}
+                            <Fab
+                                style={{position: 'absolute', bottom: 10, right:10}}
+                                size="small"
                                 color="primary"
-                                className={classes.button}
+                                aria-label="edit"
                                 onClick = {this.onPhotoChange}
-                                >
-                                Change This photo
-                                <CloudUploadIcon className={classes.rightIcon} />
-                            </Button>
+                            >
+                                <EditIcon />
+                            </Fab>
                         </div>
                     )}
                 </div>
