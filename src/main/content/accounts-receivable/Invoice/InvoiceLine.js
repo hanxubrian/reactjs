@@ -901,8 +901,6 @@ class InvoiceLineTable extends React.Component {
 
     render()
     {
-        console.log('bAllowAlertReduction=', this.state.bAllowAlertReduction);
-        console.log('bAllowAlertTaxZero=', this.state.bAllowAlertTaxZero);
         const {classes} = this.props;
         const {data} = this.state;
 

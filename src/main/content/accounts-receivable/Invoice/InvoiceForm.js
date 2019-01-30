@@ -315,7 +315,9 @@ class InvoiceForm extends Component {
         buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval,
         franchiseeFromCustomer: null,
         bInvoiceFormClose: false,
+        bShowInvoiceCloseBox: false,
         bSelectCustomerAgain: false,
+        bLoadingDetail: false,
         customerStatusLabel: ''
     };
 
@@ -406,6 +408,7 @@ class InvoiceForm extends Component {
     };
 
     getSuggestionValue =  (suggestion) =>{
+        this.setState({ bShowInvoiceCloseBox: true });
         this.setState({selectedCustomer: suggestion});
         this.setState({PO_number: suggestion.CustomerNo});
         this.setState({franchiseeFromCustomer: suggestion.Franchisees});
@@ -466,7 +469,11 @@ class InvoiceForm extends Component {
     };
 
     componentDidUpdate(prevProps, prevState, snapshot){
-        if(this.props.invoiceForm.data!==null && this.props.invoiceForm.data!== prevProps.invoiceForm.data) {
+        if(this.props.invoiceForm.data!==null && JSON.stringify(this.props.invoiceForm.data)!== JSON.stringify(prevProps.invoiceForm.data)) {
+            console.log('changed');
+            if(this.state.bLoadingDetail)
+                this.setState({ bShowInvoiceCloseBox: true });
+
             this.getTotal();
         }
         if(this.state.selectedCustomer!== null && JSON.stringify(this.state.selectedCustomer)!== JSON.stringify(this.props.invoiceForm.customer)) {
@@ -492,6 +499,8 @@ class InvoiceForm extends Component {
                 let dueDate = moment().year(year).month(month).endOf('month');
                 this.setState({InvoiceDate: invoiceDate.format('YYYY-MM-DD')});
                 this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
+                this.setState({ bShowInvoiceCloseBox: false });
+                setTimeout(() => {this.setState({bLoadingDetail: true})}, 3000);
 
                 // this.setState({InvoiceDate: moment(nextProps.invoices.invoiceDetail.Data.InvoiceDate).format('YYYY-MM-DD')});
                 // this.setState({DueDate: moment(nextProps.invoices.invoiceDetail.Data.DueDate).format('YYYY-MM-DD')});
@@ -549,9 +558,12 @@ class InvoiceForm extends Component {
         let dueDate = moment().year(year).month(month).endOf('month');
         this.setState({InvoiceDate: invoiceDate.format('YYYY-MM-DD')});
         this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
+        this.setState({ bShowInvoiceCloseBox: false });
+
     }
 
     handleChange = (event) => {
+        this.setState({ bShowInvoiceCloseBox: true });
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
     };
 
@@ -668,6 +680,7 @@ class InvoiceForm extends Component {
             };
 
             this.props.updateInvoice(this.props.invoices.invoiceDetail.Data._id, this.props.regionId, result);
+            console.log('result=', JSON.stringify(result));
         }
 
     };
@@ -793,6 +806,7 @@ class InvoiceForm extends Component {
     };
 
     handlePeriodChange = date => {
+        this.setState({ bShowInvoiceCloseBox: true });
         this.setState({ period: date });
     };
 
@@ -846,7 +860,10 @@ class InvoiceForm extends Component {
     };
 
     confirmCloseForm = () => {
-        this.setState({ bInvoiceFormClose: true });
+        if(this.state.bShowInvoiceCloseBox)
+            this.setState({ bInvoiceFormClose: true });
+        else
+            this.closeComposeForm();
     };
 
     render()
@@ -877,6 +894,7 @@ class InvoiceForm extends Component {
                 statusName = customerStatusObj[0].label;
             }
         }
+        console.log('bLoadingDetail=', this.state.bLoadingDetail);
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>

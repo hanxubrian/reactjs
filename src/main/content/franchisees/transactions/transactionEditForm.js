@@ -79,6 +79,9 @@ const styles = theme => ({
             padding: '0!important'
         }
     },
+    formControlNomb: {
+        marginBottom: 0,
+    },
     textField: {
         marginLeft: 0,
         marginRight: theme.spacing.unit,
@@ -843,7 +846,7 @@ class TransactionEditForm extends Component {
                         </GridContainer>
                         <Grid container className={classNames(classes.formControl, "mb-0")} >
                             <Grid item xs={12} sm={12} md={12} className="flex flex-row  justify-start items-center pt-16 mr-12 pr-0">
-                                <FormControl component="fieldset" className={classes.formControl}>
+                                <FormControl component="fieldset" className={classes.formControlNomb}>
                                     <FormLabel component="legend">Transaction Class</FormLabel>
                                     <RadioGroup
                                         aria-label="Transaction Class"

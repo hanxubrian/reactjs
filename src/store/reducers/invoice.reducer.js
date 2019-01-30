@@ -283,9 +283,10 @@ const invoices = function(state = initialState, action) {
         }
         case Actions.UPDATE_INVOICE_LINE:
         {
+            const data = _.cloneDeep(action.payload);
             return {
                 ...state,
-                invoiceForm: {...state.invoiceForm, data: {line: action.payload}}
+                invoiceForm: {...state.invoiceForm, data: {line: data}}
             }
         }
         case Actions.STARTING_SAVE_INVOICE_FORM_DATA: {
