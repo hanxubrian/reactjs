@@ -212,6 +212,11 @@ const styles = theme => ({
         padding: '10px 16px',
         maxWidth: 125
     },
+    inputMenu2: {
+        padding: '10px 16px',
+        maxWidth: '100%'
+    },
+
     group: {
         flexDirection: 'row',
         '& label': {
@@ -231,7 +236,7 @@ const newTransactionState = {
     "MasterTrxTypeListId": "",
     "RegionId": "",
     "RegionName": "",
-    "TransactionDate": new Date(),
+    "TransactionDate": '01/2019',
     "Date": new Date(),
     "franchiseeNo": "",
     "transactionDescription": "",
@@ -499,7 +504,7 @@ class TransactionEditForm extends Component {
                     this.setState({tax: tax});
                     this.setState({quantity: parseFloat(trxDetail.quantity)});
                     this.setState({total: parseFloat(trxDetail.TrxExtendedPrice)+ tax});
-                    this.setState({TransactionDate: moment(trxDetail.TrxDate)});
+                    this.setState({TransactionDate: trxDetail.TrxDate});
 
                     let trxType = this.props.transactionTypeList.filter(f=>f._id === trxDetail.Trxtype);
 
@@ -741,7 +746,7 @@ class TransactionEditForm extends Component {
                                     {...autosuggestProps}
                                     inputProps={{
                                         classes,
-                                        placeholder: 'Search Franchisee Name or Number',
+                                        placeholder: 'Choose a franchisee and complete the transaction form before trying to save.',
                                         value: value,
                                         onChange: this.onChange,
                                     }}
@@ -764,26 +769,32 @@ class TransactionEditForm extends Component {
                         <MuiPickersUtilsProvider utils={MomentUtils}>
                             <Grid container className={classNames(classes.formControl)}>
                                 <Grid item xs={12} sm={6} md={6} className="flex flex-row xs:flex-col xs:mb-24 pr-8" style={{padding: '0 6px!important'}}>
-                                    <DatePicker
-                                        margin="none"
-                                        label="Transaction Date"
-                                        name="TransactionDate"
-                                        variant="outlined"
-                                        format="MM/DD/YYYY"
-                                        value={this.state.TransactionDate}
-                                        onChange={this.handleTransactionDateChange}
-                                        fullWidth
-                                        required
-                                        InputProps={{
-                                            classes: {
-                                                input: classes.input2,
-                                            },
-                                        }}
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                    />
+                                    <FormControl variant="outlined" className={classNames(classes.formControl1, "ml-4 w-full")}>
+                                        <Select
+                                            classes={{
+                                                selectMenu: classNames(classes.inputMenu2),
+                                            }}
+                                            name="TransactionDate"
+                                            value={this.state.TransactionDate}
+                                            onChange={this.handleChange}
+                                            input={
+                                                <OutlinedInput
+                                                    labelWidth={this.state.labelWidth}
+                                                    name="TransactionDate"
+                                                    id="TransactionDate"
+                                                />
+                                            }
+                                            MenuProps = {{
+                                                classes:{paper: classes.dropdownMenu},
+                                            }}
+                                        >
+                                            <MenuItem value="01/2019">01/2019</MenuItem>
+                                            <MenuItem value="12/2018">12/2018</MenuItem>
+                                            <MenuItem value="11/2018">11/2018</MenuItem>
+                                            <MenuItem value="10/2018">10/2018</MenuItem>
+                                            <MenuItem value="09/2018">09/2018</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </Grid>
                                 <Grid item xs={12} sm={6} md={6} className="flex flex-row xs:flex-col pl-4" >
                                     <TextField
