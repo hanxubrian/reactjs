@@ -491,7 +491,7 @@ class TransactionEditForm extends Component {
                     this.setState({value: trxDetail.FranchiseeName});
                     this.setState({subTotal: parseFloat(trxDetail.TrxExtendedPrice)});
                     this.setState({unitPrice: parseFloat(trxDetail.TrxItemAmount)});
-                    this.setState({TrxClass: parseFloat(trxDetail.TrxClass)});
+                    this.setState({TrxClass: trxDetail.TrxClass});
 
                     let tax = parseFloat(trxDetail.TrxTax);
                     if(trxDetail.TrxType!=='5c41272c4d275d4560e90fb9') tax = 0.00;
