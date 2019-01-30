@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 
-// core components
+// Material-UI core components
 import {
     Paper, TextField, Typography, MenuItem, Card, CardHeader, CardContent, Button, Snackbar, SnackbarContent,Select, Checkbox,
-    IconButton, Icon, Grid, OutlinedInput, FormControl, FormControlLabel, NoSsr, Radio,RadioGroup, FormLabel,
+    IconButton, Icon, Grid, OutlinedInput, FormControl, FormControlLabel, NoSsr, Radio,RadioGroup, FormLabel, Divider,
 } from '@material-ui/core';
 import 'date-fns'
 import MomentUtils from '@date-io/moment';
@@ -46,7 +46,12 @@ import PropTypes from 'prop-types';
 //Utility
 import { Control, Menu, NoOptionsMessage, Option, Placeholder, SingleValue, ValueContainer} from "../../accounts-receivable/Invoice/selectUtils";
 import {emphasize} from "@material-ui/core/styles/colorManipulator";
-import {escapeRegexCharacters, NumberFormatCustom1, NumberFormatCustom2} from "../../../../services/utils";
+import {
+    escapeRegexCharacters,
+    NumberFormatCustom1,
+    NumberFormatCustom2,
+    NumberFormatCustomDeduction
+} from "../../../../services/utils";
 
 
 const styles = theme => ({
@@ -85,6 +90,10 @@ const styles = theme => ({
     textField: {
         marginLeft: 0,
         marginRight: theme.spacing.unit,
+    },
+    textField1: {
+        marginLeft: 0,
+        marginRight: 0,
     },
     summary: {
         fontSize: 15,
@@ -211,6 +220,9 @@ const styles = theme => ({
     },
     frequencyMenu:{
         maxWidth: 120
+    },
+    TrxClass: {
+        maxWidth: 150
     }
 });
 
@@ -332,7 +344,6 @@ class TransactionEditForm extends Component {
         TransactionNo: "",
         snackMessage: "",
         openSnack: false,
-        PO_number: '',
         period: moment(),
         taxExempt: false,
         buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval,
@@ -348,7 +359,10 @@ class TransactionEditForm extends Component {
         paymentsDate: new Date(),
         grossTotal: 0,
         startDate: moment(),
-        TrxClass: 'D'
+        TrxClass: 'D',
+        creditReason: '',
+        deductionReason: '',
+        trxClassAmount: 0.00
     };
 
     renderInputComponent = (inputProps ) => {
@@ -399,14 +413,13 @@ class TransactionEditForm extends Component {
 
     getSuggestionValue =  (suggestion) =>{
         this.setState({selectedFranchisee: suggestion});
-        this.setState({PO_number: suggestion.franchiseeNo});
         return suggestion.Name;
     };
 
     getSuggestions = (value) => {
         const escapedValue = escapeRegexCharacters(value.trim());
         const regex = new RegExp(escapedValue, 'i');
-        let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList
+        let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList;
 
         if(franchisees!==null)
             return franchisees.filter(f => regex.test(f.Name) || regex.test(f.Number)|| regex.test(f.StatusName));
@@ -541,6 +554,7 @@ class TransactionEditForm extends Component {
         if(quantity>0 && unitPrice>0) {
             let tax = quantity * unitPrice*0.085;
             if(this.state.transactionType.value!=='5c41272c4d275d4560e90fb9') tax = 0.0;
+            if(this.state.reSell) tax = 0.0;
 
             let line_total = parseFloat(quantity * unitPrice+tax);
             this.setState({subTotal: parseFloat(quantity * unitPrice)});
@@ -781,7 +795,7 @@ class TransactionEditForm extends Component {
                                                 input: bReadonly? classes.inputOrange: classes.input,
                                             },
                                         }}
-                                        inputProps={{tabindex:-1}}
+                                        inputProps={{tabIndex:-1}}
                                         InputLabelProps = {{
                                             shrink: true,
                                             classes: {outlined: classes.label}
@@ -845,8 +859,8 @@ class TransactionEditForm extends Component {
                                 </Card>
                             </GridItem>
                         </GridContainer>
-                        <Grid container className={classNames(classes.formControl, "mb-0")} >
-                            <Grid item xs={12} sm={12} md={12} className="flex flex-row  justify-start items-center pt-16 mr-12 pr-0">
+                        <Grid container className={classNames(classes.formControl, "mb-8")} >
+                            <Grid item xs={12} sm={12} md={12} className="flex flex-row  justify-between items-center pt-16 pr-0">
                                 <FormControl component="fieldset" className={classes.formControlNomb}>
                                     <FormLabel component="legend">Transaction Class</FormLabel>
                                     <RadioGroup
@@ -863,11 +877,88 @@ class TransactionEditForm extends Component {
                                         <FormControlLabel value="C" control={<Radio />} label="Credit" />
                                     </RadioGroup>
                                 </FormControl>
-
+                                    <TextField
+                                        id="trxClassAmount"
+                                        name="trxClassAmount"
+                                        label="Trx. Class Amount"
+                                        className={classNames(classes.TrxClass)}
+                                        value={this.state.trxClassAmount}
+                                        onChange={this.handleChange1('trxClassAmount')}
+                                        margin="dense"
+                                        variant="outlined"
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        InputProps={{
+                                            inputComponent: NumberFormatCustom2,
+                                            classes: {
+                                                input: classNames(classes.input, "text-right")
+                                            },
+                                        }}
+                                        required
+                                    />
                             </Grid>
-                            <Grid item xs={12} sm={6} md={6} className="flex flex-1 flex-row pt-0 w-full items-center">
-                                <div>Frequency: </div>
-                                <FormControl variant="outlined" className={classNames(classes.formControl1, "ml-8")}>
+                        </Grid>
+                        {this.state.TrxClass==='C' && (
+                            <Grid container className={classNames(classes.formControl, "mb-8")} >
+                                <Grid item xs={12} sm={12} md={12} className="flex flex-row xs:flex-col">
+                                    <TextField
+                                        id="creditReason"
+                                        name="creditReason"
+                                        label="Credit Reason"
+                                        className={classes.textField1}
+                                        value={this.state.creditReason}
+                                        onChange={this.handleChange}
+                                        margin="dense"
+                                        variant="outlined"
+                                        fullWidth
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input
+                                            },
+                                        }}
+                                    />
+                                </Grid>
+                            </Grid>
+                        )}
+                        {this.state.TrxClass==='D' && (
+                            <Grid container className={classNames(classes.formControl, "mb-8")} >
+                                <Grid item xs={12} sm={12} md={12} className="flex flex-row xs:flex-col">
+                                    <TextField
+                                        id="deductionReason"
+                                        name="deductionReason"
+                                        label="Deduction Reason"
+                                        className={classes.textField1}
+                                        value={this.state.deductionReason}
+                                        onChange={this.handleChange}
+                                        margin="dense"
+                                        variant="outlined"
+                                        fullWidth
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input
+                                            },
+                                        }}
+                                    />
+                                </Grid>
+                            </Grid>
+                        )}
+                        <Divider />
+
+
+                        <Grid container className={classNames(classes.formControl, "mb-0 mt-16")} >
+                            <Grid item xs={12} sm={5} md={5} className="flex flex-1 flex-row pt-0 w-full items-center">
+                                <div>Freq.: </div>
+                                <FormControl variant="outlined" className={classNames(classes.formControl1, "ml-4")}>
                                     <Select
                                         classes={{
                                             root: classNames(classes.frequencyMenu),
@@ -895,7 +986,7 @@ class TransactionEditForm extends Component {
                                     </Select>
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={12} sm={6} md={6} className="flex flex-row pt-16 items-center pt-0 mr-12 mb-16">
+                            <Grid item xs={12} sm={7} md={7} className="flex flex-row items-center pt-0">
                                 <div>Type: </div>
                                 <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl, "ml-4 w-full mr-12")}>
                                     <div className={classes.root1}>
