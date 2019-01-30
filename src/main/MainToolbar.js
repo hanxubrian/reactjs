@@ -402,7 +402,7 @@ class MainToolbar extends Component {
     };
     systemitemnotification =(e)=>{
         // alert("SYSNOT"+e);
-        this.props.history.push('/'+e);
+        this.props.history.push('/notification/system/'+e);
     }
     render()
     {

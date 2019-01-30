@@ -425,7 +425,6 @@ class BillRunDialog extends Component {
                                 multiline
                                 rows="1"
                                 value={this.state.desMSG}
-
                                 margin="normal"
                                 variant="outlined"
                                 style={{width: "100%"}}

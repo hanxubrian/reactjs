@@ -14,8 +14,8 @@ import * as Actions from 'store/actions';
 // third party
 import "react-table/react-table.css";
 import classNames from 'classnames';
-
-
+import { RowDetailState } from '@devexpress/dx-react-grid';
+import moment from 'moment/moment';
 import {
     Template, TemplateConnector
 } from '@devexpress/dx-react-core';
@@ -48,6 +48,7 @@ import {
     Toolbar,
     TableGroupRow,
     PagingPanel,
+    TableRowDetail,
     TableFilterRow,
     DragDropProvider,
     TableColumnResizing,
@@ -232,6 +233,61 @@ const DateTypeProvider = props => (
 //
 // table cell boolean edit formatter
 //
+const RowDetail = ({ row }) =>{
+    let str ="";
+    str =`<table>`;
+    if(row && row !==null){
+        Object.keys(row).forEach(function(key) {
+            // console.log("key:" + key + "value:" + item[key]);
+            str+=`<tr>`+`<td>`+key+`</td>`+`<td>`+row[key]+`</td>`+`</tr>`
+        });
+        str+=`</table>`;
+        let htmlObject = document.createElement('html');
+        htmlObject.innerHTML = str;
+        // return htmlObject;
+        return(
+            <div style={{flexGrow: 1,}}>
+                <table style={{width: "100%",}}>
+                    <thead>
+                    <tr>
+                        <th style={{textAlign: "center",}}>Bill Run No</th>
+                        <th style={{textAlign: "center",}}>Message</th>
+                        <th style={{textAlign: "center",}}>Invoice Description</th>
+                        <th style={{textAlign: "center",}}>Period</th>
+                        <th style={{textAlign: "center",}}>InvoiceDate</th>
+                        <th style={{textAlign: "center",}}>CreatedDate</th>
+                        <th style={{textAlign: "center",}}>CreateBy</th>
+                        <th style={{textAlign: "center",}}>Invoice Count</th>
+                        <th style={{textAlign: "center",}}>Billing</th>
+                        <th style={{textAlign: "center",}}>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td style={{textAlign: "center",}}>{row.BillRunNo}</td>
+                        <td style={{textAlign: "center",}}>{row.Message}</td>
+                        <td style={{textAlign: "center",}}>{row.InvoiceDescription}</td>
+                        <td style={{textAlign: "center",}}>{row.Month.toString().padStart(2,"0")}/{row.Year}</td>
+                        <td style={{textAlign: "center",}}>{row.cusinvoicedate}</td>
+                        <td style={{textAlign: "center",}}>{row.cuscreatedate}</td>
+                        <td style={{textAlign: "center",}}>{row.CreateBy}</td>
+                        <td style={{textAlign: "center",}}>{row.InvCount}</td>
+                        <td style={{textAlign: "center",}}>{row.Billing}</td>
+                        <td style={{textAlign: "center",}}>{row.Status}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        )
+    }
+    else{
+        return (<div/>);
+    }
+}
+
+
+
 const BooleanFormatter = ({ value }) => <Chip label={value ? 'Yes' : 'No'} />;
 const BooleanEditor = ({ value, onValueChange }) => (
     <Select
@@ -350,69 +406,208 @@ const Command = ({ id, onExecute }) => {
 };
 const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 
+
+
+
 class SystemNotificationContentList extends Component {
 
     constructor(props) {
         super(props);
         this.props.getallsystemnotification();
         this.state = {
-            columns: [
+            columns                             : [
                 { name: 'process', title: 'Process' },
-                { name: 'regionId', title: 'regionId' },
+                { name: 'Message', title: 'Message' },
                 { name: 'description', title: 'description' },
-                { name: 'processResponsePayload', title: 'processResponsePayload' },
+                { name: 'cuscreatedate', title: 'Created Date' },
 
             ],
-            rows: this.props.sysnotification,
-            tableColumnExtensions: [
-                { columnName: 'process', width: 180 },
-                { columnName: 'regionId', width: 120 },
-                { columnName: 'description', width: 180 },
-                { columnName: 'processResponsePayload', width: 200 },
+            rows                                : [],
+            tableColumnExtensions               : [
+                { columnName: 'process', width: 100 },
+                // { columnName: 'Message', width: 300 },
+                // { columnName: 'description', width: 100 },
+                { columnName: 'cuscreatedate', width: 100 },
 
             ],
+            pageSizes                           : [5,10, 20, 30, 50, 100],
+            pageSize                            : 5,
+            sorting                             : [
+                { columnName: 'process', direction: 'asc' },
+            ],
+            groupingColumns                     : [
+                // { columnName: 'CustomerName' },
+                // { columnName: 'CustomerNo' },
+                { columnName: 'process' },
+
+            ],
+            searchValue                         : '',
+            expandedGroups                      : ['process'],
             // leftColumns: ['region', 'sector'],
             // rightColumns: ['amount'],
+            NotificationData                    :[],
+            id                                  : null,
+            ExpandedRowIds                      : null,
         };
     };
+    TableRow = ({ tableRow, selected, onToggle, ...restProps }) => {
 
+        let timer = 0;
+        let delay = 200;
+        let prevent = false;
+        delete restProps.selectByRowClick;
+        const handleClick = () => {
+            timer = setTimeout(() => {
+                if (!prevent) {
+                    // onToggle();
+                }
+                prevent = false;
+            }, delay);
+        };
+        const handleDoubleClick = () => {
+            clearTimeout(timer);
+            prevent = true;
+        }
+        return (
+            <Table.Row
+                {...restProps}
+                className={selected ? 'active' : ''}
+                style={{ color: 'green', cursor: 'pointer' }}
+                onClick={handleClick}
+                onDoubleClick={handleDoubleClick}
+            />
+        );
+    };
     componentWillMount(){
+        console.log('this.props.match.params=', this.props.match.params);
+        this.setState({id: this.props.match.params.id});
 
     }
+    componentDidMount(){
 
+    }
+    componentDidUpdate(prevProps, prevState){
+        if(this.props.sysnotification !==null && this.props.sysnotification !== prevProps.sysnotification){
+            this.fetchData();
+        }
+
+    }
     fetchData=()=>{
+        let sysnotification = this.props.sysnotification;
+        let payload = sysnotification.processResponsePayload;
+        let midROW = [];
+        let sum = 0;
+        if(sysnotification && sysnotification !==null){
+            sysnotification.map((item)=>{
+
+                let addprocess =[];
+                addprocess =JSON.parse(item.processResponsePayload);
+                addprocess.process=item.process;
+                addprocess.description=item.description;
+                addprocess.cuscreatedate =moment(item.CreateDate).format("MM/DD/YYYY");
+                addprocess.cusinvoicedate = moment(item.InvoiceDate).format("MM/DD/YYYY");
+                addprocess._id = item._id;
+                if(this.state.id && this.state.id !== null && item._id===this.state.id && this.state.ExpandedRowIds === null && sum>=0){
+                    this.setState({ExpandedRowIds:sum});
+                    console.log("ExpandedRowIds",sum);
+                    sum =-1;
+                }
+                if(sum>=0)
+                    sum ++;
+                midROW.push(addprocess);
+            });
+            if(sum>0){
+                this.setState({ExpandedRowIds:-100});
+            }
+
+        }
+        this.setState({NotificationData:midROW});
+        if(this.state.rows && this.state.rows !== null && JSON.stringify(this.state.rows) !== JSON.stringify(midROW)){
+            this.setState({rows: midROW});
+        }
 
     }
+    expandedGroupsChange = (expandedGroups) => {
+        this.setState({ expandedGroups });
+    };
+
+    GroupCellContent = ({ column, row }) => (
+        <span>
+            <strong>{row.value}</strong>
+		</span>
+    );
     render(){
+        const { classes } = this.props;
             const {
-                rows, columns, tableColumnExtensions,
-                // leftColumns, rightColumns,
+                rows, columns, tableColumnExtensions,pageSizes,sorting,searchValue,groupingColumns,expandedGroups,
             } = this.state;
-            if(rows && rows !==null)
+            let checkstatus = true;
+            let expandedId = null;
+            if(this.props.match.params && this.props.match.params !==null && this.props.match.params.id && this.props.match.params.id !==null){
+                if(this.state.ExpandedRowIds >=0 && this.state.ExpandedRowIds !== null)
+                    checkstatus = true;
+                else{
+                    checkstatus = false;
+                }
+            }
+            if(this.state.ExpandedRowIds === -100){
+                checkstatus=true;
+            }
+            if(this.state.ExpandedRowIds >=0 ){
+                expandedId =this.state.ExpandedRowIds;
+            }
+            if(rows && rows !==null && checkstatus)
             return(
-                <Paper>
-                    <Grid
+                <Fragment>
+                    <div className={classNames(classes.layoutTable, "cust222 flex flex-col")}>
+
+                        <div className={classNames("flex flex-col")}
+                             style={{height:'600px'}}
+                        >
+                        <Grid
                         rows={rows}
                         columns={columns}
-                    >
-                        <VirtualTable height='auto'
-                                      noDataCellComponent={
-                                          ({ colSpan }) => (
-                                              <td colSpan={colSpan} style={{ textAlign: 'center' }}>
-                                                  <big className="TableNoDataCell">{this.props.NoDataString}</big>
-                                              </td>
-                                          )
-                                      }
-                                      columnExtensions={tableColumnExtensions}
-                        />
-                        <TableHeaderRow />
-                        {/*<TableFixedColumns*/}
-                            {/*leftColumns={leftColumns}*/}
-                            {/*rightColumns={rightColumns}*/}
-                        {/*/>*/}
+                        >
+                            <PagingState
+                                defaultCurrentPage={0}
+                                defaultPageSize={5}
+                            />
+                            <IntegratedPaging />
+                            <SortingState
+                                defaultSorting={[{ columnName: 'process', direction: 'asc' }]}
+                            />
+
+                                <RowDetailState
+                                    defaultExpandedRowIds={[expandedId]}
+                                />
+
+
+                            <IntegratedSorting />
+                            <VirtualTable height='auto'
+                            noDataCellComponent={
+                            ({ colSpan }) => (
+                            <td colSpan={colSpan} style={{ textAlign: 'center' }}>
+                            <big className="TableNoDataCell">{this.props.NoDataString}</big>
+                            </td>
+                            )
+                            }
+                            columnExtensions={tableColumnExtensions}
+                            />
+                            <TableHeaderRow showSortingControls />
+                            <TableRowDetail
+                                contentComponent={RowDetail}
+                            />
+                            <PagingPanel
+                                pageSizes={pageSizes}
+                            />
                     </Grid>
-                </Paper>
+                        </div>
+                    </div>
+                </Fragment>
                 );
+            else{
+                return(<div/>)
+            }
     }
 
 }

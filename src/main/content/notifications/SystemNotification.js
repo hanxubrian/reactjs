@@ -335,7 +335,10 @@ class SystemNotification extends Component {
                     }
                     content={
                         <div className="flex-1 flex-col absolute w-full h-full">
-                            <SystemNotificationContentList/>
+                            <div className="testclass">
+                                <SystemNotificationContentList/>
+                            </div>
+
 
                         </div>
                     }
