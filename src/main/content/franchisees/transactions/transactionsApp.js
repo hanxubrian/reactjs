@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 // Material-UI core components
 import {
-    Icon, Fab, Typography, Hidden, IconButton, Button, Paper, Input, CircularProgress, Toolbar} from '@material-ui/core';
+    Icon, Typography, Hidden, IconButton, Button, Paper, Input, CircularProgress, Toolbar} from '@material-ui/core';
 import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
@@ -19,7 +19,6 @@ import * as Actions from '../../../../store/actions';
 
 // third party
 import classNames from 'classnames';
-// import TransactionLists from './FranchiseeLists';
 
 //Custom components
 import TransactionEditForm from './transactionEditForm'
@@ -49,7 +48,7 @@ const styles = theme => ({
             width: 200
         },
         '& .openDetail':{
-            width: 450,
+            width: 500,
             '&>div':{
                 display: 'flex',
                 flex: 1,
@@ -340,11 +339,11 @@ class TransactionsApp extends Component {
                                             <Icon>close</Icon>
                                         </IconButton>
                                         )}
-                                        {bDetailPanel  && (
-                                            <IconButton onClick={(ev)=>this.closeComposeForm()}>
-                                                <Icon>close</Icon>
-                                            </IconButton>
-                                        )}
+                                        {/*{bDetailPanel  && (*/}
+                                            {/*<IconButton onClick={(ev)=>this.closeComposeForm()}>*/}
+                                                {/*<Icon>close</Icon>*/}
+                                            {/*</IconButton>*/}
+                                        {/*)}*/}
                                     </Hidden>
                                 </div>
                             </FuseAnimate>
