@@ -781,6 +781,7 @@ class TransactionEditForm extends Component {
                                                 input: bReadonly? classes.inputOrange: classes.input,
                                             },
                                         }}
+                                        inputProps={{tabindex:-1}}
                                         InputLabelProps = {{
                                             shrink: true,
                                             classes: {outlined: classes.label}
