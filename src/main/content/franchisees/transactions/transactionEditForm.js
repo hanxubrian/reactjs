@@ -3,9 +3,8 @@ import {withRouter} from 'react-router-dom';
 
 // core components
 import {
-    Paper, TextField, Typography, MenuItem, Card, CardHeader, CardContent, Divider, Button, Snackbar, SnackbarContent,Select, Checkbox,
-    IconButton, Icon, Grid, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog, OutlinedInput, FormControl, NoSsr,
-    FormControlLabel
+    Paper, TextField, Typography, MenuItem, Card, CardHeader, CardContent, Button, Snackbar, SnackbarContent,Select, Checkbox,
+    IconButton, Icon, Grid, OutlinedInput, FormControl, FormControlLabel, NoSsr, Radio,RadioGroup, FormLabel,
 } from '@material-ui/core';
 import 'date-fns'
 import MomentUtils from '@date-io/moment';
@@ -189,6 +188,12 @@ const styles = theme => ({
     },
     inputMenu: {
         padding: '10px 16px'
+    },
+    group: {
+        flexDirection: 'row',
+        '& label': {
+            minWidth: 150
+        }
     }
 });
 
@@ -253,6 +258,7 @@ const styles1 = theme => ({
         display: 'flex',
         alignItems: 'center',
     },
+
 });
 
 
@@ -325,7 +331,8 @@ class TransactionEditForm extends Component {
         paymentsDate: new Date(),
         billedPayments: 0,
         grossTotal: 0,
-        startDate: moment()
+        startDate: moment(),
+        trxClass: 'C'
     };
 
     renderInputComponent = (inputProps ) => {
@@ -456,6 +463,7 @@ class TransactionEditForm extends Component {
                     this.setState({value: trxDetail.FranchiseeName});
                     this.setState({subTotal: parseFloat(trxDetail.TrxExtendedPrice)});
                     this.setState({unitPrice: parseFloat(trxDetail.TrxItemAmount)});
+                    this.setState({TrxClass: parseFloat(trxDetail.TrxClass)});
 
                     let tax = parseFloat(trxDetail.TrxTax);
                     if(trxDetail.TrxType!=='5c41272c4d275d4560e90fb9') tax = 0.00;
@@ -543,6 +551,7 @@ class TransactionEditForm extends Component {
             Company_no: '',
 
             TrxType: this.state.transactionType.value,
+            TrxClass: this.state.TrxClass,
             TrxTypeLabel: this.state.transactionType.label,
             TrxFrequency: this.state.transactionFrequency,
             TrxResell: this.state.reSell, //Boolean
@@ -853,7 +862,26 @@ class TransactionEditForm extends Component {
                                     </Select>
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={12} className="flex flex-row  items-center pt-16 mr-12 pr-0">
+                            <Grid item xs={12} sm={12} md={12} className="flex flex-row  justify-start items-center pt-16 mr-12 pr-0">
+                                <FormControl component="fieldset" className={classes.formControl}>
+                                    <FormLabel component="legend">Transaction Class</FormLabel>
+                                    <RadioGroup
+                                        aria-label="Transaction Class"
+                                        name="trxClass"
+                                        className={classes.group}
+                                        classes={{
+                                            root: classes.group
+                                        }}
+                                        value={this.state.trxClass}
+                                        onChange={this.handleChange}
+                                    >
+                                        <FormControlLabel value="C" control={<Radio />} label="Credit" />
+                                        <FormControlLabel value="D" control={<Radio />} label="Deduction" />
+                                    </RadioGroup>
+                                </FormControl>
+
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={12} className="flex flex-row  items-center pt-0 mr-12 pr-0">
                                 <div>Type: </div>
                                 <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl, "ml-24 w-full mr-24")}>
                                     <div className={classes.root1}>
