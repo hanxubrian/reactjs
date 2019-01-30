@@ -12,6 +12,7 @@ import connect from "react-redux/es/connect/connect";
 
 // Third Party
 import PropTypes from 'prop-types';
+import moment from "moment";
 
 const styles = theme => ({
     root: {
@@ -36,8 +37,33 @@ TabContainer.propTypes = {
 class TransactionsSummary extends Component {
 
     state ={
-        value: 0
+        value: 0,
+        year: 2017,
+        month: 1
     };
+
+    constructor(props) {
+        super(props);
+
+        let year = moment(this.props.reportDate).year();
+        let month = moment(this.props.reportDate).month()+1;
+
+        if(!props.bLoadedFranchiseeReports) {
+            props.getReports(props.regionId, year, month);
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        let year = moment(this.props.reportDate).year();
+        let month = moment(this.props.reportDate).month()+1;
+
+        if(this.props.regionId !== prevProps.regionId) {
+            this.props.getReports(this.props.regionId, year, month);
+        }
+        if(this.props.reportDate !== prevProps.reportDate) {
+            this.props.getReports(this.props.regionId, year, month);
+        }
+    }
 
     handleChange = (event, newValue) => {
         this.setState({value: newValue});
@@ -70,12 +96,15 @@ class TransactionsSummary extends Component {
 }
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
+        getReports: Actions.getReports,
     }, dispatch);
 }
 
-function mapStateToProps({transactions, auth}) {
+function mapStateToProps({franchiseeReports, auth}) {
     return {
-
+        franchiseeReports: franchiseeReports.franchiseeReports,
+        bLoadedFranchiseeReports: franchiseeReports.bLoadedFranchiseeReports,
+        regionId: auth.login.defaultRegionId,
     }
 }
 
