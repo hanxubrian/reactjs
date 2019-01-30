@@ -1022,7 +1022,7 @@ class TransactionEditForm extends Component {
                         </div>
                         {this.state.transactionType.value==='5c41272c4d275d4560e90fb9' && this.props.transactionForm.vendor!==null && ( // Franchisee Supplies
                             <Grid container className={classNames(classes.formControl, "mb-0 p-0")} >
-                                <GridItem xs={12} sm={12} md={12} className="flex flex-1 flex-row pt-16 w-full items-center no-padding">
+                                <Grid item xs={12} sm={12} md={12} className="flex flex-row pt-16 w-full items-center no-padding">
                                     <TextField
                                         label="Vendor"
                                         className={classNames(classes.textField)}
@@ -1042,8 +1042,8 @@ class TransactionEditForm extends Component {
                                             },
                                         }}
                                     />
-                                </GridItem>
-                                <GridItem xs={12} sm={12} md={12} className="flex flex-1 flex-row pt-16 w-full items-center no-padding" >
+                                </Grid>
+                                <Grid item xs={12} sm={12} md={12} className="flex flex-row pt-16 w-full items-center no-padding" >
                                     <TextField
                                         label="Vendor Invoice No"
                                         className={classNames(classes.textField, 'mr-12')}
@@ -1090,7 +1090,7 @@ class TransactionEditForm extends Component {
                                             Edit
                                         </Button>
                                     </FuseAnimate>
-                                </GridItem>
+                                </Grid>
                             </Grid>
                         )}
 
