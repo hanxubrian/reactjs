@@ -583,6 +583,7 @@ class TransactionEditForm extends Component {
             TrxTypeLabel: this.state.transactionType.label,
             TrxFrequency: this.state.transactionFrequency,
             TrxResell: this.state.reSell, //Boolean
+            creditReason: this.state.creditReason,
 
             TrxItemAmount: this.state.unitPrice,//decimal
             TrxExtendedPrice: this.state.subTotal, //decimal
@@ -877,27 +878,6 @@ class TransactionEditForm extends Component {
                                         <FormControlLabel value="C" control={<Radio />} label="Credit" />
                                     </RadioGroup>
                                 </FormControl>
-                                    <TextField
-                                        id="trxClassAmount"
-                                        name="trxClassAmount"
-                                        label="Trx. Class Amount"
-                                        className={classNames(classes.TrxClass)}
-                                        value={this.state.trxClassAmount}
-                                        onChange={this.handleChange1('trxClassAmount')}
-                                        margin="dense"
-                                        variant="outlined"
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                        InputProps={{
-                                            inputComponent: NumberFormatCustom2,
-                                            classes: {
-                                                input: classNames(classes.input, "text-right")
-                                            },
-                                        }}
-                                        required
-                                    />
                             </Grid>
                         </Grid>
                         {this.state.TrxClass==='C' && (
@@ -926,32 +906,7 @@ class TransactionEditForm extends Component {
                                 </Grid>
                             </Grid>
                         )}
-                        {this.state.TrxClass==='D' && (
-                            <Grid container className={classNames(classes.formControl, "mb-8")} >
-                                <Grid item xs={12} sm={12} md={12} className="flex flex-row xs:flex-col">
-                                    <TextField
-                                        id="deductionReason"
-                                        name="deductionReason"
-                                        label="Deduction Reason"
-                                        className={classes.textField1}
-                                        value={this.state.deductionReason}
-                                        onChange={this.handleChange}
-                                        margin="dense"
-                                        variant="outlined"
-                                        fullWidth
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                        InputProps={{
-                                            classes: {
-                                                input: classes.input
-                                            },
-                                        }}
-                                    />
-                                </Grid>
-                            </Grid>
-                        )}
+
                         <Divider />
 
 
