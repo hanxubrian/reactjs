@@ -165,9 +165,11 @@ class TransactionsApp extends Component {
     }
 
     search = (val)=> {
+        let sv = val.toLowerCase();
         const temp = this.state.data.filter( d => {
-            return d.FranchiseeName.indexOf(val) !== -1 || !val ||
-                d.FranchiseeNo.indexOf(val) !== -1 ||
+            return d.FranchiseeName.toLowerCase().indexOf(sv) !== -1 || !val ||
+                d.Description.toLowerCase().indexOf(sv) !== -1 || !val ||
+                d.FranchiseeNo.indexOf(sv) !== -1 ||
                 // d.TrxType.toString().indexOf(val) !== -1
                 d.Number.indexOf(val) !== -1 ||
                 d.ExtendedPrice.toString().indexOf(val) !== -1 ||
