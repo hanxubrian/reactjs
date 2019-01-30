@@ -772,19 +772,18 @@ class PaymentsListContent extends Component {
 	};
 
 	GroupCellContent = ({ column, row }) => (
-		<div className="flex justify-between">
+		<span>
 			{/* {column.title} */}
-			<div>
+			<span>
 				<Checkbox onClick={(ev) => this.onClickGroupCell(ev, row.value)}></Checkbox>
 				<strong>{row.value}</strong>
-			</div>
+			</span>
 
-			<div>
+			<span style={{ float: "right" }}>
 				OverPayment: $ {this.getOverpaymentByGroupTitle(row.value)}
 				<Button onClick={(ev) => this.onClickGroupCellApplyOverpayment(ev, row.value)} variant="contained" color="primary" className="ml-24 pr-24 pl-24">Apply</Button>
-			</div>
-
-		</div>
+			</span>
+		</span>
 	);
 
 	onClickGroupCell = (ev, groupTitle) => {

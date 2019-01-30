@@ -622,8 +622,8 @@ class Payments extends Component {
 
 								<PaymentSearchBar />
 
-								{this.props.viewMode === "InvoiceView" && <PaymentListContent />}
-								{this.props.viewMode === "PaymentHistoryView" && <paymentsHistoryListContent />}
+								{this.props.viewMode === "Invoice" && <PaymentListContent />}
+								{this.props.viewMode === "PaymentHistory" && <PaymentsHistoryListContent />}
 								
 							</div>
 						</div>

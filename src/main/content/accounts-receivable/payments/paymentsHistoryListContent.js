@@ -772,19 +772,16 @@ class paymentsHistoryListContent extends Component {
 	};
 
 	GroupCellContent = ({ column, row }) => (
-		<div className="flex justify-between">
+		<span>
 			{/* {column.title} */}
-			<div>
-				<Checkbox onClick={(ev) => this.onClickGroupCell(ev, row.value)}></Checkbox>
+			<span>
 				<strong>{row.value}</strong>
-			</div>
+			</span>
 
-			<div>
+			<span style={{ float: "right" }}>
 				OverPayment: $ {this.getOverpaymentByGroupTitle(row.value)}
-				<Button onClick={(ev) => this.onClickGroupCellApplyOverpayment(ev, row.value)} variant="contained" color="primary" className="ml-24 pr-24 pl-24">Apply</Button>
-			</div>
-
-		</div>
+			</span>
+		</span>
 	);
 
 	onClickGroupCell = (ev, groupTitle) => {
@@ -859,12 +856,12 @@ class paymentsHistoryListContent extends Component {
 
 							<PagingPanel pageSizes={pageSizes} />
 
-							<SelectionState
+							{/* <SelectionState
 								selection={selection}
 								onSelectionChange={this.changeSelection}
 							/>
 
-							<IntegratedSelection />
+							<IntegratedSelection /> */}
 
 							<SortingState
 								sorting={sorting}
@@ -930,7 +927,7 @@ class paymentsHistoryListContent extends Component {
 							<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
 
 							{/* <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} /> */}
-							<TableSelection highlightRow rowComponent={this.TableRow} />
+							{/* <TableSelection highlightRow rowComponent={this.TableRow} /> */}
 
 							<TableHeaderRow showSortingControls />
 

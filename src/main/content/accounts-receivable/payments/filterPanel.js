@@ -4,7 +4,7 @@ import { Grid, Paper, withStyles } from '@material-ui/core';
 //Material UI core
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { MenuItem, FormControl, Select } from '@material-ui/core';
+import { MenuItem, FormControl, Select, RadioGroup, Radio } from '@material-ui/core';
 import { FuseThemes } from '@fuse';
 
 import 'date-fns'
@@ -170,6 +170,13 @@ class FilterPanel extends Component {
 		this.setState({ invoiceStatus: iStatus });
 		this.props.updateInvoiceStatus(iStatus)
 	};
+
+	handleChange = name => event => {
+		this.setState({ [name]: event.target.value });
+		if (name === "viewMode") {
+			this.props.setViewMode(event.target.value)
+		}
+	}
 
 	handleChange1 = event => {
 		this.setState({ [event.target.name]: event.target.value });
@@ -367,6 +374,18 @@ class FilterPanel extends Component {
 				)}
 
 				<div style={{ marginTop: 20, display: 'flex', flexDirection: 'column' }}>
+					<h3>View Mode</h3>
+					<RadioGroup
+						aria-label="Location"
+						name="Location"
+						className={classes.group}
+						value={this.props.viewMode}
+					>
+						<FormControlLabel value="Invoice" control={<Radio onChange={this.handleChange('viewMode')} />} label="Invoice" />
+						<FormControlLabel value="PaymentHistory" control={<Radio onChange={this.handleChange('viewMode')} />} label="Payment History" />
+					</RadioGroup>
+				</div>
+				<div style={{ marginTop: 20, display: 'flex', flexDirection: 'column' }}>
 					<h3>Type</h3>
 					{[
 						{ Name: "Check" },
@@ -444,7 +463,7 @@ function mapDispatchToProps(dispatch) {
 	}, dispatch);
 }
 
-function mapStateToProps({ invoices, fuse }) {
+function mapStateToProps({ invoices, fuse, accountReceivablePayments }) {
 	return {
 		filterState: invoices.bOpenedFilterPanel,
 		transactionStatus: invoices.transactionStatus,
@@ -453,6 +472,10 @@ function mapStateToProps({ invoices, fuse }) {
 		ToDate: invoices.ToDate,
 		settings: fuse.settings.current,
 		invoiceDateOption: invoices.invoiceDateOption,
+
+		invoiceDateOption: invoices.invoiceDateOption,
+
+		viewMode: accountReceivablePayments.viewMode,
 	}
 }
 
