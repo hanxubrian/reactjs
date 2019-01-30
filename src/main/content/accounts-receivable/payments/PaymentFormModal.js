@@ -406,7 +406,7 @@ class PaymentFormModal extends React.Component {
 			customerName: "",
 			customerNumber: "",
 
-			PaymentType: "",
+			PaymentType: "Check",
 			ReferenceNo: "",
 			PaymentDate: new Date().toISOString().substr(0, 10),
 			PaymentNote: "",
@@ -454,7 +454,7 @@ class PaymentFormModal extends React.Component {
 
 	handleClose = () => {
 		this.setState({
-			PaymentType: "",
+			PaymentType: "Check",
 			ReferenceNo: "",
 			PaymentDate: new Date().toISOString().substr(0, 10),
 			PaymentNote: "",
@@ -672,20 +672,15 @@ class PaymentFormModal extends React.Component {
 			})
 			console.log("floatPaymentAmount", "totalPaymentAmount", floatPaymentAmount, totalPaymentAmount)
 			if (floatPaymentAmount < totalPaymentAmount) {
-				this.setState({ errorMsg: "Total payment is greater than payment to apply" })
-				return false
+				this.setState({ 
+					errorMsg: "Total payment is greater than payment to apply",
+					overpayment: 0,
+				})
 			} else {
 				this.setState({
 					overpayment: floatPaymentAmount - totalPaymentAmount
 				})
 			}
-
-			if (value <= 0) {
-				console.log("Amount is invalid", value)
-				this.setState({ errorMsg: "Amount is invalid" })
-				return false
-			}
-
 
 			const isNonEmptyPayment = this.isNonEmptyPayment(rows)
 			console.log("isNonEmptyPayment", isNonEmptyPayment)
@@ -751,7 +746,6 @@ class PaymentFormModal extends React.Component {
 
 									<TextField sm={3} select margin="dense" id="PaymentType" label="Payment Type" variant="outlined"
 										// style={{ width: "30%" }}
-										autoFocus
 										className={classNames(classes.textField, "pr-6")}
 										value={this.state.PaymentType}
 										onChange={this.handleChange('PaymentType')}
@@ -767,6 +761,7 @@ class PaymentFormModal extends React.Component {
 									</TextField>
 
 									<TextField sm={3} type="number" margin="dense" id="ReferenceNo" label="Reference No." variant="outlined"
+										autoFocus
 										onChange={this.handleChange('ReferenceNo')}
 										value={this.state.ReferenceNo}
 										className={classNames(classes.textField, "pr-6")}
