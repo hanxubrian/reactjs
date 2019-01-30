@@ -672,10 +672,6 @@ class TransactionEditForm extends Component {
             return {value: t._id, label: t.Name}
         });
 
-
-
-        console.log(aTypes0);
-
         const components = {
             Control,
             Menu,
