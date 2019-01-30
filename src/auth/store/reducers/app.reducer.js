@@ -15,6 +15,7 @@ const app = function (state = initialState, action) {
             {
                 case Actions.INITIAL_START:
                 {
+                    let dev = state.url.split('.')[1]
                     if (action.payload.Settings.local.mode !== 0) {
                         return {
                             ...initialState,
@@ -25,6 +26,18 @@ const app = function (state = initialState, action) {
                             navSideBarIcon: action.payload.Settings.local.devices[0].assets.sidebarIcon,
                             navSideBarLeftBg: action.payload.Settings.local.devices[0].assets.vsidebarLeftBg,
                             copyRight: action.payload.Settings.local.copyright,
+                            url: window.location.host.split(':')[0]
+                        };
+                    } else if (dev) {
+                        return {
+                            ...initialState,
+                            loginLogo: action.payload.Settings.development.devices[0].assets.loginLogo,
+                            loginBackground: action.payload.Settings.development.devices[0].assets.hloginBg,
+                            loginVideoBackground: action.payload.Settings.development.devices[0].assets.loginVideoBg,
+                            navSideBarLogo: action.payload.Settings.development.devices[0].assets.sidebarLogo,
+                            navSideBarIcon: action.payload.Settings.development.devices[0].assets.sidebarIcon,
+                            navSideBarLeftBg: action.payload.Settings.development.devices[0].assets.vsidebarLeftBg,
+                            copyRight: action.payload.Settings.development.copyright,
                             url: window.location.host.split(':')[0]
                         };
                     } else {

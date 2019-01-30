@@ -398,17 +398,17 @@ class FuseLayout1 extends Component {
             </MuiThemeProvider>
         );
 
-        const footerTemplate = (
-            <MuiThemeProvider theme={FuseThemes[settings.theme.footer]}>
-                <AppBar id="fuse-footer" className={classNames(classes.footerWrapper)} color="default">
-                    <Toolbar className="p-0">
-                        <div className={classNames(classes.footer)}>
-                            {footer}
-                        </div>
-                    </Toolbar>
-                </AppBar>
-            </MuiThemeProvider>
-        );
+        // const footerTemplate = (
+        //     <MuiThemeProvider theme={FuseThemes[settings.theme.footer]}>
+        //         <AppBar id="fuse-footer" className={classNames(classes.footerWrapper)} color="default">
+        //             <Toolbar className="p-0">
+        //                 <div className={classNames(classes.footer)}>
+        //                     {footer}
+        //                 </div>
+        //             </Toolbar>
+        //         </AppBar>
+        //     </MuiThemeProvider>
+        // );
 
         switch ( layoutConfig.scroll )
         {
@@ -452,9 +452,9 @@ class FuseLayout1 extends Component {
                                             {children}
                                         </div>
 
-                                        {footer && layoutConfig.footer.display && layoutConfig.footer.position === 'below' && (
+                                        {/* {footer && layoutConfig.footer.display && layoutConfig.footer.position === 'below' && (
                                             footerTemplate
-                                        )}
+                                        )} */}
 
                                         {contentWrapper}
 
@@ -465,15 +465,15 @@ class FuseLayout1 extends Component {
                                     )}
                                 </div>
 
-                                {footer && layoutConfig.footer.display && layoutConfig.footer.style !== 'fixed' && layoutConfig.footer.position === 'above' && (
+                                {/* {footer && layoutConfig.footer.display && layoutConfig.footer.style !== 'fixed' && layoutConfig.footer.position === 'above' && (
                                     footerTemplate
-                                )}
+                                )} */}
 
                             </FuseScrollbars>
 
-                            {footer && layoutConfig.footer.display && layoutConfig.footer.style === 'fixed' && layoutConfig.footer.position === 'above' && (
+                            {/* {footer && layoutConfig.footer.display && layoutConfig.footer.style === 'fixed' && layoutConfig.footer.position === 'above' && (
                                 footerTemplate
-                            )}
+                            )} */}
 
                         </div>
 
@@ -523,14 +523,14 @@ class FuseLayout1 extends Component {
                                         {renderRoutes(this.props.routes)}
                                         {children}
 
-                                        {footer && layoutConfig.footer.display && layoutConfig.footer.position === 'below' && layoutConfig.footer.style !== 'fixed' && (
+                                        {/* {footer && layoutConfig.footer.display && layoutConfig.footer.position === 'below' && layoutConfig.footer.style !== 'fixed' && (
                                             footerTemplate
-                                        )}
+                                        )} */}
                                     </FuseScrollbars>
 
-                                    {footer && layoutConfig.footer.display && layoutConfig.footer.position === 'below' && layoutConfig.footer.style === 'fixed' && (
+                                    {/* {footer && layoutConfig.footer.display && layoutConfig.footer.position === 'below' && layoutConfig.footer.style === 'fixed' && (
                                         footerTemplate
-                                    )}
+                                    )} */}
 
                                     {contentWrapper}
                                 </div>
@@ -540,9 +540,9 @@ class FuseLayout1 extends Component {
                                 )}
                             </div>
 
-                            {footer && layoutConfig.footer.display && layoutConfig.footer.position === 'above' && (
+                            {/* {footer && layoutConfig.footer.display && layoutConfig.footer.position === 'above' && (
                                 footerTemplate
-                            )}
+                            )} */}
                         </div>
 
                         {layoutConfig.rightSidePanel.display && (

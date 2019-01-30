@@ -221,17 +221,17 @@ class FuseLayout2 extends Component {
             </MuiThemeProvider>
         );
 
-        const footerTemplate = (
-            <MuiThemeProvider theme={FuseThemes[settings.theme.footer]}>
-                <AppBar id="fuse-footer" className={classNames(classes.footerWrapper)} color="default">
-                    <Toolbar className="p-0">
-                        <div className={classNames(classes.footer)}>
-                            {footer}
-                        </div>
-                    </Toolbar>
-                </AppBar>
-            </MuiThemeProvider>
-        );
+        // const footerTemplate = (
+        //     <MuiThemeProvider theme={FuseThemes[settings.theme.footer]}>
+        //         <AppBar id="fuse-footer" className={classNames(classes.footerWrapper)} color="default">
+        //             <Toolbar className="p-0">
+        //                 <div className={classNames(classes.footer)}>
+        //                     {footer}
+        //                 </div>
+        //             </Toolbar>
+        //         </AppBar>
+        //     </MuiThemeProvider>
+        // );
 
         return (
             <div id="fuse-layout" className={classNames(classes.root, layoutConfig.mode)}>
@@ -263,14 +263,14 @@ class FuseLayout2 extends Component {
                             {children}
                         </div>
 
-                        {footer && layoutConfig.footer.display && layoutConfig.footer.style === 'static' && (
+                        {/* {footer && layoutConfig.footer.display && layoutConfig.footer.style === 'static' && (
                             footerTemplate
-                        )}
+                        )} */}
                     </FuseScrollbars>
 
-                    {footer && layoutConfig.footer.display && layoutConfig.footer.style === 'fixed' && (
+                    {/* {footer && layoutConfig.footer.display && layoutConfig.footer.style === 'fixed' && (
                         footerTemplate
-                    )}
+                    )} */}
 
                     {contentWrapper}
                 </div>
