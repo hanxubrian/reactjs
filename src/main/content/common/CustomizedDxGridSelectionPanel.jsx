@@ -17,13 +17,13 @@ const styles = {
 	}
 };
 
-export const CustomizedDxGridSelectionPanelBase = ({ selection, classes }) => (
+export const CustomizedDxGridSelectionPanelBase = ({ selection, rows, classes }) => (
 	<Plugin name="SelectionPanel">
 		<Template name="footer">
 			{/* <div className={classes.container}> */}
 			{/* <div className={classes.selectionPanel}> */}
 			<div className="pl-12" style={{ position: "absolute", bottom: 25 }}>
-				Rows selected: {selection.length}
+				{selection.length} Selected, Total: {rows.length} 
 			</div>
 			{/* </div> */}
 			<TemplatePlaceholder />

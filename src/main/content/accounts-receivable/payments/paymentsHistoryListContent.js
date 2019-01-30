@@ -349,7 +349,7 @@ const Command = ({ id, onExecute }) => {
 };
 const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 
-class PaymentsListContent extends Component {
+class paymentsHistoryListContent extends Component {
 
 	constructor(props) {
 		super(props);
@@ -775,13 +775,11 @@ class PaymentsListContent extends Component {
 		<span>
 			{/* {column.title} */}
 			<span>
-				<Checkbox onClick={(ev) => this.onClickGroupCell(ev, row.value)}></Checkbox>
 				<strong>{row.value}</strong>
 			</span>
 
 			<span style={{ float: "right" }}>
 				OverPayment: $ {this.getOverpaymentByGroupTitle(row.value)}
-				<Button onClick={(ev) => this.onClickGroupCellApplyOverpayment(ev, row.value)} variant="contained" color="primary" className="ml-24 pr-24 pl-24">Apply</Button>
 			</span>
 		</span>
 	);
@@ -858,12 +856,12 @@ class PaymentsListContent extends Component {
 
 							<PagingPanel pageSizes={pageSizes} />
 
-							<SelectionState
+							{/* <SelectionState
 								selection={selection}
 								onSelectionChange={this.changeSelection}
 							/>
 
-							<IntegratedSelection />
+							<IntegratedSelection /> */}
 
 							<SortingState
 								sorting={sorting}
@@ -929,7 +927,7 @@ class PaymentsListContent extends Component {
 							<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
 
 							{/* <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} /> */}
-							<TableSelection highlightRow rowComponent={this.TableRow} />
+							{/* <TableSelection highlightRow rowComponent={this.TableRow} /> */}
 
 							<TableHeaderRow showSortingControls />
 
@@ -987,5 +985,5 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(PaymentsListContent)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(paymentsHistoryListContent)));
 

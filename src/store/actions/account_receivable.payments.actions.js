@@ -15,6 +15,8 @@ export const CREATE_AR_PAYMENTS = "[A.R.Payments] CREATE_AR_PAYMENTS";
 export const CREATE_AR_PAYMENTS_START = "[A.R.Payments] CREATE_AR_PAYMENTS_START";
 export const FAILED_GET_ALL_RECEIVABLE_PAYMENTS = "[A.R.Payments] FAILED_GET_ALL_RECEIVABLE_PAYMENTS";
 export const SHOW_ERROR_DIALOG = "[A.R.Payments] SHOW_ERROR_DIALOG";
+export const SET_PAYMENT_STATUS_FILTER = "[A.R.Payments] SET_PAYMENT_STATUS_FILTER";
+export const SET_VIEW_MODE = "[A.R.Payments] SET_VIEW_MODE";
 
 
 export function getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status) {
@@ -122,5 +124,17 @@ export function showErrorDialog(params) {
 	return {
 		type: SHOW_ERROR_DIALOG,
 		payload: params
+	}
+}
+export function setPaymentStatusFitler(status) {
+	return {
+		type: SET_PAYMENT_STATUS_FILTER,
+		payload: status
+	}
+}
+export function setViewMode(mode) {
+	return {
+		type: SET_VIEW_MODE,
+		payload: mode
 	}
 }

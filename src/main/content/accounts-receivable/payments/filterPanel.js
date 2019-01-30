@@ -4,7 +4,7 @@ import { Grid, Paper, withStyles } from '@material-ui/core';
 //Material UI core
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { MenuItem, FormControl, Select } from '@material-ui/core';
+import { MenuItem, FormControl, Select, RadioGroup, Radio } from '@material-ui/core';
 import { FuseThemes } from '@fuse';
 
 import 'date-fns'
@@ -127,25 +127,40 @@ class FilterPanel extends Component {
 
 		switch (name) {
 			case "PaymentStatusOpen":
-				if (this.state.PaymentStatusAll !== (event.target.checked && this.state.PaymentStatusPaid)) {
-					this.setState({ PaymentStatusAll: (event.target.checked && this.state.PaymentStatusPaid) })
+				if (event.target.checked) {
+					this.props.setPaymentStatusFitler(this.state.PaymentStatusPaid ? "All" : "Open")
+				} else {
+					this.props.setPaymentStatusFitler(this.state.PaymentStatusPaid ? "Paid" : "All")
 				}
-				break;
 			case "PaymentStatusPaid":
-				if (this.state.PaymentStatusAll !== (this.state.PaymentStatusOpen && event.target.checked)) {
-					this.setState({ PaymentStatusAll: (this.state.PaymentStatusOpen && event.target.checked) })
+				if (event.target.checked) {
+					this.props.setPaymentStatusFitler(this.state.PaymentStatusOpen ? "All" : "Paid")
+				} else {
+					this.props.setPaymentStatusFitler(this.state.PaymentStatusOpen ? "Open" : "All")
 				}
-				break;
-			case "PaymentStatusAll":
-
-				if (event.target.checked !== this.state.PaymentStatusOpen) {
-					this.setState({ PaymentStatusOpen: event.target.checked })
-				}
-				if (event.target.checked !== this.state.PaymentStatusPaid) {
-					this.setState({ PaymentStatusPaid: event.target.checked })
-				}
-				break;
+				break
 		}
+
+		// switch (name) {
+		// 	case "PaymentStatusOpen":
+		// 		if (this.state.PaymentStatusAll !== (event.target.checked && this.state.PaymentStatusPaid)) {
+		// 			this.setState({ PaymentStatusAll: (event.target.checked && this.state.PaymentStatusPaid) })
+		// 		}
+		// 		break;
+		// 	case "PaymentStatusPaid":
+		// 		if (this.state.PaymentStatusAll !== (this.state.PaymentStatusOpen && event.target.checked)) {
+		// 			this.setState({ PaymentStatusAll: (this.state.PaymentStatusOpen && event.target.checked) })
+		// 		}
+		// 		break;
+		// 	case "PaymentStatusAll":
+		// 		if (event.target.checked !== this.state.PaymentStatusOpen) {
+		// 			this.setState({ PaymentStatusOpen: event.target.checked })
+		// 		}
+		// 		if (event.target.checked !== this.state.PaymentStatusPaid) {
+		// 			this.setState({ PaymentStatusPaid: event.target.checked })
+		// 		}
+		// 		break;
+		// }
 	};
 
 	handleChange = (index, name) => event => {
@@ -155,6 +170,13 @@ class FilterPanel extends Component {
 		this.setState({ invoiceStatus: iStatus });
 		this.props.updateInvoiceStatus(iStatus)
 	};
+
+	handleChange = name => event => {
+		this.setState({ [name]: event.target.value });
+		if (name === "viewMode") {
+			this.props.setViewMode(event.target.value)
+		}
+	}
 
 	handleChange1 = event => {
 		this.setState({ [event.target.name]: event.target.value });
@@ -352,6 +374,18 @@ class FilterPanel extends Component {
 				)}
 
 				<div style={{ marginTop: 20, display: 'flex', flexDirection: 'column' }}>
+					<h3>View Mode</h3>
+					<RadioGroup
+						aria-label="Location"
+						name="Location"
+						className={classes.group}
+						value={this.props.viewMode}
+					>
+						<FormControlLabel value="Invoice" control={<Radio onChange={this.handleChange('viewMode')} />} label="Invoice" />
+						<FormControlLabel value="PaymentHistory" control={<Radio onChange={this.handleChange('viewMode')} />} label="Payment History" />
+					</RadioGroup>
+				</div>
+				<div style={{ marginTop: 20, display: 'flex', flexDirection: 'column' }}>
 					<h3>Type</h3>
 					{[
 						{ Name: "Check" },
@@ -378,7 +412,7 @@ class FilterPanel extends Component {
 					})}
 					<br></br>
 					<h3>Payment Status</h3>
-					<FormControlLabel
+					{/* <FormControlLabel
 						control={
 							<Switch
 								checked={this.state.PaymentStatusAll}
@@ -387,7 +421,7 @@ class FilterPanel extends Component {
 							/>
 						}
 						label="All"
-					/>
+					/> */}
 					<FormControlLabel
 						control={
 							<Switch
@@ -422,11 +456,14 @@ function mapDispatchToProps(dispatch) {
 		updateDate: Actions.updateDate,
 		updateInvoiceStatus: Actions.updateInvoiceStatus,
 		updateInvoiceDateOption: Actions.updateInvoiceDateOption,
-		updatePeriodOption: Actions.updatePeriodOption
+		updatePeriodOption: Actions.updatePeriodOption,
+
+		setPaymentStatusFitler: Actions.setPaymentStatusFitler,
+		setViewMode: Actions.setViewMode,
 	}, dispatch);
 }
 
-function mapStateToProps({ invoices, fuse }) {
+function mapStateToProps({ invoices, fuse, accountReceivablePayments }) {
 	return {
 		filterState: invoices.bOpenedFilterPanel,
 		transactionStatus: invoices.transactionStatus,
@@ -435,6 +472,10 @@ function mapStateToProps({ invoices, fuse }) {
 		ToDate: invoices.ToDate,
 		settings: fuse.settings.current,
 		invoiceDateOption: invoices.invoiceDateOption,
+
+		invoiceDateOption: invoices.invoiceDateOption,
+
+		viewMode: accountReceivablePayments.viewMode,
 	}
 }
 
