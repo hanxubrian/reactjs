@@ -186,6 +186,6 @@ const transactions = function(state = initialState, action) {
 const persistConfig = {
     key: 'transactions',
     storage: storage,
-    blacklist: ["bOpenedTransactionFilterPanel", "transactionForm"]
+    blacklist: ['bOpenedTransactionFilterPanel', 'transactionForm']
 };
 export default persistReducer(persistConfig, transactions);

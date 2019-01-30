@@ -383,8 +383,10 @@ class TransactionEditForm extends Component {
     getSuggestions = (value) => {
         const escapedValue = escapeRegexCharacters(value.trim());
         const regex = new RegExp(escapedValue, 'i');
-        if(this.props.franchisees!==null)
-            return this.props.franchisees.filter(f => regex.test(f.Name) || regex.test(f.Number)|| regex.test(f.StatusName));
+        let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList
+
+        if(franchisees!==null)
+            return franchisees.filter(f => regex.test(f.Name) || regex.test(f.Number)|| regex.test(f.StatusName));
     };
 
     getTotal = () => {
@@ -428,6 +430,9 @@ class TransactionEditForm extends Component {
                 this.setState({grossTotal: 0});
                 this.setState({startDate: moment()});
                 this.props.updateVendor({vendor: {value:'', label: ''}, vendor_no: '', vendorDate: moment().format('YYYY-MM-DD')});
+                if(this.input) {
+                    setTimeout(() => {this.input.focus()}, 500);
+                }
             }
             else if(this.state.buttonOption===1) {
                 this.closeComposeForm();
@@ -441,45 +446,48 @@ class TransactionEditForm extends Component {
 
         if(this.props.transactionForm.type === 'edit' && this.props.transactionDetail!==null) {
             let trxDetail = this.props.transactionDetail.Data;
-            let franchisee = _.filter(this.props.franchisees, franchisee=>trxDetail.FranchiseeNo===franchisee.Number && trxDetail.FranchiseeName===franchisee.Name);
+            console.log('franchisees=', this.props.franchisees);
+            if(this.props.franchisees!==null) {
+                let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList;
 
+                let franchisee = _.filter(franchisees, franchisee=>trxDetail.FranchiseeNo===franchisee.Number && trxDetail.FranchiseeName===franchisee.Name);
+                if(franchisee.length>0) {
+                    this.setState({selectedFranchisee: franchisee[0]});
+                    this.setState({value: trxDetail.FranchiseeName});
+                    this.setState({subTotal: parseFloat(trxDetail.TrxExtendedPrice)});
+                    this.setState({unitPrice: parseFloat(trxDetail.TrxItemAmount)});
 
-            if(franchisee.length>0) {
-                this.setState({selectedFranchisee: franchisee[0]});
-                this.setState({value: trxDetail.FranchiseeName});
-                this.setState({subTotal: parseFloat(trxDetail.TrxExtendedPrice)});
-                this.setState({unitPrice: parseFloat(trxDetail.TrxItemAmount)});
+                    let tax = parseFloat(trxDetail.TrxTax);
+                    if(trxDetail.TrxType!=='5c41272c4d275d4560e90fb9') tax = 0.00;
 
-                let tax = parseFloat(trxDetail.TrxTax);
-                if(trxDetail.TrxType!=='5c41272c4d275d4560e90fb9') tax = 0.00;
+                    this.setState({tax: tax});
+                    this.setState({quantity: parseFloat(trxDetail.quantity)});
+                    this.setState({total: parseFloat(trxDetail.TrxExtendedPrice)+ tax});
+                    this.setState({TransactionDate: moment(trxDetail.TrxDate)});
 
-                this.setState({tax: tax});
-                this.setState({quantity: parseFloat(trxDetail.quantity)});
-                this.setState({total: parseFloat(trxDetail.TrxExtendedPrice)+ tax});
-                this.setState({TransactionDate: moment(trxDetail.TrxDate)});
+                    let trxType = this.props.transactionTypeList.filter(f=>f.value === parseInt(trxDetail.Trxtype));
 
-                let trxType = this.props.transactionTypeList.filter(f=>f.value === parseInt(trxDetail.Trxtype));
+                    if(trxType.length)
+                        this.setState({transactionType: trxType[0]});
 
-                if(trxType.length)
-                    this.setState({transactionType: trxType[0]});
+                    this.setState({transactionFrequency: trxDetail.TrxFrequency});
+                    this.setState({payments: parseInt(trxDetail.NumberOfPayments)});
+                    this.setState({TransactionNo: trxDetail.Trx_no});
+                    this.setState({reSell: trxDetail.TrxResell});
+                    this.setState({transactionDescription: trxDetail.Description});
 
-                this.setState({transactionFrequency: trxDetail.TrxFrequency});
-                this.setState({payments: parseInt(trxDetail.NumberOfPayments)});
-                this.setState({TransactionNo: trxDetail.Trx_no});
-                this.setState({reSell: trxDetail.TrxResell});
-                this.setState({transactionDescription: trxDetail.Description});
+                    // for recurring
+                    this.setState({grossTotal: trxDetail.GrossTotal});
+                    this.setState({billedPayments: trxDetail.BilledPayment});
+                    this.setState({startDate: moment(trxDetail.startDate)});
 
-                // for recurring
-                this.setState({grossTotal: trxDetail.GrossTotal});
-                this.setState({billedPayments: trxDetail.BilledPayment});
-                this.setState({startDate: moment(trxDetail.startDate)});
-
-                // for Vendor
-                let vendor = {label: trxDetail.VendorLabel, value: trxDetail.VendorValue};
-                let vendor_no = trxDetail.VendorNo;
-                let vendorDate = trxDetail.VendorDate;
-                this.setState({vendor: {vendor, vendor_no, vendorDate}});
-                this.props.updateVendor({vendor, vendor_no, vendorDate});
+                    // for Vendor
+                    let vendor = {label: trxDetail.VendorLabel, value: trxDetail.VendorValue};
+                    let vendor_no = trxDetail.VendorNo;
+                    let vendorDate = trxDetail.VendorDate;
+                    this.setState({vendor: {vendor, vendor_no, vendorDate}});
+                    this.props.updateVendor({vendor, vendor_no, vendorDate});
+                }
             }
         }
 
@@ -535,6 +543,7 @@ class TransactionEditForm extends Component {
             Company_no: '',
 
             TrxType: this.state.transactionType.value,
+            TrxTypeLabel: this.state.transactionType.label,
             TrxFrequency: this.state.transactionFrequency,
             TrxResell: this.state.reSell, //Boolean
 
@@ -1212,7 +1221,7 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({transactions, auth})
+function mapStateToProps({transactions, auth, franchisees})
 {
     return {
         transactionForm: transactions.transactionForm,
@@ -1222,7 +1231,8 @@ function mapStateToProps({transactions, auth})
         regionId: auth.login.defaultRegionId,
         trxRowInfo: transactions.transactionForm.trxRowInfo,
         transactionDetail: transactions.transactionDetail,
-        transactionTypeList: transactions.transactionTypeList
+        transactionTypeList: transactions.transactionTypeList,
+        franchisees: franchisees.franchiseesDB,
     }
 }
 
