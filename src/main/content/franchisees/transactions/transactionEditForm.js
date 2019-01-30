@@ -331,7 +331,7 @@ class TransactionEditForm extends Component {
         paymentsDate: new Date(),
         grossTotal: 0,
         startDate: moment(),
-        trxClass: 'C'
+        TrxClass: 'C'
     };
 
     renderInputComponent = (inputProps ) => {
@@ -471,10 +471,10 @@ class TransactionEditForm extends Component {
                     this.setState({total: parseFloat(trxDetail.TrxExtendedPrice)+ tax});
                     this.setState({TransactionDate: moment(trxDetail.TrxDate)});
 
-                    let trxType = this.props.transactionTypeList.filter(f=>f.value === parseInt(trxDetail.Trxtype));
+                    let trxType = this.props.transactionTypeList.filter(f=>f._id === trxDetail.Trxtype);
 
                     if(trxType.length)
-                        this.setState({transactionType: trxType[0]});
+                        this.setState({transactionType: {value: trxType[0]._id, label: trxType[0].Name}});
 
                     this.setState({transactionFrequency: trxDetail.TrxFrequency});
                     this.setState({payments: parseInt(trxDetail.NumberOfPayments)});
@@ -538,6 +538,7 @@ class TransactionEditForm extends Component {
 
     addNewTransaction = () => {
         let tTypeTaxValue = '5c41272c4d275d4560e90fb9';
+        console.log('trxclass=',this.state.TrxClass);
         let result = {
             Trx_no: this.state.TransactionNo,
             RegionId: this.props.regionId,
@@ -832,12 +833,12 @@ class TransactionEditForm extends Component {
                                     <FormLabel component="legend">Transaction Class</FormLabel>
                                     <RadioGroup
                                         aria-label="Transaction Class"
-                                        name="trxClass"
+                                        name="TrxClass"
                                         className={classes.group}
                                         classes={{
                                             root: classes.group
                                         }}
-                                        value={this.state.trxClass}
+                                        value={this.state.TrxClass}
                                         onChange={this.handleChange}
                                     >
                                         <FormControlLabel value="C" control={<Radio />} label="Credit" />
