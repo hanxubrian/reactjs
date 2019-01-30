@@ -72,6 +72,13 @@ const styles = theme => ({
             padding: '0!important'
         }
     },
+    formControl1: {
+        marginBottom: 12,
+        width: 120,
+        '& .no-padding': {
+            padding: '0!important'
+        }
+    },
     textField: {
         marginLeft: 0,
         marginRight: theme.spacing.unit,
@@ -189,11 +196,18 @@ const styles = theme => ({
     inputMenu: {
         padding: '10px 16px'
     },
+    inputMenu1: {
+        padding: '10px 16px',
+        maxWidth: 125
+    },
     group: {
         flexDirection: 'row',
         '& label': {
             minWidth: 150
         }
+    },
+    frequencyMenu:{
+        maxWidth: 120
     }
 });
 
@@ -847,17 +861,20 @@ class TransactionEditForm extends Component {
                                 </FormControl>
 
                             </Grid>
-                            <Grid item xs={12} sm={12} md={12} className="flex flex-1 flex-row pt-0 w-full items-center">
+                            <Grid item xs={12} sm={6} md={6} className="flex flex-1 flex-row pt-0 w-full items-center">
                                 <div>Frequency: </div>
-                                <FormControl variant="outlined" className={classNames(classes.formControl, "ml-24 w-full")}>
+                                <FormControl variant="outlined" className={classNames(classes.formControl1, "ml-8")}>
                                     <Select
                                         classes={{
-                                            outlined: classNames(classes.outlined,classes.services),
-                                            selectMenu: classNames(classes.inputMenu)
+                                            root: classNames(classes.frequencyMenu),
+                                            outlined: classNames(classes.frequencyMenu,classes.services),
+                                            selectMenu: classNames(classes.inputMenu1),
+                                            select: classNames(classes.frequencyMenu),
                                         }}
                                         name="transactionFrequency"
                                         value={this.state.transactionFrequency}
                                         onChange={this.handleChange}
+                                        autoWidth={true}
                                         input={
                                             <OutlinedInput
                                                 labelWidth={this.state.labelWidth}
@@ -877,9 +894,9 @@ class TransactionEditForm extends Component {
                                     </Select>
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={12} className="flex flex-row pt-16 items-center pt-0 mr-12 pr-0">
+                            <Grid item xs={12} sm={6} md={6} className="flex flex-row pt-16 items-center pt-0 mr-12 mb-16">
                                 <div>Type: </div>
-                                <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl, "ml-24 w-full mr-24")}>
+                                <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl, "ml-4 w-full mr-12")}>
                                     <div className={classes.root1}>
                                         <NoSsr>
                                             <Select1
@@ -894,18 +911,6 @@ class TransactionEditForm extends Component {
                                         </NoSsr>
                                     </div>
                                 </FormControl>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={this.state.reSell}
-                                            onChange={this.handleChange}
-                                            value="resell"
-                                            color="primary"
-                                            name="reSell"
-                                        />
-                                    }
-                                    label="ReSell"
-                                />
                             </Grid>
                         </Grid>
 
@@ -983,7 +988,7 @@ class TransactionEditForm extends Component {
                                 id="unitPrice"
                                 name="unitPrice"
                                 label="Item Amount"
-                                className={classNames(classes.textField, 'mr-0')}
+                                className={classNames(classes.textField, 'mr-12')}
                                 value={this.state.unitPrice}
                                 onChange={this.handleChange1('unitPrice')}
                                 onBlur={this.handleBlurTransaction('unitPrice')}
@@ -1000,6 +1005,18 @@ class TransactionEditForm extends Component {
                                     },
                                 }}
                                 required
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={this.state.reSell}
+                                        onChange={this.handleChange}
+                                        value="resell"
+                                        color="primary"
+                                        name="reSell"
+                                    />
+                                }
+                                label="ReSell"
                             />
                         </div>
                         {this.state.transactionType.value==='5c41272c4d275d4560e90fb9' && this.props.transactionForm.vendor!==null && ( // Franchisee Supplies

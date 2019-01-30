@@ -397,16 +397,16 @@ class TransactionsApp extends Component {
                                                     </Toolbar>
                                                 </FuseAnimate>
 
-                                                {this.props.transactionForm.type === 'edit' && (
+                                                {this.props.transactionForm.props.open && (
                                                     <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                                         <Typography variant="h6" className="hidden sm:flex">Franchisees | Summary</Typography>
                                                     </FuseAnimate>
                                                 )}
-                                                {this.props.transactionForm.type === 'new' && (
-                                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                                        <Typography variant="h6" className="hidden sm:flex">Franchisees | New Transaction</Typography>
-                                                    </FuseAnimate>
-                                                )}
+                                                {/*{this.props.transactionForm.type === 'new' && (*/}
+                                                    {/*<FuseAnimate animation="transition.slideLeftIn" delay={300}>*/}
+                                                        {/*<Typography variant="h6" className="hidden sm:flex">Franchisees | New Transaction</Typography>*/}
+                                                    {/*</FuseAnimate>*/}
+                                                {/*)}*/}
 
                                             </div>
                                         </div>
