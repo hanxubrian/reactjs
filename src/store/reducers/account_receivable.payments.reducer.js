@@ -49,6 +49,7 @@ const accountReceivablePayments = function (state = initialState, action) {
 				ACC_payments: action.payload.Data,
 				bACC_fechStart: false,
 				bLoadedPayments: true,
+				activePaymentRows: [],
 			}
 		case Actions.GET_ALL_RECEIVABLE_PAYMENTS_START:
 			return {
@@ -91,28 +92,33 @@ const accountReceivablePayments = function (state = initialState, action) {
 		//
 		case Actions.APPLY_SEARCH_TEXT_ARP:
 			return {
-				...state, searchText: action.payload
+				...state,
+				searchText: action.payload,
+				activePaymentRows: [],
 			}
 		//
 		// OPEN PAYMENT MODAL DIALOG
 		//
 		case Actions.OPEN_PAYMENT_DIALOG:
 			return {
-				...state, bOpenPaymentDialog: action.payload
+				...state,
+				bOpenPaymentDialog: action.payload
 			}
 		//
 		// SELECT PAYMENTS ON GRID
 		//
 		case Actions.SET_ACTIVE_PAYMENT_ROWS:
 			return {
-				...state, activePaymentRows: action.payload
+				...state,
+				activePaymentRows: action.payload
 			}
 		//
 		// SHOW ERROR DIALOG
 		//
 		case Actions.SHOW_ERROR_DIALOG:
 			return {
-				...state, errorInfo: action.payload
+				...state,
+				errorInfo: action.payload
 			}
 		//
 		// SET_PAYMENT_STATUS_FILTER
