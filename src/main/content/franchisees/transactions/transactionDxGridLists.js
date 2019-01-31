@@ -11,7 +11,9 @@ import {
     IntegratedPaging,
     DataTypeProvider,
     GroupingState,SelectionState,IntegratedSelection,
-    IntegratedGrouping, TableColumnVisibility
+    IntegratedGrouping, TableColumnVisibility,
+    SortingState,
+    IntegratedSorting,
 } from '@devexpress/dx-react-grid';
 
 import {
@@ -163,6 +165,7 @@ class TransactionsDxGridLists extends Component {
         pageSizes: [5, 10, 25, 50, 100],
         currentPage: 0,
         pageSize: 100,
+        sorting: [{ columnName: 'TrxClass', direction: 'asc'}]
     };
 
     constructor(props) {
@@ -328,6 +331,8 @@ class TransactionsDxGridLists extends Component {
 
     changeSelection = selection => this.setState({ selection });
 
+    changeSorting = sorting => this.setState({ sorting });
+
     render() {
         const {classes} = this.props;
         const {expandedGroups} = this.state;
@@ -348,20 +353,19 @@ class TransactionsDxGridLists extends Component {
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'Number', width: 100 },
-            { columnName: 'Description', width: -1 },
-            { columnName: 'ExtendedPrice', width: 100,  align: 'right' },
-            { columnName: 'Tax', width: 80,  align: 'right' },
-            { columnName: 'Fees', width: 80,  align: 'right' },
+            { columnName: 'Number', width: 100, },
+            { columnName: 'Description', width: -1},
+            { columnName: 'ExtendedPrice', width: 100,  align: 'right'},
+            { columnName: 'Tax', width: 80,  align: 'right'},
+            { columnName: 'Fees', width: 80,  align: 'right'},
             { columnName: 'TotalTrxAmount', width: 120,  align: 'right'},
             { columnName: 'TrxDate', width: 100 },
             { columnName: 'TrxType', width: 160 },
-            { columnName: 'TrxClass', width: 80 },
-            { columnName: 'Status', width: 80 },
+            { columnName: 'TrxClass', width: 100},
+            { columnName: 'Status', width: 80},
             { columnTitle: 'Id', width: 100 },
         ];
 
-        console.log('type=', this.props.transactionTypeList);
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
                 <Grid rows={this.state.data} columns={columns}>
@@ -381,6 +385,11 @@ class TransactionsDxGridLists extends Component {
                     <DateTypeProvider
                         for={['TrxDate']}
                     />
+                    <SortingState
+                        sorting={this.state.sorting}
+                        onSortingChange={this.changeSorting}
+                    />
+                    <IntegratedSorting />
                     <GroupingState
                         grouping={[
                             {columnName: 'FranNameNo'},
@@ -399,7 +408,7 @@ class TransactionsDxGridLists extends Component {
                                   cellComponent={this.ActionCell}
                                   rowComponent = {this.TableRow}
                     />
-                    <TableHeaderRow/>
+                    <TableHeaderRow showSortingControls/>
                     <TableGroupRow
                         showColumnsWhenGrouped contentComponent={this.GroupCellContent}
                     />
