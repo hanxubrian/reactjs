@@ -491,52 +491,52 @@ class TransactionEditForm extends Component {
                 let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList;
 
                 let franchisee = _.filter(franchisees, franchisee=>trxDetail.FranchiseeNo===franchisee.Number && trxDetail.FranchiseeName===franchisee.Name);
-                if(franchisee.length>0)
+                if(franchisee.length>0) {
                     this.setState({selectedFranchisee: franchisee[0]});
+                    this.setState({value: trxDetail.FranchiseeName});
+                    this.setState({subTotal: parseFloat(trxDetail.TrxExtendedPrice)});
+                    this.setState({unitPrice: parseFloat(trxDetail.TrxItemAmount)});
+                    this.setState({TrxChargeType: trxDetail.TrxChargeType});
 
-                this.setState({value: trxDetail.FranchiseeName});
-                this.setState({subTotal: parseFloat(trxDetail.TrxExtendedPrice)});
-                this.setState({unitPrice: parseFloat(trxDetail.TrxItemAmount)});
-                this.setState({TrxChargeType: trxDetail.TrxChargeType});
+                    let tax = parseFloat(trxDetail.TrxTax);
+                    if(trxDetail.TrxClass!=='5c5320066846d77648859107') tax = 0.00;
 
-                let tax = parseFloat(trxDetail.TrxTax);
-                if(trxDetail.TrxClass!=='5c5320066846d77648859107') tax = 0.00;
+                    this.setState({tax: tax});
+                    this.setState({quantity: parseFloat(trxDetail.quantity)});
+                    this.setState({total: parseFloat(trxDetail.TrxExtendedPrice)+ tax});
+                    this.setState({TransactionDate: moment(trxDetail.TrxDate)});
 
-                this.setState({tax: tax});
-                this.setState({quantity: parseFloat(trxDetail.quantity)});
-                this.setState({total: parseFloat(trxDetail.TrxExtendedPrice)+ tax});
-                this.setState({TransactionDate: moment(trxDetail.TrxDate)});
-
-                let period = trxDetail.month.toString()+'/'+trxDetail.year.toString();
-                if(trxDetail.month<10)
-                    period = '0'+period;
-
-
-                // console.log('period1=', trxDetail.month<10 ? '0':''+);
-                this.setState({TransactionPeriod: period});
+                    let period = trxDetail.month.toString()+'/'+trxDetail.year.toString();
+                    if(trxDetail.month<10)
+                        period = '0'+period;
 
 
-                let trxType = this.props.transactionTypeList.filter(f=>f._id === trxDetail.Trxtype);
+                    // console.log('period1=', trxDetail.month<10 ? '0':''+);
+                    this.setState({TransactionPeriod: period});
 
-                if(trxType.length)
-                    this.setState({transactionClass: {value: trxType[0]._id, label: trxType[0].Name}});
 
-                this.setState({transactionFrequency: trxDetail.TrxFrequency});
-                this.setState({payments: parseInt(trxDetail.NumberOfPayments)});
-                this.setState({TransactionNo: trxDetail.Trx_no});
-                this.setState({reSell: trxDetail.TrxResell});
-                this.setState({transactionDescription: trxDetail.Description});
+                    let trxType = this.props.transactionTypeList.filter(f=>f._id === trxDetail.Trxtype);
 
-                // for recurring
-                this.setState({grossTotal: trxDetail.GrossTotal});
-                this.setState({startDate: moment(trxDetail.startDate)});
+                    if(trxType.length)
+                        this.setState({transactionClass: {value: trxType[0]._id, label: trxType[0].Name}});
 
-                // for Vendor
-                let vendor = {label: trxDetail.VendorLabel, value: trxDetail.VendorValue};
-                let vendor_no = trxDetail.VendorNo;
-                let vendorDate = trxDetail.VendorDate;
-                this.setState({vendor: {vendor, vendor_no, vendorDate}});
-                this.props.updateVendor({vendor, vendor_no, vendorDate});
+                    this.setState({transactionFrequency: trxDetail.TrxFrequency});
+                    this.setState({payments: parseInt(trxDetail.NumberOfPayments)});
+                    this.setState({TransactionNo: trxDetail.Trx_no});
+                    this.setState({reSell: trxDetail.TrxResell});
+                    this.setState({transactionDescription: trxDetail.Description});
+
+                    // for recurring
+                    this.setState({grossTotal: trxDetail.GrossTotal});
+                    this.setState({startDate: moment(trxDetail.startDate)});
+
+                    // for Vendor
+                    let vendor = {label: trxDetail.VendorLabel, value: trxDetail.VendorValue};
+                    let vendor_no = trxDetail.VendorNo;
+                    let vendorDate = trxDetail.VendorDate;
+                    this.setState({vendor: {vendor, vendor_no, vendorDate}});
+                    this.props.updateVendor({vendor, vendor_no, vendorDate});
+                }
             }
         }
 
