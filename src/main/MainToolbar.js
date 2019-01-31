@@ -281,25 +281,26 @@ class MainToolbar extends Component {
         });
     }
     componentDidUpdate(prevProps,prevState){
-        // if(this.state.pusherMSG && this.state.pusherMSG !== null){
-        //     console.log("######DB############this.props.getpusherNotificationDB",this.props.getpusherNotificationDB);
-        //     console.log("######pushermsg############this.state.pusherMSG",this.state.pusherMSG);
-        //     console.log("######billstatus############this.props.billstatus",this.props.billstatus);
-        //     console.log("######subject############this.state.pusherMSG.subject",this.state.pusherMSG.subject);
-        //     console.log("######msg############this.state.pusherMSG",this.state.pusherMSG);
-        //     console.log("######MSG############prevState.pusherMSG",prevState.pusherMSG);
-        // }
+        if(this.state.pusherMSG && this.state.pusherMSG !== null){
+            console.log("######DB############this.props.getpusherNotificationDB",this.props.getpusherNotificationDB);
+            console.log("######pushermsg############this.state.pusherMSG",this.state.pusherMSG);
+            console.log("######billstatus############this.props.billstatus",this.props.billstatus);
+            console.log("######subject############this.state.pusherMSG.subject",this.state.pusherMSG.subject);
+            console.log("######msg############this.state.pusherMSG",this.state.pusherMSG);
+            console.log("######MSG############prevState.pusherMSG",prevState.pusherMSG);
+            console.log("######MSG############this.props.login.UserId.toString()",this.props.login.UserId.toString());
+        }
 
 
-        if(this.state.pusherMSG && this.state.pusherMSG !== null && this.state.pusherMSG.subject && this.state.pusherMSG.subject !== null && this.state.pusherMSG.subject.toString() ==="BillRun" && JSON.stringify(this.state.pusherMSG) !== JSON.stringify(prevState.pusherMSG) ){
+        if(this.state.pusherMSG && this.state.pusherMSG !== null && this.state.pusherMSG.subject && this.state.pusherMSG.subject !== null && this.state.pusherMSG.subject.toString() ==="BillRun"  ){//&& JSON.stringify(this.state.pusherMSG) !== JSON.stringify(prevState.pusherMSG)
             if(this.props.billstatus===400){
                 this.billrunerrormessage();
                 // console.log("error=============1");
             }
             else if(this.props.billstatus===200){
-                // console.log("**************this.props.login.UserId.toString()" ,this.props.login.UserId.toString());
+                console.log("**************this.props.login.UserId.toString()" ,this.props.login.UserId.toString());
                 if(this.state.pusherMSG.user === this.props.login.UserId.toString()){
-                    // console.log("error=============2");
+                    console.log("error=============2");
                     this.billrunsuccessmesssage();
                 }
 
