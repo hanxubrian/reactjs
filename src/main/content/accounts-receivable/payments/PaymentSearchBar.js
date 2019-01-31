@@ -221,14 +221,15 @@ class PaymentSearchBar extends Component {
 
 				</Paper>
 
-				<div className="flex items-center justify-end p-12">
+				{/* <div className="flex items-center justify-end p-12">
 					<Button
 						onClick={this.props.toggleSummaryPanelAccountReceivablePayments}
 						aria-label="toggle summary panel"
 						className={classNames(classes.summaryPanelButton)}
 					>
 						<Icon>insert_chart</Icon>
-					</Button></div>
+					</Button>
+				</div> */}
 			</div>
 		)
 	}
