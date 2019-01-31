@@ -334,6 +334,7 @@ class FilterPanel extends Component {
                         <div style={{marginTop: 20, display: 'flex', flexDirection: 'column'}}>
                             <h3>Invoice Status</h3>
                             {this.state.invoiceStatus.length>0 && this.state.invoiceStatus.map((iv, index)=> {
+                                if(index>0 && index<4)
                                 return (
                                     <FormControlLabel
                                         key={index}
