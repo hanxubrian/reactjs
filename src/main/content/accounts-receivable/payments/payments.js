@@ -545,6 +545,11 @@ class Payments extends Component {
 												<Icon>attach_money</Icon>
 												Add Payment
 											</Button>
+											<Button variant="contained" color="primary" onClick={this.showPaymentFormModal} className="ml-6">
+												<Icon>credit_card</Icon>
+												Apply Credit
+											</Button>
+
 
 											{/* <FuseAnimate animation="transition.expandIn" delay={300}>
 												<Fab color="secondary" aria-label="add"

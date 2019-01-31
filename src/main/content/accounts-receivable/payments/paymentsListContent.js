@@ -935,7 +935,7 @@ class PaymentsListContent extends Component {
 						<span style={{ float: "unset" }}>
 							<span style={{ color: "#03a9f4" }} className="ml-24"><strong>OverPayment: $ {overpayment}</strong></span>
 							<Button onClick={(ev) => this.onClickGroupCellApplyOverpayment(ev, row.value)} variant="contained" color="primary" className="ml-24 pr-24 pl-24">Apply</Button>
-							<Button onClick={(ev) => this.onClickGroupCellApplyCredit(ev, row.value)} variant="contained" color="primary" className="ml-24 pr-24 pl-24">Apply Credit</Button>
+							{/* <Button onClick={(ev) => this.onClickGroupCellApplyCredit(ev, row.value)} variant="contained" color="primary" className="ml-24 pr-24 pl-24">Apply Credit</Button> */}
 						</span>
 					)
 				}
