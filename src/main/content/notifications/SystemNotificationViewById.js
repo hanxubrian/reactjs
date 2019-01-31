@@ -306,7 +306,7 @@ class SystemNotificationViewById extends Component {
 
                 console.log("row",row);
                 console.log("##multikey",this.state.multiKey);
-                console.log("##multiData",this.state.multiData);
+                console.log("##multiData",this.state.multiData[1]);
 
                 return(
                     <div style={{marginTop:"20px"}}>
@@ -366,19 +366,64 @@ class SystemNotificationViewById extends Component {
 
 
                                     </CardContent>
+
+                                        <div style={{    marginLeft: "30px",
+                                            fontSize: "24px",}}>{multiData[0].Key}</div>
+
+
                                     <CardContent>
                                         <table className={classes.tableView}>
                                             <TableHead className={classes.tableheader}>
                                                 <TableRow>
                                                     <CustomTableCell>CustomerName</CustomTableCell>
                                                     <CustomTableCell>CustomerNo</CustomTableCell>
-                                                    <CustomTableCell align="right">CustomerBilling</CustomTableCell>
+                                                    <CustomTableCell align="right">ContractBilling</CustomTableCell>
                                                     <CustomTableCell align="right">CPIPercent</CustomTableCell>
                                                 </TableRow>
                                             </TableHead>
 
                                             <TableBody>
+                                                {
+                                                    multiData[0].Value.map((item,index)=>(
+                                                        <TableRow key={index+3} >
+                                                            <CustomTableCell style={{width:"25%"}} align="right">{item.CustomerName}</CustomTableCell>
+                                                            <CustomTableCell style={{width:"25%"}} align="right">{item.CustomerNo}</CustomTableCell>
+                                                            <CustomTableCell style={{width:"25%"}} align="right">{item.ContractBilling}</CustomTableCell>
+                                                            <CustomTableCell style={{width:"25%"}} align="right">{item.CPIPercent}</CustomTableCell>
+                                                        </TableRow>
+                                                    ))
+                                                }
 
+
+                                            </TableBody>
+                                        </table>
+
+                                    </CardContent>
+
+                                    <div style={{    marginLeft: "30px",
+                                        fontSize: "24px",}}>{multiData[1].Key}</div>
+                                    <CardContent>
+                                        <table className={classes.tableView}>
+                                            <TableHead className={classes.tableheader}>
+                                                <TableRow>
+                                                    <CustomTableCell>CustomerName</CustomTableCell>
+                                                    <CustomTableCell>CustomerNo</CustomTableCell>
+                                                    <CustomTableCell align="right">ContractBilling</CustomTableCell>
+                                                    <CustomTableCell align="right">CPIPercent</CustomTableCell>
+                                                </TableRow>
+                                            </TableHead>
+
+                                            <TableBody>
+                                                {
+                                                    multiData[1].Value.map((item,index)=>(
+                                                        <TableRow key={index+3} >
+                                                            <CustomTableCell style={{width:"25%"}} align="right">{item.CustomerName}</CustomTableCell>
+                                                            <CustomTableCell style={{width:"25%"}} align="right">{item.CustomerNo}</CustomTableCell>
+                                                            <CustomTableCell style={{width:"25%"}} align="right">{item.ContractBilling}</CustomTableCell>
+                                                            <CustomTableCell style={{width:"25%"}} align="right">{item.CPIPercent}</CustomTableCell>
+                                                        </TableRow>
+                                                    ))
+                                                }
 
 
                                             </TableBody>
