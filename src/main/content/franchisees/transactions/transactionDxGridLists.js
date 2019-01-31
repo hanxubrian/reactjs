@@ -376,7 +376,6 @@ class TransactionsDxGridLists extends Component {
             {name: "Tax", title: "Tax"},
             {name: "Fees", title: "Fees"},
             {name: "TotalTrxAmount", title: "Total"},
-            {name: "Status", title: "Status"},
             {name: "Id", title: "Actions"},
         ];
 
@@ -390,7 +389,6 @@ class TransactionsDxGridLists extends Component {
             { columnName: 'TrxDate', width: 100 },
             { columnName: 'TrxType', width: 80 },
             { columnName: 'TrxClass', width: 200},
-            { columnName: 'Status', width: 80},
             { columnTitle: 'Id', width: 100 },
         ];
 
