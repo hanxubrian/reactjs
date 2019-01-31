@@ -65,24 +65,24 @@ class UsersPermission extends React.Component {
 
     componentWillMount() {
         console.log("menu-options",menuOptions);
-        const checkedStatus = [];
-        {menuOptions.map(x => {
-            checkedStatus["view_checked"+x.MenuId] = false;
-            checkedStatus["create_checked"+x.MenuId] = false;
-            checkedStatus["edit_checked"+x.MenuId] = false;
-            checkedStatus["delete_checked"+x.MenuId] = false;
-            checkedStatus["execute_checked"+x.MenuId] = false;
-            { x.Children.map(x=>{
-                checkedStatus["view_checked"+x.MenuId] = false;
-                checkedStatus["create_checked"+x.MenuId] = false;
-                checkedStatus["edit_checked"+x.MenuId] = false;
-                checkedStatus["delete_checked"+x.MenuId] = false;
-                checkedStatus["execute_checked"+x.MenuId] = false;
-            })}
-        })}
-
-        this.setState({checkedStatus:checkedStatus});
-        console.log("-------Checked Status----------",checkedStatus);
+        // const checkedStatus = [];
+        // {menuOptions.map(x => {
+        //     checkedStatus["view_checked"+x.MenuId] = false;
+        //     checkedStatus["create_checked"+x.MenuId] = false;
+        //     checkedStatus["edit_checked"+x.MenuId] = false;
+        //     checkedStatus["delete_checked"+x.MenuId] = false;
+        //     checkedStatus["execute_checked"+x.MenuId] = false;
+        //     { x.Children.map(x=>{
+        //         checkedStatus["view_checked"+x.MenuId] = false;
+        //         checkedStatus["create_checked"+x.MenuId] = false;
+        //         checkedStatus["edit_checked"+x.MenuId] = false;
+        //         checkedStatus["delete_checked"+x.MenuId] = false;
+        //         checkedStatus["execute_checked"+x.MenuId] = false;
+        //     })}
+        // })}
+        //
+        // this.setState({checkedStatus:checkedStatus});
+        //console.log("-------Checked Status----------",checkedStatus);
     }
 
     handleClick = () => {
@@ -94,8 +94,8 @@ class UsersPermission extends React.Component {
     };
 
     handleCheckToggle = name => event => {
-        let result = this.state.checkedStatus[name] = event.target.checked ;
-        this.setState({ checkedStatus: result });
+        //let result = this.state.checkedStatus[name] = event.target.checked ;
+        //this.setState({ checkedStatus: result });
     };
 
     render() {

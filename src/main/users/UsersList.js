@@ -396,6 +396,7 @@ class UsersList extends Component {
         this.changeSearchValue = value => this.setState({ searchValue: value });
         this.changeGrouping = grouping => this.setState({ grouping });
         console.log("constructor");
+        props.getContacts();
     }
     //
     // to edit table cell
