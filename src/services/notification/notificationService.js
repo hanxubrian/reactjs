@@ -58,7 +58,7 @@ class NotificationService {
     }
     adminversionupgradetrigger=(data)=>{
         return new Promise((resolve, reject) => {//,cors(),bodyParser.urlencoded({extended: false}),bodyParser.json()
-            axios.post('/v1/api/admin/versionupgrade',data)
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/pushnotification/upgrate`,data)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);

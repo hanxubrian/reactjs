@@ -35,7 +35,7 @@ class VersioningTab extends Component {
         anchorEl : null,
         setAnchorEl : null,
         is_Mounted  : false,
-        version     : 0,
+        version     : "1.0.0",
         note        : "",
         postStatus  : false,
 
@@ -53,12 +53,11 @@ class VersioningTab extends Component {
     }
     componentDidUpdate(prevProps, prevState){
         if(this.state.postStatus !==prevState.postStatus && this.state.postStatus){
-            console.log("++++++++++++++++++++++postStatus",this.state.postStatus);
             this.versiontrigger();
             this.setState({postStatus: false});
         }
         if(this.props.adminveriontrigger && this.props.adminveriontrigger !== null && this.props.adminveriontrigger !== prevProps.adminveriontrigger){
-            console.log("########################this.props.adminveriontrigger",this.props.adminveriontrigger);
+            // console.log("########################this.props.adminveriontrigger",this.props.adminveriontrigger);
         }
     }
     componentWillUnmount(){
@@ -66,7 +65,7 @@ class VersioningTab extends Component {
         this.setState({postStatus: false});
     }
     handleVersionChange = event => {
-        console.log("this.state.version",this.state.version);
+        // console.log("this.state.version",this.state.version);
         this.setState({version:event.target.value});
     }
     handleNoteChange = event =>{
@@ -74,20 +73,22 @@ class VersioningTab extends Component {
 
     }
     postversionnotification=()=>{
-        console.log("PSOT");
-        console.log("postStatus==post",this.state.postStatus);
+        // console.log("PSOT");
+        // console.log("postStatus==post",this.state.postStatus);
+        // console.log("this.state.version",this.state.version);
         this.setState({postStatus:true});
 
     }
     versiontrigger=()=>{
         if(this.state.version  !== null && this.state.note && this.state.note !== null){
             let data ={
-                message     :this.state.note,
-                version     : this.state.version
+                note         : this.state.note,
+                version      : this.state.version
             }
+
+            console.log("data",JSON.stringify(data));
             this.props.adminversionupgradetrigger(data);
-            console.log("OK");
-            // this.setState({postStatus: false});
+
         }
 
 
@@ -152,17 +153,17 @@ class VersioningTab extends Component {
                                                     }}
                                                     style={{color:"white"}}
                                                 >
-                                                    <MenuItem value={0}>1.0.0</MenuItem>
-                                                    <MenuItem value={1}>1.0.1</MenuItem>
-                                                    <MenuItem value={2}>1.0.2</MenuItem>
-                                                    <MenuItem value={3}>1.0.3</MenuItem>
-                                                    <MenuItem value={4}>1.0.4</MenuItem>
-                                                    <MenuItem value={5}>1.0.5</MenuItem>
-                                                    <MenuItem value={6}>1.0.6</MenuItem>
-                                                    <MenuItem value={7}>1.0.7</MenuItem>
-                                                    <MenuItem value={8}>1.0.8</MenuItem>
-                                                    <MenuItem value={9}>1.0.9</MenuItem>
-                                                    <MenuItem value={10}>1.1.0</MenuItem>
+                                                    <MenuItem value={"1.0.0"}>1.0.0</MenuItem>
+                                                    <MenuItem value={"1.0.1"}>1.0.1</MenuItem>
+                                                    <MenuItem value={"1.0.2"}>1.0.2</MenuItem>
+                                                    <MenuItem value={"1.0.3"}>1.0.3</MenuItem>
+                                                    <MenuItem value={"1.0.4"}>1.0.4</MenuItem>
+                                                    <MenuItem value={"1.0.5"}>1.0.5</MenuItem>
+                                                    <MenuItem value={"1.0.6"}>1.0.6</MenuItem>
+                                                    <MenuItem value={"1.0.7"}>1.0.7</MenuItem>
+                                                    <MenuItem value={"1.0.8"}>1.0.8</MenuItem>
+                                                    <MenuItem value={"1.0.9"}>1.0.9</MenuItem>
+                                                    <MenuItem value={"1.1.0"}>1.1.0</MenuItem>
 
 
                                                 </Select>
