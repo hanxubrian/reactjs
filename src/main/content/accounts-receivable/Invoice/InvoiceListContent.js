@@ -441,12 +441,6 @@ class InvoiceListContent extends Component {
                                     width: 100
                                 },
                                 {
-                                    Header: "Status",
-                                    accessor: "TransactionStatus",
-                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-                                    width: 80
-                                },
-                                {
                                     Header: "Actions",
                                     width : 90,
                                     Cell  : row => (
