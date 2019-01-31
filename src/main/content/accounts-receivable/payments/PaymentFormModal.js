@@ -427,10 +427,9 @@ class PaymentFormModal extends React.Component {
 		this.setState({
 			bOpenPaymentDialog: this.props.bOpenPaymentDialog
 		})
-		if (this.props.bOpenPaymentDialog === true) {
-			this.checkValidations()
-		}
-		this.checkValidations()
+		// if (this.props.bOpenPaymentDialog === true) {
+		// 	this.checkValidations()
+		// }
 	}
 	UNSAFE_componentWillReceiveProps(nextProps) {
 		if (nextProps.payments !== this.props.payments) {
@@ -446,9 +445,9 @@ class PaymentFormModal extends React.Component {
 				bOpenPaymentDialog: nextProps.bOpenPaymentDialog
 			})
 
-			if (nextProps.bOpenPaymentDialog === true) {
-				this.checkValidations()
-			}
+			// if (nextProps.bOpenPaymentDialog === true) {
+			// 	this.checkValidations()
+			// }
 		}
 	}
 
@@ -514,7 +513,7 @@ class PaymentFormModal extends React.Component {
 	handleChange = name => event => {
 		this.setState({ [name]: event.target.value });
 
-		this.checkValidations(name, event.target.value)
+		// this.checkValidations(name, event.target.value)
 	};
 	commitChanges = ({ added, changed, deleted }) => {
 		let { rows } = this.state;
@@ -583,7 +582,7 @@ class PaymentFormModal extends React.Component {
 			// 	totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
 			// })
 			// floatPaymentAmount = parseFloat(`0${this.state.PaymentAmount}`)
-			this.checkValidations('', '', rows)
+			// this.checkValidations('', '', rows)
 			return {
 				rows,
 				// overpayment: floatPaymentAmount - totalPaymentAmount,
@@ -609,7 +608,7 @@ class PaymentFormModal extends React.Component {
 					floatPaymentAmount = 0
 				}
 			}
-			this.checkValidations('', '', rows)
+			// this.checkValidations('', '', rows)
 			return {
 				rows: rows,
 				// overpayment: floatPaymentAmount,
@@ -624,7 +623,7 @@ class PaymentFormModal extends React.Component {
 			for (let i = 0; i < rows.length; i++) {
 				rows[i] = { ...rows[i], PaymentAmount: 0 };
 			}
-			this.checkValidations('', '', rows)
+			// this.checkValidations('', '', rows)
 			return {
 				rows: rows,
 				// overpayment: 0,
@@ -878,7 +877,7 @@ class PaymentFormModal extends React.Component {
 					</DialogContent>
 
 					<DialogActions>
-						<Button disabled={this.state.errorMsg !== ''} variant="contained" onClick={this.handleCreatePayment} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Save</Button>
+						<Button variant="contained" onClick={this.handleCreatePayment} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Save</Button>
 					</DialogActions>
 				</Dialog>
 			</div>

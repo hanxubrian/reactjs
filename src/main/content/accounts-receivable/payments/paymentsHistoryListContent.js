@@ -403,16 +403,16 @@ class paymentsHistoryListContent extends Component {
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
-				{
-					title: "OverPayment",
-					name: "OverPayment",
-					columnName: "OverPayment",
-					align: 'right',
-					width: 150,
-					sortingEnabled: true,
-					filteringEnabled: true,
-					groupingEnabled: false,
-				},
+				// {
+				// 	title: "OverPayment",
+				// 	name: "OverPayment",
+				// 	columnName: "OverPayment",
+				// 	align: 'right',
+				// 	width: 150,
+				// 	sortingEnabled: true,
+				// 	filteringEnabled: true,
+				// 	groupingEnabled: false,
+				// },
 				{
 					title: "Invoice Date",
 					name: "InvoiceDate",
@@ -455,7 +455,7 @@ class paymentsHistoryListContent extends Component {
 			currencyColumns: [
 				'InvoiceAmount',
 				'InvoiceBalance',
-				'OverPayment',
+				// 'OverPayment',
 			],
 			phoneNumberColumns: [
 				'Phone'
@@ -771,18 +771,25 @@ class paymentsHistoryListContent extends Component {
 		this.setState({ expandedGroups });
 	};
 
-	GroupCellContent = ({ column, row }) => (
-		<span>
-			{/* {column.title} */}
+	GroupCellContent = ({ column, row }) => {
+		const overpayment = this.getOverpaymentByGroupTitle(row.value)
+		return (
 			<span>
-				<strong>{row.value}</strong>
+				{/* {column.title} */}
+				<span>
+					<strong>{row.value}</strong>
+				</span>
+				{overpayment > 0 &&
+					(
+						<span style={{ float: "right" }}>
+							<span style={{ color: "#03a9f4" }}><strong>OverPayment: $ {overpayment}</strong></span>
+						</span>
+					)
+				}
 			</span>
+		)
+	};
 
-			<span style={{ float: "right" }}>
-				OverPayment: $ {this.getOverpaymentByGroupTitle(row.value)}
-			</span>
-		</span>
-	);
 
 	onClickGroupCell = (ev, groupTitle) => {
 		console.log(groupTitle)

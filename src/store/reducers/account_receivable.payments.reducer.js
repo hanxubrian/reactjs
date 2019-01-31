@@ -33,7 +33,7 @@ const initialState = {
 	filter: {
 		paymentStatus: "All",
 	},
-	viewMode: "InvoiceView",
+	viewMode: "Invoice",
 };
 
 

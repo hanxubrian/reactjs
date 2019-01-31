@@ -403,16 +403,16 @@ class PaymentsListContent extends Component {
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
-				{
-					title: "OverPayment",
-					name: "OverPayment",
-					columnName: "OverPayment",
-					align: 'right',
-					width: 150,
-					sortingEnabled: true,
-					filteringEnabled: true,
-					groupingEnabled: false,
-				},
+				// {
+				// 	title: "OverPayment",
+				// 	name: "OverPayment",
+				// 	columnName: "OverPayment",
+				// 	align: 'right',
+				// 	width: 150,
+				// 	sortingEnabled: true,
+				// 	filteringEnabled: true,
+				// 	groupingEnabled: false,
+				// },
 				{
 					title: "Invoice Date",
 					name: "InvoiceDate",
@@ -455,7 +455,7 @@ class PaymentsListContent extends Component {
 			currencyColumns: [
 				'InvoiceAmount',
 				'InvoiceBalance',
-				'OverPayment',
+				// 'OverPayment',
 			],
 			phoneNumberColumns: [
 				'Phone'
@@ -771,20 +771,26 @@ class PaymentsListContent extends Component {
 		this.setState({ expandedGroups });
 	};
 
-	GroupCellContent = ({ column, row }) => (
-		<span>
-			{/* {column.title} */}
+	GroupCellContent = ({ column, row }) => {
+		const overpayment = this.getOverpaymentByGroupTitle(row.value)
+		return (
 			<span>
-				<Checkbox onClick={(ev) => this.onClickGroupCell(ev, row.value)}></Checkbox>
-				<strong>{row.value}</strong>
+				{/* {column.title} */}
+				<span>
+					<Checkbox onClick={(ev) => this.onClickGroupCell(ev, row.value)}></Checkbox>
+					<strong>{row.value}</strong>
+				</span>
+				{overpayment > 0 &&
+					(
+						<span style={{ float: "right" }}>
+							<span style={{ color: "#03a9f4" }}><strong>OverPayment: $ {overpayment}</strong></span>
+							<Button onClick={(ev) => this.onClickGroupCellApplyOverpayment(ev, row.value)} variant="contained" color="primary" className="ml-24 pr-24 pl-24">Apply</Button>
+						</span>
+					)
+				}
 			</span>
-
-			<span style={{ float: "right" }}>
-				OverPayment: $ {this.getOverpaymentByGroupTitle(row.value)}
-				<Button onClick={(ev) => this.onClickGroupCellApplyOverpayment(ev, row.value)} variant="contained" color="primary" className="ml-24 pr-24 pl-24">Apply</Button>
-			</span>
-		</span>
-	);
+		)
+	};
 
 	onClickGroupCell = (ev, groupTitle) => {
 		console.log(groupTitle)
