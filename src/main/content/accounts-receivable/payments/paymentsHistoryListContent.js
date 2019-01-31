@@ -448,7 +448,7 @@ class paymentsHistoryListContent extends Component {
 				},
 			],
 			sorting: [
-				// { columnName: 'CustomerNameNo', direction: 'asc' },
+				{ columnName: 'CustomerNameNo', direction: 'asc' },
 				{ columnName: 'DaysPastDue', direction: 'asc' },
 			],
 			editingColumnExtensions: [],

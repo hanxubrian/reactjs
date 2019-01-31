@@ -56,7 +56,7 @@ class paymentsService {
 		const data = {
 			"RegionId": RegionId,
 			"CustomerNo": customerNumber,
-			Payment: {
+			"Payment": {
 				"PaymentType": PaymentType,
 				"ReferenceNo": ReferenceNo,
 				"PaymentDate": PaymentDate,

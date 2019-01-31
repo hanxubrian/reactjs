@@ -41,7 +41,7 @@ import _ from 'lodash';
 import classNames from 'classnames';
 import { FusePageCustomSidebarScroll } from '@fuse';
 
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from '@material-ui/core';
 
 
 const headerHeight = 80;
@@ -450,15 +450,28 @@ class Payments extends Component {
 		})
 	}
 
+	forceFetch = () => {
+		this.props.getAccountReceivablePaymentsList(
+			this.props.regionId,
+			this.props.getPaymentsParam.fromDate,
+			this.props.getPaymentsParam.toDate,
+			this.props.searchText,
+			this.props.filter.paymentStatus
+		);
+	}
+
 	showPaymentFormModal = () => {
 		console.log("this.props.activePaymentRows.length", this.props.activePaymentRows)
+		const payments = this.getRowData(this.props.payments)
+		const invoiceBalances = this.props.activePaymentRows.map(x => payments[x].InvoiceBalance)
+
 		if (this.props.activePaymentRows.length > 100) {
 			this.props.showErrorDialog({
 				show: true,
 				title: "Warning",
 				message: "Too many rows selected. Please try to reduce them.",
 			})
-		} else if (this.props.activePaymentRows.length === 1 && parseFloat(this.getRowData(this.props.payments)[this.props.activePaymentRows].InvoiceBalance) === 0) {
+		} else if (invoiceBalances.indexOf(0) > -1) {
 			this.props.showErrorDialog({
 				show: true,
 				title: "Warning",
@@ -523,6 +536,11 @@ class Payments extends Component {
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
+											<Tooltip title="Refresh">
+												<IconButton variant="contained" onClick={this.forceFetch}>
+													<Icon>refresh</Icon>
+												</IconButton>
+											</Tooltip>
 											<Button variant="contained" color="primary" onClick={this.showPaymentFormModal}>
 												<Icon>attach_money</Icon>
 												Add Payment
@@ -704,6 +722,8 @@ function mapDispatchToProps(dispatch) {
 		openPaymentDialog: Actions.openPaymentDialog,
 		showErrorDialog: Actions.showErrorDialog,
 
+		getAccountReceivablePaymentsList: Actions.getAccountReceivablePaymentsList,
+
 	}, dispatch);
 }
 
@@ -752,6 +772,10 @@ function mapStateToProps({ invoices, auth, customers, franchisees, accountReceiv
 		payments: accountReceivablePayments.ACC_payments,
 
 		viewMode: accountReceivablePayments.viewMode,
+
+		filter: accountReceivablePayments.filter,
+		searchText: accountReceivablePayments.searchText,
+		getPaymentsParam: accountReceivablePayments.getPaymentsParam,
 	}
 }
 

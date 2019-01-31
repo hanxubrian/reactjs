@@ -477,16 +477,23 @@ class PaymentFormModal extends React.Component {
 				}
 			})
 
-			const params = {
-				RegionId: this.props.regionId,
-				PaymentType: this.state.PaymentType,
-				ReferenceNo: this.state.ReferenceNo,
-				PaymentDate: this.state.PaymentDate,
-				Note: this.state.PaymentNote,
-				PayItems: PayItems,
-				overpayment: this.getOverpaymentAmount(this.state.rows),
-			}
-			console.log("handleCreatePayment", params);
+			console.log("handleCreatePayment", this.props.regionId,
+				this.state.customerNumber,
+
+				this.state.PaymentType,
+				this.state.ReferenceNo,
+				this.state.PaymentDate,
+				this.state.PaymentNote,
+				this.getOverpaymentAmount(this.state.rows),
+				this.state.PaymentAmount,
+
+				PayItems,
+
+				this.props.getPaymentsParam.fromDate,
+				this.props.getPaymentsParam.toDate,
+				this.props.searchText,
+				this.props.filter.paymentStatus);
+
 
 
 			this.props.createAccountReceivablePayment(
@@ -497,7 +504,7 @@ class PaymentFormModal extends React.Component {
 				this.state.ReferenceNo,
 				this.state.PaymentDate,
 				this.state.PaymentNote,
-				this.state.overpayment,
+				this.getOverpaymentAmount(this.state.rows),
 				this.state.PaymentAmount,
 
 				PayItems,
@@ -505,7 +512,7 @@ class PaymentFormModal extends React.Component {
 				this.props.getPaymentsParam.fromDate,
 				this.props.getPaymentsParam.toDate,
 				this.props.searchText,
-				this.props.status
+				this.props.filter.paymentStatus
 			)
 
 			this.handleClose();
@@ -994,7 +1001,7 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 		payments: accountReceivablePayments.ACC_payments,
 
 		getPaymentsParam: accountReceivablePayments.getPaymentsParam,
-		status: accountReceivablePayments.status,
+		filter: accountReceivablePayments.filter,
 		searchText: accountReceivablePayments.searchText,
 	}
 }
