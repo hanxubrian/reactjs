@@ -353,7 +353,7 @@ class PaymentFormModal extends React.Component {
 				// 	groupingEnabled: false,
 				// },
 				{
-					title: "Payment Amount",
+					title: "Amount to Apply",
 					name: "PaymentAmount",
 					columnName: 'PaymentAmount',
 					width: 300,
@@ -397,7 +397,7 @@ class PaymentFormModal extends React.Component {
 				{ key: "DaysPastDue", name: "Days Past Due", editable: false, sortDescendingFirst: true },
 				{ key: "InvoiceAmount", name: "Invoice Amount", editable: false, formatter: CurrencyFormatter },
 				{ key: "InvoiceBalance", name: "Invoice Balance", editable: false, formatter: CurrencyFormatter },
-				{ key: "PaymentAmount", name: "Payment Amount", editable: true, formatter: CurrencyFormatter }
+				{ key: "PaymentAmount", name: "Payment to Apply", editable: true, formatter: CurrencyFormatter }
 			],
 			rows: [],
 			currencyColumns: [
@@ -882,11 +882,12 @@ class PaymentFormModal extends React.Component {
 										margin="dense"
 										variant="outlined"
 										fullWidth
+										required
 										className={classNames(classes.textField, "pr-6")}
 										id="PaymentAmount"
 										value={this.state.PaymentAmount}
 										onChange={this.handleChange('PaymentAmount')}
-										label="Amount To Apply" sm={2}
+										label="Payment Amount" sm={2}
 									/>
 									<Tooltip title="Auto Distribution">
 										<IconButton
