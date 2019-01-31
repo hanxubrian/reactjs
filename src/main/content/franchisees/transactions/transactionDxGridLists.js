@@ -306,6 +306,7 @@ class TransactionsDxGridLists extends Component {
         }
         else if (props.column.name.includes('TrxClass')) {
             let _typeId = props.row.TrxClass;
+            let type1 = this.props.transactionTypeList.filter(f=>f.TrxClass===props.row.TrxClass);
             let type = this.props.transactionTypeList.filter(f=>f.TrxClass===props.row.TrxClass);
 
             let trxTypeName = _typeId;
@@ -331,12 +332,12 @@ class TransactionsDxGridLists extends Component {
 
     TableRow = ({ row, ...restProps }) => {
         let backColor = 'inherit';
-        if(row.TrxClass==='D')
+        if(row.TrxChargeType==='D')
             backColor = 'rgba(255,0,0, .2)';
         let rowClass='';
-        if(row.TrxClass==='D')
+        if(row.TrxChargeType==='D')
             rowClass = 'deduction';
-        else if(row.TrxClass==='C')
+        else if(row.TrxChargeType==='C')
             rowClass = 'credit';
 
         return (
@@ -382,8 +383,8 @@ class TransactionsDxGridLists extends Component {
             { columnName: 'Fees', width: 80,  align: 'right'},
             { columnName: 'TotalTrxAmount', width: 120,  align: 'right'},
             { columnName: 'TrxDate', width: 100 },
-            { columnName: 'TrxType', width: 100 },
-            { columnName: 'TrxClass', width: 160},
+            { columnName: 'TrxType', width: 80 },
+            { columnName: 'TrxClass', width: 200},
             { columnName: 'Status', width: 80},
             { columnTitle: 'Id', width: 100 },
         ];
