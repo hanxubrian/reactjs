@@ -597,8 +597,9 @@ class PaymentsListContent extends Component {
 				this.props.regionId,
 				this.props.getPaymentsParam.fromDate,
 				this.props.getPaymentsParam.toDate,
-				"",
-				this.props.filter.paymentStatus);
+				this.props.searchText,
+				this.props.filter.paymentStatus
+			);
 		}
 	}
 	//
@@ -646,7 +647,9 @@ class PaymentsListContent extends Component {
 			this.props.regionId,
 			this.props.getPaymentsParam.fromDate,
 			this.props.getPaymentsParam.toDate,
-			this.props.getPaymentsParam.searchText);
+			this.props.getPaymentsParam.searchText,
+			this.props.filter.paymentStatus,
+		);
 
 		this.setState({
 			isCustomerNameNoGrouping: this.props.isCustomerNameNoGrouping
@@ -686,8 +689,8 @@ class PaymentsListContent extends Component {
 				nextProps.regionId,
 				nextProps.getPaymentsParam.fromDate,
 				nextProps.getPaymentsParam.toDate,
-				"",
-				nextProps.status);
+				nextProps.searchText,
+				nextProps.filter.paymentStatus);
 		}
 		if (nextProps.filter.paymentStatus !== this.props.filter.paymentStatus) {
 			console.log("componentWillReceiveProps", "nextProps.status", nextProps.filter.paymentStatus)
@@ -695,7 +698,7 @@ class PaymentsListContent extends Component {
 				nextProps.regionId,
 				nextProps.getPaymentsParam.fromDate,
 				nextProps.getPaymentsParam.toDate,
-				"",
+				nextProps.searchText,
 				nextProps.filter.paymentStatus);
 		}
 		if (JSON.stringify(nextProps.activePaymentRows) !== JSON.stringify(this.props.activePaymentRows)) {

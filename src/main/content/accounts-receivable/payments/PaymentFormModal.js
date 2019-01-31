@@ -504,7 +504,7 @@ class PaymentFormModal extends React.Component {
 
 				this.props.getPaymentsParam.fromDate,
 				this.props.getPaymentsParam.toDate,
-				"",
+				this.props.searchText,
 				this.props.status
 			)
 
@@ -995,6 +995,7 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 
 		getPaymentsParam: accountReceivablePayments.getPaymentsParam,
 		status: accountReceivablePayments.status,
+		searchText: accountReceivablePayments.searchText,
 	}
 }
 

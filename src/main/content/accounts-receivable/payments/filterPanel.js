@@ -135,24 +135,31 @@ class FilterPanel extends Component {
 	}
 
 	handleChangeChecked = name => event => {
-		this.setState({ [name]: event.target.checked });
+		const value = event.target.checked
+		this.setState({ [name]:  value});
+
+		let statusesAll = ["Open","Paid"]
+		let statusesOpen = ["Open"]
+		let statusesPaid = ["Paid"]
+		let statusesNone = []
 
 		switch (name) {
 			case "PaymentStatusOpen":
-				if (event.target.checked) {
-					this.props.setPaymentStatusFitler(this.state.PaymentStatusPaid ? "All" : "Open")
+				if (value) {
+					this.props.setPaymentStatusFitler(this.state.PaymentStatusPaid ? statusesAll : statusesOpen)
 				} else {
-					this.props.setPaymentStatusFitler(this.state.PaymentStatusPaid ? "Paid" : "All")
+					this.props.setPaymentStatusFitler(this.state.PaymentStatusPaid ? statusesPaid : statusesNone)
 				}
+				break
 			case "PaymentStatusPaid":
-				if (event.target.checked) {
-					this.props.setPaymentStatusFitler(this.state.PaymentStatusOpen ? "All" : "Paid")
+				if (value) {
+					this.props.setPaymentStatusFitler(this.state.PaymentStatusOpen ? statusesAll : statusesPaid)
 				} else {
-					this.props.setPaymentStatusFitler(this.state.PaymentStatusOpen ? "Open" : "All")
+					this.props.setPaymentStatusFitler(this.state.PaymentStatusOpen ? statusesOpen : statusesNone)
 				}
 				break
 			case "isCustomerNameNoGrouping":
-				this.props.setCustomerNameNoGrouping(event.target.checked)
+				this.props.setCustomerNameNoGrouping(value)
 				break
 		}
 

@@ -162,10 +162,10 @@ export function showErrorDialog(params) {
 		payload: params
 	}
 }
-export function setPaymentStatusFitler(status) {
+export function setPaymentStatusFitler(statuses) {
 	return {
 		type: SET_PAYMENT_STATUS_FILTER,
-		payload: status
+		payload: statuses
 	}
 }
 export function setViewMode(mode) {
