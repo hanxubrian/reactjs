@@ -64,6 +64,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 
 import ReactDataGrid from "react-data-grid";
+import _ from "lodash";
 
 const styles = theme => ({
 	root: {
@@ -414,7 +415,11 @@ class PaymentFormModal extends React.Component {
 			overpayment: 0,
 			errorMsg: "",
 
-			bOpenPaymentDialog: false,
+			paymentDlgPayloads: {
+				open: false,
+				paymentType: "Check",
+				paymentAmount: 0
+			},
 		}
 		// this.commitChanges = this.commitChanges.bind(this);
 	}
@@ -425,8 +430,11 @@ class PaymentFormModal extends React.Component {
 	}
 	componentDidMount() {
 		this.setState({
-			bOpenPaymentDialog: this.props.bOpenPaymentDialog
+			paymentDlgPayloads: this.props.paymentDlgPayloads,
+			PaymentAmount: this.props.paymentDlgPayloads.paymentAmount,
+			PaymentType: this.props.paymentDlgPayloads.paymentType
 		})
+
 		// if (this.props.bOpenPaymentDialog === true) {
 		// 	this.checkValidations()
 		// }
@@ -440,9 +448,11 @@ class PaymentFormModal extends React.Component {
 			console.log("componentWillReceiveProps activePaymentRows", nextProps.activePaymentRows, this.props.activePaymentRows)
 			this.setRowData(this.props.payments, nextProps.activePaymentRows)
 		}
-		if (nextProps.bOpenPaymentDialog !== this.props.bOpenPaymentDialog) {
+		if (!_.isEqual(nextProps.paymentDlgPayloads, this.props.paymentDlgPayloads)) {
 			this.setState({
-				bOpenPaymentDialog: nextProps.bOpenPaymentDialog
+				paymentDlgPayloads: nextProps.paymentDlgPayloads,
+				PaymentAmount: nextProps.paymentDlgPayloads.paymentAmount,
+				PaymentType: nextProps.paymentDlgPayloads.paymentType
 			})
 
 			// if (nextProps.bOpenPaymentDialog === true) {
@@ -464,7 +474,12 @@ class PaymentFormModal extends React.Component {
 
 		this.clearDistribute()
 
-		this.props.openPaymentDialog(false);
+		this.props.openPaymentDialog({
+			open: false,
+			paymentType: "Check",
+			paymentAmount: 0,
+		})
+
 	};
 
 	handleCreatePayment = () => {
@@ -801,7 +816,7 @@ class PaymentFormModal extends React.Component {
 		return (
 			<div>
 				<Dialog
-					open={this.state.bOpenPaymentDialog}
+					open={this.state.paymentDlgPayloads.open}
 					fullWidth={true}
 					maxWidth="lg"
 
@@ -848,6 +863,9 @@ class PaymentFormModal extends React.Component {
 										value={this.state.PaymentType}
 										onChange={this.handleChange('PaymentType')}
 										fullWidth
+										InputProps={{
+											readOnly: this.props.paymentDlgPayloads.paymentAmount !== 0 && this.props.paymentDlgPayloads.paymentType === "CreditFromOverpayment"
+										}}
 									>
 										<MenuItem value={"Check"}>Check</MenuItem>
 										<MenuItem value={"CreditCard"}>Credit Card</MenuItem>
@@ -873,6 +891,9 @@ class PaymentFormModal extends React.Component {
 										className={classNames(classes.textField, "pr-6")}
 										InputLabelProps={{
 											shrink: true
+										}}
+										InputProps={{
+											readOnly: this.props.paymentDlgPayloads.paymentAmount !== 0
 										}}
 										value={this.state.PaymentDate}
 										onChange={this.handleChange('PaymentDate')}
@@ -1003,6 +1024,8 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 		getPaymentsParam: accountReceivablePayments.getPaymentsParam,
 		filter: accountReceivablePayments.filter,
 		searchText: accountReceivablePayments.searchText,
+
+		paymentDlgPayloads: accountReceivablePayments.paymentDlgPayloads,
 	}
 }
 

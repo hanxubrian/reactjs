@@ -34,7 +34,14 @@ const initialState = {
 		paymentStatus: ["Open", "Paid"],
 	},
 	viewMode: "Invoice",
-	isCustomerNameNoGrouping: true
+	isCustomerNameNoGrouping: true,
+
+
+	paymentDlgPayloads: {
+		open: false,
+		paymentType: "Check",
+		paymentAmount: 0
+	}
 };
 
 
@@ -103,7 +110,10 @@ const accountReceivablePayments = function (state = initialState, action) {
 		case Actions.OPEN_PAYMENT_DIALOG:
 			return {
 				...state,
-				bOpenPaymentDialog: action.payload
+				paymentDlgPayloads : {
+					...state.paymentDlgPayloads,
+					...action.payload
+				}
 			}
 		//
 		// SELECT PAYMENTS ON GRID

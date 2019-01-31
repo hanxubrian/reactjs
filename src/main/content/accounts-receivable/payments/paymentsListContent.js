@@ -886,7 +886,11 @@ class PaymentsListContent extends Component {
 			this.props.setActivePaymentRows([tableRow.rowId]);
 			console.log("handleDoubleClick tableRow", tableRow)
 			if (tableRow.row.InvoiceBalance > 0) {
-				this.props.openPaymentDialog(true)
+				this.props.openPaymentDialog({
+					open: true,
+					paymentType: "Check",
+					paymentAmount: 0,
+				})
 			} else {
 				this.props.showErrorDialog({
 					show: true,
@@ -934,7 +938,8 @@ class PaymentsListContent extends Component {
 					(
 						<span style={{ float: "unset" }}>
 							<span style={{ color: "#03a9f4" }} className="ml-24"><strong>OverPayment: $ {overpayment}</strong></span>
-							<Button onClick={(ev) => this.onClickGroupCellApplyOverpayment(ev, row.value)} variant="contained" color="primary" className="ml-24 pr-24 pl-24">Apply</Button>
+
+							<Button variant="contained" color="primary" onClick={(ev) => this.onClickGroupCellApplyOverpayment(ev, row.value, overpayment)} className="ml-24 pr-24 pl-24"><Icon>autorenew</Icon>Apply</Button>
 							{/* <Button onClick={(ev) => this.onClickGroupCellApplyCredit(ev, row.value)} variant="contained" color="primary" className="ml-24 pr-24 pl-24">Apply Credit</Button> */}
 						</span>
 					)
@@ -974,9 +979,13 @@ class PaymentsListContent extends Component {
 		return groupRows[0].OverPayment
 	}
 
-	onClickGroupCellApplyOverpayment = (ev, groupTitle) => {
+	onClickGroupCellApplyOverpayment = (ev, groupTitle, overpayment) => {
 		ev.stopPropagation();
-		this.props.openPaymentDialog(true)
+		this.props.openPaymentDialog({
+			open: true,
+			paymentType: "CreditFromOverpayment",
+			paymentAmount: overpayment,
+		})
 	}
 	onClickGroupCellApplyCredit = (ev, groupTitle) => {
 		ev.stopPropagation();

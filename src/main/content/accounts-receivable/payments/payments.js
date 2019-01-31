@@ -490,7 +490,11 @@ class Payments extends Component {
 				message: "Please try it in Invoice view mode..",
 			})
 		} else {
-			this.props.openPaymentDialog(true)
+			this.props.openPaymentDialog({
+				open: true,
+				paymentType: "Check",
+				paymentAmount: 0,
+			})
 		}
 	}
 	getRowData(payments) {
@@ -547,7 +551,7 @@ class Payments extends Component {
 											</Button>
 											<Button variant="contained" color="primary" onClick={this.showPaymentFormModal} className="ml-6">
 												<Icon>credit_card</Icon>
-												Apply Credit
+												Add Credit
 											</Button>
 
 

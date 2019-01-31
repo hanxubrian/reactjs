@@ -144,10 +144,10 @@ export function applySearchText_ARP(s) {
 	}
 }
 
-export function openPaymentDialog(open) {
+export function openPaymentDialog(param) {
 	return {
 		type: OPEN_PAYMENT_DIALOG,
-		payload: open
+		payload: param
 	}
 }
 export function setActivePaymentRows(rows) {
