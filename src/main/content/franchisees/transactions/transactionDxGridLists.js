@@ -264,14 +264,17 @@ class TransactionsDxGridLists extends Component {
             return (
                 <Table.Cell>
                     <div className="flex items-center actions justify-center w-full">
-                        <IconButton
-                            onClick={(ev) => {
-                                ev.stopPropagation();
-                                this.handleOpen(props.row.Id);
-                            }}
-                        >
-                            <Icon fontSize={"small"}>delete</Icon>
-                        </IconButton>
+                        {props.row.Number==='PENDING' && (
+                            <IconButton
+                                onClick={(ev) => {
+                                    ev.stopPropagation();
+                                    this.handleOpen(props.row.Id);
+                                }}
+                            >
+                                <Icon fontSize={"small"}>delete</Icon>
+                            </IconButton>
+                        )}
+
                         <IconButton
                             onClick={(ev) => {
                                 ev.stopPropagation();
