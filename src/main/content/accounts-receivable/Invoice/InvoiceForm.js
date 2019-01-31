@@ -582,7 +582,7 @@ class InvoiceForm extends Component {
                 LineNo: 1,
                 UnitPrice: parseFloat(line.amount),
                 Quantity: parseInt(line.quantity),
-                TaxRate: line.tax,
+                TaxAmount: line.tax,
                 ExtendedPrice: line.extended,
                 Total: line.total,
                 MarkUpTotal: line.markup,
