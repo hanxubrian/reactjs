@@ -461,6 +461,9 @@ class PaymentFormModal extends React.Component {
 			overpayment: 0,
 			errorMsg: "",
 		})
+		
+		this.clearDistribute()
+
 		this.props.openPaymentDialog(false);
 	};
 
