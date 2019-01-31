@@ -13,6 +13,7 @@ import connect from "react-redux/es/connect/connect";
 // Third Party
 import PropTypes from 'prop-types';
 import moment from "moment";
+import classNames from 'classnames';
 
 const styles = theme => ({
     root: {
@@ -72,23 +73,24 @@ class TransactionsSummary extends Component {
     render() {
         const {classes} = this.props;
         return (
-            <div className={classes.root}>
-                <AppBar position="static" color="default">
-                    <Tabs value={this.state.value} onChange={this.handleChange}>
-                        <Tab label="Customer Transactions" />
-                        <Tab label="Customer Account Totals" />
-                        <Tab label="Supply Transactions" />
-                        <Tab label="Charge Backs" />
-                        <Tab label="Leases" />
-                        <Tab label="Regular Misc" />
-                    </Tabs>
-                </AppBar>
-                {this.state.value === 0 && <TabContainer>Item One</TabContainer>}
-                {this.state.value === 1 && <TabContainer>Item Two</TabContainer>}
-                {this.state.value === 2 && <TabContainer>Item Three</TabContainer>}
-                {this.state.value === 3 && <TabContainer>Item Four</TabContainer>}
-                {this.state.value === 4 && <TabContainer>Item Five</TabContainer>}
-                {this.state.value === 5 && <TabContainer>Item Six</TabContainer>}
+            <div className={classNames(classes.root,'p-48 flex flex-col flex-1 items-center')}>
+                <h1>Franchisee Transaction Summary Under Development". Will be ready by 1:00PM release 1/31/2019</h1>
+                {/*<AppBar position="static" color="default">*/}
+                    {/*<Tabs value={this.state.value} onChange={this.handleChange}>*/}
+                        {/*<Tab label="Customer Transactions" />*/}
+                        {/*<Tab label="Customer Account Totals" />*/}
+                        {/*<Tab label="Supply Transactions" />*/}
+                        {/*<Tab label="Charge Backs" />*/}
+                        {/*<Tab label="Leases" />*/}
+                        {/*<Tab label="Regular Misc" />*/}
+                    {/*</Tabs>*/}
+                {/*</AppBar>*/}
+                {/*{this.state.value === 0 && <TabContainer>Item One</TabContainer>}*/}
+                {/*{this.state.value === 1 && <TabContainer>Item Two</TabContainer>}*/}
+                {/*{this.state.value === 2 && <TabContainer>Item Three</TabContainer>}*/}
+                {/*{this.state.value === 3 && <TabContainer>Item Four</TabContainer>}*/}
+                {/*{this.state.value === 4 && <TabContainer>Item Five</TabContainer>}*/}
+                {/*{this.state.value === 5 && <TabContainer>Item Six</TabContainer>}*/}
             </div>
         );
     }
