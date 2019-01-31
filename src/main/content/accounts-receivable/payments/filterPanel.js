@@ -418,9 +418,9 @@ class FilterPanel extends Component {
 					</RadioGroup>
 				</div>
 
-				<Divider variant="middle" className="mt-12 mb-6" />
+				{this.props.viewMode === "PaymentHistory" && <Divider variant="middle" className="mt-12 mb-6" />}
 
-				<div style={{ marginTop: 20, display: 'flex', flexDirection: 'column' }}>
+				{this.props.viewMode === "PaymentHistory" && <div style={{ marginTop: 20, display: 'flex', flexDirection: 'column' }}>
 					<h3>Type</h3>
 					{[
 						{ Name: "Check" },
@@ -445,6 +445,9 @@ class FilterPanel extends Component {
 							/>
 						)
 					})}
+				</div>
+				}
+				<div style={{ marginTop: 20, display: 'flex', flexDirection: 'column' }}>
 					<Divider variant="middle" className="mt-12 mb-6" />
 					<h3>Payment Status</h3>
 					{/* <FormControlLabel
