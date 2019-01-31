@@ -66,6 +66,18 @@ const styles = theme => ({
             paddingLeft: '1.2rem!important',
             paddingRight: '1.2rem!important',
         },
+        '& .deduction':{
+            '& td': {
+                color: '#cc0000!important',
+                fontWeight: 700
+            }
+        },
+        '& .credit':{
+            '& td': {
+                color: '#0000cc!important',
+                fontWeight: 700
+            }
+        }
     },
     content: {
         position: 'relative'
@@ -203,7 +215,7 @@ class TransactionsDxGridLists extends Component {
 
         this.setState(
             {data: temp,
-            expandedGroups: [...new Set(temp.map(x => x.FranNameNo))]},
+                expandedGroups: [...new Set(temp.map(x => x.FranNameNo))]},
         );
     }
 
@@ -236,7 +248,6 @@ class TransactionsDxGridLists extends Component {
 
     emptyMessageContent = ({column, row}) => (
         <span>
-			{/* {column.title} */}
             <strong>{row.value}</strong>
 		</span>
     );
@@ -245,7 +256,7 @@ class TransactionsDxGridLists extends Component {
         this.setState({expandedGroups});
     };
 
-    ActionCell =(props, )=>{
+    ActionCell =(props )=>{
         if (props.column.name.includes('Id')) {
             return (
                 <Table.Cell>
@@ -270,6 +281,20 @@ class TransactionsDxGridLists extends Component {
                 </Table.Cell>
             )
         }
+        else if (props.column.name.includes('TrxType')) {
+            let _typeId = props.row.TrxType;
+            let type = this.props.transactionTypeList.filter(f=>f._id===props.row.TrxType);
+
+            let trxTypeName = _typeId;
+            if(type.length) trxTypeName = type[0].Name;
+            return (
+                <Table.Cell>
+                    <div className="flex items-center actions w-full">
+                        {trxTypeName}
+                    </div>
+                </Table.Cell>
+            )
+        }
 
         return <Table.Cell {...props} />;
     };
@@ -279,8 +304,19 @@ class TransactionsDxGridLists extends Component {
         return <div style={{padding: '0 12px'}} {...props}></div>
     };
 
-    TableRow = ({ row, ...restProps }) => (
-        <Table.Row
+    TableRow = ({ row, ...restProps }) => {
+        console.log('row=', row);
+        let backColor = 'inherit';
+        if(row.TrxClass==='D')
+            backColor = 'rgba(255,0,0, .2)';
+        let rowClass='';
+        if(row.TrxClass==='D')
+            rowClass = 'deduction';
+        else if(row.TrxClass==='C')
+            rowClass = 'credit';
+
+        return (
+        <Table.Row className = {classNames(rowClass)}
             {...restProps}
             // eslint-disable-next-line no-alert
             onClick={() => this.props.openEditTransactionForm(this.props.regionId, row)}
@@ -288,7 +324,8 @@ class TransactionsDxGridLists extends Component {
                 cursor: 'pointer',
             }}
         />
-    );
+        )
+    };
 
     changeSelection = selection => this.setState({ selection });
 
@@ -299,30 +336,33 @@ class TransactionsDxGridLists extends Component {
         const columns = [
             {name: "FranNameNo", title: "FranNameNo",},
             {name: "Number", title: "Trx. Number"},
+            {name: "TrxDate", title: "Trx. Date"},
             {name: "Description", title: "Description"},
+            {name: "TrxType", title: "Type"},
+            {name: "TrxClass", title: "Trx. Class"},
             {name: "ExtendedPrice", title: "Ext. Price"},
             {name: "Tax", title: "Tax"},
             {name: "Fees", title: "Fees"},
             {name: "TotalTrxAmount", title: "Total"},
-            {name: "TrxDate", title: "Trx. Date"},
-            {name: "TrxType", title: "Type"},
             {name: "Status", title: "Status"},
             {name: "Id", title: "Actions"},
         ];
 
         let  tableColumnExtensions = [
-                { columnName: 'Number', width: 100 },
-                { columnName: 'Description', width: -1 },
-                { columnName: 'ExtendedPrice', width: 100,  align: 'right' },
-                { columnName: 'Tax', width: 80,  align: 'right' },
-                { columnName: 'Fees', width: 80,  align: 'right' },
-                { columnName: 'TotalTrxAmount', width: 120,  align: 'right'},
-                { columnName: 'TrxDate', width: 100 },
-                { columnName: 'TrxType', width: 50 },
-                { columnName: 'Status', width: 80 },
-                { columnTitle: 'Id', width: 100 },
-                ];
+            { columnName: 'Number', width: 100 },
+            { columnName: 'Description', width: -1 },
+            { columnName: 'ExtendedPrice', width: 100,  align: 'right' },
+            { columnName: 'Tax', width: 80,  align: 'right' },
+            { columnName: 'Fees', width: 80,  align: 'right' },
+            { columnName: 'TotalTrxAmount', width: 120,  align: 'right'},
+            { columnName: 'TrxDate', width: 100 },
+            { columnName: 'TrxType', width: 160 },
+            { columnName: 'TrxClass', width: 80 },
+            { columnName: 'Status', width: 80 },
+            { columnTitle: 'Id', width: 100 },
+        ];
 
+        console.log('type=', this.props.transactionTypeList);
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
                 <Grid rows={this.state.data} columns={columns}>
@@ -408,6 +448,7 @@ function mapStateToProps({transactions, auth}) {
     return {
         regionId: auth.login.defaultRegionId,
         transactions: transactions.transactionsDB,
+        transactionTypeList: transactions.transactionTypeList,
     }
 }
 

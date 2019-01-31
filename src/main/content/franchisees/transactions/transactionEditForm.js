@@ -578,8 +578,6 @@ class TransactionEditForm extends Component {
     addNewTransaction = () => {
         let tTypeTaxValue = '5c41272c4d275d4560e90fb9';
         let period = this.state.TransactionPeriod.split('/');
-        console.log('period = ', period);
-        return;
 
         let result = {
             Trx_no: this.state.TransactionNo,
