@@ -574,7 +574,6 @@ class TransactionEditForm extends Component {
 
     addNewTransaction = () => {
         let tTypeTaxValue = '5c41272c4d275d4560e90fb9';
-        console.log('trxclass=',this.state.TrxClass);
         let result = {
             Trx_no: this.state.TransactionNo,
             RegionId: this.props.regionId,
