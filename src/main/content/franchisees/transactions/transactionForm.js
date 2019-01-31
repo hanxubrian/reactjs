@@ -341,7 +341,7 @@ class TransactionForm extends Component {
                     classes: {
                         input: classes.input,
                     },
-                    readOnly: this.props.transactionForm.type === 'edit'
+                    readOnly: this.props.transactionForm.type === 'edit' && this.props.transactionForm.franchisee!==null
                 }}
                 InputLabelProps = {{
                     classes: {outlined: classes.label}

@@ -387,7 +387,7 @@ class TransactionEditForm extends Component {
                     classes: {
                         input: classes.input,
                     },
-                    readOnly: this.props.transactionForm.type === 'edit'
+                    readOnly: this.props.transactionForm.type === 'edit' && this.props.transactionForm.franchisee!==null
                 }}
                 InputLabelProps = {{
                     classes: {outlined: classes.label}
@@ -487,7 +487,6 @@ class TransactionEditForm extends Component {
 
         if(this.props.transactionForm.type === 'edit' && this.props.transactionDetail!==null) {
             let trxDetail = this.props.transactionDetail.Data;
-            console.log('franchisees=', this.props.franchisees);
             if(this.props.franchisees!==null) {
                 let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList;
 
@@ -642,6 +641,16 @@ class TransactionEditForm extends Component {
         }
         if(this.state.unitPrice==='' || this.state.unitPrice<=0){
             this.setState({snackMessage: 'Please enter item amount correctly'});
+            this.setState({openSnack: true});
+            return false;
+        }
+        if(this.state.transactionFrequency===null){
+            this.setState({snackMessage: 'Please choose a frequency'});
+            this.setState({openSnack: true});
+            return false;
+        }
+        if(this.state.TrxClass===null){
+            this.setState({snackMessage: 'Please choose a Trx. Class'});
             this.setState({openSnack: true});
             return false;
         }
