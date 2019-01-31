@@ -470,6 +470,12 @@ class InvoiceListContent extends Component {
                             ]
                         },
                     ]}
+                    defaultSorted={[
+                        {
+                            id: "InvoiceDate",
+                            desc: true
+                        }
+                    ]}
                     defaultPageSize={100}
                     className={classNames( "-striped -highlight")}
                     totalRecords = {this.state.data.length}
