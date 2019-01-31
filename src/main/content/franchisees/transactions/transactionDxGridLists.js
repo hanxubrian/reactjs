@@ -296,6 +296,8 @@ class TransactionsDxGridLists extends Component {
             if(props.row.TrxChargeType!==null)
                 trxTypeName = props.row.TrxChargeType;
             // if(type.length) trxTypeName = type[0].Name;
+
+            if(props.row.TrxType==='I') trxTypeName= 'D';
             return (
                 <Table.Cell>
                     <div className="flex items-center actions w-full">
@@ -340,7 +342,7 @@ class TransactionsDxGridLists extends Component {
         if(row.TrxChargeType==='D')
             backColor = 'rgba(255,0,0, .2)';
         let rowClass='';
-        if(row.TrxChargeType==='D')
+        if(row.TrxChargeType==='D' || row.TrxType==='I')
             rowClass = 'deduction';
         else if(row.TrxChargeType==='C')
             rowClass = 'credit';
