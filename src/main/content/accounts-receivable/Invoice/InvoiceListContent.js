@@ -445,7 +445,7 @@ class InvoiceListContent extends Component {
                                     width : 90,
                                     Cell  : row => (
                                         <div className="flex items-center actions justify-center w-full">
-                                            {row.original.InvoiceNo!=='PENDING' && (
+                                            {row.original.InvoiceNo==='PENDING' && (
                                                 <IconButton style={{padding: 8}}
                                                             onClick={(ev) => {
                                                                 ev.stopPropagation();
