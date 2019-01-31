@@ -353,7 +353,7 @@ class TransactionEditForm extends Component {
         period: moment(),
         taxExempt: false,
         buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval,
-        transactionType: {label: 'Advance Fee', value:'5c41272c4d275d4560e90fa3'},
+        TrxChargeClass: {label: 'Advance Fee', value:'5c5320066846d776488590f1'},
         transactionFrequency: "single",
         reSell: false,
         quantity: 1,
@@ -365,7 +365,7 @@ class TransactionEditForm extends Component {
         paymentsDate: new Date(),
         grossTotal: 0,
         startDate: moment(),
-        TrxClass: 'D',
+        TrxChargeType: 'D',
         creditReason: '',
         deductionReason: '',
         trxClassAmount: 0.00
@@ -458,7 +458,7 @@ class TransactionEditForm extends Component {
                 this.setState({selectedFranchisee: null});
                 this.setState({value: ''});
                 this.setState({franchiseeNo: ''});
-                this.setState({transactionType: {label: 'Advance Fee', value:'5c41272c4d275d4560e90fa3'}});
+                this.setState({TrxChargeClass: {label: 'Advance Fee', value:'5c5320066846d776488590f1'}});
                 this.setState({transactionFrequency: "single"});
                 this.setState({reSell: false});
                 this.setState({quantity: 1});
@@ -496,22 +496,29 @@ class TransactionEditForm extends Component {
                     this.setState({value: trxDetail.FranchiseeName});
                     this.setState({subTotal: parseFloat(trxDetail.TrxExtendedPrice)});
                     this.setState({unitPrice: parseFloat(trxDetail.TrxItemAmount)});
-                    this.setState({TrxClass: trxDetail.TrxClass});
+                    this.setState({TrxChargeType: trxDetail.TrxChargeType});
 
                     let tax = parseFloat(trxDetail.TrxTax);
-                    if(trxDetail.TrxType!=='5c41272c4d275d4560e90fb9') tax = 0.00;
+                    if(trxDetail.TrxClass!=='5c5320066846d77648859107') tax = 0.00;
 
                     this.setState({tax: tax});
                     this.setState({quantity: parseFloat(trxDetail.quantity)});
                     this.setState({total: parseFloat(trxDetail.TrxExtendedPrice)+ tax});
                     this.setState({TransactionDate: moment(trxDetail.TrxDate)});
-                    this.setState({TransactionPeriod: trxDetail.month+'/'+trxDetail.year });
+
+                    let period = trxDetail.month.toString()+'/'+trxDetail.year.toString();
+                    if(trxDetail.month<10)
+                        period = '0'+period;
+
+
+                    // console.log('period1=', trxDetail.month<10 ? '0':''+);
+                    this.setState({TransactionPeriod: period});
 
 
                     let trxType = this.props.transactionTypeList.filter(f=>f._id === trxDetail.Trxtype);
 
                     if(trxType.length)
-                        this.setState({transactionType: {value: trxType[0]._id, label: trxType[0].Name}});
+                        this.setState({transactionClass: {value: trxType[0]._id, label: trxType[0].Name}});
 
                     this.setState({transactionFrequency: trxDetail.TrxFrequency});
                     this.setState({payments: parseInt(trxDetail.NumberOfPayments)});
@@ -560,7 +567,7 @@ class TransactionEditForm extends Component {
 
         if(quantity>0 && unitPrice>0) {
             let tax = quantity * unitPrice*0.085;
-            if(this.state.transactionType.value!=='5c41272c4d275d4560e90fb9') tax = 0.0;
+            if(this.state.TrxChargeClass.value!=='5c5320066846d77648859107') tax = 0.0;
             if(this.state.reSell) tax = 0.0;
 
             let line_total = parseFloat(quantity * unitPrice+tax);
@@ -575,7 +582,7 @@ class TransactionEditForm extends Component {
     };
 
     addNewTransaction = () => {
-        let tTypeTaxValue = '5c41272c4d275d4560e90fb9';
+        let tTypeTaxValue = '5c5320066846d77648859107';
         let period = this.state.TransactionPeriod.split('/');
 
         let result = {
@@ -586,9 +593,9 @@ class TransactionEditForm extends Component {
             CreatedBy: this.props.user.UserId,
             Company_no: '',
 
-            TrxType: this.state.transactionType.value,
-            TrxClass: this.state.TrxClass,
-            TrxTypeLabel: this.state.transactionType.label,
+            TrxClass: this.state.TrxChargeClass.value,
+            TrxClassLabel: this.state.TrxChargeClass.label,
+            TrxChargeType: this.state.TrxChargeType,
             TrxFrequency: this.state.transactionFrequency,
             TrxResell: this.state.reSell, //Boolean
             creditReason: this.state.creditReason,
@@ -604,10 +611,10 @@ class TransactionEditForm extends Component {
             TrxDate: this.state.TransactionDate,
             month: parseInt(period[0]),
             year: parseInt(period[1]),
-            VendorValue: this.state.transactionType.value===tTypeTaxValue && this.props.vendor!==null ? this.props.vendor.vendor.value: '', //vendor, vendor_no, vendorDate
-            VendorLabel: this.state.transactionType.value===tTypeTaxValue && this.props.vendor!==null ? this.props.vendor.vendor.label: '', //vendor, vendor_no, vendorDate
-            VendorNo: this.state.transactionType.value===tTypeTaxValue && this.props.vendor!==null ? this.props.vendor.vendor_no : '',
-            VendorDate: this.state.transactionType.value===tTypeTaxValue && this.props.vendor!==null ? moment(this.props.vendor.vendorDate) : moment(),
+            VendorValue: this.state.TrxChargeClass.value===tTypeTaxValue && this.props.vendor!==null ? this.props.vendor.vendor.value: '', //vendor, vendor_no, vendorDate
+            VendorLabel: this.state.TrxChargeClass.value===tTypeTaxValue && this.props.vendor!==null ? this.props.vendor.vendor.label: '', //vendor, vendor_no, vendorDate
+            VendorNo: this.state.TrxChargeClass.value===tTypeTaxValue && this.props.vendor!==null ? this.props.vendor.vendor_no : '',
+            VendorDate: this.state.TrxChargeClass.value===tTypeTaxValue && this.props.vendor!==null ? moment(this.props.vendor.vendorDate) : moment(),
             NumberOfPayments: this.state.payments,
             StartDate: this.state.startDate,
             GrossTotal: this.state.grossTotal,
@@ -649,7 +656,7 @@ class TransactionEditForm extends Component {
             this.setState({openSnack: true});
             return false;
         }
-        if(this.state.TrxClass===null){
+        if(this.state.TrxChargeType===null){
             this.setState({snackMessage: 'Please choose a Trx. Class'});
             this.setState({openSnack: true});
             return false;
@@ -700,10 +707,10 @@ class TransactionEditForm extends Component {
         this.setState({ openSnack: false });
     };
 
-    handleTransactionTypeChange = (newValue)=> {
-        this.setState({transactionType: newValue});
+    handleTransactionClassChange = (newValue)=> {
+        this.setState({TrxChargeClass: newValue});
 
-        if(newValue.value==='5c41272c4d275d4560e90fb9')
+        if(newValue.value==='5c5320066846d77648859107')
             this.props.showVendorDialogBox();
     };
 
@@ -749,6 +756,7 @@ class TransactionEditForm extends Component {
                 },
             }),
         };
+        console.log('period=', this.state.TransactionPeriod)
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
@@ -909,13 +917,13 @@ class TransactionEditForm extends Component {
                                 <FormControl component="fieldset" className={classes.formControlNomb}>
                                     <FormLabel component="legend">Transaction Class</FormLabel>
                                     <RadioGroup
-                                        aria-label="Transaction Class"
-                                        name="TrxClass"
+                                        aria-label="Charge Type"
+                                        name="TrxChargeType"
                                         className={classes.group}
                                         classes={{
                                             root: classes.group
                                         }}
-                                        value={this.state.TrxClass}
+                                        value={this.state.TrxChargeType}
                                         onChange={this.handleChange}
                                     >
                                         <FormControlLabel value="D" control={<Radio />} label="Deduction" />
@@ -924,7 +932,7 @@ class TransactionEditForm extends Component {
                                 </FormControl>
                             </Grid>
                         </Grid>
-                        {this.state.TrxClass==='C' && (
+                        {this.state.TrxChargeType==='C' && (
                             <Grid container className={classNames(classes.formControl, "mb-8")} >
                                 <Grid item xs={12} sm={12} md={12} className="flex flex-row xs:flex-col">
                                     <TextField
@@ -993,9 +1001,9 @@ class TransactionEditForm extends Component {
                                             <Select1
                                                 classes={classes}
                                                 styles={selectStyles}
-                                                value={this.state.transactionType}
+                                                value={this.state.TrxChargeClass}
                                                 components={components}
-                                                onChange={(v)=>this.handleTransactionTypeChange(v)}
+                                                onChange={(v)=>this.handleTransactionClassChange(v)}
                                                 options={aTypes0}
                                                 placeholder="Select a type"
                                             />
@@ -1110,7 +1118,7 @@ class TransactionEditForm extends Component {
                                 label="ReSell"
                             />
                         </div>
-                        {this.state.transactionType.value==='5c41272c4d275d4560e90fb9' && this.props.transactionForm.vendor!==null && ( // Franchisee Supplies
+                        {this.state.TrxChargeClass.value==='5c41272c4d275d4560e90fb9' && this.props.transactionForm.vendor!==null && ( // Franchisee Supplies
                             <Grid container className={classNames(classes.formControl, "mb-0 p-0")} >
                                 <Grid item xs={12} sm={12} md={12} className="flex flex-row pt-16 w-full items-center no-padding">
                                     <TextField

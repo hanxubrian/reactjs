@@ -286,10 +286,13 @@ class TransactionsDxGridLists extends Component {
         }
         else if (props.column.name.includes('TrxType')) {
             let _typeId = props.row.TrxType;
-            let type = this.props.transactionTypeList.filter(f=>f._id===props.row.TrxType);
+            // let type = this.props.transactionTypeList.filter(f=>f._id===props.row.TrxType);
 
             let trxTypeName = _typeId;
-            if(type.length) trxTypeName = type[0].Name;
+
+            if(props.row.TrxChargeType!==null)
+                trxTypeName = props.row.TrxChargeType;
+            // if(type.length) trxTypeName = type[0].Name;
             return (
                 <Table.Cell>
                     <div className="flex items-center actions w-full">
