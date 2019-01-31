@@ -77,10 +77,10 @@ class invoiceService {
                 params: {RegionId: RegionId}})
                 .then( res => {
                     if(res.status===200) {
-                        resolve(res.data);
+                        resolve({data:res.data,success:true});
                     }
                     else if(res.status!==200){
-                        reject(res.data);
+                        reject({data:res.data,success:false});
                     }
                 })
                 .catch(error=>{

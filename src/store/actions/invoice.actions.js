@@ -6,6 +6,12 @@ export const GET_ALL_INVOICES_ERR = "[INVOICES] GETS ALL ERROR";
 export const CLOSE_INVOICE_ERROR_DIALOG = "[INVOICES] CLOSE INVOICE ERROR DIALOG";
 export const GET_INVOICE_STATUS = "[INVOICES] GETS INVOICE STATUS";
 export const GET_INVOICE_DETAIL = "[INVOICES] GETS INVOICE DETAIL";
+
+export const GET_INVOICE_DETAIL_START = "[INVOICES] GETS INVOICE DETAIL START";
+export const GET_INVOICE_DETAIL_FAILD = "[INVOICES] GETS INVOICE DETAIL FAILD";
+
+
+
 export const GET_INVOICES_FETCH_START = "[INVOICES] GETS STARTED FETCH";
 export const DELETE_SELECTED_INVOICES = "[INVOICES] DELETE SELECTED";
 export const REMOVE_SELECTED_INVOICE = "[INVOICE] REMOVE SELECTED";
@@ -69,15 +75,22 @@ export function getInvoices(RegionId, StatusId, FromDate, ToDate, PeriodId,OpenO
 
 export function getInvoiceDetail(InvoiceId,RegionId) {
     return (dispatch) => {
+
+        dispatch({
+            type: GET_INVOICE_DETAIL_START,
+        });
        (async () => {
             let res = await invoiceService.getInvoiceDetailList(InvoiceId,RegionId);
-            if (res) {
+            if (res.success && res.data.IsSuccess) {
                 dispatch({
                     type: GET_INVOICE_DETAIL,
-                    payload: res
+                    payload: res.data
                 });
             } else {
-
+                dispatch({
+                    type: GET_INVOICE_DETAIL_FAILD,
+                    payload: "Faild",
+                });
             }
         })();
     };

@@ -215,19 +215,27 @@ const styles = theme => ({
 
 
 
-const SubListItem = ({ value, onClick }) => (
-    <li onClick={onClick}>{value}</li>
+const SubTd = ({ tdvalue, onClick }) => (
+    <td onClick={onClick}>{tdvalue}</td>
 );
 const ListItem = ({ value, onClick }) => (
-    <li onClick={onClick}>{value}</li>
+    <tr onClick={onClick}>
+        {
+            <SubTd  tdvalue={value}/>
+
+        }
+    </tr>
 
 );
 const List = ({ items, onItemClick }) => (
-    <ul>
+    <table>
+        <tbody>
         {
-            items.map((item, i) => <ListItem key={i} value={item} onClick={onItemClick} />)
+
+            items.map((item, i) => <ListItem key={i} value={item.value} onClick={onItemClick} />)
         }
-    </ul>
+        </tbody>
+    </table>
 );
 
 class SystemNotificationViewById extends Component {
@@ -352,13 +360,29 @@ class SystemNotificationViewById extends Component {
                                                 </TableBody>
                                             </table>
                                         </div>
-                                        <div>
-                                            <List items={multiKey} onItemClick={this.handleItemClick} />
-
-                                        </div>
 
 
 
+
+
+                                    </CardContent>
+                                    <CardContent>
+                                        <table className={classes.tableView}>
+                                            <TableHead className={classes.tableheader}>
+                                                <TableRow>
+                                                    <CustomTableCell>CustomerName</CustomTableCell>
+                                                    <CustomTableCell>CustomerNo</CustomTableCell>
+                                                    <CustomTableCell align="right">CustomerBilling</CustomTableCell>
+                                                    <CustomTableCell align="right">CPIPercent</CustomTableCell>
+                                                </TableRow>
+                                            </TableHead>
+
+                                            <TableBody>
+
+
+
+                                            </TableBody>
+                                        </table>
 
                                     </CardContent>
                                 </Card>

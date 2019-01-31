@@ -6,10 +6,12 @@ import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 import _ from 'lodash';
 
+
 let today = new Date();
 const initialState = {
     invoicesDB: null,
     invoiceDetail: null,
+    invoiceDetailStatus: null,
     bLoadedInvoices: false,
     bInvoiceErr: false,
     invoiceErrMsg: '',
@@ -128,7 +130,21 @@ const invoices = function(state = initialState, action) {
                 ...state,
                 invoiceDetail: action.payload,
                 bLoadedInvoices: true,
-                bInvoiceStart: false
+                bInvoiceStart: false,
+                invoiceDetailStatus: true,
+            }
+        }
+        case Actions.GET_INVOICE_DETAIL_START:
+        {
+            return {
+                ...state,invoiceDetailStatus:false,
+            }
+        }
+        case Actions.GET_INVOICE_DETAIL_FAILD:
+        {
+            return {
+                ...state,
+                invoiceDetail: action.payload,invoiceDetailStatus:false,
             }
         }
         case Actions.GET_INVOICES_FETCH_START:

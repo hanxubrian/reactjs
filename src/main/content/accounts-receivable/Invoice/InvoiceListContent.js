@@ -280,6 +280,7 @@ class InvoiceListContent extends Component {
         const input = document.getElementById('divToPrint');
         this.refs.child.downloadPDF(input, imgUrl);
     }
+
     render()
     {
         const { classes} = this.props;
@@ -505,11 +506,9 @@ class InvoiceListContent extends Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                {this.state.invoiceDetail!==null && 1 && (
+                {this.state.invoiceDetail!==null && this.state.invoiceDetail !=="Faild" && (
                     <InvoiceReport childCall={this.printDocument.bind(this)} ref="child" show={this.state.isOpen} onClose={this.toggleModal} Region={this.props.allRegion} RegionId ={this.props.regionId} Detail={this.state.invoiceDetail} />
-
                 )}
-
                 {this.state.isOpen && this.state.invoiceDetail!==null &&(
                 <div className="mb5" style={{zIndex:999999}}>
                     <button onClick={this.printDocument} style={{

@@ -109,52 +109,69 @@ class InvoiceReport extends Component {
     componentWillReceiveProps(nextProps) {
 
         if(nextProps.Detail) {
-
-            this.setState({
-                invoiceDetail:nextProps.Detail.Data,
-                Items: nextProps.Detail.Data.Items,
-                Region: nextProps.Detail.Data.Region,
-            });
+            // if(nextProps.Detail.Data.Items && nextProps.Detail.Data.Items !== null){
+            //     this.setState({Items:nextProps.Detail.Data.Items});
+            // }
+            // if(nextProps.Detail.Data && nextProps.Detail.Data !== null){
+            //     this.setState({invoiceDetail:nextProps.Detail.Data});
+            // }
+            // if(nextProps.Detail.Data.Region && nextProps.Detail.Data.Region !== null){
+            //     this.setState({Region:nextProps.Detail.Data.RegionId});
+            // }
+            // this.setState({
+            //     invoiceDetail:nextProps.Detail.Data,
+            //     Items: nextProps.Detail.Data.Items,
+            //     Region: nextProps.Detail.Data.Region,
+            // });
+        }
+        if(nextProps.Detail ==="Faild"){
+            // alert("GET INVOICE DETAIL FAILD!!!");
         }
     }
     componentDidMount(){
-
+        if(this.props.Detail ==="Faild"){
+            alert("GET INVOICE DETAIL FAILD!!!");
+        }
     }
     componentWillUnmount(){
 
     }
     componentWillMount(){
-
-        this.setState({
-            invoiceDetail:this.props.Detail.Data,
-            Items: this.props.Detail.Data.Items,
-            Region: this.props.Detail.Data.RegionId,
-        });
-        if(this.props.Region && this.props.Region !== null){
-            if(this.props.RegionId && this.props.RegionId !== null){
-                this.props.Region.map((item)=>{
-                    if(item.regionid === this.props.RegionId){
-                        this.setState({RegionInfo: item});
-                    }
-                });
+        if(this.props.Detail !=="Faild"){
+            this.setState({
+                invoiceDetail:this.props.Detail.Data,
+                Items: this.props.Detail.Data.Items,
+                Region: this.props.Detail.Data.RegionId,
+            });
+            if(this.props.Region && this.props.Region !== null){
+                if(this.props.RegionId && this.props.RegionId !== null){
+                    this.props.Region.map((item)=>{
+                        if(item.regionid === this.props.RegionId){
+                            this.setState({RegionInfo: item});
+                        }
+                    });
+                }
             }
         }
+    if(this.props.Detail ==="Faild"){
+        //alert("GET INVOICE DETAIL FAILD!!!");
+    }
 
     }
     componentDidUpdate(prevProps, prevState,){
-        if(this.props.Detail.Data.RegionId && this.props.Detail.Data.RegionId !== null && JSON.stringify(this.props.Detail.Data.RegionId) !== JSON.stringify(prevProps.Detail.Data.RegionId)){
+        if(this.props.Detail !=="Faild" &&  this.props.Detail.Data.RegionId && this.props.Detail.Data.RegionId !== null && JSON.stringify(this.props.Detail.Data.RegionId) !== JSON.stringify(prevProps.Detail.Data.RegionId)){
             this.setState({
                 Region: this.props.Detail.Data.RegionId,
             });
         }
-        if(this.props.Detail && this.props.Detail !== null && JSON.stringify(this.props.Detail) !== JSON.stringify(prevProps.Detail)){
+        if(this.props.Detail !=="Faild" && this.props.Detail && this.props.Detail !== null && JSON.stringify(this.props.Detail) !== JSON.stringify(prevProps.Detail)){
             this.setState({
                 invoiceDetail:this.props.Detail.Data,
                 Items: this.props.Detail.Data.Items,
                 Region: this.props.Detail.Data.RegionId,
             });
         }
-        if(this.props.Region && this.props.Region !== null && JSON.stringify(this.props.Region) !== JSON.stringify(prevProps.Region)){
+        if(this.props.Detail !=="Faild" && this.props.Region && this.props.Region !== null && JSON.stringify(this.props.Region) !== JSON.stringify(prevProps.Region)){
             if(this.props.RegionId && this.props.RegionId !== null && JSON.stringify(this.props.RegionId) !== JSON.stringify(prevProps.RegionId)){
                 this.props.Region.map((item)=>{
                     if(item.regionid === this.props.RegionId){
@@ -210,7 +227,7 @@ class InvoiceReport extends Component {
         if (!this.props.show) {
             return null;
         }
-        if (this.props.Detail && this.props.Detail !== null && this.state.RegionInfo && this.state.RegionInfo !== null) {
+        if (this.props.Detail && this.props.Detail !== null && this.state.RegionInfo && this.state.RegionInfo !== null ) {
         return (
 
             <div onClick={this.props.onClose}   style={{
@@ -483,7 +500,10 @@ class InvoiceReport extends Component {
                                     <Typography><br/></Typography>
                                     <Typography><br/></Typography><Typography><br/></Typography>
                                 </td>
-                                <td><Typography><br/></Typography></td>
+                                <td >
+                                    <Typography><br/></Typography>
+                                    <Typography style={{color:'black',textAlign: "center"}}>{this.state.invoiceDetail.InvoiceMessage}</Typography>
+                                </td>
                                 <td style={{border: 'solid 1px',color:'black'}}><Typography><br/></Typography></td>
                                 <td style={{border: 'solid 1px',color:'black'}}><Typography><br/></Typography></td>
                             </tr>
@@ -835,8 +855,9 @@ class InvoiceReport extends Component {
             </div>
         );
     }
-    else{
-            return null;
+    else {
+
+            return(<div>fffffffffffffffffffffffffffffffff</div>)
         }
     }
 }
