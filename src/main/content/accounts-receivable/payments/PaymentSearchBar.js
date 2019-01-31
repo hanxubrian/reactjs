@@ -142,14 +142,15 @@ class PaymentSearchBar extends Component {
 
 	handleKeyDown = (event) => {
 		console.log("escFunction");
-
-		if (event.keyCode === ENTER_KEY) {
-			clearTimeout(this.timer)
-			this.triggerChange()
-		} else if (event.keyCode === 27) {
-			clearTimeout(this.timer)
-			this.setState({ s: '' });
-			this.triggerChange()
+		if (!this.props.paymentDlgPayloads.open) {
+			if (event.keyCode === ENTER_KEY) {
+				clearTimeout(this.timer)
+				this.triggerChange()
+			} else if (event.keyCode === 27) {
+				clearTimeout(this.timer)
+				this.setState({ s: '' });
+				this.triggerChange()
+			}
 		}
 	}
 
@@ -250,6 +251,7 @@ function mapStateToProps({ accountReceivablePayments }) {
 		bOpenedSummaryPanel: accountReceivablePayments.bOpenedSummaryPanel,
 
 		searchText: accountReceivablePayments.searchText,
+		paymentDlgPayloads: accountReceivablePayments.paymentDlgPayloads,
 
 	}
 }
