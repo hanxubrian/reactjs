@@ -5,6 +5,10 @@ export const GET_ALL_SYSTEM_NOTIFICATION_START              = "[SYSTEM NOTIFICAT
 export const GET_ALL_SYSTEM_NOTIFICATION_SUCCESS            = "[SYSTEM NOTIFICATION] GET ALL NOTIFICATION SUCCESS";
 export const GET_ALL_SYSTEM_NOTIFICATION_FAILD              = "[SYSTEM NOTIFICATION] GET ALL NOTIFICATION FAILD";
 
+export const GET_SYSTEM_NOTIFICATION_BY_ID_START            = "[SYSTEM NOTIFICATION] GET NOTIFICATION BY ID START";
+export const GET_SYSTEM_NOTIFICATION_BY_ID_SUCCESS          = "[SYSTEM NOTIFICATION] GET NOTIFICATION BY ID SUCCESS";
+export const GET_SYSTEM_NOTIFICATION_BY_ID_FAILD            = "[SYSTEM NOTIFICATION] GET NOTIFICATION BY ID FAILD";
+
 
 export const ADD_NOTIFICATION_START              = "[PUSHER NOTIFICATION] ADD NOTIFICATION START";
 export const ADD_NOTIFICATION_SUCCESS            = "[PUSHER NOTIFICATION] ADD NOTIFICATION SUCCESS";
@@ -39,7 +43,29 @@ export function getallsystemnotification(UserId="65") {
         })();
     };
 }
+export function getpushermsgbyid(Id) {
+    return (dispatch) => {
 
+        dispatch({
+            type: GET_SYSTEM_NOTIFICATION_BY_ID_START,
+        });
+
+        (async () => {
+            let res = await notificationService.getpushermessagebyid(Id);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: GET_SYSTEM_NOTIFICATION_BY_ID_SUCCESS,
+                    payload: res.Data
+                });
+            } else {
+                dispatch({
+                    type: GET_SYSTEM_NOTIFICATION_BY_ID_FAILD,
+                    payload: res
+                });
+            }
+        })();
+    };
+}
 export function addnotification(pusherMSG) {
     return (dispatch) => {
 

@@ -7,12 +7,15 @@ import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 
 
+
 const initialState = {
     notificationDB              : null,
     systnotification            : null,
     status                      : false,
     pusherMSGDB                 : [],
     adminversiontriggerstatus   : false,
+    pusherMSGById               : null,
+    loadingById                 : false,
 }
 
 const notification = function (state = initialState, action) {
@@ -52,6 +55,24 @@ const notification = function (state = initialState, action) {
         {
             return {
                 adminversiontriggerstatus:false,
+            }
+        }
+        case Actions.GET_SYSTEM_NOTIFICATION_BY_ID_START:
+        {
+            return{
+                ...state,loadingById:true,pusherMSGById:null,
+            }
+        }
+        case Actions.GET_SYSTEM_NOTIFICATION_BY_ID_SUCCESS:
+        {
+            return{
+                ...state,pusherMSGById:action.payload,loadingById:false,
+            }
+        }
+        case Actions.GET_SYSTEM_NOTIFICATION_BY_ID_FAILD:
+        {
+            return{
+                ...state,loadingById:false,pusherMSGById:null,
             }
         }
         case UserActions.USER_LOGGED_OUT:

@@ -230,43 +230,26 @@ const styles = theme => ({
     }
 });
 
-class SystemNotification extends Component {
+class SystemNotificationViewContentById extends Component {
     constructor(props) {
         super(props);
-
-
-
         this.state = {
 
         };
 
-
-
     }
 
-
-
-
-
     componentDidUpdate(prevProps, prevState, snapshot) {
-
-
-
 
     }
 
     componentWillMount() {
 
-       this.props.getallsystemnotification();
-
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        if(nextProps.selectionLength !== this.props.selectionLength) {
 
-        }
     }
-
 
     componentDidMount() {
     }
@@ -274,16 +257,9 @@ class SystemNotification extends Component {
     componentWillUnmount() {
     }
 
-    handleChange = name => event => {
-        this.setState({[name]: event.target.value});
-    };
+    ;
 
-    fetchData(state, instance) {
-        this.setState({
-            pageSize: state.pageSize,
-            page: state.page,
-        });
-    }
+
 
 
 
@@ -318,14 +294,14 @@ class SystemNotification extends Component {
                                     </div>
                                     <div className="flex flex-shrink items-center">
                                         {/*<Button variant="contained" color="primary"*/}
-                                                {/*className={classNames(classes.button, classes.btntop) } onClick={()=>{alert("OK")}}>*/}
-                                            {/*Verify*/}
-                                            {/*<Icon className={classes.rightIcon}>verified_user</Icon>*/}
+                                        {/*className={classNames(classes.button, classes.btntop) } onClick={()=>{alert("OK")}}>*/}
+                                        {/*Verify*/}
+                                        {/*<Icon className={classes.rightIcon}>verified_user</Icon>*/}
                                         {/*</Button>*/}
                                         {/*<Button variant="contained" color="primary"*/}
-                                                {/*className={classNames(classes.button, classes.btntop)} onClick={()=>alert("ok")}>*/}
-                                            {/*Request Changes*/}
-                                            {/*<Icon className={classes.rightIcon}>rotate_90_degrees_ccw</Icon>*/}
+                                        {/*className={classNames(classes.button, classes.btntop)} onClick={()=>alert("ok")}>*/}
+                                        {/*Request Changes*/}
+                                        {/*<Icon className={classes.rightIcon}>rotate_90_degrees_ccw</Icon>*/}
                                         {/*</Button>*/}
                                     </div>
                                 </div>
@@ -334,10 +310,10 @@ class SystemNotification extends Component {
                         </div>
                     }
                     content={
+
                         <div className="flex-1 flex-col absolute w-full h-full">
                             <div className="testclass">
-                                <SystemNotificationContentList/>
-
+                                <SystemNotificationViewById/>
                             </div>
 
 
@@ -365,10 +341,11 @@ function mapStateToProps({notification, auth}) {
     return {
         sysnotification     : notification.systnotification,
         sysstatus           : notification.status,
+        loadingstatus       : notification.loadingById,
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(SystemNotification)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(SystemNotificationViewContentById)));
 
 
 // export default withStyles(styles, {withTheme: true})(SystemNotification);

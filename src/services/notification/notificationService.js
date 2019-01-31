@@ -37,6 +37,25 @@ class NotificationService {
                 })
         });
     }
+    getpushermessagebyid=( Id)=>{
+        const data ={
+            'id'                      : Id,
+        }
+        return new Promise((resolve, reject) => {
+            axios_instance.get(`${BASE_MONGO_API_URL}/v1/pushnotification?id=`+Id)
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    }
     adminversionupgradetrigger=(data)=>{
         return new Promise((resolve, reject) => {//,cors(),bodyParser.urlencoded({extended: false}),bodyParser.json()
             axios.post('/v1/api/admin/versionupgrade',data)
