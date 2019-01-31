@@ -325,7 +325,7 @@ const invoices = function(state = initialState, action) {
 const persistConfig = {
     key: 'invoices',
     storage: storage,
-    blacklist: ['invoicesDB', 'bInvoiceStart', 'bOpenedSummaryPanel', 'bOpenedFilterPanel', 'bLoadedCustomers',
+    blacklist: ['invoicesDB', 'customersDB', 'bInvoiceStart', 'bOpenedSummaryPanel', 'bOpenedFilterPanel', 'bLoadedCustomers',
         'customerTaxAmountLine', 'invoiceForm', 'invoiceDateOption', 'bCustomerErr', 'bInvoiceErr']
 };
 export default persistReducer(persistConfig, invoices);
