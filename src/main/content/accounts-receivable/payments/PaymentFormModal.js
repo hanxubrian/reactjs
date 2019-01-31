@@ -465,15 +465,14 @@ class PaymentFormModal extends React.Component {
 	};
 
 	handleCreatePayment = () => {
-
-		let PayItems = this.state.rows.map(x => {
-			return {
-				InvoiceNo: x.InvoiceNo,
-				Amount: x.PaymentAmount
-			}
-		})
-
 		if (this.checkValidations()) {
+
+			let PayItems = this.state.rows.map(x => {
+				return {
+					InvoiceNo: x.InvoiceNo,
+					Amount: x.PaymentAmount
+				}
+			})
 
 			const params = {
 				RegionId: this.props.regionId,
@@ -489,12 +488,16 @@ class PaymentFormModal extends React.Component {
 
 			this.props.createAccountReceivablePayment(
 				this.props.regionId,
+				this.state.customerNumber,
+
 				this.state.PaymentType,
 				this.state.ReferenceNo,
 				this.state.PaymentDate,
 				this.state.PaymentNote,
-				PayItems,
 				this.state.overpayment,
+				this.state.PaymentAmount,
+
+				PayItems,
 
 				this.props.getPaymentsParam.fromDate,
 				this.props.getPaymentsParam.toDate,
@@ -511,10 +514,19 @@ class PaymentFormModal extends React.Component {
 	};
 
 	handleChange = name => event => {
-		this.setState({ [name]: event.target.value });
+		this.setState({
+			[name]: event.target.value,
+			errorMsg: ""
+		});
 
+		if (name === "PaymentAmount") {
+			this.setState({
+				overpayment: this.getOverpaymentAmount(this.state.rows, event.target.value)
+			})
+		}
 		// this.checkValidations(name, event.target.value)
 	};
+
 	commitChanges = ({ added, changed, deleted }) => {
 		let { rows } = this.state;
 		if (added) {
@@ -583,6 +595,11 @@ class PaymentFormModal extends React.Component {
 			// })
 			// floatPaymentAmount = parseFloat(`0${this.state.PaymentAmount}`)
 			// this.checkValidations('', '', rows)
+
+			this.setState({
+				overpayment: this.getOverpaymentAmount(rows)
+			})
+
 			return {
 				rows,
 				// overpayment: floatPaymentAmount - totalPaymentAmount,
@@ -609,6 +626,10 @@ class PaymentFormModal extends React.Component {
 				}
 			}
 			// this.checkValidations('', '', rows)
+			this.setState({
+				overpayment: this.getOverpaymentAmount(rows)
+			})
+
 			return {
 				rows: rows,
 				// overpayment: floatPaymentAmount,
@@ -624,6 +645,10 @@ class PaymentFormModal extends React.Component {
 				rows[i] = { ...rows[i], PaymentAmount: 0 };
 			}
 			// this.checkValidations('', '', rows)
+			this.setState({
+				overpayment: this.getOverpaymentAmount(rows)
+			})
+
 			return {
 				rows: rows,
 				// overpayment: 0,
@@ -651,12 +676,12 @@ class PaymentFormModal extends React.Component {
 		return ""
 	}
 
-	checkValidations(name = "", value = "", rows = this.state.rows, ) {
+	checkLiveValidations(name = "", value = "", rows = this.state.rows, ) {
 
 		if (name === "PaymentType" && !value || name !== "PaymentType" && !this.state.PaymentType) {
 			this.setState({ errorMsg: "Payment type not selected" })
 		} else if (name === "ReferenceNo" && value <= 0 || name !== "ReferenceNo" && this.state.ReferenceNo <= 0) {
-			this.setState({ errorMsg: "Refernce number is invalid" })
+			this.setState({ errorMsg: "ReferenceNo is invalid" })
 		} else if (name === "PaymentDate" && !value || name !== "PaymentDate" && !this.state.PaymentDate) {
 			this.setState({ errorMsg: "Payment date not selected" })
 		} else if (name === "PaymentAmount" && value <= 0) {
@@ -665,13 +690,13 @@ class PaymentFormModal extends React.Component {
 
 			let totalPaymentAmount = 0
 			let floatPaymentAmount = parseFloat(`0${name === "PaymentAmount" ? value : this.state.PaymentAmount}`)
-			
+
 			this.state.rows.forEach(x => {
 				totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
 			})
 			console.log("floatPaymentAmount", "totalPaymentAmount", floatPaymentAmount, totalPaymentAmount)
 			if (floatPaymentAmount < totalPaymentAmount) {
-				this.setState({ 
+				this.setState({
 					errorMsg: "Total payment is greater than payment to apply",
 					overpayment: 0,
 				})
@@ -693,6 +718,74 @@ class PaymentFormModal extends React.Component {
 
 		}
 		return false
+	}
+
+	getOverpaymentAmount(rows = this.state.rows, paymentAmount = this.state.PaymentAmount) {
+		let totalPaymentAmount = 0
+		paymentAmount = parseFloat(`0${paymentAmount}`)
+		rows.forEach(x => {
+			totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
+		})
+		return paymentAmount - totalPaymentAmount
+	}
+
+	checkValidations(rows = this.state.rows, paymentAmount = this.state.paymentAmount) {
+		if (!this.state.PaymentType) {
+			this.setState({
+				errorMsg: "Payment type not selected",
+				overpayment: this.getOverpaymentAmount(rows, paymentAmount),
+			})
+		} else if (this.state.ReferenceNo <= 0) {
+			this.setState({
+				errorMsg: "ReferenceNo is invalid",
+				overpayment: this.getOverpaymentAmount(rows, paymentAmount),
+			})
+		} else if (!this.state.PaymentDate) {
+			this.setState({
+				errorMsg: "Payment date not selected",
+				overpayment: this.getOverpaymentAmount(rows, paymentAmount),
+			})
+		} else if (this.state.PaymentAmount <= 0) {
+			this.setState({
+				errorMsg: "Amount is invalid",
+				overpayment: this.getOverpaymentAmount(rows, paymentAmount),
+			})
+
+		} else if (!this.checkIfAllZeroPaymentsValidation(rows)) {
+			this.setState({ errorMsg: "Neither of payments amount is settled" })
+		} else if (!this.checkIfAPaymentGreaterThanBalanceValidation(rows)) {
+			this.setState({ errorMsg: "One or more Payment Amounts is greater than Invoice Balance" })
+		} else if (!this.checkIfAllPaymentsGreaterThanAmountValidation(rows, paymentAmount)) {
+			this.setState({ errorMsg: "Sum of payments is greater than applied one." })
+		} else {
+			return true
+		}
+		return false
+	}
+
+	checkIfAllZeroPaymentsValidation(rows) {
+		let existPositivePayment = false
+		rows.forEach(x => {
+			existPositivePayment = existPositivePayment || 0 < x.PaymentAmount
+		})
+		return existPositivePayment
+	}
+
+	checkIfAPaymentGreaterThanBalanceValidation(rows) {
+		let existPaymentsGreaterThanBalance = false
+		rows.forEach(x => {
+			existPaymentsGreaterThanBalance = existPaymentsGreaterThanBalance || x.InvoiceBalance < x.PaymentAmount
+		})
+		return !existPaymentsGreaterThanBalance
+	}
+
+	checkIfAllPaymentsGreaterThanAmountValidation(rows, paymentAmount = this.state.PaymentAmount) {
+		let totalPaymentAmount = 0
+		paymentAmount = parseFloat(`0${paymentAmount}`)
+		rows.forEach(x => {
+			totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
+		})
+		return totalPaymentAmount <= paymentAmount
 	}
 
 	render() {

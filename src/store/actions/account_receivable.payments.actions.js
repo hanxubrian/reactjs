@@ -43,7 +43,24 @@ export function getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, Sea
 	}
 }
 
-export function createAccountReceivablePayment(RegionId, PaymentType, ReferenceNo, PaymentDate, Note, PayItems, overpayment, FromDate, ToDate, SearchText, Status) {
+export function createAccountReceivablePayment(
+	RegionId,
+	customerNumber,
+
+	PaymentType,
+	ReferenceNo,
+	PaymentDate,
+	PaymentNote,
+	overpayment,
+	PaymentAmount,
+
+	PayItems,
+
+	fromDate,
+	toDate,
+	SearchText,
+	status
+) {
 
 	// RegionId = RegionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [RegionId];
 
@@ -56,7 +73,19 @@ export function createAccountReceivablePayment(RegionId, PaymentType, ReferenceN
 		(async () => {
 			// await sleep(2000)
 			// let paymentCreated = [];
-			let paymentCreated = await invoicePaymentsService.createAccountReceivablePayment(RegionId, PaymentType, ReferenceNo, PaymentDate, Note, PayItems, overpayment);
+			let paymentCreated = await invoicePaymentsService.createAccountReceivablePayment(
+				RegionId,
+				customerNumber,
+
+				PaymentType,
+				ReferenceNo,
+				PaymentDate,
+				PaymentNote,
+				overpayment,
+				PaymentAmount,
+
+				PayItems,
+			);
 			dispatch({
 				type: CREATE_AR_PAYMENTS,
 				payload: paymentCreated
@@ -70,7 +99,13 @@ export function createAccountReceivablePayment(RegionId, PaymentType, ReferenceN
 			});
 
 			RegionId = RegionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [RegionId];
-			let paymentsList = await invoicePaymentsService.getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status);
+			let paymentsList = await invoicePaymentsService.getAccountReceivablePaymentsList(
+				RegionId,
+				fromDate,
+				toDate,
+				SearchText,
+				status
+			);
 
 			dispatch({
 				type: FAILED_GET_ALL_RECEIVABLE_PAYMENTS,
