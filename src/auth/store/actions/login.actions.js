@@ -85,6 +85,9 @@ export function adminCleanCache () {
     authService.logout();
     return (dispatch) => {
         dispatch({
+            type: USER_LOGGED_OUT
+        });
+        dispatch({
             type: ADMIN_CLEAN_CACHE_FOR_UPGRADE
         });
     }

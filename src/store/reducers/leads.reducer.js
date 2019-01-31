@@ -131,6 +131,7 @@ const leads = function (state = initialState, action) {
 				drawOpen: action.payload
 			}
 		}
+
 		default:
 			{
 				return state;

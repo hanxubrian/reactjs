@@ -157,7 +157,7 @@ const LAST_QUARTER = 11;
 const LAST_YEAR = 12;
 const CUSTOM_DATE = 13;
 const PERIOD = 14;
-
+var channel =undefined;
 
 class BillRun extends Component {
     state = {
@@ -201,15 +201,15 @@ class BillRun extends Component {
     };
     componentDidMount(){
         this._isMounted = true;
-        const pusher = new Pusher('ecf6a4e23b186efa2d44', {
-            cluster: 'us2',
-            forceTLS: true
-        });
-        var channel = pusher.subscribe('billruncreate');
-        channel.bind('message', data => {
-            console.log("pusherdata",data);
-            this.setState({ pusherMSG:data});
-        });
+        // const pusher = new Pusher('ecf6a4e23b186efa2d44', {
+        //     cluster: 'us2',
+        //     forceTLS: true
+        // });
+        // channel = pusher.subscribe('billruncreate');
+        // channel.bind('message', data => {
+        //     console.log("pusherdata",data);
+        //     this.setState({ pusherMSG:data});
+        // });
     }
     componentWillMount(){
         if( this._isMounted)
@@ -261,6 +261,7 @@ class BillRun extends Component {
         this.child1=null;
         this.pageLayout = undefined;
         this._isMounted = false;
+        channel = undefined;
 
     }
     componentWillReceiveProps(nextProps) {
@@ -695,18 +696,6 @@ class BillRun extends Component {
                                             ),
                                             columns: [
                                                 {
-                                                    Header: "Bill Run #",
-                                                    accessor: "BillRunNo",
-                                                    filterAll: true,
-                                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center p-24")
-                                                },
-                                                {
-                                                    Header: "Description",
-                                                    accessor: "InvoiceDescription",
-                                                    width: 560,
-                                                    className: classNames("flex items-center  justify-start p-12-impor p-24")
-                                                },
-                                                {
                                                     Header: "Period",
                                                     id: "Period",
                                                     accessor: d => moment(d.InvoiceDate).format('MM/YYYY'),
@@ -715,6 +704,13 @@ class BillRun extends Component {
                                                         return((row.original.Month).toString().padStart(2, "0")+"/"+row.original.Year);
                                                     }
                                                 },
+                                                {
+                                                    Header: "Description",
+                                                    accessor: "InvoiceDescription",
+                                                    width: 560,
+                                                    className: classNames("flex items-center  justify-start p-12-impor p-24")
+                                                },
+
                                                 {
                                                     Header: "Create Date",
                                                     id: "InvoiceDate",

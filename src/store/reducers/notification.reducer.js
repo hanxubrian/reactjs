@@ -54,6 +54,12 @@ const notification = function (state = initialState, action) {
                 adminversiontriggerstatus:false,
             }
         }
+        case UserActions.USER_LOGGED_OUT:
+        {
+            return {
+                ...initialState
+            }
+        }
         default:
         {
             return state;

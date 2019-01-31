@@ -23,6 +23,7 @@ import Select from '@material-ui/core/Select';
 import Switch from '@material-ui/core/Switch';
 import * as Actions from "../../../chatPanel/store/actions";
 import * as authActions from "../../../../auth/store/actions/login.actions";
+
 import ReactPlayer from 'react-player';
 
 const styles = theme => ({
@@ -123,6 +124,7 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         adminCleanCache                          : authActions.adminCleanCache,
+        logout                                   : authActions.logoutUser,
     }, dispatch);
 }
 

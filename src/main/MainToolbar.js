@@ -258,16 +258,59 @@ class MainToolbar extends Component {
 
         this.setState({notification: !this.state.notification});
     }
-    componentDidUpdate(prevProps,prevState){
-        console.log("##################this.props.getpusherNotificationDB",this.props.getpusherNotificationDB);
-        console.log("##################this.state.pusherMSGList.length",this.state.pusherMSGList.length);
+    billrunerrormessage=()=>{
+        this.props.showMessage({
+            message     : "Error!!!We can't create New Bill Run",//text or html
+            autoHideDuration: 6000,//ms
+            anchorOrigin: {
+                vertical  : 'top',//top bottom
+                horizontal: 'right'//left center right
+            },
+            variant: 'error'//success error info warning null
+        });
+    }
+    billrunsuccessmesssage=()=>{
 
-        // if(this.props.getpusherNotificationDB && this.props.getpusherNotificationDB !== null && this.state.pusherMSGList.length ===0){
-        //     this.setState({pusherMSGList: this.props.getpusherNotificationDB});
+        this.props.showMessage({
+            message     : this.state.pusherMSG.message,//text or html
+            autoHideDuration: 6000,//ms
+            anchorOrigin: {
+                vertical  : 'top',//top bottom
+                horizontal: 'right'//left center right
+            },
+            variant: 'success'//success error info warning null
+        });
+    }
+    componentDidUpdate(prevProps,prevState){
+        // if(this.state.pusherMSG && this.state.pusherMSG !== null){
+        //     console.log("######DB############this.props.getpusherNotificationDB",this.props.getpusherNotificationDB);
+        //     console.log("######pushermsg############this.state.pusherMSG",this.state.pusherMSG);
+        //     console.log("######billstatus############this.props.billstatus",this.props.billstatus);
+        //     console.log("######subject############this.state.pusherMSG.subject",this.state.pusherMSG.subject);
+        //     console.log("######msg############this.state.pusherMSG",this.state.pusherMSG);
+        //     console.log("######MSG############prevState.pusherMSG",prevState.pusherMSG);
         // }
+
+
+        if(this.state.pusherMSG && this.state.pusherMSG !== null && this.state.pusherMSG.subject && this.state.pusherMSG.subject !== null && this.state.pusherMSG.subject.toString() ==="BillRun" && JSON.stringify(this.state.pusherMSG) !== JSON.stringify(prevState.pusherMSG) ){
+            if(this.props.billstatus===400){
+                this.billrunerrormessage();
+                // console.log("error=============1");
+            }
+            else if(this.props.billstatus===200){
+                // console.log("**************this.props.login.UserId.toString()" ,this.props.login.UserId.toString());
+                if(this.state.pusherMSG.user === this.props.login.UserId.toString()){
+                    // console.log("error=============2");
+                    this.billrunsuccessmesssage();
+                }
+
+            }
+
+        }
+
         let midflage = false;
         if(this.state.adminMSG && this.state.adminMSG !== null && this.state.adminMSG !== prevState.adminMSG){
-            console.log("==================adminMSG====================",this.state.adminMSG);
+            // console.log("==================adminMSG====================",this.state.adminMSG);
             if(this.state.adminMSG.note && this.state.adminMSG.version){
                 this.setState({adminVersionStatus:true});
 
@@ -292,7 +335,7 @@ class MainToolbar extends Component {
             this.setState({sysflage:false});
         }
 
-        if(this.state.pusherMSG !== prevState.pusherMSG && this.state.pusherMSG !== null ){
+        if(JSON.stringify(this.state.pusherMSG) !== JSON.stringify(prevState.pusherMSG) && this.state.pusherMSG !== null ){
             if(this.state.pusherMSG.user === this.props.login.UserId.toString()){
                 console.log("pusherMSG-createM",this.state.pusherMSG);
                 let PusherList =[];
@@ -741,11 +784,13 @@ function mapDispatchToProps(dispatch)
         closeChatPanel                  : chatPanelActions.closeChatPanel,
         changechatpanelshowstatus       : chatPanelActions.changechatpanelshowstatus,
         addpushernotification           : MainActions.addnotification,
+        showMessage                     : MainActions.showMessage,
+        hideMessage                     : MainActions.hideMessage,
     }, dispatch);
 }
 
 
-function mapStateToProps({auth,chatPanel,contactsApp,notification})
+function mapStateToProps({auth,chatPanel,contactsApp,notification,billruns})
 {
     return {
         user                    : auth.user,
@@ -757,6 +802,8 @@ function mapStateToProps({auth,chatPanel,contactsApp,notification})
         getchatnotification     : chatPanel.IndividualChat.chatnotificationstatus,
         chatpanelshowstatus     : chatPanel.IndividualChat.chatpanelshowstatus,
         getpusherNotificationDB : notification.pusherMSGDB,
+        billstatus              : billruns.billrunstatus,
+        loading                 : billruns.loadingstatus,
     }
 }
 
