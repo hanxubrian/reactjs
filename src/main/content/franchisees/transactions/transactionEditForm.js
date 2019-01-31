@@ -236,7 +236,8 @@ const newTransactionState = {
     "MasterTrxTypeListId": "",
     "RegionId": "",
     "RegionName": "",
-    "TransactionDate": '01/2019',
+    "TransactionPeriod": '01/2019',
+    "TransactionDate": moment(),
     "Date": new Date(),
     "franchiseeNo": "",
     "transactionDescription": "",
@@ -574,6 +575,10 @@ class TransactionEditForm extends Component {
 
     addNewTransaction = () => {
         let tTypeTaxValue = '5c41272c4d275d4560e90fb9';
+        let period = this.state.TransactionPeriod.split('/');
+        console.log('period = ', period);
+        return;
+
         let result = {
             Trx_no: this.state.TransactionNo,
             RegionId: this.props.regionId,
@@ -598,7 +603,8 @@ class TransactionEditForm extends Component {
 
             Description: this.state.transactionDescription,
             TrxDate: this.state.TransactionDate,
-
+            month: parseInt(period[0]),
+            year: parseInt(period[1]),
             VendorValue: this.state.transactionType.value===tTypeTaxValue && this.props.vendor!==null ? this.props.vendor.vendor.value: '', //vendor, vendor_no, vendorDate
             VendorLabel: this.state.transactionType.value===tTypeTaxValue && this.props.vendor!==null ? this.props.vendor.vendor.label: '', //vendor, vendor_no, vendorDate
             VendorNo: this.state.transactionType.value===tTypeTaxValue && this.props.vendor!==null ? this.props.vendor.vendor_no : '',
@@ -767,20 +773,42 @@ class TransactionEditForm extends Component {
 
                         <MuiPickersUtilsProvider utils={MomentUtils}>
                             <Grid container className={classNames(classes.formControl)}>
-                                <Grid item xs={12} sm={6} md={6} className="flex flex-row xs:flex-col xs:mb-24 pr-8" style={{padding: '0 6px!important'}}>
+                                <Grid item xs={12} sm={4} md={4} className="flex flex-row xs:flex-col xs:mb-24 pr-8" style={{padding: '0 6px!important'}}>
+                                    <DatePicker
+                                        margin="none"
+                                        label="Transaction Date"
+                                        name="TransactionDate"
+                                        variant="outlined"
+                                        format="MM/DD/YYYY"
+                                        value={this.state.TransactionDate}
+                                        onChange={this.handleTransactionDateChange}
+                                        fullWidth
+                                        required
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input2,
+                                            },
+                                        }}
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={4} md={4} className="flex flex-row xs:flex-col xs:mb-24 pr-8" style={{padding: '0 6px!important'}}>
                                     <FormControl variant="outlined" className={classNames(classes.formControl1, "ml-4 w-full")}>
                                         <Select
                                             classes={{
                                                 selectMenu: classNames(classes.inputMenu2),
                                             }}
-                                            name="TransactionDate"
-                                            value={this.state.TransactionDate}
+                                            name="TransactionPeriod"
+                                            value={this.state.TransactionPeriod}
                                             onChange={this.handleChange}
                                             input={
                                                 <OutlinedInput
                                                     labelWidth={this.state.labelWidth}
-                                                    name="TransactionDate"
-                                                    id="TransactionDate"
+                                                    name="TransactionPeriod"
+                                                    id="TransactionPeriod"
                                                 />
                                             }
                                             MenuProps = {{
@@ -795,7 +823,7 @@ class TransactionEditForm extends Component {
                                         </Select>
                                     </FormControl>
                                 </Grid>
-                                <Grid item xs={12} sm={6} md={6} className="flex flex-row xs:flex-col pl-4" >
+                                <Grid item xs={12} sm={4} md={4} className="flex flex-row xs:flex-col pl-4" >
                                     <TextField
                                         margin="none"
                                         label="Transaction #"
