@@ -445,14 +445,17 @@ class InvoiceListContent extends Component {
                                     width : 90,
                                     Cell  : row => (
                                         <div className="flex items-center actions justify-center w-full">
-                                            <IconButton style={{padding: 8}}
-                                                        onClick={(ev) => {
-                                                            ev.stopPropagation();
-                                                            this.handleOpenRemoveDialog(row.original.InvoiceId);
-                                                        }}
-                                            >
-                                                <Icon fontSize={"small"}>delete</Icon>
-                                            </IconButton>
+                                            {row.original.InvoiceNo!=='PENDING' && (
+                                                <IconButton style={{padding: 8}}
+                                                            onClick={(ev) => {
+                                                                ev.stopPropagation();
+                                                                this.handleOpenRemoveDialog(row.original.InvoiceId);
+                                                            }}
+                                                >
+                                                    <Icon fontSize={"small"}>delete</Icon>
+                                                </IconButton>
+
+                                            )}
                                             <IconButton style={{padding: 8}}
                                                         onClick={(ev) => {
                                                             ev.stopPropagation();

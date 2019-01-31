@@ -1078,7 +1078,7 @@ class InvoiceForm extends Component {
                                             input: bReadonly? classes.inputOrange: classes.input,
                                         },
                                     }}
-                                    inputProps={{tabindex:-1}}
+                                    inputProps={{tabIndex:-1}}
                                     InputLabelProps = {{
                                         shrink: true,
                                         classes: {outlined: classes.label}
