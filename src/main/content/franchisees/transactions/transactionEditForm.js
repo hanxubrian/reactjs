@@ -791,28 +791,6 @@ class TransactionEditForm extends Component {
                         <MuiPickersUtilsProvider utils={MomentUtils}>
                             <Grid container className={classNames(classes.formControl)}>
                                 <Grid item xs={12} sm={4} md={4} className="flex flex-row xs:flex-col xs:mb-24 pr-8" style={{padding: '0 6px!important'}}>
-                                    <DatePicker
-                                        margin="none"
-                                        label="Transaction Date"
-                                        name="TransactionDate"
-                                        variant="outlined"
-                                        format="MM/DD/YYYY"
-                                        value={this.state.TransactionDate}
-                                        onChange={this.handleTransactionDateChange}
-                                        fullWidth
-                                        required
-                                        InputProps={{
-                                            classes: {
-                                                input: classes.input2,
-                                            },
-                                        }}
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={4} md={4} className="flex flex-row xs:flex-col xs:mb-24 pr-8" style={{padding: '0 6px!important'}}>
                                     <FormControl variant="outlined" className={classNames(classes.formControl1, "ml-4 w-full")}>
                                         <Select
                                             classes={{
@@ -836,6 +814,28 @@ class TransactionEditForm extends Component {
                                             <MenuItem value="02/2019">02/2019</MenuItem>
                                         </Select>
                                     </FormControl>
+                                </Grid>
+                                <Grid item xs={12} sm={4} md={4} className="flex flex-row xs:flex-col xs:mb-24 pr-8" style={{padding: '0 6px!important'}}>
+                                    <DatePicker
+                                        margin="none"
+                                        label="Transaction Date"
+                                        name="TransactionDate"
+                                        variant="outlined"
+                                        format="MM/DD/YYYY"
+                                        value={this.state.TransactionDate}
+                                        onChange={this.handleTransactionDateChange}
+                                        fullWidth
+                                        required
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input2,
+                                            },
+                                        }}
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                    />
                                 </Grid>
                                 <Grid item xs={12} sm={4} md={4} className="flex flex-row xs:flex-col pl-4" >
                                     <TextField
