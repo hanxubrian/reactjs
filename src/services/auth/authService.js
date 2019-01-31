@@ -9,6 +9,7 @@ const axios_instance = axios.create({
 
 
 const BASE_API_URL='https://apifmsplus_c.jkdev.com';
+const BASE_MONGO_API_URL = 'https://apifmsplusplus_mongo.jkdev.com';
 
 class authService {
 
@@ -44,6 +45,23 @@ class authService {
         }
 
     };
+
+    getRegions = (userId) => {
+        return new Promise((resolve, reject) => {
+            axios_instance.get(`${BASE_MONGO_API_URL}/v1/apps/regions?userId=${userId}`)
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data.Data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    }
 }
 
 const instance = new authService();

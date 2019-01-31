@@ -24,7 +24,9 @@ export function submitSignIn(email, password, url)  {
         (async () => {
             let res = await authService.authSignin(email, password);
             if (res.IsSuccess) {
-
+                let regions = await authService.getRegions(res.id);
+                res.Regions = regions;
+                console.log("RES",res);
                 let navigations = await menuService.loadAccountMenu(url);
                 dispatch({
                     type: LOGIN_SUCCESS,

@@ -59,11 +59,30 @@ const styles = theme => ({
 class UsersPermission extends React.Component {
     state = {
         open: true,
+        checkedStatus:[],
         step: 0,
     };
 
     componentWillMount() {
         console.log("menu-options",menuOptions);
+        const checkedStatus = [];
+        {menuOptions.map(x => {
+            checkedStatus["view_checked"+x.MenuId] = false;
+            checkedStatus["create_checked"+x.MenuId] = false;
+            checkedStatus["edit_checked"+x.MenuId] = false;
+            checkedStatus["delete_checked"+x.MenuId] = false;
+            checkedStatus["execute_checked"+x.MenuId] = false;
+            { x.Children.map(x=>{
+                checkedStatus["view_checked"+x.MenuId] = false;
+                checkedStatus["create_checked"+x.MenuId] = false;
+                checkedStatus["edit_checked"+x.MenuId] = false;
+                checkedStatus["delete_checked"+x.MenuId] = false;
+                checkedStatus["execute_checked"+x.MenuId] = false;
+            })}
+        })}
+
+        this.setState({checkedStatus:checkedStatus});
+        console.log("-------Checked Status----------",checkedStatus);
     }
 
     handleClick = () => {
@@ -72,6 +91,11 @@ class UsersPermission extends React.Component {
 
     handleTabChange = (event, step) => {
         this.setState({ step });
+    };
+
+    handleCheckToggle = name => event => {
+        let result = this.state.checkedStatus[name] = event.target.checked ;
+        this.setState({ checkedStatus: result });
     };
 
     render() {
@@ -118,24 +142,24 @@ class UsersPermission extends React.Component {
                                                     <ListItemText inset primary={x.Title} />
                                                     <ListItemSecondaryAction>
                                                         <Checkbox
-                                                            //onChange={this.handleToggle(value)}
-                                                            checked={true}
+                                                            onChange={this.handleCheckToggle("view_checked"+x.MenuId)}
+                                                            checked={this.state.checkedStatus["view_checked"+x.MenuId] || false}
                                                         />
                                                         <Checkbox
-                                                            //onChange={this.handleToggle(value)}
-                                                            checked={true}
+                                                            onChange={this.handleCheckToggle("create_checked"+x.MenuId)}
+                                                            checked={this.state.checkedStatus["create_checked"+x.MenuId] || false}
                                                         />
                                                         <Checkbox
-                                                            //onChange={this.handleToggle(value)}
-                                                            checked={true}
+                                                            onChange={this.handleCheckToggle("edit_checked"+x.MenuId)}
+                                                            checked={this.state.checkedStatus["edit_checked"+x.MenuId] || false}
                                                         />
                                                         <Checkbox
-                                                            //onChange={this.handleToggle(value)}
-                                                            checked={true}
+                                                            onChange={this.handleCheckToggle("delete_checked"+x.MenuId)}
+                                                            checked={this.state.checkedStatus["delete_checked"+x.MenuId] || false}
                                                         />
                                                         <Checkbox
-                                                            //onChange={this.handleToggle(value)}
-                                                            checked={true}
+                                                            onChange={this.handleCheckToggle("execute_checked"+x.MenuId)}
+                                                            checked={this.state.checkedStatus["execute_checked"+x.MenuId] || false}
                                                         />
                                                     </ListItemSecondaryAction>
                                                 </ListItem>
