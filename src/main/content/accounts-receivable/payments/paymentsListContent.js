@@ -643,17 +643,6 @@ class PaymentsListContent extends Component {
 
 	componentDidMount() {
 		console.log("componentDidMount");
-		this.props.getAccountReceivablePaymentsList(
-			this.props.regionId,
-			this.props.getPaymentsParam.fromDate,
-			this.props.getPaymentsParam.toDate,
-			this.props.getPaymentsParam.searchText,
-			this.props.filter.paymentStatus,
-		);
-
-		this.setState({
-			isCustomerNameNoGrouping: this.props.isCustomerNameNoGrouping
-		})
 	}
 
 	componentWillMount() {
@@ -662,13 +651,22 @@ class PaymentsListContent extends Component {
 			"rows": this.getRowData(this.props.payments),
 			expandedGroups: [...new Set(this.getRowData(this.props.payments).map(x => x.CustomerNameNo))],
 		});
-		// this.props.getAccountReceivablePaymentsList(
-		// 	this.props.regionId,
-		// 	this.props.getPaymentsParam.fromDate,
-		// 	this.props.getPaymentsParam.toDate,
-		// 	this.props.getPaymentsParam.searchText);
+		if (this.props.bLoadedPayments === false) {
+			this.props.getAccountReceivablePaymentsList(
+				this.props.regionId,
+				this.props.getPaymentsParam.fromDate,
+				this.props.getPaymentsParam.toDate,
+				this.props.getPaymentsParam.searchText,
+				this.props.filter.paymentStatus,
+			);
+		}
+
+		this.setState({
+			isCustomerNameNoGrouping: this.props.isCustomerNameNoGrouping
+		})
 		this.timer = null;
 	}
+
 	componentWillUnmount() {
 		console.log("componentWillUnmount");
 	}
@@ -1043,7 +1041,7 @@ class PaymentsListContent extends Component {
 							/>
 							<IntegratedSorting />
 
-							{this.state.isCustomerNameNoGrouping &&
+							{isCustomerNameNoGrouping &&
 								<GroupingState
 									// grouping={grouping}
 									// onGroupingChange={this.changeGrouping}
@@ -1055,7 +1053,7 @@ class PaymentsListContent extends Component {
 								/>
 							}
 							{
-								this.state.isCustomerNameNoGrouping &&
+								isCustomerNameNoGrouping &&
 								<IntegratedGrouping />
 							}
 
@@ -1127,7 +1125,7 @@ class PaymentsListContent extends Component {
 							</Template>
 							{/* <Toolbar />					 */}
 							{
-								this.state.isCustomerNameNoGrouping &&
+								isCustomerNameNoGrouping &&
 								<TableGroupRow contentComponent={this.GroupCellContent} />
 							}
 
