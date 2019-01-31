@@ -481,7 +481,7 @@ class PaymentFormModal extends React.Component {
 				PaymentDate: this.state.PaymentDate,
 				Note: this.state.PaymentNote,
 				PayItems: PayItems,
-				overpayment: this.state.overpayment,
+				overpayment: this.getOverpaymentAmount(rows),
 			}
 			console.log("handleCreatePayment", params);
 
@@ -520,9 +520,9 @@ class PaymentFormModal extends React.Component {
 		});
 
 		if (name === "PaymentAmount") {
-			this.setState({
-				overpayment: this.getOverpaymentAmount(this.state.rows, event.target.value)
-			})
+			// this.setState({
+			// 	overpayment: this.getOverpaymentAmount(this.state.rows, event.target.value)
+			// })
 		}
 		// this.checkValidations(name, event.target.value)
 	};
@@ -596,9 +596,9 @@ class PaymentFormModal extends React.Component {
 			// floatPaymentAmount = parseFloat(`0${this.state.PaymentAmount}`)
 			// this.checkValidations('', '', rows)
 
-			this.setState({
-				overpayment: this.getOverpaymentAmount(rows)
-			})
+			// this.setState({
+			// 	overpayment: this.getOverpaymentAmount(rows)
+			// })
 
 			return {
 				rows,
@@ -646,7 +646,7 @@ class PaymentFormModal extends React.Component {
 			}
 			// this.checkValidations('', '', rows)
 			this.setState({
-				overpayment: this.getOverpaymentAmount(rows)
+				overpayment: 0
 			})
 
 			return {
