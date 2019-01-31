@@ -1,6 +1,7 @@
 import * as Actions from "../actions";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import * as UserActions from "../../auth/store/actions";
 
 const initialState = {
     dashboardDB: null,
@@ -16,6 +17,12 @@ const dashboard = function (state = initialState, action) {
             //     data: {...action.payload}
             // };
             return {...state, data: action.payload}
+        case UserActions.USER_LOGGED_OUT:
+        {
+            return {
+                ...initialState
+            }
+        }
         default:
             return state;
     }

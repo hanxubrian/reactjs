@@ -26,8 +26,8 @@ const initialState = {
         data : null,
         customer: null
     },
-    FromDate: moment("01/01/2018").format("MM/DD/YYYY"),
-    ToDate: moment(today).format("MM/DD/YYYY"),
+    FromDate:moment().date(1).format("MM/DD/YYYY"),
+    ToDate: moment().add(1,'months').endOf('month').format("MM/DD/YYYY"),
     StatusId: [],
     PeriodId: [220],
     InvoiceTypeId: 1,
@@ -36,7 +36,7 @@ const initialState = {
     invoiceStatus: [],
     bInvoiceStart: false,
     customerTaxAmountLine: [],
-    invoiceDateOption: 3,
+    invoiceDateOption: 13,
     newInvoice: null,
 
     customersDB: null,
@@ -326,6 +326,6 @@ const persistConfig = {
     key: 'invoices',
     storage: storage,
     blacklist: ['invoicesDB', 'bInvoiceStart', 'bOpenedSummaryPanel', 'bOpenedFilterPanel', 'bLoadedCustomers',
-        'customerTaxAmountLine', 'invoiceForm', 'bCustomerErr', 'bInvoiceErr']
+        'customerTaxAmountLine', 'invoiceForm', 'invoiceDateOption', 'bCustomerErr', 'bInvoiceErr']
 };
 export default persistReducer(persistConfig, invoices);

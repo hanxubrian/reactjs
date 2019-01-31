@@ -1,4 +1,5 @@
 import * as Actions from "../actions";
+
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 import {
@@ -6,6 +7,7 @@ import {
     PAYMENT_LOCKBOX_GET_ALL_DATA_START,
     PAYMENT_LOCKBOX_GET_ALL_DATA_SUCCESS
 } from "../actions/paymentlockbox.action";
+import * as UserActions from "../../auth/store/actions";
 
 const initialState = {
     paymentlockboxDB        : null,
@@ -22,6 +24,12 @@ const paymentlockbox = function (state = initialState, action) {
             return {...state,data:action.payload, getallstatus: false}
         case Actions.PAYMENT_LOCKBOX_GET_ALL_DATA_FAILD:
             return {...state, getallstatus: false}
+        case UserActions.USER_LOGGED_OUT:
+        {
+            return {
+                ...initialState
+            }
+        }
         default:
             return state;
     }

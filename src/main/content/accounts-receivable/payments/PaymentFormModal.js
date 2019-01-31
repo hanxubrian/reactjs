@@ -353,7 +353,7 @@ class PaymentFormModal extends React.Component {
 				// 	groupingEnabled: false,
 				// },
 				{
-					title: "Payment Amount",
+					title: "Amount to Apply",
 					name: "PaymentAmount",
 					columnName: 'PaymentAmount',
 					width: 300,
@@ -397,7 +397,7 @@ class PaymentFormModal extends React.Component {
 				{ key: "DaysPastDue", name: "Days Past Due", editable: false, sortDescendingFirst: true },
 				{ key: "InvoiceAmount", name: "Invoice Amount", editable: false, formatter: CurrencyFormatter },
 				{ key: "InvoiceBalance", name: "Invoice Balance", editable: false, formatter: CurrencyFormatter },
-				{ key: "PaymentAmount", name: "Payment Amount", editable: true, formatter: CurrencyFormatter }
+				{ key: "PaymentAmount", name: "Payment to Apply", editable: true, formatter: CurrencyFormatter }
 			],
 			rows: [],
 			currencyColumns: [
@@ -406,13 +406,15 @@ class PaymentFormModal extends React.Component {
 			customerName: "",
 			customerNumber: "",
 
-			PaymentType: "",
+			PaymentType: "Check",
 			ReferenceNo: "",
 			PaymentDate: new Date().toISOString().substr(0, 10),
 			PaymentNote: "",
 			PaymentAmount: 0,
 			overpayment: 0,
 			errorMsg: "",
+
+			bOpenPaymentDialog: false,
 		}
 		// this.commitChanges = this.commitChanges.bind(this);
 	}
@@ -422,7 +424,12 @@ class PaymentFormModal extends React.Component {
 		this.setRowData(this.props.payments)
 	}
 	componentDidMount() {
-		this.checkValidations('', '')
+		this.setState({
+			bOpenPaymentDialog: this.props.bOpenPaymentDialog
+		})
+		// if (this.props.bOpenPaymentDialog === true) {
+		// 	this.checkValidations()
+		// }
 	}
 	UNSAFE_componentWillReceiveProps(nextProps) {
 		if (nextProps.payments !== this.props.payments) {
@@ -433,32 +440,42 @@ class PaymentFormModal extends React.Component {
 			console.log("componentWillReceiveProps activePaymentRows", nextProps.activePaymentRows, this.props.activePaymentRows)
 			this.setRowData(this.props.payments, nextProps.activePaymentRows)
 		}
+		if (nextProps.bOpenPaymentDialog !== this.props.bOpenPaymentDialog) {
+			this.setState({
+				bOpenPaymentDialog: nextProps.bOpenPaymentDialog
+			})
+
+			// if (nextProps.bOpenPaymentDialog === true) {
+			// 	this.checkValidations()
+			// }
+		}
 	}
 
 	handleClose = () => {
+		this.setState({
+			PaymentType: "Check",
+			ReferenceNo: "",
+			PaymentDate: new Date().toISOString().substr(0, 10),
+			PaymentNote: "",
+			PaymentAmount: 0,
+			overpayment: 0,
+			errorMsg: "",
+		})
+		
+		this.clearDistribute()
+
 		this.props.openPaymentDialog(false);
 	};
 
 	handleCreatePayment = () => {
+		if (this.checkValidations()) {
 
-		let PayItems = this.state.rows.map(x => {
-			return {
-				InvoiceNo: x.InvoiceNo,
-				Amount: x.PaymentAmount
-			}
-		})
-
-		if (!this.state.PaymentType) {
-			this.setState({ errorMsg: "Payment type not selected" })
-		} else if (this.state.ReferenceNo <= 0) {
-			this.setState({ errorMsg: "Refernce number is invalid" })
-		} else if (!this.state.PaymentDate) {
-			this.setState({ errorMsg: "Payment date not selected" })
-		} else if (this.state.PaymentAmount <= 0) {
-			this.setState({ errorMsg: "Amount is invalid" })
-		} else if (!this.isNonEmptyPayment(this.state.rows)) {
-			this.setState({ errorMsg: "Neither of payments amount is settled" })
-		} else {
+			let PayItems = this.state.rows.map(x => {
+				return {
+					InvoiceNo: x.InvoiceNo,
+					Amount: x.PaymentAmount
+				}
+			})
 
 			const params = {
 				RegionId: this.props.regionId,
@@ -467,25 +484,31 @@ class PaymentFormModal extends React.Component {
 				PaymentDate: this.state.PaymentDate,
 				Note: this.state.PaymentNote,
 				PayItems: PayItems,
-				overpayment: this.state.overpayment,
+				overpayment: this.getOverpaymentAmount(this.state.rows),
 			}
 			console.log("handleCreatePayment", params);
 
-			this.handleClose();
+
 			this.props.createAccountReceivablePayment(
 				this.props.regionId,
+				this.state.customerNumber,
+
 				this.state.PaymentType,
 				this.state.ReferenceNo,
 				this.state.PaymentDate,
 				this.state.PaymentNote,
-				PayItems,
 				this.state.overpayment,
+				this.state.PaymentAmount,
+
+				PayItems,
 
 				this.props.getPaymentsParam.fromDate,
 				this.props.getPaymentsParam.toDate,
 				"",
 				this.props.status
 			)
+
+			this.handleClose();
 		}
 	}
 
@@ -494,23 +517,19 @@ class PaymentFormModal extends React.Component {
 	};
 
 	handleChange = name => event => {
-		this.setState({ [name]: event.target.value });
-
-		this.checkValidations(name, event.target.value)
-
+		this.setState({
+			[name]: event.target.value,
+			errorMsg: ""
+		});
 
 		if (name === "PaymentAmount") {
-			let totalPaymentAmount = 0
-			let floatPaymentAmount = parseFloat(`0${event.target.value}`)
-			this.state.rows.forEach(x => {
-				totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
-			})
-
-			this.setState({
-				overpayment: totalPaymentAmount - floatPaymentAmount
-			})
+			// this.setState({
+			// 	overpayment: this.getOverpaymentAmount(this.state.rows, event.target.value)
+			// })
 		}
+		// this.checkValidations(name, event.target.value)
 	};
+
 	commitChanges = ({ added, changed, deleted }) => {
 		let { rows } = this.state;
 		if (added) {
@@ -573,16 +592,21 @@ class PaymentFormModal extends React.Component {
 			//
 			// overpayment
 			//
-			let totalPaymentAmount = 0, floatPaymentAmount = 0
-			rows.forEach(x => {
-				totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
-			})
-			floatPaymentAmount = parseFloat(`0${this.state.PaymentAmount}`)
+			// let totalPaymentAmount = 0, floatPaymentAmount = 0
+			// rows.forEach(x => {
+			// 	totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
+			// })
+			// floatPaymentAmount = parseFloat(`0${this.state.PaymentAmount}`)
+			// this.checkValidations('', '', rows)
+
+			// this.setState({
+			// 	overpayment: this.getOverpaymentAmount(rows)
+			// })
 
 			return {
 				rows,
-				overpayment: totalPaymentAmount - floatPaymentAmount,
-				errorMsg: this.isNonEmptyPayment(rows) ? "" : "Neither of payments amount is settled"
+				// overpayment: floatPaymentAmount - totalPaymentAmount,
+				// errorMsg: this.isNonEmptyPayment(rows) ? (this.state.errorMsg === "Neither of payments amount is settled" ? "" : this.state.errorMsg) : "Neither of payments amount is settled"
 			};
 		});
 	};
@@ -604,11 +628,15 @@ class PaymentFormModal extends React.Component {
 					floatPaymentAmount = 0
 				}
 			}
+			// this.checkValidations('', '', rows)
+			this.setState({
+				overpayment: this.getOverpaymentAmount(rows)
+			})
 
 			return {
 				rows: rows,
-				overpayment: floatPaymentAmount,
-				errorMsg: this.isNonEmptyPayment(rows) ? (this.state.errorMsg === "Neither of payments amount is settled" ? "" : this.state.errorMsg) : "Neither of payments amount is settled"
+				// overpayment: floatPaymentAmount,
+				// errorMsg: this.isNonEmptyPayment(rows) ? (this.state.errorMsg === "Neither of payments amount is settled" ? "" : this.state.errorMsg) : "Neither of payments amount is settled"
 			}
 		})
 	}
@@ -619,11 +647,15 @@ class PaymentFormModal extends React.Component {
 			for (let i = 0; i < rows.length; i++) {
 				rows[i] = { ...rows[i], PaymentAmount: 0 };
 			}
+			// this.checkValidations('', '', rows)
+			this.setState({
+				overpayment: 0
+			})
 
 			return {
 				rows: rows,
-				overpayment: 0,
-				errorMsg: this.isNonEmptyPayment(rows) ? "" : "Neither of payments amount is settled"
+				// overpayment: 0,
+				// errorMsg: this.isNonEmptyPayment(rows) ? (this.state.errorMsg === "Neither of payments amount is settled" ? "" : this.state.errorMsg) : "Neither of payments amount is settled"
 			}
 		})
 	}
@@ -631,27 +663,132 @@ class PaymentFormModal extends React.Component {
 		//
 		// check row for payment amount
 		//
-		let isNonEmptyPayment = false
+		let existPositivePayment = false
+		let existPaymentsGreaterThanBalance = false
+
 		rows.forEach(x => {
-			isNonEmptyPayment = isNonEmptyPayment || x.PaymentAmount > 0
+			existPositivePayment = existPositivePayment || 0 < x.PaymentAmount
+			existPaymentsGreaterThanBalance = existPaymentsGreaterThanBalance || x.InvoiceBalance < x.PaymentAmount
 		})
-		return isNonEmptyPayment;
+		if (!existPositivePayment) {
+			return "Neither of payments amount is settled"
+		}
+		if (existPaymentsGreaterThanBalance) {
+			return "One or more Payment Amounts is greater than Invoice Balance"
+		}
+		return ""
 	}
 
-	checkValidations(name, value) {
+	checkLiveValidations(name = "", value = "", rows = this.state.rows, ) {
+
 		if (name === "PaymentType" && !value || name !== "PaymentType" && !this.state.PaymentType) {
 			this.setState({ errorMsg: "Payment type not selected" })
 		} else if (name === "ReferenceNo" && value <= 0 || name !== "ReferenceNo" && this.state.ReferenceNo <= 0) {
-			this.setState({ errorMsg: "Refernce number is invalid" })
+			this.setState({ errorMsg: "ReferenceNo is invalid" })
 		} else if (name === "PaymentDate" && !value || name !== "PaymentDate" && !this.state.PaymentDate) {
 			this.setState({ errorMsg: "Payment date not selected" })
-		} else if (name === "PaymentAmount" && value <= 0 || name !== "PaymentAmount" && this.state.PaymentAmount <= 0) {
+		} else if (name === "PaymentAmount" && value <= 0) {
 			this.setState({ errorMsg: "Amount is invalid" })
-		} else if (!this.isNonEmptyPayment(this.state.rows)) {
-			this.setState({ errorMsg: "Neither of payments amount is settled" })
 		} else {
-			this.setState({ errorMsg: "" })
+
+			let totalPaymentAmount = 0
+			let floatPaymentAmount = parseFloat(`0${name === "PaymentAmount" ? value : this.state.PaymentAmount}`)
+
+			this.state.rows.forEach(x => {
+				totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
+			})
+			console.log("floatPaymentAmount", "totalPaymentAmount", floatPaymentAmount, totalPaymentAmount)
+			if (floatPaymentAmount < totalPaymentAmount) {
+				this.setState({
+					errorMsg: "Total payment is greater than payment to apply",
+					overpayment: 0,
+				})
+			} else {
+				this.setState({
+					overpayment: floatPaymentAmount - totalPaymentAmount
+				})
+			}
+
+			const isNonEmptyPayment = this.isNonEmptyPayment(rows)
+			console.log("isNonEmptyPayment", isNonEmptyPayment)
+			if (isNonEmptyPayment) {
+				this.setState({ errorMsg: isNonEmptyPayment })
+			}
+			else {
+				this.setState({ errorMsg: "" })
+				return true
+			}
+
 		}
+		return false
+	}
+
+	getOverpaymentAmount(rows = this.state.rows, paymentAmount = this.state.PaymentAmount) {
+		let totalPaymentAmount = 0
+		paymentAmount = parseFloat(`0${paymentAmount}`)
+		rows.forEach(x => {
+			totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
+		})
+		return paymentAmount - totalPaymentAmount
+	}
+
+	checkValidations(rows = this.state.rows, paymentAmount = this.state.paymentAmount) {
+		if (!this.state.PaymentType) {
+			this.setState({
+				errorMsg: "Payment type not selected",
+				overpayment: this.getOverpaymentAmount(rows, paymentAmount),
+			})
+		} else if (!this.state.ReferenceNo || !this.state.ReferenceNo.toString().trim()) {
+			this.setState({
+				errorMsg: "ReferenceNo is invalid",
+				overpayment: this.getOverpaymentAmount(rows, paymentAmount),
+			})
+		} else if (!this.state.PaymentDate) {
+			this.setState({
+				errorMsg: "Payment date not selected",
+				overpayment: this.getOverpaymentAmount(rows, paymentAmount),
+			})
+		} else if (this.state.PaymentAmount <= 0) {
+			this.setState({
+				errorMsg: "Amount is invalid",
+				overpayment: this.getOverpaymentAmount(rows, paymentAmount),
+			})
+
+		} else if (!this.checkIfAllZeroPaymentsValidation(rows)) {
+			this.setState({ errorMsg: "Neither of payments amount is settled" })
+		} else if (!this.checkIfAPaymentGreaterThanBalanceValidation(rows)) {
+			this.setState({ errorMsg: "One or more Payment Amounts is greater than Invoice Balance" })
+		} else if (!this.checkIfAllPaymentsGreaterThanAmountValidation(rows, paymentAmount)) {
+			this.setState({ errorMsg: "Sum of payments is greater than applied one." })
+		} else {
+			return true
+		}
+		return false
+	}
+
+	checkIfAllZeroPaymentsValidation(rows) {
+		let existPositivePayment = false
+		rows.forEach(x => {
+			existPositivePayment = existPositivePayment || 0 < x.PaymentAmount
+		})
+		return existPositivePayment
+	}
+
+	checkIfAPaymentGreaterThanBalanceValidation(rows) {
+		let existPaymentsGreaterThanBalance = false
+		rows.forEach(x => {
+			existPaymentsGreaterThanBalance = existPaymentsGreaterThanBalance || x.InvoiceBalance < x.PaymentAmount
+		})
+		return !existPaymentsGreaterThanBalance
+	}
+
+	checkIfAllPaymentsGreaterThanAmountValidation(rows, paymentAmount = this.state.PaymentAmount) {
+		let totalPaymentAmount = 0
+		paymentAmount = parseFloat(`0${paymentAmount}`)
+		rows.forEach(x => {
+			totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
+		})
+		return totalPaymentAmount <= paymentAmount
 	}
 
 	render() {
@@ -661,7 +798,7 @@ class PaymentFormModal extends React.Component {
 		return (
 			<div>
 				<Dialog
-					open={this.props.bOpenPaymentDialog}
+					open={this.state.bOpenPaymentDialog}
 					fullWidth={true}
 					maxWidth="lg"
 
@@ -704,7 +841,6 @@ class PaymentFormModal extends React.Component {
 
 									<TextField sm={3} select margin="dense" id="PaymentType" label="Payment Type" variant="outlined"
 										// style={{ width: "30%" }}
-										autoFocus
 										className={classNames(classes.textField, "pr-6")}
 										value={this.state.PaymentType}
 										onChange={this.handleChange('PaymentType')}
@@ -719,7 +855,8 @@ class PaymentFormModal extends React.Component {
 
 									</TextField>
 
-									<TextField sm={3} type="number" margin="dense" id="ReferenceNo" label="Reference No." variant="outlined"
+									<TextField sm={3} margin="dense" id="ReferenceNo" label="Reference No." variant="outlined"
+										autoFocus
 										onChange={this.handleChange('ReferenceNo')}
 										value={this.state.ReferenceNo}
 										className={classNames(classes.textField, "pr-6")}
@@ -748,11 +885,12 @@ class PaymentFormModal extends React.Component {
 										margin="dense"
 										variant="outlined"
 										fullWidth
+										required
 										className={classNames(classes.textField, "pr-6")}
 										id="PaymentAmount"
 										value={this.state.PaymentAmount}
 										onChange={this.handleChange('PaymentAmount')}
-										label="Amount To Apply" sm={2}
+										label="Payment Amount" sm={2}
 									/>
 									<Tooltip title="Auto Distribution">
 										<IconButton
@@ -836,7 +974,7 @@ class PaymentFormModal extends React.Component {
 					</DialogContent>
 
 					<DialogActions>
-						<Button disabled={this.state.errorMsg !== ''} variant="contained" onClick={this.handleCreatePayment} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Save</Button>
+						<Button variant="contained" onClick={this.handleCreatePayment} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Save</Button>
 					</DialogActions>
 				</Dialog>
 			</div>

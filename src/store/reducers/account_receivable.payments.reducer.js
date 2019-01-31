@@ -13,7 +13,6 @@ const initialState = {
 		fromDate: "01/22/2019",
 		toDate: "01/22/2019",
 	},
-	status: '',
 	bOpenedSummaryPanel: false,
 	bOpenedFilterPanel: false,
 
@@ -30,7 +29,11 @@ const initialState = {
 		show: false,
 		title: "",
 		message: "",
-	}
+	},
+	filter: {
+		paymentStatus: "All",
+	},
+	viewMode: "Invoice",
 };
 
 
@@ -110,6 +113,26 @@ const accountReceivablePayments = function (state = initialState, action) {
 		case Actions.SHOW_ERROR_DIALOG:
 			return {
 				...state, errorInfo: action.payload
+			}
+		//
+		// SET_PAYMENT_STATUS_FILTER
+		//
+		case Actions.SET_PAYMENT_STATUS_FILTER:
+			return {
+				...state,
+				filter:
+				{
+					...state.filter,
+					paymentStatus: action.payload
+				}
+			}
+		//
+		// SET_VIEW_MODE
+		//
+		case Actions.SET_VIEW_MODE:
+			return {
+				...state,
+				viewMode: action.payload,
 			}
 		case UserActions.USER_LOGGED_OUT:
 			return {

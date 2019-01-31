@@ -40,15 +40,32 @@ class paymentsService {
 		});
 	}
 
-	createAccountReceivablePayment = (RegionId, PaymentType, ReferenceNo, PaymentDate, Note, PayItems, overpayment) => {
+	createAccountReceivablePayment = (
+		RegionId,
+		customerNumber,
+
+		PaymentType,
+		ReferenceNo,
+		PaymentDate,
+		PaymentNote,
+		overpayment,
+		PaymentAmount,
+
+		PayItems,
+	) => {
 		const data = {
 			"RegionId": RegionId,
-			"PaymentType": PaymentType,
-			"ReferenceNo": ReferenceNo,
-			"PaymentDate": PaymentDate,
-			"Note": Note,
-			"PayItems": PayItems,
-			"itm_overpayment": overpayment,
+			"CustomerNo": customerNumber,
+			Payment: {
+				"PaymentType": PaymentType,
+				"ReferenceNo": ReferenceNo,
+				"PaymentDate": PaymentDate,
+				"Note": PaymentNote,
+				"OverPayment": overpayment,
+				"Amount": PaymentAmount,
+				"AmountApplied": PaymentAmount,
+				"PayItems": PayItems
+			}
 		}
 		return new Promise((resolve, reject) => {
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/payment/create`, data)

@@ -441,24 +441,21 @@ class InvoiceListContent extends Component {
                                     width: 100
                                 },
                                 {
-                                    Header: "Status",
-                                    accessor: "TransactionStatus",
-                                    className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-                                    width: 80
-                                },
-                                {
                                     Header: "Actions",
                                     width : 90,
                                     Cell  : row => (
                                         <div className="flex items-center actions justify-center w-full">
-                                            <IconButton style={{padding: 8}}
-                                                        onClick={(ev) => {
-                                                            ev.stopPropagation();
-                                                            this.handleOpenRemoveDialog(row.original.InvoiceId);
-                                                        }}
-                                            >
-                                                <Icon fontSize={"small"}>delete</Icon>
-                                            </IconButton>
+                                            {row.original.InvoiceNo==='PENDING' && (
+                                                <IconButton style={{padding: 8}}
+                                                            onClick={(ev) => {
+                                                                ev.stopPropagation();
+                                                                this.handleOpenRemoveDialog(row.original.InvoiceId);
+                                                            }}
+                                                >
+                                                    <Icon fontSize={"small"}>delete</Icon>
+                                                </IconButton>
+
+                                            )}
                                             <IconButton style={{padding: 8}}
                                                         onClick={(ev) => {
                                                             ev.stopPropagation();
@@ -472,6 +469,12 @@ class InvoiceListContent extends Component {
                                 }
                             ]
                         },
+                    ]}
+                    defaultSorted={[
+                        {
+                            id: "InvoiceDate",
+                            desc: true
+                        }
                     ]}
                     defaultPageSize={100}
                     className={classNames( "-striped -highlight")}

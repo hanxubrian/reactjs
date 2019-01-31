@@ -582,7 +582,7 @@ class InvoiceForm extends Component {
                 LineNo: 1,
                 UnitPrice: parseFloat(line.amount),
                 Quantity: parseInt(line.quantity),
-                TaxRate: line.tax,
+                TaxAmount: line.tax,
                 ExtendedPrice: line.extended,
                 Total: line.total,
                 MarkUpTotal: line.markup,
@@ -647,6 +647,7 @@ class InvoiceForm extends Component {
                 Status: 2,
                 SysCust: this.state.selectedCustomer.SysCust,
                 Fees: this.state.selectedCustomer.Fees,
+                TrxType: 'I',
                 Items: items
             };
             console.log('result=', JSON.stringify(result));
@@ -1077,6 +1078,7 @@ class InvoiceForm extends Component {
                                             input: bReadonly? classes.inputOrange: classes.input,
                                         },
                                     }}
+                                    inputProps={{tabIndex:-1}}
                                     InputLabelProps = {{
                                         shrink: true,
                                         classes: {outlined: classes.label}

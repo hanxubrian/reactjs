@@ -139,6 +139,8 @@ const styles = theme => ({
 const fakeEvent = {
     stopPropagation: () => false
 }
+var pusher = null;
+var channel = null;
 const mL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 class BillRunDialog extends Component {
@@ -167,48 +169,50 @@ class BillRunDialog extends Component {
     }
     componentDidUpdate(prevProps, prevState, snapshot){
 
-            if(this.state.pusherMSG !== prevState.pusherMSG){
-                console.log("pusherMSG-create",this.state.pusherMSG);
-            }
+            // if(this.state.pusherMSG !== prevState.pusherMSG){
+            //     console.log("pusherMSG-create",this.state.pusherMSG);
+            // }
             if(this.props.billruns && this.props.billruns != null && JSON.stringify(prevProps.billruns)!==JSON.stringify(this.props.billruns)){
                 this.setState({billruns: this.props.billruns});
             }
             if(this.props.auth && this.props.auth != null && JSON.stringify(prevProps.auth)!==JSON.stringify(this.props.auth)){
                 this.setState({auth: this.props.auth});
             }
-            if(this.props.loading ===false && prevProps.loading ===true && this.state.statusMSG===200){
-                this.setState({showP: !this.state.showP});
-                if(this.props.billstatus===400){
-                    this.setState({statusMSG:10});
-                    this.errormessage();
-                }
-                else if(this.props.billstatus===200){
-                    this.setState({statusMSG:10});
-                    if(this.state.pusherMSG.user === this.props.auth.UserId.toString()){
-                        this.successmesssage();
-                    }
-
-                }
-
-            }
+            // if(this.props.loading ===false && prevProps.loading ===true && this.state.statusMSG===200){
+            //     this.setState({showP: !this.state.showP});
+            //     if(this.props.billstatus===400){
+            //         this.setState({statusMSG:10});
+            //         this.errormessage();
+            //     }
+            //     else if(this.props.billstatus===200){
+            //         this.setState({statusMSG:10});
+            //         if(this.state.pusherMSG.user === this.props.auth.UserId.toString()){
+            //             this.successmesssage();
+            //         }
+            //
+            //     }
+            //
+            // }
 
 
     }
     componentDidMount() {
         this.setState({isMounted:true});
         this.props.onRef(this);
-        const pusher = new Pusher('ecf6a4e23b186efa2d44', {
-            cluster: 'us2',
-            forceTLS: true
-        });
-        var channel = pusher.subscribe('jk-message-channel');
-        channel.bind('on-message', data => {
-            this.setState({ pusherMSG:data});
-        });
+        // pusher = new Pusher('ecf6a4e23b186efa2d44', {
+        //     cluster: 'us2',
+        //     forceTLS: true
+        // });
+        // channel = pusher.subscribe('jk-message-channel');
+        // channel.bind('on-message', data => {
+        //     this.setState({ pusherMSG:data});
+        // });
     }
     componentWillUnmount() {
         this.setState({isMounted:false});
         this.props.onRef(undefined);
+        channel = undefined;
+        pusher = undefined;
     }
     componentWillReceiveProps(nextProps){
         this.setState({open: nextProps.open});

@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 
-// core components
+// Material-UI core components
 import {
     Paper, TextField, Typography, MenuItem, Card, CardHeader, CardContent, Button, Snackbar, SnackbarContent,Select, Checkbox,
-    IconButton, Icon, Grid, OutlinedInput, FormControl, FormControlLabel, NoSsr, Radio,RadioGroup, FormLabel,
+    IconButton, Icon, Grid, OutlinedInput, FormControl, FormControlLabel, NoSsr, Radio,RadioGroup, FormLabel, Divider,
 } from '@material-ui/core';
 import 'date-fns'
 import MomentUtils from '@date-io/moment';
@@ -46,7 +46,12 @@ import PropTypes from 'prop-types';
 //Utility
 import { Control, Menu, NoOptionsMessage, Option, Placeholder, SingleValue, ValueContainer} from "../../accounts-receivable/Invoice/selectUtils";
 import {emphasize} from "@material-ui/core/styles/colorManipulator";
-import {escapeRegexCharacters, NumberFormatCustom1, NumberFormatCustom2} from "../../../../services/utils";
+import {
+    escapeRegexCharacters,
+    NumberFormatCustom1,
+    NumberFormatCustom2,
+    NumberFormatCustomDeduction
+} from "../../../../services/utils";
 
 
 const styles = theme => ({
@@ -85,6 +90,10 @@ const styles = theme => ({
     textField: {
         marginLeft: 0,
         marginRight: theme.spacing.unit,
+    },
+    textField1: {
+        marginLeft: 0,
+        marginRight: 0,
     },
     summary: {
         fontSize: 15,
@@ -203,6 +212,11 @@ const styles = theme => ({
         padding: '10px 16px',
         maxWidth: 125
     },
+    inputMenu2: {
+        padding: '10px 16px',
+        maxWidth: '100%'
+    },
+
     group: {
         flexDirection: 'row',
         '& label': {
@@ -211,6 +225,9 @@ const styles = theme => ({
     },
     frequencyMenu:{
         maxWidth: 120
+    },
+    TrxClass: {
+        maxWidth: 150
     }
 });
 
@@ -219,7 +236,7 @@ const newTransactionState = {
     "MasterTrxTypeListId": "",
     "RegionId": "",
     "RegionName": "",
-    "TransactionDate": new Date(),
+    "TransactionDate": '01/2019',
     "Date": new Date(),
     "franchiseeNo": "",
     "transactionDescription": "",
@@ -332,7 +349,6 @@ class TransactionEditForm extends Component {
         TransactionNo: "",
         snackMessage: "",
         openSnack: false,
-        PO_number: '',
         period: moment(),
         taxExempt: false,
         buttonOption: 0, //0-save and add more, 1- save & close 2- submit for approval,
@@ -348,7 +364,10 @@ class TransactionEditForm extends Component {
         paymentsDate: new Date(),
         grossTotal: 0,
         startDate: moment(),
-        TrxClass: 'C'
+        TrxClass: 'D',
+        creditReason: '',
+        deductionReason: '',
+        trxClassAmount: 0.00
     };
 
     renderInputComponent = (inputProps ) => {
@@ -399,14 +418,13 @@ class TransactionEditForm extends Component {
 
     getSuggestionValue =  (suggestion) =>{
         this.setState({selectedFranchisee: suggestion});
-        this.setState({PO_number: suggestion.franchiseeNo});
         return suggestion.Name;
     };
 
     getSuggestions = (value) => {
         const escapedValue = escapeRegexCharacters(value.trim());
         const regex = new RegExp(escapedValue, 'i');
-        let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList
+        let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList;
 
         if(franchisees!==null)
             return franchisees.filter(f => regex.test(f.Name) || regex.test(f.Number)|| regex.test(f.StatusName));
@@ -478,7 +496,7 @@ class TransactionEditForm extends Component {
                     this.setState({value: trxDetail.FranchiseeName});
                     this.setState({subTotal: parseFloat(trxDetail.TrxExtendedPrice)});
                     this.setState({unitPrice: parseFloat(trxDetail.TrxItemAmount)});
-                    this.setState({TrxClass: parseFloat(trxDetail.TrxClass)});
+                    this.setState({TrxClass: trxDetail.TrxClass});
 
                     let tax = parseFloat(trxDetail.TrxTax);
                     if(trxDetail.TrxType!=='5c41272c4d275d4560e90fb9') tax = 0.00;
@@ -486,7 +504,7 @@ class TransactionEditForm extends Component {
                     this.setState({tax: tax});
                     this.setState({quantity: parseFloat(trxDetail.quantity)});
                     this.setState({total: parseFloat(trxDetail.TrxExtendedPrice)+ tax});
-                    this.setState({TransactionDate: moment(trxDetail.TrxDate)});
+                    this.setState({TransactionDate: trxDetail.TrxDate});
 
                     let trxType = this.props.transactionTypeList.filter(f=>f._id === trxDetail.Trxtype);
 
@@ -541,6 +559,7 @@ class TransactionEditForm extends Component {
         if(quantity>0 && unitPrice>0) {
             let tax = quantity * unitPrice*0.085;
             if(this.state.transactionType.value!=='5c41272c4d275d4560e90fb9') tax = 0.0;
+            if(this.state.reSell) tax = 0.0;
 
             let line_total = parseFloat(quantity * unitPrice+tax);
             this.setState({subTotal: parseFloat(quantity * unitPrice)});
@@ -555,7 +574,6 @@ class TransactionEditForm extends Component {
 
     addNewTransaction = () => {
         let tTypeTaxValue = '5c41272c4d275d4560e90fb9';
-        console.log('trxclass=',this.state.TrxClass);
         let result = {
             Trx_no: this.state.TransactionNo,
             RegionId: this.props.regionId,
@@ -569,6 +587,7 @@ class TransactionEditForm extends Component {
             TrxTypeLabel: this.state.transactionType.label,
             TrxFrequency: this.state.transactionFrequency,
             TrxResell: this.state.reSell, //Boolean
+            creditReason: this.state.creditReason,
 
             TrxItemAmount: this.state.unitPrice,//decimal
             TrxExtendedPrice: this.state.subTotal, //decimal
@@ -726,7 +745,7 @@ class TransactionEditForm extends Component {
                                     {...autosuggestProps}
                                     inputProps={{
                                         classes,
-                                        placeholder: 'Search Franchisee Name or Number',
+                                        placeholder: 'Choose a franchisee and complete the transaction form before trying to save.',
                                         value: value,
                                         onChange: this.onChange,
                                     }}
@@ -749,26 +768,32 @@ class TransactionEditForm extends Component {
                         <MuiPickersUtilsProvider utils={MomentUtils}>
                             <Grid container className={classNames(classes.formControl)}>
                                 <Grid item xs={12} sm={6} md={6} className="flex flex-row xs:flex-col xs:mb-24 pr-8" style={{padding: '0 6px!important'}}>
-                                    <DatePicker
-                                        margin="none"
-                                        label="Transaction Date"
-                                        name="TransactionDate"
-                                        variant="outlined"
-                                        format="MM/DD/YYYY"
-                                        value={this.state.TransactionDate}
-                                        onChange={this.handleTransactionDateChange}
-                                        fullWidth
-                                        required
-                                        InputProps={{
-                                            classes: {
-                                                input: classes.input2,
-                                            },
-                                        }}
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                    />
+                                    <FormControl variant="outlined" className={classNames(classes.formControl1, "ml-4 w-full")}>
+                                        <Select
+                                            classes={{
+                                                selectMenu: classNames(classes.inputMenu2),
+                                            }}
+                                            name="TransactionDate"
+                                            value={this.state.TransactionDate}
+                                            onChange={this.handleChange}
+                                            input={
+                                                <OutlinedInput
+                                                    labelWidth={this.state.labelWidth}
+                                                    name="TransactionDate"
+                                                    id="TransactionDate"
+                                                />
+                                            }
+                                            MenuProps = {{
+                                                classes:{paper: classes.dropdownMenu},
+                                            }}
+                                        >
+                                            <MenuItem value="01/2019">01/2019</MenuItem>
+                                            <MenuItem value="12/2018">12/2018</MenuItem>
+                                            <MenuItem value="11/2018">11/2018</MenuItem>
+                                            <MenuItem value="10/2018">10/2018</MenuItem>
+                                            <MenuItem value="09/2018">09/2018</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </Grid>
                                 <Grid item xs={12} sm={6} md={6} className="flex flex-row xs:flex-col pl-4" >
                                     <TextField
@@ -781,6 +806,7 @@ class TransactionEditForm extends Component {
                                                 input: bReadonly? classes.inputOrange: classes.input,
                                             },
                                         }}
+                                        inputProps={{tabIndex:-1}}
                                         InputLabelProps = {{
                                             shrink: true,
                                             classes: {outlined: classes.label}
@@ -844,8 +870,8 @@ class TransactionEditForm extends Component {
                                 </Card>
                             </GridItem>
                         </GridContainer>
-                        <Grid container className={classNames(classes.formControl, "mb-0")} >
-                            <Grid item xs={12} sm={12} md={12} className="flex flex-row  justify-start items-center pt-16 mr-12 pr-0">
+                        <Grid container className={classNames(classes.formControl, "mb-8")} >
+                            <Grid item xs={12} sm={12} md={12} className="flex flex-row  justify-between items-center pt-16 pr-0">
                                 <FormControl component="fieldset" className={classes.formControlNomb}>
                                     <FormLabel component="legend">Transaction Class</FormLabel>
                                     <RadioGroup
@@ -858,15 +884,46 @@ class TransactionEditForm extends Component {
                                         value={this.state.TrxClass}
                                         onChange={this.handleChange}
                                     >
-                                        <FormControlLabel value="C" control={<Radio />} label="Credit" />
                                         <FormControlLabel value="D" control={<Radio />} label="Deduction" />
+                                        <FormControlLabel value="C" control={<Radio />} label="Credit" />
                                     </RadioGroup>
                                 </FormControl>
-
                             </Grid>
-                            <Grid item xs={12} sm={6} md={6} className="flex flex-1 flex-row pt-0 w-full items-center">
-                                <div>Frequency: </div>
-                                <FormControl variant="outlined" className={classNames(classes.formControl1, "ml-8")}>
+                        </Grid>
+                        {this.state.TrxClass==='C' && (
+                            <Grid container className={classNames(classes.formControl, "mb-8")} >
+                                <Grid item xs={12} sm={12} md={12} className="flex flex-row xs:flex-col">
+                                    <TextField
+                                        id="creditReason"
+                                        name="creditReason"
+                                        label="Credit Reason"
+                                        className={classes.textField1}
+                                        value={this.state.creditReason}
+                                        onChange={this.handleChange}
+                                        margin="dense"
+                                        variant="outlined"
+                                        fullWidth
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        InputProps={{
+                                            classes: {
+                                                input: classes.input
+                                            },
+                                        }}
+                                    />
+                                </Grid>
+                            </Grid>
+                        )}
+
+                        <Divider />
+
+
+                        <Grid container className={classNames(classes.formControl, "mb-0 mt-16")} >
+                            <Grid item xs={12} sm={5} md={5} className="flex flex-1 flex-row pt-0 w-full items-center">
+                                <div>Freq.: </div>
+                                <FormControl variant="outlined" className={classNames(classes.formControl1, "ml-4")}>
                                     <Select
                                         classes={{
                                             root: classNames(classes.frequencyMenu),
@@ -889,15 +946,12 @@ class TransactionEditForm extends Component {
                                             classes:{paper: classes.dropdownMenu},
                                         }}
                                     >
-                                        <MenuItem value="-1">
-                                            <em>Select</em>
-                                        </MenuItem>
                                         <MenuItem value="single">Single</MenuItem>
                                         <MenuItem value="recurring">Recurring</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={12} sm={6} md={6} className="flex flex-row pt-16 items-center pt-0 mr-12 mb-16">
+                            <Grid item xs={12} sm={7} md={7} className="flex flex-row items-center pt-0">
                                 <div>Type: </div>
                                 <FormControl variant="outlined" className={classNames(classes.selectRoot, classes.formControl, "ml-4 w-full mr-12")}>
                                     <div className={classes.root1}>
@@ -1024,7 +1078,7 @@ class TransactionEditForm extends Component {
                         </div>
                         {this.state.transactionType.value==='5c41272c4d275d4560e90fb9' && this.props.transactionForm.vendor!==null && ( // Franchisee Supplies
                             <Grid container className={classNames(classes.formControl, "mb-0 p-0")} >
-                                <GridItem xs={12} sm={12} md={12} className="flex flex-1 flex-row pt-16 w-full items-center no-padding">
+                                <Grid item xs={12} sm={12} md={12} className="flex flex-row pt-16 w-full items-center no-padding">
                                     <TextField
                                         label="Vendor"
                                         className={classNames(classes.textField)}
@@ -1044,8 +1098,8 @@ class TransactionEditForm extends Component {
                                             },
                                         }}
                                     />
-                                </GridItem>
-                                <GridItem xs={12} sm={12} md={12} className="flex flex-1 flex-row pt-16 w-full items-center no-padding" >
+                                </Grid>
+                                <Grid item xs={12} sm={12} md={12} className="flex flex-row pt-16 w-full items-center no-padding" >
                                     <TextField
                                         label="Vendor Invoice No"
                                         className={classNames(classes.textField, 'mr-12')}
@@ -1092,7 +1146,7 @@ class TransactionEditForm extends Component {
                                             Edit
                                         </Button>
                                     </FuseAnimate>
-                                </GridItem>
+                                </Grid>
                             </Grid>
                         )}
 

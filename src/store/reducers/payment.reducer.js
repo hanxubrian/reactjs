@@ -19,6 +19,12 @@ const payments = function (state = initialState, action) {
                 ...state, bOpenedFilterPanel: !state.bOpenedFilterPanel
             }
         }
+        case UserActions.USER_LOGGED_OUT:
+        {
+            return {
+                ...initialState
+            }
+        }
         default:
         {
             return state;

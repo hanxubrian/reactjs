@@ -19,11 +19,11 @@ const FuseLayouts = {
                 style   : 'fixed',
                 position: 'below'
             },
-            footer : {
-                display : true,
-                style   : 'fixed',
-                position: 'below'
-            }
+            // footer : {
+            //     display : true,
+            //     style   : 'fixed',
+            //     position: 'below'
+            // }
         },
         form     : {
             mode   : {
@@ -120,44 +120,44 @@ const FuseLayouts = {
                     }
                 }
             },
-            footer : {
-                type    : 'group',
-                title   : 'Footer',
-                children: {
-                    display : {
-                        title: 'Display',
-                        type : 'switch'
-                    },
-                    style   : {
-                        title  : 'Style',
-                        type   : 'radio',
-                        options: [
-                            {
-                                name : 'Fixed',
-                                value: 'fixed'
-                            },
-                            {
-                                name : 'Static',
-                                value: 'static'
-                            }
-                        ]
-                    },
-                    position: {
-                        title  : 'Position',
-                        type   : 'radio',
-                        options: [
-                            {
-                                name : 'Above',
-                                value: 'above'
-                            },
-                            {
-                                name : 'Below',
-                                value: 'below'
-                            }
-                        ]
-                    }
-                }
-            }
+            // footer : {
+            //     type    : 'group',
+            //     title   : 'Footer',
+            //     children: {
+            //         display : {
+            //             title: 'Display',
+            //             type : 'switch'
+            //         },
+            //         style   : {
+            //             title  : 'Style',
+            //             type   : 'radio',
+            //             options: [
+            //                 {
+            //                     name : 'Fixed',
+            //                     value: 'fixed'
+            //                 },
+            //                 {
+            //                     name : 'Static',
+            //                     value: 'static'
+            //                 }
+            //             ]
+            //         },
+            //         position: {
+            //             title  : 'Position',
+            //             type   : 'radio',
+            //             options: [
+            //                 {
+            //                     name : 'Above',
+            //                     value: 'above'
+            //                 },
+            //                 {
+            //                     name : 'Below',
+            //                     value: 'below'
+            //                 }
+            //             ]
+            //         }
+            //     }
+            // }
         }
     },
     layout2: {
@@ -174,10 +174,10 @@ const FuseLayouts = {
                 display : true,
                 position: 'below'
             },
-            footer : {
-                display: true,
-                style  : 'fixed'
-            }
+            // footer : {
+            //     display: true,
+            //     style  : 'fixed'
+            // }
         },
         form     : {
             mode   : {
@@ -228,30 +228,30 @@ const FuseLayouts = {
                     }
                 }
             },
-            footer : {
-                type    : 'group',
-                title   : 'Footer',
-                children: {
-                    display: {
-                        title: 'Display',
-                        type : 'switch'
-                    },
-                    style  : {
-                        title  : 'Style',
-                        type   : 'radio',
-                        options: [
-                            {
-                                name : 'Fixed',
-                                value: 'fixed'
-                            },
-                            {
-                                name : 'Static',
-                                value: 'static'
-                            }
-                        ]
-                    }
-                }
-            }
+            // footer : {
+            //     type    : 'group',
+            //     title   : 'Footer',
+            //     children: {
+            //         display: {
+            //             title: 'Display',
+            //             type : 'switch'
+            //         },
+            //         style  : {
+            //             title  : 'Style',
+            //             type   : 'radio',
+            //             options: [
+            //                 {
+            //                     name : 'Fixed',
+            //                     value: 'fixed'
+            //                 },
+            //                 {
+            //                     name : 'Static',
+            //                     value: 'static'
+            //                 }
+            //             ]
+            //         }
+            //     }
+            // }
         }
     }
 };

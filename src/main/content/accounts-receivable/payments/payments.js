@@ -23,6 +23,7 @@ import { withRouter } from 'react-router-dom';
 
 //Custom components
 import PaymentListContent from "./paymentsListContent"
+import PaymentsHistoryListContent from "./paymentsHistoryListContent"
 import PaymentSearchBar from "./PaymentSearchBar"
 import InvoiceForm from "./paymentsForm"
 import SummaryPanel from './summaryPanel';
@@ -463,14 +464,20 @@ class Payments extends Component {
 				title: "Warning",
 				message: "A payment can't be applied to an invoice with 0 balance.",
 			})
-		} else if (this.props.activePaymentRows.length > 0) {
-			this.props.openPaymentDialog(true)
-		} else {
+		} else if (this.props.activePaymentRows.length < 1) {
 			this.props.showErrorDialog({
 				show: true,
 				title: "Warning",
 				message: "Nothing selected for invoices. Please choose one at least.",
 			})
+		} else if (this.props.viewMode !== "Invoice") {
+			this.props.showErrorDialog({
+				show: true,
+				title: "Warning",
+				message: "Please try it in Invoice view mode..",
+			})
+		} else {
+			this.props.openPaymentDialog(true)
 		}
 	}
 	getRowData(payments) {
@@ -621,7 +628,9 @@ class Payments extends Component {
 
 								<PaymentSearchBar />
 
-								<PaymentListContent />
+								{this.props.viewMode === "Invoice" && <PaymentListContent />}
+								{this.props.viewMode === "PaymentHistory" && <PaymentsHistoryListContent />}
+
 							</div>
 						</div>
 					}
@@ -741,6 +750,8 @@ function mapStateToProps({ invoices, auth, customers, franchisees, accountReceiv
 
 		errorInfo: accountReceivablePayments.errorInfo,
 		payments: accountReceivablePayments.ACC_payments,
+
+		viewMode: accountReceivablePayments.viewMode,
 	}
 }
 
