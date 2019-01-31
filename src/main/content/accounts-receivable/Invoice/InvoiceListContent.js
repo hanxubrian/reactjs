@@ -218,6 +218,7 @@ class InvoiceListContent extends Component {
             });
             console.log("this.props.invoiceDetail",this.props.invoiceDetail);
             console.log("this.props.open",this.state.isOpen);
+            console.log("this.props.allRegion",this.props.allRegion);
         }
     }
 
@@ -505,7 +506,7 @@ class InvoiceListContent extends Component {
                     </DialogActions>
                 </Dialog>
                 {this.state.invoiceDetail!==null && 1 && (
-                    <InvoiceReport childCall={this.printDocument.bind(this)} ref="child" show={this.state.isOpen} onClose={this.toggleModal} Detail={this.state.invoiceDetail} />
+                    <InvoiceReport childCall={this.printDocument.bind(this)} ref="child" show={this.state.isOpen} onClose={this.toggleModal} Region={this.props.allRegion} RegionId ={this.props.regionId} Detail={this.state.invoiceDetail} />
 
                 )}
 
@@ -554,6 +555,7 @@ function mapStateToProps({invoices, auth})
         InvoiceForm: invoices.InvoiceForm,
         filterState: invoices.bOpenedFilterPanel,
         summaryState: invoices.bOpenedSummaryPanel,
+        allRegion:auth.login.all_regions,
     }
 }
 

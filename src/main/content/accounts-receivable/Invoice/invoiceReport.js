@@ -90,12 +90,13 @@ const styles = theme => ({
 
 class InvoiceReport extends Component {
     state = {
-        isOpen: false,
-        invoiceDetail: [],
-        Items: [],
-        Region: [],
-        CustomerSoldTo:[],
-        CustomerFor:[],
+        isOpen                          : false,
+        invoiceDetail                   : [],
+        Items                           : [],
+        Region                          : [],
+        CustomerSoldTo                  : [],
+        CustomerFor                     : [],
+        RegionInfo                      : null,
 
     };
 
@@ -129,6 +130,16 @@ class InvoiceReport extends Component {
             Items: this.props.Detail.Data.Items,
             Region: this.props.Detail.Data.RegionId,
         });
+        if(this.props.Region && this.props.Region !== null){
+            if(this.props.RegionId && this.props.RegionId !== null){
+                this.props.Region.map((item)=>{
+                    if(item.regionid === this.props.RegionId){
+                        this.setState({RegionInfo: item});
+                    }
+                });
+            }
+        }
+
     }
     componentDidUpdate(prevProps, prevState,){
         if(this.props.Detail.Data.RegionId && this.props.Detail.Data.RegionId !== null && JSON.stringify(this.props.Detail.Data.RegionId) !== JSON.stringify(prevProps.Detail.Data.RegionId)){
@@ -142,6 +153,15 @@ class InvoiceReport extends Component {
                 Items: this.props.Detail.Data.Items,
                 Region: this.props.Detail.Data.RegionId,
             });
+        }
+        if(this.props.Region && this.props.Region !== null && JSON.stringify(this.props.Region) !== JSON.stringify(prevProps.Region)){
+            if(this.props.RegionId && this.props.RegionId !== null && JSON.stringify(this.props.RegionId) !== JSON.stringify(prevProps.RegionId)){
+                this.props.Region.map((item)=>{
+                    if(item.regionid === this.props.RegionId){
+                        this.setState({RegionInfo:item});
+                    }
+                });
+            }
         }
     }
     getDataUri=(url, cb)=>
@@ -190,7 +210,7 @@ class InvoiceReport extends Component {
         if (!this.props.show) {
             return null;
         }
-        if (this.props.Detail && this.props.Detail !== null) {
+        if (this.props.Detail && this.props.Detail !== null && this.state.RegionInfo && this.state.RegionInfo !== null) {
         return (
 
             <div onClick={this.props.onClose}   style={{
@@ -230,8 +250,10 @@ class InvoiceReport extends Component {
                                 </th>
                                 <th width='50%' className="text-left" style={{color:'black'}}>
                                     Remit To:
-                                    <Typography  style={{color:'black'}}>{this.state.invoiceDetail.CustomerName}</Typography>
-                                    <Typography  style={{color:'black'}}>P.O.BOX 415291</Typography>
+                                    <Typography  style={{color:'black'}}>{this.state.RegionInfo.address1}</Typography>
+                                    <Typography  style={{color:'black'}}>{this.state.RegionInfo.address2}</Typography>
+                                    <Typography  style={{color:'black'}}>{this.state.RegionInfo.address3}</Typography>
+                                    <Typography  style={{color:'black'}}>{this.state.RegionInfo.address4}</Typography>
                                     {/*<Typography>{this.state.Region.Address}</Typography>*/}
                                     {/*<Typography>{this.state.Region.Phone}</Typography>*/}
                                 </th>
@@ -318,7 +340,7 @@ class InvoiceReport extends Component {
                             <tbody>
                             <tr>
                                 <td className="text-center" width='100%'>
-                                    <Typography><span style={{fontSize: '11px',color:'black'}}>Make All Checks Payable To:JANI-KING OF BUFFALO,INC,</span></Typography>
+                                    <Typography><span style={{fontSize: '11px',color:'black'}}>Make All Checks Payable To:JANI-KING OF {this.state.RegionInfo.regionname},INC,</span></Typography>
                                     <Typography><span
                                         style={{fontSize: '11px',color:'black'}}>RETURN THIS PORTION WITH YOUR PAYMENT</span></Typography>
                                 </td>
@@ -331,10 +353,10 @@ class InvoiceReport extends Component {
                             <tr>
                                 <td width="20%"></td>
                                 <td width="60%" className="text-center">
-                                    <Typography><strong><span style={{fontSize: '18px',color:'black'}}>JANI-KING OF BUFFALO,INC</span></strong></Typography>
+                                    <Typography><strong><span style={{fontSize: '18px',color:'black'}}>JANI-KING OF {this.state.RegionInfo.regionname} ,INC</span></strong></Typography>
                                     <Typography><strong><span
                                         style={{fontSize: '14px',color:'black'}}>Commercial Cleaning Services</span></strong></Typography>
-                                    <Typography><span style={{color:'black'}}>(716)</span> <span style={{color:'black'}}>636-4840</span></Typography>
+                                    <Typography><span style={{color:'black'}}>{this.state.RegionInfo.fax}</span></Typography>
                                     <Typography><br/></Typography>
                                     <Typography><br/></Typography>
                                     <Typography><br/></Typography>
@@ -836,6 +858,8 @@ InvoiceReport.propTypes = {
     show: PropTypes.bool,
     children: PropTypes.node,
     Detail: PropTypes.object,
+    Region: PropTypes.array,
+    RegionId: PropTypes.number,
 };
 
 export default InvoiceReport;

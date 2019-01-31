@@ -215,7 +215,20 @@ const styles = theme => ({
 
 
 
+const SubListItem = ({ value, onClick }) => (
+    <li onClick={onClick}>{value}</li>
+);
+const ListItem = ({ value, onClick }) => (
+    <li onClick={onClick}>{value}</li>
 
+);
+const List = ({ items, onItemClick }) => (
+    <ul>
+        {
+            items.map((item, i) => <ListItem key={i} value={item} onClick={onItemClick} />)
+        }
+    </ul>
+);
 
 class SystemNotificationViewById extends Component {
 
@@ -226,6 +239,8 @@ class SystemNotificationViewById extends Component {
             MsgData                 : this.props.Data,
             loading                 : this.props.loadingstatus,
             row                     : null,
+            multiKey                : null,
+            multiData               : null,
         };
     };
 
@@ -245,6 +260,8 @@ class SystemNotificationViewById extends Component {
             let payload = JSON.parse(this.props.Data.ProcessResponsePayload);
             let KEYS    = [];
             let mapvalue  = [];
+            let midmultikey =[];
+            let midmultivalue = [];
             Object.keys(payload).forEach(function(key) {
                 // console.log("key:" + key + "value:" + item[key]);
                 let str = payload[key];
@@ -252,15 +269,23 @@ class SystemNotificationViewById extends Component {
                     mapvalue.push({'Key':key, 'Value':str.toString()});
                     KEYS.push(key);
                 }
+                else{
+                    midmultikey.push(key);
+                    midmultivalue.push({'Key':key, 'Value':str});
+                }
 
             });
-            this.setState({row:mapvalue})
+            this.setState({
+                row             :mapvalue,
+                multiKey        :midmultikey,
+                multiData       :midmultivalue
+            });
         }
     }
-
+    handleItemClick = (e) => {console.log(e.target.innerHTML)}
     render(){
-        const {Data,classes} = this.props;
-        const {row}         = this.state;
+        const {Data,classes}                    = this.props;
+        const {row,multiData,multiKey}          = this.state;
         if(1){
             if(this.props.loadingstatus){
                 return(
@@ -272,6 +297,9 @@ class SystemNotificationViewById extends Component {
             else if(!this.props.loadingstatus && Data && Data !== null && row && row !== null){
 
                 console.log("row",row);
+                console.log("##multikey",this.state.multiKey);
+                console.log("##multiData",this.state.multiData);
+
                 return(
                     <div style={{marginTop:"20px"}}>
                         <div className="flex flex-col flex-1 md:pr-32 md:pl-32">
@@ -324,6 +352,13 @@ class SystemNotificationViewById extends Component {
                                                 </TableBody>
                                             </table>
                                         </div>
+                                        <div>
+                                            <List items={multiKey} onItemClick={this.handleItemClick} />
+
+                                        </div>
+
+
+
 
                                     </CardContent>
                                 </Card>
