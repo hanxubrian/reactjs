@@ -481,7 +481,7 @@ class PaymentFormModal extends React.Component {
 				PaymentDate: this.state.PaymentDate,
 				Note: this.state.PaymentNote,
 				PayItems: PayItems,
-				overpayment: this.getOverpaymentAmount(rows),
+				overpayment: this.getOverpaymentAmount(this.state.rows),
 			}
 			console.log("handleCreatePayment", params);
 
