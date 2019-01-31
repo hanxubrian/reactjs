@@ -73,8 +73,8 @@ class TransactionsSummary extends Component {
     render() {
         const {classes} = this.props;
         return (
-            <div className={classNames(classes.root,'p-48 flex flex-col flex-1 items-center')}>
-                <h1>Franchisee Transaction Summary Under Development"</h1>
+            <div className={classNames(classes.root,'p-48 flex flex-col flex-1 items-center h-full')}>
+                <h1 className="h-full flex flex-row text-36 items-center">Franchisee Transaction Summary Under Development</h1>
                 {/*<AppBar position="static" color="default">*/}
                     {/*<Tabs value={this.state.value} onChange={this.handleChange}>*/}
                         {/*<Tab label="Customer Transactions" />*/}
