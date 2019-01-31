@@ -90,7 +90,7 @@ class FilterPanel extends Component {
         invoiceStatus: [],
         FromDate: undefined,
         ToDate: undefined,
-        invoiceDateOption: THIS_MONTH,
+        invoiceDateOption: CUSTOM_DATE,
         invoiceDatePeriod: moment(),
     };
 
