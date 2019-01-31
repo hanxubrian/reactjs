@@ -23,6 +23,7 @@ import accountReceivablePayments from'./account_receivable.payments.reducer';
 import verifications from './verifications.reducer'
 import paymentlockbox from './paymentlockbox.reducer';
 import notification from './notification.reducer';
+import territories from './regions.territories.reducer'
 
 
 const createReducer = (asyncReducers) =>
@@ -51,6 +52,7 @@ const createReducer = (asyncReducers) =>
         verifications,
         paymentlockbox,
         notification,
+        territories,
         ...asyncReducers
     });
 
