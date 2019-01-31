@@ -505,7 +505,9 @@ class TransactionEditForm extends Component {
                     this.setState({tax: tax});
                     this.setState({quantity: parseFloat(trxDetail.quantity)});
                     this.setState({total: parseFloat(trxDetail.TrxExtendedPrice)+ tax});
-                    this.setState({TransactionDate: trxDetail.TrxDate});
+                    this.setState({TransactionDate: moment(trxDetail.TrxDate)});
+                    this.setState({TransactionPeriod: trxDetail.month+'/'+trxDetail.year });
+
 
                     let trxType = this.props.transactionTypeList.filter(f=>f._id === trxDetail.Trxtype);
 
