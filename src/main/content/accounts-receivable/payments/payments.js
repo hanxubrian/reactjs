@@ -29,6 +29,7 @@ import InvoiceForm from "./paymentsForm"
 import SummaryPanel from './summaryPanel';
 import FilterPanel from './filterPanel';
 import PaymentFormModal from './PaymentFormModal';
+import PaymentFormModalCredit from './PaymentFormModalCredit';
 
 // for store
 import { bindActionCreators } from "redux";
@@ -497,6 +498,44 @@ class Payments extends Component {
 			})
 		}
 	}
+
+	PaymentFormModalCredit = () => {
+		console.log("this.props.activePaymentRows.length", this.props.activePaymentRows)
+		const payments = this.getRowData(this.props.payments)
+		const invoiceBalances = this.props.activePaymentRows.map(x => payments[x].InvoiceBalance)
+
+		if (this.props.activePaymentRows.length > 100) {
+			this.props.showErrorDialog({
+				show: true,
+				title: "Warning",
+				message: "Too many rows selected. Please try to reduce them.",
+			})
+		} else if (invoiceBalances.indexOf(0) > -1) {
+			this.props.showErrorDialog({
+				show: true,
+				title: "Warning",
+				message: "A payment can't be applied to an invoice with 0 balance.",
+			})
+		} else if (this.props.activePaymentRows.length < 1) {
+			this.props.showErrorDialog({
+				show: true,
+				title: "Warning",
+				message: "Nothing selected for invoices. Please choose one at least.",
+			})
+		} else if (this.props.viewMode !== "Invoice") {
+			this.props.showErrorDialog({
+				show: true,
+				title: "Warning",
+				message: "Please try it in Invoice view mode..",
+			})
+		} else {
+			this.props.openPaymentDialog({
+				open: true,
+				paymentType: "Check",
+				paymentAmount: 0,
+			})
+		}
+	}
 	getRowData(payments) {
 		if (!payments || payments.Regions === undefined || payments.Regions.length < 1)
 			return [];
@@ -549,7 +588,7 @@ class Payments extends Component {
 												<Icon>attach_money</Icon>
 												Add Payment
 											</Button>
-											<Button variant="contained" color="primary" onClick={this.showPaymentFormModal} className="ml-6">
+											<Button variant="contained" color="primary" onClick={this.showPaymentFormModalCredit} className="ml-6">
 												<Icon>credit_card</Icon>
 												Add Credit
 											</Button>
@@ -652,6 +691,7 @@ class Payments extends Component {
 								</Dialog>
 
 								<PaymentFormModal />
+								{/* <PaymentFormModalCredit /> */}
 
 								<PaymentSearchBar />
 

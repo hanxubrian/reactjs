@@ -201,7 +201,7 @@ class FilterPanel extends Component {
 				this.props.showErrorDialog({
 					show: true,
 					title: "Coming Soon...",
-					message: "Currently Working on this, Feature will Be available at 1:00 PM release 1/31/2019."
+					message: "Currently Working on this, Feature will be available later."
 				})
 			} else {
 				this.props.setViewMode(event.target.value)

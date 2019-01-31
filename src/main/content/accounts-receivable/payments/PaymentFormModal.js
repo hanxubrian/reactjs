@@ -1030,4 +1030,3 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 }
 
 export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(PaymentFormModal)));
-
