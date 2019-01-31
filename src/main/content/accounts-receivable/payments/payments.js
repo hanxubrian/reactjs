@@ -499,7 +499,7 @@ class Payments extends Component {
 		}
 	}
 
-	PaymentFormModalCredit = () => {
+	showPaymentFormModalCredit = () => {
 		console.log("this.props.activePaymentRows.length", this.props.activePaymentRows)
 		const payments = this.getRowData(this.props.payments)
 		const invoiceBalances = this.props.activePaymentRows.map(x => payments[x].InvoiceBalance)
