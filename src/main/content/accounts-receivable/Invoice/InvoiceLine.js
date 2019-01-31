@@ -371,7 +371,7 @@ const styles = theme => ({
 function renderSuggestion (suggestion,  { isHighlighted }) {
     return (
         <MenuItem selected={isHighlighted} component="div">
-            <span>{suggestion.Number} - {suggestion.Name}</span>
+            <span>{suggestion.Number} - {suggestion.Name} - {suggestion.StatusName}</span>
         </MenuItem>
     );
 }
@@ -606,7 +606,9 @@ class InvoiceLineTable extends React.Component {
         const regex = new RegExp('^' + escapedValue, 'i');
 
         let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList;
-        return franchisees.filter(f => regex.test(f.Number) || regex.test(f.Name));
+        let suggestions =  franchisees.filter(f => regex.test(f.Number) || regex.test(f.Name));
+        let suggestionsExcludedInActive = suggestions.filter(c=>c.StatusName!=='Inactive');
+        return suggestionsExcludedInActive;
     };
 
     getSuggestionfName = (suggestion) => {
