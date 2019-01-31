@@ -304,6 +304,22 @@ class TransactionsDxGridLists extends Component {
                 </Table.Cell>
             )
         }
+        else if (props.column.name.includes('TrxClass')) {
+            let _typeId = props.row.TrxClass;
+            let type = this.props.transactionTypeList.filter(f=>f.TrxClass===props.row.TrxClass);
+
+            let trxTypeName = _typeId;
+            if (type.length) trxTypeName = type[0].Name;
+            // if (type.length===0) trxTypeName = type[0].Name;
+
+            return (
+                <Table.Cell>
+                    <div className="flex items-center actions w-full">
+                        {trxTypeName}
+                    </div>
+                </Table.Cell>
+            )
+        }
 
         return <Table.Cell {...props} />;
     };
@@ -324,14 +340,14 @@ class TransactionsDxGridLists extends Component {
             rowClass = 'credit';
 
         return (
-        <Table.Row className = {classNames(rowClass)}
-            {...restProps}
-            // eslint-disable-next-line no-alert
-            onClick={() => this.props.openEditTransactionForm(this.props.regionId, row)}
-            style={{
-                cursor: 'pointer',
-            }}
-        />
+            <Table.Row className = {classNames(rowClass)}
+                       {...restProps}
+                // eslint-disable-next-line no-alert
+                       onClick={() => this.props.openEditTransactionForm(this.props.regionId, row)}
+                       style={{
+                           cursor: 'pointer',
+                       }}
+            />
         )
     };
 
@@ -366,8 +382,8 @@ class TransactionsDxGridLists extends Component {
             { columnName: 'Fees', width: 80,  align: 'right'},
             { columnName: 'TotalTrxAmount', width: 120,  align: 'right'},
             { columnName: 'TrxDate', width: 100 },
-            { columnName: 'TrxType', width: 160 },
-            { columnName: 'TrxClass', width: 100},
+            { columnName: 'TrxType', width: 100 },
+            { columnName: 'TrxClass', width: 160},
             { columnName: 'Status', width: 80},
             { columnTitle: 'Id', width: 100 },
         ];
