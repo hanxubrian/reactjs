@@ -892,9 +892,6 @@ class PaymentFormModal extends React.Component {
 										InputLabelProps={{
 											shrink: true
 										}}
-										InputProps={{
-											readOnly: this.props.paymentDlgPayloads.paymentAmount !== 0
-										}}
 										value={this.state.PaymentDate}
 										onChange={this.handleChange('PaymentDate')}
 										margin="dense"
@@ -913,6 +910,9 @@ class PaymentFormModal extends React.Component {
 										className={classNames(classes.textField, "pr-6")}
 										id="PaymentAmount"
 										value={this.state.PaymentAmount}
+										InputProps={{
+											readOnly: this.props.paymentDlgPayloads.paymentAmount !== 0
+										}}
 										onChange={this.handleChange('PaymentAmount')}
 										label="Payment Amount" sm={2}
 									/>
