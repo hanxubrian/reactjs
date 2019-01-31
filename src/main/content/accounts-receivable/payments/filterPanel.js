@@ -196,7 +196,16 @@ class FilterPanel extends Component {
 	handleChange = name => event => {
 		this.setState({ [name]: event.target.value });
 		if (name === "viewMode") {
-			this.props.setViewMode(event.target.value)
+			
+			if (event.target.value === "PaymentHistory") {
+				this.props.showErrorDialog({
+					show: true,
+					title: "Coming Soon...",
+					message: "Currently Working on this, Feature will Be available at 1:00 PM release 1/31/2019."
+				})
+			} else {
+				this.props.setViewMode(event.target.value)
+			}
 		}
 	}
 
@@ -500,6 +509,7 @@ function mapDispatchToProps(dispatch) {
 		setViewMode: Actions.setViewMode,
 
 		setCustomerNameNoGrouping: Actions.setCustomerNameNoGrouping,
+		showErrorDialog: Actions.showErrorDialog,
 	}, dispatch);
 }
 
