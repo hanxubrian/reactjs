@@ -368,11 +368,115 @@ class PaymentsListContent extends Component {
 					title: "C.Name",
 					name: "CustomerNameNo",
 					columnName: "CustomerNameNo",
-					width: 150,
+					width: 270,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: true,
+				},
+				{
+					title: "Invoice No",
+					name: "InvoiceNo",
+					columnName: "InvoiceNo",
+					width: 150,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "Invoice Amount",
+					name: "InvoiceAmount",
+					columnName: "InvoiceAmount",
+					align: 'right',
+					width: 150,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "Invoice Balance",
+					name: "InvoiceBalance",
+					columnName: "InvoiceBalance",
+					align: 'right',
+					width: 150,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				// {
+				// 	title: "OverPayment",
+				// 	name: "OverPayment",
+				// 	columnName: "OverPayment",
+				// 	align: 'right',
+				// 	width: 150,
+				// 	sortingEnabled: true,
+				// 	filteringEnabled: true,
+				// 	groupingEnabled: false,
+				// },
+				{
+					title: "Invoice Date",
+					name: "InvoiceDate",
+					columnName: 'InvoiceDate',
+					width: 250,
+					align: 'center',
+					wordWrapEnabled: true,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "Due Date",
+					name: "DueDate",
+					columnName: 'DueDate',
+					width: 250,
+					align: 'center',
+					wordWrapEnabled: true,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "Days Past Due",
+					name: "DaysPastDue",
+					columnName: 'DaysPastDue',
+					width: 140,
+					align: 'center',
+					wordWrapEnabled: true,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+			],
+			tableColumnExtensionsUngrouping: [
+				{
+					title: "C.Name",
+					name: "CustomerNameNo",
+					columnName: "CustomerNameNo",
+					width: 100,
+					wordWrapEnabled: true,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: true,
+				},
+				{
+					title: "Customer No",
+					name: "CustomerNo",
+					columnName: "CustomerNo",
+					width: 150,
+					wordWrapEnabled: true,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "Customer Name.",
+					name: "CustomerName",
+					columnName: "CustomerName",
+					width: 150,
+					wordWrapEnabled: true,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
 				},
 				{
 					title: "Invoice No",
@@ -476,6 +580,8 @@ class PaymentsListContent extends Component {
 			payments: [],
 
 			showNoSelectionAlertDialog: false,
+
+			isCustomerNameNoGrouping: true,
 		};
 
 		this.fetchData = this.fetchData.bind(this);
@@ -534,12 +640,43 @@ class PaymentsListContent extends Component {
 		return true;
 	}
 
+	componentDidMount() {
+		console.log("componentDidMount");
+		this.props.getAccountReceivablePaymentsList(
+			this.props.regionId,
+			this.props.getPaymentsParam.fromDate,
+			this.props.getPaymentsParam.toDate,
+			this.props.getPaymentsParam.searchText);
+
+		this.setState({
+			isCustomerNameNoGrouping: this.props.isCustomerNameNoGrouping
+		})
+	}
+
+	componentWillMount() {
+		this.setState({
+			"paymentsParam": this.props.getPaymentsParam,
+			"rows": this.getRowData(this.props.payments),
+			expandedGroups: [...new Set(this.getRowData(this.props.payments).map(x => x.CustomerNameNo))],
+		});
+		// this.props.getAccountReceivablePaymentsList(
+		// 	this.props.regionId,
+		// 	this.props.getPaymentsParam.fromDate,
+		// 	this.props.getPaymentsParam.toDate,
+		// 	this.props.getPaymentsParam.searchText);
+		this.timer = null;
+	}
+	componentWillUnmount() {
+		console.log("componentWillUnmount");
+	}
+
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.payments !== this.props.payments) {
 			console.log("componentWillReceiveProps", "nextProps.payments", nextProps.payments)
+			const rows = this.getRowData(nextProps.payments);
 			this.setState({
-				rows: this.getRowData(nextProps.payments),
-				expandedGroups: [...new Set(this.getRowData(nextProps.payments).map(x => x.CustomerNameNo))],
+				rows,
+				expandedGroups: [...new Set(rows.map(x => x.CustomerNameNo))],
 			})
 		}
 
@@ -577,11 +714,18 @@ class PaymentsListContent extends Component {
 			console.log("------search text changed-------", nextProps.searchText)
 			this.search(nextProps.searchText);
 		}
+
+		if (nextProps.isCustomerNameNoGrouping !== this.props.isCustomerNameNoGrouping) {
+			this.setState({
+				isCustomerNameNoGrouping: nextProps.isCustomerNameNoGrouping
+			})
+		}
 	} // deprecate
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		console.log("componentDidUpdate", "CustomerListContent.js", this.props.locationFilterValue, this.props.customers);
 	}
+
 	getRowData(payments) {
 		if (!payments || payments.Regions === undefined || payments.Regions.length < 1)
 			return [];
@@ -610,28 +754,6 @@ class PaymentsListContent extends Component {
 		});
 		this.setState({ rows: [...temp] });
 	}
-
-	componentDidMount() {
-		console.log("componentDidMount");
-	}
-
-	componentWillMount() {
-		this.setState({
-			"paymentsParam": this.props.getPaymentsParam,
-			"rows": this.getRowData(this.props.payments),
-			expandedGroups: [...new Set(this.getRowData(this.props.payments).map(x => x.CustomerNameNo))],
-		});
-		// this.props.getAccountReceivablePaymentsList(
-		// 	this.props.regionId,
-		// 	this.props.getPaymentsParam.fromDate,
-		// 	this.props.getPaymentsParam.toDate,
-		// 	this.props.getPaymentsParam.searchText);
-		this.timer = null;
-	}
-	componentWillUnmount() {
-		console.log("componentWillUnmount");
-	}
-
 
 	handleChange = prop => event => {
 		console.log("handleChange");
@@ -860,7 +982,7 @@ class PaymentsListContent extends Component {
 		const {
 			rows,
 			selection,
-			tableColumnExtensions,
+			// tableColumnExtensions,
 			sorting,
 			editingColumnExtensions,
 			currencyColumns,
@@ -872,7 +994,20 @@ class PaymentsListContent extends Component {
 			payments,
 			groupingColumns,
 			expandedGroups,
+
+			isCustomerNameNoGrouping,
 		} = this.state;
+
+		let tableColumnExtensions = this.state.tableColumnExtensions
+
+		// let tableColumnExtensions = []
+		// if(isCustomerNameNoGrouping) {
+		// 	tableColumnExtensions = this.state.tableColumnExtensions
+		// } else {
+		// 	tableColumnExtensions = this.state.tableColumnExtensionsUngrouping
+		// }
+		console.log("tableColumnExtensions", tableColumnExtensions)
+
 		return (
 			<Fragment>
 				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
@@ -905,16 +1040,21 @@ class PaymentsListContent extends Component {
 							/>
 							<IntegratedSorting />
 
-							<GroupingState
-								// grouping={grouping}
-								// onGroupingChange={this.changeGrouping}
-								grouping={groupingColumns}
-								expandedGroups={expandedGroups}
-								onExpandedGroupsChange={this.expandedGroupsChange}
+							{this.state.isCustomerNameNoGrouping &&
+								<GroupingState
+									// grouping={grouping}
+									// onGroupingChange={this.changeGrouping}
+									grouping={groupingColumns}
+									expandedGroups={expandedGroups}
+									onExpandedGroupsChange={this.expandedGroupsChange}
 
-							// columnExtensions={tableColumnExtensions}
-							/>
-							<IntegratedGrouping />
+								// columnExtensions={tableColumnExtensions}
+								/>
+							}
+							{
+								this.state.isCustomerNameNoGrouping &&
+								<IntegratedGrouping />
+							}
 
 							<IntegratedPaging />
 
@@ -983,7 +1123,10 @@ class PaymentsListContent extends Component {
 								)}
 							</Template>
 							{/* <Toolbar />					 */}
-							<TableGroupRow contentComponent={this.GroupCellContent} />
+							{
+								this.state.isCustomerNameNoGrouping &&
+								<TableGroupRow contentComponent={this.GroupCellContent} />
+							}
 
 							<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
 							{/* <GroupingPanel showSortingControls showGroupingControls /> */}
@@ -1016,6 +1159,7 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 		NoDataString: accountReceivablePayments.NoDataString,
 
 		filter: accountReceivablePayments.filter,
+		isCustomerNameNoGrouping: accountReceivablePayments.isCustomerNameNoGrouping,
 
 	}
 }

@@ -461,7 +461,7 @@ class PaymentFormModal extends React.Component {
 			overpayment: 0,
 			errorMsg: "",
 		})
-		
+
 		this.clearDistribute()
 
 		this.props.openPaymentDialog(false);
@@ -629,12 +629,10 @@ class PaymentFormModal extends React.Component {
 				}
 			}
 			// this.checkValidations('', '', rows)
-			this.setState({
-				overpayment: this.getOverpaymentAmount(rows)
-			})
 
 			return {
 				rows: rows,
+				overpayment: this.getOverpaymentAmount(rows),
 				// overpayment: floatPaymentAmount,
 				// errorMsg: this.isNonEmptyPayment(rows) ? (this.state.errorMsg === "Neither of payments amount is settled" ? "" : this.state.errorMsg) : "Neither of payments amount is settled"
 			}
@@ -648,12 +646,10 @@ class PaymentFormModal extends React.Component {
 				rows[i] = { ...rows[i], PaymentAmount: 0 };
 			}
 			// this.checkValidations('', '', rows)
-			this.setState({
-				overpayment: 0
-			})
 
 			return {
 				rows: rows,
+				overpayment: 0,
 				// overpayment: 0,
 				// errorMsg: this.isNonEmptyPayment(rows) ? (this.state.errorMsg === "Neither of payments amount is settled" ? "" : this.state.errorMsg) : "Neither of payments amount is settled"
 			}

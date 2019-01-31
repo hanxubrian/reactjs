@@ -89,9 +89,21 @@ class FilterPanel extends Component {
 		PaymentStatusAll: true,
 		PaymentStatusOpen: true,
 		PaymentStatusPaid: true,
+
+		isCustomerNameNoGrouping: true
 	};
 
 	componentDidMount() {
+		this.setState({
+			isCustomerNameNoGrouping: this.props.isCustomerNameNoGrouping
+		})
+	}
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.isCustomerNameNoGrouping !== this.props.isCustomerNameNoGrouping) {
+			this.setState({
+				isCustomerNameNoGrouping: nextProps.isCustomerNameNoGrouping
+			})
+		}
 	}
 
 	componentWillMount() {
@@ -138,6 +150,9 @@ class FilterPanel extends Component {
 				} else {
 					this.props.setPaymentStatusFitler(this.state.PaymentStatusOpen ? "Open" : "All")
 				}
+				break
+			case "isCustomerNameNoGrouping":
+				this.props.setCustomerNameNoGrouping(event.target.checked)
 				break
 		}
 
@@ -375,6 +390,16 @@ class FilterPanel extends Component {
 
 				<div style={{ marginTop: 20, display: 'flex', flexDirection: 'column' }}>
 					<h3>View Mode</h3>
+					<FormControlLabel
+						control={
+							<Switch
+								checked={this.state.isCustomerNameNoGrouping}
+								onChange={this.handleChangeChecked('isCustomerNameNoGrouping')}
+							/>
+						}
+						label="Grouping"
+					/>
+
 					<RadioGroup
 						aria-label="Location"
 						name="Location"
@@ -460,6 +485,8 @@ function mapDispatchToProps(dispatch) {
 
 		setPaymentStatusFitler: Actions.setPaymentStatusFitler,
 		setViewMode: Actions.setViewMode,
+
+		setCustomerNameNoGrouping: Actions.setCustomerNameNoGrouping,
 	}, dispatch);
 }
 
@@ -476,6 +503,7 @@ function mapStateToProps({ invoices, fuse, accountReceivablePayments }) {
 		invoiceDateOption: invoices.invoiceDateOption,
 
 		viewMode: accountReceivablePayments.viewMode,
+		isCustomerNameNoGrouping: accountReceivablePayments.isCustomerNameNoGrouping,
 	}
 }
 

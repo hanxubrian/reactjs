@@ -34,6 +34,7 @@ const initialState = {
 		paymentStatus: "All",
 	},
 	viewMode: "Invoice",
+	isCustomerNameNoGrouping: true
 };
 
 
@@ -139,6 +140,14 @@ const accountReceivablePayments = function (state = initialState, action) {
 			return {
 				...state,
 				viewMode: action.payload,
+			}
+		//
+		// SET_CUSTOMER_NAME_NO_GROUPING
+		//
+		case Actions.SET_CUSTOMER_NAME_NO_GROUPING:
+			return {
+				...state,
+				isCustomerNameNoGrouping: action.payload,
 			}
 		case UserActions.USER_LOGGED_OUT:
 			return {

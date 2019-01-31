@@ -17,6 +17,7 @@ export const FAILED_GET_ALL_RECEIVABLE_PAYMENTS = "[A.R.Payments] FAILED_GET_ALL
 export const SHOW_ERROR_DIALOG = "[A.R.Payments] SHOW_ERROR_DIALOG";
 export const SET_PAYMENT_STATUS_FILTER = "[A.R.Payments] SET_PAYMENT_STATUS_FILTER";
 export const SET_VIEW_MODE = "[A.R.Payments] SET_VIEW_MODE";
+export const SET_CUSTOMER_NAME_NO_GROUPING = "[A.R.Payments] SET_CUSTOMER_NAME_NO_GROUPING";
 
 
 export function getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status) {
@@ -171,5 +172,11 @@ export function setViewMode(mode) {
 	return {
 		type: SET_VIEW_MODE,
 		payload: mode
+	}
+}
+export function setCustomerNameNoGrouping(grouping) {
+	return {
+		type: SET_CUSTOMER_NAME_NO_GROUPING,
+		payload: grouping
 	}
 }
