@@ -495,45 +495,6 @@ class PaymentsListContent extends Component {
 				this.props.filter.paymentStatus);
 		}
 	}
-
-	changeSelection = (selection) => {
-		if (selection.length > 1) selection = [selection[selection.length - 1]]
-		this.setState({ selection })
-		this.props.setActivePaymentRows(selection)
-	}
-
-	changeGroupSelection = (selection) => {
-
-		if (selection.length < 1) {
-			selection = []
-		} else {
-			const latestSelectionId = selection[selection.length - 1]
-			const { rows } = this.state
-			//
-			// get lastest selected row
-			//
-			console.log("rows", rows)
-			console.log("latestSelectionId", latestSelectionId)
-			let selectedLastRow = rows.filter((x, index) => x.id === latestSelectionId)
-			// let selectedLastRow = rows[latestSelectionId]
-			console.log("selectedLastRow", selectedLastRow)
-			if (selectedLastRow.length > 0) {
-				selectedLastRow = selectedLastRow[0]
-				console.log("selectedLastRow", selectedLastRow)
-				//
-				// get CustomerNameNo
-				//
-				const customerNameNo = selectedLastRow.CustomerNameNo
-				console.log("customerNameNo", customerNameNo)
-				selection = rows.filter(x => x.CustomerNameNo === customerNameNo).map((x, index) => x.id)
-				// selection = rows.filter(x => x.CustomerNameNo === customerNameNo).map((x, index) => index)
-				console.log("selection", selection)
-			}
-		}
-		this.setState({ selection })
-		this.props.setActivePaymentRows(selection)
-	}
-
 	//
 	// to edit table cell
 	//
@@ -700,6 +661,65 @@ class PaymentsListContent extends Component {
 		});
 	}
 
+	changeSelection = (selection) => {
+		console.log("----------------------------changeSelection", selection)
+		if (selection.length > 1) {
+			const firstSelectedRowCustomerNameNo = this.state.rows.filter(x => x.id === selection[0])[0].CustomerNameNo
+			const latestSelectedRowCustomerNameNo = this.state.rows.filter(x => x.id === selection[selection.length - 1])[0].CustomerNameNo
+			if (firstSelectedRowCustomerNameNo !== latestSelectedRowCustomerNameNo) {
+				this.props.setActivePaymentRows([selection[selection.length - 1]])
+				return
+			}
+		}
+		this.props.setActivePaymentRows(selection)
+	}
+
+	changeGroupSelection = (selection) => {
+
+		if (selection.length < 1) {
+			selection = []
+		} else {
+			const latestSelectionId = selection[selection.length - 1]
+			const { rows } = this.state
+			//
+			// get lastest selected row
+			//
+			console.log("rows", rows)
+			console.log("latestSelectionId", latestSelectionId)
+			let selectedLastRow = rows.filter((x, index) => x.id === latestSelectionId)
+			// let selectedLastRow = rows[latestSelectionId]
+			console.log("selectedLastRow", selectedLastRow)
+			if (selectedLastRow.length > 0) {
+				selectedLastRow = selectedLastRow[0]
+				console.log("selectedLastRow", selectedLastRow)
+				//
+				// get CustomerNameNo
+				//
+				const customerNameNo = selectedLastRow.CustomerNameNo
+				console.log("customerNameNo", customerNameNo)
+				selection = rows.filter(x => x.CustomerNameNo === customerNameNo).map((x, index) => x.id)
+				// selection = rows.filter(x => x.CustomerNameNo === customerNameNo).map((x, index) => index)
+				console.log("selection", selection)
+			}
+		}
+		this.setState({ selection })
+		this.props.setActivePaymentRows(selection)
+	}
+	addSelection = (rowId, onToggle) => {
+		const { selection } = this.state
+		if (selection.length === 0) {
+			onToggle()
+
+			this.setState({ selection: [rowId] })
+			this.props.setActivePaymentRows([rowId])
+
+		} else {
+			onToggle()
+			this.setState({ selection: [...selection, rowId] })
+			this.props.setActivePaymentRows([...selection, rowId])
+		}
+
+	}
 
 	TableRow = ({ tableRow, selected, onToggle, ...restProps }) => {
 
@@ -720,11 +740,18 @@ class PaymentsListContent extends Component {
 					// }
 					// this.changeSelection(selection)
 					console.log("tableRow", tableRow)
-					if (!selected) {
-						this.changeSelection([tableRow.rowId])
-					} else {
-						this.changeSelection([])
-					}
+
+					onToggle();
+
+					// if (selected) {
+					// 	// this.changeSelection([])
+					// 	onToggle();
+					// } else {
+					// 	// this.changeSelection([tableRow.rowId])
+					// 	// onToggle();
+					// 	onToggle();
+					// 	// this.addSelection(tableRow.rowId, onToggle)
+					// }
 				}
 				prevent = false;
 			}, delay);
