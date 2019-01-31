@@ -493,7 +493,7 @@ class paymentsHistoryListContent extends Component {
 				this.props.regionId,
 				this.props.getPaymentsParam.fromDate,
 				this.props.getPaymentsParam.toDate,
-				this.props.searchText
+				this.props.searchText,
 				this.props.filter.paymentStatus);
 		}
 	}
