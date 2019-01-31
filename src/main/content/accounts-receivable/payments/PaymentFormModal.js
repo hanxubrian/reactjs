@@ -735,7 +735,7 @@ class PaymentFormModal extends React.Component {
 				errorMsg: "Payment type not selected",
 				overpayment: this.getOverpaymentAmount(rows, paymentAmount),
 			})
-		} else if (this.state.ReferenceNo <= 0) {
+		} else if (!this.state.ReferenceNo || !this.state.ReferenceNo.toString().trim()) {
 			this.setState({
 				errorMsg: "ReferenceNo is invalid",
 				overpayment: this.getOverpaymentAmount(rows, paymentAmount),
@@ -852,7 +852,7 @@ class PaymentFormModal extends React.Component {
 
 									</TextField>
 
-									<TextField sm={3} type="number" margin="dense" id="ReferenceNo" label="Reference No." variant="outlined"
+									<TextField sm={3} margin="dense" id="ReferenceNo" label="Reference No." variant="outlined"
 										autoFocus
 										onChange={this.handleChange('ReferenceNo')}
 										value={this.state.ReferenceNo}
