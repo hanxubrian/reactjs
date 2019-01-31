@@ -306,11 +306,16 @@ class TransactionsDxGridLists extends Component {
         }
         else if (props.column.name.includes('TrxClass')) {
             let _typeId = props.row.TrxClass;
-            let type1 = this.props.transactionTypeList.filter(f=>f.TrxClass===props.row.TrxClass);
-            let type = this.props.transactionTypeList.filter(f=>f.TrxClass===props.row.TrxClass);
-
             let trxTypeName = _typeId;
-            if (type.length) trxTypeName = type[0].Name;
+            let type1 = this.props.transactionTypeList.filter(f=>f._id===props.row.TrxClass);
+            if(type1.length>0)
+                trxTypeName = type1[0].Name;
+
+            let type;
+            if(type1.length===0) {
+                type = this.props.transactionTypeList.filter(f => f.TrxClass === props.row.TrxClass);
+                if (type.length) trxTypeName = type[0].Name;
+            }
             // if (type.length===0) trxTypeName = type[0].Name;
 
             return (
