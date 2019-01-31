@@ -825,10 +825,7 @@ class TransactionEditForm extends Component {
                                             }}
                                         >
                                             <MenuItem value="01/2019">01/2019</MenuItem>
-                                            <MenuItem value="12/2018">12/2018</MenuItem>
-                                            <MenuItem value="11/2018">11/2018</MenuItem>
-                                            <MenuItem value="10/2018">10/2018</MenuItem>
-                                            <MenuItem value="09/2018">09/2018</MenuItem>
+                                            <MenuItem value="02/2019">02/2019</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>
@@ -1036,7 +1033,7 @@ class TransactionEditForm extends Component {
                                 <TextField
                                     id="payments"
                                     name="payments"
-                                    label="Number of Payments"
+                                    label="# of Payments"
                                     className={classes.textField}
                                     value={this.state.payments}
                                     onChange={this.handleChange1('payments')}

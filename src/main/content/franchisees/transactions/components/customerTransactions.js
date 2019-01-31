@@ -76,8 +76,8 @@ const styles = theme => ({
         },
         '& .credit':{
             '& td': {
-                // color: 'black!important',
-                // fontWeight: 700
+                color: '#0000cc!important',
+                fontWeight: 700
             }
         }
     },
@@ -152,7 +152,7 @@ const DateTypeProvider = props => (
 );
 
 
-class TransactionsDxGridLists extends Component {
+class CustomerTransactions extends Component {
     state = {
         s: '',
         temp: [],
@@ -171,7 +171,6 @@ class TransactionsDxGridLists extends Component {
     constructor(props) {
         super(props);
 
-        this.fetchData = this.fetchData.bind(this);
         this.escFunction = this.escFunction.bind(this);
         this.changeCurrentPage = currentPage => this.setState({currentPage});
         this.changePageSize = pageSize => this.setState({pageSize});
@@ -190,7 +189,7 @@ class TransactionsDxGridLists extends Component {
     }
 
     componentDidMount() {
-        document.addEventListener("keydown", this.escFunction, false);
+        this.props.getReport();
 
     }
 
@@ -199,7 +198,7 @@ class TransactionsDxGridLists extends Component {
     }
 
     componentWillUnmount() {
-        document.removeEventListener("keydown", this.escFunction, false);
+
     }
 
     escFunction(event) {
@@ -220,13 +219,6 @@ class TransactionsDxGridLists extends Component {
             {data: temp,
                 expandedGroups: [...new Set(temp.map(x => x.FranNameNo))]},
         );
-    }
-
-    fetchData(state, instance) {
-        this.setState({
-            pageSize: state.pageSize,
-            page: state.page,
-        });
     }
 
     handleClose = () => {
@@ -318,14 +310,14 @@ class TransactionsDxGridLists extends Component {
             rowClass = 'credit';
 
         return (
-        <Table.Row className = {classNames(rowClass)}
-            {...restProps}
-            // eslint-disable-next-line no-alert
-            onClick={() => this.props.openEditTransactionForm(this.props.regionId, row)}
-            style={{
-                cursor: 'pointer',
-            }}
-        />
+            <Table.Row className = {classNames(rowClass)}
+                       {...restProps}
+                // eslint-disable-next-line no-alert
+                       onClick={() => this.props.openEditTransactionForm(this.props.regionId, row)}
+                       style={{
+                           cursor: 'pointer',
+                       }}
+            />
         )
     };
 
@@ -448,17 +440,20 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         toggleFilterPanel: Actions.toggleTransactionFilterPanel,
         removeTransaction: Actions.removeTransaction,
-        openEditTransactionForm: Actions.openEditTransactionForm
+        openEditTransactionForm: Actions.openEditTransactionForm,
+        getReport: Actions.getReport,
     }, dispatch);
 }
 
-function mapStateToProps({transactions, auth}) {
+function mapStateToProps({transactions, auth, franchiseeReports}) {
     return {
         regionId: auth.login.defaultRegionId,
         transactions: transactions.transactionsDB,
         transactionTypeList: transactions.transactionTypeList,
+        franchiseeReport: franchiseeReports.franchiseeReport,
+        transactionDetail: transactions.transactionDetail,
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(TransactionsDxGridLists)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(CustomerTransactions)));
 
