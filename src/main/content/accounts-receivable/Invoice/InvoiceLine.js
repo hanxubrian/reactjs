@@ -607,7 +607,7 @@ class InvoiceLineTable extends React.Component {
 
         let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList;
         let suggestions =  franchisees.filter(f => regex.test(f.Number) || regex.test(f.Name));
-        let suggestionsExcludedInActive = suggestions.filter(c=>c.StatusName!=='Inactive');
+        let suggestionsExcludedInActive = suggestions.filter(c=>c.StatusName==='Active');
         return suggestionsExcludedInActive;
     };
 
