@@ -20,8 +20,8 @@ class paymentsService {
 	getAccountReceivablePaymentsList = (RegionId, FromDate, ToDate, SearchText, Status) => {
 		const data = {
 			"RegionId": RegionId,
-			"FromDate": FromDate,
-			"ToDate": ToDate,
+			"FromDate": "01/31/2017",
+			"ToDate": "12/31/2019",
 			"SearchText": SearchText,
 			"Status": Status,
 		}

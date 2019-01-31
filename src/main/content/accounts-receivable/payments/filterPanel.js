@@ -4,7 +4,7 @@ import { Grid, Paper, withStyles } from '@material-ui/core';
 //Material UI core
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { MenuItem, FormControl, Select, RadioGroup, Radio } from '@material-ui/core';
+import { MenuItem, FormControl, Select, RadioGroup, Radio, Divider } from '@material-ui/core';
 import { FuseThemes } from '@fuse';
 
 import 'date-fns'
@@ -136,9 +136,9 @@ class FilterPanel extends Component {
 
 	handleChangeChecked = name => event => {
 		const value = event.target.checked
-		this.setState({ [name]:  value});
+		this.setState({ [name]: value });
 
-		let statusesAll = ["Open","Paid"]
+		let statusesAll = ["Open", "Paid"]
 		let statusesOpen = ["Open"]
 		let statusesPaid = ["Paid"]
 		let statusesNone = []
@@ -394,7 +394,7 @@ class FilterPanel extends Component {
 						</div>
 					</MuiPickersUtilsProvider>
 				)}
-
+				<Divider variant="middle" className="mt-12 mb-6" />
 				<div style={{ marginTop: 20, display: 'flex', flexDirection: 'column' }}>
 					<h3>View Mode</h3>
 					<FormControlLabel
@@ -417,6 +417,9 @@ class FilterPanel extends Component {
 						<FormControlLabel value="PaymentHistory" control={<Radio onChange={this.handleChange('viewMode')} />} label="Payment History" />
 					</RadioGroup>
 				</div>
+
+				<Divider variant="middle" className="mt-12 mb-6" />
+
 				<div style={{ marginTop: 20, display: 'flex', flexDirection: 'column' }}>
 					<h3>Type</h3>
 					{[
@@ -442,7 +445,7 @@ class FilterPanel extends Component {
 							/>
 						)
 					})}
-					<br></br>
+					<Divider variant="middle" className="mt-12 mb-6" />
 					<h3>Payment Status</h3>
 					{/* <FormControlLabel
 						control={
