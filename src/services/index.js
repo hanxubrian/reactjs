@@ -8,7 +8,7 @@ import _invoiceService from './invoice/invoiceServices';
 import _customersService from './customers/CustomersService';
 import _contactService from './customers/ContactService';
 import _chatService from './chat/ChatService';
-import _paymentService from './payment/paymentListService';
+import _paymentService from './payment/paymentService';
 import _dashboardService from './dashboard/dashboardService';
 // import _invoicePaymentService from './invoice/paymentsService'
 import _homepageService from './home/HomepageService';
