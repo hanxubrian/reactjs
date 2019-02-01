@@ -384,9 +384,9 @@ class Franchisees extends Component {
     constructor(props){
         super(props);
 
-        if(!props.bLoadedFranchisees) {
+        // if(!props.bLoadedFranchisees) {
             props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
-        }
+        // }
         this.fetchData = this.fetchData.bind(this);
         this.escFunction = this.escFunction.bind(this);
     }

@@ -348,5 +348,6 @@ const franchisees = function(state = initialState, action) {
 const persistConfig = {
     key: 'franchise',
     storage: storage,
+    blacklist: ['franchiseesDB']
 };
 export default persistReducer(persistConfig, franchisees);
