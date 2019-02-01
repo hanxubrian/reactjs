@@ -173,6 +173,9 @@ const styles = theme => ({
     rightIcon: {
         marginLeft: theme.spacing.unit,
     },
+    leftIcon: {
+        marginRight: theme.spacing.unit,
+    },
     btntop: {
         marginRight: 20,
         '& span': {
@@ -472,7 +475,7 @@ class InvoiceApp extends Component {
                     header={
                         <div className="flex w-full items-center">
                             {(this.state.temp && !invoiceForm.props.open) && (
-                                <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
+                                <div className="flex flex-row flex-1  p-8 sm:p-12 relative justify-between ">
                                     <div className="flex flex-row flex-1 justify-between">
                                         <div className="flex flex-shrink items-center">
                                             <div className="flex items-center">
@@ -498,7 +501,7 @@ class InvoiceApp extends Component {
                             )}
                             {(this.state.temp && invoiceForm.props.open) && (
                                 <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
-                                    <div className="flex flex-row flex-1 justify-between">
+                                    <div className="flex flex-row flex-1 justify-between items-center">
                                         <div className="flex flex-shrink items-center">
                                             <div className="flex items-center">
                                                 <FuseAnimate animation="transition.expandIn" delay={300}>
@@ -522,6 +525,46 @@ class InvoiceApp extends Component {
 
                                             </div>
                                         </div>
+                                        {this.props.invoiceForm.type === 'edit' && this.props.invoiceDetail!==null && this.props.invoiceDetail.Data.Inv_no!=='PENDING' &&  (
+                                            <div>
+                                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                    <Button variant="contained" color="primary"
+                                                            className={classNames(classes.btntop) }
+                                                            // onClick={()=>this.onNewInvoice()}
+                                                    >
+                                                        <Icon className={classes.leftIcon}>attach_money</Icon>
+                                                        Pay this Invoice
+                                                    </Button>
+                                                </FuseAnimate>
+                                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                    <Button variant="contained" color="primary"
+                                                            className={classNames(classes.btntop) }
+                                                            // onClick={()=>this.onNewInvoice()}
+                                                    >
+                                                        <Icon className={classes.leftIcon}>credit_card</Icon>
+                                                        Apply Credit
+                                                    </Button>
+                                                </FuseAnimate>
+                                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                    <Button variant="contained" color="primary"
+                                                            className={classNames(classes.btntop) }
+                                                            // onClick={()=>this.onNewInvoice()}
+                                                    >
+                                                        <Icon className={classes.leftIcon}>print</Icon>
+                                                        Print
+                                                    </Button>
+                                                </FuseAnimate>
+                                                <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                    <Button variant="contained" color="primary"
+                                                            className={classNames(classes.btntop) }
+                                                            // onClick={()=>this.onNewInvoice()}
+                                                    >
+                                                        <Icon className={classes.leftIcon}>email</Icon>
+                                                        Email
+                                                    </Button>
+                                                </FuseAnimate>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             )}

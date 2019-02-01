@@ -470,7 +470,6 @@ class InvoiceForm extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.props.invoiceForm.data!==null && JSON.stringify(this.props.invoiceForm.data)!== JSON.stringify(prevProps.invoiceForm.data)) {
-            console.log('changed');
             if(this.state.bLoadingDetail)
                 this.setState({ bShowInvoiceCloseBox: true });
 
@@ -574,7 +573,7 @@ class InvoiceForm extends Component {
         //
         lines.forEach(line=>{
             let item = {
-                Inv_No: inv_no,
+                // Inv_No: inv_no,
                 ServiceTypeListId: 0,
                 Description: line.description,
                 Billing: line.billing.value,
@@ -621,7 +620,7 @@ class InvoiceForm extends Component {
 
         if(this.props.invoiceForm.type === 'new') {
             result = {
-                Inv_No: inv_no,
+                // Inv_No: inv_no,
                 Apply_to: 'Apply To',
                 CustomerId: this.state.selectedCustomer.CustomerId,
                 CustomerNo: this.state.selectedCustomer.CustomerNo,
