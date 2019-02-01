@@ -465,17 +465,20 @@ class UsersList extends Component {
 
 
     componentWillMount() {
-        //this.timer = null;
-        let obj = this.props.contacts;
-        this.setState({
-            rows: Object.values(obj)
-        });
-        //console.log("componentWillMount",Object.values(obj));
+        this.props.getContacts();
     }
     componentWillUnmount() {
         console.log("componentWillUnmount");
     }
 
+    componentWillReceiveProps(nextProps, nextContext) {
+        if(nextProps.contacts !== this.props.contacts){
+            let obj = nextProps.contacts;
+            this.setState({
+                rows: Object.values(obj)
+            });
+        }
+    }
 
     handleChange = prop => event => {
         console.log("handleChange");
