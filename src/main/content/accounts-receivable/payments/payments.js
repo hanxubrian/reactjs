@@ -530,8 +530,8 @@ class Payments extends Component {
 			})
 		} else {
 			this.props.openPaymentDialog({
-				open: true,
-				paymentType: "Check",
+				open: "CreditCard",
+				paymentType: "CreditCard",
 				paymentAmount: 0,
 			})
 		}
@@ -579,6 +579,11 @@ class Payments extends Component {
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
+											<Tooltip title="Expand/Collapse">
+												<IconButton variant="contained">
+													<Icon>format_line_spacing</Icon>
+												</IconButton>
+											</Tooltip>
 											<Tooltip title="Refresh">
 												<IconButton variant="contained" onClick={this.forceFetch}>
 													<Icon>refresh</Icon>
@@ -691,7 +696,7 @@ class Payments extends Component {
 								</Dialog>
 
 								<PaymentFormModal />
-								{/* <PaymentFormModalCredit /> */}
+								<PaymentFormModalCredit />
 
 								<PaymentSearchBar />
 

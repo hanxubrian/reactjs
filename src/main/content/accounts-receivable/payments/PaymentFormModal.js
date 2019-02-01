@@ -816,7 +816,7 @@ class PaymentFormModal extends React.Component {
 		return (
 			<div>
 				<Dialog
-					open={this.state.paymentDlgPayloads.open}
+					open={this.state.paymentDlgPayloads.open === true}
 					fullWidth={true}
 					maxWidth="lg"
 
@@ -911,8 +911,9 @@ class PaymentFormModal extends React.Component {
 										id="PaymentAmount"
 										value={this.state.PaymentAmount}
 										InputProps={{
-											readOnly: this.props.paymentDlgPayloads.paymentAmount !== 0
+											readOnly: this.props.paymentDlgPayloads.paymentAmount !== 0,
 										}}
+										inputProps={{ min: 0 }}
 										onChange={this.handleChange('PaymentAmount')}
 										label="Payment Amount" sm={2}
 									/>

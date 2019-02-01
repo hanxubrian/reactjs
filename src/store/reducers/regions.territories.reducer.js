@@ -27,6 +27,7 @@ const territories = function(state = initialState, action) {
 
 const persistConfig = {
     key: 'territories',
-    storage: storage,
+	storage: storage,
+	blacklist: ['creditInvoiceList']
 };
 export default persistReducer(persistConfig, territories);

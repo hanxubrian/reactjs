@@ -646,10 +646,12 @@ class PaymentsListContent extends Component {
 	}
 
 	componentWillMount() {
+		const rows = this.getRowData(this.props.payments);
+
 		this.setState({
 			"paymentsParam": this.props.getPaymentsParam,
-			"rows": this.getRowData(this.props.payments),
-			expandedGroups: [...new Set(this.getRowData(this.props.payments).map(x => x.CustomerNameNo))],
+			rows,
+			expandedGroups: [...new Set(rows.map(x => x.CustomerNameNo))],
 		});
 		if (this.props.bLoadedPayments === false) {
 			this.props.getAccountReceivablePaymentsList(
@@ -885,19 +887,20 @@ class PaymentsListContent extends Component {
 			console.log("restProps", tableRow);
 			this.props.setActivePaymentRows([tableRow.rowId]);
 			console.log("handleDoubleClick tableRow", tableRow)
-			if (tableRow.row.InvoiceBalance > 0) {
-				this.props.openPaymentDialog({
-					open: true,
-					paymentType: "Check",
-					paymentAmount: 0,
-				})
-			} else {
-				this.props.showErrorDialog({
-					show: true,
-					title: "Warning",
-					message: "A payment can't be applied to an invoice with 0 balance.",
-				})
-			}
+			// if (tableRow.row.InvoiceBalance > 0) {
+			// 	this.props.openPaymentDialog({
+			// 		open: true,
+			// 		paymentType: "Check",
+			// 		paymentAmount: 0,
+			// 	})
+			// } else {
+			// 	this.props.showErrorDialog({
+			// 		show: true,
+			// 		title: "Warning",
+			// 		message: "A payment can't be applied to an invoice with 0 balance.",
+			// 	})
+			// }
+			this.showPaymentFormModal(true, "Check", 0, [tableRow.rowId])
 		}
 		return (
 			<Table.Row
@@ -916,6 +919,45 @@ class PaymentsListContent extends Component {
 			/>
 		);
 	};
+
+	showPaymentFormModal = (open = true, paymentType = "Check", paymentAmount = 0, activeRows = this.props.activePaymentRows) => {
+		console.log("this.props.activePaymentRows.length", activeRows)
+		const payments = this.getRowData(this.props.payments)
+		const invoiceBalances = activeRows.map(x => payments[x].InvoiceBalance)
+
+		if (activeRows.length > 100) {
+			this.props.showErrorDialog({
+				show: true,
+				title: "Warning",
+				message: "Too many rows selected. Please try to reduce them.",
+			})
+		} else if (invoiceBalances.indexOf(0) > -1) {
+			this.props.showErrorDialog({
+				show: true,
+				title: "Warning",
+				message: "A payment can't be applied to an invoice with 0 balance.",
+			})
+		} else if (activeRows.length < 1) {
+			this.props.showErrorDialog({
+				show: true,
+				title: "Warning",
+				message: "Nothing selected for invoices. Please choose one at least.",
+			})
+		} else if (this.props.viewMode !== "Invoice") {
+			this.props.showErrorDialog({
+				show: true,
+				title: "Warning",
+				message: "Please try it in Invoice view mode..",
+			})
+		} else {
+			this.props.openPaymentDialog({
+				open: true,
+				paymentType: paymentType,
+				paymentAmount: paymentAmount,
+			})
+		}
+	}
+
 	handleCloseNoSelectionAlertDialog = () => {
 		this.setState({
 			showNoSelectionAlertDialog: false
@@ -937,9 +979,9 @@ class PaymentsListContent extends Component {
 				{overpayment > 0 &&
 					(
 						<span style={{ float: "unset" }}>
-							<span style={{ color: "#03a9f4" }} className="ml-24"><strong>OverPayment: $ {overpayment}</strong></span>
+							<span style={{ color: "#03a9f4" }} className="ml-24"><strong>OverPayment: $ {overpayment.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
 
-							<Button variant="contained" color="primary" onClick={(ev) => this.onClickGroupCellApplyOverpayment(ev, row.value, overpayment)} className="ml-24 pr-24 pl-24"><Icon>autorenew</Icon>Apply</Button>
+							<Button variant="contained" color="primary" onClick={(ev) => this.onClickGroupCellApplyOverpayment(ev, row.value, overpayment)} className="ml-24 pr-24"><Icon>autorenew</Icon> Apply</Button>
 							{/* <Button onClick={(ev) => this.onClickGroupCellApplyCredit(ev, row.value)} variant="contained" color="primary" className="ml-24 pr-24 pl-24">Apply Credit</Button> */}
 						</span>
 					)
@@ -981,11 +1023,7 @@ class PaymentsListContent extends Component {
 
 	onClickGroupCellApplyOverpayment = (ev, groupTitle, overpayment) => {
 		ev.stopPropagation();
-		this.props.openPaymentDialog({
-			open: true,
-			paymentType: "CreditFromOverpayment",
-			paymentAmount: overpayment,
-		})
+		this.showPaymentFormModal(true, "CreditFromOverpayment", overpayment)
 	}
 	onClickGroupCellApplyCredit = (ev, groupTitle) => {
 		ev.stopPropagation();
@@ -1175,6 +1213,7 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 
 		filter: accountReceivablePayments.filter,
 		isCustomerNameNoGrouping: accountReceivablePayments.isCustomerNameNoGrouping,
+		viewMode: accountReceivablePayments.viewMode,
 
 	}
 }
