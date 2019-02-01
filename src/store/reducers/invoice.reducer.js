@@ -128,7 +128,7 @@ const invoices = function(state = initialState, action) {
         {
             return {
                 ...state,
-                invoiceDetail: action.payload,
+                invoiceDetail: action.payload.data,
                 bLoadedInvoices: true,
                 bInvoiceStart: false,
                 invoiceDetailStatus: true,
