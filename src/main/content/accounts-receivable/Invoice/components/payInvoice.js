@@ -17,10 +17,7 @@ import classNames from 'classnames';
 import moment from 'moment';
 
 import {
-    escapeRegexCharacters,
-    NumberFormatCustom1,
     NumberFormatCustom2,
-    NumberFormatCustomDeduction
 } from "../../../../../services/utils";
 
 
@@ -45,12 +42,12 @@ const styles = theme => ({
         margin: theme.spacing.unit,
     },
     textField: {
-        minWidth: 200
-    }
+        minWidth: 200,
+    },
+    input: {
+        padding: '12px 14px'
+    },
 });
-
-const CurrencyFormatter = ({ value }) => (<span>$ {parseFloat(`0${value}`).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
-const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/, '$2/$3/$1');
 
 const BlueDialogTitle = withStyles(theme => ({
     root: {
@@ -235,7 +232,7 @@ class PayInvoiceFormModal extends React.Component {
                 <Dialog
                     open={this.props.bOpenPaymentInvoiceForm}
                     fullWidth={true}
-                    maxWidth="lg"
+                    maxWidth="sm"
 
                     onClose={()=>this.props.closePaymentInvoiceFormDialog()}
                     scroll="paper"
@@ -251,18 +248,20 @@ class PayInvoiceFormModal extends React.Component {
                         <div className={classNames("flex flex-col")}>
                             <div className={classNames("flex flex-col")}>
                                 {customer!==null && (
-                                    <div className={classNames("flex")}>
+                                    <div className="flex flex-row flex-1 w-full">
                                         <TextField type="text" value={customer.CustomerName} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">person_outline</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerName" label="CustomerName" />
                                         <TextField type="text" value={customer.CustomerNo} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerNumber" label="CustomerNumber" />
                                     </div>
 
                                 )}
-                                <div className="flex flex-1 justify-between" >
-
-                                    <TextField select margin="dense" id="PaymentType" label="Payment Type" variant="outlined"
-                                               className={classNames(classes.textField, "pr-6")}
-                                               value={this.state.PaymentType}
+                                <div className="flex flex-1 justify-between w-full" >
+                                    <TextField select margin="normal" id="PaymentType" label="Payment Type" variant="outlined"
+                                               className={classNames(classes.textField, "mr-12")}
+                                               value={this.state.PaymentType} fullWidth autoFocus
                                                onChange={this.handleChange('PaymentType')}
+                                               InputProps={{
+                                                   classes: {input: classes.input}
+                                               }}
                                     >
                                         <MenuItem value={"Check"}>Check</MenuItem>
                                         <MenuItem value={"CreditCard"}>Credit Card</MenuItem>
@@ -270,57 +269,63 @@ class PayInvoiceFormModal extends React.Component {
                                         <MenuItem value={"Lockbox"}>Lockbox</MenuItem>
                                         <MenuItem value={"CreditFromOverpayment"}>Credit from Overpayment</MenuItem>
                                     </TextField>
-
-                                    <TextField sm={3} margin="dense" id="ReferenceNo" label="Reference No." variant="outlined"
-                                               autoFocus
-                                               onChange={this.handleChange('ReferenceNo')}
-                                               value={this.state.ReferenceNo}
-                                               className={classNames(classes.textField, "pr-6")}
+                                    <TextField  margin="normal" id="ReferenceNo" label="Reference No." variant="outlined"
+                                                fullWidth
+                                                onChange={this.handleChange('ReferenceNo')}
+                                                value={this.state.ReferenceNo}
+                                                className={classNames(classes.textField, "ml-12")}
+                                                InputProps={{
+                                                    classes: {input: classes.input}
+                                                }}
                                     />
-
-                                    <TextField sm={1}
+                                </div>
+                                <div className="flex flex-1 justify-between w-full" >
+                                    <TextField
                                                type="date"
                                                id="PaymentDate"
                                                label="Payment Date"
-                                               className={classNames(classes.textField, "pr-6")}
+                                               className={classNames(classes.textField, "mr-12")}
                                                InputLabelProps={{
                                                    shrink: true
                                                }}
+                                               InputProps={{
+                                                   classes: {input: classes.input}
+                                               }}
                                                value={this.state.PaymentDate}
                                                onChange={this.handleChange('PaymentDate')}
-                                               margin="dense"
+                                               margin="normal" fullWidth
                                                variant="outlined"
                                     />
-                                    <TextField sm={2}
-                                        id="PaymentAmount"
-                                        name="PaymentAmount"
-                                        label="Payment Amount"
-                                        className={classNames(classes.textField, 'mr-12')}
-                                        value={this.state.PaymentAmount}
+                                    <TextField
+                                               id="PaymentAmount"
+                                               name="PaymentAmount"
+                                               label="Payment Amount"
+                                               className={classNames(classes.textField, 'ml-12')}
+                                               value={this.state.PaymentAmount}
                                                onChange={this.handleChange('PaymentAmount')}
-                                        margin="dense"
-                                        variant="outlined"
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                        InputProps={{
-                                            inputComponent: NumberFormatCustom2,
-                                            classes: {
-                                                input: classNames(classes.input, "text-right")
-                                            },
-                                        }}
+                                               margin="normal" fullWidth
+                                               variant="outlined"
+                                               InputLabelProps = {{
+                                                   shrink: true,
+                                                   classes: {outlined: classes.label}
+                                               }}
+                                               InputProps={{
+                                                   inputComponent: NumberFormatCustom2,
+                                                   classes: {
+                                                       input: classNames(classes.input, "text-right")
+                                                   },
+                                               }}
                                     />
-
                                 </div>
 
-                                <TextField margin="dense" variant="outlined" fullWidth id="PaymentNote" label="Notes" multiline rows="2" rowsMax="2"
-                                           value={this.state.PaymentNote}
-                                           onChange={this.handleChange('PaymentNote')}
-                                />
                             </div>
-                            <div className={classNames(classes.root, "flex flex-col flex-1 mt-12")}>
-                            </div>
+
+                            <TextField margin="dense" variant="outlined" fullWidth id="PaymentNote" label="Notes" multiline rows="2" rowsMax="2"
+                                       value={this.state.PaymentNote}
+                                       onChange={this.handleChange('PaymentNote')}
+                            />
+                        </div>
+                        <div className={classNames(classes.root, "flex flex-col flex-1 mt-12")}>
                         </div>
                     </DialogContent>
 
