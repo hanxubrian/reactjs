@@ -103,7 +103,15 @@ class PayInvoiceFormModal extends React.Component {
     componentDidMount() {
     }
 
-    UNSAFE_componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.invoiceForm.data!==null) {
+            let lines = nextProps.invoiceForm.data.line;
+            let s = 0;
+            lines.forEach(line=>{
+                s+=parseFloat(line.total);
+            });
+            this.setState({PaymentAmount: s});
+        }
     }
 
     handleClose = () => {
