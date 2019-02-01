@@ -81,7 +81,8 @@ export function getInvoiceDetail(InvoiceId,RegionId) {
         });
        (async () => {
             let res = await invoiceService.getInvoiceDetailList(InvoiceId,RegionId);
-            if (res.IsSuccess) {
+            console.log('eeeee', res.data);
+            if (res.data.IsSuccess) {
                 dispatch({
                     type: GET_INVOICE_DETAIL,
                     payload: res.data

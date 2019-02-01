@@ -76,6 +76,7 @@ class invoiceService {
             axios_instance.get(`${BASE_MONGO_API_URL}/v1/accountsreceivable/Invoice/${InvoiceId}`,{
                 params: {RegionId: RegionId}})
                 .then( res => {
+                    console.log('res=', res);
 
                     if(res.status===200) {
                         resolve({data:res.data,success:true});
