@@ -735,24 +735,24 @@ class MainToolbar extends Component {
 
                     )}
                 </div>
-                {/*{ this.state.adminVersionStatus && this.state.adminMSG.version !== null && (*/}
-                    {/*<div style={{position:"absolute"}}>*/}
-                    {/*<VersionUpgradeDialog*/}
-                        {/*show={this.state.adminVersionStatus}*/}
-                        {/*version={this.state.adminMSG.version}*/}
-                        {/*note ={this.state.adminMSG.note}*/}
-                    {/*/>*/}
-                    {/*</div>*/}
-                {/*)}*/}
-                { true && (
+                { this.state.adminVersionStatus && this.state.adminMSG.version !== null && (
                     <div style={{position:"absolute"}}>
                     <VersionUpgradeDialog
-                        show={true}
-                        version={"1.0.2"}
-                        note ={"this is new version note this is new version notethis is new version notethis is new version note"}
+                        show={this.state.adminVersionStatus}
+                        version={this.state.adminMSG.version}
+                        note ={this.state.adminMSG.note}
                     />
                     </div>
                 )}
+                {/*{ true && (*/}
+                    {/*<div style={{position:"absolute"}}>*/}
+                    {/*<VersionUpgradeDialog*/}
+                        {/*show={true}*/}
+                        {/*version={"1.0.2"}*/}
+                        {/*note ={"this is new version note this is new version notethis is new version notethis is new version note"}*/}
+                    {/*/>*/}
+                    {/*</div>*/}
+                {/*)}*/}
 
                 {1 && (
 
