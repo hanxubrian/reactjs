@@ -1,6 +1,6 @@
 import {territoriesService} from "services";
 
-export const GET_PAYMENTS_DIALOG_INVOICE_LIST = "[A.R.Payments] GETS ALL";
+export const GET_PAYMENTS_DIALOG_INVOICE_LIST = "[A.R.Payments] GET_PAYMENTS_DIALOG_INVOICE_LIST";
 
 export function getPaymentsDialogInvoiceList(regionId,invoiceId) {
     return (dispatch) => {

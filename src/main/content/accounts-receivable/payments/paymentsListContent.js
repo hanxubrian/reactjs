@@ -653,15 +653,15 @@ class PaymentsListContent extends Component {
 			rows,
 			expandedGroups: [...new Set(rows.map(x => x.CustomerNameNo))],
 		});
-		if (this.props.bLoadedPayments === false) {
-			this.props.getAccountReceivablePaymentsList(
-				this.props.regionId,
-				this.props.getPaymentsParam.fromDate,
-				this.props.getPaymentsParam.toDate,
-				this.props.getPaymentsParam.searchText,
-				this.props.filter.paymentStatus,
-			);
-		}
+		// if (this.props.bLoadedPayments === false) {
+		// 	this.props.getAccountReceivablePaymentsList(
+		// 		this.props.regionId,
+		// 		this.props.getPaymentsParam.fromDate,
+		// 		this.props.getPaymentsParam.toDate,
+		// 		this.props.getPaymentsParam.searchText,
+		// 		this.props.filter.paymentStatus,
+		// 	);
+		// }
 
 		this.setState({
 			isCustomerNameNoGrouping: this.props.isCustomerNameNoGrouping
