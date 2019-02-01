@@ -514,10 +514,10 @@ class TransactionEditForm extends Component {
                     this.setState({TransactionPeriod: period});
 
 
-                    let trxType = this.props.transactionTypeList.filter(f=>f._id === trxDetail.Trxtype);
+                    let trxType = this.props.transactionTypeList.filter(f=>f._id === trxDetail.TrxClass);
 
                     if(trxType.length)
-                        this.setState({transactionClass: {value: trxType[0]._id, label: trxType[0].Name}});
+                        this.setState({TrxChargeClass: {value: trxType[0]._id, label: trxType[0].Name}});
 
                     this.setState({transactionFrequency: trxDetail.TrxFrequency});
                     this.setState({payments: parseInt(trxDetail.NumberOfPayments)});
