@@ -78,22 +78,23 @@ const BlueDialogTitle = withStyles(theme => ({
         </DialogTitle>
     );
 });
+const initialState = {
+    PaymentType: "Check",
+    ReferenceNo: "",
+    PaymentDate: moment().format('YYYY-MM-DD'),
+    PaymentNote: "",
+    PaymentAmount: 0,
+    overpayment: 0,
+    errorMsg: "",
+};
 
 class PayInvoiceFormModal extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            customerName: "",
-            customerNumber: "",
-
-            PaymentType: "Check",
-            ReferenceNo: "",
-            PaymentDate: moment().format('YYYY-MM-DD'),
-            PaymentNote: "",
-            PaymentAmount: 0,
-            overpayment: 0,
-            errorMsg: "",
+            ...initialState,
+            invoiceAmount: 0.0
         }
     }
 
@@ -111,40 +112,31 @@ class PayInvoiceFormModal extends React.Component {
                 s+=parseFloat(line.total);
             });
             this.setState({PaymentAmount: s});
+            this.setState({invoiceAmount: s});
         }
     }
 
     handleClose = () => {
         this.setState({
-            PaymentType: "Check",
-            ReferenceNo: "",
-            PaymentDate: new Date().toISOString().substr(0, 10),
-            PaymentNote: "",
-            PaymentAmount: 0,
-            overpayment: 0,
-            errorMsg: "",
+            ...initialState
         });
     };
 
     handleCreatePayment = () => {
         if (this.checkValidations()) {
 
-            let PayItems = this.state.rows.map(x => {
-                return {
-                    InvoiceNo: x.InvoiceNo,
-                    Amount: x.PaymentAmount
-                }
-            });
+            let customer = this.props.invoiceForm.customer;
+            let PayItems = [{ InvoiceNo: this.props.invoiceDetail.Data.Inv_no,  Amount: this.state.PaymentAmount}];
 
             this.props.createAccountReceivablePayment(
                 this.props.regionId,
-                this.state.customerNumber,
+                customer.CustomerNo,
 
                 this.state.PaymentType,
                 this.state.ReferenceNo,
                 this.state.PaymentDate,
                 this.state.PaymentNote,
-                this.getOverpaymentAmount(this.state.rows),
+                this.getOverpaymentAmount(),
                 this.state.PaymentAmount,
 
                 PayItems,
@@ -166,44 +158,45 @@ class PayInvoiceFormModal extends React.Component {
         });
     };
 
-    getOverpaymentAmount(rows = this.state.rows, paymentAmount = this.state.PaymentAmount) {
-        let totalPaymentAmount = 0;
-        paymentAmount = parseFloat(`0${paymentAmount}`);
-        rows.forEach(x => {
-            totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
-        });
-        return paymentAmount - totalPaymentAmount;
+    getOverpaymentAmount() {
+        return this.state.PaymentAmount - this.state.invoiceAmount;
     }
 
-    checkValidations(rows = this.state.rows, paymentAmount = this.state.paymentAmount) {
+    checkValidations() {
         if (!this.state.PaymentType) {
             this.setState({
                 errorMsg: "Payment type not selected",
-                overpayment: this.getOverpaymentAmount(rows, paymentAmount),
+                overpayment: this.getOverpaymentAmount(),
             })
-        } else if (!this.state.ReferenceNo || !this.state.ReferenceNo.toString().trim()) {
+        }
+        else if (!this.state.ReferenceNo || !this.state.ReferenceNo.toString().trim()) {
             this.setState({
                 errorMsg: "ReferenceNo is invalid",
-                overpayment: this.getOverpaymentAmount(rows, paymentAmount),
+                overpayment: this.getOverpaymentAmount(),
             })
-        } else if (!this.state.PaymentDate) {
+        }
+        else if (!this.state.PaymentDate) {
             this.setState({
                 errorMsg: "Payment date not selected",
-                overpayment: this.getOverpaymentAmount(rows, paymentAmount),
+                overpayment: this.getOverpaymentAmount(),
             })
-        } else if (this.state.PaymentAmount <= 0) {
+        }
+        else if (this.state.PaymentAmount <= 0) {
             this.setState({
                 errorMsg: "Amount is invalid",
-                overpayment: this.getOverpaymentAmount(rows, paymentAmount),
+                overpayment: this.getOverpaymentAmount(),
             })
 
-        } else if (!this.checkIfAllZeroPaymentsValidation(rows)) {
-            this.setState({ errorMsg: "Neither of payments amount is settled" })
-        } else if (!this.checkIfAPaymentGreaterThanBalanceValidation(rows)) {
-            this.setState({ errorMsg: "One or more Payment Amounts is greater than Invoice Balance" })
-        } else if (!this.checkIfAllPaymentsGreaterThanAmountValidation(rows, paymentAmount)) {
-            this.setState({ errorMsg: "Sum of payments is greater than applied one." })
-        } else {
+        }
+        // else if (!this.checkIfAllZeroPaymentsValidation(rows)) {
+        //     this.setState({ errorMsg: "Neither of payments amount is settled" })
+        // }
+        // else if (!this.checkIfAPaymentGreaterThanBalanceValidation(rows)) {
+        //     this.setState({ errorMsg: "One or more Payment Amounts is greater than Invoice Balance" })
+        // }
+        // else if (!this.checkIfAllPaymentsGreaterThanAmountValidation(rows, paymentAmount)) {
+        //     this.setState({ errorMsg: "Sum of payments is greater than applied one." })
+        else {
             return true
         }
         return false
@@ -342,11 +335,17 @@ class PayInvoiceFormModal extends React.Component {
                             />
                         </div>
                         <div className={classNames(classes.root, "flex flex-col flex-1 mt-12")}>
+                            {this.state.overpayment > 0 &&
+                            <span className="p-12" style={{ background: '#efad49', color: 'black', textAlign: 'right' }}><Icon fontSize={"small"} className="mr-4" style={{ verticalAlign: 'text-bottom' }}>error_outline</Icon><strong>Over Payment: $ {this.state.overpayment.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
+                            }
+                            {this.state.errorMsg &&
+                            <span className="p-12" style={{ background: 'red', color: 'white', textAlign: 'right' }}><Icon fontSize={"small"} className="mr-4" style={{ verticalAlign: 'text-bottom' }}>warning</Icon><strong>Error: {this.state.errorMsg}</strong></span>
+                            }
                         </div>
                     </DialogContent>
 
                     <DialogActions>
-                        <Button variant="contained" onClick={this.handleCreatePayment} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Save</Button>
+                        <Button variant="contained" onClick={()=>this.handleCreatePayment()} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Save</Button>
                     </DialogActions>
                 </Dialog>
             </div>
