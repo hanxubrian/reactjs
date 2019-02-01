@@ -137,11 +137,12 @@ class InvoiceReport extends Component {
 
     }
     componentWillMount(){
-        if(this.props.Detail !=="Faild"){
+        console.log("#################this.props.Detail",this.props.Detail);
+        if(this.props.Detail !=="Failed"){
             this.setState({
-                invoiceDetail:this.props.Detail.Data,
-                Items: this.props.Detail.Data.Items,
-                Region: this.props.Detail.Data.RegionId,
+                invoiceDetail:this.props.Detail,
+                Items: this.props.Detail.Items,
+                Region: this.props.Detail.RegionId,
             });
             if(this.props.Region && this.props.Region !== null){
                 if(this.props.RegionId && this.props.RegionId !== null){
@@ -159,16 +160,16 @@ class InvoiceReport extends Component {
 
     }
     componentDidUpdate(prevProps, prevState,){
-        if(this.props.Detail !=="Faild" &&  this.props.Detail.Data.RegionId && this.props.Detail.Data.RegionId !== null && JSON.stringify(this.props.Detail.Data.RegionId) !== JSON.stringify(prevProps.Detail.Data.RegionId)){
+        if(this.props.Detail !=="Faild" &&  this.props.Detail.RegionId && this.props.Detail.RegionId !== null && JSON.stringify(this.props.Detail.RegionId) !== JSON.stringify(prevProps.Detail.RegionId)){
             this.setState({
-                Region: this.props.Detail.Data.RegionId,
+                Region: this.props.Detail.RegionId,
             });
         }
         if(this.props.Detail !=="Faild" && this.props.Detail && this.props.Detail !== null && JSON.stringify(this.props.Detail) !== JSON.stringify(prevProps.Detail)){
             this.setState({
-                invoiceDetail:this.props.Detail.Data,
-                Items: this.props.Detail.Data.Items,
-                Region: this.props.Detail.Data.RegionId,
+                invoiceDetail:this.props.Detail,
+                Items: this.props.Detail.Items,
+                Region: this.props.Detail.RegionId,
             });
         }
         if(this.props.Detail !=="Faild" && this.props.Region && this.props.Region !== null && JSON.stringify(this.props.Region) !== JSON.stringify(prevProps.Region)){
@@ -857,7 +858,7 @@ class InvoiceReport extends Component {
     }
     else {
 
-            return(<div>fffffffffffffffffffffffffffffffff</div>)
+            return(<div></div>)
         }
     }
 }

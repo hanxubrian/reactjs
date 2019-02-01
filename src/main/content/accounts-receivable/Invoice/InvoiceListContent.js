@@ -380,7 +380,7 @@ class InvoiceListContent extends Component {
                                     filterAll: true,
                                     width: 120,
 
-                                    Cell: row => <Button onClick={(e)=>{this.invoiceReport(e,row.original.InvoiceId,row.original.RegionId)}}>{row.original.InvoiceNo}</Button> ,
+                                    Cell: row => <Button onClick={(e)=>{this.invoiceReport(e,row.original.InvoiceId,this.props.regionId)}}>{row.original.InvoiceNo}</Button> ,
                                     className: classNames(classes.invoiceNo, "flex items-center  justify-center text-12")
                                 },
                                 {
@@ -506,8 +506,8 @@ class InvoiceListContent extends Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                {this.state.invoiceDetail!==null && this.state.invoiceDetail !=="Faild" && (
-                    <InvoiceReport childCall={this.printDocument.bind(this)} ref="child" show={this.state.isOpen} onClose={this.toggleModal} Region={this.props.allRegion} RegionId ={this.props.regionId} Detail={this.state.invoiceDetail} />
+                {this.props.invoiceDetail!==null && this.props.invoiceDetail!==undefined && this.state.invoiceDetail !=="Faild" && this.state.isOpen && (
+                    <InvoiceReport childCall={this.printDocument.bind(this)} ref="child" show={this.state.isOpen} onClose={this.toggleModal} Region={this.props.allRegion} RegionId ={this.props.regionId} Detail={this.props.invoiceDetail} />
                 )}
                 {this.state.isOpen && this.state.invoiceDetail!==null &&(
                 <div className="mb5" style={{zIndex:999999}}>
@@ -541,6 +541,7 @@ function mapDispatchToProps(dispatch)
         getInvoiceDetail: Actions.getInvoiceDetail,
         toggleFilterPanel: Actions.toggleFilterPanel,
         toggleSummaryPanel: Actions.toggleSummaryPanel,
+
     }, dispatch);
 }
 
@@ -555,6 +556,7 @@ function mapStateToProps({invoices, auth})
         filterState: invoices.bOpenedFilterPanel,
         summaryState: invoices.bOpenedSummaryPanel,
         allRegion:auth.login.all_regions,
+
     }
 }
 

@@ -81,15 +81,15 @@ export function getInvoiceDetail(InvoiceId,RegionId) {
         });
        (async () => {
             let res = await invoiceService.getInvoiceDetailList(InvoiceId,RegionId);
-            if (res.success && res.data.IsSuccess) {
+            if (res.success ) {
                 dispatch({
                     type: GET_INVOICE_DETAIL,
-                    payload: res.data
+                    payload: res
                 });
             } else {
                 dispatch({
                     type: GET_INVOICE_DETAIL_FAILD,
-                    payload: "Faild",
+                    payload: "Failed",
                 });
             }
         })();
