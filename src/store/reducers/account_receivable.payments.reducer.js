@@ -31,7 +31,7 @@ const initialState = {
 		message: "",
 	},
 	filter: {
-		paymentStatus: ["Open", "Paid"],
+		paymentStatus: ["Open"],
 	},
 	viewMode: "Invoice",
 	isCustomerNameNoGrouping: true,

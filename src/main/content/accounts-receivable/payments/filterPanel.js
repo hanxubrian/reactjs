@@ -77,7 +77,9 @@ const CUSTOM_DATE = 13;
 const PERIOD = 14;
 
 class FilterPanel extends Component {
-	state = {
+
+	const(props) {
+		this.state = {
 		checkedEbill: true,
 		checkedPrint: true,
 		invoiceStatus: [],
@@ -91,8 +93,8 @@ class FilterPanel extends Component {
 		PaymentStatusPaid: true,
 
 		isCustomerNameNoGrouping: true
-	};
-
+		}
+	}
 	componentDidMount() {
 		this.setState({
 			isCustomerNameNoGrouping: this.props.isCustomerNameNoGrouping
@@ -116,6 +118,12 @@ class FilterPanel extends Component {
 		this.setState({ FromDate: this.props.FromDate });
 		this.setState({ ToDate: this.props.ToDate });
 		this.setState({ invoiceDateOption: this.props.invoiceDateOption });
+
+		this.setState({
+			PaymentStatusOpen: this.props.filter.paymentStatus.indexOf("Open") > -1,
+			PaymentStatusPaid: this.props.filter.paymentStatus.indexOf("Paid") > -1,
+		})
+
 	}
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
@@ -527,6 +535,7 @@ function mapStateToProps({ invoices, fuse, accountReceivablePayments }) {
 
 		viewMode: accountReceivablePayments.viewMode,
 		isCustomerNameNoGrouping: accountReceivablePayments.isCustomerNameNoGrouping,
+		filter: accountReceivablePayments.filter,
 	}
 }
 

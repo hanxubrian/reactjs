@@ -156,7 +156,7 @@ const styles = theme => ({
 		alignItems: 'center',
 		justifyContent: 'center',
 		display: 'flex',
-		opacity: 0.5
+		opacity: 0.7
 	},
 	filterPanelButton: {
 		backgroundColor: theme.palette.secondary.main,
