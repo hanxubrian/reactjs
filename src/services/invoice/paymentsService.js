@@ -81,6 +81,27 @@ class paymentsService {
 				})
 		});
 	}
+
+	getPaymentHistory = (regionId, fromDate, toDate, status) => {
+		const data = {
+			"regionId": regionId,
+			"fromDate": "01/31/2017",
+			"toDate": "12/31/2019",
+		}
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/payment/gethistory`, data)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					} else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
 }
 
 const instance = new paymentsService();

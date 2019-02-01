@@ -10,7 +10,7 @@ import _contactService from './customers/ContactService';
 import _chatService from './chat/ChatService';
 import _paymentService from './payment/paymentListService';
 import _dashboardService from './dashboard/dashboardService';
-import _invoicePaymentService from './invoice/paymentsService'
+// import _invoicePaymentService from './invoice/paymentsService'
 import _homepageService from './home/HomepageService';
 import _billrunService from './billrun/BillrunService';
 import _paymentlockboxservice from './paymentlockbox/paymentlockboxService';
@@ -25,7 +25,7 @@ export const leaseService = _leaseService;
 export const findersFeesService = _findersFeesService;
 export const initialService = _initialService;
 export const invoiceService = _invoiceService;
-export const invoicePaymentsService = _invoicePaymentService;
+// export const invoicePaymentsService = _invoicePaymentService;
 export const customersService = _customersService;
 export const chatService = _chatService;
 export const contactService = _contactService;

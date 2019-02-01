@@ -1,4 +1,4 @@
-import { invoicePaymentsService } from "services";
+import { paymentService } from "services";
 import { TOGGLE_FILTER_PANEL_FRANCHISEES, TOGGLE_SUMMARY_PANEL_FRANCHISEES } from "./franchise.actions";
 
 export const GET_ALL_RECEIVABLE_PAYMENTS = "[A.R.Payments] GETS ALL";
@@ -20,6 +20,12 @@ export const SET_VIEW_MODE = "[A.R.Payments] SET_VIEW_MODE";
 export const SET_CUSTOMER_NAME_NO_GROUPING = "[A.R.Payments] SET_CUSTOMER_NAME_NO_GROUPING";
 
 
+export const GET_PAYMENT_HISTORY = "[A.R.Payments] GET_PAYMENT_HISTORY";
+export const GET_PAYMENT_HISTORY_FAILED = "[A.R.Payments] GET_PAYMENT_HISTORY_FAILED";
+export const GET_PAYMENT_HISTORY_START = "[A.R.Payments] GET_PAYMENT_HISTORY_START";
+
+
+
 export function getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status) {
 
 	RegionId = RegionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [RegionId];
@@ -31,7 +37,7 @@ export function getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, Sea
 		});
 
 		(async () => {
-			let paymentsList = await invoicePaymentsService.getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status);
+			let paymentsList = await paymentService.getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status);
 			dispatch({
 				type: FAILED_GET_ALL_RECEIVABLE_PAYMENTS,
 				payload: paymentsList.IsSuccess ? "Empty Data" : paymentsList.message
@@ -39,6 +45,27 @@ export function getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, Sea
 			dispatch({
 				type: GET_ALL_RECEIVABLE_PAYMENTS,
 				payload: paymentsList
+			});
+		})();
+	}
+}
+export function getPaymentHistory(regionId, fromDate, toDate, status) {
+
+	return (dispatch) => {
+		dispatch({
+			type: GET_PAYMENT_HISTORY_START,
+			payload: true
+		});
+
+		(async () => {
+			let res = await paymentService.getPaymentHistory(regionId, fromDate, toDate, status);
+			dispatch({
+				type: GET_PAYMENT_HISTORY_FAILED,
+				payload: res.IsSuccess ? "Empty Data" : res.message
+			});
+			dispatch({
+				type: GET_PAYMENT_HISTORY,
+				payload: res
 			});
 		})();
 	}
@@ -74,7 +101,7 @@ export function createAccountReceivablePayment(
 		(async () => {
 			// await sleep(2000)
 			// let paymentCreated = [];
-			let paymentCreated = await invoicePaymentsService.createAccountReceivablePayment(
+			let paymentCreated = await paymentService.createAccountReceivablePayment(
 				RegionId,
 				customerNumber,
 
@@ -100,7 +127,7 @@ export function createAccountReceivablePayment(
 			});
 
 			RegionId = RegionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [RegionId];
-			let paymentsList = await invoicePaymentsService.getAccountReceivablePaymentsList(
+			let paymentsList = await paymentService.getAccountReceivablePaymentsList(
 				RegionId,
 				fromDate,
 				toDate,
