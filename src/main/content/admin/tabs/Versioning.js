@@ -76,6 +76,7 @@ class VersioningTab extends Component {
         // console.log("PSOT");
         // console.log("postStatus==post",this.state.postStatus);
         // console.log("this.state.version",this.state.version);
+
         this.setState({postStatus:true});
 
     }
@@ -86,9 +87,8 @@ class VersioningTab extends Component {
                 version      : this.state.version
             }
 
-            console.log("data",JSON.stringify(data));
-            this.props.adminversionupgradetrigger(data);
-
+            // this.props.adminversionupgradetrigger(data);
+            // localStorage.clear();
         }
 
 
