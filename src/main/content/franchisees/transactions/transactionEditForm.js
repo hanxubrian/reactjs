@@ -366,7 +366,6 @@ class TransactionEditForm extends Component {
         grossTotal: 0,
         startDate: moment(),
         TrxChargeType: 'D',
-        creditReason: '',
         deductionReason: '',
         trxClassAmount: 0.00
     };
@@ -598,7 +597,6 @@ class TransactionEditForm extends Component {
             TrxChargeType: this.state.TrxChargeType,
             TrxFrequency: this.state.transactionFrequency,
             TrxResell: this.state.reSell, //Boolean
-            creditReason: this.state.creditReason,
 
             TrxItemAmount: this.state.unitPrice,//decimal
             TrxExtendedPrice: this.state.subTotal, //decimal
@@ -932,35 +930,6 @@ class TransactionEditForm extends Component {
                                 </FormControl>
                             </Grid>
                         </Grid>
-                        {this.state.TrxChargeType==='C' && (
-                            <Grid container className={classNames(classes.formControl, "mb-8")} >
-                                <Grid item xs={12} sm={12} md={12} className="flex flex-row xs:flex-col">
-                                    <TextField
-                                        id="creditReason"
-                                        name="creditReason"
-                                        label="Credit Reason"
-                                        className={classes.textField1}
-                                        value={this.state.creditReason}
-                                        onChange={this.handleChange}
-                                        margin="dense"
-                                        variant="outlined"
-                                        fullWidth
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                        InputProps={{
-                                            classes: {
-                                                input: classes.input
-                                            },
-                                        }}
-                                    />
-                                </Grid>
-                            </Grid>
-                        )}
-
-                        <Divider />
-
 
                         <Grid container className={classNames(classes.formControl, "mb-0 mt-16")} >
                             <Grid item xs={12} sm={5} md={5} className="flex flex-1 flex-row pt-0 w-full items-center">

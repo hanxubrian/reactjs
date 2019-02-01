@@ -816,11 +816,14 @@ class InvoiceLineTable extends React.Component {
     };
 
     handleChangeInvoiceLine =  (row, name) => event => {
+        console.log('line=', row, name);
         const data = [...this.state.data];
         let value = event.target.value;
         if (name==='amount')  value = parseFloat(value);
         if (name==='quantity')  value = parseInt(value);
         if (name==='markup')  value = parseFloat(value);
+        if(name==='commission')data[row.id]['markup'] = 0.00;
+        if(name==='markup')data[row.id]['commission'] = 0.00;
 
         data[row.id][name] = value;
         this.setState({data: data});

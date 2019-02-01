@@ -140,7 +140,7 @@ class InvoiceReport extends Component {
             }
         }
     if(this.props.Detail ==="Faild"){
-        //alert("GET INVOICE DETAIL FAILD!!!");
+
     }
 
     }
