@@ -250,6 +250,7 @@ const RowDetail = ({ row }) =>{
                 <table style={{width: "100%",}}>
                     <thead>
                     <tr>
+
                         <th style={{textAlign: "center",}}>Bill Run No</th>
                         <th style={{textAlign: "center",}}>Message</th>
                         <th style={{textAlign: "center",}}>Invoice Description</th>
@@ -264,6 +265,7 @@ const RowDetail = ({ row }) =>{
                     </thead>
                     <tbody>
                     <tr>
+
                         <td style={{textAlign: "center",}}>{row.BillRunNo}</td>
                         <td style={{textAlign: "center",}}>{row.Message}</td>
                         <td style={{textAlign: "center",}}>{row.InvoiceDescription}</td>

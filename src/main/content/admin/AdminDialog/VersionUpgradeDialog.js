@@ -63,20 +63,26 @@ class VersionUpgradeDialog extends React.Component {
     handleMaxWidthChange = event => {
         this.setState({ maxWidth: event.target.value });
     };
-
+    componentWillMount(){
+        this.setState({open:this.props.show});
+    }
     handleFullWidthChange = event => {
         this.setState({ fullWidth: event.target.checked });
     };
-
+    componentDidUpdate(prevProps, prevState){
+        if(this.props.show !== prevProps.show){
+            this.setState({open:this.props.show});
+        }
+    }
     render() {
         const { classes } = this.props;
-
+        if(this.state.open)
         return (
             <React.Fragment>
                 <Dialog
                     fullWidth={true}
                     maxWidth="xs"
-                    open={this.props.show}
+                    open={this.state.open}
                     onClose={this.handleClose}
                     aria-labelledby="max-width-dialog-title"
                 >
@@ -110,6 +116,9 @@ class VersionUpgradeDialog extends React.Component {
 
             </React.Fragment>
         );
+        else{
+            return(<div/>)
+        }
     }
 }
 
