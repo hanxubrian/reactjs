@@ -47,6 +47,9 @@ const styles = theme => ({
     input: {
         padding: '12px 14px'
     },
+    label: {
+        transform: 'translate(14px, 14px) scale(1)'
+    },
 });
 
 const BlueDialogTitle = withStyles(theme => ({
@@ -272,49 +275,54 @@ class PayInvoiceFormModal extends React.Component {
                                     <TextField  margin="normal" id="ReferenceNo" label="Reference No." variant="outlined"
                                                 fullWidth
                                                 onChange={this.handleChange('ReferenceNo')}
+                                                placeholder="Reference No"
                                                 value={this.state.ReferenceNo}
                                                 className={classNames(classes.textField, "ml-12")}
                                                 InputProps={{
                                                     classes: {input: classes.input}
                                                 }}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                    classes: {outlined: classes.label}
+                                                }}
                                     />
                                 </div>
                                 <div className="flex flex-1 justify-between w-full" >
                                     <TextField
-                                               type="date"
-                                               id="PaymentDate"
-                                               label="Payment Date"
-                                               className={classNames(classes.textField, "mr-12")}
-                                               InputLabelProps={{
-                                                   shrink: true
-                                               }}
-                                               InputProps={{
-                                                   classes: {input: classes.input}
-                                               }}
-                                               value={this.state.PaymentDate}
-                                               onChange={this.handleChange('PaymentDate')}
-                                               margin="normal" fullWidth
-                                               variant="outlined"
+                                        type="date"
+                                        id="PaymentDate"
+                                        label="Payment Date"
+                                        className={classNames(classes.textField, "mr-12")}
+                                        InputLabelProps={{
+                                            shrink: true
+                                        }}
+                                        InputProps={{
+                                            classes: {input: classes.input}
+                                        }}
+                                        value={this.state.PaymentDate}
+                                        onChange={this.handleChange('PaymentDate')}
+                                        margin="normal" fullWidth
+                                        variant="outlined"
                                     />
                                     <TextField
-                                               id="PaymentAmount"
-                                               name="PaymentAmount"
-                                               label="Payment Amount"
-                                               className={classNames(classes.textField, 'ml-12')}
-                                               value={this.state.PaymentAmount}
-                                               onChange={this.handleChange('PaymentAmount')}
-                                               margin="normal" fullWidth
-                                               variant="outlined"
-                                               InputLabelProps = {{
-                                                   shrink: true,
-                                                   classes: {outlined: classes.label}
-                                               }}
-                                               InputProps={{
-                                                   inputComponent: NumberFormatCustom2,
-                                                   classes: {
-                                                       input: classNames(classes.input, "text-right")
-                                                   },
-                                               }}
+                                        id="PaymentAmount"
+                                        name="PaymentAmount"
+                                        label="Payment Amount"
+                                        className={classNames(classes.textField, 'ml-12')}
+                                        value={this.state.PaymentAmount}
+                                        onChange={this.handleChange('PaymentAmount')}
+                                        margin="normal" fullWidth
+                                        variant="outlined"
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
+                                        InputProps={{
+                                            inputComponent: NumberFormatCustom2,
+                                            classes: {
+                                                input: classNames(classes.input, "text-right")
+                                            },
+                                        }}
                                     />
                                 </div>
 
