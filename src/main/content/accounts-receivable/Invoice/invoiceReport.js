@@ -108,28 +108,13 @@ class InvoiceReport extends Component {
     }
     componentWillReceiveProps(nextProps) {
 
-        if(nextProps.Detail) {
-            // if(nextProps.Detail.Data.Items && nextProps.Detail.Data.Items !== null){
-            //     this.setState({Items:nextProps.Detail.Data.Items});
-            // }
-            // if(nextProps.Detail.Data && nextProps.Detail.Data !== null){
-            //     this.setState({invoiceDetail:nextProps.Detail.Data});
-            // }
-            // if(nextProps.Detail.Data.Region && nextProps.Detail.Data.Region !== null){
-            //     this.setState({Region:nextProps.Detail.Data.RegionId});
-            // }
-            // this.setState({
-            //     invoiceDetail:nextProps.Detail.Data,
-            //     Items: nextProps.Detail.Data.Items,
-            //     Region: nextProps.Detail.Data.Region,
-            // });
-        }
-        if(nextProps.Detail ==="Faild"){
+
+        if(nextProps.Detail ==="Failed"){
             // alert("GET INVOICE DETAIL FAILD!!!");
         }
     }
     componentDidMount(){
-        if(this.props.Detail ==="Faild"){
+        if(this.props.Detail ==="Failed"){
             alert("GET INVOICE DETAIL FAILD!!!");
         }
     }
@@ -137,7 +122,7 @@ class InvoiceReport extends Component {
 
     }
     componentWillMount(){
-        console.log("#################this.props.Detail",this.props.Detail);
+        // console.log("#################this.props.Detail",this.props.Detail);
         if(this.props.Detail !=="Failed"){
             this.setState({
                 invoiceDetail:this.props.Detail,
