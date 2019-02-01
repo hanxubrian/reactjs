@@ -98,7 +98,7 @@ class VersionUpgradeDialog extends React.Component {
                         </DialogContentText>
                         <Divider className="my-12"/>
                         <DialogContentText>
-                            There is a new version({this.props.version}), click <strong>UPGRAGE</strong>  to log out and delete cache and log back in.
+                            Please log out and delete your browser cache. You can still use the system for a few more minutes but it is recommended to log out otherwise you may run into issues. You will be notified when you can go log back in.
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
