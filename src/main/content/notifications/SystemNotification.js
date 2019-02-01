@@ -26,6 +26,7 @@ import classNames from 'classnames';
 import SystemNotificationContentList from "./SystemNotificationContentList";
 import SystemNotificationViewById from "./SystemNotificationViewById";
 
+
 const headerHeight = 80;
 
 const hexToRgb = (hex) => {
@@ -250,14 +251,11 @@ class SystemNotification extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
 
-
-
-
     }
 
     componentWillMount() {
 
-       this.props.getallsystemnotification();
+       // this.props.getallsystemnotification();
 
     }
 
@@ -274,21 +272,16 @@ class SystemNotification extends Component {
     componentWillUnmount() {
     }
 
-    handleChange = name => event => {
-        this.setState({[name]: event.target.value});
-    };
+    // handleChange = name => event => {
+    //     this.setState({[name]: event.target.value});
+    // };
 
-    fetchData(state, instance) {
-        this.setState({
-            pageSize: state.pageSize,
-            page: state.page,
-        });
-    }
-
-
-
-
-
+    // fetchData(state, instance) {
+    //     this.setState({
+    //         pageSize: state.pageSize,
+    //         page: state.page,
+    //     });
+    // }
 
 
     render() {
@@ -299,6 +292,7 @@ class SystemNotification extends Component {
 
         return (
             <React.Fragment>
+
                 <FusePageCustomSidebarScroll
                     classes={{
                         root: classNames(classes.layoutRoot, 'test123'),
@@ -357,14 +351,14 @@ class SystemNotification extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getallsystemnotification    : Actions.getallsystemnotification,
+        // getallsystemnotification    : Actions.getallsystemnotification,
     }, dispatch);
 }
 
 function mapStateToProps({notification, auth}) {
     return {
-        sysnotification     : notification.systnotification,
-        sysstatus           : notification.status,
+        // sysnotification     : notification.systnotification,
+        // sysstatus           : notification.status,
     }
 }
 

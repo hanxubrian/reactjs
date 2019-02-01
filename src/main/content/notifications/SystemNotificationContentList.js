@@ -67,7 +67,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 
 
-
+import  SystemNotificationSearchBar from "./SystemNotificationSearchBar";
 
 
 const hexToRgb = (hex) => {
@@ -543,6 +543,7 @@ class SystemNotificationContentList extends Component {
             } = this.state;
             let checkstatus = true;
             let expandedId = null;
+            console.log("row",rows);
             if(this.props.match.params && this.props.match.params !==null && this.props.match.params.id && this.props.match.params.id !==null){
                 if(this.state.ExpandedRowIds >=0 && this.state.ExpandedRowIds !== null)
                     checkstatus = true;
@@ -556,11 +557,12 @@ class SystemNotificationContentList extends Component {
             if(this.state.ExpandedRowIds >=0 ){
                 expandedId =this.state.ExpandedRowIds;
             }
-            if(rows && rows !==null && checkstatus)
+            if(rows && rows !==null)
             return(
                 <Fragment>
-                    <div className={classNames(classes.layoutTable, "cust222 flex flex-col")}>
 
+                    <div className={classNames(classes.layoutTable, "cust222 flex flex-col")}>
+                        <SystemNotificationSearchBar/>
                         <div className={classNames("flex flex-col")}
                              style={{height:'600px'}}
                         >
