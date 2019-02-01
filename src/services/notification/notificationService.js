@@ -18,12 +18,12 @@ const BASE_MONGO_API_URL = 'https://apifmsplusplus_mongo.jkdev.com';
 
 class NotificationService {
 
-    getallsystemnotification=( UserId)=>{
+    getallsystemnotification=( RegionId)=>{
         const data ={
-            'UserId'                   : UserId,
+            'RegionId'                   : RegionId,
         }
         return new Promise((resolve, reject) => {
-            axios_instance.post(`/v1/api/notification`,data)
+            axios_instance.get(`${BASE_MONGO_API_URL}/v1/pushnotificationlist?RegionId=`+RegionId)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);

@@ -73,7 +73,7 @@ class VersioningTab extends Component {
 
     }
     postversionnotification=()=>{
-        // console.log("PSOT");
+
         // console.log("postStatus==post",this.state.postStatus);
         // console.log("this.state.version",this.state.version);
 
@@ -81,13 +81,14 @@ class VersioningTab extends Component {
 
     }
     versiontrigger=()=>{
+
         if(this.state.version  !== null && this.state.note && this.state.note !== null){
             let data ={
                 note         : this.state.note,
                 version      : this.state.version
             }
 
-            // this.props.adminversionupgradetrigger(data);
+            this.props.adminversionupgradetrigger(data);
             // localStorage.clear();
         }
 

@@ -19,7 +19,7 @@ export const ADMIN_VERSION_UPGRADE_TRIGGER_SUCCESS            = "[PUSHER NOTIFIC
 export const ADMIN_VERSION_UPGRADE_TRIGGER_FAILD              = "[PUSHER NOTIFICATION] ADMIN VERSION UPGRADE TRIGER FAILD";
 
 
-export function getallsystemnotification(UserId="65") {
+export function getallsystemnotification(RegionId) {
     return (dispatch) => {
 
         dispatch({
@@ -28,7 +28,7 @@ export function getallsystemnotification(UserId="65") {
         });
 
         (async () => {
-            let res = await notificationService.getallsystemnotification(UserId);
+            let res = await notificationService.getallsystemnotification(RegionId);
             if (res.IsSuccess) {
                 dispatch({
                     type: GET_ALL_SYSTEM_NOTIFICATION_SUCCESS,

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 // core components
-import { Icon, IconButton, Input, Paper, Button, Zoom } from '@material-ui/core';
+import { CircularProgress,Icon, IconButton, Input, Paper, Button, Zoom } from '@material-ui/core';
 
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
@@ -406,14 +406,11 @@ const Command = ({ id, onExecute }) => {
 };
 const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 
-
-
-
 class SystemNotificationContentList extends Component {
 
     constructor(props) {
         super(props);
-        this.props.getallsystemnotification();
+        this.props.getallsystemnotification(this.props.RegionId);
         this.state = {
             columns                             : [
                 { name: 'process', title: 'Process' },
@@ -425,8 +422,6 @@ class SystemNotificationContentList extends Component {
             rows                                : [],
             tableColumnExtensions               : [
                 { columnName: 'process', width: 100 },
-                // { columnName: 'Message', width: 300 },
-                // { columnName: 'description', width: 100 },
                 { columnName: 'cuscreatedate', width: 100 },
 
             ],
@@ -436,18 +431,15 @@ class SystemNotificationContentList extends Component {
                 { columnName: 'process', direction: 'asc' },
             ],
             groupingColumns                     : [
-                // { columnName: 'CustomerName' },
-                // { columnName: 'CustomerNo' },
                 { columnName: 'process' },
 
             ],
             searchValue                         : '',
             expandedGroups                      : ['process'],
-            // leftColumns: ['region', 'sector'],
-            // rightColumns: ['amount'],
             NotificationData                    :[],
             id                                  : null,
             ExpandedRowIds                      : null,
+            getdataloading                      : true,
         };
     };
     TableRow = ({ tableRow, selected, onToggle, ...restProps }) => {
@@ -479,7 +471,6 @@ class SystemNotificationContentList extends Component {
         );
     };
     componentWillMount(){
-        console.log('this.props.match.params=', this.props.match.params);
         this.setState({id: this.props.match.params.id});
 
     }
@@ -491,6 +482,7 @@ class SystemNotificationContentList extends Component {
             this.fetchData();
         }
 
+
     }
     fetchData=()=>{
         let sysnotification = this.props.sysnotification;
@@ -501,15 +493,14 @@ class SystemNotificationContentList extends Component {
             sysnotification.map((item)=>{
 
                 let addprocess =[];
-                addprocess =JSON.parse(item.processResponsePayload);
-                addprocess.process=item.process;
-                addprocess.description=item.description;
+                addprocess =JSON.parse(item.ProcessResponsePayload);
+                addprocess.process=item.Process;
+                addprocess.description=item.Description;
                 addprocess.cuscreatedate =moment(item.CreateDate).format("MM/DD/YYYY");
                 addprocess.cusinvoicedate = moment(item.InvoiceDate).format("MM/DD/YYYY");
                 addprocess._id = item._id;
                 if(this.state.id && this.state.id !== null && item._id===this.state.id && this.state.ExpandedRowIds === null && sum>=0){
                     this.setState({ExpandedRowIds:sum});
-                    console.log("ExpandedRowIds",sum);
                     sum =-1;
                 }
                 if(sum>=0)
@@ -521,6 +512,7 @@ class SystemNotificationContentList extends Component {
             }
 
         }
+
         this.setState({NotificationData:midROW});
         if(this.state.rows && this.state.rows !== null && JSON.stringify(this.state.rows) !== JSON.stringify(midROW)){
             this.setState({rows: midROW});
@@ -537,78 +529,69 @@ class SystemNotificationContentList extends Component {
 		</span>
     );
     render(){
-        const { classes } = this.props;
+        const { classes ,sysnotification,sysstatus} = this.props;
+
             const {
                 rows, columns, tableColumnExtensions,pageSizes,sorting,searchValue,groupingColumns,expandedGroups,
             } = this.state;
-            let checkstatus = true;
             let expandedId = null;
-            console.log("row",rows);
-            if(this.props.match.params && this.props.match.params !==null && this.props.match.params.id && this.props.match.params.id !==null){
-                if(this.state.ExpandedRowIds >=0 && this.state.ExpandedRowIds !== null)
-                    checkstatus = true;
-                else{
-                    checkstatus = false;
-                }
-            }
-            if(this.state.ExpandedRowIds === -100){
-                checkstatus=true;
-            }
-            if(this.state.ExpandedRowIds >=0 ){
-                expandedId =this.state.ExpandedRowIds;
-            }
-            if(rows && rows !==null)
+            console.log("rows=========",rows);
+            if(rows && rows !==null && !sysstatus)
             return(
                 <Fragment>
 
-                    <div className={classNames(classes.layoutTable, "cust222 flex flex-col")}>
-                        <SystemNotificationSearchBar/>
-                        <div className={classNames("flex flex-col")}
-                             style={{height:'600px'}}
+                    <div className={classNames(classes.layoutTable, "flex flex-col")}>
+                        <div>
+                            <SystemNotificationSearchBar/>
+                        </div>
+
+                        <div className={classNames("flex flex-col ", classes.layoutTable)}
+
                         >
-                        <Grid
-                        rows={rows}
-                        columns={columns}
-                        >
-                            <PagingState
-                                defaultCurrentPage={0}
-                                defaultPageSize={5}
-                            />
-                            <IntegratedPaging />
-                            <SortingState
-                                defaultSorting={[{ columnName: 'process', direction: 'asc' }]}
-                            />
+                                <Grid
+                                rows={rows}
+                                columns={columns}
 
-                                <RowDetailState
-                                    defaultExpandedRowIds={[expandedId]}
-                                />
+                                >
 
+                                    <PagingState
+                                        defaultCurrentPage={0}
+                                        defaultPageSize={5}
+                                    />
+                                    <PagingPanel
+                                        pageSizes={pageSizes}
+                                    />
 
-                            <IntegratedSorting />
-                            <VirtualTable height='auto'
-                            noDataCellComponent={
-                            ({ colSpan }) => (
-                            <td colSpan={colSpan} style={{ textAlign: 'center' }}>
-                            <big className="TableNoDataCell">{this.props.NoDataString}</big>
-                            </td>
-                            )
-                            }
-                            columnExtensions={tableColumnExtensions}
-                            />
-                            <TableHeaderRow showSortingControls />
-                            <TableRowDetail
-                                contentComponent={RowDetail}
-                            />
-                            <PagingPanel
-                                pageSizes={pageSizes}
-                            />
-                    </Grid>
+                                    <IntegratedPaging />
+                                    <SortingState
+                                        defaultSorting={[{ columnName: 'process', direction: 'asc' }]}
+                                    />
+                                    <IntegratedSorting />
+                                        <RowDetailState
+                                            defaultExpandedRowIds={[expandedId]}
+                                        />
+                                    <VirtualTable
+                                        columnExtensions={tableColumnExtensions}
+                                    />
+                                    <TableHeaderRow showSortingControls />
+                                    <TableRowDetail
+                                        contentComponent={RowDetail}
+                                    />
+
+                            </Grid>
                         </div>
                     </div>
                 </Fragment>
                 );
             else{
-                return(<div/>)
+                return(
+                    <div className={classes.overlay} style={{
+
+                    }}>
+                        <CircularProgress className={classes.progress} color="secondary"  />
+
+                    </div>
+                )
             }
     }
 
@@ -628,6 +611,8 @@ function mapStateToProps({ accountReceivablePayments, auth,notification }) {
 //
         sysnotification     : notification.systnotification,
         sysstatus           : notification.status,
+        UserId              : auth.login.UserId,
+        RegionId            : auth.login.defaultRegionId,
     }
 }
 

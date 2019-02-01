@@ -322,6 +322,7 @@ class PaymentLockBoxReport extends Component {
                                             </div>
                                         </div>
                                         <div className="flex flex-shrink items-center" style={{marginRight:"5%"}}>
+
                                             <div>
                                                 <input
                                                     accept="image/*,video/*,pdf/*"

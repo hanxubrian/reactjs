@@ -137,45 +137,35 @@ class SystemNotificationSearchBar extends Component {
     }
     componentDidMount() {
         console.log("componentDidMount");
-        document.addEventListener("keydown", this.handleKeyDown, false);
+        // document.addEventListener("keydown", this.handleKeyDown, false);
     }
 
     handleKeyDown = (event) => {
-        console.log("escFunction");
-
-        if (event.keyCode === ENTER_KEY) {
-            clearTimeout(this.timer)
-            this.triggerChange()
-        } else if (event.keyCode === 27) {
-            clearTimeout(this.timer)
-            this.setState({ s: '' });
-            this.triggerChange()
-        }
+        // console.log("escFunction");
+        //
+        // if (event.keyCode === ENTER_KEY) {
+        //     clearTimeout(this.timer)
+        //     this.triggerChange()
+        // } else if (event.keyCode === 27) {
+        //     clearTimeout(this.timer)
+        //     this.setState({ s: '' });
+        //     this.triggerChange()
+        // }
     }
 
     handleChange = prop => event => {
         console.log("handleChange");
-
-
-        this.setState({ [prop]: event.target.value });
-
-        if (prop === 's') {
-            clearTimeout(this.timer);
-            this.timer = setTimeout(this.triggerChange, WAIT_INTERVAL);
-        }
     };
 
-    triggerChange = (s = this.state.s) => {
-
-        console.log("start to search", s)
-
-        //this.props.applySearchText(s);
-    }
+    // triggerChange = (s = this.state.s) => {
+    //
+    //     console.log("start to search", s)
+    //
+    //     //this.props.applySearchText(s);
+    // }
 
     clearSearch = () => {
-        clearTimeout(this.timer)
-        this.setState({ s: '' });
-        this.triggerChange('')
+
     }
 
     render() {
@@ -208,12 +198,10 @@ class SystemNotificationSearchBar extends Component {
                         inputProps={{
                             'aria-label': 'Search'
                         }}
-                        // onKeyDown={this.handleKeyDown}
                     />
 
                     <IconButton
                         className={classNames(classes.button)}
-                        // className={classNames(classes.button)}
                         aria-label="Add an alarm"
                         onClick={this.clearSearch}>
                         <Icon color="action">close</Icon>
