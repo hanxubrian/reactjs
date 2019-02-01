@@ -81,7 +81,7 @@ export function getInvoiceDetail(InvoiceId,RegionId) {
         });
        (async () => {
             let res = await invoiceService.getInvoiceDetailList(InvoiceId,RegionId);
-            if (res.success && res.data.IsSuccess) {
+            if (res.IsSuccess) {
                 dispatch({
                     type: GET_INVOICE_DETAIL,
                     payload: res.data
@@ -89,7 +89,7 @@ export function getInvoiceDetail(InvoiceId,RegionId) {
             } else {
                 dispatch({
                     type: GET_INVOICE_DETAIL_FAILD,
-                    payload: "Faild",
+                    payload: "Failed",
                 });
             }
         })();
