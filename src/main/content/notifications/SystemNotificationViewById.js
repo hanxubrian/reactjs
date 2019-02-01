@@ -270,12 +270,24 @@ class SystemNotificationViewById extends Component {
             let mapvalue  = [];
             let midmultikey =[];
             let midmultivalue = [];
+            console.log("payload" , payload);
             Object.keys(payload).forEach(function(key) {
-                // console.log("key:" + key + "value:" + item[key]);
+                // console.log("key:" + key + "value:" + payload[key]);
+
                 let str = payload[key];
+                if(str ===null ){
+                    str = " ";
+                }
                 if(!Array.isArray(str)){
-                    mapvalue.push({'Key':key, 'Value':str.toString()});
-                    KEYS.push(key);
+                    if(str !== null){
+                        mapvalue.push({'Key':key, 'Value':str.toString()});
+                        KEYS.push(key);
+                    }
+                    else{
+                        mapvalue.push({'Key':key, 'Value':" "});
+                        KEYS.push(key);
+                    }
+
                 }
                 else{
                     midmultikey.push(key);
@@ -368,22 +380,32 @@ class SystemNotificationViewById extends Component {
                                     </CardContent>
 
                                         <div style={{    marginLeft: "30px",
-                                            fontSize: "24px",}}>{multiData[0].Key}</div>
+                                            fontSize: "24px",}}>{multiData[0] && multiData[0] !== null && multiData[0].Key &&
+                                        multiData[0].Key !== null &&(
+                                            multiData[0].Key
+                                        )
+                                        }</div>
 
 
                                     <CardContent>
                                         <table className={classes.tableView}>
-                                            <TableHead className={classes.tableheader}>
-                                                <TableRow>
-                                                    <CustomTableCell>CustomerName</CustomTableCell>
-                                                    <CustomTableCell>CustomerNo</CustomTableCell>
-                                                    <CustomTableCell align="right">ContractBilling</CustomTableCell>
-                                                    <CustomTableCell align="right">CPIPercent</CustomTableCell>
-                                                </TableRow>
-                                            </TableHead>
+                                            {
+                                                multiData[0] && multiData[0] !== null && multiData[0].Value && multiData[0].Value !==null &&(
+                                                    <TableHead className={classes.tableheader}>
+                                                        <TableRow>
+                                                            <CustomTableCell>CustomerName</CustomTableCell>
+                                                            <CustomTableCell>CustomerNo</CustomTableCell>
+                                                            <CustomTableCell align="right">ContractBilling</CustomTableCell>
+                                                            <CustomTableCell align="right">CPIPercent</CustomTableCell>
+                                                        </TableRow>
+                                                    </TableHead>
+                                                )
+
+                                            }
+
 
                                             <TableBody>
-                                                {
+                                                { multiData[0] && multiData[0] !== null && multiData[0].Value && multiData[0].Value !==null &&
                                                     multiData[0].Value.map((item,index)=>(
                                                         <TableRow key={index+3} >
                                                             <CustomTableCell style={{width:"25%"}} align="right">{item.CustomerName}</CustomTableCell>
@@ -401,20 +423,33 @@ class SystemNotificationViewById extends Component {
                                     </CardContent>
 
                                     <div style={{    marginLeft: "30px",
-                                        fontSize: "24px",}}>{multiData[1].Key}</div>
+                                        fontSize: "24px",}}>
+                                        {
+                                            multiData[1] && multiData[1] !== null && multiData[1].Key &&
+                                            multiData[1].Key !== null &&(
+                                                multiData[1].Key
+                                            )
+
+                                    }</div>
                                     <CardContent>
                                         <table className={classes.tableView}>
-                                            <TableHead className={classes.tableheader}>
-                                                <TableRow>
-                                                    <CustomTableCell>CustomerName</CustomTableCell>
-                                                    <CustomTableCell>CustomerNo</CustomTableCell>
-                                                    <CustomTableCell align="right">ContractBilling</CustomTableCell>
-                                                    <CustomTableCell align="right">CPIPercent</CustomTableCell>
-                                                </TableRow>
-                                            </TableHead>
+                                            {
+                                                multiData[1] && multiData[1] !== null && multiData[1].Value && multiData[1].Value !==null &&(
+                                                    <TableHead className={classes.tableheader}>
+                                                        <TableRow>
+                                                            <CustomTableCell>CustomerName</CustomTableCell>
+                                                            <CustomTableCell>CustomerNo</CustomTableCell>
+                                                            <CustomTableCell align="right">ContractBilling</CustomTableCell>
+                                                            <CustomTableCell align="right">CPIPercent</CustomTableCell>
+                                                        </TableRow>
+                                                    </TableHead>
+                                                )
+                                            }
+
 
                                             <TableBody>
                                                 {
+                                                    multiData[1] && multiData[1] !== null && multiData[1].Value && multiData[1].Value !==null &&
                                                     multiData[1].Value.map((item,index)=>(
                                                         <TableRow key={index+3} >
                                                             <CustomTableCell style={{width:"25%"}} align="right">{item.CustomerName}</CustomTableCell>

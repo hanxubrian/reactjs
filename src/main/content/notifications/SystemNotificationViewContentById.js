@@ -292,7 +292,7 @@ class SystemNotificationViewContentById extends Component {
                                         >
                                             <Icon className="text-32 mr-12">notifications_active</Icon>
                                             <Typography variant="h6" className="hidden sm:flex">Notification |
-                                                System Detail</Typography>
+                                                System | Detail</Typography>
                                         </div>
                                     </div>
                                     <div className="flex flex-shrink items-center">
