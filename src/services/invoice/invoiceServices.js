@@ -40,10 +40,10 @@ class invoiceService {
             axios_instance.post(`${BASE_MONGO_API_URL}/v1/accountsreceivable/InvoiceList`,data)
                 .then( res => {
                     if(res.status===200) {
-                        resolve({data:res.data,success:true});
+                        resolve(res.data);
                     }
                     else if(res.status!==200){
-                        reject({data:res.data,success:false});
+                        reject(res.data);
                     }
                 })
                 .catch(error=>{
@@ -76,11 +76,12 @@ class invoiceService {
             axios_instance.get(`${BASE_MONGO_API_URL}/v1/accountsreceivable/Invoice/${InvoiceId}`,{
                 params: {RegionId: RegionId}})
                 .then( res => {
+
                     if(res.status===200) {
-                        resolve(res.data);
+                        resolve({data:res.data,success:true});
                     }
                     else if(res.status!==200){
-                        reject(res.data);
+                        reject({data:res.data,success:false});
                     }
                 })
                 .catch(error=>{
