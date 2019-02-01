@@ -21,6 +21,7 @@ import {
 } from '@devexpress/dx-react-core';
 
 import {
+
     SelectionState,
     PagingState,
     IntegratedPaging,
@@ -40,6 +41,7 @@ import {
 import {
     Grid,
     Table,
+
     VirtualTable,
     TableHeaderRow,
     TableFixedColumns,
@@ -233,6 +235,7 @@ const DateTypeProvider = props => (
 //
 // table cell boolean edit formatter
 //
+
 const RowDetail = ({ row }) =>{
     let str ="";
     str =`<table>`;
@@ -251,6 +254,7 @@ const RowDetail = ({ row }) =>{
                     <thead>
                     <tr>
 
+                        <th style={{textAlign: "center",}}>Process</th>
                         <th style={{textAlign: "center",}}>Bill Run No</th>
                         <th style={{textAlign: "center",}}>Message</th>
                         <th style={{textAlign: "center",}}>Invoice Description</th>
@@ -265,7 +269,7 @@ const RowDetail = ({ row }) =>{
                     </thead>
                     <tbody>
                     <tr>
-
+                        <td style={{textAlign: "center",}}>{row.process}</td>
                         <td style={{textAlign: "center",}}>{row.BillRunNo}</td>
                         <td style={{textAlign: "center",}}>{row.Message}</td>
                         <td style={{textAlign: "center",}}>{row.InvoiceDescription}</td>
@@ -415,16 +419,22 @@ class SystemNotificationContentList extends Component {
         this.props.getallsystemnotification(this.props.RegionId);
         this.state = {
             columns                             : [
-                { name: 'process', title: 'Process' },
-                { name: 'Message', title: 'Message' },
-                { name: 'description', title: 'description' },
-                { name: 'cuscreatedate', title: 'Created Date' },
+                // { name: 'process', title: 'Process' },
+                { name: 'Message', title: 'Notification' },
+                { name: 'InvoiceDescription', title: 'Description' },
+                { name: 'From', title: 'From' },
+                { name: 'cuscreatedate', title: 'Date' },
+                { name: 'detail', title: 'Detail' },
 
             ],
             rows                                : [],
             tableColumnExtensions               : [
-                { columnName: 'process', width: 100 },
+                // { columnName: 'process', width: 100 },
+                { columnName: 'Message', width: 500 },
+                { columnName: 'InvoiceDescription', width: 500 },
+                { columnName: 'From', width: 100 },
                 { columnName: 'cuscreatedate', width: 100 },
+                { columnName: 'detail', width: 100 },
 
             ],
             pageSizes                           : [5,10, 20, 30, 50, 100],
@@ -530,6 +540,29 @@ class SystemNotificationContentList extends Component {
             <strong>{row.value}</strong>
 		</span>
     );
+    viewdetail=(e,param)=>{
+        console.log("props=",JSON.stringify(e));
+        this.props.history.push('/notification/system/'+e);
+    }
+    getCell = (props) => {
+
+        const { classes }= this.props;
+
+        if(this.state.rows !== undefined) {
+            if (props.column.name.includes('detail')) {
+                return (
+                    <Table.Cell>
+                        <Button className={classes.iconButton} onClick={()=>this.viewdetail(props.tableRow.row._id)} aria-label="Request Changes">
+                            <Icon>list</Icon>
+                        </Button>
+                    </Table.Cell>
+                )
+            }
+        }
+
+        return <Table.Cell {...props} />;
+
+    };
     render(){
         const { classes ,sysnotification,sysstatus} = this.props;
 
@@ -537,7 +570,6 @@ class SystemNotificationContentList extends Component {
                 rows, columns, tableColumnExtensions,pageSizes,sorting,searchValue,groupingColumns,expandedGroups,
             } = this.state;
             let expandedId = null;
-            console.log("rows=========",rows);
             if(rows && rows !==null && !sysstatus)
             return(
                 <Fragment>
@@ -555,6 +587,7 @@ class SystemNotificationContentList extends Component {
                                 columns={columns}
 
                                 >
+
 
                                     <PagingState
                                         defaultCurrentPage={0}
@@ -574,7 +607,12 @@ class SystemNotificationContentList extends Component {
                                         />
                                     <VirtualTable
                                         columnExtensions={tableColumnExtensions}
+                                        cellComponent={this.getCell}
                                     />
+                                    {/*<Table*/}
+                                        {/*columnExtensions={tableColumnExtensions}*/}
+                                    {/*/>*/}
+                                    <TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
                                     <TableHeaderRow showSortingControls />
                                     <TableRowDetail
                                         contentComponent={RowDetail}

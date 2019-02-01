@@ -286,10 +286,13 @@ class SystemNotificationViewContentById extends Component {
                             <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
                                 <div className="flex flex-row flex-1 justify-between">
                                     <div className="flex flex-shrink items-center">
-                                        <div className="flex items-center">
+                                        <div className="flex items-center"
+                                             style={{cursor:"pointer"}}
+                                             onClick={()=>this.props.history.push('/notification/system/')}
+                                        >
                                             <Icon className="text-32 mr-12">notifications_active</Icon>
                                             <Typography variant="h6" className="hidden sm:flex">Notification |
-                                                System</Typography>
+                                                System Detail</Typography>
                                         </div>
                                     </div>
                                     <div className="flex flex-shrink items-center">
