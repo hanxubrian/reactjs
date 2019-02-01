@@ -744,15 +744,7 @@ class MainToolbar extends Component {
                     />
                     </div>
                 )}
-                {/*{ true && (*/}
-                    {/*<div style={{position:"absolute"}}>*/}
-                    {/*<VersionUpgradeDialog*/}
-                        {/*show={true}*/}
-                        {/*version={"1.0.2"}*/}
-                        {/*note ={"this is new version note this is new version notethis is new version notethis is new version note"}*/}
-                    {/*/>*/}
-                    {/*</div>*/}
-                {/*)}*/}
+
 
                 {1 && (
 
