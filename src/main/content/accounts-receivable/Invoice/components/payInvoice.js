@@ -1,8 +1,8 @@
 import React from 'react';
 
 //Material-UI core
-import {Button, TextField, Dialog, DialogActions, DialogTitle, DialogContent, Grid,
-    Icon, IconButton, Tooltip, Paper, InputAdornment, MenuItem
+import {Button, TextField, Dialog, DialogActions, DialogTitle, DialogContent,
+    Icon, IconButton, InputAdornment, MenuItem
 } from '@material-ui/core';
 
 // for store
@@ -84,169 +84,6 @@ class PayInvoiceFormModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
-            columns: [
-                // {
-                //     title: "Payment ID",
-                //     name: "PaymentId",
-                //     columnName: "PaymentId",
-                //     width: 200,
-                //     sortingEnabled: true,
-                //     filteringEnabled: true,
-                //     groupingEnabled: false,
-                // },
-                // {
-                // 	title: "C.Name",
-                // 	name: "CustomerNameNo",
-                // 	columnName: "CustomerNameNo",
-                // 	width: 150,
-                // 	wordWrapEnabled: true,
-                // 	sortingEnabled: true,
-                // 	filteringEnabled: true,
-                // 	groupingEnabled: true,
-                // },
-                // {
-                // 	title: "C.Name",
-                // 	name: "CustomerName",
-                // 	columnName: "CustomerName",
-                // 	width: 120,
-                // 	wordWrapEnabled: true,
-                // 	sortingEnabled: true,
-                // 	filteringEnabled: true,
-                // 	groupingEnabled: true,
-                // },
-
-                // {
-                // 	title: "C.Number",
-                // 	name: "CustomerNo",
-                // 	columnName: "CustomerNo",
-                // 	width: 120,
-                // 	wordWrapEnabled: true,
-                // 	sortingEnabled: true,
-                // 	filteringEnabled: true,
-                // 	groupingEnabled: true,
-                // },
-                // {
-                // 	title: "Check No",
-                // 	name: "CheckNo",
-                // 	columnName: 'CheckNo',
-                // 	width: 180,
-                // 	align: 'center',
-                // 	sortingEnabled: true,
-                // 	filteringEnabled: true,
-                // 	groupingEnabled: false,
-                // },
-                {
-                    title: "Invoice No",
-                    name: "InvoiceNo",
-                    columnName: "InvoiceNo",
-                    width: 200,
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: false,
-                    editingEnabled: false,
-                },
-                {
-                    title: "Invoice Date",
-                    name: "InvoiceDate",
-                    columnName: "InvoiceDate",
-                    width: 300,
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: false,
-                    editingEnabled: false,
-                },
-                {
-                    title: "Due Date",
-                    name: "DueDate",
-                    columnName: "DueDate",
-                    width: 300,
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: false,
-                    editingEnabled: false,
-                },
-                {
-                    title: "Invoice Amount",
-                    name: "InvoiceAmount",
-                    columnName: "InvoiceAmount",
-                    width: 300,
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: false,
-                    editingEnabled: false,
-                },
-                {
-                    title: "Invoice Balance",
-                    name: "InvoiceBalance",
-                    columnName: "InvoiceBalance",
-                    width: 300,
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: false,
-                    editingEnabled: false,
-                },
-                // {
-                // 	title: "InvoiceBalance OR",
-                // 	name: "InvoiceBalanceOR",
-                // 	columnName: 'InvoiceBalanceOR',
-                // 	width: 150,
-                // 	align: 'center',
-                // 	sortingEnabled: true,
-                // 	filteringEnabled: true,
-                // 	groupingEnabled: false,
-                // },
-                {
-                    title: "Amount to Apply",
-                    name: "PaymentAmount",
-                    columnName: 'PaymentAmount',
-                    width: 300,
-                    align: 'right',
-                    wordWrapEnabled: true,
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: false,
-                    editingEnabled: true,
-
-                },
-                // {
-                //     title: "Region Name",
-                //     name: "RegionName",
-                //     columnName: 'RegionName',
-                //     width: 120,
-                //     align: 'right',
-                //     wordWrapEnabled: true,
-                //     sortingEnabled: true,
-                //     filteringEnabled: true,
-                //     groupingEnabled: false,
-
-                // },
-                // {
-                // 	title: "Check Amount",
-                // 	name: "CheckAmount",
-                // 	columnName: 'CheckAmount',
-                // 	width: 140,
-                // 	align: 'right',
-                // 	wordWrapEnabled: true,
-                // 	sortingEnabled: true,
-                // 	filteringEnabled: true,
-                // 	groupingEnabled: false,
-
-                // }
-            ],
-            columnsForReactDataGrid: [
-                { key: "InvoiceNo", name: "Invoice No", editable: false },
-                { key: "InvoiceDate", name: "Invoice Date", editable: false, formatter: DateFormatter },
-                { key: "DueDate", name: "Due Date", editable: false, formatter: DateFormatter },
-                { key: "DaysPastDue", name: "Days Past Due", editable: false, sortDescendingFirst: true },
-                { key: "InvoiceAmount", name: "Invoice Amount", editable: false, formatter: CurrencyFormatter },
-                { key: "InvoiceBalance", name: "Invoice Balance", editable: false, formatter: CurrencyFormatter },
-                { key: "PaymentAmount", name: "Payment to Apply", editable: true, formatter: CurrencyFormatter }
-            ],
-            rows: [],
-            currencyColumns: [
-                'InvoiceAmount', 'InvoiceBalance', 'PaymentAmount'
-            ],
             customerName: "",
             customerNumber: "",
 
@@ -257,7 +94,6 @@ class PayInvoiceFormModal extends React.Component {
             PaymentAmount: 0,
             overpayment: 0,
             errorMsg: "",
-
         }
     }
 
