@@ -171,7 +171,6 @@ class CustomerTransactions extends Component {
     constructor(props) {
         super(props);
 
-        this.escFunction = this.escFunction.bind(this);
         this.changeCurrentPage = currentPage => this.setState({currentPage});
         this.changePageSize = pageSize => this.setState({pageSize});
     }
@@ -184,42 +183,28 @@ class CustomerTransactions extends Component {
 
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.data !== prevProps.data)
-            this.processData(this.props.data)
     }
 
     componentDidMount() {
-        this.props.getReport();
-
+        //'/franchisees/reports/:regionid/:year/:month/:franchiseenumber',
+        if( this.props.transactionDetail!==null) {
+            let trxDetail = this.props.transactionDetail.Data;
+            this.props.getReport({
+                regionId: this.props.regionId,
+                year: '2017',
+                month: '1',
+                franchiseenumber: trxDetail.FranchiseeNo
+            });
+        }
     }
 
     componentWillMount() {
-        this.processData(this.props.data);
     }
 
     componentWillUnmount() {
 
     }
 
-    escFunction(event) {
-        if (event.keyCode === 27) {
-            this.setState({s: ''});
-            this.processData(this.props.data)
-        }
-    }
-
-    processData(data) {
-        let temp = [...data];
-        temp.forEach(x => {
-            x.FranNameNo = `${x.FranchiseeName} - ${x.FranchiseeNo}`
-        });
-
-
-        this.setState(
-            {data: temp,
-                expandedGroups: [...new Set(temp.map(x => x.FranNameNo))]},
-        );
-    }
 
     handleClose = () => {
         this.setState({alertOpen: false})

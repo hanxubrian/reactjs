@@ -338,7 +338,6 @@ class TransactionsDxGridLists extends Component {
     };
 
     TableRow = ({ row, ...restProps }) => {
-        console.log('row=', row);
         let backColor = 'inherit';
         if(row.TrxChargeType==='D')
             backColor = 'rgba(255,0,0, .2)';

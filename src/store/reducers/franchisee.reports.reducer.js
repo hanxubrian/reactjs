@@ -73,6 +73,9 @@ const franchiseeReports = function(state = initialState, action) {
                 ...state, reportDate: action.payload
             }
         }
+        case Actions.CLOSE_EDIT_TRANSACTION_FORM:
+        case Actions.CLOSE_NEW_TRANSACTION_FORM:
+            return {...state, franchiseeReport: null};
         case UserActions.USER_LOGGED_OUT:
         {
             return {

@@ -895,7 +895,7 @@ class InvoiceForm extends Component {
                 statusName = customerStatusObj[0].label;
             }
         }
-        console.log('bLoadingDetail=', this.state.bLoadingDetail);
+        // console.log('bLoadingDetail=', this.state.bLoadingDetail);
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 
 // Material-UI core components
-import {AppBar, Tabs, Tab, Typography }  from '@material-ui/core';
+import {Typography, CircularProgress }  from '@material-ui/core';
 
 // for store
 import * as Actions from 'store/actions';
@@ -14,6 +14,9 @@ import connect from "react-redux/es/connect/connect";
 import PropTypes from 'prop-types';
 import moment from "moment";
 import classNames from 'classnames';
+
+import CustomerTransactions from './components/customerTransactions'
+
 
 const styles = theme => ({
     root: {
@@ -46,24 +49,9 @@ class TransactionsSummary extends Component {
     constructor(props) {
         super(props);
 
-        let year = moment(this.props.reportDate).year();
-        let month = moment(this.props.reportDate).month()+1;
-
-        if(!props.bLoadedFranchiseeReports) {
-            props.getReports(props.regionId, year, month);
-        }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        let year = moment(this.props.reportDate).year();
-        let month = moment(this.props.reportDate).month()+1;
-
-        if(this.props.regionId !== prevProps.regionId) {
-            this.props.getReports(this.props.regionId, year, month);
-        }
-        if(this.props.reportDate !== prevProps.reportDate) {
-            this.props.getReports(this.props.regionId, year, month);
-        }
     }
 
     handleChange = (event, newValue) => {
@@ -71,26 +59,13 @@ class TransactionsSummary extends Component {
     };
 
     render() {
-        const {classes} = this.props;
+        const {classes, franchiseeReport} = this.props;
         return (
             <div className={classNames(classes.root,'p-48 flex flex-col flex-1 items-center h-full')}>
-                <h1 className="h-full flex flex-row text-36 items-center">Franchisee Transaction Summary Under Development</h1>
-                {/*<AppBar position="static" color="default">*/}
-                    {/*<Tabs value={this.state.value} onChange={this.handleChange}>*/}
-                        {/*<Tab label="Customer Transactions" />*/}
-                        {/*<Tab label="Customer Account Totals" />*/}
-                        {/*<Tab label="Supply Transactions" />*/}
-                        {/*<Tab label="Charge Backs" />*/}
-                        {/*<Tab label="Leases" />*/}
-                        {/*<Tab label="Regular Misc" />*/}
-                    {/*</Tabs>*/}
-                {/*</AppBar>*/}
-                {/*{this.state.value === 0 && <TabContainer>Item One</TabContainer>}*/}
-                {/*{this.state.value === 1 && <TabContainer>Item Two</TabContainer>}*/}
-                {/*{this.state.value === 2 && <TabContainer>Item Three</TabContainer>}*/}
-                {/*{this.state.value === 3 && <TabContainer>Item Four</TabContainer>}*/}
-                {/*{this.state.value === 4 && <TabContainer>Item Five</TabContainer>}*/}
-                {/*{this.state.value === 5 && <TabContainer>Item Six</TabContainer>}*/}
+                <CustomerTransactions />
+                {franchiseeReport===null  && (
+                    <CircularProgress className={classes.progress} color="secondary"  />
+                )}
             </div>
         );
     }
@@ -107,6 +82,7 @@ function mapStateToProps({franchiseeReports, auth}) {
         franchiseeReports: franchiseeReports.franchiseeReports,
         bLoadedFranchiseeReports: franchiseeReports.bLoadedFranchiseeReports,
         regionId: auth.login.defaultRegionId,
+        franchiseeReport: franchiseeReports.franchiseeReport,
     }
 }
 
