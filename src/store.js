@@ -27,7 +27,7 @@ const persistConfig = {
     key: 'janiking_web',
     storage: storage,
     blacklist: ['invoices', 'customers', 'franchisees', 'franchiseeReports', 'chatPanel', 'leads', 'leases',
-    'fuse', 'creditInvoiceList', 'contactsApp', 'notification', 'usersApp', 'planType', 'territories', 'billruns',
+    'creditInvoiceList', 'contactsApp', 'notification', 'usersApp', 'planType', 'territories', 'billruns',
     'transactions', 'payments'],
     stateReconciler: autoMergeLevel2 // see "Merge Process" section for details.
 };

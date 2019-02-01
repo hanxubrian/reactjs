@@ -293,6 +293,9 @@ const styles1 = theme => ({
         display: 'flex',
         alignItems: 'center',
     },
+    singleValue:{
+        fontSize: 13
+    }
 
 });
 
@@ -774,7 +777,6 @@ class TransactionEditForm extends Component {
                 },
             }),
         };
-        console.log('reSell=', this.state.reSell);
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
@@ -1107,7 +1109,7 @@ class TransactionEditForm extends Component {
                                 label="ReSell"
                             />
                         </div>
-                        {this.state.TrxChargeClass.value==='5c41272c4d275d4560e90fb9' && this.props.transactionForm.vendor!==null && ( // Franchisee Supplies
+                        {this.state.TrxChargeClass.value==='5c5320066846d77648859107' && this.props.transactionForm.vendor!==null && ( // Franchisee Supplies
                             <Grid container className={classNames(classes.formControl, "mb-0 p-0")} >
                                 <Grid item xs={12} sm={12} md={12} className="flex flex-row pt-16 w-full items-center no-padding">
                                     <TextField
