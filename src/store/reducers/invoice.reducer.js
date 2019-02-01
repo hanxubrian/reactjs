@@ -51,6 +51,7 @@ const initialState = {
     removedId: undefined,
     billingLists: null,
     serviceLists: null,
+    bOpenPaymentInvoiceForm: false,
 };
 
 
@@ -331,6 +332,12 @@ const invoices = function(state = initialState, action) {
             return {...state, billingLists: action.payload};
         case Actions.GET_SERVICE_LIST:
             return {...state, serviceLists: action.payload};
+        case Actions.OPEN_PAYMENT_INVOICE_FORM: {
+            return {...state, bOpenPaymentInvoiceForm: true}
+        }
+        case Actions.CLOSE_PAYMENT_INVOICE_FORM: {
+            return {...state, bOpenPaymentInvoiceForm: false}
+        }
         default:
         {
             return state;
@@ -342,6 +349,6 @@ const persistConfig = {
     key: 'invoices',
     storage: storage,
     blacklist: ['invoicesDB', 'customersDB', 'bInvoiceStart', 'bOpenedSummaryPanel', 'bOpenedFilterPanel', 'bLoadedCustomers',
-        'customerTaxAmountLine', 'invoiceForm', 'invoiceDateOption', 'bCustomerErr', 'bInvoiceErr']
+        'customerTaxAmountLine', 'invoiceForm', 'invoiceDateOption', 'bCustomerErr', 'bInvoiceErr', 'bOpenPaymentInvoiceForm']
 };
 export default persistReducer(persistConfig, invoices);

@@ -24,6 +24,7 @@ import InvoiceListContent from "./InvoiceListContent"
 import InvoiceForm from "./InvoiceForm"
 import SummaryPanel from './SummaryPanel';
 import FilterPanel from './filterPanel';
+import PaymentInvoiceForm from './components/payInvoice';
 
 // for store
 import {bindActionCreators} from "redux";
@@ -530,7 +531,7 @@ class InvoiceApp extends Component {
                                                 <FuseAnimate animation="transition.expandIn" delay={300}>
                                                     <Button variant="contained" color="primary"
                                                             className={classNames(classes.btntop) }
-                                                            // onClick={()=>this.onNewInvoice()}
+                                                            onClick={()=>this.props.openPaymentInvoiceFormDialog()}
                                                     >
                                                         <Icon className={classes.leftIcon}>attach_money</Icon>
                                                         Pay this Invoice
@@ -679,6 +680,7 @@ class InvoiceApp extends Component {
                                     </Button>
                                 </DialogActions>
                             </Dialog>
+                            <PaymentInvoiceForm />
                         </div>
                     }
                     leftSidebarHeader={
@@ -746,6 +748,7 @@ function mapDispatchToProps(dispatch)
 
         closeInvoiceAlertDialog: Actions.closeInvoiceAlertDialog,
         closeCustomerAlertDialog: Actions.closeCustomerAlertDialog,
+        openPaymentInvoiceFormDialog: Actions.openPaymentInvoiceFormDialog,
     }, dispatch);
 }
 
@@ -782,6 +785,7 @@ function mapStateToProps({invoices, auth, customers, franchisees, fuse})
         bLoadedCustomers: invoices.bLoadedSuggestCustomers,
         bCustomerFetchStart: invoices.bSuggestCustomersFetchStart,
         removedId: invoices.removedId,
+
 
         regionId: auth.login.defaultRegionId,
 

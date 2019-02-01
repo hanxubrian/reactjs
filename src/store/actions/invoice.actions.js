@@ -32,6 +32,8 @@ export const GET_SUGGEST_CUSTOMERS_FETCH_START = "[INVOICES] GET SUGGEST CUSTOME
 export const GET_BILLING_LIST = "[INVOICES] GET BILLING LIST";
 export const GET_SERVICE_LIST = "[INVOICES] GET SERVICE LIST";
 export const UPDATE_AN_INVOICE = "[INVOICES] UPDATE AN INVOICE";
+export const OPEN_PAYMENT_INVOICE_FORM = "[INVOICES] OPEN PAYMENT INVOICE FORM";
+export const CLOSE_PAYMENT_INVOICE_FORM = "[INVOICES] CLOSE PAYMENT INVOICE FORM";
 
 // for Add/Edit
 export const OPEN_NEW_INVOICE_FORM = '[INVOICES APP] OPEN NEW INVOICE FORM';
@@ -420,5 +422,17 @@ export function closeInvoiceAlertDialog(){
 export function closeCustomerAlertDialog(){
     return {
         type: CLOSE_CUSTOMER_ERROR_DIALOG,
+    }
+}
+
+export function openPaymentInvoiceFormDialog() {
+    return {
+        type: OPEN_PAYMENT_INVOICE_FORM
+    }
+}
+
+export function closePaymentInvoiceFormDialog() {
+    return {
+        type: CLOSE_PAYMENT_INVOICE_FORM
     }
 }
