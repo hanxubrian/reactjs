@@ -16,6 +16,13 @@ import Select from "@material-ui/core/Select/Select";
 import Input from "@material-ui/core/Input/Input";
 import OutlinedInput from "@material-ui/core/OutlinedInput/OutlinedInput";
 
+// Auto Suggest
+import Autosuggest from 'react-autosuggest';
+import Paper from "@material-ui/core/Paper/Paper";
+import match from 'autosuggest-highlight/match';
+import parse from 'autosuggest-highlight/parse';
+import deburr from 'lodash/deburr';
+
 const styles = theme => ({
     root     : {
         display : 'flex',
@@ -34,10 +41,140 @@ const styles = theme => ({
     multiSelectControl: {
     margin: theme.spacing.unit,
     marginLeft: 0
-    //minWidth: 120,
-    //maxWidth: 300,
-}
+    },
+    container: {
+        position: 'relative',
+        width: '100%'
+    },
+    suggestionsContainerOpen: {
+        position: 'absolute',
+        zIndex: 1000,
+        left: 0,
+        right: 0,
+        maxHeight: 200,
+        height: 200,
+        width: 300,
+        overflowY: 'scroll'
+    },
+    suggestion: {
+        display: 'block',
+    },
+    suggestionsList: {
+        margin: 0,
+        padding: 0,
+        listStyleType: 'none',
+    },
+    divider: {
+        height: theme.spacing.unit * 2,
+    }
 });
+
+
+const suggestions = [
+    { label: 'Afghanistan' },
+    { label: 'Aland Islands' },
+    { label: 'Albania' },
+    { label: 'Algeria' },
+    { label: 'American Samoa' },
+    { label: 'Andorra' },
+    { label: 'Angola' },
+    { label: 'Anguilla' },
+    { label: 'Antarctica' },
+    { label: 'Antigua and Barbuda' },
+    { label: 'Argentina' },
+    { label: 'Armenia' },
+    { label: 'Aruba' },
+    { label: 'Australia' },
+    { label: 'Austria' },
+    { label: 'Azerbaijan' },
+    { label: 'Bahamas' },
+    { label: 'Bahrain' },
+    { label: 'Bangladesh' },
+    { label: 'Barbados' },
+    { label: 'Belarus' },
+    { label: 'Belgium' },
+    { label: 'Belize' },
+    { label: 'Benin' },
+    { label: 'Bermuda' },
+    { label: 'Bhutan' },
+    { label: 'Bolivia, Plurinational State of' },
+    { label: 'Bonaire, Sint Eustatius and Saba' },
+    { label: 'Bosnia and Herzegovina' },
+    { label: 'Botswana' },
+    { label: 'Bouvet Island' },
+    { label: 'Brazil' },
+    { label: 'British Indian Ocean Territory' },
+    { label: 'Brunei Darussalam' },
+];
+
+function renderInputComponent(inputProps) {
+    const { classes, inputRef = () => {}, ref, ...other } = inputProps;
+
+    return (
+        <TextField
+            fullWidth
+            variant="outlined"
+            className={classes.textField}
+            margin="dense"
+            InputProps={{
+                inputRef: node => {
+                    ref(node);
+                    inputRef(node);
+                },
+                classes: {
+                    input: classes.input,
+                },
+            }}
+            {...other}
+        />
+    );
+}
+
+function renderSuggestion(suggestion, { query, isHighlighted }) {
+    const matches = match(suggestion.label, query);
+    const parts = parse(suggestion.label, matches);
+
+    return (
+        <MenuItem selected={isHighlighted} component="div">
+            <div>
+                {parts.map((part, index) =>
+                        part.highlight ? (
+                            <span key={String(index)} style={{ fontWeight: 500 }}>
+              {part.text}
+            </span>
+                        ) : (
+                            <strong key={String(index)} style={{ fontWeight: 300 }}>
+                                {part.text}
+                            </strong>
+                        ),
+                )}
+            </div>
+        </MenuItem>
+    );
+}
+
+function getSuggestions(value) {
+    const inputValue = deburr(value.trim()).toLowerCase();
+    const inputLength = inputValue.length;
+    let count = 0;
+
+    return inputLength === 0
+        ? []
+        : suggestions.filter(suggestion => {
+            const keep =
+                count < 5 && suggestion.label.slice(0, inputLength).toLowerCase() === inputValue;
+
+            if (keep) {
+                count += 1;
+            }
+
+            return keep;
+        });
+}
+
+function getSuggestionValue(suggestion) {
+    return suggestion.label;
+}
 
 
 const department = [
@@ -193,7 +330,11 @@ class UsersForm extends React.Component {
         userTypeVendor: '',
         userTypeEmployee: '',
         userTypeThirdParty: '',
-        userTypeContractor: ''
+        userTypeContractor: '',
+
+        single: '',
+        popper: '',
+        suggestions: [],
     };
 
 
@@ -202,10 +343,37 @@ class UsersForm extends React.Component {
     };
 
 
+    handleSuggestionsFetchRequested = ({ value }) => {
+        this.setState({
+            suggestions: getSuggestions(value),
+        });
+    };
+
+    handleSuggestionsClearRequested = () => {
+        this.setState({
+            suggestions: [],
+        });
+    };
+
+    handleAutoChange = name => (event, { newValue }) => {
+        this.setState({
+            [name]: newValue,
+        });
+    };
+
 
     render()
     {
         const {classes} = this.props;
+
+        const autosuggestProps = {
+            renderInputComponent,
+            suggestions: this.state.suggestions,
+            onSuggestionsFetchRequested: this.handleSuggestionsFetchRequested,
+            onSuggestionsClearRequested: this.handleSuggestionsClearRequested,
+            getSuggestionValue,
+            renderSuggestion,
+        };
 
         return (
             <div className={classes.root}>
@@ -498,7 +666,7 @@ class UsersForm extends React.Component {
                         </GridItem>
                     </GridContainer>
                 </div>
-                <div className={classNames(classes.userFormSection,"w-full")}>
+                <div className={classNames(classes.userFormSection,"w-full relative")}>
                     <h4>User Type</h4>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -554,17 +722,36 @@ class UsersForm extends React.Component {
                                 />
                             )}
                             {this.state.userType === 'Customer' && (
-                                <TextField
-                                    id="userTypeCustomer"
-                                    label="Customer"
-                                    variant="outlined"
-                                    className={classes.textField}
-                                    value={this.state.userTypeCustomer}
-                                    onChange={this.handleChange("userTypeCustomer")}
-                                    style={{marginLeft:'1%'}}
-                                    margin="dense"
-                                    fullWidth
-                                    required
+                                <Autosuggest
+                                    {...autosuggestProps}
+                                    inputProps={{
+                                        classes,
+                                        label: 'Label',
+                                        placeholder: 'With Popper',
+                                        value: this.state.popper,
+                                        onChange: this.handleAutoChange('popper'),
+                                        inputRef: node => {
+                                            this.popperNode = node;
+                                        },
+                                        InputLabelProps: {
+                                            shrink: true,
+                                        },
+                                    }}
+                                    theme={{
+                                        container: classNames(classes.container),
+                                        suggestionsContainerOpen: classes.suggestionsContainerOpen,
+                                        suggestionsList: classes.suggestionsList,
+                                        suggestion: classes.suggestion,
+                                    }}
+                                    renderSuggestionsContainer={options => (
+                                            <Paper
+                                                square
+                                                {...options.containerProps}
+                                                style={{ width: this.popperNode ? this.popperNode.clientWidth : null }}
+                                            >
+                                                {options.children}
+                                            </Paper>
+                                    )}
                                 />
                             )}
                             {this.state.userType === 'Vendor' && (
