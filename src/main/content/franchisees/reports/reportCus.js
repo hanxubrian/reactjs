@@ -210,54 +210,54 @@ class ReportCus extends Component {
             </tr>
         )
     };
-    render()
-    {
-        const { classes, franchiseeReport, all_regions} = this.props;
-        console.log('ppp=', franchiseeReport.PERIODS[0].FRANCHISEES[0]);
+    render() {
 
-        if(franchiseeReport===null || all_regions.length===0)
+        const {classes, franchiseeReport, all_regions} = this.props;
+
+        if (franchiseeReport && franchiseeReport !== null &&  franchiseeReport.PERIODS && franchiseeReport.PERIODS.length>0 &&  franchiseeReport.PERIODS[0] && franchiseeReport.PERIODS[0] !== null) {
+
+
+        if (franchiseeReport === null || all_regions.length === 0)
             return (
-                <div className={classes.overlay} style={{
-
-                }}>
-                    <CircularProgress className={classes.progress} color="secondary"  />
+                <div className={classes.overlay} style={{}}>
+                    <CircularProgress className={classes.progress} color="secondary"/>
 
                 </div>
 
             );
 
-        const {DLR_CODE, SUMMARY_PAGE, CUS_TRXS, CUST_ACCT_TOTALS, SUPPLY_TRXS, LEASE_PAYMENTS,REG_MISC, CHARGEBACKS ,FINDER_FEES}  = franchiseeReport.PERIODS[0].FRANCHISEES[0];
+        const {DLR_CODE, SUMMARY_PAGE, CUS_TRXS, CUST_ACCT_TOTALS, SUPPLY_TRXS, LEASE_PAYMENTS, REG_MISC, CHARGEBACKS, FINDER_FEES} = franchiseeReport.PERIODS[0].FRANCHISEES[0];
 
 
-        console.log("SUMMARY_PAGE[0]['ACTUAL BILLING'][0]",SUMMARY_PAGE[0]['ACTUAL BILLING']);
+        console.log("SUMMARY_PAGE[0]['ACTUAL BILLING'][0]", SUMMARY_PAGE[0]['ACTUAL BILLING']);
         // const aBillings = [SUMMARY_PAGE[0]['ACTUAL BILLING'][0],SUMMARY_PAGE[0].ADTL_BILL_FRAN[0],
         //     SUMMARY_PAGE[0].CLIENT_SUPPLIES[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE[0]];
 
         const aBillings = [
-            (SUMMARY_PAGE[0]['ACTUAL BILLING'] !==null)?SUMMARY_PAGE[0]['ACTUAL BILLING'][0]:'',
-            (SUMMARY_PAGE[0].ADTL_BILL_FRAN !== null)?SUMMARY_PAGE[0].ADTL_BILL_FRAN[0]:'',
-            (SUMMARY_PAGE[0].CLIENT_SUPPLIES !== null)?SUMMARY_PAGE[0].CLIENT_SUPPLIES[0]:'',
-            (SUMMARY_PAGE[0].ADDTL_BILL_OFFICE !== null)?SUMMARY_PAGE[0].ADDTL_BILL_OFFICE[0]:''
+            (SUMMARY_PAGE[0]['ACTUAL BILLING'] !== null) ? SUMMARY_PAGE[0]['ACTUAL BILLING'][0] : '',
+            (SUMMARY_PAGE[0].ADTL_BILL_FRAN !== null) ? SUMMARY_PAGE[0].ADTL_BILL_FRAN[0] : '',
+            (SUMMARY_PAGE[0].CLIENT_SUPPLIES !== null) ? SUMMARY_PAGE[0].CLIENT_SUPPLIES[0] : '',
+            (SUMMARY_PAGE[0].ADDTL_BILL_OFFICE !== null) ? SUMMARY_PAGE[0].ADDTL_BILL_OFFICE[0] : ''
         ];
-        console.log("aBillings",aBillings);
-        const aBillings1 =[
-            (SUMMARY_PAGE[0].SUBTOTAL !== null)?SUMMARY_PAGE[0].SUBTOTAL[0]:'',
-            (SUMMARY_PAGE[0].CLIENT_SALES_TAX !== null)?SUMMARY_PAGE[0].CLIENT_SALES_TAX[0]:''
+        console.log("aBillings", aBillings);
+        const aBillings1 = [
+            (SUMMARY_PAGE[0].SUBTOTAL !== null) ? SUMMARY_PAGE[0].SUBTOTAL[0] : '',
+            (SUMMARY_PAGE[0].CLIENT_SALES_TAX !== null) ? SUMMARY_PAGE[0].CLIENT_SALES_TAX[0] : ''
         ];
-        const aBillings2 =[SUMMARY_PAGE[0].TOTAL_MON_REV[0]];
-        const aDeductions0= [SUMMARY_PAGE[0].ROYALTY[0], SUMMARY_PAGE[0].ACCT_FEE[0],SUMMARY_PAGE[0].TECH_FEE[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE_COMM[0],SUMMARY_PAGE[0].FRAN_NOTE_PYMT[0]];
+        const aBillings2 = [SUMMARY_PAGE[0].TOTAL_MON_REV[0]];
+        const aDeductions0 = [SUMMARY_PAGE[0].ROYALTY[0], SUMMARY_PAGE[0].ACCT_FEE[0], SUMMARY_PAGE[0].TECH_FEE[0], SUMMARY_PAGE[0].ADDTL_BILL_OFFICE_COMM[0], SUMMARY_PAGE[0].FRAN_NOTE_PYMT[0]];
 
 
-        const aDeductions1 = [ "FINDERS_FEES", "FRANCHISE SUPPLIES", "REGULAR MISCELLANEOUS"];
+        const aDeductions1 = ["FINDERS_FEES", "FRANCHISE SUPPLIES", "REGULAR MISCELLANEOUS"];
         // "SUBTOTAL_REG_DEDS",
         //     "ADVERTISING_FEE", "TOTAL_LEASES", "BUSINESS_PROT", "BPP_ADMIN", "CLIENT_SALES_TAX_BOT", "CHARGEBACKS", "PAGERS",
         //     "PAGERS2", "SPECIAL_MISC", "SUBTOTAL_SPEC_DEDS", "TOTAL_DEDS", "DUE_TO_FRAN"
-        const aDeductions2 =["FRANCHISE NOTE PAYMENT2", "ACCT_FEE_REB_CUR", "ACCT_FEE_REB_BAL"];
-        const aDeductions3 =["SUBTOTAL_REG_DEDS"];
-        const aDeductions4 =["ADVERTISING_FEE", "TOTAL_LEASES", "BUSINESS_PROT", "BPP_ADMIN", "CLIENT_SALES_TAX_BOT", "CHARGEBACKS", "PAGERS",
-            "PAGERS2", "SPECIAL_MISC","DUE_TO_FRAN"];
-        const aDeductions5 =["SUBTOTAL_SPEC_DEDS"];
-        const aDeductions6 =["TOTAL_DEDS"];
+        const aDeductions2 = ["FRANCHISE NOTE PAYMENT2", "ACCT_FEE_REB_CUR", "ACCT_FEE_REB_BAL"];
+        const aDeductions3 = ["SUBTOTAL_REG_DEDS"];
+        const aDeductions4 = ["ADVERTISING_FEE", "TOTAL_LEASES", "BUSINESS_PROT", "BPP_ADMIN", "CLIENT_SALES_TAX_BOT", "CHARGEBACKS", "PAGERS",
+            "PAGERS2", "SPECIAL_MISC", "DUE_TO_FRAN"];
+        const aDeductions5 = ["SUBTOTAL_SPEC_DEDS"];
+        const aDeductions6 = ["TOTAL_DEDS"];
 
 
         let ct_amount = 0.0, ct_tax = 0.0, ct_total = 0.0;
@@ -267,70 +267,70 @@ class ReportCus extends Component {
         let st_extended = 0.0, st_tax = 0.0, st_total = 0.0;
         let cat_billing = 0.0, cat_month = 0.0, cat_addtl = 0.0, cat_cs = 0.0, cat_ofc = 0.0, cat_fee = 0.0;
         let finder_fee_tot = 0.0;
-        if (FINDER_FEES !==null){
-            FINDER_FEES.forEach(finder=>{
-                finder_fee_tot +=parseFloat(finder.PYMNT_TOT);
-            }) ;
+        if (FINDER_FEES !== null) {
+            FINDER_FEES.forEach(finder => {
+                finder_fee_tot += parseFloat(finder.PYMNT_TOT);
+            });
         }
-        if(CUS_TRXS!==null){
-            CUS_TRXS.forEach(ct=>{
+        if (CUS_TRXS !== null) {
+            CUS_TRXS.forEach(ct => {
                 ct_amount += parseFloat(ct.TRX_AMT);
                 ct_tax += parseFloat(ct.TRX_TAX);
                 ct_total += parseFloat(ct.TRX_TOT);
-                ct_amount =isNaN(ct_amount)?0:ct_amount;
-                ct_tax =isNaN(ct_tax)?0:ct_tax;
-                ct_total =isNaN(ct_total)?0:ct_total;
+                ct_amount = isNaN(ct_amount) ? 0 : ct_amount;
+                ct_tax = isNaN(ct_tax) ? 0 : ct_tax;
+                ct_total = isNaN(ct_total) ? 0 : ct_total;
             });
         }
-        if(LEASE_PAYMENTS !==null){
-            LEASE_PAYMENTS.forEach(lp=>{
+        if (LEASE_PAYMENTS !== null) {
+            LEASE_PAYMENTS.forEach(lp => {
                 lp_amount += parseFloat(lp.PYMNT_AMT);
                 lp_tax += parseFloat(lp.PYMNT_TAX);
                 lp_total += parseFloat(lp.PYMNT_TOT);
 
-                lp_amount =isNaN(lp_amount)?0:lp_amount;
-                lp_tax =isNaN(lp_tax)?0:lp_tax;
-                lp_total =isNaN(lp_total)?0:lp_total;
+                lp_amount = isNaN(lp_amount) ? 0 : lp_amount;
+                lp_tax = isNaN(lp_tax) ? 0 : lp_tax;
+                lp_total = isNaN(lp_total) ? 0 : lp_total;
             });
         }
 
 
-        if(CHARGEBACKS!==null) {
+        if (CHARGEBACKS !== null) {
             CHARGEBACKS.forEach(st => {
                 cb_amount += parseFloat(st.TRX_AMT);
                 cb_tax += parseFloat(st.TRX_TAX);
                 cb_total += parseFloat(st.TRX_TOT);
 
-                cb_amount =isNaN(cb_amount)?0:cb_amount;
-                cb_tax =isNaN(cb_tax)?0:cb_tax;
-                cb_total =isNaN(cb_total)?0:cb_total;
+                cb_amount = isNaN(cb_amount) ? 0 : cb_amount;
+                cb_tax = isNaN(cb_tax) ? 0 : cb_tax;
+                cb_total = isNaN(cb_total) ? 0 : cb_total;
             });
         }
 
-        if(REG_MISC!==null ) {
+        if (REG_MISC !== null) {
             REG_MISC.forEach(sm => {
                 sm_amount += parseFloat(sm.TRX_AMT);
                 sm_tax += parseFloat(sm.TRX_TAX);
                 sm_total += parseFloat(sm.TRX_TOT);
 
-                sm_amount =isNaN(sm_amount)?0:sm_amount;
-                sm_tax =isNaN(sm_tax)?0:sm_tax;
-                sm_total =isNaN(sm_total)?0:sm_total;
+                sm_amount = isNaN(sm_amount) ? 0 : sm_amount;
+                sm_tax = isNaN(sm_tax) ? 0 : sm_tax;
+                sm_total = isNaN(sm_total) ? 0 : sm_total;
             });
         }
-        if(SUPPLY_TRXS!==null){
-            SUPPLY_TRXS.forEach(st=>{
+        if (SUPPLY_TRXS !== null) {
+            SUPPLY_TRXS.forEach(st => {
                 st_extended += parseFloat(st.EXTENDED);
                 st_tax += parseFloat(st.TRX_TAX);
                 st_total += parseFloat(st.TRX_TOT);
 
-                st_extended =isNaN(st_extended)?0:st_extended;
-                st_tax =isNaN(st_tax)?0:st_tax;
-                st_total =isNaN(st_total)?0:st_total;
+                st_extended = isNaN(st_extended) ? 0 : st_extended;
+                st_tax = isNaN(st_tax) ? 0 : st_tax;
+                st_total = isNaN(st_total) ? 0 : st_total;
             });
         }
-        if(CUST_ACCT_TOTALS!==null){
-            CUST_ACCT_TOTALS.forEach(cat=>{
+        if (CUST_ACCT_TOTALS !== null) {
+            CUST_ACCT_TOTALS.forEach(cat => {
                 cat_billing += parseFloat(cat.CONT_BILL);
                 cat_month += parseFloat(cat.CUR_MONTH);
                 cat_addtl += parseFloat(cat.ADTL_B_FRN);
@@ -338,20 +338,20 @@ class ReportCus extends Component {
                 cat_ofc += parseFloat(cat.ADTL_B_OFC);
                 cat_fee += parseFloat(cat.FF_PYMNT);
 
-                cat_billing =isNaN(cat_billing)?0:cat_billing;
-                cat_month =isNaN(cat_month)?0:cat_month;
-                cat_addtl =isNaN(cat_addtl)?0:cat_addtl;
-                cat_cs =isNaN(cat_cs)?0:cat_cs;
-                cat_ofc =isNaN(cat_ofc)?0:cat_ofc;
-                cat_fee =isNaN(cat_fee)?0:cat_fee;
+                cat_billing = isNaN(cat_billing) ? 0 : cat_billing;
+                cat_month = isNaN(cat_month) ? 0 : cat_month;
+                cat_addtl = isNaN(cat_addtl) ? 0 : cat_addtl;
+                cat_cs = isNaN(cat_cs) ? 0 : cat_cs;
+                cat_ofc = isNaN(cat_ofc) ? 0 : cat_ofc;
+                cat_fee = isNaN(cat_fee) ? 0 : cat_fee;
             });
 
         }
 
         return (
-            <div className={classNames(classes.root, "p-0 sm:p-64  whole print:p-0")} id ="wholediv">
-                <div id ="testdiv" className="cardname">
-                    <Card className={classNames(classes.card,  "pdfcardcontent mx-auto")}>
+            <div className={classNames(classes.root, "p-0 sm:p-64  whole print:p-0")} id="wholediv">
+                <div id="testdiv" className="cardname">
+                    <Card className={classNames(classes.card, "pdfcardcontent mx-auto")}>
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                             <div>
                                 <table align="">
@@ -390,7 +390,8 @@ class ReportCus extends Component {
                                             <td className="text-left">
                                                 <Typography color="inherit">{SUMMARY_PAGE[0].FRAN_NAME}</Typography>
                                                 <Typography color="inherit">{SUMMARY_PAGE[0].FRAN_ADDRESS}</Typography>
-                                                <Typography color="inherit">{SUMMARY_PAGE[0].FRAN_CITY} {SUMMARY_PAGE[0].FRAN_STATE},{SUMMARY_PAGE[0].FRAN_ZIP}</Typography>
+                                                <Typography
+                                                    color="inherit">{SUMMARY_PAGE[0].FRAN_CITY} {SUMMARY_PAGE[0].FRAN_STATE},{SUMMARY_PAGE[0].FRAN_ZIP}</Typography>
                                             </td>
                                             <td className="text-left" width='200'>
                                                 <Typography color="inherit"><br/></Typography>
@@ -398,9 +399,12 @@ class ReportCus extends Component {
                                                 <Typography color="inherit"><br/></Typography>
                                             </td>
                                             <td className="text-left">
-                                                <Typography color="inherit">Plan Type: {SUMMARY_PAGE[0].PLAN_TYPE}</Typography>
-                                                <Typography color="inherit">Plan Type: {SUMMARY_PAGE[0].DATE_SIGN}</Typography>
-                                                <Typography color="inherit">Plan Type: {SUMMARY_PAGE[0].CONTACT}</Typography>
+                                                <Typography color="inherit">Plan
+                                                    Type: {SUMMARY_PAGE[0].PLAN_TYPE}</Typography>
+                                                <Typography color="inherit">Plan
+                                                    Type: {SUMMARY_PAGE[0].DATE_SIGN}</Typography>
+                                                <Typography color="inherit">Plan
+                                                    Type: {SUMMARY_PAGE[0].CONTACT}</Typography>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -408,8 +412,8 @@ class ReportCus extends Component {
                                 </div>
 
                                 <div className="mt-16">
-                                    <h2 style ={{color:'blue'}}>FRANCHISEE REVENUE:</h2>
-                                    <div style ={divline}></div>
+                                    <h2 style={{color: 'blue'}}>FRANCHISEE REVENUE:</h2>
+                                    <div style={divline}></div>
                                     <table className="">
                                         <thead>
                                         <tr>
@@ -427,75 +431,75 @@ class ReportCus extends Component {
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        { aBillings && aBillings.length>0 &&  aBillings.map((b, index)=>{
-                                            if(b !=='')
-                                                return (
-                                                    <tr key={index}>
-                                                        <td>
-                                                            <Typography variant="subtitle1">{b.LABEL}</Typography>
-                                                        </td>
-                                                        <td className="text-right">
-                                                            ${parseFloat(b.AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
-                                                        </td>
-                                                    </tr>
-                                                )
+                                        {aBillings && aBillings.length > 0 && aBillings.map((b, index) => {
+                                                if (b !== '')
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>
+                                                                <Typography variant="subtitle1">{b.LABEL}</Typography>
+                                                            </td>
+                                                            <td className="text-right">
+                                                                ${parseFloat(b.AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                                            </td>
+                                                        </tr>
+                                                    )
 
-                                            else{
-                                                return (<tr key ={index}/>)
+                                                else {
+                                                    return (<tr key={index}/>)
+                                                }
                                             }
-                                        }
                                         )}
 
 
                                         </tbody>
                                     </table>
-                                    <table style={{width:'80%'}}>
+                                    <table style={{width: '80%'}}>
                                         <tbody>
 
-                                        { aBillings1.map((b, index)=>{
-                                            if(b !== "")
-                                                return (
-                                                    <tr key={index}>
-                                                        <td width="350">
-                                                            <Typography variant="subtitle1">{b.LABEL}</Typography>
-                                                        </td>
-                                                        <td width ="" className="text-right">
-                                                            ${parseFloat(b.AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            else
-                                                return(<tr key={index}/>)
+                                        {aBillings1.map((b, index) => {
+                                                if (b !== "")
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td width="350">
+                                                                <Typography variant="subtitle1">{b.LABEL}</Typography>
+                                                            </td>
+                                                            <td width="" className="text-right">
+                                                                ${parseFloat(b.AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                else
+                                                    return (<tr key={index}/>)
                                             }
                                         )}
 
                                         </tbody>
                                     </table>
-                                    <table style={{width:'90%'}}>
+                                    <table style={{width: '90%'}}>
                                         <tbody>
 
-                                        {  aBillings2.map((b, index)=>{
-                                            if(b !==null && b!=='')
-                                                return (
-                                                    <tr key={index}>
-                                                        <td width="350">
-                                                            <Typography variant="subtitle1">{b.LABEL}</Typography>
-                                                        </td>
-                                                        <td width ="" className="text-right">
-                                                            ${parseFloat(b.AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            else{
-                                                return(<tr key={index}/>)
-                                            }
+                                        {aBillings2.map((b, index) => {
+                                                if (b !== null && b !== '')
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td width="350">
+                                                                <Typography variant="subtitle1">{b.LABEL}</Typography>
+                                                            </td>
+                                                            <td width="" className="text-right">
+                                                                ${parseFloat(b.AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                else {
+                                                    return (<tr key={index}/>)
+                                                }
                                             }
                                         )}
 
                                         </tbody>
                                     </table>
-                                    <h2 className="pt-16" style ={{color:'blue'}}>FRANCHISEE DEDUCTIONS:</h2>
-                                    <div style ={divline}></div>
+                                    <h2 className="pt-16" style={{color: 'blue'}}>FRANCHISEE DEDUCTIONS:</h2>
+                                    <div style={divline}></div>
                                     <table className="">
                                         <thead>
                                         <tr>
@@ -508,41 +512,41 @@ class ReportCus extends Component {
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        { aDeductions0.map((b, index)=>{
-                                            if(b !== null && b !=='')
-                                                return (
-                                                    <tr key={index}>
-                                                        <td>
-                                                            <Typography variant="subtitle1">{b.LABEL}</Typography>
-                                                        </td>
-                                                        <td className="text-right">
-                                                            ${parseFloat(b.AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            else{
-                                                return(<tr key={index} />)
-                                            }
+                                        {aDeductions0.map((b, index) => {
+                                                if (b !== null && b !== '')
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>
+                                                                <Typography variant="subtitle1">{b.LABEL}</Typography>
+                                                            </td>
+                                                            <td className="text-right">
+                                                                ${parseFloat(b.AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                else {
+                                                    return (<tr key={index}/>)
+                                                }
                                             }
                                         )}
-                                        { aDeductions1.map((b, index)=>{
-                                            if(b!== null && b!=='')
-                                                return (
-                                                    <tr key={index}>
-                                                        <td>
-                                                            <Typography variant="subtitle1">
-                                                                {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
-                                                            </Typography>
-                                                        </td>
-                                                        <td className="text-right">
-                                                            {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
-                                                            ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            else{
-                                                return(<tr key={index} />)
-                                            }
+                                        {aDeductions1.map((b, index) => {
+                                                if (b !== null && b !== '')
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>
+                                                                <Typography variant="subtitle1">
+                                                                    {SUMMARY_PAGE[0][b] != null && SUMMARY_PAGE[0][b][0] != null && (SUMMARY_PAGE[0][b][0].LABEL)}
+                                                                </Typography>
+                                                            </td>
+                                                            <td className="text-right">
+                                                                {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
+                                                                ${SUMMARY_PAGE[0][b] != null && SUMMARY_PAGE[0][b][0] != null && (parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                else {
+                                                    return (<tr key={index}/>)
+                                                }
                                             }
                                         )}
                                         {/*{ aDeductions2 !=null && (aDeductions2.map((b, index)=>{*/}
@@ -564,135 +568,135 @@ class ReportCus extends Component {
 
                                         </tbody>
                                     </table>
-                                    <table style={{width:'80%'}}>
+                                    <table style={{width: '80%'}}>
                                         <tbody>
-                                        { aDeductions3.map((b, index)=>{
-                                            if(SUMMARY_PAGE[0][b]!== null && b!==' ')
-                                                return (
-                                                    <tr key={index}>
-                                                        <td>
-                                                            <Typography variant="subtitle1">
-                                                               {SUMMARY_PAGE[0][b] !== null && SUMMARY_PAGE[0][b][0] !== null && SUMMARY_PAGE[0][b][0].LABEL !== '' &&  ( SUMMARY_PAGE[0][b][0].LABEL ) }
-                                                            </Typography>
-                                                        </td>
-                                                        <td className="text-right">
-                                                            {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
-                                                           ${ SUMMARY_PAGE[0][b] !==null && SUMMARY_PAGE[0][b][0] !== null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            else{
-                                                return(<tr key={index} />)
-                                            }
+                                        {aDeductions3.map((b, index) => {
+                                                if (SUMMARY_PAGE[0][b] !== null && b !== ' ')
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>
+                                                                <Typography variant="subtitle1">
+                                                                    {SUMMARY_PAGE[0][b] !== null && SUMMARY_PAGE[0][b][0] !== null && SUMMARY_PAGE[0][b][0].LABEL !== '' && (SUMMARY_PAGE[0][b][0].LABEL)}
+                                                                </Typography>
+                                                            </td>
+                                                            <td className="text-right">
+                                                                {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
+                                                                ${SUMMARY_PAGE[0][b] !== null && SUMMARY_PAGE[0][b][0] !== null && (parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                else {
+                                                    return (<tr key={index}/>)
+                                                }
                                             }
                                         )}
                                         </tbody>
                                     </table>
-                                    <table style={{width:'63.5%'}}>
+                                    <table style={{width: '63.5%'}}>
                                         <tbody>
-                                        { aDeductions2 !=null && (aDeductions2.map((b, index)=>{
-                                            if(SUMMARY_PAGE[0][b]!== null && b!==' ')
-                                                return (
-                                                    <tr key={index}>
-                                                        <td>
-                                                            <Typography variant="subtitle1">{b}</Typography>
-                                                        </td>
-                                                        <td className="text-right">
-                                                            ${SUMMARY_PAGE[0][b]!==null &&(parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}
-                                                            {SUMMARY_PAGE[0][b] ==null &&(parseFloat(0).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}
+                                        {aDeductions2 != null && (aDeductions2.map((b, index) => {
+                                                if (SUMMARY_PAGE[0][b] !== null && b !== ' ')
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>
+                                                                <Typography variant="subtitle1">{b}</Typography>
+                                                            </td>
+                                                            <td className="text-right">
+                                                                ${SUMMARY_PAGE[0][b] !== null && (parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}
+                                                                {SUMMARY_PAGE[0][b] == null && (parseFloat(0).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}
 
-                                                            {/*${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }*/}
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            else{
-                                                return(<tr key={index} />)
-                                            }
+                                                                {/*${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }*/}
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                else {
+                                                    return (<tr key={index}/>)
+                                                }
                                             }
                                         ))}
                                         </tbody>
                                     </table>
-                                    <table style={{width:'63.5%'}}>
+                                    <table style={{width: '63.5%'}}>
                                         <tbody>
-                                        { aDeductions4.map((b, index)=>{
-                                            if(SUMMARY_PAGE[0][b] !== null && SUMMARY_PAGE[0][b].length>0 &&  b!== null && b!=='')
-                                                return (
-                                                    <tr key={index}>
-                                                        <td>
-                                                            <Typography variant="subtitle1">
-                                                               {SUMMARY_PAGE[0][b] !==null && SUMMARY_PAGE[0][b][0] !==null && SUMMARY_PAGE[0][b][0].LABEL !== null && ( SUMMARY_PAGE[0][b][0].LABEL) }
-                                                            </Typography>
-                                                        </td>
-                                                        <td className="text-right">
-                                                            {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
-                                                           ${ SUMMARY_PAGE[0][b] !==null && SUMMARY_PAGE[0][b][0] !==null && SUMMARY_PAGE[0][b][0].AMOUNT!==null &&  ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            else{
-                                                return(<tr key={index} />)
-                                            }
+                                        {aDeductions4.map((b, index) => {
+                                                if (SUMMARY_PAGE[0][b] !== null && SUMMARY_PAGE[0][b].length > 0 && b !== null && b !== '')
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>
+                                                                <Typography variant="subtitle1">
+                                                                    {SUMMARY_PAGE[0][b] !== null && SUMMARY_PAGE[0][b][0] !== null && SUMMARY_PAGE[0][b][0].LABEL !== null && (SUMMARY_PAGE[0][b][0].LABEL)}
+                                                                </Typography>
+                                                            </td>
+                                                            <td className="text-right">
+                                                                {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
+                                                                ${SUMMARY_PAGE[0][b] !== null && SUMMARY_PAGE[0][b][0] !== null && SUMMARY_PAGE[0][b][0].AMOUNT !== null && (parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                else {
+                                                    return (<tr key={index}/>)
+                                                }
                                             }
                                         )}
                                         </tbody>
                                     </table>
-                                    <table style={{width:'80%'}}>
+                                    <table style={{width: '80%'}}>
                                         <tbody>
-                                        { aDeductions5.map((b, index)=>{
-                                            if(SUMMARY_PAGE[0][b] !== null && SUMMARY_PAGE[0][b].length>0 &&  b!== null && b!=='')
-                                                return (
-                                                    <tr key={index}>
-                                                        <td>
-                                                            <Typography variant="subtitle1">
-                                                                {SUMMARY_PAGE[0][b] !==null && SUMMARY_PAGE[0][b][0] !==null && ( SUMMARY_PAGE[0][b][0].LABEL) }
-                                                            </Typography>
-                                                        </td>
-                                                        <td className="text-right">
-                                                            {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
-                                                            ${ SUMMARY_PAGE[0][b] !==null && SUMMARY_PAGE[0][b][0] !==null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            else{
-                                                return(<tr key={index} />)
-                                            }
+                                        {aDeductions5.map((b, index) => {
+                                                if (SUMMARY_PAGE[0][b] !== null && SUMMARY_PAGE[0][b].length > 0 && b !== null && b !== '')
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>
+                                                                <Typography variant="subtitle1">
+                                                                    {SUMMARY_PAGE[0][b] !== null && SUMMARY_PAGE[0][b][0] !== null && (SUMMARY_PAGE[0][b][0].LABEL)}
+                                                                </Typography>
+                                                            </td>
+                                                            <td className="text-right">
+                                                                {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
+                                                                ${SUMMARY_PAGE[0][b] !== null && SUMMARY_PAGE[0][b][0] !== null && (parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                else {
+                                                    return (<tr key={index}/>)
+                                                }
                                             }
                                         )}
                                         </tbody>
                                     </table>
-                                    <table style={{width:'90%'}}>
+                                    <table style={{width: '90%'}}>
                                         <tbody>
-                                        { aDeductions6.map((b, index)=>{
-                                            if(SUMMARY_PAGE[0][b] !== null && SUMMARY_PAGE[0][b].length > 0 &&  b!== null & b!=='')
-                                                return (
-                                                    <tr key={index}>
-                                                        <td>
-                                                            <Typography variant="subtitle1">
-                                                                {SUMMARY_PAGE[0][b] !==null && SUMMARY_PAGE[0][b][0] !==null && ( SUMMARY_PAGE[0][b][0].LABEL) }
-                                                            </Typography>
-                                                        </td>
-                                                        <td className="text-right">
-                                                            {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
-                                                            ${ SUMMARY_PAGE[0][b] !==null && SUMMARY_PAGE[0][b][0] !==null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            else{
-                                                return(<tr key={index} />)
-                                            }
+                                        {aDeductions6.map((b, index) => {
+                                                if (SUMMARY_PAGE[0][b] !== null && SUMMARY_PAGE[0][b].length > 0 && b !== null & b !== '')
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>
+                                                                <Typography variant="subtitle1">
+                                                                    {SUMMARY_PAGE[0][b] !== null && SUMMARY_PAGE[0][b][0] !== null && (SUMMARY_PAGE[0][b][0].LABEL)}
+                                                                </Typography>
+                                                            </td>
+                                                            <td className="text-right">
+                                                                {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
+                                                                ${SUMMARY_PAGE[0][b] !== null && SUMMARY_PAGE[0][b][0] !== null && (parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                else {
+                                                    return (<tr key={index}/>)
+                                                }
                                             }
                                         )}
                                         </tbody>
                                     </table>
-                                    <table style={{width:'90%'}}>
+                                    <table style={{width: '90%'}}>
                                         <tbody>
                                         <tr>
-                                            <td ><h2 style ={{color:'blue'}}>DUE TO FRANCHISEE:</h2></td>
+                                            <td><h2 style={{color: 'blue'}}>DUE TO FRANCHISEE:</h2></td>
                                             <td className="text-right">97,794.90</td>
                                         </tr>
                                         </tbody>
                                     </table>
-                                    <div style ={divline}></div>
+                                    <div style={divline}></div>
 
                                     <table className="">
                                         <thead>
@@ -788,12 +792,12 @@ class ReportCus extends Component {
                                 </div>
 
                                 <div className="mt-64">
-                                    <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}>
+                                    <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)',}}>
                                         <table>
                                             <thead>
                                             <tr>
                                                 <th width="300" align="left">
-                                                    <h2 >Customer Transactions</h2>
+                                                    <h2>Customer Transactions</h2>
                                                 </th>
                                                 <th width="100">Invoice</th>
                                                 <th width="250">Description</th>
@@ -803,27 +807,27 @@ class ReportCus extends Component {
                                     </div>
 
 
-                                    <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}>
-                                        <table style={{width:'100%' ,fontSize:'11px'}}>
-                                            <tbody >
-                                            <tr >
+                                    <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)',}}>
+                                        <table style={{width: '100%', fontSize: '11px'}}>
+                                            <tbody>
+                                            <tr>
                                                 <td width="65">Customer</td>
-                                                <td width ="227"></td>
-                                                <td width ="25">I/C</td>
-                                                <td width ="74">Invoice</td>
+                                                <td width="227"></td>
+                                                <td width="25">I/C</td>
+                                                <td width="74">Invoice</td>
                                                 <td className="text-left" width="345">Description</td>
-                                                <td className="text-right" width ="73">Inv Amt</td>
-                                                <td className="text-right" width ="60">Inv Tax</td>
+                                                <td className="text-right" width="73">Inv Amt</td>
+                                                <td className="text-right" width="60">Inv Tax</td>
                                                 <td className="text-right">Total</td>
                                             </tr>
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}>
-                                        <table className="" style={{width:'100%',fontSize:'11px'}}>
+                                    <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)',}}>
+                                        <table className="" style={{width: '100%', fontSize: '11px'}}>
                                             <tbody>
-                                            <tr >
-                                                <td width="65"><Typography ></Typography></td>
+                                            <tr>
+                                                <td width="65"><Typography></Typography></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
@@ -833,21 +837,24 @@ class ReportCus extends Component {
                                                 <td className="text-right"></td>
                                             </tr>
 
-                                            {CUS_TRXS!=null && ( CUS_TRXS.map((ct, index)=>{
+                                            {CUS_TRXS != null && (CUS_TRXS.map((ct, index) => {
                                                 return (
                                                     <tr key={index}>
                                                         <td>
                                                             {ct.CUST_NO}
                                                         </td>
-                                                        <td width ="227">
+                                                        <td width="227">
                                                             {FuseUtils.capital_letter(ct.CUS_NAME)}
                                                         </td>
-                                                        <td width ="25">{ct.TRX_TYPE}</td>
-                                                        <td width ="74">{ct.CUST_NO}</td>
+                                                        <td width="25">{ct.TRX_TYPE}</td>
+                                                        <td width="74">{ct.CUST_NO}</td>
 
-                                                        <td className="text-left" width ="345">{FuseUtils.capital_letter(ct.DESCR)}</td>
-                                                        <td className="text-right" width ="73">${ ct.TRX_AMT !== null && (parseFloat(ct.TRX_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }</td>
-                                                        <td className="text-right" width ="60">{ct.TRX_TAX !== null && ('$')}{ct.TRX_TAX !== null && (parseFloat(ct.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}</td>
+                                                        <td className="text-left"
+                                                            width="345">{FuseUtils.capital_letter(ct.DESCR)}</td>
+                                                        <td className="text-right"
+                                                            width="73">${ct.TRX_AMT !== null && (parseFloat(ct.TRX_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}</td>
+                                                        <td className="text-right"
+                                                            width="60">{ct.TRX_TAX !== null && ('$')}{ct.TRX_TAX !== null && (parseFloat(ct.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}</td>
                                                         <td className="text-right">${parseFloat(ct.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                                     </tr>
                                                 )
@@ -856,16 +863,18 @@ class ReportCus extends Component {
                                             </tbody>
                                         </table>
                                     </div>
-                                    <table  style={{width:'100%'}}>
+                                    <table style={{width: '100%'}}>
                                         <tbody>
-                                        <tr >
+                                        <tr>
                                             <td width="736">
-                                                <Typography >Totals for this Franchise</Typography>
+                                                <Typography>Totals for this Franchise</Typography>
                                             </td>
 
 
-                                            <td className="text-right" width ="73">${ct_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                            <td className="text-right" width ="60">{ct_tax !== null && ('$')}{ ct_tax !== null && (ct_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}</td>
+                                            <td className="text-right"
+                                                width="73">${ct_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td className="text-right"
+                                                width="60">{ct_tax !== null && ('$')}{ct_tax !== null && (ct_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}</td>
                                             <td className="text-right">${ct_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                         </tr>
                                         </tbody>
@@ -927,12 +936,12 @@ class ReportCus extends Component {
                                 </div>
 
                                 <div className="mt-64">
-                                    <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}>
+                                    <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)',}}>
                                         <table>
                                             <thead>
                                             <tr>
                                                 <th width="300" align="left">
-                                                    <h2 >Finder Fees</h2>
+                                                    <h2>Finder Fees</h2>
                                                 </th>
                                                 <th width="100">Invoice</th>
                                                 <th width="250">Description</th>
@@ -942,42 +951,44 @@ class ReportCus extends Component {
                                     </div>
 
 
-                                    <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}>
-                                        <table style={{width:'100%' ,fontSize:'11px'}}>
-                                            <tbody >
-                                            <tr >
+                                    <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)',}}>
+                                        <table style={{width: '100%', fontSize: '11px'}}>
+                                            <tbody>
+                                            <tr>
                                                 <td width="100">Customer No</td>
-                                                <td width ="100">Customer Name</td>
-                                                <td className="text-center" >Description</td>
-                                                <td className="text-right" width ="73">Pumnt Num</td>
-                                                <td className="text-right" width ="60">Total</td>
+                                                <td width="100">Customer Name</td>
+                                                <td className="text-center">Description</td>
+                                                <td className="text-right" width="73">Pumnt Num</td>
+                                                <td className="text-right" width="60">Total</td>
                                             </tr>
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}>
-                                        <table className="" style={{width:'100%',fontSize:'11px'}}>
+                                    <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)',}}>
+                                        <table className="" style={{width: '100%', fontSize: '11px'}}>
                                             <tbody>
-                                            <tr >
+                                            <tr>
                                                 <td width="100"></td>
                                                 <td width="100"></td>
-                                                <td className="text-center" ></td>
-                                                <td className="text-right" width ="73"></td>
-                                                <td className="text-right" width ="60"></td>
+                                                <td className="text-center"></td>
+                                                <td className="text-right" width="73"></td>
+                                                <td className="text-right" width="60"></td>
                                             </tr>
 
-                                            {FINDER_FEES!=null && ( FINDER_FEES.map((ct, index)=>{
+                                            {FINDER_FEES != null && (FINDER_FEES.map((ct, index) => {
                                                 return (
                                                     <tr key={index}>
-                                                        <td width ="100">
+                                                        <td width="100">
                                                             {ct.CUST_NO}
                                                         </td>
-                                                        <td width ="100">
+                                                        <td width="100">
                                                             {(ct.CUS_NAME)}
                                                         </td>
                                                         <td className="text-center">{ct.DESCRIPTION}</td>
-                                                        <td className="text-right" width ="73">${ ct.PYMNT_NUM !== null && (parseFloat(ct.PYMNT_NUM).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }</td>
-                                                        <td className="text-right" width ="60">{ct.PYMNT_TOT !== null && ('$')}{ct.PYMNT_TOT !== null && (parseFloat(ct.PYMNT_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}</td>
+                                                        <td className="text-right"
+                                                            width="73">${ct.PYMNT_NUM !== null && (parseFloat(ct.PYMNT_NUM).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}</td>
+                                                        <td className="text-right"
+                                                            width="60">{ct.PYMNT_TOT !== null && ('$')}{ct.PYMNT_TOT !== null && (parseFloat(ct.PYMNT_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}</td>
                                                     </tr>
                                                 )
                                             }))}
@@ -985,11 +996,11 @@ class ReportCus extends Component {
                                             </tbody>
                                         </table>
                                     </div>
-                                    <table  style={{width:'100%'}}>
+                                    <table style={{width: '100%'}}>
                                         <tbody>
-                                        <tr >
+                                        <tr>
                                             <td width="736">
-                                                <Typography >Totals for this Finders Fee</Typography>
+                                                <Typography>Totals for this Finders Fee</Typography>
                                             </td>
 
                                             <td className="text-right">${finder_fee_tot.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
@@ -1050,87 +1061,100 @@ class ReportCus extends Component {
                                     </table>
                                 </div>
 
-                                <div className="" >
+                                <div className="">
                                     <h2>Customer Account Totals</h2>
-                                    <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
-                                    <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}>
-                                        <table style={{width:'100%',fontSize:'11px'}}>
+                                    <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)',}}></div>
+                                    <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)',}}>
+                                        <table style={{width: '100%', fontSize: '11px'}}>
                                             <tbody>
                                             <tr>
                                                 <td width="65">
-                                                    <Typography style={{fontSize:'11px'}}>Customer</Typography>
+                                                    <Typography style={{fontSize: '11px'}}>Customer</Typography>
                                                 </td>
                                                 <td width="253">
 
                                                 </td>
                                                 <td className="text-right" width="70">
-                                                    <Typography style={{fontSize:'11px'}}>Contract</Typography>
-                                                    <Typography style={{fontSize:'11px'}}>Billing</Typography>
+                                                    <Typography style={{fontSize: '11px'}}>Contract</Typography>
+                                                    <Typography style={{fontSize: '11px'}}>Billing</Typography>
                                                 </td>
                                                 <td className="text-right" width="70">
-                                                    <Typography style={{fontSize:'11px'}}>Current</Typography>
-                                                    <Typography style={{fontSize:'11px'}}>Month</Typography>
+                                                    <Typography style={{fontSize: '11px'}}>Current</Typography>
+                                                    <Typography style={{fontSize: '11px'}}>Month</Typography>
                                                 </td>
                                                 <td className="text-right" width="70">
-                                                    <Typography style={{fontSize:'11px'}}>Addtl Bill</Typography>
-                                                    <Typography style={{fontSize:'11px'}}>Franchisee</Typography>
+                                                    <Typography style={{fontSize: '11px'}}>Addtl Bill</Typography>
+                                                    <Typography style={{fontSize: '11px'}}>Franchisee</Typography>
                                                 </td>
                                                 <td className="text-right" width="70">
-                                                    <Typography style={{fontSize:'11px'}}>Client</Typography>
-                                                    <Typography style={{fontSize:'11px'}}>Supplies</Typography>
+                                                    <Typography style={{fontSize: '11px'}}>Client</Typography>
+                                                    <Typography style={{fontSize: '11px'}}>Supplies</Typography>
                                                 </td>
                                                 <td className="text-right" width="70">
-                                                    <Typography style={{fontSize:'11px'}}>Additional</Typography>
-                                                    <Typography style={{fontSize:'11px'}}>Bill Office</Typography>
+                                                    <Typography style={{fontSize: '11px'}}>Additional</Typography>
+                                                    <Typography style={{fontSize: '11px'}}>Bill Office</Typography>
                                                 </td>
                                                 <td className="text-right" width="70">
-                                                    <Typography style={{fontSize:'11px'}}>Finders</Typography>
-                                                    <Typography style={{fontSize:'11px'}}>Fee Nbr</Typography>
+                                                    <Typography style={{fontSize: '11px'}}>Finders</Typography>
+                                                    <Typography style={{fontSize: '11px'}}>Fee Nbr</Typography>
                                                 </td>
                                                 <td className="text-right" width="70">
-                                                    <Typography style={{fontSize:'11px'}}>Finders</Typography>
-                                                    <Typography style={{fontSize:'11px'}}>Fee</Typography>
+                                                    <Typography style={{fontSize: '11px'}}>Finders</Typography>
+                                                    <Typography style={{fontSize: '11px'}}>Fee</Typography>
                                                 </td>
                                             </tr>
                                             </tbody>
                                         </table>
                                     </div>
-                                    <table className="" style={{width:'100%',fontSize:"11px"}}>
+                                    <table className="" style={{width: '100%', fontSize: "11px"}}>
                                         <tbody>
-                                        {CUST_ACCT_TOTALS !=null && (CUST_ACCT_TOTALS.map((ct, index)=>{
+                                        {CUST_ACCT_TOTALS != null && (CUST_ACCT_TOTALS.map((ct, index) => {
                                             return (
                                                 <tr key={index}>
                                                     <td width="65">
-                                                        <Typography style={{fontSize:'11px'}}>{ct.CUST_NO}</Typography>
+                                                        <Typography style={{fontSize: '11px'}}>{ct.CUST_NO}</Typography>
                                                     </td>
                                                     <td width="250">
-                                                        <Typography style={{fontSize:'11px'}}>{FuseUtils.capital_letter(ct.CUS_NAME)}</Typography>
+                                                        <Typography
+                                                            style={{fontSize: '11px'}}>{FuseUtils.capital_letter(ct.CUS_NAME)}</Typography>
                                                     </td>
-                                                    <td className="text-right" width="70">${parseFloat(ct.CONT_BILL).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                    <td className="text-right" width="70">${parseFloat(ct.CUR_MONTH).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                    <td className="text-right" width="70">${parseFloat(ct.ADTL_B_FRN).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                    <td className="text-right" width="70">${parseFloat(ct.CLIENT_SUP).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                    <td className="text-right" width="70">${parseFloat(ct.ADTL_B_OFC).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td className="text-right"
+                                                        width="70">${parseFloat(ct.CONT_BILL).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td className="text-right"
+                                                        width="70">${parseFloat(ct.CUR_MONTH).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td className="text-right"
+                                                        width="70">${parseFloat(ct.ADTL_B_FRN).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td className="text-right"
+                                                        width="70">${parseFloat(ct.CLIENT_SUP).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td className="text-right"
+                                                        width="70">${parseFloat(ct.ADTL_B_OFC).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                                     <td className="text-right" width="70">{ct.FF_NBR}</td>
-                                                    <td className="text-right" width="70">${parseFloat(ct.FF_PYMNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td className="text-right"
+                                                        width="70">${parseFloat(ct.FF_PYMNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                                 </tr>
                                             )
                                         }))}
                                         </tbody>
                                     </table>
-                                    <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
-                                    <div style ={{ width:'100%'}}>
-                                        <table style={{width:'100%'}}>
+                                    <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)',}}></div>
+                                    <div style={{width: '100%'}}>
+                                        <table style={{width: '100%'}}>
                                             <tbody>
                                             <tr>
-                                                <td width ="325"><Typography >Franchisee Actual Amount</Typography></td>
-                                                <td className="text-right" width="70">${cat_billing.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td className="text-right" width="70">${cat_month.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td className="text-right" width="70">${cat_addtl.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td className="text-right" width="70">${cat_cs.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td className="text-right" width="70">${cat_ofc.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td width="325"><Typography>Franchisee Actual Amount</Typography></td>
+                                                <td className="text-right"
+                                                    width="70">${cat_billing.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right"
+                                                    width="70">${cat_month.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right"
+                                                    width="70">${cat_addtl.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right"
+                                                    width="70">${cat_cs.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right"
+                                                    width="70">${cat_ofc.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                                 <td className="text-right" width="70"></td>
-                                                <td className="text-right" width="70">${cat_fee.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td className="text-right"
+                                                    width="70">${cat_fee.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -1192,9 +1216,9 @@ class ReportCus extends Component {
 
                                 <div className="">
                                     <h2>Supply Transactions</h2>
-                                    <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
-                                    <div style ={{width:'100%'}}>
-                                        <table style ={{width:'100%',fontSize:'11px'}}>
+                                    <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)',}}></div>
+                                    <div style={{width: '100%'}}>
+                                        <table style={{width: '100%', fontSize: '11px'}}>
                                             <tbody>
                                             <tr>
                                                 <td className="text-left" width="350">
@@ -1221,37 +1245,45 @@ class ReportCus extends Component {
                                     </div>
 
                                     {SUPPLY_TRXS != null && (
-                                        <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+                                        <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)',}}></div>
                                     )}
-                                    <table className="" style={{width:'100%',fontSize:'11px'}}>
+                                    <table className="" style={{width: '100%', fontSize: '11px'}}>
                                         <tbody>
-                                        { SUPPLY_TRXS != null && (SUPPLY_TRXS.map((st, index)=>{
+                                        {SUPPLY_TRXS != null && (SUPPLY_TRXS.map((st, index) => {
                                             return (
                                                 <tr key={index}>
                                                     <td width="350">
-                                                        <Typography  style={{fontSize:'11px'}}>{FuseUtils.capital_letter(st.DESCR)}</Typography>
+                                                        <Typography
+                                                            style={{fontSize: '11px'}}>{FuseUtils.capital_letter(st.DESCR)}</Typography>
                                                     </td>
                                                     <td className="text-right" width="70">{st.QUANTITY}</td>
-                                                    <td className="text-right" width="70">${parseFloat(st["UNIT COST"]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                    <td className="text-right" width="70">${parseFloat(st.EXTENDED).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                    <td className="text-right" width="70">${parseFloat(st.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                    <td className="text-right" width="70">${parseFloat(st.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td className="text-right"
+                                                        width="70">${parseFloat(st["UNIT COST"]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td className="text-right"
+                                                        width="70">${parseFloat(st.EXTENDED).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td className="text-right"
+                                                        width="70">${parseFloat(st.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td className="text-right"
+                                                        width="70">${parseFloat(st.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                                 </tr>
                                             )
                                         }))}
                                         </tbody>
                                     </table>
 
-                                    <div style={{width:'100%'}}>
-                                        <table style={{width:'100%'}}>
+                                    <div style={{width: '100%'}}>
+                                        <table style={{width: '100%'}}>
                                             <tbody>
-                                            <tr >
-                                                <td width="350"><Typography >Total Supplies</Typography></td>
+                                            <tr>
+                                                <td width="350"><Typography>Total Supplies</Typography></td>
                                                 <td width="70" className="text-right"></td>
-                                                <td width="70"  className="text-right"></td>
-                                                <td width="70"  className="text-right">${st_extended.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td  width="70" className="text-right">${st_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td  width="70" className="text-right">${st_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td width="70" className="text-right"></td>
+                                                <td width="70"
+                                                    className="text-right">${st_extended.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td width="70"
+                                                    className="text-right">${st_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td width="70"
+                                                    className="text-right">${st_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -1262,7 +1294,7 @@ class ReportCus extends Component {
                     </Card>
                 </div>
                 <div className="cardname">
-                    {CHARGEBACKS!==null && (
+                    {CHARGEBACKS !== null && (
                         <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
                             <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                                 <div>
@@ -1312,46 +1344,47 @@ class ReportCus extends Component {
                                     </div>
 
                                     <div className="mt-64">
-                                        <table className="simple invoice-table"  style={{fontSize:'11px'}}>
+                                        <table className="simple invoice-table" style={{fontSize: '11px'}}>
                                             <thead>
                                             <tr>
                                                 <th>
-                                                    <h2 >Charge Backs</h2>
+                                                    <h2>Charge Backs</h2>
                                                 </th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr >
+                                            <tr>
                                                 <td>
-                                                    <Typography style={{fontSize:'11px'}}>Description</Typography>
+                                                    <Typography style={{fontSize: '11px'}}>Description</Typography>
                                                 </td>
                                                 <td className="text-center">
                                                     Tax Amt
                                                 </td>
-                                                <td className="text-center" style={{fontSize:'11px'}}>
+                                                <td className="text-center" style={{fontSize: '11px'}}>
                                                     Tax
                                                 </td>
-                                                <td className="text-center" style={{fontSize:'11px'}}>
+                                                <td className="text-center" style={{fontSize: '11px'}}>
                                                     Total Amt
                                                 </td>
                                             </tr>
 
 
-                                            { CHARGEBACKS != null && (CHARGEBACKS.map((cb, index)=>{
+                                            {CHARGEBACKS != null && (CHARGEBACKS.map((cb, index) => {
                                                 return (
-                                                    <tr key={index} >
+                                                    <tr key={index}>
                                                         <td>
-                                                            <Typography style={{fontSize:'11px'}}>{FuseUtils.capital_letter(cb.DESCR)}</Typography>
+                                                            <Typography
+                                                                style={{fontSize: '11px'}}>{FuseUtils.capital_letter(cb.DESCR)}</Typography>
                                                         </td>
                                                         <td className="text-right">${parseFloat(cb.TRX_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                                         <td className="text-right">${parseFloat(cb.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                                         <td className="text-right">${parseFloat(cb.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                                     </tr>
                                                 )
-                                            })) }
-                                            <tr >
+                                            }))}
+                                            <tr>
                                                 <td>
-                                                    <Typography >Total Charge Backs</Typography>
+                                                    <Typography>Total Charge Backs</Typography>
                                                 </td>
                                                 <td className="text-right">${cb_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                                 <td className="text-right">${cb_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
@@ -1416,8 +1449,9 @@ class ReportCus extends Component {
                                     </table>
                                 </div>
                                 <h2>Leases</h2>
-                                <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
-                                <table style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',fontSize:'11px'}}>
+                                <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)',}}></div>
+                                <table
+                                    style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)', fontSize: '11px'}}>
                                     <tbody>
                                     <tr>
                                         <td width="100" className="text-left">Lease Date</td>
@@ -1431,20 +1465,25 @@ class ReportCus extends Component {
                                     </tbody>
                                 </table>
                                 <div className="">
-                                    <table className="" style={{width:'100%',fontSize:'11px'}}>
+                                    <table className="" style={{width: '100%', fontSize: '11px'}}>
                                         <tbody>
-                                        {LEASE_PAYMENTS != null && (LEASE_PAYMENTS.map((lp, index)=> {
+                                        {LEASE_PAYMENTS != null && (LEASE_PAYMENTS.map((lp, index) => {
                                             return (
                                                 <tr key={index}>
                                                     <td width="100" className="text-left">
-                                                        <Typography style={{fontSize:'11px'}}>{lp.LEASE_DATE}</Typography>
+                                                        <Typography
+                                                            style={{fontSize: '11px'}}>{lp.LEASE_DATE}</Typography>
                                                     </td>
                                                     <td width="100" className="text-right">{lp.LEASE_NO}</td>
-                                                    <td width="300" className="text-right">{FuseUtils.capital_letter(lp.DESCR)}</td>
+                                                    <td width="300"
+                                                        className="text-right">{FuseUtils.capital_letter(lp.DESCR)}</td>
                                                     <td width="100" className="text-right">{lp.PYMNT_NUM}</td>
-                                                    <td width="100" className="text-right">${parseFloat(lp.PYMNT_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                    <td width="100" className="text-right">${parseFloat(lp.PYMNT_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                    <td width="100" className="text-right">${parseFloat(lp.PYMNT_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td width="100"
+                                                        className="text-right">${parseFloat(lp.PYMNT_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td width="100"
+                                                        className="text-right">${parseFloat(lp.PYMNT_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                    <td width="100"
+                                                        className="text-right">${parseFloat(lp.PYMNT_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                                 </tr>
                                             )
                                         }))
@@ -1452,22 +1491,25 @@ class ReportCus extends Component {
 
                                         </tbody>
                                     </table>
-                                    {LEASE_PAYMENTS !=null && (
-                                        <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+                                    {LEASE_PAYMENTS != null && (
+                                        <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)',}}></div>
 
                                     )}
-                                    <table style={{width:'100%',fontSize:'11px'}}>
+                                    <table style={{width: '100%', fontSize: '11px'}}>
                                         <tbody>
                                         <tr>
                                             <td width="100" className="text-left">
-                                                <Typography >Lease Totals</Typography>
+                                                <Typography>Lease Totals</Typography>
                                             </td>
                                             <td width="100" className="text-right"></td>
                                             <td width="300" className="text-right"></td>
                                             <td width="100" className="text-right"></td>
-                                            <td width="100" className="text-right">${lp_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                            <td width="100" className="text-right">${lp_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                            <td width="100" className="text-right">${lp_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td width="100"
+                                                className="text-right">${lp_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td width="100"
+                                                className="text-right">${lp_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                            <td width="100"
+                                                className="text-right">${lp_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -1477,7 +1519,7 @@ class ReportCus extends Component {
                     </Card>
                 </div>
                 <div className="cardname">
-                    {REG_MISC!==null && (
+                    {REG_MISC !== null && (
                         <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
                             <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
 
@@ -1529,59 +1571,67 @@ class ReportCus extends Component {
 
                                     <div className="">
                                         <h2>Regular Misc</h2>
-                                        <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
-                                        <table style={{width:'100%',fontSize:'11px'}}>
+                                        <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)',}}></div>
+                                        <table style={{width: '100%', fontSize: '11px'}}>
                                             <tbody>
                                             <tr>
                                                 <td width="100" className="text-left">
-                                                    <Typography style={{fontSize:'11px'}}>Type</Typography>
+                                                    <Typography style={{fontSize: '11px'}}>Type</Typography>
                                                 </td>
-                                                <td  width="400" className="text-left">
+                                                <td width="400" className="text-left">
                                                     Description
                                                 </td>
-                                                <td  width="100" className="text-right">
+                                                <td width="100" className="text-right">
                                                     Tax Amt
                                                 </td>
-                                                <td  width="100" className="text-right">
+                                                <td width="100" className="text-right">
                                                     Tax
                                                 </td>
-                                                <td  width="100" className="text-right">
+                                                <td width="100" className="text-right">
                                                     Total Amt
                                                 </td>
                                             </tr>
                                             </tbody>
                                         </table>
-                                        {REG_MISC!==null &&(
-                                            <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+                                        {REG_MISC !== null && (
+                                            <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)',}}></div>
                                         )}
-                                        <table className="" style={{width:'100%',fontSize:'11px'}}>
+                                        <table className="" style={{width: '100%', fontSize: '11px'}}>
                                             <tbody>
 
-                                            {REG_MISC!==null && REG_MISC.map((sm, index)=>{
+                                            {REG_MISC !== null && REG_MISC.map((sm, index) => {
                                                 return (
-                                                    <tr key={index} >
+                                                    <tr key={index}>
                                                         <td width="100" className="text-left">{sm.TYPE}</td>
                                                         <td width="400" className="text-left">
-                                                            <Typography style={{fontSize:'11px'}}>{FuseUtils.capital_letter(sm.DESCR)}</Typography>
+                                                            <Typography
+                                                                style={{fontSize: '11px'}}>{FuseUtils.capital_letter(sm.DESCR)}</Typography>
                                                         </td>
-                                                        <td width="100" className="text-right">{parseFloat(sm.TRX_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                        <td width="100" className="text-right">{parseFloat(sm.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                        <td width="100" className="text-right">{parseFloat(sm.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                        <td width="100"
+                                                            className="text-right">{parseFloat(sm.TRX_AMT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                        <td width="100"
+                                                            className="text-right">{parseFloat(sm.TRX_TAX).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                        <td width="100"
+                                                            className="text-right">{parseFloat(sm.TRX_TOT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                                     </tr>
                                                 )
                                             })}
 
                                             </tbody>
                                         </table>
-                                        <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
-                                        <table style={{width:'100%'}}>
+                                        <div style={{width: '100%', borderBottom: '2px solid rgb(0, 0, 0)',}}></div>
+                                        <table style={{width: '100%'}}>
                                             <tbody>
                                             <tr>
-                                                <td width="100" className="text-left"><Typography >Total Regular</Typography></td>
+                                                <td width="100" className="text-left"><Typography>Total
+                                                    Regular</Typography></td>
                                                 <td width="400" className="text-right"></td>
-                                                <td width="100" className="text-right">{sm_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td width="100" className="text-right">{sm_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
-                                                <td width="100" className="text-right">{sm_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td width="100"
+                                                    className="text-right">{sm_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td width="100"
+                                                    className="text-right">{sm_tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
+                                                <td width="100"
+                                                    className="text-right">{sm_total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -1593,6 +1643,10 @@ class ReportCus extends Component {
                 </div>
             </div>
         )
+    }
+    else{
+        return(<div/>)
+}
     }
 }
 function mapDispatchToProps(dispatch)
