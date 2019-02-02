@@ -4,6 +4,7 @@ import {withStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import {bindActionCreators} from "redux";
 import * as Actions from "./store/actions";
+import * as MainActions from "./store/actions";
 import connect from "react-redux/es/connect/connect";
 import GridContainer from "../../Commons/Grid/GridContainer";
 import GridItem from "../../Commons/Grid/GridItem";
@@ -726,8 +727,8 @@ class UsersForm extends React.Component {
                                     {...autosuggestProps}
                                     inputProps={{
                                         classes,
-                                        label: 'Label',
-                                        placeholder: 'With Popper',
+                                        label: 'Customer',
+                                        placeholder: 'Enter Customer Name',
                                         value: this.state.popper,
                                         onChange: this.handleAutoChange('popper'),
                                         inputRef: node => {

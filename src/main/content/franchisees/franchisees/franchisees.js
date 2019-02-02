@@ -513,7 +513,7 @@ class Franchisees extends Component {
             return;
         }else{
             for(let i= 0 ; i < rawData.Data.Region.length ; i++){
-                tempData = rawData.Data.Region[i].FranchiseeList;
+                tempData = rawData.Data.Region[i].Franchisees;
                 data = data.concat(tempData);
             }
         }
@@ -633,12 +633,12 @@ class Franchisees extends Component {
         console.log("regions", regions)
 
         regions.forEach(x => {
-            all_temp = [...all_temp, ...x.FranchiseeList];
+            all_temp = [...all_temp, ...x.Franchisee];
         });
 
         let _pins_temp = [];
         regions.forEach(x => {
-            _pins_temp = [..._pins_temp, ...x.FranchiseeList.map(franchisee => {
+            _pins_temp = [..._pins_temp, ...x.Franchisee.map(franchisee => {
                 return {
                     lat: parseFloat(0+franchisee.Latitude),
                     lng: parseFloat(0+franchisee.Longitude),
