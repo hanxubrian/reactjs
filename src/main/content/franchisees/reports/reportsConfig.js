@@ -15,6 +15,13 @@ export const ReportsConfig = {
             })
         },
         {
+            path     : '/franchisees/report/legacy',
+            component: FuseLoadable({
+                // loader: () => import('./report')
+                loader: () => import('./reportCuslayout')
+            })
+        },
+        {
             path     : '/franchisees/reports',
             component: FuseLoadable({
                 loader: () => import('./reportsApp')

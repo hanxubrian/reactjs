@@ -16,6 +16,8 @@ import _billrunService from './billrun/BillrunService';
 import _paymentlockboxservice from './paymentlockbox/paymentlockboxService';
 import _notificationservice from './notification/notificationService';
 import _territoriesService from './regions/territoriesService';
+import _franchiseeReportService from './franchisees/franchiseeReportService';
+
 
 
 export const authService = _authService;
@@ -36,3 +38,4 @@ export const billrunService = _billrunService;
 export const paymentlockboxservice = _paymentlockboxservice;
 export const notificationService = _notificationservice;
 export const territoriesService = _territoriesService;
+export const franchiseeReportService = _franchiseeReportService;

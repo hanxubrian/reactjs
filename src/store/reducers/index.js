@@ -23,12 +23,15 @@ import accountReceivablePayments from'./account_receivable.payments.reducer';
 import verifications from './verifications.reducer'
 import paymentlockbox from './paymentlockbox.reducer';
 import notification from './notification.reducer';
-import territories from './regions.territories.reducer'
+import territories from './regions.territories.reducer';
+import franchiseeReportDatalist from './franchiseeReport.reducer';
+
 
 import * as Actions from "../actions/";
 import * as AuthAction from "../../auth/store/actions";
 import storage from 'redux-persist/lib/storage';
 import {USER_LOGGED_OUT} from "../../auth/store/actions";
+
 import {ADMIN_CLEAN_CACHE_FOR_UPGRADE} from "../../auth/store/actions/login.actions";
 
 const createReducer =
@@ -60,6 +63,7 @@ const createReducer =
         paymentlockbox,
         notification,
         territories,
+        franchiseeReportDatalist,
         ...asyncReducers
     })
     (action.type === 'ADMIN_CLEAN_CACHE_FOR_UPGRADE' ? undefined : state, action)

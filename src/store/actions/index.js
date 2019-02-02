@@ -16,3 +16,4 @@ export * from './verifications.action';
 export * from './paymentlockbox.action';
 export * from './notification.actions';
 export * from './regions.territories.action'
+export * from './franchiseeReport.actions';

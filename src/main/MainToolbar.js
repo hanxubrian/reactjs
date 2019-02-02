@@ -207,6 +207,7 @@ class MainToolbar extends Component {
         sysnotificationSeletedID    : null,
         adminMSG                    : null,
         adminVersionStatus          : false,
+        MSG                         : null,
 
     };
 
@@ -243,7 +244,7 @@ class MainToolbar extends Component {
             cluster: 'us2',
             forceTLS: true
         });
-        var channel = pusher.subscribe('jk-message-channel');
+        var channel = pusher.subscribe('jk-message-channel');//jk-message-channel  on-message
         channel.bind('on-message', data => {
             this.setState({ pusherMSG:data});
         });
@@ -281,6 +282,7 @@ class MainToolbar extends Component {
         });
     }
     componentDidUpdate(prevProps,prevState){
+        console.log("##########################this.state.pusherMSG",this.state.pusherMSG);
         // if(this.state.pusherMSG && this.state.pusherMSG !== null){
         //     console.log("######DB############this.props.getpusherNotificationDB",this.props.getpusherNotificationDB);
         //     console.log("######pushermsg############this.state.pusherMSG",this.state.pusherMSG);
@@ -343,7 +345,9 @@ class MainToolbar extends Component {
                 let unreadNum = this.state.unreadMSGnum;
                 let sysunread = this.state.systeunread;
 
-
+                let midgetPusherMSG=[];
+                midgetPusherMSG = this.state.pusherMSG;
+                midgetPusherMSG.time = moment();
                 PusherList=this.state.pusherMSGList;
                 PusherList.unshift(this.state.pusherMSG);
                 unreadNum += 1;
@@ -465,6 +469,7 @@ class MainToolbar extends Component {
 
         let M= this.state.unreadMSGnum;
         M -= this.state.systeunread;
+        if(M<0) M = 0;
         this.setState({unreadMSGnum:M});
         this.setState({systeunread:0});
 
@@ -473,7 +478,6 @@ class MainToolbar extends Component {
         this.setState({value});
     };
     systemitemnotification =(e)=>{
-        // alert("SYSNOT"+e);
         this.props.history.push('/notification/system/'+e);
     }
     render()
