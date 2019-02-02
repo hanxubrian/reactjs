@@ -368,7 +368,7 @@ class InvoiceApp extends Component {
             this.setState({customers: temp});
         }
         if(nextProps.franchisees!==null && this.props.franchisees!==nextProps.franchisees){
-            this.setState({franchisees: nextProps.franchisees.Data.Region[0].FranchiseeList});
+            this.setState({franchisees: nextProps.franchisees.Data.Region[0].Franchisees});
         }
 
     }

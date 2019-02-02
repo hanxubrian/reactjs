@@ -544,7 +544,7 @@ class InvoiceLineTable extends React.Component {
 
         if(this.props.fn!==null && prevProps.fn!==this.props.fn){
             let selectedFranchiess =[];
-            let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList;
+            let franchisees = this.props.franchisees.Data.Region[0].Franchisees;
             this.props.fn.forEach(f=>{
                 selectedFranchiess = _.filter(franchisees, franchisee=>f.Number===franchisee.Number && f.Name===franchisee.Name);
             });
@@ -605,7 +605,7 @@ class InvoiceLineTable extends React.Component {
         const escapedValue = escapeRegexCharacters(value.trim());
         const regex = new RegExp('^' + escapedValue, 'i');
 
-        let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList;
+        let franchisees = this.props.franchisees.Data.Region[0].Franchisees;
         let suggestions =  franchisees.filter(f => regex.test(f.Number) || regex.test(f.Name));
         let suggestionsExcludedInActive = suggestions.filter(c=>c.StatusName==='Active');
         return suggestionsExcludedInActive;
