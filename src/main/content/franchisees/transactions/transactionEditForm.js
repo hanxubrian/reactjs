@@ -427,7 +427,7 @@ class TransactionEditForm extends Component {
     getSuggestions = (value) => {
         const escapedValue = escapeRegexCharacters(value.trim());
         const regex = new RegExp(escapedValue, 'i');
-        let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList;
+        let franchisees = this.props.franchisees.Data.Region[0].Franchisees;
 
         if(franchisees!==null)
             return franchisees.filter(f => regex.test(f.Name) || regex.test(f.Number)|| regex.test(f.StatusName));
@@ -510,12 +510,12 @@ class TransactionEditForm extends Component {
         if(this.props.transactionForm.type === 'edit' && this.props.transactionDetail!==null) {
             let trxDetail = this.props.transactionDetail.Data;
             if(this.props.franchisees!==null) {
-                let franchisees = this.props.franchisees.Data.Region[0].FranchiseeList;
+                let franchisees = this.props.franchisees.Data.Region[0].Franchisees;
 
-                let franchisee = _.filter(franchisees, franchisee=>trxDetail.FranchiseeNo===franchisee.Number && trxDetail.FranchiseeName===franchisee.Name);
+                let franchisee = _.filter(franchisees, franchisee=>trxDetail.FranchiseeNo===franchisee.Number || trxDetail.FranchiseeName===franchisee.Name);
                 if(franchisee.length>0) {
                     this.setState({selectedFranchisee: franchisee[0]});
-                    this.setState({value: trxDetail.FranchiseeName});
+                    this.setState({value: franchisee[0].Name});
                     this.setState({subTotal: parseFloat(trxDetail.TrxExtendedPrice)});
                     this.setState({unitPrice: parseFloat(trxDetail.TrxItemAmount)});
                     this.setState({TrxChargeType: trxDetail.TrxChargeType});
@@ -526,15 +526,14 @@ class TransactionEditForm extends Component {
                     this.setState({tax: tax});
                     this.setState({quantity: parseFloat(trxDetail.quantity)});
                     this.setState({total: parseFloat(trxDetail.TrxExtendedPrice)+ tax});
-                    this.setState({TransactionDate: moment(trxDetail.TrxDate)});
+                    this.setState({TransactionDate: trxDetail.TrxDate!==null ? moment(trxDetail.TrxDate): moment()});
 
-                    let period = trxDetail.month.toString()+'/'+trxDetail.year.toString();
-                    if(trxDetail.month<10)
-                        period = '0'+period;
-
-
-                    // console.log('period1=', trxDetail.month<10 ? '0':''+);
-                    this.setState({TransactionPeriod: period});
+                    if(trxDetail.month!==0 && trxDetail.year!==0) {
+                        let period = trxDetail.month.toString() + '/' + trxDetail.year.toString();
+                        if (trxDetail.month < 10)
+                            period = '0' + period;
+                        this.setState({TransactionPeriod: period});
+                    }
 
 
                     let trxType = this.props.transactionTypeList.filter(f=>f._id === trxDetail.TrxClass);
@@ -542,9 +541,11 @@ class TransactionEditForm extends Component {
                     if(trxType.length)
                         this.setState({TrxChargeClass: {value: trxType[0]._id, label: trxType[0].Name}});
 
-                    this.setState({transactionFrequency: trxDetail.TrxFrequency});
+                    if(trxDetail.TrxFrequency!==null)
+                        this.setState({transactionFrequency: trxDetail.TrxFrequency});
+
                     this.setState({payments: parseInt(trxDetail.NumberOfPayments)});
-                    this.setState({TransactionNo: trxDetail.Trx_no});
+                    this.setState({TransactionNo: trxDetail.Trx_no!==null? trxDetail.Trx_no : ''});
                     this.setState({reSell: trxDetail.TrxResell});
                     this.setState({transactionDescription: trxDetail.Description});
 
@@ -553,11 +554,13 @@ class TransactionEditForm extends Component {
                     this.setState({startDate: moment(trxDetail.startDate)});
 
                     // for Vendor
-                    let vendor = {label: trxDetail.VendorLabel, value: trxDetail.VendorValue};
-                    let vendor_no = trxDetail.VendorNo;
-                    let vendorDate = trxDetail.VendorDate;
-                    this.setState({vendor: {vendor, vendor_no, vendorDate}});
-                    this.props.updateVendor({vendor, vendor_no, vendorDate});
+                    if(trxDetail.VendorLabel!==null && trxDetail.VendorValue!==null) {
+                        let vendor = {label: trxDetail.VendorLabel, value: trxDetail.VendorValue};
+                        let vendor_no = trxDetail.VendorNo;
+                        let vendorDate = trxDetail.VendorDate;
+                        this.setState({vendor: {vendor, vendor_no, vendorDate}});
+                        this.props.updateVendor({vendor, vendor_no, vendorDate});
+                    }
                 }
             }
         }

@@ -239,7 +239,7 @@ class TransactionsApp extends Component {
             this.getTransactions(nextProps.transactions);
 
         if(nextProps.franchisees!==null && this.props.franchisees!==nextProps.franchisees){
-            this.setState({franchisees: nextProps.franchisees.Data.Region[0].FranchiseeList});
+            this.setState({franchisees: nextProps.franchisees.Data.Region[0].Franchisees});
         }
     }
 
