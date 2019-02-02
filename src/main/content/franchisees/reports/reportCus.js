@@ -1241,7 +1241,7 @@ class ReportCus extends Component {
                                         }))}
                                         </tbody>
                                     </table>
-                                    <div style ={{ width:'100%',borderBottom:'2px solid rgb(0, 0, 0)',}}></div>
+
                                     <div style={{width:'100%'}}>
                                         <table style={{width:'100%'}}>
                                             <tbody>
