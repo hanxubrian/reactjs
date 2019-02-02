@@ -88,7 +88,7 @@ const initialState = {
     errorMsg: "",
 };
 
-class PayInvoiceFormModal extends React.Component {
+class CreditInvoiceFormModal extends React.Component {
 
     constructor(props) {
         super(props);
@@ -234,18 +234,18 @@ class PayInvoiceFormModal extends React.Component {
         return (
             <div>
                 <Dialog
-                    open={this.props.bOpenPaymentInvoiceForm}
+                    open={this.props.bOpenCreditInvoiceForm}
                     fullWidth={true}
                     maxWidth="sm"
 
-                    onClose={()=>this.props.closePaymentInvoiceFormDialog()}
+                    onClose={()=>this.props.closeCreditInvoiceFormDialog()}
                     scroll="paper"
                     aria-labelledby="form-dialog-title"
                 >
-                    <BlueDialogTitle id="form-dialog-title" onClose={this.props.closePaymentInvoiceFormDialog}>
+                    <BlueDialogTitle id="form-dialog-title" onClose={this.props.closeCreditInvoiceFormDialog}>
                         <h2 style={{ display: "flex", alignItems: "center", color: "white" }}>
                             <Icon>attach_money</Icon>
-                            Pay Invoice
+                            Credit Invoice
                         </h2>
                     </BlueDialogTitle>
                     <DialogContent>
@@ -356,7 +356,7 @@ class PayInvoiceFormModal extends React.Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         createAccountReceivablePayment: Actions.createAccountReceivablePayment,
-        closePaymentInvoiceFormDialog: Actions.closePaymentInvoiceFormDialog
+        closeCreditInvoiceFormDialog: Actions.closeCreditInvoiceFormDialog,
     }, dispatch);
 }
 
@@ -371,10 +371,10 @@ function mapStateToProps({ accountReceivablePayments, auth, invoices }) {
         filter: accountReceivablePayments.filter,
         searchText: accountReceivablePayments.searchText,
 
-        bOpenPaymentInvoiceForm: invoices.bOpenPaymentInvoiceForm,
+        bOpenCreditInvoiceForm: invoices.bOpenCreditInvoiceForm,
         invoiceForm: invoices.invoiceForm,
         invoiceDetail: invoices.invoiceDetail,
     }
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(PayInvoiceFormModal)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(CreditInvoiceFormModal)));

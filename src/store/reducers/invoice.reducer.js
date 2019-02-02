@@ -52,6 +52,7 @@ const initialState = {
     billingLists: null,
     serviceLists: null,
     bOpenPaymentInvoiceForm: false,
+    bOpenCreditInvoiceForm: false,
 };
 
 
@@ -337,6 +338,12 @@ const invoices = function(state = initialState, action) {
         }
         case Actions.CLOSE_PAYMENT_INVOICE_FORM: {
             return {...state, bOpenPaymentInvoiceForm: false}
+        }
+        case Actions.OPEN_CREDIT_INVOICE_FORM: {
+            return {...state, bOpenCreditInvoiceForm: true}
+        }
+        case Actions.CLOSE_CREDIT_INVOICE_FORM: {
+            return {...state, bOpenCreditInvoiceForm: false}
         }
         default:
         {

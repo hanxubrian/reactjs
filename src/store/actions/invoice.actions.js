@@ -34,6 +34,8 @@ export const GET_SERVICE_LIST = "[INVOICES] GET SERVICE LIST";
 export const UPDATE_AN_INVOICE = "[INVOICES] UPDATE AN INVOICE";
 export const OPEN_PAYMENT_INVOICE_FORM = "[INVOICES] OPEN PAYMENT INVOICE FORM";
 export const CLOSE_PAYMENT_INVOICE_FORM = "[INVOICES] CLOSE PAYMENT INVOICE FORM";
+export const OPEN_CREDIT_INVOICE_FORM = "[INVOICES] OPEN CREDIT INVOICE FORM";
+export const CLOSE_CREDIT_INVOICE_FORM = "[INVOICES] CLOSE CREDIT INVOICE FORM";
 
 // for Add/Edit
 export const OPEN_NEW_INVOICE_FORM = '[INVOICES APP] OPEN NEW INVOICE FORM';
@@ -434,5 +436,17 @@ export function openPaymentInvoiceFormDialog() {
 export function closePaymentInvoiceFormDialog() {
     return {
         type: CLOSE_PAYMENT_INVOICE_FORM
+    }
+}
+
+export function openCreditInvoiceFormDialog() {
+    return {
+        type: OPEN_CREDIT_INVOICE_FORM
+    }
+}
+
+export function closeCreditInvoiceFormDialog() {
+    return {
+        type: CLOSE_CREDIT_INVOICE_FORM
     }
 }
