@@ -31,9 +31,18 @@ import "react-table/react-table.css";
 import classNames from 'classnames';
 import NumberFormat from 'react-number-format';
 
+const hexToRgb = (hex) => {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+};
 
 const styles = theme => ({
     tableTheadRow: {
+        // backgroundColor: 'rgba(' + hexToRgb(theme.palette.primary.main).r + ',' + hexToRgb(theme.palette.primary.main).g + ',' + hexToRgb(theme.palette.primary.main).b +', .2)'
         backgroundColor: theme.palette.primary.main,
         '& tr': {
             height: 48
@@ -110,7 +119,7 @@ const CurrencyTypeProvider = props => (
     />
 );
 
-class CustomerTransactions extends Component {
+class SupplyTransactons extends Component {
     state = {
         pageSizes: [5, 10, 25, 50, 100],
         currentPage: 0,
@@ -131,43 +140,17 @@ class CustomerTransactions extends Component {
     };
 
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-    }
-
-    componentDidMount() {
-        //'/franchisees/reports/:regionid/:year/:month/:franchiseenumber',
-        if( this.props.transactionDetail!==null) {
-            let trxDetail = this.props.transactionDetail.Data;
-            this.props.getReport({
-                regionId: this.props.regionId,
-                year: '2017',
-                month: '1',
-                franchiseenumber: trxDetail.FranchiseeNo
-            });
-        }
-    }
-
-    componentWillMount() {
-    }
-
-    componentWillUnmount() {
-
-    }
-
-
     changeSorting = sorting => this.setState({ sorting });
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.CUS_TRXS===null)
+        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.SUPPLY_TRXS===null)
             return (<div/>);
 
-        // const {DLR_CODE, SUMMARY_PAGE, CUS_TRXS, CUST_ACCT_TOTALS, SUPPLY_TRXS, LEASE_PAYMENTS,REG_MISC, CHARGEBACKS }  = franchiseeReport.Data;
-        // console.log('customer', CUS_TRXS);
-
-        let data = franchiseeReport.Data.CUS_TRXS.map(d=>{
-            d.TRX_AMT = parseFloat(d.TRX_AMT);
+        let data = franchiseeReport.Data.SUPPLY_TRXS.map(d=>{
+            d.TRX_AMT = parseFloat(d.EXTENDED);
             d.TRX_TAX = parseFloat(d.TRX_TAX);
+            d.TRX_UNIT = parseFloat(d['UNIT COST']);
             d.TRX_TOT = parseFloat(d.TRX_TOT);
             return d;
         });
@@ -175,36 +158,31 @@ class CustomerTransactions extends Component {
         console.log('data= ', data);
 
         const columns = [
-            {name: "CUST_NO", title: "Cus. #",},
-            {name: "CUS_NAME", title: "Cus. Name"},
             {name: "DESCR", title: "Description"},
-            {name: "INV_NO", title: "Invoice #"},
-            {name: "TRX_TYPE", title: "Type"},
-            {name: "TRX_AMT", title: "Amount"},
+            {name: "QUANTITY", title: "Quantity"},
+            {name: "TRX_UNIT", title: "Unit Amount"},
+            {name: "TRX_AMT", title: "SubTotal"},
             {name: "TRX_TAX", title: "Tax"},
             {name: "TRX_TOT", title: "Total"},
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'CUST_NO', width: 80, },
-            { columnName: 'CUS_NAME', width: 220, },
             { columnName: 'DESCR', width: -1, },
-            { columnName: 'INV_NO', width: 80},
-            { columnName: 'TRX_TYPE', width: 50,  align: 'center'},
+            { columnName: 'TRX_UNIT', width: 100,  align: 'right'},
             { columnName: 'TRX_AMT', width: 100,  align: 'right'},
             { columnName: 'TRX_TAX', width: 100,  align: 'right'},
             { columnName: 'TRX_TOT', width: 100,  align: 'right'},
         ];
 
         let totalSummaryItems = [
-            { columnName: 'TRX_AMT',  title: 'Amount Sum', type: 'sum'},
+            { columnName: 'TRX_AMT',  type: 'sum'},
             { columnName: 'TRX_TAX',  type: 'sum'},
             { columnName: 'TRX_TOT',  type: 'sum'},
         ];
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
-                <h2>Customer Transactions</h2>
+                <h2>Supply Transactions</h2>
                 <Grid rows={data} columns={columns}>
                     <PagingState
                         currentPage={this.state.currentPage}
@@ -228,7 +206,6 @@ class CustomerTransactions extends Component {
                                   columnExtensions={tableColumnExtensions}
                     />
                     <TableHeaderRow />
-                    {/*<PagingPanel pageSizes={this.state.pageSizes} />*/}
                     <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
                 </Grid>
             </div>
@@ -254,5 +231,5 @@ function mapStateToProps({transactions, auth, franchiseeReports}) {
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(CustomerTransactions)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(SupplyTransactons)));
 

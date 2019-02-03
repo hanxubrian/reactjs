@@ -1,10 +1,5 @@
 import React, {Component} from 'react';
 
-// Material-UI core components
-import {
-    Icon, IconButton, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
-} from '@material-ui/core';
-
 //DevExtreme React-Grid
 import {
     PagingState,
@@ -36,18 +31,8 @@ import "react-table/react-table.css";
 import classNames from 'classnames';
 import NumberFormat from 'react-number-format';
 
-const hexToRgb = (hex) => {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-    } : null;
-};
-
 const styles = theme => ({
     tableTheadRow: {
-        // backgroundColor: 'rgba(' + hexToRgb(theme.palette.primary.main).r + ',' + hexToRgb(theme.palette.primary.main).g + ',' + hexToRgb(theme.palette.primary.main).b +', .2)'
         backgroundColor: theme.palette.primary.main,
         '& tr': {
             height: 48
@@ -65,7 +50,6 @@ const styles = theme => ({
     tableStriped: {
         marginBottom: '0!important',
         '& tbody tr:nth-of-type(odd)': {
-            // backgroundColor: fade(theme.palette.primary.main, 0.15),
         },
         '& tbody tr td': {
             fontSize: 11,
@@ -145,31 +129,6 @@ class CustomerAccountTotals extends Component {
         });
     };
 
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-    }
-
-    componentDidMount() {
-        //'/franchisees/reports/:regionid/:year/:month/:franchiseenumber',
-        if( this.props.transactionDetail!==null) {
-            let trxDetail = this.props.transactionDetail.Data;
-            this.props.getReport({
-                regionId: this.props.regionId,
-                year: '2017',
-                month: '1',
-                franchiseenumber: trxDetail.FranchiseeNo
-            });
-        }
-    }
-
-    componentWillMount() {
-    }
-
-    componentWillUnmount() {
-
-    }
-
-
     changeSorting = sorting => this.setState({ sorting });
 
     render() {
@@ -200,9 +159,9 @@ class CustomerAccountTotals extends Component {
         let  tableColumnExtensions = [
             { columnName: 'CUST_NO', width: 80, },
             { columnName: 'CUS_NAME', width: -1, },
-            { columnName: 'CONT_BILL', width: 120, align: 'center', wordWrapEnabled: true},
-            { columnName: 'CUR_MONTH', width: 120, align: 'center', wordWrapEnabled: true},
-            { columnName: 'ADTL_B_FRN', width: 120,  align: 'center', wordWrapEnabled: true},
+            { columnName: 'CONT_BILL', width: 120, align: 'right', wordWrapEnabled: true},
+            { columnName: 'CUR_MONTH', width: 120, align: 'right', wordWrapEnabled: true},
+            { columnName: 'ADTL_B_FRN', width: 120,  align: 'right', wordWrapEnabled: true},
             { columnName: 'ADTL_B_OFC', width: 120,  align: 'right', wordWrapEnabled: true},
             { columnName: 'FF_NBR', width: 120,  align: 'center', wordWrapEnabled: true},
             { columnName: 'FF_PYMNT', width: 120, align: 'right',wordWrapEnabled: true},
