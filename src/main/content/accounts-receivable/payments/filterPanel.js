@@ -248,7 +248,7 @@ class FilterPanel extends Component {
 				this.props.filterParam.toDate,
 				this.props.filterParam.paymentStatus,
 				newPaymentHistoryTypes
-				);
+			);
 
 			this.props.setPaymentHistoryFilterPaymentTypes(newPaymentHistoryTypes)
 
@@ -505,10 +505,12 @@ class FilterPanel extends Component {
 					})}
 				</div>
 				}
-				<div style={{ marginTop: 20, display: 'flex', flexDirection: 'column' }}>
-					<Divider variant="middle" className="mt-12 mb-6" />
-					<h3>Payment Status</h3>
-					{/* <FormControlLabel
+
+				{this.props.viewMode === "Invoice" &&
+					<div style={{ marginTop: 20, display: 'flex', flexDirection: 'column' }}>
+						<Divider variant="middle" className="mt-12 mb-6" />
+						<h3>Payment Status</h3>
+						{/* <FormControlLabel
 						control={
 							<Switch
 								checked={this.state.PaymentStatusAll}
@@ -518,27 +520,28 @@ class FilterPanel extends Component {
 						}
 						label="All"
 					/> */}
-					<FormControlLabel
-						control={
-							<Switch
-								checked={this.state.PaymentStatusOpen}
-								onChange={this.handleChangeChecked('PaymentStatusOpen')}
-								value="PaymentStatusOpen"
-							/>
-						}
-						label="Open"
-					/>
-					<FormControlLabel
-						control={
-							<Switch
-								checked={this.state.PaymentStatusPaid}
-								onChange={this.handleChangeChecked('PaymentStatusPaid')}
-								value="PaymentStatusPaid"
-							/>
-						}
-						label="Paid"
-					/>
-				</div>
+						<FormControlLabel
+							control={
+								<Switch
+									checked={this.state.PaymentStatusOpen}
+									onChange={this.handleChangeChecked('PaymentStatusOpen')}
+									value="PaymentStatusOpen"
+								/>
+							}
+							label="Open"
+						/>
+						<FormControlLabel
+							control={
+								<Switch
+									checked={this.state.PaymentStatusPaid}
+									onChange={this.handleChangeChecked('PaymentStatusPaid')}
+									value="PaymentStatusPaid"
+								/>
+							}
+							label="Paid"
+						/>
+					</div>
+				}
 				{/* </Paper> */}
 				{/* </div> */}
 			</div>
