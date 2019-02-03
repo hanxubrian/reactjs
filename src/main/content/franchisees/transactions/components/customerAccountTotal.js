@@ -14,12 +14,15 @@ import {
     Table,
     VirtualTable,
     TableHeaderRow,
-    TableSummaryRow, PagingPanel
+    TableSummaryRow
 } from '@devexpress/dx-react-grid-material-ui';
 
 
 import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
+
+//Theme Utilities
+import FuseUtils from '@fuse/FuseUtils';
 
 // for store
 import {bindActionCreators} from "redux";
@@ -137,6 +140,7 @@ class CustomerAccountTotals extends Component {
             return (<div/>);
 
         let data = franchiseeReport.Data.CUST_ACCT_TOTALS.map(d=>{
+            d.CUS_NAME = FuseUtils.capital_letter(d.CUS_NAME);
             d.CONT_BILL = parseFloat(d.CONT_BILL);
             d.CUR_MONTH = parseFloat(d.CUR_MONTH);
             d.ADTL_B_FRN = parseFloat(d.ADTL_B_FRN);

@@ -14,12 +14,15 @@ import {
     Table,
     VirtualTable,
     TableHeaderRow,
-    TableSummaryRow, PagingPanel
+    TableSummaryRow
 } from '@devexpress/dx-react-grid-material-ui';
 
 
 import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
+
+//Theme Utilities
+import FuseUtils from '@fuse/FuseUtils';
 
 // for store
 import {bindActionCreators} from "redux";
@@ -148,6 +151,7 @@ class SupplyTransactons extends Component {
             return (<div/>);
 
         let data = franchiseeReport.Data.SUPPLY_TRXS.map(d=>{
+            d.DESCR = FuseUtils.capital_letter(d.DESCR);
             d.TRX_AMT = parseFloat(d.EXTENDED);
             d.TRX_TAX = parseFloat(d.TRX_TAX);
             d.TRX_UNIT = parseFloat(d['UNIT COST']);

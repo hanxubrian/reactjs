@@ -31,6 +31,8 @@ import "react-table/react-table.css";
 import classNames from 'classnames';
 import NumberFormat from 'react-number-format';
 
+//Theme Utilities
+import FuseUtils from '@fuse/FuseUtils';
 
 const styles = theme => ({
     tableTheadRow: {
@@ -166,6 +168,8 @@ class CustomerTransactions extends Component {
         // console.log('customer', CUS_TRXS);
 
         let data = franchiseeReport.Data.CUS_TRXS.map(d=>{
+            d.DESCR = FuseUtils.capital_letter(d.DESCR);
+            d.CUS_NAME = FuseUtils.capital_letter(d.CUS_NAME);
             d.TRX_AMT = parseFloat(d.TRX_AMT);
             d.TRX_TAX = parseFloat(d.TRX_TAX);
             d.TRX_TOT = parseFloat(d.TRX_TOT);
