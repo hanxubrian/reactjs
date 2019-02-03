@@ -216,6 +216,7 @@ class MainToolbar extends Component {
         adminVersionStatus          : false,
         MSG                         : null,
         triggerF                    : false,
+        checkloadingchatMSG         : true,
 
     };
 
@@ -264,7 +265,7 @@ class MainToolbar extends Component {
     }
     shownotification=()=>{
         // e.stopPropagation();
-
+        this.setState({unreadMSGnum:0});
         this.setState({notification: !this.state.notification});
     }
     billrunerrormessage=()=>{
@@ -277,22 +278,27 @@ class MainToolbar extends Component {
             },
             variant: 'error'//success error info warning null
         });
+        this.props.changebillrunstatus();
     }
     billrunsuccessmesssage=()=>{
-        if(!this.state.triggerF){
-            if(this.props.billrunstatus === 200){
+        let msg = this.state.pusherMSG.message;
+        if(msg === null)msg = "";
+        if(1){
+            if(this.props.billstatus === 200){
+
+                this.props.showMessage({
+                    message     : msg,//text or html
+                    autoHideDuration: 6000,//ms
+                    anchorOrigin: {
+                        vertical  : 'top',//top bottom
+                        horizontal: 'right'//left center right
+                    },
+                    variant: 'success'//success error info warning null
+                });
                 this.props.changebillrunstatus();
+                this.setState({triggerF:true});
             }
-            this.props.showMessage({
-                message     : this.state.pusherMSG.message,//text or html
-                autoHideDuration: 6000,//ms
-                anchorOrigin: {
-                    vertical  : 'top',//top bottom
-                    horizontal: 'right'//left center right
-                },
-                variant: 'success'//success error info warning null
-            });
-            this.setState({triggerF:true});
+
         }
 
     }
@@ -318,9 +324,16 @@ class MainToolbar extends Component {
         this.setState({MSG:allmsg});
     }
     mainmsg=()=>{
+
         let chatmidmsg          = this.state.chatMSG;
         let pushermidmsg        = this.state.pusherMSGList;
         let allmsg              = [];
+
+        // console.log("mainmsg");
+        // console.log("mainmsg===this.state.chatMSG",this.state.chatMSG);
+        // console.log("mainmsg===this.state.pusherMSGList",this.state.pusherMSGList);
+
+
         if(chatmidmsg && chatmidmsg !== null && pushermidmsg === null ){
             allmsg =chatmidmsg;
         }
@@ -351,12 +364,14 @@ class MainToolbar extends Component {
 
     }
     componentDidUpdate(prevProps,prevState){
-        if(this.props.billrunstatus !== prevProps.billrunstatus && prevProps.billrunstatus===200){
+        if(this.props.billstatus !== prevProps.billstatus && prevProps.billstatus===200){
             this.setState({triggerF:false});
         }
         if(JSON.stringify(this.state.chatMSG) !== JSON.stringify(prevState.chatMSG)){//chat 0Message
             this.mainmsg();
         }
+
+
         // if(this.state.pusherMSG && this.state.pusherMSG !== null){
         //     console.log("######DB############this.props.getpusherNotificationDB",this.props.getpusherNotificationDB);
         //     console.log("######pushermsg############this.state.pusherMSG",this.state.pusherMSG);
@@ -366,22 +381,15 @@ class MainToolbar extends Component {
         //     console.log("######MSG############prevState.pusherMSG",prevState.pusherMSG);
         //     console.log("######MSG############this.props.login.UserId.toString()",this.props.login.UserId.toString());
         // }
+        //
 
-
-        if( this.state.pusherMSG && this.state.pusherMSG !== null && this.state.pusherMSG.subject && this.state.pusherMSG.subject !== null && this.state.pusherMSG.subject.toString() ==="BillRun" ){//&& JSON.stringify(this.state.pusherMSG) !== JSON.stringify(prevState.pusherMSG)
-            if(this.props.billstatus===400){
+        if(this.props.billstatus !== prevProps.billstatus){
+            if(this.props.billstatus === 200){
+                this.billrunsuccessmesssage();
+            }
+            else if(this.props.billstatus === 400){
                 this.billrunerrormessage();
-                // console.log("error=============1");
             }
-            else if(this.props.billstatus===200 && !this.state.triggerF ){
-                // console.log("**************this.props.login.UserId.toString()" ,this.props.login.UserId.toString());
-                if(this.state.pusherMSG.user === this.props.login.UserId.toString()){
-                    // console.log("error=============2");
-                    this.billrunsuccessmesssage();
-                }
-
-            }
-
         }
 
         let midflage = false;
@@ -411,9 +419,8 @@ class MainToolbar extends Component {
             this.setState({sysflage:false});
         }
 
-        if(JSON.stringify(this.state.pusherMSG) !== JSON.stringify(prevState.pusherMSG) && this.state.pusherMSG !== null ){
+        if(JSON.stringify(this.state.pusherMSG) !== JSON.stringify(prevState.pusherMSG) && this.state.pusherMSG !== null  ){
             if(this.state.pusherMSG.user === this.props.login.UserId.toString()){
-
                 let PusherList =[];
                 let settime = moment();
                 let unreadNum = this.state.unreadMSGnum;
@@ -436,6 +443,10 @@ class MainToolbar extends Component {
             this.setState({messages: this.props.chat.messages});
             midflage = true;
         }
+        if(this.state.checkloadingchatMSG && this.props.chat.messages){
+            this.setState({messages: this.props.chat.messages});
+            this.setState({checkloadingchatMSG:false});
+        }
         if(this.props.contacts.entities !== prevProps.contacts.entities){
             this.setState({contacts: this.props.contacts.entities});
             let num = 0;
@@ -456,7 +467,7 @@ class MainToolbar extends Component {
         if(this.props.chatUser !== prevProps.chatUser){
             this.setState({chatUser: this.props.chatUser});
         }
-        if(this.state.contacts && this.state.contacts !== null && this.state.messages && this.state.messages !== null && this.state.chatUser.id && this.state.chatUser.id !== null){
+        if(this.state.contacts && this.state.contacts !== null && this.state.messages && this.state.messages !== null && this.state.chatUser && this.state.chatUser !== null && this.state.chatUser.id && this.state.chatUser.id !== null){
             let msg = Object.values(this.state.messages);
             let chatMSG =[];
             let midMSG = '';

@@ -180,7 +180,8 @@ class Chat extends Component {
 
     render()
     {
-        const {classes, chat, contacts, user, className} = this.props;
+        const {classes, chat, contacts, user, className,selectedContactId} = this.props;
+        console.log("selectedContactId",selectedContactId);
         const {messageText} = this.state;
         return (
             <Paper elevation={3} className={classNames("flex flex-col", className)}>
@@ -190,7 +191,7 @@ class Chat extends Component {
                     }}
                     className="flex flex-1 flex-col overflow-y-auto"
                 >
-                    {!chat ?
+                    {selectedContactId ===null && !chat ?
                         (
                             <div className="flex flex-col flex-1 items-center justify-center p-24">
                                 <Icon className="text-128" color="disabled">chat</Icon>
@@ -199,14 +200,14 @@ class Chat extends Component {
                                 </Typography>
                             </div>
                         ) :
-                        chat.dialog && chat.dialog.length > 0 ?
+                        selectedContactId !==null && chat.dialog && chat.dialog.length > 0 ?
                             (
                                 <div className="flex flex-col pt-16 pl-40 pb-40">
                                     {chat.dialog.map((item, i) => {
                                         const contact = item.who === user.id ? user : contacts.find(_contact => _contact.id === item.who);
                                         return (
                                             <div
-                                                key={item.time}
+                                                key={i}
                                                 className={classNames(
                                                     classes.messageRow,
                                                     {'me': item.who === user.id},

@@ -231,11 +231,15 @@ export function addMessage(roomId, message)
         const currentRoom = getState().chatPanel.chat.currentRoom;
         const loading = getState().chatPanel.chat.loading;
         const user = getState().chatPanel.user;
-
+        const chatpanelstatus = getState().chatPanel.state;
         if (loading) return;
         let isthis;
-        if (currentRoom && currentRoom.id == roomId)
+        if (currentRoom && currentRoom.id == roomId){
             isthis = true;
+            if (!loading && !chatpanelstatus){
+                dispatch(addUnread(message.who));
+            }
+        }
         else{
             if (!loading)
                 dispatch(addUnread(message.who));

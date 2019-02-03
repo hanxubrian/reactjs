@@ -41,8 +41,10 @@ const notification = function (state = initialState, action) {
         case Actions.ADD_NOTIFICATION_SUCCESS:
         {
             const MSG = action.payload;
+            let pusherdb = state.pusherMSGDB;
+           // pusherdb.unshift(MSG);
             return{
-                ...state,pusherMSGDB:[MSG,...state.pusherMSGDB],
+                ...state,
             }
         }
         case Actions.ADMIN_VERSION_UPGRADE_TRIGGER_SUCCESS:

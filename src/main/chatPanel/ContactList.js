@@ -132,7 +132,7 @@ class ContactList extends Component {
     render()
     {
         const {classes, chat, contacts, user, selectedContactId} = this.props;
-
+        // console.log("user.chatList",user.chatList);
         const ContactButton = ({chat, contact}) => {
             return (
                 <Tooltip title={contact.name} placement="left">

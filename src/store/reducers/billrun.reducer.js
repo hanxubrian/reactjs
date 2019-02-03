@@ -75,7 +75,7 @@ const billruns = function(state = initialState, action) {
         }
         case Actions.CHANGE_BILLRUN_STATUS:{
             return {
-                ...state,loadingstatus: false,billrunstatus:10,
+                ...state,loadingstatus: false,billrunstatus:50,
             }
         }
         case Actions.DELETE_BILLRUN_SUCCESS:
