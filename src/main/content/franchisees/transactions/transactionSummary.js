@@ -23,6 +23,23 @@ const styles = theme => ({
         flexGrow: 1,
         backgroundColor: theme.palette.background.paper,
     },
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100vh',
+        backgroundColor: 'rgba(0,0,0, .9)',
+        zIndex: 1000,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        opacity: 0.5
+    },
+    progress: {
+        margin: theme.spacing.unit * 2,
+    },
 });
 
 function TabContainer(props) {
@@ -61,10 +78,13 @@ class TransactionsSummary extends Component {
     render() {
         const {classes, franchiseeReport} = this.props;
         return (
-            <div className={classNames(classes.root,'p-48 flex flex-col flex-1 items-center h-full')}>
+            <div className={classNames(classes.root,'p-16 flex flex-col flex-1 items-center')}>
                 <CustomerTransactions />
                 {franchiseeReport===null  && (
-                    <CircularProgress className={classes.progress} color="secondary"  />
+                    <div className={classNames(classes.overlay)}>
+                        <CircularProgress className={classes.progress} color="secondary"  />
+                        <h4 style={{color: 'white'}}>Loading Transaction Summary Detail...</h4>
+                    </div>
                 )}
             </div>
         );
@@ -79,7 +99,6 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps({franchiseeReports, auth}) {
     return {
-        franchiseeReports: franchiseeReports.franchiseeReports,
         bLoadedFranchiseeReports: franchiseeReports.bLoadedFranchiseeReports,
         regionId: auth.login.defaultRegionId,
         franchiseeReport: franchiseeReports.franchiseeReport,
