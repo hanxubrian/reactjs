@@ -74,8 +74,14 @@ class PaymentListService {
 		fromDate = "01/31/2017"
 		toDate = "12/31/2019"
 		return new Promise((resolve, reject) => {
-			axios_instance.get(`${BASE_MONGO_API_URL}/v1/payment/gethistory?regionId=${regionId}&fromDate=${fromDate}&toDate=${toDate}`)
-				// axios_instance.get(`${BASE_MONGO_API_URL}/v1/payment/gethistory`, { regionId: 2, fromDate, toDate })
+			const data = {
+				regionId, 
+				fromDate,
+				toDate,
+				PaymentTypes: paymentTypes
+			}
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/payment/gethistory`, data)
+			// axios_instance.get(`${BASE_MONGO_API_URL}/v1/payment/gethistory?regionId=${regionId}&fromDate=${fromDate}&toDate=${toDate}`)
 				.then(res => {
 					console.log("getPaymentHistory service", res)
 					if (res.status === 200) {
