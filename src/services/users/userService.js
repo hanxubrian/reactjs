@@ -70,6 +70,68 @@ class UserService {
         });
     };
 
+    /**
+     * @method GET
+     *
+     */
+    getUserStateList = () => {
+        return new Promise((resolve, reject) => {
+            axios_instance.get(`${BASE_MONGO_API_URL}/v1/lists/states`)
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    };
+    /**
+     * @method GET
+     * regionId : parameter
+     *
+     */
+    getUserDepartmentList = (regionId) => {
+        return new Promise((resolve, reject) => {
+            axios_instance.get(`${BASE_MONGO_API_URL}/v1/lists/departments?regionid=${regionId}`)
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    };
+
+    /**
+     * @method GET
+     *
+     */
+    getUserPermissionList = () => {
+        return new Promise((resolve, reject) => {
+            axios_instance.get(`${BASE_MONGO_API_URL}/v1/apps/applist`)
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    };
 
 }
 

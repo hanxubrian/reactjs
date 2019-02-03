@@ -126,6 +126,9 @@ function renderInputComponent(inputProps) {
                     input: classes.input,
                 },
             }}
+            inputProps={{
+                autoComplete: 'off',
+            }}
             {...other}
         />
     );
@@ -178,80 +181,8 @@ function getSuggestionValue(suggestion) {
 }
 
 
-const department = [
-    {
-        value: "DepartMent1",
-        label: "DepartMent1"
-    },
-    {
-        value: "DepartMent2",
-        label: "DepartMent2"
-    },
-    {
-        value: "DepartMent3",
-        label: "DepartMent3"
-    },
-    {
-        value: "DepartMent4",
-        label: "DepartMent4"
-    },
-    {
-        value: "DepartMent5",
-        label: "DepartMent5"
-    },
-    {
-        value: "DepartMent6",
-        label: "DepartMent6"
-    },
-    {
-        value: "DepartMent7",
-        label: "DepartMent7"
-    }
-];
-
-const State = [
-    {
-        label: "Buffalo",
-        value: "Buffalo",
-    },
-    {
-        label: "New York",
-        value: "New York",
-    },
-    {
-        label: "Kansas",
-        value: "Kansas",
-    },
-    {
-        label: "Ohio",
-        value: "Ohio",
-    },
-    {
-        label: "Georgia",
-        value: "Georgia",
-    },
-    {
-        label: "Texas",
-        value: "Texas",
-    },
-    {
-        label: "Florida",
-        value: "Florida",
-    }
-];
-
 const GroupList = [];
 const RoleList = [];
-
-const UserRegion = [
-    "Buffalo",
-    "New York",
-    "Kansas",
-    "Ohio",
-    "Georgia",
-    "Texas",
-    "Florida",
-];
 
 const ITEM_HEIGHT = 40;
 const ITEM_PADDING_TOP = 8;
@@ -299,7 +230,11 @@ class UsersForm extends React.Component {
         single: '',
         popper: '',
         suggestions: [],
-        TypeList:[]
+        TypeList:[],
+        MultiRegion: [],
+        DefaultRegion: [],
+        UserPermission: [],
+        DepartmentList: []
     };
 
 
@@ -307,6 +242,9 @@ class UsersForm extends React.Component {
         this.props.getUserFormGroupList();
         this.props.getUserFormRoleList();
         this.props.getUserFormUserTypeList();
+        this.props.getUserStateList();
+        this.props.getUserDepartmentList(this.props.regionId);
+        this.props.getUserPermissionList();
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
@@ -335,6 +273,23 @@ class UsersForm extends React.Component {
                 this.setState({
                     TypeList: nextProps.userTypeList
                 })
+            }
+        }
+        if ( nextProps.userStateList !== this.props.userStateList )
+        {
+            if(nextProps.userStateList !== null)
+            {
+                nextProps.userStateList.map(x=>{
+                    this.state.MultiRegion.push(x.name);
+                });
+                this.state.DefaultRegion = nextProps.userStateList;
+            }
+        }
+        if ( nextProps.userDepartmentList !== this.props.userDepartmentList )
+        {
+            if(nextProps.userDepartmentList !== null)
+            {
+                this.state.DepartmentList = nextProps.userDepartmentList;
             }
         }
     }
@@ -366,7 +321,12 @@ class UsersForm extends React.Component {
     render()
     {
         const {classes} = this.props;
-        const {TypeList} = this.state;
+        const {
+            TypeList,
+            DepartmentList,
+            MultiRegion,
+            DefaultRegion
+        } = this.state;
 
         const autosuggestProps = {
             renderInputComponent,
@@ -471,9 +431,9 @@ class UsersForm extends React.Component {
                                         margin="dense"
                                         fullWidth
                                     >
-                                        {department.map(option => (
-                                            <MenuItem key={option.value} value={option.value}>
-                                                {option.label}
+                                        {DepartmentList.map(option => (
+                                            <MenuItem key={option._id} value={option.name}>
+                                                {option.name}
                                             </MenuItem>
                                         ))}
                                     </TextField>
@@ -520,9 +480,9 @@ class UsersForm extends React.Component {
                                         margin="dense"
                                         fullWidth
                                     >
-                                        {State.map(option => (
-                                            <MenuItem key={option.value} value={option.value}>
-                                                {option.label}
+                                        {DefaultRegion.map(option => (
+                                            <MenuItem key={option._id} value={option.abbreviation}>
+                                                {option.name}
                                             </MenuItem>
                                         ))}
                                     </TextField>
@@ -610,7 +570,7 @@ class UsersForm extends React.Component {
                                     margin="dense"
                                     MenuProps={MenuProps}
                                 >
-                                    {UserRegion.map(name => (
+                                    {MultiRegion.map(name => (
                                         <MenuItem key={name} value={name} >
                                             {name}
                                         </MenuItem>
@@ -634,9 +594,9 @@ class UsersForm extends React.Component {
                                 margin="dense"
                                 fullWidth
                             >
-                                {State.map(option => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
+                                {DefaultRegion.map(option => (
+                                    <MenuItem key={option._id} value={option.abbreviation}>
+                                        {option.name}
                                     </MenuItem>
                                 ))}
                             </TextField>
@@ -731,6 +691,7 @@ class UsersForm extends React.Component {
                                         label: 'Customer',
                                         placeholder: 'Enter Customer Name',
                                         value: this.state.popper,
+                                        autoComplete: 'off',
                                         onChange: this.handleAutoChange('popper'),
                                         inputRef: node => {
                                             this.popperNode = node;
@@ -820,17 +781,24 @@ function mapDispatchToProps(dispatch)
         getUserFormGroupList: Actions.getUserFormGroupList,
         getUserFormRoleList: Actions.getUserFormRoleList,
         getUserFormUserTypeList: Actions.getUserFormUserTypeList,
+        getUserStateList: Actions.getUserStateList,
+        getUserDepartmentList: Actions.getUserDepartmentList,
+        getUserPermissionList: Actions.getUserPermissionList,
     }, dispatch);
 }
 
-function mapStateToProps({usersApp, fuse})
+function mapStateToProps({usersApp, fuse ,auth})
 {
     return {
         openUsersFormStatus: usersApp.users.openUsersFormStatus,
         userGroupList: usersApp.users.userGroupList,
         userRoleList: usersApp.users.userRoleList,
         userTypeList: usersApp.users.userTypeList,
-        navigation : fuse.navigation
+        userStateList: usersApp.users.userStateList,
+        userDepartmentList: usersApp.users.userDepartmentList,
+        userPermissionList: usersApp.users.userPermissionList,
+        navigation : fuse.navigation,
+        regionId: auth.login.defaultRegionId,
     }
 }
 

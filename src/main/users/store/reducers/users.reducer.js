@@ -1,5 +1,8 @@
 import * as Actions from '../actions';
 import * as UserActions from "../../../../auth/store/actions";
+import {GET_USER_FORM_PERMISSION_LIST} from "../actions";
+import {GET_USER_FORM_DEPARTMENT_LIST} from "../actions";
+import {GET_USER_FORM_STATE_LIST} from "../actions";
 const initialState = {
     openUsersFormStatus: false,
     selectedRows: [],
@@ -7,6 +10,9 @@ const initialState = {
     userGroupList: [],
     userRoleList: [],
     userTypeList: [],
+    userStateList: [],
+    userDepartmentList: [],
+    userPermissionList: [],
     payload:{
         picture:null,
         fName: "",
@@ -146,6 +152,24 @@ const usersReducer = function (state = initialState, action) {
             return{
                 ...state,
                 userTypeList: action.payload
+            }
+        }
+        case Actions.GET_USER_FORM_STATE_LIST: {
+            return{
+                ...state,
+                userStateList: action.payload
+            }
+        }
+        case Actions.GET_USER_FORM_DEPARTMENT_LIST: {
+            return{
+                ...state,
+                userDepartmentList: action.payload
+            }
+        }
+        case Actions.GET_USER_FORM_PERMISSION_LIST: {
+            return{
+                ...state,
+                userPermissionList: action.payload
             }
         }
         case UserActions.USER_LOGGED_OUT:
