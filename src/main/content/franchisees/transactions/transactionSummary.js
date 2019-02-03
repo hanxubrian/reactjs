@@ -15,7 +15,9 @@ import PropTypes from 'prop-types';
 import moment from "moment";
 import classNames from 'classnames';
 
+//Child Components
 import CustomerTransactions from './components/customerTransactions'
+import CustomerAccountTotals from './components/customerAccountTotal'
 
 
 const styles = theme => ({
@@ -80,6 +82,7 @@ class TransactionsSummary extends Component {
         return (
             <div className={classNames(classes.root,'p-16 flex flex-col flex-1 items-center')}>
                 <CustomerTransactions />
+                <CustomerAccountTotals />
                 {franchiseeReport===null  && (
                     <div className={classNames(classes.overlay)}>
                         <CircularProgress className={classes.progress} color="secondary"  />
