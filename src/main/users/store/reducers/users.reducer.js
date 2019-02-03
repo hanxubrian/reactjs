@@ -4,6 +4,9 @@ const initialState = {
     openUsersFormStatus: false,
     selectedRows: [],
     fpStatus: false,
+    userGroupList: [],
+    userRoleList: [],
+    userTypeList: [],
     payload:{
         picture:null,
         fName: "",
@@ -125,6 +128,24 @@ const usersReducer = function (state = initialState, action) {
             return{
                 ...state,
                 fpStatus: !state.fpStatus
+            }
+        }
+        case Actions.GET_USER_FORM_GROUP_LIST: {
+            return{
+                ...state,
+                userGroupList: action.payload
+            }
+        }
+        case Actions.GET_USER_FORM_ROLE_LIST: {
+            return{
+                ...state,
+                userRoleList: action.payload
+            }
+        }
+        case Actions.GET_USER_FORM_USERTYPE_LIST: {
+            return{
+                ...state,
+                userTypeList: action.payload
             }
         }
         case UserActions.USER_LOGGED_OUT:

@@ -240,6 +240,8 @@ const State = [
     }
 ];
 
+const GroupList = [];
+const RoleList = [];
 
 const UserRegion = [
     "Buffalo",
@@ -250,49 +252,6 @@ const UserRegion = [
     "Texas",
     "Florida",
 ];
-
-const Group = [
-     'Group 1',
-     'Group 2',
-     'Group 3',
-     'Group 4',
-];
-
-
-const userRole = [
-    'Admin-User',
-    'Guest',
-    'Editor',
-    'Contractor',
-    'Subscriber',
-];
-
-const userType = [
-    {
-        label: "Customer",
-        value: "Customer",
-    },
-    {
-        label: "Franchisee",
-        value: "Franchisee",
-    },
-    {
-        label: "Employee",
-        value: "Employee",
-    },
-    {
-        label: "Vendor",
-        value: "Vendor",
-    },
-    {
-        label: "Third-Party",
-        value: "ThirdParty",
-    },
-    {
-        label: "Contractor",
-        value: "Contractor",
-    }
-]
 
 const ITEM_HEIGHT = 40;
 const ITEM_PADDING_TOP = 8;
@@ -307,6 +266,11 @@ const MenuProps = {
 
 
 class UsersForm extends React.Component {
+
+    constructor(props) {
+        super(props);
+    }
+
     state = {
         firstName: '',
         lastName : '',
@@ -332,12 +296,48 @@ class UsersForm extends React.Component {
         userTypeEmployee: '',
         userTypeThirdParty: '',
         userTypeContractor: '',
-
         single: '',
         popper: '',
         suggestions: [],
+        TypeList:[]
     };
 
+
+    componentWillMount() {
+        this.props.getUserFormGroupList();
+        this.props.getUserFormRoleList();
+        this.props.getUserFormUserTypeList();
+    }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        if ( nextProps.userGroupList !== this.props.userGroupList )
+        {
+            if(nextProps.userGroupList !== null)
+            {
+                nextProps.userGroupList.map(x=>{
+                    GroupList.push(x.name);
+                });
+            }
+        }
+        if ( nextProps.userRoleList !== this.props.userRoleList )
+        {
+            if(nextProps.userRoleList !== null)
+            {
+                nextProps.userRoleList.map(x=>{
+                    RoleList.push(x.name);
+                });
+            }
+        }
+        if ( nextProps.userTypeList !== this.props.userTypeList )
+        {
+            if(nextProps.userTypeList !== null)
+            {
+                this.setState({
+                    TypeList: nextProps.userTypeList
+                })
+            }
+        }
+    }
 
     handleChange = prop => event => {
         this.setState({[prop]: event.target.value});
@@ -366,6 +366,7 @@ class UsersForm extends React.Component {
     render()
     {
         const {classes} = this.props;
+        const {TypeList} = this.state;
 
         const autosuggestProps = {
             renderInputComponent,
@@ -591,7 +592,7 @@ class UsersForm extends React.Component {
                                     margin="dense"
                                     MenuProps={MenuProps}
                                 >
-                                    {Group.map(name => (
+                                    {GroupList.map(name => (
                                         <MenuItem key={name} value={name} >
                                             {name}
                                         </MenuItem>
@@ -657,7 +658,7 @@ class UsersForm extends React.Component {
                                     margin="dense"
                                     MenuProps={MenuProps}
                                 >
-                                    {userRole.map(name => (
+                                    {RoleList.map(name => (
                                         <MenuItem key={name} value={name} >
                                             {name}
                                         </MenuItem>
@@ -688,9 +689,9 @@ class UsersForm extends React.Component {
                                 margin="dense"
                                 fullWidth
                             >
-                                {userType.map(option => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
+                                {TypeList.map(option => (
+                                    <MenuItem key={option._id} value={option.name}>
+                                        {option.name}
                                     </MenuItem>
                                 ))}
                             </TextField>
@@ -815,7 +816,10 @@ class UsersForm extends React.Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        openUsersForm : Actions.openUsersForm
+        openUsersForm : Actions.openUsersForm,
+        getUserFormGroupList: Actions.getUserFormGroupList,
+        getUserFormRoleList: Actions.getUserFormRoleList,
+        getUserFormUserTypeList: Actions.getUserFormUserTypeList,
     }, dispatch);
 }
 
@@ -823,6 +827,9 @@ function mapStateToProps({usersApp, fuse})
 {
     return {
         openUsersFormStatus: usersApp.users.openUsersFormStatus,
+        userGroupList: usersApp.users.userGroupList,
+        userRoleList: usersApp.users.userRoleList,
+        userTypeList: usersApp.users.userTypeList,
         navigation : fuse.navigation
     }
 }
