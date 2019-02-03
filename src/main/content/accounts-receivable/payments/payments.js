@@ -365,9 +365,9 @@ class Payments extends Component {
 			}
 			this.setState({ customers: temp });
 		}
-		if (nextProps.franchisees !== null && this.props.franchisees !== nextProps.franchisees) {
-			this.setState({ franchisees: nextProps.franchisees.Data.Region[0].FranchiseeList });
-		}
+		// if (nextProps.franchisees !== null && this.props.franchisees !== nextProps.franchisees) {
+		// 	this.setState({ franchisees: nextProps.franchisees.Data.Region[0].FranchiseeList });
+		// }
 
 		if (JSON.stringify(this.props.errorInfo) !== JSON.stringify(nextProps.errorInfo)) {
 			this.setState({
@@ -753,7 +753,13 @@ class Payments extends Component {
 				{(this.props.isStartedPaymentsCreated) && (
 					<div className={classNames(classes.overlay, "flex-col")}>
 						<CircularProgress className={classes.progress} color="secondary" />
-						<Typography variant="body2" color="primary">Saving payment for invoices...</Typography>
+						<Typography variant="body2" color="primary">Saving payments for invoices...</Typography>
+					</div>
+				)}
+				{(this.props.startPaymentHistory) && (
+					<div className={classNames(classes.overlay, "flex-col")}>
+						<CircularProgress className={classes.progress} color="secondary" />
+						<Typography variant="body2" color="primary">Fetching payments history...</Typography>
 					</div>
 				)}
 			</React.Fragment>
@@ -830,6 +836,8 @@ function mapStateToProps({ invoices, auth, customers, franchisees, accountReceiv
 		filter: accountReceivablePayments.filter,
 		searchText: accountReceivablePayments.searchText,
 		getPaymentsParam: accountReceivablePayments.getPaymentsParam,
+
+		startPaymentHistory: accountReceivablePayments.startPaymentHistory,
 	}
 }
 

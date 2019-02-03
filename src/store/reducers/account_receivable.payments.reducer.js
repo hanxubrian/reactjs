@@ -41,7 +41,11 @@ const initialState = {
 		open: false,
 		paymentType: "Check",
 		paymentAmount: 0
-	}
+	},
+
+	startPaymentHistory: false,
+	bLoadedPaymentHistory: false,
+	paymentHistory: [],
 };
 
 
@@ -64,7 +68,33 @@ const accountReceivablePayments = function (state = initialState, action) {
 				...state,
 				bACC_fechStart: true
 			}
-
+		case Actions.FAILED_GET_ALL_RECEIVABLE_PAYMENTS:
+			return {
+				...state,
+				NoDataString: action.payload,
+				bACC_fechStart: false,
+			}
+		//
+		// GET PAYMENT HISTORY
+		//
+		case Actions.GET_PAYMENT_HISTORY:
+			return {
+				...state,
+				paymentHistory: action.payload,
+				startPaymentHistory: false,
+				bLoadedPaymentHistory: true,
+			}
+		case Actions.GET_PAYMENT_HISTORY_START:
+			return {
+				...state,
+				startPaymentHistory: true
+			}
+		case Actions.GET_PAYMENT_HISTORY_FAILED:
+			return {
+				...state,
+				NoDataString: action.payload,
+				startPaymentHistory: false
+			}
 		//
 		// PAYMENT CREATE
 		// 
@@ -78,11 +108,6 @@ const accountReceivablePayments = function (state = initialState, action) {
 			return {
 				...state,
 				isStartedPaymentsCreated: true,
-			}
-		case Actions.FAILED_GET_ALL_RECEIVABLE_PAYMENTS:
-			return {
-				...state,
-				NoDataString: action.payload,
 			}
 		//
 		// TOGGLE SIDE PANELS
@@ -110,7 +135,7 @@ const accountReceivablePayments = function (state = initialState, action) {
 		case Actions.OPEN_PAYMENT_DIALOG:
 			return {
 				...state,
-				paymentDlgPayloads : {
+				paymentDlgPayloads: {
 					...state.paymentDlgPayloads,
 					...action.payload
 				}

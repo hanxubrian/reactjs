@@ -362,7 +362,7 @@ class paymentsHistoryListContent extends Component {
 			data: [],
 			selectAll: false,
 			selection: this.props.activePaymentRows,
-			rows: this.getRowData(this.props.payments),
+			rows: [],
 			tableColumnExtensions: [
 				{
 					title: "C.Name",
@@ -375,18 +375,18 @@ class paymentsHistoryListContent extends Component {
 					groupingEnabled: true,
 				},
 				{
-					title: "Invoice No",
-					name: "InvoiceNo",
-					columnName: "InvoiceNo",
+					title: "Payment Type",
+					name: "PaymentType",
+					columnName: "PaymentType",
 					width: 150,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
 				{
-					title: "Invoice Amount",
-					name: "InvoiceAmount",
-					columnName: "InvoiceAmount",
+					title: "Reference No.",
+					name: "ReferenceNo",
+					columnName: "ReferenceNo",
 					align: 'right',
 					width: 150,
 					sortingEnabled: true,
@@ -394,29 +394,29 @@ class paymentsHistoryListContent extends Component {
 					groupingEnabled: false,
 				},
 				{
-					title: "Invoice Balance",
-					name: "InvoiceBalance",
-					columnName: "InvoiceBalance",
+					title: "Payment Date",
+					name: "PaymentDate",
+					columnName: "PaymentDate",
 					align: 'right',
 					width: 150,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
-				// {
-				// 	title: "OverPayment",
-				// 	name: "OverPayment",
-				// 	columnName: "OverPayment",
-				// 	align: 'right',
-				// 	width: 150,
-				// 	sortingEnabled: true,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: false,
-				// },
 				{
-					title: "Invoice Date",
-					name: "InvoiceDate",
-					columnName: 'InvoiceDate',
+					title: "Note",
+					name: "Note",
+					columnName: "Note",
+					align: 'right',
+					width: 150,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "OverPayment",
+					name: "OverPayment",
+					columnName: 'OverPayment',
 					width: 250,
 					align: 'center',
 					wordWrapEnabled: true,
@@ -425,9 +425,9 @@ class paymentsHistoryListContent extends Component {
 					groupingEnabled: false,
 				},
 				{
-					title: "Due Date",
-					name: "DueDate",
-					columnName: 'DueDate',
+					title: "Amount",
+					name: "Amount",
+					columnName: 'Amount',
 					width: 250,
 					align: 'center',
 					wordWrapEnabled: true,
@@ -436,9 +436,9 @@ class paymentsHistoryListContent extends Component {
 					groupingEnabled: false,
 				},
 				{
-					title: "Days Past Due",
-					name: "DaysPastDue",
-					columnName: 'DaysPastDue',
+					title: "AmountApplied",
+					name: "AmountApplied",
+					columnName: 'AmountApplied',
 					width: 140,
 					align: 'center',
 					wordWrapEnabled: true,
@@ -449,20 +449,19 @@ class paymentsHistoryListContent extends Component {
 			],
 			sorting: [
 				{ columnName: 'CustomerNameNo', direction: 'asc' },
-				{ columnName: 'DaysPastDue', direction: 'asc' },
+				{ columnName: 'PaymentDate', direction: 'asc' },
 			],
 			editingColumnExtensions: [],
 			currencyColumns: [
-				'InvoiceAmount',
-				'InvoiceBalance',
-				// 'OverPayment',
+				'OverPayment',
+				'Amount',
+				'AmountApplied',
 			],
 			phoneNumberColumns: [
-				'Phone'
+				// 'Phone'
 			],
 			dateColumns: [
-				'InvoiceDate',
-				'DueDate'
+				'PaymentDate',
 			],
 			groupingColumns: [
 				{ columnName: 'CustomerNameNo' },
@@ -486,14 +485,17 @@ class paymentsHistoryListContent extends Component {
 		this.commitChanges = this.commitChanges.bind(this);
 		this.changeSearchValue = value => this.setState({ searchValue: value });
 		this.changeGrouping = grouping => this.setState({ grouping });
-		console.log("constructor");
+		console.log("constructor",
+			this.props.regionId,
+			this.props.getPaymentsParam.fromDate,
+			this.props.getPaymentsParam.toDate,
+			this.props.filter.paymentStatus);
 
-		if (this.props.bLoadedPayments === false) {
-			this.props.getAccountReceivablePaymentsList(
+		if (!this.props.bLoadedPaymentHistory) {
+			this.props.getPaymentHistory(
 				this.props.regionId,
 				this.props.getPaymentsParam.fromDate,
 				this.props.getPaymentsParam.toDate,
-				this.props.searchText,
 				this.props.filter.paymentStatus);
 		}
 	}
@@ -582,18 +584,15 @@ class paymentsHistoryListContent extends Component {
 	componentWillMount() {
 		this.setState({
 			"paymentsParam": this.props.getPaymentsParam,
-			"rows": this.getRowData(this.props.payments),
-			expandedGroups: [...new Set(this.getRowData(this.props.payments).map(x => x.CustomerNameNo))],
+			"rows": this.getRowData(this.props.paymentHistory),
+			expandedGroups: [...new Set(this.getRowData(this.props.paymentHistory).map(x => x.CustomerNameNo))],
 		});
-		if (this.props.bLoadedPayments === false) {
-			this.props.getAccountReceivablePaymentsList(
-				this.props.regionId,
-				this.props.getPaymentsParam.fromDate,
-				this.props.getPaymentsParam.toDate,
-				this.props.getPaymentsParam.searchText,
-				this.props.filter.paymentStatus,
-			);
-		}
+		this.props.getPaymentHistory(
+			this.props.regionId,
+			this.props.getPaymentsParam.fromDate,
+			this.props.getPaymentsParam.toDate,
+			this.props.filter.paymentStatus,
+		);
 
 		this.setState({
 			isCustomerNameNoGrouping: this.props.isCustomerNameNoGrouping
@@ -605,9 +604,9 @@ class paymentsHistoryListContent extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.payments !== this.props.payments) {
-			console.log("componentWillReceiveProps", "nextProps.payments", nextProps.payments)
-			const rows = this.getRowData(nextProps.payments);
+		if (nextProps.paymentHistory !== this.props.paymentHistory) {
+			console.log("componentWillReceiveProps", "nextProps.payments", nextProps.paymentHistory)
+			const rows = this.getRowData(nextProps.paymentHistory);
 			this.setState({
 				rows,
 				expandedGroups: [...new Set(rows.map(x => x.CustomerNameNo))],
@@ -616,20 +615,18 @@ class paymentsHistoryListContent extends Component {
 
 		if (nextProps.regionId !== this.props.regionId) {
 			console.log("componentWillReceiveProps", "nextProps.regionId", nextProps.regionId)
-			this.props.getAccountReceivablePaymentsList(
+			this.props.getPaymentHistory(
 				nextProps.regionId,
 				nextProps.getPaymentsParam.fromDate,
 				nextProps.getPaymentsParam.toDate,
-				nextProps.searchText,
 				nextProps.filter.paymentStatus);
 		}
 		if (nextProps.filter.paymentStatus !== this.props.filter.paymentStatus) {
 			console.log("componentWillReceiveProps", "nextProps.status", nextProps.filter.paymentStatus)
-			this.props.getAccountReceivablePaymentsList(
+			this.props.getPaymentHistory(
 				nextProps.regionId,
 				nextProps.getPaymentsParam.fromDate,
 				nextProps.getPaymentsParam.toDate,
-				nextProps.searchText,
 				nextProps.filter.paymentStatus);
 		}
 		if (JSON.stringify(nextProps.activePaymentRows) !== JSON.stringify(this.props.activePaymentRows)) {
@@ -659,26 +656,27 @@ class paymentsHistoryListContent extends Component {
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		console.log("componentDidUpdate", "CustomerListContent.js", this.props.locationFilterValue, this.props.customers);
 	}
-	getRowData(payments) {
-		if (!payments || payments.Regions === undefined || payments.Regions.length < 1)
+	getRowData(res) {
+		console.log("getRowData", res, res.Data);
+		if (!res || !res.Data)
 			return [];
-		let res = [...payments.Regions[0].Payments]
+		let data = [...res.Data]
 
-		res.forEach(x => {
+		data.forEach(x => {
 			x.CustomerNameNo = `${x.CustomerName} - ${x.CustomerNo}`;
 		})
-		console.log("getRowData", res);
+		console.log("getRowData", data);
 
-		return res;
+		return data;
 	}
 	search(val) {
 		console.log("---------search---------", val);
 		val = val.toLowerCase();
 		if (val === '') {
-			this.setState({ rows: this.getRowData(this.props.payments) });
+			this.setState({ rows: this.getRowData(this.props.paymentHistory) });
 			return;
 		}
-		const temp = this.getRowData(this.props.payments).filter(d => {
+		const temp = this.getRowData(this.props.paymentHistory).filter(d => {
 			return (d.CheckNo && d.CheckNo.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.CustomerName && d.CustomerName.toString().toLowerCase().indexOf(val) !== -1) ||
 				(d.CustomerNameNo && d.CustomerNameNo.toString().toLowerCase().indexOf(val) !== -1) ||
@@ -995,11 +993,11 @@ class paymentsHistoryListContent extends Component {
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
-		getAccountReceivablePaymentsList: Actions.getAccountReceivablePaymentsList,
-
 		setActivePaymentRows: Actions.setActivePaymentRows,
 		openPaymentDialog: Actions.openPaymentDialog,
 		showErrorDialog: Actions.showErrorDialog,
+
+		getPaymentHistory: Actions.getPaymentHistory,
 	}, dispatch);
 }
 
@@ -1016,6 +1014,8 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 		filter: accountReceivablePayments.filter,
 		isCustomerNameNoGrouping: accountReceivablePayments.isCustomerNameNoGrouping,
 
+		paymentHistory: accountReceivablePayments.paymentHistory,
+		bLoadedPaymentHistory: accountReceivablePayments.bLoadedPaymentHistory,
 	}
 }
 

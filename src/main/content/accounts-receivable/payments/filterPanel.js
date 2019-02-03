@@ -205,15 +205,16 @@ class FilterPanel extends Component {
 		this.setState({ [name]: event.target.value });
 		if (name === "viewMode") {
 			
-			if (event.target.value === "PaymentHistory") {
-				this.props.showErrorDialog({
-					show: true,
-					title: "Coming Soon...",
-					message: "Currently Working on this, Feature will be available later."
-				})
-			} else {
-				this.props.setViewMode(event.target.value)
-			}
+			// if (event.target.value === "PaymentHistory") {
+			// 	this.props.showErrorDialog({
+			// 		show: true,
+			// 		title: "Coming Soon...",
+			// 		message: "Currently Working on this, Feature will be available later."
+			// 	})
+			// } else {
+			// 	this.props.setViewMode(event.target.value)
+			// }
+			this.props.setViewMode(event.target.value)
 		}
 	}
 

@@ -38,10 +38,12 @@ export function getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, Sea
 
 		(async () => {
 			let paymentsList = await paymentService.getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status);
-			dispatch({
-				type: FAILED_GET_ALL_RECEIVABLE_PAYMENTS,
-				payload: paymentsList.IsSuccess ? "Empty Data" : paymentsList.message
-			});
+			if (!paymentsList.IsSuccess) {
+				dispatch({
+					type: FAILED_GET_ALL_RECEIVABLE_PAYMENTS,
+					payload: paymentsList.IsSuccess ? "Empty Data" : paymentsList.message
+				});
+			}
 			dispatch({
 				type: GET_ALL_RECEIVABLE_PAYMENTS,
 				payload: paymentsList
@@ -59,10 +61,12 @@ export function getPaymentHistory(regionId, fromDate, toDate, status) {
 
 		(async () => {
 			let res = await paymentService.getPaymentHistory(regionId, fromDate, toDate, status);
-			dispatch({
-				type: GET_PAYMENT_HISTORY_FAILED,
-				payload: res.IsSuccess ? "Empty Data" : res.message
-			});
+			if (!res.IsSuccess) {
+				dispatch({
+					type: GET_PAYMENT_HISTORY_FAILED,
+					payload: res.message
+				});
+			}
 			dispatch({
 				type: GET_PAYMENT_HISTORY,
 				payload: res
@@ -135,10 +139,12 @@ export function createAccountReceivablePayment(
 				status
 			);
 
-			dispatch({
-				type: FAILED_GET_ALL_RECEIVABLE_PAYMENTS,
-				payload: paymentsList.IsSuccess ? "Empty Data" : paymentsList.message
-			});
+			if (!paymentsList.IsSuccess) {
+				dispatch({
+					type: FAILED_GET_ALL_RECEIVABLE_PAYMENTS,
+					payload: paymentsList.IsSuccess ? "Empty Data" : paymentsList.message
+				});
+			}
 
 			dispatch({
 				type: GET_ALL_RECEIVABLE_PAYMENTS,

@@ -23,7 +23,7 @@ class PaymentListService {
 			"FromDate": "01/31/2017",
 			"ToDate": "12/31/2019",
 			"SearchText": SearchText,
-			"Status": Status,
+			"Status": Status
 		}
 		return new Promise((resolve, reject) => {
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/Payment/PaymentList`, data)
@@ -40,19 +40,7 @@ class PaymentListService {
 		});
 	}
 
-	createAccountReceivablePayment = (
-		RegionId,
-		customerNumber,
-
-		PaymentType,
-		ReferenceNo,
-		PaymentDate,
-		PaymentNote,
-		overpayment,
-		PaymentAmount,
-
-		PayItems,
-	) => {
+	createAccountReceivablePayment = (RegionId, customerNumber, PaymentType, ReferenceNo, PaymentDate, PaymentNote, overpayment, PaymentAmount, PayItems, ) => {
 		const data = {
 			"RegionId": RegionId,
 			"CustomerNo": customerNumber,
@@ -83,14 +71,13 @@ class PaymentListService {
 	}
 
 	getPaymentHistory = (regionId, fromDate, toDate, status) => {
-		const data = {
-			"regionId": regionId,
-			"fromDate": "01/31/2017",
-			"toDate": "12/31/2019",
-		}
+		fromDate = "01/31/2017"
+		toDate = "12/31/2019"
 		return new Promise((resolve, reject) => {
-			axios_instance.post(`${BASE_MONGO_API_URL}/v1/payment/gethistory`, data)
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/payment/gethistory?regionId=${regionId}&fromDate=${fromDate}&toDate=${toDate}`)
+			// axios_instance.get(`${BASE_MONGO_API_URL}/v1/payment/gethistory`, { regionId: 2, fromDate, toDate })
 				.then(res => {
+					console.log("getPaymentHistory service", res)
 					if (res.status === 200) {
 						resolve(res.data);
 					} else if (res.status !== 200) {

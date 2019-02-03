@@ -300,7 +300,7 @@ class PaymentFormModalCredit extends React.Component {
 
 
 	componentWillMount() {
-		if (this.props.creditInvoiceList && this.props.creditInvoiceList.Data !== undefined && this.props.creditInvoiceList.Data.Items !== undefined) {
+		if (this.props.creditInvoiceList && this.props.creditInvoiceList.Data && this.props.creditInvoiceList.Data.Items) {
 			console.log("------------------ creditInvoiceList ---------------------", this.props.creditInvoiceList.Data.Items);
 			this.setState({ rows: this.props.creditInvoiceList.Data.Items[0].Distribution });
 		}
