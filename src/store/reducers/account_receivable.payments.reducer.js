@@ -8,11 +8,6 @@ const initialState = {
 	ACC_payments: [],
 	bLoadedPayments: false,
 	bACC_fechStart: false,
-	getPaymentsParam: {
-		searchText: "",
-		fromDate: "01/22/2019",
-		toDate: "01/22/2019",
-	},
 	bOpenedSummaryPanel: false,
 	bOpenedFilterPanel: false,
 
@@ -30,8 +25,14 @@ const initialState = {
 		title: "",
 		message: "",
 	},
-	filter: {
+	filterParam: {
 		paymentStatus: ["Open"],
+		paymentHistoryTypes: [
+			"Check", "CreditCard", "EFT", "Lockbox", "CreditFromOverpayment", "ManualCreditCard"
+		],
+		searchText: "",
+		fromDate: "01/22/2019",
+		toDate: "01/22/2019",
 	},
 	viewMode: "Invoice",
 	isCustomerNameNoGrouping: true,
@@ -46,6 +47,7 @@ const initialState = {
 	startPaymentHistory: false,
 	bLoadedPaymentHistory: false,
 	paymentHistory: [],
+
 };
 
 
@@ -162,9 +164,9 @@ const accountReceivablePayments = function (state = initialState, action) {
 		case Actions.SET_PAYMENT_STATUS_FILTER:
 			return {
 				...state,
-				filter:
+				filterParam:
 				{
-					...state.filter,
+					...state.filterParam,
 					paymentStatus: action.payload
 				}
 			}
@@ -183,6 +185,17 @@ const accountReceivablePayments = function (state = initialState, action) {
 			return {
 				...state,
 				isCustomerNameNoGrouping: action.payload,
+			}
+		//
+		// SET_PAYMENT_HISTORY_FILTER_PAYMENT_TYPES
+		//
+		case Actions.SET_PAYMENT_HISTORY_FILTER_PAYMENT_TYPES:
+			return {
+				...state,
+				filterParam: {
+					...state.filterParam,
+					paymentHistoryTypes: action.payload,
+				}
 			}
 		case UserActions.USER_LOGGED_OUT:
 			return {

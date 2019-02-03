@@ -23,6 +23,7 @@ export const SET_CUSTOMER_NAME_NO_GROUPING = "[A.R.Payments] SET_CUSTOMER_NAME_N
 export const GET_PAYMENT_HISTORY = "[A.R.Payments] GET_PAYMENT_HISTORY";
 export const GET_PAYMENT_HISTORY_FAILED = "[A.R.Payments] GET_PAYMENT_HISTORY_FAILED";
 export const GET_PAYMENT_HISTORY_START = "[A.R.Payments] GET_PAYMENT_HISTORY_START";
+export const SET_PAYMENT_HISTORY_FILTER_PAYMENT_TYPES = "[A.R.Payments] SET_PAYMENT_HISTORY_FILTER_PAYMENT_TYPES";
 
 
 
@@ -51,7 +52,7 @@ export function getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, Sea
 		})();
 	}
 }
-export function getPaymentHistory(regionId, fromDate, toDate, status) {
+export function getPaymentHistory(regionId, fromDate, toDate, status, paymentTypes = []) {
 
 	return (dispatch) => {
 		dispatch({
@@ -60,7 +61,7 @@ export function getPaymentHistory(regionId, fromDate, toDate, status) {
 		});
 
 		(async () => {
-			let res = await paymentService.getPaymentHistory(regionId, fromDate, toDate, status);
+			let res = await paymentService.getPaymentHistory(regionId, fromDate, toDate, status, paymentTypes);
 			if (!res.IsSuccess) {
 				dispatch({
 					type: GET_PAYMENT_HISTORY_FAILED,
@@ -211,5 +212,11 @@ export function setCustomerNameNoGrouping(grouping) {
 	return {
 		type: SET_CUSTOMER_NAME_NO_GROUPING,
 		payload: grouping
+	}
+}
+export function setPaymentHistoryFilterPaymentTypes(types) {
+	return {
+		type: SET_PAYMENT_HISTORY_FILTER_PAYMENT_TYPES,
+		payload: types
 	}
 }

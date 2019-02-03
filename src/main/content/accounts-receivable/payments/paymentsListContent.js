@@ -361,7 +361,7 @@ class PaymentsListContent extends Component {
 			temp: [],
 			data: [],
 			selectAll: false,
-			selection: this.props.activePaymentRows,
+			selection: [],
 			rows: this.getRowData(this.props.payments),
 			tableColumnExtensions: [
 				{
@@ -595,10 +595,10 @@ class PaymentsListContent extends Component {
 		if (this.props.bLoadedPayments === false) {
 			this.props.getAccountReceivablePaymentsList(
 				this.props.regionId,
-				this.props.getPaymentsParam.fromDate,
-				this.props.getPaymentsParam.toDate,
+				this.props.filterParam.fromDate,
+				this.props.filterParam.toDate,
 				this.props.searchText,
-				this.props.filter.paymentStatus
+				this.props.filterParam.paymentStatus
 			);
 		}
 	}
@@ -649,22 +649,14 @@ class PaymentsListContent extends Component {
 		const rows = this.getRowData(this.props.payments);
 
 		this.setState({
-			"paymentsParam": this.props.getPaymentsParam,
+			"paymentsParam": this.props.filterParam,
 			rows,
 			expandedGroups: [...new Set(rows.map(x => x.CustomerNameNo))],
 		});
-		// if (this.props.bLoadedPayments === false) {
-		// 	this.props.getAccountReceivablePaymentsList(
-		// 		this.props.regionId,
-		// 		this.props.getPaymentsParam.fromDate,
-		// 		this.props.getPaymentsParam.toDate,
-		// 		this.props.getPaymentsParam.searchText,
-		// 		this.props.filter.paymentStatus,
-		// 	);
-		// }
 
 		this.setState({
-			isCustomerNameNoGrouping: this.props.isCustomerNameNoGrouping
+			isCustomerNameNoGrouping: this.props.isCustomerNameNoGrouping,
+			selection: [...this.props.activePaymentRows]
 		})
 		this.timer = null;
 	}
@@ -687,19 +679,19 @@ class PaymentsListContent extends Component {
 			console.log("componentWillReceiveProps", "nextProps.regionId", nextProps.regionId)
 			this.props.getAccountReceivablePaymentsList(
 				nextProps.regionId,
-				nextProps.getPaymentsParam.fromDate,
-				nextProps.getPaymentsParam.toDate,
+				nextProps.filterParam.fromDate,
+				nextProps.filterParam.toDate,
 				nextProps.searchText,
-				nextProps.filter.paymentStatus);
+				nextProps.filterParam.paymentStatus);
 		}
-		if (nextProps.filter.paymentStatus !== this.props.filter.paymentStatus) {
-			console.log("componentWillReceiveProps", "nextProps.status", nextProps.filter.paymentStatus)
+		if (nextProps.filterParam.paymentStatus !== this.props.filterParam.paymentStatus) {
+			console.log("componentWillReceiveProps", "nextProps.status", nextProps.filterParam.paymentStatus)
 			this.props.getAccountReceivablePaymentsList(
 				nextProps.regionId,
-				nextProps.getPaymentsParam.fromDate,
-				nextProps.getPaymentsParam.toDate,
+				nextProps.filterParam.fromDate,
+				nextProps.filterParam.toDate,
 				nextProps.searchText,
-				nextProps.filter.paymentStatus);
+				nextProps.filterParam.paymentStatus);
 		}
 		if (JSON.stringify(nextProps.activePaymentRows) !== JSON.stringify(this.props.activePaymentRows)) {
 			console.log("componentWillReceiveProps", "nextProps.activePaymentRows", nextProps.activePaymentRows)
@@ -1041,7 +1033,6 @@ class PaymentsListContent extends Component {
 			currencyColumns,
 			phoneNumberColumns,
 			dateColumns,
-			getPaymentsParam,
 			pageSizes,
 			searchValue,
 			payments,
@@ -1206,12 +1197,11 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 		bLoadedPayments: accountReceivablePayments.bLoadedPayments,
 		payments: accountReceivablePayments.ACC_payments,
 		regionId: auth.login.defaultRegionId,
-		getPaymentsParam: accountReceivablePayments.getPaymentsParam,
 		searchText: accountReceivablePayments.searchText,
 		activePaymentRows: accountReceivablePayments.activePaymentRows,
 		NoDataString: accountReceivablePayments.NoDataString,
 
-		filter: accountReceivablePayments.filter,
+		filterParam: accountReceivablePayments.filterParam,
 		isCustomerNameNoGrouping: accountReceivablePayments.isCustomerNameNoGrouping,
 		viewMode: accountReceivablePayments.viewMode,
 

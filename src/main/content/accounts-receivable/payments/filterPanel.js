@@ -78,21 +78,25 @@ const PERIOD = 14;
 
 class FilterPanel extends Component {
 
-	const(props) {
+	constructor(props) {
+		super(props)
+
 		this.state = {
-		checkedEbill: true,
-		checkedPrint: true,
-		invoiceStatus: [],
-		FromDate: undefined,
-		ToDate: undefined,
-		invoiceDateOption: THIS_MONTH,
-		invoiceDatePeriod: moment(),
+			checkedEbill: true,
+			checkedPrint: true,
+			invoiceStatus: [],
+			FromDate: undefined,
+			ToDate: undefined,
+			invoiceDateOption: THIS_MONTH,
+			invoiceDatePeriod: moment(),
 
-		PaymentStatusAll: true,
-		PaymentStatusOpen: true,
-		PaymentStatusPaid: true,
+			PaymentStatusAll: true,
+			PaymentStatusOpen: true,
+			PaymentStatusPaid: true,
 
-		isCustomerNameNoGrouping: true
+			isCustomerNameNoGrouping: true,
+
+			paymentHistoryFilterPaymentTypes: [],
 		}
 	}
 	componentDidMount() {
@@ -104,6 +108,12 @@ class FilterPanel extends Component {
 		if (nextProps.isCustomerNameNoGrouping !== this.props.isCustomerNameNoGrouping) {
 			this.setState({
 				isCustomerNameNoGrouping: nextProps.isCustomerNameNoGrouping
+			})
+		}
+		if (nextProps.filterParam.paymentHistoryTypes !== this.props.filterParam.paymentHistoryTypes) {
+			console.log("nextProps.filter.paymentHistoryTypes", nextProps.filterParam.paymentHistoryTypes, this.props.filterParam.paymentHistoryTypes)
+			this.setState({
+				paymentHistoryFilterPaymentTypes: nextProps.filterParam.paymentHistoryTypes
 			})
 		}
 	}
@@ -119,9 +129,11 @@ class FilterPanel extends Component {
 		this.setState({ ToDate: this.props.ToDate });
 		this.setState({ invoiceDateOption: this.props.invoiceDateOption });
 
+		console.log("this.props.filter.paymentHistoryTypes", this.props.filterParam)
 		this.setState({
-			PaymentStatusOpen: this.props.filter.paymentStatus.indexOf("Open") > -1,
-			PaymentStatusPaid: this.props.filter.paymentStatus.indexOf("Paid") > -1,
+			PaymentStatusOpen: this.props.filterParam.paymentStatus.indexOf("Open") > -1,
+			PaymentStatusPaid: this.props.filterParam.paymentStatus.indexOf("Paid") > -1,
+			paymentHistoryFilterPaymentTypes: this.props.filterParam.paymentHistoryTypes,
 		})
 
 	}
@@ -202,9 +214,10 @@ class FilterPanel extends Component {
 	};
 
 	handleChange = name => event => {
-		this.setState({ [name]: event.target.value });
+		const value = event.target.value
+		const checked = event.target.checked
 		if (name === "viewMode") {
-			
+
 			// if (event.target.value === "PaymentHistory") {
 			// 	this.props.showErrorDialog({
 			// 		show: true,
@@ -215,7 +228,34 @@ class FilterPanel extends Component {
 			// 	this.props.setViewMode(event.target.value)
 			// }
 			this.props.setViewMode(event.target.value)
+		} else if (name === "paymentHistoryFilterPaymentTypes") {
+			let newPaymentHistoryTypes = [...this.state.paymentHistoryFilterPaymentTypes]
+			newPaymentHistoryTypes = [...new Set([...newPaymentHistoryTypes, value])]
+			if (checked) {
+				this.setState({
+					paymentHistoryFilterPaymentTypes: newPaymentHistoryTypes
+				})
+			} else {
+				newPaymentHistoryTypes.splice(newPaymentHistoryTypes.indexOf(value), 1)
+				this.setState({
+					paymentHistoryFilterPaymentTypes: newPaymentHistoryTypes
+				})
+			}
+
+			this.props.getPaymentHistory(
+				this.props.regionId,
+				this.props.filterParam.fromDate,
+				this.props.filterParam.toDate,
+				this.props.filterParam.paymentStatus,
+				newPaymentHistoryTypes
+				);
+
+			this.props.setPaymentHistoryFilterPaymentTypes(newPaymentHistoryTypes)
+
+			console.log("paymentHistoryFilterPaymentTypes", value, checked)
+			return
 		}
+		this.setState({ [name]: value });
 	}
 
 	handleChange1 = event => {
@@ -441,25 +481,25 @@ class FilterPanel extends Component {
 				{this.props.viewMode === "PaymentHistory" && <div style={{ marginTop: 20, display: 'flex', flexDirection: 'column' }}>
 					<h3>Type</h3>
 					{[
-						{ Name: "Check" },
-						{ Name: "Credit Card" },
-						{ Name: "EFT" },
-						{ Name: "Lockbox" },
-						{ Name: "Credit From Overpayment" },
-						{ Name: "Manual Credit Card" },
+						{ name: "Check", value: "Check" },
+						{ name: "Credit Card", value: "CreditCard" },
+						{ name: "EFT", value: "EFT" },
+						{ name: "Lockbox", value: "Lockbox" },
+						{ name: "Credit From Overpayment", value: "CreditFromOverpayment" },
+						{ name: "Manual Credit Card", value: "ManualCreditCard" },
 
-					].map((iv, index) => {
+					].map((x, index) => {
 						return (
 							<FormControlLabel
 								key={index}
 								control={
 									<Switch
-										checked={iv['checked' + iv.TransactionStatusListId]}
-										onChange={this.handleChange(index, iv.TransactionStatusListId)}
-										value="checkedPaid"
+										checked={this.state.paymentHistoryFilterPaymentTypes.indexOf(x.value) > -1}
+										onChange={this.handleChange("paymentHistoryFilterPaymentTypes")}
+										value={x.value}
 									/>
 								}
-								label={iv.Name}
+								label={x.name}
 							/>
 						)
 					})}
@@ -519,10 +559,13 @@ function mapDispatchToProps(dispatch) {
 
 		setCustomerNameNoGrouping: Actions.setCustomerNameNoGrouping,
 		showErrorDialog: Actions.showErrorDialog,
+
+		setPaymentHistoryFilterPaymentTypes: Actions.setPaymentHistoryFilterPaymentTypes,
+		getPaymentHistory: Actions.getPaymentHistory,
 	}, dispatch);
 }
 
-function mapStateToProps({ invoices, fuse, accountReceivablePayments }) {
+function mapStateToProps({ auth, invoices, fuse, accountReceivablePayments }) {
 	return {
 		filterState: invoices.bOpenedFilterPanel,
 		transactionStatus: invoices.transactionStatus,
@@ -536,7 +579,9 @@ function mapStateToProps({ invoices, fuse, accountReceivablePayments }) {
 
 		viewMode: accountReceivablePayments.viewMode,
 		isCustomerNameNoGrouping: accountReceivablePayments.isCustomerNameNoGrouping,
-		filter: accountReceivablePayments.filter,
+		filterParam: accountReceivablePayments.filterParam,
+
+		regionId: auth.login.defaultRegionId,
 	}
 }
 

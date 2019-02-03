@@ -361,7 +361,7 @@ class paymentsHistoryListContent extends Component {
 			temp: [],
 			data: [],
 			selectAll: false,
-			selection: this.props.activePaymentRows,
+			selection: [],
 			rows: [],
 			tableColumnExtensions: [
 				{
@@ -485,18 +485,15 @@ class paymentsHistoryListContent extends Component {
 		this.commitChanges = this.commitChanges.bind(this);
 		this.changeSearchValue = value => this.setState({ searchValue: value });
 		this.changeGrouping = grouping => this.setState({ grouping });
-		console.log("constructor",
-			this.props.regionId,
-			this.props.getPaymentsParam.fromDate,
-			this.props.getPaymentsParam.toDate,
-			this.props.filter.paymentStatus);
-
+		
 		if (!this.props.bLoadedPaymentHistory) {
 			this.props.getPaymentHistory(
 				this.props.regionId,
-				this.props.getPaymentsParam.fromDate,
-				this.props.getPaymentsParam.toDate,
-				this.props.filter.paymentStatus);
+				this.props.filterParam.fromDate,
+				this.props.filterParam.toDate,
+				this.props.filterParam.paymentStatus,
+				this.props.filterParam.paymentHistoryTypes,
+			);
 		}
 	}
 
@@ -587,13 +584,6 @@ class paymentsHistoryListContent extends Component {
 			"rows": this.getRowData(this.props.paymentHistory),
 			expandedGroups: [...new Set(this.getRowData(this.props.paymentHistory).map(x => x.CustomerNameNo))],
 		});
-		this.props.getPaymentHistory(
-			this.props.regionId,
-			this.props.getPaymentsParam.fromDate,
-			this.props.getPaymentsParam.toDate,
-			this.props.filter.paymentStatus,
-		);
-
 		this.setState({
 			isCustomerNameNoGrouping: this.props.isCustomerNameNoGrouping
 		})
@@ -617,24 +607,28 @@ class paymentsHistoryListContent extends Component {
 			console.log("componentWillReceiveProps", "nextProps.regionId", nextProps.regionId)
 			this.props.getPaymentHistory(
 				nextProps.regionId,
-				nextProps.getPaymentsParam.fromDate,
-				nextProps.getPaymentsParam.toDate,
-				nextProps.filter.paymentStatus);
+				nextProps.filterParam.fromDate,
+				nextProps.filterParam.toDate,
+				nextProps.filterParam.paymentStatus,
+				nextProps.filterParam.paymentHistoryTypes,
+			);
 		}
-		if (nextProps.filter.paymentStatus !== this.props.filter.paymentStatus) {
-			console.log("componentWillReceiveProps", "nextProps.status", nextProps.filter.paymentStatus)
+		if (nextProps.filterParam.paymentStatus !== this.props.filterParam.paymentStatus) {
+			console.log("componentWillReceiveProps", "nextProps.status", nextProps.filterParam.paymentStatus)
 			this.props.getPaymentHistory(
 				nextProps.regionId,
-				nextProps.getPaymentsParam.fromDate,
-				nextProps.getPaymentsParam.toDate,
-				nextProps.filter.paymentStatus);
+				nextProps.filterParam.fromDate,
+				nextProps.filterParam.toDate,
+				nextProps.filterParam.paymentStatus,
+				nextProps.filterParam.paymentHistoryTypes
+			);
 		}
-		if (JSON.stringify(nextProps.activePaymentRows) !== JSON.stringify(this.props.activePaymentRows)) {
-			console.log("componentWillReceiveProps", "nextProps.activePaymentRows", nextProps.activePaymentRows)
-			if (JSON.stringify(this.state.selection) !== JSON.stringify(nextProps.activePaymentRows)) {
-				this.setState({ selection: [...nextProps.activePaymentRows] })
-			}
-		}
+		// if (JSON.stringify(nextProps.activePaymentRows) !== JSON.stringify(this.props.activePaymentRows)) {
+		// 	console.log("componentWillReceiveProps", "nextProps.activePaymentRows", nextProps.activePaymentRows)
+		// 	if (JSON.stringify(this.state.selection) !== JSON.stringify(nextProps.activePaymentRows)) {
+		// 		this.setState({ selection: [...nextProps.activePaymentRows] })
+		// 	}
+		// }
 		// if (this.props.locationFilterValue !== nextProps.locationFilterValue) {
 		// 	this.setState({ locationFilterValue: nextProps.locationFilterValue })
 		// 	console.log("componentWillReceiveProps", "locationFilterValue", nextProps.locationFilterValue, this.props.customers)
@@ -1011,7 +1005,7 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 		activePaymentRows: accountReceivablePayments.activePaymentRows,
 		NoDataString: accountReceivablePayments.NoDataString,
 
-		filter: accountReceivablePayments.filter,
+		filterParam: accountReceivablePayments.filterParam,
 		isCustomerNameNoGrouping: accountReceivablePayments.isCustomerNameNoGrouping,
 
 		paymentHistory: accountReceivablePayments.paymentHistory,
