@@ -27,6 +27,7 @@ export const GET_BILLRUN_INVOICE_DETAIL_BILLRUN_SUCCESS    = "[BILL-RUNS] GET BI
 export const GET_BILLRUN_INVOICE_DETAIL_BILLRUN_START      = "[BILL-RUNS] GET BILLRUN INVOICE DETAIL START";
 export const GET_BILLRUN_INVOICE_DETAIL_BILLRUN_FAILD      = "[BILL-RUNS] GET BILLRUN INVOICE DETAIL FAILD";
 
+export const CHANGE_BILLRUN_STATUS       = "[BILL-RUNS] CHANGE BILL RUN STATUS";
 
 
 export function getBillruns() {
@@ -40,6 +41,14 @@ export function getBillruns() {
             });
         });
     };
+}
+export function  changebillrunstatus() {
+    return (dispatch) => {
+        dispatch({
+            type: CHANGE_BILLRUN_STATUS,
+        });
+    }
+
 }
 export function getAllBillruns(RegionIds, UserIds ,isBillPeriod,BillMonth,BillYear,FromDate,ToDate,SearchText) {
     return (dispatch) => {

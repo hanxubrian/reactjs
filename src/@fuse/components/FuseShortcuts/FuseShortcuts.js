@@ -105,7 +105,7 @@ class FuseShortcuts extends Component {
                                 onToggle(item.id);
                             }}
                         >
-                            <Icon color="action">{shortcuts.includes(item.id) ? 'star' : 'star_border'}</Icon>
+                           <Icon color="action">{shortcuts.includes(item.id) ? 'star' : 'star_border'}</Icon>
                         </IconButton>
                     </MenuItem>
                 </Link>
@@ -137,7 +137,13 @@ class FuseShortcuts extends Component {
                             </Tooltip>
                         </Link>
                     ))}
-
+                    <Link to={"notification/system"} className={classes.Item}>
+                        <Tooltip title={"Notifications"} placement="bottom">
+                            <IconButton className="w-40 h-40 p-0">
+                                        <Icon>chat</Icon>
+                            </IconButton>
+                        </Tooltip>
+                    </Link>
                     <Tooltip title="Click to add/remove shortcut" placement="bottom">
                         <IconButton
                             className="w-40 h-40 p-0"

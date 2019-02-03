@@ -162,7 +162,7 @@ const styles = theme => ({
     },
     mainnotificationbtns:{
         backgroundColor         : theme.palette.secondary.main,
-        width                   : '33.333333333%',
+        width                   : '100%',
         color                   : 'white',
         borderRadius            : '0',
     },
@@ -174,7 +174,14 @@ const styles = theme => ({
     },
     chattogglebtnpro:{
         backgroundColor:'#3c93ec',
+
         color:'white',
+    },
+    chatheader:{
+        backgroundColor         : theme.palette.secondary.main,
+        width                   : '100%',
+        height                  : '35px',
+        color                   : 'white',
     },
     sysnotification:{
         position        : 'absolute',
@@ -208,6 +215,7 @@ class MainToolbar extends Component {
         adminMSG                    : null,
         adminVersionStatus          : false,
         MSG                         : null,
+        triggerF                    : false,
 
     };
 
@@ -233,7 +241,8 @@ class MainToolbar extends Component {
     };
 
     componentDidMount() {
-        console.log("this.props.getpusherNotificationDB",this.props.getpusherNotificationDB);
+        this.mainmsg();
+
         if(this.props.getpusherNotificationDB && this.props.getpusherNotificationDB !== null){
             this.setState({pusherMSGList: this.props.getpusherNotificationDB});
         }
@@ -244,7 +253,7 @@ class MainToolbar extends Component {
             cluster: 'us2',
             forceTLS: true
         });
-        var channel = pusher.subscribe('jk-message-channel');//jk-message-channel  on-message
+        var channel = pusher.subscribe('jk-message-channel');//my-channel my-event jk-message-channel  on-message
         channel.bind('on-message', data => {
             this.setState({ pusherMSG:data});
         });
@@ -270,19 +279,84 @@ class MainToolbar extends Component {
         });
     }
     billrunsuccessmesssage=()=>{
+        if(!this.state.triggerF){
+            if(this.props.billrunstatus === 200){
+                this.props.changebillrunstatus();
+            }
+            this.props.showMessage({
+                message     : this.state.pusherMSG.message,//text or html
+                autoHideDuration: 6000,//ms
+                anchorOrigin: {
+                    vertical  : 'top',//top bottom
+                    horizontal: 'right'//left center right
+                },
+                variant: 'success'//success error info warning null
+            });
+            this.setState({triggerF:true});
+        }
 
-        this.props.showMessage({
-            message     : this.state.pusherMSG.message,//text or html
-            autoHideDuration: 6000,//ms
-            anchorOrigin: {
-                vertical  : 'top',//top bottom
-                horizontal: 'right'//left center right
-            },
-            variant: 'success'//success error info warning null
-        });
+    }
+    changeallmsg=(param)=>{
+        let chatmidmsg          = this.state.chatMSG;
+        let pushermidmsg        = param;
+        let allmsg              = [];
+        if(chatmidmsg && chatmidmsg !== null && pushermidmsg === null ){
+            allmsg =chatmidmsg;
+        }
+        else if(chatmidmsg === null && pushermidmsg !== null && pushermidmsg ){
+            allmsg =pushermidmsg;
+        }
+        else if(chatmidmsg !== null && pushermidmsg !== null ){
+            allmsg =chatmidmsg.concat(pushermidmsg);
+        }
+
+        if(allmsg && allmsg.length >0){
+            allmsg.sort(function (a,b) {
+                return (new Date(b['time']))-(new Date(a['time']));
+            });
+        }
+        this.setState({MSG:allmsg});
+    }
+    mainmsg=()=>{
+        let chatmidmsg          = this.state.chatMSG;
+        let pushermidmsg        = this.state.pusherMSGList;
+        let allmsg              = [];
+        if(chatmidmsg && chatmidmsg !== null && pushermidmsg === null ){
+            allmsg =chatmidmsg;
+        }
+        else if(chatmidmsg === null && pushermidmsg !== null && pushermidmsg ){
+            allmsg =pushermidmsg;
+        }
+        else if(chatmidmsg !== null && pushermidmsg !== null ){
+            allmsg =chatmidmsg.concat(pushermidmsg);
+        }
+
+        if(allmsg && allmsg.length >0){
+            allmsg.sort(function (a,b) {
+                return (new Date(b['time']))-(new Date(a['time']));
+            });
+        }
+        this.setState({MSG:allmsg});
+
+    }
+    showchatPanel =()=>{
+        if(this.props.getchatnotification){
+            this.props.chatnotificationstatus();
+        }
+        else{
+            this.props.chatnotificationstatus();
+            this.props.openChatPanel();
+            this.shownotification();
+        }
+
     }
     componentDidUpdate(prevProps,prevState){
-        console.log("##########################this.state.pusherMSG",this.state.pusherMSG);
+        if(this.props.billrunstatus !== prevProps.billrunstatus && prevProps.billrunstatus===200){
+            this.setState({triggerF:false});
+        }
+        if(JSON.stringify(this.state.chatMSG) !== JSON.stringify(prevState.chatMSG)){//chat 0Message
+            this.mainmsg();
+        }
         // if(this.state.pusherMSG && this.state.pusherMSG !== null){
         //     console.log("######DB############this.props.getpusherNotificationDB",this.props.getpusherNotificationDB);
         //     console.log("######pushermsg############this.state.pusherMSG",this.state.pusherMSG);
@@ -292,14 +366,14 @@ class MainToolbar extends Component {
         //     console.log("######MSG############prevState.pusherMSG",prevState.pusherMSG);
         //     console.log("######MSG############this.props.login.UserId.toString()",this.props.login.UserId.toString());
         // }
-        //
 
-        if(this.state.pusherMSG && this.state.pusherMSG !== null && this.state.pusherMSG.subject && this.state.pusherMSG.subject !== null && this.state.pusherMSG.subject.toString() ==="BillRun"  ){//&& JSON.stringify(this.state.pusherMSG) !== JSON.stringify(prevState.pusherMSG)
+
+        if( this.state.pusherMSG && this.state.pusherMSG !== null && this.state.pusherMSG.subject && this.state.pusherMSG.subject !== null && this.state.pusherMSG.subject.toString() ==="BillRun" ){//&& JSON.stringify(this.state.pusherMSG) !== JSON.stringify(prevState.pusherMSG)
             if(this.props.billstatus===400){
                 this.billrunerrormessage();
                 // console.log("error=============1");
             }
-            else if(this.props.billstatus===200){
+            else if(this.props.billstatus===200 && !this.state.triggerF ){
                 // console.log("**************this.props.login.UserId.toString()" ,this.props.login.UserId.toString());
                 if(this.state.pusherMSG.user === this.props.login.UserId.toString()){
                     // console.log("error=============2");
@@ -339,7 +413,7 @@ class MainToolbar extends Component {
 
         if(JSON.stringify(this.state.pusherMSG) !== JSON.stringify(prevState.pusherMSG) && this.state.pusherMSG !== null ){
             if(this.state.pusherMSG.user === this.props.login.UserId.toString()){
-                console.log("pusherMSG-createM",this.state.pusherMSG);
+
                 let PusherList =[];
                 let settime = moment();
                 let unreadNum = this.state.unreadMSGnum;
@@ -349,12 +423,13 @@ class MainToolbar extends Component {
                 midgetPusherMSG = this.state.pusherMSG;
                 midgetPusherMSG.time = moment();
                 PusherList=this.state.pusherMSGList;
-                PusherList.unshift(this.state.pusherMSG);
+                PusherList.unshift(midgetPusherMSG);//this.state.pusherMSG
                 unreadNum += 1;
-                this.props.addpushernotification(this.state.pusherMSG);
+                this.props.addpushernotification(midgetPusherMSG);//this.state.pusherMSG
                 this.setState({unreadMSGnum:unreadNum});
                 this.setState({pusherMSGList:PusherList});
                 this.setState({systeunread:sysunread+1});
+                this.changeallmsg(PusherList);
             }
         }
         if(this.props.chat.messages !== prevProps.chat.messages){
@@ -415,17 +490,7 @@ class MainToolbar extends Component {
 
 
     }
-    showchatPanel =()=>{
-        if(this.props.getchatnotification){
-            this.props.chatnotificationstatus();
-        }
-        else{
-            this.props.chatnotificationstatus();
-            this.props.openChatPanel();
-            this.shownotification();
-        }
 
-    }
     componentWillReceiveProps(nextProps) {
         if(nextProps.login.IsSuccess && !nextProps.login.bLoadedMenu){
             this.setState({region: nextProps.login.defaultRegionId});
@@ -466,12 +531,7 @@ class MainToolbar extends Component {
 
     };
     systemreadmake=()=>{
-
-        let M= this.state.unreadMSGnum;
-        M -= this.state.systeunread;
-        if(M<0) M = 0;
-        this.setState({unreadMSGnum:M});
-        this.setState({systeunread:0});
+        this.setState({unreadMSGnum:0});
 
     }
     handleNotificationChange = (event, value) => {
@@ -484,7 +544,6 @@ class MainToolbar extends Component {
     {
         const {classes, user, logout, openChatPanel} = this.props;
         const {userMenu,value} = this.state;
-
         return (
             <div className={classNames(classes.root, "flex flex-row")}>
                 {this.state.sysflage === true && (
@@ -494,6 +553,7 @@ class MainToolbar extends Component {
                 )}
                 <div className="flex flex-1">
                     <FuseShortcuts/>
+
                 </div>
                 <div className="flex">
                     <FuseAnimate delay={300}>
@@ -624,41 +684,101 @@ class MainToolbar extends Component {
                     {this.state.notification && (
                         <ClickAwayListener onClickAway={() => this.shownotification()}>
                         <div className={classes.notificationbody}>
-                            <div>
-                                {/*<Button className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:0});this.mailnotificationchat()}}><Icon>chat</Icon></Button>*/}
+                            <div className={classes.chatheader}>
+
+                                <div className={classes.chatheader}>
+                                    <Button className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:0});this.systemreadmake()}}><Icon>chat</Icon></Button>
+                                </div>
+                                {/*<Button component={Link} to="/apps/contacts/all" className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:2})}}><Icon>account_box</Icon></Button>*/}
+                                {/*<Button className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:0})}}><Icon>chat</Icon></Button>*/}
+                                {/*<Button className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:1});this.systemreadmake();}}><Icon>mail</Icon></Button>*/}
+
+                                    {/*<div style={{display: "contents"}} >*/}
+                                        {/*<div className={classes.unreadchatBadge}>*/}
+                                            {/*{this.state.chatunread}*/}
+                                        {/*</div>*/}
+                                    {/*</div>*/}
+                                    {/*<div style={{display: "contents"}} >*/}
+                                        {/*<div className={classes.unreadsystemBadge}>*/}
+                                        {/*{this.state.systeunread}*/}
+                                        {/*</div>*/}
+                                    {/*</div>*/}
+
+
+
+                                    {/*<div style={{display: "contents"}} >*/}
+                                        {/*<div className={classes.unreademailBadge}>*/}
+                                           {/*0*/}
+                                        {/*</div>*/}
+                                    {/*</div>*/}
+
 
                                 {/*<Button component={Link} to="/apps/contacts/all" className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:2})}}><Icon>account_box</Icon></Button>*/}
-                                <Button className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:0})}}><Icon>chat</Icon></Button>
-                                <Button className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:1});this.systemreadmake();}}><Icon>mail</Icon></Button>
-
-                                    <div style={{display: "contents"}} >
-                                        <div className={classes.unreadchatBadge}>
-                                            {this.state.chatunread}
-                                        </div>
-                                    </div>
-                                    <div style={{display: "contents"}} >
-                                        <div className={classes.unreadsystemBadge}>
-                                        {this.state.systeunread}
-                                        </div>
-                                    </div>
-
-
-
-                                    <div style={{display: "contents"}} >
-                                        <div className={classes.unreademailBadge}>
-                                           0
-                                        </div>
-                                    </div>
-
-
-                                <Button component={Link} to="/apps/contacts/all" className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:2})}}><Icon>account_box</Icon></Button>
 
 
                             </div>
                             <Paper style={{maxHeight: 350, overflow: 'auto'}}>
 
                                     <List component="nav" className={classes.notificationroot} >
-                                        { value === 0 && this.state.chatMSG && this.state.chatMSG.length &&  (
+
+                                        { this.state.MSG && this.state.MSG !== null && (
+                                            this.state.MSG.map((item,index)=>{
+                                                if(index < 15){
+                                                    if(item.who && item.who !== null){
+                                                        return (
+                                                            <div key={index}>
+                                                                <ListItem button style ={{height:'55px'}} onClick={() => this.handleContactClick(item.who)}>
+                                                                    <React.Fragment>
+                                                                        {this.state.contacts && this.state.contacts !== null && (
+                                                                            this.state.contacts.map((contact,i)=>{
+                                                                                if(contact && contact != null && contact.id ===item.who){
+                                                                                    return(
+                                                                                        <div key={i} style ={{height:'40px'}} style={{textAlign: '-webkit-center'}}>
+                                                                                            <Avatar className={classes.avatarresize} alt={contact.name} src ={contact.avatar} />
+                                                                                            <span style={{fontSize:'12px'}}>{contact.name}</span>
+                                                                                        </div>
+
+                                                                                    )
+                                                                                }
+                                                                            })
+                                                                        )}
+                                                                    </React.Fragment>
+                                                                    <span style={{
+                                                                        fontSize:'15px',width:'250px',paddingLeft:'16px',paddingRight:'16px',textOverflow: 'ellipsis',
+                                                                        whiteSpace: 'nowrap',
+                                                                        overflow: 'hidden',
+                                                                    }}>{item.message}<br/><span style={{fontSize:'9px'}}>{moment(item.time).format('MMMM Do YYYY, h:mm:ss a')}</span></span><br/>
+                                                                    {/*<Typography style={{fontSize:'9px'}}>{moment(item.time).format('MMMM Do YYYY, h:mm:ss a')}</Typography>*/}
+                                                                    {/*<ListItemText style={{fontSize:'0.7em'}} primary={item.message} secondary={moment(item.time).format('MMMM Do YYYY, h:mm:ss a')}/>*/}
+                                                                </ListItem>
+                                                                <Divider className="my-0.5"/>
+                                                            </div>
+                                                        )
+                                                    }
+                                                    else{
+                                                        return(
+                                                            <div key={index} >
+                                                                <ListItem button key={item.id} onClick={()=>{this.setState({sysnotificationSeletedID:item.id});this.systemitemnotification(item.id)}} style ={{height:'55px'}} >
+                                                                    <React.Fragment>
+                                                                        <div style ={{height:'40px'}} style={{textAlign: '-webkit-center'}}>
+                                                                            <Avatar className={classes.avatarresize} alt={this.props.login.firstName + this.props.login.lastName} src ={this.props.login.profilePhoto} />
+                                                                            <span style={{fontSize:'12px'}}>{item.subject}</span>
+                                                                        </div>
+                                                                    </React.Fragment>
+                                                                    <span style={{
+                                                                        fontSize:'15px',width:'250px',paddingLeft:'16px',paddingRight:'16px',textOverflow: 'ellipsis',
+                                                                        whiteSpace: 'nowrap',
+                                                                        overflow: 'hidden',
+                                                                    }}>{item.message}<br/><span style={{fontSize:'9px'}}>{moment(item.time).format('MMMM Do YYYY, h:mm:ss a')}</span></span><br/>
+                                                                </ListItem>
+                                                                <Divider className="my-0.5"/>
+                                                            </div>
+                                                        )
+                                                    }
+                                                }
+                                            })
+                                        )}
+                                        { !1 && value === 0 && this.state.chatMSG && this.state.chatMSG.length &&  (
                                             this.state.chatMSG.map((item, index)=>{
                                                 if(index < 15)
                                                     return (
@@ -694,7 +814,7 @@ class MainToolbar extends Component {
 
                                         )
                                         }
-                                        {value === 1 && this.state.pusherMSG && this.state.pusherMSG != null &&  (
+                                        {!1 && value === 1 && this.state.pusherMSG && this.state.pusherMSG != null &&  (
                                             this.state.pusherMSGList.map((item,index)=>{
                                                 return (
                                                 <div key={index} >
@@ -794,6 +914,7 @@ function mapDispatchToProps(dispatch)
         addpushernotification           : MainActions.addnotification,
         showMessage                     : MainActions.showMessage,
         hideMessage                     : MainActions.hideMessage,
+        changebillrunstatus             : MainActions.changebillrunstatus,
     }, dispatch);
 }
 
