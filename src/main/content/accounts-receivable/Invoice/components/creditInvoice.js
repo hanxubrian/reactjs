@@ -292,7 +292,7 @@ class CreditInvoiceFormModal extends React.Component {
                                     <TextField
                                         type="date"
                                         id="PaymentDate"
-                                        label="Payment Date"
+                                        label="Date"
                                         className={classNames(classes.textField, "mr-12")}
                                         InputLabelProps={{
                                             shrink: true
@@ -308,7 +308,7 @@ class CreditInvoiceFormModal extends React.Component {
                                     <TextField
                                         id="PaymentAmount"
                                         name="PaymentAmount"
-                                        label="Payment Amount"
+                                        label="Amount"
                                         className={classNames(classes.textField, 'ml-12')}
                                         value={this.state.PaymentAmount}
                                         onChange={this.handleChange('PaymentAmount')}
