@@ -528,9 +528,9 @@ class TransactionEditForm extends Component {
                     this.setState({total: parseFloat(trxDetail.TrxExtendedPrice)+ tax});
                     this.setState({TransactionDate: trxDetail.TrxDate!==null ? moment(trxDetail.TrxDate): moment()});
 
-                    if(trxDetail.month!==0 && trxDetail.year!==0) {
-                        let period = trxDetail.month.toString() + '/' + trxDetail.year.toString();
-                        if (trxDetail.month < 10)
+                    if(trxDetail.bill_month!==0 && trxDetail.bill_year!==0) {
+                        let period = trxDetail.bill_month.toString() + '/' + trxDetail.bill_year.toString();
+                        if (trxDetail.bill_month < 10)
                             period = '0' + period;
                         this.setState({TransactionPeriod: period});
                     }
@@ -633,8 +633,8 @@ class TransactionEditForm extends Component {
 
             Description: this.state.transactionDescription,
             TrxDate: this.state.TransactionDate,
-            month: parseInt(period[0]),
-            year: parseInt(period[1]),
+            bill_month: parseInt(period[0]),
+            bill_year: parseInt(period[1]),
             VendorValue: this.state.TrxChargeClass.value===tTypeTaxValue && this.props.vendor!==null ? this.props.vendor.vendor.value: '', //vendor, vendor_no, vendorDate
             VendorLabel: this.state.TrxChargeClass.value===tTypeTaxValue && this.props.vendor!==null ? this.props.vendor.vendor.label: '', //vendor, vendor_no, vendorDate
             VendorNo: this.state.TrxChargeClass.value===tTypeTaxValue && this.props.vendor!==null ? this.props.vendor.vendor_no : '',
