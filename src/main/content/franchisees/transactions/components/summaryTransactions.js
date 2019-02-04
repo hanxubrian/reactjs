@@ -240,6 +240,9 @@ class SummaryTransactons extends Component {
                 <table style={{width:'80%'}}>
                     <tbody>
                     { aDeductions3.map((b, index)=>{
+                        if(SUMMARY_PAGE[0][b]===null || (SUMMARY_PAGE[0][b]!==null && SUMMARY_PAGE[0][b].length===0) )
+                            return false;
+                        else
                             return (
                                 <tr key={index}>
                                     <td>
@@ -280,7 +283,7 @@ class SummaryTransactons extends Component {
                 <table style={{width:'63.5%'}}>
                     <tbody>
                     { aDeductions4.map((b, index)=>{
-                        if(SUMMARY_PAGE[0][b]===null)
+                        if(SUMMARY_PAGE[0][b]===null || (SUMMARY_PAGE[0][b]!==null && SUMMARY_PAGE[0][b].length===0) )
                             return false;
                         else
                             return (
