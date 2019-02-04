@@ -505,10 +505,10 @@ class PaymentFormModal extends React.Component {
 
 				PayItems,
 
-				this.props.getPaymentsParam.fromDate,
-				this.props.getPaymentsParam.toDate,
+				this.props.filterParam.fromDate,
+				this.props.filterParam.toDate,
 				this.props.searchText,
-				this.props.filter.paymentStatus
+				this.props.filterParam.paymentStatus
 			)
 
 			this.handleClose();
@@ -1003,8 +1003,7 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 
 		payments: accountReceivablePayments.ACC_payments,
 
-		getPaymentsParam: accountReceivablePayments.getPaymentsParam,
-		filter: accountReceivablePayments.filter,
+		filterParam: accountReceivablePayments.filterParam,
 		searchText: accountReceivablePayments.searchText,
 
 		paymentDlgPayloads: accountReceivablePayments.paymentDlgPayloads,

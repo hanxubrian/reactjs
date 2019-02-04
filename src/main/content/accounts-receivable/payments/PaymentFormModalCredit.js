@@ -208,7 +208,7 @@ const BlueDialogTitle = withStyles(theme => ({
 
 
 function getSteps() {
-	return ['First Step', 'Second Step'];
+	return ['', 'Second Step'];
 }
 
 
@@ -380,7 +380,32 @@ class PaymentFormModalCredit extends React.Component {
 		this.setState({ [name]: event.target.value });
 	};
 
+	handleCreatePayment = () => {
+		if (this.checkValidations()) {
 
+			let PayItems = []
+
+			this.props.createAccountReceivablePayment(
+				this.props.regionId,
+				this.state.customerNumber,
+
+				"Credit",
+				this.state.ReferenceNo,
+				this.state.PaymentDate,
+				this.state.PaymentNote,
+				0, //overpayment
+				this.state.PaymentAmount,
+
+				PayItems,
+
+				this.props.filterParam.fromDate,
+				this.props.filterParam.toDate,
+				this.props.searchText,
+				this.props.filterParam.paymentStatus
+			)
+			this.handleClose();
+		}
+	}
 
 	render() {
 		const { classes } = this.props;
@@ -412,10 +437,55 @@ class PaymentFormModalCredit extends React.Component {
 									<TextField sm={3} type="text" value={customerNumber} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerNumber" label="CustomerNumber" />
 								</div>
 							</div>
-							<div className={classNames("flex flex-col")}>
+
+							<div className={classNames("flex")} sm={12}>
+								<TextField
+									type="date"
+									id="PaymentDate"
+									label="Date"
+									className={classNames(classes.textField, "pr-6")}
+									InputLabelProps={{ shrink: true }}
+									value={this.state.PaymentDate}
+									onChange={this.handleChange('PaymentDate')}
+									margin="dense"
+									variant="outlined"
+									// fullWidth
+									sm={3}
+									style={{ width: '20%' }}
+								/>
+								<TextField
+									type="number"
+									InputLabelProps={{ shrink: true }} InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+									margin="dense"
+									variant="outlined"
+									// fullWidth
+									className={classNames(classes.textField, "pr-6")}
+									id="PaymentAmount"
+									value={this.state.PaymentAmount}
+									onChange={this.handleChange('PaymentAmount')}
+									label="Amount"
+									sm={3}
+									style={{ width: '20%' }}
+								/>
+								<TextField
+									InputLabelProps={{ shrink: true }}
+									margin="dense"
+									variant="outlined"
+									// fullWidth
+									className={classNames(classes.textField, "pr-6")}
+									id="PaymentNote"
+									value={this.state.PaymentNote}
+									onChange={this.handleChange('PaymentNote')}
+									label="Reason"
+									sm={6}
+									style={{ width: '60%' }}
+								/>
+							</div>
+
+							{/* <div className={classNames("flex flex-col")}>
 								<Stepper activeStep={activeStep} orientation="vertical">
 									<Step>
-										<StepLabel>First Step</StepLabel>
+										<StepLabel></StepLabel>
 										<StepContent>
 											<div>
 												<div className={classNames("flex")} sm={12}>
@@ -459,7 +529,7 @@ class PaymentFormModalCredit extends React.Component {
 													/>
 												</div>
 
-												<TextField margin="dense" variant="outlined" fullWidth id="PaymentNote" label="Notes" multiline rows="5" rowsMax="5"
+												<TextField margin="dense" variant="outlined" fullWidth id="PaymentNote" label="Notes" multiline rows="3" rowsMax="3"
 													value={this.state.PaymentNote}
 													onChange={this.handleChange('PaymentNote')}
 												/>
@@ -477,7 +547,7 @@ class PaymentFormModalCredit extends React.Component {
 										</StepContent>
 									</Step>
 									<Step>
-										<StepLabel>Charge Back Distribution</StepLabel>
+										<StepLabel></StepLabel>
 										<StepContent>
 											<div>
 												<div className={classNames(classes.root, "flex flex-col flex-1 mt-12")}>
@@ -512,7 +582,7 @@ class PaymentFormModalCredit extends React.Component {
 										</StepContent>
 									</Step>
 								</Stepper>
-							</div>
+							</div> */}
 						</div>
 					</DialogContent>
 
@@ -540,6 +610,7 @@ function mapStateToProps({ territories, auth, accountReceivablePayments }) {
 		paymentDlgPayloads: accountReceivablePayments.paymentDlgPayloads,
 		payments: accountReceivablePayments.ACC_payments,
 		activePaymentRows: accountReceivablePayments.activePaymentRows,
+		filterParam: accountReceivablePayments.filterParam,
 	}
 }
 
