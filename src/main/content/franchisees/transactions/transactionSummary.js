@@ -12,7 +12,6 @@ import connect from "react-redux/es/connect/connect";
 
 // Third Party
 import PropTypes from 'prop-types';
-import moment from "moment";
 import classNames from 'classnames';
 
 //Child Components

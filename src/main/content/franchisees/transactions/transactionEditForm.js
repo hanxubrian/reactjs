@@ -463,6 +463,7 @@ class TransactionEditForm extends Component {
             this.props.selectFranchisee(this.state.selectedFranchisee);
         }
 
+
         if(prevState.reSell!==this.state.reSell) {
             this.getTotal();
         }
@@ -1330,6 +1331,7 @@ function mapDispatchToProps(dispatch)
         createNewTransaction: Actions.createNewTransaction,
         resetTransactionForm: Actions.resetTransactionForm,
         updateFranchiseeTransaction: Actions.updateFranchiseeTransaction,
+        getTransactionDetail: Actions.getTransactionDetail
 
     }, dispatch);
 }

@@ -134,19 +134,21 @@ class CustomerTransactions extends Component {
 
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-    }
-
-    componentDidMount() {
-        //'/franchisees/reports/:regionid/:year/:month/:franchiseenumber',
-        if( this.props.transactionDetail!==null) {
-            let trxDetail = this.props.transactionDetail.Data;
+        if( this.props.transactionForm.franchisee!==null && (prevProps.transactionForm.franchisee!==this.props.transactionForm.franchisee)) {
+            // let trxDetail = this.props.transactionDetail.Data;
             this.props.createReport({
                 regionId: this.props.regionId,
                 year: '2017',
                 month: '1',
-                franchiseenumber: trxDetail.dlr_code
+                franchiseenumber: this.props.transactionForm.franchisee.Number
             });
         }
+
+    }
+
+    componentDidMount() {
+        //'/franchisees/reports/:regionid/:year/:month/:franchiseenumber',
+
     }
 
     componentWillMount() {
@@ -247,6 +249,7 @@ function mapStateToProps({transactions, auth, franchiseeReports}) {
     return {
         regionId: auth.login.defaultRegionId,
         transactions: transactions.transactionsDB,
+        transactionForm: transactions.transactionForm,
         transactionTypeList: transactions.transactionTypeList,
         franchiseeReport: franchiseeReports.franchiseeReport1,
         transactionDetail: transactions.transactionDetail,
