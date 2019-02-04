@@ -245,7 +245,7 @@ class CreditInvoiceFormModal extends React.Component {
                     <BlueDialogTitle id="form-dialog-title" onClose={this.props.closeCreditInvoiceFormDialog}>
                         <h2 style={{ display: "flex", alignItems: "center", color: "white" }}>
                             <Icon>attach_money</Icon>
-                            Credit Invoice
+                            Add Credit
                         </h2>
                     </BlueDialogTitle>
                     <DialogContent>

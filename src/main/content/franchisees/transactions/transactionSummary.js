@@ -19,6 +19,7 @@ import classNames from 'classnames';
 import CustomerTransactions from './components/customerTransactions'
 import CustomerAccountTotals from './components/customerAccountTotal'
 import SupplyTransactons from './components/supplyTransactions'
+import RegularMiscTransactons from './components/regularMiscTransactions'
 
 
 const styles = theme => ({
@@ -85,6 +86,7 @@ class TransactionsSummary extends Component {
                 <CustomerTransactions />
                 <CustomerAccountTotals />
                 <SupplyTransactons />
+                <RegularMiscTransactons />
                 {franchiseeReport===null  && (
                     <div className={classNames(classes.overlay)}>
                         <CircularProgress className={classes.progress} color="secondary"  />

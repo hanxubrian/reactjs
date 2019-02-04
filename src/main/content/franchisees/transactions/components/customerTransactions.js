@@ -164,9 +164,6 @@ class CustomerTransactions extends Component {
         if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.CUS_TRXS===null)
             return (<div/>);
 
-        // const {DLR_CODE, SUMMARY_PAGE, CUS_TRXS, CUST_ACCT_TOTALS, SUPPLY_TRXS, LEASE_PAYMENTS,REG_MISC, CHARGEBACKS }  = franchiseeReport.Data;
-        // console.log('customer', CUS_TRXS);
-
         let data = franchiseeReport.Data.CUS_TRXS.map(d=>{
             d.DESCR = FuseUtils.capital_letter(d.DESCR);
             d.CUS_NAME = FuseUtils.capital_letter(d.CUS_NAME);
@@ -175,8 +172,6 @@ class CustomerTransactions extends Component {
             d.TRX_TOT = parseFloat(d.TRX_TOT);
             return d;
         });
-
-        console.log('data= ', data);
 
         const columns = [
             {name: "CUST_NO", title: "Cus. #",},
