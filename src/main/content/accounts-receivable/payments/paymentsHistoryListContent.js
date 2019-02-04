@@ -35,6 +35,7 @@ import {
 	FilteringState,
 	IntegratedFiltering,
 	SearchState,
+	RowDetailState
 } from '@devexpress/dx-react-grid';
 
 
@@ -51,6 +52,7 @@ import {
 	TableFilterRow,
 	DragDropProvider,
 	TableColumnResizing,
+	TableRowDetail
 
 } from '@devexpress/dx-react-grid-material-ui';
 
@@ -436,17 +438,17 @@ class paymentsHistoryListContent extends Component {
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
-				{
-					title: "AmountApplied",
-					name: "AmountApplied",
-					columnName: 'AmountApplied',
-					width: 140,
-					align: 'center',
-					wordWrapEnabled: true,
-					sortingEnabled: true,
-					filteringEnabled: true,
-					groupingEnabled: false,
-				},
+				// {
+				// 	title: "AmountApplied",
+				// 	name: "AmountApplied",
+				// 	columnName: 'AmountApplied',
+				// 	width: 140,
+				// 	align: 'center',
+				// 	wordWrapEnabled: true,
+				// 	sortingEnabled: true,
+				// 	filteringEnabled: true,
+				// 	groupingEnabled: false,
+				// },
 			],
 			sorting: [
 				{ columnName: 'CustomerNameNo', direction: 'asc' },
@@ -456,7 +458,7 @@ class paymentsHistoryListContent extends Component {
 			currencyColumns: [
 				'OverPayment',
 				'Amount',
-				'AmountApplied',
+				// 'AmountApplied',
 			],
 			phoneNumberColumns: [
 				// 'Phone'
@@ -478,6 +480,7 @@ class paymentsHistoryListContent extends Component {
 			showNoSelectionAlertDialog: false,
 
 			isCustomerNameNoGrouping: true,
+			expandedRowIds: [2, 5],
 		};
 
 		this.fetchData = this.fetchData.bind(this);
@@ -486,6 +489,8 @@ class paymentsHistoryListContent extends Component {
 		this.commitChanges = this.commitChanges.bind(this);
 		this.changeSearchValue = value => this.setState({ searchValue: value });
 		this.changeGrouping = grouping => this.setState({ grouping });
+
+		this.changeExpandedDetails = expandedRowIds => this.setState({ expandedRowIds });
 
 		if (!this.props.bLoadedPaymentHistory) {
 			this.props.getPaymentHistory(
@@ -580,10 +585,12 @@ class paymentsHistoryListContent extends Component {
 	}
 
 	componentWillMount() {
+		const rows = this.getRowData(this.props.paymentHistory)
 		this.setState({
 			"paymentsParam": this.props.getPaymentsParam,
-			"rows": this.getRowData(this.props.paymentHistory),
-			expandedGroups: [...new Set(this.getRowData(this.props.paymentHistory).map(x => x.CustomerNameNo))],
+			rows,
+			expandedGroups: [...new Set(rows.map(x => x.CustomerNameNo))],
+			expandedRowIds: rows.map((x, index) => index)
 		});
 		this.setState({
 			isCustomerNameNoGrouping: this.props.isCustomerNameNoGrouping
@@ -817,6 +824,25 @@ class paymentsHistoryListContent extends Component {
 		ev.stopPropagation();
 	}
 
+	RowDetail = ({ row }) => (
+		<div className="flex flex-col">
+			<div className="flex justify-end">
+				<span style={{ width: "10%" }}><strong>Invoice #: </strong></span>
+				<span style={{ width: "10%" }}><strong>Amount: </strong></span>
+			</div>
+			{
+				row.PayItems.map((x, index) => (
+					<div key={index} className="flex justify-end">
+						<span style={{ width: "10%", color: "#63b6ff" }}>{x.InvoiceNo}</span>
+						<span style={{ width: "10%", color: "#ffb26e" }}>$ {x.Amount}</span>
+					</div>
+				))
+			}
+		</div>
+
+
+	);
+
 	render() {
 		const { classes } = this.props;
 
@@ -836,7 +862,9 @@ class paymentsHistoryListContent extends Component {
 			groupingColumns,
 			expandedGroups,
 			isCustomerNameNoGrouping,
+			expandedRowIds
 		} = this.state;
+		console.log("payment hisory rows", rows)
 		return (
 			<Fragment>
 				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
@@ -848,6 +876,12 @@ class paymentsHistoryListContent extends Component {
 							columns={tableColumnExtensions}
 						>
 							<DragDropProvider />
+
+							<RowDetailState
+								expandedRowIds={expandedRowIds}
+								onExpandedRowIdsChange={this.changeExpandedDetails}
+							/>
+
 							<PagingState
 								defaultCurrentPage={0}
 								defaultPageSize={50}
@@ -935,6 +969,10 @@ class paymentsHistoryListContent extends Component {
 
 							<TableHeaderRow showSortingControls />
 
+							<TableRowDetail
+								contentComponent={this.RowDetail}
+							/>
+
 							<Template
 								name="tableRow"
 								predicate={({ tableRow }) => tableRow.type === 'data'}
@@ -982,7 +1020,6 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 		bLoadedPayments: accountReceivablePayments.bLoadedPayments,
 		payments: accountReceivablePayments.ACC_payments,
 		regionId: auth.login.defaultRegionId,
-		getPaymentsParam: accountReceivablePayments.getPaymentsParam,
 		searchText: accountReceivablePayments.searchText,
 		activePaymentRows: accountReceivablePayments.activePaymentRows,
 		NoDataString: accountReceivablePayments.NoDataString,
