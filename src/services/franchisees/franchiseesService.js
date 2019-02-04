@@ -213,6 +213,7 @@ class franchiseesService {
 
 
     getFranchiseeReport = (params) => {
+        console.log('parmas=', params);
         return new Promise((resolve, reject) => {
             axios_instance.get(`${BASE_MONGO_API_URL}/api/FranchiseeReport`,
                 { params: {...params}}

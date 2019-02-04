@@ -144,7 +144,7 @@ class CustomerTransactions extends Component {
                 regionId: this.props.regionId,
                 year: '2017',
                 month: '1',
-                franchiseenumber: trxDetail.FranchiseeNo
+                franchiseenumber: trxDetail.dlr_code
             });
         }
     }
