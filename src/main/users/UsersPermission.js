@@ -1,4 +1,7 @@
 import React, {Fragment} from 'react';
+import {bindActionCreators} from "redux";
+import * as Actions from "./store/actions";
+import connect from "react-redux/es/connect/connect";
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 
@@ -19,9 +22,10 @@ import Icon from "@material-ui/core/es/Icon/Icon";
 import menuOptions from "./menuOptions";
 
 
+
 function TabContainer(props) {
     return (
-        <Typography component="div" style={{padding: 8 * 3}}>
+        <Typography component="div">
             {props.children}
         </Typography>
     );
@@ -31,8 +35,9 @@ TabContainer.propTypes = {
     children: PropTypes.node.isRequired,
 };
 
+
 function LinkTab(props) {
-    return <Tab component="button" onClick={event => event.preventDefault()} {...props} />;
+    return <Tab style={{width: '100%',maxWidth:'33.3333%'}} component="button" onClick={event => event.preventDefault()} {...props} />;
 }
 
 const styles = theme => ({
@@ -61,25 +66,39 @@ class UsersPermission extends React.Component {
         open: true,
         checkedStatus: [],
         step: 0,
+        UserPermission:[],
     };
 
     componentWillMount() {
-        console.log("menu-options", menuOptions);
+        this.props.getUserPermissionList();
+    }
+
+
+    componentWillReceiveProps(nextProps, nextContext) {
+
         let checkedStatus = {};
 
-        menuOptions.forEach((x, xIndex) => {
-            x.Children.forEach((y, yIndex) => {
-                checkedStatus[`view_${xIndex}_${yIndex}`] = false
-                checkedStatus[`create_${xIndex}_${yIndex}`] = false
-                checkedStatus[`edit_${xIndex}_${yIndex}`] = false
-                checkedStatus[`delete_${xIndex}_${yIndex}`] = false
-                checkedStatus[`execute_${xIndex}_${yIndex}`] = false
-            })
-        })
+        if ( nextProps.userPermissionList !== this.props.userPermissionList )
+        {
+            if(nextProps.userPermissionList !== null)
+            {
+                this.state.UserPermission = nextProps.userPermissionList;
 
+                nextProps.userPermissionList.forEach((x, xIndex) => {
+                    x.menuOptions.forEach((y,yIndex)=>{
+                        y.Children.forEach((z, zIndex) => {
+                            checkedStatus[`view_${xIndex}_${yIndex}_${zIndex}`] = false
+                            checkedStatus[`create_${xIndex}_${yIndex}_${zIndex}`] = false
+                            checkedStatus[`edit_${xIndex}_${yIndex}_${zIndex}`] = false
+                            checkedStatus[`delete_${xIndex}_${yIndex}_${zIndex}`] = false
+                            checkedStatus[`execute_${xIndex}_${yIndex}_${zIndex}`] = false
+                        })
+                    })
+                })
 
-        this.setState({checkedStatus});
-        console.log("-------Checked Status----------", checkedStatus);
+                this.setState({checkedStatus});
+            }
+        }
     }
 
     handleClick = () => {
@@ -100,211 +119,86 @@ class UsersPermission extends React.Component {
                 [name] : checked
             }
         })
-
-
-        // let data = [];
-        // data = this.state.checkedStatus;
-        // console.log("handleCheckToggle", name);
-        // console.log("handleCheckToggleIndex", index);
-        // data[index][name] = event.target.checked;
-        // this.setState({checkedStatus: data});
-
     };
 
     render() {
         const {classes} = this.props;
-        const {step, checkedStatus} = this.state;
+        const {step, checkedStatus,UserPermission} = this.state;
 
         return (
             <NoSsr>
                 <div className={classes.tabRoot}>
                     <AppBar color="default" position="static">
                         <Tabs variant="fullWidth" value={step} onChange={this.handleTabChange}>
-                            <LinkTab icon={<Icon>web</Icon>}/>
-                            <LinkTab icon={<Icon>phone</Icon>}/>
-                            <LinkTab icon={<Icon>tablet</Icon>}/>
+                            {UserPermission.map(x=>(
+                                <LinkTab key={x._id} label={x.name}/>
+                            ))}
                         </Tabs>
                     </AppBar>
-                    {step === 0 && <TabContainer>
-                        <div>
-                                <List
-                                    component="nav"
-                                    className={classes.listRoot}
-                                >
+                    {UserPermission.map((x,index)=>(
+                        <TabContainer key={x._id}>
+                        {step === index &&
+                          <div>
+                            <List
+                            component="nav"
+                            className={classes.listRoot}
+                            >
+                            <ListItem button onClick={this.handleClick}
+                            style={{borderBottom: "1px solid lightgray"}}>
+                            <ListItemText primary="Navigation Options"/>
+                            <ListItemSecondaryAction>
+                            <span className={classes.textSpan}>View</span>
+                            <span className={classes.textSpan}>Create</span>
+                            <span className={classes.textSpan}>Edit</span>
+                            <span className={classes.textSpan}>Delete</span>
+                            <span className={classes.textSpan}>Execute</span>
+                            </ListItemSecondaryAction>
+                            </ListItem>
+                            {x.menuOptions.map((x, pIndex) => (
+                                <Fragment key={x.MenuId}>
                                     <ListItem button onClick={this.handleClick}
                                               style={{borderBottom: "1px solid lightgray"}}>
-                                        <ListItemText primary="Navigation Options"/>
-                                        <ListItemSecondaryAction>
-                                            <span className={classes.textSpan}>View</span>
-                                            <span className={classes.textSpan}>Create</span>
-                                            <span className={classes.textSpan}>Edit</span>
-                                            <span className={classes.textSpan}>Delete</span>
-                                            <span className={classes.textSpan}>Execute</span>
-                                        </ListItemSecondaryAction>
+                                        <ListItemIcon>
+                                            <Icon>{x.Icon}</Icon>
+                                        </ListItemIcon>
+                                        <ListItemText inset primary={x.Title}/>
                                     </ListItem>
-                                    {menuOptions.map((x, pIndex) => (
-                                        <Fragment key={x.MenuId}>
-                                            <ListItem button onClick={this.handleClick}
-                                                      style={{borderBottom: "1px solid lightgray"}}>
-                                                <ListItemIcon>
-                                                    <Icon>{x.Icon}</Icon>
-                                                </ListItemIcon>
+                                    {x.Children.map((x, cIndex) => (
+                                        <List key={x.MenuId} component="div" disablePadding>
+                                            <ListItem className={classes.nested}>
                                                 <ListItemText inset primary={x.Title}/>
+                                                <ListItemSecondaryAction>
+                                                    <Checkbox
+                                                        onChange={this.handleCheckToggle(`view_${index}_${pIndex}_${cIndex}`)}
+                                                        checked={checkedStatus[`view_${index}_${pIndex}_${cIndex}`] || false}
+                                                    />
+                                                    <Checkbox
+                                                        onChange={this.handleCheckToggle(`create_${index}_${pIndex}_${cIndex}`)}
+                                                        checked={checkedStatus[`create_${index}_${pIndex}_${cIndex}`] || false}
+                                                    />
+                                                    <Checkbox
+                                                        onChange={this.handleCheckToggle(`edit_${index}_${pIndex}_${cIndex}`)}
+                                                        checked={checkedStatus[`edit_${index}_${pIndex}_${cIndex}`] || false}
+                                                    />
+                                                    <Checkbox
+                                                        onChange={this.handleCheckToggle(`delete_${index}_${pIndex}_${cIndex}`)}
+                                                        checked={checkedStatus[`delete_${index}_${pIndex}_${cIndex}`] || false}
+                                                    />
+                                                    <Checkbox
+                                                        onChange={this.handleCheckToggle(`execute_${index}_${pIndex}_${cIndex}`)}
+                                                        checked={checkedStatus[`execute_${index}_${pIndex}_${cIndex}`] || false}
+                                                    />
+                                                </ListItemSecondaryAction>
                                             </ListItem>
-                                            {x.Children.map((x, cIndex) => (
-                                                <List key={x.MenuId} component="div" disablePadding>
-                                                    <ListItem className={classes.nested}>
-                                                        <ListItemText inset primary={x.Title}/>
-                                                        <ListItemSecondaryAction>
-                                                            <Checkbox
-                                                                onChange={this.handleCheckToggle(`view_${pIndex}_${cIndex}`)}
-                                                                checked={checkedStatus[`view_${pIndex}_${cIndex}`] || false}
-                                                            />
-                                                            <Checkbox
-                                                                onChange={this.handleCheckToggle(`create_${pIndex}_${cIndex}`)}
-                                                                checked={checkedStatus[`create_${pIndex}_${cIndex}`] || false}
-                                                            />
-                                                            <Checkbox
-                                                                onChange={this.handleCheckToggle(`edit_${pIndex}_${cIndex}`)}
-                                                                checked={checkedStatus[`edit_${pIndex}_${cIndex}`] || false}
-                                                            />
-                                                            <Checkbox
-                                                                onChange={this.handleCheckToggle(`delete_${pIndex}_${cIndex}`)}
-                                                                checked={checkedStatus[`delete_${pIndex}_${cIndex}`] || false}
-                                                            />
-                                                            <Checkbox
-                                                                onChange={this.handleCheckToggle(`execute_${pIndex}_${cIndex}`)}
-                                                                checked={checkedStatus[`execute_${pIndex}_${cIndex}`] || false}
-                                                            />
-                                                        </ListItemSecondaryAction>
-                                                    </ListItem>
-                                                </List>
-                                            ))}
-                                        </Fragment>
+                                        </List>
                                     ))}
-                                </List>
-                        </div>
-                    </TabContainer>}
-                    {step === 1 && <TabContainer>
-                        <div>
-                            <List
-                                component="nav"
-                                className={classes.listRoot}
-                            >
-                                <ListItem button onClick={this.handleClick}
-                                          style={{borderBottom: "1px solid lightgray"}}>
-                                    <ListItemText primary="Navigation Options"/>
-                                    <ListItemSecondaryAction>
-                                        <span className={classes.textSpan}>View</span>
-                                        <span className={classes.textSpan}>Create</span>
-                                        <span className={classes.textSpan}>Edit</span>
-                                        <span className={classes.textSpan}>Delete</span>
-                                        <span className={classes.textSpan}>Execute</span>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                                {menuOptions.map(x => (
-                                    <Fragment key={x.MenuId}>
-                                        <ListItem button onClick={this.handleClick}
-                                                  style={{borderBottom: "1px solid lightgray"}}>
-                                            <ListItemIcon>
-                                                <Icon>{x.Icon}</Icon>
-                                            </ListItemIcon>
-                                            <ListItemText inset primary={x.Title}/>
-                                        </ListItem>
-                                        {x.Children.map(x => (
-                                            <List key={x.MenuId} component="div" disablePadding>
-                                                <ListItem className={classes.nested}>
-                                                    <ListItemText inset primary={x.Title}/>
-                                                    <ListItemSecondaryAction>
-                                                        <Checkbox
-                                                            //onChange={this.handleToggle(value)}
-                                                            checked={true}
-                                                        />
-                                                        <Checkbox
-                                                            //onChange={this.handleToggle(value)}
-                                                            checked={true}
-                                                        />
-                                                        <Checkbox
-                                                            //onChange={this.handleToggle(value)}
-                                                            checked={true}
-                                                        />
-                                                        <Checkbox
-                                                            //onChange={this.handleToggle(value)}
-                                                            checked={true}
-                                                        />
-                                                        <Checkbox
-                                                            //onChange={this.handleToggle(value)}
-                                                            checked={true}
-                                                        />
-                                                    </ListItemSecondaryAction>
-                                                </ListItem>
-                                            </List>
-                                        ))}
-                                    </Fragment>
-                                ))}
+                                </Fragment>
+                            ))}
                             </List>
-                        </div>
-                    </TabContainer>}
-                    {step === 2 && <TabContainer>
-                        <div>
-                            <List
-                                component="nav"
-                                className={classes.listRoot}
-                            >
-                                <ListItem button onClick={this.handleClick}
-                                          style={{borderBottom: "1px solid lightgray"}}>
-                                    <ListItemText primary="Navigation Options"/>
-                                    <ListItemSecondaryAction>
-                                        <span className={classes.textSpan}>View</span>
-                                        <span className={classes.textSpan}>Create</span>
-                                        <span className={classes.textSpan}>Edit</span>
-                                        <span className={classes.textSpan}>Delete</span>
-                                        <span className={classes.textSpan}>Execute</span>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                                {menuOptions.map(x => (
-                                    <Fragment key={x.MenuId}>
-                                        <ListItem button onClick={this.handleClick}
-                                                  style={{borderBottom: "1px solid lightgray"}}>
-                                            <ListItemIcon>
-                                                <Icon>{x.Icon}</Icon>
-                                            </ListItemIcon>
-                                            <ListItemText inset primary={x.Title}/>
-                                        </ListItem>
-                                        {x.Children.map(x => (
-                                            <List key={x.MenuId} component="div" disablePadding>
-                                                <ListItem className={classes.nested}>
-                                                    <ListItemText inset primary={x.Title}/>
-                                                    <ListItemSecondaryAction>
-                                                        <Checkbox
-                                                            //onChange={this.handleToggle(value)}
-                                                            checked={true}
-                                                        />
-                                                        <Checkbox
-                                                            //onChange={this.handleToggle(value)}
-                                                            checked={true}
-                                                        />
-                                                        <Checkbox
-                                                            //onChange={this.handleToggle(value)}
-                                                            checked={true}
-                                                        />
-                                                        <Checkbox
-                                                            //onChange={this.handleToggle(value)}
-                                                            checked={true}
-                                                        />
-                                                        <Checkbox
-                                                            //onChange={this.handleToggle(value)}
-                                                            checked={true}
-                                                        />
-                                                    </ListItemSecondaryAction>
-                                                </ListItem>
-                                            </List>
-                                        ))}
-                                    </Fragment>
-                                ))}
-                            </List>
-                        </div>
-                    </TabContainer>}
+                          </div>
+                        }
+                        </TabContainer>
+                    ))}
                 </div>
             </NoSsr>
 
@@ -312,8 +206,19 @@ class UsersPermission extends React.Component {
     }
 }
 
-UsersPermission.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
 
-export default withStyles(styles)(UsersPermission);
+function mapDispatchToProps(dispatch)
+{
+    return bindActionCreators({
+        getUserPermissionList: Actions.getUserPermissionList,
+    }, dispatch);
+}
+
+function mapStateToProps({usersApp})
+{
+    return {
+        userPermissionList: usersApp.users.userPermissionList,
+    }
+}
+
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(UsersPermission));

@@ -244,7 +244,6 @@ class UsersForm extends React.Component {
         this.props.getUserFormUserTypeList();
         this.props.getUserStateList();
         this.props.getUserDepartmentList(this.props.regionId);
-        this.props.getUserPermissionList();
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
@@ -325,7 +324,8 @@ class UsersForm extends React.Component {
             TypeList,
             DepartmentList,
             MultiRegion,
-            DefaultRegion
+            DefaultRegion,
+            UserPermission
         } = this.state;
 
         const autosuggestProps = {
