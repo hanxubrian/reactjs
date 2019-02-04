@@ -615,6 +615,7 @@ class TransactionEditForm extends Component {
             Trx_no: this.state.TransactionNo,
             RegionId: this.props.regionId,
             FranchiseeNo: this.state.selectedFranchisee.Number,
+            dlr_code: this.state.selectedFranchisee.Number,
             FranchiseeName: this.state.selectedFranchisee.Name,
             CreatedBy: this.props.user.UserId,
             Company_no: '',
