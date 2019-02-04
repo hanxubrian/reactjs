@@ -141,6 +141,9 @@ class Chat extends Component {
         {
             this.scrollToBottom();
         }
+        if(this.props.selectedContactId && this.props.selectedContactId !== null){
+            this.scrollToBottom();
+        }
     }
 
     shouldShowContactAvatar = (item, i) => {
@@ -202,6 +205,7 @@ class Chat extends Component {
                         ) :
                         selectedContactId !==null && chat.dialog && chat.dialog.length > 0 ?
                             (
+
                                 <div className="flex flex-col pt-16 pl-40 pb-40">
                                     {chat.dialog.map((item, i) => {
                                         const contact = item.who === user.id ? user : contacts.find(_contact => _contact.id === item.who);
