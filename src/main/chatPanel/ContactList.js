@@ -76,7 +76,10 @@ const styles = theme => ({
         '&.offline': {
             backgroundColor: '#646464'
         }
-    }
+    },
+    chatcontactview:{
+        background: theme.palette.background.default
+    },
 });
 
 class ContactList extends Component {
@@ -156,7 +159,7 @@ class ContactList extends Component {
         };
 
         return (
-            <div className="chatcontactview">
+            <div className={classNames(classes.chatcontactview)} >
             <FuseScrollbars
                 className={classNames(classes.root, "flex flex-no-shrink flex-col overflow-y-auto py-8")}
                 containerRef={(ref) => {

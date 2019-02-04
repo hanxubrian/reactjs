@@ -52,7 +52,7 @@ const styles = theme => ({
     },
     notificationroot: {
         width: '100%',
-        maxWidth: 500,
+        maxWidth: 600,
         backgroundColor: theme.palette.background.paper,
     },
     notificationbody:{
@@ -75,9 +75,9 @@ const styles = theme => ({
         }),
     },
     avatarresize:{
-        width:'24px',
-        height:'24px',
-        marginTop:'10px',
+        width:'30px',
+        height:'30px',
+        marginTop:'1px',
     },
     unreadBadge  : {
         position       : 'absolute',
@@ -551,6 +551,21 @@ class MainToolbar extends Component {
     systemitemnotification =(e)=>{
         this.props.history.push('/notification/system/'+e);
     }
+    closenotification=(param)=>{
+        console.log(param);
+        let midMSG = this.state.MSG;
+        let getMsg =[];
+        if(param !== null){
+            midMSG.map((item)=>{
+                if(item!==param){
+                    getMsg.push(item);
+                }
+            });
+        }
+        this.setState({MSG:getMsg});
+
+
+    }
     render()
     {
         const {classes, user, logout, openChatPanel} = this.props;
@@ -695,10 +710,10 @@ class MainToolbar extends Component {
                     {this.state.notification && (
                         <ClickAwayListener onClickAway={() => this.shownotification()}>
                         <div className={classes.notificationbody}>
-                            <div className={classes.chatheader}>
+                            <div className={classes.chatheader} style={{display:"none"}}>
 
-                                <div className={classes.chatheader}>
-                                    <Button className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:0});this.systemreadmake()}}><Icon>chat</Icon></Button>
+                                <div className={classes.chatheader} style={{display:"none"}}>
+                                    <Button className={classes.mainnotificationbtns} onClick={()=>{this.shownotification()}}>Close</Button>
                                 </div>
                                 {/*<Button component={Link} to="/apps/contacts/all" className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:2})}}><Icon>account_box</Icon></Button>*/}
                                 {/*<Button className={classes.mainnotificationbtns} onClick={()=>{this.setState({value:0})}}><Icon>chat</Icon></Button>*/}
@@ -738,13 +753,13 @@ class MainToolbar extends Component {
                                                     if(item.who && item.who !== null){
                                                         return (
                                                             <div key={index}>
-                                                                <ListItem button style ={{height:'55px'}} onClick={() => this.handleContactClick(item.who)}>
+                                                                <ListItem button style ={{height:'55px',}} onClick={() => this.handleContactClick(item.who)}>
                                                                     <React.Fragment>
                                                                         {this.state.contacts && this.state.contacts !== null && (
                                                                             this.state.contacts.map((contact,i)=>{
                                                                                 if(contact && contact != null && contact.id ===item.who){
                                                                                     return(
-                                                                                        <div key={i} style ={{height:'40px'}} style={{textAlign: '-webkit-center'}}>
+                                                                                        <div key={i}  style={{textAlign: '-webkit-center',height:'40px',width:'50px'}}>
                                                                                             <Avatar className={classes.avatarresize} alt={contact.name} src ={contact.avatar} />
                                                                                             <span style={{fontSize:'12px'}}>{contact.name}</span>
                                                                                         </div>
@@ -755,10 +770,14 @@ class MainToolbar extends Component {
                                                                         )}
                                                                     </React.Fragment>
                                                                     <span style={{
-                                                                        fontSize:'15px',width:'250px',paddingLeft:'16px',paddingRight:'16px',textOverflow: 'ellipsis',
+                                                                        fontSize:'15px',width:'350px',paddingLeft:'16px',paddingRight:'16px',textOverflow: 'ellipsis',
                                                                         whiteSpace: 'nowrap',
                                                                         overflow: 'hidden',
-                                                                    }}>{item.message}<br/><span style={{fontSize:'9px'}}>{moment(item.time).format('MMMM Do YYYY, h:mm:ss a')}</span></span><br/>
+                                                                    }}>{item.message}<br/><span style={{fontSize:'9px'}}>{moment(item.time).format('DD/MM/YYYY')}</span></span><br/>
+                                                                    <div>
+                                                                        <IconButton onClick={(e)=>{e.stopPropagation();this.closenotification(item)}}><Icon>close</Icon></IconButton>
+                                                                    </div>
+
                                                                     {/*<Typography style={{fontSize:'9px'}}>{moment(item.time).format('MMMM Do YYYY, h:mm:ss a')}</Typography>*/}
                                                                     {/*<ListItemText style={{fontSize:'0.7em'}} primary={item.message} secondary={moment(item.time).format('MMMM Do YYYY, h:mm:ss a')}/>*/}
                                                                 </ListItem>
@@ -771,16 +790,20 @@ class MainToolbar extends Component {
                                                             <div key={index} >
                                                                 <ListItem button key={item.id} onClick={()=>{this.setState({sysnotificationSeletedID:item.id});this.systemitemnotification(item.id)}} style ={{height:'55px'}} >
                                                                     <React.Fragment>
-                                                                        <div style ={{height:'40px'}} style={{textAlign: '-webkit-center'}}>
-                                                                            <Avatar className={classes.avatarresize} alt={this.props.login.firstName + this.props.login.lastName} src ={this.props.login.profilePhoto} />
+                                                                        <div style={{textAlign: '-webkit-center',height:'40px',width:'50px'}}>
+
+                                                                            <div><Icon>notifications</Icon></div>
                                                                             <span style={{fontSize:'12px'}}>{item.subject}</span>
                                                                         </div>
                                                                     </React.Fragment>
                                                                     <span style={{
-                                                                        fontSize:'15px',width:'250px',paddingLeft:'16px',paddingRight:'16px',textOverflow: 'ellipsis',
+                                                                        fontSize:'15px',width:'350px',paddingLeft:'16px',paddingRight:'16px',textOverflow: 'ellipsis',
                                                                         whiteSpace: 'nowrap',
                                                                         overflow: 'hidden',
-                                                                    }}>{item.message}<br/><span style={{fontSize:'9px'}}>{moment(item.time).format('MMMM Do YYYY, h:mm:ss a')}</span></span><br/>
+                                                                    }}>{item.message}<br/><span style={{fontSize:'9px'}}>{moment(item.time).format('DD/MM/YYYY')}</span></span><br/>
+                                                                    <div>
+                                                                        <IconButton onClick={(e)=>{e.stopPropagation();this.closenotification(item)}}><Icon>close</Icon></IconButton>
+                                                                    </div>
                                                                 </ListItem>
                                                                 <Divider className="my-0.5"/>
                                                             </div>

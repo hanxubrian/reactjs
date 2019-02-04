@@ -242,7 +242,7 @@ class BillRunDialog extends Component {
     createbillrunmesssage=()=>{
         this.props.showMessage({
             message     : `Bill Run Process has started.You will be notified when completed.\n You can continue using the system as usual`,//text or html
-            autoHideDuration: 2000,//ms
+            autoHideDuration: 3000,//ms
             anchorOrigin: {
                 vertical  : 'top',//top  bottom
                 horizontal: 'center'//left center right

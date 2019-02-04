@@ -420,7 +420,7 @@ class SystemNotificationContentList extends Component {
         this.state = {
             columns                             : [
                 // { name: 'process', title: 'Process' },
-                { name: 'Message', title: 'Notification' },
+                { name: 'process', title: 'Notification' },
                 { name: 'InvoiceDescription', title: 'Description' },
                 { name: 'From', title: 'From' },
                 { name: 'cuscreatedate', title: 'Date' },
@@ -430,15 +430,15 @@ class SystemNotificationContentList extends Component {
             rows                                : [],
             tableColumnExtensions               : [
                 // { columnName: 'process', width: 100 },
-                { columnName: 'Message', width: 500 },
+                { columnName: 'process', width: 500 },
                 { columnName: 'InvoiceDescription', width: 500 },
                 { columnName: 'From', width: 100 },
                 { columnName: 'cuscreatedate', width: 100 },
                 { columnName: 'detail', width: 100 },
 
             ],
-            pageSizes                           : [5,10, 20, 30, 50, 100],
-            pageSize                            : 5,
+            pageSizes                           : [5,10, 20, 30, 50, 100,200],
+            pageSize                            : 50,
             sorting                             : [
                 { columnName: 'process', direction: 'asc' },
             ],
@@ -541,7 +541,7 @@ class SystemNotificationContentList extends Component {
 		</span>
     );
     viewdetail=(e,param)=>{
-        console.log("props=",JSON.stringify(e));
+        // console.log("props=",JSON.stringify(e));
         this.props.history.push('/notification/system/'+e);
     }
     getCell = (props) => {
@@ -580,18 +580,18 @@ class SystemNotificationContentList extends Component {
                         </div>
 
                         <div className={classNames("flex flex-col ", classes.layoutTable)}
-
+                            style={{height:"700px"}}
                         >
                                 <Grid
                                 rows={rows}
                                 columns={columns}
-
+                                height={"100%"}
                                 >
 
 
                                     <PagingState
                                         defaultCurrentPage={0}
-                                        defaultPageSize={5}
+                                        defaultPageSize={50}
                                     />
                                     <PagingPanel
                                         pageSizes={pageSizes}
@@ -608,6 +608,8 @@ class SystemNotificationContentList extends Component {
                                     <VirtualTable
                                         columnExtensions={tableColumnExtensions}
                                         cellComponent={this.getCell}
+                                        height="auto"
+
                                     />
                                     {/*<Table*/}
                                         {/*columnExtensions={tableColumnExtensions}*/}

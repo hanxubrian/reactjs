@@ -77,8 +77,8 @@ export function assignRooms(currentUser)
                                 'time'          : message.createdAt,
                                 'attachment'    : message.attachment,
                             };
-
-                            return dispatch(addMessage(chat.chatId, newmsg))
+                            if(message.text && message.text !==null)
+                                return dispatch(addMessage(chat.chatId, newmsg))
 
                          },
                          onPresenceChanged: (state, user) => {
