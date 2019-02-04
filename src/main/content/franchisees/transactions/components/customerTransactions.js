@@ -140,8 +140,7 @@ class CustomerTransactions extends Component {
         //'/franchisees/reports/:regionid/:year/:month/:franchiseenumber',
         if( this.props.transactionDetail!==null) {
             let trxDetail = this.props.transactionDetail.Data;
-            console.log('trxDetail=', trxDetail);
-            this.props.getReport({
+            this.props.createReport({
                 regionId: this.props.regionId,
                 year: '2017',
                 month: '1',
@@ -162,10 +161,10 @@ class CustomerTransactions extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.CUS_TRXS===null)
+        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUS_TRXS.length===0)
             return (<div/>);
 
-        let data = franchiseeReport.Data.CUS_TRXS.map(d=>{
+        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUS_TRXS.map(d=>{
             d.DESCR = FuseUtils.capital_letter(d.DESCR);
             d.CUS_NAME = FuseUtils.capital_letter(d.CUS_NAME);
             d.TRX_AMT = parseFloat(d.TRX_AMT);
@@ -240,7 +239,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         removeTransaction: Actions.removeTransaction,
         openEditTransactionForm: Actions.openEditTransactionForm,
-        getReport: Actions.getReport,
+        createReport: Actions.createReport,
     }, dispatch);
 }
 
@@ -249,7 +248,7 @@ function mapStateToProps({transactions, auth, franchiseeReports}) {
         regionId: auth.login.defaultRegionId,
         transactions: transactions.transactionsDB,
         transactionTypeList: transactions.transactionTypeList,
-        franchiseeReport: franchiseeReports.franchiseeReport,
+        franchiseeReport: franchiseeReports.franchiseeReport1,
         transactionDetail: transactions.transactionDetail,
     }
 }

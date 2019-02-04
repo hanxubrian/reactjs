@@ -34,18 +34,9 @@ import "react-table/react-table.css";
 import classNames from 'classnames';
 import NumberFormat from 'react-number-format';
 
-const hexToRgb = (hex) => {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-    } : null;
-};
 
 const styles = theme => ({
     tableTheadRow: {
-        // backgroundColor: 'rgba(' + hexToRgb(theme.palette.primary.main).r + ',' + hexToRgb(theme.palette.primary.main).g + ',' + hexToRgb(theme.palette.primary.main).b +', .2)'
         backgroundColor: theme.palette.primary.main,
         '& tr': {
             height: 48
@@ -56,9 +47,6 @@ const styles = theme => ({
         '& tr th:nth-child(3)': {
             width: '100%'
         }
-    },
-    imageIcon: {
-        width: 24
     },
     tableStriped: {
         marginBottom: '0!important',
@@ -147,10 +135,10 @@ class SupplyTransactons extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.SUPPLY_TRXS===null)
+        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].SUPPLY_TRXS.length===0)
             return (<div/>);
 
-        let data = franchiseeReport.Data.SUPPLY_TRXS.map(d=>{
+        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].SUPPLY_TRXS.map(d=>{
             d.DESCR = FuseUtils.capital_letter(d.DESCR);
             d.TRX_AMT = parseFloat(d.EXTENDED);
             d.TRX_TAX = parseFloat(d.TRX_TAX);
@@ -228,7 +216,7 @@ function mapStateToProps({transactions, auth, franchiseeReports}) {
         regionId: auth.login.defaultRegionId,
         transactions: transactions.transactionsDB,
         transactionTypeList: transactions.transactionTypeList,
-        franchiseeReport: franchiseeReports.franchiseeReport,
+        franchiseeReport: franchiseeReports.franchiseeReport1,
         transactionDetail: transactions.transactionDetail,
     }
 }

@@ -213,13 +213,11 @@ class franchiseesService {
 
 
     getFranchiseeReport = (params) => {
-        console.log('parmas=', params);
         return new Promise((resolve, reject) => {
             axios_instance.get(`${BASE_MONGO_API_URL}/api/FranchiseeReport`,
                 { params: {...params}}
             )
                 .then( res => {
-                    console.log('reports API result=', res);
                     if(res.status===200) {
                         resolve(res.data);
                     }
@@ -231,8 +229,26 @@ class franchiseesService {
                     resolve(error);
                 })
         });
-    }
+    };
 
+    createFranchiseeReport = (params) => {
+        return new Promise((resolve, reject) => {
+            axios_instance.get(`${BASE_MONGO_API_URL}/api/CreateFranchiseeReport`,
+                { params: {...params}}
+            )
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    };
 
     /**
      * get Transaction Lists

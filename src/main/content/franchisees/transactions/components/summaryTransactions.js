@@ -14,12 +14,15 @@ import {
     Table,
     VirtualTable,
     TableHeaderRow,
-    TableSummaryRow, PagingPanel
+    TableSummaryRow
 } from '@devexpress/dx-react-grid-material-ui';
 
 
 import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
+
+//Theme Utilities
+import FuseUtils from '@fuse/FuseUtils';
 
 // for store
 import {bindActionCreators} from "redux";
@@ -31,9 +34,6 @@ import "react-table/react-table.css";
 import classNames from 'classnames';
 import NumberFormat from 'react-number-format';
 
-//Theme Utilities
-import FuseUtils from '@fuse/FuseUtils';
-
 const styles = theme => ({
     tableTheadRow: {
         backgroundColor: theme.palette.primary.main,
@@ -43,12 +43,9 @@ const styles = theme => ({
         '& tr th': {
             color: 'white'
         },
-        '& tr th:nth-child(2)': {
+        '& tr th:nth-child(3)': {
             width: '100%'
         }
-    },
-    imageIcon: {
-        width: 24
     },
     tableStriped: {
         marginBottom: '0!important',
@@ -59,13 +56,13 @@ const styles = theme => ({
             paddingLeft: 4,
             paddingRight: 4
         },
-        '& tbody tr td:nth-child(2)': {
+        '& tbody tr td:nth-child(3)': {
             width: '100%',
         },
 
     },
     tableFootRow: {
-        '& td:nth-child(2)': {
+        '& td:nth-child(3)': {
             width: '100%',
         },
     }
@@ -112,7 +109,7 @@ const CurrencyTypeProvider = props => (
     />
 );
 
-class RegularMiscTransactons extends Component {
+class SummaryTransactons extends Component {
     state = {
         pageSizes: [5, 10, 25, 50, 100],
         currentPage: 0,
@@ -133,49 +130,37 @@ class RegularMiscTransactons extends Component {
     };
 
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-    }
-
-    componentDidMount() {
-    }
-
-    componentWillMount() {
-    }
-
-    componentWillUnmount() {
-
-    }
-
-
     changeSorting = sorting => this.setState({ sorting });
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].REG_MISC===null)
+        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].SUMMARY_PAGE[0]===null)
             return (<div/>);
 
-        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].REG_MISC.map(d=>{
+        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].SUMMARY_PAGE[0].map(d=>{
             d.DESCR = FuseUtils.capital_letter(d.DESCR);
-            d.TRX_AMT = parseFloat(d.TRX_AMT);
+            d.TRX_AMT = parseFloat(d.EXTENDED);
             d.TRX_TAX = parseFloat(d.TRX_TAX);
+            d.TRX_UNIT = parseFloat(d['UNIT COST']);
             d.TRX_TOT = parseFloat(d.TRX_TOT);
             return d;
         });
 
         const columns = [
-            {name: "TYPE", title: "Type"},
             {name: "DESCR", title: "Description"},
-            {name: "TRX_AMT", title: "Amount"},
+            {name: "QUANTITY", title: "Quantity"},
+            {name: "TRX_UNIT", title: "Unit Amount"},
+            {name: "TRX_AMT", title: "SubTotal"},
             {name: "TRX_TAX", title: "Tax"},
             {name: "TRX_TOT", title: "Total"},
         ];
 
         let  tableColumnExtensions = [
             { columnName: 'DESCR', width: -1, },
-            { columnName: 'TYPE', width: 100},
-            { columnName: 'TRX_AMT', width: 140,  align: 'right'},
-            { columnName: 'TRX_TAX', width: 140,  align: 'right'},
-            { columnName: 'TRX_TOT', width: 140,  align: 'right'},
+            { columnName: 'TRX_UNIT', width: 100,  align: 'right'},
+            { columnName: 'TRX_AMT', width: 100,  align: 'right'},
+            { columnName: 'TRX_TAX', width: 100,  align: 'right'},
+            { columnName: 'TRX_TOT', width: 100,  align: 'right'},
         ];
 
         let totalSummaryItems = [
@@ -186,7 +171,7 @@ class RegularMiscTransactons extends Component {
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
-                <h2>Regular Misc. Transactions</h2>
+                <h2>Supply Transactions</h2>
                 <Grid rows={data} columns={columns}>
                     <PagingState
                         currentPage={this.state.currentPage}
@@ -221,6 +206,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         removeTransaction: Actions.removeTransaction,
         openEditTransactionForm: Actions.openEditTransactionForm,
+        getReport: Actions.getReport,
     }, dispatch);
 }
 
@@ -234,5 +220,5 @@ function mapStateToProps({transactions, auth, franchiseeReports}) {
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(RegularMiscTransactons)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(SummaryTransactons)));
 

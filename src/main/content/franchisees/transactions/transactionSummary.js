@@ -20,6 +20,7 @@ import CustomerTransactions from './components/customerTransactions'
 import CustomerAccountTotals from './components/customerAccountTotal'
 import SupplyTransactons from './components/supplyTransactions'
 import RegularMiscTransactons from './components/regularMiscTransactions'
+import FindersFeeTransactions from './components/findersFeeTransactions'
 
 
 const styles = theme => ({
@@ -87,6 +88,7 @@ class TransactionsSummary extends Component {
                 <CustomerAccountTotals />
                 <SupplyTransactons />
                 <RegularMiscTransactons />
+                <FindersFeeTransactions />
                 {franchiseeReport===null  && (
                     <div className={classNames(classes.overlay)}>
                         <CircularProgress className={classes.progress} color="secondary"  />
@@ -108,7 +110,7 @@ function mapStateToProps({franchiseeReports, auth}) {
     return {
         bLoadedFranchiseeReports: franchiseeReports.bLoadedFranchiseeReports,
         regionId: auth.login.defaultRegionId,
-        franchiseeReport: franchiseeReports.franchiseeReport,
+        franchiseeReport: franchiseeReports.franchiseeReport1,
     }
 }
 

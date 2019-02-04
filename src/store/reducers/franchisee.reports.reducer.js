@@ -4,6 +4,7 @@ import * as UserActions from "../../auth/store/actions/";
 const initialState = {
     franchiseeReports: null,
     franchiseeReport: null,
+    franchiseeReport1: null,
     bLoadedFranchiseeReports: false,
     bOpenedFilterPanelFranchiseeReports: false,
     FranchiseesReportForm: {
@@ -33,6 +34,13 @@ const franchiseeReports = function(state = initialState, action) {
             return {
                 ...state,
                 franchiseeReport: action.payload,
+            }
+        }
+        case Actions.CREATE_FRANCHISEE_REPORT_DETAIL:
+        {
+            return {
+                ...state,
+                franchiseeReport1: action.payload,
             }
         }
         case Actions.TOGGLE_FRANCHISEES_REPORTS_FILTER_PANEL:
@@ -75,7 +83,7 @@ const franchiseeReports = function(state = initialState, action) {
         }
         case Actions.CLOSE_EDIT_TRANSACTION_FORM:
         case Actions.CLOSE_NEW_TRANSACTION_FORM:
-            return {...state, franchiseeReport: null};
+            return {...state, franchiseeReport1: null};
         case UserActions.USER_LOGGED_OUT:
         {
             return {

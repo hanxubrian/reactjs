@@ -43,7 +43,7 @@ const styles = theme => ({
         '& tr th': {
             color: 'white'
         },
-        '& tr th:nth-child(2)': {
+        '& tr th:nth-child(3)': {
             width: '100%'
         }
     },
@@ -59,13 +59,13 @@ const styles = theme => ({
             paddingLeft: 4,
             paddingRight: 4
         },
-        '& tbody tr td:nth-child(2)': {
+        '& tbody tr td:nth-child(3)': {
             width: '100%',
         },
 
     },
     tableFootRow: {
-        '& td:nth-child(2)': {
+        '& td:nth-child(3)': {
             width: '100%',
         },
     }
@@ -112,7 +112,7 @@ const CurrencyTypeProvider = props => (
     />
 );
 
-class RegularMiscTransactons extends Component {
+class FindersFeeTransactions extends Component {
     state = {
         pageSizes: [5, 10, 25, 50, 100],
         currentPage: 0,
@@ -151,42 +151,38 @@ class RegularMiscTransactons extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].REG_MISC===null)
+        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].FINDER_FEES.length===0)
             return (<div/>);
 
-        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].REG_MISC.map(d=>{
-            d.DESCR = FuseUtils.capital_letter(d.DESCR);
-            d.TRX_AMT = parseFloat(d.TRX_AMT);
-            d.TRX_TAX = parseFloat(d.TRX_TAX);
-            d.TRX_TOT = parseFloat(d.TRX_TOT);
+        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].FINDER_FEES.map(d=>{
+            d.DESCRIPTION = FuseUtils.capital_letter(d.DESCRIPTION);
+            d.PYMNT_TOT = parseFloat(d.PYMNT_TOT);
             return d;
         });
 
         const columns = [
-            {name: "TYPE", title: "Type"},
-            {name: "DESCR", title: "Description"},
-            {name: "TRX_AMT", title: "Amount"},
-            {name: "TRX_TAX", title: "Tax"},
-            {name: "TRX_TOT", title: "Total"},
+            {name: "CUST_NO", title: "Cus. #",},
+            {name: "CUS_NAME", title: "Cus. Name"},
+            {name: "DESCRIPTION", title: "Description"},
+            {name: "PYMNT_NUM", title: "Payment #"},
+            {name: "PYMNT_TOT", title: "Payment Total"},
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'DESCR', width: -1, },
-            { columnName: 'TYPE', width: 100},
-            { columnName: 'TRX_AMT', width: 140,  align: 'right'},
-            { columnName: 'TRX_TAX', width: 140,  align: 'right'},
-            { columnName: 'TRX_TOT', width: 140,  align: 'right'},
+            { columnName: 'CUST_NO', width: 80, },
+            { columnName: 'CUS_NAME', width: 220, },
+            { columnName: 'DESCRIPTION', width: -1, },
+            { columnName: 'PYMNT_NUM', width: 100},
+            { columnName: 'PYMNT_TOT', width: 100,  align: 'right'},
         ];
 
         let totalSummaryItems = [
-            { columnName: 'TRX_AMT',  type: 'sum'},
-            { columnName: 'TRX_TAX',  type: 'sum'},
-            { columnName: 'TRX_TOT',  type: 'sum'},
+            { columnName: 'PYMNT_TOT', type: 'sum'},
         ];
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
-                <h2>Regular Misc. Transactions</h2>
+                <h2>Finder Fees</h2>
                 <Grid rows={data} columns={columns}>
                     <PagingState
                         currentPage={this.state.currentPage}
@@ -195,7 +191,7 @@ class RegularMiscTransactons extends Component {
                         onPageSizeChange={this.changePageSize}
                     />
                     <CurrencyTypeProvider
-                        for={['TRX_AMT', 'TRX_TAX', 'TRX_TOT']}
+                        for={['PYMNT_TOT']}
                     />
 
                     <IntegratedPaging/>
@@ -221,6 +217,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         removeTransaction: Actions.removeTransaction,
         openEditTransactionForm: Actions.openEditTransactionForm,
+        createReport: Actions.createReport,
     }, dispatch);
 }
 
@@ -234,5 +231,5 @@ function mapStateToProps({transactions, auth, franchiseeReports}) {
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(RegularMiscTransactons)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(FindersFeeTransactions)));
 

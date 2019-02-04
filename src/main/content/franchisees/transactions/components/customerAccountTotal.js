@@ -136,10 +136,10 @@ class CustomerAccountTotals extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.CUST_ACCT_TOTALS===null)
+        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS.length===0)
             return (<div/>);
 
-        let data = franchiseeReport.Data.CUST_ACCT_TOTALS.map(d=>{
+        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS.map(d=>{
             d.CUS_NAME = FuseUtils.capital_letter(d.CUS_NAME);
             d.CONT_BILL = parseFloat(d.CONT_BILL);
             d.CUR_MONTH = parseFloat(d.CUR_MONTH);
@@ -224,7 +224,7 @@ function mapStateToProps({transactions, auth, franchiseeReports}) {
         regionId: auth.login.defaultRegionId,
         transactions: transactions.transactionsDB,
         transactionTypeList: transactions.transactionTypeList,
-        franchiseeReport: franchiseeReports.franchiseeReport,
+        franchiseeReport: franchiseeReports.franchiseeReport1,
         transactionDetail: transactions.transactionDetail,
     }
 }
