@@ -4,7 +4,7 @@ import {withStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import {bindActionCreators} from "redux";
 import * as Actions from "./store/actions";
-import * as MainActions from "./store/actions";
+import * as MainActions from "store/actions";
 import connect from "react-redux/es/connect/connect";
 import GridContainer from "../../Commons/Grid/GridContainer";
 import GridItem from "../../Commons/Grid/GridItem";
@@ -71,42 +71,8 @@ const styles = theme => ({
 });
 
 
-const suggestions = [
-    { label: 'Afghanistan' },
-    { label: 'Aland Islands' },
-    { label: 'Albania' },
-    { label: 'Algeria' },
-    { label: 'American Samoa' },
-    { label: 'Andorra' },
-    { label: 'Angola' },
-    { label: 'Anguilla' },
-    { label: 'Antarctica' },
-    { label: 'Antigua and Barbuda' },
-    { label: 'Argentina' },
-    { label: 'Armenia' },
-    { label: 'Aruba' },
-    { label: 'Australia' },
-    { label: 'Austria' },
-    { label: 'Azerbaijan' },
-    { label: 'Bahamas' },
-    { label: 'Bahrain' },
-    { label: 'Bangladesh' },
-    { label: 'Barbados' },
-    { label: 'Belarus' },
-    { label: 'Belgium' },
-    { label: 'Belize' },
-    { label: 'Benin' },
-    { label: 'Bermuda' },
-    { label: 'Bhutan' },
-    { label: 'Bolivia, Plurinational State of' },
-    { label: 'Bonaire, Sint Eustatius and Saba' },
-    { label: 'Bosnia and Herzegovina' },
-    { label: 'Botswana' },
-    { label: 'Bouvet Island' },
-    { label: 'Brazil' },
-    { label: 'British Indian Ocean Territory' },
-    { label: 'Brunei Darussalam' },
-];
+const suggestions = [];
+const franchiseeSuggestions = [];
 
 function renderInputComponent(inputProps) {
     const { classes, inputRef = () => {}, ref, ...other } = inputProps;
@@ -135,8 +101,8 @@ function renderInputComponent(inputProps) {
 }
 
 function renderSuggestion(suggestion, { query, isHighlighted }) {
-    const matches = match(suggestion.label, query);
-    const parts = parse(suggestion.label, matches);
+    const matches = match(suggestion.customerName, query);
+    const parts = parse(suggestion.customerName, matches);
 
     return (
         <MenuItem selected={isHighlighted} component="div">
@@ -166,7 +132,7 @@ function getSuggestions(value) {
         ? []
         : suggestions.filter(suggestion => {
             const keep =
-                count < 5 && suggestion.label.slice(0, inputLength).toLowerCase() === inputValue;
+                count < 5 && suggestion.customerName.slice(0, inputLength).toLowerCase() === inputValue;
 
             if (keep) {
                 count += 1;
@@ -177,7 +143,7 @@ function getSuggestions(value) {
 }
 
 function getSuggestionValue(suggestion) {
-    return suggestion.label;
+    return suggestion.customerName;
 }
 
 
@@ -234,7 +200,7 @@ class UsersForm extends React.Component {
         MultiRegion: [],
         DefaultRegion: [],
         UserPermission: [],
-        DepartmentList: []
+        DepartmentList: [],
     };
 
 
@@ -244,6 +210,8 @@ class UsersForm extends React.Component {
         this.props.getUserFormUserTypeList();
         this.props.getUserStateList();
         this.props.getUserDepartmentList(this.props.regionId);
+        this.props.getCustomers(this.props.regionId);
+        this.props.getFranchisees(this.props.regionId);
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
@@ -291,6 +259,25 @@ class UsersForm extends React.Component {
                 this.state.DepartmentList = nextProps.userDepartmentList;
             }
         }
+        if ( nextProps.customers !== this.props.customers ){
+            if(nextProps.customers !== null){
+                nextProps.customers.Data.Regions.map(x=>{
+                    x.CustomerList.map(y=>{
+                        suggestions.push({customerName: y.CustomerName});
+                    });
+                });
+            }
+        }
+        if ( nextProps.franchisees !== this.props.franchisees ){
+            if(nextProps.franchisees !== null){
+                nextProps.franchisees.Data.Region.map(x=>{
+                    x.Franchisees.map(y=>{
+                        franchiseeSuggestions.push({franchiseeName: y.Name});
+                    });
+                });
+                console.log("CustomerList",franchiseeSuggestions);
+            }
+        }
     }
 
     handleChange = prop => event => {
@@ -325,7 +312,8 @@ class UsersForm extends React.Component {
             DepartmentList,
             MultiRegion,
             DefaultRegion,
-            UserPermission
+            UserPermission,
+            CustomerName
         } = this.state;
 
         const autosuggestProps = {
@@ -784,10 +772,12 @@ function mapDispatchToProps(dispatch)
         getUserStateList: Actions.getUserStateList,
         getUserDepartmentList: Actions.getUserDepartmentList,
         getUserPermissionList: Actions.getUserPermissionList,
+        getCustomers: MainActions.getCustomers,
+        getFranchisees: MainActions.getFranchisees,
     }, dispatch);
 }
 
-function mapStateToProps({usersApp, fuse ,auth})
+function mapStateToProps({usersApp, fuse ,auth,customers, franchisees})
 {
     return {
         openUsersFormStatus: usersApp.users.openUsersFormStatus,
@@ -797,8 +787,10 @@ function mapStateToProps({usersApp, fuse ,auth})
         userStateList: usersApp.users.userStateList,
         userDepartmentList: usersApp.users.userDepartmentList,
         userPermissionList: usersApp.users.userPermissionList,
+        customers: customers.customersDB,
         navigation : fuse.navigation,
         regionId: auth.login.defaultRegionId,
+        franchisees: franchisees.franchiseesDB,
     }
 }
 

@@ -145,14 +145,14 @@ class UsersPermission extends React.Component {
                             >
                             <ListItem button onClick={this.handleClick}
                             style={{borderBottom: "1px solid lightgray"}}>
-                            <ListItemText primary="Navigation Options"/>
-                            <ListItemSecondaryAction>
-                            <span className={classes.textSpan}>View</span>
-                            <span className={classes.textSpan}>Create</span>
-                            <span className={classes.textSpan}>Edit</span>
-                            <span className={classes.textSpan}>Delete</span>
-                            <span className={classes.textSpan}>Execute</span>
-                            </ListItemSecondaryAction>
+                                <ListItemText primary="Navigation Options"/>
+                                    <ListItemSecondaryAction>
+                                        <span className={classes.textSpan}>View</span>
+                                        <span className={classes.textSpan}>Create</span>
+                                        <span className={classes.textSpan}>Edit</span>
+                                        <span className={classes.textSpan}>Delete</span>
+                                        <span className={classes.textSpan}>Execute</span>
+                                    </ListItemSecondaryAction>
                             </ListItem>
                             {x.menuOptions.map((x, pIndex) => (
                                 <Fragment key={x.MenuId}>
