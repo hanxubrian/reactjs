@@ -91,7 +91,7 @@ class TransactionsSummary extends Component {
                 <SupplyTransactons />
                 <RegularMiscTransactons />
                 <FindersFeeTransactions />
-                {franchiseeReport===null  && (
+                {(franchiseeReport===null && this.props.transactionForm.franchisee!==null)  && (
                     <div className={classNames(classes.overlay)}>
                         <CircularProgress className={classes.progress} color="secondary"  />
                         <h4 style={{color: 'white'}}>Loading Transaction Summary Detail...</h4>
@@ -108,8 +108,9 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-function mapStateToProps({franchiseeReports, auth}) {
+function mapStateToProps({franchiseeReports, transactions, auth}) {
     return {
+        transactionForm: transactions.transactionForm,
         bLoadedFranchiseeReports: franchiseeReports.bLoadedFranchiseeReports,
         regionId: auth.login.defaultRegionId,
         franchiseeReport: franchiseeReports.franchiseeReport1,

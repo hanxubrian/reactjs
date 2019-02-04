@@ -88,7 +88,8 @@ const transactions = function(state = initialState, action) {
                     bVendorBox: false,
                     vendor: null
                 },
-                newTransaction: null
+                newTransaction: null,
+                transactionDetail: null
             };
         }
         case Actions.OPEN_EDIT_TRANSACTION_FORM:
@@ -122,7 +123,8 @@ const transactions = function(state = initialState, action) {
                     bVendorBox: false,
                     vendor: null
                 },
-                newTransaction: null
+                newTransaction: null,
+                transactionDetail: null
             };
         }
         case Actions.SELECT_TRANSACTION_FRANCHISEE:
