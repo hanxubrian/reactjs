@@ -530,8 +530,8 @@ class Payments extends Component {
 			})
 		} else {
 			this.props.openPaymentDialog({
-				open: "CreditCard",
-				paymentType: "CreditCard",
+				open: "Credit",
+				paymentType: "Credit",
 				paymentAmount: 0,
 			})
 		}

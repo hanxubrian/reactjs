@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import _ from "lodash";
 // core components
 import { Icon, IconButton, Input, Paper, Button, Zoom, Checkbox } from '@material-ui/core';
 
@@ -221,7 +222,7 @@ const PhoneNumberTypeProvider = props => (
 //
 // table cell date formatter
 //
-const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/, '$2/$3/$1');
+const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z/, '$2/$3/$1');
 const DateTypeProvider = props => (
 	<DataTypeProvider
 		formatterComponent={DateFormatter}
@@ -485,7 +486,7 @@ class paymentsHistoryListContent extends Component {
 		this.commitChanges = this.commitChanges.bind(this);
 		this.changeSearchValue = value => this.setState({ searchValue: value });
 		this.changeGrouping = grouping => this.setState({ grouping });
-		
+
 		if (!this.props.bLoadedPaymentHistory) {
 			this.props.getPaymentHistory(
 				this.props.regionId,
@@ -603,7 +604,9 @@ class paymentsHistoryListContent extends Component {
 			})
 		}
 
-		if (nextProps.regionId !== this.props.regionId) {
+		if (nextProps.regionId !== this.props.regionId ||
+			!_.isEqual(nextProps.filterParam, this.props.filterParam)
+		) {
 			console.log("componentWillReceiveProps", "nextProps.regionId", nextProps.regionId)
 			this.props.getPaymentHistory(
 				nextProps.regionId,
@@ -613,27 +616,6 @@ class paymentsHistoryListContent extends Component {
 				nextProps.filterParam.paymentHistoryTypes,
 			);
 		}
-		if (nextProps.filterParam.paymentStatus !== this.props.filterParam.paymentStatus) {
-			console.log("componentWillReceiveProps", "nextProps.status", nextProps.filterParam.paymentStatus)
-			this.props.getPaymentHistory(
-				nextProps.regionId,
-				nextProps.filterParam.fromDate,
-				nextProps.filterParam.toDate,
-				nextProps.filterParam.paymentStatus,
-				nextProps.filterParam.paymentHistoryTypes
-			);
-		}
-		// if (JSON.stringify(nextProps.activePaymentRows) !== JSON.stringify(this.props.activePaymentRows)) {
-		// 	console.log("componentWillReceiveProps", "nextProps.activePaymentRows", nextProps.activePaymentRows)
-		// 	if (JSON.stringify(this.state.selection) !== JSON.stringify(nextProps.activePaymentRows)) {
-		// 		this.setState({ selection: [...nextProps.activePaymentRows] })
-		// 	}
-		// }
-		// if (this.props.locationFilterValue !== nextProps.locationFilterValue) {
-		// 	this.setState({ locationFilterValue: nextProps.locationFilterValue })
-		// 	console.log("componentWillReceiveProps", "locationFilterValue", nextProps.locationFilterValue, this.props.customers)
-		// 	this.initRowsFromRawJson(this.props.customers, nextProps.locationFilterValue);
-		// }
 
 		if (nextProps.searchText !== this.props.searchText) {
 			console.log("------search text changed-------", nextProps.searchText)

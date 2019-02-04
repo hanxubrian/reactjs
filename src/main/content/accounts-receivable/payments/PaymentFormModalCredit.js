@@ -277,7 +277,7 @@ class PaymentFormModalCredit extends React.Component {
 				paymentAmount: 0
 			},
 		}
-		this.props.getPaymentsDialogInvoiceList(props.regionId, invoiceId);
+		// this.props.getPaymentsDialogInvoiceList(props.regionId, invoiceId);
 	}
 
 	handleStepNext = () => {
@@ -300,21 +300,31 @@ class PaymentFormModalCredit extends React.Component {
 
 
 	componentWillMount() {
-		if (this.props.creditInvoiceList && this.props.creditInvoiceList.Data && this.props.creditInvoiceList.Data.Items) {
-			console.log("------------------ creditInvoiceList ---------------------", this.props.creditInvoiceList.Data.Items);
-			this.setState({ rows: this.props.creditInvoiceList.Data.Items[0].Distribution });
-		}
+		// if (this.props.creditInvoiceList && this.props.creditInvoiceList.Data && this.props.creditInvoiceList.Data.Items) {
+		// 	console.log("------------------ creditInvoiceList ---------------------", this.props.creditInvoiceList.Data.Items);
+		// 	this.setState({ rows: this.props.creditInvoiceList.Data.Items[0].Distribution });
+		// }
 
 		this.setState({
 			paymentDlgPayloads: this.props.paymentDlgPayloads,
 			PaymentAmount: this.props.paymentDlgPayloads.paymentAmount,
 			PaymentType: this.props.paymentDlgPayloads.paymentType
 		})
+
+		this.setRowData(this.props.payments)
 	}
 	componentDidMount() {
 
 	}
 	UNSAFE_componentWillReceiveProps(nextProps) {
+		if (nextProps.payments !== this.props.payments) {
+			console.log("componentWillReceiveProps payments")
+			this.setRowData(nextProps.payments)
+		}
+		if (!_.isEqual(nextProps.activePaymentRows, this.props.activePaymentRows)) {
+			console.log("componentWillReceiveProps activePaymentRows", nextProps.activePaymentRows, this.props.activePaymentRows)
+			this.setRowData(this.props.payments, nextProps.activePaymentRows)
+		}
 		if (!_.isEqual(nextProps.paymentDlgPayloads, this.props.paymentDlgPayloads)) {
 			this.setState({
 				paymentDlgPayloads: nextProps.paymentDlgPayloads,
@@ -323,12 +333,41 @@ class PaymentFormModalCredit extends React.Component {
 			})
 		}
 	}
+	setRowData(payments, activePaymentRows = this.props.activePaymentRows) {
+		console.log("payment modal credit----------------------------------------", activePaymentRows, payments)
+		// const temp_rows = [
+		// 	{ id: 0, InvoiceNo: 1, InvoiceAmount: 1351.51, InvoiceBalance: 216.36, PaymentAmount: 0 },
+		// 	{ id: 1, InvoiceNo: 2, InvoiceAmount: 56.30, InvoiceBalance: 548.24, PaymentAmount: 0 },
+		// 	{ id: 2, InvoiceNo: 3, InvoiceAmount: 215.28, InvoiceBalance: 1654.36, PaymentAmount: 0 },
 
+		// ];
+		// this.setState({ rows: temp_rows })
+
+		if (!payments || payments.Regions === undefined || payments.Regions.length < 1)
+			return [];
+		let res = [...payments.Regions[0].Payments]
+
+		res.forEach((x, index) => {
+			x.CustomerNameNo = `${x.CustomerName} - ${x.CustomerNo}`;
+			x.id = index
+		})
+		res = res.filter(x => {
+			return activePaymentRows.indexOf(x.id) > -1
+		})
+		console.log("setRowData", res);
+		if (res.length > 0) {
+			this.setState({
+				customerName: res[0].CustomerName,
+				customerNumber: res[0].CustomerNo,
+			})
+		}
+		this.setState({ rows: res })
+	}
 	handleClose = () => {
 		// this.props.openPaymentDialog(false);
 		this.props.openPaymentDialog({
 			open: false,
-			paymentType: "CreditCard",
+			paymentType: "Credit",
 			paymentAmount: 0,
 		})
 	};
@@ -345,12 +384,12 @@ class PaymentFormModalCredit extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		const { rows, activeStep, columnsForReactDataGrid } = this.state;
+		const { rows, activeStep, columnsForReactDataGrid, customerName, customerNumber } = this.state;
 		const steps = getSteps();
 		return (
 			<div>
 				<Dialog
-					open={this.state.paymentDlgPayloads.open === "CreditCard"}
+					open={this.state.paymentDlgPayloads.open === "Credit"}
 					fullWidth={true}
 					maxWidth="lg"
 
@@ -369,8 +408,8 @@ class PaymentFormModalCredit extends React.Component {
 						<div className={classNames("flex flex-col")}>
 							<div className={classNames("flex flex-col")}>
 								<div className={classNames("flex")} sm={12} >
-									<TextField sm={3} type="text" value={"Rishun Li"} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">person_outline</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerName" label="Customer #" />
-									<TextField sm={3} type="text" value={"5c5259037f8ac50b0cde01c3"} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerNumber" label="Invoice #" />
+									<TextField sm={3} type="text" value={customerName} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">person_outline</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerName" label="CustomerName" />
+									<TextField sm={3} type="text" value={customerNumber} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerNumber" label="CustomerNumber" />
 								</div>
 							</div>
 							<div className={classNames("flex flex-col")}>
@@ -499,6 +538,8 @@ function mapStateToProps({ territories, auth, accountReceivablePayments }) {
 		regionId: auth.login.defaultRegionId,
 
 		paymentDlgPayloads: accountReceivablePayments.paymentDlgPayloads,
+		payments: accountReceivablePayments.ACC_payments,
+		activePaymentRows: accountReceivablePayments.activePaymentRows,
 	}
 }
 

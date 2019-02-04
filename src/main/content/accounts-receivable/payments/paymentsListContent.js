@@ -675,7 +675,9 @@ class PaymentsListContent extends Component {
 			})
 		}
 
-		if (nextProps.regionId !== this.props.regionId) {
+		if (nextProps.regionId !== this.props.regionId ||
+			!_.isEqual(nextProps.filterParam, this.props.filterParam)
+		) {
 			console.log("componentWillReceiveProps", "nextProps.regionId", nextProps.regionId)
 			this.props.getAccountReceivablePaymentsList(
 				nextProps.regionId,
@@ -683,15 +685,15 @@ class PaymentsListContent extends Component {
 				nextProps.filterParam.toDate,
 				nextProps.searchText,
 				nextProps.filterParam.paymentStatus);
-		}
-		if (nextProps.filterParam.paymentStatus !== this.props.filterParam.paymentStatus) {
-			console.log("componentWillReceiveProps", "nextProps.status", nextProps.filterParam.paymentStatus)
-			this.props.getAccountReceivablePaymentsList(
-				nextProps.regionId,
-				nextProps.filterParam.fromDate,
-				nextProps.filterParam.toDate,
-				nextProps.searchText,
-				nextProps.filterParam.paymentStatus);
+			// }
+			// if (nextProps.filterParam.paymentStatus !== this.props.filterParam.paymentStatus) {
+			// 	console.log("componentWillReceiveProps", "nextProps.status", nextProps.filterParam.paymentStatus)
+			// 	this.props.getAccountReceivablePaymentsList(
+			// 		nextProps.regionId,
+			// 		nextProps.filterParam.fromDate,
+			// 		nextProps.filterParam.toDate,
+			// 		nextProps.searchText,
+			// 		nextProps.filterParam.paymentStatus);
 		}
 		if (JSON.stringify(nextProps.activePaymentRows) !== JSON.stringify(this.props.activePaymentRows)) {
 			console.log("componentWillReceiveProps", "nextProps.activePaymentRows", nextProps.activePaymentRows)

@@ -444,7 +444,7 @@ class PaymentFormModal extends React.Component {
 			console.log("componentWillReceiveProps payments")
 			this.setRowData(nextProps.payments)
 		}
-		if (JSON.stringify(nextProps.activePaymentRows) !== JSON.stringify(this.props.activePaymentRows)) {
+		if (!_.isEqual(nextProps.activePaymentRows, this.props.activePaymentRows)) {
 			console.log("componentWillReceiveProps activePaymentRows", nextProps.activePaymentRows, this.props.activePaymentRows)
 			this.setRowData(this.props.payments, nextProps.activePaymentRows)
 		}
@@ -491,25 +491,6 @@ class PaymentFormModal extends React.Component {
 					Amount: x.PaymentAmount
 				}
 			})
-
-			console.log("handleCreatePayment", this.props.regionId,
-				this.state.customerNumber,
-
-				this.state.PaymentType,
-				this.state.ReferenceNo,
-				this.state.PaymentDate,
-				this.state.PaymentNote,
-				this.getOverpaymentAmount(this.state.rows),
-				this.state.PaymentAmount,
-
-				PayItems,
-
-				this.props.getPaymentsParam.fromDate,
-				this.props.getPaymentsParam.toDate,
-				this.props.searchText,
-				this.props.filter.paymentStatus);
-
-
 
 			this.props.createAccountReceivablePayment(
 				this.props.regionId,
