@@ -512,7 +512,7 @@ class TransactionEditForm extends Component {
             if(this.props.franchisees!==null) {
                 let franchisees = this.props.franchisees.Data.Region[0].Franchisees;
 
-                let franchisee = _.filter(franchisees, franchisee=>trxDetail.FranchiseeNo===franchisee.Number || trxDetail.FranchiseeName===franchisee.Name);
+                let franchisee = _.filter(franchisees, franchisee=>trxDetail.dlr_code===franchisee.Number || trxDetail.FranchiseeName===franchisee.Name);
                 if(franchisee.length>0) {
                     this.setState({selectedFranchisee: franchisee[0]});
                     this.setState({value: franchisee[0].Name});
@@ -528,9 +528,9 @@ class TransactionEditForm extends Component {
                     this.setState({total: parseFloat(trxDetail.TrxExtendedPrice)+ tax});
                     this.setState({TransactionDate: trxDetail.TrxDate!==null ? moment(trxDetail.TrxDate): moment()});
 
-                    if(trxDetail.bill_month!==0 && trxDetail.bill_year!==0) {
-                        let period = trxDetail.bill_month.toString() + '/' + trxDetail.bill_year.toString();
-                        if (trxDetail.bill_month < 10)
+                    if(trxDetail.bill_mon!==0 && trxDetail.bill_year!==0) {
+                        let period = trxDetail.bill_mon.toString() + '/' + trxDetail.bill_year.toString();
+                        if (trxDetail.bill_mon < 10)
                             period = '0' + period;
                         this.setState({TransactionPeriod: period});
                     }
@@ -545,7 +545,7 @@ class TransactionEditForm extends Component {
                         this.setState({transactionFrequency: trxDetail.TrxFrequency});
 
                     this.setState({payments: parseInt(trxDetail.NumberOfPayments)});
-                    this.setState({TransactionNo: trxDetail.Trx_no!==null? trxDetail.Trx_no : ''});
+                    this.setState({TransactionNo: trxDetail.Trx_no!==null? trxDetail.Trx_no : 'PENDING'});
                     this.setState({reSell: trxDetail.TrxResell});
                     this.setState({transactionDescription: trxDetail.Description});
 
@@ -633,7 +633,7 @@ class TransactionEditForm extends Component {
 
             Description: this.state.transactionDescription,
             TrxDate: this.state.TransactionDate,
-            bill_month: parseInt(period[0]),
+            bill_mon: parseInt(period[0]),
             bill_year: parseInt(period[1]),
             VendorValue: this.state.TrxChargeClass.value===tTypeTaxValue && this.props.vendor!==null ? this.props.vendor.vendor.value: '', //vendor, vendor_no, vendorDate
             VendorLabel: this.state.TrxChargeClass.value===tTypeTaxValue && this.props.vendor!==null ? this.props.vendor.vendor.label: '', //vendor, vendor_no, vendorDate

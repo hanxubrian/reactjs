@@ -140,6 +140,7 @@ class CustomerTransactions extends Component {
         //'/franchisees/reports/:regionid/:year/:month/:franchiseenumber',
         if( this.props.transactionDetail!==null) {
             let trxDetail = this.props.transactionDetail.Data;
+            console.log('trxDetail=', trxDetail);
             this.props.getReport({
                 regionId: this.props.regionId,
                 year: '2017',
