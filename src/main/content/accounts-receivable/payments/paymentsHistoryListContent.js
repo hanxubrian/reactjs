@@ -474,7 +474,6 @@ class paymentsHistoryListContent extends Component {
 			pageSizes: [10, 20, 30, 50, 100],
 			amountFilterOperations: ['equal', 'notEqual', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual'],
 			searchValue: '',
-			paymentsParam: [],
 			payments: [],
 
 			showNoSelectionAlertDialog: false,
@@ -587,7 +586,6 @@ class paymentsHistoryListContent extends Component {
 	componentWillMount() {
 		const rows = this.getRowData(this.props.paymentHistory)
 		this.setState({
-			"paymentsParam": this.props.getPaymentsParam,
 			rows,
 			expandedGroups: [...new Set(rows.map(x => x.CustomerNameNo))],
 			expandedRowIds: rows.map((x, index) => index)
@@ -855,7 +853,6 @@ class paymentsHistoryListContent extends Component {
 			currencyColumns,
 			phoneNumberColumns,
 			dateColumns,
-			getPaymentsParam,
 			pageSizes,
 			searchValue,
 			payments,

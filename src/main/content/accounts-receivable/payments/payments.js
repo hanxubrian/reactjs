@@ -454,10 +454,10 @@ class Payments extends Component {
 	forceFetch = () => {
 		this.props.getAccountReceivablePaymentsList(
 			this.props.regionId,
-			this.props.getPaymentsParam.fromDate,
-			this.props.getPaymentsParam.toDate,
+			this.props.filterParam.fromDate,
+			this.props.filterParam.toDate,
 			this.props.searchText,
-			this.props.filter.paymentStatus
+			this.props.filterParam.paymentStatus
 		);
 	}
 
@@ -833,9 +833,8 @@ function mapStateToProps({ invoices, auth, customers, franchisees, accountReceiv
 
 		viewMode: accountReceivablePayments.viewMode,
 
-		filter: accountReceivablePayments.filter,
+		filterParam: accountReceivablePayments.filterParam,
 		searchText: accountReceivablePayments.searchText,
-		getPaymentsParam: accountReceivablePayments.getPaymentsParam,
 
 		startPaymentHistory: accountReceivablePayments.startPaymentHistory,
 	}
