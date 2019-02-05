@@ -597,6 +597,8 @@ class InvoiceForm extends Component {
                     period = '0' + period;
                 if(periods.current.status==='Open')
                     all_periods.push(period);
+                this.setState({period: period});
+
 
                 period = periods.next.month.toString() + '/' + periods.next.year.toString();
                 if (periods.next.month < 10)

@@ -603,6 +603,8 @@ class TransactionEditForm extends Component {
                 if(periods.current.status==='Open')
                     all_periods.push(period);
 
+                this.setState({TransactionPeriod: period});
+
                 period = periods.next.month.toString() + '/' + periods.next.year.toString();
                 if (periods.next.month < 10)
                     period = '0' + period;
