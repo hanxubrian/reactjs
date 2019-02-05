@@ -305,6 +305,7 @@ class franchiseesService {
      */
     getTransactionDetail = (transactionId, regionId) => {
         return new Promise((resolve, reject) => {
+            console.log('parmas = ', transactionId, regionId);
             axios_instance.get(`${BASE_MONGO_API_URL}/v1/franchiseetransaction/${transactionId}`,{
                 params: {regionId: regionId}})
                 .then( res => {

@@ -84,6 +84,7 @@ export function closeNewTransactionForm()
 
 export function openEditTransactionForm(regionId, data)
 {
+    console.log('ssss=', data, regionId)
     return (dispatch) => {
         dispatch({
             type: START_FETCH_TRANSACTIONS,

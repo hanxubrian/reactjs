@@ -50,7 +50,6 @@ import {
     escapeRegexCharacters,
     NumberFormatCustom1,
     NumberFormatCustom2,
-    NumberFormatCustomDeduction
 } from "../../../../services/utils";
 
 
@@ -236,7 +235,7 @@ const newTransactionState = {
     "MasterTrxTypeListId": "",
     "RegionId": "",
     "RegionName": "",
-    "TransactionPeriod": '01/2019',
+    "TransactionPeriod": moment().format('MM/YYYY'),
     "TransactionDate": moment(),
     "Date": new Date(),
     "franchiseeNo": "",
@@ -350,7 +349,7 @@ class TransactionEditForm extends Component {
         selectedFranchisee: null,
         labelWidth: 0,
         selectedWork: "",
-        TransactionNo: "",
+        TransactionNo: "PENDING",
         snackMessage: "",
         openSnack: false,
         period: moment(),
@@ -370,7 +369,8 @@ class TransactionEditForm extends Component {
         startDate: moment(),
         TrxChargeType: 'D',
         deductionReason: '',
-        trxClassAmount: 0.00
+        trxClassAmount: 0.00,
+        periods: null
     };
 
     renderInputComponent = (inputProps ) => {
@@ -510,7 +510,7 @@ class TransactionEditForm extends Component {
 
         if(this.props.transactionForm.type === 'edit' && this.props.transactionDetail!==null) {
             let trxDetail = this.props.transactionDetail.Data;
-            if(this.props.franchisees!==null) {
+            if(this.props.franchisees!==null && trxDetail!==null) {
                 let franchisees = this.props.franchisees.Data.Region[0].Franchisees;
 
                 let franchisee = _.filter(franchisees, franchisee=>trxDetail.dlr_code===franchisee.Number || trxDetail.FranchiseeName===franchisee.Name);
@@ -568,6 +568,35 @@ class TransactionEditForm extends Component {
 
         if(this.input) {
             setTimeout(() => {this.input.focus()}, 500);
+        }
+        if(this.props.all_regions!==null && this.props.all_regions.length){
+            let all_regions = this.props.all_regions;
+            let region = all_regions.filter(r=>r.regionid===this.props.regionId);
+
+            if(region.length){
+                let periods = region[0].OpenPeriods;
+
+                let all_periods = [];
+
+                let period = periods.current.month.toString() + '/' + periods.current.year.toString();
+                if (periods.current.month < 10)
+                    period = '0' + period;
+                if(periods.current.status==='Open')
+                    all_periods.push(period);
+
+                period = periods.next.month.toString() + '/' + periods.next.year.toString();
+                if (periods.next.month < 10)
+                    period = '0' + period;
+                if(periods.next.status==='Open')
+                    all_periods.push(period);
+                period = periods.previous.month.toString() + '/' + periods.previous.year.toString();
+                if (periods.previous.month < 10)
+                    period = '0' + period;
+                if(periods.previous.status==='Open')
+                    all_periods.push(period);
+
+                this.setState({periods: all_periods});
+            }
         }
     }
 
@@ -783,6 +812,8 @@ class TransactionEditForm extends Component {
             }),
         };
 
+        console.log('periods======', this.state.periods);
+
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="h-full flex flex-col relative">
@@ -817,27 +848,31 @@ class TransactionEditForm extends Component {
                             <Grid container className={classNames(classes.formControl)}>
                                 <Grid item xs={12} sm={4} md={4} className="flex flex-row xs:flex-col xs:mb-24 pr-8" style={{padding: '0 6px!important'}}>
                                     <FormControl variant="outlined" className={classNames(classes.formControl1, "ml-4 w-full")}>
-                                        <Select
-                                            classes={{
-                                                selectMenu: classNames(classes.inputMenu2),
-                                            }}
-                                            name="TransactionPeriod"
-                                            value={this.state.TransactionPeriod}
-                                            onChange={this.handleChange}
-                                            input={
-                                                <OutlinedInput
-                                                    labelWidth={this.state.labelWidth}
-                                                    name="TransactionPeriod"
-                                                    id="TransactionPeriod"
-                                                />
-                                            }
-                                            MenuProps = {{
-                                                classes:{paper: classes.dropdownMenu},
-                                            }}
-                                        >
-                                            <MenuItem value="01/2019">01/2019</MenuItem>
-                                            <MenuItem value="02/2019">02/2019</MenuItem>
-                                        </Select>
+                                        {this.state.periods!==null && (
+                                            <Select
+                                                classes={{
+                                                    selectMenu: classNames(classes.inputMenu2),
+                                                }}
+                                                name="TransactionPeriod"
+                                                value={this.state.TransactionPeriod}
+                                                onChange={this.handleChange}
+                                                input={
+                                                    <OutlinedInput
+                                                        labelWidth={this.state.labelWidth}
+                                                        name="TransactionPeriod"
+                                                        id="TransactionPeriod"
+                                                    />
+                                                }
+                                                MenuProps = {{
+                                                    classes:{paper: classes.dropdownMenu},
+                                                }}
+                                            >
+                                                {this.state.periods.map((p, index)=>{
+                                                    return (<MenuItem key={index} value={p}>{p}</MenuItem>)
+                                                })}
+                                            </Select>
+                                        )}
+
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12} sm={4} md={4} className="flex flex-row xs:flex-col xs:mb-24 pr-8" style={{padding: '0 6px!important'}}>
@@ -1349,6 +1384,7 @@ function mapStateToProps({transactions, auth, franchisees})
         transactionDetail: transactions.transactionDetail,
         transactionTypeList: transactions.transactionTypeList,
         franchisees: franchisees.franchiseesDB,
+        all_regions: auth.login.all_regions,
     }
 }
 
