@@ -129,8 +129,8 @@ const styles = theme => ({
     },
     overlay: {
         position: 'absolute',
-        top: 0,
-        left: 0,
+        top: -110,
+        left: -65,
         width: '100vw',
         height: '100vh',
         backgroundColor: 'rgba(0,0,0, .6)',
@@ -252,7 +252,7 @@ class AdminImport extends Component {
     }
     render()
     {
-        const {classes}     = this.props;
+        const {classes ,adminimportstatus}     = this.props;
         const {regionId}    = this.state;
         return (
             <FusePageCustom
@@ -278,7 +278,7 @@ class AdminImport extends Component {
                                 <Button variant="contained" color="primary"
                                         className={classNames(classes.button, classes.btntop) } onClick={this.importaction}>
                                     Import
-                                    <Icon className={classes.rightIcon}>attach_money</Icon>
+                                    <Icon className={classes.rightIcon}>import_export</Icon>
                                 </Button>
                             </div>
                         </div>
@@ -295,6 +295,15 @@ class AdminImport extends Component {
                 content={
 
                     <div className="flex-1 flex-col absolute w-full h-full">
+                        {adminimportstatus && (//loading && loading !==null
+                            <div className={classes.overlay} style={{
+
+                            }}>
+                                <CircularProgress className={classes.progress} color="secondary"  />
+
+                            </div>
+                        )}
+
                         {this.state.temp && (
                             <ReactTable
                                 data={this.state.temp}
@@ -451,8 +460,15 @@ class AdminImport extends Component {
                                                     if(row.original.Status===null){
                                                         return "Preliminary";
                                                     }
+                                                    else if(row.original.Status==="Success"){
+                                                        return (
+                                                            <div style={{color:'green'}}>{row.original.Status}</div>
+                                                        );
+                                                    }
                                                     else{
-                                                        return row.original.Status;
+                                                        return (
+                                                            <div style={{color:'red'}}>{row.original.Status}</div>
+                                                        );
                                                     }
                                                 }
 
