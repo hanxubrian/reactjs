@@ -432,7 +432,7 @@ class SystemNotificationContentList extends Component {
                 { name: 'InvoiceDescription', title: 'Description' },
                 { name: 'From', title: 'From' },
                 { name: 'cuscreatedate', title: 'Date' },
-                { name: 'detail', title: 'Detail' },
+                // { name: 'detail', title: 'Detail' },
 
             ],
             rows                                : [],
@@ -485,7 +485,8 @@ class SystemNotificationContentList extends Component {
                 {...restProps}
                 className={selected ? 'active' : ''}
                 style={{ color: 'green', cursor: 'pointer' }}
-                onClick={handleClick}
+                onClick={()=>this.viewdetail(tableRow.row._id)}
+                // onClick={handleClick}
                 onDoubleClick={handleDoubleClick}
             />
         );
@@ -550,7 +551,6 @@ class SystemNotificationContentList extends Component {
     );
     viewdetail=(e,param)=>{
         // console.log("props=",JSON.stringify(e));
-        debugger
         this.props.history.push('/notification/system/'+e);
     }
     getCell = (props) => {
@@ -589,7 +589,7 @@ class SystemNotificationContentList extends Component {
                         </div>
 
                         <div className={classNames("flex flex-col ", classes.layoutTable)}
-                            style={{height:"530px"}}
+                            style={{height:"700px"}}
                         >
                                 <Grid
                                 rows={rows}
@@ -616,8 +616,9 @@ class SystemNotificationContentList extends Component {
                                         /> */}
                                     <VirtualTable
                                         columnExtensions={tableColumnExtensions}
-                                        cellComponent={this.getCell}
-                                        height="auto"
+                                        // cellComponent={this.getCell}
+                                        rowComponent={this.TableRow}
+                                        height="530"
                                         headComponent = {TableHeadComponent}
                                     />
                                     {/*<Table*/}
