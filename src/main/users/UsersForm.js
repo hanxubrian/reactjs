@@ -70,10 +70,12 @@ const styles = theme => ({
     }
 });
 
-
+// Define suggestion Array()
 const suggestions = [];
 const franchiseeSuggestions = [];
 
+
+// Define render input component function
 function renderInputComponent(inputProps) {
     const { classes, inputRef = () => {}, ref, ...other } = inputProps;
 
@@ -100,6 +102,10 @@ function renderInputComponent(inputProps) {
     );
 }
 
+
+
+// renderSuggestion functions
+
 function renderSuggestion(suggestion, { query, isHighlighted }) {
     const matches = match(suggestion.customerName, query);
     const parts = parse(suggestion.customerName, matches);
@@ -123,6 +129,35 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
     );
 }
 
+function renderFranchiseeSuggestion(franchiseeSuggestions, { query, isHighlighted }) {
+    const matches = match(franchiseeSuggestions.franchiseeName, query);
+    const parts = parse(franchiseeSuggestions.franchiseeName, matches);
+
+    return (
+        <MenuItem selected={isHighlighted} component="div">
+            <div>
+                {parts.map((part, index) =>
+                        part.highlight ? (
+                            <span key={String(index)} style={{ fontWeight: 500 }}>
+              {part.text}
+            </span>
+                        ) : (
+                            <strong key={String(index)} style={{ fontWeight: 300 }}>
+                                {part.text}
+                            </strong>
+                        ),
+                )}
+            </div>
+        </MenuItem>
+    );
+}
+
+
+
+
+// getSuggestions
+
+
 function getSuggestions(value) {
     const inputValue = deburr(value.trim()).toLowerCase();
     const inputLength = inputValue.length;
@@ -142,9 +177,42 @@ function getSuggestions(value) {
         });
 }
 
+function getFranchiseeSuggestions(value) {
+    const inputValue = deburr(value.trim()).toLowerCase();
+    const inputLength = inputValue.length;
+    let count = 0;
+
+    return inputLength === 0
+        ? []
+        : suggestions.filter(suggestion => {
+            const keep =
+                count < 5 && suggestion.franchiseeName.slice(0, inputLength).toLowerCase() === inputValue;
+
+            if (keep) {
+                count += 1;
+            }
+
+            return keep;
+        });
+}
+
+
+
+
+
+
+// getSuggestionValue
+
 function getSuggestionValue(suggestion) {
     return suggestion.customerName;
 }
+
+function getFranchiseeSuggestionValue(franchiseeSuggestion) {
+    return franchiseeSuggestion.franchiseeName;
+}
+
+
+
 
 
 const GroupList = [];
