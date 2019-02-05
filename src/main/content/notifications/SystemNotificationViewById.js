@@ -333,6 +333,7 @@ class SystemNotificationViewById extends Component {
     render(){
         const {Data,classes}                    = this.props;
         const {row,multiData,multiKey}          = this.state;
+        console.log(row)
         if(1){
             if(this.props.loadingstatus){
                 return(
@@ -402,27 +403,98 @@ class SystemNotificationViewById extends Component {
 													</div>
 												</div> */}
 
-                                                {
-                                                     row.map((item,index)=>(
-                                                            <div key={index+3} className="flex flex-row justify-between mb-4">
+                                               
+                                                            <div  className="flex flex-row justify-between mb-4">
                                                             <div className="flex" style={{ flex: 1 }}>
                                                                 {/* <Icon fontSize={"small"} className="mr-4">location_on</Icon> */}
-                                                                <Typography variant="subtitle1" color="inherit">{item.Key}</Typography>
+                                                                <Typography variant="subtitle1" color="inherit">Id</Typography>
                                                             </div>
                                                             <div className="flex" style={{ flex: 1 }}>
                                                                 {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
-                                                                <Typography variant="subtitle1" color="inherit">{item.Value}</Typography>
+                                                                <Typography variant="subtitle1" color="inherit">{row[0].Value}</Typography>
                                                             </div>
-                                                        </div>))
-                                                        //     <div key={index+3}>
-                                                        //         <CustomTableCell align="right">{item.Key}</CustomTableCell>
-                                                        //         <CustomTableCell align="right">{item.Value}</CustomTableCell>
-                                                        //     </div>
-                                                        // ))
-                                                    }
+                                                            </div>
 
-												{/* <Divider variant="fullWidth" style={{ marginTop: 5, marginBottom: 5 }} />
+                                                            <div  className="flex flex-row justify-between mb-4">
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">location_on</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">Bill Run Number</Typography>
+                                                            </div>
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">{row[1].Value}</Typography>
+                                                            </div>
+                                                            </div>
 
+                                                            <div  className="flex flex-row justify-between mb-4">
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">location_on</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">Message</Typography>
+                                                            </div>
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">{row[3].Value}</Typography>
+                                                            </div>
+                                                            </div>
+
+                                                            <div  className="flex flex-row justify-between mb-4">
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">location_on</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">Invoice Description</Typography>
+                                                            </div>
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">{row[4].Value}</Typography>
+                                                            </div>
+                                                            </div>
+                                                            
+                                                            <Divider variant="fullWidth" style={{ marginTop: 5, marginBottom: 5 }} />
+
+                                                            <div  className="flex flex-row justify-between mb-4">
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">location_on</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">Month</Typography>
+                                                            </div>
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">{row[6].Value}</Typography>
+                                                            </div>
+                                                            </div>
+
+                                                            <div  className="flex flex-row justify-between mb-4">
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">location_on</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">Year</Typography>
+                                                            </div>
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">{row[5].Value}</Typography>
+                                                            </div>
+                                                            </div>
+
+                                                            <div  className="flex flex-row justify-between mb-4">
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">location_on</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">Billing</Typography>
+                                                            </div>
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">{row[12].Value}</Typography>
+                                                            </div>
+                                                            </div>
+
+                                                            <div  className="flex flex-row justify-between mb-4">
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">location_on</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">Status</Typography>
+                                                            </div>
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">{row[13].Value}</Typography>
+                                                            </div>
+                                                            </div>
+
+                                                {/*
 												<div className="flex flex-row justify-start mb-4">
 													<div className="flex flex-row items-center">
 														<Icon fontSize={"small"} className="mr-4">email</Icon>

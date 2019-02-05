@@ -550,6 +550,7 @@ class SystemNotificationContentList extends Component {
     );
     viewdetail=(e,param)=>{
         // console.log("props=",JSON.stringify(e));
+        debugger
         this.props.history.push('/notification/system/'+e);
     }
     getCell = (props) => {
@@ -610,9 +611,9 @@ class SystemNotificationContentList extends Component {
                                         defaultSorting={[{ columnName: 'process', direction: 'asc' }]}
                                     />
                                     <IntegratedSorting />
-                                        <RowDetailState
+                                        {/* <RowDetailState
                                             defaultExpandedRowIds={[expandedId]}
-                                        />
+                                        /> */}
                                     <VirtualTable
                                         columnExtensions={tableColumnExtensions}
                                         cellComponent={this.getCell}
@@ -624,9 +625,9 @@ class SystemNotificationContentList extends Component {
                                     {/*/>*/}
                                     <TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
                                     <TableHeaderRow showSortingControls />
-                                    <TableRowDetail
+                                    {/* <TableRowDetail
                                         contentComponent={RowDetail}
-                                    />
+                                    /> */}
 
                             </Grid>
                         </div>

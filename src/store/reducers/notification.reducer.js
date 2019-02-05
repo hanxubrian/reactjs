@@ -16,6 +16,7 @@ const initialState = {
     adminversiontriggerstatus   : false,
     pusherMSGById               : null,
     loadingById                 : false,
+    open                        : null
 }
 
 const notification = function (state = initialState, action) {
@@ -25,6 +26,13 @@ const notification = function (state = initialState, action) {
             return {
                 ...state,status:true,
             }
+        }
+        case Actions.CLOSE_NOTIFICATION_DETAIL:
+        {
+            return {
+                ...state,
+                open: false
+            };
         }
         case Actions.GET_ALL_SYSTEM_NOTIFICATION_SUCCESS:
         {
@@ -62,13 +70,13 @@ const notification = function (state = initialState, action) {
         case Actions.GET_SYSTEM_NOTIFICATION_BY_ID_START:
         {
             return{
-                ...state,loadingById:true,pusherMSGById:null,
+                ...state,loadingById:true,pusherMSGById:null,open:true
             }
         }
         case Actions.GET_SYSTEM_NOTIFICATION_BY_ID_SUCCESS:
         {
             return{
-                ...state,pusherMSGById:action.payload,loadingById:false,
+                ...state,pusherMSGById:action.payload,loadingById:false,open:true
             }
         }
         case Actions.GET_SYSTEM_NOTIFICATION_BY_ID_FAILD:

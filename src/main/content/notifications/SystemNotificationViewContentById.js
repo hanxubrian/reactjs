@@ -261,7 +261,10 @@ class SystemNotificationViewContentById extends Component {
 
 
 
-
+    closeNotification = () => {
+        this.props.closeNotificationDetail()
+        this.props.history.push('/notification/system/')
+    };
 
 
 
@@ -308,6 +311,17 @@ class SystemNotificationViewContentById extends Component {
                                         {/*</Button>*/}
                                     </div>
                                 </div>
+                                <div className="flex row flex-1  p-8 sm:p-12 relative justify-end">
+									<div className="flex flex-row flex-1 justify-end">
+										<div className="flex">
+											<Tooltip title="Close">
+												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeNotification()}>
+													<Icon>close</Icon>
+												</IconButton>
+											</Tooltip>
+										</div>
+									</div>
+								</div>
 
                             </div>
                         </div>
@@ -337,6 +351,7 @@ class SystemNotificationViewContentById extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getallsystemnotification    : Actions.getallsystemnotification,
+        closeNotificationDetail: Actions.closeNotificationDetail,
     }, dispatch);
 }
 
@@ -345,6 +360,7 @@ function mapStateToProps({notification, auth}) {
         sysnotification     : notification.systnotification,
         sysstatus           : notification.status,
         loadingstatus       : notification.loadingById,
+        open : notification.open
     }
 }
 

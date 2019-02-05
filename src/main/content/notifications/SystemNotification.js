@@ -25,7 +25,7 @@ import "react-table/react-table.css";
 import classNames from 'classnames';
 import SystemNotificationContentList from "./SystemNotificationContentList";
 import SystemNotificationViewById from "./SystemNotificationViewById";
-
+import SystemNotificationViewContentById from "./SystemNotificationViewContentById";
 
 const headerHeight = 80;
 
@@ -283,7 +283,11 @@ class SystemNotification extends Component {
     //     });
     // }
 
+    closeNotification = () => {
+				this.props.closeNotificationDetail()
 
+    };
+    
     render() {
 
         const {classes, filterState, summaryState} = this.props;
@@ -301,6 +305,7 @@ class SystemNotification extends Component {
                     }}
                     header={
                         <div className="flex w-full items-center">
+                        {(!this.props.open) && (
                             <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
                                 <div className="flex flex-row flex-1 justify-between">
                                     <div className="flex flex-shrink items-center">
@@ -325,13 +330,16 @@ class SystemNotification extends Component {
                                 </div>
 
                             </div>
-                        </div>
-                    }
+                            )}
+                            {(this.props.open) && (
+								<SystemNotificationViewContentById/>
+							)}
+						</div>
+					}
                     content={
                         <div className="flex-1 flex-col absolute w-full h-full">
                             <div className="testclass">
                                 <SystemNotificationContentList/>
-
                             </div>
 
 
@@ -352,6 +360,7 @@ class SystemNotification extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         // getallsystemnotification    : Actions.getallsystemnotification,
+        closeNotificationDetail: Actions.closeNotificationDetail,
     }, dispatch);
 }
 
@@ -359,6 +368,7 @@ function mapStateToProps({notification, auth}) {
     return {
         // sysnotification     : notification.systnotification,
         // sysstatus           : notification.status,
+        open : notification.open
     }
 }
 
