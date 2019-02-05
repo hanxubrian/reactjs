@@ -639,6 +639,7 @@ class InvoiceForm extends Component {
                 ExtendedPrice: line.extended,
                 Total: line.total,
                 MarkUpTotal: line.markup,
+                MarkUpTax: line.markup,
                 Commission: line.billing.value===1 ? line.commission : 0.00,
                 CommissionTotal: line.commissionAmount,
                 ExtraWork: 1,
