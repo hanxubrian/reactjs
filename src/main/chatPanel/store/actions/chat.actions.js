@@ -236,12 +236,12 @@ export function addMessage(roomId, message)
         let isthis;
         if (currentRoom && currentRoom.id == roomId){
             isthis = true;
-            if (!loading && !chatpanelstatus){
+            if (!loading && !chatpanelstatus && message.message && message.message !== null ){
                 dispatch(addUnread(message.who));
             }
         }
         else{
-            if (!loading)
+            if (!loading && message.message && message.message !== null)
                 dispatch(addUnread(message.who));
         }
         let messages = getState().chatPanel.chat.messages;

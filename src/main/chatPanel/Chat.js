@@ -134,9 +134,23 @@ class Chat extends Component {
     state = {
         messageText: ''
     };
-
+    constructor(props) {
+        super(props);
+        this.textInput = React.createRef();
+        this.focusTextInput = this.focusTextInput.bind(this);
+    }
+    focusTextInput() {
+        // Explicitly focus the text input using the raw DOM API
+        // Note: we're accessing "current" to get the DOM node
+        this.textInput.current.focus();
+    }
     componentDidUpdate(prevProps)
     {
+        if(this.props.chatstatus !== prevProps.chatstatus && this.props.chatstatus){
+            // this.focus();
+
+        }
+
         if ( this.props.chat && !_.isEqual(prevProps.chat, this.props.chat) )
         {
             this.scrollToBottom();
@@ -180,7 +194,14 @@ class Chat extends Component {
     scrollToBottom = () => {
         this.chatScroll.scrollTop = this.chatScroll.scrollHeight;
     };
+    focus(){
+        this.nameInput.focus();
+    }
 
+    componentDidMount(){
+        // this.nameInput.focus();
+
+    }
     render()
     {
         const {classes, chat, contacts, user, className,selectedContactId} = this.props;
@@ -262,7 +283,6 @@ class Chat extends Component {
                             {/*</label>*/}
                             <TextField
                                 autoFocus={false}
-                                ref={(input) => { this.nameInput = input; }}
                                 id="message-input"
                                 className="flex-1"
                                 InputProps={{
@@ -306,7 +326,8 @@ function mapStateToProps({chatPanel})
         contacts         : chatPanel.contacts.entities,
         selectedContactId: chatPanel.contacts.selectedContactId,
         chat             : chatPanel.chat,
-        user             : chatPanel.user
+        user             : chatPanel.user,
+        chatstatus       : chatPanel.state,
     }
 }
 

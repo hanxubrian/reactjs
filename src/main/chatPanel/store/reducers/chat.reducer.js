@@ -10,6 +10,7 @@ const initialState = {
     messages:[],
     rooms:[],
     dialog:[],
+    ChatpanelStatu: false,
 };
 
 const chat = function (state = initialState, action) {
@@ -94,6 +95,18 @@ const chat = function (state = initialState, action) {
 
             };
         }
+        // case Actions.OPEN_CHAT_PANEL:
+        // {
+        //     return {
+        //         ChatpanelStatu:true,
+        //     }
+        // }
+        // case Actions.CLOSE_CHAT_PANEL:
+        // {
+        //     return {
+        //         ChatpanelStatu:false,
+        //     }
+        // }
         default:
         {
             return state;

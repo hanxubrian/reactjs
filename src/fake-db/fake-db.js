@@ -26,6 +26,6 @@ import './transaction-db';
 import './leads-db';
 import './notification-db';
 import './franchiseereport-db';
-
+import './admin-import-db';
 
 mock.onAny().passThrough();
