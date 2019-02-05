@@ -492,14 +492,17 @@ class InvoiceLineTable extends React.Component {
 
             if(items!==null && items.length>0){
                 let newData = items.map((item, index)=>{
+                    console.log('line=', item);
                     let billing = billingSuggestions.filter(b=>b.value===parseInt(item.Billing));
+                    console.log('billing=', billing);
                     this.setState({[`selectedBillingOption${index}`]: billing[0]});
 
                     let service = serviceSuggestions.filter(s=>s.value===item.Service);
                     if(service.length)
                         this.setState({[`selectedServiceOption${index}`]: service[0]});
 
-                    let line = createData(billing[3], service.length ? service[0] : '', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 0, item.ExtendedPrice, item.Total, item.MarkUpTotal, item.Commission);
+                    let line = createData(billing, service.length ? service[0] : '', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 0, item.ExtendedPrice, item.Total, item.MarkUpTotal, item.Commission, item.CommissionTotal);
+                            // createData(  description='', quantity=1, amount='', tax=0, markup='', extended=0, total=0, markupAmount=0, markupTax=0, commission=0, commissionAmount=0.0)
 
                     let distributions = [];
                     if(item.Distribution!==null && item.Distribution.length>0){
@@ -965,6 +968,7 @@ class InvoiceLineTable extends React.Component {
         if(this.props.invoiceForm.customer!==null && this.props.invoiceForm.customer.TaxExempt!=='N')
             bReadonly = true;
 
+        console.log('all_data = ', all_data)
         return (
             <Paper className={classNames(classes.root)}>
                 <div className={classNames(classes.tableWrapper, "flex flex-col h-full")}>
