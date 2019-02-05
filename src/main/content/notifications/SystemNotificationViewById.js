@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 // core components
-import { Icon, IconButton,CircularProgress, TableBody ,TableCell ,TableHead ,TableRow ,Card,AppBar,Divider,Input,Typography,CardContent, Paper, Button, Zoom } from '@material-ui/core';
+import { Icon, IconButton,CircularProgress, CardHeader, TableBody ,TableCell ,TableHead ,TableRow ,Card,AppBar,Divider,Input,Typography,CardContent, Paper, Button, Zoom } from '@material-ui/core';
 
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
@@ -65,6 +65,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 
+import GridContainer from "Commons/Grid/GridContainer";
+import GridItem from "Commons/Grid/GridItem";
 
 
 const CustomTableCell = withStyles(theme => ({
@@ -139,9 +141,34 @@ const styles = theme => ({
             justifyContent: 'flex-end'
         },
     },
+    card: {
+		width: '100%',
+	},
+	formControl: {
+		marginBottom: 12,
+        width: '100%',
+        borderCollapse: 'collapse',
+        // border: 'solid 1px',color:'black',
+	},
     content: {
         position: 'relative'
     },
+    cardHeader: {
+		backgroundColor: theme.palette.secondary.main,
+		padding: '8px 24px',
+		'& span': {
+			color: 'white',
+			fontSize: 16,
+		}
+	},
+	cardContent: {
+		paddingTop: 12,
+		paddingBottom: '12px!important',
+		'& h6': {
+			lineHeight: 1.5,
+			fontSize: 14
+		}
+	},
     search: {
         width: '100%',
         [theme.breakpoints.down('sm')]: {
@@ -321,7 +348,7 @@ class SystemNotificationViewById extends Component {
                 console.log("##multiData",this.state.multiData[1]);
 
                 return(
-                    <div style={{marginTop:"20px"}}>
+                    <div style={{marginTop:""}}>
                         <div className="flex flex-col flex-1 md:pr-32 md:pl-32">
                             <FuseAnimateGroup
                                 enter={{
@@ -329,17 +356,94 @@ class SystemNotificationViewById extends Component {
                                 }}
 
                             >
-                                <Card className="w-full mb-16">
-                                    <AppBar position="static" elevation={0}>
+                                {/* <Card className="w-full mb-16"> */}
+                                    {/* <AppBar position="static" elevation={0}> */}
 
-                                        <div style={{height:"50px",alignItems:"center"}}>
+                                        <div style={{height:"30px",alignItems:"center"}}>
                                             {/*<Typography>TEST</Typography>*/}
                                         </div>
 
-                                    </AppBar>
-                                    <CardContent>
+                                    {/* </AppBar> */}
+                                    {/* <CardContent> */}
 
-                                        <div>
+                                    <div className="pl-32">
+								<GridContainer style={{ alignItems: 'center'}} className={classNames(classes.formControl, "mb-0")}>
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col">
+										<Card className={classes.card}>
+											<CardHeader title="Notification Detail" className={classNames(classes.cardHeader, "flex-1")} />
+											<CardContent className={classNames(classes.cardContent)}>
+												<div className="flex flex-row mb-4">
+													<div className="flex" style={{ flex: 1 }}>
+														{/* <Icon fontSize={"small"} className="mr-4">person_outline</Icon> */}
+														<Typography variant="subtitle1" color="inherit">Process</Typography>
+													</div>
+													<div className="flex" style={{ flex: 1 }}>
+														{/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
+														<Typography variant="subtitle1" color="inherit">{Data.Process}</Typography>
+													</div>
+												</div>
+
+												<div className="flex flex-row justify-between mb-4">
+													<div className="flex" style={{ flex: 1 }}>
+														{/* <Icon fontSize={"small"} className="mr-4">location_on</Icon> */}
+														<Typography variant="subtitle1" color="inherit">Description</Typography>
+													</div>
+													<div className="flex" style={{ flex: 1 }}>
+														{/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
+														<Typography variant="subtitle1" color="inherit">{Data.Description}</Typography>
+													</div>
+												</div>
+
+												{/* <div className="flex flex-row justify-between mb-4">
+													<div className="flex">
+														<Icon fontSize={"small"} className="mr-4"></Icon>
+														<Typography variant="subtitle1" color="inherit">
+														</Typography>
+													</div>
+												</div> */}
+
+                                                {
+                                                     row.map((item,index)=>(
+                                                            <div key={index+3} className="flex flex-row justify-between mb-4">
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">location_on</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">{item.Key}</Typography>
+                                                            </div>
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">{item.Value}</Typography>
+                                                            </div>
+                                                        </div>))
+                                                        //     <div key={index+3}>
+                                                        //         <CustomTableCell align="right">{item.Key}</CustomTableCell>
+                                                        //         <CustomTableCell align="right">{item.Value}</CustomTableCell>
+                                                        //     </div>
+                                                        // ))
+                                                    }
+
+												{/* <Divider variant="fullWidth" style={{ marginTop: 5, marginBottom: 5 }} />
+
+												<div className="flex flex-row justify-start mb-4">
+													<div className="flex flex-row items-center">
+														<Icon fontSize={"small"} className="mr-4">email</Icon>
+														<Typography variant="subtitle1" color="inherit">{this.state.customerEmail}</Typography>
+													</div>
+												</div>
+
+												<div className="flex flex-row justify-start mb-4">
+													<div className="flex flex-row items-center">
+														<Icon fontSize={"small"} className="mr-4">language</Icon>
+														<Typography variant="subtitle1" color="inherit">{this.state.customerWebsite}</Typography>
+													</div>
+												</div> */}
+
+											</CardContent>
+										</Card>
+									</GridItem>
+                                    </GridContainer>
+                                </div>
+
+                                        {/* <div>
                                             <table className={classes.tableView}>
                                                 <TableHead className={classes.tableheader}>
                                                     <TableRow>
@@ -371,13 +475,13 @@ class SystemNotificationViewById extends Component {
 
                                                 </TableBody>
                                             </table>
-                                        </div>
+                                        </div> */}
 
 
 
 
 
-                                    </CardContent>
+                                    {/* </CardContent> */}
 
                                         <div style={{    marginLeft: "30px",
                                             fontSize: "24px",}}>{multiData[0] && multiData[0] !== null && multiData[0].Key &&
@@ -465,7 +569,7 @@ class SystemNotificationViewById extends Component {
                                         </table>
 
                                     </CardContent>
-                                </Card>
+                                {/* </Card> */}
                             </FuseAnimateGroup>
                         </div>
                     </div>
