@@ -264,10 +264,10 @@ export function updateInvoiceLine(data) {
  * @param TaxTypeId
  * @returns {Function}
  */
-export function getCustomerTaxAmount(row_index, RegionId,CustomerId, Amount, Quantity, Markup=0.0, TaxTypeId=1 ) {
+export function getCustomerTaxAmount(row_index, RegionId,CustomerId, Amount, Quantity, Markup=0.0, Commission= 0.0, TaxTypeId=1 ) {
     return (dispatch) => {
         (async () => {
-            let res = await invoiceService.getCustomerTaxAmount(RegionId,CustomerId, Amount, Quantity, Markup, TaxTypeId);
+            let res = await invoiceService.getCustomerTaxAmount(RegionId,CustomerId, Amount, Quantity, Markup, Commission, TaxTypeId);
             if (res.IsSuccess) {
                 dispatch({
                     type: GET_CUSTOMER_TAX_AMOUNT,

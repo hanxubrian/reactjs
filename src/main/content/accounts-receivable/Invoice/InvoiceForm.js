@@ -3,12 +3,14 @@ import {Link, withRouter} from 'react-router-dom';
 
 // core components
 import {
-    Paper, TextField, Typography, MenuItem, Card, CardHeader, CardContent, Divider, Button, Snackbar, SnackbarContent,
-    IconButton, Icon, Grid, FormControlLabel, Checkbox, DialogTitle, DialogContent, DialogContentText, DialogActions, Dialog,Fab
+    Paper, TextField, Typography, MenuItem,  Card,  CardHeader,  CardContent,  Divider, Button,  Snackbar, SnackbarContent,
+    IconButton, Icon, Grid, FormControlLabel, Checkbox, DialogTitle, DialogContent, DialogContentText, DialogActions,
+    Dialog, Fab, Select, OutlinedInput, FormControl
 } from '@material-ui/core';
+
 import 'date-fns'
 import MomentUtils from '@date-io/moment';
-import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+import { MuiPickersUtilsProvider, } from 'material-ui-pickers';
 import green from '@material-ui/core/colors/green';
 import amber from '@material-ui/core/colors/amber';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -131,6 +133,17 @@ const styles = theme => ({
             fontSize: 12,
             height: 12,
         }
+    },
+    inputMenu: {
+        padding: '10px 16px'
+    },
+    inputMenu1: {
+        padding: '10px 16px',
+        width: 125
+    },
+    inputMenu2: {
+        padding: '10px 16px',
+        maxWidth: '100%'
     },
     picker: {
         padding: '0 6px'
@@ -302,13 +315,14 @@ class InvoiceForm extends Component {
         subTotal: 0.0,
         tax: 0,
         markup: 0.0,
+        commissionAmount: 0.0,
         InvoiceNo: this.props.invoiceForm.type === 'new' ? "PENDING": '',
         snackMessage: "",
         openSnack: false,
         snackMessage1: "",
         openSnack1: false,
         PO_number: '',
-        period: moment(),
+        period: moment().format('MM/YYYY'),
         taxExempt: false,
         bAlertNewInvoice: false,
         bCustomerNotFound: false,
@@ -318,7 +332,8 @@ class InvoiceForm extends Component {
         bShowInvoiceCloseBox: false,
         bSelectCustomerAgain: false,
         bLoadingDetail: false,
-        customerStatusLabel: ''
+        customerStatusLabel: '',
+        periods: null,
     };
 
     constructor(props) {
@@ -449,6 +464,7 @@ class InvoiceForm extends Component {
         let subTotal = 0.0;
         let markup = 0.0;
         let tax = 0.0;
+        let commissionTotal = 0.0;
 
         if(this.props.invoiceForm.data===null) return;
 
@@ -458,6 +474,7 @@ class InvoiceForm extends Component {
             subTotal += parseFloat(n.extended);
             tax += parseFloat(n.tax);
             markup += parseFloat(n.markupAmount)
+            commissionTotal += parseFloat(n.commissionAmount)
         });
 
         if(this.state.selectedCustomer.TaxExempt!=='N') tax = 0;
@@ -465,7 +482,8 @@ class InvoiceForm extends Component {
         this.setState({subTotal: subTotal});
         this.setState({markup: markup});
         this.setState({tax: tax});
-        this.setState({total: subTotal+tax+markup});
+        this.setState({commissionAmount: commissionTotal});
+        this.setState({total: subTotal+tax});
     };
 
     componentDidUpdate(prevProps, prevState, snapshot){
@@ -499,10 +517,16 @@ class InvoiceForm extends Component {
                 this.setState({InvoiceDate: invoiceDate.format('YYYY-MM-DD')});
                 this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
                 this.setState({ bShowInvoiceCloseBox: false });
-                setTimeout(() => {this.setState({bLoadingDetail: true})}, 3000);
 
-                // this.setState({InvoiceDate: moment(nextProps.invoices.invoiceDetail.Data.InvoiceDate).format('YYYY-MM-DD')});
-                // this.setState({DueDate: moment(nextProps.invoices.invoiceDetail.Data.DueDate).format('YYYY-MM-DD')});
+                let trxDetail = nextProps.invoices.invoiceDetail.Data;
+
+                if(trxDetail.PeriodMonth!==0 && trxDetail.PeriodYear!==0) {
+                    let period = trxDetail.PeriodMonth.toString() + '/' + trxDetail.PeriodYear.toString();
+                    if (trxDetail.PeriodMonth < 10)
+                        period = '0' + period;
+                    this.setState({period: period});
+                }
+                setTimeout(() => {this.setState({bLoadingDetail: true})}, 3000);
             }
         }
 
@@ -558,6 +582,36 @@ class InvoiceForm extends Component {
         this.setState({InvoiceDate: invoiceDate.format('YYYY-MM-DD')});
         this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
         this.setState({ bShowInvoiceCloseBox: false });
+
+        if(this.props.all_regions!==null && this.props.all_regions.length){
+            let all_regions = this.props.all_regions;
+            let region = all_regions.filter(r=>r.regionid===this.props.regionId);
+
+            if(region.length){
+                let periods = region[0].OpenPeriods;
+
+                let all_periods = [];
+
+                let period = periods.current.month.toString() + '/' + periods.current.year.toString();
+                if (periods.current.month < 10)
+                    period = '0' + period;
+                if(periods.current.status==='Open')
+                    all_periods.push(period);
+
+                period = periods.next.month.toString() + '/' + periods.next.year.toString();
+                if (periods.next.month < 10)
+                    period = '0' + period;
+                if(periods.next.status==='Open')
+                    all_periods.push(period);
+                period = periods.previous.month.toString() + '/' + periods.previous.year.toString();
+                if (periods.previous.month < 10)
+                    period = '0' + period;
+                if(periods.previous.status==='Open')
+                    all_periods.push(period);
+
+                this.setState({periods: all_periods});
+            }
+        }
 
     }
 
@@ -619,6 +673,7 @@ class InvoiceForm extends Component {
         let result;
 
         if(this.props.invoiceForm.type === 'new') {
+            let period = this.state.period.split('/');
             result = {
                 // Inv_No: inv_no,
                 Apply_to: 'Apply To',
@@ -626,8 +681,8 @@ class InvoiceForm extends Component {
                 CustomerNo: this.state.selectedCustomer.CustomerNo,
                 CustomerName: this.state.selectedCustomer.CustomerName,
                 PeriodId: this.props.invoices.PeriodId[0],
-                PeriodMonth: moment(this.state.period).month()+1,
-                PeriodYear: moment(this.state.period).year(),
+                PeriodMonth: parseInt(period[0]),
+                PeriodYear: parseInt(period[1]),
                 Description: this.state.InvoiceDescription,
                 Notes: this.state.notes,
                 RegionId: this.props.regionId,
@@ -653,14 +708,15 @@ class InvoiceForm extends Component {
             this.props.addInvoice(this.props.regionId, result);
         }
         else {
+            let period = this.state.period.split('/');
             result = {
                 ...this.props.invoices.invoiceDetail.Data,
                 CustomerId: this.state.selectedCustomer.CustomerId,
                 CustomerNo: this.state.selectedCustomer.CustomerNo,
                 CustomerName: this.state.selectedCustomer.CustomerName,
                 PeriodId: this.props.invoices.PeriodId[0],
-                PeriodMonth: moment(this.state.period).month()+1,
-                PeriodYear: moment(this.state.period).year(),
+                PeriodMonth: parseInt(period[0]),
+                PeriodYear: parseInt(period[1]),
                 Description: this.state.InvoiceDescription,
                 Notes: this.state.notes,
                 RegionId: this.props.regionId,
@@ -681,19 +737,6 @@ class InvoiceForm extends Component {
 
             this.props.updateInvoice(this.props.invoices.invoiceDetail.Data._id, this.props.regionId, result);
             console.log('result=', JSON.stringify(result));
-        }
-
-    };
-
-    addNewCustomer = () => {
-        this.setState({bCustomerNotFound: false})
-    };
-
-    isDisableButton = () => {
-        let data = this.props.invoiceForm.data.line;
-        if (data.length) {
-
-
         }
 
     };
@@ -805,11 +848,6 @@ class InvoiceForm extends Component {
         this.props.invoiceForm.type === 'edit' ? this.props.closeEditInvoiceForm() : this.props.closeNewInvoiceForm();
     };
 
-    handlePeriodChange = date => {
-        this.setState({ bShowInvoiceCloseBox: true });
-        this.setState({ period: date });
-    };
-
     storeInputReference = autosuggest => {
         if (autosuggest !== null) {
             this.input = autosuggest.input;
@@ -894,7 +932,6 @@ class InvoiceForm extends Component {
                 statusName = customerStatusObj[0].label;
             }
         }
-        // console.log('bLoadingDetail=', this.state.bLoadingDetail);
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
@@ -932,119 +969,74 @@ class InvoiceForm extends Component {
                                     </Fab>
                                 )}
                             </Grid>
-                            <MuiPickersUtilsProvider utils={MomentUtils}>
-                                <Grid item xs={12} sm={4} md={4} className="flex flex-row pl-16 pr-4">
-                                    <DatePicker
-                                        margin="none"
-                                        label="Period"
-                                        name="InvoicePeriod"
-                                        variant="outlined"
-                                        format="MM/YYYY"
-                                        className={classes.textField}
+                            <Grid item xs={12} sm={4} md={4} className="flex flex-row pl-16 pr-4">
+                                {this.state.periods!==null && (
+                                    <Select
+                                        classes={{
+                                            selectMenu: classNames(classes.inputMenu1),
+                                        }}
+                                        name="period"
                                         value={this.state.period}
-                                        onChange={this.handlePeriodChange}
-                                        fullWidth
-                                        required
-                                        InputProps={{
-                                            classes: {
-                                                input: classes.input,
-                                            },
-                                        }}
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                        openToYearSelection={true}
-                                    />
-                                    <TextField
-                                        margin="none"
-                                        label="Invoice Date"
-                                        name="InvoiceDate"
-                                        type="date"
-                                        variant="outlined"
-                                        value={this.state.InvoiceDate}
                                         onChange={this.handleChange}
-                                        fullWidth
-                                        required
+                                        input={
+                                            <OutlinedInput
+                                                labelWidth={this.state.labelWidth}
+                                                name="period"
+                                                id="period"
+                                            />
+                                        }
                                         className={classes.textField}
-                                        InputProps={{
-                                            classes: {
-                                                input: classes.input1,
-                                            },
+                                        MenuProps = {{
+                                            classes:{paper: classes.dropdownMenu},
                                         }}
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                    />
-                                    <TextField
-                                        margin="none"
-                                        label="Due Date"
-                                        name="DueDate"
-                                        type="date"
-                                        variant="outlined"
-                                        value={this.state.DueDate}
-                                        onChange={this.handleChange}
-                                        fullWidth
-                                        required
-                                        InputProps={{
-                                            classes: {
-                                                input: classes.input1,
-                                            },
-                                        }}
-                                        InputLabelProps = {{
-                                            shrink: true,
-                                            classes: {outlined: classes.label}
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={1} md={1} className="flex flex-row xs:flex-col xs:mb-24 pr-4 pl-4" style={{display: 'none', padding: '0 6px!important'}}>
-                                    {/*<DatePicker*/}
-                                    {/*margin="none"*/}
-                                    {/*label="Invoice Date"*/}
-                                    {/*name="InvoiceDate"*/}
-                                    {/*variant="outlined"*/}
-                                    {/*format="MM/DD/YYYY"*/}
-                                    {/*value={this.state.InvoiceDate}*/}
-                                    {/*onChange={this.handleInvoiceDateChange}*/}
-                                    {/*fullWidth*/}
-                                    {/*required*/}
-                                    {/*InputProps={{*/}
-                                    {/*classes: {*/}
-                                    {/*input: classes.input1,*/}
-                                    {/*},*/}
-                                    {/*}}*/}
-                                    {/*InputLabelProps = {{*/}
-                                    {/*shrink: true,*/}
-                                    {/*classes: {outlined: classes.label}*/}
-                                    {/*}}*/}
-                                    {/*/>*/}
-
-                                </Grid>
-                                <Grid item xs={12} sm={1} md={1} className="flex flex-row xs:flex-col pr-4 pl-4"
-                                      style={{padding: '0 6px!important', display: 'none'}}>
-                                    {/*<DatePicker*/}
-                                    {/*margin="none"*/}
-                                    {/*label="Due Date"*/}
-                                    {/*format="MM/DD/YYYY"*/}
-                                    {/*name="DueDate"*/}
-                                    {/*variant="outlined"*/}
-                                    {/*value={this.state.DueDate}*/}
-                                    {/*onChange={this.handleDueDateChange}*/}
-                                    {/*required*/}
-                                    {/*fullWidth*/}
-                                    {/*InputProps={{*/}
-                                    {/*classes: {*/}
-                                    {/*input: classes.input1,*/}
-                                    {/*},*/}
-                                    {/*}}*/}
-                                    {/*InputLabelProps = {{*/}
-                                    {/*shrink: true,*/}
-                                    {/*classes: {outlined: classes.label}*/}
-                                    {/*}}*/}
-                                    {/*/>*/}
-                                </Grid>
-                            </MuiPickersUtilsProvider>
+                                    >
+                                        {this.state.periods.map((p, index)=>{
+                                            return (<MenuItem key={index} value={p}>{p}</MenuItem>)
+                                        })}
+                                    </Select>
+                                )}
+                                <TextField
+                                    margin="none"
+                                    label="Invoice Date"
+                                    name="InvoiceDate"
+                                    type="date"
+                                    variant="outlined"
+                                    value={this.state.InvoiceDate}
+                                    onChange={this.handleChange}
+                                    fullWidth
+                                    required
+                                    className={classes.textField}
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input1,
+                                        },
+                                    }}
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                />
+                                <TextField
+                                    margin="none"
+                                    label="Due Date"
+                                    name="DueDate"
+                                    type="date"
+                                    variant="outlined"
+                                    value={this.state.DueDate}
+                                    onChange={this.handleChange}
+                                    fullWidth
+                                    required
+                                    InputProps={{
+                                        classes: {
+                                            input: classes.input1,
+                                        },
+                                    }}
+                                    InputLabelProps = {{
+                                        shrink: true,
+                                        classes: {outlined: classes.label}
+                                    }}
+                                />
+                            </Grid>
                             <Grid item xs={12} sm={2} md={2} className="flex flex-row xs:flex-col pl-4" >
                                 <TextField
                                     margin="none"
@@ -1248,7 +1240,8 @@ class InvoiceForm extends Component {
                                 </div>
                             </GridItem>
                             <GridItem xs={12} sm={3} md={3} className="flex flex-col xs:flex-col xs:mb-24">
-                                <div className="w-full p-12 flex justify-end pb-0">
+                                <div className="w-full p-12 flex justify-between pb-0">
+                                    <span className={classes.summary}><strong>Commission Total: </strong>${this.state.commissionAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                     <span className={classes.summary}><strong>Subtotal: </strong>${this.state.subTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
                                 <div className="w-full p-12 flex justify-end pb-0 pt-6 ">
@@ -1454,6 +1447,7 @@ function mapStateToProps({invoices, auth, franchisees})
         regionId: auth.login.defaultRegionId,
         bStartingSaveFormData: invoices.bStartingSaveFormData,
         franchisees: franchisees.franchiseesDB,
+        all_regions: auth.login.all_regions,
     }
 }
 

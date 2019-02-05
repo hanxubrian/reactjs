@@ -1433,8 +1433,27 @@ class FilterPanel extends Component {
 									<TextField
 										select
 
-										id="AccountTypes"
-										label="Account Types"
+										id="AccountTypeGroup"
+										label="Account Type Group"
+										className={classes.textField}
+										InputLabelProps={{
+											shrink: true
+										}}
+										value={this.state.AccountTypeGroup || 0}
+										onChange={this.handleChange('AccountTypeGroup')}
+										margin="dense"
+										variant="outlined"
+										fullWidth
+									>
+										{accountTypesGroups.map((x, index) => (
+											<MenuItem key={index} value={index}>{x}</MenuItem>
+										))}
+									</TextField>
+									<TextField
+										select
+
+										id="AccountType"
+										label="Account Type"
 										className={classes.textField}
 										InputLabelProps={{
 											shrink: true
@@ -1445,25 +1464,9 @@ class FilterPanel extends Component {
 										variant="outlined"
 										fullWidth
 									>
-
-
-										{/* <MenuItem value={-2}><em>All</em></MenuItem>
-										<MenuItem value={-1}><em>None</em></MenuItem>
-										{
-											accountTypes.map((x, index) => {
-												if (x !== null)
-													return (<MenuItem key={x} value={index}>{x}</MenuItem>)
-												else
-													return null
-											})
-										} */}
-										{
-											accountTypeTexts.map((x, index) => (
-												<MenuItem key={index} value={index}>{x}</MenuItem>
-											))
-										}
-
-
+										{accountTypeTexts.map((x, index) => (
+											<MenuItem key={index} value={index}>{x}</MenuItem>
+										))}
 									</TextField>
 
 									<TextField

@@ -184,7 +184,7 @@ class Chat extends Component {
     render()
     {
         const {classes, chat, contacts, user, className,selectedContactId} = this.props;
-        console.log("selectedContactId",selectedContactId);
+
         const {messageText} = this.state;
         return (
             <Paper elevation={3} className={classNames("flex flex-col", className)}>
@@ -262,6 +262,7 @@ class Chat extends Component {
                             {/*</label>*/}
                             <TextField
                                 autoFocus={false}
+                                ref={(input) => { this.nameInput = input; }}
                                 id="message-input"
                                 className="flex-1"
                                 InputProps={{

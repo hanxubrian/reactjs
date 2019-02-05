@@ -123,7 +123,7 @@ function createFranchisee(parent_id,id, fnumber="", name="", amount=0) {
     }
 }
 
-function createData(billing={label:'Regular Billing', value: 4}, service='Adjust-Balance', description='', quantity=1, amount='', tax=0, markup='', extended=0, total=0, markupAmount=0, markupTax=0, commission=0)
+function createData(billing={label:'Regular Billing', value: 4}, service='Adjust-Balance', description='', quantity=1, amount='', tax=0, markup='', extended=0, total=0, markupAmount=0, markupTax=0, commission=0, commissionAmount=0.0)
 {
     return {
         id: counter++,
@@ -139,6 +139,7 @@ function createData(billing={label:'Regular Billing', value: 4}, service='Adjust
         extended,
         total,
         commission,
+        commissionAmount,
         franchisees: [],
         type: 'line'
     };
@@ -538,7 +539,7 @@ class InvoiceLineTable extends React.Component {
             rows.forEach(row=>{
                 let markup = 0.0;
                 if(row.markup!=='' && row.billing.value===2) markup = row.markup;
-                this.props.getCustomerTaxAmount(row.id, this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity, markup);
+                this.props.getCustomerTaxAmount(row.id, this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity, markup, row.commission);
             });
         }
 
@@ -588,6 +589,7 @@ class InvoiceLineTable extends React.Component {
             data[taxRowId].extended = parseFloat(customerTaxAmountLine[taxRowId].ExtendedPrice);
             data[taxRowId].total = parseFloat(customerTaxAmountLine[taxRowId].TotalAmount);
             data[taxRowId].markupAmount = customerTaxAmountLine[taxRowId].MarkupAmount;
+            data[taxRowId].commissionAmount = customerTaxAmountLine[taxRowId].CommissionAmount;
             data[taxRowId].markupTax = customerTaxAmountLine[taxRowId].MarkupTax;
             if(data[taxRowId].franchisees.length){
                 let d_amount = customerTaxAmountLine[taxRowId].ExtendedPrice/data[taxRowId].franchisees.length;
@@ -780,7 +782,7 @@ class InvoiceLineTable extends React.Component {
             let markup = 0.0;
             if(row.markup!=='') markup = row.markup;
             if(row.markup!=='' && row.billing.value===2) markup = row.markup;
-            this.props.getCustomerTaxAmount(row.id, this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity, markup);
+            this.props.getCustomerTaxAmount(row.id, this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity, markup, row.commission);
             this.setState({taxRowId: row.id})
         }
     };
@@ -822,8 +824,9 @@ class InvoiceLineTable extends React.Component {
         if (name==='amount')  value = parseFloat(value);
         if (name==='quantity')  value = parseInt(value);
         if (name==='markup')  value = parseFloat(value);
-        if(name==='commission')data[row.id]['markup'] = 0.00;
-        if(name==='markup')data[row.id]['commission'] = 0.00;
+        if (name==='commission')  value = parseFloat(value);
+        if(name==='commission') data[row.id]['markup'] = 0.00;
+        if(name==='markup') data[row.id]['commission'] = 0.00;
 
         data[row.id][name] = value;
         this.setState({data: data});
@@ -1004,7 +1007,7 @@ class InvoiceLineTable extends React.Component {
                                 return {
                                     className: classNames(
                                         {"justify-end": column.Header==='Service'},
-                                        {"justify-start": column.id==='extended'},
+                                        {"justify-end": column.id==='extended'},
                                         {"franchiRow": column.id==='description'},
                                         {"taxColumn": column.id==='tax'},
                                     )
@@ -1013,7 +1016,7 @@ class InvoiceLineTable extends React.Component {
                             else {
                                 return {
                                     className: classNames(
-                                        {"justify-end": column.id==='extended'},
+                                        {"justify-end": column.id==='total'},
                                         {"justify-end": rowInfo.original.type!=='line'})
                                     // {"hidden": column.id==='commission' && rowInfo.original.billing.value!==1},
                                     // {"hidden": column.id==='markup' && rowInfo.original.billing.value===1}),
@@ -1264,6 +1267,7 @@ class InvoiceLineTable extends React.Component {
                                                     placeholder="Commission"
                                                     value={row.original.commission}
                                                     onChange={this.handleChangeInvoiceLine(row.original, 'commission')}
+                                                    onBlur={this.handleChangeInvoiceLineOnBlur(row.original, 'commission')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustomPercent,
                                                         readOnly: row.original.billing.value!==1,
@@ -1281,13 +1285,13 @@ class InvoiceLineTable extends React.Component {
                                         width: 110
                                     },
                                     {
-                                        Header: "Ext. Amount",
-                                        accessor: "extended",
+                                        Header: "Tot. Amount",
+                                        accessor: "total",
                                         Cell: row=>{
                                             if(row.original.type==='line') {
                                                 let markup = 0.0;
                                                 if(row.original.markup!=='') markup = row.original.markup;
-                                                return ("$" + parseFloat(row.original.extended).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+                                                return ("$" + parseFloat(row.original.total).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
                                             }
                                             else {
                                                 if (row.original.length>1)

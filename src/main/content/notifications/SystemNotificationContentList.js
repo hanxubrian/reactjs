@@ -589,7 +589,7 @@ class SystemNotificationContentList extends Component {
                         </div>
 
                         <div className={classNames("flex flex-col ", classes.layoutTable)}
-                            style={{height:"700px"}}
+                            style={{height:"530px"}}
                         >
                                 <Grid
                                 rows={rows}
@@ -617,7 +617,7 @@ class SystemNotificationContentList extends Component {
                                     <VirtualTable
                                         columnExtensions={tableColumnExtensions}
                                         cellComponent={this.getCell}
-                                        height="530"
+                                        height="auto"
                                         headComponent = {TableHeadComponent}
                                     />
                                     {/*<Table*/}
