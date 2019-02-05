@@ -199,7 +199,15 @@ const TableComponentBase = ({ classes, ...restProps }) => (
         className={classes.tableStriped}
     />
 );
+const TableHeadComponentBase = ({ classes, ...restProps }) => (
+    <Table.TableHead
+        {...restProps}
+        className={classes.tableTheadRow}
+    />
+);
 export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
+export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
+
 //
 // table cell currency formatter
 //
@@ -608,8 +616,8 @@ class SystemNotificationContentList extends Component {
                                     <VirtualTable
                                         columnExtensions={tableColumnExtensions}
                                         cellComponent={this.getCell}
-                                        height="auto"
-
+                                        height="530"
+                                        headComponent = {TableHeadComponent}
                                     />
                                     {/*<Table*/}
                                         {/*columnExtensions={tableColumnExtensions}*/}
