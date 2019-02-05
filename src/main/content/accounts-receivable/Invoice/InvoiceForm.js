@@ -483,7 +483,7 @@ class InvoiceForm extends Component {
         this.setState({markup: markup});
         this.setState({tax: tax});
         this.setState({commissionAmount: commissionTotal});
-        this.setState({total: subTotal+tax});
+        this.setState({total: subTotal+tax+markup});
     };
 
     componentDidUpdate(prevProps, prevState, snapshot){
@@ -640,7 +640,7 @@ class InvoiceForm extends Component {
                 Total: line.total,
                 MarkUpTotal: line.markup,
                 Commission: line.billing.value===1 ? line.commission : 0.00,
-                CommissionTotal: 0.00,
+                CommissionTotal: line.commissionAmount,
                 ExtraWork: 1,
                 TaxExcempt: this.state.selectedCustomer.TaxExempt,
                 Distribution: [],
@@ -1244,10 +1244,8 @@ class InvoiceForm extends Component {
                                     <span className={classes.summary}><strong>Commission Total: </strong>${this.state.commissionAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                     <span className={classes.summary}><strong>Subtotal: </strong>${this.state.subTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
-                                <div className="w-full p-12 flex justify-end pb-0 pt-6 ">
+                                <div className="w-full p-12 flex justify-between pt-6 pb-6">
                                     <span className={classes.summary}><strong>Markup Total: </strong>${this.state.markup.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
-                                </div>
-                                <div className="w-full p-12 flex justify-end pt-6 pb-6">
                                     <span className={classes.summary}><strong>Tax: </strong>${this.state.tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
                                 <div className="w-full p-12 flex justify-end  pt-6 pb-6">
