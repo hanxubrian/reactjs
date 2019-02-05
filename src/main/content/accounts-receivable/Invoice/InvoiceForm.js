@@ -1244,8 +1244,11 @@ class InvoiceForm extends Component {
                                     <span className={classes.summary}><strong>Commission Total: </strong>${this.state.commissionAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                     <span className={classes.summary}><strong>Subtotal: </strong>${this.state.subTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
-                                <div className="w-full p-12 flex justify-between pt-6 pb-6">
+                                <div className="w-full p-12 flex justify-end pt-6 pb-6">
                                     <span className={classes.summary}><strong>Markup Total: </strong>${this.state.markup.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
+                                </div>
+
+                                <div className="w-full p-12 flex justify-end pt-6 pb-6">
                                     <span className={classes.summary}><strong>Tax: </strong>${this.state.tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
                                 <div className="w-full p-12 flex justify-end  pt-6 pb-6">
