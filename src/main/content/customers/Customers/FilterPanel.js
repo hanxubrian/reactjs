@@ -1513,15 +1513,24 @@ class FilterPanel extends Component {
 										label="All"
 									/>
 									{
-										customerStatusListTexts.map((x, index) => (
-											<FormControlLabel key={index}
-												control={
-													<Switch checked={this.state['customerStatusList' + (index + 1)]}
-														onChange={this.handleChangeChecked('customerStatusList' + index + 1)} />
-												}
-												label={x}
-											/>
-										))
+										// customerStatusListTexts
+										[
+											"Active",
+											"Cancelled",
+											"Inactive",
+											"Suspended",
+											"Transferred",
+											"Unknown",
+										]
+											.map((x, index) => (
+												<FormControlLabel key={index}
+													control={
+														<Switch checked={this.state['customerStatusList' + (index + 1)]}
+															onChange={this.handleChangeChecked('customerStatusList' + index + 1)} />
+													}
+													label={x}
+												/>
+											))
 									}
 								</div>
 							</div>
