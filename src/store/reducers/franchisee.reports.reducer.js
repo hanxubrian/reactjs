@@ -84,6 +84,8 @@ const franchiseeReports = function(state = initialState, action) {
         case Actions.CLOSE_EDIT_TRANSACTION_FORM:
         case Actions.CLOSE_NEW_TRANSACTION_FORM:
             return {...state, franchiseeReport1: null};
+        case Actions.NULLIFY_FRANCHISEE_REPORT:
+            return {...state, franchiseeReport1: null};
         case UserActions.USER_LOGGED_OUT:
         {
             return {

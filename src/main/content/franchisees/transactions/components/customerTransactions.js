@@ -134,21 +134,9 @@ class CustomerTransactions extends Component {
 
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if( this.props.transactionForm.franchisee!==null && (prevProps.transactionForm.franchisee!==this.props.transactionForm.franchisee)) {
-            // let trxDetail = this.props.transactionDetail.Data;
-            this.props.createReport({
-                regionId: this.props.regionId,
-                year: '2017',
-                month: '1',
-                franchiseenumber: this.props.transactionForm.franchisee.Number
-            });
-        }
-
     }
 
     componentDidMount() {
-        //'/franchisees/reports/:regionid/:year/:month/:franchiseenumber',
-
     }
 
     componentWillMount() {
@@ -241,7 +229,6 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         removeTransaction: Actions.removeTransaction,
         openEditTransactionForm: Actions.openEditTransactionForm,
-        createReport: Actions.createReport,
     }, dispatch);
 }
 

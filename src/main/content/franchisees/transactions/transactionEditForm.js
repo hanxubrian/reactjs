@@ -463,9 +463,28 @@ class TransactionEditForm extends Component {
             this.props.selectFranchisee(this.state.selectedFranchisee);
         }
 
-
         if(prevState.reSell!==this.state.reSell) {
             this.getTotal();
+        }
+
+        if( this.props.transactionForm.franchisee!==null && (prevProps.transactionForm.franchisee!==this.props.transactionForm.franchisee)) {
+            let period = this.state.TransactionPeriod.split('/');
+            this.props.createReport({
+                regionId: this.props.regionId,
+                year: parseInt(period[1]),
+                month: parseInt(period[0]),
+                franchiseenumber: this.props.transactionForm.franchisee.Number
+            });
+        }
+        if( this.props.transactionForm.franchisee!==null && (this.state.TransactionPeriod!==prevState.TransactionPeriod)) {
+            this.props.nullifyFranchiseeReport();
+            let period = this.state.TransactionPeriod.split('/');
+            this.props.createReport({
+                regionId: this.props.regionId,
+                year: parseInt(period[1]),
+                month: parseInt(period[0]),
+                franchiseenumber: this.props.transactionForm.franchisee.Number
+            });
         }
     }
 
@@ -811,8 +830,6 @@ class TransactionEditForm extends Component {
                 },
             }),
         };
-
-        console.log('periods======', this.state.periods);
 
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
@@ -1367,8 +1384,9 @@ function mapDispatchToProps(dispatch)
         createNewTransaction: Actions.createNewTransaction,
         resetTransactionForm: Actions.resetTransactionForm,
         updateFranchiseeTransaction: Actions.updateFranchiseeTransaction,
-        getTransactionDetail: Actions.getTransactionDetail
-
+        getTransactionDetail: Actions.getTransactionDetail,
+        createReport: Actions.createReport,
+        nullifyFranchiseeReport: Actions.nullifyFranchiseeReport
     }, dispatch);
 }
 

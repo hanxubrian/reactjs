@@ -18,6 +18,7 @@ export const GET_TRANSACTION_DETAIL = '[FRANCHISEE-TRANSACTION] GET TRANSACTION 
 export const RESET_TRANSACTION_FORM = '[FRANCHISEE-TRANSACTION] RESET TRANSACTION FORM';
 export const UPDATE_A_FRANCHISEE_TRANSACTION = '[FRANCHISEE-TRANSACTION] UPDATE A FRANCHISEE TRANSACTION';
 export const GET_FRANCHISEE_TRANSACTION_TYPE_LIST = '[FRANCHISEE-TRANSACTION] GET FRANCHISEE TRANSACTION TYPE LIST';
+export const NULLIFY_FRANCHISEE_REPORT = '[FRANCHISEE-TRANSACTION] NULLIFY FRANCHISEE REPORT';
 
 export function getTransactions(regionId) {
     return (dispatch) => {
@@ -84,7 +85,6 @@ export function closeNewTransactionForm()
 
 export function openEditTransactionForm(regionId, data)
 {
-    console.log('ssss=', data, regionId)
     return (dispatch) => {
         dispatch({
             type: START_FETCH_TRANSACTIONS,
@@ -221,4 +221,10 @@ export function getFranchiseeTransactionTypeLists(regionId) {
             }
         })();
     };
+}
+
+export function nullifyFranchiseeReport() {
+    return {
+        type: NULLIFY_FRANCHISEE_REPORT,
+    }
 }
