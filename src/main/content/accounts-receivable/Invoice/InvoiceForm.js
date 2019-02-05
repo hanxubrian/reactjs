@@ -150,7 +150,7 @@ const styles = theme => ({
     },
     addCustomer: {
 
-    }
+    },
 });
 
 const newInvoiceState = {

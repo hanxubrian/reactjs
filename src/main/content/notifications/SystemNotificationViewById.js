@@ -240,7 +240,13 @@ const styles = theme => ({
 //
 
 
-
+const TableComponentBase = ({ classes, ...restProps }) => (
+	<Table.Table
+		{...restProps}
+		className={classes.tableStriped}
+	/>
+);
+export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
 
 const SubTd = ({ tdvalue, onClick }) => (
     <td onClick={onClick}>{tdvalue}</td>
@@ -276,6 +282,49 @@ class SystemNotificationViewById extends Component {
             row                     : null,
             multiKey                : null,
             multiData               : null,
+            rows                    : [],
+            tableColumnExtensions: [
+                {
+                    title: "Name",
+                    name: "CustomerName",
+                    columnName: JSON.parse(props.sysnotification[0].ProcessResponsePayload).CustomersQualifiedForCPI[0].CustomerName,
+                    width: 80,
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                },
+                {
+                    title: "No",
+                    name: "CustomerNo",
+                    columnName: JSON.parse(props.sysnotification[0].ProcessResponsePayload).CustomersQualifiedForCPI[0].CustomerNo,
+                    width: 250,
+                    wordWrapEnabled: true,
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                    togglingEnabled: false,
+                },
+                {
+                    title: "Contract Billing",
+                    name: "ContractBilling",
+                    columnName: JSON.parse(props.sysnotification[0].ProcessResponsePayload).CustomersQualifiedForCPI[0].ContractBilling,
+                    width: 250,
+                    wordWrapEnabled: true,
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                },
+                {
+                    title: "CPI Percent",
+                    name: "CPIPercent",
+                    columnName: JSON.parse(props.sysnotification[0].ProcessResponsePayload).CustomersQualifiedForCPI[0].CPIPercent,
+                    width: 250,
+                    wordWrapEnabled: true,
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                }
+            ]
         };
     };
 
@@ -325,7 +374,8 @@ class SystemNotificationViewById extends Component {
             this.setState({
                 row             :mapvalue,
                 multiKey        :midmultikey,
-                multiData       :midmultivalue
+                multiData       :midmultivalue,
+                rows            :payload.CustomersQualifiedForCPI
             });
         }
     }
@@ -333,6 +383,31 @@ class SystemNotificationViewById extends Component {
     render(){
         const {Data,classes}                    = this.props;
         const {row,multiData,multiKey}          = this.state;
+
+        const {
+			pins,
+			// locationFilterValue,
+			pins2,
+			gmapVisible,
+			// mapViewState,
+			rows,
+			columns,
+			selection,
+			tableColumnExtensions,
+			sorting,
+			editingColumnExtensions,
+			currencyColumns,
+			phoneNumberColumns,
+			pageSize,
+			pageSizes,
+			amountFilterOperations,
+			// groupingColumns,
+			// booleanColumns,
+			searchValue,
+			grouping,
+			// leftColumns,
+			// rightColumns,
+		} = this.state;
         console.log(row)
         if(1){
             if(this.props.loadingstatus){
@@ -564,7 +639,7 @@ class SystemNotificationViewById extends Component {
 
 
                                     <CardContent>
-                                        <table className={classes.tableView}>
+                                            <table className={classes.tableView}>
                                             {
                                                 multiData[0] && multiData[0] !== null && multiData[0].Value && multiData[0].Value !==null &&(
                                                     <TableHead className={classes.tableheader}>
@@ -608,7 +683,16 @@ class SystemNotificationViewById extends Component {
 
                                     }</div>
                                     <CardContent>
-                                        <table className={classes.tableView}>
+                                            <Grid
+                                                rows={rows}
+                                                columns={tableColumnExtensions}
+                                                >
+                                                <VirtualTable height="auto" />
+
+                                                <TableColumnResizing />
+                                                <TableHeaderRow className={classes.tableView} />
+                                            </Grid>
+                                        {/* <table className={classes.tableView}>
                                             {
                                                 multiData[1] && multiData[1] !== null && multiData[1].Value && multiData[1].Value !==null &&(
                                                     <TableHead className={classes.tableheader}>
@@ -638,7 +722,7 @@ class SystemNotificationViewById extends Component {
 
 
                                             </TableBody>
-                                        </table>
+                                        </table> */}
 
                                     </CardContent>
                                 {/* </Card> */}
