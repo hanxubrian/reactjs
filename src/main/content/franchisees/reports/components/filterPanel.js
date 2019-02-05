@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 //Material UI core
-import {Paper, withStyles} from '@material-ui/core';
+import {MenuItem, OutlinedInput, Paper, Select, withStyles} from '@material-ui/core';
 import 'date-fns'
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
@@ -13,6 +13,8 @@ import * as Actions from 'store/actions';
 
 //Third party
 import classNames from 'classnames';
+import moment from "moment";
+import _ from "lodash";
 
 const styles = theme => ({
     root : {
@@ -45,17 +47,63 @@ const styles = theme => ({
         '&.opened1'                    : {
             transform: 'translateX(300px)'
         }
-    }
+    },
+    dropdownMenu: {
+        '& li': {
+            fontSize: 12,
+            height: 12,
+        }
+    },
+    inputMenu: {
+        padding: '10px 16px'
+    },
+    inputMenu1: {
+        padding: '10px 16px',
+        width: 150
+    },
 });
 
 class FilterPanel extends Component {
 
     state = {
-        reportDate: new Date()
+        reportDate: new Date(),
+        period: moment().format('MM/YYYY'),
+        periods: null
     };
 
     componentDidMount()
     {
+        if(this.props.all_regions!==null && this.props.all_regions.length){
+            let all_regions = this.props.all_regions;
+            let region = all_regions.filter(r=>r.regionid===this.props.regionId);
+
+            if(region.length){
+                let periods = region[0].OpenPeriods;
+
+                let all_periods = [];
+
+                let period = periods.current.month.toString() + '/' + periods.current.year.toString();
+                if (periods.current.month < 10)
+                    period = '0' + period;
+                if(periods.current.status==='Open')
+                    all_periods.push(period);
+                this.setState({period: period});
+
+
+                period = periods.next.month.toString() + '/' + periods.next.year.toString();
+                if (periods.next.month < 10)
+                    period = '0' + period;
+                if(periods.next.status==='Open')
+                    all_periods.push(period);
+                period = periods.previous.month.toString() + '/' + periods.previous.year.toString();
+                if (periods.previous.month < 10)
+                    period = '0' + period;
+                if(periods.previous.status==='Open')
+                    all_periods.push(period);
+
+                this.setState({periods: all_periods});
+            }
+        }
     }
 
     componentWillMount(){
@@ -75,9 +123,8 @@ class FilterPanel extends Component {
 
     }
 
-    handleChange = name => event => {
-        this.setState({ [name]: event.target.checked });
-        this.props.toggleStatus(name, event.target.checked)
+    handleChange = (event) => {
+        this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
     };
 
     handleInvoiceDateChange = date => {
@@ -92,23 +139,34 @@ class FilterPanel extends Component {
             <div className={classNames(classes.root)}>
                 <div className={classNames("flex flex-col")}>
                     <Paper className="flex flex-1 flex-col min-h-px p-20">
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <div style={{marginTop: 50, display: 'flex', flexDirection: 'column'}}>
                             <h3>Choose a date</h3>
-                            <DatePicker
-                                margin="none"
-                                label="Period"
-                                name="InvoiceDate"
-                                variant="outlined"
-                                format="MM/dd/yyyy"
-                                value={this.state.reportDate}
-                                onChange={this.handleInvoiceDateChange}
-                                fullWidth
-                                required
-                                className={classNames("mt-24")}
-                            />
+                            {this.state.periods!==null && (
+                                <Select
+                                    classes={{
+                                        selectMenu: classNames(classes.inputMenu1),
+                                    }}
+                                    name="period"
+                                    value={this.state.period}
+                                    onChange={this.handleChange}
+                                    input={
+                                        <OutlinedInput
+                                            labelWidth={this.state.labelWidth}
+                                            name="period"
+                                            id="period"
+                                        />
+                                    }
+                                    className={classes.textField}
+                                    MenuProps = {{
+                                        classes:{paper: classes.dropdownMenu},
+                                    }}
+                                >
+                                    {this.state.periods.map((p, index)=>{
+                                        return (<MenuItem key={index} value={p}>{p}</MenuItem>)
+                                    })}
+                                </Select>
+                            )}
                         </div>
-                        </MuiPickersUtilsProvider>
                     </Paper>
                 </div>
             </div>
@@ -119,7 +177,7 @@ class FilterPanel extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        updateReportDate: Actions.updateReportDate
+        updateReportDate: Actions.updateReportDate,
 
     }, dispatch);
 }
@@ -128,7 +186,9 @@ function mapStateToProps({franchiseeReports, auth})
 {
     return {
         filterState: franchiseeReports.bOpenedFilterPanelFranchiseeReports,
-        reportDate: franchiseeReports.reportDate
+        reportDate: franchiseeReports.reportDate,
+        all_regions: auth.login.all_regions,
+        regionId: auth.login.defaultRegionId,
     }
 }
 
