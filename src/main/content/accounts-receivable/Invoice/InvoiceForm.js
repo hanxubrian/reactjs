@@ -315,6 +315,7 @@ class InvoiceForm extends Component {
         subTotal: 0.0,
         tax: 0,
         markup: 0.0,
+        commissionAmount: 0.0,
         InvoiceNo: this.props.invoiceForm.type === 'new' ? "PENDING": '',
         snackMessage: "",
         openSnack: false,
@@ -463,6 +464,7 @@ class InvoiceForm extends Component {
         let subTotal = 0.0;
         let markup = 0.0;
         let tax = 0.0;
+        let commissionTotal = 0.0;
 
         if(this.props.invoiceForm.data===null) return;
 
@@ -472,6 +474,7 @@ class InvoiceForm extends Component {
             subTotal += parseFloat(n.extended);
             tax += parseFloat(n.tax);
             markup += parseFloat(n.markupAmount)
+            commissionTotal += parseFloat(n.commissionAmount)
         });
 
         if(this.state.selectedCustomer.TaxExempt!=='N') tax = 0;
@@ -479,7 +482,8 @@ class InvoiceForm extends Component {
         this.setState({subTotal: subTotal});
         this.setState({markup: markup});
         this.setState({tax: tax});
-        this.setState({total: subTotal+tax+markup});
+        this.setState({commissionAmount: commissionTotal});
+        this.setState({total: subTotal+tax});
     };
 
     componentDidUpdate(prevProps, prevState, snapshot){
@@ -1236,7 +1240,8 @@ class InvoiceForm extends Component {
                                 </div>
                             </GridItem>
                             <GridItem xs={12} sm={3} md={3} className="flex flex-col xs:flex-col xs:mb-24">
-                                <div className="w-full p-12 flex justify-end pb-0">
+                                <div className="w-full p-12 flex justify-between pb-0">
+                                    <span className={classes.summary}><strong>Commission Total: </strong>${this.state.commissionAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                     <span className={classes.summary}><strong>Subtotal: </strong>${this.state.subTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
                                 <div className="w-full p-12 flex justify-end pb-0 pt-6 ">
