@@ -136,12 +136,10 @@ class PaymentSearchBar extends Component {
 			}
 	}
 	componentDidMount() {
-		console.log("componentDidMount");
 		document.addEventListener("keydown", this.handleKeyDown, false);
 	}
 
 	handleKeyDown = (event) => {
-		console.log("escFunction");
 		if (!this.props.paymentDlgPayloads.open) {
 			if (event.keyCode === ENTER_KEY) {
 				clearTimeout(this.timer)
@@ -155,11 +153,7 @@ class PaymentSearchBar extends Component {
 	}
 
 	handleChange = prop => event => {
-		console.log("handleChange");
-
-
 		this.setState({ [prop]: event.target.value });
-
 		if (prop === 's') {
 			clearTimeout(this.timer);
 			this.timer = setTimeout(this.triggerChange, WAIT_INTERVAL);
@@ -167,9 +161,6 @@ class PaymentSearchBar extends Component {
 	};
 
 	triggerChange = (s = this.state.s) => {
-
-		console.log("start to search", s)
-
 		this.props.applySearchText(s);
 	}
 
