@@ -640,9 +640,7 @@ class SystemNotificationContentList extends Component {
                 );
             else{
                 return(
-                    <div className={classes.overlay} style={{
-
-                    }}>
+                    <div className={classes.overlay}>
                         <CircularProgress className={classes.progress} color="secondary"  />
                         <Typography variant="body2" color="primary">Fetching notifications info...</Typography>
                     </div>
