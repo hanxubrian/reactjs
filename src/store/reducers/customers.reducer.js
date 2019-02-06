@@ -44,6 +44,11 @@ const initialState = {
 
 	getCustomerResponse: [],
 	bGetCustomerStart: false,
+
+	filters: {
+		StatusNames: [],
+		AccountTypeListName: "",
+	}
 };
 
 
@@ -247,6 +252,16 @@ const customers = function (state = initialState, action) {
 							open: false
 						},
 						data: null
+					}
+				};
+			}
+		case Actions.SET_FILTER_CUSTOMER_STATUSES:
+			{
+				return {
+					...state,
+					filters: {
+						...state.filters,
+						StatusNames: action.payload
 					}
 				};
 			}

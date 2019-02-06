@@ -325,7 +325,8 @@ class PaymentLockBoxReport extends Component {
 
                                             <div>
                                                 <input
-                                                    accept="image/*,video/*,pdf/*"
+													// accept="image/*,video/*,pdf/*, txt/*"
+													accept="txt/*"
                                                     className={classes.input}
                                                     style={{ display: 'none' }}
                                                     id="raised-button-file"

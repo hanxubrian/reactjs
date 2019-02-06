@@ -294,7 +294,15 @@ class Customers extends Component {
 		console.log("constructor, Customer.js")
 
 		if (!props.bLoadedCustomers) {
-			this.props.getCustomers(this.props.regionId, this.props.statusId, this.props.location, this.props.latitude, this.props.longitude, this.props.searchText);
+			this.props.getCustomers(
+				this.props.regionId,
+				this.props.statusId,
+				this.props.filters.StatusNames,
+				this.props.filters.AccountTypeListName,
+				this.props.location,
+				this.props.latitude,
+				this.props.longitude,
+				this.props.searchText);
 		}
 
 		this.props.getAccountTypeList();
@@ -364,14 +372,30 @@ class Customers extends Component {
 			});
 			console.log("----------START FETCHING----------")
 			// this.setState({ loading: true });
-			this.props.getCustomers(this.props.regionId, this.props.statusId, this.props.location, this.props.latitude, this.props.longitude, this.props.searchText);
+			this.props.getCustomers(
+				this.props.regionId,
+				this.props.statusId,
+				this.props.filters.StatusNames,
+				this.props.filters.AccountTypeListName,
+				this.props.location,
+				this.props.latitude,
+				this.props.longitude,
+				this.props.searchText);
 			bChanged = true;
 		}
 	}
 
 	componentWillMount() {
 		if (this.props.customers === null) {
-			this.props.getCustomers(this.props.regionId, this.props.statusId, this.props.location, this.props.latitude, this.props.longitude, this.props.searchText);
+			this.props.getCustomers(
+				this.props.regionId,
+				this.props.statusId,
+				this.props.filters.StatusNames,
+				this.props.filters.AccountTypeListName,
+				this.props.location,
+				this.props.latitude,
+				this.props.longitude,
+				this.props.searchText);
 		}
 		if (this.props.accountTypeList === null) {
 			this.props.getAccountTypeList();
@@ -490,6 +514,8 @@ class Customers extends Component {
 		this.props.getCustomers(
 			this.props.regionId,
 			this.props.statusId,
+			this.props.filters.StatusNames,
+			this.props.filters.AccountTypeListName,
 			this.props.location,
 			this.props.latitude,
 			this.props.longitude,
@@ -814,6 +840,8 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		bCreateCustomerStart: customers.bCreateCustomerStart,
 
 		bGetCustomerStart: customers.bGetCustomerStart,
+
+		filters: customers.filters,
 	}
 }
 

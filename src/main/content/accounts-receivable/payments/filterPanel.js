@@ -230,17 +230,14 @@ class FilterPanel extends Component {
 			this.props.setViewMode(event.target.value)
 		} else if (name === "paymentHistoryFilterPaymentTypes") {
 			let newPaymentHistoryTypes = [...this.state.paymentHistoryFilterPaymentTypes]
-			newPaymentHistoryTypes = [...new Set([...newPaymentHistoryTypes, value])]
 			if (checked) {
-				this.setState({
-					paymentHistoryFilterPaymentTypes: newPaymentHistoryTypes
-				})
+				newPaymentHistoryTypes = [...new Set([...newPaymentHistoryTypes, value])]
 			} else {
 				newPaymentHistoryTypes.splice(newPaymentHistoryTypes.indexOf(value), 1)
-				this.setState({
-					paymentHistoryFilterPaymentTypes: newPaymentHistoryTypes
-				})
 			}
+			this.setState({
+				paymentHistoryFilterPaymentTypes: newPaymentHistoryTypes
+			})
 
 			this.props.getPaymentHistory(
 				this.props.regionId,

@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import _ from "lodash";
 import { withRouter } from 'react-router-dom';
 import Geocode from "react-geocode";
 
@@ -485,6 +486,11 @@ class FilterPanel extends Component {
 			customerEmail: "",
 			customerWeb: "",
 
+			filters: {
+				StatusNames: [],
+				AccountTypeListName: "",
+			}
+
 		}
 
 
@@ -501,6 +507,9 @@ class FilterPanel extends Component {
 	}
 
 	componentWillMount() {
+		this.setState({
+			filters: { ...this.props.filters }
+		})
 
 	}
 	componentWillReceiveProps(nextProps) {
@@ -530,6 +539,12 @@ class FilterPanel extends Component {
 				});
 			}
 
+		}
+
+		if (!_.isEqual(nextProps.filters, this.props.filters)) {
+			this.setState({
+				filters: { ...nextProps.filters }
+			})
 		}
 		// if (nextProps.locationFilterValue !== this.props.locationFilterValue) {
 		// 	this.setState({
@@ -579,7 +594,9 @@ class FilterPanel extends Component {
 
 	handleChange = name => event => {
 
-		let value = event.target.value
+		const value = event.target.value
+		const checked = event.target.checked
+
 		let onLocationFilter = this.onLocationFilter
 
 		switch (name) {
@@ -603,6 +620,38 @@ class FilterPanel extends Component {
 				value = parseFloat("0" + value).toLocaleString(undefined, { maximumFractionDigits: 0 })
 				console.log("value", value)
 				break;
+
+			case "filters.StatusNames":
+
+				let newStatusNames = [...this.state.filters.StatusNames]
+				if (checked) {
+					newStatusNames = [...new Set([...newStatusNames, value])]
+				} else {
+					newStatusNames.splice(newStatusNames.indexOf(value), 1)
+				}
+				this.setState({
+					filter: {
+						...this.state.filter,
+						StatusNames: newStatusNames
+					}
+				})
+
+				this.props.getCustomers(
+					this.props.regionId,
+					this.props.statusId,
+					newStatusNames,
+					this.state.filters.AccountTypeListName,
+					this.props.location,
+					this.props.latitude,
+					this.props.longitude,
+					this.props.searchText,
+				);
+
+				this.props.setFilterCustomerStatuses(newStatusNames)
+
+				console.log("paymentHistoryFilterPaymentTypes", value, checked)
+				return
+
 			default:
 				break;
 
@@ -1525,8 +1574,11 @@ class FilterPanel extends Component {
 											.map((x, index) => (
 												<FormControlLabel key={index}
 													control={
-														<Switch checked={this.state['customerStatusList' + (index + 1)]}
-															onChange={this.handleChangeChecked('customerStatusList' + index + 1)} />
+														<Switch
+															checked={this.state.filters.StatusNames.indexOf(x) > -1}
+															onChange={this.handleChange('filters.StatusNames')}
+															value={x}
+														/>
 													}
 													label={x}
 												/>
@@ -1546,7 +1598,9 @@ class FilterPanel extends Component {
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
 		toggleStatus: Actions.toggleStatus,
-		selectLocationFilter: Actions.selectLocationFilter
+		selectLocationFilter: Actions.selectLocationFilter,
+		setFilterCustomerStatuses: Actions.setFilterCustomerStatuses,
+		getCustomers: Actions.getCustomers,
 	}, dispatch);
 }
 
@@ -1563,6 +1617,7 @@ function mapStateToProps({ customers, auth }) {
 		accountExecutiveList: customers.accountExecutiveList,
 		customerStatusList: customers.customerStatusList,
 		accountTypesGroups: customers.accountTypesGroups,
+		filters: customers.filters,
 	}
 }
 
