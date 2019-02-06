@@ -179,7 +179,6 @@ const DialogActions = withStyles(theme => ({
 }))(MuiDialogActions);
 
 
-
 class VendorDialogBox extends Component {
     state = {
         vendor_no: '',
@@ -230,63 +229,24 @@ class VendorDialogBox extends Component {
 
     handleVendorChange = (newValue)=> {
         this.setState({vendor: newValue});
+
+        if(this.props.vendorList!==null) {
+            let vv = this.props.vendorList.Data.filter(v=>v.Name===newValue.value);
+            this.setState({vendor_no: vv[0].VendorID})
+        }
     };
 
     render()
     {
+        let vendors = [];
+
+        if(this.props.vendorList!==null) {
+            vendors = this.props.vendorList.Data.map(v=>{
+                return {value:  v.Name, label: v.Name}
+            })
+        }
+
         const {classes} = this.props;
-        const vendors = [
-            {value:'PFO', label: 'Purchase from Office'},
-            {value: '1120',label: 'PHILIP ROSENAU CO. INC.'},
-            {value: 'ABCPAPER',label: 'ABC PAPER &amp; CHEMICAL INC.'},
-            {value: 'ACA',label: 'ACA ENTERPRISES'},
-            {value: 'ACCOMMODAT',label: 'ACCOMMODATION MOLLEN, INC.'},
-            {value: 'ADV001',label: 'ADVANCE PRODUCTS &amp; BRUSH CO.'},
-            {value: 'AFFLINK',label: 'AFFLINK c/o Wachovia Bank'},
-            {value: 'ALPHA',label: 'ALPHASOURCE-PHILADELPHIA WIPER'},
-            {value: 'AMSAN',label: 'AMSAN'},
-            {value: 'BASIC',label: 'BASIC MAINTENANCE SUPPLY COMPA'},
-            {value: 'BOBLILLY',label: 'BOB LILLY PROFESSIONAL PROMO'},
-            {value: 'BURRELL',label: 'K &amp; L BURRELL ENTERPRISES LLC'},
-            {value: 'CER001',label: 'CERTIFIED CHEMICAL CO.'},
-            {value: 'CON001',label: 'CONTRACT CLEANERS SUPPLY INC.'},
-            {value: 'EAGLE',label: 'EAGLE MAINTENANCE SUPPLY, INC.'},
-            {value: 'ECOLAB',label: 'ECOLAB, INC.'},
-            {value: 'FRA001',label: 'FRANKLIN CHEMICAL &amp; EQUIPMENT'},
-            {value: 'GELMARC',label: 'GELMARC DISTRIBUTORS, INC'},
-            {value: 'GRAINGER',label: 'GRAINGER'},
-            {value: 'HILDEL',label: 'HILLYARD INC. - DELEWARE'},
-            {value: 'HILL001',label: 'HILLYARD, INC - LANCASTER'},
-            {value: 'HPI',label: 'HPI DIRECT'},
-            {value: 'IMA001',label: 'IMAGE FIRST PROFESSIONAL APPAR'},
-            {value: 'J.W.&amp;ASSOC',label: 'J.W. &amp; ASSOCIATES'},
-            {value: 'JK SUPP',label: 'JANI-KING INTERNATIONAL, INC.'},
-            {value: 'L B',label: 'L B SUPPLY'},
-            {value: 'LEB001',label: 'LEBANON VALLEY PAPER COMPANY'},
-            {value: 'MAS',label: 'MASTER CHEMICAL PRODUCTS INC'},
-            {value: 'MEYER',label: 'MEYER LABORATORY INC'},
-            {value: 'MODERN',label: 'MODERN GAS SALES INC'},
-            {value: 'NIX001',label: 'NIXON UNIFORMS'},
-            {value: 'PCA001',label: 'PCA INDUSTRIAL &amp; PAPER SUPPLIE'},
-            {value: 'PEN001',label: 'PENN VALLEY CHEMICAL COMPANY'},
-            {value: 'PROMOWORX',label: 'PROMOWORX, INC.'},
-            {value: 'QUA001',label: 'QUAKER CITY PAPER COMPANY'},
-            {value: 'ROOMS',label: 'ROOM SERVICE AMENITIES'},
-            {value: 'SINGER',label: 'SINGER EQUIPMENT COMPANY'},
-            {value: 'STCLAIR',label: 'ST. CLAIR PLASTICS CO.'},
-            {value: 'SUBURBAN',label: 'SUBURBAN PAPER CO.'},
-            {value: 'SUPERIOR',label: 'SUPERIOR SERVICE &amp; SUPPLY CO.'},
-            {value: 'SUPPLY',label: 'INTERLINE BRANDS INC.'},
-            {value: 'TRA001',label: 'TRAY S WHOLESALE, INC.'},
-            {value: 'TRE002',label: 'TREXLER-HAINES GAS, INC.'},
-            {value: 'TRIPLE',label: 'SSS TRIPLE S'},
-            {value: 'TRIPLE2',label: 'TRIPLE S'},
-            {value: 'USPRODUCTS',label: 'U.S. PRODUCTS'},
-            {value: 'WIWIN',label: 'WIWIN ENTERPRISE, LLC'},
-            {value: 'YKERO',label: 'YIBEGETA Y. KERO'},
-            {value: 'ZIM001',label: 'ZIMMERMAN, INC.'},
-            {value: 'ZIMMER',label: 'ZIMMERMAN MONTCO SANITARY INC.'}
-    ];
 
         const selectStyles = {
             input: base => ({
@@ -317,6 +277,7 @@ class VendorDialogBox extends Component {
                                     <div className={classes.root1}>
                                         <NoSsr>
                                             <Select
+                                                autoFocus
                                                 classes={classes}
                                                 styles={selectStyles}
                                                 value={this.state.vendor}
@@ -330,15 +291,17 @@ class VendorDialogBox extends Component {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
-                                        autoFocus
                                         name="vendor_no"
                                         value={this.state.vendor_no}
                                         onChange={this.handleChange}
                                         variant="outlined"
                                         margin="normal"
                                         id="vendor_no"
-                                        label="Vendor Invoice No"
+                                        label="Vendor ID"
                                         fullWidth
+                                        InputProps={{
+                                            readOnly: true,
+                                        }}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>

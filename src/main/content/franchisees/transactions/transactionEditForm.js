@@ -370,8 +370,13 @@ class TransactionEditForm extends Component {
         TrxChargeType: 'D',
         deductionReason: '',
         trxClassAmount: 0.00,
-        periods: null
+        periods: null,
+        vendorList: null
     };
+
+    constructor(props){
+        super(props);
+    }
 
     renderInputComponent = (inputProps ) => {
         const { classes, inputRef = () => {}, ref, ...other } = inputProps ;
@@ -524,7 +529,13 @@ class TransactionEditForm extends Component {
         }
     }
 
-    componentDidMount(){
+    componentDidMount = () =>{
+
+            fetch(`https://apifmsplusplus_mongo.jkdev.com/v1/vendors/getvendorlist?regionId=${this.props.regionId}`)
+                .then(response => response.json())
+                .then(data => this.setState({ vendorList: data }));
+
+
         if(this.props.transactionForm.type === 'new')
             this.setState({TransactionNo: "PENDING"});
 
@@ -1371,7 +1382,7 @@ class TransactionEditForm extends Component {
                             message={this.state.snackMessage}
                         />
                     </Snackbar>
-                    <VendorDialogBox />
+                    <VendorDialogBox vendorList={this.state.vendorList}/>
                 </div>
             </FuseAnimate>
         );
