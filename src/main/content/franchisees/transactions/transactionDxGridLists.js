@@ -277,7 +277,7 @@ class TransactionsDxGridLists extends Component {
                         <IconButton
                             onClick={(ev) => {
                                 ev.stopPropagation();
-                                this.props.openEditTransactionForm(props.row.Id, props.row);
+                                this.props.openEditTransactionForm(this.props.regionId, props.row);
                             }}
                         >
                             <Icon fontSize={"small"}>edit</Icon>
@@ -317,7 +317,6 @@ class TransactionsDxGridLists extends Component {
                 type = this.props.transactionTypeList.filter(f => f.TrxClass === props.row.TrxClass);
                 if (type.length) trxTypeName = type[0].Name;
             }
-            // if (type.length===0) trxTypeName = type[0].Name;
 
             return (
                 <Table.Cell>

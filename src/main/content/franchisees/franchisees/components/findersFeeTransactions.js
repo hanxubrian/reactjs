@@ -56,9 +56,6 @@ const styles = theme => ({
             display: 'none'
         },
     },
-    imageIcon: {
-        width: 24
-    },
     tableStriped: {
         marginBottom: '0!important',
         '& tbody tr:nth-of-type(odd)': {
@@ -109,7 +106,7 @@ const TableSummaryComponentBase = ({ classes, ...restProps }) => (
 );
 
 export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
-export const TableSummaryComponent = withStyles(styles, { name: 'TableSummaryComponent' })(TableSummaryComponentBase);
+export const TableSummaryRowComponent = withStyles(styles, { name: 'TableSummaryComponent' })(TableSummaryComponentBase);
 export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
 
 const CurrencyFormatter = ({value}) => (
@@ -221,7 +218,7 @@ class FindersFeeTransactions extends Component {
                     <TableHeaderRow />
                     {data.length>0 && (
                         <TableSummaryRow
-                            totalRowComponent={TableSummaryComponent}
+                            totalRowComponent={TableSummaryRowComponent}
                             messages={messages}
                         />
                     )}
