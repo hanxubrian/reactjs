@@ -173,7 +173,6 @@ class ReportLists extends Component {
     }
     search = (val)=> {
         const temp = this.props.data.filter( d => {
-            console.log('value=', d);
             return d.Name.indexOf(val) !== -1 || !val ||
                 d.FranchiseeNo.indexOf(val) !== -1 ||
                 // d.TrxType.toString().indexOf(val) !== -1
@@ -218,8 +217,6 @@ class ReportLists extends Component {
         const { toggleSelection, isSelected} = this;
         const { data, year, month } = this.state;
         if(data.length===0) return (<div/>);
-
-        console.log(data.FranchiseeReports);
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
