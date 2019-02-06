@@ -161,15 +161,15 @@ class franchiseesService {
     };
     /**
      * @method POST
-     * 
+     *
      * @param  regionId
      * @param data
-     * 
+     *
      * @returns {Promise<any>}
-     * 
-    */   
+     *
+    */
     createFranchiseesList =  (regionId,data) => {
-        
+
         return new Promise((resolve, reject) => {
             axios_instance.post(`${BASE_MONGO_API_URL}/v1/Franchisee/create/${regionId}`, data)
                 .then( res => {
@@ -189,17 +189,17 @@ class franchiseesService {
 
     /**
      * @method POST
-     * 
+     *
      * @param  regionId
      * @param id
      * @param data
-     * 
+     *
      * @returns {Promise<any>}
-     * 
-    */ 
+     *
+    */
 
     updateFranchiseesList =  (id,regionId,data) => {
-        
+
     return new Promise((resolve, reject) => {
         axios_instance.post(`${BASE_MONGO_API_URL}/v1/Franchisee/update/${id}?regionId=${regionId}`, data)
             .then( res => {
@@ -219,16 +219,16 @@ class franchiseesService {
 
     /**
      * @method POST
-     * 
+     *
      * @param  regionId
      * @param id
-     * 
+     *
      * @returns {Promise<any>}
-     * 
-    */ 
+     *
+    */
 
    deleteFranchiseesList =  (id,regionId) => {
-        
+
     return new Promise((resolve, reject) => {
         axios_instance.post(`${BASE_MONGO_API_URL}/v1/Franchisee/delete/${id}?regionId=${regionId}`)
             .then( res => {
@@ -255,6 +255,7 @@ class franchiseesService {
      * @returns {Promise<any>}
      */
     getFranchiseesReportsList = (regionId, year, month) => {
+        console.log('xxxxxx=', regionId, year, month)
         return new Promise((resolve, reject) => {
             axios_instance.get(`${BASE_MONGO_API_URL}/api/franchisee/GetFranchisees`,
                 { params: {regionId, year, month}}

@@ -1,5 +1,6 @@
 import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
+import moment from 'moment';
 
 const initialState = {
     franchiseeReports: null,
@@ -14,7 +15,8 @@ const initialState = {
         },
         data : null
     },
-    reportDate: "Sun Jan 01 2017 12:00:00 GMT-0600 (Central Standard Time)"
+    // reportDate: "Sun Jan 01 2017 12:00:00 GMT-0600 (Central Standard Time)"
+    reportDate: moment().format('MM/YYYY')
 };
 
 

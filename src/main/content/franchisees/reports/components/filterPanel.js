@@ -66,9 +66,10 @@ const styles = theme => ({
 class FilterPanel extends Component {
 
     state = {
-        reportDate: new Date(),
+        reportDate: moment().format('MM/YYYY'),
         period: moment().format('MM/YYYY'),
-        periods: null
+        periods: null,
+        labelWidth: 0,
     };
 
     componentDidMount()
@@ -81,13 +82,15 @@ class FilterPanel extends Component {
                 let periods = region[0].OpenPeriods;
 
                 let all_periods = [];
+                all_periods.push('01/2017');
+                this.setState({period: '01/2017'});
 
                 let period = periods.current.month.toString() + '/' + periods.current.year.toString();
                 if (periods.current.month < 10)
                     period = '0' + period;
                 if(periods.current.status==='Open')
                     all_periods.push(period);
-                this.setState({period: period});
+                // this.setState({period: period});
 
 
                 period = periods.next.month.toString() + '/' + periods.next.year.toString();
@@ -125,10 +128,7 @@ class FilterPanel extends Component {
 
     handleChange = (event) => {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
-    };
-
-    handleInvoiceDateChange = date => {
-        this.setState({ reportDate: date });
+        this.setState({ reportDate: event.target.value });
     };
 
     render()
