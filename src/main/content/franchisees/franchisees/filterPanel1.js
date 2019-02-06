@@ -88,6 +88,8 @@ class FilterPanel1 extends Component {
             this.props.nullifyFranchiseeNewReport();
 
             let period = this.state.reportPeriod.split('/');
+            console.log('period=', period);
+
             this.props.createReport({
                 regionId: this.props.regionId,
                 year: parseInt(period[1]),

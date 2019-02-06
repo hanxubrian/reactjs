@@ -170,7 +170,11 @@ class Report extends Component {
 
     renderHeader = ()=>{
         const { all_regions} = this.props;
-        const {month, year, regionid} = this.props.match.params;
+        const {regionid} = this.props.match.params;
+        let period = this.props.reportPeriod.split('/');
+
+        let month = period[0];
+        let year = period[1];
 
         const months = ["January","February","March","April","May","June","July",
             "August","September","October","November","December"];
@@ -564,11 +568,12 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({auth, franchiseeReports})
+function mapStateToProps({auth, franchiseeReports, franchisees})
 {
     return {
         franchiseeReport: franchiseeReports.franchiseeReport1,
         all_regions: auth.login.all_regions,
+        reportPeriod: franchisees.reportPeriod,
     }
 }
 const divline ={
