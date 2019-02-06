@@ -246,8 +246,6 @@ const MapWithAMarkerClusterer = compose(
     withHandlers({
         onMarkerClustererClick: () => (markerClusterer) => {
             const clickedMarkers = markerClusterer.getMarkers()
-            console.log(`Current clicked markers length: ${clickedMarkers.length}`)
-            console.log(clickedMarkers)
         },
     }),
     withScriptjs,
@@ -284,8 +282,6 @@ const MapWithAMarkerClusterer2 = compose(
     withHandlers({
         onMarkerClustererClick: () => (markerClusterer) => {
             const clickedMarkers = markerClusterer.getMarkers()
-            console.log(`Current clicked markers length: ${clickedMarkers.length}`)
-            console.log(clickedMarkers)
         },
     }),
     withScriptjs,
@@ -488,7 +484,6 @@ class Franchisees extends Component {
         }
         if (this.props.locationFilterValue !== nextProps.locationFilterValue) {
             this.setState({ locationFilterValue: nextProps.locationFilterValue })
-            console.log("componentWillReceiveProps", "locationFilterValue", nextProps.locationFilterValue, this.props.franchisees)
             this.initRowsFromRawJson(this.props.franchisees, nextProps.locationFilterValue);
         }
     }
@@ -588,12 +583,9 @@ class Franchisees extends Component {
         this.props.createFranchisees.type === 'create' ? this.props.closeEditFranchisees() : this.props.closeCreateFranchisees();
     };
     getLocation() {
-        console.log("getLocation");
-
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    console.log(position.coords);
                     this.setState({
                         current_lat: position.coords.latitude,
                         current_long: position.coords.longitude
@@ -614,16 +606,12 @@ class Franchisees extends Component {
     }
 
     initRowsFromRawJson = (rawData = this.props.franchisees, locationFilterValue = this.props.locationFilterValue) => {
-        console.log("initRowsFromRawJson", "CustomerListContent.js", this.props.regionId, this.props.statusId, rawData)
         let all_temp = [];
         if (rawData === null || rawData === undefined) return;
 
         let regions = rawData.Data.Region.filter(x => {
             return this.props.regionId === 0 || x.Id === this.props.regionId;
         });
-
-
-        console.log("regions", regions)
 
         regions.forEach(x => {
             all_temp = [...all_temp, ...x.Franchisee];
@@ -646,16 +634,13 @@ class Franchisees extends Component {
         this.setState({
             rows: all_temp,
             data: all_temp,
-            // pins: _pins_temp,
         });
 
     };
 
     filterPins(pins, locationFilterValue) {
-        // this.setState({ gmapVisible: !this.state.gmapVisible });
-        console.log("-------filterPins---------", pins)
-        let k = (12.5 - 9.5) * 75 / (75 / 5 - 1)
-        let b = 12.5 - k / 5
+        let k = (12.5 - 9.5) * 75 / (75 / 5 - 1);
+        let b = 12.5 - k / 5;
 
         switch (locationFilterValue.id) {
             case "locationAll":
@@ -1088,12 +1073,13 @@ class Franchisees extends Component {
                                         }
                                     }}
                                     getTrProps={(state, rowInfo, column) => {
+                                        let period = this.props.reportPeriod.split('/');
                                         return {
                                             className: "cursor-pointer",
                                             onClick  : (e, handleOriginal) => {
                                                 if ( rowInfo )
                                                 {
-                                                    this.props.history.push(`/franchisees/reports_new/${this.props.regionId}/2017/01/${rowInfo.original.Number}`);
+                                                    this.props.history.push(`/franchisees/reports_new/${this.props.regionId}/${period[1]}/${period[0]}/${rowInfo.original.Number}`);
                                                 }
                                             }
                                         }
@@ -1283,7 +1269,8 @@ function mapStateToProps({franchisees,auth})
         SearchText: franchisees.SearchText,
         mapViewState: franchisees.bOpenedMapView,
         bFranchiseesFetchStart: franchisees.bFranchiseesFetchStart,
-        locationFilterValue: franchisees.locationFilterValue
+        locationFilterValue: franchisees.locationFilterValue,
+        reportPeriod: franchisees.reportPeriod,
     }
 }
 

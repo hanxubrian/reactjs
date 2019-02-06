@@ -306,7 +306,6 @@ class SummaryTransactons extends Component {
                 <table style={{width:'80%'}}>
                     <tbody>
                     { aDeductions5.map((b, index)=>{
-                        console.log('b=', b);
                         if(SUMMARY_PAGE[0][b]===null)
                             return false;
                         else

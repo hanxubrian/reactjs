@@ -578,7 +578,7 @@ function mapStateToProps({auth, franchiseeReports})
 {
     return {
         franchiseeReport: franchiseeReports.franchiseeReport1,
-        all_regions: auth.login.all_regions
+        all_regions: auth.login.all_regions,
     }
 }
 const divline ={
