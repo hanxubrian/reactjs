@@ -670,9 +670,13 @@ class TransactionEditForm extends Component {
             CreatedBy: this.props.user.UserId,
             Company_no: '',
 
-            TrxClass: this.state.TrxChargeClass.value,
-            TrxClassLabel: this.state.TrxChargeClass.label,
+            TrxType: this.state.TrxChargeClass.value,
+            TrxTypeLabel: this.state.TrxChargeClass.label,
+
+            TrxClass: 'I',
+
             TrxChargeType: this.state.TrxChargeType,
+
             TrxFrequency: this.state.transactionFrequency,
             TrxResell: this.state.reSell, //Boolean
 
