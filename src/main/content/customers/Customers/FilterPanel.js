@@ -79,6 +79,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
+import { Filter } from 'konva';
 
 Geocode.setApiKey("AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA");
 
@@ -591,7 +592,7 @@ class FilterPanel extends Component {
 
 		// this.props.toggleStatus(name, event.target.checked)
 	};
-
+	customerStatusFiltertimer = null
 	handleChange = name => event => {
 
 		const value = event.target.value
@@ -625,9 +626,28 @@ class FilterPanel extends Component {
 
 				let newStatusNames = [...this.state.filters.StatusNames]
 				if (checked) {
-					newStatusNames = [...new Set([...newStatusNames, value])]
+					if (value === "All") {
+						newStatusNames = [
+							"Active",
+							"Cancelled",
+							"Inactive",
+							"Suspended",
+							"Transferred",
+							"Unknown",
+						]
+					} else {
+						newStatusNames = [...new Set([...newStatusNames, value])]
+					}
 				} else {
-					newStatusNames.splice(newStatusNames.indexOf(value), 1)
+					if (value === "All") {
+						newStatusNames = ["-"]
+					} else {
+						newStatusNames.splice(newStatusNames.indexOf(value), 1)
+						if (newStatusNames.length === 0) {
+							newStatusNames = ["-"]
+						}
+					}
+
 				}
 				this.setState({
 					filter: {
@@ -635,21 +655,13 @@ class FilterPanel extends Component {
 						StatusNames: newStatusNames
 					}
 				})
-
-				this.props.getCustomers(
-					this.props.regionId,
-					this.props.statusId,
-					newStatusNames,
-					this.state.filters.AccountTypeListName,
-					this.props.location,
-					this.props.latitude,
-					this.props.longitude,
-					this.props.searchText,
-				);
-
 				this.props.setFilterCustomerStatuses(newStatusNames)
 
-				console.log("paymentHistoryFilterPaymentTypes", value, checked)
+				clearTimeout(this.customerStatusFiltertimer)
+				this.customerStatusFiltertimer = setTimeout(
+					this.fetchCustomersByStatus,
+					WAIT_INTERVAL,
+					newStatusNames)
 				return
 
 			default:
@@ -662,7 +674,18 @@ class FilterPanel extends Component {
 		});
 
 	};
-
+	fetchCustomersByStatus = (newStatusNames) => {
+		this.props.getCustomers(
+			this.props.regionId,
+			this.props.statusId,
+			newStatusNames.length >= 6 ? [] : newStatusNames.map(x => x.substring(0, 1)),
+			this.props.filters.AccountTypeListName,
+			this.props.location,
+			this.props.latitude,
+			this.props.longitude,
+			this.props.searchText,
+		);
+	}
 	onLocationFilter = (name, value) => {
 
 		let payload = {
@@ -1556,8 +1579,11 @@ class FilterPanel extends Component {
 									<h3 className="mb-12">Customer Status</h3>
 									<FormControlLabel
 										control={
-											<Switch checked={this.state['customerStatusList0']}
-												onChange={this.handleChangeChecked('customerStatusList0')} />
+											<Switch
+												checked={this.state.filters.StatusNames.length >= 6}
+												onChange={this.handleChange('filters.StatusNames')}
+												value="All"
+											/>
 										}
 										label="All"
 									/>

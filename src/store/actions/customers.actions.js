@@ -38,7 +38,7 @@ export const GET_CUSTOMER_START = "[CUSTOMERS APP] GET_CUSTOMER_START";
 export const SET_FILTER_CUSTOMER_STATUSES = "[CUSTOMERS APP] SET_FILTER_CUSTOMER_STATUSES";
 
 
-export function getCustomers(regionId, StatusNames, AccountTypeListName, statusId = 0, location = "all", latitude = "", longitude = "", searchText = "") {
+export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	// return dispatch => {
 	// const request = axios.get("/api/customers/gets");
 
@@ -61,7 +61,7 @@ export function getCustomers(regionId, StatusNames, AccountTypeListName, statusI
 			regionId = regionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [regionId]
 			statusId = statusId === 0 ? Array.from({ length: 10 }).map((item, index) => (index + 1)) : [statusId]
 			console.log(regionId, statusId)
-			let response = await customersService.getCustomersList(regionId, StatusNames, AccountTypeListName, statusId, location, latitude, longitude, searchText);
+			let response = await customersService.getCustomersList(regionId, statusId, StatusNames, AccountTypeListName, location, latitude, longitude, searchText);
 			dispatch({
 				type: GET_ALL_CUSTOMERS,
 				payload: response

@@ -29,6 +29,7 @@ class CustomersService {
 			Longitude,
 			SearchText
 		};
+		console.log("getCustomersList-data", data)
 		return new Promise((resolve, reject) => {
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/Customer/CustomerList`, data)
 				.then(res => {
