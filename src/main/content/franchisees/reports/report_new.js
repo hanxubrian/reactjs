@@ -16,6 +16,11 @@ import html2canvas from 'html2canvas';
 import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
 import SummaryTransactons from "./components/summaryTransactions";
+import CustomerTransactions from './components/customerTransactions'
+import CustomerAccountTotals from './components/customerAccountTotal'
+import SupplyTransactons from './components/supplyTransactions'
+import RegularMiscTransactons from './components/regularMiscTransactions'
+import FindersFeeTransactions from './components/findersFeeTransactions'
 
 const styles = theme => ({
     root: {
@@ -227,22 +232,6 @@ class Report extends Component {
 
         const {DLR_CODE, SUMMARY_PAGE, CUS_TRXS, CUST_ACCT_TOTALS, SUPPLY_TRXS, LEASE_PAYMENTS,REG_MISC, CHARGEBACKS }  = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0];
 
-        // const aBillings = [SUMMARY_PAGE[0]['ACTUAL BILLING'][0],SUMMARY_PAGE[0].ADTL_BILL_FRAN[0],
-        //     SUMMARY_PAGE[0].CLIENT_SUPPLIES[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE[0]];
-        // const aBillings1 =[SUMMARY_PAGE[0].SUBTOTAL[0], SUMMARY_PAGE[0].CLIENT_SALES_TAX[0]];
-        // const aBillings2 =[SUMMARY_PAGE[0].TOTAL_MON_REV[0]];
-        // const aDeductions0= [SUMMARY_PAGE[0].ROYALTY[0], SUMMARY_PAGE[0].ACCT_FEE[0],SUMMARY_PAGE[0].TECH_FEE[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE_COMM[0],SUMMARY_PAGE[0].FRAN_NOTE_PYMT[0]];
-        // const aDeductions1 = [ "FINDERS_FEES", "FRANCHISE SUPPLIES", "REGULAR MISCELLANEOUS"];
-        // "SUBTOTAL_REG_DEDS",
-        //     "ADVERTISING_FEE", "TOTAL_LEASES", "BUSINESS_PROT", "BPP_ADMIN", "CLIENT_SALES_TAX_BOT", "CHARGEBACKS", "PAGERS",
-        //     "PAGERS2", "SPECIAL_MISC", "SUBTOTAL_SPEC_DEDS", "TOTAL_DEDS", "DUE_TO_FRAN"
-        // const aDeductions2 =["FRANCHISE NOTE PAYMENT2", "ACCT_FEE_REB_CUR", "ACCT_FEE_REB_BAL"];
-        // const aDeductions3 =["SUBTOTAL_REG_DEDS"];
-        // const aDeductions4 =["ADVERTISING_FEE", "TOTAL_LEASES", "BUSINESS_PROT", "BPP_ADMIN", "CLIENT_SALES_TAX_BOT", "CHARGEBACKS", "PAGERS",
-        //     "PAGERS2", "SPECIAL_MISC","DUE_TO_FRAN"];
-        // const aDeductions5 =["SUBTOTAL_SPEC_DEDS"];
-        // const aDeductions6 =["TOTAL_DEDS"];
-
         return (
             <div className={classNames(classes.root, "p-0 sm:p-64  whole print:p-0")} id ="wholediv">
                 <div id ="testdiv" className="cardname">
@@ -255,7 +244,6 @@ class Report extends Component {
                                     </tbody>
                                 </table>
                             </div>
-
                             <div className="">
                                 <div>
                                     <table className="mb-16">
@@ -301,8 +289,61 @@ class Report extends Component {
                                         </tbody>
                                     </table>
                                 </div>
-
                                 <SummaryTransactons />
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                <div className="cardname">
+                    <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
+                        <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
+                            <div>
+                                <table align="">
+                                    <tbody>
+                                    {this.renderHeader()}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div className="">
+                                <div>
+                                    <table className="mb-16">
+                                        <tbody>
+                                        <tr>
+                                            <td className="pr-16 pb-4">
+                                                <Typography color="inherit">Franchisee Code:
+                                                </Typography>
+                                            </td>
+                                            <td className="text-left" width='100'>
+                                                <Typography color="inherit"><br/></Typography>
+                                            </td>
+                                            <td className="pb-4">
+                                                <Typography color="inherit">
+                                                    Name
+                                                </Typography>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td className="pr-16">
+                                                <Typography color="inherit">
+                                                    {DLR_CODE}
+                                                </Typography>
+                                            </td>
+                                            <td className="text-left" width='100'>
+                                                <Typography color="inherit"><br/></Typography>
+                                            </td>
+                                            <td>
+                                                <Typography color="inherit">
+                                                    {SUMMARY_PAGE[0].FRAN_NAME}
+                                                </Typography>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                               <CustomerTransactions />
                             </div>
                         </CardContent>
                     </Card>
