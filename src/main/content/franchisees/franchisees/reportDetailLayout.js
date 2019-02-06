@@ -260,13 +260,14 @@ class ReportLayout extends Component {
         let imgUrl ='https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
         const input = document.getElementById('wholediv');
         this.child.downloadPDF(input, imgUrl);
-    }
+    };
     email = () => {
         alert("Email");
-    }
-    gobackreport =()=>{
-        this.props.history.push('/franchisees/reports');
-    }
+    };
+
+    goBackList =()=>{
+        this.props.history.push('/franchisees/list');
+    };
     render() {
 
         const {classes, filterState, summaryState} = this.props;
@@ -289,7 +290,7 @@ class ReportLayout extends Component {
                             <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
                                 <div className="flex flex-row flex-1 justify-between">
 
-                                    <div className="flex flex-shrink items-center" onClick={this.gobackreport} style={{
+                                    <div className="flex flex-shrink items-center" onClick={this.goBackList} style={{
                                         cursor: "pointer",
                                     }}>
 

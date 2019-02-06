@@ -23,7 +23,7 @@ const initialState = {
     documentsList: [],
     franchiseeFees: [],
     Location: "all",
-    StateList: [],    
+    StateList: [],
     transactionStatusFranchisees:{
         Active: true,
         Inactive: true,
@@ -115,8 +115,9 @@ const initialState = {
         NewFindersFee: 1,
         CURSTAT: "",
         CURSTATDT: "",
-        Documents: []
-    }
+        Documents: [],
+    },
+    reportPeriod: '01/2017'
 };
 
 
@@ -363,6 +364,12 @@ const franchisees = function(state = initialState, action) {
             return{
                 ...state,
                 StateList: action.payload
+            }
+        }
+        case Actions.UPDATE_REPORT_PERIOD: {
+            return{
+                ...state,
+                reportPeriod: action.payload
             }
         }
         default:

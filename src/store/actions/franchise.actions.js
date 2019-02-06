@@ -31,6 +31,8 @@ export const CREATE_FRANCHISEE = '[FRANCHISEES] CREATE FRANCHISEE';
 export const UPDATE_FRANCHISEE = '[FRANCHISEES] UPDATE FRANCHISEE';
 export const DELETE_FRANCHISEE = '[FRANCHISEES] DELETE FRANCHISEE';
 
+export const UPDATE_REPORT_PERIOD = '[FRANCHISEES] UPDATE REPORT PERIOD';
+
 
 export function getFranchisees(regionId, statusId, location , latitude , longitude , searchtext) {
 
@@ -276,4 +278,12 @@ export function selectLocation(location){
        type: SELECTED_LOCATION,
         Location: location
      }
+}
+
+
+export function updateReportPeriod(period) {
+    return {
+        type: UPDATE_REPORT_PERIOD,
+        payload: period
+    }
 }

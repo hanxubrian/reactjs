@@ -116,7 +116,7 @@ class FilterPanel extends Component {
         Phone1: '+1(  )    -    ',
         Phone2: '+1(  )    -    ',
 
-        reportDate: moment().format('MM/YYYY'),
+        reportPeriod: moment().format('MM/YYYY'),
         period: moment().format('MM/YYYY'),
         periods: null,
         labelWidth: 0,
@@ -173,7 +173,7 @@ class FilterPanel extends Component {
         });
     }
 
-    componentDidUpdate(prevProps)
+    componentDidUpdate(prevProps, prevState, snapshot)
     {
         if ( this.props.state !== prevProps.state )
         {
@@ -185,6 +185,10 @@ class FilterPanel extends Component {
             {
                 document.removeEventListener('keydown', this.handleDocumentKeyDown);
             }
+        }
+
+        if(prevState.reportPeriod!==this.state.reportPeriod) {
+            this.props.updateReportPeriod(this.state.reportPeriod);
         }
     }
 
@@ -263,7 +267,7 @@ class FilterPanel extends Component {
 
     handlePeriodChange = (event) => {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
-        this.setState({ reportDate: event.target.value });
+        this.setState({ reportPeriod: event.target.value });
     };
 
     onLocationFilter = (name, value) => {
@@ -717,7 +721,8 @@ function mapDispatchToProps(dispatch)
         getStatusFilterList: Actions.getStatusFilterList,
         updateFranchiseeStatus: Actions.updateFranchiseeStatus,
         franchiseeUpdateInsertPayload: Actions.franchiseeUpdateInsertPayload,
-        getFranchiseeStateList: Actions.getFranchiseeStateList
+        getFranchiseeStateList: Actions.getFranchiseeStateList,
+        updateReportPeriod: Actions.updateReportPeriod
     }, dispatch);
 }
 
@@ -733,7 +738,7 @@ function mapStateToProps({franchisees, auth})
         locationFilterValue: franchisees.locationFilterValue,
         insertPayload: franchisees.insertPayload,
         stateList: franchisees.StateList,
-        reportDate: franchisees.reportDate,
+        reportPeriod: franchisees.reportPeriod,
         all_regions: auth.login.all_regions,
     }
 }
