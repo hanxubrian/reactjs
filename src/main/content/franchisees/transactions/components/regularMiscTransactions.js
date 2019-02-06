@@ -36,12 +36,13 @@ import FuseUtils from '@fuse/FuseUtils';
 
 const styles = theme => ({
     tableTheadRow: {
-        backgroundColor: theme.palette.primary.main,
         '& tr': {
-            height: 48
+            height: 32
         },
         '& tr th': {
-            color: 'white'
+            padding: '0 8px',
+            borderBottom: '2px solid black',
+            borderTop: '2px solid black',
         },
         '& tr th:nth-child(2)': {
             width: '100%'
@@ -55,13 +56,16 @@ const styles = theme => ({
         '& tbody tr:nth-of-type(odd)': {
         },
         '& tbody tr td': {
-            fontSize: 11,
+            fontSize: 12,
             paddingLeft: 4,
             paddingRight: 4
         },
         '& tbody tr td:nth-child(2)': {
             width: '100%',
         },
+        '& tbody tr:last-child td': {
+            borderBottom: '2px solid black',
+        }
 
     },
     tableFootRow: {
@@ -152,7 +156,8 @@ class RegularMiscTransactons extends Component {
     render() {
         const {classes, franchiseeReport} = this.props;
         if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].REG_MISC===null)
-            return (<div/>);
+            return (<div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
+                <h2>Regular Misc. Transactions</h2></div>);
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].REG_MISC.map(d=>{
             d.DESCR = FuseUtils.capital_letter(d.DESCR);
@@ -185,7 +190,7 @@ class RegularMiscTransactons extends Component {
         ];
 
         return (
-            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
+            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24 w-full")}>
                 <h2>Regular Misc. Transactions</h2>
                 <Grid rows={data} columns={columns}>
                     <PagingState

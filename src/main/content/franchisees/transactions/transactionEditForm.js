@@ -529,7 +529,6 @@ class TransactionEditForm extends Component {
 
         if(this.props.transactionForm.type === 'edit' && this.props.transactionDetail!==null) {
             let trxDetail = this.props.transactionDetail.Data;
-            console.log('detail====', trxDetail)
             if(this.props.franchisees!==null && trxDetail!==null) {
                 let franchisees = this.props.franchisees.Data.Region[0].Franchisees;
 

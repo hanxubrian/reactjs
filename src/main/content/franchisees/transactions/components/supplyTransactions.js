@@ -36,13 +36,22 @@ import NumberFormat from 'react-number-format';
 
 
 const styles = theme => ({
+    layoutTable: {
+        '& table th:first-child span': {
+            paddingLeft: '8px!important'
+        },
+        '& table th:last-child span': {
+            paddingRight: '8px!important'
+        }
+    },
     tableTheadRow: {
-        backgroundColor: theme.palette.primary.main,
         '& tr': {
-            height: 48
+            height: 32
         },
         '& tr th': {
-            color: 'white'
+            padding: '0 8px',
+            borderBottom: '2px solid black',
+            borderTop: '2px solid black',
         },
         '& tr th:nth-child(3)': {
             width: '100%'
@@ -53,14 +62,16 @@ const styles = theme => ({
         '& tbody tr:nth-of-type(odd)': {
         },
         '& tbody tr td': {
-            fontSize: 11,
+            fontSize: 12,
             paddingLeft: 4,
             paddingRight: 4
         },
         '& tbody tr td:nth-child(3)': {
             width: '100%',
         },
-
+        '& tbody tr:last-child td': {
+            borderBottom: '2px solid black',
+        }
     },
     tableFootRow: {
         '& td:nth-child(3)': {
@@ -135,7 +146,7 @@ class SupplyTransactons extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].SUPPLY_TRXS.length===0)
+        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].SUPPLY_TRXS===null)
             return (<div/>);
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].SUPPLY_TRXS.map(d=>{
@@ -185,10 +196,11 @@ class SupplyTransactons extends Component {
                     />
 
                     <IntegratedPaging/>
-                    <SummaryState
-                        totalItems={totalSummaryItems}
-                    />
-                    <IntegratedSummary />
+                    <IntegratedPaging/>
+                    {data.length>0 && (
+                        <SummaryState totalItems={totalSummaryItems} />
+                    )}
+                    {data.length>0 && (<IntegratedSummary /> )}
 
                     <VirtualTable height="auto"
                                   tableComponent={TableComponent}
@@ -196,7 +208,9 @@ class SupplyTransactons extends Component {
                                   columnExtensions={tableColumnExtensions}
                     />
                     <TableHeaderRow />
-                    <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
+                    {data.length>0 && (
+                        <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
+                    )}
                 </Grid>
             </div>
         );

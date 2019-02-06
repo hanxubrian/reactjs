@@ -35,17 +35,25 @@ import classNames from 'classnames';
 import NumberFormat from 'react-number-format';
 
 const styles = theme => ({
+    layoutTable: {
+        '& table th:first-child span': {
+            paddingLeft: '8px!important'
+        }
+    },
     tableTheadRow: {
-        backgroundColor: theme.palette.primary.main,
         '& tr': {
-            height: 48
+            height: 32
         },
-        '& tr th': {
-            color: 'white'
+        '& tr th':{
+            borderBottom: '2px solid black',
+            borderTop: '2px solid black',
         },
         '& tr th:nth-child(2)': {
             width: '100%'
-        }
+        },
+        '& tr th:nth-child(2) span': {
+            display: 'none'
+        },
     },
     imageIcon: {
         width: 24
@@ -55,14 +63,16 @@ const styles = theme => ({
         '& tbody tr:nth-of-type(odd)': {
         },
         '& tbody tr td': {
-            fontSize: 11,
+            fontSize: 12,
             paddingLeft: 4,
             paddingRight: 4
         },
         '& tbody tr td:nth-child(2)': {
             width: '100%',
         },
-
+        '& tbody tr:last-child td': {
+            borderBottom: '2px solid black',
+        }
     },
     tableFootRow: {
         '& td:nth-child(2)': {
@@ -136,7 +146,7 @@ class CustomerAccountTotals extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS.length===0)
+        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS===null)
             return (<div/>);
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS.map(d=>{
@@ -150,7 +160,7 @@ class CustomerAccountTotals extends Component {
         });
 
         const columns = [
-            {name: "CUST_NO", title: "Cus. #",},
+            {name: "CUST_NO", title: "Customer",},
             {name: "CUS_NAME", title: "Cus. Name"},
             {name: "CONT_BILL", title: "Contact Billing"},
             {name: "CUR_MONTH", title: "Current Month"},
@@ -161,7 +171,7 @@ class CustomerAccountTotals extends Component {
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'CUST_NO', width: 80, },
+            { columnName: 'CUST_NO', width: 120, },
             { columnName: 'CUS_NAME', width: -1, },
             { columnName: 'CONT_BILL', width: 120, align: 'right', wordWrapEnabled: true},
             { columnName: 'CUR_MONTH', width: 120, align: 'right', wordWrapEnabled: true},
@@ -193,10 +203,10 @@ class CustomerAccountTotals extends Component {
                     />
 
                     <IntegratedPaging/>
-                    <SummaryState
-                        totalItems={totalSummaryItems}
-                    />
-                    <IntegratedSummary />
+                    {data.length>0 && (
+                        <SummaryState totalItems={totalSummaryItems} />
+                    )}
+                    {data.length>0 && (<IntegratedSummary /> )}
 
                     <VirtualTable height="auto"
                                   tableComponent={TableComponent}
@@ -204,7 +214,9 @@ class CustomerAccountTotals extends Component {
                                   columnExtensions={tableColumnExtensions}
                     />
                     <TableHeaderRow />
-                    <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
+                    {data.length>0 && (
+                        <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
+                    )}
                 </Grid>
             </div>
         );

@@ -35,13 +35,27 @@ import NumberFormat from 'react-number-format';
 import FuseUtils from '@fuse/FuseUtils';
 
 const styles = theme => ({
+    layoutTable: {
+     '& table th:first-child span': {
+         paddingLeft: '8px!important'
+     },
+     '& table th:nth-child(2) span': {
+            display: 'none'
+     },
+     '& th':{
+         borderBottom: '2px solid black',
+         borderTop: '2px solid black',
+     }
+    },
     tableTheadRow: {
-        backgroundColor: theme.palette.primary.main,
         '& tr': {
-            height: 48
+            height: 32
         },
         '& tr th': {
-            color: 'white'
+            padding: '0 8px'
+        },
+        '& tr th:first-child': {
+            paddingLeft: '8px!important'
         },
         '& tr th:nth-child(3)': {
             width: '100%'
@@ -55,13 +69,16 @@ const styles = theme => ({
         '& tbody tr:nth-of-type(odd)': {
         },
         '& tbody tr td': {
-            fontSize: 11,
+            fontSize: 12,
             paddingLeft: 4,
             paddingRight: 4
         },
         '& tbody tr td:nth-child(3)': {
             width: '100%',
         },
+        '& tbody tr:last-child td': {
+            borderBottom: '2px solid black',
+        }
 
     },
     tableFootRow: {
@@ -151,7 +168,7 @@ class CustomerTransactions extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUS_TRXS.length===0)
+        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUS_TRXS===null)
             return (<div/>);
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUS_TRXS.map(d=>{
@@ -164,7 +181,7 @@ class CustomerTransactions extends Component {
         });
 
         const columns = [
-            {name: "CUST_NO", title: "Cus. #",},
+            {name: "CUST_NO", title: "Customer",},
             {name: "CUS_NAME", title: "Cus. Name"},
             {name: "DESCR", title: "Description"},
             {name: "INV_NO", title: "Invoice #"},
@@ -175,7 +192,7 @@ class CustomerTransactions extends Component {
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'CUST_NO', width: 80, },
+            { columnName: 'CUST_NO', width: 120, },
             { columnName: 'CUS_NAME', width: 220, },
             { columnName: 'DESCR', width: -1, },
             { columnName: 'INV_NO', width: 80},
@@ -206,10 +223,10 @@ class CustomerTransactions extends Component {
                     />
 
                     <IntegratedPaging/>
-                    <SummaryState
-                        totalItems={totalSummaryItems}
-                    />
-                    <IntegratedSummary />
+                    {data.length>0 && (
+                    <SummaryState totalItems={totalSummaryItems} />
+                    )}
+                    {data.length>0 && (<IntegratedSummary /> )}
 
                     <VirtualTable height="auto"
                                   tableComponent={TableComponent}
@@ -217,8 +234,9 @@ class CustomerTransactions extends Component {
                                   columnExtensions={tableColumnExtensions}
                     />
                     <TableHeaderRow />
-                    {/*<PagingPanel pageSizes={this.state.pageSizes} />*/}
-                    <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
+                    {data.length>0 && (
+                        <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
+                    )}
                 </Grid>
             </div>
         );
