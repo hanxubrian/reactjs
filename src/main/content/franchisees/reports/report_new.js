@@ -5,13 +5,13 @@ import connect from "react-redux/es/connect/connect";
 import classNames from 'classnames';
 
 // core components
-import {Card, CardContent, Typography, TextField,CircularProgress} from '@material-ui/core';
+import {Card, CardContent, Typography, CircularProgress} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles/index';
 
 //Theme component
-import FuseUtils from '@fuse/FuseUtils';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+
 //Store
 import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
@@ -397,6 +397,60 @@ class Report extends Component {
                                     </table>
                                 </div>
                                <CustomerAccountTotals />
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+                <div className="cardname">
+                    <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
+                        <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
+                            <div>
+                                <table align="">
+                                    <tbody>
+                                    {this.renderHeader()}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div className="">
+                                <div>
+                                    <table className="mb-16">
+                                        <tbody>
+                                        <tr>
+                                            <td className="pr-16 pb-4">
+                                                <Typography color="inherit">Franchisee Code:
+                                                </Typography>
+                                            </td>
+                                            <td className="text-left" width='100'>
+                                                <Typography color="inherit"><br/></Typography>
+                                            </td>
+                                            <td className="pb-4">
+                                                <Typography color="inherit">
+                                                    Name
+                                                </Typography>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td className="pr-16">
+                                                <Typography color="inherit">
+                                                    {DLR_CODE}
+                                                </Typography>
+                                            </td>
+                                            <td className="text-left" width='100'>
+                                                <Typography color="inherit"><br/></Typography>
+                                            </td>
+                                            <td>
+                                                <Typography color="inherit">
+                                                    {SUMMARY_PAGE[0].FRAN_NAME}
+                                                </Typography>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <SupplyTransactons />
+
                             </div>
                         </CardContent>
                     </Card>
