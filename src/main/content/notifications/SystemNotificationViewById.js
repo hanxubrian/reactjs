@@ -240,13 +240,29 @@ const styles = theme => ({
 //
 
 
+// const TableComponentBase = ({ classes, ...restProps }) => (
+// 	<Table.Table
+// 		{...restProps}
+// 		className={classes.tableStriped}
+// 	/>
+// );
+// export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
+
 const TableComponentBase = ({ classes, ...restProps }) => (
-	<Table.Table
-		{...restProps}
-		className={classes.tableStriped}
-	/>
+    <Table.Table
+        {...restProps}
+        className={classes.tableStriped}
+    />
+);
+const TableHeadComponentBase = ({ classes, ...restProps }) => (
+    <Table.TableHead
+        {...restProps}
+        className={classes.tableTheadRow}
+    />
 );
 export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
+export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
+
 
 const SubTd = ({ tdvalue, onClick }) => (
     <td onClick={onClick}>{tdvalue}</td>
@@ -380,6 +396,7 @@ class SystemNotificationViewById extends Component {
         }
     }
     handleItemClick = (e) => {console.log(e.target.innerHTML)}
+
     render(){
         const {Data,classes}                    = this.props;
         const {row,multiData,multiKey}          = this.state;
@@ -683,13 +700,17 @@ class SystemNotificationViewById extends Component {
 
                                     }</div>
                                     <CardContent>
-                                            <Grid
+                                            <Grid 
                                                 rows={rows}
                                                 columns={tableColumnExtensions}
                                                 >
-                                                <VirtualTable height="auto" />
+                                                <VirtualTable 
+                                                    height="550" 
+                                                    headComponent = {TableHeadComponent}
+                                                
+                                                />
 
-                                                <TableColumnResizing />
+                                                {/* <TableColumnResizing /> */}
                                                 <TableHeaderRow className={classes.tableView} />
                                             </Grid>
                                         {/* <table className={classes.tableView}>
