@@ -20,7 +20,8 @@ const initialState = {
 			open: false
 		},
 		data: null
-	}
+	},
+    reportDate: '01/2017'
 };
 
 

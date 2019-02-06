@@ -44,13 +44,6 @@ import {withScriptjs, withGoogleMap, GoogleMap, Marker,} from "react-google-maps
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 import { compose, withProps, withHandlers, lifecycle } from "recompose";
 
-// function Marker({ text }) {
-//     return (
-//         <Tooltip title={text} placement="top">
-//             <Icon className="text-red">place</Icon>
-//         </Tooltip>
-//     );
-// }
 
 const headerHeight = 80;
 
@@ -61,7 +54,7 @@ const hexToRgb = (hex) =>{
         g: parseInt(result[2], 16),
         b: parseInt(result[3], 16)
     } : null;
-}
+};
 
 const styles = theme => ({
     root: {
@@ -240,8 +233,8 @@ const styles = theme => ({
     }
 });
 
-const DEFAULT_ZOOM = 8
-let map_zoom = DEFAULT_ZOOM
+const DEFAULT_ZOOM = 8;
+let map_zoom = DEFAULT_ZOOM;
 
 const MapWithAMarkerClusterer = compose(
     withProps({

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Paper, TextField, withStyles} from '@material-ui/core';
+import {OutlinedInput, Paper, Select, TextField, withStyles} from '@material-ui/core';
 import keycode from 'keycode';
 
 //Material UI core
@@ -20,6 +20,8 @@ import Radio from "@material-ui/core/Radio/Radio";
 import Geocode from "react-geocode";
 import MaskedInput from "react-text-mask";
 import * as PropTypes from "prop-types";
+import moment from "moment";
+import _ from "lodash";
 
 
 const styles = theme => ({
@@ -53,7 +55,20 @@ const styles = theme => ({
         '&.opened1'                    : {
             transform: 'translateX(300px)'
         }
-    }
+    },
+    dropdownMenu: {
+        '& li': {
+            fontSize: 12,
+            height: 12,
+        }
+    },
+    inputMenu: {
+        padding: '10px 16px'
+    },
+    inputMenu1: {
+        padding: '10px 16px',
+        width: 150
+    },
 });
 
 
@@ -69,7 +84,7 @@ const TextMaskCustom = (props) => {
             showMask
         />
     );
-}
+};
 
 TextMaskCustom.propTypes = {
     inputRef: PropTypes.func.isRequired,
@@ -100,6 +115,11 @@ class FilterPanel extends Component {
         stateList: [],
         Phone1: '+1(  )    -    ',
         Phone2: '+1(  )    -    ',
+
+        reportDate: moment().format('MM/YYYY'),
+        period: moment().format('MM/YYYY'),
+        periods: null,
+        labelWidth: 0,
     };
 
     constructor(props){
@@ -111,6 +131,39 @@ class FilterPanel extends Component {
     }
     componentDidMount()
     {
+        if(this.props.all_regions!==null && this.props.all_regions.length){
+            let all_regions = this.props.all_regions;
+            let region = all_regions.filter(r=>r.regionid===this.props.regionId);
+
+            if(region.length){
+                let periods = region[0].OpenPeriods;
+
+                let all_periods = [];
+                all_periods.push('01/2017');
+                this.setState({period: '01/2017'});
+
+                let period = periods.current.month.toString() + '/' + periods.current.year.toString();
+                if (periods.current.month < 10)
+                    period = '0' + period;
+                if(periods.current.status==='Open')
+                    all_periods.push(period);
+                // this.setState({period: period});
+
+
+                period = periods.next.month.toString() + '/' + periods.next.year.toString();
+                if (periods.next.month < 10)
+                    period = '0' + period;
+                if(periods.next.status==='Open')
+                    all_periods.push(period);
+                period = periods.previous.month.toString() + '/' + periods.previous.year.toString();
+                if (periods.previous.month < 10)
+                    period = '0' + period;
+                if(periods.previous.status==='Open')
+                    all_periods.push(period);
+
+                this.setState({periods: all_periods});
+            }
+        }
     }
 
     componentWillMount(){
@@ -208,11 +261,11 @@ class FilterPanel extends Component {
         }
     };
 
-    handleFilterChange = name => event => {
-        this.setState({
-            [name]: event.target.value,
-        });
+    handlePeriodChange = (event) => {
+        this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
+        this.setState({ reportDate: event.target.value });
     };
+
     onLocationFilter = (name, value) => {
 
         let payload = {
@@ -525,6 +578,33 @@ class FilterPanel extends Component {
                            </div>
                         ):(
                            <div style={{display: 'flex', flexDirection: 'column',width: '200px'}}>
+                               <h3>Periods (for report) </h3>
+                               {this.state.periods!==null && (
+                                   <Select
+                                       classes={{
+                                           selectMenu: classNames(classes.inputMenu1),
+                                       }}
+                                       name="period"
+                                       value={this.state.period}
+                                       onChange={this.handleChangePeriod}
+                                       input={
+                                           <OutlinedInput
+                                               labelWidth={this.state.labelWidth}
+                                               name="period"
+                                               id="period"
+                                           />
+                                       }
+                                       className={classes.textField}
+                                       MenuProps = {{
+                                           classes:{paper: classes.dropdownMenu},
+                                       }}
+                                   >
+                                       {this.state.periods.map((p, index)=>{
+                                           return (<MenuItem key={index} value={p}>{p}</MenuItem>)
+                                       })}
+                                   </Select>
+                               )}
+                               <br />
                                 <h3>Location</h3>
                                 <FormControl component="fieldset" className={classNames(classes.formControl,"mt-12")}>
                                    <RadioGroup
@@ -652,7 +732,9 @@ function mapStateToProps({franchisees, auth})
         franchiseeStatus: franchisees.franchiseeStatus,
         locationFilterValue: franchisees.locationFilterValue,
         insertPayload: franchisees.insertPayload,
-        stateList: franchisees.StateList
+        stateList: franchisees.StateList,
+        reportDate: franchisees.reportDate,
+        all_regions: auth.login.all_regions,
     }
 }
 
