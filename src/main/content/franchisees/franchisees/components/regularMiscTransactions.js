@@ -36,12 +36,13 @@ import FuseUtils from '@fuse/FuseUtils';
 
 const styles = theme => ({
     tableTheadRow: {
-        backgroundColor: theme.palette.primary.main,
         '& tr': {
-            height: 48
+            height: 32
         },
         '& tr th': {
-            color: 'white'
+            padding: '0 8px',
+            borderBottom: '2px solid black',
+            borderTop: '2px solid black',
         },
         '& tr th:nth-child(2)': {
             width: '100%'
@@ -62,6 +63,9 @@ const styles = theme => ({
         '& tbody tr td:nth-child(2)': {
             width: '100%',
         },
+        '& tbody tr:last-child td': {
+            borderBottom: '2px solid black',
+        }
 
     },
     tableFootRow: {

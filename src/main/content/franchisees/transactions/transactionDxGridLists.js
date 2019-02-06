@@ -70,7 +70,6 @@ const styles = theme => ({
         },
         '& .deduction':{
             '& td': {
-                color: '#cc0000!important',
                 fontWeight: 700
             }
         },
