@@ -18,6 +18,7 @@ import _notificationservice from './notification/notificationService';
 import _territoriesService from './regions/territoriesService';
 import _franchiseeReportService from './franchisees/franchiseeReportService';
 import _userService from './users/userService';
+import _adminImportNotificationService from  './admin/adminImportNotificationService';
 
 
 
@@ -41,3 +42,4 @@ export const notificationService = _notificationservice;
 export const territoriesService = _territoriesService;
 export const franchiseeReportService = _franchiseeReportService;
 export const userService = _userService;
+export const adminImportNotificationService = _adminImportNotificationService;

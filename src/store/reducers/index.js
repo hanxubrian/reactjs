@@ -25,6 +25,7 @@ import paymentlockbox from './paymentlockbox.reducer';
 import notification from './notification.reducer';
 import territories from './regions.territories.reducer';
 import franchiseeReportDatalist from './franchiseeReport.reducer';
+import admin from './admin.reducer';
 
 
 import * as Actions from "../actions/";
@@ -64,6 +65,7 @@ const createReducer =
         notification,
         territories,
         franchiseeReportDatalist,
+        admin,
         ...asyncReducers
     })
     (action.type === 'ADMIN_CLEAN_CACHE_FOR_UPGRADE' ? undefined : state, action)

@@ -264,10 +264,30 @@ class FranchiseesDocumentUploadTable extends React.Component {
     handleChange(selectorFiles,id)
     {
         let today = new Date();
-        let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        let month = "";
+        let day = "";
+        if((today.getMonth()+1)<10){
+            month = '0'+(today.getMonth()+1)
+        }else{
+            month = (today.getMonth()+1)
+        }
+        if(today.getDate()<10){
+            day = '0'+(today.getDate())
+        }else{
+            day = (today.getDate())
+        }
+        let date = today.getFullYear()+'-'+month+'-'+day;
         const list = this.props.documentsList;
-        list["documentDateTime"+id] = date;
-        list["documentFileSize"+id] = selectorFiles[0].size+" bytes";
+        list.map(x=>{
+            if(id === x.FileTypeListId){
+                x.UploadDocuments=selectorFiles;
+                x["documentDateTime"+id] = date;
+                x["documentFileSize"+id] = selectorFiles[0].size+" bytes";
+            }
+        })
+        const tempInsertPayload = this.props.insertPayload;
+        tempInsertPayload.documents = list;
+        this.props.franchiseeUpdateInsertPayload(tempInsertPayload);
         this.setState({
             documentsList: list
         });
@@ -327,22 +347,22 @@ class FranchiseesDocumentUploadTable extends React.Component {
                             {documentsList.length > 0 && (
                                 stableSort(documentsList, getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map(n => {
+                                .map((n,index) => {
                                             return (
                                                 <TableRow hover key={n.FileTypeListId} >
                                                     <TableCell component="td" scope="row" >
                                                         {n.Name}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {documentsList["documentDateTime"+n.FileTypeListId]}
+                                                        {documentsList[index]["documentDateTime"+n.FileTypeListId]}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {documentsList["documentFileSize"+n.FileTypeListId]}
+                                                        {documentsList[index]["documentFileSize"+n.FileTypeListId]}
                                                     </TableCell>
                                                     <TableCell>
                                                         <IconButton
                                                             className={classNames(classes.summaryPanelButton, "mr-12")}
-                                                            aria-label="Add an alarm"
+                                                            aria-label="view-icon"
                                                             onClick={(ev) => this.documentView(["documentView"+n.FileTypeListId])}>
                                                             <Icon>visibility</Icon>
                                                         </IconButton>
@@ -351,6 +371,7 @@ class FranchiseesDocumentUploadTable extends React.Component {
                                                         <TextField
                                                             id={"value" + n.FileTypeListId}
                                                             type="file"
+                                                            multiple
                                                             onChange={ (e) => this.handleChange(e.target.files,n.FileTypeListId)}
                                                             margin="dense"
                                                             className={classes.textField}
@@ -371,14 +392,16 @@ class FranchiseesDocumentUploadTable extends React.Component {
 }
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-       getFranchiseeDocumentsList: Actions.getFranchiseeDocumentsList
+       getFranchiseeDocumentsList: Actions.getFranchiseeDocumentsList,
+       franchiseeUpdateInsertPayload: Actions.franchiseeUpdateInsertPayload,
     }, dispatch);
 }
 
 function mapStateToProps({ franchisees, auth }) {
     return {
         regionId: auth.login.defaultRegionId,
-        documentsList: franchisees.documentsList
+        documentsList: franchisees.documentsList,
+        insertPayload: franchisees.insertPayload
     }
 }
 

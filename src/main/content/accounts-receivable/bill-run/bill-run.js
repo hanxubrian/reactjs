@@ -453,7 +453,7 @@ class BillRun extends Component {
                     content: classes.content
                 }}
                 header={
-                    <div className="flex row flex-1  p-8 sm:p-12 relative justify-between" >
+                    <div className="flex row flex-1  p-8 sm:p-12 relative justify-between" >a
                         <div className="flex flex-row flex-1 justify-between">
                             <div className="flex flex-shrink items-center">
                                 <div className="flex items-center">

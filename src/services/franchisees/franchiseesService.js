@@ -273,30 +273,6 @@ class franchiseesService {
                 })
         });
     }
-    /**
-     * @method POST
-     *
-     * @param data
-     * @param regionId
-     * @returns {Promise<any>}
-     */
-    createFranchiseesList =  (data,regionId) => {
-
-        return new Promise((resolve, reject) => {
-            axios_instance.post(`${BASE_API_URL}/v1/Franchisee/create/${regionId}`, data)
-                .then( res => {
-                    if(res.status===200) {
-                        resolve(res.data);
-                    }
-                    else if(res.status!==200){
-                        reject(res.data);
-                    }
-                })
-                .catch(error=>{
-                    resolve(error);
-                })
-        });
-    };
 
 
     getFranchiseeReport = (params) => {

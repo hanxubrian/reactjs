@@ -10,7 +10,9 @@ import { withRouter } from 'react-router-dom';
 // for store
 import { bindActionCreators } from "redux";
 import connect from "react-redux/es/connect/connect";
-import * as Actions from 'store/actions/account_receivable.payments.actions.js';
+
+import * as AccReceivablePaymnetActions from 'store/actions/account_receivable.payments.actions.js';
+import * as InvoiceActions from 'store/actions/invoice.actions.js';
 
 // third party
 import "react-table/react-table.css";
@@ -68,6 +70,8 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import { CustomizedDxGridSelectionPanel } from "./../../common/CustomizedDxGridSelectionPanel";
 
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
+// import InvoiceReport from './../Invoice/invoiceReport'
+import InvoiceReport from './invoiceReport'
 
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -557,6 +561,9 @@ class PaymentsListContent extends Component {
 				{ columnName: 'DaysPastDue', direction: 'asc' },
 			],
 			editingColumnExtensions: [],
+			invoiceNoButtonColumns: [
+				'InvoiceNo',
+			],
 			currencyColumns: [
 				'InvoiceAmount',
 				'InvoiceBalance',
@@ -583,6 +590,7 @@ class PaymentsListContent extends Component {
 			showNoSelectionAlertDialog: false,
 
 			isCustomerNameNoGrouping: true,
+			invoiceDetail: null,
 		};
 
 		this.fetchData = this.fetchData.bind(this);
@@ -653,12 +661,13 @@ class PaymentsListContent extends Component {
 			"paymentsParam": this.props.filterParam,
 			rows,
 			expandedGroups: [...new Set(rows.map(x => x.CustomerNameNo))],
+
+			isCustomerNameNoGrouping: this.props.isCustomerNameNoGrouping,
+			selection: [...this.props.activePaymentRows],
+
+			invoiceDetail: this.props.invoiceDetail,
 		});
 
-		this.setState({
-			isCustomerNameNoGrouping: this.props.isCustomerNameNoGrouping,
-			selection: [...this.props.activePaymentRows]
-		})
 		this.timer = null;
 	}
 
@@ -717,6 +726,16 @@ class PaymentsListContent extends Component {
 			this.setState({
 				isCustomerNameNoGrouping: nextProps.isCustomerNameNoGrouping
 			})
+		}
+		if (nextProps.invoiceDetail !== this.props.invoiceDetail) {
+			this.setState({
+				invoiceDetail: nextProps.invoiceDetail,
+			});
+			if(!nextProps.invoiceDetail || !nextProps.invoiceDetail.Data) {
+				this.setState({
+					isOpen: false
+				});
+			}
 		}
 	} // deprecate
 
@@ -1024,6 +1043,45 @@ class PaymentsListContent extends Component {
 		ev.stopPropagation();
 		this.props.openPaymentDialog(true)
 	}
+	//
+	// invoice detail functions
+	//
+	//
+	// table cell invoice number button formatter
+	//
+	InvoiceNoButtonFormatter = ({ value }) => (<Button onClick={(ev) => this.onClickInvoiceNo(ev, value)}>{value}</Button>);
+	InvoiceNoButtonTypeProvider = props => (
+		<DataTypeProvider
+			formatterComponent={this.InvoiceNoButtonFormatter}
+			{...props}
+		/>
+	);
+	onClickInvoiceNo(ev, InvoiceNo) {
+		ev.stopPropagation();
+		const { rows } = this.state
+		const targetRows = rows.filter(x => x.InvoiceNo === InvoiceNo)
+		if (targetRows && targetRows.length > 0) {
+			this.invoiceReport(targetRows[0].InvoiceId, this.props.regionId)
+		}
+
+	}
+
+	invoiceReport = (InvoiceId, RegionId) => {
+		this.props.getInvoiceDetail(InvoiceId, RegionId);
+		this.setState({
+			isOpen: true
+		});
+	};
+	toggleModal = () => {
+		this.setState({
+			isOpen: !this.state.isOpen
+		});
+	};
+	printDocument = () => {
+		let imgUrl = 'https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
+		const input = document.getElementById('divToPrint');
+		this.refs.child.downloadPDF(input, imgUrl);
+	}
 	render() {
 		const { classes } = this.props;
 
@@ -1033,6 +1091,7 @@ class PaymentsListContent extends Component {
 			// tableColumnExtensions,
 			sorting,
 			editingColumnExtensions,
+			invoiceNoButtonColumns,
 			currencyColumns,
 			phoneNumberColumns,
 			dateColumns,
@@ -1043,6 +1102,9 @@ class PaymentsListContent extends Component {
 			expandedGroups,
 
 			isCustomerNameNoGrouping,
+
+			invoiceDetail,
+			isOpen,
 		} = this.state;
 
 		let tableColumnExtensions = this.state.tableColumnExtensions
@@ -1122,6 +1184,9 @@ class PaymentsListContent extends Component {
 							/>
 
 
+							<this.InvoiceNoButtonTypeProvider
+								for={invoiceNoButtonColumns}
+							/>
 							<CurrencyTypeProvider
 								for={currencyColumns}
 							/>
@@ -1179,6 +1244,16 @@ class PaymentsListContent extends Component {
 							{/* <GroupingPanel showSortingControls showGroupingControls /> */}
 						</Grid>
 					</div>
+					{invoiceDetail && invoiceDetail.Data && isOpen && 
+						<InvoiceReport
+							childCall={this.printDocument.bind(this)}
+							ref="child"
+							show={isOpen}
+							onClose={this.toggleModal}
+							Region={this.props.allRegion}
+							RegionId={this.props.regionId}
+							Detail={invoiceDetail} />
+					}
 				</div>
 			</Fragment>
 		)
@@ -1187,15 +1262,18 @@ class PaymentsListContent extends Component {
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
-		getAccountReceivablePaymentsList: Actions.getAccountReceivablePaymentsList,
+		getAccountReceivablePaymentsList: AccReceivablePaymnetActions.getAccountReceivablePaymentsList,
 
-		setActivePaymentRows: Actions.setActivePaymentRows,
-		openPaymentDialog: Actions.openPaymentDialog,
-		showErrorDialog: Actions.showErrorDialog,
+		setActivePaymentRows: AccReceivablePaymnetActions.setActivePaymentRows,
+		openPaymentDialog: AccReceivablePaymnetActions.openPaymentDialog,
+		showErrorDialog: AccReceivablePaymnetActions.showErrorDialog,
+
+		getInvoiceDetail: InvoiceActions.getInvoiceDetail,
+
 	}, dispatch);
 }
 
-function mapStateToProps({ accountReceivablePayments, auth }) {
+function mapStateToProps({ accountReceivablePayments, auth, invoices }) {
 	return {
 		bLoadedPayments: accountReceivablePayments.bLoadedPayments,
 		payments: accountReceivablePayments.ACC_payments,
@@ -1207,6 +1285,9 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 		filterParam: accountReceivablePayments.filterParam,
 		isCustomerNameNoGrouping: accountReceivablePayments.isCustomerNameNoGrouping,
 		viewMode: accountReceivablePayments.viewMode,
+
+		allRegion: auth.login.all_regions,
+		invoiceDetail: invoices.invoiceDetail,
 
 	}
 }
