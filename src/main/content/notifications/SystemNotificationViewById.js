@@ -325,6 +325,7 @@ class SystemNotificationViewById extends Component {
                     name: "ContractBilling",
                     columnName: JSON.parse(props.sysnotification[0].ProcessResponsePayload).CustomersQualifiedForCPI[0].ContractBilling,
                     width: 250,
+                    align: 'right',
                     wordWrapEnabled: true,
                     sortingEnabled: true,
                     filteringEnabled: true,
@@ -333,6 +334,7 @@ class SystemNotificationViewById extends Component {
                 {
                     title: "CPI Percent",
                     name: "CPIPercent",
+                    align: 'right',
                     columnName: JSON.parse(props.sysnotification[0].ProcessResponsePayload).CustomersQualifiedForCPI[0].CPIPercent,
                     width: 250,
                     wordWrapEnabled: true,
@@ -539,7 +541,7 @@ class SystemNotificationViewById extends Component {
                                                                 <Typography variant="subtitle1" color="inherit">{row[4].Value}</Typography>
                                                             </div>
                                                             </div>
-                                                            
+
                                                             <Divider variant="fullWidth" style={{ marginTop: 5, marginBottom: 5 }} />
 
                                                             <div  className="flex flex-row justify-between mb-4">
@@ -647,12 +649,17 @@ class SystemNotificationViewById extends Component {
 
                                     {/* </CardContent> */}
 
-                                        <div style={{    marginLeft: "30px",
-                                            fontSize: "24px",}}>{multiData[0] && multiData[0] !== null && multiData[0].Key &&
-                                        multiData[0].Key !== null &&(
-                                            multiData[0].Key
-                                        )
-                                        }</div>
+                                        <div
+                                            style={{ marginLeft: "30px",
+                                            fontSize: "24px",
+                                            }}
+                                        >
+                                            {
+                                                multiData[0] && multiData[0] !== null && multiData[0].Key &&
+                                                multiData[0].Key !== null &&(
+                                                multiData[0].Key)
+                                            }
+                                        </div>
 
 
                                     <CardContent>
@@ -690,24 +697,27 @@ class SystemNotificationViewById extends Component {
 
                                     </CardContent>
 
-                                    <div style={{    marginLeft: "30px",
-                                        fontSize: "24px",}}>
+                                    <div
+                                        style={{
+                                        marginLeft: "30px",
+                                        fontSize: "24px",}}
+                                    >
                                         {
                                             multiData[1] && multiData[1] !== null && multiData[1].Key &&
                                             multiData[1].Key !== null &&(
-                                                multiData[1].Key
+                                            multiData[1].Key
                                             )
+                                        }
+                                    </div>
 
-                                    }</div>
                                     <CardContent>
-                                            <Grid 
+                                            <Grid
                                                 rows={rows}
                                                 columns={tableColumnExtensions}
-                                                >
-                                                <VirtualTable 
-                                                    height="550" 
+                                            >
+                                                <VirtualTable
+                                                    height="550"
                                                     headComponent = {TableHeadComponent}
-                                                
                                                 />
 
                                                 {/* <TableColumnResizing /> */}
