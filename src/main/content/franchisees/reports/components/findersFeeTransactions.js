@@ -35,6 +35,11 @@ import NumberFormat from 'react-number-format';
 import FuseUtils from '@fuse/FuseUtils';
 
 const styles = theme => ({
+    layoutTable: {
+        '& table th:first-child span': {
+            paddingLeft: '8px!important'
+        }
+    },
     tableTheadRow: {
         backgroundColor: theme.palette.primary.main,
         '& tr': {
@@ -195,10 +200,10 @@ class FindersFeeTransactions extends Component {
                     />
 
                     <IntegratedPaging/>
-                    <SummaryState
-                        totalItems={totalSummaryItems}
-                    />
-                    <IntegratedSummary />
+                    {data.length>0 && (
+                        <SummaryState totalItems={totalSummaryItems} />
+                    )}
+                    {data.length>0 && (<IntegratedSummary /> )}
 
                     <VirtualTable height="auto"
                                   tableComponent={TableComponent}
@@ -206,7 +211,9 @@ class FindersFeeTransactions extends Component {
                                   columnExtensions={tableColumnExtensions}
                     />
                     <TableHeaderRow />
-                    <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
+                    {data.length>0 && (
+                        <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
+                    )}
                 </Grid>
             </div>
         );
