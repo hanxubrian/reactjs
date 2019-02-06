@@ -189,17 +189,10 @@ class FindersFeeTransactions extends Component {
             <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
                 <h2>Finder Fees</h2>
                 <Grid rows={data} columns={columns}>
-                    <PagingState
-                        currentPage={this.state.currentPage}
-                        onCurrentPageChange={this.changeCurrentPage}
-                        pageSize={this.state.pageSize}
-                        onPageSizeChange={this.changePageSize}
-                    />
                     <CurrencyTypeProvider
                         for={['PYMNT_TOT']}
                     />
 
-                    <IntegratedPaging/>
                     {data.length>0 && (
                         <SummaryState totalItems={totalSummaryItems} />
                     )}

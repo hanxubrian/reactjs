@@ -55,7 +55,7 @@ const styles = theme => ({
         '& tbody tr:nth-of-type(odd)': {
         },
         '& tbody tr td': {
-            fontSize: 11,
+            fontSize: 12,
             paddingLeft: 4,
             paddingRight: 4
         },
@@ -152,7 +152,8 @@ class RegularMiscTransactons extends Component {
     render() {
         const {classes, franchiseeReport} = this.props;
         if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].REG_MISC===null)
-            return (<div/>);
+            return (<div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
+                <h2>Regular Misc. Transactions</h2></div>);
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].REG_MISC.map(d=>{
             d.DESCR = FuseUtils.capital_letter(d.DESCR);
