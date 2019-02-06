@@ -76,7 +76,7 @@ const styles = theme => ({
     overlay: {
         position: 'absolute',
         top: -104,
-        left: -65,
+        left: 0,
         width: '100vw',
         height: '100vh',
         backgroundColor: 'rgba(0,0,0, .6)',
@@ -131,7 +131,8 @@ class Report extends Component {
             cb(canvas.toDataURL('image/png'));
         };
         image.src = log_url;
-    }
+    };
+
     downloadPDF=(input, imgURL)=> {
         console.log("document.getElementsByClassName length",document.getElementsByClassName("pdfcardcontent").length);
         let cardlen = document.getElementsByClassName("pdfcardcontent").length;
@@ -146,35 +147,27 @@ class Report extends Component {
 
                     const imgData = canvas.toDataURL('image/jpeg',1.0);
                     this.calculatePDF_height_width("whole",0);
-                    // pdf = new jsPDF();
+
                     pdf = new jsPDF('p', 'pt', [input.offsetWidth, input.offsetHeight]);
                     pdf.addImage(imgData, 'jpeg', top_left_margin, top_left_margin, HTML_Width, HTML_Height);
                     pdf.save("download.pdf");
-
-
-                    // const imgData = canvas.toDataURL('image/png');
-                    // const pdf = new jsPDF();
-                    // pdf.addImage(imgData, 'PNG', 0, 0);
-                    // pdf.addImage(img, 'PNG', 8, 15, 40, 30);
-                    // pdf.addImage(img, 'PNG', 150, 102, 40, 30);
-                    // pdf.save("download.pdf");
                 })
             ;
         }
-    }
+    };
+
     calculatePDF_height_width=(selector,index)=>{
-        // page_section = $(selector).eq(index);
+
         page_section = document.getElementsByClassName(selector)[index];
-        console.log("page_section",page_section);
         HTML_Width = page_section.offsetWidth;
-        console.log("HTML_Width",HTML_Width);
         HTML_Height = page_section.offsetHeight ;
         top_left_margin = 15;
         PDF_Width = HTML_Width + (top_left_margin * 2);
         PDF_Height = (PDF_Width * 1.2) + (top_left_margin * 2);
         canvas_image_width = HTML_Width;
         canvas_image_height = HTML_Height;
-    }
+    };
+
     renderHeader = ()=>{
         const { all_regions} = this.props;
         const {month, year, regionid} = this.props.match.params;
@@ -221,16 +214,13 @@ class Report extends Component {
 
         if(franchiseeReport===null || all_regions.length===0)
             return (
-                <div className={classes.overlay} style={{
-
-                }}>
+                <div className={classNames(classes.overlay, 'flex items-center w-full')}>
                     <CircularProgress className={classes.progress} color="secondary"  />
-
                 </div>
 
             );
 
-        const {DLR_CODE, SUMMARY_PAGE, CUS_TRXS, CUST_ACCT_TOTALS, SUPPLY_TRXS, LEASE_PAYMENTS,REG_MISC, CHARGEBACKS }  = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0];
+        const {DLR_CODE, SUMMARY_PAGE, LEASE_PAYMENTS,CHARGEBACKS }  = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0];
 
         return (
             <div className={classNames(classes.root, "p-0 sm:p-64  whole print:p-0")} id ="wholediv">

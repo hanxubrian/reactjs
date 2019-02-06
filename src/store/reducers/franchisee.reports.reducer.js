@@ -1,6 +1,7 @@
 import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
 import moment from 'moment';
+import {NULLIFY_FRANCHISEE_NEW_REPORT} from "../actions/";
 
 const initialState = {
     franchiseeReports: null,
@@ -88,6 +89,7 @@ const franchiseeReports = function(state = initialState, action) {
         case Actions.CLOSE_NEW_TRANSACTION_FORM:
             return {...state, franchiseeReport1: null};
         case Actions.NULLIFY_FRANCHISEE_REPORT:
+        case Actions.NULLIFY_FRANCHISEE_NEW_REPORT:
             return {...state, franchiseeReport1: null};
         case UserActions.USER_LOGGED_OUT:
         {

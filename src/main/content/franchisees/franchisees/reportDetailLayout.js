@@ -25,6 +25,7 @@ import * as Actions from 'store/actions';
 import "react-table/react-table.css";
 import classNames from 'classnames';
 import Report from './report_new';
+import FilterPanel from "./filterPanel1";
 
 const headerHeight = 80;
 
@@ -42,6 +43,35 @@ const styles = theme => ({
         background: "url('/assets/images/backgrounds/signin-bg.jpg') no-repeat",
         backgroundSize: 'cover',
     },
+    filterPanel: {
+        position                      : 'absolute',
+        width                         : 300,
+        backgroundColor               : theme.palette.background.paper,
+        boxShadow                     : theme.shadows[3],
+        top                           : 0,
+        height                        : '100%',
+        minHeight                     : '100%',
+        bottom                        : 0,
+        left                         :  -300,
+        margin                        : 0,
+        zIndex                        : 1000,
+        transform                     : 'translate3d(50px,0,0)',
+        overflow                      : 'hidden',
+        [theme.breakpoints.down('md')]: {
+            transform : 'translate3d(360px,0,0)',
+            boxShadow : 'none',
+            '&.opened': {
+                boxShadow: theme.shadows[5]
+            }
+        },
+        transition  : theme.transitions.create(['transform'], {
+            easing  : theme.transitions.easing.easeInOut,
+            duration: theme.transitions.duration.standard
+        }),
+        '&.opened'                    : {
+            transform: 'translateX(300px)'
+        }
+    },
     layoutRoot: {
         flexDirection: 'row',
         '& .z-9999': {
@@ -50,41 +80,11 @@ const styles = theme => ({
         '& .-pageSizeOptions': {
             display: 'none'
         },
-        '& .ReactTable .rt-noData': {
-            top: '250px',
-            border: '1px solid coral'
-        },
-        '& .ReactTable .rt-thead.-headerGroups': {
-            paddingLeft: '0!important',
-            paddingRight: '0!important',
-            minWidth: 'inherit!important'
-        },
-        '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
-            background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
-            color: 'white!important'
-        },
         '& .openFilter': {
             width: 'inherit'
         },
         '& .openSummary': {
             width: 300
-        },
-        '& .ReactTable .rt-tbody': {
-            overflowY: 'scroll',
-            overflowX: 'hidden'
-        },
-        '& .ReactTable .rt-tr-group': {
-            flex: '0 0 auto'
-        },
-        '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
-            justifyContent: 'center'
-        },
-        '& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
-            width: 'inherit!important',
-            minWidth: 'inherit!important',
-        },
-        '& .ReactTable .rt-thead .rt-th:last-child': {
-            justifyContent: 'flex-end'
         },
         '& .p-12-impor': {
             paddingLeft: '1.2rem!important',
@@ -114,7 +114,7 @@ const styles = theme => ({
         }
     },
     layoutLeftSidebar: {
-        width: 0,
+        width: 300,
         [theme.breakpoints.down('sm')]: {
             width: 'inherit'
         }
@@ -172,15 +172,6 @@ const styles = theme => ({
             width: '100%'
         }
     },
-    tableTheadRow: {
-        backgroundColor: theme.palette.primary.main
-    },
-    tableThEven: {
-        backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .3)'
-    },
-    tableTdEven: {
-        backgroundColor: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .1)'
-    },
     filterPanelButton: {
         backgroundColor: theme.palette.secondary.main,
         minWidth: 42,
@@ -226,9 +217,6 @@ const styles = theme => ({
         marginRight: 20,
         // backgroundColor: "#3c93ec",
     },
-    iconSmall: {
-        fontSize: 20,
-    }
 });
 
 class ReportLayout extends Component {
@@ -251,6 +239,7 @@ class ReportLayout extends Component {
 
 
     componentDidMount() {
+        console.log('this.props.match.params===', this.props.match.params);
     }
 
     componentWillUnmount() {
@@ -270,17 +259,15 @@ class ReportLayout extends Component {
     };
     render() {
 
-        const {classes, filterState, summaryState} = this.props;
-
-        // const {selectionLength} = this.state;
+        const {classes, filterState, summaryState, filterStateFranchisees} = this.props;
 
         return (
             <React.Fragment>
                 <FusePageCustomSidebarScroll
                     classes={{
-                        root: classNames(classes.layoutRoot, 'test123'),
+                        root: classNames(classes.layoutRoot),
                         rightSidebar: classNames(classes.layoutRightSidebar, {'openSummary': summaryState}),
-                        leftSidebar: classNames(classes.layoutLeftSidebar, {'openFilter': filterState}),
+                        leftSidebar: classNames(classes.layoutLeftSidebar, classes.filterPanel, "opened"),
                         sidebarHeader: classes.layoutSidebarHeader,
                         header: classes.layoutHeader,
                         content: classes.content
@@ -328,6 +315,14 @@ class ReportLayout extends Component {
                             </Fragment>
                         </div>
                     }
+                    leftSidebarHeader={
+                        <div className={classNames("flex flex-row w-full h-full justify-between p-12 items-center pr-0", {'filteropen': filterStateFranchisees})}>
+                            <h4 className={classes.elementCenter}>Period Panel</h4>
+                        </div>
+                    }
+                    leftSidebarContent={
+                        <FilterPanel franchiNo={this.props.match.params.franchiseenumber}/>
+                    }
                     onRef={instance => {
                         this.pageLayout = instance;
                     }}
@@ -340,31 +335,14 @@ class ReportLayout extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getVerifications: Actions.getVerifications,
-        toggleFilterPanel: Actions.toggleVerificationFilterPanel,
-        toggleSummaryPanel: Actions.toggleVerificationSummaryPanel,
-        openNewVerificationForm: Actions.openNewVerificationForm,
-        closeNewVerificationForm: Actions.closeNewVerificationForm,
-        openVerificationDialog: Actions.openVerificationDialog,
         openCloseReviseModal: Actions.openCloseReviseDialog,
         openCloseRejectModal: Actions.openCloseRejectDialog
     }, dispatch);
 }
 
-function mapStateToProps({verifications, auth}) {
+function mapStateToProps({auth, franchisees}) {
     return {
-        verifications: verifications.verificationsDB,
-        bLoadedVerifications: verifications.bLoadedVerifications,
-        transactionStatus: verifications.transactionStatus,
-        summaryState: verifications.bOpenedSummaryPanel,
-        filterState: verifications.bOpenedFilterPanel,
-        verificationForm: verifications.verificationForm,
-        statusId: verifications.statusId,
-        searchText: verifications.searchText,
-        selectionLength: verifications.selectionLength,
-        verifiedModal: verifications.verifiedModal,
-        reviseModal: verifications.reviseModal,
-        rejectModal: verifications.rejectModal
+        filterStateFranchisees: franchisees.bOpenedFilterPanelFranchisees,
     }
 }
 
