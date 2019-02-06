@@ -459,6 +459,14 @@ class Payments extends Component {
 			this.props.searchText,
 			this.props.filterParam.paymentStatus
 		);
+
+		this.props.getPaymentHistory(
+			this.props.regionId,
+			this.props.filterParam.fromDate,
+			this.props.filterParam.toDate,
+			this.props.filterParam.paymentStatus,
+			this.props.filterParam.paymentHistoryTypes,
+		);
 	}
 
 	showPaymentFormModal = () => {
@@ -783,6 +791,7 @@ function mapDispatchToProps(dispatch) {
 		showErrorDialog: Actions.showErrorDialog,
 
 		getAccountReceivablePaymentsList: Actions.getAccountReceivablePaymentsList,
+		getPaymentHistory: Actions.getPaymentHistory,
 
 	}, dispatch);
 }
