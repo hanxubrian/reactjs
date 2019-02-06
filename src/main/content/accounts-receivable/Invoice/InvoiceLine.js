@@ -499,7 +499,7 @@ class InvoiceLineTable extends React.Component {
                     if(service.length)
                         this.setState({[`selectedServiceOption${index}`]: service[0]});
 
-                    let line = createData(billing, service.length ? service[0] : '', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 0, item.ExtendedPrice, item.Total, item.MarkUpTotal, item.MarkUpTax, item.Commission, item.CommissionTotal);
+                    let line = createData(billing[0], service.length ? service[0] : '', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 0, item.ExtendedPrice, item.Total, item.MarkUpTotal, item.MarkUpTax, item.Commission, item.CommissionTotal);
 
                     let distributions = [];
                     if(item.Distribution!==null && item.Distribution.length>0){
@@ -802,11 +802,12 @@ class InvoiceLineTable extends React.Component {
             })
         }
 
-        if(d_total>data[row.id].extended) {
-            this.setState({snackMessage: "Distribution amount can\'t be greater than Line amount"});
-            this.setState({openSnack: true});
-            return ;
-        }
+        // if(d_total>data[row.id].extended) {
+        //     this.setState({snackMessage: "Distribution amount can\'t be greater than Line amount"});
+        //     this.setState({openSnack: true});
+        //     return ;
+        // }
+
         data[row.id].franchisees[row.fid].amount = parseFloat(event.target.value);
         this.setState({data: data});
     };
