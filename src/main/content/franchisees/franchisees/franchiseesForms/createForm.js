@@ -599,6 +599,7 @@ class FranchiseesCreateForm extends Component {
         paymentAmount: 0,
         documentsList: [],
         franchiseeFees: [],
+        Name : "",
         AddressLine1: "",
         AddressLine2: "",
         City: "",
@@ -627,6 +628,10 @@ class FranchiseesCreateForm extends Component {
     };
     closeComposeForm = () => {
         this.type === 'create' ? this.props.closeEditFranchisees() : this.props.closeCreateFranchisees();
+    };
+
+    createFranchiseeForm = () => {
+        this.props.createFranchisee(this.props.regionId,this.props.insertPayload);
     };
     componentWillMount(){
         this.setState({
@@ -856,7 +861,7 @@ class FranchiseesCreateForm extends Component {
                                 variant="contained"
                                 color="primary"
                                 className={classNames(classes.button, "mr-12")}
-                                onClick={() => {this.closeComposeForm();}}
+                                onClick={() => {this.createFranchiseeForm();}}
                                 disabled={!this.canBeSubmitted()}
                             > Save </Button>
                         </FuseAnimate>
@@ -890,6 +895,7 @@ function mapDispatchToProps(dispatch) {
         getFranchiseeFeeMaintenance: Actions.getFranchiseeFeeMaintenance,
         getFranchiseeStateList: Actions.getFranchiseeStateList,
         franchiseeUpdateInsertPayload: Actions.franchiseeUpdateInsertPayload,
+        createFranchisee : Actions.createFranchisees,
     }, dispatch);
 }
 

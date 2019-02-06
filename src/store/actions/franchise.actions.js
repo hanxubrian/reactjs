@@ -10,7 +10,6 @@ export const CREATE_FRANCHISEES_LIST = "[FRANCHISEES] FRANCHISEES CREATE OPEN";
 export const CLOSE_CREATE_FRANCHISEES = "[FRANCHISEES] FRANCHISEES CREATE CLOSE";
 export const OPEN_EDIT_FRANCHISEES_FORM = "[FRANCHISEES] FRANCHISEES EDIT OPEN";
 export const CLOSE_EDIT_FRANCHISEES_FORM = "[FRANCHISEES] FRANCHISEES EDIT CLOSE";
-export const UPDATE_FRANCHISEES = '[FRANCHISEES] UPDATE FRANCHISEES';
 export const ADD_FRANCHISEES = '[FRANCHISEES] ADD FRANCHISEES';
 export const TOGGLE_FRANCHISEE_MAP_VIEW = '[FRANCHISEES] TOGGLE FRANCHISEE MAP VIEW';
 export const GET_FILTER_LIST = '[FRANCHISEES] GET FILTER LIST';
@@ -28,6 +27,9 @@ export const UPLOAD_INSERT_PAYLOAD = '[FRANCHISEES] UPDATE INSERT PAYLOAD';
 export const GET_FRANCHISEE_STATE_LIST = '[FRANCHISEES] GET FRANCHISEE STATE LIST';
 export const UPDATE_FRANCHISEE_UPDATE_CHECKBOX = '[FRANCHISEES] UPDATE FRANCHISEE UPDATE CHECKBOX';
 
+export const CREATE_FRANCHISEE = '[FRANCHISEES] CREATE FRANCHISEE';
+export const UPDATE_FRANCHISEE = '[FRANCHISEES] UPDATE FRANCHISEE';
+export const DELETE_FRANCHISEE = '[FRANCHISEES] DELETE FRANCHISEE';
 
 
 export function getFranchisees(regionId, statusId, location , latitude , longitude , searchtext) {
@@ -44,6 +46,45 @@ export function getFranchisees(regionId, statusId, location , latitude , longitu
             let franchiseesList = await franchiseesService.getFranchiseesList(regionId, statusId, location , latitude , longitude , searchtext);
             dispatch({
                 type: GET_ALL_FRANCHISEES,
+                payload: franchiseesList
+            });
+        })();
+    }
+}
+
+export function createFranchisees(regionId,data) {
+
+    return (dispatch) => {
+        (async () => {
+            let franchiseesList = await franchiseesService.createFranchiseesList(regionId, data);
+            dispatch({
+                type: CREATE_FRANCHISEE,
+                payload: franchiseesList
+            });
+        })();
+    }
+}
+
+export function updateFranchisees(id,regionId,data) {
+
+    return (dispatch) => {
+        (async () => {
+            let franchiseesList = await franchiseesService.updateFranchisees(id,regionId,data);
+            dispatch({
+                type: UPDATE_FRANCHISEE,
+                payload: franchiseesList
+            });
+        })();
+    }
+}
+
+export function deleteFranchisees(id,regionId) {
+
+    return (dispatch) => {
+        (async () => {
+            let franchiseesList = await franchiseesService.deleteFranchiseesList(id, regionId);
+            dispatch({
+                type: DELETE_FRANCHISEE,
                 payload: franchiseesList
             });
         })();
@@ -121,18 +162,6 @@ export function toggleSummaryPanelFranchisees(){
     }
 }
 
-export function deleteFranchisees(keys, franchisees) {
-    return dispatch => {
-        const request = axios.post("/api/franchisees/delete", { ids: keys, franchisees: franchisees });
-
-        return request.then(response => {
-            return dispatch({
-                type: DELETE_SELECTED_FRANCHISEES,
-                payload: response.data
-            });
-        });
-    };
-}
 
 export function removeFranchisees(key, franchisees) {
     return dispatch => {
@@ -199,25 +228,6 @@ export function addFranchisees(newFranchisees)
     };
 }
 
-export function updateFranchisees(franchisees)
-{
-    return (dispatch, getState) => {
-
-        // const {routeParams} = getState().contactsApp.contacts;
-
-        const request = axios.post('/api/franchisees/update-franchisees', {
-            franchisees
-        });
-
-        return request.then((response) =>
-            Promise.all([
-                dispatch({
-                    type: UPDATE_FRANCHISEES
-                })
-            ]).then(() => dispatch(getFranchisees()))
-        );
-    };
-}
 
 export function toggleFranchiseeMapView(){
     return {

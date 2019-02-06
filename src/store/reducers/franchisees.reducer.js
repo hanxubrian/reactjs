@@ -23,7 +23,7 @@ const initialState = {
     documentsList: [],
     franchiseeFees: [],
     Location: "all",
-    StateList: [],
+    StateList: [],    
     transactionStatusFranchisees:{
         Active: true,
         Inactive: true,
@@ -130,6 +130,33 @@ const franchisees = function(state = initialState, action) {
                 franchiseesDB: action.payload,
                 bLoadedFranchisees: true,
                 bOpenedFilterPanelFranchisees: state.bOpenedFilterPanelFranchisees,
+                bFranchiseesFetchStart: false
+            };
+        }
+        case Actions.CREATE_FRANCHISEE:
+        {
+            return {
+                ...state,
+                createFranchisees: {
+                    type : 'new',
+                    props: {
+                        open: false
+                    },
+                    data : null
+                }
+            };
+        }
+        case Actions.UPDATE_FRANCHISEE:
+        {
+            return {
+                ...state,
+                bFranchiseesFetchStart: false
+            };
+        }
+        case Actions.DELETE_FRANCHISEE:
+        {
+            return {
+                ...state,
                 bFranchiseesFetchStart: false
             };
         }
