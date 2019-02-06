@@ -1100,8 +1100,7 @@ class Franchisees extends Component {
                                             onClick  : (e, handleOriginal) => {
                                                 if ( rowInfo )
                                                 {
-                                                    alert('ok');
-                                                    // openEditContactDialog(rowInfo.original);
+                                                    this.props.history.push(`/franchisees/reports_new/${this.props.regionId}/2017/01/${rowInfo.original.Number}`);
                                                 }
                                             }
                                         }
