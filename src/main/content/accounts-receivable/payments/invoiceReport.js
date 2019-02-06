@@ -218,7 +218,7 @@ class InvoiceReport extends Component {
 			<Dialog
 				open={this.props.show}
 				fullWidth={true}
-				maxWidth="lg"
+				maxWidth="md"
 
 				onClose={this.props.onClose}
 				scroll="paper"
