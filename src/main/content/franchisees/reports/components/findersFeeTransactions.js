@@ -60,7 +60,7 @@ const styles = theme => ({
         '& tbody tr:nth-of-type(odd)': {
         },
         '& tbody tr td': {
-            fontSize: 11,
+            fontSize: 12,
             paddingLeft: 4,
             paddingRight: 4
         },

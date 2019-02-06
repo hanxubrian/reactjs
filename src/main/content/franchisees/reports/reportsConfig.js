@@ -11,8 +11,8 @@ export const ReportsConfig = {
             path     : '/franchisees/reports/:regionid/:year/:month/:franchiseenumber',
             component: FuseLoadable({
                 // loader: () => import('./report')
-                // loader: () => import('./reportlayout')
-                loader: () => import('./reportDetailLayout')
+                loader: () => import('./reportlayout')
+                // loader: () => import('./reportDetailLayout')
             })
         },
         {
