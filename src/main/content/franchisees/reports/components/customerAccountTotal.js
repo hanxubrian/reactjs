@@ -35,6 +35,11 @@ import classNames from 'classnames';
 import NumberFormat from 'react-number-format';
 
 const styles = theme => ({
+    layoutTable: {
+        '& table th:first-child span': {
+            paddingLeft: '8px!important'
+        }
+    },
     tableTheadRow: {
         backgroundColor: theme.palette.primary.main,
         '& tr': {
@@ -55,7 +60,7 @@ const styles = theme => ({
         '& tbody tr:nth-of-type(odd)': {
         },
         '& tbody tr td': {
-            fontSize: 11,
+            fontSize: 12,
             paddingLeft: 4,
             paddingRight: 4
         },
@@ -136,7 +141,7 @@ class CustomerAccountTotals extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS.length===0)
+        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS===null)
             return (<div/>);
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS.map(d=>{
@@ -193,10 +198,10 @@ class CustomerAccountTotals extends Component {
                     />
 
                     <IntegratedPaging/>
-                    <SummaryState
-                        totalItems={totalSummaryItems}
-                    />
-                    <IntegratedSummary />
+                    {data.length>0 && (
+                        <SummaryState totalItems={totalSummaryItems} />
+                    )}
+                    {data.length>0 && (<IntegratedSummary /> )}
 
                     <VirtualTable height="auto"
                                   tableComponent={TableComponent}
@@ -204,7 +209,9 @@ class CustomerAccountTotals extends Component {
                                   columnExtensions={tableColumnExtensions}
                     />
                     <TableHeaderRow />
-                    <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
+                    {data.length>0 && (
+                        <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
+                    )}
                 </Grid>
             </div>
         );
