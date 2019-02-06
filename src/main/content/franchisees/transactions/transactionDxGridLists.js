@@ -365,15 +365,13 @@ class TransactionsDxGridLists extends Component {
         const {classes} = this.props;
         const {expandedGroups} = this.state;
 
-        console.log('qqq=', this.state.data);
-
         const columns = [
             {name: "FranNameNo", title: "FranNameNo",},
             {name: "Number", title: "Trx. Number"},
             {name: "TrxDate", title: "Trx. Date"},
             {name: "Description", title: "Description"},
-            {name: "TrxChargeType", title: "Type"},
-            {name: "TrxType", title: "Trx. Type"},
+            {name: "TrxChargeType", title: "Class"},
+            {name: "TrxType", title: "Type"},
             {name: "ExtendedPrice", title: "Ext. Price"},
             {name: "Tax", title: "Tax"},
             {name: "Fees", title: "Fees"},

@@ -433,13 +433,14 @@ class TransactionEditForm extends Component {
             return franchisees.filter(f => regex.test(f.Name) || regex.test(f.Number)|| regex.test(f.StatusName));
     };
 
-    getTotal = () => {
+    getTotal = async () => {
         let quantity =  this.state.quantity;
         let unitPrice = this.state.unitPrice;
         let payments = this.state.payments;
 
-        if(quantity>0 && unitPrice>0) {
-            let tax = quantity * unitPrice*0.085;
+        if(quantity>0 && unitPrice>0 && this.props.transactionForm.franchisee!==null) {
+            await this.props.getFranchiseeTransactionTaxAmount(this.props.regionId, this.props.transactionForm.franchisee.Id, unitPrice, quantity);
+            let tax = this.props.transactionTax.TotalTaxAmount;
             if(this.state.TrxType.value!=='5c5320066846d77648859107') tax = 0.0;
             if(this.state.reSell) tax = 0.0;
 
@@ -1392,7 +1393,8 @@ function mapDispatchToProps(dispatch)
         updateFranchiseeTransaction: Actions.updateFranchiseeTransaction,
         getTransactionDetail: Actions.getTransactionDetail,
         createReport: Actions.createReport,
-        nullifyFranchiseeReport: Actions.nullifyFranchiseeReport
+        nullifyFranchiseeReport: Actions.nullifyFranchiseeReport,
+        getFranchiseeTransactionTaxAmount: Actions.getFranchiseeTransactionTaxAmount,
     }, dispatch);
 }
 
@@ -1409,6 +1411,7 @@ function mapStateToProps({transactions, auth, franchisees})
         transactionTypeList: transactions.transactionTypeList,
         franchisees: franchisees.franchiseesDB,
         all_regions: auth.login.all_regions,
+        transactionTax: transactions.transactionTax,
     }
 }
 

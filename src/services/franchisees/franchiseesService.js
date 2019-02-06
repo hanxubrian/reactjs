@@ -255,7 +255,6 @@ class franchiseesService {
      * @returns {Promise<any>}
      */
     getFranchiseesReportsList = (regionId, year, month) => {
-        console.log('xxxxxx=', regionId, year, month)
         return new Promise((resolve, reject) => {
             axios_instance.get(`${BASE_MONGO_API_URL}/api/franchisee/GetFranchisees`,
                 { params: {regionId, year, month}}
@@ -272,7 +271,7 @@ class franchiseesService {
                     resolve(error);
                 })
         });
-    }
+    };
 
 
     getFranchiseeReport = (params) => {
@@ -295,7 +294,6 @@ class franchiseesService {
     };
 
     createFranchiseeReport = (params) => {
-        console.log('params=', params);
         return new Promise((resolve, reject) => {
             axios_instance.get(`${BASE_MONGO_API_URL}/api/CreateFranchiseeReport`,
                 { params: {...params}}
@@ -442,6 +440,24 @@ class franchiseesService {
         return new Promise((resolve, reject) => {
             axios_instance.get(`${BASE_MONGO_API_URL}/api/Lists/GetFranchiseeTransactionType`,{
                 params: {regionId: regiondId}})
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    }
+
+    getFranchiseeTransactionTaxAmount = (regionId, FranchiseeId, Amount, Quantity, TaxTypeId) => {
+        return new Promise((resolve, reject) => {
+            axios_instance.get(`${BASE_MONGO_API_URL}/api/Tax/GetFranchiseeTaxAmount`,{
+                params: {regionId, FranchiseeId, Amount, Quantity, TaxTypeId}})
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);
