@@ -219,6 +219,8 @@ class ReportLists extends Component {
         const { data, year, month } = this.state;
         if(data.length===0) return (<div/>);
 
+        console.log(data.FranchiseeReports);
+
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
                 <ReactTable
