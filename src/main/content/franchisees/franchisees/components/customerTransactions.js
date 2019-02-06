@@ -39,6 +39,9 @@ const styles = theme => ({
      '& table th:first-child span': {
          paddingLeft: '8px!important'
      },
+     '& table th:nth-child(2) span': {
+            display: 'none'
+     },
      '& th':{
          borderBottom: '2px solid black',
          borderTop: '2px solid black',
@@ -178,7 +181,7 @@ class CustomerTransactions extends Component {
         });
 
         const columns = [
-            {name: "CUST_NO", title: "Cus. #",},
+            {name: "CUST_NO", title: "Customer",},
             {name: "CUS_NAME", title: "Cus. Name"},
             {name: "DESCR", title: "Description"},
             {name: "INV_NO", title: "Invoice #"},
@@ -189,7 +192,7 @@ class CustomerTransactions extends Component {
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'CUST_NO', width: 80, },
+            { columnName: 'CUST_NO', width: 120, },
             { columnName: 'CUS_NAME', width: 220, },
             { columnName: 'DESCR', width: -1, },
             { columnName: 'INV_NO', width: 80},

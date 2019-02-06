@@ -51,7 +51,10 @@ const styles = theme => ({
         },
         '& tr th:nth-child(3)': {
             width: '100%'
-        }
+        },
+        '& tr th:nth-child(2) span': {
+            display: 'none'
+        },
     },
     imageIcon: {
         width: 24
@@ -73,9 +76,14 @@ const styles = theme => ({
         }
     },
     tableFootRow: {
+        height: 32,
         '& td:nth-child(3)': {
             width: '100%',
         },
+        '& td:nth-child(5)>div': {
+            display: 'flex',
+            justifyContent: 'flex-end'
+        }
     }
 });
 
@@ -119,6 +127,10 @@ const CurrencyTypeProvider = props => (
         {...props}
     />
 );
+
+const messages = {
+    sum: 'Sum',
+};
 
 class FindersFeeTransactions extends Component {
     state = {
@@ -169,7 +181,7 @@ class FindersFeeTransactions extends Component {
         });
 
         const columns = [
-            {name: "CUST_NO", title: "Cus. #",},
+            {name: "CUST_NO", title: "Customer",},
             {name: "CUS_NAME", title: "Cus. Name"},
             {name: "DESCRIPTION", title: "Description"},
             {name: "PYMNT_NUM", title: "Payment #"},
@@ -177,11 +189,11 @@ class FindersFeeTransactions extends Component {
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'CUST_NO', width: 80, },
-            { columnName: 'CUS_NAME', width: 220, },
+            { columnName: 'CUST_NO', width: 120, },
+            { columnName: 'CUS_NAME', width: 150, },
             { columnName: 'DESCRIPTION', width: -1, },
             { columnName: 'PYMNT_NUM', width: 100},
-            { columnName: 'PYMNT_TOT', width: 100,  align: 'right'},
+            { columnName: 'PYMNT_TOT', width: 140,  align: 'right'},
         ];
 
         let totalSummaryItems = [
@@ -208,7 +220,10 @@ class FindersFeeTransactions extends Component {
                     />
                     <TableHeaderRow />
                     {data.length>0 && (
-                        <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
+                        <TableSummaryRow
+                            totalRowComponent={TableSummaryComponent}
+                            messages={messages}
+                        />
                     )}
                 </Grid>
             </div>

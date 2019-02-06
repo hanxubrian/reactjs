@@ -50,7 +50,10 @@ const styles = theme => ({
         },
         '& tr th:nth-child(2)': {
             width: '100%'
-        }
+        },
+        '& tr th:nth-child(2) span': {
+            display: 'none'
+        },
     },
     imageIcon: {
         width: 24
@@ -157,7 +160,7 @@ class CustomerAccountTotals extends Component {
         });
 
         const columns = [
-            {name: "CUST_NO", title: "Cus. #",},
+            {name: "CUST_NO", title: "Customer",},
             {name: "CUS_NAME", title: "Cus. Name"},
             {name: "CONT_BILL", title: "Contact Billing"},
             {name: "CUR_MONTH", title: "Current Month"},
@@ -168,7 +171,7 @@ class CustomerAccountTotals extends Component {
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'CUST_NO', width: 80, },
+            { columnName: 'CUST_NO', width: 120, },
             { columnName: 'CUS_NAME', width: -1, },
             { columnName: 'CONT_BILL', width: 120, align: 'right', wordWrapEnabled: true},
             { columnName: 'CUR_MONTH', width: 120, align: 'right', wordWrapEnabled: true},
