@@ -28,7 +28,7 @@ import {withStyles} from "@material-ui/core";
 import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
 import InvoiceLineTable from "./InvoiceLine"
-
+import VendorSelectionDialog from "./components/vendorSelectionDialog";
 
 // for store
 import {bindActionCreators} from "redux";
@@ -645,7 +645,7 @@ class InvoiceForm extends Component {
                 MarkUp: line.markup,
                 MarkUpTotal: line.markupAmount,
                 MarkUpTax: line.markupTax,
-                Commission: line.billing.value===1 ? line.commission : 0.00,
+                Commission: line.billing.value==='5c41e517d2963319d486a198' ? line.commission : 0.00,
                 CommissionTotal: line.commissionAmount,
                 ExtraWork: 1,
                 TaxExcempt: this.state.selectedCustomer.TaxExempt,
@@ -1424,6 +1424,7 @@ class InvoiceForm extends Component {
                             </Button>
                         </DialogActions>
                     </Dialog>
+                    <VendorSelectionDialog />
                 </div>
             </FuseAnimate>
         );

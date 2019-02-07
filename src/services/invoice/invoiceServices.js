@@ -275,7 +275,7 @@ class invoiceService {
     // +                .then(response => response.json())
     // +                .then(data => this.setState({ vendorList: data }));
 
-    getVendorLists = (RegionId) => {
+    getInvoiceVendorLists = (RegionId) => {
         return new Promise((resolve, reject) => {
             axios_instance.get(`${BASE_MONGO_API_URL}/v1/vendors/getvendorlist`,
                 {

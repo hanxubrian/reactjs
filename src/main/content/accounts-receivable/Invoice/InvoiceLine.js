@@ -123,7 +123,7 @@ function createFranchisee(parent_id,id, fnumber="", name="", amount=0) {
     }
 }
 
-function createData(billing={label:'Regular Billing', value: '5c41e517d2963319d486a19b'}, service='Adjust-Balance', description='', quantity=1, amount='', tax=0, markup='', extended=0, total=0, markupAmount=0, markupTax=0, commission=0, commissionAmount=0.0)
+function createData(billing={label:'Regular Billing', value: '5c41e517d2963319d486a19b'}, service='Adjust-Balance', description='', quantity=1, amount='', tax=0, markup='', extended=0, total=0, markupAmount=0, markupTax=0, commission=0, commissionAmount=0.0, vendorId='')
 {
     return {
         id: counter++,
@@ -141,7 +141,8 @@ function createData(billing={label:'Regular Billing', value: '5c41e517d2963319d4
         commission,
         commissionAmount,
         franchisees: [],
-        type: 'line'
+        type: 'line',
+        vendorId
     };
 }
 
@@ -923,6 +924,9 @@ class InvoiceLineTable extends React.Component {
         const data = [...this.state.data];
         data[row.id].service = newValue;
         this.setState({data: data});
+
+        if(newValue.value==='5c4b8a3b651a9c5970514a68')  //label: "Customer Supplies"
+            alert('ok');
     };
 
     render()
@@ -1449,7 +1453,7 @@ function mapStateToProps({invoices, franchisees, auth})
         customerTaxAmountLine: invoices.customerTaxAmountLine,
         bStartingSaveFormData: invoices.bStartingSaveFormData,
         billingLists: invoices.billingLists,
-        serviceLists: invoices.serviceLists
+        serviceLists: invoices.serviceLists,
     }
 }
 

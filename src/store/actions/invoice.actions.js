@@ -455,7 +455,7 @@ export function closeCreditInvoiceFormDialog() {
 export function getVendorLists(regionId) {
     return (dispatch) => {
         (async () => {
-            let res = await invoiceService.getVendorLists(regionId);
+            let res = await invoiceService.getInvoiceVendorLists(regionId);
             if (res.IsSuccess) {
                 dispatch({
                     type: GET_INVOICE_VENDOR_LIST,
