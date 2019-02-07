@@ -1047,14 +1047,16 @@ class Franchisees extends Component {
                                                 fontWeight: 400,
                                                 lineHeight: 1.75,
                                                 color: 'white',
-                                                borderRight: border
+                                                borderRight: border,
+                                                height: 50,
+                                                fontSize: 12
                                             },
                                         }
                                     }}
                                     getTheadProps={(state, rowInfo, column, instance) =>{
                                         return {
                                             style:{
-                                                fontSize: 13,
+                                                fontSize: 12
                                             },
                                             className: classes.tableTheadRow
                                         }
@@ -1122,20 +1124,26 @@ class Franchisees extends Component {
                                                     Header: "NUMBER",
                                                     accessor: "Number",
                                                     filterAll: true,
-                                                    width: 200,
+                                                    width: 100,
                                                     className: classNames("flex items-center  justify-center")
                                                 },
                                                 {
                                                     Header: "FRANCHISEES NAME",
                                                     accessor: "Name",
-                                                    width: 350,
+                                                    width: 250,
                                                     className: classNames("flex items-center  justify-start p-12-impor")
                                                 },
                                                 {
                                                     Header: "FULL ADDRESS",
                                                     accessor: "Address",
                                                     className: classNames("flex items-center  justify-start p-12-impor"),
-                                                    width: 420
+                                                    width: 250
+                                                },
+                                                {
+                                                    Header: "CITY",
+                                                    accessor: "City",
+                                                    className: classNames("flex items-center  justify-start p-12-impor"),
+                                                    width: 120
                                                 },
                                                 {
                                                     Header: "PHONE",
@@ -1150,8 +1158,14 @@ class Franchisees extends Component {
                                                     width: 150
                                                 },
                                                 {
-                                                    Header: "Actions",
-                                                    width : 150,
+                                                    Header: "REGION NAME",
+                                                    accessor: "RegionName",
+                                                    className: classNames("flex items-center  justify-center p-12-impor"),
+                                                    width: 150
+                                                },
+                                                {
+                                                    Header: "ACTIONS",
+                                                    width : 250,
                                                     className: classNames("flex items-center  justify-center p-12-impor"),
                                                     Cell  : row =>{
                                                         return (
