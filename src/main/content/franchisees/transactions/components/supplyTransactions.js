@@ -151,9 +151,9 @@ class SupplyTransactons extends Component {
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].SUPPLY_TRXS.map(d=>{
             d.DESCR = FuseUtils.capital_letter(d.DESCR);
-            d.TRX_AMT = parseFloat(d.EXTENDED);
+            d.TRX_AMT = parseFloat(d.TRX_AMT);
             d.TRX_TAX = parseFloat(d.TRX_TAX);
-            d.TRX_UNIT = parseFloat(d['UNIT COST']);
+            d.TRX_UNIT = parseFloat(d.TRX_UNIT);
             d.TRX_TOT = parseFloat(d.TRX_TOT);
             return d;
         });

@@ -444,7 +444,8 @@ class TransactionEditForm extends Component {
         let payments = this.state.payments;
 
         if(quantity>0 && unitPrice>0 && this.props.transactionForm.franchisee!==null) {
-            await this.props.getFranchiseeTransactionTaxAmount(this.props.regionId, this.props.transactionForm.franchisee.Id, unitPrice, quantity);
+            let r = await this.props.getFranchiseeTransactionTaxAmount(this.props.regionId, this.props.transactionForm.franchisee.Id, unitPrice, quantity);
+            console.log('tax===', this.props.transactionTax);
             let tax = this.props.transactionTax.TotalTaxAmount;
             if(this.state.TrxType.value!=='5c5320066846d77648859107') tax = 0.0;
             if(this.state.reSell) tax = 0.0;

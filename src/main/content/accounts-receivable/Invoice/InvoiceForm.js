@@ -75,7 +75,7 @@ const styles = theme => ({
         // padding: '0 0'
     },
     summary: {
-        fontSize: 15,
+        fontSize: 14,
         fontWeight: 700
     },
     suggestionsContainerOpen: {
@@ -1219,7 +1219,7 @@ class InvoiceForm extends Component {
                     </div>
                     <div className="flex flex-shrink flex-col w-full pl-24 pr-24 pt-0 pb-12">
                         <GridContainer style={{alignItems: 'center'}} className={classNames(classes.formControl)}>
-                            <GridItem xs={12} sm={9} md={9} className="flex flex-col xs:flex-col xs:mb-24">
+                            <GridItem xs={12} sm={8} md={8} className="flex flex-col xs:flex-col xs:mb-24">
                                 <div className="w-full">
                                     <TextField
                                         id="notes"
@@ -1241,23 +1241,23 @@ class InvoiceForm extends Component {
                                                 input: classes.input, multiline: classes.input
                                             },
                                         }}
-                                        rows={3}
+                                        rows={2}
                                     />
                                 </div>
                             </GridItem>
-                            <GridItem xs={12} sm={3} md={3} className="flex flex-col xs:flex-col xs:mb-24">
+                            <GridItem xs={12} sm={4} md={4} className="flex flex-col xs:flex-col xs:mb-24">
                                 <div className="w-full p-12 flex justify-between pb-0">
                                     <span className={classes.summary}><strong>Commission Total: </strong>${this.state.commissionAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                     <span className={classes.summary}><strong>Subtotal: </strong>${this.state.subTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
-                                <div className="w-full p-12 flex justify-end pt-6 pb-6">
+                                <div className="w-full p-12 flex justify-end pt-6 pb-0">
                                     <span className={classes.summary}><strong>Markup Total: </strong>${this.state.markup.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
 
-                                <div className="w-full p-12 flex justify-end pt-6 pb-6">
+                                <div className="w-full p-12 flex justify-end pt-6 pb-0">
                                     <span className={classes.summary}><strong>Tax: </strong>${this.state.tax.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
-                                <div className="w-full p-12 flex justify-end  pt-6 pb-6">
+                                <div className="w-full p-12 flex justify-end  pt-6 pb-0">
                                     <span className={classes.summary}><strong>Grand Total: </strong>${this.state.total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</span>
                                 </div>
                             </GridItem>
