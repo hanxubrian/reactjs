@@ -239,7 +239,6 @@ class ReportLayout extends Component {
 
 
     componentDidMount() {
-        console.log('this.props.match.params===', this.props.match.params);
     }
 
     componentWillUnmount() {

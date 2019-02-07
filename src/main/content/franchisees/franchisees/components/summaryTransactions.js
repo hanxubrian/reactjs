@@ -148,7 +148,7 @@ class SummaryTransactons extends Component {
         const aDeductions2 =["FRANCHISE NOTE PAYMENT2", "ACCT_FEE_REB_CUR", "ACCT_FEE_REB_BAL"];
         const aDeductions3 =["SUBTOTAL_REG_DEDS"];
         const aDeductions4 =["ADVERTISING_FEE", "TOTAL_LEASES", "BUSINESS_PROT", "BPP_ADMIN", "CLIENT_SALES_TAX_BOT", "CHARGEBACKS", "PAGERS",
-            "PAGERS2", "REGULAR_MISCELLANEOUS", "SPECIAL_MISC","DUE_TO_FRAN"];
+            "PAGERS2", "REGULAR MISCELLANEOUS", "SPECIAL_MISC","DUE_TO_FRAN"];
         const aDeductions5 =["SUBTOTAL_SPEC_DEDS"];
         const aDeductions6 =["TOTAL_DEDS"];
         const aDeductions7 =["ChildSupport"];
@@ -161,29 +161,14 @@ class SummaryTransactons extends Component {
                 <table style={{width:'63%'}}>
                     <tbody>
 
-                                <tr >
-                                    <td width="350">
-                                        <Typography variant="subtitle1">Regular Billing</Typography>
-                                    </td>
-                                    <td width ="" className="text-right">
-                                        $0.00
-                                    </td>
-                                </tr>
-
-                    {/* { aBillings2.map((b, index)=>{
-                            return (
-                                <tr key={index}>
-                                    <td width="350">
-                                        <Typography variant="subtitle1">{b.LABEL}</Typography>
-                                    </td>
-                                    <td width ="" className="text-right">
-                                        ${parseFloat(b.AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
-                                    </td>
-                                </tr>
-                            )
-                        }
-                    )} */}
-
+                    <tr >
+                        <td width="350">
+                            <Typography variant="subtitle1">Regular Billing</Typography>
+                        </td>
+                        <td width ="" className="text-right">
+                            $0.00
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
 
@@ -224,14 +209,14 @@ class SummaryTransactons extends Component {
                         }
                     )}
 
-                                <tr >
-                                    <td width="350">
-                                        <Typography variant="subtitle1">Total Customer Invoice</Typography>
-                                    </td>
-                                    <td width ="" className="text-right">
-                                        $0.00
-                                    </td>
-                                </tr>
+                    <tr >
+                        <td width="350">
+                            <Typography variant="subtitle1">Total Customer Invoice</Typography>
+                        </td>
+                        <td width ="" className="text-right">
+                            $0.00
+                        </td>
+                    </tr>
 
 
                     </tbody>
@@ -280,44 +265,27 @@ class SummaryTransactons extends Component {
                             )
                         }
                     )}
-                    {/*{ aDeductions2 !=null && (aDeductions2.map((b, index)=>{*/}
-                    {/*return (*/}
-                    {/*<tr key={index}>*/}
-                    {/*<td>*/}
-                    {/*<Typography variant="subtitle1">{b}</Typography>*/}
-                    {/*</td>*/}
-                    {/*<td className="text-right">*/}
-                    {/*${SUMMARY_PAGE[0][b]!=null &&(parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}*/}
-                    {/*{SUMMARY_PAGE[0][b] ==null &&(parseFloat(0).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}*/}
-
-                    {/*/!*${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }*!/*/}
-                    {/*</td>*/}
-                    {/*</tr>*/}
-                    {/*)*/}
-                    {/*}*/}
-                    {/*))}*/}
-
                     </tbody>
                 </table>
                 <table style={{width:'80%'}}>
                     <tbody>
                     { aDeductions3.map((b, index)=>{
-                        if(SUMMARY_PAGE[0][b]===null || (SUMMARY_PAGE[0][b]!==null && SUMMARY_PAGE[0][b].length===0) )
-                            return false;
-                        else
-                            return (
-                                <tr key={index}>
-                                    <td>
-                                        <Typography variant="subtitle1">
-                                            {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
-                                        </Typography>
-                                    </td>
-                                    <td className="text-right">
-                                        {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
-                                        ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
-                                    </td>
-                                </tr>
-                            )
+                            if(SUMMARY_PAGE[0][b]===null || (SUMMARY_PAGE[0][b]!==null && SUMMARY_PAGE[0][b].length===0) )
+                                return false;
+                            else
+                                return (
+                                    <tr key={index}>
+                                        <td>
+                                            <Typography variant="subtitle1">
+                                                {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
+                                            </Typography>
+                                        </td>
+                                        <td className="text-right">
+                                            {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
+                                            ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                        </td>
+                                    </tr>
+                                )
                         }
                     )}
                     </tbody>
@@ -333,7 +301,7 @@ class SummaryTransactons extends Component {
                                         </Typography>
                                     </td>
                                     <td className="text-right">
-                                    ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                        ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
                                     </td>
                                 </tr>
                             )
@@ -344,23 +312,22 @@ class SummaryTransactons extends Component {
                 <table style={{width:'63.5%'}}>
                     <tbody>
                     { aDeductions4.map((b, index)=>{
-                        console.log('bbb4=', b);
-                        if(SUMMARY_PAGE[0][b]===null || (SUMMARY_PAGE[0][b]!==null && SUMMARY_PAGE[0][b].length===0) )
-                            return false;
-                        else
-                            return (
-                                <tr key={index}>
-                                    <td>
-                                        <Typography variant="subtitle1">
-                                            {(SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b].length) && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
-                                        </Typography>
-                                    </td>
-                                    <td className="text-right">
-                                        {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
-                                        ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
-                                    </td>
-                                </tr>
-                            )
+                            if(SUMMARY_PAGE[0][b]===null || (SUMMARY_PAGE[0][b]!==null && SUMMARY_PAGE[0][b].length===0) )
+                                return false;
+                            else
+                                return (
+                                    <tr key={index}>
+                                        <td>
+                                            <Typography variant="subtitle1">
+                                                {(SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b].length) && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
+                                            </Typography>
+                                        </td>
+                                        <td className="text-right">
+                                            {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
+                                            ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                        </td>
+                                    </tr>
+                                )
                         }
                     )}
                     </tbody>
@@ -368,22 +335,22 @@ class SummaryTransactons extends Component {
                 <table style={{width:'80%'}}>
                     <tbody>
                     { aDeductions5.map((b, index)=>{
-                        if(SUMMARY_PAGE[0][b]===null)
-                            return false;
-                        else
-                            return (
-                                <tr key={index}>
-                                    <td>
-                                        <Typography variant="subtitle1">
-                                            {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
-                                        </Typography>
-                                    </td>
-                                    <td className="text-right">
-                                        {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
-                                        ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
-                                    </td>
-                                </tr>
-                            )
+                            if(SUMMARY_PAGE[0][b]===null)
+                                return false;
+                            else
+                                return (
+                                    <tr key={index}>
+                                        <td>
+                                            <Typography variant="subtitle1">
+                                                {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
+                                            </Typography>
+                                        </td>
+                                        <td className="text-right">
+                                            {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
+                                            ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                        </td>
+                                    </tr>
+                                )
                         }
                     )}
                     </tbody>
@@ -391,22 +358,22 @@ class SummaryTransactons extends Component {
                 <table style={{width:'90%'}}>
                     <tbody>
                     { aDeductions6.map((b, index)=>{
-                        if(SUMMARY_PAGE[0][b]===null)
-                            return false;
-                        else
-                            return (
-                                <tr key={index}>
-                                    <td>
-                                        <Typography variant="subtitle1">
-                                            {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
-                                        </Typography>
-                                    </td>
-                                    <td className="text-right">
-                                        {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
-                                        ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
-                                    </td>
-                                </tr>
-                            )
+                            if(SUMMARY_PAGE[0][b]===null)
+                                return false;
+                            else
+                                return (
+                                    <tr key={index}>
+                                        <td>
+                                            <Typography variant="subtitle1">
+                                                {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
+                                            </Typography>
+                                        </td>
+                                        <td className="text-right">
+                                            {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
+                                            ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                        </td>
+                                    </tr>
+                                )
                         }
                     )}
                     </tbody>
@@ -414,75 +381,67 @@ class SummaryTransactons extends Component {
 
                 <table>
                     <tbody>
-                        <tr>
-                            <td><h2 className="pt-16" style ={{color:'white'}}>DUE TO FRANCHISEE BEFORE CHARGEBACK:</h2></td>
-                            <td style={{width:'14%'}}> $0.00 </td>
-                        </tr>
+                    <tr>
+                        <td><h2 className="pt-16" style ={{color:'white'}}>DUE TO FRANCHISEE BEFORE CHARGEBACK:</h2></td>
+                        <td style={{width:'14%'}}> $0.00 </td>
+                    </tr>
                     </tbody>
                 </table>
 
                 <table style={{width:'63%'}}>
                     <tbody>
-                        <tr >
-                            <td width="350">
+                    <tr >
+                        <td width="350">
                             <Typography variant="subtitle1">Chargeback</Typography>
-                            </td>
-                            <td width ="" className="text-right">
-                                $0.00
-                            </td>
-                        </tr>
+                        </td>
+                        <td width ="" className="text-right">
+                            $0.00
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
                 <table style={{width:'63%'}}>
                     <tbody>
                     { aDeductions7.map((b, index)=>{
-                        if(SUMMARY_PAGE[0][b]===null)
-                            return false;
-                        else
-                            return (
-                                <tr key={index}>
-                                    <td>
-                                        <Typography variant="subtitle1">
-                                            {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
-                                        </Typography>
-                                    </td>
-                                    <td className="text-right">
-                                        {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
-                                        ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
-                                    </td>
-                                </tr>
-                            )
+                            if(SUMMARY_PAGE[0][b]===null)
+                                return false;
+                            else
+                                return (
+                                    <tr key={index}>
+                                        <td>
+                                            <Typography variant="subtitle1">
+                                                {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
+                                            </Typography>
+                                        </td>
+                                        <td className="text-right">
+                                            {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
+                                            ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                        </td>
+                                    </tr>
+                                )
                         }
                     )}
-                        {/* <tr >
-                            <td width="350">
-                            <Typography variant="subtitle1">Child Support</Typography>
-                            </td>
-                            <td width ="" className="text-right">
-                                $0.00
-                            </td>
-                        </tr> */}
                     </tbody>
                 </table>
                 <table style={{width:'63%'}}>
                     <tbody>
-                        <tr >
-                            <td width="350">
+                    <tr >
+                        <td width="350">
                             <Typography variant="subtitle1">Tax Levy</Typography>
-                            </td>
-                            <td width ="" className="text-right">
-                                $0.00
-                            </td>
-                        </tr>
+                        </td>
+                        <td width ="" className="text-right">
+                            $0.00
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
 
                 <table>
                     <tbody>
-                        <tr>
-                            <td><h2 className="pt-16" style ={{color:'white'}}>DUE TO FRANCHISEE:</h2></td>
-                            <td style={{width:'14%'}}> $0.00 </td>
-                        </tr>
+                    <tr>
+                        <td><h2 className="pt-16" style ={{color:'white'}}>DUE TO FRANCHISEE:</h2></td>
+                        <td style={{width:'14%'}}> $0.00 </td>
+                    </tr>
                     </tbody>
                 </table>
 
