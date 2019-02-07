@@ -462,6 +462,7 @@ class InvoiceForm extends Component {
         if(this.state.selectedCustomer===null) return;
 
         let subTotal = 0.0;
+        let total = 0.0;
         let markup = 0.0;
         let tax = 0.0;
         let commissionTotal = 0.0;
@@ -472,8 +473,9 @@ class InvoiceForm extends Component {
 
         data.forEach(n => {
             subTotal += parseFloat(n.extended);
+            total += parseFloat(n.total);
             tax += parseFloat(n.tax);
-            markup += parseFloat(n.markupAmount)
+            markup += parseFloat(n.markupAmount);
             commissionTotal += parseFloat(n.commissionAmount)
         });
 
@@ -483,7 +485,7 @@ class InvoiceForm extends Component {
         this.setState({markup: markup});
         this.setState({tax: tax});
         this.setState({commissionAmount: commissionTotal});
-        this.setState({total: subTotal+tax+markup});
+        this.setState({total: total+markup});
     };
 
     componentDidUpdate(prevProps, prevState, snapshot){

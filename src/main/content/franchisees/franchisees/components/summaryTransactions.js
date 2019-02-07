@@ -334,7 +334,6 @@ class SummaryTransactons extends Component {
                                     </td>
                                     <td className="text-right">
                                     ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
-                                        {/*${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }*/}
                                     </td>
                                 </tr>
                             )
@@ -345,6 +344,7 @@ class SummaryTransactons extends Component {
                 <table style={{width:'63.5%'}}>
                     <tbody>
                     { aDeductions4.map((b, index)=>{
+                        console.log('bbb4=', b);
                         if(SUMMARY_PAGE[0][b]===null || (SUMMARY_PAGE[0][b]!==null && SUMMARY_PAGE[0][b].length===0) )
                             return false;
                         else

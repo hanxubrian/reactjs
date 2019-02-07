@@ -1294,8 +1294,8 @@ class InvoiceLineTable extends React.Component {
                                         Cell: row=>{
                                             if(row.original.type==='line') {
                                                 let markup = 0.0;
-                                                if(row.original.markup!=='') markup = row.original.markup;
-                                                return ("$" + parseFloat(row.original.total).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+                                                if(row.original.markupAmount!=='') markup = row.original.markupAmount;
+                                                return ("$" + parseFloat(row.original.total+markup).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
                                             }
                                             else {
                                                 if (row.original.length>1)
