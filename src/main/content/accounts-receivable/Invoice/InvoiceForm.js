@@ -19,7 +19,6 @@ import InfoIcon from '@material-ui/icons/Info';
 import CloseIcon from '@material-ui/icons/Close';
 import WarningIcon from '@material-ui/icons/Warning';
 
-
 // theme components
 import {FuseAnimate} from '@fuse';
 import {withStyles} from "@material-ui/core";
@@ -650,6 +649,7 @@ class InvoiceForm extends Component {
                 ExtraWork: 1,
                 TaxExcempt: this.state.selectedCustomer.TaxExempt,
                 Distribution: [],
+                vendorId: line.vendorId
             };
             let franchisees = [];
 
@@ -1424,7 +1424,10 @@ class InvoiceForm extends Component {
                             </Button>
                         </DialogActions>
                     </Dialog>
-                    <VendorSelectionDialog />
+                    {this.props.invoiceForm.data!==null && this.props.invoiceForm.data.line.length>0 && (
+                        <VendorSelectionDialog />
+                    )}
+
                 </div>
             </FuseAnimate>
         );

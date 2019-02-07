@@ -10,8 +10,6 @@ export const GET_INVOICE_DETAIL = "[INVOICES] GETS INVOICE DETAIL";
 export const GET_INVOICE_DETAIL_START = "[INVOICES] GETS INVOICE DETAIL START";
 export const GET_INVOICE_DETAIL_FAILD = "[INVOICES] GETS INVOICE DETAIL FAILD";
 
-
-
 export const GET_INVOICES_FETCH_START = "[INVOICES] GETS STARTED FETCH";
 export const DELETE_SELECTED_INVOICES = "[INVOICES] DELETE SELECTED";
 export const REMOVE_SELECTED_INVOICE = "[INVOICE] REMOVE SELECTED";
@@ -47,7 +45,12 @@ export const UPDATED_INVOICES = '[INVOICES APP] UPDATED INVOICES';
 export const UPDATE_INVOICE_STATUS = '[INVOICES APP] UPDATE INVOICE STATUS';
 export const UPDATE_INVOICE_LINE = '[INVOICES APP] UPDATE INVOICE LINE';
 export const UPDATE_INVOICE_DATE_OPTION = '[INVOICES APP] UPDATE INVOICE DATE OPTION';
+
+//for Vendor
 export const GET_INVOICE_VENDOR_LIST = '[INVOICES APP] GET INVOICE VENDOR LIST';
+export const OPEN_INVOICE_VENDOR_DIALOG_BOX = '[INVOICES APP] OPEN INVOICE VENDOR DIALOG BOX';
+export const CLOSE_INVOICE_VENDOR_DIALOG_BOX = '[INVOICES APP] CLOSE INVOICE VENDOR DIALOG BOX';
+export const UPDATE_INVOICE_VENDOR_ID = '[INVOICES APP] UPDATE INVOICE VENDOR_ID';
 
 
 export function getInvoices(RegionId, StatusId, FromDate, ToDate, PeriodId,OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText) {
@@ -248,6 +251,7 @@ export function addInvoice(regionId, data)
 }
 
 export function updateInvoiceLine(data) {
+    console.log('data=', data);
     return {
         type: UPDATE_INVOICE_LINE,
         payload: data
@@ -466,4 +470,25 @@ export function getVendorLists(regionId) {
             }
         })();
     };
+}
+
+export function openInvoiceVendorDialogBox(id) {
+    return {
+        type: OPEN_INVOICE_VENDOR_DIALOG_BOX,
+        payload: id
+    }
+}
+
+export function closeInvoiceVendorDialogBox() {
+    return {
+        type: CLOSE_INVOICE_VENDOR_DIALOG_BOX
+    }
+}
+
+export function updateInvoiceVendor(vendorId) {
+    return {
+        type: UPDATE_INVOICE_VENDOR_ID,
+        payload: vendorId
+    }
+
 }

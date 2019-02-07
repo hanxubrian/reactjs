@@ -3,7 +3,7 @@ import {withRouter} from 'react-router-dom';
 
 // core components
 import {
-    TextField, Typography, Button, IconButton, Grid, Dialog, NoSsr
+    Typography, Button, IconButton, Grid, Dialog, FormControl, Select,OutlinedInput, InputLabel, MenuItem,
 } from '@material-ui/core';
 
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -22,18 +22,6 @@ import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
 
-// third party
-import _ from 'lodash';
-import moment from 'moment'
-import Select from 'react-select';
-
-//Utility
-import {escapeRegexCharacters} from 'services/utils'
-import {
-    Control, Menu, NoOptionsMessage, Option,  Placeholder,  SingleValue, ValueContainer
-} from "main/content/accounts-receivable/Invoice/selectUtils";
-
-import {emphasize} from "@material-ui/core/styles/colorManipulator";
 
 const styles = theme => ({
     layoutForm: {
@@ -44,32 +32,18 @@ const styles = theme => ({
             textTransform: 'none'
         }
     },
-    card: {
-        width: '100%',
-    },
     container: {
         position: 'relative',
         width: '100%'
     },
     formControl: {
         marginBottom: 12,
-        minWidth: 200,
+        width: '100%',
+
     },
     textField: {
         marginLeft: 0,
         marginRight: theme.spacing.unit,
-    },
-    summary: {
-        fontSize: 15,
-        fontWeight: 700
-    },
-    suggestion: {
-        display: 'block',
-    },
-    suggestionsList: {
-        margin: 0,
-        padding: 0,
-        listStyleType: 'none',
     },
     divider: {
         height: theme.spacing.unit * 2,
@@ -80,60 +54,12 @@ const styles = theme => ({
     label: {
         transform: 'translate(14px, 14px) scale(1)'
     },
-    inputOrange: {
-        padding: '12px 14px',
-        color: 'orange'
-    },
-    dropdownMenu: {
-        '& li': {
-            fontSize: 12,
-            height: 12,
-        }
-    },
-    picker: {
-        padding: '0 6px'
-    },
     root1: {
         flexGrow: 1,
     },
     input1: {
         display: 'flex',
         padding: '12px 12px'
-    },
-    valueContainer: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        flex: 1,
-        alignItems: 'center',
-        overflow: 'hidden',
-    },
-    chip: {
-        margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
-    },
-    chipFocused: {
-        backgroundColor: emphasize(
-            theme.palette.type === 'light' ? theme.palette.grey[300] : theme.palette.grey[700],
-            0.08,
-        ),
-    },
-    noOptionsMessage: {
-        padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
-    },
-    singleValue: {
-        fontSize: 14,
-    },
-    placeholder: {
-        position: 'absolute',
-        left: 6,
-        fontSize: 14,
-    },
-    paper: {
-        position: 'absolute',
-        zIndex: '9999!important',
-        marginTop: theme.spacing.unit,
-        fontSize: 14,
-        left: 0,
-        right: 0
     },
 });
 
@@ -182,11 +108,14 @@ const DialogActions = withStyles(theme => ({
 
 class VendorDialogBox extends Component {
     state = {
-        vendor: {value:'', label: ''},
-        bOpen: false,
+        vendor: '',
     };
 
     componentDidUpdate(prevProps, prevState, snapshot){
+        if(this.props.itemId!==prevProps.itemId) {
+            let lines = this.props.invoiceForm.data.line;
+            this.setState({vendor: lines[this.props.itemId].vendorId});
+        }
     }
 
     componentWillMount(){
@@ -194,29 +123,29 @@ class VendorDialogBox extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+
     }
 
     componentDidMount(){
+        if(this.props.invoiceForm.data!==null) {
+            let lines = this.props.invoiceForm.data.line;
+
+            this.setState({vendor: lines[this.props.itemId].vendorId});
+        }
     }
 
-    handleChange = (event) => {
-        this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
-
-    };
-
     updateVendor = () => {
-        const {vendor, vendor_no, vendorDate} = this.state;
-        this.props.updateVendor({vendor, vendor_no, vendorDate});
-        this.props.hideVendorDialogBox();
+        this.props.updateInvoiceVendor(this.state.vendor);
+        this.props.closeInvoiceVendorDialogBox();
     };
 
     isDisable = ()=>{
-        if(this.state.vendor===null) return true;
+        if(this.state.vendor==='') return true;
         return false;
     };
 
-    handleVendorChange = (newValue)=> {
-        this.setState({vendor: newValue});
+    handleVendorChange = (event)=> {
+        this.setState({vendor: event.target.value});
     };
 
     render()
@@ -231,23 +160,12 @@ class VendorDialogBox extends Component {
 
         const {classes} = this.props;
 
-        const selectStyles = {
-            input: base => ({
-                ...base,
-                '& input': {
-                    font: 'inherit',
-                },
-            }),
-        };
-
-        const components = { Control, Menu, NoOptionsMessage, Option, Placeholder, SingleValue, ValueContainer };
-
         return (
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
                 <div className="">
                     <Dialog
-                        open={this.props.bVendorBox}
-                        onClose={()=> this.props.hideVendorDialogBox()}
+                        open={this.props.bInvoiceVendorBox}
+                        onClose={()=> this.props.closeInvoiceVendorDialogBox()}
                         aria-labelledby="alert-dialog-title"
                         aria-describedby="alert-dialog-description"
                         fullWidth
@@ -258,24 +176,31 @@ class VendorDialogBox extends Component {
                             <Grid container spacing={24}>
                                 <Grid item xs={12}>
                                     <div className={classes.root1}>
-                                        <NoSsr>
+                                        <FormControl className={classes.formControl}>
+                                            <InputLabel htmlFor="vendorId">Vendor</InputLabel>
                                             <Select
-                                                autoFocus
-                                                classes={classes}
-                                                styles={selectStyles}
                                                 value={this.state.vendor}
-                                                components={components}
-                                                onChange={(v)=>this.handleVendorChange(v)}
-                                                options={vendors}
-                                                placeholder="Select a vendor"
-                                            />
-                                        </NoSsr>
+                                                onChange={this.handleVendorChange}
+                                                inputProps={{
+                                                    name: 'vendorId',
+                                                    id: 'vendorId',
+                                                }}
+                                                variant="outlined"
+                                                classes={{
+
+                                                }}
+                                            >
+                                                {vendors.length>0 && vendors.map(v=>{
+                                                    return (<MenuItem key={v.value} value={v.value}>{v.label}</MenuItem>)
+                                                })}
+                                            </Select>
+                                        </FormControl>
                                     </div>
                                 </Grid>
                             </Grid>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={()=> this.props.hideVendorDialogBox()} color="primary">
+                            <Button onClick={()=> this.props.closeInvoiceVendorDialogBox()} color="primary">
                                 Close
                             </Button>
                             <Button
@@ -294,18 +219,19 @@ class VendorDialogBox extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        showVendorDialogBox: Actions.showVendorDialogBox,
-        hideVendorDialogBox: Actions.hideVendorDialogBox,
+        closeInvoiceVendorDialogBox: Actions.closeInvoiceVendorDialogBox,
+        updateInvoiceVendor: Actions.updateInvoiceVendor,
         updateVendor: Actions.updateVendor,
     }, dispatch);
 }
 
-function mapStateToProps({transactions, invoices})
+function mapStateToProps({invoices})
 {
     return {
-        transactionForm: transactions.transactionForm,
-        bVendorBox: transactions.transactionForm.bVendorBox,
-        vendorList: invoices.vendorList
+        vendorList: invoices.vendorList,
+        bInvoiceVendorBox: invoices.bInvoiceVendorBox,
+        invoiceForm: invoices.invoiceForm,
+        itemId: invoices.itemId
     }
 }
 

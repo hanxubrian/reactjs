@@ -531,8 +531,18 @@ class InvoiceLineTable extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.state.data!==null && prevState.data!==this.state.data) {
-            this.props.updateInvoiceLine(this.state.data);
+            console.log('data=', this.state.data);
+            let data = this.state.data;
+            if(!this.props.bSkip) {
+                if(data.length>0 && this.props.invoiceForm.data.line.length>0){
+                    data.map((line, index)=>{
+                        line.vendorId=this.props.invoiceForm.data.line[index].vendorId;
+                    })
+                }
+                this.props.updateInvoiceLine(data);
+            }
         }
+
         if(JSON.stringify(this.state.customerTaxAmountLine)!== JSON.stringify(prevState.customerTaxAmountLine)){
             this.updateTaxFromLine();
         }
@@ -672,6 +682,10 @@ class InvoiceLineTable extends React.Component {
     handleTaxAlertReductionClose = () => {
         this.setState({ bTaxAlertReduction: false });
         this.setState({ bAllowNeverAlertReduction: true });
+    };
+
+    showVendorDialogBox = (row) =>{
+        this.props.openInvoiceVendorDialogBox(row.id);
     };
 
     addLineData=(row)=>{
@@ -925,8 +939,9 @@ class InvoiceLineTable extends React.Component {
         data[row.id].service = newValue;
         this.setState({data: data});
 
-        if(newValue.value==='5c4b8a3b651a9c5970514a68')  //label: "Customer Supplies"
-            alert('ok');
+        if(newValue.value==='5c4b8a3b651a9c5970514a68') {//label: "Customer Supplies"
+            this.props.openInvoiceVendorDialogBox(row.id);
+        }
     };
 
     render()
@@ -1333,7 +1348,7 @@ class InvoiceLineTable extends React.Component {
                                     },
                                     {
                                         Header: "Action",
-                                        width: 130,
+                                        width: 150,
                                         Cell: row=>{
                                             if(row.original.type==='line')
                                                 return (
@@ -1350,6 +1365,14 @@ class InvoiceLineTable extends React.Component {
                                                         >
                                                             <Icon>add</Icon>
                                                         </Fab>
+                                                        {row.original.service.value==='5c4b8a3b651a9c5970514a68' && (
+                                                            <Fab color="secondary" aria-label="show vendor box"
+                                                                 className={classNames(classes.lineButton, "mr-8")}
+                                                                 onClick={()=>this.showVendorDialogBox(row.original)}
+                                                            >
+                                                                <Icon>settings</Icon>
+                                                            </Fab>
+                                                        )}
                                                         {this.state.data.length>1 && (
                                                             <Fab aria-label="remove"
                                                                  onClick={()=>this.removeLineData(row.original)}
@@ -1439,7 +1462,8 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         updateInvoiceLine: Actions.updateInvoiceLine,
         getCustomerTaxAmount: Actions.getCustomerTaxAmount,
-        getServiceLists: Actions.getServiceLists
+        getServiceLists: Actions.getServiceLists,
+        openInvoiceVendorDialogBox: Actions.openInvoiceVendorDialogBox,
     }, dispatch);
 }
 
@@ -1454,6 +1478,8 @@ function mapStateToProps({invoices, franchisees, auth})
         bStartingSaveFormData: invoices.bStartingSaveFormData,
         billingLists: invoices.billingLists,
         serviceLists: invoices.serviceLists,
+        itemId: invoices.itemId,
+        bSkip: invoices.bSkip,
     }
 }
 

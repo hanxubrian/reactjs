@@ -7,7 +7,6 @@ import { persistReducer } from 'redux-persist';
 import _ from 'lodash';
 
 
-let today = new Date();
 const initialState = {
     invoicesDB: null,
     invoiceDetail: null,
@@ -53,7 +52,10 @@ const initialState = {
     serviceLists: null,
     bOpenPaymentInvoiceForm: false,
     bOpenCreditInvoiceForm: false,
-    vendorList: null
+    vendorList: null,
+    itemId: 0,
+    bInvoiceVendorBox: false,
+    bSkip: false
 };
 
 
@@ -349,6 +351,22 @@ const invoices = function(state = initialState, action) {
         case Actions.GET_INVOICE_VENDOR_LIST: {
             return {...state, vendorList: action.payload}
         }
+        case Actions.OPEN_INVOICE_VENDOR_DIALOG_BOX: {
+            return {...state, bInvoiceVendorBox: true, itemId: action.payload, bSkip: true}
+        }
+        case Actions.CLOSE_INVOICE_VENDOR_DIALOG_BOX: {
+            return {...state, bInvoiceVendorBox: false, bSkip: false}
+        }
+        case Actions.UPDATE_INVOICE_VENDOR_ID: {
+            const lines = _.cloneDeep(state.invoiceForm.data.line);
+            lines[state.itemId].vendorId = action.payload;
+
+            return {
+                ...state,
+                invoiceForm: {...state.invoiceForm, data: {line: lines}, bInvoiceVendorBox: false}
+            };
+        }
+
         default:
         {
             return state;
@@ -360,6 +378,6 @@ const persistConfig = {
     key: 'invoices',
     storage: storage,
     blacklist: ['invoicesDB', 'customersDB', 'bInvoiceStart', 'bOpenedSummaryPanel', 'bOpenedFilterPanel', 'bLoadedCustomers',
-        'customerTaxAmountLine', 'invoiceForm', 'invoiceDateOption', 'bCustomerErr', 'bInvoiceErr', 'bOpenPaymentInvoiceForm']
+        'customerTaxAmountLine', 'invoiceForm', 'invoiceDateOption', 'bCustomerErr', 'bInvoiceErr', 'bOpenPaymentInvoiceForm','bInvoiceVendorBox']
 };
 export default persistReducer(persistConfig, invoices);
