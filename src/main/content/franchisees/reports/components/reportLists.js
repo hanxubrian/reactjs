@@ -173,7 +173,6 @@ class ReportLists extends Component {
     }
     search = (val)=> {
         const temp = this.props.data.filter( d => {
-            console.log('value=', d);
             return d.Name.indexOf(val) !== -1 || !val ||
                 d.FranchiseeNo.indexOf(val) !== -1 ||
                 // d.TrxType.toString().indexOf(val) !== -1

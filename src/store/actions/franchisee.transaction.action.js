@@ -19,6 +19,7 @@ export const RESET_TRANSACTION_FORM = '[FRANCHISEE-TRANSACTION] RESET TRANSACTIO
 export const UPDATE_A_FRANCHISEE_TRANSACTION = '[FRANCHISEE-TRANSACTION] UPDATE A FRANCHISEE TRANSACTION';
 export const GET_FRANCHISEE_TRANSACTION_TYPE_LIST = '[FRANCHISEE-TRANSACTION] GET FRANCHISEE TRANSACTION TYPE LIST';
 export const NULLIFY_FRANCHISEE_REPORT = '[FRANCHISEE-TRANSACTION] NULLIFY FRANCHISEE REPORT';
+export const GET_FRANCHISEE_TRANSACTION_TAX_AMOUNT = '[FRANCHISEE-TRANSACTION] GET FRANCHISEE TRANSACTION TAX AMOUNT';
 
 export function getTransactions(regionId) {
     return (dispatch) => {
@@ -227,4 +228,20 @@ export function nullifyFranchiseeReport() {
     return {
         type: NULLIFY_FRANCHISEE_REPORT,
     }
+}
+
+export function getFranchiseeTransactionTaxAmount(regiondId, FranchiseeId, Amount, Quantity, TaxTypeId=3){
+    return (dispatch) => {
+        (async () => {
+            let res = await franchiseesService.getFranchiseeTransactionTaxAmount(regiondId, FranchiseeId, Amount, Quantity, TaxTypeId);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: GET_FRANCHISEE_TRANSACTION_TAX_AMOUNT,
+                    payload: res.Data
+                });
+            } else {
+
+            }
+        })();
+    };
 }

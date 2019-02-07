@@ -12,6 +12,7 @@ export const ReportsConfig = {
             component: FuseLoadable({
                 // loader: () => import('./report')
                 loader: () => import('./reportlayout')
+                // loader: () => import('./reportDetailLayout')
             })
         },
         {

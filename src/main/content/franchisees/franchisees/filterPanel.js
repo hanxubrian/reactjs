@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Paper, TextField, withStyles} from '@material-ui/core';
+import {OutlinedInput, Paper, Select, TextField, withStyles} from '@material-ui/core';
 import keycode from 'keycode';
 
 //Material UI core
@@ -20,6 +20,8 @@ import Radio from "@material-ui/core/Radio/Radio";
 import Geocode from "react-geocode";
 import MaskedInput from "react-text-mask";
 import * as PropTypes from "prop-types";
+import moment from "moment";
+import _ from "lodash";
 
 
 const styles = theme => ({
@@ -53,7 +55,20 @@ const styles = theme => ({
         '&.opened1'                    : {
             transform: 'translateX(300px)'
         }
-    }
+    },
+    dropdownMenu: {
+        '& li': {
+            fontSize: 12,
+            height: 12,
+        }
+    },
+    inputMenu: {
+        padding: '10px 16px'
+    },
+    inputMenu1: {
+        padding: '10px 16px',
+        width: 150
+    },
 });
 
 
@@ -69,7 +84,7 @@ const TextMaskCustom = (props) => {
             showMask
         />
     );
-}
+};
 
 TextMaskCustom.propTypes = {
     inputRef: PropTypes.func.isRequired,
@@ -137,7 +152,7 @@ class FilterPanel extends Component {
         
     }
 
-    componentDidUpdate(prevProps)
+    componentDidUpdate(prevProps, prevState, snapshot)
     {
         if ( this.props.state !== prevProps.state )
         {
@@ -224,11 +239,6 @@ class FilterPanel extends Component {
         }
     };
 
-    handleFilterChange = name => event => {
-        this.setState({
-            [name]: event.target.value,
-        });
-    };
     onLocationFilter = (name, value) => {
 
         let payload = {
@@ -358,7 +368,8 @@ class FilterPanel extends Component {
                 return;
         }
         this.props.franchiseeSelectLocationFilter(payload)
-    }
+    };
+
     render()
     {
         const {classes, franchiseesForm} = this.props;
@@ -660,7 +671,8 @@ function mapDispatchToProps(dispatch)
         getStatusFilterList: Actions.getStatusFilterList,
         updateFranchiseeStatus: Actions.updateFranchiseeStatus,
         franchiseeUpdateInsertPayload: Actions.franchiseeUpdateInsertPayload,
-        getFranchiseeStateList: Actions.getFranchiseeStateList
+        getFranchiseeStateList: Actions.getFranchiseeStateList,
+        updateReportPeriod: Actions.updateReportPeriod
     }, dispatch);
 }
 
@@ -675,7 +687,7 @@ function mapStateToProps({franchisees, auth})
         franchiseeStatus: franchisees.franchiseeStatus,
         locationFilterValue: franchisees.locationFilterValue,
         insertPayload: franchisees.insertPayload,
-        stateList: franchisees.StateList
+        stateList: franchisees.StateList,
     }
 }
 

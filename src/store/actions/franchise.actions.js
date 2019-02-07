@@ -32,6 +32,8 @@ export const UPDATE_FRANCHISEE = '[FRANCHISEES] UPDATE FRANCHISEE';
 export const DELETE_FRANCHISEE = '[FRANCHISEES] DELETE FRANCHISEE';
 export const GET_FRANCHISEE_DETAIL = '[FRANCHISEES] GET FRANCHISEE DETAIL';
 
+export const UPDATE_REPORT_PERIOD = '[FRANCHISEES] UPDATE REPORT PERIOD';
+export const NULLIFY_FRANCHISEE_NEW_REPORT = '[FINDERSFEES APP] NULLIFY FRANCHISEE NEW REPORT';
 
 export function getFranchisees(regionId, statusId, location , latitude , longitude , searchtext) {
 
@@ -280,3 +282,18 @@ export function selectLocation(location){
 }
 
 
+<<<<<<< HEAD
+=======
+export function updateReportPeriod(period) {
+    return {
+        type: UPDATE_REPORT_PERIOD,
+        payload: period
+    }
+}
+
+export function nullifyFranchiseeNewReport() {
+    return {
+        type: NULLIFY_FRANCHISEE_NEW_REPORT,
+    }
+}
+>>>>>>> a0d633207d312258a85458b91620e049b1f0bb44

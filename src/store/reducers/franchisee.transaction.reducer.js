@@ -2,6 +2,7 @@ import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import {GET_FRANCHISEE_TRANSACTION_TAX_AMOUNT} from "../actions/";
 
 const initialState = {
     transactionsDB: null,
@@ -23,6 +24,7 @@ const initialState = {
     },
     newTransaction: null,
     removedTrxKey: undefined,
+    transactionTax: null
 };
 
 const transactions = function(state = initialState, action) {
@@ -165,6 +167,13 @@ const transactions = function(state = initialState, action) {
             return {
                 ...state,
                 transactionTypeList: action.payload
+            };
+        }
+        case Actions.GET_FRANCHISEE_TRANSACTION_TAX_AMOUNT:
+        {
+            return {
+                ...state,
+                transactionTax: action.payload
             };
         }
 

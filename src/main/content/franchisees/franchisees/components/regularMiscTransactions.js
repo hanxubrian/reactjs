@@ -14,15 +14,12 @@ import {
     Table,
     VirtualTable,
     TableHeaderRow,
-    TableSummaryRow
+    TableSummaryRow, PagingPanel
 } from '@devexpress/dx-react-grid-material-ui';
 
 
 import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
-
-//Theme Utilities
-import FuseUtils from '@fuse/FuseUtils';
 
 // for store
 import {bindActionCreators} from "redux";
@@ -34,26 +31,22 @@ import "react-table/react-table.css";
 import classNames from 'classnames';
 import NumberFormat from 'react-number-format';
 
+//Theme Utilities
+import FuseUtils from '@fuse/FuseUtils';
+
 const styles = theme => ({
-    layoutTable: {
-        '& table th:first-child span': {
-            paddingLeft: '8px!important'
-        }
-    },
     tableTheadRow: {
         '& tr': {
             height: 32
         },
-        '& tr th':{
+        '& tr th': {
+            padding: '0 8px',
             borderBottom: '2px solid black',
             borderTop: '2px solid black',
         },
         '& tr th:nth-child(2)': {
             width: '100%'
-        },
-        '& tr th:nth-child(2) span': {
-            display: 'none'
-        },
+        }
     },
     imageIcon: {
         width: 24
@@ -73,6 +66,7 @@ const styles = theme => ({
         '& tbody tr:last-child td': {
             borderBottom: '2px solid black',
         }
+
     },
     tableFootRow: {
         '& td:nth-child(2)': {
@@ -122,7 +116,7 @@ const CurrencyTypeProvider = props => (
     />
 );
 
-class CustomerAccountTotals extends Component {
+class RegularMiscTransactons extends Component {
     state = {
         pageSizes: [5, 10, 25, 50, 100],
         currentPage: 0,
@@ -142,55 +136,62 @@ class CustomerAccountTotals extends Component {
         });
     };
 
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+    }
+
+    componentDidMount() {
+    }
+
+    componentWillMount() {
+    }
+
+    componentWillUnmount() {
+
+    }
+
+
     changeSorting = sorting => this.setState({ sorting });
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS===null)
-            return (<div/>);
+        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].REG_MISC===null)
+            return (<div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
+                <h2>Regular Misc. Transactions</h2></div>);
 
-        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS.map(d=>{
-            d.CUS_NAME = FuseUtils.capital_letter(d.CUS_NAME);
-            d.CONT_BILL = parseFloat(d.CONT_BILL);
-            d.CUR_MONTH = parseFloat(d.CUR_MONTH);
-            d.ADTL_B_FRN = parseFloat(d.ADTL_B_FRN);
-            d.ADTL_B_OFC = parseFloat(d.ADTL_B_OFC);
-            d.FF_PYMNT = parseFloat(d.FF_PYMNT);
+        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].REG_MISC.map(d=>{
+            d.DESCR = FuseUtils.capital_letter(d.DESCR);
+            d.TRX_AMT = parseFloat(d.TRX_AMT);
+            d.TRX_TAX = parseFloat(d.TRX_TAX);
+            d.TRX_TOT = parseFloat(d.TRX_TOT);
             return d;
         });
 
         const columns = [
-            {name: "CUST_NO", title: "Customer",},
-            {name: "CUS_NAME", title: "Cus. Name"},
-            {name: "CONT_BILL", title: "Contact Billing"},
-            {name: "CUR_MONTH", title: "Current Month"},
-            {name: "ADTL_B_FRN", title: "Additional Bill Franchisee"},
-            {name: "ADTL_B_OFC", title: "Client Supplies"},
-            {name: "FF_NBR", title: "Finders Fee Nbr"},
-            {name: "FF_PYMNT", title: "Finders Fee"},
+            {name: "TYPE", title: "Type"},
+            {name: "DESCR", title: "Description"},
+            {name: "TRX_AMT", title: "Amount"},
+            {name: "TRX_TAX", title: "Tax"},
+            {name: "TRX_TOT", title: "Total"},
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'CUST_NO', width: 120, },
-            { columnName: 'CUS_NAME', width: -1, },
-            { columnName: 'CONT_BILL', width: 120, align: 'right', wordWrapEnabled: true},
-            { columnName: 'CUR_MONTH', width: 120, align: 'right', wordWrapEnabled: true},
-            { columnName: 'ADTL_B_FRN', width: 120,  align: 'right', wordWrapEnabled: true},
-            { columnName: 'ADTL_B_OFC', width: 120,  align: 'right', wordWrapEnabled: true},
-            { columnName: 'FF_NBR', width: 120,  align: 'center', wordWrapEnabled: true},
-            { columnName: 'FF_PYMNT', width: 120, align: 'right',wordWrapEnabled: true},
+            { columnName: 'DESCR', width: -1, },
+            { columnName: 'TYPE', width: 100},
+            { columnName: 'TRX_AMT', width: 140,  align: 'right'},
+            { columnName: 'TRX_TAX', width: 140,  align: 'right'},
+            { columnName: 'TRX_TOT', width: 140,  align: 'right'},
         ];
 
         let totalSummaryItems = [
-            { columnName: 'CUR_MONTH', type: 'sum'},
-            { columnName: 'CONT_BILL',  type: 'sum'},
-            { columnName: 'FF_PYMNT',  type: 'sum'},
-            { columnName: 'ADTL_B_FRN',  type: 'sum'},
+            { columnName: 'TRX_AMT',  type: 'sum'},
+            { columnName: 'TRX_TAX',  type: 'sum'},
+            { columnName: 'TRX_TOT',  type: 'sum'},
         ];
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
-                <h2>Customer Account Totals</h2>
+                <h2>Regular Misc. Transactions</h2>
                 <Grid rows={data} columns={columns}>
                     <PagingState
                         currentPage={this.state.currentPage}
@@ -199,14 +200,14 @@ class CustomerAccountTotals extends Component {
                         onPageSizeChange={this.changePageSize}
                     />
                     <CurrencyTypeProvider
-                        for={['CUR_MONTH', 'CONT_BILL', 'ADTL_B_FRN', 'ADTL_B_OFC', 'FF_PYMNT']}
+                        for={['TRX_AMT', 'TRX_TAX', 'TRX_TOT']}
                     />
 
                     <IntegratedPaging/>
-                    {data.length>0 && (
-                        <SummaryState totalItems={totalSummaryItems} />
-                    )}
-                    {data.length>0 && (<IntegratedSummary /> )}
+                    <SummaryState
+                        totalItems={totalSummaryItems}
+                    />
+                    <IntegratedSummary />
 
                     <VirtualTable height="auto"
                                   tableComponent={TableComponent}
@@ -214,9 +215,7 @@ class CustomerAccountTotals extends Component {
                                   columnExtensions={tableColumnExtensions}
                     />
                     <TableHeaderRow />
-                    {data.length>0 && (
-                        <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
-                    )}
+                    <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
                 </Grid>
             </div>
         );
@@ -227,7 +226,6 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         removeTransaction: Actions.removeTransaction,
         openEditTransactionForm: Actions.openEditTransactionForm,
-        getReport: Actions.getReport,
     }, dispatch);
 }
 
@@ -241,5 +239,5 @@ function mapStateToProps({transactions, auth, franchiseeReports}) {
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(CustomerAccountTotals)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(RegularMiscTransactons)));
 

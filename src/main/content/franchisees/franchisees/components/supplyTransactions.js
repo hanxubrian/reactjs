@@ -34,29 +34,28 @@ import "react-table/react-table.css";
 import classNames from 'classnames';
 import NumberFormat from 'react-number-format';
 
+
 const styles = theme => ({
     layoutTable: {
         '& table th:first-child span': {
             paddingLeft: '8px!important'
+        },
+        '& table th:last-child span': {
+            paddingRight: '8px!important'
         }
     },
     tableTheadRow: {
         '& tr': {
             height: 32
         },
-        '& tr th':{
+        '& tr th': {
+            padding: '0 8px',
             borderBottom: '2px solid black',
             borderTop: '2px solid black',
         },
-        '& tr th:nth-child(2)': {
+        '& tr th:nth-child(3)': {
             width: '100%'
-        },
-        '& tr th:nth-child(2) span': {
-            display: 'none'
-        },
-    },
-    imageIcon: {
-        width: 24
+        }
     },
     tableStriped: {
         marginBottom: '0!important',
@@ -67,7 +66,7 @@ const styles = theme => ({
             paddingLeft: 4,
             paddingRight: 4
         },
-        '& tbody tr td:nth-child(2)': {
+        '& tbody tr td:nth-child(3)': {
             width: '100%',
         },
         '& tbody tr:last-child td': {
@@ -75,7 +74,7 @@ const styles = theme => ({
         }
     },
     tableFootRow: {
-        '& td:nth-child(2)': {
+        '& td:nth-child(3)': {
             width: '100%',
         },
     }
@@ -122,7 +121,7 @@ const CurrencyTypeProvider = props => (
     />
 );
 
-class CustomerAccountTotals extends Component {
+class SupplyTransactons extends Component {
     state = {
         pageSizes: [5, 10, 25, 50, 100],
         currentPage: 0,
@@ -142,55 +141,49 @@ class CustomerAccountTotals extends Component {
         });
     };
 
+
     changeSorting = sorting => this.setState({ sorting });
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS===null)
+        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].SUPPLY_TRXS===null)
             return (<div/>);
 
-        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS.map(d=>{
-            d.CUS_NAME = FuseUtils.capital_letter(d.CUS_NAME);
-            d.CONT_BILL = parseFloat(d.CONT_BILL);
-            d.CUR_MONTH = parseFloat(d.CUR_MONTH);
-            d.ADTL_B_FRN = parseFloat(d.ADTL_B_FRN);
-            d.ADTL_B_OFC = parseFloat(d.ADTL_B_OFC);
-            d.FF_PYMNT = parseFloat(d.FF_PYMNT);
+        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].SUPPLY_TRXS.map(d=>{
+            d.DESCR = FuseUtils.capital_letter(d.DESCR);
+            d.TRX_AMT = parseFloat(d.EXTENDED);
+            d.TRX_TAX = parseFloat(d.TRX_TAX);
+            d.TRX_UNIT = parseFloat(d['UNIT COST']);
+            d.TRX_TOT = parseFloat(d.TRX_TOT);
             return d;
         });
 
         const columns = [
-            {name: "CUST_NO", title: "Customer",},
-            {name: "CUS_NAME", title: "Cus. Name"},
-            {name: "CONT_BILL", title: "Contact Billing"},
-            {name: "CUR_MONTH", title: "Current Month"},
-            {name: "ADTL_B_FRN", title: "Additional Bill Franchisee"},
-            {name: "ADTL_B_OFC", title: "Client Supplies"},
-            {name: "FF_NBR", title: "Finders Fee Nbr"},
-            {name: "FF_PYMNT", title: "Finders Fee"},
+            {name: "DESCR", title: "Description"},
+            {name: "QUANTITY", title: "Quantity"},
+            {name: "TRX_UNIT", title: "Unit Amount"},
+            {name: "TRX_AMT", title: "SubTotal"},
+            {name: "TRX_TAX", title: "Tax"},
+            {name: "TRX_TOT", title: "Total"},
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'CUST_NO', width: 120, },
-            { columnName: 'CUS_NAME', width: -1, },
-            { columnName: 'CONT_BILL', width: 120, align: 'right', wordWrapEnabled: true},
-            { columnName: 'CUR_MONTH', width: 120, align: 'right', wordWrapEnabled: true},
-            { columnName: 'ADTL_B_FRN', width: 120,  align: 'right', wordWrapEnabled: true},
-            { columnName: 'ADTL_B_OFC', width: 120,  align: 'right', wordWrapEnabled: true},
-            { columnName: 'FF_NBR', width: 120,  align: 'center', wordWrapEnabled: true},
-            { columnName: 'FF_PYMNT', width: 120, align: 'right',wordWrapEnabled: true},
+            { columnName: 'DESCR', width: -1, },
+            { columnName: 'TRX_UNIT', width: 100,  align: 'right'},
+            { columnName: 'TRX_AMT', width: 100,  align: 'right'},
+            { columnName: 'TRX_TAX', width: 100,  align: 'right'},
+            { columnName: 'TRX_TOT', width: 100,  align: 'right'},
         ];
 
         let totalSummaryItems = [
-            { columnName: 'CUR_MONTH', type: 'sum'},
-            { columnName: 'CONT_BILL',  type: 'sum'},
-            { columnName: 'FF_PYMNT',  type: 'sum'},
-            { columnName: 'ADTL_B_FRN',  type: 'sum'},
+            { columnName: 'TRX_AMT',  type: 'sum'},
+            { columnName: 'TRX_TAX',  type: 'sum'},
+            { columnName: 'TRX_TOT',  type: 'sum'},
         ];
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
-                <h2>Customer Account Totals</h2>
+                <h2>Supply Transactions</h2>
                 <Grid rows={data} columns={columns}>
                     <PagingState
                         currentPage={this.state.currentPage}
@@ -199,9 +192,10 @@ class CustomerAccountTotals extends Component {
                         onPageSizeChange={this.changePageSize}
                     />
                     <CurrencyTypeProvider
-                        for={['CUR_MONTH', 'CONT_BILL', 'ADTL_B_FRN', 'ADTL_B_OFC', 'FF_PYMNT']}
+                        for={['TRX_AMT', 'TRX_TAX', 'TRX_TOT']}
                     />
 
+                    <IntegratedPaging/>
                     <IntegratedPaging/>
                     {data.length>0 && (
                         <SummaryState totalItems={totalSummaryItems} />
@@ -241,5 +235,5 @@ function mapStateToProps({transactions, auth, franchiseeReports}) {
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(CustomerAccountTotals)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(SupplyTransactons)));
 

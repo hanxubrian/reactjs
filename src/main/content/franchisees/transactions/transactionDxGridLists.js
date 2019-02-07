@@ -70,7 +70,6 @@ const styles = theme => ({
         },
         '& .deduction':{
             '& td': {
-                color: '#cc0000!important',
                 fontWeight: 700
             }
         },
@@ -278,7 +277,7 @@ class TransactionsDxGridLists extends Component {
                         <IconButton
                             onClick={(ev) => {
                                 ev.stopPropagation();
-                                this.props.openEditTransactionForm(props.row.Id, props.row);
+                                this.props.openEditTransactionForm(this.props.regionId, props.row);
                             }}
                         >
                             <Icon fontSize={"small"}>edit</Icon>
@@ -287,7 +286,7 @@ class TransactionsDxGridLists extends Component {
                 </Table.Cell>
             )
         }
-        else if (props.column.name.includes('TrxType')) {
+        else if (props.column.name.includes('TrxChargeType')) {
             let _typeId = props.row.TrxType;
             // let type = this.props.transactionTypeList.filter(f=>f._id===props.row.TrxType);
 
@@ -306,19 +305,18 @@ class TransactionsDxGridLists extends Component {
                 </Table.Cell>
             )
         }
-        else if (props.column.name.includes('TrxClass')) {
+        else if (props.column.name.includes('TrxType')) {
             let _typeId = props.row.TrxClass;
             let trxTypeName = _typeId;
-            let type1 = this.props.transactionTypeList.filter(f=>f._id===props.row.TrxClass);
+            let type1 = this.props.transactionTypeList.filter(f=>f._id===props.row.TrxType);
             if(type1.length>0)
                 trxTypeName = type1[0].Name;
 
             let type;
             if(type1.length===0) {
-                type = this.props.transactionTypeList.filter(f => f.TrxClass === props.row.TrxClass);
+                type = this.props.transactionTypeList.filter(f => f.TrxType === props.row.TrxType);
                 if (type.length) trxTypeName = type[0].Name;
             }
-            // if (type.length===0) trxTypeName = type[0].Name;
 
             return (
                 <Table.Cell>
@@ -369,11 +367,11 @@ class TransactionsDxGridLists extends Component {
 
         const columns = [
             {name: "FranNameNo", title: "FranNameNo",},
-            {name: "Number", title: "Trx. Number"},
+            {name: "Number", title: "Trx. #"},
             {name: "TrxDate", title: "Trx. Date"},
             {name: "Description", title: "Description"},
+            {name: "TrxChargeType", title: "Class"},
             {name: "TrxType", title: "Type"},
-            {name: "TrxClass", title: "Trx. Class"},
             {name: "ExtendedPrice", title: "Ext. Price"},
             {name: "Tax", title: "Tax"},
             {name: "Fees", title: "Fees"},
@@ -389,8 +387,8 @@ class TransactionsDxGridLists extends Component {
             { columnName: 'Fees', width: 80,  align: 'right'},
             { columnName: 'TotalTrxAmount', width: 120,  align: 'right'},
             { columnName: 'TrxDate', width: 100 },
-            { columnName: 'TrxType', width: 80 },
-            { columnName: 'TrxClass', width: 200},
+            { columnName: 'TrxChargeType', width: 80 },
+            { columnName: 'TrxType', width: 200},
             { columnTitle: 'Id', width: 100 },
         ];
 

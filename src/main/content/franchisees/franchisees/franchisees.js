@@ -44,13 +44,6 @@ import {withScriptjs, withGoogleMap, GoogleMap, Marker,} from "react-google-maps
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 import { compose, withProps, withHandlers, lifecycle } from "recompose";
 
-// function Marker({ text }) {
-//     return (
-//         <Tooltip title={text} placement="top">
-//             <Icon className="text-red">place</Icon>
-//         </Tooltip>
-//     );
-// }
 
 const headerHeight = 80;
 
@@ -61,7 +54,7 @@ const hexToRgb = (hex) =>{
         g: parseInt(result[2], 16),
         b: parseInt(result[3], 16)
     } : null;
-}
+};
 
 const styles = theme => ({
     root: {
@@ -240,8 +233,8 @@ const styles = theme => ({
     }
 });
 
-const DEFAULT_ZOOM = 8
-let map_zoom = DEFAULT_ZOOM
+const DEFAULT_ZOOM = 8;
+let map_zoom = DEFAULT_ZOOM;
 
 const MapWithAMarkerClusterer = compose(
     withProps({
@@ -253,8 +246,6 @@ const MapWithAMarkerClusterer = compose(
     withHandlers({
         onMarkerClustererClick: () => (markerClusterer) => {
             const clickedMarkers = markerClusterer.getMarkers()
-            console.log(`Current clicked markers length: ${clickedMarkers.length}`)
-            console.log(clickedMarkers)
         },
     }),
     withScriptjs,
@@ -291,8 +282,6 @@ const MapWithAMarkerClusterer2 = compose(
     withHandlers({
         onMarkerClustererClick: () => (markerClusterer) => {
             const clickedMarkers = markerClusterer.getMarkers()
-            console.log(`Current clicked markers length: ${clickedMarkers.length}`)
-            console.log(clickedMarkers)
         },
     }),
     withScriptjs,
@@ -492,7 +481,6 @@ class Franchisees extends Component {
         }
         if (this.props.locationFilterValue !== nextProps.locationFilterValue) {
             this.setState({ locationFilterValue: nextProps.locationFilterValue })
-            console.log("componentWillReceiveProps", "locationFilterValue", nextProps.locationFilterValue, this.props.franchisees)
             this.initRowsFromRawJson(this.props.franchisees, nextProps.locationFilterValue);
         }
         if (this.props.detailPayload !== nextProps.detailPayload) {
@@ -597,12 +585,9 @@ class Franchisees extends Component {
         this.props.createFranchisees.type === 'create' ? this.props.closeEditFranchisees() : this.props.closeCreateFranchisees();
     };
     getLocation() {
-        console.log("getLocation");
-
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    console.log(position.coords);
                     this.setState({
                         current_lat: position.coords.latitude,
                         current_long: position.coords.longitude
@@ -623,16 +608,12 @@ class Franchisees extends Component {
     }
 
     initRowsFromRawJson = (rawData = this.props.franchisees, locationFilterValue = this.props.locationFilterValue) => {
-        console.log("initRowsFromRawJson", "CustomerListContent.js", this.props.regionId, this.props.statusId, rawData)
         let all_temp = [];
         if (rawData === null || rawData === undefined) return;
 
         let regions = rawData.Data.Region.filter(x => {
             return this.props.regionId === 0 || x.Id === this.props.regionId;
         });
-
-
-        console.log("regions", regions)
 
         regions.forEach(x => {
             all_temp = [...all_temp, ...x.Franchisee];
@@ -655,16 +636,13 @@ class Franchisees extends Component {
         this.setState({
             rows: all_temp,
             data: all_temp,
-            // pins: _pins_temp,
         });
 
     };
 
     filterPins(pins, locationFilterValue) {
-        // this.setState({ gmapVisible: !this.state.gmapVisible });
-        console.log("-------filterPins---------", pins)
-        let k = (12.5 - 9.5) * 75 / (75 / 5 - 1)
-        let b = 12.5 - k / 5
+        let k = (12.5 - 9.5) * 75 / (75 / 5 - 1);
+        let b = 12.5 - k / 5;
 
         switch (locationFilterValue.id) {
             case "locationAll":
@@ -1095,13 +1073,18 @@ class Franchisees extends Component {
                                         }
                                     }}
                                     getTrProps={(state, rowInfo, column) => {
+                                        let period = this.props.reportPeriod.split('/');
                                         return {
                                             className: "cursor-pointer",
                                             onClick  : (e, handleOriginal) => {
                                                 if ( rowInfo )
                                                 {
+<<<<<<< HEAD
                                                     //alert('ok');
                                                     // openEditContactDialog(rowInfo.original);
+=======
+                                                    this.props.history.push(`/franchisees/reports_new/${this.props.regionId}/${period[1]}/${period[0]}/${rowInfo.original.Number}`);
+>>>>>>> a0d633207d312258a85458b91620e049b1f0bb44
                                                 }
                                             }
                                         }
@@ -1292,9 +1275,13 @@ function mapStateToProps({franchisees,auth})
         mapViewState: franchisees.bOpenedMapView,
         bFranchiseesFetchStart: franchisees.bFranchiseesFetchStart,
         locationFilterValue: franchisees.locationFilterValue,
+<<<<<<< HEAD
         editPayload: franchisees.eiditPayload,
         detailPayload: franchisees.detailPayload,
         createPayload: franchisees.createPayload
+=======
+        reportPeriod: franchisees.reportPeriod,
+>>>>>>> a0d633207d312258a85458b91620e049b1f0bb44
     }
 }
 

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 // core components
-import { CircularProgress,Icon, IconButton, Input, Paper, Button, Zoom } from '@material-ui/core';
+import { CircularProgress,Icon, IconButton, Input, Paper, Button, Zoom, Typography } from '@material-ui/core';
 
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
@@ -176,6 +176,9 @@ const styles = theme => ({
             backgroundColor: 'fade(' + theme.palette.primary.secondary + ', 0.03)',
         },
     },
+    progress: {
+		margin: theme.spacing.unit * 2,
+	},
     overlay: {
         position: 'absolute',
         top: 0,
@@ -637,11 +640,9 @@ class SystemNotificationContentList extends Component {
                 );
             else{
                 return(
-                    <div className={classes.overlay} style={{
-
-                    }}>
+                    <div className={classes.overlay}>
                         <CircularProgress className={classes.progress} color="secondary"  />
-
+                        <Typography variant="body2" color="primary">Fetching notifications info...</Typography>
                     </div>
                 )
             }

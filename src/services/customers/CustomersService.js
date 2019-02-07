@@ -18,15 +18,18 @@ class CustomersService {
      * @param searchText
      * @returns {Promise<any>}
      */
-	getCustomersList = (regionId, statusId, location = "all", latitude = "", longitude = "", searchText = "") => {
+	getCustomersList = (RegionId, StatusId, StatusNames, AccountTypeListName, Location = "all", Latitude = "", Longitude = "", SearchText = "") => {
 		const data = {
-			"RegionId": regionId,
-			"StatusId": statusId,
-			"Location": location,
-			"Latitude": latitude,
-			"Longitude": longitude,
-			"SearchText": searchText
+			RegionId,
+			StatusId,
+			StatusNames,
+			AccountTypeListName,
+			Location,
+			Latitude,
+			Longitude,
+			SearchText
 		};
+		console.log("getCustomersList-data", data)
 		return new Promise((resolve, reject) => {
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/Customer/CustomerList`, data)
 				.then(res => {

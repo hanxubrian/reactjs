@@ -24,10 +24,13 @@ const initialState = {
     franchiseeFees: [],
     Location: "all",
     StateList: [],
+<<<<<<< HEAD
     detailPayload: null,
     eidtPayload: null,
     createPayload: null,
     deletePayload: null,    
+=======
+>>>>>>> a0d633207d312258a85458b91620e049b1f0bb44
     transactionStatusFranchisees:{
         Active: true,
         Inactive: true,
@@ -150,9 +153,15 @@ const initialState = {
         ded_tech: "",
         CURSTAT: "",
         CURSTATDT: "",
+<<<<<<< HEAD
         Owners: [],
         Fees: [],
     }
+=======
+        Documents: [],
+    },
+    reportPeriod: '01/2017'
+>>>>>>> a0d633207d312258a85458b91620e049b1f0bb44
 };
 
 
@@ -425,6 +434,12 @@ const franchisees = function(state = initialState, action) {
             return{
                 ...state,
                 StateList: action.payload
+            }
+        }
+        case Actions.UPDATE_REPORT_PERIOD: {
+            return{
+                ...state,
+                reportPeriod: action.payload
             }
         }
         default:

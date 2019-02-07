@@ -731,7 +731,7 @@ class PaymentsListContent extends Component {
 			this.setState({
 				invoiceDetail: nextProps.invoiceDetail,
 			});
-			if(!nextProps.invoiceDetail || !nextProps.invoiceDetail.Data) {
+			if (!nextProps.invoiceDetail || !nextProps.invoiceDetail.Data) {
 				this.setState({
 					isOpen: false
 				});
@@ -1244,7 +1244,7 @@ class PaymentsListContent extends Component {
 							{/* <GroupingPanel showSortingControls showGroupingControls /> */}
 						</Grid>
 					</div>
-					{invoiceDetail && invoiceDetail.Data && isOpen && 
+					{invoiceDetail && invoiceDetail.Data && isOpen &&
 						<InvoiceReport
 							childCall={this.printDocument.bind(this)}
 							ref="child"

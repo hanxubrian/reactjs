@@ -208,7 +208,7 @@ const styles = theme => ({
             },
             '& .f2': {
                 width: '100%',
-                padding: '4px 8px',
+                padding: '2px 8px',
                 border: '0px solid lightgray',
                 borderRadius: 6,
                 marginLeft: 10
@@ -370,9 +370,11 @@ const styles = theme => ({
 });
 
 function renderSuggestion (suggestion,  { isHighlighted }) {
+    let status = suggestion.StatusName;
+    if (suggestion.StatusName==='Y') status = 'Active';
     return (
         <MenuItem selected={isHighlighted} component="div">
-            <span>{suggestion.Number} - {suggestion.Name} - {suggestion.StatusName}</span>
+            <span>{suggestion.Number} - {suggestion.Name} - {status}</span>
         </MenuItem>
     );
 }
@@ -499,7 +501,7 @@ class InvoiceLineTable extends React.Component {
                     if(service.length)
                         this.setState({[`selectedServiceOption${index}`]: service[0]});
 
-                    let line = createData(billing, service.length ? service[0] : '', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 0, item.ExtendedPrice, item.Total, item.MarkUpTotal, item.MarkUpTax, item.Commission, item.CommissionTotal);
+                    let line = createData(billing[0], service.length ? service[0] : '', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 0, item.ExtendedPrice, item.Total, item.MarkUpTotal, item.MarkUpTax, item.Commission, item.CommissionTotal);
 
                     let distributions = [];
                     if(item.Distribution!==null && item.Distribution.length>0){
@@ -609,7 +611,9 @@ class InvoiceLineTable extends React.Component {
 
         let franchisees = this.props.franchisees.Data.Region[0].Franchisees;
         let suggestions =  franchisees.filter(f => regex.test(f.Number) || regex.test(f.Name));
-        let suggestionsExcludedInActive = suggestions.filter(c=>c.StatusName==='Active');
+
+
+        let suggestionsExcludedInActive = suggestions.filter(c=>c.StatusName==='Y');
         return suggestionsExcludedInActive;
     };
 
@@ -802,11 +806,12 @@ class InvoiceLineTable extends React.Component {
             })
         }
 
-        if(d_total>data[row.id].extended) {
-            this.setState({snackMessage: "Distribution amount can\'t be greater than Line amount"});
-            this.setState({openSnack: true});
-            return ;
-        }
+        // if(d_total>data[row.id].extended) {
+        //     this.setState({snackMessage: "Distribution amount can\'t be greater than Line amount"});
+        //     this.setState({openSnack: true});
+        //     return ;
+        // }
+
         data[row.id].franchisees[row.fid].amount = parseFloat(event.target.value);
         this.setState({data: data});
     };
@@ -1085,7 +1090,7 @@ class InvoiceLineTable extends React.Component {
                                                 return (
                                                     <TextField
                                                         id="description"
-                                                        style={{ margin: 8 }}
+                                                        style={{ margin: '0 8px' }}
                                                         placeholder="Description"
                                                         fullWidth
                                                         value={row.original.description}
@@ -1242,7 +1247,7 @@ class InvoiceLineTable extends React.Component {
                                                     onBlur={this.handleChangeInvoiceLineOnBlur(row.original, 'markup')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustomPercent,
-                                                        readOnly: row.original.billing.value!==2,
+                                                        // readOnly: row.original.billing.value!==2,
                                                         classes: {
                                                             input: classes.input,
                                                         },
@@ -1269,7 +1274,7 @@ class InvoiceLineTable extends React.Component {
                                                     onBlur={this.handleChangeInvoiceLineOnBlur(row.original, 'commission')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustomPercent,
-                                                        readOnly: row.original.billing.value!==1,
+                                                        // readOnly: row.original.billing.value!==1,
                                                         classes: {
                                                             input: classes.input,
                                                         },
@@ -1289,8 +1294,8 @@ class InvoiceLineTable extends React.Component {
                                         Cell: row=>{
                                             if(row.original.type==='line') {
                                                 let markup = 0.0;
-                                                if(row.original.markup!=='') markup = row.original.markup;
-                                                return ("$" + parseFloat(row.original.total).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+                                                if(row.original.markupAmount!=='') markup = row.original.markupAmount;
+                                                return ("$" + parseFloat(row.original.total+markup).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
                                             }
                                             else {
                                                 if (row.original.length>1)

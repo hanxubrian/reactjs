@@ -1,52 +1,19 @@
 import React, {Component} from 'react';
+import {OutlinedInput, Paper, Select,  withStyles} from '@material-ui/core';
 
-//Material UI core
-import {MenuItem, OutlinedInput, Paper, Select, withStyles} from '@material-ui/core';
-import 'date-fns'
-import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
-
-//Store
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
 import * as Actions from 'store/actions';
 
-//Third party
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import classNames from 'classnames';
+import MenuItem from "@material-ui/core/MenuItem/MenuItem";
+
 import moment from "moment";
 import _ from "lodash";
 
+
 const styles = theme => ({
     root : {
-    },
-    panel: {
-        position                      : 'absolute',
-        width                         : 300,
-        backgroundColor               : theme.palette.background.paper,
-        boxShadow                     : theme.shadows[3],
-        top                           : 0,
-        height                        : '100%',
-        minHeight                     : '100%',
-        bottom                        : 0,
-        left                         :  -300,
-        margin                        : 0,
-        zIndex                        : 1000,
-        transform                     : 'translate3d(50px,0,0)',
-        overflow                      : 'hidden',
-        [theme.breakpoints.down('md')]: {
-            transform : 'translate3d(360px,0,0)',
-            boxShadow : 'none',
-            '&.opened': {
-                boxShadow: theme.shadows[5]
-            }
-        },
-        transition  : theme.transitions.create(['transform'], {
-            easing  : theme.transitions.easing.easeInOut,
-            duration: theme.transitions.duration.standard
-        }),
-        '&.opened1'                    : {
-            transform: 'translateX(300px)'
-        }
     },
     dropdownMenu: {
         '& li': {
@@ -59,25 +26,27 @@ const styles = theme => ({
     },
     inputMenu1: {
         padding: '10px 16px',
-        width: 150
+        width: 200
     },
 });
 
-class FilterPanel extends Component {
+
+
+class FilterPanel1 extends Component {
 
     state = {
-        reportDate: moment().format('MM/YYYY'),
+        reportPeriod: moment().format('MM/YYYY'),
         period: moment().format('MM/YYYY'),
         periods: null,
         labelWidth: 0,
     };
+
 
     componentDidMount()
     {
         if(this.props.all_regions!==null && this.props.all_regions.length){
             let all_regions = this.props.all_regions;
             let region = all_regions.filter(r=>r.regionid===this.props.regionId);
-
             if(region.length){
                 let periods = region[0].OpenPeriods;
 
@@ -110,37 +79,43 @@ class FilterPanel extends Component {
     }
 
     componentWillMount(){
-        this.setState({
-            reportDate: this.props.reportDate
-        });
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot){
-        if(prevState.reportDate!==this.state.reportDate) {
-            this.props.updateReportDate(this.state.reportDate);
+    componentDidUpdate(prevProps, prevState, snapshot)
+    {
+        if(prevState.reportPeriod!==this.state.reportPeriod) {
+            this.props.updateReportPeriod(this.state.reportPeriod);
+            this.props.nullifyFranchiseeNewReport();
+
+            let period = this.state.reportPeriod.split('/');
+
+            this.props.createReport({
+                regionId: this.props.regionId,
+                year: parseInt(period[1]),
+                month: parseInt(period[0]),
+                franchiseenumber: this.props.franchiNo
+            });
         }
     }
 
     componentWillUnmount()
     {
-
     }
 
-    handleChange = (event) => {
+    handleChangePeriod = (event) => {
         this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
-        this.setState({ reportDate: event.target.value });
+        this.setState({ reportPeriod: event.target.value });
     };
 
     render()
     {
         const {classes} = this.props;
-
         return (
             <div className={classNames(classes.root)}>
                 <div className={classNames("flex flex-col")}>
-                    <Paper className="flex flex-1 flex-col min-h-px p-20">
-                        <div style={{marginTop: 50, display: 'flex', flexDirection: 'column'}}>
-                            <h3>Choose a date</h3>
+                    <Paper className="flex flex-1 flex-col min-h-px p-20 w-full">
+                        <div style={{display: 'flex', flexDirection: 'column'}}>
+                            <h3>Periods </h3>
                             {this.state.periods!==null && (
                                 <Select
                                     classes={{
@@ -148,7 +123,7 @@ class FilterPanel extends Component {
                                     }}
                                     name="period"
                                     value={this.state.period}
-                                    onChange={this.handleChange}
+                                    onChange={this.handleChangePeriod}
                                     input={
                                         <OutlinedInput
                                             labelWidth={this.state.labelWidth}
@@ -177,19 +152,19 @@ class FilterPanel extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        updateReportDate: Actions.updateReportDate,
-
+        createReport: Actions.createReport,
+        updateReportPeriod: Actions.updateReportPeriod,
+        nullifyFranchiseeNewReport: Actions.nullifyFranchiseeNewReport,
     }, dispatch);
 }
 
-function mapStateToProps({franchiseeReports, auth})
+function mapStateToProps({franchisees, auth})
 {
     return {
-        filterState: franchiseeReports.bOpenedFilterPanelFranchiseeReports,
-        reportDate: franchiseeReports.reportDate,
-        all_regions: auth.login.all_regions,
         regionId: auth.login.defaultRegionId,
+        reportPeriod: franchisees.reportPeriod,
+        all_regions: auth.login.all_regions,
     }
 }
 
-export default (withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(FilterPanel)));
+export default (withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(FilterPanel1)));

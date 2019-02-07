@@ -231,7 +231,7 @@ const styles = theme => ({
 		alignItems: 'center',
 		justifyContent: 'center',
 		display: 'flex',
-		opacity: 0.5
+		opacity: 0.7
 	},
 	validationMenu: {
 		color: "#07DF07",//green[600],
@@ -294,10 +294,15 @@ class Customers extends Component {
 		console.log("constructor, Customer.js")
 
 		if (!props.bLoadedCustomers) {
-			console.log("getCustomers")
-			// this.setState({ loading: true });
-			// this.getCustomersFromStatus();
-			this.props.getCustomers(this.props.regionId, this.props.statusId, this.props.location, this.props.latitude, this.props.longitude, this.props.searchText);
+			this.props.getCustomers(
+				this.props.regionId,
+				this.props.statusId,
+				this.props.filters.StatusNames,
+				this.props.filters.AccountTypeListName,
+				this.props.location,
+				this.props.latitude,
+				this.props.longitude,
+				this.props.searchText);
 		}
 
 		this.props.getAccountTypeList();
@@ -367,14 +372,30 @@ class Customers extends Component {
 			});
 			console.log("----------START FETCHING----------")
 			// this.setState({ loading: true });
-			this.props.getCustomers(this.props.regionId, this.props.statusId, this.props.location, this.props.latitude, this.props.longitude, this.props.searchText);
+			this.props.getCustomers(
+				this.props.regionId,
+				this.props.statusId,
+				this.props.filters.StatusNames,
+				this.props.filters.AccountTypeListName,
+				this.props.location,
+				this.props.latitude,
+				this.props.longitude,
+				this.props.searchText);
 			bChanged = true;
 		}
 	}
 
 	componentWillMount() {
 		if (this.props.customers === null) {
-			this.props.getCustomers(this.props.regionId, this.props.statusId, this.props.location, this.props.latitude, this.props.longitude, this.props.searchText);
+			this.props.getCustomers(
+				this.props.regionId,
+				this.props.statusId,
+				this.props.filters.StatusNames,
+				this.props.filters.AccountTypeListName,
+				this.props.location,
+				this.props.latitude,
+				this.props.longitude,
+				this.props.searchText);
 		}
 		if (this.props.accountTypeList === null) {
 			this.props.getAccountTypeList();
@@ -489,6 +510,17 @@ class Customers extends Component {
 			isSubmittingForApproval: false
 		})
 	}
+	forceFetch = () => {
+		this.props.getCustomers(
+			this.props.regionId,
+			this.props.statusId,
+			this.props.filters.StatusNames,
+			this.props.filters.AccountTypeListName,
+			this.props.location,
+			this.props.latitude,
+			this.props.longitude,
+			this.props.searchText);
+	}
 	render() {
 		console.log(this.props.documents)
 		console.log(this.props)
@@ -526,6 +558,11 @@ class Customers extends Component {
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
+											<Tooltip title="Refresh">
+												<IconButton variant="contained" onClick={this.forceFetch}>
+													<Icon>refresh</Icon>
+												</IconButton>
+											</Tooltip>
 											<Tooltip title="Add new customer">
 												<IconButton className={classes.button} aria-label="add" onClick={openNewCustomerForm}>
 													<Icon>add</Icon>
@@ -803,6 +840,8 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		bCreateCustomerStart: customers.bCreateCustomerStart,
 
 		bGetCustomerStart: customers.bGetCustomerStart,
+
+		filters: customers.filters,
 	}
 }
 

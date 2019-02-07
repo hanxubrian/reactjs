@@ -240,13 +240,29 @@ const styles = theme => ({
 //
 
 
+// const TableComponentBase = ({ classes, ...restProps }) => (
+// 	<Table.Table
+// 		{...restProps}
+// 		className={classes.tableStriped}
+// 	/>
+// );
+// export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
+
 const TableComponentBase = ({ classes, ...restProps }) => (
-	<Table.Table
-		{...restProps}
-		className={classes.tableStriped}
-	/>
+    <Table.Table
+        {...restProps}
+        className={classes.tableStriped}
+    />
+);
+const TableHeadComponentBase = ({ classes, ...restProps }) => (
+    <Table.TableHead
+        {...restProps}
+        className={classes.tableTheadRow}
+    />
 );
 export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
+export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
+
 
 const SubTd = ({ tdvalue, onClick }) => (
     <td onClick={onClick}>{tdvalue}</td>
@@ -289,6 +305,7 @@ class SystemNotificationViewById extends Component {
                     name: "CustomerName",
                     columnName: JSON.parse(props.sysnotification[0].ProcessResponsePayload).CustomersQualifiedForCPI[0].CustomerName,
                     width: 80,
+                    align: 'left',
                     sortingEnabled: true,
                     filteringEnabled: true,
                     groupingEnabled: false,
@@ -297,7 +314,8 @@ class SystemNotificationViewById extends Component {
                     title: "No",
                     name: "CustomerNo",
                     columnName: JSON.parse(props.sysnotification[0].ProcessResponsePayload).CustomersQualifiedForCPI[0].CustomerNo,
-                    width: 250,
+                    width: 200,
+                    align: 'right',
                     wordWrapEnabled: true,
                     sortingEnabled: true,
                     filteringEnabled: true,
@@ -308,7 +326,8 @@ class SystemNotificationViewById extends Component {
                     title: "Contract Billing",
                     name: "ContractBilling",
                     columnName: JSON.parse(props.sysnotification[0].ProcessResponsePayload).CustomersQualifiedForCPI[0].ContractBilling,
-                    width: 250,
+                    width: 200,
+                    align: 'right',
                     wordWrapEnabled: true,
                     sortingEnabled: true,
                     filteringEnabled: true,
@@ -318,7 +337,8 @@ class SystemNotificationViewById extends Component {
                     title: "CPI Percent",
                     name: "CPIPercent",
                     columnName: JSON.parse(props.sysnotification[0].ProcessResponsePayload).CustomersQualifiedForCPI[0].CPIPercent,
-                    width: 250,
+                    width: 200,
+                    align: 'right',
                     wordWrapEnabled: true,
                     sortingEnabled: true,
                     filteringEnabled: true,
@@ -380,6 +400,7 @@ class SystemNotificationViewById extends Component {
         }
     }
     handleItemClick = (e) => {console.log(e.target.innerHTML)}
+
     render(){
         const {Data,classes}                    = this.props;
         const {row,multiData,multiKey}          = this.state;
@@ -425,7 +446,7 @@ class SystemNotificationViewById extends Component {
 
                 return(
                     <div style={{marginTop:""}}>
-                        <div className="flex flex-col flex-1 md:pr-32 md:pl-32">
+                        <div className="flex flex-col flex-1 ">
                             <FuseAnimateGroup
                                 enter={{
                                     animation: "transition.slideUpBigIn"
@@ -442,7 +463,7 @@ class SystemNotificationViewById extends Component {
                                     {/* </AppBar> */}
                                     {/* <CardContent> */}
 
-                                    <div className="pl-32">
+                                <div className="pl-32">
 								<GridContainer style={{ alignItems: 'center'}} className={classNames(classes.formControl, "mb-0")}>
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col">
 										<Card className={classes.card}>
@@ -478,7 +499,7 @@ class SystemNotificationViewById extends Component {
 													</div>
 												</div> */}
 
-                                               
+
                                                             <div  className="flex flex-row justify-between mb-4">
                                                             <div className="flex" style={{ flex: 1 }}>
                                                                 {/* <Icon fontSize={"small"} className="mr-4">location_on</Icon> */}
@@ -522,7 +543,7 @@ class SystemNotificationViewById extends Component {
                                                                 <Typography variant="subtitle1" color="inherit">{row[4].Value}</Typography>
                                                             </div>
                                                             </div>
-                                                            
+
                                                             <Divider variant="fullWidth" style={{ marginTop: 5, marginBottom: 5 }} />
 
                                                             <div  className="flex flex-row justify-between mb-4">
@@ -547,14 +568,23 @@ class SystemNotificationViewById extends Component {
                                                             </div>
                                                             </div>
 
-                                                            <div  className="flex flex-row justify-between mb-4">
+                                                            {/* <div  className="flex flex-row justify-between mb-4">
                                                             <div className="flex" style={{ flex: 1 }}>
-                                                                {/* <Icon fontSize={"small"} className="mr-4">location_on</Icon> */}
                                                                 <Typography variant="subtitle1" color="inherit">Billing</Typography>
                                                             </div>
                                                             <div className="flex" style={{ flex: 1 }}>
-                                                                {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
                                                                 <Typography variant="subtitle1" color="inherit">{row[12].Value}</Typography>
+                                                            </div>
+                                                            </div> */}
+
+                                                            <div  className="flex flex-row justify-between mb-4">
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">location_on</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">Invoice Count</Typography>
+                                                            </div>
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">{row[11].Value}</Typography>
                                                             </div>
                                                             </div>
 
@@ -583,6 +613,85 @@ class SystemNotificationViewById extends Component {
 														<Typography variant="subtitle1" color="inherit">{this.state.customerWebsite}</Typography>
 													</div>
 												</div> */}
+
+											</CardContent>
+										</Card>
+									</GridItem>
+                                    </GridContainer>
+                                </div>
+
+                                <br></br>
+                                <div
+                                            style={{ marginLeft: "30px",
+                                            fontSize: "24px",
+                                            }}
+                                        >
+                                            {/* {
+                                                multiData[0] && multiData[0] !== null && multiData[0].Key &&
+                                                multiData[0].Key !== null &&(
+                                                multiData[0].Key)
+                                            } */}
+                                            Bill Run Results
+                                        </div>
+                                <div className="pl-32">
+								<GridContainer style={{ alignItems: 'center'}} className={classNames(classes.formControl, "mb-0")}>
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col">
+										<Card className={classes.card}>
+											{/* <CardHeader title="Notification Detail" className={classNames(classes.cardHeader, "flex-1")} /> */}
+											<CardContent className={classNames(classes.cardContent)}>
+
+                                                            <div  className="flex flex-row justify-between mb-4">
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">location_on</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">Month</Typography>
+                                                            </div>
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">{row[6].Value}</Typography>
+                                                            </div>
+                                                            </div>
+
+                                                            <div  className="flex flex-row justify-between mb-4">
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">location_on</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">Year</Typography>
+                                                            </div>
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">{row[5].Value}</Typography>
+                                                            </div>
+                                                            </div>
+
+                                                            {/* <div  className="flex flex-row justify-between mb-4">
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                <Typography variant="subtitle1" color="inherit">Billing</Typography>
+                                                            </div>
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                <Typography variant="subtitle1" color="inherit">{row[12].Value}</Typography>
+                                                            </div>
+                                                            </div> */}
+
+                                                            <div  className="flex flex-row justify-between mb-4">
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">location_on</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">Invoice Count</Typography>
+                                                            </div>
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">{row[11].Value}</Typography>
+                                                            </div>
+                                                            </div>
+
+                                                            <div  className="flex flex-row justify-between mb-4">
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">location_on</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">Status</Typography>
+                                                            </div>
+                                                            <div className="flex" style={{ flex: 1 }}>
+                                                                {/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
+                                                                <Typography variant="subtitle1" color="inherit">{row[13].Value}</Typography>
+                                                            </div>
+                                                            </div>
 
 											</CardContent>
 										</Card>
@@ -623,19 +732,20 @@ class SystemNotificationViewById extends Component {
                                                 </TableBody>
                                             </table>
                                         </div> */}
-
-
-
-
-
                                     {/* </CardContent> */}
 
-                                        <div style={{    marginLeft: "30px",
-                                            fontSize: "24px",}}>{multiData[0] && multiData[0] !== null && multiData[0].Key &&
-                                        multiData[0].Key !== null &&(
-                                            multiData[0].Key
-                                        )
-                                        }</div>
+                                        <div
+                                            style={{ marginLeft: "30px",
+                                            fontSize: "24px",
+                                            }}
+                                        >
+                                            {/* {
+                                                multiData[0] && multiData[0] !== null && multiData[0].Key &&
+                                                multiData[0].Key !== null &&(
+                                                multiData[0].Key)
+                                            } */}
+                                            Customers Coming Out of Suspension
+                                        </div>
 
 
                                     <CardContent>
@@ -673,23 +783,33 @@ class SystemNotificationViewById extends Component {
 
                                     </CardContent>
 
-                                    <div style={{    marginLeft: "30px",
-                                        fontSize: "24px",}}>
-                                        {
+                                    <div
+                                        style={{
+                                        marginLeft: "30px",
+                                        fontSize: "24px",}}
+                                    >
+                                        {/* {
                                             multiData[1] && multiData[1] !== null && multiData[1].Key &&
                                             multiData[1].Key !== null &&(
-                                                multiData[1].Key
+                                            multiData[1].Key
                                             )
+                                        } */}
+                                        Customers Qualified for CPI
+                                    </div>
 
-                                    }</div>
                                     <CardContent>
-                                            <Grid
-                                                rows={rows}
-                                                columns={tableColumnExtensions}
+                                                <Grid
+                                                    rows={rows}
+                                                    columns={tableColumnExtensions}
                                                 >
-                                                <VirtualTable height="auto" />
+                                                <VirtualTable
+                                                    height="550"
+                                                    tableComponent={TableComponent}
+                                                    headComponent = {TableHeadComponent}
+                                                    columnExtensions={tableColumnExtensions}
+                                                />
 
-                                                <TableColumnResizing />
+                                                {/* <TableColumnResizing /> */}
                                                 <TableHeaderRow className={classes.tableView} />
                                             </Grid>
                                         {/* <table className={classes.tableView}>

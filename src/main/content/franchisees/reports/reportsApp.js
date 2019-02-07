@@ -149,8 +149,9 @@ class ReportsApp extends Component {
 
     constructor(props){
         super(props);
-        let year = moment(this.props.reportDate).year();
-        let month = parseInt(moment(this.props.reportDate).month())+1;
+        let period = this.props.reportDate.split('/');
+        let year = period[1];
+        let month = period[0];
         if(!props.bLoadedFranchiseeReports) {
             props.getReports(props.regionId, year, month);
         }
@@ -170,8 +171,9 @@ class ReportsApp extends Component {
         this.getFranchiseeReports()
     }
     componentDidUpdate(prevProps, prevState, snapshot){
-        let year = moment(this.props.reportDate).year();
-        let month = parseInt(moment(this.props.reportDate).month())+1;
+        let period = this.props.reportDate.split('/');
+        let year = parseInt(period[1]);
+        let month = parseInt(period[0]);
 
         if(this.props.regionId !== prevProps.regionId) {
             this.props.getReports(this.props.regionId, year, month);
@@ -194,11 +196,19 @@ class ReportsApp extends Component {
     getFranchiseeReports =(rawData=this.props.franchiseeReports) =>{
         if(rawData===null) return;
 
-        let year = moment(this.props.reportDate).year();
-        let month = parseInt(moment(this.props.reportDate).month())+1;
+        console.log('report date =', this.props.reportDate, rawData);
 
-        this.setState({headerTitle: `${rawData.Data.Region[0].Name} Region Franchisee Reports for ${month}/${year} Period`})
-        this.setState({data: rawData.Data.Region[0]});
+        let period = this.props.reportDate.split('/');
+        let year = period[1];
+        let month = period[0];
+
+        if(rawData.Data.Region!==null) {
+            this.setState({headerTitle: `${rawData.Data.Region[0].Name} Region Franchisee Reports for ${month}/${year} Period`})
+            this.setState({data: rawData.Data.Region[0]});
+        }
+        if(rawData.Data.Region==null) {
+            this.setState({data: []});
+        }
     };
 
     toggleLeftSidebar = () => {
