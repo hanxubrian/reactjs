@@ -1079,12 +1079,9 @@ class Franchisees extends Component {
                                             onClick  : (e, handleOriginal) => {
                                                 if ( rowInfo )
                                                 {
-<<<<<<< HEAD
                                                     //alert('ok');
                                                     // openEditContactDialog(rowInfo.original);
-=======
                                                     this.props.history.push(`/franchisees/reports_new/${this.props.regionId}/${period[1]}/${period[0]}/${rowInfo.original.Number}`);
->>>>>>> a0d633207d312258a85458b91620e049b1f0bb44
                                                 }
                                             }
                                         }
@@ -1275,13 +1272,10 @@ function mapStateToProps({franchisees,auth})
         mapViewState: franchisees.bOpenedMapView,
         bFranchiseesFetchStart: franchisees.bFranchiseesFetchStart,
         locationFilterValue: franchisees.locationFilterValue,
-<<<<<<< HEAD
         editPayload: franchisees.eiditPayload,
         detailPayload: franchisees.detailPayload,
-        createPayload: franchisees.createPayload
-=======
+        createPayload: franchisees.createPayload,
         reportPeriod: franchisees.reportPeriod,
->>>>>>> a0d633207d312258a85458b91620e049b1f0bb44
     }
 }
 

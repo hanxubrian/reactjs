@@ -24,13 +24,10 @@ const initialState = {
     franchiseeFees: [],
     Location: "all",
     StateList: [],
-<<<<<<< HEAD
     detailPayload: null,
     eidtPayload: null,
     createPayload: null,
-    deletePayload: null,    
-=======
->>>>>>> a0d633207d312258a85458b91620e049b1f0bb44
+    deletePayload: null,
     transactionStatusFranchisees:{
         Active: true,
         Inactive: true,
@@ -153,15 +150,12 @@ const initialState = {
         ded_tech: "",
         CURSTAT: "",
         CURSTATDT: "",
-<<<<<<< HEAD
         Owners: [],
         Fees: [],
-    }
-=======
         Documents: [],
     },
-    reportPeriod: '01/2017'
->>>>>>> a0d633207d312258a85458b91620e049b1f0bb44
+    reportPeriod: "01/2017" , 
+
 };
 
 
