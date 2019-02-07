@@ -289,9 +289,17 @@ export function updateReportPeriod(period) {
         payload: period
     }
 }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> c3fd3edacf9085c95cb66277c242148473a50408
 export function nullifyFranchiseeNewReport() {
     return {
         type: NULLIFY_FRANCHISEE_NEW_REPORT,
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> c3fd3edacf9085c95cb66277c242148473a50408

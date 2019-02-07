@@ -73,7 +73,6 @@ const initialState = {
         AgreementDaysToFulfill: 0,
         AllowAccountRebate: "Y",
         AllowGenerateReport: "Y",
-        Documents: [],
         company_no: "",
         dlr_code: "",
         control_no: "",
@@ -154,7 +153,7 @@ const initialState = {
         Fees: [],
         Documents: [],
     },
-    reportPeriod: "01/2017" , 
+    reportPeriod: "01/2017" ,
 
 };
 
