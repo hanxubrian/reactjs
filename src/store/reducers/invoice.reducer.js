@@ -257,6 +257,7 @@ const invoices = function(state = initialState, action) {
         {
             return {
                 ...state,
+                itemId: 0,
                 invoiceForm: {
                     type : 'new',
                     props: {
@@ -289,6 +290,7 @@ const invoices = function(state = initialState, action) {
         {
             return {
                 ...state,
+                itemId: 0,
                 invoiceForm: {
                     type : 'edit',
                     props: {
@@ -321,7 +323,8 @@ const invoices = function(state = initialState, action) {
                 ...state,
                 bStartingSaveFormData: false,
                 invoiceForm: {...state.invoiceForm, data: null, customer: null},
-                newInvoice: null
+                newInvoice: null,
+                itemId: 0,
             }
         }
         case Actions.ADD_INVOICE:
@@ -378,6 +381,6 @@ const persistConfig = {
     key: 'invoices',
     storage: storage,
     blacklist: ['invoicesDB', 'customersDB', 'bInvoiceStart', 'bOpenedSummaryPanel', 'bOpenedFilterPanel', 'bLoadedCustomers',
-        'customerTaxAmountLine', 'invoiceForm', 'invoiceDateOption', 'bCustomerErr', 'bInvoiceErr', 'bOpenPaymentInvoiceForm','bInvoiceVendorBox']
+        'customerTaxAmountLine', 'invoiceForm', 'invoiceDateOption', 'bCustomerErr', 'bInvoiceErr', 'bOpenPaymentInvoiceForm','bInvoiceVendorBox','itemId']
 };
 export default persistReducer(persistConfig, invoices);

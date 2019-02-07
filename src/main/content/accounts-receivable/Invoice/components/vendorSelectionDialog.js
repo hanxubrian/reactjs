@@ -130,6 +130,8 @@ class VendorDialogBox extends Component {
         if(this.props.invoiceForm.data!==null) {
             let lines = this.props.invoiceForm.data.line;
 
+            console.log('lines = ', lines, this.props.itemId);
+
             this.setState({vendor: lines[this.props.itemId].vendorId});
         }
     }
