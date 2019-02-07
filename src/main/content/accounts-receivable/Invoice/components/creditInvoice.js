@@ -42,7 +42,7 @@ const styles = theme => ({
         margin: theme.spacing.unit,
     },
     textField: {
-        minWidth: 200,
+        maxWidth: 200,
     },
     input: {
         padding: '12px 14px'
@@ -79,10 +79,8 @@ const BlueDialogTitle = withStyles(theme => ({
     );
 });
 const initialState = {
-    PaymentType: "Check",
-    ReferenceNo: "",
+    Reason: "",
     PaymentDate: moment().format('YYYY-MM-DD'),
-    PaymentNote: "",
     PaymentAmount: 0,
     overpayment: 0,
     errorMsg: "",
@@ -128,24 +126,22 @@ class CreditInvoiceFormModal extends React.Component {
             let customer = this.props.invoiceForm.customer;
             let PayItems = [{ InvoiceNo: this.props.invoiceDetail.Data.Inv_no,  Amount: this.state.PaymentAmount}];
 
-            this.props.createAccountReceivablePayment(
-                this.props.regionId,
-                customer.CustomerNo,
-
-                this.state.PaymentType,
-                this.state.ReferenceNo,
-                this.state.PaymentDate,
-                this.state.PaymentNote,
-                this.getOverpaymentAmount(),
-                this.state.PaymentAmount,
-
-                PayItems,
-
-                this.props.getPaymentsParam.fromDate,
-                this.props.getPaymentsParam.toDate,
-                this.props.searchText,
-                this.props.filter.paymentStatus
-            );
+            // this.props.createAccountReceivablePayment(
+            //     this.props.regionId,
+            //     customer.CustomerNo,
+            //
+            //     this.state.Reason,
+            //     this.state.PaymentDate,
+            //     this.getOverpaymentAmount(),
+            //     this.state.PaymentAmount,
+            //
+            //     PayItems,
+            //
+            //     this.props.getPaymentsParam.fromDate,
+            //     this.props.getPaymentsParam.toDate,
+            //     this.props.searchText,
+            //     this.props.filter.paymentStatus
+            // );
 
             this.handleClose();
         }
@@ -163,15 +159,9 @@ class CreditInvoiceFormModal extends React.Component {
     }
 
     checkValidations() {
-        if (!this.state.PaymentType) {
+        if (!this.state.Reason || !this.state.Reason.toString().trim()) {
             this.setState({
-                errorMsg: "Payment type not selected",
-                overpayment: this.getOverpaymentAmount(),
-            })
-        }
-        else if (!this.state.ReferenceNo || !this.state.ReferenceNo.toString().trim()) {
-            this.setState({
-                errorMsg: "ReferenceNo is invalid",
+                errorMsg: "Reason is invalid",
                 overpayment: this.getOverpaymentAmount(),
             })
         }
@@ -236,7 +226,7 @@ class CreditInvoiceFormModal extends React.Component {
                 <Dialog
                     open={this.props.bOpenCreditInvoiceForm}
                     fullWidth={true}
-                    maxWidth="sm"
+                    maxWidth="md"
 
                     onClose={()=>this.props.closeCreditInvoiceFormDialog()}
                     scroll="paper"
@@ -248,7 +238,7 @@ class CreditInvoiceFormModal extends React.Component {
                             Add Credit
                         </h2>
                     </BlueDialogTitle>
-                    <DialogContent>
+                    <DialogContent style={{paddingBottom: 0}}>
                         <div className={classNames("flex flex-col")}>
                             <div className={classNames("flex flex-col")}>
                                 {customer!==null && (
@@ -258,36 +248,6 @@ class CreditInvoiceFormModal extends React.Component {
                                     </div>
 
                                 )}
-                                <div className="flex flex-1 justify-between w-full" >
-                                    <TextField select margin="normal" id="PaymentType" label="Payment Type" variant="outlined"
-                                               className={classNames(classes.textField, "mr-12")}
-                                               value={this.state.PaymentType} fullWidth autoFocus
-                                               onChange={this.handleChange('PaymentType')}
-                                               InputProps={{
-                                                   classes: {input: classes.input}
-                                               }}
-                                    >
-                                        <MenuItem value={"Check"}>Check</MenuItem>
-                                        <MenuItem value={"CreditCard"}>Credit Card</MenuItem>
-                                        <MenuItem value={"EFT"}>EFT</MenuItem>
-                                        <MenuItem value={"Lockbox"}>Lockbox</MenuItem>
-                                        <MenuItem value={"CreditFromOverpayment"}>Credit from Overpayment</MenuItem>
-                                    </TextField>
-                                    <TextField  margin="normal" id="ReferenceNo" label="Reference No." variant="outlined"
-                                                fullWidth
-                                                onChange={this.handleChange('ReferenceNo')}
-                                                placeholder="Reference No"
-                                                value={this.state.ReferenceNo}
-                                                className={classNames(classes.textField, "ml-12")}
-                                                InputProps={{
-                                                    classes: {input: classes.input}
-                                                }}
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                    classes: {outlined: classes.label}
-                                                }}
-                                    />
-                                </div>
                                 <div className="flex flex-1 justify-between w-full" >
                                     <TextField
                                         type="date"
@@ -325,14 +285,23 @@ class CreditInvoiceFormModal extends React.Component {
                                             },
                                         }}
                                     />
+                                    <TextField  margin="normal" id="Reason" label="Reason" variant="outlined"
+                                                fullWidth
+                                                onChange={this.handleChange('Reason')}
+                                                placeholder="Reason"
+                                                value={this.state.Reason}
+                                                className={classNames("ml-12")}
+                                                InputProps={{
+                                                    classes: {input: classes.input}
+                                                }}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                    classes: {outlined: classes.label}
+                                                }}
+                                    />
                                 </div>
 
                             </div>
-
-                            <TextField margin="dense" variant="outlined" fullWidth id="PaymentNote" label="Notes" multiline rows="2" rowsMax="2"
-                                       value={this.state.PaymentNote}
-                                       onChange={this.handleChange('PaymentNote')}
-                            />
                         </div>
                         <div className={classNames(classes.root, "flex flex-col flex-1 mt-12")}>
                             {this.state.overpayment > 0 &&
