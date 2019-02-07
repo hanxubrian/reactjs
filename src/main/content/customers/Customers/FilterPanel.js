@@ -1594,7 +1594,7 @@ class FilterPanel extends Component {
 												<FormControlLabel key={index}
 													control={
 														<Switch
-															checked={this.state.filters.StatusNames.indexOf(x) > -1}
+															checked={this.state.filters.StatusNames.indexOf(x) > -1 || this.state.filters.StatusNames.indexOf(x.substring(0,1)) > -1}
 															onChange={this.handleChange('filters.StatusNames')}
 															value={x}
 														/>
