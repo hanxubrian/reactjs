@@ -271,6 +271,29 @@ class invoiceService {
                 })
         });
     };
+    // fetch(`https://apifmsplusplus_mongo.jkdev.com/v1/vendors/getvendorlist?regionId=${this.props.regionId}`)
+    // +                .then(response => response.json())
+    // +                .then(data => this.setState({ vendorList: data }));
+
+    getVendorLists = (RegionId) => {
+        return new Promise((resolve, reject) => {
+            axios_instance.get(`${BASE_MONGO_API_URL}/v1/vendors/getvendorlist`,
+                {
+                    params: {RegionId}
+                })
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    };
 }
 
 const instance = new invoiceService();

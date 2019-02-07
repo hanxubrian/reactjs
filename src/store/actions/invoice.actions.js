@@ -47,6 +47,7 @@ export const UPDATED_INVOICES = '[INVOICES APP] UPDATED INVOICES';
 export const UPDATE_INVOICE_STATUS = '[INVOICES APP] UPDATE INVOICE STATUS';
 export const UPDATE_INVOICE_LINE = '[INVOICES APP] UPDATE INVOICE LINE';
 export const UPDATE_INVOICE_DATE_OPTION = '[INVOICES APP] UPDATE INVOICE DATE OPTION';
+export const GET_INVOICE_VENDOR_LIST = '[INVOICES APP] GET INVOICE VENDOR LIST';
 
 
 export function getInvoices(RegionId, StatusId, FromDate, ToDate, PeriodId,OpenOrClosed, InvoiceTypeId, ToPrintOrToEmail, SearchText) {
@@ -449,4 +450,20 @@ export function closeCreditInvoiceFormDialog() {
     return {
         type: CLOSE_CREDIT_INVOICE_FORM
     }
+}
+
+export function getVendorLists(regionId) {
+    return (dispatch) => {
+        (async () => {
+            let res = await invoiceService.getVendorLists(regionId);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: GET_INVOICE_VENDOR_LIST,
+                    payload: res.Data
+                });
+            } else {
+
+            }
+        })();
+    };
 }
