@@ -41,6 +41,9 @@ export const SET_CUSTOMER_FORM_FINDERS_FEES_DIALOG_PAYLOAD = "[CUSTOMERS APP] SE
 export const GET_FINDERS_FEES_BY_CUSTOMER_NO_START = "[CUSTOMERS APP] GET_FINDERS_FEES_BY_CUSTOMER_NO_START";
 export const GET_FINDERS_FEES_BY_CUSTOMER_NO = "[CUSTOMERS APP] GET_FINDERS_FEES_BY_CUSTOMER_NO";
 
+export const FINDERS_FEE_CONFIGS = "[CUSTOMERS APP] FINDERS_FEE_CONFIGS";
+export const FINDERS_FEE_CONFIGS_START = "[CUSTOMERS APP] FINDERS_FEE_CONFIGS_START";
+
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	// return dispatch => {
 	// const request = axios.get("/api/customers/gets");
@@ -270,6 +273,22 @@ export function openEditCustomerForm(regionId, customerId, customerNo) {
 			dispatch({
 				type: OPEN_EDIT_CUSTOMER_FORM,
 				payload: { customer, findersFees }
+			});
+		})();
+	}
+}
+export function findersfeeConfigs() {
+	return (dispatch) => {
+		dispatch({
+			type: FINDERS_FEE_CONFIGS_START,
+			payload: true
+		});
+
+		(async () => {
+			let res = await customersService.findersfeeConfigs();
+			dispatch({
+				type: FINDERS_FEE_CONFIGS,
+				payload: res
 			});
 		})();
 	}

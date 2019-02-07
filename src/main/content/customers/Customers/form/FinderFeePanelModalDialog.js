@@ -789,23 +789,6 @@ class FinderFeePanelModalDialog extends React.Component {
 						<div className={classNames("flex flex-col")}>
 							<div className={classNames("flex flex-col")}>
 								<div className={classNames("flex mt-12")} sm={12} md={12} >
-
-									<TextField
-										select margin="dense"
-										id="Status" label="Status" variant="outlined"
-										InputLabelProps={{shrink: true}}
-										style={{ width: "20%" }}
-										className={classNames(classes.textField, "pr-6")}
-										value={this.state.Status || ""}
-										onChange={this.handleChange('Status')}
-									>
-										{
-											["Active"].map((x, index) =>
-												<MenuItem key={index} value={x}>{x}</MenuItem>
-											)
-										}
-									</TextField>
-
 									<TextField sm={1}
 										type="date"
 										id="StartDate"
@@ -822,7 +805,7 @@ class FinderFeePanelModalDialog extends React.Component {
 										margin="dense" variant="outlined" fullWidth id="Description" label="Description"
 										value={this.state.Description}
 										onChange={this.handleChange('Description')}
-										style={{ width: "60%" }}
+										style={{ width: "80%" }}
 									/>
 								</div>
 

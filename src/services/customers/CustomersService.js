@@ -200,7 +200,38 @@ fullbill: 0
 			CustomerNo,
 		};
 		return new Promise((resolve, reject) => {
-			axios_instance.get(`${BASE_MONGO_API_URL}/v1/FinderFee/finderfeesByCustomerNo`, {params: data})
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/FinderFee/finderfeesByCustomerNo`, { params: data })
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
+	findersfeeConfigs() {
+		/*
+		{
+            "_id": "5c5bbc9c7667182f003c48a2",
+            "Code": "V",
+            "Name": "Variable",
+            "Values": {
+                "DownPayPercentage": "30.0",
+                "EndAmount": "3000.0",
+                "Factor": "0.0",
+                "MonthlyPercentage": "5.0",
+                "NumOfPayments": "72",
+                "StartAmount": "50.0"
+            }
+        },
+		*/
+		return new Promise((resolve, reject) => {
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/FinderFee/findersfeeConfigs`)
 				.then(res => {
 					if (res.status === 200) {
 						resolve(res.data);

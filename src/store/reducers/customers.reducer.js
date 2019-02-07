@@ -55,6 +55,10 @@ const initialState = {
 	},
 	// findersFees: [],
 	// isStartedFindersFeesFetching : false,
+
+	finderFeesConfigs: [],
+	isStartedFindersFeesConfigsFetching: false,
+
 };
 
 
@@ -277,6 +281,21 @@ const customers = function (state = initialState, action) {
 				return {
 					...state,
 					customerFormFindersFeesDialogPayload: action.payload
+				};
+			}
+		case Actions.FINDERS_FEE_CONFIGS:
+			{
+				return {
+					...state,
+					finderFeesConfigs: action.payload,
+					isStartedFindersFeesConfigsFetching: false
+				};
+			}
+		case Actions.FINDERS_FEE_CONFIGS_START:
+			{
+				return {
+					...state,
+					isStartedFindersFeesConfigsFetching: true
 				};
 			}
 
