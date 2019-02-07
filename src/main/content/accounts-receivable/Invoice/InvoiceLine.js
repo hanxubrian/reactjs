@@ -370,9 +370,11 @@ const styles = theme => ({
 });
 
 function renderSuggestion (suggestion,  { isHighlighted }) {
+    let status = suggestion.StatusName;
+    if (suggestion.StatusName==='Y') status = 'Active';
     return (
         <MenuItem selected={isHighlighted} component="div">
-            <span>{suggestion.Number} - {suggestion.Name} - {suggestion.StatusName}</span>
+            <span>{suggestion.Number} - {suggestion.Name} - {status}</span>
         </MenuItem>
     );
 }
@@ -609,7 +611,9 @@ class InvoiceLineTable extends React.Component {
 
         let franchisees = this.props.franchisees.Data.Region[0].Franchisees;
         let suggestions =  franchisees.filter(f => regex.test(f.Number) || regex.test(f.Name));
-        let suggestionsExcludedInActive = suggestions.filter(c=>c.StatusName==='Active');
+
+
+        let suggestionsExcludedInActive = suggestions.filter(c=>c.StatusName==='Y');
         return suggestionsExcludedInActive;
     };
 
@@ -1243,7 +1247,7 @@ class InvoiceLineTable extends React.Component {
                                                     onBlur={this.handleChangeInvoiceLineOnBlur(row.original, 'markup')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustomPercent,
-                                                        readOnly: row.original.billing.value!==2,
+                                                        // readOnly: row.original.billing.value!==2,
                                                         classes: {
                                                             input: classes.input,
                                                         },
@@ -1270,7 +1274,7 @@ class InvoiceLineTable extends React.Component {
                                                     onBlur={this.handleChangeInvoiceLineOnBlur(row.original, 'commission')}
                                                     InputProps={{
                                                         inputComponent: NumberFormatCustomPercent,
-                                                        readOnly: row.original.billing.value!==1,
+                                                        // readOnly: row.original.billing.value!==1,
                                                         classes: {
                                                             input: classes.input,
                                                         },

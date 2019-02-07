@@ -367,7 +367,7 @@ class TransactionsDxGridLists extends Component {
 
         const columns = [
             {name: "FranNameNo", title: "FranNameNo",},
-            {name: "Number", title: "Trx. Number"},
+            {name: "Number", title: "Trx. #"},
             {name: "TrxDate", title: "Trx. Date"},
             {name: "Description", title: "Description"},
             {name: "TrxChargeType", title: "Class"},

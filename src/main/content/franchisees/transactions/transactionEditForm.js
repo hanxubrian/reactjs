@@ -649,25 +649,7 @@ class TransactionEditForm extends Component {
     };
 
     handleBlurTransaction = name =>(event) => {
-        let quantity =  this.state.quantity;
-        let unitPrice = this.state.unitPrice;
-        let payments = this.state.payments;
-
         this.getTotal();
-        // if(quantity>0 && unitPrice>0) {
-        //     let tax = quantity * unitPrice*0.085;
-        //     if(this.state.TrxType.value!=='5c5320066846d77648859107') tax = 0.0;
-        //     if(this.state.reSell) tax = 0.0;
-
-        //     let line_total = parseFloat(quantity * unitPrice+tax);
-        //     this.setState({subTotal: parseFloat(quantity * unitPrice)});
-        //     this.setState({tax: parseFloat(tax)});
-        //     this.setState({total: parseFloat(quantity * unitPrice+tax)});
-
-        //     if(this.state.transactionFrequency==='recurring' && payments>0) {
-        //         this.setState({grossTotal: parseFloat(payments * line_total)});
-        //     }
-        // }
     };
 
     addNewTransaction = () => {
