@@ -151,6 +151,7 @@ class SummaryTransactons extends Component {
             "PAGERS2", "REGULAR MISCELLANEOUS", "SPECIAL_MISC","DUE_TO_FRAN"];
         const aDeductions5 =["SUBTOTAL_SPEC_DEDS"];
         const aDeductions6 =["TOTAL_DEDS"];
+        const aDeductions7 =["ChildSupport"];
 
 
         return (
@@ -425,6 +426,49 @@ class SummaryTransactons extends Component {
                         <tr >
                             <td width="350">
                             <Typography variant="subtitle1">Chargeback</Typography>
+                            </td>
+                            <td width ="" className="text-right">
+                                $0.00
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table style={{width:'63%'}}>
+                    <tbody>
+                    { aDeductions7.map((b, index)=>{
+                        if(SUMMARY_PAGE[0][b]===null)
+                            return false;
+                        else
+                            return (
+                                <tr key={index}>
+                                    <td>
+                                        <Typography variant="subtitle1">
+                                            {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
+                                        </Typography>
+                                    </td>
+                                    <td className="text-right">
+                                        {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
+                                        ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                    </td>
+                                </tr>
+                            )
+                        }
+                    )}
+                        {/* <tr >
+                            <td width="350">
+                            <Typography variant="subtitle1">Child Support</Typography>
+                            </td>
+                            <td width ="" className="text-right">
+                                $0.00
+                            </td>
+                        </tr> */}
+                    </tbody>
+                </table>
+                <table style={{width:'63%'}}>
+                    <tbody>
+                        <tr >
+                            <td width="350">
+                            <Typography variant="subtitle1">Tax Levy</Typography>
                             </td>
                             <td width ="" className="text-right">
                                 $0.00
