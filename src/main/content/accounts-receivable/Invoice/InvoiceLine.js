@@ -123,7 +123,7 @@ function createFranchisee(parent_id,id, fnumber="", name="", amount=0) {
     }
 }
 
-function createData(billing={label:'Regular Billing', value: 4}, service='Adjust-Balance', description='', quantity=1, amount='', tax=0, markup='', extended=0, total=0, markupAmount=0, markupTax=0, commission=0, commissionAmount=0.0)
+function createData(billing={label:'Regular Billing', value: '5c41e517d2963319d486a19b'}, service='Adjust-Balance', description='', quantity=1, amount='', tax=0, markup='', extended=0, total=0, markupAmount=0, markupTax=0, commission=0, commissionAmount=0.0)
 {
     return {
         id: counter++,
@@ -384,7 +384,7 @@ class InvoiceLineTable extends React.Component {
         order      : 'asc',
         selected   : [],
         data       :  this.props.invoiceForm.type === 'new' ? [
-            createData({label: this.props.billingLists[3].Name, value:this.props.billingLists[3].BillingTypeId}, {value: "Buffing", label: "Buffing"}, '',1),
+            createData({label: this.props.billingLists[3].Name, value:this.props.billingLists[3]._id}, {label: this.props.serviceLists[0].Name, value:this.props.serviceLists[0]._id}, '',1),
         ] : [],
         page       : 0,
         rowsPerPage: 10,
@@ -416,7 +416,7 @@ class InvoiceLineTable extends React.Component {
         numberSuggestions: [],
         taxRowId: 0,
         customerTaxAmountLine: null,
-        selectedBillingOption0: {label: this.props.billingLists[3].Name, value:this.props.billingLists[3].BillingTypeId},selectedBillingOption1: null,selectedBillingOption2: null,selectedBillingOption3: null,
+        selectedBillingOption0: {label: this.props.billingLists[3].Name, value:this.props.billingLists[3]._id},selectedBillingOption1: null,selectedBillingOption2: null,selectedBillingOption3: null,
         selectedBillingOption4: null,selectedBillingOption5: null,selectedBillingOption6: null,selectedBillingOption7: null,
         selectedBillingOption8: null,selectedBillingOption9: null,selectedBillingOption10: null,selectedBillingOption11: null,
         selectedBillingOption12: null,selectedBillingOption13: null,selectedBillingOption14: null,selectedBillingOption15: null,
@@ -433,9 +433,9 @@ class InvoiceLineTable extends React.Component {
 
 
         billingSuggestions: this.props.billingLists.map(b => ({
-            value: b.BillingTypeId, label: b.Name})),
+            value: b._id, label: b.Name})),
         serviceSuggestions: this.props.serviceLists.map(s=>({
-            BillingTypeId: s.BillingTypeId, label: s.Name, value: s.Name
+            BillingTypeId: s.BillingTypeId, label: s.Name, value: s._id
         }))
     };
 
@@ -484,24 +484,24 @@ class InvoiceLineTable extends React.Component {
             let items = this.props.invoiceDetail.Data.Items;
 
             let billingSuggestions = this.props.billingLists.map(b => ({
-                value: b.BillingTypeId, label: b.Name}));
+                value: b._id, label: b.Name}));
 
             let serviceSuggestions = this.props.serviceLists.map(s=>({
-                label: s.Name, value: s.Name
+                label: s.Name, value: s._id
             }));
 
             let f_index = 0;
 
             if(items!==null && items.length>0){
                 let newData = items.map((item, index)=>{
-                    let billing = billingSuggestions.filter(b=>b.value===parseInt(item.Billing));
+                    let billing = billingSuggestions.filter(b=>b.value===item.Billing);
                     this.setState({[`selectedBillingOption${index}`]: billing[0]});
 
                     let service = serviceSuggestions.filter(s=>s.value===item.Service);
                     if(service.length)
                         this.setState({[`selectedServiceOption${index}`]: service[0]});
 
-                    let line = createData(billing[0], service.length ? service[0] : '', item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 0, item.ExtendedPrice, item.Total, item.MarkUpTotal, item.MarkUpTax, item.Commission, item.CommissionTotal);
+                    let line = createData(billing[0], service[0], item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 0, item.ExtendedPrice, item.Total, item.MarkUpTotal, item.MarkUpTax, item.Commission, item.CommissionTotal);
 
                     let distributions = [];
                     if(item.Distribution!==null && item.Distribution.length>0){
@@ -540,8 +540,14 @@ class InvoiceLineTable extends React.Component {
             let rows = this.props.invoiceForm.data.line;
             rows.forEach(row=>{
                 let markup = 0.0;
-                if(row.markup!=='' && row.billing.value===2) markup = row.markup;
-                this.props.getCustomerTaxAmount(row.id, this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity, markup, row.commission);
+                if(row.markup!=='' && row.billing.value===this.props.billingLists[1]._id) markup = row.markup;  //Client Supplies
+
+                if( row.billing.value===this.props.billingLists[1]._id)
+                    this.props.getCustomerTaxAmount(row.id, this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity, markup, 0);
+                else if( row.billing.value===this.props.billingLists[0]._id)
+                    this.props.getCustomerTaxAmount(row.id, this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity, 0, row.commission);
+                else
+                    this.props.getCustomerTaxAmount(row.id, this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity, 0, 0);
             });
         }
 
@@ -577,7 +583,7 @@ class InvoiceLineTable extends React.Component {
 
         //for save & add more
         if(nextProps.invoiceForm.data===null && JSON.stringify(nextProps.invoiceForm.data)!==JSON.stringify(this.props.invoiceForm.data)){
-            let newData = createData({label: this.props.billingLists[3].Name, value:this.props.billingLists[3].BillingTypeId}, {value: "Buffing", label: "Buffing"}, '','');
+            let newData = createData({label: this.props.billingLists[3].Name, value:this.props.billingLists[3]._id},  {label: this.props.serviceLists[0].Name, value:this.props.serviceLists[0]._id}, '','');
             this.setState({data: [{...newData, id: 0}]});
         }
     }
@@ -692,9 +698,9 @@ class InvoiceLineTable extends React.Component {
             return;
         }
 
-        const data = [...this.state.data, createData({label: this.props.billingLists[3].Name, value:this.props.billingLists[3].BillingTypeId},{value: "Buffing", label: "Buffing"})];
+        const data = [...this.state.data, createData({label: this.props.billingLists[3].Name, value:this.props.billingLists[3]._id},{value: "Buffing", label: "Buffing"})];
         this.setState({
-            ["selectedBillingOption"+parseInt(data.length-1)]: {label: this.props.billingLists[3].Name, value:this.props.billingLists[3].BillingTypeId,
+            ["selectedBillingOption"+parseInt(data.length-1)]: {label: this.props.billingLists[3].Name, value:this.props.billingLists[3]._id,
             }
         });
 
@@ -785,8 +791,15 @@ class InvoiceLineTable extends React.Component {
         if(!this.isDisable(row)) {
             let markup = 0.0;
             if(row.markup!=='') markup = row.markup;
-            if(row.markup!=='' && row.billing.value===2) markup = row.markup;
-            this.props.getCustomerTaxAmount(row.id, this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity, markup, row.commission);
+            if(row.markup!=='' && row.billing.value===this.props.billingLists[1]._id) markup = row.markup; //Client Supplies
+
+            if( row.billing.value===this.props.billingLists[1]._id)
+                this.props.getCustomerTaxAmount(row.id, this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity, markup, 0);
+            else if( row.billing.value===this.props.billingLists[0]._id)
+                this.props.getCustomerTaxAmount(row.id, this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity, 0, row.commission);
+            else
+                this.props.getCustomerTaxAmount(row.id, this.props.regionId, this.props.invoiceForm.customer.CustomerId, row.amount, row.quantity, 0, 0);
+
             this.setState({taxRowId: row.id})
         }
     };
@@ -829,8 +842,9 @@ class InvoiceLineTable extends React.Component {
         if (name==='quantity')  value = parseInt(value);
         if (name==='markup')  value = parseFloat(value);
         if (name==='commission')  value = parseFloat(value);
-        if(name==='commission') data[row.id]['markup'] = 0.00;
-        if(name==='markup') data[row.id]['commission'] = 0.00;
+
+        // if(name==='commission') data[row.id]['markup'] = 0.00;
+        // if(name==='markup') data[row.id]['commission'] = 0.00;
 
         data[row.id][name] = value;
         this.setState({data: data});
@@ -955,12 +969,12 @@ class InvoiceLineTable extends React.Component {
         let billingSuggestions = [];
         if(this.props.billingLists!==null && this.props.billingLists.length>0) {
             billingSuggestions = this.props.billingLists.map(b => ({
-                value: b.BillingTypeId, label: b.Name
+                value: b._id, label: b.Name
             }));
         }
 
         const serviceSuggestions =this.props.serviceLists.map(suggestion => ({
-            value: suggestion.Name,
+            value: suggestion._id,
             label: suggestion.Name
         }));
 

@@ -635,7 +635,7 @@ class InvoiceForm extends Component {
                 ServiceTypeListId: 0,
                 Description: line.description,
                 Billing: line.billing.value,
-                Service: line.service.label,
+                Service: line.service.value,
                 LineNo: 1,
                 UnitPrice: parseFloat(line.amount),
                 Quantity: parseInt(line.quantity),
