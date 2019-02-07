@@ -171,7 +171,7 @@ class RegularMiscTransactons extends Component {
             {name: "TYPE", title: "Type"},
             {name: "DESCR", title: "Description"},
             {name: "TRX_AMT", title: "Amount"},
-            {name: "TRX_TAX", title: "Tax"},
+            // {name: "TRX_TAX", title: "Tax"},
             {name: "TRX_TOT", title: "Total"},
         ];
 
