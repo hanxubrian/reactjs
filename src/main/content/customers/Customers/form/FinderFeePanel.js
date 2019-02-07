@@ -1221,12 +1221,10 @@ class FinderFeePanel extends Component {
 						> Add Finders Fee... </Button>
 					</div>
 
-					<div className={classNames("flex flex-col")}
-					// style={{ height: "calc(100% - 110px)" }}
-					// style={{ overflowY: 'scroll' }}
-					>
+					<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
 						<FinderFeeGrid />
 					</div>
+
 					<FinderFeePanelModalDialog />
 				</div>
 			</Fragment>

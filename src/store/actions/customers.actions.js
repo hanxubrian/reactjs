@@ -38,6 +38,8 @@ export const GET_CUSTOMER_START = "[CUSTOMERS APP] GET_CUSTOMER_START";
 export const SET_FILTER_CUSTOMER_STATUSES = "[CUSTOMERS APP] SET_FILTER_CUSTOMER_STATUSES";
 
 export const SET_CUSTOMER_FORM_FINDERS_FEES_DIALOG_PAYLOAD = "[CUSTOMERS APP] SET_CUSTOMER_FORM_FINDERS_FEES_DIALOG_PAYLOAD";
+export const GET_FINDERS_FEES_BY_CUSTOMER_NO_START = "[CUSTOMERS APP] GET_FINDERS_FEES_BY_CUSTOMER_NO_START";
+export const GET_FINDERS_FEES_BY_CUSTOMER_NO = "[CUSTOMERS APP] GET_FINDERS_FEES_BY_CUSTOMER_NO";
 
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	// return dispatch => {
@@ -65,6 +67,22 @@ export function getCustomers(regionId, statusId, StatusNames, AccountTypeListNam
 			let response = await customersService.getCustomersList(regionId, statusId, StatusNames, AccountTypeListName, location, latitude, longitude, searchText);
 			dispatch({
 				type: GET_ALL_CUSTOMERS,
+				payload: response
+			});
+		})();
+	}
+}
+export function getFindersFeesByCustomerNo(RegionId, CustomerNo) {
+	return (dispatch) => {
+
+		dispatch({
+			type: GET_FINDERS_FEES_BY_CUSTOMER_NO_START,
+		});
+
+		(async () => {
+			let response = await customersService.getFindersFeesByCustomerNo(RegionId, CustomerNo);
+			dispatch({
+				type: GET_FINDERS_FEES_BY_CUSTOMER_NO,
 				payload: response
 			});
 		})();
@@ -239,7 +257,7 @@ export function closeNewCustomerForm() {
 	}
 }
 
-export function openEditCustomerForm(regionId, customerId) {
+export function openEditCustomerForm(regionId, customerId, customerNo) {
 	return (dispatch) => {
 		dispatch({
 			type: GET_CUSTOMER_START,
@@ -247,10 +265,11 @@ export function openEditCustomerForm(regionId, customerId) {
 		});
 
 		(async () => {
-			let response = await customersService.getCustomer(regionId, customerId);
+			let customer = await customersService.getCustomer(regionId, customerId);
+			let findersFees = await customersService.getFindersFeesByCustomerNo(regionId, customerNo);
 			dispatch({
 				type: OPEN_EDIT_CUSTOMER_FORM,
-				payload: response
+				payload: { customer, findersFees }
 			});
 		})();
 	}

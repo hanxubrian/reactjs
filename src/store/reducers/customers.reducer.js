@@ -52,7 +52,9 @@ const initialState = {
 
 	customerFormFindersFeesDialogPayload: {
 		open: false,
-	}
+	},
+	// findersFees: [],
+	// isStartedFindersFeesFetching : false,
 };
 
 
@@ -242,7 +244,8 @@ const customers = function (state = initialState, action) {
 						props: {
 							open: true
 						},
-						data: action.payload
+						data: action.payload.customer,
+						findersFees: action.payload.findersFees,
 					}
 				};
 			}
@@ -276,6 +279,22 @@ const customers = function (state = initialState, action) {
 					customerFormFindersFeesDialogPayload: action.payload
 				};
 			}
+
+		// case Actions.GET_FINDERS_FEES_BY_CUSTOMER_NO_START:
+		// 	{
+		// 		return {
+		// 			...state,
+		// 			isStartedFindersFeesFetching: true
+		// 		};
+		// 	}
+		// case Actions.GET_FINDERS_FEES_BY_CUSTOMER_NO:
+		// 	{
+		// 		return {
+		// 			...state,
+		// 			findersFees: action.payload,
+		// 			isStartedFindersFeesFetching: false,
+		// 		};
+		// 	}
 		default:
 			{
 				return state;

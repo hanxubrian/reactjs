@@ -567,8 +567,8 @@ class FinderFeeGrid extends Component {
 				},
 				{
 					title: "Payment Amount",
-					name: "PaymentAmount",
-					columnName: "PaymentAmount",
+					name: "ff_pyamt",
+					columnName: "ff_pyamt",
 					width: 150,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
@@ -598,8 +598,8 @@ class FinderFeeGrid extends Component {
 				},
 				{
 					title: "Total FF",
-					name: "TotalFF",
-					columnName: 'TotalFF',
+					name: "ff_tot",
+					columnName: 'ff_tot',
 					width: 120,
 					align: 'center',
 					sortingEnabled: true,
@@ -608,8 +608,8 @@ class FinderFeeGrid extends Component {
 				},
 				{
 					title: "Balance",
-					name: "Balance",
-					columnName: "Balance",
+					name: "ff_balance",
+					columnName: "ff_balance",
 					width: 130,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -617,8 +617,8 @@ class FinderFeeGrid extends Component {
 				},
 				{
 					title: "Hold",
-					name: "Hold",
-					columnName: "Hold",
+					name: "ff_hold",
+					columnName: "ff_hold",
 					width: 150,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -807,6 +807,10 @@ class FinderFeeGrid extends Component {
 		if (nextProps.searchText !== this.props.searchText) {
 			this.search(nextProps.searchText);
 		}
+
+		if (!_.isEqual(nextProps.customerForm, this.props.customerForm)) {
+			this.initRowsFromRawJson(nextProps.customerForm)
+		}
 	} // deprecate 
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
@@ -943,42 +947,13 @@ class FinderFeeGrid extends Component {
 
 
 
-	initRowsFromRawJson = (rawData = this.props.customers, locationFilterValue = this.props.locationFilterValue) => {
-		console.log("initRowsFromRawJson", "CustomerListContent.js", this.props.regionId, this.props.statusId, rawData)
-		let all_temp = [];
-		if (rawData === null || rawData === undefined || rawData.Data === undefined) return;
-
-		let regions = rawData.Data.Regions.filter(x => {
-			return this.props.regionId === 0 || x.Id === this.props.regionId;
-		});
-
-
-		console.log("regions", regions)
-
-		regions.forEach(x => {
-			all_temp = [...all_temp, ...x.CustomerList];
-		});
-
-		let _pins_temp = [];
-		regions.forEach(x => {
-			_pins_temp = [..._pins_temp, ...x.CustomerList.map(customer => {
-				return {
-					lat: customer.Latitude,
-					lng: customer.Longitude,
-					text: customer.CustomerName
-				}
-			})];
-
-		})
-
-		this.filterPins(_pins_temp, locationFilterValue)
+	initRowsFromRawJson = (rawData = this.props.customerForm, ) => {
+		console.log("initRowsFromRawJson", "finderfeegrid.js", rawData)
+		if (!rawData || !rawData.findersFees || !rawData.findersFees.Data) return;
 
 		this.setState({
-			rows: all_temp,
-			data: all_temp,
-			// pins: _pins_temp,
+			rows: rawData.findersFees.Data,
 		});
-
 	};
 
 	filterPins(pins, locationFilterValue) {
@@ -1151,7 +1126,7 @@ class FinderFeeGrid extends Component {
 			prevent = true;
 			// alert(JSON.stringify(tableRow.row));
 			console.log(restProps);
-			this.props.openEditCustomerForm(this.props.regionId, tableRow.row.CustomerId);
+			// this.props.openEditCustomerForm(this.props.regionId, tableRow.row.CustomerId);
 		}
 		return (
 			<Table.Row
@@ -1200,54 +1175,10 @@ class FinderFeeGrid extends Component {
 			// rightColumns,
 		} = this.state;
 
-		console.log("-------render-------", locationFilterValue, pins, pins2)
+		console.log("-------finder fee grid render-------", locationFilterValue, rows, pins, pins2)
 
 		return (
 			<Fragment>
-				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
-
-					{/* Mapview */}
-					{mapViewState && (<div className={classNames("w-full h-full p-1")} style={{ borderColor: 'lightgray', borderWidth: '1px' }}>
-						{/* <div className="w-full h-full"> */}
-						{/* <GoogleMap
-								bootstrapURLKeys={{
-									key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
-								}}
-								defaultZoom={12}
-								defaultCenter={[this.state.current_lat, this.state.current_long]}
-							>
-								{
-									this.props.pins.map((x, index) => (
-										<Marker
-											key={index}
-											text={x.text}
-											lat={x.lat}
-											lng={x.lng}
-										/>
-									))
-								}
-							</GoogleMap> */}
-
-						{gmapVisible && (<MapWithAMarkerClusterer
-							markers={pins}
-							center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
-						/>)}
-
-						{!gmapVisible && (<MapWithAMarkerClusterer2
-							markers={pins2}
-							center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
-						/>)}
-
-						{/* </div> */}
-					</div>)}
-
-					{/* Girdview */}
-					{!mapViewState &&
-						(
-							<div className={classNames("flex flex-col")}
-							// style={{ height: "calc(100% - 110px)" }}
-							// style={{ overflowY: 'scroll' }}
-							>
 								<Grid
 									// rootComponent={GridRootComponent}
 									rows={rows}
@@ -1425,11 +1356,6 @@ class FinderFeeGrid extends Component {
 									<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
 
 								</Grid>
-							</div>
-
-						)
-					}
-				</div>
 			</Fragment>
 		)
 	}
@@ -1459,11 +1385,13 @@ function mapStateToProps({ customers, auth }) {
 		filterState: customers.bOpenedFilterPanel,
 		summaryState: customers.bOpenedSummaryPanel,
 		regionId: auth.login.defaultRegionId,
-		CustomerForm: customers.CustomerForm,
+		customerForm: customers.customerForm,
 		mapViewState: customers.bOpenedMapView,
 		locationFilterValue: customers.locationFilterValue,
 		searchText: customers.searchText,
 		bCustomerFetchStart: customers.bCustomerFetchStart,
+
+
 	}
 }
 

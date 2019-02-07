@@ -1182,7 +1182,7 @@ class CustomerListContent extends Component {
 			prevent = true;
 			// alert(JSON.stringify(tableRow.row));
 			console.log(restProps);
-			this.props.openEditCustomerForm(this.props.regionId, tableRow.row.CustomerId);
+			this.props.openEditCustomerForm(this.props.regionId, tableRow.row.CustomerId, tableRow.row.CustomerNo);
 		}
 		return (
 			<Table.Row
@@ -1231,7 +1231,7 @@ class CustomerListContent extends Component {
 			// rightColumns,
 		} = this.state;
 
-		console.log("-------render-------", locationFilterValue, pins, pins2)
+		console.log("-------render-------", locationFilterValue, rows, pins, pins2)
 
 		return (
 			<Fragment>

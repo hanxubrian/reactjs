@@ -794,6 +794,12 @@ class Customers extends Component {
 						<Typography variant="body2" color="primary">Fetching the customer data...</Typography>
 					</div>
 				)}
+				{/* {(this.props.isStartedFindersFeesFetching) && (
+					<div className={classNames(classes.overlay, "flex-col")}>
+						<CircularProgress className={classes.progress} color="secondary" />
+						<Typography variant="body2" color="primary">Fetching Finders Fees data...</Typography>
+					</div>
+				)} */}
 			</React.Fragment >
 		);
 	}
@@ -853,6 +859,7 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		bGetCustomerStart: customers.bGetCustomerStart,
 
 		filters: customers.filters,
+		// isStartedFindersFeesFetching: customers.isStartedFindersFeesFetching,
 	}
 }
 
