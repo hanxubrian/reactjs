@@ -195,7 +195,7 @@ class Report extends Component {
                         <img src="https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png" alt=""/>
                     </Typography>
                 </td>
-                <td className="text-center" width='600'>
+                <td className="text-center" width='550'>
                     <Typography color="inherit">FRANCHISEE REPORT</Typography>
                     <Typography color="inherit">
                         {region_name}
