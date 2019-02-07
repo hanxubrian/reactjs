@@ -126,22 +126,23 @@ class CreditInvoiceFormModal extends React.Component {
             let customer = this.props.invoiceForm.customer;
             let PayItems = [{ InvoiceNo: this.props.invoiceDetail.Data.Inv_no,  Amount: this.state.PaymentAmount}];
 
-            // this.props.createAccountReceivablePayment(
-            //     this.props.regionId,
-            //     customer.CustomerNo,
-            //
-            //     this.state.Reason,
-            //     this.state.PaymentDate,
-            //     this.getOverpaymentAmount(),
-            //     this.state.PaymentAmount,
-            //
-            //     PayItems,
-            //
-            //     this.props.getPaymentsParam.fromDate,
-            //     this.props.getPaymentsParam.toDate,
-            //     this.props.searchText,
-            //     this.props.filter.paymentStatus
-            // );
+            this.props.createAccountReceivablePayment(
+                this.props.regionId,
+                customer.CustomerNo,
+                'Credit',//Payment Type
+                this.state.Reason,
+                this.state.PaymentDate,
+                '',//note
+                this.getOverpaymentAmount(),
+                this.state.PaymentAmount,
+
+                PayItems,
+
+                this.props.getPaymentsParam.fromDate,
+                this.props.getPaymentsParam.toDate,
+                this.props.searchText,
+                this.props.filter.paymentStatus
+            );
 
             this.handleClose();
         }
