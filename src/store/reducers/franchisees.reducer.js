@@ -251,8 +251,8 @@ const franchisees = function(state = initialState, action) {
             if(action.payload.length>0) {
                 documentsList = action.payload.map(iv => {
                     return {
-                        ["documentDateTime"]: "",
-                        ["documentFileSize"]: "",
+                        ["Type"]: "",
+                        ["Status"]: "",
                         ["documentView"]: "",
                         ...iv
                     }

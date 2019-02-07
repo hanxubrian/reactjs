@@ -306,16 +306,16 @@ class FranchiseesDocumentUploadTable extends React.Component {
                 label: 'Document Name'
             },
             {
-                id: 'uploadDateTime',
+                id: 'type',
                 numeric: false,
                 disablePadding: false,
-                label: 'Upload Date Time'
+                label: 'Type'
             },
             {
-                id: 'fileSize',
+                id: 'status',
                 numeric: false,
                 disablePadding: false,
-                label: 'File Size'
+                label: 'Status'
             },
             {
                 id: 'view',
@@ -328,6 +328,12 @@ class FranchiseesDocumentUploadTable extends React.Component {
                 numeric: false,
                 disablePadding: false,
                 label: 'Browse'
+            },
+            {
+                id: 'action',
+                numeric: false,
+                disablePadding: false,
+                label: 'Action'
             }
         ];
 
@@ -354,10 +360,10 @@ class FranchiseesDocumentUploadTable extends React.Component {
                                                         {n.Name}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {documentsList[index]["documentDateTime"]}
+                                                        {documentsList[index]["Type"]}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {documentsList[index]["documentFileSize"]}
+                                                        {documentsList[index]["Status"]}
                                                     </TableCell>
                                                     <TableCell>
                                                         <IconButton
@@ -378,6 +384,15 @@ class FranchiseesDocumentUploadTable extends React.Component {
                                                             variant="outlined"
                                                             fullWidth
                                                         />
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <IconButton
+                                                                className={classNames(classes.summaryPanelButton, "mr-12")}
+                                                                aria-label="send-icon"
+                                                                // onClick={}
+                                                                >
+                                                                <Icon>send</Icon>
+                                                        </IconButton>
                                                     </TableCell>
                                                 </TableRow>
                                             )

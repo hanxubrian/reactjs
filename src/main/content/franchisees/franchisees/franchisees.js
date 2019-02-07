@@ -230,6 +230,15 @@ const styles = theme => ({
         justifyContent: 'center',
         display: 'flex',
         opacity: 0.5
+    },
+    rightIcon: {
+        marginLeft: theme.spacing.unit,
+    },
+    btntop: {
+        marginRight: 20
+    },
+    iconSmall: {
+        fontSize: 20,
     }
 });
 
@@ -768,6 +777,16 @@ class Franchisees extends Component {
         this.props.getFranchiseeDetail(id,regionId);
     }
 
+    formatPhoneNumber(phoneNumberString) {
+        var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
+        var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/)
+        if (match) {
+          var intlCode = (match[1] ? '+1 ' : '')
+          return [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('')
+        }
+        return null
+    }
+
     render()
     {
         const { classes,toggleFilterPanelFranchisees,showCreteFranchisees, toggleSummaryPanelFranchisees, createFranchisees, filterStateFranchisees, summaryStateFranchisees, toggleFranchiseeMapView, mapViewState} = this.props;
@@ -801,26 +820,19 @@ class Franchisees extends Component {
                                         </div>
                                     </div>
                                     <div className="flex flex-shrink items-center">
-                                        <FuseAnimate animation="transition.expandIn" delay={300}>
-                                            <Fab
+                                            {/* <Fab
                                                 color="secondary"
                                                 aria-label="add"
                                                 className={classNames(classes.sideButton, "mr-12")}
                                                 onClick={showCreteFranchisees}>
                                                 <Icon>add</Icon>
-                                            </Fab>
-                                        </FuseAnimate>
-                                        <FuseAnimate animation="transition.expandIn" delay={300}>
-                                            <Fab color="secondary" aria-label="add"
-                                                 className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-                                                <Icon>mail_outline</Icon>
-                                            </Fab>
-                                        </FuseAnimate>
-                                        <FuseAnimate animation="transition.expandIn" delay={300}>
-                                            <Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-                                                <Icon>print</Icon>
-                                            </Fab>
-                                        </FuseAnimate>
+                                            </Fab> */}
+                                            <Button variant="contained" color="primary" 
+                                                className={classNames(classes.button, classes.btntop) }
+                                                onClick={showCreteFranchisees}>
+                                            Add
+                                            <Icon className={classes.rightIcon}>add</Icon>
+                                           </Button>
                                     </div>
                                 </div>
                             </div>
@@ -835,9 +847,16 @@ class Franchisees extends Component {
                                                     <img className="mr-12" alt="icon-white" src="assets/images/invoices/invoice-icon-white.png" style={{width: 32, height: 32}}/>
                                                 </Toolbar>
                                             </FuseAnimate>
-                                            <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                                <Typography variant="h6" className="hidden sm:flex">Franchisees | New Franchisees</Typography>
-                                            </FuseAnimate>
+                                            {createFranchisees.type === "new" && (
+                                                <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                    <Typography variant="h6" className="hidden sm:flex">Franchisees | New Franchisees</Typography>   
+                                                </FuseAnimate>
+                                            )}
+                                            {createFranchisees.type === "edit" && (
+                                                <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                                    <Typography variant="h6" className="hidden sm:flex">Franchisees | Edit Franchisees</Typography>
+                                                </FuseAnimate>
+                                            )}
                                         </div>
                                     </div>
                                     <div className="flex flex-shrink items-center">
@@ -1124,48 +1143,37 @@ class Franchisees extends Component {
                                                     Header: "NUMBER",
                                                     accessor: "Number",
                                                     filterAll: true,
-                                                    width: 100,
+                                                    width: 150,
                                                     className: classNames("flex items-center  justify-center")
                                                 },
                                                 {
                                                     Header: "FRANCHISEES NAME",
                                                     accessor: "Name",
-                                                    width: 250,
+                                                    width: 300,
                                                     className: classNames("flex items-center  justify-start p-12-impor")
                                                 },
                                                 {
                                                     Header: "FULL ADDRESS",
                                                     accessor: "Address",
                                                     className: classNames("flex items-center  justify-start p-12-impor"),
-                                                    width: 250
+                                                    width: 300
                                                 },
                                                 {
                                                     Header: "CITY",
                                                     accessor: "City",
                                                     className: classNames("flex items-center  justify-start p-12-impor"),
-                                                    width: 120
+                                                    width: 180
                                                 },
                                                 {
                                                     Header: "PHONE",
                                                     accessor: "Phone",
-                                                    width: 200,
+                                                    width: 250,
+                                                    Cell: row =>{ return(this.formatPhoneNumber(row.original.Phone))},
                                                     className: classNames("flex items-center  justify-center p-12-impor")
                                                 },
                                                 {
-                                                    Header: "STATUS",
-                                                    accessor: "StatusName",
-                                                    className: classNames("flex items-center  justify-center p-12-impor"),
-                                                    width: 150
-                                                },
-                                                {
-                                                    Header: "REGION NAME",
-                                                    accessor: "RegionName",
-                                                    className: classNames("flex items-center  justify-center p-12-impor"),
-                                                    width: 150
-                                                },
-                                                {
                                                     Header: "ACTIONS",
-                                                    width : 250,
+                                                    width : 350,
                                                     className: classNames("flex items-center  justify-center p-12-impor"),
                                                     Cell  : row =>{
                                                         return (
