@@ -37,6 +37,7 @@ export const GET_CUSTOMER = "[CUSTOMERS APP] GET_CUSTOMER";
 export const GET_CUSTOMER_START = "[CUSTOMERS APP] GET_CUSTOMER_START";
 export const SET_FILTER_CUSTOMER_STATUSES = "[CUSTOMERS APP] SET_FILTER_CUSTOMER_STATUSES";
 
+export const SET_CUSTOMER_FORM_FINDERS_FEES_DIALOG_PAYLOAD = "[CUSTOMERS APP] SET_CUSTOMER_FORM_FINDERS_FEES_DIALOG_PAYLOAD";
 
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	// return dispatch => {
@@ -272,6 +273,13 @@ export function setFilterCustomerStatuses(statuses) {
 	return {
 		type: SET_FILTER_CUSTOMER_STATUSES,
 		payload: statuses
+	}
+}
+
+export function setCustomerFormFindersFeesDialogPayload(payload) {
+	return {
+		type: SET_CUSTOMER_FORM_FINDERS_FEES_DIALOG_PAYLOAD,
+		payload: payload
 	}
 }
 

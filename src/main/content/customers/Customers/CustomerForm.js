@@ -128,6 +128,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 
 import AccountOfferingPage from './AccountOfferingPage';
+import FinderFeePanel from './form/FinderFeePanel'
 
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -310,7 +311,7 @@ function escapeRegexCharacters(str) {
 
 
 function getSteps() {
-	return ['Service Agreement', 'Billing', 'Cleaning Schedule', "Walk-Thru", "Account Offering", "Documents", "Marketing", "Account History"];
+	return ['Service Agreement', 'Billing', 'Cleaning Schedule', "Walk-Thru", "Account Offering", "Documents", "Marketing", "Account History", "Finders Fees"];
 }
 
 const Upload_Document_headers = [
@@ -422,7 +423,7 @@ class CustomerForm extends Component {
 		labelWidth: 0,
 		selectedWork: "",
 
-		activeStep: 0,
+		activeStep: 8,
 		completed: new Set(),
 		skipped: new Set(),
 
@@ -1458,6 +1459,10 @@ class CustomerForm extends Component {
 				)
 			case 7:
 				return (<Fragment></Fragment>)
+			case 8:
+				return (<Fragment></Fragment>)
+			case 9:
+				return (<FinderFeePanel />)
 			default:
 				return 'Unknown step';
 		}

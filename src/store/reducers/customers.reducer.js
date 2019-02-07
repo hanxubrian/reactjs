@@ -48,6 +48,10 @@ const initialState = {
 	filters: {
 		StatusNames: ["Active"],
 		AccountTypeListName: "",
+	},
+
+	customerFormFindersFeesDialogPayload: {
+		open: false,
 	}
 };
 
@@ -263,6 +267,13 @@ const customers = function (state = initialState, action) {
 						...state.filters,
 						StatusNames: action.payload
 					}
+				};
+			}
+		case Actions.SET_CUSTOMER_FORM_FINDERS_FEES_DIALOG_PAYLOAD:
+			{
+				return {
+					...state,
+					customerFormFindersFeesDialogPayload: action.payload
 				};
 			}
 		default:
