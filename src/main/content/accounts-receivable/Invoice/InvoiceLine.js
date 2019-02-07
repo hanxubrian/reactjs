@@ -502,7 +502,7 @@ class InvoiceLineTable extends React.Component {
                     if(service.length)
                         this.setState({[`selectedServiceOption${index}`]: service[0]});
 
-                    let line = createData(billing[0], service[0], item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 0, item.ExtendedPrice, item.Total, item.MarkUpTotal, item.MarkUpTax, item.Commission, item.CommissionTotal);
+                    let line = createData(billing[0], service[0], item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 0, item.ExtendedPrice, item.Total, item.MarkUpTotal, item.MarkUpTax, item.Commission, item.CommissionTotal, item.VendorId);
 
                     let distributions = [];
                     if(item.Distribution!==null && item.Distribution.length>0){

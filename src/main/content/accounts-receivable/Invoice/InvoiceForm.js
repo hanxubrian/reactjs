@@ -649,7 +649,7 @@ class InvoiceForm extends Component {
                 ExtraWork: 1,
                 TaxExcempt: this.state.selectedCustomer.TaxExempt,
                 Distribution: [],
-                vendorId: line.vendorId
+                VendorId: line.vendorId
             };
             let franchisees = [];
 
