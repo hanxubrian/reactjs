@@ -473,16 +473,16 @@ class Leases extends Component {
 
 	componentDidMount() {
 		document.addEventListener("keydown", this.escFunction, false);
-		if(this.props.franchisees!==null){
-            let temp = [];
-            let regions = this.props.franchisees.Data.Region;
-	
-            regions.map(x => {
-                temp = [...temp, ...x.FranchiseeList];
-                return true;
-            });
-            this.setState({franchisees: temp});
-        }
+		// if(this.props.franchisees!==null){
+        //     let temp = [];
+        //     let regions = this.props.franchisees.Data.Region;
+		// 	debugger
+        //     regions.map(x => {
+        //         temp = [...temp, ...x.FranchiseeList];
+        //         return true;
+        //     });
+        //     this.setState({franchisees: temp});
+        // }
 	}
 
 	componentWillUnmount() {
