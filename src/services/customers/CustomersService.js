@@ -22,7 +22,7 @@ class CustomersService {
 		const data = {
 			RegionId,
 			StatusId,
-			StatusNames,
+			StatusNames: StatusNames.map(x => x.substring(0, 1)),
 			AccountTypeListName,
 			Location,
 			Latitude,

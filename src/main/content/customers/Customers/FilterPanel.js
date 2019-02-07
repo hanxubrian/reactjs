@@ -650,16 +650,15 @@ class FilterPanel extends Component {
 
 				}
 				this.setState({
-					filter: {
+					filters: {
 						...this.state.filter,
 						StatusNames: newStatusNames
 					}
 				})
-				this.props.setFilterCustomerStatuses(newStatusNames)
 				console.log("newStatusNames", newStatusNames)
 				clearTimeout(this.customerStatusFiltertimer)
 				this.customerStatusFiltertimer = setTimeout(
-					this.fetchCustomersByStatus,
+					this.props.setFilterCustomerStatuses,
 					WAIT_INTERVAL,
 					newStatusNames)
 				return
@@ -674,18 +673,6 @@ class FilterPanel extends Component {
 		});
 
 	};
-	fetchCustomersByStatus = (newStatusNames) => {
-		this.props.getCustomers(
-			this.props.regionId,
-			this.props.statusId,
-			newStatusNames.length >= 6 ? [] : newStatusNames.map(x => x.substring(0, 1)),
-			this.props.filters.AccountTypeListName,
-			this.props.location,
-			this.props.latitude,
-			this.props.longitude,
-			this.props.searchText,
-		);
-	}
 	onLocationFilter = (name, value) => {
 
 		let payload = {
@@ -1594,7 +1581,7 @@ class FilterPanel extends Component {
 												<FormControlLabel key={index}
 													control={
 														<Switch
-															checked={this.state.filters.StatusNames.indexOf(x) > -1 || this.state.filters.StatusNames.indexOf(x.substring(0,1)) > -1}
+															checked={this.state.filters.StatusNames.indexOf(x) > -1}
 															onChange={this.handleChange('filters.StatusNames')}
 															value={x}
 														/>

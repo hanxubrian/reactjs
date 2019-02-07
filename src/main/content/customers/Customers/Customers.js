@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-
+import _ from "lodash";
 // core components
 import { Icon, IconButton, Fab, Typography, Toolbar, CircularProgress, Menu, MenuItem, Checkbox, FormControlLabel, Tooltip, Button } from '@material-ui/core';
 import { green } from '@material-ui/core/colors';
@@ -419,6 +419,17 @@ class Customers extends Component {
 		// 	// this.setState({ loading: false });
 		// 	this.getCustomersFromStatus(nextProps.customers);
 		// }
+		if (!_.isEqual(nextProps.filters, this.props.filters)) {
+			this.props.getCustomers(
+				nextProps.regionId,
+				nextProps.statusId,
+				nextProps.filters.StatusNames,
+				nextProps.filters.AccountTypeListName,
+				nextProps.location,
+				nextProps.latitude,
+				nextProps.longitude,
+				nextProps.searchText);
+		}
 	}
 
 

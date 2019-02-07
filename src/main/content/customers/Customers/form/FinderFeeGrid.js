@@ -57,6 +57,8 @@ import {
 	SearchState,
 } from '@devexpress/dx-react-grid';
 
+import { CustomizedDxGridSelectionPanel } from "./../../../common/CustomizedDxGridSelectionPanel";
+
 import {
 	Grid,
 	Table,
@@ -95,11 +97,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 
 import Spinner from 'react-spinner-material';
 import { getOverlappingDaysInIntervals } from 'date-fns';
-import CustomerSearchBar from './../CustomerSearchBar';
-import { getCustomers } from '../../../../../store/actions';
 
-import FinderFeePanelModalDialog from './FinderFeePanelModalDialog';
-import FinderFeeGrid from './FinderFeeGrid';
 
 // function Marker({ text }) {
 // 	return (
@@ -524,7 +522,7 @@ const MapWithAMarkerClusterer2 = compose(
 	</GoogleMap>
 );
 
-class FinderFeePanel extends Component {
+class FinderFeeGrid extends Component {
 
 	constructor(props) {
 		super(props);
@@ -1165,11 +1163,6 @@ class FinderFeePanel extends Component {
 			/>
 		);
 	};
-	onClickAddFindersFee = () => {
-		this.props.setCustomerFormFindersFeesDialogPayload({
-			open: true,
-		})
-	}
 
 	render() {
 		const {
@@ -1212,22 +1205,230 @@ class FinderFeePanel extends Component {
 		return (
 			<Fragment>
 				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
-					<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-						<Button
-							variant="contained"
-							color="primary"
-							className={classNames(classes.button, "pr-24 pl-24 mb-6")}
-							onClick={this.onClickAddFindersFee}
-						> Add Finders Fee... </Button>
-					</div>
 
-					<div className={classNames("flex flex-col")}
-					// style={{ height: "calc(100% - 110px)" }}
-					// style={{ overflowY: 'scroll' }}
-					>
-						<FinderFeeGrid />
-					</div>
-					<FinderFeePanelModalDialog />
+					{/* Mapview */}
+					{mapViewState && (<div className={classNames("w-full h-full p-1")} style={{ borderColor: 'lightgray', borderWidth: '1px' }}>
+						{/* <div className="w-full h-full"> */}
+						{/* <GoogleMap
+								bootstrapURLKeys={{
+									key: "AIzaSyChEVMf9jz-1iVYHVPQOS8sP2RSsKOsyeA" //process.env.REACT_APP_MAP_KEY
+								}}
+								defaultZoom={12}
+								defaultCenter={[this.state.current_lat, this.state.current_long]}
+							>
+								{
+									this.props.pins.map((x, index) => (
+										<Marker
+											key={index}
+											text={x.text}
+											lat={x.lat}
+											lng={x.lng}
+										/>
+									))
+								}
+							</GoogleMap> */}
+
+						{gmapVisible && (<MapWithAMarkerClusterer
+							markers={pins}
+							center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
+						/>)}
+
+						{!gmapVisible && (<MapWithAMarkerClusterer2
+							markers={pins2}
+							center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
+						/>)}
+
+						{/* </div> */}
+					</div>)}
+
+					{/* Girdview */}
+					{!mapViewState &&
+						(
+							<div className={classNames("flex flex-col")}
+							// style={{ height: "calc(100% - 110px)" }}
+							// style={{ overflowY: 'scroll' }}
+							>
+								<Grid
+									// rootComponent={GridRootComponent}
+									rows={rows}
+									columns={tableColumnExtensions}
+								>
+									<DragDropProvider />
+									<PagingState
+										defaultCurrentPage={0}
+										// currentPage={currentPage}
+										// onCurrentPageChange={this.changeCurrentPage}
+										// pageSize={pageSize}
+										// onPageSizeChange={this.changePageSize}
+										defaultPageSize={20}
+									/>
+
+									<PagingPanel pageSizes={pageSizes} />
+
+									<SelectionState
+										selection={selection}
+										onSelectionChange={this.changeSelection}
+									/>
+									{/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
+									<IntegratedSelection />
+
+									<SortingState
+										sorting={sorting}
+										onSortingChange={this.changeSorting}
+										columnExtensions={tableColumnExtensions}
+									/>
+									<IntegratedSorting />
+
+									<IntegratedPaging />
+
+									<SearchState
+										// defaultValue="Paris"
+										value={searchValue}
+										onValueChange={this.changeSearchValue}
+									/>
+
+									<FilteringState
+										defaultFilters={[]}
+										columnExtensions={tableColumnExtensions}
+									/>
+									<IntegratedFiltering />
+
+									<EditingState
+										columnExtensions={editingColumnExtensions}
+										onCommitChanges={this.commitChanges}
+									/>
+
+
+
+									{/* <GroupingState
+										grouping={grouping}
+										onGroupingChange={this.changeGrouping}
+									// defaultGrouping={[]}
+									// columnExtensions={tableColumnExtensions}
+									/>
+									<IntegratedGrouping /> */}
+
+									{/* <BooleanTypeProvider
+									for={booleanColumns}
+								/> */}
+
+									<CurrencyTypeProvider
+										for={currencyColumns}
+									// availableFilterOperations={amountFilterOperations}
+									// editorComponent={AmountEditor}
+									/>
+
+									<PhoneNumberTypeProvider
+										for={phoneNumberColumns}
+									// availableFilterOperations={amountFilterOperations}
+									// editorComponent={AmountEditor}
+									/>
+									{/* <DateTypeProvider
+									for={dateColumns}
+								/> */}
+
+									<VirtualTable height="auto" rowComponent={this.TableRow} />
+
+									{/* <Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} rowComponent={TableRow} /> */}
+									{/* <Table rowComponent={this.TableRow} /> */}
+
+									<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
+
+									{/* showGroupingControls */}
+
+
+									{/* <TableFixedColumns
+									leftColumns={leftColumns}
+									rightColumns={rightColumns}
+								/> */}
+
+									{/* <TableSelection showSelectAll selectByRowClick highlightRow /> */}
+									<TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
+
+									<TableHeaderRow showSortingControls />
+
+									{/* <TableEditRow /> */}
+									{/* <TableEditColumn
+										// showAddCommand
+										showEditCommand
+										showDeleteCommand
+										commandComponent={Command}
+									/>
+									<Getter
+										name="tableColumns"
+										computed={({ tableColumns }) => {
+											// debugger
+											const result = [
+												...tableColumns.filter(c => c.type !== TableEditColumn.COLUMN_TYPE),
+												{ key: 'editCommand', type: TableEditColumn.COLUMN_TYPE, width: 140 }
+											];
+											return result;
+										}
+										}
+									/> */}
+
+									{/* <TableColumnReordering
+										defaultOrder={tableColumnExtensions.map(x => x.columnName)}
+									/> */}
+									{/* Column Visibility */}
+									{/* Disable Column Visibility Toggling */}
+									{/* <TableColumnVisibility
+										defaultHiddenColumnNames={[]}
+										columnExtensions={tableColumnExtensions}
+									/> */}
+									{/* <Toolbar /> */}
+									{/* <SearchPanel /> */}
+									{/* Column Visibility */}
+									{/* <ColumnChooser /> */}
+
+									{/* {filterState && (
+										<TableFilterRow
+											showFilterSelector
+											iconComponent={FilterIcon}
+										// messages={{ month: 'Month equals' }}
+										/>
+									)} */}
+
+									{/* <TableGroupRow /> */}
+									{/* <GroupingPanel showSortingControls showGroupingControls /> */}
+
+									{/* <div
+									className={classNames(classes.layoutTable, "flex flex-row")}
+									style={{ justifyContent: "space-between" }}
+								>
+									<span className={"p-6"}>
+										Rows Selected: <strong>{selection.length}</strong>
+									</span>
+
+									<span className={"p-6"}>
+										Total Rows: <strong>{rows.length}</strong>
+									</span>
+								</div> */}
+
+									<Template
+										name="tableRow"
+										predicate={({ tableRow }) => tableRow.type === 'data'}
+									>
+										{params => (
+											<TemplateConnector>
+												{({ selection }, { toggleSelection }) => (
+													<this.TableRow
+														{...params}
+														selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
+														onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
+													/>
+												)}
+											</TemplateConnector>
+										)}
+									</Template>
+
+									<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
+
+								</Grid>
+							</div>
+
+						)
+					}
 				</div>
 			</Fragment>
 		)
@@ -1247,8 +1448,6 @@ function mapDispatchToProps(dispatch) {
 		openNewCustomerForm: Actions.openNewCustomerForm,
 
 		getCustomer: Actions.getCustomer,
-		setCustomerFormFindersFeesDialogPayload: Actions.setCustomerFormFindersFeesDialogPayload,
-
 	}, dispatch);
 }
 
@@ -1268,5 +1467,5 @@ function mapStateToProps({ customers, auth }) {
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(FinderFeePanel)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(FinderFeeGrid)));
 
