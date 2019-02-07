@@ -558,8 +558,8 @@ class FinderFeeGrid extends Component {
 			tableColumnExtensions: [
 				{
 					title: "FF No.",
-					name: "FFNo",
-					columnName: "FFNo",
+					name: "ff_seq",
+					columnName: "ff_seq",
 					width: 80,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -578,8 +578,8 @@ class FinderFeeGrid extends Component {
 				},
 				{
 					title: "Payment No.",
-					name: "PaymentNo",
-					columnName: "PaymentNo",
+					name: "ff_pybill",
+					columnName: "ff_pybill",
 					width: 150,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
@@ -588,8 +588,8 @@ class FinderFeeGrid extends Component {
 				},
 				{
 					title: "Total #",
-					name: "TotalNo",
-					columnName: "TotalNo",
+					name: "ff_pytotl",
+					columnName: "ff_pytotl",
 					width: 120,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
