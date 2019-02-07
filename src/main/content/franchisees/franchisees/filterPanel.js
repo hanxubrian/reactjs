@@ -174,7 +174,23 @@ class FilterPanel extends Component {
     }
     componentWillReceiveProps(nextProps){
        if(nextProps.franchiseesForm.props.open === false){
-        this.initialCloseState();
+           this.initialCloseState();
+       }
+       if(nextProps.franchiseesForm.props.open === true){
+        this.setState({
+            franchiseeStatus: this.props.franchiseeStatus,
+            stateList: this.props.getFranchiseeStateList(this.props.regionId),
+            AddressLine1: this.props.insertPayload.AddressLine1,
+            AddressLine2: this.props.insertPayload.AddressLine2,
+            Name: this.props.insertPayload.Name,
+            Phone1: this.props.insertPayload.Phone1,
+            Phone2: this.props.insertPayload.Phone2,
+            County: this.props.insertPayload.County,
+            Zip: this.props.insertPayload.Zip,
+            City: this.props.insertPayload.City,
+            State: this.props.insertPayload.State,
+            Email: this.props.insertPayload.Email
+         });
        }
     }
 

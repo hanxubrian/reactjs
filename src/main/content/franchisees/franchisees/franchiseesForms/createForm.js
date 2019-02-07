@@ -695,17 +695,16 @@ class FranchiseesCreateForm extends Component {
         this.initCloseState();
     };
 
-    createFranchiseeForm = () => {
+    createFranchiseeForm = async() => {
         if(this.props.franchiseesForm.type ==="new"){
-            this.props.createFranchisee(this.props.regionId,this.props.insertPayload);
-            //this.props.closeCreateFranchisees();
-            this.props.getFranchisees(this.props.regionId);
-            this.initCloseState();
+            await this.props.createFranchisee(this.props.regionId,this.props.insertPayload);
+            await this.props.getFranchisees(this.props.regionId);
+            await this.initCloseState();
         }
         if(this.props.franchiseesForm.type ==="edit"){
-            this.props.updateFranchisees(this.props.insertPayload._id , this.props.regionId, this.props.insertPayload);
-            this.props.getFranchisees(this.props.regionId);
-            this.initCloseState();
+            await this.props.updateFranchisees(this.props.insertPayload._id , this.props.regionId, this.props.insertPayload);
+            await this.props.getFranchisees(this.props.regionId);
+            await this.initCloseState();
         }
     };
 

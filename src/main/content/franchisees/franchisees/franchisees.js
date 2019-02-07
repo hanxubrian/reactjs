@@ -553,14 +553,10 @@ class Franchisees extends Component {
         }
     };
 
-    removeFranchisees = ()=> {
-        if(this.state.selection.length===0){
-            alert("Please choose franchisee(s) to delete");
-            return;
-        }
+    removeFranchisees = async(id)=> {        
         if (window.confirm("Do you really want to remove the selected franchisee(s)")) {
-            this.props.deleteFranchisees(this.state.selection, this.props.franchisees);
-            this.setState({selection: [], selectAll: false})
+            await this.props.deleteFranchisees(id,this.props.regionId, this.props.insertPayload);
+            await this.props.getFranchisees(this.props.regionId);
         }
     };
 
@@ -1158,20 +1154,12 @@ class Franchisees extends Component {
                                                     width : 150,
                                                     className: classNames("flex items-center  justify-center p-12-impor"),
                                                     Cell  : row =>{
-                                                        console.log('row=', row);
                                                         return (
                                                         <div className="flex items-center actions ">
                                                             <IconButton
                                                                 onClick={(ev) => {
                                                                     ev.stopPropagation();
-                                                                    if (window.confirm("Do you really want to remove this franchisee")) {
-                                                                        this.props.deleteFranchisees(row.original.Id,this.props.regionId);
-                                                                        if(this.state.selection.length>0){
-                                                                            _.remove(this.state.temp, function(id) {
-                                                                                return id === row.original.Id;
-                                                                            });
-                                                                        }
-                                                                    }
+                                                                    this.removeFranchisees(row.original.Id);
                                                                 }}
                                                             >
                                                                 <Icon>delete</Icon>
