@@ -46,7 +46,7 @@ const initialState = {
 	bGetCustomerStart: false,
 
 	filters: {
-		StatusNames: [],
+		StatusNames: ["Active"],
 		AccountTypeListName: "",
 	}
 };
