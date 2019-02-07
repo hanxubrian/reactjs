@@ -251,7 +251,6 @@ export function addInvoice(regionId, data)
 }
 
 export function updateInvoiceLine(data) {
-    console.log('data=', data);
     return {
         type: UPDATE_INVOICE_LINE,
         payload: data

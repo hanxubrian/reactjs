@@ -531,7 +531,6 @@ class InvoiceLineTable extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.state.data!==null && prevState.data!==this.state.data) {
-            console.log('data=', this.state.data);
             let data = this.state.data;
             if(!this.props.bSkip) {
                 if(data.length>0 && this.props.invoiceForm.data.line.length>0){
