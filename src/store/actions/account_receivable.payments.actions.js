@@ -25,6 +25,8 @@ export const GET_PAYMENT_HISTORY_FAILED = "[A.R.Payments] GET_PAYMENT_HISTORY_FA
 export const GET_PAYMENT_HISTORY_START = "[A.R.Payments] GET_PAYMENT_HISTORY_START";
 export const SET_PAYMENT_HISTORY_FILTER_PAYMENT_TYPES = "[A.R.Payments] SET_PAYMENT_HISTORY_FILTER_PAYMENT_TYPES";
 
+export const FILTER_PAYMENT_START_DATE = "[A.R.Payments] FILTER_PAYMENT_START_DATE";
+export const FILTER_PAYMENT_END_DATE = "[A.R.Payments] FILTER_PAYMENT_END_DATE";
 
 
 export function getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status) {
@@ -39,12 +41,10 @@ export function getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, Sea
 
 		(async () => {
 			let paymentsList = await paymentService.getAccountReceivablePaymentsList(RegionId, FromDate, ToDate, SearchText, Status);
-			if (!paymentsList.IsSuccess) {
-				dispatch({
-					type: FAILED_GET_ALL_RECEIVABLE_PAYMENTS,
-					payload: paymentsList.IsSuccess ? "Empty Data" : paymentsList.message
-				});
-			}
+			dispatch({
+				type: FAILED_GET_ALL_RECEIVABLE_PAYMENTS,
+				payload: paymentsList.IsSuccess ? "Empty Data" : paymentsList.message
+			});
 			dispatch({
 				type: GET_ALL_RECEIVABLE_PAYMENTS,
 				payload: paymentsList
@@ -62,12 +62,10 @@ export function getPaymentHistory(regionId, fromDate, toDate, status, paymentTyp
 
 		(async () => {
 			let res = await paymentService.getPaymentHistory(regionId, fromDate, toDate, status, paymentTypes);
-			if (!res.IsSuccess) {
-				dispatch({
-					type: GET_PAYMENT_HISTORY_FAILED,
-					payload: res.message
-				});
-			}
+			dispatch({
+				type: GET_PAYMENT_HISTORY_FAILED,
+				payload: res.IsSuccess ? "Empty Data" : res.message
+			});
 			dispatch({
 				type: GET_PAYMENT_HISTORY,
 				payload: res
@@ -218,5 +216,13 @@ export function setPaymentHistoryFilterPaymentTypes(types) {
 	return {
 		type: SET_PAYMENT_HISTORY_FILTER_PAYMENT_TYPES,
 		payload: types
+	}
+}
+export function updateFilterDate(key, date) {
+	// FILTER_PAYMENT_START_DATE
+	// FILTER_PAYMENT_END_DATE
+	return {
+		type: key,
+		payload: date
 	}
 }

@@ -371,7 +371,14 @@ const EditingCellComponent = withStyles(editing_cell_styles, { name: "EditingCel
 	EditingCellComponentBase
 );
 
-
+const CUSTOMER_STATUS_LIST = [
+	"Active",
+	"Cancelled",
+	"Inactive",
+	"Suspended",
+	"Transferred",
+	"Unknown",
+]
 const WAIT_INTERVAL = 1000
 const ENTER_KEY = 13
 
@@ -627,14 +634,7 @@ class FilterPanel extends Component {
 				let newStatusNames = [...this.state.filters.StatusNames]
 				if (checked) {
 					if (value === "All") {
-						newStatusNames = [
-							"Active",
-							"Cancelled",
-							"Inactive",
-							"Suspended",
-							"Transferred",
-							"Unknown",
-						]
+						newStatusNames = CUSTOMER_STATUS_LIST
 					} else {
 						newStatusNames = [...new Set([...newStatusNames, value])]
 					}
@@ -656,7 +656,7 @@ class FilterPanel extends Component {
 					}
 				})
 				this.props.setFilterCustomerStatuses(newStatusNames)
-
+				console.log("newStatusNames", newStatusNames)
 				clearTimeout(this.customerStatusFiltertimer)
 				this.customerStatusFiltertimer = setTimeout(
 					this.fetchCustomersByStatus,
@@ -988,6 +988,7 @@ class FilterPanel extends Component {
 				return x.Text
 			}).sort();
 		}
+		customerStatusListTexts = CUSTOMER_STATUS_LIST
 
 
 		let accountTypeTexts = []
@@ -1580,7 +1581,7 @@ class FilterPanel extends Component {
 									<FormControlLabel
 										control={
 											<Switch
-												checked={this.state.filters.StatusNames.length >= 6}
+												checked={this.state.filters.StatusNames.length >= customerStatusListTexts.length}
 												onChange={this.handleChange('filters.StatusNames')}
 												value="All"
 											/>
@@ -1588,15 +1589,7 @@ class FilterPanel extends Component {
 										label="All"
 									/>
 									{
-										// customerStatusListTexts
-										[
-											"Active",
-											"Cancelled",
-											"Inactive",
-											"Suspended",
-											"Transferred",
-											"Unknown",
-										]
+										customerStatusListTexts
 											.map((x, index) => (
 												<FormControlLabel key={index}
 													control={

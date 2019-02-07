@@ -1049,7 +1049,7 @@ class PaymentsListContent extends Component {
 	//
 	// table cell invoice number button formatter
 	//
-	InvoiceNoButtonFormatter = ({ value }) => (<Button onClick={(ev) => this.onClickInvoiceNo(ev, value)}>{value}</Button>);
+	InvoiceNoButtonFormatter = ({ value }) => (<Button style={{ background: '#505050' }} onClick={(ev) => this.onClickInvoiceNo(ev, value)}>{value}</Button>);
 	InvoiceNoButtonTypeProvider = props => (
 		<DataTypeProvider
 			formatterComponent={this.InvoiceNoButtonFormatter}

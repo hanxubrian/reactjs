@@ -197,6 +197,32 @@ const accountReceivablePayments = function (state = initialState, action) {
 					paymentHistoryTypes: action.payload,
 				}
 			}
+		//
+		// filter start date
+		//
+		case Actions.FILTER_PAYMENT_START_DATE:
+			return {
+				...state,
+				filterParam: {
+					...state.filterParam,
+					fromDate: action.payload,
+				}
+			}
+		//
+		// filter start date
+		//
+		case Actions.FILTER_PAYMENT_END_DATE:
+			return {
+				...state,
+				filterParam: {
+					...state.filterParam,
+					toDate: action.payload,
+				}
+			}
+
+		//
+		// INITIATE STATES WHEN LOGOUT
+		//
 		case UserActions.USER_LOGGED_OUT:
 			return {
 				...initialState
