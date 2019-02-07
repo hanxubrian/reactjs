@@ -169,7 +169,8 @@ const styles = theme => ({
     chattogglebtn:{
         position: 'fixed',
         bottom: '5px',
-        right: '90px',
+        // right: '90px',
+        right: '15%',
         zIndex: 999999,
     },
     chattogglebtnpro:{
@@ -382,7 +383,7 @@ class MainToolbar extends Component {
         //     console.log("######MSG############this.props.login.UserId.toString()",this.props.login.UserId.toString());
         // }
         //
-
+        console.log("+++++++++this.state.pusherMSG",this.state.pusherMSG);
         if(this.props.billstatus !== prevProps.billstatus){
             if(this.props.billstatus === 200){
                 this.billrunsuccessmesssage();

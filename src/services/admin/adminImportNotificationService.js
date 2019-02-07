@@ -13,10 +13,11 @@ const BASE_MONGO_API_URL = 'https://apifmsplusplus_mongo.jkdev.com';
 
 class adminImportNotificationService {
 
-    getImportResultFromRegion = (RegionId) => {
+    getImportResultFromRegion = (UserId,RegionId) => {
         const Data = {
-            'overWrite': true,
-            'regionIds' : [3],
+            'overWrite'     : true,
+            'regionIds'     : [3],
+            'userId'        : UserId,
         };
         return new Promise((resolve, reject) => {
 
