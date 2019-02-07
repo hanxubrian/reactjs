@@ -330,7 +330,7 @@ class LeaseForm extends Component {
         const escapedValue = escapeRegexCharacters(value.trim());
         const regex = new RegExp(escapedValue, 'i');
         if(this.props.franchisees!==null) {
-            let suggestions = this.props.franchisees.Data.Region[0].Franchisees.filter(f => regex.test(f.Name));
+            let suggestions = this.props.franchisees.Data.Region[0].Franchisees.filter(f => regex.test(f.Name)|| regex.test(f.Number));
             if(this.state.bFranchiseeNotFound)
                 return suggestions;
 
