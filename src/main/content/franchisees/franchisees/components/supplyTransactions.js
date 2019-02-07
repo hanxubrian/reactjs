@@ -50,8 +50,8 @@ const styles = theme => ({
         },
         '& tr th': {
             padding: '0 8px',
-            borderBottom: '2px solid black',
-            borderTop: '2px solid black',
+            borderBottom: `2px solid ${theme.palette.text.primary}`,
+            borderTop: `2px solid ${theme.palette.text.primary}`,
         },
         '& tr th:nth-child(3)': {
             width: '100%'
@@ -70,7 +70,7 @@ const styles = theme => ({
             width: '100%',
         },
         '& tbody tr:last-child td': {
-            borderBottom: '2px solid black',
+            borderBottom: `2px solid ${theme.palette.text.primary}`,
         }
     },
     tableFootRow: {

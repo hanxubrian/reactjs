@@ -43,8 +43,8 @@ const styles = theme => ({
             display: 'none'
      },
      '& th':{
-         borderBottom: '2px solid black',
-         borderTop: '2px solid black',
+         borderBottom: `2px solid ${theme.palette.text.primary}`,
+         borderTop: `2px solid ${theme.palette.text.primary}`,
      }
     },
     tableTheadRow: {
@@ -77,7 +77,7 @@ const styles = theme => ({
             width: '100%',
         },
         '& tbody tr:last-child td': {
-            borderBottom: '2px solid black',
+            borderBottom: `2px solid ${theme.palette.text.primary}`,
         }
 
     },
