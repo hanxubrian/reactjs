@@ -23,7 +23,7 @@ import JanikingPagination from './../../../../Commons/JanikingPagination';
 
 import {bindActionCreators} from "redux";
 import {withStyles, Checkbox} from "@material-ui/core";
-import {withRouter} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 
 // for store
 import connect from "react-redux/es/connect/connect";
@@ -487,7 +487,7 @@ class Franchisees extends Component {
            console.log("detail",nextProps.detailPayload);
         }
         if (this.props.createPayload !== nextProps.createPayload) {
-            console.log("CreatePayload", nextProps.createPayload); 
+            console.log("CreatePayload", nextProps.createPayload);
         }
 
     }
@@ -767,7 +767,7 @@ class Franchisees extends Component {
         })];
     }
 
-    
+
     handleEditRowFranchisee(id,regionId){
         this.props.getFranchiseeDetail(id,regionId);
     }
@@ -777,6 +777,7 @@ class Franchisees extends Component {
         const { classes,toggleFilterPanelFranchisees,showCreteFranchisees, toggleSummaryPanelFranchisees, createFranchisees, filterStateFranchisees, summaryStateFranchisees, toggleFranchiseeMapView, mapViewState} = this.props;
         const { toggleSelection, toggleAll, isSelected} = this;
         const { selection, anchorEl,pins, pins2,gmapVisible } = this.state;
+        let period = this.props.reportPeriod.split('/');
         return (
             <React.Fragment >
               <FusePageCustomSidebarScroll
@@ -1081,7 +1082,6 @@ class Franchisees extends Component {
                                                 {
                                                     //alert('ok');
                                                     // openEditContactDialog(rowInfo.original);
-                                                    this.props.history.push(`/franchisees/reports_new/${this.props.regionId}/${period[1]}/${period[0]}/${rowInfo.original.Number}`);
                                                 }
                                             }
                                         }
@@ -1157,7 +1157,9 @@ class Franchisees extends Component {
                                                     Header: "Actions",
                                                     width : 150,
                                                     className: classNames("flex items-center  justify-center p-12-impor"),
-                                                    Cell  : row => (
+                                                    Cell  : row =>{
+                                                        console.log('row=', row);
+                                                        return (
                                                         <div className="flex items-center actions ">
                                                             <IconButton
                                                                 onClick={(ev) => {
@@ -1181,8 +1183,14 @@ class Franchisees extends Component {
                                                             >
                                                                 <Icon>edit</Icon>
                                                             </IconButton>
+                                                            <IconButton
+                                                                to = {`/franchisees/reports_new/${this.props.regionId}/${period[1]}/${period[0]}/${row.original.Number}`}
+                                                                component={Link}
+                                                            >
+                                                                <Icon>visibility</Icon>
+                                                            </IconButton>
                                                         </div>
-                                                    )
+                                                    )}
                                                 }
                                             ]
                                         }
