@@ -634,6 +634,51 @@ class FranchiseesCreateForm extends Component {
         AgreementTerm: 0
     };
 
+    initCloseState = () => {
+        this.setState({
+            labelWidth: 0,
+            selectedWork: "",
+            activeStep: 0,
+            completed: new Set(),
+            termsYrs: '',
+            skipped: new Set(),
+            Print1099: true,
+            chargeBack: false,
+            bbpAdministration: false,
+            accountRebate: false,
+            generateReport: false,
+            StateValue: '',
+            defaultPlanType: 0,
+            selectedSignDate: new Date(),
+            selectedRenewDate: new Date(),
+            selectedExpDate: new Date(),
+            planAmount: 0,
+            ibAmount: 0,
+            downPayment: 0,
+            interest: 0,
+            noOfPayments: 0,
+            daysToFullfill: 0,
+            paymentAmount: 0,
+            documentsList: [],
+            franchiseeFees: [],
+            LegalName : "",
+            LegalAddressLine1: "",
+            LegalAddressLine2: "",
+            LegalCity: "",
+            LegalState: "",
+            LegalZip: "",
+            LegalCounty: "",
+            LegalIdNum: 0,
+            LegalId: "ein",
+            NameOn1099: "",
+            AllowBppAdminFee: true,
+            AllowChargeBack: true,
+            AllowAccountRebate: true,
+            AllowGenerateReport: true,
+            AgreementTerm: 0
+        });
+    }
+
     constructor (props){
         super(props);
         props.getFranchiseeFormPlanType(props.regionId);
@@ -647,17 +692,20 @@ class FranchiseesCreateForm extends Component {
     };
     closeComposeForm = () => {
         this.type === 'create' ? this.props.closeEditFranchisees() : this.props.closeCreateFranchisees();
+        this.initCloseState();
     };
 
     createFranchiseeForm = () => {
-        if(this.props.franchiseesForm.type ==="create"){
+        if(this.props.franchiseesForm.type ==="new"){
             this.props.createFranchisee(this.props.regionId,this.props.insertPayload);
             //this.props.closeCreateFranchisees();
             this.props.getFranchisees(this.props.regionId);
+            this.initCloseState();
         }
         if(this.props.franchiseesForm.type ==="edit"){
             this.props.updateFranchisees(this.props.insertPayload._id , this.props.regionId, this.props.insertPayload);
             this.props.getFranchisees(this.props.regionId);
+            this.initCloseState();
         }
     };
 

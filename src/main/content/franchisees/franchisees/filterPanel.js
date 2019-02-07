@@ -120,7 +120,8 @@ class FilterPanel extends Component {
         County: "",
         Phone1: '+1(  )    -    ',
         Phone2: '+1(  )    -    ',
-        Email: ""
+        Email: "",
+        Name: ""
     };
 
     constructor(props){
@@ -170,6 +171,27 @@ class FilterPanel extends Component {
     componentWillUnmount()
     {
         document.removeEventListener('keydown', this.handleDocumentKeyDown);
+    }
+    componentWillReceiveProps(nextProps){
+       if(nextProps.franchiseesForm.props.open === false){
+        this.initialCloseState();
+       }
+    }
+
+    initialCloseState = () => {
+        this.setState({
+            Name: '',
+            State: '',
+            stateList: [],
+            AddressLine1: '',
+            AddressLine2: '',
+            City: '',
+            Zip: '',
+            County: '',
+            Phone1: '+1(  )    -    ',
+            Phone2: '+1(  )    -    ',
+            Email: ''
+        });
     }
 
     handleDocumentKeyDown = event => {

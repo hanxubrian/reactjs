@@ -199,6 +199,7 @@ const franchisees = function(state = initialState, action) {
                     },
                     data : null
                 },
+                bOpenedFilterPanelFranchisees: true
             };
         }
         case Actions.UPDATE_FRANCHISEE:
