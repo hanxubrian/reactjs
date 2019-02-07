@@ -98,7 +98,6 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import Spinner from 'react-spinner-material';
 import { getOverlappingDaysInIntervals } from 'date-fns';
 import CustomerSearchBar from './CustomerSearchBar';
-import { getCustomers } from '../../../../store/actions';
 
 // function Marker({ text }) {
 // 	return (

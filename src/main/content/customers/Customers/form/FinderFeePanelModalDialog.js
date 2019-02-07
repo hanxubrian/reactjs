@@ -838,7 +838,15 @@ class FinderFeePanelModalDialog extends React.Component {
 											fullWidth
 										>
 											{
-												["Single Ten."].map((x, index) =>
+												[
+													"Single Ten.",
+													"Variable 5.00%",
+													"Seasonal",
+													"Apartment",
+													"Public Event",
+													"Variable 2.5%",
+													"National Account",
+											].map((x, index) =>
 													<MenuItem key={index} value={x}>{x}</MenuItem>
 												)
 											}
