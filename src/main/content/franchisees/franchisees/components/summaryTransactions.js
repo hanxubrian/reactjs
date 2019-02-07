@@ -148,7 +148,7 @@ class SummaryTransactons extends Component {
         const aDeductions2 =["FRANCHISE NOTE PAYMENT2", "ACCT_FEE_REB_CUR", "ACCT_FEE_REB_BAL"];
         const aDeductions3 =["SUBTOTAL_REG_DEDS"];
         const aDeductions4 =["ADVERTISING_FEE", "TOTAL_LEASES", "BUSINESS_PROT", "BPP_ADMIN", "CLIENT_SALES_TAX_BOT", "CHARGEBACKS", "PAGERS",
-            "PAGERS2", "REGULAR MISCELLANEOUS", "SPECIAL_MISC","DUE_TO_FRAN"];
+            "PAGERS2", "REGULAR_MISCELLANEOUS", "SPECIAL_MISC","DUE_TO_FRAN"];
         const aDeductions5 =["SUBTOTAL_SPEC_DEDS"];
         const aDeductions6 =["TOTAL_DEDS"];
         const aDeductions7 =["ChildSupport"];
