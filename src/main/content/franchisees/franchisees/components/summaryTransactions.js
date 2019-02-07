@@ -142,19 +142,50 @@ class SummaryTransactons extends Component {
         //     SUMMARY_PAGE[0].CLIENT_SUPPLIES[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE[0]];
         // const aBillings1 =[SUMMARY_PAGE[0].SUBTOTAL[0], SUMMARY_PAGE[0].CLIENT_SALES_TAX[0]];
         const aBillings2 =[SUMMARY_PAGE[0].TOTAL_MON_REV[0]];
+        const aBillings3 = [SUMMARY_PAGE[0].CLIENT_SALES_TAX_BOT[0]];
         const aDeductions0= [SUMMARY_PAGE[0].ROYALTY[0], SUMMARY_PAGE[0].ACCT_FEE[0],SUMMARY_PAGE[0].TECH_FEE[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE_COMM[0],SUMMARY_PAGE[0].FRAN_NOTE_PYMT[0]];
-        const aDeductions1 = [ "FINDERS_FEES", "FRANCHISE SUPPLIES", "REGULAR MISCELLANEOUS"];
+        const aDeductions1 = [ "FINDERS_FEES", "FRANCHISE SUPPLIES"];
         const aDeductions2 =["FRANCHISE NOTE PAYMENT2", "ACCT_FEE_REB_CUR", "ACCT_FEE_REB_BAL"];
         const aDeductions3 =["SUBTOTAL_REG_DEDS"];
         const aDeductions4 =["ADVERTISING_FEE", "TOTAL_LEASES", "BUSINESS_PROT", "BPP_ADMIN", "CLIENT_SALES_TAX_BOT", "CHARGEBACKS", "PAGERS",
-            "PAGERS2", "SPECIAL_MISC","DUE_TO_FRAN"];
+            "PAGERS2", "REGULAR MISCELLANEOUS", "SPECIAL_MISC","DUE_TO_FRAN"];
         const aDeductions5 =["SUBTOTAL_SPEC_DEDS"];
         const aDeductions6 =["TOTAL_DEDS"];
 
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
-                <h2 style ={{color:'blue'}}>FRANCHISEE REVENUE:</h2>
+                <h2 style ={{color:'white'}}>FRANCHISEE REVENUES:</h2>
+
+                <table style={{width:'63%'}}>
+                    <tbody>
+
+                                <tr >
+                                    <td width="350">
+                                        <Typography variant="subtitle1">Regular Billing</Typography>
+                                    </td>
+                                    <td width ="" className="text-right">
+                                        $0.00
+                                    </td>
+                                </tr>
+
+                    {/* { aBillings2.map((b, index)=>{
+                            return (
+                                <tr key={index}>
+                                    <td width="350">
+                                        <Typography variant="subtitle1">{b.LABEL}</Typography>
+                                    </td>
+                                    <td width ="" className="text-right">
+                                        ${parseFloat(b.AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                    </td>
+                                </tr>
+                            )
+                        }
+                    )} */}
+
+                    </tbody>
+                </table>
+
                 <table style={{width:'90%'}}>
                     <tbody>
 
@@ -175,7 +206,37 @@ class SummaryTransactons extends Component {
                     </tbody>
                 </table>
 
-                <h2 className="pt-16" style ={{color:'blue'}}>FRANCHISEE DEDUCTIONS:</h2>
+                <table style={{width:'63%'}}>
+                    <tbody>
+
+                    { aBillings3.map((b, index)=>{
+                            return (
+                                <tr key={index}>
+                                    <td width="350">
+                                        <Typography variant="subtitle1">{b.LABEL}</Typography>
+                                    </td>
+                                    <td width ="" className="text-right">
+                                        ${parseFloat(b.AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                    </td>
+                                </tr>
+                            )
+                        }
+                    )}
+
+                                <tr >
+                                    <td width="350">
+                                        <Typography variant="subtitle1">Total Customer Invoice</Typography>
+                                    </td>
+                                    <td width ="" className="text-right">
+                                        $0.00
+                                    </td>
+                                </tr>
+
+
+                    </tbody>
+                </table>
+
+                <h2 className="pt-16" style ={{color:'white'}}>FRANCHISEE DEDUCTIONS:</h2>
 
                 <table className="">
                     <thead>
@@ -266,12 +327,12 @@ class SummaryTransactons extends Component {
                             return (
                                 <tr key={index}>
                                     <td>
-                                        <Typography variant="subtitle1">{b}</Typography>
+                                        <Typography variant="subtitle1">
+                                            {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
+                                        </Typography>
                                     </td>
                                     <td className="text-right">
-                                        ${SUMMARY_PAGE[0][b]!=null &&(parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}
-                                        {SUMMARY_PAGE[0][b] ==null &&(parseFloat(0).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))}
-
+                                    ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
                                         {/*${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }*/}
                                     </td>
                                 </tr>
@@ -349,6 +410,38 @@ class SummaryTransactons extends Component {
                     )}
                     </tbody>
                 </table>
+
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><h2 className="pt-16" style ={{color:'white'}}>DUE TO FRANCHISEE BEFORE CHARGEBACK:</h2></td>
+                            <td style={{width:'14%'}}> $0.00 </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table style={{width:'63%'}}>
+                    <tbody>
+                        <tr >
+                            <td width="350">
+                            <Typography variant="subtitle1">Chargeback</Typography>
+                            </td>
+                            <td width ="" className="text-right">
+                                $0.00
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><h2 className="pt-16" style ={{color:'white'}}>DUE TO FRANCHISEE:</h2></td>
+                            <td style={{width:'14%'}}> $0.00 </td>
+                        </tr>
+                    </tbody>
+                </table>
+
             </div>
         );
     }

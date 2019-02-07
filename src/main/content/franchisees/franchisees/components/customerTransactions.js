@@ -187,7 +187,7 @@ class CustomerTransactions extends Component {
             {name: "INV_NO", title: "Invoice #"},
             {name: "TRX_TYPE", title: "Type"},
             {name: "TRX_AMT", title: "Amount"},
-            {name: "TRX_TAX", title: "Tax"},
+            // {name: "TRX_TAX", title: "Tax"},
             {name: "TRX_TOT", title: "Total"},
         ];
 
