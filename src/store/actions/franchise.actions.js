@@ -30,6 +30,7 @@ export const UPDATE_FRANCHISEE_UPDATE_CHECKBOX = '[FRANCHISEES] UPDATE FRANCHISE
 export const CREATE_FRANCHISEE = '[FRANCHISEES] CREATE FRANCHISEE';
 export const UPDATE_FRANCHISEE = '[FRANCHISEES] UPDATE FRANCHISEE';
 export const DELETE_FRANCHISEE = '[FRANCHISEES] DELETE FRANCHISEE';
+export const GET_FRANCHISEE_DETAIL = '[FRANCHISEES] GET FRANCHISEE DETAIL';
 
 
 export function getFranchisees(regionId, statusId, location , latitude , longitude , searchtext) {
@@ -69,9 +70,22 @@ export function updateFranchisees(id,regionId,data) {
 
     return (dispatch) => {
         (async () => {
-            let franchiseesList = await franchiseesService.updateFranchisees(id,regionId,data);
+            let franchiseesList = await franchiseesService.updateFranchiseesList(id,regionId,data);
             dispatch({
                 type: UPDATE_FRANCHISEE,
+                payload: franchiseesList
+            });
+        })();
+    }
+}
+
+export function getFranchiseeDetail(id,regionId) {
+
+    return (dispatch) => {
+        (async () => {
+            let franchiseesList = await franchiseesService.getFranchiseesDetail(id,regionId);
+            dispatch({
+                type: GET_FRANCHISEE_DETAIL,
                 payload: franchiseesList
             });
         })();
@@ -162,19 +176,6 @@ export function toggleSummaryPanelFranchisees(){
     }
 }
 
-
-export function removeFranchisees(key, franchisees) {
-    return dispatch => {
-        const request = axios.post("/api/franchisees/remove", { id: key, franchisees: franchisees });
-
-        return request.then(response => {
-            return dispatch({
-                type: REMOVE_SELECTED_FRANCHISEES,
-                payload: response.data
-            });
-        });
-    };
-}
 
 export function showCreteFranchisees()
 {
@@ -277,3 +278,5 @@ export function selectLocation(location){
         Location: location
      }
 }
+
+

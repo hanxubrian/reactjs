@@ -265,10 +265,7 @@ class FranchiseesMaintenanceTable extends React.Component {
     };
     constructor(props)
     {
-        super(props);
-        this.setState({
-            insertPayload: props.insertPayload
-        })
+        super(props);        
     }
     handleRequestSort = (event, property) => {
         const orderBy = property;

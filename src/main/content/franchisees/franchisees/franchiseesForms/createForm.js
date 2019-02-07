@@ -143,8 +143,8 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="financeName"
                                 label="Name"
-                                onChange={franchiseeForm.handleAddressFormChange("Name")}
-                                value={franchiseeForm.state.Name}
+                                onChange={franchiseeForm.handleTextChange("LegalName")}
+                                value={franchiseeForm.state.LegalName}
                                 variant="outlined"
                                 inputProps={{
                                     maxLength:60
@@ -159,12 +159,12 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="financeAddress1"
                                 label="Address 1"
-                                onChange={franchiseeForm.handleAddressFormChange('AddressLine1')}
+                                onChange={franchiseeForm.handleTextChange('LegalAddressLine1')}
                                 variant="outlined"
                                 inputProps={{
                                     maxLength:100
                                 }}
-                                value={franchiseeForm.state.AddressLine1}
+                                value={franchiseeForm.state.LegalAddressLine1}
                                 className={classes.textField}
                                 style={{marginRight:'1%'}}
                                 margin="dense"
@@ -176,9 +176,9 @@ function getStepContent(franchiseeForm, step) {
                                 inputProps={{
                                     maxLength:100
                                 }}
-                                onChange={franchiseeForm.handleAddressFormChange('AddressLine2')}
+                                onChange={franchiseeForm.handleTextChange('LegalAddressLine2')}
                                 variant="outlined"
-                                value={franchiseeForm.state.AddressLine2}
+                                value={franchiseeForm.state.LegalAddressLine2}
                                 className={classes.textField}
                                 style={{marginLeft:'1%'}}
                                 margin="dense"
@@ -189,12 +189,12 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="outlined-city"
                                 label="City"
-                                onChange={franchiseeForm.handleAddressFormChange('City')}
+                                onChange={franchiseeForm.handleTextChange('LegalCity')}
                                 inputProps={{
                                     maxLength:100
                                 }}
                                 variant="outlined"
-                                value={franchiseeForm.state.City}
+                                value={franchiseeForm.state.LegalCity}
                                 className={classes.textField}
                                 margin="dense"
                                 style={{marginRight:'1%'}}
@@ -205,8 +205,8 @@ function getStepContent(franchiseeForm, step) {
                                 label="State"
                                 select
                                 className={classes.textField}
-                                value={franchiseeForm.state.State}
-                                onChange={franchiseeForm.handleAddressFormChange('State')}
+                                value={franchiseeForm.state.LegalState}
+                                onChange={franchiseeForm.handleTextChange('LegalState')}
                                 variant="outlined"
                                 margin="dense"
                                 style={{marginRight:'1%',marginLeft:'1%'}}
@@ -222,11 +222,11 @@ function getStepContent(franchiseeForm, step) {
                                 id="outlined-zip"
                                 label="Zip"
                                 variant="outlined"
-                                onChange={franchiseeForm.handleAddressFormChange('Zip')}
+                                onChange={franchiseeForm.handleTextChange('LegalZip')}
                                 inputProps={{
                                     maxLength:20
                                 }}
-                                value={franchiseeForm.state.Zip}
+                                value={franchiseeForm.state.LegalZip}
                                 className={classes.textField}
                                 margin="dense"
                                 style={{marginLeft:'1%'}}
@@ -237,24 +237,24 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="financeCounty"
                                 label="County"
-                                onChange={franchiseeForm.handleAddressFormChange('County')}
+                                onChange={franchiseeForm.handleTextChange('LegalCounty')}
                                 inputProps={{
                                     maxLength:100
                                 }}
                                 variant="outlined"
                                 className={classes.textField}
-                                value={franchiseeForm.state.County}
+                                value={franchiseeForm.state.LegalCounty}
                                 style={{marginRight:'1%'}}
                                 margin="dense"
                                 required
                             />
                             <FormControlLabel
                                 control={
-                                    <Checkbox checked={franchiseeForm.state.print1099} />
+                                    <Checkbox checked={franchiseeForm.state.Print1099} />
                                 }
-                                onChange={franchiseeForm.handleCheckboxChange('print1099')}
+                                onChange={franchiseeForm.handleCheckboxChange('Print1099')}
                                 className={classes.textField}
-                                value={franchiseeForm.state.print1099 === true ? "N" : "Y" }
+                                value={franchiseeForm.state.Print1099 === true ? "N" : "Y" }
                                 label="Print 1099"
                                 margin="dense"
                                 style={{marginLeft:'1%',marginRight: '1%'}}
@@ -264,7 +264,7 @@ function getStepContent(franchiseeForm, step) {
                                 variant="outlined"
                                 label="1099 Name"
                                 value={franchiseeForm.state.NameOn1099}
-                                onChange={franchiseeForm.handleAddressFormChange('NameOn1099')}
+                                onChange={franchiseeForm.handleTextChange('NameOn1099')}
                                 inputProps={{
                                     maxLength:60
                                 }}
@@ -277,7 +277,12 @@ function getStepContent(franchiseeForm, step) {
                     <div style={{ marginTop: '30px' }}></div>
                     <h3>Owner</h3>
                     <div className="flex">
-                        <FranchiseesOwnerTable tableType="OWNER" headers={Owner_headers} />
+                     {franchiseeForm.props.insertPayload.Owners !== null && (
+                            <FranchiseesOwnerTable tableType="OWNER" headers={Owner_headers} />
+                     ) }
+                     {franchiseeForm.props.insertPayload.Owners === null && (
+                            <p style={{marginTop:20,marginLeft:10}}>Owners Empty!</p>
+                     )}
                     </div>
                 </Fragment>
             );
@@ -341,6 +346,7 @@ function getStepContent(franchiseeForm, step) {
                                 inputProps={{
                                     maxLength:60
                                 }}
+                                value={franchiseeForm.state.AgreementTerm}
                                 onChange={franchiseeForm.handleFormChange('AgreementTerm')}
                                 className={classes.textField}
                                 required
@@ -554,7 +560,14 @@ function getStepContent(franchiseeForm, step) {
                     </GridContainer>
                     <div style={{ marginTop: '30px' }}></div>
                     <h3>Fees</h3>
-                    <FranchiseesMaintenanceTable/>
+                    <Fragment>
+                        {franchiseeForm.props.insertPayload.Fees !== null && (
+                            <FranchiseesMaintenanceTable/>
+                        )}
+                        {franchiseeForm.props.insertPayload.Fees === null && (
+                            <p style={{marginTop:20,marginLeft:10}}>Fees Empty!</p>
+                        )}                    
+                    </Fragment>
                 </Fragment>
             );
         case 2:
@@ -562,7 +575,12 @@ function getStepContent(franchiseeForm, step) {
                 <Fragment>
                     <div style={{ marginTop: '30px' }}></div>
                     <div className="flex">
-                        <FranchiseesDocumentUploadTable/>
+                        {franchiseeForm.props.insertPayload.Documents !== null && (
+                            <FranchiseesDocumentUploadTable/>
+                        )}
+                        {franchiseeForm.props.insertPayload.Documents === null && (
+                            <p style={{marginTop:20,marginLeft:10}}>Documents Empty!</p>
+                        )}
                     </div>
                 </Fragment>
             )
@@ -580,13 +598,13 @@ class FranchiseesCreateForm extends Component {
         completed: new Set(),
         termsYrs: '',
         skipped: new Set(),
-        print1099: true,
+        Print1099: true,
         chargeBack: false,
         bbpAdministration: false,
         accountRebate: false,
         generateReport: false,
         StateValue: '',
-        defaultPlanType: 1,
+        defaultPlanType: 0,
         selectedSignDate: new Date(),
         selectedRenewDate: new Date(),
         selectedExpDate: new Date(),
@@ -599,13 +617,13 @@ class FranchiseesCreateForm extends Component {
         paymentAmount: 0,
         documentsList: [],
         franchiseeFees: [],
-        Name : "",
-        AddressLine1: "",
-        AddressLine2: "",
-        City: "",
-        State: "",
-        Zip: "",
-        County: "",
+        LegalName : "",
+        LegalAddressLine1: "",
+        LegalAddressLine2: "",
+        LegalCity: "",
+        LegalState: "",
+        LegalZip: "",
+        LegalCounty: "",
         LegalIdNum: 0,
         LegalId: "ein",
         NameOn1099: "",
@@ -613,6 +631,7 @@ class FranchiseesCreateForm extends Component {
         AllowChargeBack: true,
         AllowAccountRebate: true,
         AllowGenerateReport: true,
+        AgreementTerm: 0
     };
 
     constructor (props){
@@ -631,38 +650,95 @@ class FranchiseesCreateForm extends Component {
     };
 
     createFranchiseeForm = () => {
-        this.props.createFranchisee(this.props.regionId,this.props.insertPayload);
+        if(this.props.franchiseesForm.type ==="create"){
+            this.props.createFranchisee(this.props.regionId,this.props.insertPayload);
+            //this.props.closeCreateFranchisees();
+            this.props.getFranchisees(this.props.regionId);
+        }
+        if(this.props.franchiseesForm.type ==="edit"){
+            this.props.updateFranchisees(this.props.insertPayload._id , this.props.regionId, this.props.insertPayload);
+            this.props.getFranchisees(this.props.regionId);
+        }
     };
+
     componentWillMount(){
+        
         this.setState({
-            planType: this.props.planType
+            documentsList: this.props.getFranchiseeDocumentsList(this.props.regionId),
+            LegalId: this.props.insertPayload.LegalId,
+            LegalName: this.props.insertPayload.LegalName,
+            LegalAddressLine1: this.props.insertPayload.LegalAddressLine1,
+            LegalAddressLine2: this.props.insertPayload.LegalAddressLine2,
+            LegalCity: this.props.insertPayload.LegalCity,
+            LegalCounty: this.props.insertPayload.LegalCounty,
+            LegalState: this.props.insertPayload.LegalState,
+            LegalZip: this.props.insertPayload.LegalZip,
+            LegalIdNum: this.props.insertPayload.LegalIdNum, 
+            NameOn1099: this.props.insertPayload.NameOn1099,
+            defaultPlanType: this.props.insertPayload.AgreementPlanTypeId
         });
-        this.setState({
-            documentsList: this.props.getFranchiseeDocumentsList(this.props.regionId)
-        });
+        
+        if(this.props.insertPayload.Print1099 === "Y"){
+            this.setState({ Print1099: true });
+        }else{
+            this.setState({Print1099: false });
+        }
+
+        if(this.props.insertPayload.AllowChargeBack === "Y"){
+            this.setState({ AllowChargeBack: true });
+        }else{
+            this.setState({AllowChargeBack: false });
+        }
+        if(this.props.insertPayload.AllowAccountRebate === "Y"){
+            this.setState({ AllowAccountRebate: true });
+        }else{
+            this.setState({AllowAccountRebate: false });
+        }
+        if(this.props.insertPayload.AllowGenerateReport === "Y"){
+            this.setState({ AllowGenerateReport: true });
+        }else{
+            this.setState({AllowGenerateReport: false });
+        }
+        if(this.props.insertPayload.AllowBppAdminFee === "Y"){
+            this.setState({ AllowBppAdminFee: true });
+        }else{
+            this.setState({AllowBppAdminFee: false });
+        }
+        if(this.props.planType.length !== 0){
+            
+            this.props.planType.Data.map( (x,index)=> {
+                if (this.props.insertPayload.AgreementPlanTypeId === x.FranchiseeContractTypeListId) {
+                    this.setState({
+                        planAmount: x.Price,
+                        daysToFullfill: x.DaysToFulfill,
+                        noOfPayments: x.NoOfPayments,
+                        interest: x.Interest,
+                        downPayment: x.DownPayment,
+                        ibAmount: x.BusinessAmount
+                    });
+                    this.handleInitialUpdate("AgreementPlanAmount",x.Price);
+                    this.handleInitialUpdate("AgreementDaysToFulfill",x.DaysToFulfill);
+                    this.handleInitialUpdate("AgreementTotalPayments",x.NoOfPayments);
+                    this.handleInitialUpdate("AgreementInterestRate",x.Interest);
+                    this.handleInitialUpdate("AgreementPlanTypeId",x.FranchiseeContractTypeListId);
+                    this.handleInitialUpdate("AgreementDownPayment",x.DownPayment);
+                    this.handleInitialUpdate("AgreementInitialBusinessAmount",x.BusinessAmount);
+                    this.handleInitialUpdate("AgreementPlanType",x.Name);
+                    this.handleInitialUpdate("AgreementMonthlyPayment",x.PaymentAmount);
+                }
+            })
+    
+        }
+        
         this.props.getFranchiseeFeeMaintenance(this.props.regionId);
         this.props.getFranchiseeStateList(this.props.regionId);
-        if(this.props.planType.Data != null){
-            this.setState({
-               planAmount: this.props.planType.Data[0].Price,
-               daysToFullfill: this.props.planType.Data[0].DaysToFulfill,
-               noOfPayments: this.props.planType.Data[0].NoOfPayments,
-               interest: this.props.planType.Data[0].Interest,
-               downPayment: this.props.planType.Data[0].DownPayment,
-               ibAmount: this.props.planType.Data[0].BusinessAmount,
-               planTypeId: this.props.planType.Data[0].FranchiseeContractTypeListId,
-            });
-            this.handleInitialUpdate("AgreementPlanAmount",this.props.planType.Data[0].Price);
-            this.handleInitialUpdate("AgreementDaysToFullfill",this.props.planType.Data[0].DaysToFulfill);
-            this.handleInitialUpdate("AgreementTotalPayments",this.props.planType.Data[0].NoOfPayments);
-            this.handleInitialUpdate("AgreementInterestrate",this.props.planType.Data[0].Interest);
-            this.handleInitialUpdate("AgreementPlanTypeid",this.props.planType.Data[0].FranchiseeContractTypeListId);
-            this.handleInitialUpdate("AgreementDownPayment",this.props.planType.Data[0].DownPayment);
-            this.handleInitialUpdate("AgreementInitialBusinessAmount",this.props.planType.Data[0].BusinessAmount);
-            this.handleInitialUpdate("AgreementPlanType",this.props.planType.Data[0].Name);
-            this.handleInitialUpdate("AgreementMonthlyPayment",this.props.planType.Data[0].PaymentAmount);
-        }
     }
+
+    componentWillReceiveProps(nextProps){
+       
+    }
+
+
 
     handleFormChange = (name) => event => {
 
@@ -730,10 +806,10 @@ class FranchiseesCreateForm extends Component {
                             ibAmount: x.BusinessAmount
                         });
                         this.handleInitialUpdate("AgreementPlanAmount",x.Price);
-                        this.handleInitialUpdate("AgreementDaysToFullfill",x.DaysToFulfill);
+                        this.handleInitialUpdate("AgreementDaysToFulfill",x.DaysToFulfill);
                         this.handleInitialUpdate("AgreementTotalPayments",x.NoOfPayments);
-                        this.handleInitialUpdate("AgreementInterestrate",x.Interest);
-                        this.handleInitialUpdate("AgreementPlanTypeid",x.FranchiseeContractTypeListId);
+                        this.handleInitialUpdate("AgreementInterestRate",x.Interest);
+                        this.handleInitialUpdate("AgreementPlanTypeId",x.FranchiseeContractTypeListId);
                         this.handleInitialUpdate("AgreementDownPayment",x.DownPayment);
                         this.handleInitialUpdate("AgreementInitialBusinessAmount",x.BusinessAmount);
                         this.handleInitialUpdate("AgreementPlanType",x.Name);
@@ -885,6 +961,7 @@ class FranchiseesCreateForm extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
+        getFranchisees: Actions.getFranchisees,
         showCreteFranchisees: Actions.showCreteFranchisees,
         closeCreateFranchisees: Actions.closeCreateFranchisees,
         showEditFranchisees: Actions.showCreteFranchisees,
@@ -896,6 +973,7 @@ function mapDispatchToProps(dispatch) {
         getFranchiseeStateList: Actions.getFranchiseeStateList,
         franchiseeUpdateInsertPayload: Actions.franchiseeUpdateInsertPayload,
         createFranchisee : Actions.createFranchisees,
+        updateFranchisees: Actions.updateFranchisees,
     }, dispatch);
 }
 

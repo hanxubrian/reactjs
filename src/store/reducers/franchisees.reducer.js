@@ -23,7 +23,11 @@ const initialState = {
     documentsList: [],
     franchiseeFees: [],
     Location: "all",
-    StateList: [],    
+    StateList: [],
+    detailPayload: null,
+    eidtPayload: null,
+    createPayload: null,
+    deletePayload: null,    
     transactionStatusFranchisees:{
         Active: true,
         Inactive: true,
@@ -51,71 +55,103 @@ const initialState = {
     },
     insertPayload: {
         RegionId: 2,
-        Name: "",
-        Addresses: [
-            {
-                Type: "Main",
-                AddressLine1: "",
-                AddressLine2: "",
-                City: "",
-                State: "",
-                Zip: "",
-                County: ""
-            },
-            {
-                Type: "Legal",
-                AddressLine1: "",
-                AddressLine2: "",
-                City: "",
-                State: "",
-                Zip: "",
-                County: ""
-            }
-        ],
-        Email: "",
-        Phone1: "",
-        Phone2: "",
-        CheckPayee1: "",
-        CheckPayee2: "",
-        Owners: [],
-        LegalId:"SSN",
-        LegalIdNum: "57547120",
-        DATE_1: "",
-        DATE_2: "",
-        AgreementPlanType: "B",
-        AgreementPlanTypeid: 99,
-        AgreementTerm: 20,
-        AgreementDownPayment: 2850.00,
-        AgreementPlanAmount: 9500.00,
-        AgreementMonthlyPayment: 147.93,
-        AgreementInterestRate: 12.00,
-        AgreementPaymentBill: 31,
-        AgreementTotalPayments: 60,
-        AgreementDateSigned: moment(new Date()).format("MM/DD/YYYY"),
-        AgreementLatestRenewDate: moment(new Date()).format("MM/DD/YYYY"),
-        AgreementExpirationDate: moment(new Date()).format("MM/DD/YYYY"),
-        AgreementInitialBusinessAmount: 1000.00,
-        AgreementDaysToFulfill:200,
-        MoralObligation: 0.00,
-        CurrentBusiness: 0.00,
-        Fees: [],
-        AllowBppAdminFee: "Y",
-        AllowChargeBack: "Y",
+        AddressLine2: "",
+        Latitude: "",
+        Longitude: "",
+        Phone2: "+1(  )    -    ",
+        AgreementPlanTypeId: 0,
+        LegalName: "",
+        LegalAddressLine1: "",
+        LegalAddressLine2: "",
+        LegalCity: "",
+        LegalCounty: "",
+        LegalState: "",
+        LegalZip: "",
+        LegalId: "ein",
+        LegalIdNum: 0,
+        AgreementInitialBusinessAmount: 0,
+        AgreementDaysToFulfill: 0,
         AllowAccountRebate: "Y",
         AllowGenerateReport: "Y",
+        Documents: [],
+        company_no: "",
+        dlr_code: "",
+        control_no: "",
+        Name: "",
+        AddressLine1: "",
+        City: "",
+        County: "",
+        State: "",
+        Zip: "",
+        CheckPayee1: "",
+        CheckPayee2: "",
+        Phone1: "+1(  )    -    ",
+        dlr_pager: "",
+        ssn: "",
+        AgreementPlanAmount: 0,
+        AgreementMonthlyPayment: 0,
+        business: 0,
+        DATE_1: "",
+        DATE_2: "",
+        AgreementDateSigned: moment(new Date()).format("MM/DD/YYYY"),
+        fed_id: "",
+        health_amt: 0,
+        AgreementInterestRate: 0,
+        min_sales: 0,
+        AgreementPaymentBill: 0,
+        AgreementTotalPayment: 0,
+        PctFlag: "",
+        AddPct: 0,
+        Status: "",
+        num_beeps: 0,
+        beep_cost: 0,
+        num_beeps2: 0,
+        beep_cost2: 52.1,
+        SecNote: "",
+        sec_date: "",
+        sec_amount: 0,
+        sec_pymnt: 0,
+        sec_int: 0,
+        SecPBill: 0,
+        sec_pytotl: "",
+        TakeNote: "",
+        inittot: 0,
+        initcur: 0,
+        AgreementPlanType: "",
+        initdate: "",
+        ffcredit: 0,
+        AgreementDownPayment: 0,
+        obl_begin: "",
+        obl_end: "",
+        leg_obg: 0,
+        MoralObligation: 0,
+        CurrentBusiness: 0,
+        oper_mgr: "",
+        REBELIG: "",
+        rebbal: 0,
+        NewFindersFee: "",
+        ffdate: "",
+        ded_ad: "",
+        ad_cur: 0,
+        ad_max: 0,
+        callbdate: "",
+        Email: "",
+        dlr_id: "",
+        AllowChargeBack: "Y",
         Print1099: "Y",
         NameOn1099: "",
-        PctFlag: "Y",
-        AddPct: 3.00,
-        Status: "Y",
-        SecNote: "N",
-        SecPBill: "15",
-        TakeNote: "N",
-        REBELIG: 1,
-        NewFindersFee: 1,
+        royalty: 0,
+        AllowBppAdminFee: "Y",
+        AgreementLatestRenewDate: moment(new Date()).format("MM/DD/YYYY"),
+        AgreementTerm: 0,
+        AgreementExpirationDate: moment(new Date()).format("MM/DD/YYYY"),
+        contact: "",
+        tech_pct: 0,
+        ded_tech: "",
         CURSTAT: "",
         CURSTATDT: "",
-        Documents: []
+        Owners: [],
+        Fees: [],
     }
 };
 
@@ -137,26 +173,51 @@ const franchisees = function(state = initialState, action) {
         {
             return {
                 ...state,
+                insertPayload: initialState.insertPayload,
                 createFranchisees: {
                     type : 'new',
                     props: {
                         open: false
                     },
                     data : null
-                }
+                },
+                createPayload: action.payload
+            };
+        }
+        case Actions.GET_FRANCHISEE_DETAIL:
+        {
+            return {
+                ...state,
+                insertPayload: action.payload.Data,
+                createFranchisees: {
+                    type : 'edit',
+                    props: {
+                        open: true
+                    },
+                    data : null
+                },
             };
         }
         case Actions.UPDATE_FRANCHISEE:
         {
             return {
                 ...state,
-                bFranchiseesFetchStart: false
+                eidtPayload: action.payload,
+                createFranchisees: {
+                    type : 'close',
+                    props: {
+                        open: false
+                    },
+                    data : null
+                },
+                insertPayload: initialState.insertPayload,
             };
         }
         case Actions.DELETE_FRANCHISEE:
         {
             return {
                 ...state,
+                deletePayload: action.payload,
                 bFranchiseesFetchStart: false
             };
         }
@@ -187,9 +248,9 @@ const franchisees = function(state = initialState, action) {
             if(action.payload.length>0) {
                 documentsList = action.payload.map(iv => {
                     return {
-                        ["documentDateTime"+iv.FileTypeListId]: "",
-                        ["documentFileSize"+iv.FileTypeListId]: "",
-                        ["documentView"+iv.FileTypeListId]: "",
+                        ["documentDateTime"]: "",
+                        ["documentFileSize"]: "",
+                        ["documentView"]: "",
                         ...iv
                     }
                 });
@@ -285,7 +346,8 @@ const franchisees = function(state = initialState, action) {
                         open: false
                     },
                     data : null
-                }
+                },
+                insertPayload: initialState.insertPayload
             };
         }
         case Actions.OPEN_EDIT_FRANCHISEES_FORM:

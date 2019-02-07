@@ -98,8 +98,14 @@ class FilterPanel extends Component {
         AddressZipcodeRadius: this.props.locationFilterValue.miles,
         franchiseeStatus: [],
         stateList: [],
+        AddressLine1: "",
+        AddressLine2: "",
+        City: "",
+        Zip: "",
+        County: "",
         Phone1: '+1(  )    -    ',
         Phone2: '+1(  )    -    ',
+        Email: ""
     };
 
     constructor(props){
@@ -116,8 +122,19 @@ class FilterPanel extends Component {
     componentWillMount(){
         this.setState({
            franchiseeStatus: this.props.franchiseeStatus,
-           stateList: this.props.getFranchiseeStateList(this.props.regionId)
+           stateList: this.props.getFranchiseeStateList(this.props.regionId),
+           AddressLine1: this.props.insertPayload.AddressLine1,
+           AddressLine2: this.props.insertPayload.AddressLine2,
+           Name: this.props.insertPayload.Name,
+           Phone1: this.props.insertPayload.Phone1,
+           Phone2: this.props.insertPayload.Phone2,
+           County: this.props.insertPayload.County,
+           Zip: this.props.insertPayload.Zip,
+           City: this.props.insertPayload.City,
+           State: this.props.insertPayload.State,
+           Email: this.props.insertPayload.Email
         });
+        
     }
 
     componentDidUpdate(prevProps)
@@ -148,12 +165,11 @@ class FilterPanel extends Component {
     };
 
     handleFormChange = (name) => event => {
-
-        if(name === 'State' || name === 'Phone1'|| name === 'Phone2'){
-            this.setState({
+        
+        this.setState({
                 [name]: event.target.value,
-            });
-        }
+        });
+       
         const iStatus = this.props.insertPayload;
         console.log('insertPayload = ',iStatus);
         iStatus[name] = event.target.value;
@@ -359,8 +375,9 @@ class FilterPanel extends Component {
                                             <TextField
                                                 id="lf_name"
                                                 label="Name"
+                                                value={this.state.Name}
                                                 className={classes.textField}
-                                                onChange={this.handleAddressFormChange('Name')}
+                                                onChange={this.handleFormChange('Name')}
                                                 margin="dense"
                                                 variant="outlined"
                                                 inputProps={{
@@ -376,7 +393,8 @@ class FilterPanel extends Component {
                                                 id="lf_address1"
                                                 label="Address"
                                                 className={classes.textField}
-                                                onChange={this.handleAddressFormChange('AddressLine1')}
+                                                value = {this.state.AddressLine1}
+                                                onChange={this.handleFormChange('AddressLine1')}
                                                 margin="dense"
                                                 inputProps={{
                                                     maxLength:100
@@ -391,7 +409,8 @@ class FilterPanel extends Component {
                                                 id="lf_address2"
                                                 label="Address2"
                                                 className={classes.textField}
-                                                onChange={this.handleAddressFormChange('AddressLine2')}
+                                                value = {this.state.AddressLine2}
+                                                onChange={this.handleFormChange('AddressLine2')}
                                                 inputProps={{
                                                     maxLength:100
                                                 }}
@@ -405,7 +424,8 @@ class FilterPanel extends Component {
                                                 id="lf_city"
                                                 label="City"
                                                 className={classes.textField}
-                                                onChange={this.handleAddressFormChange('City')}
+                                                value = {this.state.City}
+                                                onChange={this.handleFormChange('City')}
                                                 margin="dense"
                                                 variant="outlined"
                                                 inputProps={{
@@ -422,7 +442,7 @@ class FilterPanel extends Component {
                                                 select
                                                 className={classes.textField}
                                                 value={this.state.State}
-                                                onChange={this.handleAddressFormChange('State')}
+                                                onChange={this.handleFormChange('State')}
                                                 margin="dense"
                                                 variant="outlined"
                                                 required
@@ -440,7 +460,8 @@ class FilterPanel extends Component {
                                                id="lf_county"
                                                label="County"
                                                className={classes.textField}
-                                               onChange={this.handleAddressFormChange('County')}
+                                               value = {this.state.County}
+                                               onChange={this.handleFormChange('County')}
                                                margin="dense"
                                                variant="outlined"
                                                inputProps={{
@@ -455,7 +476,8 @@ class FilterPanel extends Component {
                                                 id="lf_zip"
                                                 label="Zip"
                                                 className={classes.textField}
-                                                onChange={this.handleAddressFormChange('Zip')}
+                                                value = {this.state.Zip}
+                                                onChange={this.handleFormChange('Zip')}
                                                 inputProps={{
                                                     maxLength:20
                                                 }}
@@ -511,6 +533,7 @@ class FilterPanel extends Component {
                                                 id="lf_email"
                                                 label="E-mail"
                                                 className={classes.textField}
+                                                value={this.state.Email}
                                                 onChange={this.handleFormChange('Email')}
                                                 inputProps={{
                                                     maxLength:100

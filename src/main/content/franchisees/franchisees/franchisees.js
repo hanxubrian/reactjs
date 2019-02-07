@@ -371,7 +371,7 @@ class Franchisees extends Component {
             let end_index = start_index+pageSize;
             currentRecords.forEach(item => {
                 if(item._index>=start_index && item._index<end_index)
-                    selection.push(item._original.ID);
+                    selection.push(item._original.Id);
             });
         }
         this.setState({ selectAll, selection });
@@ -383,10 +383,7 @@ class Franchisees extends Component {
 
     constructor(props){
         super(props);
-
-        // if(!props.bLoadedFranchisees) {
-            props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
-        // }
+        props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
         this.fetchData = this.fetchData.bind(this);
         this.escFunction = this.escFunction.bind(this);
     }
@@ -498,9 +495,14 @@ class Franchisees extends Component {
             console.log("componentWillReceiveProps", "locationFilterValue", nextProps.locationFilterValue, this.props.franchisees)
             this.initRowsFromRawJson(this.props.franchisees, nextProps.locationFilterValue);
         }
+        if (this.props.detailPayload !== nextProps.detailPayload) {
+           console.log("detail",nextProps.detailPayload);
+        }
+        if (this.props.createPayload !== nextProps.createPayload) {
+            console.log("CreatePayload", nextProps.createPayload); 
+        }
+
     }
-
-
     getFranchiseesFromStatus =(rawData=this.props.franchisees) =>{
         let data = [];
         let tempData = [];
@@ -787,6 +789,11 @@ class Franchisees extends Component {
         })];
     }
 
+    
+    handleEditRowFranchisee(id,regionId){
+        this.props.getFranchiseeDetail(id,regionId);
+    }
+
     render()
     {
         const { classes,toggleFilterPanelFranchisees,showCreteFranchisees, toggleSummaryPanelFranchisees, createFranchisees, filterStateFranchisees, summaryStateFranchisees, toggleFranchiseeMapView, mapViewState} = this.props;
@@ -819,13 +826,6 @@ class Franchisees extends Component {
                                         </div>
                                     </div>
                                     <div className="flex flex-shrink items-center">
-                                        { selection.length>0 && (
-                                            <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                <Fab color="secondary" aria-label="delete" className={classNames(classes.sideButton, "mr-12")} onClick={()=>this.removeFranchisees()}>
-                                                    <Icon>delete</Icon>
-                                                </Fab>
-                                            </FuseAnimate>
-                                        )}
                                         <FuseAnimate animation="transition.expandIn" delay={300}>
                                             <Fab
                                                 color="secondary"
@@ -1100,7 +1100,7 @@ class Franchisees extends Component {
                                             onClick  : (e, handleOriginal) => {
                                                 if ( rowInfo )
                                                 {
-                                                    alert('ok');
+                                                    //alert('ok');
                                                     // openEditContactDialog(rowInfo.original);
                                                 }
                                             }
@@ -1119,7 +1119,7 @@ class Franchisees extends Component {
                                                             onChange={(event) => toggleAll(instance) }
                                                             checked={this.state.selectAll}
                                                             style={{color: 'white'}}
-                                                            // indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
+                                                            //indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
                                                         />
                                                     ),
                                                     accessor : "",
@@ -1128,8 +1128,8 @@ class Franchisees extends Component {
                                                                 onClick={(event) => {
                                                                     event.stopPropagation();
                                                                 }}
-                                                                checked={isSelected(row.value.ID)}
-                                                                onChange={() => toggleSelection(row.value.ID)}
+                                                                checked={isSelected(row.value.Id)}
+                                                                onChange={() => toggleSelection(row.value.Id)}
                                                             />
                                                         )
                                                     },
@@ -1183,10 +1183,10 @@ class Franchisees extends Component {
                                                                 onClick={(ev) => {
                                                                     ev.stopPropagation();
                                                                     if (window.confirm("Do you really want to remove this franchisee")) {
-                                                                        this.props.removeFranchisees(row.original.ID, this.props.franchisees);
+                                                                        this.props.deleteFranchisees(row.original.Id,this.props.regionId);
                                                                         if(this.state.selection.length>0){
-                                                                            _.remove(this.state.selection, function(id) {
-                                                                                return id === row.original.ID;
+                                                                            _.remove(this.state.temp, function(id) {
+                                                                                return id === row.original.Id;
                                                                             });
                                                                         }
                                                                     }
@@ -1196,8 +1196,7 @@ class Franchisees extends Component {
                                                             </IconButton>
                                                             <IconButton
                                                                 onClick={(ev) => {
-                                                                    ev.stopPropagation();
-                                                                    // removeContact(row.original.id);
+                                                                   this.handleEditRowFranchisee(row.original.Id,this.props.regionId);
                                                                 }}
                                                             >
                                                                 <Icon>edit</Icon>
@@ -1265,12 +1264,13 @@ function mapDispatchToProps(dispatch)
         toggleFilterPanelFranchisees: Actions.toggleFilterPanelFranchisees,
         toggleSummaryPanelFranchisees: Actions.toggleSummaryPanelFranchisees,
         deleteFranchisees: Actions.deleteFranchisees,
-        removeFranchisees: Actions.removeFranchisees,
         showCreteFranchisees: Actions.showCreteFranchisees,
         closeCreateFranchisees: Actions.closeCreateFranchisees,
         showEditFranchisees: Actions.showCreteFranchisees,
         closeEditFranchisees: Actions.showCreteFranchisees,
-        toggleFranchiseeMapView: Actions.toggleFranchiseeMapView
+        toggleFranchiseeMapView: Actions.toggleFranchiseeMapView,
+        updateFranchisees: Actions.updateFranchisees,
+        getFranchiseeDetail: Actions.getFranchiseeDetail,
     }, dispatch);
 }
 
@@ -1291,7 +1291,10 @@ function mapStateToProps({franchisees,auth})
         SearchText: franchisees.SearchText,
         mapViewState: franchisees.bOpenedMapView,
         bFranchiseesFetchStart: franchisees.bFranchiseesFetchStart,
-        locationFilterValue: franchisees.locationFilterValue
+        locationFilterValue: franchisees.locationFilterValue,
+        editPayload: franchisees.eiditPayload,
+        detailPayload: franchisees.detailPayload,
+        createPayload: franchisees.createPayload
     }
 }
 

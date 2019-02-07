@@ -281,15 +281,15 @@ class FranchiseesDocumentUploadTable extends React.Component {
         list.map(x=>{
             if(id === x.FileTypeListId){
                 x.UploadDocuments=selectorFiles;
-                x["documentDateTime"+id] = date;
-                x["documentFileSize"+id] = selectorFiles[0].size+" bytes";
+                x["documentDateTime"] = date;
+                x["documentFileSize"] = selectorFiles[0].size+" bytes";
             }
         })
         const tempInsertPayload = this.props.insertPayload;
-        tempInsertPayload.documents = list;
+        tempInsertPayload.Documents = list;
         this.props.franchiseeUpdateInsertPayload(tempInsertPayload);
         this.setState({
-            documentsList: list
+            documentsList: null
         });
     }
 
@@ -354,10 +354,10 @@ class FranchiseesDocumentUploadTable extends React.Component {
                                                         {n.Name}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {documentsList[index]["documentDateTime"+n.FileTypeListId]}
+                                                        {documentsList[index]["documentDateTime"]}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {documentsList[index]["documentFileSize"+n.FileTypeListId]}
+                                                        {documentsList[index]["documentFileSize"]}
                                                     </TableCell>
                                                     <TableCell>
                                                         <IconButton
