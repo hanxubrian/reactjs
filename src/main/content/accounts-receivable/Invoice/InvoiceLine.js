@@ -208,7 +208,7 @@ const styles = theme => ({
             },
             '& .f2': {
                 width: '100%',
-                padding: '4px 8px',
+                padding: '2px 8px',
                 border: '0px solid lightgray',
                 borderRadius: 6,
                 marginLeft: 10
@@ -1090,7 +1090,7 @@ class InvoiceLineTable extends React.Component {
                                                 return (
                                                     <TextField
                                                         id="description"
-                                                        style={{ margin: 8 }}
+                                                        style={{ margin: '0 8px' }}
                                                         placeholder="Description"
                                                         fullWidth
                                                         value={row.original.description}
