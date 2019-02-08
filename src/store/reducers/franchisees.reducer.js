@@ -3,7 +3,7 @@ import * as UserActions from "../../auth/store/actions/";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 import moment from "moment";
-import {ADD_FRANCHISEE_OWNER_ROW} from "../actions/";
+import _ from "lodash";
 
 const initialState = {
     franchiseesDB: null,
@@ -28,19 +28,8 @@ const initialState = {
     eidtPayload: null,
     createPayload: null,
     deletePayload: null,
-    transactionStatusFranchisees:{
-        Active: true,
-        Inactive: true,
-        CTDB: true,
-        Transfer: true,
-        LegalCompliancePending: true,
-        PendingTransfer: true,
-        Terminated: true,
-        Rejected: true,
-        Pending: true,
-        "Non-Renewed": true,
-        Repurchased: true,
-    },
+    Active: true,
+    InActive: true,
     createFranchisees: {
         type : 'new',
         props: {
@@ -101,7 +90,7 @@ const initialState = {
         AgreementTotalPayment: 0,
         PctFlag: "",
         AddPct: 0,
-        Status: "",
+        Status: "Y",
         num_beeps: 0,
         beep_cost: 0,
         num_beeps2: 0,
@@ -286,9 +275,14 @@ const franchisees = function(state = initialState, action) {
                 ...state, bOpenedFilterPanelFranchisees: !state.bOpenedFilterPanelFranchisees
             }
         }
-        case Actions.UPDATE_FRANCHISEE_STATUS:{
+        case Actions.UPDATE_FRANCHISEE_STATUS_ACTIVE:{
             return {
-                ...state, transactionStatusFranchisees:{...state.transactionStatusFranchisees,...action.payload}
+                ...state, Active: action.payload
+            }
+        }
+        case Actions.UPDATE_FRANCHISEE_STATUS_INACTIVE:{
+            return {
+                ...state, InActive: action.payload
             }
         }
         case Actions.UPDATE_FRANCHISEE_UPDATE_CHECKBOX:{
@@ -446,6 +440,6 @@ const franchisees = function(state = initialState, action) {
 const persistConfig = {
     key: 'franchise',
     storage: storage,
-    blacklist: ['franchiseesDB']
+    blacklist: ['franchiseesDB','transactionStatusFranchisees']
 };
 export default persistReducer(persistConfig, franchisees);

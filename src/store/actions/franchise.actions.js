@@ -13,7 +13,8 @@ export const CLOSE_EDIT_FRANCHISEES_FORM = "[FRANCHISEES] FRANCHISEES EDIT CLOSE
 export const ADD_FRANCHISEES = '[FRANCHISEES] ADD FRANCHISEES';
 export const TOGGLE_FRANCHISEE_MAP_VIEW = '[FRANCHISEES] TOGGLE FRANCHISEE MAP VIEW';
 export const GET_FILTER_LIST = '[FRANCHISEES] GET FILTER LIST';
-export const UPDATE_FRANCHISEE_STATUS = '[FRANCHISEES] UPDATE FRANCHISEE STATUS';
+export const UPDATE_FRANCHISEE_STATUS_ACTIVE = '[FRANCHISEES] UPDATE FRANCHISEE STATUS ACTIVE';
+export const UPDATE_FRANCHISEE_STATUS_INACTIVE = '[FRANCHISEES] UPDATE FRANCHISEE STATUS INACTIVE';
 export const UPDATE_DATE_SIGN_FRANCHISEE = "[FRANCHISEE] UPDATE  DATE_SIGN FRANCHISEE";
 export const UPDATE_RENEW_DATE_FRANCHISEE = "[FRANCHISEE] UPDATE  RENEW_DATE FRANCHISEE";
 export const UPDATE_EXP_DATE_FRANCHISEE = "[FRANCHISEE] UPDATE  EXP_DATE FRANCHISEE";
@@ -239,9 +240,16 @@ export function toggleFranchiseeMapView(){
     }
 }
 
-export function updateFranchiseeStatus(newStatus){
+export function updateFranchiseeStatusActive(newStatus){
     return {
-        type: UPDATE_FRANCHISEE_STATUS,
+        type: UPDATE_FRANCHISEE_STATUS_ACTIVE,
+        payload: newStatus
+    }
+}
+
+export function updateFranchiseeStatusInActive(newStatus){
+    return {
+        type: UPDATE_FRANCHISEE_STATUS_INACTIVE,
         payload: newStatus
     }
 }

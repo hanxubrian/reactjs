@@ -96,16 +96,7 @@ class FilterPanel extends Component {
 
     state = {
         Active: true,
-        CTDB: true,
-        NonRenewed: true,
-        Pending: true,
-        Repurchased: true,
-        Terminated: true,
-        Transfer: true,
-        Rejected: true,
-        LegalCompliancePending: true,
-        Inactive: true,
-        PendingTransfer: true,
+        InActive: true,
         State: '',
         contactState: '',
         Location: this.props.locationFilterValue.id,
@@ -121,7 +112,8 @@ class FilterPanel extends Component {
         Phone1: '+1(  )    -    ',
         Phone2: '+1(  )    -    ',
         Email: "",
-        Name: ""
+        Name: "",
+        //transactionStatusFranchisees: {Active: true, InActive: true}
     };
 
     constructor(props){
@@ -148,7 +140,9 @@ class FilterPanel extends Component {
            Zip: this.props.insertPayload.Zip,
            City: this.props.insertPayload.City,
            State: this.props.insertPayload.State,
-           Email: this.props.insertPayload.Email
+           Email: this.props.insertPayload.Email,
+           Active: this.props.Active,
+           InActive: this.props.InActive,
         });
         
     }
@@ -229,13 +223,16 @@ class FilterPanel extends Component {
         this.props.franchiseeUpdateInsertPayload(iStatus)
     };
 
-    handleChange = (index,name) => event => {
-
-        const iStatus = this.props.franchiseeStatus;
-        iStatus[index][name] = event.target.checked;
-
-        this.setState({franchiseeStatus: iStatus });
-        this.props.updateFranchiseeStatus(iStatus)
+    handleChange = name => event => {
+        this.setState({
+            [name]: event.target.checked
+        });
+        if(name === "Active"){
+            this.props.updateFranchiseeStatusActive(event.target.checked);
+        }
+        if(name === "InActive"){
+            this.props.updateFranchiseeStatusInActive(event.target.checked);
+        }
     };
 
     handleAddressFormChange = (name) => event => {
@@ -415,7 +412,7 @@ class FilterPanel extends Component {
         return (
             <div className={classNames(classes.root)}>
                 <div className={classNames("flex flex-col")}>
-                    <Paper className="flex flex-1 flex-col min-h-px p-20">
+                    <div className="flex flex-1 flex-col min-h-px p-20">
                         {franchiseesForm && franchiseesForm.props.open
                         ?(
                            <div>
@@ -674,28 +671,32 @@ class FilterPanel extends Component {
                                 </FormControl>
                                 <br/>
                                 <h3>Franchisees Statuses</h3>
-                               { this.props.franchiseeStatus && this.props.bLoadedFilterList && (
-                                   <FormControl>
-                                       {
-                                           this.props.franchiseeStatus.map((data,index)=>(
-                                               <FormControlLabel
-                                                   key={data.Value}
-                                                   control={
-                                                       <Switch
-                                                           checked={data[data.Name]}
-                                                           onChange={this.handleChange(index,`${data.Name}`)}
-                                                           value={data.Value}
-                                                       />
-                                                   }
-                                                   label={data.Text}
-                                               />
-                                           ))
-                                       }
-                                   </FormControl>
-                               )}
+                                <FormControl>
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={this.state.Active}
+                                                onChange={this.handleChange("Active")}
+                                                value="Y"
+                                            />
+                                           }
+                                        label="Active"
+                                    />
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={this.state.InActive}
+                                                onChange={this.handleChange("InActive")}
+                                                value="N"
+                                            />
+                                           }
+                                        label="InActive"
+                                    />
+                                </FormControl>
+                               
                             </div>
                         )}
-                    </Paper>
+                    </div>
                 </div>
             </div>
         );
@@ -707,7 +708,8 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         franchiseeSelectLocationFilter: Actions.franchiseeSelectLocationFilter,
         getStatusFilterList: Actions.getStatusFilterList,
-        updateFranchiseeStatus: Actions.updateFranchiseeStatus,
+        updateFranchiseeStatusActive: Actions.updateFranchiseeStatusActive,
+        updateFranchiseeStatusInActive: Actions.updateFranchiseeStatusInActive,
         franchiseeUpdateInsertPayload: Actions.franchiseeUpdateInsertPayload,
         getFranchiseeStateList: Actions.getFranchiseeStateList,
         updateReportPeriod: Actions.updateReportPeriod
@@ -718,7 +720,8 @@ function mapStateToProps({franchisees, auth})
 {
     return {
         filterStateFranchisees: franchisees.bOpenedSummaryPanelFranchisees,
-        transactionStatusFranchisees: franchisees.transactionStatusFranchisees,
+        Active: franchisees.Active,
+        InActive: franchisees.InActive,
         franchiseesForm: franchisees.createFranchisees,
         bLoadedFilterList: franchisees.bLoadedFilterList,
         regionId: auth.login.defaultRegionId,
