@@ -163,10 +163,13 @@ class RegularMiscTransactons extends Component {
                 <h2>Regular Misc. Transactions</h2></div>);
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].REG_MISC.map(d=>{
+            let type = this.props.transactionTypeList.filter(t=>t._id===d.TYPE);
+
             d.DESCR = FuseUtils.capital_letter(d.DESCR);
             d.TRX_AMT = parseFloat(d.TRX_AMT);
             d.TRX_TAX = parseFloat(d.TRX_TAX);
             d.TRX_TOT = parseFloat(d.TRX_TOT);
+            d.TYPE = type[0].Name;
             return d;
         });
 
@@ -180,7 +183,7 @@ class RegularMiscTransactons extends Component {
 
         let  tableColumnExtensions = [
             { columnName: 'DESCR', width: -1, },
-            { columnName: 'TYPE', width: 100},
+            { columnName: 'TYPE', width: 180},
             { columnName: 'TRX_AMT', width: 140,  align: 'right'},
             { columnName: 'TRX_TAX', width: 140,  align: 'right'},
             { columnName: 'TRX_TOT', width: 140,  align: 'right'},

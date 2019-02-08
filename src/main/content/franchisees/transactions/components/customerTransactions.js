@@ -129,6 +129,9 @@ const CurrencyTypeProvider = props => (
     />
 );
 
+const messages = {
+    sum: '',
+};
 class CustomerTransactions extends Component {
     state = {
         pageSizes: [5, 10, 25, 50, 100],
@@ -235,7 +238,9 @@ class CustomerTransactions extends Component {
                     />
                     <TableHeaderRow />
                     {data.length>0 && (
-                        <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
+                        <TableSummaryRow  totalRowComponent={TableSummaryComponent}
+                                          messages={messages}
+                        />
                     )}
                 </Grid>
             </div>

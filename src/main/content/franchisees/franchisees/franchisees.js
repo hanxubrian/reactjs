@@ -376,6 +376,9 @@ class Franchisees extends Component {
         this.escFunction = this.escFunction.bind(this);
         if(props.billingLists===null)
             props.getBillingLists(props.regionId);
+
+        if(props.transactionTypeList===null)
+            props.getFranchiseeTransactionTypeLists(props.regionId);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot){
@@ -1226,10 +1229,11 @@ function mapDispatchToProps(dispatch)
         updateFranchisees: Actions.updateFranchisees,
         getFranchiseeDetail: Actions.getFranchiseeDetail,
         getBillingLists: Actions.getBillingLists,
+        getFranchiseeTransactionTypeLists : Actions.getFranchiseeTransactionTypeLists,
     }, dispatch);
 }
 
-function mapStateToProps({franchisees,auth, invoices})
+function mapStateToProps({franchisees,auth, invoices, transactions})
 {
     return {
         franchisees: franchisees.franchiseesDB,
@@ -1253,6 +1257,7 @@ function mapStateToProps({franchisees,auth, invoices})
         createPayload: franchisees.createPayload,
         reportPeriod: franchisees.reportPeriod,
         billingLists: invoices.billingLists,
+        transactionTypeList: transactions.transactionTypeList,
     }
 }
 

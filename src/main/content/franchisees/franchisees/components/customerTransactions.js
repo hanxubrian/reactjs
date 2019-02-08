@@ -88,7 +88,10 @@ const styles = theme => ({
         '& td:nth-child(3)': {
             width: '100%',
         },
-
+        // '& td:nth-child(7)>div, & td:nth-child(6)>div': {
+        //     display: 'flex',
+        //     justifyContent: 'flex-end'
+        // }
     }
 });
 
@@ -239,7 +242,8 @@ class CustomerTransactions extends Component {
                     />
                     <TableHeaderRow />
                     {data.length>0 && (
-                        <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
+                        <TableSummaryRow  totalRowComponent={TableSummaryComponent}
+                        />
                     )}
                 </Grid>
             </div>

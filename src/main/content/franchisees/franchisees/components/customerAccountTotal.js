@@ -18,7 +18,7 @@ import {
 } from '@devexpress/dx-react-grid-material-ui';
 
 
-import {withStyles} from "@material-ui/core";
+import {Icon, IconButton, withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
 //Theme Utilities
@@ -65,22 +65,38 @@ const styles = theme => ({
         '& tbody tr td': {
             fontSize: 12,
             paddingLeft: 4,
-            paddingRight: 4
+            paddingRight: 4,
+            borderBottom: `0px solid ${theme.palette.text.primary}`,
         },
         '& tbody tr td:nth-child(3)': {
             width: '100%',
         },
         '& tbody tr:last-child td': {
             borderBottom: `2px solid ${theme.palette.text.primary}`,
+        },
+        '& tr.subHeading td:nth-child(4)': {
+            display: 'none'
         }
     },
     tableFootRow: {
         '& td': {
             borderBottom: `1px solid ${theme.palette.text.primary}`,
         },
-        '& td:nth-child(2)': {
+        '& td:nth-child(1)': {
             width: '100%',
         },
+        '& td:nth-child(4)>div': {
+            display: 'flex',
+            justifyContent: 'flex-end'
+        },
+        '& td:nth-child(2), & td:nth-child(3)':{
+            display:'none'
+        },
+        '& td:nth-child(5)': {
+            width: 0,
+        },
+    },
+    tableSummaryCell: {
     }
 });
 
@@ -92,24 +108,48 @@ const TableComponentBase = ({ classes, ...restProps }) => (
 );
 
 const TableHeadComponentBase = ({ classes, ...restProps }) => {
-    console.log('head', restProps);
     return (
-    <Table.TableHead
-        {...restProps}
-        className={classes.tableTheadRow}
-    />
-)};
+        <Table.TableHead
+            {...restProps}
+            className={classes.tableTheadRow}
+        />
+    )};
 
-const TableSummaryComponentBase = ({ classes, ...restProps }) => (
-    <Table.Row
-        {...restProps}
-        className={classes.tableFootRow}
-    />
-);
+const TableSummaryComponentBase = ({ classes,  ...restProps }) =>{
+    return     (
+        <Table.Row
+            {...restProps}
+            className={classes.tableFootRow}
+        />
+    );
+};
+
+
+const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
+    console.log('cell=', restProps);
+    if(restProps.column.name==='type'){
+        return (
+            <Table.Cell cols
+                {...restProps}
+                colspan={3}
+                className={classes.tableSummaryCell}>
+                <strong>Total Revenue for this Franchisee</strong>
+            </Table.Cell>
+        );
+    }
+    else
+        return (
+            <Table.Cell
+                {...restProps}
+                className={classes.tableSummaryCell}
+            />
+        );
+};
 
 export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
 export const TableSummaryComponent = withStyles(styles, { name: 'TableSummaryComponent' })(TableSummaryComponentBase);
 export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
+export const TableSummaryCellComponent = withStyles(styles, { name: 'TableSummaryCellComponent' })(TableSummaryCellComponentBase);
 
 const CurrencyFormatter = ({value}) => (
     <NumberFormat value={value}
@@ -149,12 +189,25 @@ class CustomerAccountTotals extends Component {
 
     changeSorting = sorting => this.setState({ sorting });
 
+    TableRow = ({ row, ...restProps }) => {
+        let rowClass='';
+        if(row.SUB)
+            rowClass = 'subHeading';
+
+        return (
+            <Table.Row className = {classNames(rowClass)}
+                       {...restProps}
+            />
+        )
+    };
+
     render() {
         const {classes, franchiseeReport} = this.props;
         if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS===null)
             return (<div/>);
 
         let data = [];
+        let total = 0;
 
         franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS.forEach(type=>{
             let billing = this.props.billingLists.filter(b=>b._id===type.Billing);
@@ -162,7 +215,8 @@ class CustomerAccountTotals extends Component {
             line.type = billing[0].Name;
             line.CUS_NO = '';
             line.CUS_NAME = '';
-            line.CUS_TAX = '';
+            line.CUS_TAX = 0;
+            line.SUB = true;
             data.push(line);
             if(type.Customers !==null && type.Customers.length){
                 type.Customers.forEach(c=>{
@@ -171,6 +225,7 @@ class CustomerAccountTotals extends Component {
                     line_c.CUS_NO = c.CUST_NO;
                     line_c.CUS_NAME = c.CUS_NAME;
                     line_c.CUS_TAX = c.TRX_AMT;
+                    line_c.SUB = false;
 
                     data.push(line_c);
                 })
@@ -180,10 +235,10 @@ class CustomerAccountTotals extends Component {
             line_sub.CUS_NO = '';
             line_sub.CUS_NAME = '';
             line_sub.CUS_TAX = type.Amount;
+            line_sub.SUB = false;
             data.push(line_sub);
+            total += type.Amount;
         });
-
-        console.log('data= ', data);
 
         const columns = [
             {name: "type", title: "Customer Transactions",},
@@ -200,7 +255,7 @@ class CustomerAccountTotals extends Component {
         ];
 
         let totalSummaryItems = [
-            // { columnName: 'CUR_MONTH', type: 'sum'},
+            { columnName: 'CUS_TAX', type: 'sum'},
         ];
 
         return (
@@ -227,10 +282,14 @@ class CustomerAccountTotals extends Component {
                                   tableComponent={TableComponent}
                                   headComponent = {TableHeadComponent}
                                   columnExtensions={tableColumnExtensions}
+                                  rowComponent = {this.TableRow}
                     />
                     <TableHeaderRow />
                     {data.length>0 && (
-                        <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
+                        <TableSummaryRow  totalRowComponent={TableSummaryComponent}
+                                          totalCellComponent = {TableSummaryCellComponent}
+                                          colspan={3}
+                        />
                     )}
                 </Grid>
             </div>
