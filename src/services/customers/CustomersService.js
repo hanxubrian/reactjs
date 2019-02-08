@@ -245,6 +245,50 @@ fullbill: 0
 				})
 		});
 	}
+	getCustomerServiceList(regionId, CustomerNo, fromDate, toDate) {
+		const data = {
+				CustomerNo:[CustomerNo],
+				fromDate: "2017-02-08T06:16:30.3466692-06:00",
+				toDate: "2019-02-08T06:16:30.3466692-06:00"
+			  }
+		console.log("getCustomerServiceList", data)
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/Service/List`, data)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
+	getCustomerCollectionList(regionId, CustomerNo, fromDate, toDate) {
+		const data = {
+				CustomerNo:[CustomerNo],
+				fromDate: "2017-02-08T06:16:30.3466692-06:00",
+				toDate: "2019-02-08T06:16:30.3466692-06:00"
+			  }
+		
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/Collection/List`, data)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
 }
 
 
