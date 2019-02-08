@@ -149,45 +149,54 @@ class CustomerAccountTotals extends Component {
         if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS===null)
             return (<div/>);
 
-        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS.map(d=>{
-            d.CUS_NAME = FuseUtils.capital_letter(d.CUS_NAME);
-            d.CONT_BILL = parseFloat(d.CONT_BILL);
-            d.CUR_MONTH = parseFloat(d.CUR_MONTH);
-            d.ADTL_B_FRN = parseFloat(d.ADTL_B_FRN);
-            d.ADTL_B_OFC = parseFloat(d.ADTL_B_OFC);
-            d.FF_PYMNT = parseFloat(d.FF_PYMNT);
-            return d;
+        let data = [];
+
+        franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS.forEach(type=>{
+            let billing = this.props.billingLists.filter(b=>b._id===type.Billing);
+            let line = {};
+            line.type = billing[0].Name;
+            line.CUS_NO = '';
+            line.CUS_NAME = '';
+            line.CUS_TAX = '';
+            data.push(line);
+            if(type.Customers !==null && type.Customers.length){
+                type.Customers.forEach(c=>{
+                    let line_c = {};
+                    line_c.type = '';
+                    line_c.CUS_NO = c.CUST_NO;
+                    line_c.CUS_NAME = c.CUS_NAME;
+                    line_c.CUS_TAX = c.TRX_AMT;
+
+                    data.push(line_c);
+                })
+            }
+            let line_sub = {};
+            line_sub.type = 'Sub Total';
+            line_sub.CUS_NO = '';
+            line_sub.CUS_NAME = '';
+            line_sub.CUS_TAX = type.Amount;
+            data.push(line_sub);
         });
 
+        console.log('data= ', data);
+
         const columns = [
-            {name: "CUST_NO", title: "Customer",},
-            {name: "CUS_NAME", title: "Cus. Name"},
-            {name: "CONT_BILL", title: "Contact Billing"},
-            {name: "CUR_MONTH", title: "Current Month"},
-            {name: "ADTL_B_FRN", title: "Additional Bill Franchisee"},
-            {name: "ADTL_B_OFC", title: "Client Supplies"},
-            {name: "FF_NBR", title: "Finders Fee Nbr"},
-            {name: "FF_PYMNT", title: "Finders Fee"},
+            {name: "type", title: "Customer Transactions",},
+            {name: "CUS_NO", title: "Customer"},
+            {name: "CUS_NAME", title: " "},
+            {name: "CUS_TAX", title: "TOTAL Without Tax"},
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'CUST_NO', width: 120, },
+            { columnName: 'type', width: 160, },
+            { columnName: 'CUS_NO', width: 120, },
             { columnName: 'CUS_NAME', width: -1, },
-            { columnName: 'CONT_BILL', width: 120, align: 'right', wordWrapEnabled: true},
-            { columnName: 'CUR_MONTH', width: 120, align: 'right', wordWrapEnabled: true},
-            { columnName: 'ADTL_B_FRN', width: 120,  align: 'right', wordWrapEnabled: true},
-            { columnName: 'ADTL_B_OFC', width: 120,  align: 'right', wordWrapEnabled: true},
-            { columnName: 'FF_NBR', width: 120,  align: 'center', wordWrapEnabled: true},
-            { columnName: 'FF_PYMNT', width: 120, align: 'right',wordWrapEnabled: true},
+            { columnName: 'CUS_TAX', width: 160, align: 'right', wordWrapEnabled: true},
         ];
 
         let totalSummaryItems = [
-            { columnName: 'CUR_MONTH', type: 'sum'},
-            { columnName: 'CONT_BILL',  type: 'sum'},
-            { columnName: 'FF_PYMNT',  type: 'sum'},
-            { columnName: 'ADTL_B_FRN',  type: 'sum'},
+            // { columnName: 'CUR_MONTH', type: 'sum'},
         ];
-
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
                 <h2>Customer Account Totals</h2>

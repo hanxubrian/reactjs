@@ -196,10 +196,10 @@ class CustomerTransactions extends Component {
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'CUST_NO', width: 120, },
-            { columnName: 'CUS_NAME', width: 220, },
+            { columnName: 'CUST_NO', width: 100, },
+            { columnName: 'CUS_NAME', width: 180, },
             { columnName: 'DESCR', width: -1, },
-            { columnName: 'INV_NO', width: 80},
+            { columnName: 'INV_NO', width: 100},
             { columnName: 'TRX_TYPE', width: 50,  align: 'center'},
             { columnName: 'TRX_AMT', width: 100,  align: 'right'},
             { columnName: 'TRX_TAX', width: 100,  align: 'right'},
