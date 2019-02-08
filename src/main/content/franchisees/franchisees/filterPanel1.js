@@ -76,6 +76,8 @@ class FilterPanel1 extends Component {
                 this.setState({periods: all_periods});
             }
         }
+
+        this.setState({period: this.props.reportPeriod});
     }
 
     componentWillMount(){
@@ -96,6 +98,7 @@ class FilterPanel1 extends Component {
                 franchiseenumber: this.props.franchiNo
             });
         }
+
     }
 
     componentWillUnmount()
