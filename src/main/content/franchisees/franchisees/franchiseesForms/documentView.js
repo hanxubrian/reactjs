@@ -88,7 +88,7 @@ const DialogActions = withStyles(theme => ({
     },
 }))(MuiDialogActions);
 
-class DocumentSignatureDialog extends React.Component {
+class DocumentView extends React.Component {
     state = {
         openDialog: false,
         insertPayload: null,
@@ -110,7 +110,7 @@ class DocumentSignatureDialog extends React.Component {
     }
 
     componentWillMount() {
-        this.setState({openDialog:this.props.docSendModal});
+        this.setState({openDialog:this.props.docViewModal});
         this.props.regions.map(x=>{
              if(x.regionid === this.props.regionId){
                  this.setState({
@@ -121,16 +121,16 @@ class DocumentSignatureDialog extends React.Component {
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        if(nextProps.docSendModal !== this.props.docSendModal) {
+        if(nextProps.docViewModal !== this.props.docViewModal) {
             this.setState({
-                openDialog: nextProps.docSendModal
+                openDialog: nextProps.docViewModal
             });
         }
     }
 
     handleClose = () => {
         this.setState({ openDialog: false });
-        this.props.openCloseDocSendActionDialog(false);
+        this.props.openCloseDocViewActionDialog(false);
     };
 
     handleChangeForm = (name) => event => {
@@ -167,7 +167,7 @@ class DocumentSignatureDialog extends React.Component {
                         <DialogTitle id="form-dialog-title" onClose={this.handleClose }>
                             <h2 className={classes.dialogH2}>
                                 <AssignmentTurnedIn  className={classNames(classes.leftIcon)} />
-                                Signature Documents
+                                Document Details
                             </h2>
                         </DialogTitle>
                         <DialogContent>
@@ -251,16 +251,16 @@ class DocumentSignatureDialog extends React.Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        openCloseDocSendActionDialog: Actions.openCloseDocSendActionDialog,
+        openCloseDocViewActionDialog: Actions.openCloseDocViewActionDialog,
     }, dispatch);
 }
 
 function mapStateToProps({franchisees, auth}) {
     return {
-        docSendModal: franchisees.docSendModal,
+        docViewModal: franchisees.docViewModal,
         regionId: auth.login.defaultRegionId,
         regions: auth.login.all_regions
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(DocumentSignatureDialog)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(DocumentView)));

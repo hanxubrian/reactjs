@@ -120,7 +120,9 @@ class FilterPanel extends Component {
         super(props);
         if(!props.bLoadedFilterList) {
             props.getStatusFilterList(this.props.regionId);
-            props.getFranchiseeStateList(this.props.regionId);
+            if(props.stateList.length === 0){
+                props.getFranchiseeStateList(this.props.regionId);
+            }            
         }
     }
     componentDidMount()
@@ -130,7 +132,7 @@ class FilterPanel extends Component {
     componentWillMount(){
         this.setState({
            franchiseeStatus: this.props.franchiseeStatus,
-           stateList: this.props.getFranchiseeStateList(this.props.regionId),
+           stateList: this.props.stateList,
            AddressLine1: this.props.insertPayload.AddressLine1,
            AddressLine2: this.props.insertPayload.AddressLine2,
            Name: this.props.insertPayload.Name,
@@ -143,7 +145,7 @@ class FilterPanel extends Component {
            Email: this.props.insertPayload.Email,
            Active: this.props.Active,
            InActive: this.props.InActive,
-        });
+        });      
         
     }
 
@@ -173,7 +175,7 @@ class FilterPanel extends Component {
        if(nextProps.franchiseesForm.props.open === true){
         this.setState({
             franchiseeStatus: this.props.franchiseeStatus,
-            stateList: this.props.getFranchiseeStateList(this.props.regionId),
+            stateList: this.props.StateList,
             AddressLine1: this.props.insertPayload.AddressLine1,
             AddressLine2: this.props.insertPayload.AddressLine2,
             Name: this.props.insertPayload.Name,

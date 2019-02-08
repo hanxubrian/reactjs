@@ -19,6 +19,8 @@ import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import {withRouter} from "react-router-dom";
 import DocumentSignatureDialog from "./documentSignature";
+import DocumentViewDialog from "./documentView";
+
 
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -47,12 +49,12 @@ function getSorting(order, orderBy) {
 class DocumentUploadTableHead extends React.Component {
 
     state = {
-        docModal: false
+        docSendModal: false
     }
 
     componentWillMount(){
        this.setState({
-           docModal: this.props.docModal
+        docSendModal: this.props.docSendModal
        });
     }
 
@@ -387,13 +389,13 @@ class FranchiseesDocumentUploadTable extends React.Component {
                                                         <IconButton
                                                             className={classNames(classes.summaryPanelButton, "mr-12")}
                                                             aria-label="view-icon"
-                                                            onClick={(ev) => this.documentView(["documentView"+n.FileTypeListId])}>
+                                                            onClick={(ev) => this.props.openCloseDocViewActionDialog(true)}>
                                                             <Icon>visibility</Icon>
                                                         </IconButton>
                                                         <IconButton
                                                                 className={classNames(classes.summaryPanelButton, "mr-12")}
                                                                 aria-label="send-icon"
-                                                                onClick={(ev)=>this.props.openClosedocDialog(true)}
+                                                                onClick={(ev)=>this.props.openCloseDocSendActionDialog(true)}
                                                                 >
                                                                 <Icon>send</Icon>
                                                         </IconButton>
@@ -406,6 +408,7 @@ class FranchiseesDocumentUploadTable extends React.Component {
                     </Table>
                 </div>
                 <DocumentSignatureDialog/>
+                <DocumentViewDialog/>
             </Paper>
         );
     }
@@ -414,7 +417,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
        getFranchiseeDocumentsList: Actions.getFranchiseeDocumentsList,
        franchiseeUpdateInsertPayload: Actions.franchiseeUpdateInsertPayload,
-       openClosedocDialog: Actions.openClosedocDialog
+       openCloseDocSendActionDialog: Actions.openCloseDocSendActionDialog,
+       openCloseDocViewActionDialog: Actions.openCloseDocViewActionDialog,
     }, dispatch);
 }
 
@@ -423,7 +427,7 @@ function mapStateToProps({ franchisees, auth }) {
         regionId: auth.login.defaultRegionId,
         documentsList: franchisees.documentsList,
         insertPayload: franchisees.insertPayload,
-        docModal: franchisees.docModal
+        docSendModal: franchisees.docSendModal
     }
 }
 

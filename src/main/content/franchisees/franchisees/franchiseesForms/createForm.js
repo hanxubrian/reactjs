@@ -681,8 +681,7 @@ class FranchiseesCreateForm extends Component {
 
     constructor (props){
         super(props);
-        props.getFranchiseeFormPlanType(props.regionId);
-        props.getFranchiseeStateList(props.regionId);
+        props.getFranchiseeFormPlanType(props.regionId);        
     }
 
     onChange = (event, { newValue, method }) => {
