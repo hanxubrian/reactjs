@@ -82,9 +82,13 @@ const styles = theme => ({
 
     },
     tableFootRow: {
+        '& td': {
+            borderBottom: `1px solid ${theme.palette.text.primary}`,
+        },
         '& td:nth-child(3)': {
             width: '100%',
         },
+
     }
 });
 

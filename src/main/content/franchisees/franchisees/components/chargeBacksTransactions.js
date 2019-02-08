@@ -69,6 +69,9 @@ const styles = theme => ({
 
     },
     tableFootRow: {
+        '& td': {
+            borderBottom: `1px solid ${theme.palette.text.primary}`,
+        },
         '& td:nth-child(2)': {
             width: '100%',
         },
