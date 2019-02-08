@@ -18,7 +18,7 @@ import TextField from "@material-ui/core/TextField/TextField";
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import {withRouter} from "react-router-dom";
-
+import DocumentSignatureDialog from "./documentSignature";
 
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -45,9 +45,21 @@ function getSorting(order, orderBy) {
 }
 
 class DocumentUploadTableHead extends React.Component {
+
+    state = {
+        docModal: false
+    }
+
+    componentWillMount(){
+       this.setState({
+           docModal: this.props.docModal
+       });
+    }
+
     createSortHandler = property => event => {
         this.props.onRequestSort(event, property);
     };
+
 
     render() {
         const { order, orderBy, headers } = this.props;
@@ -318,12 +330,6 @@ class FranchiseesDocumentUploadTable extends React.Component {
                 label: 'Status'
             },
             {
-                id: 'view',
-                numeric: false,
-                disablePadding: false,
-                label: 'View'
-            },
-            {
                 id: 'browse',
                 numeric: false,
                 disablePadding: false,
@@ -366,14 +372,6 @@ class FranchiseesDocumentUploadTable extends React.Component {
                                                         {documentsList[index]["Status"]}
                                                     </TableCell>
                                                     <TableCell>
-                                                        <IconButton
-                                                            className={classNames(classes.summaryPanelButton, "mr-12")}
-                                                            aria-label="view-icon"
-                                                            onClick={(ev) => this.documentView(["documentView"+n.FileTypeListId])}>
-                                                            <Icon>visibility</Icon>
-                                                        </IconButton>
-                                                    </TableCell>
-                                                    <TableCell>
                                                         <TextField
                                                             id={"value" + n.FileTypeListId}
                                                             type="file"
@@ -387,9 +385,15 @@ class FranchiseesDocumentUploadTable extends React.Component {
                                                     </TableCell>
                                                     <TableCell>
                                                         <IconButton
+                                                            className={classNames(classes.summaryPanelButton, "mr-12")}
+                                                            aria-label="view-icon"
+                                                            onClick={(ev) => this.documentView(["documentView"+n.FileTypeListId])}>
+                                                            <Icon>visibility</Icon>
+                                                        </IconButton>
+                                                        <IconButton
                                                                 className={classNames(classes.summaryPanelButton, "mr-12")}
                                                                 aria-label="send-icon"
-                                                                // onClick={}
+                                                                onClick={(ev)=>this.props.openClosedocDialog(true)}
                                                                 >
                                                                 <Icon>send</Icon>
                                                         </IconButton>
@@ -401,6 +405,7 @@ class FranchiseesDocumentUploadTable extends React.Component {
                         </TableBody>
                     </Table>
                 </div>
+                <DocumentSignatureDialog/>
             </Paper>
         );
     }
@@ -409,6 +414,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
        getFranchiseeDocumentsList: Actions.getFranchiseeDocumentsList,
        franchiseeUpdateInsertPayload: Actions.franchiseeUpdateInsertPayload,
+       openClosedocDialog: Actions.openClosedocDialog
     }, dispatch);
 }
 
@@ -416,7 +422,8 @@ function mapStateToProps({ franchisees, auth }) {
     return {
         regionId: auth.login.defaultRegionId,
         documentsList: franchisees.documentsList,
-        insertPayload: franchisees.insertPayload
+        insertPayload: franchisees.insertPayload,
+        docModal: franchisees.docModal
     }
 }
 

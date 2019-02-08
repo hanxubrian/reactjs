@@ -30,6 +30,7 @@ const initialState = {
     deletePayload: null,
     Active: true,
     InActive: true,
+    docModal: false,
     createFranchisees: {
         type : 'new',
         props: {
@@ -428,6 +429,12 @@ const franchisees = function(state = initialState, action) {
             return{
                 ...state,
                 reportPeriod: action.payload
+            }
+        }
+        case Actions.OPEN_CLOSE_DOC_DIALOG:{
+            return{
+                ...state,
+                docModal: action.payload
             }
         }
         default:

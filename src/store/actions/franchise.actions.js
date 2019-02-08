@@ -36,6 +36,8 @@ export const GET_FRANCHISEE_DETAIL = '[FRANCHISEES] GET FRANCHISEE DETAIL';
 export const UPDATE_REPORT_PERIOD = '[FRANCHISEES] UPDATE REPORT PERIOD';
 export const NULLIFY_FRANCHISEE_NEW_REPORT = '[FINDERSFEES APP] NULLIFY FRANCHISEE NEW REPORT';
 
+export const OPEN_CLOSE_DOC_DIALOG = '[FRANCHISEES] OPEN_CLOSE_DOC_DIALOG ';
+
 
 export function getFranchisees(regionId, statusId, location , latitude , longitude , searchtext) {
 
@@ -302,6 +304,13 @@ export function updateReportPeriod(period) {
 export function nullifyFranchiseeNewReport() {
     return {
         type: NULLIFY_FRANCHISEE_NEW_REPORT,
+    }
+}
+
+export function openClosedocDialog (flag){
+    return{
+        type: OPEN_CLOSE_DOC_DIALOG,
+        payload: flag
     }
 }
 
