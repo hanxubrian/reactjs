@@ -289,7 +289,6 @@ class Report extends Component {
                         </CardContent>
                     </Card>
                 </div>
-
                 <div className="cardname">
                     <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
@@ -343,7 +342,6 @@ class Report extends Component {
                         </CardContent>
                     </Card>
                 </div>
-
                 <div className="cardname">
                     <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>

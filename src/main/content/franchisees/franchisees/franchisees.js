@@ -374,11 +374,13 @@ class Franchisees extends Component {
         props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
         this.fetchData = this.fetchData.bind(this);
         this.escFunction = this.escFunction.bind(this);
+        if(props.billingLists===null)
+            props.getBillingLists(props.regionId);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot){
         let bChanged = false;
-        
+
 
         if(this.props.regionId !== prevProps.regionId) {
             this.setState({regionId: prevProps.regionId});
@@ -440,7 +442,7 @@ class Franchisees extends Component {
             });
             this.getFranchiseesFromStatus(this.props.franchisees, this.props.Active, nextProps.InActive);
         }
- 
+
     }
     getFranchiseesFromStatus =(rawData=this.props.franchisees, Active=this.state.Active, InActive=this.state.InActive) =>{
         let data = [];
@@ -516,7 +518,7 @@ class Franchisees extends Component {
         }
     };
 
-    removeFranchisees = async(id)=> {        
+    removeFranchisees = async(id)=> {
         if (window.confirm("Do you really want to remove the selected franchisee(s)")) {
             await this.props.deleteFranchisees(id,this.props.regionId, this.props.insertPayload);
             await this.props.getFranchisees(this.props.regionId);
@@ -781,7 +783,7 @@ class Franchisees extends Component {
                                                 onClick={showCreteFranchisees}>
                                                 <Icon>add</Icon>
                                             </Fab> */}
-                                            <Button variant="contained" color="primary" 
+                                            <Button variant="contained" color="primary"
                                                 className={classNames(classes.button, classes.btntop) }
                                                 onClick={showCreteFranchisees}>
                                             Add
@@ -803,7 +805,7 @@ class Franchisees extends Component {
                                             </FuseAnimate>
                                             {createFranchisees.type === "new" && (
                                                 <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                                    <Typography variant="h6" className="hidden sm:flex">Franchisees | New Franchisees</Typography>   
+                                                    <Typography variant="h6" className="hidden sm:flex">Franchisees | New Franchisees</Typography>
                                                 </FuseAnimate>
                                             )}
                                             {createFranchisees.type === "edit" && (
@@ -1223,10 +1225,11 @@ function mapDispatchToProps(dispatch)
         toggleFranchiseeMapView: Actions.toggleFranchiseeMapView,
         updateFranchisees: Actions.updateFranchisees,
         getFranchiseeDetail: Actions.getFranchiseeDetail,
+        getBillingLists: Actions.getBillingLists,
     }, dispatch);
 }
 
-function mapStateToProps({franchisees,auth})
+function mapStateToProps({franchisees,auth, invoices})
 {
     return {
         franchisees: franchisees.franchiseesDB,
@@ -1249,6 +1252,7 @@ function mapStateToProps({franchisees,auth})
         detailPayload: franchisees.detailPayload,
         createPayload: franchisees.createPayload,
         reportPeriod: franchisees.reportPeriod,
+        billingLists: invoices.billingLists,
     }
 }
 

@@ -86,7 +86,7 @@ class TransactionsSummary extends Component {
             <div className={classNames(classes.root,'p-16 flex flex-col flex-1 items-center')}>
                 <SummaryTransactons />
                 <CustomerTransactions />
-                <CustomerAccountTotals />
+                {/*<CustomerAccountTotals />*/}
                 <SupplyTransactons />
                 <FindersFeeTransactions />
                 <RegularMiscTransactons />

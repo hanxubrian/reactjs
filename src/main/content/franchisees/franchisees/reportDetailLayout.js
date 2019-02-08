@@ -254,6 +254,7 @@ class ReportLayout extends Component {
     };
 
     goBackList =()=>{
+        this.props.nullifyFranchiseeNewReport();
         this.props.history.push('/franchisees/list');
     };
     render() {
@@ -335,7 +336,8 @@ class ReportLayout extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         openCloseReviseModal: Actions.openCloseReviseDialog,
-        openCloseRejectModal: Actions.openCloseRejectDialog
+        openCloseRejectModal: Actions.openCloseRejectDialog,
+        nullifyFranchiseeNewReport: Actions.nullifyFranchiseeNewReport,
     }, dispatch);
 }
 
