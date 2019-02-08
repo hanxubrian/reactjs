@@ -415,7 +415,12 @@ class FinderFeePanelModalDialog extends React.Component {
 			overpayment: 0,
 			errorMsg: "",
 
-			customerFormFindersFeesDialogPayload: {}
+			customerFormFindersFeesDialogPayload: {},
+			findersFeesCalculationMethod: {
+				title: "",
+				name: "",
+				value: "",
+			}
 		}
 		// this.commitChanges = this.commitChanges.bind(this);
 	}
@@ -424,7 +429,8 @@ class FinderFeePanelModalDialog extends React.Component {
 		console.log("componentWillMount")
 		this.setRowData(this.props.payments)
 		this.setState({
-			customerFormFindersFeesDialogPayload: this.props.customerFormFindersFeesDialogPayload
+			customerFormFindersFeesDialogPayload: this.props.customerFormFindersFeesDialogPayload,
+			findersFeesCalculationMethod: this.props.findersFeesCalculationMethod,
 		})
 	}
 	componentDidMount() {
@@ -433,6 +439,11 @@ class FinderFeePanelModalDialog extends React.Component {
 		if (!_.isEqual(nextProps.customerFormFindersFeesDialogPayload, this.props.customerFormFindersFeesDialogPayload)) {
 			this.setState({
 				customerFormFindersFeesDialogPayload: nextProps.customerFormFindersFeesDialogPayload
+			})
+		}
+		if (!_.isEqual(nextProps.findersFeesCalculationMethod, this.props.findersFeesCalculationMethod)) {
+			this.setState({
+				findersFeesCalculationMethod: nextProps.findersFeesCalculationMethod
 			})
 		}
 	}
@@ -494,17 +505,29 @@ class FinderFeePanelModalDialog extends React.Component {
 	};
 
 	handleChange = name => event => {
+		const value = event.target.value
+		if (name === "findersFeesCalculationMethod") {
+			const findersFeesCalculationMethod = {
+				...this.state.findersFeesCalculationMethod,
+				title: value,
+			}
+			this.setState({ findersFeesCalculationMethod })
+			this.props.setFindersFeesCalculationMethod(findersFeesCalculationMethod)
+			//
+			// config value parsing
+			//
+			console.log(this.props.customerForm)
+
+
+
+
+
+
+			return
+		}
 		this.setState({
 			[name]: event.target.value,
-			errorMsg: ""
 		});
-
-		if (name === "PaymentAmount") {
-			// this.setState({
-			// 	overpayment: this.getOverpaymentAmount(this.state.rows, event.target.value)
-			// })
-		}
-		// this.checkValidations(name, event.target.value)
 	};
 
 	commitChanges = ({ added, changed, deleted }) => {
@@ -794,7 +817,7 @@ class FinderFeePanelModalDialog extends React.Component {
 										id="StartDate"
 										label="Start Date"
 										className={classNames(classes.textField, "pr-6")}
-										InputLabelProps={{shrink: true}}
+										InputLabelProps={{ shrink: true }}
 										value={this.state.StartDate}
 										onChange={this.handleChange('StartDate')}
 										margin="dense"
@@ -809,15 +832,15 @@ class FinderFeePanelModalDialog extends React.Component {
 									/>
 								</div>
 
-								<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24, width:"50%" }} />
+								<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24, width: "50%" }} />
 
 								<div className={classNames("flex flex-col")} sm={12}>
 									<div className={classNames("flex")}>
 										<TextField sm={3} select margin="dense" id="CalculationMethod" label="CalculationMethod" variant="outlined"
-											InputLabelProps={{shrink: true}}
+											InputLabelProps={{ shrink: true }}
 											className={classNames(classes.textField, "pr-6")}
-											value={this.state.CalculationMethod || ""}
-											onChange={this.handleChange('CalculationMethod')}
+											value={this.state.findersFeesCalculationMethod.title || ""}
+											onChange={this.handleChange('findersFeesCalculationMethod')}
 											fullWidth
 										>
 											{
@@ -829,7 +852,7 @@ class FinderFeePanelModalDialog extends React.Component {
 													"Public Event",
 													"Variable 2.5%",
 													"National Account",
-											].map((x, index) =>
+												].map((x, index) =>
 													<MenuItem key={index} value={x}>{x}</MenuItem>
 												)
 											}
@@ -1013,6 +1036,7 @@ function mapDispatchToProps(dispatch) {
 		// createAccountReceivablePayment: Actions.createAccountReceivablePayment,
 
 		setCustomerFormFindersFeesDialogPayload: Actions.setCustomerFormFindersFeesDialogPayload,
+		setFindersFeesCalculationMethod : Actions.setFindersFeesCalculationMethod,
 	}, dispatch);
 }
 
@@ -1027,7 +1051,11 @@ function mapStateToProps({ customers, accountReceivablePayments, auth }) {
 		filterParam: accountReceivablePayments.filterParam,
 		searchText: accountReceivablePayments.searchText,
 
+		customerForm: customers.customerForm,
+
 		customerFormFindersFeesDialogPayload: customers.customerFormFindersFeesDialogPayload,
+		findersFeesCalculationMethod: customers.findersFeesCalculationMethod,
+
 	}
 }
 

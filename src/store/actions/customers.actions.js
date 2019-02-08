@@ -43,6 +43,7 @@ export const GET_FINDERS_FEES_BY_CUSTOMER_NO = "[CUSTOMERS APP] GET_FINDERS_FEES
 
 export const FINDERS_FEE_CONFIGS = "[CUSTOMERS APP] FINDERS_FEE_CONFIGS";
 export const FINDERS_FEE_CONFIGS_START = "[CUSTOMERS APP] FINDERS_FEE_CONFIGS_START";
+export const SET_FINDERS_FEES_CALCULATION_METHOD = "[CUSTOMERS APP] SET_FINDERS_FEES_CALCULATION_METHOD";
 
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	// return dispatch => {
@@ -270,9 +271,10 @@ export function openEditCustomerForm(regionId, customerId, customerNo) {
 		(async () => {
 			let customer = await customersService.getCustomer(regionId, customerId);
 			let findersFees = await customersService.getFindersFeesByCustomerNo(regionId, customerNo);
+			let findersFeesConfig = await customersService.findersfeeConfigs();
 			dispatch({
 				type: OPEN_EDIT_CUSTOMER_FORM,
-				payload: { customer, findersFees }
+				payload: { customer, findersFees, findersFeesConfig }
 			});
 		})();
 	}
@@ -291,6 +293,13 @@ export function findersfeeConfigs() {
 				payload: res
 			});
 		})();
+	}
+}
+
+export function setFindersFeesCalculationMethod(s) {
+	return {
+		type: SET_FINDERS_FEES_CALCULATION_METHOD,
+		payload: s
 	}
 }
 

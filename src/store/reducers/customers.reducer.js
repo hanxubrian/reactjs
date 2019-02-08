@@ -59,6 +59,11 @@ const initialState = {
 	finderFeesConfigs: [],
 	isStartedFindersFeesConfigsFetching: false,
 
+	findersFeesCalculationMethod: {
+		title: "",
+		name: "",
+		value: "",
+	},
 };
 
 
@@ -250,6 +255,7 @@ const customers = function (state = initialState, action) {
 						},
 						data: action.payload.customer,
 						findersFees: action.payload.findersFees,
+						findersFeesConfig: action.payload.findersFeesConfig,
 					}
 				};
 			}
@@ -296,6 +302,13 @@ const customers = function (state = initialState, action) {
 				return {
 					...state,
 					isStartedFindersFeesConfigsFetching: true
+				};
+			}
+		case Actions.SET_FINDERS_FEES_CALCULATION_METHOD:
+			{
+				return {
+					...state,
+					findersFeesCalculationMethod: action.payload
 				};
 			}
 
