@@ -155,7 +155,7 @@ class SummaryTransactons extends Component {
         const aDeductions5 =["SUBTOTAL_SPEC_DEDS"];
         const aDeductions6 =["TOTAL_DEDS"];
         const aDeductions7 =["CHARGEBACKS", "ChildSupport"];
-
+        const aDeductions8 =["ACCT_FEE_REB_BAL"];
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
@@ -386,7 +386,7 @@ class SummaryTransactons extends Component {
                     <tbody>
                     <tr>
                         <td><h2 className="pt-16" style ={{color:'white'}}>DUE TO FRANCHISEE BEFORE CHARGEBACK:</h2></td>
-                        <td style={{width:'14%'}}> $0.00 </td>
+                        <td className="pt-16" style={{width:'16%'}}> ${ SUMMARY_PAGE[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'] !=null && SUMMARY_PAGE[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'][0] !=null && ( parseFloat(SUMMARY_PAGE[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) } </td>
                     </tr>
                     </tbody>
                 </table>
@@ -413,12 +413,12 @@ class SummaryTransactons extends Component {
                                     <tr key={index}>
                                         <td>
                                             <Typography variant="subtitle1">
-                                                {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
+                                                {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && SUMMARY_PAGE[0][b][0].AMOUNT !== "0" && ( SUMMARY_PAGE[0][b][0].LABEL) }
                                             </Typography>
                                         </td>
                                         <td className="text-right">
                                             {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
-                                            ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                            { SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && SUMMARY_PAGE[0][b][0].AMOUNT !== "0" && ( '$' + parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
                                         </td>
                                     </tr>
                                 )
@@ -443,8 +443,32 @@ class SummaryTransactons extends Component {
                     <tbody>
                     <tr>
                         <td><h2 className="pt-16" style ={{color:'white'}}>DUE TO FRANCHISEE:</h2></td>
-                        <td style={{width:'14%'}}> $0.00 </td>
+                        <td className="pt-16" style={{width:'16%'}}> ${ SUMMARY_PAGE[0]['DUE_TO_FRAN'] !=null && SUMMARY_PAGE[0]['DUE_TO_FRAN'][0] !=null && ( parseFloat(SUMMARY_PAGE[0]['DUE_TO_FRAN'][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) } </td>
                     </tr>
+                    </tbody>
+                </table>
+
+                <table style={{width:'63%'}}>
+                    <tbody>
+                    { aDeductions8.map((b, index)=>{
+                            if(SUMMARY_PAGE[0][b]===null)
+                                return false;
+                            else
+                                return (
+                                    <tr key={index}>
+                                        <td>
+                                            <Typography variant="subtitle1">
+                                                {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && SUMMARY_PAGE[0][b][0].AMOUNT !== "0" && ( SUMMARY_PAGE[0][b][0].LABEL) }
+                                            </Typography>
+                                        </td>
+                                        <td className="text-right">
+                                            {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
+                                            { SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && SUMMARY_PAGE[0][b][0].AMOUNT !== "0" && ( '$' + parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                        </td>
+                                    </tr>
+                                )
+                        }
+                    )}
                     </tbody>
                 </table>
 
