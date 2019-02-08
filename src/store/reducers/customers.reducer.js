@@ -64,6 +64,25 @@ const initialState = {
 		name: "",
 		value: "",
 	},
+
+	customerServiceForm : {
+		serviceList:{
+			data:[],
+			isFetching:false,
+		},
+		billingList:{
+			data:[],
+			isFetching:false,
+		},
+		collectionList:{
+			data:[],
+			isFetching:false,
+		},
+	},
+	filterParam : {
+		fromDate : "",
+		toDate : "",
+	}
 };
 
 
@@ -311,6 +330,58 @@ const customers = function (state = initialState, action) {
 					findersFeesCalculationMethod: action.payload
 				};
 			}
+		case Actions.GET_CUSTOMER_SERVICE_LIST:
+			{
+				return {
+					...state,
+					customerServiceForm: {
+						...state.customerServiceForm,
+						serviceList : {
+							data:action.payload,
+							isFetching:false
+						}
+					}
+				};
+			}
+		case Actions.GET_CUSTOMER_SERVICE_LIST_START:
+			{
+				return {
+					...state,
+					customerServiceForm: {
+						...state.customerServiceForm,
+						serviceList : {
+							...state.customerServiceForm.serviceList,
+							isFetching:true
+						}
+					}
+				};
+			}
+			case Actions.GET_CUSTOMER_COLLECTION_LIST:
+			{
+				return {
+					...state,
+					customerServiceForm: {
+						...state.customerServiceForm,
+						collectionList : {
+							data:action.payload,
+							isFetching:false
+						}
+					}
+				};
+			}
+			case Actions.GET_CUSTOMER_COLLECTION_LIST_START:
+			{
+				return {
+					...state,
+					customerServiceForm: {
+						...state.customerServiceForm,
+						collectionList : {
+							...state.customerServiceForm.collectionList,
+							isFetching:true
+						}
+					}
+				};
+			}
 
 		// case Actions.GET_FINDERS_FEES_BY_CUSTOMER_NO_START:
 		// 	{
@@ -327,6 +398,8 @@ const customers = function (state = initialState, action) {
 		// 			isStartedFindersFeesFetching: false,
 		// 		};
 		// 	}
+
+		
 		default:
 			{
 				return state;

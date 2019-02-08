@@ -141,8 +141,6 @@ class CustomerSearchBar extends Component {
 	}
 
 	handleKeyDown = (event) => {
-		console.log("escFunction");
-
 		if (event.keyCode === ENTER_KEY) {
 			clearTimeout(this.timer)
 			this.triggerChange()

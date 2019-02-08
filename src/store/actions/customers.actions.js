@@ -45,6 +45,11 @@ export const FINDERS_FEE_CONFIGS = "[CUSTOMERS APP] FINDERS_FEE_CONFIGS";
 export const FINDERS_FEE_CONFIGS_START = "[CUSTOMERS APP] FINDERS_FEE_CONFIGS_START";
 export const SET_FINDERS_FEES_CALCULATION_METHOD = "[CUSTOMERS APP] SET_FINDERS_FEES_CALCULATION_METHOD";
 
+export const GET_CUSTOMER_SERVICE_LIST_START = "[CUSTOMERS-service APP] GET_CUSTOMER_SERVICE_LIST_START";
+export const GET_CUSTOMER_SERVICE_LIST = "[CUSTOMERS-service APP] GET_CUSTOMER_SERVICE_LIST";
+export const GET_CUSTOMER_COLLECTION_LIST_START = "[CUSTOMERS-service APP] GET_CUSTOMER_COLLECTION_LIST_START";
+export const GET_CUSTOMER_COLLECTION_LIST = "[CUSTOMERS-service APP] GET_CUSTOMER_COLLECTION_LIST";
+
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	// return dispatch => {
 	// const request = axios.get("/api/customers/gets");
@@ -295,6 +300,46 @@ export function findersfeeConfigs() {
 		})();
 	}
 }
+//////////////////////////////////////////////////////////
+//														//
+//			CUSTOMER-SERVICE Forms Tab Grid				//
+//														//
+//////////////////////////////////////////////////////////
+export function getCustomerServiceList(regionId, CustomerNo, fromDate, toDate) {
+	return (dispatch) => {
+		dispatch({
+			type: GET_CUSTOMER_SERVICE_LIST_START,
+			payload: true
+		});
+
+		(async () => {
+			let res = await customersService.getCustomerServiceList(regionId, CustomerNo, fromDate, toDate);
+			dispatch({
+				type: GET_CUSTOMER_SERVICE_LIST,
+				payload: res
+			});
+		})();
+	}
+}
+export function getCustomerCollectionList(regionId, CustomerNo, fromDate, toDate) {
+	return (dispatch) => {
+		dispatch({
+			type: GET_CUSTOMER_COLLECTION_LIST_START,
+			payload: true
+		});
+
+		(async () => {
+			let res = await customersService.getCustomerCollectionList(regionId, CustomerNo, fromDate, toDate);
+			dispatch({
+				type: GET_CUSTOMER_COLLECTION_LIST,
+				payload: res
+			});
+		})();
+	}
+}
+
+
+
 
 export function setFindersFeesCalculationMethod(s) {
 	return {
