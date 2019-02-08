@@ -23,13 +23,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import SendIcon from '@material-ui/icons/Send';
-import Check from "@material-ui/icons/Check";
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import PDF from '../../../../../styles/document.pdf';
 
 const styles = theme => ({
     leftIcon: {
@@ -91,14 +85,7 @@ const DialogActions = withStyles(theme => ({
 class DocumentView extends React.Component {
     state = {
         openDialog: false,
-        insertPayload: null,
-        dialogForm: {
-            Subject: "",
-            Email: "",
-            Message: ""
-        },
-        radioValue: "docuSign",
-        regionName: ""
+        file : PDF
     };
     constructor (props){
         super(props);
@@ -111,13 +98,7 @@ class DocumentView extends React.Component {
 
     componentWillMount() {
         this.setState({openDialog:this.props.docViewModal});
-        this.props.regions.map(x=>{
-             if(x.regionid === this.props.regionId){
-                 this.setState({
-                     regionName: x.regionname
-                 });
-             }
-        })
+        //console.log("PDF",PDF);
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
@@ -133,26 +114,20 @@ class DocumentView extends React.Component {
         this.props.openCloseDocViewActionDialog(false);
     };
 
-    handleChangeForm = (name) => event => {
-        const dialogForm = this.state.dialogForm;
-        if(name === "Subject"){
-            dialogForm.Subject = event.target.value;
-        }
-        if(name === "Email"){
-            dialogForm.Email = event.target.value;
-        }
-        if(name === "Message"){
-            dialogForm.Message = event.target.value;
-        }
-        this.setState({dialogForm: dialogForm});
+    onDocumentLoadSuccess = ({ numPages }) => {
+        this.setState({ numPages });
     }
 
-    handleRadioChange = event => {
-        this.setState({ radioValue: event.target.value });
-    };
+    onFileChange = (event) => {
+        this.setState({
+          file: event.target.files[0],
+        });
+      }
+    
 
     render() {
         const { classes } = this.props;
+        const { pageNumber, numPages, file } = this.state;
 
         return (
             <div className={classes.root}>
@@ -160,10 +135,10 @@ class DocumentView extends React.Component {
                     open={this.state.openDialog}
                     onClose={this.handleClose }
                     aria-labelledby="form-dialog-title"
-                    maxWidth={"md"}
+                    maxWidth={"lg"}
                     fullWidth
                 >
-                    <form action="/" method={"POST"} onSubmit={(e) => {e.preventDefault();this.handleAddOwner();}}>
+                    
                         <DialogTitle id="form-dialog-title" onClose={this.handleClose }>
                             <h2 className={classes.dialogH2}>
                                 <AssignmentTurnedIn  className={classNames(classes.leftIcon)} />
@@ -172,76 +147,9 @@ class DocumentView extends React.Component {
                         </DialogTitle>
                         <DialogContent>
                             <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-                                <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                    <Typography className="flex" style={{alignItems: "center",marginRight:20,fontSize:"16px"}}>Send Via :</Typography>
-                                    <RadioGroup
-                                            aria-label="sign"
-                                            name="sign"
-                                            value={this.state.radioValue}
-                                            onChange={this.handleRadioChange}
-                                            row
-                                        >
-                                            <FormControlLabel value="docuSign" labelPlacement="end" control={<Radio />} label="Document Sign" />
-                                            <FormControlLabel labelPlacement="end" value="email" control={<Radio />} label="Email" />
-                                    </RadioGroup>
-                                </GridItem>
-                                <GridItem xs={12} sm={12} md={12}  className="flex flex-row justify-between">
-                                    <Typography style={{fontSize:"16px"}} className="justify-start">From : {this.state.regionName} </Typography>   
-                                </GridItem>
-                                <GridItem xs={12} sm={12} md={12}  className="flex flex-row justify-between mt-16">
-                                    <TextField
-                                        id="franchisee-email"
-                                        label="Franchisee Email"
-                                        className={classes.textField}
-                                        value={this.state.name}
-                                        InputProps={{
-                                            startAdornment: <InputAdornment position="start">To:</InputAdornment>,
-                                        }}
-                                        autoFocus={true}
-                                        onChange={this.handleChangeForm('franchiseeEmail')}
-                                        margin="dense"
-                                        variant="outlined"
-                                        fullWidth
-                                    />   
-                                </GridItem>
-                                <GridItem xs={12} sm={12} md={12}  className="flex flex-row justify-between">
-                                    <TextField
-                                        id="date"
-                                        type="date"
-                                        variant="outlined"
-                                        label="Return Signed Before"
-                                        className={classes.textField}
-                                        InputLabelProps={{
-                                           shrink: true,
-                                        }}
-                                        margin="dense"
-                                        fullWidth
-                                    />
-                                </GridItem>
-                                <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                    <TextField
-                                        id="dialogMessage"
-                                        label="Message"
-                                        variant={"outlined"}
-                                        className={classes.textField}
-                                        value=""
-                                        onChange={this.handleChangeForm("Message")}
-                                        multiline
-                                        margin={"dense"}
-                                        rows={5}
-                                        fullWidth
-                                        required
-                                    />
-                                </GridItem>
+                            <embed src={PDF} width="100%" height="800px" />
                             </GridContainer>
                         </DialogContent>
-                        <DialogActions style={{padding:"2%"}}>
-                            <Button type="submit" color={"primary"} variant="contained" size="small" className={classes.button}>
-                                <SendIcon  className={classNames(classes.leftIcon, classes.iconSmall)} />
-                                Send
-                            </Button>
-                        </DialogActions>
-                    </form>
                 </Dialog>
             </div>
         );
