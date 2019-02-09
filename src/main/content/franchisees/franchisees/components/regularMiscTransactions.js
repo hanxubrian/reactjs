@@ -247,10 +247,10 @@ class RegularMiscTransactons extends Component {
                     />
 
                     <IntegratedPaging/>
-                    <SummaryState
-                        totalItems={totalSummaryItems}
-                    />
-                    <IntegratedSummary />
+                    {data.length>0 && (
+                        <SummaryState totalItems={totalSummaryItems} />
+                    )}
+                    {data.length>0 && (<IntegratedSummary /> )}
 
                     <VirtualTable height="auto"
                                   tableComponent={TableComponent}
@@ -258,9 +258,11 @@ class RegularMiscTransactons extends Component {
                                   columnExtensions={tableColumnExtensions}
                     />
                     <TableHeaderRow />
+                    {data.length>0 && (
                     <TableSummaryRow  totalRowComponent={TableSummaryComponent}
                                       totalCellComponent = {TableSummaryCellComponent}
                     />
+                    )}
                 </Grid>
             </div>
         );

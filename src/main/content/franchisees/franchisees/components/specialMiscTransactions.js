@@ -234,7 +234,7 @@ class SpecialMiscTransactons extends Component {
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
-                <h2>Regular Misc. Transactions</h2>
+                <h2>Special Misc. Transactions</h2>
                 <Grid rows={data} columns={columns}>
                     <PagingState
                         currentPage={this.state.currentPage}
@@ -247,10 +247,10 @@ class SpecialMiscTransactons extends Component {
                     />
 
                     <IntegratedPaging/>
-                    <SummaryState
-                        totalItems={totalSummaryItems}
-                    />
-                    <IntegratedSummary />
+                    {data.length>0 && (
+                        <SummaryState totalItems={totalSummaryItems} />
+                    )}
+                    {data.length>0 && (<IntegratedSummary /> )}
 
                     <VirtualTable height="auto"
                                   tableComponent={TableComponent}
@@ -258,9 +258,11 @@ class SpecialMiscTransactons extends Component {
                                   columnExtensions={tableColumnExtensions}
                     />
                     <TableHeaderRow />
+                    {data.length>0 && (
                     <TableSummaryRow  totalRowComponent={TableSummaryComponent}
                                       totalCellComponent = {TableSummaryCellComponent}
                     />
+                    )}
                 </Grid>
             </div>
         );
