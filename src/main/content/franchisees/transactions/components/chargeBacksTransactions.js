@@ -35,11 +35,6 @@ import NumberFormat from 'react-number-format';
 import FuseUtils from '@fuse/FuseUtils';
 
 const styles = theme => ({
-    layoutTable: {
-        '& table th:first-child span': {
-            paddingLeft: '8px!important'
-        }
-    },
     tableTheadRow: {
         '& tr': {
             height: 32
@@ -49,12 +44,12 @@ const styles = theme => ({
             borderBottom: `2px solid ${theme.palette.text.primary}`,
             borderTop: `2px solid ${theme.palette.text.primary}`,
         },
-        '& tr th:nth-child(3)': {
+        '& tr th:nth-child(2)': {
             width: '100%'
-        },
-        '& tr th:nth-child(2) span': {
-            display: 'none'
-        },
+        }
+    },
+    imageIcon: {
+        width: 24
     },
     tableStriped: {
         marginBottom: '0!important',
@@ -68,25 +63,22 @@ const styles = theme => ({
             paddingLeft: 4,
             paddingRight: 4
         },
-        '& tbody tr td:nth-child(3)': {
+        '& tbody tr td:nth-child(2)': {
             width: '100%',
         },
         '& tbody tr:last-child td': {
             borderBottom: `2px solid ${theme.palette.text.primary}`,
         }
+
     },
     tableFootRow: {
         height: 42,
         '& td': {
             borderBottom: `1px solid ${theme.palette.text.primary}`,
         },
-        '& td:nth-child(3)': {
+        '& td:nth-child(2)': {
             width: '100%',
         },
-        '& td:nth-child(5)>div': {
-            display: 'flex',
-            justifyContent: 'flex-end'
-        }
     }
 });
 
@@ -128,7 +120,7 @@ const TableSummaryComponentBase = ({ classes, ...restProps }) => (
 );
 
 const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
-    if(restProps.column.name==='type'){
+    if(restProps.column.name==='type34214'){
         return (
             <Table.Cell
                 {...restProps}
@@ -138,7 +130,7 @@ const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
             </Table.Cell>
         );
     }
-    else if(restProps.column.name==='PYMNT_TOT'){
+    else if(restProps.column.name==='TRX_AMT' || restProps.column.name==='TRX_TAX'|| restProps.column.name==='TRX_TOT'){
         return (
             <Table.Cell
                 {...restProps}
@@ -147,7 +139,6 @@ const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
                 {CurrencyFormatter({value: restProps.children.props.children[0].props.params.value})}
             </Table.Cell>
         );
-
     }
     else
         return (
@@ -163,7 +154,7 @@ export const TableSummaryComponent = withStyles(styles, { name: 'TableSummaryCom
 export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
 export const TableSummaryCellComponent = withStyles(styles, { name: 'TableSummaryCellComponent' })(TableSummaryCellComponentBase);
 
-class FindersFeeTransactions extends Component {
+class ChargeBacksTransactions extends Component {
     state = {
         pageSizes: [5, 10, 25, 50, 100],
         currentPage: 0,
@@ -202,43 +193,58 @@ class FindersFeeTransactions extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].FINDER_FEES.length===0)
-            return (<div/>);
+        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CHARGEBACKS===null)
+            return (<div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
+                <h2>Charge Backs Transactions</h2></div>);
 
-        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].FINDER_FEES.map(d=>{
-            d.DESCRIPTION = FuseUtils.capital_letter(d.DESCRIPTION);
-            d.PYMNT_TOT = parseFloat(d.PYMNT_TOT);
+        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CHARGEBACKS.map(d=>{
+            let type = this.props.transactionTypeList.filter(t=>t._id===d.TYPE);
+            d.DESCR = FuseUtils.capital_letter(d.DESCR);
+            d.TRX_AMT = parseFloat(d.TRX_AMT);
+            d.TRX_TAX = parseFloat(d.TRX_TAX);
+            d.TRX_TOT = parseFloat(d.TRX_TOT);
+            if(type.length>0)
+                d.TYPE = type[0].Name;
             return d;
         });
 
         const columns = [
-            {name: "CUST_NO", title: "Customer",},
-            {name: "CUS_NAME", title: "Cus. Name"},
-            {name: "DESCRIPTION", title: "Description"},
-            {name: "PYMNT_NUM", title: "Payment #"},
-            {name: "PYMNT_TOT", title: "Payment Total"},
+            {name: "TYPE", title: "Type"},
+            {name: "DESCR", title: "Description"},
+            {name: "TRX_AMT", title: "Amount"},
+            // {name: "TRX_TAX", title: "Tax"},
+            {name: "TRX_TOT", title: "Total"},
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'CUST_NO', width: 120, },
-            { columnName: 'CUS_NAME', width: 150, },
-            { columnName: 'DESCRIPTION', width: -1, },
-            { columnName: 'PYMNT_NUM', width: 100},
-            { columnName: 'PYMNT_TOT', width: 140,  align: 'right'},
+            { columnName: 'DESCR', width: -1, },
+            { columnName: 'TYPE', width: 180},
+            { columnName: 'TRX_AMT', width: 140,  align: 'right'},
+            { columnName: 'TRX_TAX', width: 140,  align: 'right'},
+            { columnName: 'TRX_TOT', width: 140,  align: 'right'},
         ];
 
         let totalSummaryItems = [
-            { columnName: 'PYMNT_TOT', type: 'sum'},
+            { columnName: 'TRX_AMT',  type: 'sum'},
+            { columnName: 'TRX_TAX',  type: 'sum'},
+            { columnName: 'TRX_TOT',  type: 'sum'},
         ];
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
-                <h2>Finder Fees</h2>
+                <h2>Charge Backs Transactions</h2>
                 <Grid rows={data} columns={columns}>
+                    <PagingState
+                        currentPage={this.state.currentPage}
+                        onCurrentPageChange={this.changeCurrentPage}
+                        pageSize={this.state.pageSize}
+                        onPageSizeChange={this.changePageSize}
+                    />
                     <CurrencyTypeProvider
-                        for={['PYMNT_TOT']}
+                        for={['TRX_AMT', 'TRX_TAX', 'TRX_TOT']}
                     />
 
+                    <IntegratedPaging/>
                     {data.length>0 && (
                         <SummaryState totalItems={totalSummaryItems} />
                     )}
@@ -251,10 +257,9 @@ class FindersFeeTransactions extends Component {
                     />
                     <TableHeaderRow />
                     {data.length>0 && (
-                        <TableSummaryRow
-                            totalRowComponent={TableSummaryComponent}
-                            totalCellComponent = {TableSummaryCellComponent}
-                        />
+                    <TableSummaryRow  totalRowComponent={TableSummaryComponent}
+                                      totalCellComponent = {TableSummaryCellComponent}
+                    />
                     )}
                 </Grid>
             </div>
@@ -266,7 +271,6 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         removeTransaction: Actions.removeTransaction,
         openEditTransactionForm: Actions.openEditTransactionForm,
-        createReport: Actions.createReport,
     }, dispatch);
 }
 
@@ -280,5 +284,5 @@ function mapStateToProps({transactions, auth, franchiseeReports}) {
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(FindersFeeTransactions)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(ChargeBacksTransactions)));
 

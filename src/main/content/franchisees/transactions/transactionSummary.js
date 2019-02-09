@@ -21,7 +21,8 @@ import SupplyTransactons from './components/supplyTransactions'
 import RegularMiscTransactons from './components/regularMiscTransactions'
 import FindersFeeTransactions from './components/findersFeeTransactions'
 import SummaryTransactons from './components/summaryTransactions'
-
+import SpecialMiscTransactions from './components/specialMiscTransactions'
+import ChargeBacksTransactions from './components/chargeBacksTransactions'
 
 const styles = theme => ({
     root: {
@@ -86,10 +87,12 @@ class TransactionsSummary extends Component {
             <div className={classNames(classes.root,'p-16 flex flex-col flex-1 items-center')}>
                 <SummaryTransactons />
                 <CustomerTransactions />
-                {/*<CustomerAccountTotals />*/}
+                <CustomerAccountTotals />
                 <SupplyTransactons />
                 <FindersFeeTransactions />
                 <RegularMiscTransactons />
+                <SpecialMiscTransactions />
+                <ChargeBacksTransactions />
                 {(franchiseeReport===null && this.props.transactionForm.franchisee!==null)  && (
                     <div className={classNames(classes.overlay)}>
                         <CircularProgress className={classes.progress} color="secondary"  />

@@ -43,8 +43,8 @@ const styles = theme => ({
             display: 'none'
      },
      '& th':{
-         borderBottom: '2px solid black',
-         borderTop: '2px solid black',
+         borderBottom: `2px solid ${theme.palette.text.primary}`,
+         borderTop: `2px solid ${theme.palette.text.primary}`,
      }
     },
     tableTheadRow: {
@@ -66,6 +66,9 @@ const styles = theme => ({
     },
     tableStriped: {
         marginBottom: '0!important',
+        '& tbody tr':{
+            height: 36
+        },
         '& tbody tr:nth-of-type(odd)': {
         },
         '& tbody tr td': {
@@ -77,16 +80,35 @@ const styles = theme => ({
             width: '100%',
         },
         '& tbody tr:last-child td': {
-            borderBottom: '2px solid black',
+            borderBottom: `2px solid ${theme.palette.text.primary}`,
         }
-
     },
     tableFootRow: {
+        height: 42,
+        '& td': {
+            borderBottom: `1px solid ${theme.palette.text.primary}`,
+        },
         '& td:nth-child(3)': {
             width: '100%',
         },
     }
 });
+
+const CurrencyFormatter = ({value}) => (
+    <NumberFormat value={value}
+                  displayType={'text'}
+                  fixedDecimalScale={true}
+                  thousandSeparator
+                  decimalScale={2}
+                  prefix="$" renderText={value => <div className="sum-01">{value}</div>}/>
+);
+
+const CurrencyTypeProvider = props => (
+    <DataTypeProvider
+        formatterComponent={CurrencyFormatter}
+        {...props}
+    />
+);
 
 const TableComponentBase = ({ classes, ...restProps }) => (
     <Table.Table
@@ -108,30 +130,42 @@ const TableSummaryComponentBase = ({ classes, ...restProps }) => (
         className={classes.tableFootRow}
     />
 );
+const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
+    if(restProps.column.name==='type'){
+        return (
+            <Table.Cell
+                {...restProps}
+                colSpan={3}
+                className={classes.tableSummaryCell}>
+                <strong>Total Revenue for this Franchisee</strong>
+            </Table.Cell>
+        );
+    }
+    else if(restProps.column.name==='TRX_AMT' || restProps.column.name==='TRX_TAX'|| restProps.column.name==='TRX_TOT'){
+        return (
+            <Table.Cell
+                {...restProps}
+                colSpan={1}
+                className={classes.tableSummaryCell}>
+                {CurrencyFormatter({value: restProps.children.props.children[0].props.params.value})}
+            </Table.Cell>
+        );
+
+    }
+    else
+        return (
+            <Table.Cell
+                {...restProps}
+                className={classes.tableSummaryCell}
+            />
+        );
+};
 
 export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
 export const TableSummaryComponent = withStyles(styles, { name: 'TableSummaryComponent' })(TableSummaryComponentBase);
 export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
+export const TableSummaryCellComponent = withStyles(styles, { name: 'TableSummaryCellComponent' })(TableSummaryCellComponentBase);
 
-const CurrencyFormatter = ({value}) => (
-    <NumberFormat value={value}
-                  displayType={'text'}
-                  fixedDecimalScale={true}
-                  thousandSeparator
-                  decimalScale={2}
-                  prefix="$" renderText={value => <div>{value}</div>}/>
-);
-
-const CurrencyTypeProvider = props => (
-    <DataTypeProvider
-        formatterComponent={CurrencyFormatter}
-        {...props}
-    />
-);
-
-const messages = {
-    sum: '',
-};
 class CustomerTransactions extends Component {
     state = {
         pageSizes: [5, 10, 25, 50, 100],
@@ -190,7 +224,7 @@ class CustomerTransactions extends Component {
             {name: "INV_NO", title: "Invoice #"},
             {name: "TRX_TYPE", title: "Type"},
             {name: "TRX_AMT", title: "Amount"},
-            {name: "TRX_TAX", title: "Tax"},
+            // {name: "TRX_TAX", title: "Tax"},
             {name: "TRX_TOT", title: "Total"},
         ];
 
@@ -206,7 +240,7 @@ class CustomerTransactions extends Component {
         ];
 
         let totalSummaryItems = [
-            { columnName: 'TRX_AMT',  title: 'Amount Sum', type: 'sum'},
+            { columnName: 'TRX_AMT',  type: 'sum'},
             { columnName: 'TRX_TAX',  type: 'sum'},
             { columnName: 'TRX_TOT',  type: 'sum'},
         ];
@@ -239,7 +273,7 @@ class CustomerTransactions extends Component {
                     <TableHeaderRow />
                     {data.length>0 && (
                         <TableSummaryRow  totalRowComponent={TableSummaryComponent}
-                                          messages={messages}
+                                          totalCellComponent = {TableSummaryCellComponent}
                         />
                     )}
                 </Grid>

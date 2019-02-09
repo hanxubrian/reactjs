@@ -18,7 +18,7 @@ import {
 } from '@devexpress/dx-react-grid-material-ui';
 
 
-import {withStyles} from "@material-ui/core";
+import {Icon, IconButton, withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
 //Theme Utilities
@@ -45,66 +45,64 @@ const styles = theme => ({
             height: 32
         },
         '& tr th':{
-            borderBottom: '2px solid black',
-            borderTop: '2px solid black',
+            borderBottom: `2px solid ${theme.palette.text.primary}`,
+            borderTop: `2px solid ${theme.palette.text.primary}`,
         },
-        '& tr th:nth-child(2)': {
+        '& tr th:nth-child(3)': {
             width: '100%'
         },
-        '& tr th:nth-child(2) span': {
-            display: 'none'
-        },
+        // '& tr th:nth-child(2) span': {
+        //     display: 'none'
+        // },
     },
     imageIcon: {
         width: 24
     },
     tableStriped: {
         marginBottom: '0!important',
+        '& tbody tr':{
+            height: 36
+        },
         '& tbody tr:nth-of-type(odd)': {
         },
         '& tbody tr td': {
             fontSize: 12,
             paddingLeft: 4,
-            paddingRight: 4
+            paddingRight: 4,
+            borderBottom: `0px solid ${theme.palette.text.primary}`,
         },
-        '& tbody tr td:nth-child(2)': {
+        '& tbody tr td:nth-child(3)': {
             width: '100%',
         },
         '& tbody tr:last-child td': {
-            borderBottom: '2px solid black',
+            borderBottom: `2px solid ${theme.palette.text.primary}`,
+        },
+        '& tr.subHeading td:nth-child(4)': {
+            display: 'none'
         }
     },
     tableFootRow: {
-        '& td:nth-child(2)': {
+        height: 42,
+        '& td': {
+            borderBottom: `1px solid ${theme.palette.text.primary}`,
+        },
+        '& td:nth-child(1)': {
             width: '100%',
         },
+        '& td:nth-child(4)>div': {
+            display: 'flex',
+            justifyContent: 'flex-end'
+        },
+        '& td:nth-child(2), & td:nth-child(3)':{
+            display:'none'
+        },
+        '& td:nth-child(5)': {
+            width: 0,
+        },
+    },
+    tableSummaryCell: {
     }
 });
-
-const TableComponentBase = ({ classes, ...restProps }) => (
-    <Table.Table
-        {...restProps}
-        className={classes.tableStriped}
-    />
-);
-
-const TableHeadComponentBase = ({ classes, ...restProps }) => (
-    <Table.TableHead
-        {...restProps}
-        className={classes.tableTheadRow}
-    />
-);
-
-const TableSummaryComponentBase = ({ classes, ...restProps }) => (
-    <Table.Row
-        {...restProps}
-        className={classes.tableFootRow}
-    />
-);
-
-export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
-export const TableSummaryComponent = withStyles(styles, { name: 'TableSummaryComponent' })(TableSummaryComponentBase);
-export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
 
 const CurrencyFormatter = ({value}) => (
     <NumberFormat value={value}
@@ -112,7 +110,7 @@ const CurrencyFormatter = ({value}) => (
                   fixedDecimalScale={true}
                   thousandSeparator
                   decimalScale={2}
-                  prefix="$" renderText={value => <div>{value}</div>}/>
+                  prefix="$" renderText={value => <div className="sum-01">{value}</div>}/>
 );
 
 const CurrencyTypeProvider = props => (
@@ -121,6 +119,67 @@ const CurrencyTypeProvider = props => (
         {...props}
     />
 );
+
+const TableComponentBase = ({ classes, ...restProps }) => (
+    <Table.Table
+        {...restProps}
+        className={classes.tableStriped}
+    />
+);
+
+const TableHeadComponentBase = ({ classes, ...restProps }) => {
+    return (
+        <Table.TableHead
+            {...restProps}
+            className={classes.tableTheadRow}
+        />
+    )};
+
+const TableSummaryComponentBase = ({ classes, ...restProps }) =>{
+    return     (
+        <Table.Row
+            {...restProps}
+            className={classes.tableFootRow}
+        />
+    );
+};
+
+
+const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
+    if(restProps.column.name==='type'){
+        return (
+            <Table.Cell
+                {...restProps}
+                colSpan={3}
+                className={classes.tableSummaryCell}>
+                <strong>Total Revenue for this Franchisee</strong>
+            </Table.Cell>
+        );
+    }
+    else if(restProps.column.name==='CUS_TAX'){
+        return (
+            <Table.Cell
+                {...restProps}
+                colSpan={1}
+                className={classes.tableSummaryCell}>
+                {CurrencyFormatter({value: restProps.children.props.children[0].props.params.value})}
+            </Table.Cell>
+        );
+
+    }
+    else
+        return (
+            <Table.Cell
+                {...restProps}
+                className={classes.tableSummaryCell}
+            />
+        );
+};
+
+export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
+export const TableSummaryComponent = withStyles(styles, { name: 'TableSummaryComponent' })(TableSummaryComponentBase);
+export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
+export const TableSummaryCellComponent = withStyles(styles, { name: 'TableSummaryCellComponent' })(TableSummaryCellComponentBase);
 
 class CustomerAccountTotals extends Component {
     state = {
@@ -144,6 +203,18 @@ class CustomerAccountTotals extends Component {
 
     changeSorting = sorting => this.setState({ sorting });
 
+    TableRow = ({ row, ...restProps }) => {
+        let rowClass='';
+        if(row.SUB)
+            rowClass = 'subHeading';
+
+        return (
+            <Table.Row className = {classNames(rowClass)}
+                       {...restProps}
+            />
+        )
+    };
+
     render() {
         const {classes, franchiseeReport} = this.props;
         if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS===null)
@@ -154,10 +225,12 @@ class CustomerAccountTotals extends Component {
         franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS.forEach(type=>{
             let billing = this.props.billingLists.filter(b=>b._id===type.Billing);
             let line = {};
-            line.type = billing[0].Name;
+            if(billing.length>0)
+                line.type = billing[0].Name;
             line.CUS_NO = '';
             line.CUS_NAME = '';
-            line.CUS_TAX = '';
+            line.CUS_TAX = 0;
+            line.SUB = true;
             data.push(line);
             if(type.Customers !==null && type.Customers.length){
                 type.Customers.forEach(c=>{
@@ -166,6 +239,7 @@ class CustomerAccountTotals extends Component {
                     line_c.CUS_NO = c.CUST_NO;
                     line_c.CUS_NAME = c.CUS_NAME;
                     line_c.CUS_TAX = c.TRX_AMT;
+                    line_c.SUB = false;
 
                     data.push(line_c);
                 })
@@ -175,10 +249,9 @@ class CustomerAccountTotals extends Component {
             line_sub.CUS_NO = '';
             line_sub.CUS_NAME = '';
             line_sub.CUS_TAX = type.Amount;
+            line_sub.SUB = false;
             data.push(line_sub);
         });
-
-        console.log('data= ', data);
 
         const columns = [
             {name: "type", title: "Customer Transactions",},
@@ -195,11 +268,12 @@ class CustomerAccountTotals extends Component {
         ];
 
         let totalSummaryItems = [
-            // { columnName: 'CUR_MONTH', type: 'sum'},
+            { columnName: 'CUS_TAX', type: 'sum'},
         ];
+
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
-                <h2>Customer Account Totals</h2>
+                <h2>Total Revenue by Customer</h2>
                 <Grid rows={data} columns={columns}>
                     <PagingState
                         currentPage={this.state.currentPage}
@@ -208,7 +282,7 @@ class CustomerAccountTotals extends Component {
                         onPageSizeChange={this.changePageSize}
                     />
                     <CurrencyTypeProvider
-                        for={['CUR_MONTH', 'CONT_BILL', 'ADTL_B_FRN', 'ADTL_B_OFC', 'FF_PYMNT']}
+                        for={['CUS_TAX']}
                     />
 
                     <IntegratedPaging/>
@@ -221,10 +295,13 @@ class CustomerAccountTotals extends Component {
                                   tableComponent={TableComponent}
                                   headComponent = {TableHeadComponent}
                                   columnExtensions={tableColumnExtensions}
+                                  rowComponent = {this.TableRow}
                     />
                     <TableHeaderRow />
                     {data.length>0 && (
-                        <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
+                        <TableSummaryRow  totalRowComponent={TableSummaryComponent}
+                                          totalCellComponent = {TableSummaryCellComponent}
+                        />
                     )}
                 </Grid>
             </div>
@@ -240,13 +317,14 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-function mapStateToProps({transactions, auth, franchiseeReports}) {
+function mapStateToProps({transactions, auth, franchiseeReports,invoices}) {
     return {
         regionId: auth.login.defaultRegionId,
         transactions: transactions.transactionsDB,
         transactionTypeList: transactions.transactionTypeList,
         franchiseeReport: franchiseeReports.franchiseeReport1,
         transactionDetail: transactions.transactionDetail,
+        billingLists: invoices.billingLists,
     }
 }
 
