@@ -104,6 +104,22 @@ const styles = theme => ({
     }
 });
 
+const CurrencyFormatter = ({value}) => (
+    <NumberFormat value={value}
+                  displayType={'text'}
+                  fixedDecimalScale={true}
+                  thousandSeparator
+                  decimalScale={2}
+                  prefix="$" renderText={value => <div className="sum-01">{value}</div>}/>
+);
+
+const CurrencyTypeProvider = props => (
+    <DataTypeProvider
+        formatterComponent={CurrencyFormatter}
+        {...props}
+    />
+);
+
 const TableComponentBase = ({ classes, ...restProps }) => (
     <Table.Table
         {...restProps}
@@ -119,7 +135,7 @@ const TableHeadComponentBase = ({ classes, ...restProps }) => {
         />
     )};
 
-const TableSummaryComponentBase = ({ classes,  ...restProps }) =>{
+const TableSummaryComponentBase = ({ classes, ...restProps }) =>{
     return     (
         <Table.Row
             {...restProps}
@@ -140,6 +156,17 @@ const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
             </Table.Cell>
         );
     }
+    else if(restProps.column.name==='CUS_TAX'){
+        return (
+            <Table.Cell
+                {...restProps}
+                colSpan={1}
+                className={classes.tableSummaryCell}>
+                {CurrencyFormatter({value: restProps.children.props.children[0].props.params.value})}
+            </Table.Cell>
+        );
+
+    }
     else
         return (
             <Table.Cell
@@ -153,22 +180,6 @@ export const TableComponent = withStyles(styles, { name: 'TableComponent' })(Tab
 export const TableSummaryComponent = withStyles(styles, { name: 'TableSummaryComponent' })(TableSummaryComponentBase);
 export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
 export const TableSummaryCellComponent = withStyles(styles, { name: 'TableSummaryCellComponent' })(TableSummaryCellComponentBase);
-
-const CurrencyFormatter = ({value}) => (
-    <NumberFormat value={value}
-                  displayType={'text'}
-                  fixedDecimalScale={true}
-                  thousandSeparator
-                  decimalScale={2}
-                  prefix="$" renderText={value => <div>{value}</div>}/>
-);
-
-const CurrencyTypeProvider = props => (
-    <DataTypeProvider
-        formatterComponent={CurrencyFormatter}
-        {...props}
-    />
-);
 
 class CustomerAccountTotals extends Component {
     state = {
@@ -210,12 +221,12 @@ class CustomerAccountTotals extends Component {
             return (<div/>);
 
         let data = [];
-        let total = 0;
 
         franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS.forEach(type=>{
             let billing = this.props.billingLists.filter(b=>b._id===type.Billing);
             let line = {};
-            line.type = billing[0].Name;
+            if(billing.length>0)
+                line.type = billing[0].Name;
             line.CUS_NO = '';
             line.CUS_NAME = '';
             line.CUS_TAX = 0;
@@ -240,7 +251,6 @@ class CustomerAccountTotals extends Component {
             line_sub.CUS_TAX = type.Amount;
             line_sub.SUB = false;
             data.push(line_sub);
-            total += type.Amount;
         });
 
         const columns = [

@@ -82,6 +82,7 @@ const styles = theme => ({
     }
 });
 
+
 const CurrencyFormatter = ({value}) => (
     <NumberFormat value={value}
                   displayType={'text'}
@@ -154,7 +155,7 @@ export const TableSummaryComponent = withStyles(styles, { name: 'TableSummaryCom
 export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
 export const TableSummaryCellComponent = withStyles(styles, { name: 'TableSummaryCellComponent' })(TableSummaryCellComponentBase);
 
-class ChargeBacksTransactions extends Component {
+class SpecialMiscTransactons extends Component {
     state = {
         pageSizes: [5, 10, 25, 50, 100],
         currentPage: 0,
@@ -193,12 +194,13 @@ class ChargeBacksTransactions extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CHARGEBACKS===null)
+        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].SPEC_MISC===null)
             return (<div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
-                <h2>Charge Backs Transactions</h2></div>);
+                <h2>Special Misc. Transactions</h2></div>);
 
-        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CHARGEBACKS.map(d=>{
+        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].SPEC_MISC.map(d=>{
             let type = this.props.transactionTypeList.filter(t=>t._id===d.TYPE);
+
             d.DESCR = FuseUtils.capital_letter(d.DESCR);
             d.TRX_AMT = parseFloat(d.TRX_AMT);
             d.TRX_TAX = parseFloat(d.TRX_TAX);
@@ -212,7 +214,7 @@ class ChargeBacksTransactions extends Component {
             {name: "TYPE", title: "Type"},
             {name: "DESCR", title: "Description"},
             {name: "TRX_AMT", title: "Amount"},
-            // {name: "TRX_TAX", title: "Tax"},
+            {name: "TRX_TAX", title: "Tax"},
             {name: "TRX_TOT", title: "Total"},
         ];
 
@@ -232,7 +234,7 @@ class ChargeBacksTransactions extends Component {
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
-                <h2>Charge Backs Transactions</h2>
+                <h2>Special Misc. Transactions</h2>
                 <Grid rows={data} columns={columns}>
                     <PagingState
                         currentPage={this.state.currentPage}
@@ -284,5 +286,5 @@ function mapStateToProps({transactions, auth, franchiseeReports}) {
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(ChargeBacksTransactions)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(SpecialMiscTransactons)));
 

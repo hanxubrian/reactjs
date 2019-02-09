@@ -50,15 +50,18 @@ const styles = theme => ({
         },
         '& tr th': {
             padding: '0 8px',
-            borderBottom: '2px solid black',
-            borderTop: '2px solid black',
+            borderBottom: `2px solid ${theme.palette.text.primary}`,
+            borderTop: `2px solid ${theme.palette.text.primary}`,
         },
-        '& tr th:nth-child(3)': {
+        '& tr th:nth-child(1)': {
             width: '100%'
         }
     },
     tableStriped: {
         marginBottom: '0!important',
+        '& tbody tr':{
+            height: 36
+        },
         '& tbody tr:nth-of-type(odd)': {
         },
         '& tbody tr td': {
@@ -66,19 +69,39 @@ const styles = theme => ({
             paddingLeft: 4,
             paddingRight: 4
         },
-        '& tbody tr td:nth-child(3)': {
+        '& tbody tr td:nth-child(1)': {
             width: '100%',
         },
         '& tbody tr:last-child td': {
-            borderBottom: '2px solid black',
+            borderBottom: `2px solid ${theme.palette.text.primary}`,
         }
     },
     tableFootRow: {
-        '& td:nth-child(3)': {
+        height: 42,
+        '& td': {
+            borderBottom: `1px solid ${theme.palette.text.primary}`,
+        },
+        '& td:nth-child(1)': {
             width: '100%',
         },
     }
 });
+
+const CurrencyFormatter = ({value}) => (
+    <NumberFormat value={value}
+                  displayType={'text'}
+                  fixedDecimalScale={true}
+                  thousandSeparator
+                  decimalScale={2}
+                  prefix="$" renderText={value => <div className="sum-01">{value}</div>}/>
+);
+
+const CurrencyTypeProvider = props => (
+    <DataTypeProvider
+        formatterComponent={CurrencyFormatter}
+        {...props}
+    />
+);
 
 const TableComponentBase = ({ classes, ...restProps }) => (
     <Table.Table
@@ -101,25 +124,41 @@ const TableSummaryComponentBase = ({ classes, ...restProps }) => (
     />
 );
 
+const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
+    if(restProps.column.name==='type'){
+        return (
+            <Table.Cell
+                {...restProps}
+                colSpan={3}
+                className={classes.tableSummaryCell}>
+                <strong>Total Revenue for this Franchisee</strong>
+            </Table.Cell>
+        );
+    }
+    else if(restProps.column.name==='TRX_AMT' || restProps.column.name==='TRX_TAX'|| restProps.column.name==='TRX_TOT'){
+        return (
+            <Table.Cell
+                {...restProps}
+                colSpan={1}
+                className={classes.tableSummaryCell}>
+                {CurrencyFormatter({value: restProps.children.props.children[0].props.params.value})}
+            </Table.Cell>
+        );
+
+    }
+    else
+        return (
+            <Table.Cell
+                {...restProps}
+                className={classes.tableSummaryCell}
+            />
+        );
+};
+
 export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
 export const TableSummaryComponent = withStyles(styles, { name: 'TableSummaryComponent' })(TableSummaryComponentBase);
 export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
-
-const CurrencyFormatter = ({value}) => (
-    <NumberFormat value={value}
-                  displayType={'text'}
-                  fixedDecimalScale={true}
-                  thousandSeparator
-                  decimalScale={2}
-                  prefix="$" renderText={value => <div>{value}</div>}/>
-);
-
-const CurrencyTypeProvider = props => (
-    <DataTypeProvider
-        formatterComponent={CurrencyFormatter}
-        {...props}
-    />
-);
+export const TableSummaryCellComponent = withStyles(styles, { name: 'TableSummaryCellComponent' })(TableSummaryCellComponentBase);
 
 class SupplyTransactons extends Component {
     state = {
@@ -151,17 +190,14 @@ class SupplyTransactons extends Component {
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].SUPPLY_TRXS.map(d=>{
             d.DESCR = FuseUtils.capital_letter(d.DESCR);
-            d.TRX_AMT = parseFloat(d.TRX_AMT);
+            d.TRX_AMT = parseFloat(d.EXTENDED);
             d.TRX_TAX = parseFloat(d.TRX_TAX);
-            d.TRX_UNIT = parseFloat(d.TRX_UNIT);
             d.TRX_TOT = parseFloat(d.TRX_TOT);
             return d;
         });
 
         const columns = [
             {name: "DESCR", title: "Description"},
-            {name: "QUANTITY", title: "Quantity"},
-            {name: "TRX_UNIT", title: "Unit Amount"},
             {name: "TRX_AMT", title: "SubTotal"},
             {name: "TRX_TAX", title: "Tax"},
             {name: "TRX_TOT", title: "Total"},
@@ -169,7 +205,6 @@ class SupplyTransactons extends Component {
 
         let  tableColumnExtensions = [
             { columnName: 'DESCR', width: -1, },
-            { columnName: 'TRX_UNIT', width: 100,  align: 'right'},
             { columnName: 'TRX_AMT', width: 100,  align: 'right'},
             { columnName: 'TRX_TAX', width: 100,  align: 'right'},
             { columnName: 'TRX_TOT', width: 100,  align: 'right'},
@@ -209,7 +244,9 @@ class SupplyTransactons extends Component {
                     />
                     <TableHeaderRow />
                     {data.length>0 && (
-                        <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
+                        <TableSummaryRow  totalRowComponent={TableSummaryComponent}
+                                          totalCellComponent = {TableSummaryCellComponent}
+                        />
                     )}
                 </Grid>
             </div>
