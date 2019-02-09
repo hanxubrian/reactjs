@@ -766,8 +766,6 @@ class LogCallModalForm extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		const { rows, columns, customerName, customerNumber, currencyColumns, columnsForReactDataGrid } = this.state;
-		console.log("activeRows", rows)
 		return (
 			<div>
 				<Dialog
@@ -798,7 +796,7 @@ class LogCallModalForm extends React.Component {
 									<TextField sm={3} select margin="dense" id="InitiatedBy" label="Initiated By" variant="outlined"
 										InputLabelProps={{ shrink: true }}
 										className={classNames(classes.textField, "pr-6")}
-										value={this.state.InitiatedBy}
+										value={this.state.InitiatedBy || ''}
 										onChange={this.handleChange('InitiatedBy')}
 										fullWidth
 										InputProps={{ readOnly: false }}
@@ -809,7 +807,7 @@ class LogCallModalForm extends React.Component {
 									<TextField sm={3} select margin="dense" id="Type" label="Type" variant="outlined"
 										InputLabelProps={{ shrink: true }}
 										className={classNames(classes.textField, "pl-6 pr-6")}
-										value={this.state.Type}
+										value={this.state.Type || ''}
 										onChange={this.handleChange('Type')}
 										fullWidth
 										InputProps={{ readOnly: false }}
@@ -820,7 +818,7 @@ class LogCallModalForm extends React.Component {
 									<TextField sm={3} select margin="dense" id="Status" label="Status By" variant="outlined"
 										InputLabelProps={{ shrink: true }}
 										className={classNames(classes.textField, "pl-6")}
-										value={this.state.Status}
+										value={this.state.Status || ''}
 										onChange={this.handleChange('Status')}
 										fullWidth
 										InputProps={{ readOnly: false }}
@@ -878,20 +876,20 @@ class LogCallModalForm extends React.Component {
 									<div className="flex flex-col w-full pr-6">
 										<TextField margin="dense" variant="outlined" fullWidth id="SpokeWith" label="Spoke With"
 											InputLabelProps={{ shrink: true }}
-											value={this.state.SpokeWith}
+											value={this.state.SpokeWith || ''}
 											onChange={this.handleChange('SpokeWith')}
 										/>
 
 										<TextField margin="dense" variant="outlined" fullWidth id="Action" label="Action"
 											InputLabelProps={{ shrink: true }}
-											value={this.state.Action}
+											value={this.state.Action || ''}
 											onChange={this.handleChange('Action')}
 										/>
 
 										<TextField margin="dense" variant="outlined" fullWidth id="Area" label="Area"
 											select
 											InputLabelProps={{ shrink: true }}
-											value={this.state.Area}
+											value={this.state.Area || ''}
 											onChange={this.handleChange('Area')}>
 											<MenuItem value={""}></MenuItem>
 										</TextField>
@@ -906,7 +904,7 @@ class LogCallModalForm extends React.Component {
 										<TextField margin="dense" variant="outlined" fullWidth id="FollowUpBy" label="Follow Up By"
 											select
 											InputLabelProps={{ shrink: true }}
-											value={this.state.FollowUpBy}
+											value={this.state.FollowUpBy || ''}
 											onChange={this.handleChange('FollowUpBy')}>
 											<MenuItem value={"Claudia Ulloa"}>Claudia Ulloa</MenuItem>
 										</TextField>
@@ -948,7 +946,7 @@ class LogCallModalForm extends React.Component {
 
 									</div>
 								</div>
-
+								<Divider variant="middle" style={{ marginTop: 10, width: '100%', alignSelf: 'center' }} />
 
 							</div>
 						</div>
