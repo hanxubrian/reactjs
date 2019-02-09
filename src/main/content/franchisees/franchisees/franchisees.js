@@ -1020,10 +1020,10 @@ class Franchisees extends Component {
 
                                         return {
                                             style:{
-                                                fontSize: '1.6rem',
+                                                fontSize: '1.5rem',
                                                 fontFamily: 'Muli,Roboto,"Helvetica",Arial,sans-serif',
                                                 fontWeight: 400,
-                                                lineHeight: 1.75,
+                                                lineHeight: 1.5,
                                                 color: 'white',
                                                 borderRight: border,
                                                 height: 50,
@@ -1033,7 +1033,7 @@ class Franchisees extends Component {
                                     getTheadProps={(state, rowInfo, column, instance) =>{
                                         return {
                                             style:{
-                                                fontSize: 12
+                                                fontSize: 12,
                                             },
                                             className: classes.tableTheadRow
                                         }
@@ -1058,6 +1058,9 @@ class Franchisees extends Component {
                                                     //alert('ok');
                                                     // openEditContactDialog(rowInfo.original);
                                                 }
+                                            },
+                                            style:{
+                                                height: 35
                                             }
                                         }
                                     }}
@@ -1090,7 +1093,7 @@ class Franchisees extends Component {
                                                     },
                                                     className: "justify-center",
                                                     sortable : false,
-                                                    width    : 72
+                                                    width    : 50
                                                 }
                                             ],
                                             className: classNames("justify-center")
@@ -1098,40 +1101,40 @@ class Franchisees extends Component {
                                         {
                                             columns: [
                                                 {
-                                                    Header: "NUMBER",
+                                                    Header: "Number",
                                                     accessor: "Number",
                                                     filterAll: true,
-                                                    width: 150,
+                                                    width: 100,
                                                     className: classNames("flex items-center  justify-center")
                                                 },
                                                 {
-                                                    Header: "FRANCHISEES NAME",
+                                                    Header: "Franchisee Name",
                                                     accessor: "Name",
-                                                    width: 300,
+                                                    width: 200,
                                                     className: classNames("flex items-center  justify-start p-12-impor")
                                                 },
                                                 {
-                                                    Header: "FULL ADDRESS",
+                                                    Header: "Full Address",
                                                     accessor: "Address",
                                                     className: classNames("flex items-center  justify-start p-12-impor"),
-                                                    width: 300
+                                                    width: -1
                                                 },
                                                 {
-                                                    Header: "CITY",
+                                                    Header: "City",
                                                     accessor: "City",
                                                     className: classNames("flex items-center  justify-start p-12-impor"),
-                                                    width: 180
+                                                    width: 150
                                                 },
                                                 {
-                                                    Header: "PHONE",
+                                                    Header: "Phone",
                                                     accessor: "Phone",
-                                                    width: 250,
+                                                    width: 150,
                                                     Cell: row =>{ return(this.formatPhoneNumber(row.original.Phone))},
                                                     className: classNames("flex items-center  justify-center p-12-impor")
                                                 },
                                                 {
-                                                    Header: "ACTIONS",
-                                                    width : 350,
+                                                    Header: "Actions",
+                                                    width : 200,
                                                     className: classNames("flex items-center  justify-center p-12-impor"),
                                                     Cell  : row =>{
                                                         return (
