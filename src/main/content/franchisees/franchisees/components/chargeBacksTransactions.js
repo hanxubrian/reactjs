@@ -203,7 +203,8 @@ class ChargeBacksTransactions extends Component {
             d.TRX_AMT = parseFloat(d.TRX_AMT);
             d.TRX_TAX = parseFloat(d.TRX_TAX);
             d.TRX_TOT = parseFloat(d.TRX_TOT);
-            d.TYPE = type[0].Name;
+            if(type.length>0)
+                d.TYPE = type[0].Name;
             return d;
         });
 
