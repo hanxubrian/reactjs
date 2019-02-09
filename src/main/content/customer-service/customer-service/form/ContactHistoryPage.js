@@ -678,7 +678,9 @@ class ContactHistoryPage extends Component {
 		console.log("constructor");
 
 		console.log("constructor", this.props.customerForm)
-		this.props.getCustomerServiceList(this.props.regionId, this.props.customerForm.data.Data.cust_no, this.props.filterParam.fromDate, this.props.filterParam.toDate)
+		if (this.props.customerForm.data && this.props.customerForm.data.Data) {
+			this.props.getCustomerServiceList(this.props.regionId, this.props.customerForm.data.Data.cust_no, this.props.filterParam.fromDate, this.props.filterParam.toDate)
+		}
 	}
 	//
 	// to edit table cell
@@ -790,11 +792,11 @@ class ContactHistoryPage extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if(nextProps.regionId !== this.props.regionId) {
+		if (nextProps.regionId !== this.props.regionId) {
 			this.props.getCustomerServiceList(nextProps.regionId, this.props.customerForm.cus_no, this.props.filterParam.fromDate, this.props.filterParam.toDate)
 		}
 
-		if(nextProps.customerServiceForm.serviceList.data, this.props.customerServiceForm.serviceList.data) {
+		if (nextProps.customerServiceForm.serviceList.data, this.props.customerServiceForm.serviceList.data) {
 			this.initRowsFromRawJson(nextProps.customerServiceForm.serviceList.data)
 		}
 	} // deprecate 
@@ -887,11 +889,11 @@ class ContactHistoryPage extends Component {
 
 	initRowsFromRawJson = (rawData = this.props.customerServiceForm.serviceList.data) => {
 		if (!rawData || !rawData.Data) return;
-		
-		rawData.Data.forEach(x=>{
+
+		rawData.Data.forEach(x => {
 			x.DateTime = `${x.call_date} ${x.call_time}`
 		})
-		this.setState({rows: rawData.Data})
+		this.setState({ rows: rawData.Data })
 	};
 
 
@@ -908,7 +910,7 @@ class ContactHistoryPage extends Component {
 		const handleClick = () => {
 			timer = setTimeout(() => {
 				if (!prevent) {
-					onToggle();
+					// onToggle();
 				}
 				prevent = false;
 			}, delay);
@@ -918,7 +920,7 @@ class ContactHistoryPage extends Component {
 			prevent = true;
 			// alert(JSON.stringify(tableRow.row));
 			console.log(restProps);
-			this.props.openEditCustomerForm(this.props.regionId, tableRow.row.CustomerId);
+			// this.props.openEditCustomerForm(this.props.regionId, tableRow.row.CustomerId);
 		}
 		return (
 			<Table.Row
@@ -972,59 +974,59 @@ class ContactHistoryPage extends Component {
 		return (
 			<Fragment>
 				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
-								<Grid
-									// rootComponent={GridRootComponent}
-									rows={rows}
-									columns={tableColumnExtensions}
-								>
-									<DragDropProvider />
-									<PagingState
-										defaultCurrentPage={0}
-										// currentPage={currentPage}
-										// onCurrentPageChange={this.changeCurrentPage}
-										// pageSize={pageSize}
-										// onPageSizeChange={this.changePageSize}
-										defaultPageSize={20}
-									/>
+					<Grid
+						// rootComponent={GridRootComponent}
+						rows={rows}
+						columns={tableColumnExtensions}
+					>
+						<DragDropProvider />
+						<PagingState
+							defaultCurrentPage={0}
+							// currentPage={currentPage}
+							// onCurrentPageChange={this.changeCurrentPage}
+							// pageSize={pageSize}
+							// onPageSizeChange={this.changePageSize}
+							defaultPageSize={20}
+						/>
 
-									<PagingPanel pageSizes={pageSizes} />
+						<PagingPanel pageSizes={pageSizes} />
 
-									{/* <SelectionState
+						{/* <SelectionState
 										selection={selection}
 										onSelectionChange={this.changeSelection}
 									/> */}
-									{/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
-									{/* <IntegratedSelection /> */}
+						{/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
+						{/* <IntegratedSelection /> */}
 
-									<SortingState
-										sorting={sorting}
-										onSortingChange={this.changeSorting}
-										columnExtensions={tableColumnExtensions}
-									/>
-									<IntegratedSorting />
+						<SortingState
+							sorting={sorting}
+							onSortingChange={this.changeSorting}
+							columnExtensions={tableColumnExtensions}
+						/>
+						<IntegratedSorting />
 
-									<IntegratedPaging />
+						<IntegratedPaging />
 
-									<SearchState
-										// defaultValue="Paris"
-										value={searchValue}
-										onValueChange={this.changeSearchValue}
-									/>
+						<SearchState
+							// defaultValue="Paris"
+							value={searchValue}
+							onValueChange={this.changeSearchValue}
+						/>
 
-									<FilteringState
-										defaultFilters={[]}
-										columnExtensions={tableColumnExtensions}
-									/>
-									<IntegratedFiltering />
+						<FilteringState
+							defaultFilters={[]}
+							columnExtensions={tableColumnExtensions}
+						/>
+						<IntegratedFiltering />
 
-									<EditingState
-										columnExtensions={editingColumnExtensions}
-										onCommitChanges={this.commitChanges}
-									/>
+						<EditingState
+							columnExtensions={editingColumnExtensions}
+							onCommitChanges={this.commitChanges}
+						/>
 
 
 
-									{/* <GroupingState
+						{/* <GroupingState
 										grouping={grouping}
 										onGroupingChange={this.changeGrouping}
 									// defaultGrouping={[]}
@@ -1032,47 +1034,47 @@ class ContactHistoryPage extends Component {
 									/>
 									<IntegratedGrouping /> */}
 
-									{/* <BooleanTypeProvider
+						{/* <BooleanTypeProvider
 									for={booleanColumns}
 								/> */}
 
-									<CurrencyTypeProvider
-										for={currencyColumns}
-									// availableFilterOperations={amountFilterOperations}
-									// editorComponent={AmountEditor}
-									/>
+						<CurrencyTypeProvider
+							for={currencyColumns}
+						// availableFilterOperations={amountFilterOperations}
+						// editorComponent={AmountEditor}
+						/>
 
-									<PhoneNumberTypeProvider
-										for={phoneNumberColumns}
-									// availableFilterOperations={amountFilterOperations}
-									// editorComponent={AmountEditor}
-									/>
-									{/* <DateTypeProvider
+						<PhoneNumberTypeProvider
+							for={phoneNumberColumns}
+						// availableFilterOperations={amountFilterOperations}
+						// editorComponent={AmountEditor}
+						/>
+						{/* <DateTypeProvider
 									for={dateColumns}
 								/> */}
 
-									<VirtualTable height="auto" rowComponent={this.TableRow} />
+						<VirtualTable height="auto" rowComponent={this.TableRow} />
 
-									{/* <Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} rowComponent={TableRow} /> */}
-									{/* <Table rowComponent={this.TableRow} /> */}
+						{/* <Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} rowComponent={TableRow} /> */}
+						{/* <Table rowComponent={this.TableRow} /> */}
 
-									<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
+						<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
 
-									{/* showGroupingControls */}
+						{/* showGroupingControls */}
 
 
-									{/* <TableFixedColumns
+						{/* <TableFixedColumns
 									leftColumns={leftColumns}
 									rightColumns={rightColumns}
 								/> */}
 
-									{/* <TableSelection showSelectAll selectByRowClick highlightRow /> */}
-									{/* <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} /> */}
+						{/* <TableSelection showSelectAll selectByRowClick highlightRow /> */}
+						{/* <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} /> */}
 
-									<TableHeaderRow showSortingControls />
+						<TableHeaderRow showSortingControls />
 
-									{/* <TableEditRow /> */}
-									{/* <TableEditColumn
+						{/* <TableEditRow /> */}
+						{/* <TableEditColumn
 										// showAddCommand
 										showEditCommand
 										showDeleteCommand
@@ -1091,21 +1093,21 @@ class ContactHistoryPage extends Component {
 										}
 									/> */}
 
-									{/* <TableColumnReordering
+						{/* <TableColumnReordering
 										defaultOrder={tableColumnExtensions.map(x => x.columnName)}
 									/> */}
-									{/* Column Visibility */}
-									{/* Disable Column Visibility Toggling */}
-									{/* <TableColumnVisibility
+						{/* Column Visibility */}
+						{/* Disable Column Visibility Toggling */}
+						{/* <TableColumnVisibility
 										defaultHiddenColumnNames={[]}
 										columnExtensions={tableColumnExtensions}
 									/> */}
-									{/* <Toolbar /> */}
-									{/* <SearchPanel /> */}
-									{/* Column Visibility */}
-									{/* <ColumnChooser /> */}
+						{/* <Toolbar /> */}
+						{/* <SearchPanel /> */}
+						{/* Column Visibility */}
+						{/* <ColumnChooser /> */}
 
-									{/* {filterState && (
+						{/* {filterState && (
 										<TableFilterRow
 											showFilterSelector
 											iconComponent={FilterIcon}
@@ -1113,10 +1115,10 @@ class ContactHistoryPage extends Component {
 										/>
 									)} */}
 
-									{/* <TableGroupRow /> */}
-									{/* <GroupingPanel showSortingControls showGroupingControls /> */}
+						{/* <TableGroupRow /> */}
+						{/* <GroupingPanel showSortingControls showGroupingControls /> */}
 
-									{/* <div
+						{/* <div
 									className={classNames(classes.layoutTable, "flex flex-row")}
 									style={{ justifyContent: "space-between" }}
 								>
@@ -1129,26 +1131,26 @@ class ContactHistoryPage extends Component {
 									</span>
 								</div> */}
 
-									<Template
-										name="tableRow"
-										predicate={({ tableRow }) => tableRow.type === 'data'}
-									>
-										{params => (
-											<TemplateConnector>
-												{({ selection }, { toggleSelection }) => (
-													<this.TableRow
-														{...params}
-														selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
-														// onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
-													/>
-												)}
-											</TemplateConnector>
-										)}
-									</Template>
+						<Template
+							name="tableRow"
+							predicate={({ tableRow }) => tableRow.type === 'data'}
+						>
+							{params => (
+								<TemplateConnector>
+									{({ selection }, { toggleSelection }) => (
+										<this.TableRow
+											{...params}
+											selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
+										// onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
+										/>
+									)}
+								</TemplateConnector>
+							)}
+						</Template>
 
-									{/* <CustomizedDxGridSelectionPanel selection={selection} rows={rows} /> */}
+						{/* <CustomizedDxGridSelectionPanel selection={selection} rows={rows} /> */}
 
-								</Grid>
+					</Grid>
 				</div>
 			</Fragment>
 		)

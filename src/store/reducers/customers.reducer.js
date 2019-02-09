@@ -65,23 +65,26 @@ const initialState = {
 		value: "",
 	},
 
-	customerServiceForm : {
-		serviceList:{
-			data:[],
-			isFetching:false,
+	customerServiceForm: {
+		serviceList: {
+			data: [],
+			isFetching: false,
 		},
-		billingList:{
-			data:[],
-			isFetching:false,
+		billingList: {
+			data: [],
+			isFetching: false,
 		},
-		collectionList:{
-			data:[],
-			isFetching:false,
+		collectionList: {
+			data: [],
+			isFetching: false,
 		},
 	},
-	filterParam : {
-		fromDate : "",
-		toDate : "",
+	filterParam: {
+		fromDate: "",
+		toDate: "",
+	},
+	logCallModalForm: {
+		open: false,
 	}
 };
 
@@ -336,9 +339,9 @@ const customers = function (state = initialState, action) {
 					...state,
 					customerServiceForm: {
 						...state.customerServiceForm,
-						serviceList : {
-							data:action.payload,
-							isFetching:false
+						serviceList: {
+							data: action.payload,
+							isFetching: false
 						}
 					}
 				};
@@ -349,36 +352,46 @@ const customers = function (state = initialState, action) {
 					...state,
 					customerServiceForm: {
 						...state.customerServiceForm,
-						serviceList : {
+						serviceList: {
 							...state.customerServiceForm.serviceList,
-							isFetching:true
+							isFetching: true
 						}
 					}
 				};
 			}
-			case Actions.GET_CUSTOMER_COLLECTION_LIST:
+		case Actions.GET_CUSTOMER_COLLECTION_LIST:
 			{
 				return {
 					...state,
 					customerServiceForm: {
 						...state.customerServiceForm,
-						collectionList : {
-							data:action.payload,
-							isFetching:false
+						collectionList: {
+							data: action.payload,
+							isFetching: false
 						}
 					}
 				};
 			}
-			case Actions.GET_CUSTOMER_COLLECTION_LIST_START:
+		case Actions.GET_CUSTOMER_COLLECTION_LIST_START:
 			{
 				return {
 					...state,
 					customerServiceForm: {
 						...state.customerServiceForm,
-						collectionList : {
+						collectionList: {
 							...state.customerServiceForm.collectionList,
-							isFetching:true
+							isFetching: true
 						}
+					}
+				};
+			}
+		case Actions.SHOW_LOG_CALL_MODAL_FORM:
+			{
+				return {
+					...state,
+					logCallModalForm: {
+						...state.logCallModalForm,
+						open: action.payload,
 					}
 				};
 			}
@@ -399,7 +412,7 @@ const customers = function (state = initialState, action) {
 		// 		};
 		// 	}
 
-		
+
 		default:
 			{
 				return state;

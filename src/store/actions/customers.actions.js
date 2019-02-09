@@ -50,6 +50,8 @@ export const GET_CUSTOMER_SERVICE_LIST = "[CUSTOMERS-service APP] GET_CUSTOMER_S
 export const GET_CUSTOMER_COLLECTION_LIST_START = "[CUSTOMERS-service APP] GET_CUSTOMER_COLLECTION_LIST_START";
 export const GET_CUSTOMER_COLLECTION_LIST = "[CUSTOMERS-service APP] GET_CUSTOMER_COLLECTION_LIST";
 
+export const SHOW_LOG_CALL_MODAL_FORM = "[CUSTOMERS-service APP] SHOW_LOG_CALL_MODAL_FORM";
+
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	// return dispatch => {
 	// const request = axios.get("/api/customers/gets");
@@ -263,6 +265,13 @@ export function openNewCustomerForm() {
 export function closeNewCustomerForm() {
 	return {
 		type: CLOSE_NEW_CUSTOMER_FORM
+	}
+}
+
+export function showLogCallModalForm(visible) {
+	return {
+		type: SHOW_LOG_CALL_MODAL_FORM,
+		payload: visible
 	}
 }
 

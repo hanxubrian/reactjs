@@ -598,12 +598,12 @@ class Payments extends Component {
 												</IconButton>
 											</Tooltip>
 											<Button variant="contained" color="primary" onClick={this.showPaymentFormModal}>
-												<Icon>attach_money</Icon>
 												Add Payment
+												<Icon className={classes.rightIcon}>attach_money</Icon>
 											</Button>
 											<Button variant="contained" color="primary" onClick={this.showPaymentFormModalCredit} className="ml-6">
-												<Icon>credit_card</Icon>
 												Add Credit
+												<Icon className={classes.rightIcon}>autorenew</Icon>
 											</Button>
 
 

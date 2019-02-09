@@ -40,6 +40,7 @@ import IconPhone from '@material-ui/icons/Phone';
 import IconChat from '@material-ui/icons/ChatBubbleOutline';
 
 import CustomerSearchBar from './CustomerSearchBar';
+import LogCallModalForm from './form/LogCallModalForm';
 
 const headerHeight = 80;
 
@@ -431,6 +432,9 @@ class CustomerServices extends Component {
 	}
 
 
+	onClickLogCall = () => {
+		this.props.showLogCallModalForm(true)
+	}
 
 	render() {
 		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, openNewCustomerForm, customerForm, mapViewState, toggleMapView } = this.props;
@@ -442,7 +446,7 @@ class CustomerServices extends Component {
 				<FusePageCustomSidebarScroll
 					classes={{
 						root: classNames(classes.layoutRoot, 'test123'),
-						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': !customerForm.props.open && summaryState ||  customerForm.props.open && this.state.showRightSidePanel}),
+						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': !customerForm.props.open && summaryState || customerForm.props.open && this.state.showRightSidePanel }),
 						leftSidebar: classNames(classes.layoutLeftSidebar, { 'openFilter': filterState }),
 						sidebarHeader: classes.layoutSidebarHeader,
 						header: classes.layoutHeader,
@@ -465,6 +469,15 @@ class CustomerServices extends Component {
 										</div>
 										<div className="flex flex-shrink items-center">
 
+											<Button
+												variant="contained"
+												color="primary"
+												className={classNames(classes.button, "pr-24 pl-24 mb-6")}
+												onClick={this.onClickLogCall}
+											>
+												Log Call
+												<Icon className={classes.rightIcon}>settings_phone</Icon>
+											</Button>
 											{/* <Tooltip title="Add new customer">
 												<IconButton className={classes.button} aria-label="add" onClick={openNewCustomerForm}>
 													<Icon>add</Icon>
@@ -591,58 +604,59 @@ class CustomerServices extends Component {
 					}
 					content={
 						<div className="flex-1 flex-col absolute w-full h-full">
-						<div className={classNames("flex flex-col h-full")}>
-							<DialogEmailToCustomer />
+							<div className={classNames("flex flex-col h-full")}>
+								<DialogEmailToCustomer />
 
-							{/* Confirm Dialog for submitting */}
-							<Dialog
-								open={this.state.isSubmittingForApproval}
-								onClose={this.handleCloseConfirmDialog}
-								aria-labelledby="alert-dialog-title"
-								aria-describedby="alert-dialog-description"
-							>
-								<DialogTitle id="alert-dialog-title">{"You are submitting customer data for approval."}</DialogTitle>
-								<DialogContent>
-									<DialogContentText id="alert-dialog-description">There are still some incompleted items. Are you sure to sumit anyway?</DialogContentText>
-								</DialogContent>
-								<DialogActions>
-									<Button onClick={this.handleCloseConfirmDialog} color="primary">No</Button>
-									<Button onClick={this.submitForApproval} color="primary" autoFocus>Yes</Button>
-								</DialogActions>
-							</Dialog>
+								{/* Confirm Dialog for submitting */}
+								<Dialog
+									open={this.state.isSubmittingForApproval}
+									onClose={this.handleCloseConfirmDialog}
+									aria-labelledby="alert-dialog-title"
+									aria-describedby="alert-dialog-description"
+								>
+									<DialogTitle id="alert-dialog-title">{"You are submitting customer data for approval."}</DialogTitle>
+									<DialogContent>
+										<DialogContentText id="alert-dialog-description">There are still some incompleted items. Are you sure to sumit anyway?</DialogContentText>
+									</DialogContent>
+									<DialogActions>
+										<Button onClick={this.handleCloseConfirmDialog} color="primary">No</Button>
+										<Button onClick={this.submitForApproval} color="primary" autoFocus>Yes</Button>
+									</DialogActions>
+								</Dialog>
 
-							{customerForm.props.open &&  <CustomerForm />}
-							{!customerForm.props.open &&  <CustomerSearchBar />}
-							{!customerForm.props.open &&  <CustomerListContent />}
-								
-						</div>
+								{customerForm.props.open && <CustomerForm />}
+								{!customerForm.props.open && <CustomerSearchBar />}
+								{!customerForm.props.open && <CustomerListContent />}
+								<LogCallModalForm />
+
+							</div>
 						</div>
 					}
 					leftSidebarHeader={
 						<Fragment>
 							<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
-								<h2 style={{ marginBlockStart: '1em' }}>{customerForm.props.open ? (this.props.customerForm.data === null ? "" : this.props.customerForm.data.Data.cus_name) : "Filters"}</h2>
+								<h2 style={{ marginBlockStart: '1em' }}>{customerForm.props.open ? (this.props.customerForm.data && this.props.customerForm.data.Data ? this.props.customerForm.data.Data.cus_name : "") : "Filters"}</h2>
 							</div>
 						</Fragment>
 					}
 					leftSidebarContent={
 						<FilterPanel />
 					}
-					// rightSidebarHeader={
-					// 	<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
-					// 		<h2 style={{ marginBlockStart: '1em' }}>{customerForm.props.open ? "Agreement & Cleaning Schedule" : "Summary"}</h2>
-					// 	</div>
-					// }
-					// rightSidebarContent={
-					// 	<Fragment>
-					// 		{/* {!customerForm.props.open && summaryState && (<SummaryPanel />)} */}
-					// 		{/* {customerForm.props.open && this.state.showRightSidePanel && (<SummaryPanel />)} */}
-					// 		<SummaryPanel />
-					// 	</Fragment>
-					// }
-					// onRef={instance => {
-					// 	this.pageLayout = instance;
-					// }}
+				// rightSidebarHeader={
+				// 	<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
+				// 		<h2 style={{ marginBlockStart: '1em' }}>{customerForm.props.open ? "Agreement & Cleaning Schedule" : "Summary"}</h2>
+				// 	</div>
+				// }
+				// rightSidebarContent={
+				// 	<Fragment>
+				// 		{/* {!customerForm.props.open && summaryState && (<SummaryPanel />)} */}
+				// 		{/* {customerForm.props.open && this.state.showRightSidePanel && (<SummaryPanel />)} */}
+				// 		<SummaryPanel />
+				// 	</Fragment>
+				// }
+				// onRef={instance => {
+				// 	this.pageLayout = instance;
+				// }}
 				>
 				</FusePageCustomSidebarScroll>
 				{(this.props.bCustomerFetchStart) && (
@@ -690,6 +704,7 @@ function mapDispatchToProps(dispatch) {
 		openEmailToCustomerDialog: Actions.openEmailToCustomerDialog,
 
 		createCustomer: Actions.createCustomer,
+		showLogCallModalForm: Actions.showLogCallModalForm,
 	}, dispatch);
 }
 
