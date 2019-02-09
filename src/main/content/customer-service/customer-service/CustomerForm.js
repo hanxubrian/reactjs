@@ -129,6 +129,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 
 import ContactHistoryPage from './form/ContactHistoryPage.js';
 import CollectionsPage from './form/CollectionsPage.js';
+import BillingsPage from './form/BillingsPage';
 
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -533,7 +534,7 @@ class CustomerForm extends Component {
 				);
 			case 1:
 				return (
-					<Fragment></Fragment>
+					<BillingsPage></BillingsPage>
 				);
 			case 2:
 				return (

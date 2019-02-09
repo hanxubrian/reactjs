@@ -385,6 +385,32 @@ const customers = function (state = initialState, action) {
 					}
 				};
 			}
+		case Actions.GET_CUSTOMER_BILLING_LIST:
+			{
+				return {
+					...state,
+					customerServiceForm: {
+						...state.customerServiceForm,
+						billingList: {
+							data: action.payload,
+							isFetching: false
+						}
+					}
+				};
+			}
+		case Actions.GET_CUSTOMER_BILLING_LIST_START:
+			{
+				return {
+					...state,
+					customerServiceForm: {
+						...state.customerServiceForm,
+						billingList: {
+							...state.customerServiceForm.billingList,
+							isFetching: true
+						}
+					}
+				};
+			}
 		case Actions.SHOW_LOG_CALL_MODAL_FORM:
 			{
 				return {

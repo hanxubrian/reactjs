@@ -49,6 +49,8 @@ export const GET_CUSTOMER_SERVICE_LIST_START = "[CUSTOMERS-service APP] GET_CUST
 export const GET_CUSTOMER_SERVICE_LIST = "[CUSTOMERS-service APP] GET_CUSTOMER_SERVICE_LIST";
 export const GET_CUSTOMER_COLLECTION_LIST_START = "[CUSTOMERS-service APP] GET_CUSTOMER_COLLECTION_LIST_START";
 export const GET_CUSTOMER_COLLECTION_LIST = "[CUSTOMERS-service APP] GET_CUSTOMER_COLLECTION_LIST";
+export const GET_CUSTOMER_BILLING_LIST_START = "[CUSTOMERS-service APP] GET_CUSTOMER_BILLING_LIST_START";
+export const GET_CUSTOMER_BILLING_LIST = "[CUSTOMERS-service APP] GET_CUSTOMER_BILLING_LIST";
 
 export const SHOW_LOG_CALL_MODAL_FORM = "[CUSTOMERS-service APP] SHOW_LOG_CALL_MODAL_FORM";
 
@@ -341,6 +343,22 @@ export function getCustomerCollectionList(regionId, CustomerNo, fromDate, toDate
 			let res = await customersService.getCustomerCollectionList(regionId, CustomerNo, fromDate, toDate);
 			dispatch({
 				type: GET_CUSTOMER_COLLECTION_LIST,
+				payload: res
+			});
+		})();
+	}
+}
+export function getCustomerBillingList(regionId, CustomerNo) {
+	return (dispatch) => {
+		dispatch({
+			type: GET_CUSTOMER_BILLING_LIST_START,
+			payload: true
+		});
+
+		(async () => {
+			let res = await customersService.getCustomerBillingList(regionId, CustomerNo);
+			dispatch({
+				type: GET_CUSTOMER_BILLING_LIST,
 				payload: res
 			});
 		})();
