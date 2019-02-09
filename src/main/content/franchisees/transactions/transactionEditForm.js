@@ -438,14 +438,12 @@ class TransactionEditForm extends Component {
             return franchisees.filter(f => regex.test(f.Name) || regex.test(f.Number)|| regex.test(f.StatusName));
     };
 
-    getTotal = async () => {
+    getTotal = () => {
         let quantity =  this.state.quantity;
         let unitPrice = this.state.unitPrice;
         let payments = this.state.payments;
 
         if(quantity>0 && unitPrice>0 && this.props.transactionForm.franchisee!==null) {
-            let r = await this.props.getFranchiseeTransactionTaxAmount(this.props.regionId, this.props.transactionForm.franchisee.Id, unitPrice, quantity);
-            console.log('tax===', this.props.transactionTax);
             if(this.props.transactionTax!==null) {
                 let tax = this.props.transactionTax.TotalTaxAmount;
                 if (this.state.TrxType.value !== '5c5320066846d77648859107') tax = 0.0;
@@ -466,7 +464,7 @@ class TransactionEditForm extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.props.transactionForm!== prevProps.transactionForm) {
-            this.getTotal();
+            // this.getTotal();
         }
         if(this.state.selectedFranchisee!== null && JSON.stringify(this.state.selectedFranchisee)!== JSON.stringify(this.props.transactionForm.franchisee)) {
             this.props.selectFranchisee(this.state.selectedFranchisee);
@@ -494,6 +492,10 @@ class TransactionEditForm extends Component {
                 month: parseInt(period[0]),
                 franchiseenumber: this.props.transactionForm.franchisee.Number
             });
+        }
+
+        if(this.props.transactionTax !==prevProps.transactionTax && this.props.transactionTax!==null){
+            this.getTotal();
         }
     }
 
@@ -534,9 +536,9 @@ class TransactionEditForm extends Component {
 
     componentDidMount = () =>{
 
-            fetch(`https://apifmsplusplus_mongo.jkdev.com/v1/vendors/getvendorlist?regionId=${this.props.regionId}`)
-                .then(response => response.json())
-                .then(data => this.setState({ vendorList: data }));
+        fetch(`https://apifmsplusplus_mongo.jkdev.com/v1/vendors/getvendorlist?regionId=${this.props.regionId}`)
+            .then(response => response.json())
+            .then(data => this.setState({ vendorList: data }));
 
 
         if(this.props.transactionForm.type === 'new')
@@ -559,7 +561,7 @@ class TransactionEditForm extends Component {
                     if(trxDetail.Trxtype!=='5c5320066846d77648859107') tax = 0.00;
 
                     this.setState({tax: tax});
-                    this.setState({quantity: parseFloat(trxDetail.quantity)});
+                    this.setState({quantity: parseInt(trxDetail.quantity)});
                     this.setState({total: parseFloat(trxDetail.TrxExtendedPrice)+ tax});
                     this.setState({TransactionDate: trxDetail.TrxDate!==null ? moment(trxDetail.TrxDate): moment()});
 
@@ -652,7 +654,9 @@ class TransactionEditForm extends Component {
     };
 
     handleBlurTransaction = name =>(event) => {
-        this.getTotal();
+        let quantity =  this.state.quantity;
+        let unitPrice = this.state.unitPrice;
+        this.props.getFranchiseeTransactionTaxAmount(this.props.regionId, this.props.transactionForm.franchisee.Id, unitPrice, quantity);
     };
 
     addNewTransaction = () => {
