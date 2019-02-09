@@ -129,9 +129,9 @@ const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
     console.log('cell=', restProps);
     if(restProps.column.name==='type'){
         return (
-            <Table.Cell cols
+            <Table.Cell
                 {...restProps}
-                colspan={3}
+                colSpan={3}
                 className={classes.tableSummaryCell}>
                 <strong>Total Revenue for this Franchisee</strong>
             </Table.Cell>
@@ -288,7 +288,6 @@ class CustomerAccountTotals extends Component {
                     {data.length>0 && (
                         <TableSummaryRow  totalRowComponent={TableSummaryComponent}
                                           totalCellComponent = {TableSummaryCellComponent}
-                                          colspan={3}
                         />
                     )}
                 </Grid>

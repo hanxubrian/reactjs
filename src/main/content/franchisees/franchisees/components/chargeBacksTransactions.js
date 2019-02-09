@@ -164,7 +164,6 @@ class ChargeBacksTransactions extends Component {
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CHARGEBACKS.map(d=>{
             let type = this.props.transactionTypeList.filter(t=>t._id===d.TYPE);
-            console.log('type=', type);
             d.DESCR = FuseUtils.capital_letter(d.DESCR);
             d.TRX_AMT = parseFloat(d.TRX_AMT);
             d.TRX_TAX = parseFloat(d.TRX_TAX);

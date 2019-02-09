@@ -20,23 +20,13 @@ import {withRouter} from 'react-router-dom';
 // for store
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
-// import SummaryPanel from './SummaryPanel';
-// import FilterPanel from './FilterPanel';
+
 import "react-table/react-table.css";
 import classNames from 'classnames';
 import Report from './report_new';
 import FilterPanel from "./filterPanel1";
 
 const headerHeight = 80;
-
-const hexToRgb = (hex) => {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-    } : null;
-}
 
 const styles = theme => ({
     root: {
@@ -222,8 +212,6 @@ const styles = theme => ({
 class ReportLayout extends Component {
     constructor(props) {
         super(props);
-
-
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {

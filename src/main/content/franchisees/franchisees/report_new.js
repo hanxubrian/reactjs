@@ -116,6 +116,7 @@ class Report extends Component {
 
         this.props.onRef(undefined);
     }
+
     getDataUri=(url, cb)=>
     {
         var image = new Image();
