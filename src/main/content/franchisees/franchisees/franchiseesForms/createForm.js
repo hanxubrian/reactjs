@@ -66,7 +66,7 @@ const styles = theme => ({
 
 
 function getSteps() {
-    return ["Company Information", "Franchisee Agreement", "Upload Required Document"];
+    return ["Company Information", "Franchisee Agreement", "Upload Required Document","History","Franchisee Reports","Customers"];
 }
 
 function getStepContent(franchiseeForm, step) {
@@ -583,7 +583,25 @@ function getStepContent(franchiseeForm, step) {
                         )}
                     </div>
                 </Fragment>
-            )
+            );
+        case 3:
+            return (
+                <Fragment>
+                    <h3>History Panel...</h3>
+                </Fragment>
+            );
+        case 4:
+            return (
+                <Fragment>
+                    <h3>Franchisee Reports Panel...</h3>
+                </Fragment>
+            );
+        case 5:
+            return (
+                <Fragment>
+                    <h3>Customers Panel...</h3>
+                </Fragment>
+            );    
         default:
             return 'Unknown step';
     }
@@ -759,7 +777,7 @@ class FranchiseesCreateForm extends Component {
         }else{
             this.setState({AllowBppAdminFee: false });
         }
-        
+
         this.props.getFranchiseeFeeMaintenance(this.props.regionId);
         this.props.getFranchiseeStateList(this.props.regionId);
     }
@@ -919,6 +937,9 @@ class FranchiseesCreateForm extends Component {
                         <Tab label="Company Information" />
                         <Tab label="Franchisee Agreement" />
                         <Tab label="Upload Required Document" />
+                        <Tab label="History" />
+                        <Tab label="Franchisee Reports" />
+                        <Tab label="Customers" />
                     </Tabs>
                 </AppBar>
                 <div
