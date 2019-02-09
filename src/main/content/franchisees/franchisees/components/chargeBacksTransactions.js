@@ -88,7 +88,7 @@ const CurrencyFormatter = ({value}) => (
                   fixedDecimalScale={true}
                   thousandSeparator
                   decimalScale={2}
-                  prefix="$" renderText={value => <div style={{color: 'black'}}>{value}</div>}/>
+                  prefix="$" renderText={value => <div className="sum-01">{value}</div>}/>
 );
 
 const CurrencyTypeProvider = props => (

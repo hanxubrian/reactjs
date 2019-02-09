@@ -89,7 +89,7 @@ const CurrencyFormatter = ({value}) => (
                   fixedDecimalScale={true}
                   thousandSeparator
                   decimalScale={2}
-                  prefix="$" renderText={value => <div style={{color: 'black'}}>{value}</div>}/>
+                  prefix="$" renderText={value => <div className="sum-01">{value}</div>}/>
 );
 
 const CurrencyTypeProvider = props => (
@@ -214,7 +214,7 @@ class RegularMiscTransactons extends Component {
             {name: "TYPE", title: "Type"},
             {name: "DESCR", title: "Description"},
             {name: "TRX_AMT", title: "Amount"},
-            // {name: "TRX_TAX", title: "Tax"},
+            {name: "TRX_TAX", title: "Tax"},
             {name: "TRX_TOT", title: "Total"},
         ];
 
