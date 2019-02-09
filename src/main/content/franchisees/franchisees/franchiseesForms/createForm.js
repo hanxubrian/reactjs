@@ -721,7 +721,13 @@ class FranchiseesCreateForm extends Component {
             LegalZip: this.props.insertPayload.LegalZip,
             LegalIdNum: this.props.insertPayload.LegalIdNum, 
             NameOn1099: this.props.insertPayload.NameOn1099,
-            defaultPlanType: this.props.insertPayload.AgreementPlanTypeId
+            defaultPlanType: this.props.insertPayload.AgreementPlanTypeId,
+            planAmount: this.props.insertPayload.AgreementPlanAmount,
+            daysToFullfill: this.props.insertPayload.AgreementDaysToFulfill,
+            noOfPayments: this.props.insertPayload.AgreementTotalPayments,
+            interest: this.props.insertPayload.AgreementInterestRate,
+            downPayment: this.props.insertPayload.AgreementDownPayment,
+            ibAmount: this.props.insertPayload.AgreementInitialBusinessAmount
         });
         
         if(this.props.insertPayload.Print1099 === "Y"){
@@ -735,45 +741,23 @@ class FranchiseesCreateForm extends Component {
         }else{
             this.setState({AllowChargeBack: false });
         }
+
         if(this.props.insertPayload.AllowAccountRebate === "Y"){
             this.setState({ AllowAccountRebate: true });
         }else{
             this.setState({AllowAccountRebate: false });
         }
+
         if(this.props.insertPayload.AllowGenerateReport === "Y"){
             this.setState({ AllowGenerateReport: true });
         }else{
             this.setState({AllowGenerateReport: false });
         }
+
         if(this.props.insertPayload.AllowBppAdminFee === "Y"){
             this.setState({ AllowBppAdminFee: true });
         }else{
             this.setState({AllowBppAdminFee: false });
-        }
-        if(this.props.planType.length !== 0){
-            
-            this.props.planType.Data.map( (x,index)=> {
-                if (this.props.insertPayload.AgreementPlanTypeId === x.FranchiseeContractTypeListId) {
-                    this.setState({
-                        planAmount: x.Price,
-                        daysToFullfill: x.DaysToFulfill,
-                        noOfPayments: x.NoOfPayments,
-                        interest: x.Interest,
-                        downPayment: x.DownPayment,
-                        ibAmount: x.BusinessAmount
-                    });
-                    this.handleInitialUpdate("AgreementPlanAmount",x.Price);
-                    this.handleInitialUpdate("AgreementDaysToFulfill",x.DaysToFulfill);
-                    this.handleInitialUpdate("AgreementTotalPayments",x.NoOfPayments);
-                    this.handleInitialUpdate("AgreementInterestRate",x.Interest);
-                    this.handleInitialUpdate("AgreementPlanTypeId",x.FranchiseeContractTypeListId);
-                    this.handleInitialUpdate("AgreementDownPayment",x.DownPayment);
-                    this.handleInitialUpdate("AgreementInitialBusinessAmount",x.BusinessAmount);
-                    this.handleInitialUpdate("AgreementPlanType",x.Name);
-                    this.handleInitialUpdate("AgreementMonthlyPayment",x.PaymentAmount);
-                }
-            })
-    
         }
         
         this.props.getFranchiseeFeeMaintenance(this.props.regionId);

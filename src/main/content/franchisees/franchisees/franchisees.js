@@ -413,6 +413,7 @@ class Franchisees extends Component {
             InActive: this.props.InActive
         });
         this.getFranchiseesFromStatus();
+        this.props.getFranchiseeFeeMaintenance(this.props.regionId);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -1231,6 +1232,7 @@ function mapDispatchToProps(dispatch)
         updateFranchisees: Actions.updateFranchisees,
         getFranchiseeDetail: Actions.getFranchiseeDetail,
         getBillingLists: Actions.getBillingLists,
+        getFranchiseeFeeMaintenance: Actions.getFranchiseeFeeMaintenance,
         getFranchiseeTransactionTypeLists : Actions.getFranchiseeTransactionTypeLists,
     }, dispatch);
 }
