@@ -11,7 +11,6 @@ export const CLOSE_ALERT_DIALOG = 'CLOSE_ALERT_DIALOG';
 export const INITIALIZE_FROM_LOCAL = 'INITIALIZE_FROM_LOCAL';
 export const LOADED_MENU = 'LOADED_MENU';
 export const ADMIN_CLEAN_CACHE_FOR_UPGRADE = 'ADMIN_CLEAN_CACHE_FOR_UPGRADE';
-// export const INITIAL_START = 'INITIAL_START';
 
 
 
@@ -26,7 +25,6 @@ export function submitSignIn(email, password, url)  {
             if (res.IsSuccess) {
                 let regions = await authService.getRegions(res.id);
                 res.Regions = regions;
-                console.log("RES",res);
                 let navigations = await menuService.loadAccountMenu(url);
                 dispatch({
                     type: LOGIN_SUCCESS,

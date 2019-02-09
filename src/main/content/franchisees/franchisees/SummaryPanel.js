@@ -103,7 +103,7 @@ class SummaryPanel extends Component {
 
     render()
     {
-        const {classes, franchiseesForm} = this.props;
+        const {classes} = this.props;
 
         let widgets_data ={
             widget8: {

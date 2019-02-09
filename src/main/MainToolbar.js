@@ -330,11 +330,6 @@ class MainToolbar extends Component {
         let pushermidmsg        = this.state.pusherMSGList;
         let allmsg              = [];
 
-        // console.log("mainmsg");
-        // console.log("mainmsg===this.state.chatMSG",this.state.chatMSG);
-        // console.log("mainmsg===this.state.pusherMSGList",this.state.pusherMSGList);
-
-
         if(chatmidmsg && chatmidmsg !== null && pushermidmsg === null ){
             allmsg =chatmidmsg;
         }
@@ -372,18 +367,6 @@ class MainToolbar extends Component {
             this.mainmsg();
         }
 
-
-        // if(this.state.pusherMSG && this.state.pusherMSG !== null){
-        //     console.log("######DB############this.props.getpusherNotificationDB",this.props.getpusherNotificationDB);
-        //     console.log("######pushermsg############this.state.pusherMSG",this.state.pusherMSG);
-        //     console.log("######billstatus############this.props.billstatus",this.props.billstatus);
-        //     console.log("######subject############this.state.pusherMSG.subject",this.state.pusherMSG.subject);
-        //     console.log("######msg############this.state.pusherMSG",this.state.pusherMSG);
-        //     console.log("######MSG############prevState.pusherMSG",prevState.pusherMSG);
-        //     console.log("######MSG############this.props.login.UserId.toString()",this.props.login.UserId.toString());
-        // }
-        //
-        console.log("+++++++++this.state.pusherMSG",this.state.pusherMSG);
         if(this.props.billstatus !== prevProps.billstatus){
             if(this.props.billstatus === 200){
                 this.billrunsuccessmesssage();
@@ -395,13 +378,11 @@ class MainToolbar extends Component {
 
         let midflage = false;
         if(this.state.adminMSG && this.state.adminMSG !== null && this.state.adminMSG !== prevState.adminMSG){
-            // console.log("==================adminMSG====================",this.state.adminMSG);
             if(this.state.adminMSG.note && this.state.adminMSG.version){
                 this.setState({adminVersionStatus:true});
 
             }
         }
-
 
         if (this.state.sysflage === true){
             setTimeout(
@@ -545,15 +526,16 @@ class MainToolbar extends Component {
     systemreadmake=()=>{
         this.setState({unreadMSGnum:0});
 
-    }
+    };
+
     handleNotificationChange = (event, value) => {
         this.setState({value});
     };
     systemitemnotification =(e)=>{
         this.props.history.push('/notification/system/'+e);
-    }
+    };
+
     closenotification=(param)=>{
-        console.log(param);
         let midMSG = this.state.MSG;
         let getMsg =[];
         if(param !== null){

@@ -490,7 +490,7 @@ class Franchisees extends Component {
 
         this.initRowsFromRawJson();
 
-        this.getLocation();
+        // this.getLocation();
     }
 
     escFunction(event){
@@ -1027,7 +1027,6 @@ class Franchisees extends Component {
                                                 color: 'white',
                                                 borderRight: border,
                                                 height: 50,
-                                                fontSize: 12
                                             },
                                         }
                                     }}

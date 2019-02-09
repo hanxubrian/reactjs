@@ -126,7 +126,6 @@ const TableSummaryComponentBase = ({ classes,  ...restProps }) =>{
 
 
 const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
-    console.log('cell=', restProps);
     if(restProps.column.name==='type'){
         return (
             <Table.Cell
