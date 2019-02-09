@@ -90,6 +90,22 @@ const styles = theme => ({
     }
 });
 
+const CurrencyFormatter = ({value}) => (
+    <NumberFormat value={value}
+                  displayType={'text'}
+                  fixedDecimalScale={true}
+                  thousandSeparator
+                  decimalScale={2}
+                  prefix="$" renderText={value => <div style={{color: 'black'}}>{value}</div>}/>
+);
+
+const CurrencyTypeProvider = props => (
+    <DataTypeProvider
+        formatterComponent={CurrencyFormatter}
+        {...props}
+    />
+);
+
 const TableComponentBase = ({ classes, ...restProps }) => (
     <Table.Table
         {...restProps}
@@ -111,29 +127,41 @@ const TableSummaryComponentBase = ({ classes, ...restProps }) => (
     />
 );
 
-export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
-export const TableSummaryRowComponent = withStyles(styles, { name: 'TableSummaryComponent' })(TableSummaryComponentBase);
-export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
+const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
+    if(restProps.column.name==='type'){
+        return (
+            <Table.Cell
+                {...restProps}
+                colSpan={3}
+                className={classes.tableSummaryCell}>
+                <strong>Total Revenue for this Franchisee</strong>
+            </Table.Cell>
+        );
+    }
+    else if(restProps.column.name==='PYMNT_TOT'){
+        return (
+            <Table.Cell
+                {...restProps}
+                colSpan={1}
+                className={classes.tableSummaryCell}>
+                {CurrencyFormatter({value: restProps.children.props.children[0].props.params.value})}
+            </Table.Cell>
+        );
 
-const CurrencyFormatter = ({value}) => (
-    <NumberFormat value={value}
-                  displayType={'text'}
-                  fixedDecimalScale={true}
-                  thousandSeparator
-                  decimalScale={2}
-                  prefix="$" renderText={value => <div>{value}</div>}/>
-);
-
-const CurrencyTypeProvider = props => (
-    <DataTypeProvider
-        formatterComponent={CurrencyFormatter}
-        {...props}
-    />
-);
-
-const messages = {
-    sum: 'Sum',
+    }
+    else
+        return (
+            <Table.Cell
+                {...restProps}
+                className={classes.tableSummaryCell}
+            />
+        );
 };
+
+export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
+export const TableSummaryComponent = withStyles(styles, { name: 'TableSummaryComponent' })(TableSummaryComponentBase);
+export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
+export const TableSummaryCellComponent = withStyles(styles, { name: 'TableSummaryCellComponent' })(TableSummaryCellComponentBase);
 
 class FindersFeeTransactions extends Component {
     state = {
@@ -224,8 +252,8 @@ class FindersFeeTransactions extends Component {
                     <TableHeaderRow />
                     {data.length>0 && (
                         <TableSummaryRow
-                            totalRowComponent={TableSummaryRowComponent}
-                            messages={messages}
+                            totalRowComponent={TableSummaryComponent}
+                            totalCellComponent = {TableSummaryCellComponent}
                         />
                     )}
                 </Grid>

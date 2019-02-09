@@ -104,6 +104,22 @@ const styles = theme => ({
     }
 });
 
+const CurrencyFormatter = ({value}) => (
+    <NumberFormat value={value}
+                  displayType={'text'}
+                  fixedDecimalScale={true}
+                  thousandSeparator
+                  decimalScale={2}
+                  prefix="$" renderText={value => <div  style={{color: 'black'}}>{value}</div>}/>
+);
+
+const CurrencyTypeProvider = props => (
+    <DataTypeProvider
+        formatterComponent={CurrencyFormatter}
+        {...props}
+    />
+);
+
 const TableComponentBase = ({ classes, ...restProps }) => (
     <Table.Table
         {...restProps}
@@ -119,7 +135,7 @@ const TableHeadComponentBase = ({ classes, ...restProps }) => {
         />
     )};
 
-const TableSummaryComponentBase = ({ classes,  ...restProps }) =>{
+const TableSummaryComponentBase = ({ classes, ...restProps }) =>{
     return     (
         <Table.Row
             {...restProps}
@@ -140,6 +156,17 @@ const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
             </Table.Cell>
         );
     }
+    else if(restProps.column.name==='CUS_TAX'){
+        return (
+            <Table.Cell
+                {...restProps}
+                colSpan={1}
+                className={classes.tableSummaryCell}>
+                {CurrencyFormatter({value: restProps.children.props.children[0].props.params.value})}
+            </Table.Cell>
+        );
+
+    }
     else
         return (
             <Table.Cell
@@ -153,22 +180,6 @@ export const TableComponent = withStyles(styles, { name: 'TableComponent' })(Tab
 export const TableSummaryComponent = withStyles(styles, { name: 'TableSummaryComponent' })(TableSummaryComponentBase);
 export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
 export const TableSummaryCellComponent = withStyles(styles, { name: 'TableSummaryCellComponent' })(TableSummaryCellComponentBase);
-
-const CurrencyFormatter = ({value}) => (
-    <NumberFormat value={value}
-                  displayType={'text'}
-                  fixedDecimalScale={true}
-                  thousandSeparator
-                  decimalScale={2}
-                  prefix="$" renderText={value => <div>{value}</div>}/>
-);
-
-const CurrencyTypeProvider = props => (
-    <DataTypeProvider
-        formatterComponent={CurrencyFormatter}
-        {...props}
-    />
-);
 
 class CustomerAccountTotals extends Component {
     state = {

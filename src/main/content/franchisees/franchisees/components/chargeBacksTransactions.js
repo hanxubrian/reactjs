@@ -82,6 +82,22 @@ const styles = theme => ({
     }
 });
 
+const CurrencyFormatter = ({value}) => (
+    <NumberFormat value={value}
+                  displayType={'text'}
+                  fixedDecimalScale={true}
+                  thousandSeparator
+                  decimalScale={2}
+                  prefix="$" renderText={value => <div style={{color: 'black'}}>{value}</div>}/>
+);
+
+const CurrencyTypeProvider = props => (
+    <DataTypeProvider
+        formatterComponent={CurrencyFormatter}
+        {...props}
+    />
+);
+
 const TableComponentBase = ({ classes, ...restProps }) => (
     <Table.Table
         {...restProps}
@@ -103,25 +119,40 @@ const TableSummaryComponentBase = ({ classes, ...restProps }) => (
     />
 );
 
+const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
+    if(restProps.column.name==='type34214'){
+        return (
+            <Table.Cell
+                {...restProps}
+                colSpan={3}
+                className={classes.tableSummaryCell}>
+                <strong>Total Revenue for this Franchisee</strong>
+            </Table.Cell>
+        );
+    }
+    else if(restProps.column.name==='TRX_AMT' || restProps.column.name==='TRX_TAX'|| restProps.column.name==='TRX_TOT'){
+        return (
+            <Table.Cell
+                {...restProps}
+                colSpan={1}
+                className={classes.tableSummaryCell}>
+                {CurrencyFormatter({value: restProps.children.props.children[0].props.params.value})}
+            </Table.Cell>
+        );
+    }
+    else
+        return (
+            <Table.Cell
+                {...restProps}
+                className={classes.tableSummaryCell}
+            />
+        );
+};
+
 export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
 export const TableSummaryComponent = withStyles(styles, { name: 'TableSummaryComponent' })(TableSummaryComponentBase);
 export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
-
-const CurrencyFormatter = ({value}) => (
-    <NumberFormat value={value}
-                  displayType={'text'}
-                  fixedDecimalScale={true}
-                  thousandSeparator
-                  decimalScale={2}
-                  prefix="$" renderText={value => <div>{value}</div>}/>
-);
-
-const CurrencyTypeProvider = props => (
-    <DataTypeProvider
-        formatterComponent={CurrencyFormatter}
-        {...props}
-    />
-);
+export const TableSummaryCellComponent = withStyles(styles, { name: 'TableSummaryCellComponent' })(TableSummaryCellComponentBase);
 
 class ChargeBacksTransactions extends Component {
     state = {
@@ -224,7 +255,9 @@ class ChargeBacksTransactions extends Component {
                                   columnExtensions={tableColumnExtensions}
                     />
                     <TableHeaderRow />
-                    <TableSummaryRow  totalRowComponent={TableSummaryComponent}/>
+                    <TableSummaryRow  totalRowComponent={TableSummaryComponent}
+                                      totalCellComponent = {TableSummaryCellComponent}
+                    />
                 </Grid>
             </div>
         );
