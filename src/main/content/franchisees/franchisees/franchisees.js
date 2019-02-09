@@ -1026,7 +1026,7 @@ class Franchisees extends Component {
                                                 lineHeight: 1.5,
                                                 color: 'white',
                                                 borderRight: border,
-                                                height: 50,
+                                                height: 40,
                                             },
                                         }
                                     }}
@@ -1060,7 +1060,7 @@ class Franchisees extends Component {
                                                 }
                                             },
                                             style:{
-                                                height: 35
+                                                height: 40
                                             }
                                         }
                                     }}
