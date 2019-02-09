@@ -989,326 +989,177 @@ class FilterPanel extends Component {
 											<CardHeader title="Customer Information" className={classNames(classes.cardHeader, "flex-1")} />
 											<CardContent className={classNames(classes.cardContent)}>
 												<div className="flex flex-row mb-4">
-													<div className="flex" style={{ flex: 2 }}>
-														<Icon fontSize={"small"} className="mr-4">person_outline</Icon>
-														<Typography variant="subtitle1" color="inherit"><strong>{this.state.customerName}</strong></Typography>
+													<div className="flex mr-6" style={{ flex: 2 }}>
+														{/* <Icon fontSize={"small"} className="mr-4">person_outline</Icon> */}
+														{/* <Typography variant="subtitle1" color="inherit"><strong>{this.state.customerName}</strong></Typography> */}
+														<TextField
+															id="customerName"
+															label="Name"
+															value={this.state.customerName}
+															className={classes.textField}
+															InputLabelProps={{ shrink: true }}
+															InputProps={{ readOnly: true }}
+															margin="dense"
+															fullWidth
+														/>
 													</div>
-													<div className="flex" style={{ flex: 1 }}>
-														<Icon fontSize={"small"} className="mr-4">phone_iphone</Icon>
-														<Typography variant="subtitle1" color="inherit">{this.state.customerPhone}</Typography>
-													</div>
-												</div>
-
-												{/* <div className="flex flex-row justify-end mb-4">
-                                                <div className="flex flex-row items-center">
-                                                    <Icon fontSize={"small"} className="mr-4">phone</Icon>
-                                                    <Typography variant="subtitle1" color="inherit">
-														{this.state.customerPhone}
-                                                    </Typography>
-                                                </div>
-                                            </div>
-
-											<div className="flex flex-row justify-end mb-4">
-                                                <div className="flex flex-row items-center">
-                                                    <Icon fontSize={"small"} className="mr-4">phone</Icon>
-                                                    <Typography variant="subtitle1" color="inherit">
-														{this.state.customerFax}
-                                                    </Typography>
-                                                </div>
-                                            </div> */}
-
-												<div className="flex flex-row justify-between mb-4">
-													<div className="flex" style={{ flex: 2 }}>
-														<Icon fontSize={"small"} className="mr-4">location_on</Icon>
-														<Typography variant="subtitle1" color="inherit">{FuseUtils.capital_letter(this.state.customerAddress)}</Typography>
-													</div>
-													<div className="flex" style={{ flex: 1 }}>
-														<Icon fontSize={"small"} className="mr-4">phone_iphone</Icon>
-														<Typography variant="subtitle1" color="inherit">{this.state.customerFax}</Typography>
+													<div className="flex ml-6" style={{ flex: 1 }}>
+														{/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
+														{/* <Typography variant="subtitle1" color="inherit">{this.state.customerPhone}</Typography> */}
+														<TextField
+															id="customerPhone"
+															label="Phone"
+															value={this.state.customerPhone}
+															className={classes.textField}
+															InputLabelProps={{ shrink: true }}
+															InputProps={{ readOnly: true }}
+															margin="dense"
+															fullWidth
+														/>
 													</div>
 												</div>
 
-												{/* <div className="flex flex-row justify-start mb-4">
-                                                <div className="flex flex-row items-center">
-                                                    <Icon fontSize={"small"} className="mr-4">place</Icon>
-                                                    <Typography variant="subtitle1" color="inherit">
-														Address2:
-                                                    </Typography>
-                                                </div>
-                                            </div> */}
+												<div className="flex flex-row justify-between mb-4">
+													<div className="flex mr-6" style={{ flex: 2 }}>
+														{/* <Icon fontSize={"small"} className="mr-4">location_on</Icon> */}
+														{/* <Typography variant="subtitle1" color="inherit">{FuseUtils.capital_letter(this.state.customerAddress)}</Typography> */}
+														<TextField
+															id="customerAddress"
+															label="Address"
+															value={FuseUtils.capital_letter(this.state.customerAddress)}
+															className={classes.textField}
+															InputLabelProps={{ shrink: true }}
+															InputProps={{ readOnly: true }}
+															margin="dense"
+															fullWidth
+														/>
+													</div>
+													<div className="flex ml-6" style={{ flex: 1 }}>
+														{/* <Icon fontSize={"small"} className="mr-4">phone_iphone</Icon> */}
+														{/* <Typography variant="subtitle1" color="inherit">{this.state.customerFax}</Typography> */}
+														<TextField
+															id="customerFax"
+															label="Fax"
+															value={this.state.customerFax}
+															className={classes.textField}
+															InputLabelProps={{ shrink: true }}
+															InputProps={{ readOnly: true }}
+															margin="dense"
+															fullWidth
+														/>
+													</div>
+												</div>
+
 
 												<div className="flex flex-row justify-between mb-4">
-													<div className="flex">
-														<Icon fontSize={"small"} className="mr-4"></Icon>
-														<Typography variant="subtitle1" color="inherit">
-															{FuseUtils.capital_letter(this.state.customerCity)}, {this.state.customerState}, {this.state.customerZip}
-														</Typography>
+													<div className="flex" style={{ flex: 1 }}>
+														{/* <Icon fontSize={"small"} className="mr-4"></Icon> */}
+														{/* <Typography variant="subtitle1" color="inherit">{FuseUtils.capital_letter(this.state.customerCity)}, {this.state.customerState}, {this.state.customerZip}</Typography> */}
+														<TextField
+															id="customerAddress"
+															label=""
+															value={FuseUtils.capital_letter(this.state.customerCity) + ", " + this.state.customerState + ", " + this.state.customerZip}
+															className={classes.textField}
+															InputLabelProps={{ shrink: true }}
+															InputProps={{ readOnly: true }}
+															margin="dense"
+															fullWidth
+														/>
 													</div>
 												</div>
 
 												<Divider variant="middle" style={{ marginTop: 5, marginBottom: 5 }} />
 
 												<div className="flex flex-row justify-start mb-4">
-													<div className="flex flex-row items-center">
-														<Icon fontSize={"small"} className="mr-4">email</Icon>
-														<Typography variant="subtitle1" color="inherit">{this.state.customerEmail}</Typography>
+													<div className="flex flex-row items-center mr-6" style={{ flex: 1 }}>
+														{/* <Icon fontSize={"small"} className="mr-4">email</Icon> */}
+														{/* <Typography variant="subtitle1" color="inherit">{this.state.customerEmail}</Typography> */}
+														<TextField
+															id="customerEmail"
+															label="Email"
+															value={this.state.customerEmail}
+															className={classes.textField}
+															InputLabelProps={{ shrink: true }}
+															InputProps={{ readOnly: true }}
+															margin="dense"
+															fullWidth
+														/>
+													</div>
+													<div className="flex flex-row items-center ml-6" style={{ flex: 1 }}>
+														{/* <Icon fontSize={"small"} className="mr-4">language</Icon> */}
+														{/* <Typography variant="subtitle1" color="inherit">{this.state.customerWebsite}</Typography> */}
+														<TextField
+															id="customerWebsite"
+															label="Website"
+															value={this.state.customerWebsite}
+															className={classes.textField}
+															InputLabelProps={{ shrink: true }}
+															InputProps={{ readOnly: true }}
+															margin="dense"
+															fullWidth
+														/>
 													</div>
 												</div>
-
-												<div className="flex flex-row justify-start mb-4">
-													<div className="flex flex-row items-center">
-														<Icon fontSize={"small"} className="mr-4">language</Icon>
-														<Typography variant="subtitle1" color="inherit">{this.state.customerWebsite}</Typography>
-													</div>
-												</div>
-
-												{/* <div className="flex flex-row justify-start mb-4">
-                                                <div className="flex flex-row items-center">
-                                                    <Icon fontSize={"small"} className="mr-4"></Icon>
-                                                    <Typography variant="subtitle1" color="inherit">
-														Account Type Group: {this.state.AccountTypeGroup}
-                                                    </Typography>
-                                                </div>
-                                            </div>
-
-											<div className="flex flex-row justify-start mb-4">
-                                                <div className="flex flex-row items-center">
-                                                    <Icon fontSize={"small"} className="mr-4"></Icon>
-                                                    <Typography variant="subtitle1" color="inherit">
-														Account Type: {this.state.AccountType}
-                                                    </Typography>
-                                                </div>
-                                            </div> */}
 
 											</CardContent>
 										</Card>
 									</GridItem>
-									{/* <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<h3 className="mt-24">Customer Information</h3>
-									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="Name"
-											label="Name *"
-											className={classes.textField}
-											value={this.state.customerName}
-											InputProps={{
-												readOnly: true,
-											}}
-											onChange={this.handleChange('customerName')}
-											margin="dense"
-											// variant="outlined"
-											autoFocus
-											fullWidth />
 
-									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="outlined-name"
-											label="Address *"
-											className={classes.textField}
-											value={this.state.customerAddress}
-											InputProps={{
-												readOnly: true,
-											}}
-											onChange={this.handleChange('customerAddress')}
-											margin="dense"
-											// variant="outlined"
-											fullWidth />
-									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="outlined-name"
-											label="Address2"
-											className={classes.textField}
-											// value={customerForm.state.name}
-											InputProps={{
-												readOnly: true,
-											}}
-											onChange={this.handleChange('Address2')}
-											margin="dense"
-											// variant="outlined"
-											fullWidth />
-									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="outlined-name"
-											label="City *"
-											className={classNames(classes.textField, 'mr-6')}
-											value={this.state.customerCity}
-											InputProps={{
-												readOnly: true,
-											}}
-											onChange={this.handleChange('customerCity')}
-											margin="dense"
-											// variant="outlined"
-											style={{ width: '60%' }}
-										/>
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row mt-12">
+										<Card className={classes.card}>
+											<CardHeader title="Assigned Franchisees" className={classNames(classes.cardHeader, "flex-1")} />
+											<CardContent className={classNames(classes.cardContent)}>
+												<div className="flex flex-row justify-start mb-4">
+													<TextField
+														id="AccountTypeGroup"
+														label="Account Type Group"
+														select
+														className={classNames(classes.textField, 'mr-6')}
+														value={this.state.AccountTypeGroup === undefined ? 0 : this.state.AccountTypeGroup}
+														InputProps={{
+															readOnly: true,
+														}}
+														onChange={this.handleChange('AccountTypeGroup')}
+														margin="dense"
+														// variant="outlined"
+														fullWidth
+													// style={{ minWidth: "100px", width: "30%" }}
+													>
+														{
+															accountTypesGroups.map((x, index) => (
+																<MenuItem key={index} value={index}>{x}</MenuItem>
+															))
+														}
 
+													</TextField>
 
-										<TextField
-											id="outlined-name"
-											label="State *"
-											select
-											className={classNames(classes.textField, 'mr-6 ml-6')}
-											value={this.state.customerState}
-											InputProps={{
-												readOnly: true,
-											}}
-											onChange={this.handleChange('customerState')}
-											margin="dense"
-											// variant="outlined"
-											style={{ width: '15%' }}
-										>
-											{stateNames.map((option, index) => (
-												<MenuItem key={index} value={option.Value}>
-													{option.Value}
-												</MenuItem>
-											))}
-										</TextField>
+													<TextField
+														id="AccountType"
+														label="Account Type *"
+														select
+														className={classNames(classes.textField, 'ml-6')}
+														value={this.state.AccountType === undefined ? 0 : this.state.AccountType}
+														InputProps={{
+															readOnly: true,
+														}}
+														onChange={this.handleChange('AccountType')}
+														margin="dense"
+														// variant="outlined"
+														fullWidth
+													// style={{ minWidth: "100px", width: "30%" }}
+													>
+														{
+															accountTypeTexts.map((x, index) => (
+																<MenuItem key={index} value={index}>{x}</MenuItem>
+															))
+														}
 
-										<TextField
-											id="outlined-name"
-											label="Zip *"
-											className={classNames(classes.textField, 'ml-6')}
-											value={this.state.customerZip}
-											InputProps={{
-												readOnly: true,
-											}}
-											onChange={this.handleChange('customerZip')}
-											margin="dense"
-											// variant="outlined"
-											style={{ width: '25%' }}
-										/>
+													</TextField>
+												</div>
+											</CardContent>
+										</Card>
 									</GridItem>
 
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<FormControl className={classNames(classes.formControl, 'mr-6')} style={{ flex: 1 }}>
-											<TextField
-												id="Phone"
-												label="Phone"
-												className={classes.textField}
-												// onChange={this.handleChange('customerPhone')}
-												margin="dense"
-												InputLabelProps={{
-													shrink: true
-												}}
-												InputProps={{
-													readOnly: true,
-													inputComponent: TextMaskPhone,
-													maxLength: 40,
-													value: this.state.customerPhone,
-													onChange: this.handleChange('customerPhone')
-												}}
-												// variant="outlined"
-												fullWidth
-												required
-											/>
-										</FormControl>
-
-										<FormControl className={classNames(classes.formControl, 'ml-6')} style={{ flex: 1 }}>
-											<TextField
-												id="Fax"
-												label="Fax"
-												className={classes.textField}
-												// onChange={this.handleChange('customerFax')}
-												margin="dense"
-												InputLabelProps={{
-													shrink: true
-												}}
-												InputProps={{
-													readOnly: true,
-													inputComponent: TextMaskPhone,
-													maxLength: 40,
-													value: this.state.customerFax,
-													onChange: this.handleChange('customerFax')
-												}}
-												// variant="outlined"
-												fullWidth
-												required
-											/>
-										</FormControl>
-
-									</GridItem>
-
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="outlined-name"
-											label="Email"
-											type="email"
-											className={classNames(classes.textField, 'mr-6')}
-											value={this.state.customerEmail}
-											InputProps={{
-												readOnly: true,
-											}}
-											onChange={this.handleChange('customerEmail')}
-											margin="dense"
-											// variant="outlined"
-											style={{ width: '100%' }}
-										/>
-
-										<TextField
-											id="outlined-name"
-											label="Website"
-											className={classNames(classes.textField, 'ml-6')}
-											value={this.state.customerWebsite}
-											InputProps={{
-												readOnly: true,
-											}}
-											onChange={this.handleChange('customerWebsite')}
-											margin="dense"
-											// variant="outlined"
-											style={{ width: '100%' }}
-										/>
-									</GridItem> */}
-
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="AccountTypeGroup"
-											label="Account Type Group"
-											select
-											className={classNames(classes.textField, 'mr-6')}
-											value={this.state.AccountTypeGroup === undefined ? 0 : this.state.AccountTypeGroup}
-											InputProps={{
-												readOnly: true,
-											}}
-											onChange={this.handleChange('AccountTypeGroup')}
-											margin="dense"
-											// variant="outlined"
-											fullWidth
-										// style={{ minWidth: "100px", width: "30%" }}
-										>
-											{
-												accountTypesGroups.map((x, index) => (
-													<MenuItem key={index} value={index}>{x}</MenuItem>
-												))
-											}
-
-										</TextField>
-
-										<TextField
-											id="AccountType"
-											label="Account Type *"
-											select
-											className={classNames(classes.textField, 'ml-6')}
-											value={this.state.AccountType === undefined ? 0 : this.state.AccountType}
-											InputProps={{
-												readOnly: true,
-											}}
-											onChange={this.handleChange('AccountType')}
-											margin="dense"
-											// variant="outlined"
-											fullWidth
-										// style={{ minWidth: "100px", width: "30%" }}
-										>
-											{
-												accountTypeTexts.map((x, index) => (
-													<MenuItem key={index} value={index}>{x}</MenuItem>
-												))
-											}
-
-										</TextField>
-									</GridItem>
 									<GridItem xs={12} sm={12} md={12} className="flex flex-col">
 										<div className="flex justify-around">
 											<FormControlLabel
@@ -1317,7 +1168,6 @@ class FilterPanel extends Component {
 														checked={this.state.NationalAccount}
 														onChange={this.handleChangeChecked('NationalAccount')}
 														value="NationalAccount"
-													// InputProps={{readOnly: true,}}
 													/>
 												}
 												label="National Account"
@@ -1328,7 +1178,6 @@ class FilterPanel extends Component {
 														checked={this.state.ChildAccount}
 														onChange={this.handleChangeChecked('ChildAccount')}
 														value="ChildAccount"
-													// InputProps={{readOnly: true,}}
 													/>
 												}
 												label="Child Account"
@@ -1380,69 +1229,141 @@ class FilterPanel extends Component {
 											<CardHeader title="Contract" className={classNames(classes.cardHeader, "flex-1")} />
 											<CardContent className={classNames(classes.cardContent)}>
 												<div className="flex flex-row justify-start mb-4">
-													<div className="flex" style={{ flex: 2 }}>
-														<Icon fontSize={"small"} className="mr-4" >attach_money</Icon>
-														<Typography variant="subtitle1" color="inherit">Amount:</Typography>
+													<div className="flex mr-6" style={{ flex: 1 }}>
+														{/* <Icon fontSize={"small"} className="mr-4" >attach_money</Icon> */}
+														{/* <Typography variant="subtitle1" color="inherit">Amount:</Typography> */}
+														<TextField
+															id="Amount"
+															label="Amount"
+															value={this.state.Amount}
+															className={classes.textField}
+															InputLabelProps={{ shrink: true }}
+															InputProps={{ readOnly: true }}
+															margin="dense"
+															fullWidth
+														/>
 													</div>
-													<div className="flex" style={{ flex: 1 }}>
-														<Icon fontSize={"small"} className="mr-4" >date_range</Icon>
-														<Typography variant="subtitle1" color="inherit">Sign Date:</Typography>
+													<div className="flex ml-6" style={{ flex: 1 }}>
+														{/* <Icon fontSize={"small"} className="mr-4" >date_range</Icon>
+														<Typography variant="subtitle1" color="inherit">Sign Date:</Typography> */}
+														<TextField
+															id="SignDate"
+															label="SignDate"
+															value={this.state.SignDate}
+															className={classes.textField}
+															InputLabelProps={{ shrink: true }}
+															InputProps={{ readOnly: true }}
+															margin="dense"
+															fullWidth
+														/>
 													</div>
 												</div>
 
 												<div className="flex flex-row justify-start mb-4">
-													<div className="flex" style={{ flex: 2 }}>
-														<Icon fontSize={"small"} className="mr-4">edit</Icon>
-														<Typography variant="subtitle1" color="inherit">Description:</Typography>
+													<div className="flex mr-6" style={{ flex: 1 }}>
+														{/* <Icon fontSize={"small"} className="mr-4">edit</Icon>
+														<Typography variant="subtitle1" color="inherit">Description:</Typography> */}
+														<TextField
+															id="Description"
+															label="Description"
+															value={this.state.Description}
+															className={classes.textField}
+															InputLabelProps={{ shrink: true }}
+															InputProps={{ readOnly: true }}
+															margin="dense"
+															fullWidth
+														/>
 													</div>
-													<div className="flex" style={{ flex: 1 }}>
-														<Icon fontSize={"small"} className="mr-4">date_range</Icon>
-														<Typography variant="subtitle1" color="inherit">Start Date:</Typography>
+													<div className="flex ml-6" style={{ flex: 1 }}>
+														{/* <Icon fontSize={"small"} className="mr-4">date_range</Icon> */}
+														{/* <Typography variant="subtitle1" color="inherit">Start Date:</Typography> */}
+														<TextField
+															id="StartDate"
+															label="Start Date"
+															value={this.state.StartDate}
+															className={classes.textField}
+															InputLabelProps={{ shrink: true }}
+															InputProps={{ readOnly: true }}
+															margin="dense"
+															fullWidth
+														/>
 													</div>
 												</div>
 
 												<div className="flex flex-row justify-start mb-4">
-													<div className="flex" style={{ flex: 2 }}>
-														<Icon fontSize={"small"} className="mr-4">perm_contact_calendar</Icon>
-														<Typography variant="subtitle1" color="inherit">Contract Type:</Typography>
+													<div className="flex mr-6" style={{ flex: 1 }}>
+														{/* <Icon fontSize={"small"} className="mr-4">perm_contact_calendar</Icon>
+														<Typography variant="subtitle1" color="inherit">Contract Type:</Typography> */}
+														<TextField
+															id="ContractType"
+															label="Contract Type"
+															value={this.state.ContractType}
+															className={classes.textField}
+															InputLabelProps={{ shrink: true }}
+															InputProps={{ readOnly: true }}
+															margin="dense"
+															fullWidth
+														/>
 													</div>
-													<div className="flex" style={{ flex: 1 }}>
-														<Icon fontSize={"small"} className="mr-4">date_range</Icon>
-														<Typography variant="subtitle1" color="inherit">Expiration Date:</Typography>
+													<div className="flex ml-6" style={{ flex: 1 }}>
+														{/* <Icon fontSize={"small"} className="mr-4">date_range</Icon>
+														<Typography variant="subtitle1" color="inherit">Expiration Date:</Typography> */}
+														<TextField
+															id="ExpirationDate"
+															label="Expiration Date"
+															value={this.state.ExpirationDate}
+															className={classes.textField}
+															InputLabelProps={{ shrink: true }}
+															InputProps={{ readOnly: true }}
+															margin="dense"
+															fullWidth
+														/>
 													</div>
 												</div>
 
 												<Divider variant="middle" style={{ marginTop: 5, marginBottom: 5 }} />
 
 												<div className="flex flex-row justify-start mb-4">
-													<Icon fontSize={"small"} className="mr-4"></Icon>
-													<Typography variant="subtitle1" color="inherit">Term Months:</Typography>
+													{/* <Icon fontSize={"small"} className="mr-4"></Icon>
+													<Typography variant="subtitle1" color="inherit">Term Months:</Typography> */}
+													<TextField
+														id="TermMonths"
+														label="Term Months"
+														value={this.state.TermMonths}
+														className="pr-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														style={{ width: '50%' }}
+													/>
 												</div>
+
 
 												<div className="flex flex-row justify-start mb-4">
-													<Icon fontSize={"small"} className="mr-4"></Icon>
-													<Typography variant="subtitle1" color="inherit">Agreement Type:</Typography>
+													{/* <Icon fontSize={"small"} className="mr-4"></Icon>
+													<Typography variant="subtitle1" color="inherit">Acct Exec:</Typography> */}
+													<TextField
+														id="AgreementType"
+														label="Agreement Type"
+														value={this.state.AgreementType}
+														className="mr-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
+
+													<TextField
+														id="AccountExecutive"
+														label="Account Executive"
+														value={this.state.AccountExecutive}
+														className="ml-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
 												</div>
-
-												<div className="flex flex-row justify-start mb-4">
-													<Icon fontSize={"small"} className="mr-4"></Icon>
-													<Typography variant="subtitle1" color="inherit">Acct Exec:</Typography>
-												</div>
-
-												{/* <div className="flex flex-row justify-start mb-4">
-													<Icon fontSize={"small"} className="mr-4">date_range</Icon>
-													<Typography variant="subtitle1" color="inherit">Sign Date:</Typography>
-												</div> */}
-
-												{/* <div className="flex flex-row justify-start mb-4">
-													<Icon fontSize={"small"} className="mr-4">date_range</Icon>
-													<Typography variant="subtitle1" color="inherit">Start Date:</Typography>
-												</div> */}
-
-												{/* <div className="flex flex-row justify-start mb-4">
-													<Icon fontSize={"small"} className="mr-4">date_range</Icon>
-													<Typography variant="subtitle1" color="inherit">Expiration Date:</Typography>
-												</div> */}
 
 											</CardContent>
 										</Card>
@@ -1453,69 +1374,116 @@ class FilterPanel extends Component {
 											<CardHeader title="Billing" className={classNames(classes.cardHeader, "flex-1")} />
 											<CardContent className={classNames(classes.cardContent)}>
 												<div className="flex flex-row justify-start mb-4">
-													<div className="flex" style={{ flex: 2 }}>
-														<Icon fontSize={"small"} className="mr-4">date_range</Icon>
-														<Typography variant="subtitle1" color="inherit">Effective Date:</Typography>
-													</div>
-													<div className="flex" style={{ flex: 1 }}>
-														<Icon fontSize={"small"} className="mr-4">email</Icon>
-														<Typography variant="subtitle1" color="inherit">Email:</Typography>
-													</div>
+
+													{/* <Icon fontSize={"small"} className="mr-4">date_range</Icon>
+														<Typography variant="subtitle1" color="inherit">Effective Date:</Typography> */}
+													<TextField
+														id="EffectiveDate"
+														label="Effective Date"
+														value={this.state.EffectiveDate}
+														className="pr-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
+													{/* <Icon fontSize={"small"} className="mr-4">email</Icon>
+														<Typography variant="subtitle1" color="inherit">Email:</Typography> */}
+													<TextField
+														id="Email"
+														label="Email"
+														value={this.state.Email}
+														className="pl-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
 												</div>
 
 												<div className="flex flex-row justify-start mb-4">
-													<div className="flex" style={{ flex: 2 }}>
-														<Icon fontSize={"small"} className="mr-4"></Icon>
-														<Typography variant="subtitle1" color="inherit">PO number:</Typography>
-													</div>
-													<div className="flex" style={{ flex: 1 }}>
-														<Icon fontSize={"small"} className="mr-4">check_box</Icon>
-														<Typography variant="subtitle1" color="inherit">Term:</Typography>
-													</div>
+
+													{/* <Icon fontSize={"small"} className="mr-4"></Icon>
+														<Typography variant="subtitle1" color="inherit">PO number:</Typography> */}
+													<TextField
+														id="PONumber"
+														label="PO Number"
+														value={this.state.PONumber}
+														className="pr-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
+
+													{/* <Icon fontSize={"small"} className="mr-4">check_box</Icon>
+														<Typography variant="subtitle1" color="inherit">Term:</Typography> */}
+													<TextField
+														id="Term"
+														label="Term"
+														value={this.state.Term}
+														className="pl-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
 												</div>
 												<Divider variant="middle" style={{ marginTop: 5, marginBottom: 5 }} />
 												<div className="flex flex-row justify-start mb-4">
-													<div className="flex" style={{ flex: 2 }}>
-														<Icon fontSize={"small"} className="mr-4">date_range</Icon>
-														<Typography variant="subtitle1" color="inherit">Invoice Date:</Typography>
-													</div>
-													<div className="flex" style={{ flex: 1 }}>
-														<Icon fontSize={"small"} className="mr-4"></Icon>
-														<Typography variant="subtitle1" color="inherit">AR Status:</Typography>
-													</div>
+
+													{/* <Icon fontSize={"small"} className="mr-4">date_range</Icon>
+														<Typography variant="subtitle1" color="inherit">Invoice Date:</Typography> */}
+													<TextField
+														id="InvoiceDate"
+														label="Invoice Date"
+														value={this.state.InvoiceDate}
+														className="pr-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
+													{/* <Icon fontSize={"small"} className="mr-4"></Icon>
+														<Typography variant="subtitle1" color="inherit">AR Status:</Typography> */}
+													<TextField
+														id="ARStatus"
+														label="AR Status"
+														value={this.state.ARStatus}
+														className="pl-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
 												</div>
 
 												<div className="flex flex-row justify-start mb-4">
-													<div className="flex" style={{ flex: 2 }}>
-														<Icon fontSize={"small"} className="mr-4"></Icon>
-														<Typography variant="subtitle1" color="inherit">Billing Frequency:</Typography>
-													</div>
-													<div className="flex" style={{ flex: 1 }}>
-														<Icon fontSize={"small"} className="mr-4">edit</Icon>
-														<Typography variant="subtitle1" color="inherit">Notes:</Typography>
-													</div>
+													{/* <Icon fontSize={"small"} className="mr-4"></Icon>
+														<Typography variant="subtitle1" color="inherit">Billing Frequency:</Typography> */}
+													<TextField
+														id="BillingFrequency"
+														label="Billing Frequency"
+														value={this.state.BillingFrequency}
+														className="pr-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
+													{/* <Icon fontSize={"small"} className="mr-4">edit</Icon>
+														<Typography variant="subtitle1" color="inherit">Notes:</Typography> */}
+													<TextField
+														id="Notes"
+														label="Notes"
+														value={this.state.Notes}
+														className="pl-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
 												</div>
-
-												{/* <div className="flex flex-row justify-start mb-4">
-													<Icon fontSize={"small"} className="mr-4">email</Icon>
-													<Typography variant="subtitle1" color="inherit">Email:</Typography>
-												</div> */}
-
-												{/* <div className="flex flex-row justify-start mb-4">
-													<Icon fontSize={"small"} className="mr-4">check_box</Icon>
-													<Typography variant="subtitle1" color="inherit">Term:</Typography>
-												</div> */}
-
-												{/* <div className="flex flex-row justify-start mb-4">
-													<Icon fontSize={"small"} className="mr-4"></Icon>
-													<Typography variant="subtitle1" color="inherit">AR Status:</Typography>
-												</div> */}
-
-												{/* <div className="flex flex-row justify-start mb-4">
-													<Icon fontSize={"small"} className="mr-4">edit</Icon>
-													<Typography variant="subtitle1" color="inherit">Notes:</Typography>
-												</div> */}
-
 											</CardContent>
 										</Card>
 									</GridItem>
@@ -1525,68 +1493,128 @@ class FilterPanel extends Component {
 											<CardHeader title="Inspections" className={classNames(classes.cardHeader, "flex-1")} />
 											<CardContent className={classNames(classes.cardContent)}>
 												<div className="flex flex-row justify-start mb-4">
-													<div className="flex" style={{ flex: 2 }}>
+													{/* <div className="flex" style={{ flex: 2 }}>
 														<Icon fontSize={"small"} className="mr-4"></Icon>
 														<Typography variant="subtitle1" color="inherit">Service Type:</Typography>
 													</div>
 													<div className="flex" style={{ flex: 1 }}>
 														<Icon fontSize={"small"} className="mr-4">attach_money</Icon>
 														<Typography variant="subtitle1" color="inherit">Amount:</Typography>
-													</div>
+													</div> */}
+													<TextField
+														id="ServiceType"
+														label="Service Type"
+														value={this.state.ServiceType}
+														className="pr-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
+													<TextField
+														id="Amount"
+														label="Amount"
+														value={this.state.Amount}
+														className="pl-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
 												</div>
 
 												<div className="flex flex-row justify-start mb-4">
-													<div className="flex" style={{ flex: 2 }}>
+													{/* <div className="flex" style={{ flex: 2 }}>
 														<Icon fontSize={"small"} className="mr-4"></Icon>
 														<Typography variant="subtitle1" color="inherit">Square Footage:</Typography>
 													</div>
 													<div className="flex" style={{ flex: 1 }}>
 														<Icon fontSize={"small"} className="mr-4"></Icon>
 														<Typography variant="subtitle1" color="inherit">Clean Times:</Typography>
-													</div>
+													</div> */}
+													<TextField
+														id="SquareFootage"
+														label="Square Footage"
+														value={this.state.SquareFootage}
+														className="pr-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
+													<TextField
+														id="CleanTimes"
+														label="Clean Times"
+														value={this.state.CleanTimes}
+														className="pl-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
 												</div>
 												<Divider variant="middle" style={{ marginTop: 5, marginBottom: 5 }} />
 												<div className="flex flex-row justify-start mb-4">
-													<div className="flex" style={{ flex: 2 }}>
+													{/* <div className="flex" style={{ flex: 2 }}>
 														<Icon fontSize={"small"} className="mr-4">timer</Icon>
 														<Typography variant="subtitle1" color="inherit">Start Time:</Typography>
 													</div>
 													<div className="flex" style={{ flex: 1 }}>
 														<Icon fontSize={"small"} className="mr-4"></Icon>
 														<Typography variant="subtitle1" color="inherit">Clean Frequency:</Typography>
-													</div>
+													</div> */}
+													<TextField
+														id="StartTime"
+														label="Start Time"
+														value={this.state.StartTime}
+														className="pr-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
+													<TextField
+														id="CleanFrequency"
+														label="Clean Frequency"
+														value={this.state.CleanFrequency}
+														className="pl-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
 												</div>
 
 												<div className="flex flex-row justify-start mb-4">
-													<div className="flex" style={{ flex: 2 }}>
+													{/* <div className="flex" style={{ flex: 2 }}>
 														<Icon fontSize={"small"} className="mr-4">timer</Icon>
 														<Typography variant="subtitle1" color="inherit">End Time:</Typography>
 													</div>
 													<div className="flex" style={{ flex: 1 }}>
 														<Icon fontSize={"small"} className="mr-4">edit</Icon>
 														<Typography variant="subtitle1" color="inherit">Description:</Typography>
-													</div>
+													</div> */}
+													<TextField
+														id="EndTime"
+														label="End Time"
+														value={this.state.EndTime}
+														className="pr-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
+													<TextField
+														id="Description"
+														label="Description"
+														value={this.state.Description}
+														className="pl-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
 												</div>
-
-												{/* <div className="flex flex-row justify-start mb-4">
-													<Icon fontSize={"small"} className="mr-4">attach_money</Icon>
-													<Typography variant="subtitle1" color="inherit">Amount:</Typography>
-												</div> */}
-
-												{/* <div className="flex flex-row justify-start mb-4">
-													<Icon fontSize={"small"} className="mr-4"></Icon>
-													<Typography variant="subtitle1" color="inherit">Clean Times:</Typography>
-												</div> */}
-
-												{/* <div className="flex flex-row justify-start mb-4">
-													<Icon fontSize={"small"} className="mr-4"></Icon>
-													<Typography variant="subtitle1" color="inherit">Clean Frequency:</Typography>
-												</div> */}
-
-												{/* <div className="flex flex-row justify-start mb-4">
-													<Icon fontSize={"small"} className="mr-4">edit</Icon>
-													<Typography variant="subtitle1" color="inherit">Description:</Typography>
-												</div> */}
 											</CardContent>
 										</Card>
 									</GridItem>

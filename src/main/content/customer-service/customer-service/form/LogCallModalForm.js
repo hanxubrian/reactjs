@@ -935,6 +935,7 @@ class LogCallModalForm extends React.Component {
 											].map((x, index) =>
 												(
 													<ListItem
+														key={index}
 														button
 														selected={this.state.EmailNotesTo === x}
 														onClick={event => this.handleChangeEmailNotesTo(event, x)}
