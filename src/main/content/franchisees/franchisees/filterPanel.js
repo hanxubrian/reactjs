@@ -97,6 +97,11 @@ class FilterPanel extends Component {
     state = {
         Active: true,
         InActive: true,
+        Ceased: true,
+        Terminated: true,
+        Repurchased: true,
+        Transferred: true,
+        NonRenewed: true,
         State: '',
         contactState: '',
         Location: this.props.locationFilterValue.id,
@@ -671,8 +676,6 @@ class FilterPanel extends Component {
                                         </div>
                                     )}
                                 </FormControl>
-                                <br/>
-                                <h3>Franchisees Statuses</h3>
                                 <FormControl>
                                     <FormControlLabel
                                         control={
@@ -693,6 +696,58 @@ class FilterPanel extends Component {
                                             />
                                            }
                                         label="InActive"
+                                    />
+                                    <br/>
+                                    <h3>Franchisees Continuance</h3>
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={this.state.Ceased}
+                                                onChange={this.handleChange("Ceased")}
+                                                value="C"
+                                            />
+                                           }
+                                        label="Ceased"
+                                    />
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={this.state.Terminated}
+                                                onChange={this.handleChange("Terminated")}
+                                                value="T"
+                                            />
+                                           }
+                                        label="Terminated"
+                                    />
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={this.state.Repurchased}
+                                                onChange={this.handleChange("Repurchased")}
+                                                value="R"
+                                            />
+                                           }
+                                        label="Repurchased"
+                                    />
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={this.state.Transferred}
+                                                onChange={this.handleChange("Transferred")}
+                                                value="TR"
+                                            />
+                                           }
+                                        label="Transferred"
+                                    />
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={this.state.NonRenewed}
+                                                onChange={this.handleChange("NonRenewed")}
+                                                value="N"
+                                            />
+                                           }
+                                        label="Non Renewed"
                                     />
                                 </FormControl>
                                
