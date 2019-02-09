@@ -66,6 +66,9 @@ const styles = theme => ({
     },
     tableStriped: {
         marginBottom: '0!important',
+        '& tbody tr':{
+            height: 36
+        },
         '& tbody tr:nth-of-type(odd)': {
         },
         '& tbody tr td': {
@@ -79,19 +82,15 @@ const styles = theme => ({
         '& tbody tr:last-child td': {
             borderBottom: `2px solid ${theme.palette.text.primary}`,
         }
-
     },
     tableFootRow: {
+        height: 42,
         '& td': {
             borderBottom: `1px solid ${theme.palette.text.primary}`,
         },
         '& td:nth-child(3)': {
             width: '100%',
         },
-        // '& td:nth-child(7)>div, & td:nth-child(6)>div': {
-        //     display: 'flex',
-        //     justifyContent: 'flex-end'
-        // }
     }
 });
 

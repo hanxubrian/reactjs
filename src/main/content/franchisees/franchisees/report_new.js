@@ -231,7 +231,7 @@ class Report extends Component {
         return (
             <div className={classNames(classes.root, "p-0 sm:p-64  whole print:p-0")} id ="wholediv">
                 <div id ="testdiv" className="cardname">
-                    <Card className={classNames(classes.card,  "pdfcardcontent mx-auto")}>
+                    <Card className={classNames(classes.card,  "pdfcardcontent1 mx-auto")}>
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                             <div>
                                 <table align="">

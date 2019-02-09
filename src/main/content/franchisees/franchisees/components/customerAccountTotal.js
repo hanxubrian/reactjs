@@ -60,6 +60,9 @@ const styles = theme => ({
     },
     tableStriped: {
         marginBottom: '0!important',
+        '& tbody tr':{
+            height: 36
+        },
         '& tbody tr:nth-of-type(odd)': {
         },
         '& tbody tr td': {
@@ -79,6 +82,7 @@ const styles = theme => ({
         }
     },
     tableFootRow: {
+        height: 42,
         '& td': {
             borderBottom: `1px solid ${theme.palette.text.primary}`,
         },
