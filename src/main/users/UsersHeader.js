@@ -163,7 +163,7 @@
 // export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(UsersHeader));
 import React, { Component } from 'react';
 
-import { Icon, IconButton, Input, Paper, Button, Tooltip } from '@material-ui/core';
+import { Icon, IconButton, Input, Paper, Button } from '@material-ui/core';
 import classNames from 'classnames';
 
 import { withStyles } from "@material-ui/core";
@@ -353,7 +353,6 @@ class VerificationSearchBar extends Component {
         const {
             classes,
         } = this.props;
-        const {filterState} = this.state;
 
         return (
             <div className="flex flex-row items-center">

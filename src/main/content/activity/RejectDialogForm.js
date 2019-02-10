@@ -97,10 +97,6 @@ class RejectDialogForm extends React.Component {
             Message: ""
         }
     };
-    constructor (props){
-        super(props);
-    }
-
 
     componentDidMount() {
 

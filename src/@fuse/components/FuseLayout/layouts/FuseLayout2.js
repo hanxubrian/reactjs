@@ -124,7 +124,7 @@ class FuseLayout2 extends Component {
 
     render()
     {
-        const {classes, toolbar, footer, navbarHeader, navbarContent, settings, navbar, navbarOpenMobile, navbarCloseMobile, children, leftSidePanel, rightSidePanel, contentWrapper} = this.props;
+        const {classes, toolbar, navbarHeader, navbarContent, settings, navbar, navbarOpenMobile, navbarCloseMobile, children, leftSidePanel, rightSidePanel, contentWrapper} = this.props;
         console.warn('FuseLayout:: rendered', this.props);
         const layoutConfig = settings.layout.config;
 

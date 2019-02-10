@@ -8,8 +8,6 @@ import ContactList from './ContactList';
 import Chat from './Chat';
 import classNames from 'classnames';
 
-import withReducer from 'store/withReducer';
-import reducer from './store/reducers';
 import IndividualChat from './individualChat';
 import "./individualChat.css";
 
@@ -109,7 +107,7 @@ class ChatPanel extends Component {
     {
         if ( this.props.state !== prevProps.state )
         {
-            
+
             if ( this.props.state )
             {
                 document.addEventListener("keydown", this.handleDocumentKeyDown);
@@ -168,7 +166,6 @@ class ChatPanel extends Component {
     render()
     {
         const {classes, openChatPanel, closeChatPanel, contacts, selectedContactId, state} = this.props;
-        const {individualchats} = this.state;
         const selectedContact = contacts.find(_contact => _contact.id === selectedContactId);
 
         return (

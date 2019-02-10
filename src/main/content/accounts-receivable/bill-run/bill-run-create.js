@@ -5,31 +5,21 @@ import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
 
-
-
-import {withRouter} from 'react-router-dom';
 import {withStyles} from "@material-ui/core";
-import Pusher from 'pusher-js';
-
-import _ from '@lodash';
 
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import  {CircularProgress,LinearProgress,IconButton,Button,Dialog} from '@material-ui/core';
+import  {CircularProgress,IconButton,Button,Dialog} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import MomentUtils from '@date-io/moment';
-import { MuiPickersUtilsProvider, TimePicker, DatePicker } from 'material-ui-pickers';
-import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+
 import 'date-fns';
-import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import moment from "moment/moment";
-import {UPDATE_TO_DATE_INVOICE} from "../../../../store/actions";
-
-
 
 const DialogTitle = withStyles(theme => ({
     root: {
@@ -136,13 +126,9 @@ const styles = theme => ({
         backgroundColor: theme.palette.secondary.main,
     },
 });
-const fakeEvent = {
-    stopPropagation: () => false
-}
-var pusher = null;
-var channel = null;
+
 const mL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+
 class BillRunDialog extends Component {
     state = {
         open                    : false,
@@ -162,38 +148,30 @@ class BillRunDialog extends Component {
         desMSG                  : `MONTHLY CONTRACT BILLING AMOUNT FOR `+mL[moment().month()].toUpperCase()+` `+moment().year(),
         isMounted               : false,
     };
-    constructor(props){
-        super(props);
 
-
-    }
     componentDidUpdate(prevProps, prevState, snapshot){
-
-
-            if(this.props.billruns && this.props.billruns != null && JSON.stringify(prevProps.billruns)!==JSON.stringify(this.props.billruns)){
-                this.setState({billruns: this.props.billruns});
-            }
-            if(this.props.auth && this.props.auth != null && JSON.stringify(prevProps.auth)!==JSON.stringify(this.props.auth)){
-                this.setState({auth: this.props.auth});
-            }
-
-
+        if(this.props.billruns && this.props.billruns != null && JSON.stringify(prevProps.billruns)!==JSON.stringify(this.props.billruns)){
+            this.setState({billruns: this.props.billruns});
+        }
+        if(this.props.auth && this.props.auth != null && JSON.stringify(prevProps.auth)!==JSON.stringify(this.props.auth)){
+            this.setState({auth: this.props.auth});
+        }
     }
+
     componentDidMount() {
         this.setState({isMounted:true});
         this.props.onRef(this);
-
     }
+
     componentWillUnmount() {
         this.setState({isMounted:false});
         this.props.onRef(undefined);
-        channel = undefined;
-        pusher = undefined;
     }
+
     componentWillReceiveProps(nextProps){
         this.setState({open: nextProps.open});
-
     }
+
     handleClickOpen = () => {
         this.setState({
             open: true,
@@ -297,15 +275,6 @@ class BillRunDialog extends Component {
                 this.createbillrunmesssage();
                 let buggyObject = setTimeout(
                     function() {
-                        let getres = this.props.createbillrun(
-                            regionid,
-                            year,
-                            month,
-                            user,
-                            userid,
-                            this.state.message,
-                            this.state.description,
-                        );
                         this.setState({statusMSG:200});
                         this.setState({showP: !this.state.showP});
                         clearTimeout(buggyObject);
@@ -336,13 +305,11 @@ class BillRunDialog extends Component {
         }
     };
     test=()=>{
-        console.log("GGGG");
     }
     render() {
 
-        const { classes,loading ,billstatus} = this.props;
-        const { selectedDate ,showP,auth,billruns,year,month,desMSG} = this.state;
-        let date = this.state.selectedDate;
+        const { classes,loading } = this.props;
+        const { selectedDate ,showP} = this.state;
 
         return (
             <div style={{
@@ -366,7 +333,7 @@ class BillRunDialog extends Component {
                     open={this.state.open}
                 >
                     <DialogTitle id="customized-dialog-title" onClose={this.handleClose}>
-                         <div style={{color:'white'}}>Create New Bill Run</div>
+                        <div style={{color:'white'}}>Create New Bill Run</div>
                     </DialogTitle>
                     <DialogContent>
                         <div>

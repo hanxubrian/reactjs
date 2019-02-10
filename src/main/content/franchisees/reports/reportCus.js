@@ -15,7 +15,6 @@ import html2canvas from 'html2canvas';
 //Store
 import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
-import franchiseeReportDatalist from "../../../../store/reducers/franchiseeReport.reducer";
 
 const styles = theme => ({
     root: {
@@ -91,9 +90,9 @@ let HTML_Width                      = 0;
 let HTML_Height                     = 0;
 let top_left_margin                 = 0;
 let PDF_Width                       = 0;
-let PDF_Height                      = 0;
-let canvas_image_width              = 0;
-let canvas_image_height             = 0;
+// let PDF_Height                      = 0;
+// let canvas_image_width              = 0;
+// let canvas_image_height             = 0;
 
 class ReportCus extends Component {
 
@@ -166,9 +165,9 @@ class ReportCus extends Component {
         HTML_Height = page_section.offsetHeight ;
         top_left_margin = 15;
         PDF_Width = HTML_Width + (top_left_margin * 2);
-        PDF_Height = (PDF_Width * 1.2) + (top_left_margin * 2);
-        canvas_image_width = HTML_Width;
-        canvas_image_height = HTML_Height;
+        // PDF_Height = (PDF_Width * 1.2) + (top_left_margin * 2);
+        // canvas_image_width = HTML_Width;
+        // canvas_image_height = HTML_Height;
     }
     renderHeader = ()=>{
         const { all_regions} = this.props;

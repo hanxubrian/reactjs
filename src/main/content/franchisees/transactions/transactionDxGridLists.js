@@ -10,7 +10,7 @@ import {
     PagingState,
     IntegratedPaging,
     DataTypeProvider,
-    GroupingState,SelectionState,IntegratedSelection,
+    GroupingState,SelectionState,
     IntegratedGrouping, TableColumnVisibility,
     SortingState,
     IntegratedSorting,
@@ -22,11 +22,11 @@ import {
     VirtualTable,
     TableHeaderRow,
     TableGroupRow,
-    PagingPanel,TableSelection
+    PagingPanel
 } from '@devexpress/dx-react-grid-material-ui';
 
 
-import {withStyles, Checkbox} from "@material-ui/core";
+import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
 
 // for store
@@ -331,14 +331,7 @@ class TransactionsDxGridLists extends Component {
     };
 
 
-    pagerContainer = (props, ContainerProps)=> {
-        return <div style={{padding: '0 12px'}} {...props}></div>
-    };
-
     TableRow = ({ row, ...restProps }) => {
-        let backColor = 'inherit';
-        if(row.TrxChargeType==='D')
-            backColor = 'rgba(255,0,0, .2)';
         let rowClass='';
         if(row.TrxChargeType==='D' || row.TrxType==='D')
             rowClass = 'deduction';

@@ -11,7 +11,6 @@ import NoSsr from '@material-ui/core/NoSsr';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 
-import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -19,8 +18,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction/ListItemSecondaryAction";
 import Checkbox from "@material-ui/core/Checkbox/Checkbox";
 import Icon from "@material-ui/core/es/Icon/Icon";
-import menuOptions from "./menuOptions";
-
 
 
 function TabContainer(props) {
@@ -87,11 +84,11 @@ class UsersPermission extends React.Component {
                 nextProps.userPermissionList.forEach((x, xIndex) => {
                     x.menuOptions.forEach((y,yIndex)=>{
                         y.Children.forEach((z, zIndex) => {
-                            checkedStatus[`view_${xIndex}_${yIndex}_${zIndex}`] = false
-                            checkedStatus[`create_${xIndex}_${yIndex}_${zIndex}`] = false
-                            checkedStatus[`edit_${xIndex}_${yIndex}_${zIndex}`] = false
-                            checkedStatus[`delete_${xIndex}_${yIndex}_${zIndex}`] = false
-                            checkedStatus[`execute_${xIndex}_${yIndex}_${zIndex}`] = false
+                            checkedStatus[`view_${xIndex}_${yIndex}_${zIndex}`] = false;
+                            checkedStatus[`create_${xIndex}_${yIndex}_${zIndex}`] = false;
+                            checkedStatus[`edit_${xIndex}_${yIndex}_${zIndex}`] = false;
+                            checkedStatus[`delete_${xIndex}_${yIndex}_${zIndex}`] = false;
+                            checkedStatus[`execute_${xIndex}_${yIndex}_${zIndex}`] = false;
                         })
                     })
                 })

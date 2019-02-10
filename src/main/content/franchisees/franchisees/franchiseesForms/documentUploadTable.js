@@ -7,7 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 //Material UI core and icons
 import {
     Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel,
-    Toolbar, Typography, Paper, Icon, IconButton, Tooltip, Fab} from '@material-ui/core'
+    Toolbar, Typography, Paper, Icon, IconButton, Tooltip} from '@material-ui/core'
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -297,8 +297,10 @@ class FranchiseesDocumentUploadTable extends React.Component {
                 x.UploadDocuments=selectorFiles;
                 x["documentDateTime"] = date;
                 x["documentFileSize"] = selectorFiles[0].size+" bytes";
+                return x;
             }
-        })
+        });
+
         const tempInsertPayload = this.props.insertPayload;
         tempInsertPayload.Documents = list;
         this.props.franchiseeUpdateInsertPayload(tempInsertPayload);

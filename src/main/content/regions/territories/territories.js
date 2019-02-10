@@ -9,9 +9,8 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
-import Typography from '@material-ui/core/Typography';
 
-import { Icon, IconButton, Tooltip, Slide, Paper, InputAdornment, MenuItem } from '@material-ui/core';
+import { Icon, IconButton, Slide, Paper, InputAdornment } from '@material-ui/core';
 
 // for store
 import { bindActionCreators } from "redux";
@@ -89,94 +88,7 @@ const EditButton = ({ onExecute }) => (
     </IconButton>
 );
 
-const DeleteButton = ({ onExecute }) => (
-    <IconButton onClick={onExecute} title="Delete">
-        <DeleteIcon />
-    </IconButton>
-);
-
-const CommitButton = ({ onExecute }) => (
-    <IconButton onClick={onExecute} title="Save">
-        <SaveIcon />
-    </IconButton>
-);
-
-const CancelButton = ({ onExecute }) => (
-    <IconButton color="secondary" onClick={onExecute} title="Cancel">
-        <CancelIcon />
-    </IconButton>
-);
-
-const commandComponents = {
-    edit: EditButton,
-    commit: CommitButton,
-    cancel: CancelButton,
-};
-
-const Command = ({ id, onExecute }) => {
-    const CommandButton = commandComponents[id];
-    return (
-        <CommandButton
-            onExecute={onExecute}
-        />
-    );
-};
-
-const editing_cell_styles = theme => ({
-    cell: {
-        background: "#989898",
-        color: "white",
-        padding: 0,
-    }
-});
-const EditingHeaderCellComponentBase = props => {
-    return (<TableEditColumn.Cell {...props}
-
-    />);
-};
-
-const EditingHeaderCellComponent = withStyles(editing_cell_styles, { name: "EditingCell" })(
-    EditingHeaderCellComponentBase
-);
-
-const EditingCellComponentBase = props => {
-    return (<TableEditColumn.Cell {...props}>
-        {React.Children.toArray(props.children)
-            .filter((child) => {
-                if (child.props.id === 'delete') {
-                    return false;
-                }
-                return true;
-            })}
-    </TableEditColumn.Cell>)
-};
-
-//
-// header cell style
-//
-const header_cell_styles = theme => ({
-    cell: {
-        background: "#989898",
-        color: "white",
-    }
-});
-const tableHeaderCellComponentBase = props => {
-    return (<TableHeaderRow.Cell {...props}
-
-    />);
-};
-const tableHeaderCellComponent = withStyles(header_cell_styles)(
-    tableHeaderCellComponentBase
-);
-
-
-const EditingCellComponent = withStyles(editing_cell_styles, { name: "EditingCell" })(
-    EditingCellComponentBase
-);
-const getRowId = row => row.id;
-
 const CurrencyFormatter = ({ value }) => (<span>$ {parseFloat(`0${value}`).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
-const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/, '$2/$3/$1');
 
 const BlueDialogTitle = withStyles(theme => ({
     root: {
@@ -324,7 +236,7 @@ class Territories extends React.Component {
     render() {
         const { classes } = this.props;
         const { rows, activeStep , columnsForReactDataGrid } = this.state;
-        const steps = getSteps();
+
         return (
             <div>
                 <Dialog

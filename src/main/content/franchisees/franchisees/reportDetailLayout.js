@@ -336,4 +336,3 @@ function mapStateToProps({auth, franchisees}) {
 }
 
 export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(ReportLayout)));
-

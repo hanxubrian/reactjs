@@ -14,7 +14,7 @@ import {
     Table,
     VirtualTable,
     TableHeaderRow,
-    TableSummaryRow, PagingPanel
+    TableSummaryRow
 } from '@devexpress/dx-react-grid-material-ui';
 
 
@@ -194,7 +194,7 @@ class RegularMiscTransactons extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].REG_MISC===null)
+        if((franchiseeReport===null) || (franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].REG_MISC===null))
             return (<div/>);
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].REG_MISC.map(d=>{

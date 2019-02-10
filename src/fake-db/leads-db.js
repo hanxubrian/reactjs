@@ -103,7 +103,7 @@ let leadsDb = {
                 "SqFt": "",
                 "SpokeWITH": "Joe Berlin",
                 "CRM_CallResultId": 1,
-                "CallBack": "\/Date(1542746700000)\/",
+                "CallBack": "Date(1542746700000)",
                 "AccountTypeListId": 71,
                 "AccountTypeName": "Administration Bldg.",
                 "NumberOfLocations": 0,

@@ -14,7 +14,7 @@ import {
     Table,
     VirtualTable,
     TableHeaderRow,
-    TableSummaryRow, PagingPanel
+    TableSummaryRow
 } from '@devexpress/dx-react-grid-material-ui';
 
 
@@ -202,7 +202,7 @@ class CustomerTransactions extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUS_TRXS===null)
+        if((franchiseeReport===null) || (franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUS_TRXS===null))
             return (<div/>);
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUS_TRXS.map(d=>{

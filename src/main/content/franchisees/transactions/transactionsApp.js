@@ -10,7 +10,7 @@ import {withRouter} from 'react-router-dom';
 import FilterPanel from './filterPanel';
 
 // theme components
-import {FusePageCustom, FuseAnimate, FusePageCustomSidebarScroll} from '@fuse';
+import {FuseAnimate, FusePageCustomSidebarScroll} from '@fuse';
 
 // for store
 import connect from "react-redux/es/connect/connect";
@@ -29,14 +29,6 @@ import _ from "lodash";
 
 const headerHeight = 80;
 
-const hexToRgb = (hex) =>{
-    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-    } : null;
-};
 
 const styles = theme => ({
     layoutRoot: {
@@ -257,10 +249,10 @@ class TransactionsApp extends Component {
         if(rawData.transactionsDB===null) return;
 
         let temp0 = rawData.transactionsDB.Data;
-        let temp=[];
-        let all_temp=[];
-        const statusStrings = ['Open', 'Completed'];
-        const keys=['checkedOpen', 'checkedCompleted'];
+        // let temp=[];
+        // let all_temp=[];
+        // const statusStrings = ['Open', 'Completed'];
+        // const keys=['checkedOpen', 'checkedCompleted'];
 
         // keys.map((key, index)=> {
         //
