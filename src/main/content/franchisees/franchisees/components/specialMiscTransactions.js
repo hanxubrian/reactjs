@@ -221,9 +221,9 @@ class SpecialMiscTransactons extends Component {
         let  tableColumnExtensions = [
             { columnName: 'DESCR', width: -1, },
             { columnName: 'TYPE', width: 180},
-            { columnName: 'TRX_AMT', width: 140,  align: 'right'},
-            { columnName: 'TRX_TAX', width: 140,  align: 'right'},
-            { columnName: 'TRX_TOT', width: 140,  align: 'right'},
+            { columnName: 'TRX_AMT', width: 90,  align: 'right'},
+            { columnName: 'TRX_TAX', width: 90,  align: 'right'},
+            { columnName: 'TRX_TOT', width: 90,  align: 'right'},
         ];
 
         let totalSummaryItems = [

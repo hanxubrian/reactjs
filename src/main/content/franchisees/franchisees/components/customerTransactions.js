@@ -220,13 +220,13 @@ class CustomerTransactions extends Component {
             {name: "DESCR", title: "Description"},
             {name: "INV_NO", title: "Invoice #"},
             // {name: "TRX_TYPE", title: "Type"},
-            {name: "TRX_AMT", title: "Amount"},
+            // {name: "TRX_AMT", title: "Amount"},
             // {name: "TRX_TAX", title: "Tax"},
             {name: "TRX_TOT", title: "Total"},
         ];
 
         let  tableColumnExtensions = [
-            { columnName: 'CUST_NO', width: 100, },
+            { columnName: 'CUST_NO', width: 70, },
             { columnName: 'CUS_NAME', width: 220, },
             { columnName: 'DESCR', width: -1, },
             { columnName: 'INV_NO', width: 100},

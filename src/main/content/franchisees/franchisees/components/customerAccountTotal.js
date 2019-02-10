@@ -89,11 +89,8 @@ const styles = theme => ({
         },
         '& tr.subTotal td:nth-child(4)':{
             display: 'flex',
-            justifyContent: 'flex-end',
+            justifyContent: 'space-between',
             height: 36,
-            '& strong': {
-                marginRight: 15
-            }
         }
     },
     tableFootRow: {
@@ -314,9 +311,9 @@ class CustomerAccountTotals extends Component {
 
         let  tableColumnExtensions = [
             { columnName: 'type', width: 160, },
-            { columnName: 'CUS_NO', width: 120, },
+            { columnName: 'CUS_NO', width: 80, },
             { columnName: 'CUS_NAME', width: -1, },
-            { columnName: 'CUS_TAX', width: 200, align: 'right', wordWrapEnabled: true},
+            { columnName: 'CUS_TAX', width: 140, align: 'right', wordWrapEnabled: true},
         ];
 
         let totalSummaryItems = [
