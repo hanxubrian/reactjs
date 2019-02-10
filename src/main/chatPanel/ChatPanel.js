@@ -185,7 +185,7 @@ class ChatPanel extends Component {
                                                 <Icon className="text-32">chat</Icon>
                                             </IconButton>
                                             {!selectedContactId && (
-                                                <Typography className="ml-16 text-16" color="inherit">Team Chat</Typography>
+                                                <Typography className="ml-16 text-16" color="inherit">Team Messaging</Typography>
                                             )}
                                         </React.Fragment>
                                     )}
