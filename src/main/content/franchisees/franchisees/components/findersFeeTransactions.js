@@ -228,7 +228,7 @@ class FindersFeeTransactions extends Component {
         ];
 
         return (
-            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
+            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-12")}>
                 <h2>Finder Fees</h2>
                 <Grid rows={data} columns={columns}>
                     <CurrencyTypeProvider

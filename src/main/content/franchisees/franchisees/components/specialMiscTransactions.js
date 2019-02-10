@@ -195,7 +195,7 @@ class SpecialMiscTransactons extends Component {
     render() {
         const {classes, franchiseeReport} = this.props;
         if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].SPEC_MISC===null)
-            return (<div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
+            return (<div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-12")}>
                 <h2>Special Misc. Transactions</h2></div>);
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].SPEC_MISC.map(d=>{
@@ -233,7 +233,7 @@ class SpecialMiscTransactons extends Component {
         ];
 
         return (
-            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
+            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-12")}>
                 <h2>Special Misc. Transactions</h2>
                 <Grid rows={data} columns={columns}>
                     <PagingState

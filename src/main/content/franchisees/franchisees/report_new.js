@@ -46,7 +46,16 @@ const styles = theme => ({
             boxShadow: 'none'
         }
     },
-    cardContent: {},
+    cardContent: {
+        '& .page': {
+            borderBottom: `1px solid ${theme.palette.text.primary}`
+        },
+        '& .page1': {
+            paddingTop: 12,
+            borderTop: `1px solid ${theme.palette.text.primary}`,
+            borderBottom: `1px solid ${theme.palette.text.primary}`
+        }
+    },
     divider    : {
         width          : 1,
         backgroundColor: theme.palette.divider,
@@ -222,7 +231,6 @@ class Report extends Component {
                 <div className={classNames(classes.overlay, 'flex items-center w-full')}>
                     <CircularProgress className={classes.progress} color="secondary"  />
                 </div>
-
             );
 
         const {DLR_CODE, SUMMARY_PAGE, LEASE_PAYMENTS,CHARGEBACKS }  = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0];
@@ -230,7 +238,7 @@ class Report extends Component {
         return (
             <div className={classNames(classes.root, "p-0 sm:p-64  whole print:p-0")} id ="wholediv">
                 <div id ="testdiv" className="cardname">
-                    <Card className={classNames(classes.card,  "pdfcardcontent1 mx-auto")}>
+                    <Card className={classNames(classes.card, "pdfcardcontent1 mx-auto")}>
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                             <div>
                                 <table align="">
@@ -285,59 +293,7 @@ class Report extends Component {
                                     </table>
                                 </div>
                                 <SummaryTransactons />
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
-                <div className="cardname">
-                    <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
-                        <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
-                            <div>
-                                <table align="">
-                                    <tbody>
-                                    {this.renderHeader()}
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div className="">
-                                <div>
-                                    <table className="mb-16">
-                                        <tbody>
-                                        <tr>
-                                            <td className="pr-16 pb-4">
-                                                <Typography color="inherit">Franchisee Code:
-                                                </Typography>
-                                            </td>
-                                            <td className="text-left" width='100'>
-                                                <Typography color="inherit"><br/></Typography>
-                                            </td>
-                                            <td className="pb-4">
-                                                <Typography color="inherit">
-                                                    Name
-                                                </Typography>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td className="pr-16">
-                                                <Typography color="inherit">
-                                                    {DLR_CODE}
-                                                </Typography>
-                                            </td>
-                                            <td className="text-left" width='100'>
-                                                <Typography color="inherit"><br/></Typography>
-                                            </td>
-                                            <td>
-                                                <Typography color="inherit">
-                                                    {SUMMARY_PAGE[0].FRAN_NAME}
-                                                </Typography>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                               <CustomerTransactions />
+                                <div className="flex flex-row justify-center pb-12 page1">Page 1 of 8</div>
                             </div>
                         </CardContent>
                     </Card>
@@ -389,7 +345,8 @@ class Report extends Component {
                                         </tbody>
                                     </table>
                                 </div>
-                               <CustomerAccountTotals />
+                                <CustomerTransactions />
+                                <div className="flex flex-row justify-center pb-12 page">Page 2 of 8</div>
                             </div>
                         </CardContent>
                     </Card>
@@ -404,7 +361,6 @@ class Report extends Component {
                                     </tbody>
                                 </table>
                             </div>
-
                             <div className="">
                                 <div>
                                     <table className="mb-16">
@@ -442,8 +398,61 @@ class Report extends Component {
                                         </tbody>
                                     </table>
                                 </div>
+                                <CustomerAccountTotals />
+                                <div className="flex flex-row justify-center pb-12 page">Page 3 of 8</div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+                <div className="cardname">
+                    <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
+                        <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
+                            <div>
+                                <table align="">
+                                    <tbody>
+                                    {this.renderHeader()}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div className="">
+                                <div>
+                                    <table className="mb-16">
+                                        <tbody>
+                                        <tr>
+                                            <td className="pr-16 pb-4">
+                                                <Typography color="inherit">Franchisee Code:
+                                                </Typography>
+                                            </td>
+                                            <td className="text-left" width='100'>
+                                                <Typography color="inherit"><br/></Typography>
+                                            </td>
+                                            <td className="pb-4">
+                                                <Typography color="inherit">
+                                                    Name
+                                                </Typography>
+                                            </td>
+                                        </tr>
 
+                                        <tr>
+                                            <td className="pr-16">
+                                                <Typography color="inherit">
+                                                    {DLR_CODE}
+                                                </Typography>
+                                            </td>
+                                            <td className="text-left" width='100'>
+                                                <Typography color="inherit"><br/></Typography>
+                                            </td>
+                                            <td>
+                                                <Typography color="inherit">
+                                                    {SUMMARY_PAGE[0].FRAN_NAME}
+                                                </Typography>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                                 <SupplyTransactons />
+                                <div className="flex flex-row justify-center pb-12 page">Page 4 of 8</div>
                             </div>
                         </CardContent>
                     </Card>
@@ -458,7 +467,6 @@ class Report extends Component {
                                     </tbody>
                                 </table>
                             </div>
-
                             <div className="">
                                 <div>
                                     <table className="mb-16">
@@ -497,69 +505,14 @@ class Report extends Component {
                                     </table>
                                 </div>
                                 <FindersFeeTransactions />
+                                <div className="flex flex-row justify-center pb-12 page">Page 5 of 8</div>
                             </div>
                         </CardContent>
                     </Card>
                 </div>
                 <div className="cardname">
-                        <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
-                            <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
-
-                                <div>
-                                    <table align="">
-                                        <tbody>
-                                        {this.renderHeader()}
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <div className="">
-                                    <div>
-                                        <table className="mb-16">
-                                            <tbody>
-                                            <tr>
-                                                <td className="pr-16 pb-4">
-                                                    <Typography color="inherit">Franchisee Code:
-                                                    </Typography>
-                                                </td>
-                                                <td className="text-left" width='100'>
-                                                    <Typography color="inherit"><br/></Typography>
-                                                </td>
-                                                <td className="pb-4">
-                                                    <Typography color="inherit">
-                                                        Name
-                                                    </Typography>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td className="pr-16">
-                                                    <Typography color="inherit">
-                                                        {DLR_CODE}
-                                                    </Typography>
-                                                </td>
-                                                <td className="text-left" width='100'>
-                                                    <Typography color="inherit"><br/></Typography>
-                                                </td>
-                                                <td>
-                                                    <Typography color="inherit">
-                                                        {SUMMARY_PAGE[0].FRAN_NAME}
-                                                    </Typography>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <RegularMiscTransactions />
-                                </div>
-                            </CardContent>
-                        </Card>
-                </div>
-                <div className="cardname">
                     <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
-
                             <div>
                                 <table align="">
                                     <tbody>
@@ -567,7 +520,6 @@ class Report extends Component {
                                     </tbody>
                                 </table>
                             </div>
-
                             <div className="">
                                 <div>
                                     <table className="mb-16">
@@ -605,66 +557,117 @@ class Report extends Component {
                                         </tbody>
                                     </table>
                                 </div>
-
-                                <SpecialMiscTransactions />
+                                <RegularMiscTransactions />
+                                <div className="flex flex-row justify-center pb-12 page">Page 6 of 8</div>
                             </div>
                         </CardContent>
                     </Card>
                 </div>
                 <div className="cardname">
-                        <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
-                            <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
-
+                    <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
+                        <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
+                            <div>
+                                <table align="">
+                                    <tbody>
+                                    {this.renderHeader()}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div className="">
                                 <div>
-                                    <table align="">
+                                    <table className="mb-16">
                                         <tbody>
-                                        {this.renderHeader()}
+                                        <tr>
+                                            <td className="pr-16 pb-4">
+                                                <Typography color="inherit">Franchisee Code:
+                                                </Typography>
+                                            </td>
+                                            <td className="text-left" width='100'>
+                                                <Typography color="inherit"><br/></Typography>
+                                            </td>
+                                            <td className="pb-4">
+                                                <Typography color="inherit">
+                                                    Name
+                                                </Typography>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td className="pr-16">
+                                                <Typography color="inherit">
+                                                    {DLR_CODE}
+                                                </Typography>
+                                            </td>
+                                            <td className="text-left" width='100'>
+                                                <Typography color="inherit"><br/></Typography>
+                                            </td>
+                                            <td>
+                                                <Typography color="inherit">
+                                                    {SUMMARY_PAGE[0].FRAN_NAME}
+                                                </Typography>
+                                            </td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
+                                <SpecialMiscTransactions />
+                                <div className="flex flex-row justify-center pb-12 page">Page 7 of 8</div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+                <div className="cardname">
+                    <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
+                        <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
+                            <div>
+                                <table align="">
+                                    <tbody>
+                                    {this.renderHeader()}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div className="">
+                                <div>
+                                    <table className="mb-16">
+                                        <tbody>
+                                        <tr>
+                                            <td className="pr-16 pb-4">
+                                                <Typography color="inherit">Franchisee Code:
+                                                </Typography>
+                                            </td>
+                                            <td className="text-left" width='100'>
+                                                <Typography color="inherit"><br/></Typography>
+                                            </td>
+                                            <td className="pb-4">
+                                                <Typography color="inherit">
+                                                    Name
+                                                </Typography>
+                                            </td>
+                                        </tr>
 
-                                <div className="">
-                                    <div>
-                                        <table className="mb-16">
-                                            <tbody>
-                                            <tr>
-                                                <td className="pr-16 pb-4">
-                                                    <Typography color="inherit">Franchisee Code:
-                                                    </Typography>
-                                                </td>
-                                                <td className="text-left" width='100'>
-                                                    <Typography color="inherit"><br/></Typography>
-                                                </td>
-                                                <td className="pb-4">
-                                                    <Typography color="inherit">
-                                                        Name
-                                                    </Typography>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td className="pr-16">
-                                                    <Typography color="inherit">
-                                                        {DLR_CODE}
-                                                    </Typography>
-                                                </td>
-                                                <td className="text-left" width='100'>
-                                                    <Typography color="inherit"><br/></Typography>
-                                                </td>
-                                                <td>
-                                                    <Typography color="inherit">
-                                                        {SUMMARY_PAGE[0].FRAN_NAME}
-                                                    </Typography>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <ChargeBacksTransactions />
+                                        <tr>
+                                            <td className="pr-16">
+                                                <Typography color="inherit">
+                                                    {DLR_CODE}
+                                                </Typography>
+                                            </td>
+                                            <td className="text-left" width='100'>
+                                                <Typography color="inherit"><br/></Typography>
+                                            </td>
+                                            <td>
+                                                <Typography color="inherit">
+                                                    {SUMMARY_PAGE[0].FRAN_NAME}
+                                                </Typography>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-                            </CardContent>
-                        </Card>
+                                <ChargeBacksTransactions />
+                                <div className="flex flex-row justify-center pb-12 page">Page 8 of 8</div>
+                            </div>
+                        </CardContent>
+                    </Card>
                 </div>
             </div>
         )

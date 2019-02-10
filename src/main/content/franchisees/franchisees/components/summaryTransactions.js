@@ -162,7 +162,7 @@ class SummaryTransactons extends Component {
         const aDeductions8 =["ACCT_FEE_REB_BAL"];
 
         return (
-            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
+            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-12")}>
                 <h2 >FRANCHISEE REVENUES:</h2>
 
                 <table style={{width:'63%'}}>

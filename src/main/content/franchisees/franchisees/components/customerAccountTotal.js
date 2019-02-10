@@ -233,7 +233,6 @@ class CustomerAccountTotals extends Component {
     };
 
     TableCell = ({classes, ...restProps })=>{
-        console.log('(restProps', restProps);
         if(restProps.column.name==='type' && restProps.row.SUB===2){
             return  (
                 <Table.Cell
@@ -256,7 +255,7 @@ class CustomerAccountTotals extends Component {
                 {...restProps}
                 colSpan={1}
             >
-                <strong>Sub total: </strong>{CurrencyFormatter({value: restProps.value})}
+                <strong>Sub Total: </strong>{CurrencyFormatter({value: restProps.value})}
             </Table.Cell>
             )
         }
@@ -325,7 +324,7 @@ class CustomerAccountTotals extends Component {
         ];
 
         return (
-            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
+            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-12")}>
                 <h2>Total Revenue by Customer</h2>
                 <Grid rows={data} columns={columns}>
                     <PagingState
