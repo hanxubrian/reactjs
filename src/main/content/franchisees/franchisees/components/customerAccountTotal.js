@@ -202,8 +202,10 @@ class CustomerAccountTotals extends Component {
 
     TableRow = ({ row, ...restProps }) => {
         let rowClass='';
-        if(row.SUB)
+        if(row.SUB===0)
             rowClass = 'subHeading';
+        else if(row.SUB===2)
+            rowClass = 'subTotal';
 
         return (
             <Table.Row className = {classNames(rowClass)}
@@ -227,7 +229,7 @@ class CustomerAccountTotals extends Component {
             line.CUS_NO = '';
             line.CUS_NAME = '';
             line.CUS_TAX = 0;
-            line.SUB = true;
+            line.SUB = 0;//sub section
             data.push(line);
             if(type.Customers !==null && type.Customers.length){
                 type.Customers.forEach(c=>{
@@ -236,7 +238,7 @@ class CustomerAccountTotals extends Component {
                     line_c.CUS_NO = c.CUST_NO;
                     line_c.CUS_NAME = c.CUS_NAME;
                     line_c.CUS_TAX = c.TRX_AMT;
-                    line_c.SUB = false;
+                    line_c.SUB = 1;//item
 
                     data.push(line_c);
                 })
@@ -246,7 +248,7 @@ class CustomerAccountTotals extends Component {
             line_sub.CUS_NO = '';
             line_sub.CUS_NAME = '';
             line_sub.CUS_TAX = type.Amount;
-            line_sub.SUB = false;
+            line_sub.SUB = 2;  //Subtotal
             data.push(line_sub);
         });
 
