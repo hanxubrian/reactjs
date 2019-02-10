@@ -15,13 +15,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import Switch from '@material-ui/core/Switch';
-import * as Actions from "../../../chatPanel/store/actions";
+
 import * as authActions from "../../../../auth/store/actions/login.actions";
 
 import ReactPlayer from 'react-player';
@@ -75,7 +69,6 @@ class VersionUpgradeDialog extends React.Component {
         }
     }
     render() {
-        const { classes } = this.props;
         if(this.state.open)
         return (
             <React.Fragment>

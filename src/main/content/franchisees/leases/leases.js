@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles/index';
 import {withRouter} from 'react-router-dom';
 import { bindActionCreators } from "redux";
@@ -13,17 +13,14 @@ import {
     Toolbar,
     CircularProgress,
     Button,
-    Input,
-    Paper
 } from '@material-ui/core';
 
 // theme components
-import { FusePageCustomSidebarScroll, FuseAnimate, FusePageCustom } from '@fuse';
+import {FuseAnimate, FusePageCustom } from '@fuse';
 
 // for store
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
-import SummaryPanel from './SummaryPanel';
 import FilterPanel from './FilterPanel';
 
 // third party
@@ -476,7 +473,7 @@ class Leases extends Component {
 		if(this.props.franchisees!==null){
             let temp = [];
             let regions = this.props.franchisees.Data.Region;
-		
+
             regions.map(x => {
                 temp = [...temp, ...x.Franchisees];
                 return true;
@@ -561,8 +558,8 @@ class Leases extends Component {
 
 
     render() {
-		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState,
-		openNewLeaseForm, leaseForm, mapViewState } = this.props;
+		const { classes, toggleFilterPanel, filterState, summaryState,
+		openNewLeaseForm, leaseForm } = this.props;
 		console.log(this.props)
 		console.log(this.state)
 		// const { toggleSelection, toggleAll, isSelected, logSelection } = this;

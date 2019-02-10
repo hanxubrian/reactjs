@@ -160,6 +160,7 @@ class Report extends Component {
 
                     pdf = new jsPDF('p', 'pt', [input.offsetWidth, input.offsetHeight]);
                     pdf.addImage(imgData, 'jpeg', top_left_margin, top_left_margin, HTML_Width, HTML_Height);
+
                     pdf.save("download.pdf");
                 })
             ;
@@ -233,12 +234,12 @@ class Report extends Component {
                 </div>
             );
 
-        const {DLR_CODE, SUMMARY_PAGE, LEASE_PAYMENTS,CHARGEBACKS }  = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0];
+        const {DLR_CODE, SUMMARY_PAGE}  = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0];
 
         return (
             <div className={classNames(classes.root, "p-0 sm:p-64  whole print:p-0")} id ="wholediv">
                 <div id ="testdiv" className="cardname">
-                    <Card className={classNames(classes.card, "pdfcardcontent1 mx-auto")}>
+                    <Card className={classNames(classes.card, "pdfcardcontent mx-auto")}>
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                             <div>
                                 <table align="">
@@ -688,9 +689,5 @@ function mapStateToProps({auth, franchiseeReports, franchisees})
         reportPeriod: franchisees.reportPeriod,
     }
 }
-const divline ={
-    width:'65%',
-    borderBottom:'2px solid #25058a',
-};
 
 export default  withStyles(styles)(withRouter(connect(mapStateToProps, mapDispatchToProps)(Report)));

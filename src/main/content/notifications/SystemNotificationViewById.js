@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 // core components
 import { Icon, IconButton,CircularProgress, CardHeader, TableBody ,TableCell ,TableHead ,TableRow ,Card,AppBar,Divider,Input,Typography,CardContent, Paper, Button, Zoom } from '@material-ui/core';
 
@@ -403,31 +403,11 @@ class SystemNotificationViewById extends Component {
 
     render(){
         const {Data,classes}                    = this.props;
-        const {row,multiData,multiKey}          = this.state;
+        const {row,multiData}          = this.state;
 
         const {
-			pins,
-			// locationFilterValue,
-			pins2,
-			gmapVisible,
-			// mapViewState,
 			rows,
-			columns,
-			selection,
 			tableColumnExtensions,
-			sorting,
-			editingColumnExtensions,
-			currencyColumns,
-			phoneNumberColumns,
-			pageSize,
-			pageSizes,
-			amountFilterOperations,
-			// groupingColumns,
-			// booleanColumns,
-			searchValue,
-			grouping,
-			// leftColumns,
-			// rightColumns,
 		} = this.state;
         console.log(row)
         if(1){

@@ -1,17 +1,7 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import {
     Icon,
-    IconButton,
-    Fab,
     Typography,
-    Toolbar,
-    CircularProgress,
-    Menu,
-    MenuItem,
-    Checkbox,
-    FormControlLabel,
-    Tooltip,
-    Button
 } from '@material-ui/core';
 import {FusePageCustomSidebarScroll, FuseAnimate} from '@fuse';
 import {bindActionCreators} from "redux";
@@ -24,7 +14,6 @@ import * as Actions from 'store/actions';
 import "react-table/react-table.css";
 import classNames from 'classnames';
 import SystemNotificationContentList from "./SystemNotificationContentList";
-import SystemNotificationViewById from "./SystemNotificationViewById";
 import SystemNotificationViewContentById from "./SystemNotificationViewContentById";
 
 const headerHeight = 80;
@@ -287,12 +276,10 @@ class SystemNotification extends Component {
 				this.props.closeNotificationDetail()
 
     };
-    
+
     render() {
 
-        const {classes, filterState, summaryState} = this.props;
-
-        const {selectionLength, HeaderIcon} = this.state;
+        const {classes} = this.props;
 
         return (
             <React.Fragment>
