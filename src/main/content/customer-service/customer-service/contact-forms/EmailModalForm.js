@@ -792,169 +792,44 @@ class EmailModalForm extends React.Component {
 								</div> */}
 
 								<div className={classNames("flex mt-12")} sm={12}>
-
-									<TextField sm={3} id="InitiatedBy" label="Initiated By" value={this.state.InitiatedBy || ''} 
+									<TextField type="email" sm={3} id="EmailTo" label="To" value={this.state.EmailTo || ''} 
 										variant="outlined" margin="dense"  
 										InputLabelProps={{ shrink: true }}
-										className={classNames(classes.textField, "pr-6")}
-										onChange={this.handleChange('InitiatedBy')}
+										className={classNames(classes.textField)}
+										onChange={this.handleChange('EmailTo')}
 										fullWidth
 									/>
+								</div>
 
-									<TextField sm={3} select margin="dense" id="Type" label="Type" variant="outlined"
+								<div className={classNames("flex")} sm={12}>
+									<TextField sm={3} id="EmailSubject" label="Subject" value={this.state.EmailSubject || ''} 
+										variant="outlined" margin="dense"  
 										InputLabelProps={{ shrink: true }}
-										className={classNames(classes.textField, "pl-6 pr-6")}
-										value={this.state.Type || ''}
-										onChange={this.handleChange('Type')}
+										className={classNames(classes.textField)}
+										onChange={this.handleChange('EmailSubject')}
 										fullWidth
-										InputProps={{ readOnly: false }}
-									>
-										<MenuItem value={""}></MenuItem>
-									</TextField>
+									/>
+								</div>
 
-									<TextField sm={3} select margin="dense" id="Status" label="Status By" variant="outlined"
+								<div className={classNames("flex")} sm={12}>
+									<TextField sm={3} id="EmailMessage" label="Message" value={this.state.EmailMessage || ''} 
+										variant="outlined" margin="dense" multiline rows='5' rowsMax='5'
 										InputLabelProps={{ shrink: true }}
-										className={classNames(classes.textField, "pl-6")}
-										value={this.state.Status || ''}
-										onChange={this.handleChange('Status')}
-										fullWidth
-										InputProps={{ readOnly: false }}
-									>
-										<MenuItem value={"Contactd"}>Contactd</MenuItem>
-									</TextField>
-
-									{/* 
-									<TextField sm={3} margin="dense" id="ReferenceNo" label="Reference No." variant="outlined"
-										autoFocus
-										onChange={this.handleChange('ReferenceNo')}
-										value={this.state.ReferenceNo}
-										className={classNames(classes.textField, "pr-6")}
+										className={classNames(classes.textField)}
+										onChange={this.handleChange('EmailMessage')}
 										fullWidth
 									/>
-
-									<TextField sm={1}
-										type="date"
-										id="PaymentDate"
-										label="Payment Date"
-										className={classNames(classes.textField, "pr-6")}
-										InputLabelProps={{
-											shrink: true
-										}}
-										value={this.state.PaymentDate}
-										onChange={this.handleChange('PaymentDate')}
-										margin="dense"
-										variant="outlined"
-										fullWidth
-									/>
-
-									<TextField
-										type="number"
-										InputLabelProps={{ shrink: true }} InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
-										margin="dense"
-										variant="outlined"
-										fullWidth
-										required
-										className={classNames(classes.textField, "pr-6")}
-										id="PaymentAmount"
-										value={this.state.PaymentAmount}
-										InputProps={{
-											readOnly: this.props.paymentDlgPayloads.paymentAmount !== 0,
-										}}
-										inputProps={{ min: 0 }}
-										onChange={this.handleChange('PaymentAmount')}
-										label="Payment Amount" sm={2}
-									/> */}
-
 								</div>
 
 								<Divider variant="middle" style={{ margin: 10, width: '50%', alignSelf: 'center' }} />
-
-								<div className="flex">
-									<div className="flex flex-col w-full pr-6">
-										<TextField margin="dense" variant="outlined" fullWidth id="SpokeWith" label="Spoke With"
-											InputLabelProps={{ shrink: true }}
-											value={this.state.SpokeWith || ''}
-											onChange={this.handleChange('SpokeWith')}
-										/>
-
-										<TextField margin="dense" variant="outlined" fullWidth id="Action" label="Action"
-											InputLabelProps={{ shrink: true }}
-											value={this.state.Action || ''}
-											onChange={this.handleChange('Action')}
-										/>
-
-										<TextField margin="dense" variant="outlined" fullWidth id="Area" label="Area"
-											select
-											InputLabelProps={{ shrink: true }}
-											value={this.state.Area || ''}
-											onChange={this.handleChange('Area')}>
-											<MenuItem value={""}></MenuItem>
-										</TextField>
-
-										<TextField margin="dense" variant="outlined" fullWidth id="CallBack" label="Call Back"
-											type="date"
-											InputLabelProps={{ shrink: true }}
-											value={this.state.CallBack}
-											onChange={this.handleChange('CallBack')}
-										/>
-
-										<TextField margin="dense" variant="outlined" fullWidth id="FollowUpBy" label="Follow Up By"
-											select
-											InputLabelProps={{ shrink: true }}
-											value={this.state.FollowUpBy || ''}
-											onChange={this.handleChange('FollowUpBy')}>
-											<MenuItem value={"Claudia Ulloa"}>Claudia Ulloa</MenuItem>
-										</TextField>
-									</div>
-									<div className="flex flex-col w-full pr-6 pl-6">
-										<TextField margin="dense" variant="outlined" fullWidth id="Comments" label="Comments" multiline rows="13" rowsMax="13"
-											InputLabelProps={{ shrink: true }}
-											value={this.state.Comments}
-											onChange={this.handleChange('Comments')}
-										/>
-									</div>
-									<div className="flex flex-col w-full pl-6" >
-										<Typography variant="caption">Email Call Notes To:</Typography>
-										<List component="nav" style={{ height: 280, overflow: 'auto' }}>
-											{[
-												"Frank Lopez",
-												"Mark Hodges",
-												"Robert Griffin (RD)",
-												"Samuel Stanley",
-												"Stacey Jarvis",
-												"Frank Lopez",
-												"Mark Hodges",
-												"Robert Griffin (RD)",
-												"Samuel Stanley",
-												"Stacey Jarvis",
-											].map((x, index) =>
-												(
-													<ListItem
-														key={index}
-														button
-														selected={this.state.EmailNotesTo === x}
-														onClick={event => this.handleChangeEmailNotesTo(event, x)}
-													>
-														<ListItemText primary={x} />
-													</ListItem>
-												)
-											)}
-										</List>
-
-									</div>
-								</div>
-								<Divider variant="middle" style={{ marginTop: 10, width: '100%', alignSelf: 'center' }} />
 
 							</div>
 						</div>
 					</DialogContent>
 
 					<DialogActions>
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Phones</Button>
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Home</Button>
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Save</Button>
+						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Send</Button>
 						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Close</Button>
-
 					</DialogActions>
 				</Dialog>
 			</div>

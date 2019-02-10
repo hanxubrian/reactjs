@@ -548,7 +548,7 @@ const customers = function (state = initialState, action) {
 				contactForms: {
 					...state.contactForms,
 					smsModalForm: {
-						...state.contactForms.sendsmsModalFormSmsModalForm,
+						...state.contactForms.smsModalForm,
 						open: action.payload,
 					}
 				}

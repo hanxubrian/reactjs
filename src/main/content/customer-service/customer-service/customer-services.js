@@ -44,6 +44,9 @@ import CustomerSearchBar from './CustomerSearchBar';
 import LogCallModalForm from './form/LogCallModalForm';
 
 import EmailModalForm from './contact-forms/EmailModalForm';
+import ChatModalForm from './contact-forms/ChatModalForm';
+import PhoneCallModalForm from './contact-forms/PhoneCallModalForm';
+import SmsModalForm from './contact-forms/SmsModalForm';
 
 const headerHeight = 80;
 
@@ -438,8 +441,8 @@ class CustomerServices extends Component {
 		this.props.showSendSmsModalForm()
 		this.closeContactMenu()
 	}
-	showPhoneCallModalForm = () => {
-		this.props.showPhoneCallModalForm()
+	showSendPhoneCallModalForm = () => {
+		this.props.showSendPhoneCallModalForm()
 		this.closeContactMenu()
 	}
 	showSendChatModalForm = () => {
@@ -599,7 +602,7 @@ class CustomerServices extends Component {
 													<Typography variant="inherit">Send SMS</Typography>
 												</MenuItem>
 
-												<MenuItem onClick={this.showPhoneCallModalForm}>
+												<MenuItem onClick={this.showSendPhoneCallModalForm}>
 													<ListItemIcon><IconPhone /></ListItemIcon>
 													<Typography variant="inherit">Phone Call</Typography>
 												</MenuItem>
@@ -637,6 +640,11 @@ class CustomerServices extends Component {
 										</div>
 
 										<div className="flex">
+											<Tooltip title="Expand/Collapse">
+												<IconButton variant="contained">
+													<Icon>format_line_spacing</Icon>
+												</IconButton>
+											</Tooltip>
 											<Tooltip title="Left Side Panel">
 												<IconButton className={classes.button} aria-label="Add an alarm" onClick={this.toggleRightSidePanel}>
 													<Icon>event_note</Icon>
@@ -682,6 +690,9 @@ class CustomerServices extends Component {
 								<LogCallModalForm />
 
 								<EmailModalForm />
+								<ChatModalForm />
+								<PhoneCallModalForm />
+								<SmsModalForm />
 
 							</div>
 						</div>
