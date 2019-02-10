@@ -11,6 +11,11 @@ export const GET_USER_FORM_STATE_LIST ='[USERS APP] GET USER FORM STATE LIST';
 export const GET_USER_FORM_DEPARTMENT_LIST = '[USERS APP] GET USER FORM DEPARTMENT LIST';
 export const GET_USER_FORM_PERMISSION_LIST = '[USERS APP] GET USER FORM PERMISSION LIST';
 
+export const CREATE_USER = '[USERS APP] CREATE USER';
+export const GET_USER_DETAIL = '[USERS APP] GET USER DETAIL';
+export const UPDATE_USER = '[USERS APP] UPDATE USER';
+export const DELETE_USER = '[USERS APP] DELETE USER';
+
 
 // GET USER FORM GROUP LIST
 
@@ -30,6 +35,69 @@ export function getUserFormGroupList() {
     };
 }
 
+// CREATE USER
+
+export function createUser(data) {
+    return (dispatch) => {
+        (async () => {
+            let res = await userService.createUser(data);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: CREATE_USER,
+                    payload: res
+                });
+            } 
+        })();
+    };
+}
+
+// UPDATE USER
+
+export function updateUser(id,data) {
+    return (dispatch) => {
+        (async () => {
+            let res = await userService.createUser(id,data);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: UPDATE_USER,
+                    payload: res
+                });
+            } 
+        })();
+    };
+}
+
+// DELETE USER
+
+export function deleteUser(id) {
+    return (dispatch) => {
+        (async () => {
+            let res = await userService.deleteUser(id);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: DELETE_USER,
+                    payload: res
+                });
+            } 
+        })();
+    };
+}
+
+// GET USER DETAIL
+
+export function getUserDetail(id) {
+    return (dispatch) => {
+        (async () => {
+            let res = await userService.getUserDetail(id);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: GET_USER_DETAIL,
+                    payload: res
+                });
+            } 
+        })();
+    };
+}
 
 //GET USER FORM ROLE LIST
 

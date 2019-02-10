@@ -13,6 +13,7 @@ const initialState = {
     userStateList: [],
     userDepartmentList: [],
     userPermissionList: [],
+    userDetail: null,
     payload:{
         picture:null,
         fName: "",
@@ -170,6 +171,31 @@ const usersReducer = function (state = initialState, action) {
             return{
                 ...state,
                 userPermissionList: action.payload
+            }
+        }
+        case Actions.CREATE_USER:
+        {
+            return{
+                ...state,
+            }
+        }
+        case Actions.UPDATE_USER:
+        {
+            return{
+                ...state,
+            }
+        }
+        case Actions.DELETE_USER:
+        {
+            return{
+                ...state,
+            }
+        }
+        case Actions.GET_USER_DETAIL:
+        {
+            return{
+                ...state,
+                userDetail: action.payload
             }
         }
         case UserActions.USER_LOGGED_OUT:
