@@ -76,6 +76,17 @@ const styles = theme => ({
         },
         '& tr.subHeading td:nth-child(4)': {
             display: 'none'
+        },
+        '& tr.subTotal td:nth-child(2), & tr.subTotal td:nth-child(3)':{
+            display: 'none'
+        },
+        '& tr.subTotal td:nth-child(4)':{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            height: 36,
+            '& strong': {
+                marginRight: 15
+            }
         }
     },
     tableFootRow: {
@@ -214,6 +225,34 @@ class CustomerAccountTotals extends Component {
         )
     };
 
+    TableCell = ({classes, ...restProps })=>{
+        console.log('(restProps', restProps);
+        if(restProps.column.name==='type' && restProps.row.SUB===2){
+            return  (
+                <Table.Cell
+                    {...restProps}
+                    colSpan={3}
+                />
+            )
+        }
+        else if(restProps.column.name==='CUS_TAX' && restProps.row.SUB===2){
+            return (
+            <Table.Cell
+                {...restProps}
+                colSpan={1}
+            >
+                <strong>Subtotal: </strong>{CurrencyFormatter({value: restProps.value})}
+            </Table.Cell>
+            )
+        }
+        else
+        return (
+            <Table.Cell
+                {...restProps}
+            />
+        )
+    };
+
     render() {
         const {classes, franchiseeReport} = this.props;
         if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].CUST_ACCT_TOTALS===null)
@@ -244,7 +283,7 @@ class CustomerAccountTotals extends Component {
                 })
             }
             let line_sub = {};
-            line_sub.type = 'Sub Total';
+            line_sub.type = '';
             line_sub.CUS_NO = '';
             line_sub.CUS_NAME = '';
             line_sub.CUS_TAX = type.Amount;
@@ -263,7 +302,7 @@ class CustomerAccountTotals extends Component {
             { columnName: 'type', width: 160, },
             { columnName: 'CUS_NO', width: 120, },
             { columnName: 'CUS_NAME', width: -1, },
-            { columnName: 'CUS_TAX', width: 160, align: 'right', wordWrapEnabled: true},
+            { columnName: 'CUS_TAX', width: 200, align: 'right', wordWrapEnabled: true},
         ];
 
         let totalSummaryItems = [
@@ -295,6 +334,7 @@ class CustomerAccountTotals extends Component {
                                   headComponent = {TableHeadComponent}
                                   columnExtensions={tableColumnExtensions}
                                   rowComponent = {this.TableRow}
+                                  cellComponent = {this.TableCell}
                     />
                     <TableHeaderRow />
                     {data.length>0 && (
