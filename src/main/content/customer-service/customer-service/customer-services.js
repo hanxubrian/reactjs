@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import _ from "lodash";
 import { withStyles } from '@material-ui/core/styles/index';
 import { withRouter } from 'react-router-dom';
 import connect from "react-redux/es/connect/connect";
@@ -381,7 +382,20 @@ class CustomerServices extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-
+		if (!_.isEqual(nextProps.filters, this.props.filters) ||
+			nextProps.regionId !== this.props.regionId ||
+			nextProps.location !== this.props.location
+		) {
+			this.props.getCustomers(
+				nextProps.regionId,
+				nextProps.statusId,
+				nextProps.filters.StatusNames,
+				nextProps.filters.AccountTypeListName,
+				nextProps.location,
+				nextProps.latitude,
+				nextProps.longitude,
+				nextProps.searchText);
+		}
 	}
 
 	componentDidMount() {
@@ -486,7 +500,7 @@ class CustomerServices extends Component {
 												</IconButton>
 											</Tooltip>
 
-											<Button
+											{/* <Button
 												variant="contained"
 												color="primary"
 												className={classNames(classes.button, "pr-24 pl-24 mb-6")}
@@ -494,7 +508,8 @@ class CustomerServices extends Component {
 											>
 												Log Call
 												<Icon className={classes.rightIcon}>settings_phone</Icon>
-											</Button>
+											</Button> */}
+
 											{/* <Tooltip title="Add new customer">
 												<IconButton className={classes.button} aria-label="add" onClick={openNewCustomerForm}>
 													<Icon>add</Icon>

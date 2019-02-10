@@ -560,7 +560,7 @@ class BillingsPage extends Component {
 					title: "Invoice No",
 					name: "inv_no",
 					columnName: "inv_no",
-					width: 160,
+					width: 120,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
@@ -932,19 +932,19 @@ class BillingsPage extends Component {
 		if (row.payments && row.payments.length > 0)
 			return (
 				<div className="flex flex-col">
-					<div className="flex justify-end">
-						<span style={{ width: "10%" }}><strong>PaymentType</strong></span>
-						<span style={{ width: "10%" }}><strong>Ref.No.</strong></span>
-						<span style={{ width: "12%" }}><strong>PayDate</strong></span>
-						<span style={{ width: "13%" }}><strong>Amount</strong></span>
+					<div className="flex justify-start">
+						<span style={{ width: "15%", marginLeft: 220 }}><strong>PaymentType</strong></span>
+						<span style={{ width: "15%" }}><strong>Ref.No.</strong></span>
+						<span style={{ width: "15%" }}><strong>PayDate</strong></span>
+						<span style={{ width: "15%" }}><strong>Amount</strong></span>
 					</div>
 					{
 						row.payments.map((x, index) => (
-							<div key={index} className="flex justify-end">
-								<span style={{ width: "10%", color: "#63b6ff", textAlign: 'center' }}>{x.PaymentType ? x.PaymentType : ""}</span>
-								<span style={{ width: "10%", color: "#abc524" }}>{x.ReferenceNumber}</span>
-								<span style={{ width: "12%", color: "#ffb26e" }}>{x.PayDate.substring(0, 10)}</span>
-								<span style={{ width: "13%", color: "#15d400" }}>$ {x.Amount}</span>
+							<div key={index} className="flex justify-start">
+								<span style={{ width: "15%", color: "#63b6ff", marginLeft: 220, textAlign: 'center' }}>{x.PaymentType ? x.PaymentType : ""}</span>
+								<span style={{ width: "15%", color: "#abc524" }}>{x.ReferenceNumber}</span>
+								<span style={{ width: "15%", color: "#ffb26e" }}>{x.PayDate.replace(/(\d{4})-(\d{2})-(\d{2})(.+)/, '$2/$3/$1')}</span>
+								<span style={{ width: "15%", color: "#15d400" }}>$ {x.Amount}</span>
 							</div>
 						))
 					}
