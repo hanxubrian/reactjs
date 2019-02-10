@@ -37,9 +37,6 @@ import NumberFormat from 'react-number-format';
 
 const styles = theme => ({
     layoutTable: {
-        '& table th:first-child span': {
-            paddingLeft: '8px!important'
-        },
         '& table th:last-child span': {
             paddingRight: '8px!important'
         }
@@ -49,7 +46,6 @@ const styles = theme => ({
             height: 32
         },
         '& tr th': {
-            padding: '0 8px',
             borderBottom: `2px solid ${theme.palette.text.primary}`,
             borderTop: `2px solid ${theme.palette.text.primary}`,
         },

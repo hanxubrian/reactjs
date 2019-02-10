@@ -195,8 +195,7 @@ class RegularMiscTransactons extends Component {
     render() {
         const {classes, franchiseeReport} = this.props;
         if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].REG_MISC===null)
-            return (<div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
-                <h2>Regular Misc. Transactions</h2></div>);
+            return (<div/>);
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].REG_MISC.map(d=>{
             let type = this.props.transactionTypeList.filter(t=>t._id===d.TYPE);

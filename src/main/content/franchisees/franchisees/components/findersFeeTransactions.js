@@ -36,16 +36,12 @@ import FuseUtils from '@fuse/FuseUtils';
 
 const styles = theme => ({
     layoutTable: {
-        '& table th:first-child span': {
-            paddingLeft: '8px!important'
-        }
     },
     tableTheadRow: {
         '& tr': {
             height: 32
         },
         '& tr th': {
-            padding: '0 8px',
             borderBottom: `2px solid ${theme.palette.text.primary}`,
             borderTop: `2px solid ${theme.palette.text.primary}`,
         },

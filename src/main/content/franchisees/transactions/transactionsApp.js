@@ -10,7 +10,7 @@ import {withRouter} from 'react-router-dom';
 import FilterPanel from './filterPanel';
 
 // theme components
-import {FusePageCustom, FuseAnimate} from '@fuse';
+import {FusePageCustom, FuseAnimate, FusePageCustomSidebarScroll} from '@fuse';
 
 // for store
 import connect from "react-redux/es/connect/connect";
@@ -305,7 +305,7 @@ class TransactionsApp extends Component {
 
         return (
             <React.Fragment>
-                <FusePageCustom
+                <FusePageCustomSidebarScroll
                     classes={{
                         root: classes.layoutRoot,
                         header: classes.layoutHeader,
@@ -474,7 +474,7 @@ class TransactionsApp extends Component {
                         this.pageLayout = instance;
                     }}
                 >
-                </FusePageCustom>
+                </FusePageCustomSidebarScroll>
                 {(this.props.bFranchiseesFetchStart || this.props.bStartFetchTransactions) && (
                     <div className={classes.overlay}>
                         <CircularProgress className={classes.progress} color="secondary"  />

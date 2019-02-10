@@ -36,9 +36,6 @@ import NumberFormat from 'react-number-format';
 
 const styles = theme => ({
     layoutTable: {
-        '& table th:first-child span': {
-            paddingLeft: '8px!important'
-        }
     },
     tableTheadRow: {
         '& tr': {

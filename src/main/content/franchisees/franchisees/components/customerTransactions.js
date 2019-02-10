@@ -36,9 +36,6 @@ import FuseUtils from '@fuse/FuseUtils';
 
 const styles = theme => ({
     layoutTable: {
-     '& table th:first-child span': {
-         paddingLeft: '8px!important'
-     },
      '& table th:nth-child(2) span': {
             display: 'none'
      },
@@ -55,7 +52,7 @@ const styles = theme => ({
             padding: '0 8px'
         },
         '& tr th:first-child': {
-            paddingLeft: '8px!important'
+            paddingLeft: '0px!important',
         },
         '& tr th:nth-child(3)': {
             width: '100%'
@@ -222,7 +219,7 @@ class CustomerTransactions extends Component {
             {name: "CUS_NAME", title: "Cus. Name"},
             {name: "DESCR", title: "Description"},
             {name: "INV_NO", title: "Invoice #"},
-            {name: "TRX_TYPE", title: "Type"},
+            // {name: "TRX_TYPE", title: "Type"},
             {name: "TRX_AMT", title: "Amount"},
             // {name: "TRX_TAX", title: "Tax"},
             {name: "TRX_TOT", title: "Total"},
@@ -230,10 +227,10 @@ class CustomerTransactions extends Component {
 
         let  tableColumnExtensions = [
             { columnName: 'CUST_NO', width: 100, },
-            { columnName: 'CUS_NAME', width: 180, },
+            { columnName: 'CUS_NAME', width: 220, },
             { columnName: 'DESCR', width: -1, },
             { columnName: 'INV_NO', width: 100},
-            { columnName: 'TRX_TYPE', width: 50,  align: 'center'},
+            // { columnName: 'TRX_TYPE', width: 50,  align: 'center'},
             { columnName: 'TRX_AMT', width: 100,  align: 'right'},
             { columnName: 'TRX_TAX', width: 100,  align: 'right'},
             { columnName: 'TRX_TOT', width: 100,  align: 'right'},

@@ -163,7 +163,7 @@ class SummaryTransactons extends Component {
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
-                <h2 style ={{color:'white'}}>FRANCHISEE REVENUES:</h2>
+                <h2 >FRANCHISEE REVENUES:</h2>
 
                 <table style={{width:'63%'}}>
                     <tbody>
@@ -229,7 +229,7 @@ class SummaryTransactons extends Component {
                     </tbody>
                 </table>
 
-                <h2 className="pt-16" style ={{color:'white'}}>FRANCHISEE DEDUCTIONS:</h2>
+                <h2 className="pt-16" >FRANCHISEE DEDUCTIONS:</h2>
 
                 <table className="">
                     <thead>
@@ -389,7 +389,7 @@ class SummaryTransactons extends Component {
                 <table>
                     <tbody>
                     <tr>
-                        <td><h2 className="pt-16" style ={{color:'white'}}>DUE TO FRANCHISEE BEFORE CHARGEBACK:</h2></td>
+                        <td><h2 className="pt-16" >DUE TO FRANCHISEE BEFORE CHARGEBACK:</h2></td>
                         <td className="pt-16" style={{width:'16%'}}> ${ SUMMARY_PAGE[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'] !=null && SUMMARY_PAGE[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'][0] !=null && ( parseFloat(SUMMARY_PAGE[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) } </td>
                     </tr>
                     </tbody>
@@ -446,7 +446,7 @@ class SummaryTransactons extends Component {
                 <table>
                     <tbody>
                     <tr>
-                        <td><h2 className="pt-16" style ={{color:'white'}}>DUE TO FRANCHISEE:</h2></td>
+                        <td><h2 className="pt-16" >DUE TO FRANCHISEE:</h2></td>
                         <td className="pt-16" style={{width:'16%'}}> ${ SUMMARY_PAGE[0]['DUE_TO_FRAN'] !=null && SUMMARY_PAGE[0]['DUE_TO_FRAN'][0] !=null && ( parseFloat(SUMMARY_PAGE[0]['DUE_TO_FRAN'][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) } </td>
                     </tr>
                     </tbody>
