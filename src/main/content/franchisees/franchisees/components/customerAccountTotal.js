@@ -74,6 +74,13 @@ const styles = theme => ({
         '& tbody tr:last-child td': {
             borderBottom: `2px solid ${theme.palette.text.primary}`,
         },
+        '& tr.subHeading td:nth-child(1)': {
+            fontWeight: 700,
+            fontSize: 14
+        },
+        '& tr.subHeading td:nth-child(2)': {
+            display: 'none'
+        },
         '& tr.subHeading td:nth-child(4)': {
             display: 'none'
         },
@@ -235,13 +242,21 @@ class CustomerAccountTotals extends Component {
                 />
             )
         }
+        else if(restProps.column.name==='type' && restProps.row.SUB===0){
+            return  (
+                <Table.Cell
+                    {...restProps}
+                    colSpan={2}
+                />
+            )
+        }
         else if(restProps.column.name==='CUS_TAX' && restProps.row.SUB===2){
             return (
             <Table.Cell
                 {...restProps}
                 colSpan={1}
             >
-                <strong>Subtotal: </strong>{CurrencyFormatter({value: restProps.value})}
+                <strong>Sub total: </strong>{CurrencyFormatter({value: restProps.value})}
             </Table.Cell>
             )
         }
