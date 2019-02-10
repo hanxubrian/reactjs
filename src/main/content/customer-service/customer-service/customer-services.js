@@ -43,6 +43,8 @@ import IconChat from '@material-ui/icons/ChatBubbleOutline';
 import CustomerSearchBar from './CustomerSearchBar';
 import LogCallModalForm from './form/LogCallModalForm';
 
+import EmailModalForm from './contact-forms/EmailModalForm';
+
 const headerHeight = 80;
 
 const hexToRgb = (hex) => {
@@ -427,6 +429,24 @@ class CustomerServices extends Component {
 	closeContactMenu = () => {
 		this.setState({ anchorContactMenu: null });
 	}
+
+	showSendEmailModalForm = () => {
+		this.props.showSendEmailModalForm()
+		this.closeContactMenu()
+	}
+	showSendSmsModalForm = () => {
+		this.props.showSendSmsModalForm()
+		this.closeContactMenu()
+	}
+	showPhoneCallModalForm = () => {
+		this.props.showPhoneCallModalForm()
+		this.closeContactMenu()
+	}
+	showSendChatModalForm = () => {
+		this.props.showSendChatModalForm()
+		this.closeContactMenu()
+	}
+
 	onClickEmailToCustomer = () => {
 		this.setState({
 			anchorContactMenu: null,
@@ -569,22 +589,22 @@ class CustomerServices extends Component {
 												open={Boolean(anchorContactMenu)}
 												onClose={this.closeContactMenu}
 											>
-												<MenuItem onClick={this.closeContactMenu}>
+												<MenuItem onClick={this.showSendEmailModalForm}>
 													<ListItemIcon><IconEmail /></ListItemIcon>
 													<Typography variant="inherit">Send Email</Typography>
 												</MenuItem>
 
-												<MenuItem onClick={this.closeContactMenu}>
+												<MenuItem onClick={this.showSendSmsModalForm}>
 													<ListItemIcon><IconSms /></ListItemIcon>
 													<Typography variant="inherit">Send SMS</Typography>
 												</MenuItem>
 
-												<MenuItem onClick={this.closeContactMenu}>
+												<MenuItem onClick={this.showPhoneCallModalForm}>
 													<ListItemIcon><IconPhone /></ListItemIcon>
 													<Typography variant="inherit">Phone Call</Typography>
 												</MenuItem>
 
-												<MenuItem onClick={this.closeContactMenu}>
+												<MenuItem onClick={this.showSendChatModalForm}>
 													<ListItemIcon><IconChat /></ListItemIcon>
 													<Typography variant="inherit">Send Chat</Typography>
 												</MenuItem>
@@ -660,6 +680,8 @@ class CustomerServices extends Component {
 								{!customerForm.props.open && <CustomerSearchBar />}
 								{!customerForm.props.open && <CustomerListContent />}
 								<LogCallModalForm />
+
+								<EmailModalForm />
 
 							</div>
 						</div>
@@ -737,6 +759,13 @@ function mapDispatchToProps(dispatch) {
 
 		createCustomer: Actions.createCustomer,
 		showLogCallModalForm: Actions.showLogCallModalForm,
+
+		showSendEmailModalForm: Actions.showSendEmailModalForm,
+		showSendSmsModalForm: Actions.showSendSmsModalForm,
+		showSendPhoneCallModalForm: Actions.showSendPhoneCallModalForm,
+		showSendChatModalForm: Actions.showSendChatModalForm,
+
+
 	}, dispatch);
 }
 
@@ -769,6 +798,8 @@ function mapStateToProps({ customers, auth, franchisees }) {
 
 		bGetCustomerStart: customers.bGetCustomerStart,
 		filters: customers.filters,
+
+		contactForms: customers.contactForms,
 
 	}
 }

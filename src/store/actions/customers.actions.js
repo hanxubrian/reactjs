@@ -54,6 +54,11 @@ export const GET_CUSTOMER_BILLING_LIST = "[CUSTOMERS-service APP] GET_CUSTOMER_B
 
 export const SHOW_LOG_CALL_MODAL_FORM = "[CUSTOMERS-service APP] SHOW_LOG_CALL_MODAL_FORM";
 
+export const SHOW_SEND_EMAIL_MODAL_FORM = "[CUSTOMERS-service APP] SHOW_SEND_EMAIL_MODAL_FORM";
+export const SHOW_SEND_SMS_MODAL_FORM = "[CUSTOMERS-service APP] SHOW_SEND_SMS_MODAL_FORM";
+export const SHOW_SEND_PHONE_CALL_MODAL_FORM = "[CUSTOMERS-service APP] SHOW_SEND_PHONE_CALL_MODAL_FORM";
+export const SHOW_SEND_CHAT_MODAL_FORM = "[CUSTOMERS-service APP] SHOW_SEND_CHAT_MODAL_FORM";
+
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	// return dispatch => {
 	// const request = axios.get("/api/customers/gets");
@@ -275,6 +280,19 @@ export function showLogCallModalForm(visible) {
 		type: SHOW_LOG_CALL_MODAL_FORM,
 		payload: visible
 	}
+}
+
+export function showSendEmailModalForm(visible = true) {
+	return { type: SHOW_SEND_EMAIL_MODAL_FORM, payload: visible }
+}
+export function showSendSmsModalForm(visible = true) {
+	return { type: SHOW_SEND_SMS_MODAL_FORM, payload: visible }
+}
+export function showSendPhoneCallModalForm(visible = true) {
+	return { type: SHOW_SEND_PHONE_CALL_MODAL_FORM, payload: visible }
+}
+export function showSendChatModalForm(visible = true) {
+	return { type: SHOW_SEND_CHAT_MODAL_FORM, payload: visible }
 }
 
 export function openEditCustomerForm(regionId, customerId, customerNo) {

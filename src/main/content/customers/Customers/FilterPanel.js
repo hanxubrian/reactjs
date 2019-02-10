@@ -1218,8 +1218,8 @@ class FilterPanel extends Component {
 												control={
 													<Checkbox
 														checked={this.state.NationalAccount}
-														onChange={this.handleChangeChecked('NationalAccount')}
-														value="NationalAccount"
+														// onChange={this.handleChangeChecked('NationalAccount')}
+														// value="NationalAccount"
 													/>
 												}
 												label="National Account"
@@ -1228,8 +1228,8 @@ class FilterPanel extends Component {
 												control={
 													<Checkbox
 														checked={this.state.ChildAccount}
-														onChange={this.handleChangeChecked('ChildAccount')}
-														value="ChildAccount"
+														// onChange={this.handleChangeChecked('ChildAccount')}
+														// value="ChildAccount"
 													/>
 												}
 												label="Child Account"

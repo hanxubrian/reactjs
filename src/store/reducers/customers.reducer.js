@@ -86,6 +86,13 @@ const initialState = {
 	logCallModalForm: {
 		open: false,
 	},
+	contactForms:
+	{
+		emailModalForm: { open: true },
+		smsModalForm: { open: true },
+		phoneCallModalForm: { open: true },
+		chatModalForm: { open: true },
+	},
 	activeCustomer: {
 		/*
 		AccountOfferings: null
@@ -523,6 +530,52 @@ const customers = function (state = initialState, action) {
 					}
 				};
 			}
+
+		case Actions.SHOW_SEND_EMAIL_MODAL_FORM:
+			return {
+				...state,
+				contactForms: {
+					...state.contactForms,
+					emailModalForm: {
+						...state.contactForms.emailModalForm,
+						open: action.payload,
+					}
+				}
+			};
+		case Actions.SHOW_SEND_SMS_MODAL_FORM:
+			return {
+				...state,
+				contactForms: {
+					...state.contactForms,
+					smsModalForm: {
+						...state.contactForms.sendsmsModalFormSmsModalForm,
+						open: action.payload,
+					}
+				}
+			};
+		case Actions.SHOW_SEND_PHONE_CALL_MODAL_FORM:
+			return {
+				...state,
+				contactForms: {
+					...state.contactForms,
+					phoneCallModalForm: {
+						...state.contactForms.phoneCallModalForm,
+						open: action.payload,
+					}
+				}
+			};
+		case Actions.SHOW_SEND_CHAT_MODAL_FORM:
+			return {
+				...state,
+				contactForms: {
+					...state.contactForms,
+					chatModalForm: {
+						...state.contactForms.chatModalForm,
+						open: action.payload,
+					}
+				}
+			};
+
 
 		// case Actions.GET_FINDERS_FEES_BY_CUSTOMER_NO_START:
 		// 	{

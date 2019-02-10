@@ -933,7 +933,7 @@ class BillingsPage extends Component {
 			return (
 				<div className="flex flex-col">
 					<div className="flex justify-start">
-						<span style={{ width: "15%", marginLeft: 220 }}><strong>PaymentType</strong></span>
+						<span style={{ width: "15%", marginLeft: 220, textAlign: 'center' }}><strong>PaymentType</strong></span>
 						<span style={{ width: "15%" }}><strong>Ref.No.</strong></span>
 						<span style={{ width: "15%" }}><strong>PayDate</strong></span>
 						<span style={{ width: "15%" }}><strong>Amount</strong></span>
