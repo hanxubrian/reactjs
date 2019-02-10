@@ -436,6 +436,18 @@ class CustomerServices extends Component {
 		this.props.showLogCallModalForm(true)
 	}
 
+	forceFetch = () => {
+		this.props.getCustomers(
+			this.props.regionId,
+			this.props.statusId,
+			this.props.filters.StatusNames,
+			this.props.filters.AccountTypeListName,
+			this.props.location,
+			this.props.latitude,
+			this.props.longitude,
+			this.props.searchText);
+	}
+
 	render() {
 		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, openNewCustomerForm, customerForm, mapViewState, toggleMapView } = this.props;
 		const { selection, anchorEl, anchorContactMenu } = this.state;
@@ -468,6 +480,11 @@ class CustomerServices extends Component {
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
+											<Tooltip title="Refresh">
+												<IconButton variant="contained" onClick={this.forceFetch}>
+													<Icon>refresh</Icon>
+												</IconButton>
+											</Tooltip>
 
 											<Button
 												variant="contained"

@@ -976,7 +976,7 @@ class CollectionsPage extends Component {
 		return (
 			<Fragment>
 				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
-					<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+					{/* <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
 						<Button
 							variant="contained"
 							color="primary"
@@ -986,7 +986,7 @@ class CollectionsPage extends Component {
 							Log Call
 						<Icon className={classes.rightIcon}>settings_phone</Icon>
 						</Button>
-					</div>
+					</div> */}
 
 					<Grid
 						// rootComponent={GridRootComponent}

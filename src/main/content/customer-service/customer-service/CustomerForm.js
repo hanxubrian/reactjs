@@ -544,7 +544,7 @@ class CustomerForm extends Component {
 				return (
 					<CollectionsPage />
 				);
-			
+
 			default:
 				return 'Unknown step';
 		}
@@ -809,6 +809,9 @@ class CustomerForm extends Component {
 	handleTab = (event, activeStep) => {
 		this.setState({ activeStep });
 	};
+	onClickLogCall = () => {
+		this.props.showLogCallModalForm(true)
+	}
 	//////////////////////
 	render() {
 		console.log(this.props)
@@ -890,41 +893,26 @@ class CustomerForm extends Component {
 					}}
 				>
 
-					{/* {activeStep === 4 ?
-						(<Fragment>
-							{account_offering_step === 0 &&
-							(<div style={{ display: 'flex', justifyContent: 'space-between' }}>
-								<h2>{steps[activeStep]}</h2>
-								<Button
-									variant="contained"
-									color="primary"
-									className={classes.button}
-									onClick={() => {
-										this.offerThisAccount();
-									}}
-								> Offer this account </Button>
-							</div>)
-							}
-							{account_offering_step === 1 &&
-							(<div style={{ display: 'flex', justifyContent: 'space-between' }}>
-								<h2>{steps[activeStep]}</h2>
-								<Button
-									variant="contained"
-									color="primary"
-									className={classes.button}
-									onClick={() => {
-										this.backToAccountOfferingHome();
-									}}
-								> Back </Button>
-							</div>)
-							}
-						</Fragment>)
-						: */}
-					{/* ( */}
-					<h2>{steps[activeStep]}</h2>
-					{/* ) */}
-					{/* } */}
+					{activeStep === 3 ?
+						<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+							<h2>{steps[activeStep]}</h2>
+							<Button
+								variant="contained"
+								color="primary"
+								className={classNames(classes.button, "pr-24 pl-24")}
+								style={{ margin: -6 }}
+								onClick={this.onClickLogCall}
+							>
+								Log Call
+										<Icon className={classes.rightIcon}>settings_phone</Icon>
+							</Button>
 
+						</div>
+						:
+						(
+							<h2>{steps[activeStep]}</h2>
+						)
+					}
 
 					<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
 
@@ -996,7 +984,8 @@ function mapDispatchToProps(dispatch) {
 		closeNewCustomerForm: Actions.closeNewCustomerForm,
 		openEditCustomerForm: Actions.openEditCustomerForm,
 		closeEditCustomerForm: Actions.closeEditCustomerForm,
-		getDocuments: Actions.getDocuments
+		getDocuments: Actions.getDocuments,
+		showLogCallModalForm: Actions.showLogCallModalForm
 	}, dispatch);
 }
 

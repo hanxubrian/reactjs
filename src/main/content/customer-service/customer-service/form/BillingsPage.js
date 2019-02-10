@@ -614,7 +614,7 @@ class BillingsPage extends Component {
 					filteringEnabled: true,
 					groupingEnabled: true,
 				},
-				
+
 			],
 			sorting: [
 				{ columnName: 'CustomerNo', direction: 'asc' }
@@ -976,12 +976,12 @@ class BillingsPage extends Component {
 
 						<PagingPanel pageSizes={pageSizes} />
 
-						{/* <SelectionState
-										selection={selection}
-										onSelectionChange={this.changeSelection}
-									/> */}
+						<SelectionState
+							selection={selection}
+							onSelectionChange={this.changeSelection}
+						/>
 						{/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
-						{/* <IntegratedSelection /> */}
+						<IntegratedSelection />
 
 						<SortingState
 							sorting={sorting}
@@ -1054,7 +1054,7 @@ class BillingsPage extends Component {
 								/> */}
 
 						{/* <TableSelection showSelectAll selectByRowClick highlightRow /> */}
-						{/* <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} /> */}
+						<TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
 
 						<TableHeaderRow showSortingControls />
 
@@ -1126,14 +1126,14 @@ class BillingsPage extends Component {
 										<this.TableRow
 											{...params}
 											selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
-										// onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
+											onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
 										/>
 									)}
 								</TemplateConnector>
 							)}
 						</Template>
 
-						{/* <CustomizedDxGridSelectionPanel selection={selection} rows={rows} /> */}
+						<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
 
 					</Grid>
 				</div>
