@@ -507,24 +507,11 @@ class FilterPanel extends Component {
 				MobilePhone: "Sample MobilePhone",
 				Email: "Sample Email",
 			}],
-
-			customerName: "",
-			customerAddress: "",
-			customerCity: "",
-			customerState: "",
-			customerZip: "",
-
-			customerPhone: "",
-			customerFax: "",
-
-			customerEmail: "",
-			customerWeb: "",
-
 			filters: {
 				StatusNames: [],
 				AccountTypeListName: "",
-			}
-
+			},
+			activeCustomer: null,
 		}
 
 
@@ -542,7 +529,8 @@ class FilterPanel extends Component {
 
 	componentWillMount() {
 		this.setState({
-			filters: { ...this.props.filters }
+			filters: { ...this.props.filters },
+			activeCustomer: this.props.activeCustomer ? this.props.activeCustomer.Data : null,
 		})
 	}
 	componentWillReceiveProps(nextProps) {
@@ -553,25 +541,8 @@ class FilterPanel extends Component {
 			});
 		}
 
-		if (nextProps.customerForm !== customerForm) {
-			if (nextProps.customerForm.data !== null) {
-				console.log("nextProps.customerForm.data.Data.cus_phone", nextProps.customerForm.data.Data.cus_phone)
-				this.setState({
-					customerName: nextProps.customerForm.data.Data.cus_name,
-					customerAddress: nextProps.customerForm.data.Data.cus_addr,
-					customerCity: nextProps.customerForm.data.Data.cus_city,
-					customerState: nextProps.customerForm.data.Data.cus_state,
-					customerZip: nextProps.customerForm.data.Data.cus_zip,
-
-					customerPhone: "+1" + nextProps.customerForm.data.Data.cus_phone,
-					customerFax: "+1" + nextProps.customerForm.data.Data.cus_fax,
-
-					customerEmail: nextProps.customerForm.data.Data.email1,
-					customerWeb: nextProps.customerForm.data.Data.cus_zip,
-
-				});
-			}
-
+		if (nextProps.activeCustomer !== this.props.activeCustomer) {
+			this.setState({ activeCustomer: nextProps.activeCustomer ? nextProps.activeCustomer.Data : null })
 		}
 		if (!_.isEqual(nextProps.filters, this.props.filters)) {
 			this.setState({
@@ -966,7 +937,7 @@ class FilterPanel extends Component {
 
 		const { addressRows, addressColumns, contactsRows, contactsColumns } = this.state;
 
-		const { childCustomerName, suggestions } = this.state;
+		const { childCustomerName, suggestions, activeCustomer } = this.state;
 		// Autosuggest will pass through all these props to the input.
 		const inputProps = {
 			classes,
@@ -1053,7 +1024,7 @@ class FilterPanel extends Component {
 														<TextField
 															id="customerName"
 															label="Name"
-															value={this.state.customerName}
+															value={activeCustomer ? activeCustomer.cus_name : ''}
 															className={classes.textField}
 															InputLabelProps={{ shrink: true }}
 															InputProps={{ readOnly: true }}
@@ -1067,7 +1038,7 @@ class FilterPanel extends Component {
 														<TextField
 															id="customerPhone"
 															label="Phone"
-															value={this.state.customerPhone}
+															value={activeCustomer ? '+1' + activeCustomer.cus_phone : ''}
 															className={classes.textField}
 															InputLabelProps={{ shrink: true }}
 															InputProps={{ readOnly: true }}
@@ -1084,7 +1055,7 @@ class FilterPanel extends Component {
 														<TextField
 															id="customerAddress"
 															label="Address"
-															value={FuseUtils.capital_letter(this.state.customerAddress)}
+															value={activeCustomer ? FuseUtils.capital_letter(activeCustomer.cus_addr) : ''}
 															className={classes.textField}
 															InputLabelProps={{ shrink: true }}
 															InputProps={{ readOnly: true }}
@@ -1098,7 +1069,7 @@ class FilterPanel extends Component {
 														<TextField
 															id="customerFax"
 															label="Fax"
-															value={this.state.customerFax}
+															value={activeCustomer ? '+1' + activeCustomer.cus_fax : ''}
 															className={classes.textField}
 															InputLabelProps={{ shrink: true }}
 															InputProps={{ readOnly: true }}
@@ -1116,7 +1087,7 @@ class FilterPanel extends Component {
 														<TextField
 															id="customerAddress"
 															label=""
-															value={FuseUtils.capital_letter(this.state.customerCity) + ", " + this.state.customerState + ", " + this.state.customerZip}
+															value={activeCustomer ? FuseUtils.capital_letter(activeCustomer.cus_city) + ", " + activeCustomer.cus_state + ", " + activeCustomer.cus_zip : ''}
 															className={classes.textField}
 															InputLabelProps={{ shrink: true }}
 															InputProps={{ readOnly: true }}
@@ -1129,44 +1100,47 @@ class FilterPanel extends Component {
 												<Divider variant="middle" style={{ marginTop: 5, marginBottom: 5 }} />
 
 												<div className="flex flex-row justify-start mb-4">
-													<div className="flex flex-row items-center mr-6" style={{ flex: 1 }}>
-														{/* <Icon fontSize={"small"} className="mr-4">email</Icon> */}
-														{/* <Typography variant="subtitle1" color="inherit">{this.state.customerEmail}</Typography> */}
-														<TextField
-															id="customerEmail"
-															label="Email"
-															value={this.state.customerEmail}
-															className={classes.textField}
-															InputLabelProps={{ shrink: true }}
-															InputProps={{ readOnly: true }}
-															margin="dense"
-															fullWidth
-														/>
-													</div>
-													<div className="flex flex-row items-center ml-6" style={{ flex: 1 }}>
-														{/* <Icon fontSize={"small"} className="mr-4">language</Icon> */}
-														{/* <Typography variant="subtitle1" color="inherit">{this.state.customerWebsite}</Typography> */}
-														<TextField
-															id="customerWebsite"
-															label="Website"
-															value={this.state.customerWebsite}
-															className={classes.textField}
-															InputLabelProps={{ shrink: true }}
-															InputProps={{ readOnly: true }}
-															margin="dense"
-															fullWidth
-														/>
-													</div>
+													{/* <Icon fontSize={"small"} className="mr-4">email</Icon> */}
+													{/* <Typography variant="subtitle1" color="inherit">{this.state.customerEmail}</Typography> */}
+													<TextField
+														id="customerEmail"
+														label="Email 1"
+														value={activeCustomer ? activeCustomer.email1 : ''}
+														className="pr-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
+
+													<TextField
+														id="customerEmail"
+														label="Email 2"
+														value={activeCustomer ? activeCustomer.email2 : ''}
+														className="pr-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
+
 												</div>
 
-											</CardContent>
-										</Card>
-									</GridItem>
+												<div className="flex flex-row justify-start mb-4">
+													{/* <Icon fontSize={"small"} className="mr-4">language</Icon> */}
+													{/* <Typography variant="subtitle1" color="inherit">{this.state.customerWebsite}</Typography> */}
+													<TextField
+														id="customerWebsite"
+														label="Website"
+														value={activeCustomer ? 'Not Specified' : ''}
+														className="pl-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
+												</div>
 
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row mt-12">
-										<Card className={classes.card}>
-											<CardHeader title="Assigned Franchisees" className={classNames(classes.cardHeader, "flex-1")} />
-											<CardContent className={classNames(classes.cardContent)}>
 												<div className="flex flex-row justify-start mb-4">
 													<TextField
 														id="AccountTypeGroup"
@@ -1214,71 +1188,83 @@ class FilterPanel extends Component {
 
 													</TextField>
 												</div>
+
+												<div className="flex justify-around">
+													<FormControlLabel
+														control={
+															<Checkbox
+																// checked={this.state.NationalAccount}
+																// onChange={this.handleChangeChecked('NationalAccount')}
+																value="NationalAccount"
+															/>
+														}
+														label="National Account"
+													/>
+													<FormControlLabel
+														control={
+															<Checkbox
+																// checked={this.state.ChildAccount}
+																// onChange={this.handleChangeChecked('ChildAccount')}
+																value="ChildAccount"
+															/>
+														}
+														label="Child Account"
+													/>
+												</div>
+
+												{this.state.ChildAccount && (
+													<div className="flex flex-col">
+														<Autosuggest
+															style={{ width: "100%" }}
+															className={classNames(classes.textfield)}
+															theme={{
+																container: classNames(classes.container),
+																suggestionsContainerOpen: classes.suggestionsContainerOpen,
+																suggestionsList: classes.suggestionsList,
+																suggestion: classes.suggestion,
+															}}
+															renderSuggestionsContainer={options => (
+																<Paper {...options.containerProps} square>
+																	{options.children}
+																</Paper>
+															)}
+															renderInputComponent={this.renderInputComponent}
+
+															suggestions={suggestions}
+															onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+															onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+															getSuggestionValue={this.getSuggestionValue}
+															renderSuggestion={this.renderSuggestion}
+															inputProps={inputProps}
+														/>
+
+														<TextField
+															id="StoreNumber"
+															label="Store Number"
+															className={classes.textField}
+															onChange={this.handleChange('StoreNumber')}
+															margin="dense"
+															// variant="outlined"
+															fullWidth />
+													</div>
+												)}
+
+											</CardContent>
+										</Card>
+									</GridItem>
+
+									<GridItem xs={12} sm={12} md={12} className="flex flex-row mt-12">
+										<Card className={classes.card}>
+											<CardHeader title="Assigned Franchisees" className={classNames(classes.cardHeader, "flex-1")} />
+											<CardContent className={classNames(classes.cardContent)}>
+												<div className="flex flex-row justify-start mb-4">
+
+												</div>
 											</CardContent>
 										</Card>
 									</GridItem>
 
 									<GridItem xs={12} sm={12} md={12} className="flex flex-col">
-										<div className="flex justify-around">
-											<FormControlLabel
-												control={
-													<Checkbox
-														checked={this.state.NationalAccount}
-														onChange={this.handleChangeChecked('NationalAccount')}
-														value="NationalAccount"
-													/>
-												}
-												label="National Account"
-											/>
-											<FormControlLabel
-												control={
-													<Checkbox
-														checked={this.state.ChildAccount}
-														onChange={this.handleChangeChecked('ChildAccount')}
-														value="ChildAccount"
-													/>
-												}
-												label="Child Account"
-											/>
-										</div>
-
-										{this.state.ChildAccount && (
-											<div className="flex flex-col">
-												<Autosuggest
-													style={{ width: "100%" }}
-													className={classNames(classes.textfield)}
-													theme={{
-														container: classNames(classes.container),
-														suggestionsContainerOpen: classes.suggestionsContainerOpen,
-														suggestionsList: classes.suggestionsList,
-														suggestion: classes.suggestion,
-													}}
-													renderSuggestionsContainer={options => (
-														<Paper {...options.containerProps} square>
-															{options.children}
-														</Paper>
-													)}
-													renderInputComponent={this.renderInputComponent}
-
-													suggestions={suggestions}
-													onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-													onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-													getSuggestionValue={this.getSuggestionValue}
-													renderSuggestion={this.renderSuggestion}
-													inputProps={inputProps}
-												/>
-
-												<TextField
-													id="StoreNumber"
-													label="Store Number"
-													className={classes.textField}
-													onChange={this.handleChange('StoreNumber')}
-													margin="dense"
-													// variant="outlined"
-													fullWidth />
-											</div>
-										)}
-
 
 									</GridItem>
 
@@ -1307,7 +1293,7 @@ class FilterPanel extends Component {
 														<TextField
 															id="SignDate"
 															label="SignDate"
-															value={this.state.SignDate}
+															value={activeCustomer ? activeCustomer.date_sign : ''}
 															className={classes.textField}
 															InputLabelProps={{ shrink: true }}
 															InputProps={{ readOnly: true }}
@@ -1338,7 +1324,7 @@ class FilterPanel extends Component {
 														<TextField
 															id="StartDate"
 															label="Start Date"
-															value={this.state.StartDate}
+															value={activeCustomer ? activeCustomer.date_start : ''}
 															className={classes.textField}
 															InputLabelProps={{ shrink: true }}
 															InputProps={{ readOnly: true }}
@@ -1369,7 +1355,7 @@ class FilterPanel extends Component {
 														<TextField
 															id="ExpirationDate"
 															label="Expiration Date"
-															value={this.state.ExpirationDate}
+															value={activeCustomer ? activeCustomer.exp_date : ''}
 															className={classes.textField}
 															InputLabelProps={{ shrink: true }}
 															InputProps={{ readOnly: true }}
@@ -1466,7 +1452,7 @@ class FilterPanel extends Component {
 													<TextField
 														id="PONumber"
 														label="PO Number"
-														value={this.state.PONumber}
+														value={activeCustomer ? activeCustomer.inv_msg : ''}
 														className="pr-6"
 														InputLabelProps={{ shrink: true }}
 														InputProps={{ readOnly: true }}
@@ -1507,7 +1493,7 @@ class FilterPanel extends Component {
 													<TextField
 														id="ARStatus"
 														label="AR Status"
-														value={this.state.ARStatus}
+														value={activeCustomer ? activeCustomer.arstatus : ''}
 														className="pl-6"
 														InputLabelProps={{ shrink: true }}
 														InputProps={{ readOnly: true }}
@@ -2021,6 +2007,7 @@ function mapStateToProps({ customers, auth }) {
 		customerStatusList: customers.customerStatusList,
 		accountTypesGroups: customers.accountTypesGroups,
 		filters: customers.filters,
+		activeCustomer: customers.activeCustomer,
 	}
 }
 
