@@ -54,6 +54,7 @@ import {
 	FilteringState,
 	IntegratedFiltering,
 	SearchState,
+	RowDetailState,
 } from '@devexpress/dx-react-grid';
 
 import { CustomizedDxGridSelectionPanel } from "./../../../common/CustomizedDxGridSelectionPanel";
@@ -78,6 +79,7 @@ import {
 	TableColumnVisibility,
 	TableFixedColumns,
 	VirtualTable,
+	TableRowDetail,
 
 } from '@devexpress/dx-react-grid-material-ui';
 
@@ -564,7 +566,7 @@ class BillingsPage extends Component {
 					groupingEnabled: false,
 				},
 				{
-					title: "Invoice Date,",
+					title: "Invoice Date",
 					name: "date_inv",
 					columnName: "date_inv",
 					width: 120,
@@ -647,6 +649,7 @@ class BillingsPage extends Component {
 			searchValue: '',
 			// leftColumns: ['CustomerNo', 'CustomerName'],
 			// rightColumns: ['Amount'],
+			expandedRowIds: [2, 5],
 		};
 
 		this.fetchData = this.fetchData.bind(this);
@@ -659,6 +662,7 @@ class BillingsPage extends Component {
 		// this.changePageSize = pageSize => this.setState({ pageSize });
 		this.changeSearchValue = value => this.setState({ searchValue: value });
 		this.changeGrouping = grouping => this.setState({ grouping });
+		this.changeExpandedDetails = expandedRowIds => this.setState({ expandedRowIds });
 		console.log("constructor");
 
 		console.log("constructor", this.props.customerForm)
@@ -877,8 +881,13 @@ class BillingsPage extends Component {
 		rawData.Data.forEach(x => {
 			x.DateTime = `${x.call_date} ${x.call_time}`
 		})
-		console.log("initRowsFromRawJson=billingList", rawData.Data)
-		this.setState({ rows: rawData.Data })
+		const rows = rawData.Data
+		console.log("initRowsFromRawJson=billingList", rows)
+
+		this.setState({
+			rows,
+			expandedRowIds: rows.map((x, index) => index)
+		})
 	};
 
 
@@ -918,6 +927,33 @@ class BillingsPage extends Component {
 		);
 	};
 
+	RowDetail = ({ row }) => {
+
+		if (row.payments && row.payments.length > 0)
+			return (
+				<div className="flex flex-col">
+					<div className="flex justify-end">
+						<span style={{ width: "10%" }}><strong>PaymentType</strong></span>
+						<span style={{ width: "10%" }}><strong>Ref.No.</strong></span>
+						<span style={{ width: "12%" }}><strong>PayDate</strong></span>
+						<span style={{ width: "13%" }}><strong>Amount</strong></span>
+					</div>
+					{
+						row.payments.map((x, index) => (
+							<div key={index} className="flex justify-end">
+								<span style={{ width: "10%", color: "#63b6ff", textAlign: 'center' }}>{x.PaymentType ? x.PaymentType : ""}</span>
+								<span style={{ width: "10%", color: "#abc524" }}>{x.ReferenceNumber}</span>
+								<span style={{ width: "12%", color: "#ffb26e" }}>{x.PayDate.substring(0, 10)}</span>
+								<span style={{ width: "13%", color: "#15d400" }}>$ {x.Amount}</span>
+							</div>
+						))
+					}
+				</div>
+			)
+		return (<div className="flex justify-end">No Payments Data</div>)
+	}
+
+
 	render() {
 		const {
 			classes,
@@ -952,6 +988,7 @@ class BillingsPage extends Component {
 			grouping,
 			// leftColumns,
 			// rightColumns,
+			expandedRowIds,
 		} = this.state;
 
 		console.log("-------render-------", locationFilterValue, pins, pins2)
@@ -965,6 +1002,12 @@ class BillingsPage extends Component {
 						columns={tableColumnExtensions}
 					>
 						<DragDropProvider />
+
+						<RowDetailState
+							expandedRowIds={expandedRowIds}
+							onExpandedRowIdsChange={this.changeExpandedDetails}
+						/>
+
 						<PagingState
 							defaultCurrentPage={0}
 							// currentPage={currentPage}
@@ -1057,6 +1100,10 @@ class BillingsPage extends Component {
 						<TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
 
 						<TableHeaderRow showSortingControls />
+
+						<TableRowDetail
+							contentComponent={this.RowDetail}
+						/>
 
 						{/* <TableEditRow /> */}
 						{/* <TableEditColumn
