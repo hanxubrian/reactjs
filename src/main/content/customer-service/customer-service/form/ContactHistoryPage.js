@@ -558,15 +558,15 @@ class ContactHistoryPage extends Component {
 					title: "Date/Time",
 					name: "DateTime",
 					columnName: "DateTime",
-					width: 200,
+					width: 180,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
 				{
 					title: "Status",
-					name: "call_stat",
-					columnName: "call_stat",
+					name: "stat_otr",
+					columnName: "stat_otr",
 					width: 80,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
@@ -578,7 +578,7 @@ class ContactHistoryPage extends Component {
 					title: "Spoke With",
 					name: "spoke_with",
 					columnName: "spoke_with",
-					width: 150,
+					width: 120,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -598,7 +598,7 @@ class ContactHistoryPage extends Component {
 					title: "Initiated",
 					name: "init_call",
 					columnName: 'init_call',
-					width: 120,
+					width: 100,
 					align: 'center',
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -606,9 +606,9 @@ class ContactHistoryPage extends Component {
 				},
 				{
 					title: "Action",
-					name: "action",
-					columnName: "action",
-					width: 100,
+					name: "action_otr",
+					columnName: "action_otr",
+					width: 160,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
@@ -617,7 +617,7 @@ class ContactHistoryPage extends Component {
 					title: "Call Back Type",
 					name: "call_back",
 					columnName: "call_back",
-					width: 150,
+					width: 140,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
@@ -923,13 +923,16 @@ class ContactHistoryPage extends Component {
 			// this.props.openEditCustomerForm(this.props.regionId, tableRow.row.CustomerId);
 		}
 		return (
+
 			<Table.Row
 				{...restProps}
 				className={selected ? 'active' : ''}
 				style={{ color: 'green', cursor: 'pointer' }}
 				onClick={handleClick}
 				onDoubleClick={handleDoubleClick}
-			/>
+			>
+			</Table.Row>
+
 		);
 	};
 

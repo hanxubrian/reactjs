@@ -628,7 +628,8 @@ class BillingsPage extends Component {
 				// },
 			],
 			currencyColumns: [
-				'Amount'
+				'itm_amt',
+				'itm_tax'
 			],
 			phoneNumberColumns: [
 				'Phone'
@@ -933,18 +934,18 @@ class BillingsPage extends Component {
 			return (
 				<div className="flex flex-col">
 					<div className="flex justify-start">
-						<span style={{ width: "15%", marginLeft: 220, textAlign: 'center' }}><strong>PaymentType</strong></span>
-						<span style={{ width: "15%" }}><strong>Ref.No.</strong></span>
-						<span style={{ width: "15%" }}><strong>PayDate</strong></span>
+						<span style={{ width: "20%", marginLeft: 220, textAlign: 'center' }}><strong>Payment Type</strong></span>
+						<span style={{ width: "15%" }}><strong>Ref. No.</strong></span>
+						<span style={{ width: "15%" }}><strong>Pay Date</strong></span>
 						<span style={{ width: "15%" }}><strong>Amount</strong></span>
 					</div>
 					{
 						row.payments.map((x, index) => (
 							<div key={index} className="flex justify-start">
-								<span style={{ width: "15%", color: "#63b6ff", marginLeft: 220, textAlign: 'center' }}>{x.PaymentType ? x.PaymentType : ""}</span>
+								<span style={{ width: "20%", color: "#63b6ff", marginLeft: 220, textAlign: 'center' }}>{x.PaymentType ? x.PaymentType : ""}</span>
 								<span style={{ width: "15%", color: "#abc524" }}>{x.ReferenceNumber}</span>
 								<span style={{ width: "15%", color: "#ffb26e" }}>{x.PayDate.replace(/(\d{4})-(\d{2})-(\d{2})(.+)/, '$2/$3/$1')}</span>
-								<span style={{ width: "15%", color: "#15d400" }}>$ {x.Amount}</span>
+								<span style={{ width: "15%", color: "#15d400" }}>$ {x.Amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
 							</div>
 						))
 					}

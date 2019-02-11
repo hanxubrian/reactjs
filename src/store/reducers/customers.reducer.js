@@ -88,10 +88,10 @@ const initialState = {
 	},
 	contactForms:
 	{
-		emailModalForm: { open: true },
-		smsModalForm: { open: true },
-		phoneCallModalForm: { open: true },
-		chatModalForm: { open: true },
+		emailModalForm: { open: false },
+		smsModalForm: { open: false },
+		phoneCallModalForm: { open: false },
+		chatModalForm: { open: false },
 	},
 	activeCustomer: {
 		/*

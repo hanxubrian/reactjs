@@ -1015,7 +1015,7 @@ class FilterPanel extends Component {
 								<GridContainer style={{ alignItems: 'center', width: 500 }} className={classNames(classes.formControl, "mb-0")}>
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row xs:flex-col">
 										<Card className={classes.card}>
-											<CardHeader title="Customer Information" className={classNames(classes.cardHeader, "flex-1")} />
+											<CardHeader title={"Customer Information" + (activeCustomer ? " (" + activeCustomer.cust_no + ")" : "")} className={classNames(classes.cardHeader, "flex-1")} />
 											<CardContent className={classNames(classes.cardContent)}>
 												<div className="flex flex-row mb-4">
 													<div className="flex mr-6" style={{ flex: 2 }}>
@@ -1317,7 +1317,7 @@ class FilterPanel extends Component {
 														<TextField
 															id="Amount"
 															label="Amount"
-															value={this.state.Amount}
+															value={activeCustomer ? activeCustomer.cont_bill : ''}
 															className={classes.textField}
 															InputLabelProps={{ shrink: true }}
 															InputProps={{ readOnly: true }}
@@ -1342,70 +1342,32 @@ class FilterPanel extends Component {
 												</div>
 
 												<div className="flex flex-row justify-start mb-4">
-													<div className="flex mr-6" style={{ flex: 1 }}>
-														{/* <Icon fontSize={"small"} className="mr-4">edit</Icon>
-														<Typography variant="subtitle1" color="inherit">Description:</Typography> */}
-														<TextField
-															id="Description"
-															label="Description"
-															value={this.state.Description}
-															className={classes.textField}
-															InputLabelProps={{ shrink: true }}
-															InputProps={{ readOnly: true }}
-															margin="dense"
-															fullWidth
-														/>
-													</div>
-													<div className="flex ml-6" style={{ flex: 1 }}>
-														{/* <Icon fontSize={"small"} className="mr-4">date_range</Icon> */}
-														{/* <Typography variant="subtitle1" color="inherit">Start Date:</Typography> */}
-														<TextField
-															id="StartDate"
-															label="Start Date"
-															value={activeCustomer ? activeCustomer.date_start : ''}
-															className={classes.textField}
-															InputLabelProps={{ shrink: true }}
-															InputProps={{ readOnly: true }}
-															margin="dense"
-															fullWidth
-														/>
-													</div>
+													{/* <Icon fontSize={"small"} className="mr-4">date_range</Icon> */}
+													{/* <Typography variant="subtitle1" color="inherit">Start Date:</Typography> */}
+													<TextField
+														id="ContractType"
+														label="Contract Type"
+														value={this.state.ContractType}
+														className="pr-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
+													<TextField
+														id="StartDate"
+														label="Start Date"
+														value={activeCustomer ? activeCustomer.date_start : ''}
+														className="pl-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
 												</div>
 
 												<div className="flex flex-row justify-start mb-4">
-													<div className="flex mr-6" style={{ flex: 1 }}>
-														{/* <Icon fontSize={"small"} className="mr-4">perm_contact_calendar</Icon>
-														<Typography variant="subtitle1" color="inherit">Contract Type:</Typography> */}
-														<TextField
-															id="ContractType"
-															label="Contract Type"
-															value={this.state.ContractType}
-															className={classes.textField}
-															InputLabelProps={{ shrink: true }}
-															InputProps={{ readOnly: true }}
-															margin="dense"
-															fullWidth
-														/>
-													</div>
-													<div className="flex ml-6" style={{ flex: 1 }}>
-														{/* <Icon fontSize={"small"} className="mr-4">date_range</Icon>
-														<Typography variant="subtitle1" color="inherit">Expiration Date:</Typography> */}
-														<TextField
-															id="ExpirationDate"
-															label="Expiration Date"
-															value={activeCustomer ? activeCustomer.exp_date : ''}
-															className={classes.textField}
-															InputLabelProps={{ shrink: true }}
-															InputProps={{ readOnly: true }}
-															margin="dense"
-															fullWidth
-														/>
-													</div>
-												</div>
 
-												<div className="flex flex-row justify-start mb-4">
-													{/* <Icon fontSize={"small"} className="mr-4"></Icon>
-													<Typography variant="subtitle1" color="inherit">Term Months:</Typography> */}
 													<TextField
 														id="ContractLength"
 														label="Contract Length (Months)"
@@ -1414,10 +1376,20 @@ class FilterPanel extends Component {
 														InputLabelProps={{ shrink: true }}
 														InputProps={{ readOnly: true }}
 														margin="dense"
-														style={{ width: '50%' }}
+														fullWidth
+													/>
+
+													<TextField
+														id="ExpirationDate"
+														label="Expiration Date"
+														value={activeCustomer ? activeCustomer.exp_date : ''}
+														className={classes.textField}
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
 													/>
 												</div>
-
 
 												<div className="flex flex-row justify-start mb-4">
 													{/* <Icon fontSize={"small"} className="mr-4"></Icon>
@@ -1464,16 +1436,7 @@ class FilterPanel extends Component {
 														margin="dense"
 														fullWidth
 													/>
-													<TextField
-														id="Phone"
-														label="Phone"
-														value={activeCustomer ? "+1" + activeCustomer.bill_phone : ''}
-														className="pl-6"
-														InputLabelProps={{ shrink: true }}
-														InputProps={{ readOnly: true }}
-														margin="dense"
-														fullWidth
-													/>
+
 												</div>
 
 												<div className="flex flex-row justify-start mb-4">
@@ -1494,7 +1457,7 @@ class FilterPanel extends Component {
 														id="City"
 														label="City"
 														value={activeCustomer ? FuseUtils.capital_letter(activeCustomer.bill_city) : ''}
-														className="pl-6 pr-6"
+														className="pr-6"
 														InputLabelProps={{ shrink: true }}
 														InputProps={{ readOnly: true }}
 														margin="dense"
@@ -1504,7 +1467,7 @@ class FilterPanel extends Component {
 														id="State"
 														label="State"
 														value={activeCustomer ? activeCustomer.bill_state : ''}
-														className="pl-6"
+														className="pl-6 pr-6"
 														InputLabelProps={{ shrink: true }}
 														InputProps={{ readOnly: true }}
 														margin="dense"
@@ -1514,7 +1477,7 @@ class FilterPanel extends Component {
 														id="Zip"
 														label="Zip"
 														value={activeCustomer ? activeCustomer.bill_zip : ''}
-														className="pr-6"
+														className="pl-6"
 														InputLabelProps={{ shrink: true }}
 														InputProps={{ readOnly: true }}
 														margin="dense"
@@ -1523,6 +1486,28 @@ class FilterPanel extends Component {
 												</div>
 
 
+												<div className="flex flex-row justify-start mb-4">
+													<TextField
+														id="Phone"
+														label="Phone"
+														value={activeCustomer ? "+1" + activeCustomer.bill_phone : ''}
+														className="pr-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
+													<TextField
+														id="Fax"
+														label="Fax"
+														value={activeCustomer ? "+1" + activeCustomer.bill_fax : ''}
+														className="pl-6"
+														InputLabelProps={{ shrink: true }}
+														InputProps={{ readOnly: true }}
+														margin="dense"
+														fullWidth
+													/>
+												</div>
 												<div className="flex flex-row justify-start mb-4">
 													<TextField
 														id="BillingMethod"
@@ -1616,10 +1601,10 @@ class FilterPanel extends Component {
 														fullWidth
 													/>
 													<TextField
-														id="CleanTimes"
-														label="Clean Times"
-														value={activeCustomer ? activeCustomer.cleantimes : ''}
-														className="pl-6"
+														id="StartTime"
+														label="Start Time"
+														value={activeCustomer ? activeCustomer.cleaning_start_time.replace(/(\d{4})-(\d{2})-(\d{2})(.+)/, '$2/$3/$1') : ''}
+														className="pr-6"
 														InputLabelProps={{ shrink: true }}
 														InputProps={{ readOnly: true }}
 														margin="dense"
@@ -1630,24 +1615,39 @@ class FilterPanel extends Component {
 
 												<div className="flex flex-row justify-start mb-4">
 													<TextField
-														id="StartTime"
-														label="Start Time"
-														value={activeCustomer ? activeCustomer.cleaning_start_time.replace(/(\d{4})-(\d{2})-(\d{2})(.+)/, '$2/$3/$1') : ''}
-														className="pr-6"
-														InputLabelProps={{ shrink: true }}
-														InputProps={{ readOnly: true }}
-														margin="dense"
-														fullWidth
-													/>
-													<TextField
-														id="CleanFrequency"
-														label="Clean Frequency"
-														value={activeCustomer ? activeCustomer.cleanper : ''}
+														id="CleanTimes"
+														label="Clean Times &amp; Frequency"
+														value={activeCustomer ? ("Clean " + activeCustomer.cleantimes + " Times Per " + activeCustomer.cleanper) : ''}
 														className="pl-6"
 														InputLabelProps={{ shrink: true }}
 														InputProps={{ readOnly: true }}
 														margin="dense"
 														fullWidth
+													/>
+
+												</div>
+
+												<div className="flex flex-row justify-between mb-4">
+													<FormControlLabel label="Mon" labelPlacement="top" control={<Checkbox />} style={{ marginLeft: 0, marginRight: 0 }}
+														checked={activeCustomer ? activeCustomer.mon !== "F" : false}
+													/>
+													<FormControlLabel label="Tue" labelPlacement="top" control={<Checkbox />} style={{ marginLeft: 0, marginRight: 0 }}
+														checked={activeCustomer ? activeCustomer.tue !== "F" : false}
+													/>
+													<FormControlLabel label="Wed" labelPlacement="top" control={<Checkbox />} style={{ marginLeft: 0, marginRight: 0 }}
+														checked={activeCustomer ? activeCustomer.wed !== "F" : false}
+													/>
+													<FormControlLabel label="Thu" labelPlacement="top" control={<Checkbox />} style={{ marginLeft: 0, marginRight: 0 }}
+														checked={activeCustomer ? activeCustomer.thu !== "F" : false}
+													/>
+													<FormControlLabel label="Fri" labelPlacement="top" control={<Checkbox />} style={{ marginLeft: 0, marginRight: 0 }}
+														checked={activeCustomer ? activeCustomer.fri !== "F" : false}
+													/>
+													<FormControlLabel label="Sat" labelPlacement="top" control={<Checkbox />} style={{ marginLeft: 0, marginRight: 0 }}
+														checked={activeCustomer ? activeCustomer.sat !== "F" : false}
+													/>
+													<FormControlLabel label="Sun" labelPlacement="top" control={<Checkbox />} style={{ marginLeft: 0, marginRight: 0 }}
+														checked={activeCustomer ? activeCustomer.sun !== "F" : false}
 													/>
 												</div>
 
