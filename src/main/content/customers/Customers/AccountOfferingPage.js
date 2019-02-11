@@ -592,6 +592,8 @@ class AccountOfferingPage extends Component {
 		this.setState({ addressRows: rows });
 	}
 	componentWillMount() {
+		this.props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
+
 		this.getFranchiseesFromStatus();
 
 		this.getLocation();
@@ -774,7 +776,8 @@ class AccountOfferingPage extends Component {
 		}
 
 
-		console.log("activeRow", this.state.activeRow)
+		console.log("activeRow", rows)
+		console.log("columns", columns)
 		return (
 			<Fragment>
 				<div className={classNames("mb-12 w-full")}>
