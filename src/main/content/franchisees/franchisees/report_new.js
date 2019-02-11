@@ -34,7 +34,17 @@ const styles = theme => ({
             '& th:last-child, & td:last-child'  : {
                 paddingRight: 0 + '!important'
             }
+        },
+        '& .report-header h2':{
+            fontSize: 20,
+            fontWeight: 700,
+            lineHeight: 1.5,
+        },
+        '& .report-header td:nth-child(2), & .report-header td:nth-child(3)':{
+            verticalAlign: 'top',
+            paddingTop: 20
         }
+
     },
     paper: {
         padding: theme.spacing.unit * 1,
@@ -193,28 +203,22 @@ class Report extends Component {
         const months = ["January","February","March","April","May","June","July",
             "August","September","October","November","December"];
 
-        let region_name = '';
+        let region = all_regions.filter(r=>r.regionid===parseInt(regionid));
 
-        all_regions.forEach(r=>{
-            if(r.RegionId===parseInt(regionid)) {
-                region_name = r.Displayname;
-                return false
-            }
-        });
         return (
-            <tr>
+            <tr className="report-header">
                 <td className="text-center" width='200' align="left">
                     <Typography color="inherit">
                         <img src="https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png" alt=""/>
                     </Typography>
                 </td>
                 <td className="text-center" width='550'>
-                    <Typography color="inherit">FRANCHISEE REPORT</Typography>
-                    <Typography color="inherit">
-                        {region_name}
+                    <Typography variant={"h2"} color="inherit">FRANCHISEE REPORT</Typography>
+                    <Typography variant={"h2"} color="inherit">
+                        {/*{region[0].regionname}*/}
                     </Typography>
-                    <Typography color="inherit">
-                        BUSINESS FOR THE MONTH OF {months[parseInt(month)-1]} {year}
+                    <Typography color="inherit" variant={"h2"}>
+                        BUSINESS FOR THE MONTH OF {(months[parseInt(month)-1]).toUpperCase()} {year}
                     </Typography>
 
                 </td>
@@ -245,7 +249,7 @@ class Report extends Component {
                     <Card className={classNames(classes.card, "pdfcardcontent mx-auto")}>
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                             <div>
-                                <table align="">
+                                <table className="w-full">
                                     <tbody>
                                     {this.renderHeader()}
                                     </tbody>
@@ -306,7 +310,7 @@ class Report extends Component {
                     <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                             <div>
-                                <table align="">
+                                <table className="w-full">
                                     <tbody>
                                     {this.renderHeader()}
                                     </tbody>
@@ -359,7 +363,7 @@ class Report extends Component {
                     <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                             <div>
-                                <table align="">
+                                <table className="w-full">
                                     <tbody>
                                     {this.renderHeader()}
                                     </tbody>
@@ -412,7 +416,7 @@ class Report extends Component {
                     <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                             <div>
-                                <table align="">
+                                <table className="w-full">
                                     <tbody>
                                     {this.renderHeader()}
                                     </tbody>
@@ -465,7 +469,7 @@ class Report extends Component {
                     <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                             <div>
-                                <table align="">
+                                <table className="w-full">
                                     <tbody>
                                     {this.renderHeader()}
                                     </tbody>
@@ -518,7 +522,7 @@ class Report extends Component {
                     <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                             <div>
-                                <table align="">
+                                <table className="w-full">
                                     <tbody>
                                     {this.renderHeader()}
                                     </tbody>
@@ -571,7 +575,7 @@ class Report extends Component {
                     <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                             <div>
-                                <table align="">
+                                <table className="w-full">
                                     <tbody>
                                     {this.renderHeader()}
                                     </tbody>
@@ -624,7 +628,7 @@ class Report extends Component {
                     <Card className={classNames(classes.card, "pdfcardcontent mx-auto mt-64")}>
                         <CardContent className={classNames(classes.cardContent, "p-32 print:p-0")}>
                             <div>
-                                <table align="">
+                                <table className="w-full">
                                     <tbody>
                                     {this.renderHeader()}
                                     </tbody>
