@@ -20,7 +20,6 @@ import Radio from "@material-ui/core/Radio/Radio";
 import Geocode from "react-geocode";
 import MaskedInput from "react-text-mask";
 import * as PropTypes from "prop-types";
-import moment from "moment";
 import _ from "lodash";
 
 
@@ -90,7 +89,10 @@ const styles = theme => ({
 			lineHeight: 1.5,
 			fontSize: 14
 		}
-	},
+    },
+    textField: {
+        fontSize: '1.3rem'
+    }
 });
 
 
@@ -438,7 +440,7 @@ class FilterPanel extends Component {
         return (
             <div className={classNames(classes.root)}>
                 <div className={classNames("flex flex-col")}>
-                    <div className="flex flex-1 flex-col min-h-px p-20">
+                    <div style={{height: "100%"}} className="flex flex-1 flex-col min-h-px p-20">
                         {franchiseesForm && franchiseesForm.props.open
                         ?(
                            <div>
