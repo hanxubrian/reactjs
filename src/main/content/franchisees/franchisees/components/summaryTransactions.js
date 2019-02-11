@@ -139,12 +139,15 @@ class SummaryTransactons extends Component {
             return (<div/>);
 
         const {SUMMARY_PAGE }  = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0];
-        const aBillings = [SUMMARY_PAGE[0]['ACTUAL BILLING'][0],SUMMARY_PAGE[0].ADTL_BILL_FRAN[0],
-            SUMMARY_PAGE[0].CLIENT_SUPPLIES[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE[0]];
+
+        const aBillings = [
+            SUMMARY_PAGE[0]['ACTUAL BILLING'],
+            SUMMARY_PAGE[0].ADTL_BILL_FRAN,
+            SUMMARY_PAGE[0].CLIENT_SUPPLIES,
+            SUMMARY_PAGE[0].ADDTL_BILL_OFFICE
+        ];
         // const aBillings1 =[SUMMARY_PAGE[0].SUBTOTAL[0], SUMMARY_PAGE[0].CLIENT_SALES_TAX[0]];
 
-        const aBillings2 =[SUMMARY_PAGE[0].TOTAL_MON_REV[0]];
-        // const aBillings3 = [SUMMARY_PAGE[0].CLIENT_SALES_TAX_BOT[0]];
         // const aDeductions0= [SUMMARY_PAGE[0].ROYALTY[0], SUMMARY_PAGE[0].ACCT_FEE[0],SUMMARY_PAGE[0].TECH_FEE[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE_COMM[0],SUMMARY_PAGE[0].FRAN_NOTE_PYMT[0]];
 
         let aBillings3 = [];
@@ -156,11 +159,11 @@ class SummaryTransactons extends Component {
         let summaryFranNote = [];
 
         if(SUMMARY_PAGE[0].TOTAL_MON_REV!== null && SUMMARY_PAGE[0].TOTAL_MON_REV.length>0){
-            aBillings3 = [SUMMARY_PAGE[0].TOTAL_MON_REV[0]];
+            aBillings3.push(SUMMARY_PAGE[0].TOTAL_MON_REV[0]);
         }
 
         if(SUMMARY_PAGE[0].CLIENT_SALES_TAX_BOT!== null && SUMMARY_PAGE[0].CLIENT_SALES_TAX_BOT.length>0){
-            aBillings3 = [SUMMARY_PAGE[0].CLIENT_SALES_TAX_BOT[0]];
+            aBillings3.push(SUMMARY_PAGE[0].CLIENT_SALES_TAX_BOT[0]);
         }
 
         if(SUMMARY_PAGE[0].ROYALTY!== null && SUMMARY_PAGE[0].ROYALTY.length>0){
@@ -194,7 +197,7 @@ class SummaryTransactons extends Component {
         const aDeductions8 =["ACCT_FEE_REB_BAL"];
 
         return (
-            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-12")}>
+            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-12 w-full")}>
                 <h2 >FRANCHISEE REVENUES:</h2>
 
                 <table style={{width:'63%'}}>
@@ -211,28 +214,24 @@ class SummaryTransactons extends Component {
                     </tbody>
                 </table>
 
-                <table style={{width:'65%'}}>
+                <table style={{width:'63%'}}>
                     <tbody>
-
-                    { aBillings2.map((b, index)=>{
-                            return (
-                                <tr key={index}>
-                                    <td width="350">
-                                        <Typography variant="subtitle1">{b.LABEL}</Typography>
-                                    </td>
-                                    <td width ="" className="text-right">
-                                        ${parseFloat(b.AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
-                                    </td>
-                                </tr>
-                            )
+                    { aBillings.map((b, index)=> {
+                            if (b !== null && b.length > 0)
+                                return (
+                                    <tr key={index}>
+                                        <td width="350">
+                                            <Typography variant="subtitle1">{b[0].LABEL}</Typography>
+                                        </td>
+                                        <td width="" className="text-right">
+                                            ${parseFloat(b[0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+                                        </td>
+                                    </tr>
+                                )
+                            else
+                                return false
                         }
                     )}
-
-                    </tbody>
-                </table>
-
-                <table style={{width:'65%'}}>
-                    <tbody>
 
                     { aBillings3.map((b, index)=>{
                             return (
@@ -422,23 +421,11 @@ class SummaryTransactons extends Component {
                     <tbody>
                     <tr>
                         <td><h2 className="pt-16" >DUE TO FRANCHISEE BEFORE CHARGEBACK:</h2></td>
-                        <td className="pt-16" style={{width:'16%'}}> ${ SUMMARY_PAGE[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'] !=null && SUMMARY_PAGE[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'][0] !=null && ( parseFloat(SUMMARY_PAGE[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) } </td>
+                        <td className="pt-16" style={{width:'16%'}}> { SUMMARY_PAGE[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'] !=null && SUMMARY_PAGE[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'][0] !=null && ( CurrencyFormatter({value: SUMMARY_PAGE[0]['DUE_TO_FRAN_BEFORE_CHARGEBACK'][0].AMOUNT}))} </td>
                     </tr>
                     </tbody>
                 </table>
 
-                {/* <table style={{width:'63%'}}>
-                    <tbody>
-                    <tr >
-                        <td width="350">
-                            <Typography variant="subtitle1">Chargeback</Typography>
-                        </td>
-                        <td width ="" className="text-right">
-                            $0.00
-                        </td>
-                    </tr>
-                    </tbody>
-                </table> */}
                 <table style={{width:'63%'}}>
                     <tbody>
                     { aDeductions7.map((b, index)=>{
@@ -479,7 +466,7 @@ class SummaryTransactons extends Component {
                     <tbody>
                     <tr>
                         <td><h2 className="pt-16" >DUE TO FRANCHISEE:</h2></td>
-                        <td className="pt-16" style={{width:'16%'}}> ${ SUMMARY_PAGE[0]['DUE_TO_FRAN'] !=null && SUMMARY_PAGE[0]['DUE_TO_FRAN'][0] !=null && ( parseFloat(SUMMARY_PAGE[0]['DUE_TO_FRAN'][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) } </td>
+                        <td className="pt-16" style={{width:'16%'}}> { SUMMARY_PAGE[0]['DUE_TO_FRAN'] !=null && SUMMARY_PAGE[0]['DUE_TO_FRAN'][0] !=null && ( CurrencyFormatter({value: SUMMARY_PAGE[0]['DUE_TO_FRAN'][0].AMOUNT}))} </td>
                     </tr>
                     </tbody>
                 </table>
