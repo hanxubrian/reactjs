@@ -142,9 +142,48 @@ class SummaryTransactons extends Component {
         // const aBillings = [SUMMARY_PAGE[0]['ACTUAL BILLING'][0],SUMMARY_PAGE[0].ADTL_BILL_FRAN[0],
         //     SUMMARY_PAGE[0].CLIENT_SUPPLIES[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE[0]];
         // const aBillings1 =[SUMMARY_PAGE[0].SUBTOTAL[0], SUMMARY_PAGE[0].CLIENT_SALES_TAX[0]];
-        const aBillings2 =[SUMMARY_PAGE[0].TOTAL_MON_REV[0]];
-        const aBillings3 = [SUMMARY_PAGE[0].CLIENT_SALES_TAX_BOT[0]];
-        const aDeductions0= [SUMMARY_PAGE[0].ROYALTY[0], SUMMARY_PAGE[0].ACCT_FEE[0],SUMMARY_PAGE[0].TECH_FEE[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE_COMM[0],SUMMARY_PAGE[0].FRAN_NOTE_PYMT[0]];
+
+        // const aBillings2 =[SUMMARY_PAGE[0].TOTAL_MON_REV[0]];
+        // const aBillings3 = [SUMMARY_PAGE[0].CLIENT_SALES_TAX_BOT[0]];
+        // const aDeductions0= [SUMMARY_PAGE[0].ROYALTY[0], SUMMARY_PAGE[0].ACCT_FEE[0],SUMMARY_PAGE[0].TECH_FEE[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE_COMM[0],SUMMARY_PAGE[0].FRAN_NOTE_PYMT[0]];
+
+        let aBillings2 = [];
+        let aBillings3 = [];
+        let aDeductions0 = [];
+        let summaryRoyalty = [];
+        let summarytech = [];
+        let summaryAcct = [];
+        let summaryAddtl= [];
+        let summaryFranNote = [];
+
+        if(SUMMARY_PAGE[0].TOTAL_MON_REV!== null && SUMMARY_PAGE[0].TOTAL_MON_REV.length>0){
+            aBillings3 = [SUMMARY_PAGE[0].TOTAL_MON_REV[0]];
+        }
+
+        if(SUMMARY_PAGE[0].CLIENT_SALES_TAX_BOT!== null && SUMMARY_PAGE[0].CLIENT_SALES_TAX_BOT.length>0){
+            aBillings3 = [SUMMARY_PAGE[0].CLIENT_SALES_TAX_BOT[0]];
+        }
+
+        if(SUMMARY_PAGE[0].ROYALTY!== null && SUMMARY_PAGE[0].ROYALTY.length>0){
+            summaryRoyalty = SUMMARY_PAGE[0].ROYALTY[0];
+        }
+
+        if(SUMMARY_PAGE[0].ACCT_FEE!== null && SUMMARY_PAGE[0].ACCT_FEE.length>0){
+            summaryAcct = SUMMARY_PAGE[0].ACCT_FEE[0];
+        }
+
+        if(SUMMARY_PAGE[0].TECH_FEE!== null && SUMMARY_PAGE[0].TECH_FEE.length>0){
+            summarytech = SUMMARY_PAGE[0].TECH_FEE[0];
+        }
+
+        if(SUMMARY_PAGE[0].ADDTL_BILL_OFFICE_COMM!== null && SUMMARY_PAGE[0].ADDTL_BILL_OFFICE_COMM.length>0){
+            summaryAddtl = SUMMARY_PAGE[0].ADDTL_BILL_OFFICE_COMM[0];
+        }
+
+        if(SUMMARY_PAGE[0].FRAN_NOTE_PYMT!== null && SUMMARY_PAGE[0].FRAN_NOTE_PYMT.length>0){
+            summaryFranNote = SUMMARY_PAGE[0].FRAN_NOTE_PYMT[0];
+        }
+        aDeductions0 = [summaryRoyalty,summaryAcct,summarytech,summaryAddtl,summaryFranNote];
         const aDeductions1 = [ "FINDERS_FEES", "FRANCHISE SUPPLIES"];
         const aDeductions2 =["FRANCHISE NOTE PAYMENT2", "ACCT_FEE_REB_CUR", "ACCT_FEE_REB_BAL"];
         const aDeductions3 =["SUBTOTAL_REG_DEDS"];
