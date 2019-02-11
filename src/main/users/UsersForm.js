@@ -215,8 +215,8 @@ function getFranchiseeSuggestionValue(franchiseeSuggestion) {
 
 
 
-const GroupList = [];
-const RoleList = [];
+let GroupList = [];
+let RoleList = [];
 
 const ITEM_HEIGHT = 40;
 const ITEM_PADDING_TOP = 8;
@@ -494,7 +494,8 @@ class UsersForm extends React.Component {
         if ( nextProps.userGroupList !== this.props.userGroupList )
         {
             if(nextProps.userGroupList !== null)
-            {
+            {   
+                GroupList = [];
                 nextProps.userGroupList.map(x=>{
                     GroupList.push(x.name);
                 });
@@ -504,6 +505,7 @@ class UsersForm extends React.Component {
         {
             if(nextProps.userRoleList !== null)
             {
+                RoleList = [];
                 nextProps.userRoleList.map(x=>{
                     RoleList.push(x.name);
                 });
