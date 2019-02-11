@@ -36,7 +36,7 @@ const styles = theme => ({
             }
         },
         '& .report-header h2':{
-            fontSize: 20,
+            fontSize: 19,
             fontWeight: 700,
             lineHeight: 1.5,
         },

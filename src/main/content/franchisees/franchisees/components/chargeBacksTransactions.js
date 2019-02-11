@@ -232,7 +232,7 @@ class ChargeBacksTransactions extends Component {
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-12")}>
-                <h2>Charge Backs Transactions</h2>
+                <h2>Charge Back Transactions</h2>
                 <Grid rows={data} columns={columns}>
                     <PagingState
                         currentPage={this.state.currentPage}
