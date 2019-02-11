@@ -1053,11 +1053,11 @@ class Franchisees extends Component {
                                         let period = this.props.reportPeriod.split('/');
                                         return {
                                             className: "cursor-pointer",
-                                            onClick  : (e, handleOriginal) => {
+                                            onClick  : (ev, handleOriginal) => {
                                                 if ( rowInfo )
                                                 {
-                                                    //alert('ok');
-                                                    // openEditContactDialog(rowInfo.original);
+                                                    //console.log(rowInfo);
+                                                   this.handleEditRowFranchisee(rowInfo.original.Id,this.props.regionId);
                                                 }
                                             },
                                             style:{
@@ -1149,13 +1149,9 @@ class Franchisees extends Component {
                                                                 <Icon>delete</Icon>
                                                             </IconButton>
                                                             <IconButton
-                                                                onClick={(ev) => {
-                                                                   this.handleEditRowFranchisee(row.original.Id,this.props.regionId);
-                                                                }}
-                                                            >
-                                                                <Icon>edit</Icon>
-                                                            </IconButton>
-                                                            <IconButton
+                                                            onClick={(ev) => {
+                                                                ev.stopPropagation();
+                                                            }}
                                                                 to = {`/franchisees/reports_new/${this.props.regionId}/${period[1]}/${period[0]}/${row.original.Number}`}
                                                                 component={Link}
                                                             >

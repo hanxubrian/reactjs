@@ -169,10 +169,7 @@ class FilterPanel extends Component {
         }
     }
 
-    componentWillUnmount()
-    {
-        document.removeEventListener('keydown', this.handleDocumentKeyDown);
-    }
+    
     componentWillReceiveProps(nextProps){
        if(nextProps.franchiseesForm.props.open === false){
            this.initialCloseState();
@@ -697,8 +694,6 @@ class FilterPanel extends Component {
                                            }
                                         label="InActive"
                                     />
-                                    <br/>
-                                    <h3>Franchisees Continuance</h3>
                                     <FormControlLabel
                                         control={
                                             <Switch
