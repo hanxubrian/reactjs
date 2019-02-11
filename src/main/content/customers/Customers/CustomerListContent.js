@@ -273,6 +273,28 @@ const DateTypeProvider = props => (
 		{...props}
 	/>
 );
+const AtRiskFormatter = ({ value }) => {
+	if (!value || value.trim() === "")
+		return ""
+	else if (value === "A") // Account At Risk
+		return (<Icon style={{ color: 'red', textAlign: 'center' }} >error_outline</Icon >)
+	else if (value === "C") // Active Complaint
+		return (<Icon style={{ color: 'red', textAlign: 'center' }} >sentiment_dissatisfied</Icon >)
+	else if (value === "X") // At Risk with Active Complaints
+		return (<Icon style={{ color: 'red', textAlign: 'center' }} >new_releases</Icon >)
+	else if (value === "CA") // Collection Activity
+		return (<Icon style={{ color: 'red', textAlign: 'center' }} >block</Icon >)
+	else if (value === "XCA") // highest risk
+		return (<Icon style={{ color: 'red', textAlign: 'center' }} >warning</Icon >)
+	else
+		return value
+}
+const AtRiskProvider = props => (
+	<DataTypeProvider
+		formatterComponent={AtRiskFormatter}
+		{...props}
+	/>
+);
 //
 // table cell boolean edit formatter
 //
@@ -566,6 +588,15 @@ class CustomerListContent extends Component {
 					groupingEnabled: false,
 				},
 				{
+					title: " ",
+					name: "atrisk",
+					columnName: "atrisk",
+					width: 50,
+					sortingEnabled: false,
+					filteringEnabled: false,
+					groupingEnabled: false,
+				},
+				{
 					title: "Name",
 					name: "CustomerName",
 					columnName: "CustomerName",
@@ -668,6 +699,9 @@ class CustomerListContent extends Component {
 			],
 			currencyColumns: [
 				'Amount'
+			],
+			atRiskColumns: [
+				'atrisk'
 			],
 			phoneNumberColumns: [
 				'Phone'
@@ -1229,6 +1263,7 @@ class CustomerListContent extends Component {
 			grouping,
 			// leftColumns,
 			// rightColumns,
+			atRiskColumns,
 		} = this.state;
 
 		console.log("-------render-------", locationFilterValue, rows, pins, pins2)
@@ -1345,6 +1380,12 @@ class CustomerListContent extends Component {
 
 									<CurrencyTypeProvider
 										for={currencyColumns}
+									// availableFilterOperations={amountFilterOperations}
+									// editorComponent={AmountEditor}
+									/>
+
+									<AtRiskProvider
+										for={atRiskColumns}
 									// availableFilterOperations={amountFilterOperations}
 									// editorComponent={AmountEditor}
 									/>
