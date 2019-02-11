@@ -300,6 +300,12 @@ const usersReducer = function (state = initialState, action) {
                 userDetail: action.payload
             }
         }
+        case Actions.GET_USER_FORM_VARIABLE: {
+            return{
+                ...state,
+                payload: action.payload
+            }
+        }
         case UserActions.USER_LOGGED_OUT:
         {
             return {

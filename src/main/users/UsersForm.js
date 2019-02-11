@@ -237,23 +237,23 @@ class UsersForm extends React.Component {
     }
 
     state = {
-        firstName: '',
-        lastName : '',
+        FirstName: '',
+        LastName : '',
         title : '',
-        email : '',
-        department: 'DepartMent1',
-        phone : '',
-        address: '',
-        state: 'Buffalo',
-        city : '',
-        zip : '',
-        userName: '',
-        accPassword: '',
-        selectRegion: [],
-        userGroup: [],
+        Email : '',
+        DepartmentId: 'DepartMent1',
+        Phone : '',
+        Address: '',
+        State: 'Buffalo',
+        City : '',
+        Zipcode : '',
+        UserName: '',
+        PasswordHash: '',
+        Regions: [],
+        Groups: [],
         defaultRegion: '',
         checked: [1],
-        userRole: [],
+        Roles: [],
         userType: '',
         userTypeFranchisee: '',
         userTypeCustomer: '',
@@ -262,14 +262,214 @@ class UsersForm extends React.Component {
         userTypeThirdParty: '',
         userTypeContractor: '',
         single: '',
-        popper: '',
         suggestions: [],
         TypeList:[],
         MultiRegion: [],
         DefaultRegion: [],
         UserPermission: [],
         DepartmentList: [],
-    };
+        payload:{
+            PasswordHash: "sample string 1",
+            IsFirstTimeLogin: "sample string 2",
+            Salt: "sample string 3",
+            OutlookPassword: "sample string 4",
+            Apps: [
+              {
+                _id: "sample string 1",
+                MenuOptions: [
+                  {
+                    Children: [
+                      {
+                        AppId: 1.1,
+                        Icon: "sample string 2",
+                        IconMobile: "sample string 3",
+                        IframeUrl: "sample string 4",
+                        MenuId: 5.1,
+                        MenuLevel: 6.1,
+                        MenuOrder: 7.1,
+                        ParentId: 8.1,
+                        Slug: "sample string 9",
+                        TabName: "sample string 10",
+                        Title: "sample string 11",
+                        Type: "sample string 12"
+                      },
+                      {
+                        AppId: 1.1,
+                        Icon: "sample string 2",
+                        IconMobile: "sample string 3",
+                        IframeUrl: "sample string 4",
+                        MenuId: 5.1,
+                        MenuLevel: 6.1,
+                        MenuOrder: 7.1,
+                        ParentId: 8.1,
+                        Slug: "sample string 9",
+                        TabName: "sample string 10",
+                        Title: "sample string 11",
+                        Type: "sample string 12"
+                      }
+                    ],
+                    Icon: "sample string 1",
+                    IconMobile: "sample string 2",
+                    IframeUrl: "sample string 3",
+                    MenuId: 4.1,
+                    Level: 5.1,
+                    Slug: "sample string 6",
+                    TabName: "sample string 7",
+                    Title: "sample string 8",
+                    Type: "sample string 9"
+                  },
+                  {
+                    Children: [
+                      {
+                        AppId: 1.1,
+                        Icon: "sample string 2",
+                        IconMobile: "sample string 3",
+                        IframeUrl: "sample string 4",
+                        MenuId: 5.1,
+                        MenuLevel: 6.1,
+                        MenuOrder: 7.1,
+                        ParentId: 8.1,
+                        Slug: "sample string 9",
+                        TabName: "sample string 10",
+                        Title: "sample string 11",
+                        Type: "sample string 12"
+                      },
+                      {
+                        AppId: 1.1,
+                        Icon: "sample string 2",
+                        IconMobile: "sample string 3",
+                        IframeUrl: "sample string 4",
+                        MenuId: 5.1,
+                        MenuLevel: 6.1,
+                        MenuOrder: 7.1,
+                        ParentId: 8.1,
+                        Slug: "sample string 9",
+                        TabName: "sample string 10",
+                        Title: "sample string 11",
+                        Type: "sample string 12"
+                      }
+                    ],
+                    Icon: "sample string 1",
+                    IconMobile: "sample string 2",
+                    IframeUrl: "sample string 3",
+                    MenuId: 4.1,
+                    Level: 5.1,
+                    Slug: "sample string 6",
+                    TabName: "sample string 7",
+                    Title: "sample string 8",
+                    Type: "sample string 9"
+                  }
+                ]
+              },
+              {
+                _id: "sample string 1",
+                MenuOptions: [
+                  {
+                    Children: [
+                      {
+                        AppId: 1.1,
+                        Icon: "sample string 2",
+                        IconMobile: "sample string 3",
+                        IframeUrl: "sample string 4",
+                        MenuId: 5.1,
+                        MenuLevel: 6.1,
+                        MenuOrder: 7.1,
+                        ParentId: 8.1,
+                        Slug: "sample string 9",
+                        TabName: "sample string 10",
+                        Title: "sample string 11",
+                        Type: "sample string 12"
+                      },
+                      {
+                        AppId: 1.1,
+                        Icon: "sample string 2",
+                        IconMobile: "sample string 3",
+                        IframeUrl: "sample string 4",
+                        MenuId: 5.1,
+                        MenuLevel: 6.1,
+                        MenuOrder: 7.1,
+                        ParentId: 8.1,
+                        Slug: "sample string 9",
+                        TabName: "sample string 10",
+                        Title: "sample string 11",
+                        Type: "sample string 12"
+                      }
+                    ],
+                    Icon: "sample string 1",
+                    IconMobile: "sample string 2",
+                    IframeUrl: "sample string 3",
+                    MenuId: 4.1,
+                    Level: 5.1,
+                    Slug: "sample string 6",
+                    TabName: "sample string 7",
+                    Title: "sample string 8",
+                    Type: "sample string 9"
+                  },
+                  {
+                    Children: [
+                      {
+                        AppId: 1.1,
+                        Icon: "sample string 2",
+                        IconMobile: "sample string 3",
+                        IframeUrl: "sample string 4",
+                        MenuId: 5.1,
+                        MenuLevel: 6.1,
+                        MenuOrder: 7.1,
+                        ParentId: 8.1,
+                        Slug: "sample string 9",
+                        TabName: "sample string 10",
+                        Title: "sample string 11",
+                        Type: "sample string 12"
+                      },
+                      {
+                        AppId: 1.1,
+                        Icon: "sample string 2",
+                        IconMobile: "sample string 3",
+                        IframeUrl: "sample string 4",
+                        MenuId: 5.1,
+                        MenuLevel: 6.1,
+                        MenuOrder: 7.1,
+                        ParentId: 8.1,
+                        Slug: "sample string 9",
+                        TabName: "sample string 10",
+                        Title: "sample string 11",
+                        Type: "sample string 12"
+                      }
+                    ],
+                    Icon: "sample string 1",
+                    IconMobile: "sample string 2",
+                    IframeUrl: "sample string 3",
+                    MenuId: 4.1,
+                    Level: 5.1,
+                    Slug: "sample string 6",
+                    TabName: "sample string 7",
+                    Title: "sample string 8",
+                    Type: "sample string 9"
+                  }
+                ]
+              }
+            ],
+            UserId: 6,
+            UserName: "sample string 7",
+            FirstName: "sample string 8",
+            LastName: "sample string 9",
+            Email: "sample string 10",
+            Phone: "sample string 11",
+            Address: "sample string 12",
+            City: "sample string 13",
+            State: "sample string 14",
+            Zipcode: "sample string 15",
+            DepartmentId: "sample string 16",
+            Title: "sample string 17",
+            OutlookUsername: "sample string 18",
+            DefaultRegionId: 19,
+            ProfilePhoto: "sample string 20",
+            UserType: "sample string 21",
+            Roles: [1,2],
+            Groups: [1,2],
+            Regions: [1,2]
+        }
+    }
 
 
     componentWillMount() {
@@ -278,8 +478,16 @@ class UsersForm extends React.Component {
         this.props.getUserFormUserTypeList();
         this.props.getUserStateList();
         this.props.getUserDepartmentList(this.props.regionId);
-        this.props.getCustomers(this.props.regionId);
         this.props.getFranchisees(this.props.regionId);
+        this.setState({
+            payload: this.props.payload
+        });
+        if(this.props.payload.UserId !== this.props.userId){
+            this.updateUserFormPayload("UserId", this.props.userId);
+        }
+        if(this.props.payload.DefaultRegionId !== this.props.regionId){
+            this.updateUserFormPayload("DefaultRegionId",this.props.regionId);
+        }
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
@@ -348,8 +556,50 @@ class UsersForm extends React.Component {
         }
     }
 
-    handleChange = prop => event => {
-        this.setState({[prop]: event.target.value});
+    handleChange = name => event => {
+        this.setState({[name]: event.target.value});
+        if(name === "Groups" || name === "Regions" || name ==="Roles"){
+            if(name === "Groups"){
+                let temp = event.target.value;
+                let changedGroups = [];
+                temp.map(x=>{
+                    this.props.userGroupList.map(y=>{
+                        if(x === y.name){
+                          changedGroups.push(y.group_id);
+                        }
+                    })
+                })
+                this.updateUserFormPayload(name,changedGroups);
+            }
+            if(name === "Regions") {
+                let temp = event.target.value;
+                let changedRegions = [];
+                temp.map(x=>{
+                    this.props.userStateList.map(y=>{
+                        if(x === y.name){
+                            changedRegions.push(y.abbreviation);
+                        }
+                    })
+                })
+                //console.log("roles",changedRegions);
+                this.updateUserFormPayload(name,changedRegions);
+            }     
+            if(name === "Roles") {
+                let temp = event.target.value;
+                let changedRoles = [];
+                temp.map(x=>{
+                    this.props.userRoleList.map(y=>{
+                        if(x === y.name){
+                            changedRoles.push(y._id);
+                        }
+                    })
+                })
+                console.log("roles",changedRoles);
+                this.updateUserFormPayload(name,changedRoles);
+            }        
+        }else{
+            this.updateUserFormPayload(name,event.target.value);
+        }        
     };
 
 
@@ -369,7 +619,18 @@ class UsersForm extends React.Component {
         this.setState({
             [name]: newValue,
         });
+        setTimeout(function() {
+            this.updateUserFormPayload(name,newValue);
+        }, 1500);
     };
+
+
+    updateUserFormPayload = (name,value) => {
+        
+        let insertPayload = this.state.payload;
+        insertPayload[name] = value;
+        this.props.updateUserFormPayload(insertPayload);
+    }
 
 
     render()
@@ -409,8 +670,8 @@ class UsersForm extends React.Component {
                                         label="First Name"
                                         variant="outlined"
                                         className={classes.textField}
-                                        value={this.state.firstName}
-                                        onChange={this.handleChange("firstName")}
+                                        value={this.state.FirstName}
+                                        onChange={this.handleChange("FirstName")}
                                         style={{marginRight:'1%'}}
                                         margin="dense"
                                         fullWidth
@@ -421,8 +682,8 @@ class UsersForm extends React.Component {
                                         label="Last Name"
                                         variant="outlined"
                                         className={classes.textField}
-                                        value={this.state.lastName}
-                                        onChange={this.handleChange("lastName")}
+                                        value={this.state.LastName}
+                                        onChange={this.handleChange("LastName")}
                                         style={{marginRight:'1%', marginLeft: '1%'}}
                                         margin="dense"
                                         fullWidth
@@ -431,8 +692,8 @@ class UsersForm extends React.Component {
                                     <TextField
                                         id="title"
                                         label="Title"
-                                        onChange={this.handleChange("title")}
-                                        value={this.state.title}
+                                        onChange={this.handleChange("Title")}
+                                        value={this.state.Title}
                                         variant="outlined"
                                         inputProps={{
                                             maxLength:60
@@ -450,8 +711,8 @@ class UsersForm extends React.Component {
                                         label="Phone"
                                         variant="outlined"
                                         className={classes.textField}
-                                        value={this.state.phone}
-                                        onChange={this.handleChange("phone")}
+                                        value={this.state.Phone}
+                                        onChange={this.handleChange("Phone")}
                                         style={{marginRight:'1%'}}
                                         margin="dense"
                                         fullWidth
@@ -462,8 +723,8 @@ class UsersForm extends React.Component {
                                         label="E Mail"
                                         variant="outlined"
                                         className={classes.textField}
-                                        value={this.state.email}
-                                        onChange={this.handleChange("email")}
+                                        value={this.state.Email}
+                                        onChange={this.handleChange("Email")}
                                         style={{marginRight:'1%', marginLeft: '1%'}}
                                         margin="dense"
                                         fullWidth
@@ -476,9 +737,9 @@ class UsersForm extends React.Component {
                                         variant={"outlined"}
                                         className={classes.textField}
                                         style={{marginLeft:'1%'}}
-                                        value={this.state.department}
+                                        value={this.state.DepartmentId}
                                         label={"Department"}
-                                        onChange={this.handleChange('department')}
+                                        onChange={this.handleChange('DepartmentId')}
                                         SelectProps={{
                                             MenuProps: {
                                                 className: classes.menu,
@@ -500,8 +761,8 @@ class UsersForm extends React.Component {
                                         label="Address"
                                         variant="outlined"
                                         className={classes.textField}
-                                        value={this.state.address}
-                                        onChange={this.handleChange("address")}
+                                        value={this.state.Address}
+                                        onChange={this.handleChange("Address")}
                                         style={{marginRight:'1%'}}
                                         margin="dense"
                                         fullWidth
@@ -512,8 +773,8 @@ class UsersForm extends React.Component {
                                         label="City"
                                         variant="outlined"
                                         className={classes.textField}
-                                        value={this.state.city}
-                                        onChange={this.handleChange("city")}
+                                        value={this.state.City}
+                                        onChange={this.handleChange("City")}
                                         style={{marginRight:'1%', marginLeft: '1%'}}
                                         margin="dense"
                                         fullWidth
@@ -526,8 +787,8 @@ class UsersForm extends React.Component {
                                         label={"State"}
                                         className={classes.textField}
                                         style={{marginRight:'1%', marginLeft: '1%'}}
-                                        value={this.state.state}
-                                        onChange={this.handleChange('state')}
+                                        value={this.state.State}
+                                        onChange={this.handleChange('State')}
                                         SelectProps={{
                                             MenuProps: {
                                                 className: classes.menu,
@@ -545,8 +806,8 @@ class UsersForm extends React.Component {
                                     <TextField
                                         id="zip"
                                         label="Zip"
-                                        onChange={this.handleChange("zip")}
-                                        value={this.state.zip}
+                                        onChange={this.handleChange("Zipcode")}
+                                        value={this.state.Zipcode}
                                         variant="outlined"
                                         inputProps={{
                                             maxLength:60
@@ -571,8 +832,8 @@ class UsersForm extends React.Component {
                                 label="User Name"
                                 variant="outlined"
                                 className={classes.textField}
-                                value={this.state.userName}
-                                onChange={this.handleChange("userName")}
+                                value={this.state.UserName}
+                                onChange={this.handleChange("UserName")}
                                 style={{marginRight:'1%'}}
                                 margin="dense"
                                 fullWidth
@@ -598,13 +859,13 @@ class UsersForm extends React.Component {
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <FormControl style={{width:"100%"}} className={classes.multiSelectControl}>
-                                <InputLabel variant={"outlined"} htmlFor="select-userGroup">User Group</InputLabel>
+                                <InputLabel variant={"outlined"} htmlFor="select-Groups">User Group</InputLabel>
                                 <Select
                                     multiple
-                                    value={this.state.userGroup}
+                                    value={this.state.Groups}
                                     className={classes.textField}
-                                    onChange={this.handleChange('userGroup')}
-                                    input={<OutlinedInput id="select-userGroup" labelWidth={80}/>}
+                                    onChange={this.handleChange('Groups')}
+                                    input={<OutlinedInput id="select-Groups" labelWidth={80}/>}
                                     margin="dense"
                                     MenuProps={MenuProps}
                                 >
@@ -619,10 +880,10 @@ class UsersForm extends React.Component {
                                 <InputLabel variant={"outlined"}  htmlFor="select-userGroup">Select Region</InputLabel>
                                 <Select
                                     multiple
-                                    value={this.state.selectRegion}
+                                    value={this.state.Regions}
                                     className={classes.textField}
-                                    onChange={this.handleChange('selectRegion')}
-                                    input={<OutlinedInput id="select-selectRegion" labelWidth={100}/>}
+                                    onChange={this.handleChange('Regions')}
+                                    input={<OutlinedInput id="select-Regions" labelWidth={100}/>}
                                     margin="dense"
                                     MenuProps={MenuProps}
                                 >
@@ -667,10 +928,10 @@ class UsersForm extends React.Component {
                                 <InputLabel variant={"outlined"}  htmlFor="select-userRole">User Role</InputLabel>
                                 <Select
                                     multiple
-                                    value={this.state.userRole}
+                                    value={this.state.Roles}
                                     className={classes.textField}
-                                    onChange={this.handleChange('userRole')}
-                                    input={<OutlinedInput id="select-userRole" labelWidth={80}/>}
+                                    onChange={this.handleChange('Roles')}
+                                    input={<OutlinedInput id="select-roles" labelWidth={80}/>}
                                     margin="dense"
                                     MenuProps={MenuProps}
                                 >
@@ -746,9 +1007,9 @@ class UsersForm extends React.Component {
                                         classes,
                                         label: 'Customer',
                                         placeholder: 'Enter Customer Name',
-                                        value: this.state.popper,
+                                        value: this.state.userTypeCustomer,
                                         autoComplete: 'off',
-                                        onChange: this.handleAutoChange('popper'),
+                                        onChange: this.handleAutoChange('userTypeCustomer'),
                                         inputRef: node => {
                                             this.popperNode = node;
                                         },
@@ -842,6 +1103,8 @@ function mapDispatchToProps(dispatch)
         getUserPermissionList: Actions.getUserPermissionList,
         getCustomers: MainActions.getCustomers,
         getFranchisees: MainActions.getFranchisees,
+        createUser: Actions.createUser,
+        updateUserFormPayload: Actions.updateUserFormVariable
     }, dispatch);
 }
 
@@ -859,6 +1122,8 @@ function mapStateToProps({usersApp, fuse ,auth,customers, franchisees})
         navigation : fuse.navigation,
         regionId: auth.login.defaultRegionId,
         franchisees: franchisees.franchiseesDB,
+        payload: usersApp.users.payload,
+        userId: auth.login.UserId
     }
 }
 

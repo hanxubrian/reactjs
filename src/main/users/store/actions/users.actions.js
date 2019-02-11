@@ -10,6 +10,7 @@ export const GET_USER_FORM_USERTYPE_LIST = '[USERS APP] GET USER FORM USERTYPE L
 export const GET_USER_FORM_STATE_LIST ='[USERS APP] GET USER FORM STATE LIST';
 export const GET_USER_FORM_DEPARTMENT_LIST = '[USERS APP] GET USER FORM DEPARTMENT LIST';
 export const GET_USER_FORM_PERMISSION_LIST = '[USERS APP] GET USER FORM PERMISSION LIST';
+export const GET_USER_FORM_VARIABLE = '[USERS APP] UPDATE USER FORM VARIABLE';
 
 export const CREATE_USER = '[USERS APP] CREATE USER';
 export const GET_USER_DETAIL = '[USERS APP] GET USER DETAIL';
@@ -227,5 +228,14 @@ export function updateSelectRows (row){
 export function toggleUsersFilterPanel() {
     return{
         type: TOGGLE_USERS_FILTER_PANEL
+    }
+}
+
+// UPDATE USER FORM VARIABLE
+
+export function updateUserFormVariable(newPayload) {
+    return{
+        type: GET_USER_FORM_VARIABLE,
+        payload: newPayload
     }
 }
