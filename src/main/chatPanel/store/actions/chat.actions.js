@@ -1,4 +1,3 @@
-import axios from 'axios/index';
 import {setselectedContactId} from './contacts.actions';
 import {closeMobileChatsSidebar} from 'main/content/apps/chat/store/actions/sidebars.actions';
 import Chatkit from '@pusher/chatkit-client'
@@ -9,7 +8,6 @@ import {addUnread} from  './contacts.actions';
 import {initUnread} from  './contacts.actions';
 import {updateUser} from './user.actions'
 import {checkChatUserData} from './user.actions'
-import _ from '@lodash';
 
 export const GET_CHAT           = '[CHAT PANEL] GET CHAT';
 export const REMOVE_CHAT        = '[CHAT PANEL] REMOVE CHAT';
@@ -38,7 +36,7 @@ export function initChat()
                   url: 'https://us1.pusherplatform.io/services/chatkit_token_provider/v1/e55a61d5-6a16-4a03-9ff0-5bdacd4f04ca/token',
                 }),
             })
-    
+
             chatManager
             .connect()
             .then(currentUser => {
@@ -46,7 +44,7 @@ export function initChat()
               dispatch(assignRooms(currentUser));
             })
         }
-        
+
     }
 }
 
@@ -95,7 +93,7 @@ export function assignRooms(currentUser)
                 .catch(error => console.error('error', error))
             }
           }
-          ); 
+          );
 
     };
 }
@@ -183,16 +181,16 @@ export function appendNewRoom(room)
         const contacts = getState().chatPanel.user.chatList;
 
         let loading = contacts.length - 1 !== rooms.length;
- 
+
         dispatch( {
             type: GET_ROOMS,
-            data: room, 
+            data: room,
             loading : loading,
         })
-       
+
     }
 
-   
+
 }
 
 export function appendMessages(chatId)
@@ -217,7 +215,7 @@ export function appendMessages(chatId)
             dispatch({
                 type   : APPEND_MESSAGE,
                 data: {[chatId] : messages},
-                
+
             });
             dispatch(updateUser(user));
         })();
@@ -245,7 +243,7 @@ export function addMessage(roomId, message)
                 dispatch(addUnread(message.who));
         }
         let messages = getState().chatPanel.chat.messages;
-        
+
         if (messages === null || messages.length === 0)
         {
             messages = [];
@@ -257,14 +255,15 @@ export function addMessage(roomId, message)
             else
                 messages[roomId] = [message];
         }
-    
+
         user.chatList.map((item) => {
                     if(item.chatId === roomId)
                     {
                         item.lastMessageTime = message.time;
+                        return item;
                     }
                 });
-       
+
 
         return dispatch({
             type   : ADD_MESSAGE,

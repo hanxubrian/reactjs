@@ -1,4 +1,3 @@
-import axios from 'axios/index';
 import {chatService} from "services";
 
 export const GET_CONTACTS = '[CHAT PANEL] GET CONTACTS';
@@ -12,13 +11,13 @@ export function getContacts()
         (async () => {
             let contacts = await chatService.getContactList(userId);
             if (contacts)
-            {   
+            {
                 dispatch({
                     type   : GET_CONTACTS,
                     payload: contacts
                 });
             }
-         
+
         })();
     }
 }
@@ -29,8 +28,9 @@ export function initContactsPresense(currentUser)
 
         contacts.map((item, i) => {
             item.status = currentUser.presenceStore.store[item.id];
+            return item;
         });
-       
+
         (async () => {
             dispatch({
                 type   : GET_CONTACTS,
@@ -49,9 +49,10 @@ export function updateContactsPresense(user, state)
             if (item.id === user.id)
             {
                 item.status = state.current;
+                return
             }
         });
-       
+
         (async () => {
             dispatch({
                 type   : GET_CONTACTS,
@@ -70,14 +71,14 @@ export function addUnread(userId)
         contacts.map((item, i) => {
             if (item.id === userId)
             {
-                
+
                 if (item.unread === undefined || item.unread === 0)
                     item.unread = 1;
                 else
                     item.unread = item.unread + 1;
             }
         });
-       
+
         (async () => {
             dispatch({
                 type   : GET_CONTACTS,
@@ -98,7 +99,7 @@ export function initUnread(userId)
                 item.unread = 0;
             }
         });
-       
+
         (async () => {
             dispatch({
                 type   : GET_CONTACTS,
@@ -121,7 +122,7 @@ export function getChatContacts()
                     payload: contacts
                 });
             }
-           
+
         })();
     }
 }

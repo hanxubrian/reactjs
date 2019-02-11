@@ -209,8 +209,7 @@ class InvoiceReport extends Component {
     //     this.downloadPDF(input, imgUrl);
     // }
     render() {
-        console.log("#################this.props.Detail",this.props.Detail);
-        const { classes} = this.props;
+
         if (!this.props.show) {
             return null;
         }

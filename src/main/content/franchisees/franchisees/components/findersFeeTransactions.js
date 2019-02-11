@@ -82,7 +82,10 @@ const styles = theme => ({
         '& td:nth-child(5)>div': {
             display: 'flex',
             justifyContent: 'flex-end'
-        }
+        },
+        '& td:nth-child(5)': {
+            paddingRight: 0,
+        },
     }
 });
 

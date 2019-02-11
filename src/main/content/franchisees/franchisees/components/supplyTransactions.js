@@ -80,6 +80,9 @@ const styles = theme => ({
         '& td:nth-child(1)': {
             width: '100%',
         },
+        '& td:nth-child(4)': {
+            paddingRight: 0,
+        },
     }
 });
 

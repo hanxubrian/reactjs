@@ -23,10 +23,10 @@ export function getVerifications(regionId, statusId = 0, location = "all", latit
             regionId = regionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [regionId]
             statusId = statusId === 0 ? Array.from({ length: 10 }).map((item, index) => (index + 1)) : [statusId]
             console.log(regionId, statusId)
-            let response = await customersService.getCustomersList(regionId, statusId, location, latitude, longitude, searchText);
+            // let response = await customersService.getCustomersList(regionId, statusId, location, latitude, longitude, searchText);
             dispatch({
                 type: GET_ALL_VERIFICATIONS,
-                payload: response
+                // payload: response
             });
         })();
     }

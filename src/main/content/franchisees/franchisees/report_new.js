@@ -12,6 +12,8 @@ import html2canvas from 'html2canvas';
 //Store
 import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
+
+//Child components
 import SummaryTransactons from "./components/summaryTransactions";
 import CustomerTransactions from './components/customerTransactions'
 import CustomerAccountTotals from './components/customerAccountTotal'
@@ -48,12 +50,12 @@ const styles = theme => ({
     },
     cardContent: {
         '& .page': {
-            borderBottom: `1px solid ${theme.palette.text.primary}`
+            // borderBottom: `1px solid ${theme.palette.text.primary}`
         },
         '& .page1': {
             paddingTop: 12,
             borderTop: `1px solid ${theme.palette.text.primary}`,
-            borderBottom: `1px solid ${theme.palette.text.primary}`
+            // borderBottom: `1px solid ${theme.palette.text.primary}`
         }
     },
     divider    : {
@@ -104,10 +106,10 @@ let page_section                    = 0;
 let HTML_Width                      = 0;
 let HTML_Height                     = 0;
 let top_left_margin                 = 0;
-let PDF_Width                       = 0;
-let PDF_Height                      = 0;
-let canvas_image_width              = 0;
-let canvas_image_height             = 0;
+// let PDF_Width                       = 0;
+// let PDF_Height                      = 0;
+// let canvas_image_width              = 0;
+// let canvas_image_height             = 0;
 
 class Report extends Component {
 
@@ -127,14 +129,14 @@ class Report extends Component {
 
     getDataUri=(url, cb)=>
     {
-        var image = new Image();
-        var log_url = 'https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
+        let image = new Image();
+        let log_url = 'https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
         image.setAttribute('crossOrigin', 'anonymous');
         image.onload = function () {
-            var canvas = document.createElement('canvas');
+            let canvas = document.createElement('canvas');
             canvas.width = this.naturalWidth;
             canvas.height = 2500;
-            var ctx = canvas.getContext('2d');
+            let ctx = canvas.getContext('2d');
             ctx.fillStyle = '#fff';  /// set white fill style
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             canvas.getContext('2d').drawImage(this, 0, 0);
@@ -145,6 +147,7 @@ class Report extends Component {
 
     downloadPDF=(input, imgURL)=> {
         console.log("document.getElementsByClassName length",document.getElementsByClassName("pdfcardcontent").length);
+        console.log('image=',imgURL,top_left_margin, top_left_margin, HTML_Width, HTML_Height);
         let cardlen = document.getElementsByClassName("pdfcardcontent").length;
         let img = null;
 
@@ -173,10 +176,10 @@ class Report extends Component {
         HTML_Width = page_section.offsetWidth;
         HTML_Height = page_section.offsetHeight ;
         top_left_margin = 15;
-        PDF_Width = HTML_Width + (top_left_margin * 2);
-        PDF_Height = (PDF_Width * 1.2) + (top_left_margin * 2);
-        canvas_image_width = HTML_Width;
-        canvas_image_height = HTML_Height;
+        // PDF_Width = HTML_Width + (top_left_margin * 2);
+        // PDF_Height = (PDF_Width * 1.2) + (top_left_margin * 2);
+        // canvas_image_width = HTML_Width;
+        // canvas_image_height = HTML_Height;
     };
 
     renderHeader = ()=>{

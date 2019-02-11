@@ -75,6 +75,7 @@ const styles = theme => ({
         height: 42,
         '& td': {
             borderBottom: `1px solid ${theme.palette.text.primary}`,
+            paddingRight: 0
         },
         '& td:nth-child(2)': {
             width: '100%',
