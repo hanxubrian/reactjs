@@ -95,103 +95,125 @@ const initialState = {
 	},
 	activeCustomer: {
 		/*
-		AccountOfferings: null
-		Addresses: null
-		Agreement: null
-		CPIBillingAppliedDate: null
-		Contacts: null
-		CustomerId: "5c59d4b9a0cca3180486ff7a"
-		Ebilling: "N"
-		Latitude: 0
-		Longitude: 0
-		SquareFootage: 0
-		ad_cur: 1.5
-		add_pct: 3
-		agreeused: "Jani-King"
-		arstatdate: "01/01/1950"
-		arstatus: "Net 45 Days"
-		atrisk: " "
-		bill_addr: "ONE BILLS DRIVE"
-		bill_addr2: ""
-		bill_city: "ORCHARD PARK"
-		bill_ext: ""
-		bill_fax: ""
-		bill_name: "BUFFALO BILLS, LLC"
-		bill_name2: ""
-		bill_phone: "7163128761"
-		bill_state: "NY"
-		bill_zip: "14127"
-		business: 6.75
-		callbdate: "01/01/1950"
-		canc_date: "01/01/1950"
-		candescr: ""
-		canentdat: "01/01/1950"
-		canreason: " "
-		claimstat: " "
-		class_type: "Sports Stadium"
-		cleanper: "W"
-		cleantimes: 7
-		coll_rep: "SMIHALICS"
-		company_no: "BUF701"
-		cont_1: "SALLY CATALDO"
-		cont_2: "MATT HUNTER"
-		cont_bill: 28671.77
-		cont_tax: "Y"
-		cpiadj: "F"
-		crteinv: "Y"
-		cs_rep: "CULLOA"
-		cscallbdat: "01/01/1950"
-		cus_addr: "ONE BILLS DRIVE"
-		cus_addr2: ""
-		cus_city: "ORCHARD PARK"
-		cus_county: "ERIE"
-		cus_ext: ""
-		cus_fax: ""
-		cus_name: "BUFFALO BILLS TRAINING AND"
-		cus_name2: "OPERATIONS CENTER"
-		cus_phone: "7163128760"
-		cus_state: "NY"
-		cus_zip: "14127"
-		cust_no: "011050"
-		date_offer: "05/20/2012"
-		date_sign: "05/31/2012"
-		date_start: "06/01/2012"
-		dlr_code: "701011"
-		email1: "sally.cataldo@bills.nfl.net"
-		email2: "matt.hunter@bills.nfl.net"
-		exp_date: "05/31/2014"
-		firstdate: "01/01/1950"
-		firstfran: ""
-		flag: "A"
-		fri: "T"
-		inv_msg: "PO63356B"
-		masteracct: "F"
-		misc_info: ""
-		misc_info2: ""
-		mon: "T"
-		natacct: "N"
-		notes: "DNC"
-		ops_mgr: ""
-		parent: 0
-		po_1: "63356B"
-		prntinv: "Y"
-		prntpd: "Y"
-		resume_d: "01/01/1950"
-		royalty: 10
-		sales_tax: 8
-		sat: "T"
-		seconddate: "01/01/1950"
-		secondfran: ""
-		slsmn_no: "4435"
-		sun: "T"
-		sys_cust: 1542
-		tax_exempt: "N"
-		tech_pct: 2.5
-		thu: "T"
-		tue: "T"
-		wed: "T"
-		xregionid: 0
-		xsys_cust: 0
+		"_id": "5c60d0e7a0cca52060539838",
+        "Latitude": 0,
+        "Longitude": 0,
+        "CPIBillingAppliedDate": null,
+        "lastModified": "0001-01-01T00:00:00Z",
+        "overpayment": 0,
+        "AssignedFranchisees": [
+            {
+                "FranchiseeNumber": "701ZZ9",
+                "Status": "Active",
+                "AssignedDate": "09/03/1996",
+                "MonthlyBilling": 1180.08,
+                "CreatedById": 0
+            }
+        ],
+        "AccountOfferings": [
+            {
+                "FranchiseeNumber": "701ZZ9",
+                "Type": "Offer",
+                "Response": "Accepted",
+                "OfferDate": "01/01/1950",
+                "ReplyDeadlineDateTime": null,
+                "ResponseDate": null,
+                "AssignedDate": "09/03/1996",
+                "MonthlyBillingOffered": 1180.08,
+                "CreatedById": 0
+            }
+        ],
+        "pmt_history": null,
+        "sys_cust": 1,
+        "company_no": "BUF701",
+        "dlr_code": "701ZZ9",
+        "cust_no": "ZZ9001",
+        "cus_name": "UNILAND DEVELOPMENT COMPANY",
+        "cus_addr": "100 CORPORATE PARKWAY",
+        "cus_city": "AMHERST",
+        "cus_county": "ERIE",
+        "cus_state": "NY",
+        "cus_zip": "14226",
+        "cus_phone": "7168345000",
+        "bill_name": "UNILAND DEVELOPMENT COMPANY",
+        "bill_addr": "100 CORPORATE PARKWAY",
+        "bill_city": "AMHERST",
+        "bill_state": "NY",
+        "bill_zip": "14226",
+        "bill_name2": "",
+        "bill_addr2": "",
+        "bill_phone": "7168345000",
+        "cus_name2": "",
+        "cus_addr2": "",
+        "class_type": "Gas Station",
+        "royalty": 10,
+        "sales_tax": 7,
+        "cont_1": "BOB KEIL",
+        "cont_2": "",
+        "cont_bill": 1180.08,
+        "date_sign": "09/03/1996",
+        "flag": "C",
+        "misc_info": "",
+        "misc_info2": "",
+        "po_1": "46320",
+        "slsmn_no": "",
+        "add_on": " ",
+        "cont_tax": "Y",
+        "exp_date": "09/03/1997",
+        "cleantimes": 5,
+        "cleanper": "W",
+        "firstfran": "",
+        "firstdate": "01/01/1950",
+        "secondfran": "",
+        "seconddate": "01/01/1950",
+        "crteinv": "N",
+        "prntpd": "Y",
+        "tax_exempt": "N",
+        "canc_date": "03/31/2000",
+        "canreason": "8",
+        "candescr": "DISPUTE W/ LANDLORD",
+        "callbdate": "01/01/1950",
+        "cscallbdat": "01/01/1950",
+        "ops_mgr": "",
+        "cus_fax": "",
+        "bill_fax": "",
+        "cs_rep": "",
+        "date_start": "01/01/1950",
+        "date_offer": "01/01/1950",
+        "mon": "F",
+        "tue": "F",
+        "wed": "F",
+        "thu": "F",
+        "fri": "F",
+        "sat": "F",
+        "sun": "F",
+        "email1": "",
+        "email2": "",
+        "ebill": " ",
+        "prntinv": "Y",
+        "atrisk": " ",
+        "canentdat": "01/01/1950",
+        "coll_rep": "",
+        "inv_msg": "",
+        "masteracct": "F",
+        "parent": 0,
+        "xregionid": 0,
+        "xsys_cust": 0,
+        "cpiadj": "F",
+        "resume_d": "01/01/1950",
+        "natacct": " ",
+        "cus_ext": "",
+        "bill_ext": "",
+        "sqr_ft": 0,
+        "agreeused": "",
+        "arstatus": "",
+        "arstatdate": "01/01/1950",
+        "notes": "",
+        "claimstat": " ",
+        "business": 6.75,
+        "add_pct": 3,
+        "ad_cur": 1,
+        "tech_pct": 0
 		*/
 	},
 };

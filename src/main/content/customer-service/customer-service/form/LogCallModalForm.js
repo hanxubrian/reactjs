@@ -771,7 +771,7 @@ class LogCallModalForm extends React.Component {
 				<Dialog
 					open={this.props.logCallModalForm.open === true}
 					fullWidth={true}
-					maxWidth="md"
+					maxWidth="sm"
 
 					onClose={this.handleClose}
 					scroll="paper"
@@ -793,7 +793,7 @@ class LogCallModalForm extends React.Component {
 
 								<div className={classNames("flex mt-12")} sm={12}>
 
-									<TextField sm={3} select margin="dense" id="InitiatedBy" label="Initiated By" variant="outlined"
+									<TextField sm={3} select margin="dense" id="InitiatedBy" label="Initiated By"
 										InputLabelProps={{ shrink: true }}
 										className={classNames(classes.textField, "pr-6")}
 										value={this.state.InitiatedBy || ''}
@@ -804,7 +804,7 @@ class LogCallModalForm extends React.Component {
 										<MenuItem value={"JK"}>JK</MenuItem>
 									</TextField>
 
-									<TextField sm={3} select margin="dense" id="Type" label="Type" variant="outlined"
+									<TextField sm={3} select margin="dense" id="Type" label="Type"
 										InputLabelProps={{ shrink: true }}
 										className={classNames(classes.textField, "pl-6 pr-6")}
 										value={this.state.Type || ''}
@@ -815,7 +815,7 @@ class LogCallModalForm extends React.Component {
 										<MenuItem value={""}></MenuItem>
 									</TextField>
 
-									<TextField sm={3} select margin="dense" id="Status" label="Status By" variant="outlined"
+									<TextField sm={3} select margin="dense" id="Status" label="Status By"
 										InputLabelProps={{ shrink: true }}
 										className={classNames(classes.textField, "pl-6")}
 										value={this.state.Status || ''}
@@ -874,19 +874,19 @@ class LogCallModalForm extends React.Component {
 
 								<div className="flex">
 									<div className="flex flex-col w-full pr-6">
-										<TextField margin="dense" variant="outlined" fullWidth id="SpokeWith" label="Spoke With"
+										<TextField margin="dense" fullWidth id="SpokeWith" label="Spoke With"
 											InputLabelProps={{ shrink: true }}
 											value={this.state.SpokeWith || ''}
 											onChange={this.handleChange('SpokeWith')}
 										/>
 
-										<TextField margin="dense" variant="outlined" fullWidth id="Action" label="Action"
+										<TextField margin="dense" fullWidth id="Action" label="Action"
 											InputLabelProps={{ shrink: true }}
 											value={this.state.Action || ''}
 											onChange={this.handleChange('Action')}
 										/>
 
-										<TextField margin="dense" variant="outlined" fullWidth id="Area" label="Area"
+										<TextField margin="dense" fullWidth id="Area" label="Area"
 											select
 											InputLabelProps={{ shrink: true }}
 											value={this.state.Area || ''}
@@ -894,14 +894,14 @@ class LogCallModalForm extends React.Component {
 											<MenuItem value={""}></MenuItem>
 										</TextField>
 
-										<TextField margin="dense" variant="outlined" fullWidth id="CallBack" label="Call Back"
+										<TextField margin="dense" fullWidth id="CallBack" label="Call Back"
 											type="date"
 											InputLabelProps={{ shrink: true }}
 											value={this.state.CallBack}
 											onChange={this.handleChange('CallBack')}
 										/>
 
-										<TextField margin="dense" variant="outlined" fullWidth id="FollowUpBy" label="Follow Up By"
+										<TextField margin="dense" fullWidth id="FollowUpBy" label="Follow Up By"
 											select
 											InputLabelProps={{ shrink: true }}
 											value={this.state.FollowUpBy || ''}
@@ -953,8 +953,6 @@ class LogCallModalForm extends React.Component {
 					</DialogContent>
 
 					<DialogActions>
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Phones</Button>
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Home</Button>
 						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Save</Button>
 						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Close</Button>
 
