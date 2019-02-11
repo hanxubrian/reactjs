@@ -609,7 +609,7 @@ class AccountOfferingPage extends Component {
 			this.getFranchiseesFromStatus(nextProps.franchisees);
 	}
 	getFranchiseesFromStatus = (rawData = this.props.franchisees) => {
-		console.log("rawData-getFranchiseesFromStatus", this.props.franchisees);
+		console.log("rawData-getFranchiseesFromStatus", rawData);
 
 		let data = [];
 		let tempData = [];
@@ -622,7 +622,7 @@ class AccountOfferingPage extends Component {
 			return;
 		} else {
 			for (let i = 0; i < rawData.Data.Region.length; i++) {
-				tempData = rawData.Data.Region[i].FranchiseeList;
+				tempData = rawData.Data.Region[i].Franchisees;
 				data = data.concat(tempData);
 			}
 		}
