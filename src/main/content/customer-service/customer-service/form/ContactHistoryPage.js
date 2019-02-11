@@ -54,6 +54,7 @@ import {
 	FilteringState,
 	IntegratedFiltering,
 	SearchState,
+	RowDetailState,
 } from '@devexpress/dx-react-grid';
 
 import { CustomizedDxGridSelectionPanel } from "./../../../common/CustomizedDxGridSelectionPanel";
@@ -78,7 +79,7 @@ import {
 	TableColumnVisibility,
 	TableFixedColumns,
 	VirtualTable,
-
+	TableRowDetail,
 } from '@devexpress/dx-react-grid-material-ui';
 
 import * as PropTypes from 'prop-types';
@@ -622,15 +623,15 @@ class ContactHistoryPage extends Component {
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
-				{
-					title: "Comment",
-					name: "Comment",
-					columnName: "Comment",
-					width: 200,
-					sortingEnabled: true,
-					filteringEnabled: true,
-					groupingEnabled: true,
-				}
+				// {
+				// 	title: "Comment",
+				// 	name: "Comment",
+				// 	columnName: "Comment",
+				// 	width: 200,
+				// 	sortingEnabled: true,
+				// 	filteringEnabled: true,
+				// 	groupingEnabled: true,
+				// }
 			],
 			sorting: [
 				{ columnName: 'CustomerNo', direction: 'asc' }
@@ -663,6 +664,7 @@ class ContactHistoryPage extends Component {
 			searchValue: '',
 			// leftColumns: ['CustomerNo', 'CustomerName'],
 			// rightColumns: ['Amount'],
+			expandedRowIds: [2, 5],
 		};
 
 		this.fetchData = this.fetchData.bind(this);
@@ -675,6 +677,7 @@ class ContactHistoryPage extends Component {
 		// this.changePageSize = pageSize => this.setState({ pageSize });
 		this.changeSearchValue = value => this.setState({ searchValue: value });
 		this.changeGrouping = grouping => this.setState({ grouping });
+		this.changeExpandedDetails = expandedRowIds => this.setState({ expandedRowIds });
 		console.log("constructor");
 
 		console.log("constructor", this.props.customerForm)
@@ -893,7 +896,11 @@ class ContactHistoryPage extends Component {
 		rawData.Data.forEach(x => {
 			x.DateTime = `${x.call_date} ${x.call_time}`
 		})
-		this.setState({ rows: rawData.Data })
+		const rows = rawData.Data
+		this.setState({
+			rows,
+			expandedRowIds: rows.map((x, index) => index)
+		})
 	};
 
 
@@ -935,7 +942,15 @@ class ContactHistoryPage extends Component {
 
 		);
 	};
-
+	RowDetail = ({ row }) => {
+		return (
+			<div className="flex flex-col">
+				<div className="flex justify-start">
+					{row.comment}
+				</div>
+			</div>
+		)
+	}
 	render() {
 		const {
 			classes,
@@ -970,6 +985,7 @@ class ContactHistoryPage extends Component {
 			grouping,
 			// leftColumns,
 			// rightColumns,
+			expandedRowIds,
 		} = this.state;
 
 		console.log("-------render-------", locationFilterValue, pins, pins2)
@@ -983,6 +999,12 @@ class ContactHistoryPage extends Component {
 						columns={tableColumnExtensions}
 					>
 						<DragDropProvider />
+
+						<RowDetailState
+							expandedRowIds={expandedRowIds}
+							onExpandedRowIdsChange={this.changeExpandedDetails}
+						/>
+
 						<PagingState
 							defaultCurrentPage={0}
 							// currentPage={currentPage}
@@ -1075,7 +1097,9 @@ class ContactHistoryPage extends Component {
 						{/* <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} /> */}
 
 						<TableHeaderRow showSortingControls />
-
+						<TableRowDetail
+							contentComponent={this.RowDetail}
+						/>
 						{/* <TableEditRow /> */}
 						{/* <TableEditColumn
 										// showAddCommand
