@@ -139,15 +139,14 @@ class SummaryTransactons extends Component {
             return (<div/>);
 
         const {SUMMARY_PAGE }  = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0];
-        // const aBillings = [SUMMARY_PAGE[0]['ACTUAL BILLING'][0],SUMMARY_PAGE[0].ADTL_BILL_FRAN[0],
-        //     SUMMARY_PAGE[0].CLIENT_SUPPLIES[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE[0]];
+        const aBillings = [SUMMARY_PAGE[0]['ACTUAL BILLING'][0],SUMMARY_PAGE[0].ADTL_BILL_FRAN[0],
+            SUMMARY_PAGE[0].CLIENT_SUPPLIES[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE[0]];
         // const aBillings1 =[SUMMARY_PAGE[0].SUBTOTAL[0], SUMMARY_PAGE[0].CLIENT_SALES_TAX[0]];
 
-        // const aBillings2 =[SUMMARY_PAGE[0].TOTAL_MON_REV[0]];
+        const aBillings2 =[SUMMARY_PAGE[0].TOTAL_MON_REV[0]];
         // const aBillings3 = [SUMMARY_PAGE[0].CLIENT_SALES_TAX_BOT[0]];
         // const aDeductions0= [SUMMARY_PAGE[0].ROYALTY[0], SUMMARY_PAGE[0].ACCT_FEE[0],SUMMARY_PAGE[0].TECH_FEE[0],SUMMARY_PAGE[0].ADDTL_BILL_OFFICE_COMM[0],SUMMARY_PAGE[0].FRAN_NOTE_PYMT[0]];
 
-        let aBillings2 = [];
         let aBillings3 = [];
         let aDeductions0 = [];
         let summaryRoyalty = [];
@@ -212,7 +211,7 @@ class SummaryTransactons extends Component {
                     </tbody>
                 </table>
 
-                <table style={{width:'90%'}}>
+                <table style={{width:'65%'}}>
                     <tbody>
 
                     { aBillings2.map((b, index)=>{
@@ -232,7 +231,7 @@ class SummaryTransactons extends Component {
                     </tbody>
                 </table>
 
-                <table style={{width:'63%'}}>
+                <table style={{width:'65%'}}>
                     <tbody>
 
                     { aBillings3.map((b, index)=>{

@@ -192,7 +192,7 @@ class SupplyTransactons extends Component {
             let type = this.props.transactionTypeList.filter(t=>t._id===d.TYPE);
 
             d.DESCR = FuseUtils.capital_letter(d.DESCR);
-            d.TRX_AMT = parseFloat(d.TRX_TOT)-parseFloat(d.TRX_TAX);
+            // d.TRX_AMT = parseFloat(d.TRX_TOT)-parseFloat(d.TRX_TAX);
             d.TRX_TAX = d.TRX_RESELL ? 0 : parseFloat(d.TRX_TAX);
             d.TRX_TOT = parseFloat(d.TRX_TOT);
 
