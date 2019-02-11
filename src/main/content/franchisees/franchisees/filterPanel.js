@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {OutlinedInput, Paper, Select, TextField, withStyles} from '@material-ui/core';
+import {Card, CardHeader, CardContent, TextField, withStyles} from '@material-ui/core';
 import keycode from 'keycode';
 
 //Material UI core
@@ -69,6 +69,28 @@ const styles = theme => ({
         padding: '10px 16px',
         width: 150
     },
+    card: {
+        width: '90%',
+        margin: 'auto'
+    },
+    cardHeader: {
+		backgroundColor: theme.palette.secondary.main,
+		padding: '8px 24px',
+		'& span': {
+			color: 'white',
+			fontSize: 16,
+		}
+	},
+	cardContent: {
+		paddingTop: 12,
+        paddingBottom: '12px!important',
+        paddingRight: 0,
+        paddingLeft: 0,
+		'& h6': {
+			lineHeight: 1.5,
+			fontSize: 14
+		}
+	},
 });
 
 
@@ -420,180 +442,205 @@ class FilterPanel extends Component {
                         {franchiseesForm && franchiseesForm.props.open
                         ?(
                            <div>
-                               <GridContainer style={{ alignItems: 'center', width: 300 }} className={classNames(classes.formControl)}>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="lf_name"
-                                                label="Name"
-                                                value={this.state.Name}
-                                                className={classes.textField}
-                                                onChange={this.handleFormChange('Name')}
-                                                margin="dense"
-                                                variant="outlined"
-                                                inputProps={{
-                                                    maxLength:60
-                                                }}
-                                                required
-                                                fullWidth
-                                            />
+                               <GridContainer style={{ alignItems: 'center', width: 500 }} className={classNames(classes.formControl)}>
+                                    <Card className={classes.card}>
+                                        <CardHeader title={"Franchisee Information"} className={classNames(classes.cardHeader, "flex-1")} />
+                                        <CardContent className={classNames(classes.cardContent)}>
+                                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                                <TextField
+                                                    id="lf_name"
+                                                    label="Name"
+                                                    value={this.state.Name}
+                                                    className={classes.textField}
+                                                    onChange={this.handleFormChange('Name')}
+                                                    margin="dense"
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                    inputProps={{
+                                                        maxLength:60
+                                                    }}
+                                                    required
+                                                    fullWidth
+                                                />
 
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                            </GridItem>
+                                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                                <TextField
+                                                    id="lf_address1"
+                                                    label="Address"
+                                                    className={classes.textField}
+                                                    value = {this.state.AddressLine1}
+                                                    onChange={this.handleFormChange('AddressLine1')}
+                                                    margin="dense"
+                                                    inputProps={{
+                                                        maxLength:100
+                                                    }}
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                    fullWidth
+                                                    required
+                                                />
+                                            </GridItem>
+                                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                                <TextField
+                                                    id="lf_address2"
+                                                    label="Address2"
+                                                    className={classes.textField}
+                                                    value = {this.state.AddressLine2}
+                                                    onChange={this.handleFormChange('AddressLine2')}
+                                                    inputProps={{
+                                                        maxLength:100
+                                                    }}
+                                                    margin="dense"
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                    fullWidth
+                                                />
+                                            </GridItem>
+                                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                                <TextField
+                                                    id="lf_city"
+                                                    label="City"
+                                                    className={classes.textField}
+                                                    value = {this.state.City}
+                                                    onChange={this.handleFormChange('City')}
+                                                    margin="dense"
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                    inputProps={{
+                                                        maxLength:100
+                                                    }}
+                                                    fullWidth
+                                                    required
+                                                />
+                                            </GridItem>
+                                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                                <TextField
+                                                    id="lf_state"
+                                                    label="State"
+                                                    select
+                                                    className={classes.textField}
+                                                    value={this.state.State}
+                                                    onChange={this.handleFormChange('State')}
+                                                    margin="dense"
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                    required
+                                                    fullWidth
+                                                >
+                                                    {this.props.stateList.map(option => (
+                                                        <MenuItem key={option.Value} value={option.Value}>
+                                                            {option.Text}
+                                                        </MenuItem>
+                                                    ))}
+                                                </TextField>
+                                            </GridItem>
+                                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
-                                                id="lf_address1"
-                                                label="Address"
+                                                id="lf_county"
+                                                label="County"
                                                 className={classes.textField}
-                                                value = {this.state.AddressLine1}
-                                                onChange={this.handleFormChange('AddressLine1')}
+                                                value = {this.state.County}
+                                                onChange={this.handleFormChange('County')}
                                                 margin="dense"
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
                                                 inputProps={{
                                                     maxLength:100
                                                 }}
-                                                variant="outlined"
                                                 fullWidth
                                                 required
                                             />
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="lf_address2"
-                                                label="Address2"
-                                                className={classes.textField}
-                                                value = {this.state.AddressLine2}
-                                                onChange={this.handleFormChange('AddressLine2')}
-                                                inputProps={{
-                                                    maxLength:100
-                                                }}
-                                                margin="dense"
-                                                variant="outlined"
-                                                fullWidth
-                                            />
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="lf_city"
-                                                label="City"
-                                                className={classes.textField}
-                                                value = {this.state.City}
-                                                onChange={this.handleFormChange('City')}
-                                                margin="dense"
-                                                variant="outlined"
-                                                inputProps={{
-                                                    maxLength:100
-                                                }}
-                                                fullWidth
-                                                required
-                                            />
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="lf_state"
-                                                label="State"
-                                                select
-                                                className={classes.textField}
-                                                value={this.state.State}
-                                                onChange={this.handleFormChange('State')}
-                                                margin="dense"
-                                                variant="outlined"
-                                                required
-                                                fullWidth
-                                            >
-                                                {this.props.stateList.map(option => (
-                                                    <MenuItem key={option.Value} value={option.Value}>
-                                                        {option.Text}
-                                                    </MenuItem>
-                                                ))}
-                                            </TextField>
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                           <TextField
-                                               id="lf_county"
-                                               label="County"
-                                               className={classes.textField}
-                                               value = {this.state.County}
-                                               onChange={this.handleFormChange('County')}
-                                               margin="dense"
-                                               variant="outlined"
-                                               inputProps={{
-                                                   maxLength:100
-                                               }}
-                                               fullWidth
-                                               required
-                                           />
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="lf_zip"
-                                                label="Zip"
-                                                className={classes.textField}
-                                                value = {this.state.Zip}
-                                                onChange={this.handleFormChange('Zip')}
-                                                inputProps={{
-                                                    maxLength:20
-                                                }}
-                                                margin="dense"
-                                                variant="outlined"
-                                                fullWidth
-                                                required
-                                            />
-                                        </GridItem>
+                                            </GridItem>
+                                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                                <TextField
+                                                    id="lf_zip"
+                                                    label="Zip"
+                                                    className={classes.textField}
+                                                    value = {this.state.Zip}
+                                                    onChange={this.handleFormChange('Zip')}
+                                                    inputProps={{
+                                                        maxLength:20
+                                                    }}
+                                                    margin="dense"
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                    fullWidth
+                                                    required
+                                                />
+                                            </GridItem>
 
+                                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                                <TextField
+                                                    id="lf_phone1"
+                                                    label="Phone"
+                                                    className={classes.textField}
+                                                    margin="dense"
+                                                    inputProps={{
+                                                        maxLength:40
+                                                    }}
+                                                    InputProps={{
+                                                        inputComponent: TextMaskCustom,
+                                                        value:this.state.Phone1,
+                                                        onChange: this.handleFormChange('Phone1')
+                                                    }}
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                    fullWidth
+                                                    required
+                                                />
+                                                {/*<NumberFormat value={this.state.Phone1} displayType={'text'}  format="+1 (###) ###-####" mask="_" renderText={value => <div>{value}</div>} />*/}
+                                            </GridItem>
                                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                             <TextField
-                                                id="lf_phone1"
-                                                label="Phone"
+                                                id="lf_phone2"
+                                                label="Cell"
                                                 className={classes.textField}
+                                                onChange={this.handleFormChange('Phone2')}
                                                 margin="dense"
                                                 inputProps={{
                                                     maxLength:40
                                                 }}
                                                 InputProps={{
                                                     inputComponent: TextMaskCustom,
-                                                    value:this.state.Phone1,
-                                                    onChange: this.handleFormChange('Phone1')
+                                                    value:this.state.Phone2,
+                                                    onChange: this.handleFormChange('Phone2')
                                                 }}
-                                                variant="outlined"
-                                                fullWidth
-                                                required
-                                            />
-                                            {/*<NumberFormat value={this.state.Phone1} displayType={'text'}  format="+1 (###) ###-####" mask="_" renderText={value => <div>{value}</div>} />*/}
-                                        </GridItem>
-                                       <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                           <TextField
-                                               id="lf_phone2"
-                                               label="Cell"
-                                               className={classes.textField}
-                                               onChange={this.handleFormChange('Phone2')}
-                                               margin="dense"
-                                               inputProps={{
-                                                   maxLength:40
-                                               }}
-                                               InputProps={{
-                                                   inputComponent: TextMaskCustom,
-                                                   value:this.state.Phone2,
-                                                   onChange: this.handleFormChange('Phone2')
-                                               }}
-                                               variant="outlined"
-                                               fullWidth
-                                               required
-                                           />
-                                       </GridItem>
-                                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                                            <TextField
-                                                id="lf_email"
-                                                label="E-mail"
-                                                className={classes.textField}
-                                                value={this.state.Email}
-                                                onChange={this.handleFormChange('Email')}
-                                                inputProps={{
-                                                    maxLength:100
+                                                InputLabelProps={{
+                                                    shrink: true,
                                                 }}
-                                                margin="dense"
-                                                variant="outlined"
                                                 fullWidth
                                                 required
                                             />
                                         </GridItem>
+                                            <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                                                <TextField
+                                                    id="lf_email"
+                                                    label="E-mail"
+                                                    className={classes.textField}
+                                                    value={this.state.Email}
+                                                    onChange={this.handleFormChange('Email')}
+                                                    inputProps={{
+                                                        maxLength:100
+                                                    }}
+                                                    margin="dense"
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                    fullWidth
+                                                    required
+                                                />
+                                            </GridItem>
+                                        </CardContent>
+                                    </Card>
                                </GridContainer>
                            </div>
                         ):(
