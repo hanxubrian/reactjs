@@ -771,7 +771,7 @@ class ChatModalForm extends React.Component {
 				<Dialog
 					open={this.props.contactForms.chatModalForm.open === true}
 					fullWidth={true}
-					maxWidth="sm"
+					maxWidth="md"
 
 					onClose={this.handleClose}
 					scroll="paper"

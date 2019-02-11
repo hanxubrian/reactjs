@@ -771,7 +771,7 @@ class SmsModalForm extends React.Component {
 				<Dialog
 					open={this.props.contactForms.smsModalForm.open === true}
 					fullWidth={true}
-					maxWidth="sm"
+					maxWidth="md"
 
 					onClose={this.handleClose}
 					scroll="paper"

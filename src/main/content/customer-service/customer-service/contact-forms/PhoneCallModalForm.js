@@ -771,7 +771,7 @@ class PhoneCallModalForm extends React.Component {
 				<Dialog
 					open={this.props.contactForms.phoneCallModalForm.open === true}
 					fullWidth={true}
-					maxWidth="sm"
+					maxWidth="md"
 
 					onClose={this.handleClose}
 					scroll="paper"

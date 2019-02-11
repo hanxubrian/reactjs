@@ -771,7 +771,7 @@ class EmailModalForm extends React.Component {
 				<Dialog
 					open={this.props.contactForms.emailModalForm.open === true}
 					fullWidth={true}
-					maxWidth="sm"
+					maxWidth="md"
 
 					onClose={this.handleClose}
 					scroll="paper"
