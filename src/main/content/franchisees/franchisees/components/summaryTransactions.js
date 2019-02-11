@@ -25,9 +25,9 @@ import NumberFormat from 'react-number-format';
 
 const styles = theme => ({
     layoutTable:{
-      '& h2':{
-          fontSize: 18
-      }
+        '& h2':{
+            fontSize: 18
+        }
     },
     tableTheadRow: {
         backgroundColor: theme.palette.primary.main,
@@ -361,8 +361,7 @@ class SummaryTransactons extends Component {
                                             </Typography>
                                         </td>
                                         <td className="text-right">
-                                            {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
-                                            ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                            { SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( CurrencyFormatter({value: SUMMARY_PAGE[0][b][0].AMOUNT})) }
                                         </td>
                                     </tr>
                                 )
@@ -384,8 +383,7 @@ class SummaryTransactons extends Component {
                                             </Typography>
                                         </td>
                                         <td className="text-right">
-                                            {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
-                                            ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                            { SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( CurrencyFormatter({value: SUMMARY_PAGE[0][b][0].AMOUNT})) }
                                         </td>
                                     </tr>
                                 )
@@ -407,8 +405,7 @@ class SummaryTransactons extends Component {
                                             </Typography>
                                         </td>
                                         <td className="text-right">
-                                            {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
-                                            ${ SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
+                                            { SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( CurrencyFormatter({value: SUMMARY_PAGE[0][b][0].AMOUNT}))}
                                         </td>
                                     </tr>
                                 )
@@ -440,7 +437,6 @@ class SummaryTransactons extends Component {
                                             </Typography>
                                         </td>
                                         <td className="text-right">
-                                            {/*${parseFloat(SUMMARY_PAGE[0][b]).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}*/}
                                             { SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && SUMMARY_PAGE[0][b][0].AMOUNT !== "0" && ( '$' + parseFloat(SUMMARY_PAGE[0][b][0].AMOUNT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')) }
                                         </td>
                                     </tr>
