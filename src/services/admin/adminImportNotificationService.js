@@ -16,7 +16,7 @@ class adminImportNotificationService {
     getImportResultFromRegion = (UserId,RegionId) => {
         const Data = {
             'overWrite'     : true,
-            'regionIds'     : [3],
+            'regionIds'     : [RegionId],
             'userId'        : UserId,
         };
         return new Promise((resolve, reject) => {
