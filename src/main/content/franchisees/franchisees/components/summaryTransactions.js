@@ -2,27 +2,16 @@ import React, {Component} from 'react';
 
 //DevExtreme React-Grid
 import {
-    PagingState,
-    IntegratedPaging,
     DataTypeProvider,
-    SummaryState,
-    IntegratedSummary,
 } from '@devexpress/dx-react-grid';
 
 import {
-    Grid,
     Table,
-    VirtualTable,
-    TableHeaderRow,
-    TableSummaryRow
 } from '@devexpress/dx-react-grid-material-ui';
 
 
 import {Typography, withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
-
-//Theme Utilities
-import FuseUtils from '@fuse/FuseUtils';
 
 // for store
 import {bindActionCreators} from "redux";
@@ -35,6 +24,11 @@ import classNames from 'classnames';
 import NumberFormat from 'react-number-format';
 
 const styles = theme => ({
+    layoutTable:{
+      '& h2':{
+          fontSize: 18
+      }
+    },
     tableTheadRow: {
         backgroundColor: theme.palette.primary.main,
         '& tr': {
