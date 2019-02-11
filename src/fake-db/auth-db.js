@@ -44,10 +44,10 @@ let authDB = {
                     },
                     customScrollbars: true,
                     theme           : {
-                        main   : 'defaultDark',
-                        navbar : 'defaultDark',
-                        toolbar: 'defaultDark',
-                        footer : 'defaultDark'
+                        main   : 'mainThemeLight',
+                        navbar : 'mainThemeLight',
+                        toolbar: 'mainThemeLight',
+                        footer : 'mainThemeLight'
                     }
                 },
                 shortcuts    : [

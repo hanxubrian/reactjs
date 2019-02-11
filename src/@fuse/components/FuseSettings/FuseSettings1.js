@@ -248,7 +248,7 @@ class FuseSettings extends Component {
                 </div>
 
 
-                <FormControl component="fieldset" className={classes.formControl}>
+                {/* <FormControl component="fieldset" className={classes.formControl}>
                     <FormLabel component="legend" className="text-14">Custom Scrollbars</FormLabel>
                     <Switch
                         checked={settings.customScrollbars}
@@ -256,7 +256,7 @@ class FuseSettings extends Component {
                         aria-label="Custom Scrollbars"
                         name="customScrollbars"
                     />
-                </FormControl>
+                </FormControl> */}
             </div>
         );
     }

@@ -29,10 +29,10 @@ const fuseSettingsConfig = {
     },
     customScrollbars: true,
     theme           : {
-        main   : 'defaultDark',
-        navbar : 'mainThemeDark',
-        toolbar: 'defaultDark',
-        footer : 'mainThemeDark'
+        main   : 'mainThemeLight',
+        navbar : 'mainThemeLight',
+        toolbar: 'mainThemeLight',
+        footer : 'mainThemeLight'
     }
 };
 

@@ -33,10 +33,10 @@ const defaultSettings = {
     },
     customScrollbars: true,
     theme           : {
-        main   : 'default',
-        navbar : 'mainThemeDark',
+        main   : 'mainThemeLight',
+        navbar : 'mainThemeLight',
         toolbar: 'mainThemeLight',
-        footer : 'mainThemeDark'
+        footer : 'mainThemeLight'
     }
 };
 
