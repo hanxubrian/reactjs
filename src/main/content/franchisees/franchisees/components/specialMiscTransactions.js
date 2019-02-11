@@ -74,6 +74,7 @@ const styles = theme => ({
     tableFootRow: {
         height: 42,
         '& td': {
+            paddingRight: 0,
             borderBottom: `1px solid ${theme.palette.text.primary}`,
         },
         '& td:nth-child(2)': {
