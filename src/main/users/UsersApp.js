@@ -272,6 +272,12 @@ class UsersApp extends Component {
         })
     }
 
+    save =  () => async (ev)=>{
+        //console.log("Saved...")
+       await this.props.createUser(this.props.insertPayload);
+       await this.setState({"openUsersFormStatus": false});
+       await this.props.openUsersForm(false);
+    }
 
     render() {
 
@@ -318,7 +324,7 @@ class UsersApp extends Component {
                                             { openUsersFormStatus && (
                                                 <div>
                                                     <Button variant="contained" color="primary"
-                                                            className={classNames(classes.button, classes.btntop) } onClick={this.toggleForm(false)}>
+                                                            className={classNames(classes.button, classes.btntop) } onClick={this.save()}>
                                                         Save
                                                         <Icon className={classes.rightIcon}>save</Icon>
                                                     </Button>
@@ -367,7 +373,8 @@ class UsersApp extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        openUsersForm       : Actions.openUsersForm
+        openUsersForm       : Actions.openUsersForm,
+        createUser: Actions.createUser
     }, dispatch);
 }
 
@@ -376,7 +383,8 @@ function mapStateToProps({ usersApp,fuse})
     return {
         openUsersFormStatus  : usersApp.users.openUsersFormStatus,
         filterState: usersApp.users.fpStatus,
-        nav: fuse.navigation
+        nav: fuse.navigation,
+        insertPayload: usersApp.users.payload
     }
 }
 
