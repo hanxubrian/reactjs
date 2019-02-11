@@ -139,7 +139,7 @@ class FuseShortcuts extends Component {
                     ))}
                     <Link to={"/notification/system"} className={classes.Item}>
                         <Tooltip title={"Notifications"} placement="bottom">
-                            <IconButton className="w-40 h-40 p-0">
+                            <IconButton className="w-40 h-40 p-0 pt-3">
                                         <Icon>chat</Icon>
                             </IconButton>
                         </Tooltip>
