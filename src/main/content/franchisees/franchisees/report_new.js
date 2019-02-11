@@ -43,6 +43,9 @@ const styles = theme => ({
         '& .report-header td:nth-child(2), & .report-header td:nth-child(3)':{
             verticalAlign: 'top',
             paddingTop: 20
+        },
+        '& .report-header td:nth-child(3)':{
+            paddingLeft: 30
         }
 
     },
