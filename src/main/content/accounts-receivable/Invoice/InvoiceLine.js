@@ -521,14 +521,14 @@ class InvoiceLineTable extends React.Component {
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.state.data!==null && prevState.data!==this.state.data) {
             let data = this.state.data;
-            if(!this.props.bSkip) {
+            if(!this.props.bSkip && this.props.invoiceForm.type==='edit') {
                 if(data.length>0 && this.props.invoiceForm.data.line.length>0){
                     data.map((line, index)=>{
                         line.vendorId=this.props.invoiceForm.data.line[index].vendorId;
                     })
                 }
-                this.props.updateInvoiceLine(data);
             }
+            this.props.updateInvoiceLine(data);
         }
 
         if(JSON.stringify(this.state.customerTaxAmountLine)!== JSON.stringify(prevState.customerTaxAmountLine)){
