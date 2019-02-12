@@ -819,12 +819,12 @@ class InvoiceForm extends Component {
 
                 return false;
             }
-            if(!bLineFranchAmountEqual) {
-                this.setState({snackMessage: 'Distribution Amount needs to be Equal to the Invoice Line Amount.'});
-                this.setState({openSnack: true});
-
-                return false;
-            }
+            // if(!bLineFranchAmountEqual) {
+            //     this.setState({snackMessage: 'Distribution Amount needs to be Equal to the Invoice Line Amount.'});
+            //     this.setState({openSnack: true});
+            //
+            //     return false;
+            // }
         }
 
         return true;
