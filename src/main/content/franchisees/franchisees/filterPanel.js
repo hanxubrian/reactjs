@@ -92,6 +92,9 @@ const styles = theme => ({
     },
     textField: {
         fontSize: '1.3rem'
+    },
+    filterInput:{
+        fontSize: '1.3rem'
     }
 });
 
@@ -454,6 +457,7 @@ class FilterPanel extends Component {
                                                     label="Name"
                                                     value={this.state.Name}
                                                     className={classes.textField}
+                                                    style={{fontSize:"1.3rem"}}
                                                     onChange={this.handleFormChange('Name')}
                                                     margin="dense"
                                                     InputLabelProps={{

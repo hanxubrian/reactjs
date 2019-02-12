@@ -801,24 +801,12 @@ class Franchisees extends Component {
                             <div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
                                 <div className="flex flex-row flex-1 justify-between">
                                     <div className="flex flex-shrink items-center">
-                                        {createFranchisees.type === "new" && (
-                                            <div className="flex items-center">
-                                                <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                    <Toolbar className="pl-12 pr-0">
-                                                        <img className="mr-12" alt="icon-white" src="assets/images/invoices/invoice-icon-white.png" style={{width: 32, height: 32}}/>
-                                                    </Toolbar>
-                                                </FuseAnimate>
-                                                
-                                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                                        <Typography variant="h6" className="hidden sm:flex">Franchisees | New Franchisees</Typography>
-                                                    </FuseAnimate>
-                                            </div>
-                                        )}
+                                        
                                     </div>
                                     <div className="flex flex-shrink items-center">
-                                        {/*<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleFilterPanelFranchisees()}>*/}
-                                            {/*<Icon>person_outline</Icon>*/}
-                                        {/*</IconButton>*/}
+                                        {/* <IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleFilterPanelFranchisees()}>
+                                            <Icon>close</Icon>
+                                        </IconButton> */}
 
                                         <IconButton
                                             // className={classNames(classes.button, classes.validationMenu)}
@@ -1176,16 +1164,23 @@ class Franchisees extends Component {
                 }
                 leftSidebarHeader={
                     <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", {'filteropen': filterStateFranchisees})}>
-                        {createFranchisees.props.open && createFranchisees.type === "edit" ? (
+                        {createFranchisees.props.open ? (
                             <div className = "flex items-center" style = {{paddingRight:20}}>
                                 <FuseAnimate animation="transition.expandIn" delay={300}>
                                     <Toolbar className="pl-12 pr-0">
                                         <img className="mr-12" alt="icon-white" src="assets/images/invoices/invoice-icon-white.png" style={{width: 32, height: 32}}/>
                                     </Toolbar>
                                 </FuseAnimate>
-                                <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                    <Typography variant="h6" className="hidden sm:flex">Franchisees | Edit Franchisees</Typography>
-                                </FuseAnimate>
+                                {createFranchisees.type === "edit" && (
+                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                        <Typography variant="h6" className="hidden sm:flex">Franchisees | Edit Franchisees</Typography>
+                                    </FuseAnimate>
+                                )}  
+                                {createFranchisees.type === "new" && (
+                                    <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                                        <Typography variant="h6" className="hidden sm:flex">Franchisees | New Franchisees</Typography>
+                                    </FuseAnimate>
+                                )}                                 
                             </div>
                         ) : (
                             <h4 className={classes.elementCenter}>Filter Panel</h4>

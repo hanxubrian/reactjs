@@ -79,7 +79,7 @@ class franchiseesService {
      */
     getFranchiseeFormPlanType = (RegionId) => {
         return new Promise((resolve, reject) => {
-            axios_instance.get(`${BASE_API_URL}/v1/lists/GetFranchiseePlans?RegionId=${RegionId}`)
+            axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/GetFranchiseePlanList?RegionId=${RegionId}`)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);
