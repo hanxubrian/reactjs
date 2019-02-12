@@ -524,7 +524,7 @@ const MapWithAMarkerClusterer2 = compose(
 );
 
 
-class AccountOfferingPage extends Component {
+class FranchieesListPage extends Component {
 
 
 	constructor(props) {
@@ -1729,4 +1729,4 @@ function mapStateToProps({ customers, franchisees, auth }) {
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(AccountOfferingPage)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(FranchieesListPage)));

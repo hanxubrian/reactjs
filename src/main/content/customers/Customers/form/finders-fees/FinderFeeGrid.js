@@ -57,6 +57,8 @@ import {
 	SearchState,
 } from '@devexpress/dx-react-grid';
 
+import { CustomizedDxGridSelectionPanel } from "../../../../common/CustomizedDxGridSelectionPanel";
+
 import {
 	Grid,
 	Table,
@@ -95,11 +97,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 
 import Spinner from 'react-spinner-material';
 import { getOverlappingDaysInIntervals } from 'date-fns';
-import CustomerSearchBar from './../CustomerSearchBar';
-import { getCustomers } from '../../../../../store/actions';
 
-import FinderFeePanelModalDialog from './FinderFeePanelModalDialog';
-import FinderFeeGrid from './FinderFeeGrid';
 
 // function Marker({ text }) {
 // 	return (
@@ -524,7 +522,7 @@ const MapWithAMarkerClusterer2 = compose(
 	</GoogleMap>
 );
 
-class FinderFeePanel extends Component {
+class FinderFeeGrid extends Component {
 
 	constructor(props) {
 		super(props);
@@ -560,8 +558,8 @@ class FinderFeePanel extends Component {
 			tableColumnExtensions: [
 				{
 					title: "FF No.",
-					name: "FFNo",
-					columnName: "FFNo",
+					name: "ff_seq",
+					columnName: "ff_seq",
 					width: 80,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -569,8 +567,8 @@ class FinderFeePanel extends Component {
 				},
 				{
 					title: "Payment Amount",
-					name: "PaymentAmount",
-					columnName: "PaymentAmount",
+					name: "ff_pyamt",
+					columnName: "ff_pyamt",
 					width: 150,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
@@ -580,8 +578,8 @@ class FinderFeePanel extends Component {
 				},
 				{
 					title: "Payment No.",
-					name: "PaymentNo",
-					columnName: "PaymentNo",
+					name: "ff_pybill",
+					columnName: "ff_pybill",
 					width: 150,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
@@ -590,8 +588,8 @@ class FinderFeePanel extends Component {
 				},
 				{
 					title: "Total #",
-					name: "TotalNo",
-					columnName: "TotalNo",
+					name: "ff_pytotl",
+					columnName: "ff_pytotl",
 					width: 120,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
@@ -600,8 +598,8 @@ class FinderFeePanel extends Component {
 				},
 				{
 					title: "Total FF",
-					name: "TotalFF",
-					columnName: 'TotalFF',
+					name: "ff_tot",
+					columnName: 'ff_tot',
 					width: 120,
 					align: 'center',
 					sortingEnabled: true,
@@ -610,8 +608,8 @@ class FinderFeePanel extends Component {
 				},
 				{
 					title: "Balance",
-					name: "Balance",
-					columnName: "Balance",
+					name: "ff_balance",
+					columnName: "ff_balance",
 					width: 130,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -619,8 +617,8 @@ class FinderFeePanel extends Component {
 				},
 				{
 					title: "Hold",
-					name: "Hold",
-					columnName: "Hold",
+					name: "ff_hold",
+					columnName: "ff_hold",
 					width: 150,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -809,6 +807,10 @@ class FinderFeePanel extends Component {
 		if (nextProps.searchText !== this.props.searchText) {
 			this.search(nextProps.searchText);
 		}
+
+		if (!_.isEqual(nextProps.customerForm, this.props.customerForm)) {
+			this.initRowsFromRawJson(nextProps.customerForm)
+		}
 	} // deprecate 
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
@@ -945,42 +947,13 @@ class FinderFeePanel extends Component {
 
 
 
-	initRowsFromRawJson = (rawData = this.props.customers, locationFilterValue = this.props.locationFilterValue) => {
-		console.log("initRowsFromRawJson", "CustomerListContent.js", this.props.regionId, this.props.statusId, rawData)
-		let all_temp = [];
-		if (rawData === null || rawData === undefined || rawData.Data === undefined) return;
-
-		let regions = rawData.Data.Regions.filter(x => {
-			return this.props.regionId === 0 || x.Id === this.props.regionId;
-		});
-
-
-		console.log("regions", regions)
-
-		regions.forEach(x => {
-			all_temp = [...all_temp, ...x.CustomerList];
-		});
-
-		let _pins_temp = [];
-		regions.forEach(x => {
-			_pins_temp = [..._pins_temp, ...x.CustomerList.map(customer => {
-				return {
-					lat: customer.Latitude,
-					lng: customer.Longitude,
-					text: customer.CustomerName
-				}
-			})];
-
-		})
-
-		this.filterPins(_pins_temp, locationFilterValue)
+	initRowsFromRawJson = (rawData = this.props.customerForm, ) => {
+		console.log("initRowsFromRawJson", "finderfeegrid.js", rawData)
+		if (!rawData || !rawData.findersFees || !rawData.findersFees.Data) return;
 
 		this.setState({
-			rows: all_temp,
-			data: all_temp,
-			// pins: _pins_temp,
+			rows: rawData.findersFees.Data,
 		});
-
 	};
 
 	filterPins(pins, locationFilterValue) {
@@ -1153,7 +1126,7 @@ class FinderFeePanel extends Component {
 			prevent = true;
 			// alert(JSON.stringify(tableRow.row));
 			console.log(restProps);
-			this.props.openEditCustomerForm(this.props.regionId, tableRow.row.CustomerId);
+			// this.props.openEditCustomerForm(this.props.regionId, tableRow.row.CustomerId);
 		}
 		return (
 			<Table.Row
@@ -1165,11 +1138,6 @@ class FinderFeePanel extends Component {
 			/>
 		);
 	};
-	onClickAddFindersFee = () => {
-		this.props.setCustomerFormFindersFeesDialogPayload({
-			open: true,
-		})
-	}
 
 	render() {
 		const {
@@ -1207,26 +1175,187 @@ class FinderFeePanel extends Component {
 			// rightColumns,
 		} = this.state;
 
-		console.log("-------render-------", locationFilterValue, pins, pins2)
+		console.log("-------finder fee grid render-------", locationFilterValue, rows, pins, pins2)
 
 		return (
 			<Fragment>
-				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
-					<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-						<Button
-							variant="contained"
-							color="primary"
-							className={classNames(classes.button, "pr-24 pl-24 mb-6")}
-							onClick={this.onClickAddFindersFee}
-						> Add Finders Fee... </Button>
-					</div>
+								<Grid
+									// rootComponent={GridRootComponent}
+									rows={rows}
+									columns={tableColumnExtensions}
+								>
+									<DragDropProvider />
+									<PagingState
+										defaultCurrentPage={0}
+										// currentPage={currentPage}
+										// onCurrentPageChange={this.changeCurrentPage}
+										// pageSize={pageSize}
+										// onPageSizeChange={this.changePageSize}
+										defaultPageSize={20}
+									/>
 
-					<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
-						<FinderFeeGrid />
-					</div>
+									<PagingPanel pageSizes={pageSizes} />
 
-					<FinderFeePanelModalDialog />
-				</div>
+									<SelectionState
+										selection={selection}
+										onSelectionChange={this.changeSelection}
+									/>
+									{/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
+									<IntegratedSelection />
+
+									<SortingState
+										sorting={sorting}
+										onSortingChange={this.changeSorting}
+										columnExtensions={tableColumnExtensions}
+									/>
+									<IntegratedSorting />
+
+									<IntegratedPaging />
+
+									<SearchState
+										// defaultValue="Paris"
+										value={searchValue}
+										onValueChange={this.changeSearchValue}
+									/>
+
+									<FilteringState
+										defaultFilters={[]}
+										columnExtensions={tableColumnExtensions}
+									/>
+									<IntegratedFiltering />
+
+									<EditingState
+										columnExtensions={editingColumnExtensions}
+										onCommitChanges={this.commitChanges}
+									/>
+
+
+
+									{/* <GroupingState
+										grouping={grouping}
+										onGroupingChange={this.changeGrouping}
+									// defaultGrouping={[]}
+									// columnExtensions={tableColumnExtensions}
+									/>
+									<IntegratedGrouping /> */}
+
+									{/* <BooleanTypeProvider
+									for={booleanColumns}
+								/> */}
+
+									<CurrencyTypeProvider
+										for={currencyColumns}
+									// availableFilterOperations={amountFilterOperations}
+									// editorComponent={AmountEditor}
+									/>
+
+									<PhoneNumberTypeProvider
+										for={phoneNumberColumns}
+									// availableFilterOperations={amountFilterOperations}
+									// editorComponent={AmountEditor}
+									/>
+									{/* <DateTypeProvider
+									for={dateColumns}
+								/> */}
+
+									<VirtualTable height="auto" rowComponent={this.TableRow} />
+
+									{/* <Table tableComponent={TableComponent} columnExtensions={tableColumnExtensions} rowComponent={TableRow} /> */}
+									{/* <Table rowComponent={this.TableRow} /> */}
+
+									<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
+
+									{/* showGroupingControls */}
+
+
+									{/* <TableFixedColumns
+									leftColumns={leftColumns}
+									rightColumns={rightColumns}
+								/> */}
+
+									{/* <TableSelection showSelectAll selectByRowClick highlightRow /> */}
+									<TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
+
+									<TableHeaderRow showSortingControls />
+
+									{/* <TableEditRow /> */}
+									{/* <TableEditColumn
+										// showAddCommand
+										showEditCommand
+										showDeleteCommand
+										commandComponent={Command}
+									/>
+									<Getter
+										name="tableColumns"
+										computed={({ tableColumns }) => {
+											// debugger
+											const result = [
+												...tableColumns.filter(c => c.type !== TableEditColumn.COLUMN_TYPE),
+												{ key: 'editCommand', type: TableEditColumn.COLUMN_TYPE, width: 140 }
+											];
+											return result;
+										}
+										}
+									/> */}
+
+									{/* <TableColumnReordering
+										defaultOrder={tableColumnExtensions.map(x => x.columnName)}
+									/> */}
+									{/* Column Visibility */}
+									{/* Disable Column Visibility Toggling */}
+									{/* <TableColumnVisibility
+										defaultHiddenColumnNames={[]}
+										columnExtensions={tableColumnExtensions}
+									/> */}
+									{/* <Toolbar /> */}
+									{/* <SearchPanel /> */}
+									{/* Column Visibility */}
+									{/* <ColumnChooser /> */}
+
+									{/* {filterState && (
+										<TableFilterRow
+											showFilterSelector
+											iconComponent={FilterIcon}
+										// messages={{ month: 'Month equals' }}
+										/>
+									)} */}
+
+									{/* <TableGroupRow /> */}
+									{/* <GroupingPanel showSortingControls showGroupingControls /> */}
+
+									{/* <div
+									className={classNames(classes.layoutTable, "flex flex-row")}
+									style={{ justifyContent: "space-between" }}
+								>
+									<span className={"p-6"}>
+										Rows Selected: <strong>{selection.length}</strong>
+									</span>
+
+									<span className={"p-6"}>
+										Total Rows: <strong>{rows.length}</strong>
+									</span>
+								</div> */}
+
+									<Template
+										name="tableRow"
+										predicate={({ tableRow }) => tableRow.type === 'data'}
+									>
+										{params => (
+											<TemplateConnector>
+												{({ selection }, { toggleSelection }) => (
+													<this.TableRow
+														{...params}
+														selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
+														onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
+													/>
+												)}
+											</TemplateConnector>
+										)}
+									</Template>
+
+									<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
+
+								</Grid>
 			</Fragment>
 		)
 	}
@@ -1245,8 +1374,6 @@ function mapDispatchToProps(dispatch) {
 		openNewCustomerForm: Actions.openNewCustomerForm,
 
 		getCustomer: Actions.getCustomer,
-		setCustomerFormFindersFeesDialogPayload: Actions.setCustomerFormFindersFeesDialogPayload,
-
 	}, dispatch);
 }
 
@@ -1258,13 +1385,15 @@ function mapStateToProps({ customers, auth }) {
 		filterState: customers.bOpenedFilterPanel,
 		summaryState: customers.bOpenedSummaryPanel,
 		regionId: auth.login.defaultRegionId,
-		CustomerForm: customers.CustomerForm,
+		customerForm: customers.customerForm,
 		mapViewState: customers.bOpenedMapView,
 		locationFilterValue: customers.locationFilterValue,
 		searchText: customers.searchText,
 		bCustomerFetchStart: customers.bCustomerFetchStart,
+
+
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(FinderFeePanel)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(FinderFeeGrid)));
 

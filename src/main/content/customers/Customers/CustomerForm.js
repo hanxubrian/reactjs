@@ -127,8 +127,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 
-import AccountOfferingPage from './AccountOfferingPage';
-import FinderFeePanel from './form/FinderFeePanel'
+import AccountOfferingPage from './form/account-offering/AccountOfferingPage';
+import FinderFeePage from './form/finders-fees/FinderFeePage'
 
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -1462,7 +1462,7 @@ class CustomerForm extends Component {
 			case 8:
 				return (<Fragment></Fragment>)
 			case 9:
-				return (<FinderFeePanel />)
+				return (<FinderFeePage />)
 			default:
 				return 'Unknown step';
 		}
