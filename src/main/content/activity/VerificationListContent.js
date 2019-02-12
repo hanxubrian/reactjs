@@ -26,7 +26,6 @@ import {
     GroupingState, TableColumnVisibility
 } from '@devexpress/dx-react-grid';
 
-
 import {
     Grid,
     Table,
@@ -38,6 +37,9 @@ import {
     DragDropProvider,
     TableGroupRow
 } from '@devexpress/dx-react-grid-material-ui';
+
+import { CustomizedDxGridSelectionPanel } from "./CustomizedDxGridSelectionPanel";
+
 
 import * as PropTypes from 'prop-types';
 
@@ -334,7 +336,7 @@ class VerificationListContent extends Component {
     componentWillUnmount() {
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.verifications.Data.FranchiseeTransactions !== prevProps.verifications.Data.FranchiseeTransactions)
+        if (this.props.verifications!==null && (this.props.verifications !== prevProps.verifications))
             this.processData()
     }
 
@@ -346,16 +348,16 @@ class VerificationListContent extends Component {
 
         const { classes }= this.props;
 
-        if(this.state.rows !== undefined) {
+        if(this.state.data.length) {
             if (props.column.name.includes('Action')) {
-                let thisCol = this.state.rows.filter(d => {
+                let thisCol = this.state.data.filter(d => {
                     if (d.name === props.column.name) {
                         return d;
                     }
                     return false;
                 });
                 return (
-                    <Table.Cell>
+                    <Table.Cell style={{textAlign: 'center'}}>
                         <IconButton className={classes.iconButton} onClick={this.openVerificationDialog} aria-label="Verify">
                             <Icon>verified_user</Icon>
                         </IconButton>
@@ -468,7 +470,7 @@ class VerificationListContent extends Component {
 
         let  tableColumnExtensions = [
                 { columnName: "Region", wordWrapEnabled: true, width: 80},
-                { columnName: "Type",           width: 180},
+                { columnName: "Type",           width: 220},
                 { columnName: "Description",    width: -1 },
                 { columnName: "ExtendedPrice",  width: 100, align: 'right'},
                 { columnName: "Tax",            width: 100, align: 'right'},
@@ -476,10 +478,9 @@ class VerificationListContent extends Component {
                 { columnName: "TrxChargeType",  width: 140,  align: 'center'},
                 { columnName: "TrxClass",       width: 100,  align: 'center'},
                 { columnName: "TrxDate",        width: 100, align: 'center'},
-                { columnName: "Action",         width: 100, align: 'center'}
+                { columnName: "Action",         width: 180, align: 'center'}
                 ];
 
-        console.log('this.state.expandedGroups=', this.state.expandedGroups);
 
         return (
             <Fragment>
@@ -539,6 +540,24 @@ class VerificationListContent extends Component {
                             <TableColumnVisibility
                                 hiddenColumnNames={['Franchisee']}
                                 emptyMessageComponent={this.emptyMessageContent} />
+                            <Template
+                                name="tableRow"
+                                predicate={({ tableRow }) => tableRow.type === 'data'}
+                            >
+                                {params => (
+                                    <TemplateConnector>
+                                        {({ selection }, { toggleSelection }) => (
+                                            <this.TableRow
+                                                {...params}
+                                                selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
+                                                onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
+                                            />
+                                        )}
+                                    </TemplateConnector>
+                                )}
+                            </Template>
+
+                            <CustomizedDxGridSelectionPanel selection={selection} />
                         </Grid>
                     </div>
                 </div>

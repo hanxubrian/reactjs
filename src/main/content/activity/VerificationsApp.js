@@ -236,8 +236,6 @@ class VerificationsApp extends Component {
     constructor(props) {
         super(props);
 
-        this.fetchData = this.fetchData.bind(this);
-
         this.state = {
             s: '',
             temp: [],
@@ -323,13 +321,6 @@ class VerificationsApp extends Component {
         this.setState({[name]: event.target.value});
     };
 
-    fetchData(state, instance) {
-        this.setState({
-            pageSize: state.pageSize,
-            page: state.page,
-        });
-    }
-
     openVerificationDialog = () => {
         this.props.openVerificationDialog(true);
     };
@@ -338,9 +329,7 @@ class VerificationsApp extends Component {
         this.props.openCloseReviseModal(true);
     };
 
-
     render() {
-
         const {classes, filterState, summaryState} = this.props;
         const {selectionLength, HeaderIcon} = this.state;
 
@@ -348,7 +337,7 @@ class VerificationsApp extends Component {
             <React.Fragment>
                 <FusePageCustomSidebarScroll
                     classes={{
-                        root: classNames(classes.layoutRoot, 'test123'),
+                        root: classNames(classes.layoutRoot),
                         rightSidebar: classNames(classes.layoutRightSidebar, {'openSummary': summaryState}),
                         leftSidebar: classNames(classes.layoutLeftSidebar, {'openFilter': filterState}),
                         sidebarHeader: classes.layoutSidebarHeader,
@@ -437,6 +426,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getInvoiceTransactionPendingLists: Actions.getInvoiceTransactionPendingLists,
         openCloseReviseModal: Actions.openCloseReviseDialog,
+        openVerificationDialog : Actions.openVerificationDialog ,
         openCloseRejectModal: Actions.openCloseRejectDialog,
         getFranchiseeTransactionTypeLists : Actions.getFranchiseeTransactionTypeLists,
     }, dispatch);
