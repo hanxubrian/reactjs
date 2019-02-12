@@ -484,10 +484,10 @@ export function closeInvoiceVendorDialogBox() {
     }
 }
 
-export function updateInvoiceVendor(vendorId) {
+export function updateInvoiceVendor(vendorId, vendorInvNo) {
     return {
         type: UPDATE_INVOICE_VENDOR_ID,
-        payload: vendorId
+        payload: {vendorId,vendorInvNo}
     }
 
 }

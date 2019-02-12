@@ -362,7 +362,8 @@ const invoices = function(state = initialState, action) {
         }
         case Actions.UPDATE_INVOICE_VENDOR_ID: {
             const lines = _.cloneDeep(state.invoiceForm.data.line);
-            lines[state.itemId].vendorId = action.payload;
+            lines[state.itemId].vendorId = action.payload.vendorId;
+            lines[state.itemId].vendorInvNo = action.payload.vendorInvNo;
 
             return {
                 ...state,

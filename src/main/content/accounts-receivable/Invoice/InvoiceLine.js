@@ -123,7 +123,7 @@ function createFranchisee(parent_id,id, fnumber="", name="", amount=0) {
     }
 }
 
-function createData(billing={label:'Regular Billing', value: '5c41e517d2963319d486a19b'}, service='Adjust-Balance', description='', quantity=1, amount='', tax=0, markup='', extended=0, total=0, markupAmount=0, markupTax=0, commission=0, commissionAmount=0.0, vendorId='')
+function createData(billing={label:'Regular Billing', value: '5c41e517d2963319d486a19b'}, service='Adjust-Balance', description='', quantity=1, amount='', tax=0, markup='', extended=0, total=0, markupAmount=0, markupTax=0, commission=0, commissionAmount=0.0, vendorId='', vendorInvNo='')
 {
     return {
         id: counter++,
@@ -142,7 +142,8 @@ function createData(billing={label:'Regular Billing', value: '5c41e517d2963319d4
         commissionAmount,
         franchisees: [],
         type: 'line',
-        vendorId
+        vendorId,
+        vendorInvNo
     };
 }
 
@@ -490,7 +491,7 @@ class InvoiceLineTable extends React.Component {
                     if(service.length)
                         this.setState({[`selectedServiceOption${index}`]: service[0]});
 
-                    let line = createData(billing[0], service[0], item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 0, item.ExtendedPrice, item.Total, item.MarkUpTotal, item.MarkUpTax, item.Commission, item.CommissionTotal, item.VendorId);
+                    let line = createData(billing[0], service[0], item.Description, item.Quantity, item.UnitPrice, item.TaxRate, 0, item.ExtendedPrice, item.Total, item.MarkUpTotal, item.MarkUpTax, item.Commission, item.CommissionTotal, item.VendorId, item.VendorInvNo);
 
                     let distributions = [];
                     if(item.Distribution!==null && item.Distribution.length>0){

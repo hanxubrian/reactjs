@@ -116,7 +116,7 @@ class VendorDialogBox extends Component {
     componentDidUpdate(prevProps, prevState, snapshot){
         if(this.props.itemId!==prevProps.itemId) {
             let lines = this.props.invoiceForm.data.line;
-            this.setState({vendor: lines[this.props.itemId].vendorId});
+            this.setState({vendor: lines[this.props.itemId].vendorId, vendorInvoiceNumber: lines[this.props.itemId].vendorInvNo});
         }
     }
 
@@ -132,12 +132,12 @@ class VendorDialogBox extends Component {
         if(this.props.invoiceForm.data!==null) {
             let lines = this.props.invoiceForm.data.line;
 
-            this.setState({vendor: lines[this.props.itemId].vendorId});
+            this.setState({vendor: lines[this.props.itemId].vendorId, vendorInvoiceNumber: lines[this.props.itemId].vendorInvNo});
         }
     }
 
     updateVendor = () => {
-        this.props.updateInvoiceVendor(this.state.vendor);
+        this.props.updateInvoiceVendor(this.state.vendor, this.state.vendorInvoiceNumber);
         this.props.closeInvoiceVendorDialogBox();
     };
 

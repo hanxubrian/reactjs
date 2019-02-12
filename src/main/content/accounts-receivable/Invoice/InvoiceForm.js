@@ -503,7 +503,7 @@ class InvoiceForm extends Component {
 
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps = async (nextProps) =>{
         if(nextProps.invoiceForm.customer!==null){
             if(nextProps.invoiceForm.type==='edit') {
                 this.setState({InvoiceNo: nextProps.invoices.invoiceDetail.Data.Inv_no});
@@ -527,7 +527,7 @@ class InvoiceForm extends Component {
                         period = '0' + period;
                     this.setState({period: period});
                 }
-                setTimeout(() => {this.setState({bLoadingDetail: true})}, 3000);
+                await setTimeout(() => {this.setState({bLoadingDetail: true})}, 3000);
             }
         }
 
@@ -649,7 +649,8 @@ class InvoiceForm extends Component {
                 ExtraWork: 1,
                 TaxExcempt: this.state.selectedCustomer.TaxExempt,
                 Distribution: [],
-                VendorId: line.vendorId
+                VendorId: line.vendorId,
+                VendorInvNo: line.vendorInvNo,
             };
             let franchisees = [];
 
