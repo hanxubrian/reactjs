@@ -497,6 +497,36 @@ class InvoiceForm extends Component {
         if(this.state.selectedCustomer!== null && JSON.stringify(this.state.selectedCustomer)!== JSON.stringify(this.props.invoiceForm.customer)) {
             this.props.selectCustomer(this.state.selectedCustomer);
         }
+        //in time of Saving
+        if(this.props.newInvoice!==null && JSON.stringify(this.props.newInvoice)!==JSON.stringify(prevProps.newInvoice)){
+            console.log('xxxxxxxxx=',this.state.buttonOption );
+            if(this.state.buttonOption===0){
+                this.setState({snackMessage1: 'Saved!'});
+                this.setState({openSnack1: true});
+
+                this.props.updatedInvoices();
+                this.props.resetInvoiceForm();
+                this.setState({InvoiceDescription: ''});
+                this.setState({notes: ''});
+                this.setState({selectedCustomer: null});
+                this.setState({value: ''});
+                this.setState({CustomerNo: ''});
+                this.setState({subTotal: 0});
+                this.setState({markup: 0});
+                this.setState({tax: 0});
+                this.setState({total: 0});
+                if(this.input) {
+                    if(this.props.invoiceForm.type === 'new')
+                        setTimeout(() => {this.input.focus()}, 500);
+                }
+            }
+            else if(this.state.buttonOption===1) {
+                this.props.updatedInvoices();
+                this.setState({snackMessage1: 'Saved!'});
+                this.setState({openSnack1: true});
+                setTimeout(() => {this.closeComposeForm()}, 3000);
+            }
+        }
     }
 
     componentWillMount(){
@@ -527,40 +557,10 @@ class InvoiceForm extends Component {
                         period = '0' + period;
                     this.setState({period: period});
                 }
-                await setTimeout(() => {this.setState({bLoadingDetail: true})}, 3000);
+                // await setTimeout(() => {this.setState({bLoadingDetail: true})}, 3000);
             }
         }
-
-        //in time of Saving
-        if(nextProps.newInvoice!==null && nextProps.newInvoice!==this.props.newInvoice){
-            if(this.state.buttonOption===0){
-                this.setState({snackMessage1: 'Saved!'});
-                this.setState({openSnack1: true});
-
-                this.props.updatedInvoices();
-                this.props.resetInvoiceForm();
-                this.setState({InvoiceDescription: ''});
-                this.setState({notes: ''});
-                this.setState({selectedCustomer: null});
-                this.setState({value: ''});
-                this.setState({CustomerNo: ''});
-                this.setState({subTotal: 0});
-                this.setState({markup: 0});
-                this.setState({tax: 0});
-                this.setState({total: 0});
-                if(this.input) {
-                    if(this.props.invoiceForm.type === 'new')
-                        setTimeout(() => {this.input.focus()}, 500);
-                }
-            }
-            else if(this.state.buttonOption===1) {
-                this.props.updatedInvoices();
-                this.setState({snackMessage1: 'Saved!'});
-                this.setState({openSnack1: true});
-                setTimeout(() => {this.closeComposeForm()}, 3000);
-            }
-        }
-    }
+    };
 
     componentDidMount(){
         if(this.input) {
@@ -745,7 +745,6 @@ class InvoiceForm extends Component {
             this.props.updateInvoice(this.props.invoices.invoiceDetail.Data._id, this.props.regionId, result);
             console.log('result=', JSON.stringify(result));
         }
-
     };
 
     validateNewInvoice = () => {
@@ -832,6 +831,7 @@ class InvoiceForm extends Component {
     };
 
     onSaveInvoice = (buttonOption) => {
+        console.log('button=', buttonOption);
         if(this.validateNewInvoice()){
             this.setState({buttonOption: buttonOption});
             this.addNewInvoice();
