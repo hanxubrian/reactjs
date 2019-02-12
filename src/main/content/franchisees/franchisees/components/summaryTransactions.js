@@ -457,6 +457,18 @@ class SummaryTransactons extends Component {
                     </tr>
                     </tbody>
                 </table>
+                <table style={{width:'63%'}}>
+                    <tbody>
+                    <tr >
+                        <td width="350">
+                            <Typography variant="subtitle1">Garnishment</Typography>
+                        </td>
+                        <td width ="" className="text-right">
+                            $0.00
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
 
                 <table>
                     <tbody>

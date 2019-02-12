@@ -296,8 +296,8 @@ class Report extends Component {
                                             </td>
                                             <td className="text-left">
                                                 <Typography color="inherit">Plan Type: {SUMMARY_PAGE[0].PLAN_TYPE}</Typography>
-                                                <Typography color="inherit">Plan Type: {SUMMARY_PAGE[0].DATE_SIGN}</Typography>
-                                                <Typography color="inherit">Plan Type: {SUMMARY_PAGE[0].CONTACT}</Typography>
+                                                <Typography color="inherit">Sign Date: {SUMMARY_PAGE[0].DATE_SIGN}</Typography>
+                                                {/* <Typography color="inherit">Plan Type: {SUMMARY_PAGE[0].CONTACT}</Typography> */}
                                             </td>
                                         </tr>
                                         </tbody>
