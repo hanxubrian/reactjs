@@ -12,13 +12,17 @@ import SettingsPanel from "main/content/profile/tabs/SettingsPanel";
 
 
 const styles = theme => ({
+    bigAvatar: {
+        width: 170,
+        height: 170,
+      },
     layoutRoot   : {},
     layoutToolbar: {
         padding: 0
     },
     layoutHeader : {
-        height                        : 120,
-        minHeight                     : 120,
+        height                        : 200,
+        minHeight                     : 200,
         background                    : "url('/assets/images/backgrounds/dark-material-bg.jpg') no-repeat",
         backgroundSize                : 'cover',
         color                         : '#fff',
@@ -59,9 +63,9 @@ class FranchiseeProfilePage extends Component {
                 }}
                 header={
                     <div className="p-4 flex flex-1 flex-col items-center justify-center md:flex-row md:items-end">
-                        <div className="p-4 flex flex-1 flex-col items-center justify-center md:flex-row md:items-center">
+                        <div className="p-4 flex flex-1 flex-col items-center justify-center md:flex-row">
                             <FuseAnimate animation="transition.expandIn" delay={300}>
-                                <Avatar align= "center" className="w-84 h-84" src={this.props.login.profilePhoto}/>
+                                <Avatar align= "center" className={classes.bigAvatar} src={this.props.login.profilePhoto}/>
                             </FuseAnimate>
                             <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                 <Typography className="md:ml-24" variant="h4" color="inherit">{this.props.login.firstName}&nbsp;&nbsp;{this.props.login.lastName}</Typography>

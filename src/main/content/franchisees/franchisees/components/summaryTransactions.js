@@ -198,7 +198,7 @@ class SummaryTransactons extends Component {
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-12 w-full")}>
-                <h2 >FRANCHISEE REVENUES:</h2>
+                <h2 >FRANCHISEE REVENUE:</h2>
 
                 <table style={{width:'63%'}}>
                     <tbody>
