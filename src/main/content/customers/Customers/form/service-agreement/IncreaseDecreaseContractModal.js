@@ -236,7 +236,7 @@ const BlueDialogTitle = withStyles(theme => ({
 	);
 });
 
-class FranchieesAssignModal extends React.Component {
+class IncreaseDecreaseContractModal extends React.Component {
 
 	constructor(props) {
 		super(props)
@@ -505,7 +505,7 @@ class FranchieesAssignModal extends React.Component {
 		// 	paymentAmount: 0,
 		// })
 
-		this.props.showFranchieesAssignModalForm(false)
+		this.props.showIncreaseDecreaseContractModalForm(false)
 
 	};
 
@@ -807,60 +807,29 @@ class FranchieesAssignModal extends React.Component {
 
 		return (
 			<>
-				<div className={classNames("flex mt-12 justify-end")}>
-
-					<TextField margin="dense" id="Total Monthly Contract" label="Total Monthly Contract"
+				<div className={classNames("flex mt-12 justify-start")}>
+					<TextField margin="dense" id="Current Contract Amount" label="Current Contract Amount"
 						InputLabelProps={{ shrink: true }}
 						className={classNames(classes.textField, "pr-6")}
 						InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">attach_money</Icon></InputAdornment> }}
 					/>
 				</div>
 
-				<Typography className="mb-12" variant="title">Franchisees</Typography>
+				<div className={classNames("flex mt-12 justify-start")}>
+					<TextField margin="dense" id="New Amount" label="New Amount"
+						InputLabelProps={{ shrink: true }}
+						className={classNames(classes.textField, "pr-6")}
+						InputProps={{ readOnly: false, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">attach_money</Icon></InputAdornment> }}
+					/>
 
-				<div className={classNames("flex flex-col w-full")}>
-					<div className={classNames("flex w-full")}>
-						{franHeaders.map((f, findex) => (
-							<Typography key={findex} style={{ width: f.width + '%' }} variant="caption">{f.title}</Typography>
-						))}
-					</div>
+					<TextField margin="dense" id="Reason" label="Reason"
+						InputLabelProps={{ shrink: true }}
+						className={classNames(classes.textField, "pl-6 flex-1")}
+						InputProps={{ readOnly: false }}
 
-					<Divider variant="middle" style={{ marginTop: 10, width: '100%', alignSelf: 'center' }} />
-
-					{this.props.franchieesesToOffer.map((x, index) => (
-						<div key={index} className={classNames("flex w-full")} style={{ alignItems: 'bottom' }}>
-
-							<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="body2">{x.Number}</Typography>
-							<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="body2">{x.Name}</Typography>
-
-							<TextField style={{ width: franHeaders[2].width + '%' }}
-								margin="dense"
-								className="pl-6"
-								select
-							>
-								{franchiseeBillingTypes.map((x, index) => (<MenuItem key={index} value={x.Name}>{x.Name}</MenuItem>))}
-							</TextField>
-
-							<TextField style={{ width: franHeaders[3].width + '%' }}
-								margin="dense"
-								className="pl-6"
-								select
-							>
-								{franchiseeServiceTypes.map((x, index) => (<MenuItem key={index} value={x.Name}>{x.Name}</MenuItem>))}
-							</TextField>
-
-							<TextField style={{ width: franHeaders[4].width + '%' }}
-								margin="dense"
-								className="pr-6 pl-6"
-							/>
-							<TextField style={{ width: franHeaders[5].width + '%' }}
-								InputProps={{ startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">attach_money</Icon></InputAdornment> }}
-								margin="dense"
-								className="pl-6"
-							/>
-						</div>
-					))}
+					/>
 				</div>
+
 			</>
 		)
 	}
@@ -870,8 +839,8 @@ class FranchieesAssignModal extends React.Component {
 		return (
 			<>
 				<div className="flex">
-					<Typography className="mb-12 pr-12" variant="title">Franchisees Number</Typography>
-					<Typography className="mb-12" variant="title">Franchisees Name</Typography>
+					<Typography className="mb-12 pr-12" variant="title">123456789</Typography>
+					<Typography className="mb-12" variant="title">OOOOOOOOOOOO</Typography>
 				</div>
 				<div className={classNames("flex mt-12 justify-start")}>
 					<TextField margin="dense" id="Monthly Billing Amount" label="Monthly Billing Amount"
@@ -890,7 +859,7 @@ class FranchieesAssignModal extends React.Component {
 		return (
 			<div>
 				<Dialog
-					open={this.props.franchieesAssignModalForm.open === true}
+					open={this.props.increaseDecreaseContractModalForm.open === true}
 					fullWidth={true}
 					maxWidth="md"
 
@@ -900,7 +869,7 @@ class FranchieesAssignModal extends React.Component {
 					aria-labelledby="form-dialog-title"
 				>
 					<BlueDialogTitle id="form-dialog-title" onClose={this.handleClose}>
-						{step === 0 && <h2 style={{ display: "flex", alignItems: "center", color: "white" }}><Icon>account_balance</Icon>&nbsp;&nbsp;Franchiee Assignment &amp; Distribution</h2>}
+						{step === 0 && <h2 style={{ display: "flex", alignItems: "center", color: "white" }}><Icon>account_balance</Icon>&nbsp;&nbsp;Increase / Decrease Contract Amount</h2>}
 						{step === 1 && <h2 style={{ display: "flex", alignItems: "center", color: "white" }}><Icon>account_balance</Icon>&nbsp;&nbsp;Finders Fees</h2>}
 
 					</BlueDialogTitle>
@@ -918,8 +887,8 @@ class FranchieesAssignModal extends React.Component {
 					</DialogContent>
 
 					<DialogActions>
-						{step === 0 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Assign<Icon>keyboard_arrow_right</Icon></Button>}
-						{step === 1 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}><Icon>keyboard_arrow_left</Icon>Finders Fees</Button>}
+						{step === 0 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Next (Franchisee Distribution)<Icon>keyboard_arrow_right</Icon></Button>}
+						{step === 1 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>}
 						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Cancel</Button>
 					</DialogActions>
 				</Dialog>
@@ -933,7 +902,7 @@ function mapDispatchToProps(dispatch) {
 		openPaymentDialog: Actions.openPaymentDialog,
 		createAccountReceivablePayment: Actions.createAccountReceivablePayment,
 
-		showFranchieesAssignModalForm: Actions.showFranchieesAssignModalForm,
+		showIncreaseDecreaseContractModalForm: Actions.showIncreaseDecreaseContractModalForm,
 
 		getLogCallCustomerServiceTypes: Actions.getLogCallCustomerServiceTypes,
 
@@ -955,10 +924,10 @@ function mapStateToProps({ customers, accountReceivablePayments, auth }) {
 
 		paymentDlgPayloads: accountReceivablePayments.paymentDlgPayloads,
 
-		franchieesAssignModalForm: customers.franchieesAssignModalForm,
+		increaseDecreaseContractModalForm: customers.increaseDecreaseContractModalForm,
 		lists: customers.lists,
 		franchieesesToOffer: customers.franchieesesToOffer,
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(FranchieesAssignModal)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(IncreaseDecreaseContractModal)));

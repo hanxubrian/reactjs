@@ -129,6 +129,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 
 import AccountOfferingPage from './form/account-offering/AccountOfferingPage';
 import FinderFeePage from './form/finders-fees/FinderFeePage'
+import IncreaseDecreaseContractModal from './form/service-agreement/IncreaseDecreaseContractModal'
 
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -423,7 +424,7 @@ class CustomerForm extends Component {
 		labelWidth: 0,
 		selectedWork: "",
 
-		activeStep: 4,
+		activeStep: 0,
 		completed: new Set(),
 		skipped: new Set(),
 
@@ -465,7 +466,9 @@ class CustomerForm extends Component {
 		}
 		this.setState({ rows });
 	}
-
+	IncreaseDecreaseContract = () => {
+		this.props.showIncreaseDecreaseContractModalForm(true)
+	}
 	getStepContent(step) {
 		const { classes,
 			// CustomerForm,
@@ -503,7 +506,7 @@ class CustomerForm extends Component {
 				return (
 					<Fragment>
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between">
 								<TextField
 									type="number"
 									id="Amount"
@@ -521,6 +524,12 @@ class CustomerForm extends Component {
 										startAdornment: <InputAdornment position="start">$</InputAdornment>
 									}}
 								/>
+								<Button
+									variant="contained"
+									color="primary"
+									className={classNames(classes.button, "pr-24 pl-24")}
+									onClick={this.IncreaseDecreaseContract}
+								>Increase/Decrease Contract</Button>
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
@@ -674,6 +683,8 @@ class CustomerForm extends Component {
 								/>
 							</GridItem>
 						</GridContainer>
+
+						<IncreaseDecreaseContractModal />
 					</Fragment>
 				);
 			case 2:
@@ -1804,7 +1815,8 @@ function mapDispatchToProps(dispatch) {
 		closeNewCustomerForm: Actions.closeNewCustomerForm,
 		openEditCustomerForm: Actions.openEditCustomerForm,
 		closeEditCustomerForm: Actions.closeEditCustomerForm,
-		getDocuments: Actions.getDocuments
+		getDocuments: Actions.getDocuments,
+		showIncreaseDecreaseContractModalForm: Actions.showIncreaseDecreaseContractModalForm
 	}, dispatch);
 }
 

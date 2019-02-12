@@ -95,6 +95,8 @@ const initialState = {
 	},
 	lists: {
 		customerServiceTypes: [],
+		franchiseeBillingTypes: [],
+		franchiseeServiceTypes: [],
 	},
 	activeCustomer: {
 	},
@@ -106,6 +108,9 @@ const initialState = {
 		open: false,
 	},
 	franchieesesToOffer: [],
+	increaseDecreaseContractModalForm: {
+		open: false,
+	},
 };
 
 
@@ -561,6 +566,34 @@ const customers = function (state = initialState, action) {
 				}
 			};
 
+
+		case Actions.GET_FRANCHISEE_SERVICE_TYPES:
+			return {
+				...state,
+				lists: {
+					...state.lists,
+					franchiseeServiceTypes: action.payload,
+
+				}
+			};
+		case Actions.GET_FRANCHISEE_BILLING_TYPES:
+			return {
+				...state,
+				lists: {
+					...state.lists,
+					franchiseeBillingTypes: action.payload,
+
+				}
+			};
+
+		case Actions.SHOW_INCREASE_DECREASE_CONTRACT_MODAL_FORM:
+			return {
+				...state,
+				increaseDecreaseContractModalForm: {
+					...state.increaseDecreaseContractModalForm,
+					open: action.payload,
+				}
+			};
 		default:
 			{
 				return state;

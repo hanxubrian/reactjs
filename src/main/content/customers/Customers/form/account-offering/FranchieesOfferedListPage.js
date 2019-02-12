@@ -674,7 +674,7 @@ class FranchieesOfferedListPage extends Component {
 							onClick={() => {
 								this.offerThisAccount();
 							}}
-						> Offer this account... </Button>
+						> Offer this account</Button>
 					</div>
 
 				</div>

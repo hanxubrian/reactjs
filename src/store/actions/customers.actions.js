@@ -69,6 +69,11 @@ export const CUSTOMER_COLLECTION_CREATE_START = "[CUSTOMERS-service APP] CUSTOME
 export const SET_FRANCHIEESES_TO_OFFER = "[CUSTOMERS APP] SET_FRANCHIEESES_TO_OFFER";
 export const SHOW_FRANCHIEES_ASSIGN_MODAL_FORM = "[CUSTOMERS APP] SHOW_FRANCHIEES_ASSIGN_MODAL_FORM";
 
+export const GET_FRANCHISEE_SERVICE_TYPES = "[CUSTOMERS APP] GET_FRANCHISEE_SERVICE_TYPES";
+export const GET_FRANCHISEE_BILLING_TYPES = "[CUSTOMERS APP] GET_FRANCHISEE_BILLING_TYPES";
+
+export const SHOW_INCREASE_DECREASE_CONTRACT_MODAL_FORM = "[CUSTOMERS APP] SHOW_INCREASE_DECREASE_CONTRACT_MODAL_FORM";
+
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	// return dispatch => {
 	// const request = axios.get("/api/customers/gets");
@@ -522,4 +527,32 @@ export function showFranchieesAssignModalForm(visible) {
 		payload: visible
 	}
 }
+export function showIncreaseDecreaseContractModalForm(visible) {
+	return {
+		type: SHOW_INCREASE_DECREASE_CONTRACT_MODAL_FORM,
+		payload: visible
+	}
+}
 
+export function getFranchiseeServiceTypes(regionId) {
+	return (dispatch) => {
+		(async () => {
+			let res = await customersService.getFranchiseeServiceTypes(regionId);
+			dispatch({
+				type: GET_FRANCHISEE_SERVICE_TYPES,
+				payload: res.Data
+			});
+		})();
+	}
+}
+export function getFranchiseeBillingTypes(regionId) {
+	return (dispatch) => {
+		(async () => {
+			let res = await customersService.getFranchiseeBillingTypes(regionId);
+			dispatch({
+				type: GET_FRANCHISEE_BILLING_TYPES,
+				payload: res.Data
+			});
+		})();
+	}
+}

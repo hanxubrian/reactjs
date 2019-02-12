@@ -389,6 +389,39 @@ fullbill: 0
 				})
 		});
 	}
+
+	getFranchiseeServiceTypes(regionId) {
+		return new Promise((resolve, reject) => {
+			axios_instance.get(`${BASE_MONGO_API_URL}/api/Lists/GetServiceType?RegionId=${regionId}&BillingTypeId=0`)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
+	getFranchiseeBillingTypes(regionId) {
+		return new Promise((resolve, reject) => {
+			axios_instance.get(`${BASE_MONGO_API_URL}/api/Lists/GetBillingType?RegionId=${regionId}`)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
 }
 
 
