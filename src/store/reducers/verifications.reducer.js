@@ -29,7 +29,7 @@ const initialState = {
 
 const verifications = function (state = initialState, action) {
     switch (action.type) {
-        case Actions.GET_ALL_VERIFICATIONS:
+        case Actions.GET_ALL_PENDING_LISTS:
         {
             return {
                 ...state,
@@ -37,6 +37,21 @@ const verifications = function (state = initialState, action) {
                 bLoadedVerifications: true,
                 bVerificationFetchStart: false
             };
+        }
+        case Actions.GET_ALL_PENDING_LISTS_ERROR:
+        {
+            return {
+                ...state,
+                verificationsDB: null,
+                bLoadedVerifications: true,
+                bVerificationFetchStart: false
+            };
+        }
+        case Actions.GET_STARTED_FETCHING_PENDING_LISTS:
+        {
+            return {
+                ...state, bVerificationFetchStart: true
+            }
         }
         case Actions.TOGGLE_VERIFICATION_FILTER_PANEL:
         {

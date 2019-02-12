@@ -170,7 +170,6 @@ class TransactionsDxGridLists extends Component {
     constructor(props) {
         super(props);
 
-        this.fetchData = this.fetchData.bind(this);
         this.escFunction = this.escFunction.bind(this);
         this.changeCurrentPage = currentPage => this.setState({currentPage});
         this.changePageSize = pageSize => this.setState({pageSize});
@@ -219,13 +218,6 @@ class TransactionsDxGridLists extends Component {
             {data: temp,
                 expandedGroups: [...new Set(temp.map(x => x.FranNameNo))]},
         );
-    }
-
-    fetchData(state, instance) {
-        this.setState({
-            pageSize: state.pageSize,
-            page: state.page,
-        });
     }
 
     handleClose = () => {
@@ -412,7 +404,6 @@ class TransactionsDxGridLists extends Component {
                     <GroupingState
                         grouping={[
                             {columnName: 'FranNameNo'},
-                            // {columnName: 'TrxType'},
                         ]}
                         expandedGroups={expandedGroups}
                         onExpandedGroupsChange={this.expandedGroupsChange}

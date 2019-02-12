@@ -1,35 +1,32 @@
 import React, {Component, Fragment} from 'react';
-import {
-    Icon,
-    IconButton,
-    Fab,
-    Typography,
-    Toolbar,
-    CircularProgress,
-    Menu,
-    MenuItem,
-    Checkbox,
-    FormControlLabel,
-    Tooltip,
-    Button
-} from '@material-ui/core';
-import {FusePageCustomSidebarScroll, FuseAnimate} from '@fuse';
-import {bindActionCreators} from "redux";
-import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
+
+//Material UI core
+import {
+    Icon, Typography, Button
+} from '@material-ui/core';
+import {withStyles} from "@material-ui/core";
+
+//Theme
+import {FusePageCustomSidebarScroll, FuseAnimate} from '@fuse';
+
 // for store
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
-import SummaryPanel from './SummaryPanel';
-import FilterPanel from './FilterPanel';
+import {bindActionCreators} from "redux";
+
+//third party
 import "react-table/react-table.css";
 import classNames from 'classnames';
 
+
+//Child Components
 import VerificationListContent from './VerificationListContent';
 import VerifiedDialogForm from "./VerifiedDialogForm";
 import ReviseDialogForm from "./ReviseDialogForms";
 import RejectDialogForm from "./RejectDialogForm";
-
+import SummaryPanel from './SummaryPanel';
+import FilterPanel from './FilterPanel';
 
 const headerHeight = 80;
 
@@ -40,7 +37,7 @@ const hexToRgb = (hex) => {
         g: parseInt(result[2], 16),
         b: parseInt(result[3], 16)
     } : null;
-}
+};
 
 const styles = theme => ({
     root: {
@@ -259,38 +256,34 @@ class VerificationsApp extends Component {
             selectionLength: [],
             openDialog: false,
         };
-        console.log("constructor, Customer.js")
 
-        if (!props.bLoadedCustomers) {
-            console.log("getCustomers")
-            this.props.getVerifications(this.props.regionId, "", "", "", "", "");
+        if (!props.bLoadedVerifications) {
+            this.props.getInvoiceTransactionPendingLists(props.regionId);
         }
+        if(props.transactionTypeList===null)
+            props.getFranchiseeTransactionTypeLists(props.regionId);
     }
 
     closeComposeForm = () => {
         switch (this.props.verificationForm.type) {
             case "new":
-                this.props.closeNewVerificationForm()
+                this.props.closeNewVerificationForm();
                 break;
         }
     };
 
-
-
     componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log("componentDidUpdate", "Customer.js")
         let bChanged = false;
 
         if (this.props.regionId !== prevProps.regionId ||
             this.props.statusId !== prevProps.statusId) {
-            console.log("regionId", this.props.regionId, prevProps.regionId)
             this.setState({
                 regionId: this.props.regionId,
                 statusId: this.props.statusId
             });
             console.log("----------START FETCHING----------")
             // this.setState({ loading: true });
-            this.props.getVerifications(this.props.regionId, "", "", "", "", "");
+            this.props.getInvoiceTransactionPendingLists(this.props.regionId);
             bChanged = true;
         }
         if (this.props.selectionLength !== prevProps.selectionLength) {
@@ -300,7 +293,7 @@ class VerificationsApp extends Component {
 
     componentWillMount() {
         if (this.props.verifications === null) {
-            this.props.getVerifications(this.props.regionId, "", "", "", "", "");
+            this.props.getInvoiceTransactionPendingLists(this.props.regionId);
         }
         this.setState({"selectionLength": this.props.selectionLength});
         this.setState({openDialog: this.props.verifiedModal});
@@ -337,44 +330,18 @@ class VerificationsApp extends Component {
         });
     }
 
-    showValidationMenu = event => {
-        this.setState({anchorEl: event.currentTarget});
-    }
-    closeValidationMenu = () => {
-        this.setState({anchorEl: null});
-    }
-    showContactMenu = event => {
-        this.setState({anchorContactMenu: event.currentTarget});
-    }
-    closeContactMenu = () => {
-        this.setState({anchorContactMenu: null});
-    }
-    onClickEmailToCustomer = () => {
-        this.setState({
-            anchorContactMenu: null,
-        });
-
-        this.props.openEmailToCustomerDialog(true);
-    }
-    handleCloseConfirmDialog = () => {
-        this.setState({
-            isSubmittingForApproval: false
-        })
-    }
     openVerificationDialog = () => {
         this.props.openVerificationDialog(true);
-    }
+    };
+
     openReviseDialog = () => {
         this.props.openCloseReviseModal(true);
-    }
-
-
+    };
 
 
     render() {
 
         const {classes, filterState, summaryState} = this.props;
-
         const {selectionLength, HeaderIcon} = this.state;
 
         return (
@@ -468,32 +435,21 @@ class VerificationsApp extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getVerifications: Actions.getVerifications,
-        toggleFilterPanel: Actions.toggleVerificationFilterPanel,
-        toggleSummaryPanel: Actions.toggleVerificationSummaryPanel,
-        openNewVerificationForm: Actions.openNewVerificationForm,
-        closeNewVerificationForm: Actions.closeNewVerificationForm,
-        openVerificationDialog: Actions.openVerificationDialog,
+        getInvoiceTransactionPendingLists: Actions.getInvoiceTransactionPendingLists,
         openCloseReviseModal: Actions.openCloseReviseDialog,
-        openCloseRejectModal: Actions.openCloseRejectDialog
+        openCloseRejectModal: Actions.openCloseRejectDialog,
+        getFranchiseeTransactionTypeLists : Actions.getFranchiseeTransactionTypeLists,
     }, dispatch);
 }
 
-function mapStateToProps({verifications, auth, fuse}) {
+function mapStateToProps({verifications, auth, fuse, transactions}) {
     return {
         verifications: verifications.verificationsDB,
         bLoadedVerifications: verifications.bLoadedVerifications,
-        transactionStatus: verifications.transactionStatus,
-        summaryState: verifications.bOpenedSummaryPanel,
-        filterState: verifications.bOpenedFilterPanel,
-        verificationForm: verifications.verificationForm,
-        statusId: verifications.statusId,
-        searchText: verifications.searchText,
         selectionLength: verifications.selectionLength,
-        verifiedModal: verifications.verifiedModal,
-        reviseModal: verifications.reviseModal,
-        rejectModal: verifications.rejectModal,
-        nav: fuse.navigation
+        regionId: auth.login.defaultRegionId,
+        nav: fuse.navigation,
+        transactionTypeList: transactions.transactionTypeList,
     }
 }
 

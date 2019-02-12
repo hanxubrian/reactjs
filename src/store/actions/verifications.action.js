@@ -1,7 +1,9 @@
-import axios from "axios";
-import { customersService } from "services";
+import {verificationService} from "../../services";
 
 export const GET_ALL_VERIFICATIONS = "[VERIFICATIONS APP] GETS ALL";
+export const GET_ALL_PENDING_LISTS = "[VERIFICATIONS APP] GETS ALL PENDING INVOICES & TRANSACTIONS";
+export const GET_STARTED_FETCHING_PENDING_LISTS = "[VERIFICATIONS APP] GET STARTED FETCHING ALL PENDING INVOICES & TRANSACTIONS";
+export const GET_ALL_PENDING_LISTS_ERROR = "[VERIFICATIONS APP] GETS ALL ENDING INVOICES & TRANSACTIONS ERROR";
 export const TOGGLE_VERIFICATION_SUMMARY_PANEL = "[VERIFICATIONS APP] TOGGLE SUMMARY PANEL";
 export const TOGGLE_VERIFICATION_FILTER_STATUS = "[VERIFICATIONS APP] TOGGLE VERIFICATION FILTER STATUS";
 export const TOGGLE_VERIFICATION_FILTER_PANEL = "[VERIFICATIONS APP] TOGGLE VERIFICATION FILTER PANEL";
@@ -16,18 +18,25 @@ export const OPEN_CLOSE_REJECT_DIALOG = "[VERIFICATIONS APP] OPEN/CLOSE REJECT D
 export const OPEN_NEW_VERIFICATION_FORM = '[VERIFICATIONS APP] OPEN NEW CUSTOMER FORM';
 export const CLOSE_NEW_VERIFICATION_FORM = '[VERIFICATIONS APP] CLOSE NEW CUSTOMER FORM';
 
-export function getVerifications(regionId, statusId = 0, location = "all", latitude = "", longitude = "", searchText = "") {
-
+export function getInvoiceTransactionPendingLists(regionId) {
     return (dispatch) => {
+        dispatch({
+            type: GET_STARTED_FETCHING_PENDING_LISTS
+        });
+
         (async () => {
-            regionId = regionId === 0 ? [2, 7, 9, 13, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 28, 29, 31, 46, 55, 64, 82] : [regionId]
-            statusId = statusId === 0 ? Array.from({ length: 10 }).map((item, index) => (index + 1)) : [statusId]
-            console.log(regionId, statusId)
-            // let response = await customersService.getCustomersList(regionId, statusId, location, latitude, longitude, searchText);
+            let res = await verificationService.getInvoiceTransactionPendingList(regionId);
+            if (res.IsSuccess) {
             dispatch({
-                type: GET_ALL_VERIFICATIONS,
-                // payload: response
+                type: GET_ALL_PENDING_LISTS,
+                payload: res
             });
+            }  else {
+                dispatch({
+                    type: GET_ALL_PENDING_LISTS_ERROR,
+                    payload: res.message
+                });
+            }
         })();
     }
 }

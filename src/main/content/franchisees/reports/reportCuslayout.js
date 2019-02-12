@@ -340,31 +340,11 @@ class ReportCusLayout extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getVerifications: Actions.getVerifications,
-        toggleFilterPanel: Actions.toggleVerificationFilterPanel,
-        toggleSummaryPanel: Actions.toggleVerificationSummaryPanel,
-        openNewVerificationForm: Actions.openNewVerificationForm,
-        closeNewVerificationForm: Actions.closeNewVerificationForm,
-        openVerificationDialog: Actions.openVerificationDialog,
-        openCloseReviseModal: Actions.openCloseReviseDialog,
-        openCloseRejectModal: Actions.openCloseRejectDialog
     }, dispatch);
 }
 
 function mapStateToProps({verifications, auth}) {
     return {
-        verifications: verifications.verificationsDB,
-        bLoadedVerifications: verifications.bLoadedVerifications,
-        transactionStatus: verifications.transactionStatus,
-        summaryState: verifications.bOpenedSummaryPanel,
-        filterState: verifications.bOpenedFilterPanel,
-        verificationForm: verifications.verificationForm,
-        statusId: verifications.statusId,
-        searchText: verifications.searchText,
-        selectionLength: verifications.selectionLength,
-        verifiedModal: verifications.verifiedModal,
-        reviseModal: verifications.reviseModal,
-        rejectModal: verifications.rejectModal
     }
 }
 

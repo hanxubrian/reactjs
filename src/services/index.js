@@ -10,6 +10,7 @@ import _contactService from './customers/ContactService';
 import _chatService from './chat/ChatService';
 import _paymentService from './payment/paymentService';
 import _dashboardService from './dashboard/dashboardService';
+import _verificationService from './activity/verificationService';
 // import _invoicePaymentService from './invoice/paymentsService'
 import _homepageService from './home/HomepageService';
 import _billrunService from './billrun/BillrunService';
@@ -19,8 +20,6 @@ import _territoriesService from './regions/territoriesService';
 import _franchiseeReportService from './franchisees/franchiseeReportService';
 import _userService from './users/userService';
 import _adminImportNotificationService from  './admin/adminImportNotificationService';
-
-
 
 export const authService = _authService;
 export const menuService = _menuService;
@@ -43,3 +42,4 @@ export const territoriesService = _territoriesService;
 export const franchiseeReportService = _franchiseeReportService;
 export const userService = _userService;
 export const adminImportNotificationService = _adminImportNotificationService;
+export const verificationService = _verificationService;

@@ -1,64 +1,48 @@
 import React, { Component, Fragment } from 'react';
-import { IconButton, Input, Button } from '@material-ui/core';
-import { withStyles} from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
+
+//Material UI Core
+import { IconButton, Input, Icon } from '@material-ui/core';
+import { withStyles} from "@material-ui/core";
+
+//Store
 import { bindActionCreators } from "redux";
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
-import "react-table/react-table.css";
+
+//third party
+import NumberFormat from 'react-number-format';
 import classNames from 'classnames';
+import moment from 'moment';
 
-
+//DevExtreme React-Grid
 import {
     Template, TemplateConnector
 } from '@devexpress/dx-react-core';
 import {
-    SelectionState,
-    PagingState,
-    IntegratedPaging,
-    IntegratedSelection,
-    SortingState,
-    IntegratedSorting,
-    EditingState,
-    DataTypeProvider,
-    FilteringState,
-    IntegratedFiltering,
-    SearchState,
+    SelectionState, PagingState, IntegratedPaging, IntegratedSelection, SortingState, IntegratedSorting, EditingState,
+    DataTypeProvider, FilteringState, IntegratedFiltering, SearchState,
+    IntegratedGrouping,
+    GroupingState, TableColumnVisibility
 } from '@devexpress/dx-react-grid';
 
-import { CustomizedDxGridSelectionPanel } from "./CustomizedDxGridSelectionPanel";
 
 import {
     Grid,
     Table,
+    VirtualTable,
     TableHeaderRow,
     TableSelection,
     PagingPanel,
     TableFilterRow,
-    DragDropProvider
-
+    DragDropProvider,
+    TableGroupRow
 } from '@devexpress/dx-react-grid-material-ui';
 
 import * as PropTypes from 'prop-types';
 
-import Chip from '@material-ui/core/Chip';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import SaveIcon from '@material-ui/icons/Save';
-import CancelIcon from '@material-ui/icons/Cancel';
+//Child components
 import VerificationSearchBar from './VerificationSearchBar';
-import Icon from '@material-ui/core/Icon';
-
-const hexToRgb = (hex) => {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-    } : null;
-};
 
 const styles = theme => ({
     layoutTable: {
@@ -79,36 +63,6 @@ const styles = theme => ({
             paddingLeft: '1.2rem!important',
             paddingRight: '1.2rem!important',
         },
-        '& .ReactTable .rt-noData': {
-            top: '250px',
-            border: '1px solid coral'
-        },
-        '& .ReactTable .rt-thead.-headerGroups': {
-            paddingLeft: '0!important',
-            paddingRight: '0!important',
-            minWidth: 'inherit!important'
-        },
-        '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
-            background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
-            color: 'white!important'
-        },
-        '& .ReactTable .rt-tbody': {
-            overflowY: 'scroll',
-            overflowX: 'hidden'
-        },
-        '& .ReactTable .rt-tr-group': {
-            flex: '0 0 auto'
-        },
-        '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
-            justifyContent: 'center'
-        },
-        '& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
-            width: 'inherit!important',
-            minWidth: 'inherit!important',
-        },
-        '& .ReactTable .rt-thead .rt-th:last-child': {
-            justifyContent: 'flex-end'
-        },
     },
     content: {
         position: 'relative'
@@ -120,7 +74,16 @@ const styles = theme => ({
         }
     },
     tableTheadRow: {
-        backgroundColor: theme.palette.primary.main
+        backgroundColor: theme.palette.primary.main,
+        '& tr': {
+            height: 48
+        },
+        '& tr th': {
+            color: 'white'
+        },
+        '& tr th:nth-child(4)': {
+            // width: '100%'
+        }
     },
     filterPanelButton: {
         backgroundColor: theme.palette.secondary.main,
@@ -151,6 +114,9 @@ const styles = theme => ({
         '& tbody tr:nth-of-type(even)': {
             backgroundColor: 'fade(' + theme.palette.primary.secondary + ', 0.03)',
         },
+        '& tbody tr td:nth-child(4)': {
+            // width: '100%'
+        }
     },
     overlay: {
         position: 'absolute',
@@ -170,76 +136,50 @@ const styles = theme => ({
         marginRight: 10
     }
 });
-//
-// table content rows stle
-//
+
+/** table content rows style
+ *
+ * @param classes
+ * @param restProps
+ * @returns {*}
+ * @constructor
+ */
 const TableComponentBase = ({ classes, ...restProps }) => (
     <Table.Table
         {...restProps}
         className={classes.tableStriped}
     />
 );
+
+const TableHeadComponentBase = ({ classes, ...restProps }) => (
+    <Table.TableHead
+        {...restProps}
+        className={classes.tableTheadRow}
+    />
+);
+
+export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
 export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
+
 //
 // table cell currency formatter
 //
-const CurrencyFormatter = ({ value }) => (<span>$ {value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
+const CurrencyFormatter = ({value}) => (
+    <NumberFormat value={value}
+                  displayType={'text'}
+                  fixedDecimalScale={true}
+                  thousandSeparator
+                  decimalScale={2}
+                  prefix="$" renderText={value => <span>{value}</span>}/>
+);
+
 const CurrencyTypeProvider = props => (
     <DataTypeProvider
         formatterComponent={CurrencyFormatter}
         {...props}
     />
 );
-//
-// table cell phone number formatter
-//
-const PhoneNumberFormatter = ({ value }) => {
-    return value.replace(/(\d{3})(\d{3})(\d{4})/, '+1 ($1) $2 - $3')
-};
-const PhoneNumberTypeProvider = props => (
-    <DataTypeProvider
-        formatterComponent={PhoneNumberFormatter}
-        {...props}
-    />
-);
-//
-// table cell date formatter
-//
-const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1');
-const DateTypeProvider = props => (
-    <DataTypeProvider
-        formatterComponent={DateFormatter}
-        {...props}
-    />
-);
-//
-// table cell boolean edit formatter
-//
-const BooleanFormatter = ({ value }) => <Chip label={value ? 'Yes' : 'No'} />;
-const BooleanEditor = ({ value, onValueChange }) => (
-    <Select
-        input={<Input />}
-        value={value ? 'Yes' : 'No'}
-        onChange={event => onValueChange(event.target.value === 'Yes')}
-        style={{ width: '100%' }}
-    >
-        <MenuItem value="Yes">Yes</MenuItem>
-        <MenuItem value="No">No</MenuItem>
-    </Select>
-);
-const BooleanTypeProvider = props => (
-    <DataTypeProvider
-        formatterComponent={BooleanFormatter}
-        editorComponent={BooleanEditor}
-        {...props}
-    />
-);
-//
-// filter icon
-//
-const FilterIcon = ({ type, ...restProps }) => {
-    return <TableFilterRow.Icon type={type} {...restProps} />;
-};
+
 
 //
 // amount filter editor component
@@ -275,65 +215,6 @@ AmountEditorBase.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 AmountEditorBase.defaultProps = { value: undefined, };
-const AmountEditor = withStyles(styles)(AmountEditorBase);
-//
-// table row edit command buttons
-//
-const AddButton = ({ onExecute }) => (
-    <div style={{ textAlign: 'center' }}>
-        <Button
-            color="primary"
-            onClick={onExecute}
-            title="Create new row"
-        >
-            New
-        </Button>
-    </div>
-);
-
-const EditButton = ({ onExecute }) => (
-    <IconButton onClick={onExecute} title="Edit row">
-        <EditIcon />
-    </IconButton>
-);
-
-const DeleteButton = ({ onExecute }) => (
-    <IconButton onClick={onExecute} title="Delete row">
-        <DeleteIcon />
-    </IconButton>
-);
-
-const CommitButton = ({ onExecute }) => (
-    <IconButton onClick={onExecute} title="Save changes">
-        <SaveIcon />
-    </IconButton>
-);
-
-const CancelButton = ({ onExecute }) => (
-    <IconButton color="secondary" onClick={onExecute} title="Cancel changes">
-        <CancelIcon />
-    </IconButton>
-);
-
-const commandComponents = {
-    add: AddButton,
-    edit: EditButton,
-    delete: DeleteButton,
-    commit: CommitButton,
-    cancel: CancelButton,
-};
-
-const Command = ({ id, onExecute }) => {
-    const CommandButton = commandComponents[id];
-    return (
-        <CommandButton
-            onExecute={onExecute}
-        />
-    );
-};
-const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
-
-
 
 
 class VerificationListContent extends Component {
@@ -347,164 +228,14 @@ class VerificationListContent extends Component {
             selectAll: false,
             selection: [...this.props.selectionLength],
             //rows: [],
-            tableColumnExtensions: [
-                {
-                    title: "Region",
-                    name: "Region",
-                    columnName: "Region",
-                    // width: 100,
-                    wordWrapEnabled: true,
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: false,
-                },
-                {
-                    title: "Type",
-                    name: "Type",
-                    columnName: "Type",
-                    // width: 150,
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: false,
-                },
-                {
-                    title: "Description",
-                    name: "Description",
-                    columnName: "Description",
-                    // width: 250,
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: false,
-                },
-                {
-                    title: "Number",
-                    name: "Number",
-                    columnName: "Number",
-                    // width: 120,
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: false,
-                },
-                {
-                    title: "User",
-                    name: "User",
-                    columnName: "User",
-                    // width: 120,
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: false,
-                },
-                {
-                    title: "Status",
-                    name: "Status",
-                    columnName: "Status",
-                    // width: 120,
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: false,
-                },
-                {
-                    title: "Date",
-                    name: "Date",
-                    columnName: "Date",
-                    // width: 120,
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: false,
-                },
-                {
-                    title: "Action",
-                    name: "Action",
-                    columnName: "Action",
-                    // width: 300,
-                    wordWrapEnabled: true,
-                    sortingEnabled: true,
-                    filteringEnabled: true,
-                    groupingEnabled: false,
-                    togglingEnabled: false,
-                    align: 'center',
-                }
-            ],
-            rows : [
-                {
-                    "Region": "BUF",
-                    "Type": "Customer",
-                    "Description": "Midas Auto Care, Inc",
-                    "Number": "PENDING",
-                    "User": "German Sosa",
-                    "Status": "Pending",
-                    "Date": "01/21/2019",
-                    "Action": "",
-                },
-                {
-                    "Region": "BUF",
-                    "Type": "Transaction",
-                    "Description": "Child Support Added",
-                    "Number": "PENDING",
-                    "User": "German Sosa",
-                    "Status": "Pending",
-                    "Date": "01/21/2019",
-                    "Action": "",
-                },
-                {
-                    "Region": "BUF",
-                    "Type": "Invoice",
-                    "Description": "Midas Auto Care, Inc",
-                    "Number": "PENDING",
-                    "User": "German Sosa",
-                    "Status": "Pending",
-                    "Date": "01/21/2019",
-                    "Action": "",
-                },
-                {
-                    "Region": "BUF",
-                    "Type": "Transfer",
-                    "Description": "Midas Auto Care, Inc",
-                    "Number": "PENDING",
-                    "User": "Lizhu Lu",
-                    "Status": "Pending",
-                    "Date": "01/21/2019",
-                    "Action": "",
-                },
-                {
-                    "Region": "BUF",
-                    "Type": "Customer",
-                    "Description": "Added Lines",
-                    "Number": "PENDING",
-                    "User": "Wanzhe",
-                    "Status": "Pending",
-                    "Date": "01/21/2019",
-                    "Action": "",
-                },
-                {
-                    "Region": "BUF",
-                    "Type": "New Lease",
-                    "Description": "Midas CC payment Added",
-                    "Number": "PENDING",
-                    "User": "German Sosa",
-                    "Status": "Pending",
-                    "Date": "01/21/2019",
-                    "Action": "",
-                },
-                {
-                    "Region": "BUF",
-                    "Type": "Customer",
-                    "Description": "Midas Auto Care, Inc",
-                    "Number": "PENDING",
-                    "User": "German Sosa",
-                    "Status": "Pending",
-                    "Date": "01/21/2019",
-                    "Action": "",
-                }
-            ],
             sorting: [
-                { columnName: 'CustomerNo', direction: 'asc' }
+                { columnName: 'Franchisee', direction: 'asc' }
             ],
             editingColumnExtensions: [
 
             ],
             currencyColumns: [
-                'Amount'
+                'ExtendedPrice', 'TotalTrxAmount', 'Tax'
             ],
             phoneNumberColumns: [
                 'Phone'
@@ -513,26 +244,21 @@ class VerificationListContent extends Component {
             grouping: [
                 // { columnName: 'AccountTypeListName' },
             ],
-            pageSize: 20,
+            pageSize: 100,
             pageSizes: [10, 20, 30, 50, 100],
             amountFilterOperations: ['equal', 'notEqual', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual'],
             searchValue: '',
-
-
         };
-
-        this.fetchData = this.fetchData.bind(this);
 
         this.changeSelection = selection =>{
             this.setState({ selection });
             this.props.updateSelectedRowsLength(selection);
-            console.log('selectionLength',selection);
-        }
+        };
+
         this.changeSorting = sorting => this.setState({ sorting });
         this.commitChanges = this.commitChanges.bind(this);
         this.changeSearchValue = value => this.setState({ searchValue: value });
         this.changeGrouping = grouping => this.setState({ grouping });
-        console.log("constructor");
     }
     //
     // to edit table cell
@@ -561,7 +287,6 @@ class VerificationListContent extends Component {
     }
 
     onChange = (event, { newValue, method }) => {
-        console.log("onChange");
 
         this.setState({
             value: newValue.toString()
@@ -569,13 +294,11 @@ class VerificationListContent extends Component {
     };
 
     shouldComponentUpdate(nextProps, nextState) {
-        console.log("shouldComponentUpdate", this.state !== nextState);
         return true;
     }
 
 
     search(val) {
-        console.log("---------search---------", val);
         val = val.toLowerCase();
         if (val === '') {
             this.setState({ rows: [...this.state.data] });
@@ -596,42 +319,38 @@ class VerificationListContent extends Component {
     }
 
     componentDidMount() {
-        console.log("componentDidMount");
+        if(this.props.verifications!==null) {
+            this.processData();
+        }
     }
 
+    processData = ()=> {
+        if(this.props.verifications!==null) {
+            let temp = [...this.props.verifications.Data.FranchiseeTransactions];
+            temp.forEach(x => {
+                x.Franchisee = `${x.FranchiseeName} - ${x.FranchiseeNo}`
+            });
 
-    componentWillMount() {
-        console.log("componentWillMount");
-        this.timer = null;
-    }
-    componentWillUnmount() {
-        console.log("componentWillUnmount");
-    }
-
-
-    handleChange = prop => event => {
-        console.log("handleChange");
-        this.setState({ [prop]: event.target.value });
+            let expandedGroups = [...new Set(temp.map(d => d.Franchisee))];
+            this.setState({data: temp});
+            this.setState({expandedGroups: expandedGroups});
+        }
     };
 
 
-
-    fetchData(state, instance) {
-        console.log("fetchData");
-
-        this.setState({
-            pageSize: state.pageSize,
-            page: state.page,
-        });
+    componentWillMount() {
+        this.timer = null;
+    }
+    componentWillUnmount() {
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.verifications.Data.FranchiseeTransactions !== prevProps.verifications.Data.FranchiseeTransactions)
+            this.processData()
     }
 
-    generateRows() {
-        console.log("generateRows");
-
-        console.log(this.props.data.slice(0, 15));
-        return this.props.data;
-    }
-
+    handleChange = prop => event => {
+        this.setState({ [prop]: event.target.value });
+    };
 
     getCell = (props) => {
 
@@ -685,8 +404,8 @@ class VerificationListContent extends Component {
             clearTimeout(timer);
             prevent = true;
             console.log(restProps);
-            //this.props.openEditCustomerForm(this.props.regionId, tableRow.row.CustomerId);
-        }
+        };
+
         return (
             <Table.Row
                 {...restProps}
@@ -708,106 +427,130 @@ class VerificationListContent extends Component {
         this.props.openCloseRejectDialog(true);
     };
 
+    expandedGroupsChange = (expandedGroups) => {
+        this.setState({expandedGroups: expandedGroups});
+    };
+
+    emptyMessageContent = ({column, row}) => (
+        <span>
+            <strong>{row.value}</strong>
+		</span>
+    );
+
+    GroupCellContent = ({column, row}) => (
+        <span>
+            <strong>{row.value}</strong>
+		</span>
+    );
+
     render() {
         const { classes } = this.props;
 
         const {
-            rows,
             selection,
-            tableColumnExtensions,
             sorting,
             editingColumnExtensions,
             currencyColumns,
-            phoneNumberColumns,
             pageSizes,
             searchValue,
         } = this.state;
 
+        let data = this.state.data.map(d=>{
+            let type = this.props.transactionTypeList.filter(t=>t._id===d.TrxType);
+            if(type.length>0)
+                d.Type = type[0].Name;
+            d.TrxDate = moment(d.TrxDate).format('MM/DD/YYYY');
+            return d;
+        });
+        let  columns= [
+            { title: "Region",      name: "Region"},
+            { title: "Type",        name: "Type"},
+            { title: "Description", name: "Description"},
+            { title: "Franchisee",  name: "Franchisee"},
+            { title: "Sub total",   name: "ExtendedPrice"},
+            { title: "Tax",         name: "Tax"},
+            { title: "Total",       name: "TotalTrxAmount"},
+            { title: "Charge Type", name: "TrxChargeType"},
+            { title: "Class",       name: "TrxClass"},
+            { title: "Date",        name: "TrxDate"},
+            { title: "Action",      name: "Action"}
+        ];
+
+        let  tableColumnExtensions = [
+                { columnName: "Region", wordWrapEnabled: true, width: 80},
+                { columnName: "Type",           width: 180},
+                { columnName: "Description",    width: -1 },
+                { columnName: "ExtendedPrice",  width: 100, align: 'right'},
+                { columnName: "Tax",            width: 100, align: 'right'},
+                { columnName: "TotalTrxAmount", width: 100, align: 'right'},
+                { columnName: "TrxChargeType",  width: 140,  align: 'center'},
+                { columnName: "TrxClass",       width: 100,  align: 'center'},
+                { columnName: "TrxDate",        width: 100, align: 'center'},
+                { columnName: "Action",         width: 100, align: 'center'}
+                ];
+
+        console.log('this.state.expandedGroups=', this.state.expandedGroups);
 
         return (
             <Fragment>
                 <div className={classNames(classes.layoutTable, "flex flex-col")}>
+                    <VerificationSearchBar />
+                    <div className={classNames("flex flex-col", classes.layoutTable)} >
+                        <Grid
+                            rows={data}
+                            columns={columns}
+                        >
+                            <SelectionState
+                                selection={selection}
+                                onSelectionChange={this.changeSelection}
+                            />
+                            <PagingState
+                                defaultCurrentPage={0}
+                                defaultPageSize={100}
+                            />
 
-                        <VerificationSearchBar />
-                        <div className={classNames("flex flex-col", classes.layoutTable)} >
-                            <Grid
-                                rows={rows}
-                                columns={tableColumnExtensions}
-                            >
-                                <DragDropProvider />
-                                <PagingState
-                                    defaultCurrentPage={0}
-                                    defaultPageSize={20}
-                                />
+                            <CurrencyTypeProvider
+                                for={currencyColumns}
+                            />
 
-                                <PagingPanel pageSizes={pageSizes} />
+                            <PagingPanel pageSizes={pageSizes} />
+                            <IntegratedSelection />
 
-                                <SelectionState
-                                    selection={selection}
-                                    onSelectionChange={this.changeSelection}
-                                />
-                                <IntegratedSelection />
+                            <SortingState
+                                sorting={sorting}
+                                onSortingChange={this.changeSorting}
+                                columnExtensions={tableColumnExtensions}
+                            />
+                            <GroupingState
+                                grouping={[
+                                    {columnName: 'Franchisee'},
+                                ]}
+                                expandedGroups={this.state.expandedGroups}
+                                onExpandedGroupsChange={this.expandedGroupsChange}
+                            />
 
-                                <SortingState
-                                    sorting={sorting}
-                                    onSortingChange={this.changeSorting}
-                                    columnExtensions={tableColumnExtensions}
-                                />
-                                <IntegratedSorting />
+                            <IntegratedSorting />
 
-                                <IntegratedPaging />
+                            <IntegratedPaging />
+                            <IntegratedGrouping/>
+                            <VirtualTable height="auto"
+                                          tableComponent={TableComponent}
+                                          headComponent = {TableHeadComponent}
+                                          columnExtensions={columns}
+                                          rowComponent={this.TableRow}
+                                          cellComponent={this.getCell} />
 
-                                <SearchState
-                                    value={searchValue}
-                                    onValueChange={this.changeSearchValue}
-                                />
+                            <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
 
-                                <FilteringState
-                                    defaultFilters={[]}
-                                    columnExtensions={tableColumnExtensions}
-                                />
-                                <IntegratedFiltering />
-
-                                <EditingState
-                                    columnExtensions={editingColumnExtensions}
-                                    onCommitChanges={this.commitChanges}
-                                />
-
-                                <CurrencyTypeProvider
-                                    for={currencyColumns}
-                                />
-
-                                <PhoneNumberTypeProvider
-                                    for={phoneNumberColumns}
-                                />
-                                <Table rowComponent={this.TableRow} cellComponent={this.getCell} />
-
-                                {/*<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />*/}
-
-                                <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
-
-                                <TableHeaderRow showSortingControls />
-                                <Template
-                                    name="tableRow"
-                                    predicate={({ tableRow }) => tableRow.type === 'data'}
-                                >
-                                    {params => (
-                                        <TemplateConnector>
-                                            {({ selection }, { toggleSelection }) => (
-                                                <this.TableRow
-                                                    {...params}
-                                                    selected={selection.findIndex((i) => i === params.tableRow.rowId) > -1}
-                                                    onToggle={() => toggleSelection({ rowIds: [params.tableRow.rowId] })}
-                                                />
-                                            )}
-                                        </TemplateConnector>
-                                    )}
-                                </Template>
-
-                                <CustomizedDxGridSelectionPanel selection={selection} />
-
-                            </Grid>
-                        </div>
+                            <TableHeaderRow showSortingControls />
+                            <TableGroupRow
+                                showColumnsWhenGrouped contentComponent={this.GroupCellContent}
+                            />
+                            <TableColumnVisibility
+                                hiddenColumnNames={['Franchisee']}
+                                emptyMessageComponent={this.emptyMessageContent} />
+                        </Grid>
+                    </div>
                 </div>
             </Fragment>
         )
@@ -818,7 +561,6 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         toggleFilterPanel: Actions.toggleVerificationFilterPanel,
         toggleSummaryPanel: Actions.toggleVerificationSummaryPanel,
-        getVerifications: Actions.getVerifications,
         updateSelectedRowsLength: Actions.updateSelectedRowsLength,
         openCloseReviseDialog: Actions.openCloseReviseDialog,
         openVerificationDialog: Actions.openVerificationDialog,
@@ -826,7 +568,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-function mapStateToProps({ customers, auth, verifications }) {
+function mapStateToProps({ customers, auth, verifications, transactions }) {
     return {
         verifications: verifications.verificationsDB,
         bLoadedVerifications: verifications.bLoadedVerifications,
@@ -839,7 +581,8 @@ function mapStateToProps({ customers, auth, verifications }) {
         selectionLength: verifications.selectionLength,
         verifiedModal: verifications.verifiedModal,
         reviseModal: verifications.reviseModal,
-        rejectModal: verifications.rejectModal
+        rejectModal: verifications.rejectModal,
+        transactionTypeList: transactions.transactionTypeList,
     }
 }
 
