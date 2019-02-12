@@ -142,7 +142,7 @@ class VendorDialogBox extends Component {
     };
 
     isDisable = ()=>{
-        if(this.state.vendor==='') return true;
+        if(this.state.vendor==='' || this.state.vendorInvoiceNumber==='') return true;
         return false;
     };
 
@@ -183,25 +183,31 @@ class VendorDialogBox extends Component {
                             <Grid container spacing={24}>
                                 <Grid item xs={12}>
                                     <div className={classes.root1}>
-                                        <FormControl className={classes.formControl}>
-                                            <InputLabel htmlFor="vendorId">Vendor</InputLabel>
-                                            <Select
-                                                value={this.state.vendor}
-                                                onChange={this.handleVendorChange}
-                                                inputProps={{
-                                                    name: 'vendorId',
-                                                    id: 'vendorId',
-                                                }}
-                                                variant="outlined"
-                                                classes={{
+                                        <TextField
+                                            id="vendor-choice"
+                                            select
+                                            fullWidth
+                                            autoFocus={true}
+                                            label="Vendor Choice"
+                                            className={classes.textField}
+                                            value={this.state.vendor}
+                                            onChange={this.handleVendorChange}
+                                            SelectProps={{
+                                                MenuProps: {
+                                                    className: classes.menu,
+                                                },
+                                            }}
+                                            required
+                                            margin="normal"
+                                            variant="outlined"
+                                        >
+                                            {vendors.length>0 && vendors.map(v=>(
+                                                <MenuItem  key={v.value} value={v.value}>
+                                                    {v.label}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
 
-                                                }}
-                                            >
-                                                {vendors.length>0 && vendors.map(v=>{
-                                                    return (<MenuItem key={v.value} value={v.value}>{v.label}</MenuItem>)
-                                                })}
-                                            </Select>
-                                        </FormControl>
                                         <TextField
                                             id="vendorInvoiceNumber"
                                             label="Vendor Invoice Number"
