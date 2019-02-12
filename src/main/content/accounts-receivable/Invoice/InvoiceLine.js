@@ -458,18 +458,6 @@ class InvoiceLineTable extends React.Component {
         }
     }
 
-    handleChangeBilling = (event, n) => {
-        let newData = this.state.data.map(row=>{
-            let temp = row;
-            if(n.id===row.id){
-                temp[event.target.name] = event.target.value
-            }
-            return temp;
-        });
-
-        this.setState({data: newData})
-    };
-
     componentDidMount(){
         if(this.props.invoiceForm.type === 'new') {
             let id = 0;
@@ -930,13 +918,13 @@ class InvoiceLineTable extends React.Component {
         this.setState({data: data});
     };
 
-    handleServiceChange = (newValue, row) => {
+    handleServiceChange = async (newValue, row) => {
         this.setState({
             ["selectedServiceOption"+row.id]: newValue
         });
         const data = [...this.state.data];
         data[row.id].service = newValue;
-        this.setState({data: data});
+        await this.setState({data: data});
 
         if(newValue.value==='5c4b8a3b651a9c5970514a68') {//label: "Customer Supplies"
             this.props.openInvoiceVendorDialogBox(row.id);

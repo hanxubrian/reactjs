@@ -3,7 +3,7 @@ import {withRouter} from 'react-router-dom';
 
 // core components
 import {
-    Typography, Button, IconButton, Grid, Dialog, FormControl, Select,OutlinedInput, InputLabel, MenuItem,
+    Typography, Button, IconButton, Grid, Dialog, FormControl, Select,OutlinedInput, InputLabel, MenuItem,TextField
 } from '@material-ui/core';
 
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -21,6 +21,7 @@ import {withStyles} from "@material-ui/core";
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
+import _ from "lodash";
 
 
 const styles = theme => ({
@@ -109,6 +110,7 @@ const DialogActions = withStyles(theme => ({
 class VendorDialogBox extends Component {
     state = {
         vendor: '',
+        vendorInvoiceNumber: ''
     };
 
     componentDidUpdate(prevProps, prevState, snapshot){
@@ -147,6 +149,11 @@ class VendorDialogBox extends Component {
     handleVendorChange = (event)=> {
         this.setState({vendor: event.target.value});
     };
+
+    handleChange = name => event => {
+        this.setState({ [name]: event.target.value });
+    };
+
 
     render()
     {
@@ -195,6 +202,21 @@ class VendorDialogBox extends Component {
                                                 })}
                                             </Select>
                                         </FormControl>
+                                        <TextField
+                                            id="vendorInvoiceNumber"
+                                            label="Vendor Invoice Number"
+                                            name="vendorInvoiceNumber"
+                                            value={this.state.vendorInvoiceNumber}
+                                            onChange={this.handleChange('vendorInvoiceNumber')}
+                                            placeholder="Vendor Invoice Number"
+                                            fullWidth
+                                            margin="normal"
+                                            variant="outlined"
+                                            InputLabelProps={{
+                                                shrink: true,
+                                                autoFocus: true
+                                            }}
+                                        />
                                     </div>
                                 </Grid>
                             </Grid>
