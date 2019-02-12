@@ -68,7 +68,7 @@ import {
 } from "react-google-maps";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 import { compose, withProps, withHandlers, lifecycle } from "recompose";
-
+import { CustomizedDxGridSelectionPanel } from "./../../../../common/CustomizedDxGridSelectionPanel";
 
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -183,147 +183,6 @@ const styles = theme => ({
 		// backgroundColor: "lightyellow"
 	}
 });
-
-const account_offering_columns = [
-	{
-		title: "No.",
-		name: "Number",
-		columnName: "Number",
-		width: 90,
-	},
-	{
-		title: "Franchisees Name",
-		name: "Name",
-		columnName: "Name",
-		width: 220,
-	},
-	{
-		title: "Offer Date",
-		name: "OfferDate",
-		columnName: "OfferDate",
-		width: 130,
-	},
-	{
-		title: "Response",
-		name: "Response",
-		columnName: "Response",
-		width: 100,
-	},
-	{
-		title: "User",
-		name: "User",
-		columnName: "User",
-		width: 120,
-	},
-	{
-		title: "Response Date",
-		name: "ResponseDate",
-		columnName: "ResponseDate",
-		width: 130,
-	},
-	{
-		title: "Result",
-		name: "Result",
-		columnName: "Result",
-		width: 100,
-	},
-	{
-		title: "Offer Sent",
-		name: "OfferSent",
-		columnName: "OfferSent",
-		width: 100,
-	},
-
-];
-
-const account_offering_franchisee_columns = [
-	{
-		title: "No.",
-		name: "Number",
-		columnName: "Number",
-		width: 90,
-	},
-	{
-		title: "Franchisees Name",
-		name: "Name",
-		columnName: "Name",
-		width: 220,
-	},
-	{
-		title: "Signed",
-		name: "Signed",
-		columnName: "Signed",
-		width: 90,
-	},
-	{
-		title: "Plan",
-		name: "Plan",
-		columnName: "Plan",
-		width: 80,
-	},
-	{
-		title: "Accounts",
-		name: "Accounts",
-		columnName: "Accounts",
-		width: 100,
-	},
-	{
-		title: "Billing",
-		name: "Billing",
-		columnName: "Billing",
-		width: 130,
-	},
-	{
-		title: "Cont Eval",
-		name: "ContEval",
-		columnName: "ContEval",
-		width: 100,
-	},
-	{
-		title: "Group1 Total",
-		name: "Group1Total",
-		columnName: "Group1Total",
-		width: 120,
-	},
-	{
-		title: "Compliant",
-		name: "Compliant",
-		columnName: "Compliant",
-		width: 100,
-	},
-	{
-		title: "Fail Insp",
-		name: "FailInsp",
-		columnName: "FailInsp",
-		width: 90,
-	},
-	{
-		title: "Cancel",
-		name: "Cancel",
-		columnName: "Cancel",
-		width: 80,
-	},
-	{
-		title: "Pend Cancel",
-		name: "PendCancel",
-		columnName: "PendCancel",
-		width: 110,
-	},
-	{
-		title: "Last Offered",
-		name: "LastOffered",
-		columnName: "LastOffered",
-		width: 110,
-	},
-	{
-		title: "Oblg",
-		name: "Oblg",
-		columnName: "Oblg",
-		width: 80,
-	},
-
-];
-
 //
 // table row edit command buttons
 //
@@ -531,6 +390,92 @@ class FranchieesListPage extends Component {
 		super(props)
 
 		this.state = {
+			columns: [
+				{
+					title: "No.",
+					name: "Number",
+					columnName: "Number",
+					width: 90,
+				},
+				{
+					title: "Franchisees Name",
+					name: "Name",
+					columnName: "Name",
+					width: 220,
+				},
+				{
+					title: "Signed",
+					name: "Signed",
+					columnName: "Signed",
+					width: 90,
+				},
+				{
+					title: "Plan",
+					name: "Plan",
+					columnName: "Plan",
+					width: 80,
+				},
+				{
+					title: "Accounts",
+					name: "Accounts",
+					columnName: "Accounts",
+					width: 100,
+				},
+				{
+					title: "Billing",
+					name: "Billing",
+					columnName: "Billing",
+					width: 130,
+				},
+				{
+					title: "Cont Eval",
+					name: "ContEval",
+					columnName: "ContEval",
+					width: 100,
+				},
+				{
+					title: "Group1 Total",
+					name: "Group1Total",
+					columnName: "Group1Total",
+					width: 120,
+				},
+				{
+					title: "Compliant",
+					name: "Compliant",
+					columnName: "Compliant",
+					width: 100,
+				},
+				{
+					title: "Fail Insp",
+					name: "FailInsp",
+					columnName: "FailInsp",
+					width: 90,
+				},
+				{
+					title: "Cancel",
+					name: "Cancel",
+					columnName: "Cancel",
+					width: 80,
+				},
+				{
+					title: "Pend Cancel",
+					name: "PendCancel",
+					columnName: "PendCancel",
+					width: 110,
+				},
+				{
+					title: "Last Offered",
+					name: "LastOffered",
+					columnName: "LastOffered",
+					width: 110,
+				},
+				{
+					title: "Oblg",
+					name: "Oblg",
+					columnName: "Oblg",
+					width: 80,
+				},
+			],
 			openSideBar: false,
 			showMapView: false,
 
@@ -541,7 +486,7 @@ class FranchieesListPage extends Component {
 
 
 			temp: [],
-			data: [],
+			rows: [],
 			customers: [],
 
 			pageSizes: [5, 10, 20, 30, 50, 100],
@@ -613,40 +558,45 @@ class FranchieesListPage extends Component {
 	getFranchiseesFromStatus = (rawData = this.props.franchisees) => {
 		console.log("rawData-getFranchiseesFromStatus", rawData);
 
-		let data = [];
-		let tempData = [];
-		if (rawData === undefined || rawData === null) return;
+		let rows = [];
 
-		if (rawData.Data.Region.length === 0) {
-			data = [];
-			this.setState({ temp: data });
-			this.setState({ data: data });
-			return;
-		} else {
-			for (let i = 0; i < rawData.Data.Region.length; i++) {
-				tempData = rawData.Data.Region[i].Franchisees;
-				data = data.concat(tempData);
-			}
-		}
-		this.setState({ temp: data });
-		this.setState({ data: data });
+		if (!rawData || !rawData.Data || !rawData.Data.Region) return;
+
+		// let tempData = [];
+		// if (rawData.Data.Region.length === 0) {
+		// 	data = [];
+		// 	this.setState({ temp: data });
+		// 	this.setState({ data: data });
+		// 	return;
+		// } else {
+		// 	for (let i = 0; i < rawData.Data.Region.length; i++) {
+		// 		tempData = rawData.Data.Region[i].Franchisees;
+		// 		data = data.concat(tempData);
+		// 	}
+		// }
+
+		rawData.Data.Region.forEach((x, index) => {
+			rows = [...rows, ...x.Franchisees]
+		})
+		this.setState({ rows })
+
+
+		// this.setState({ temp: data });
+		// this.setState({ data: data });
 	};
 	offerThisAccount = () => {
 		this.setState({ step: 1 })
 	}
 	backToAccountOfferingHome = () => {
 		this.setState({
-			step: 0,
 			showMapView: false
 		})
+		this.props.setStep(0)
 	}
-	backToFranchiseeList = () => {
-		this.setState({ step: 1 })
-	}
-
 
 	showDetails = row => {
-		this.setState({ popupVisible: true, activeRow: row, step: 2 });
+		this.props.setActiveRow(row)
+		this.props.setStep(2)
 	};
 
 	EditingCellComponentBase = ({ children, row, ...restProps }) => {
@@ -730,7 +680,15 @@ class FranchieesListPage extends Component {
 			);
 		}
 	}
+	onClickAssign = () => {
+		const { selection, rows } = this.state
+		const franchieesesToOffer = selection.map(x => (rows[x]))
 
+		console.log(selection, franchieesesToOffer)
+
+		this.props.showFranchieesAssignModalForm(true)
+		this.props.setFranchieesesToOffer(franchieesesToOffer)
+	}
 	render() {
 		const {
 			classes,
@@ -751,104 +709,52 @@ class FranchieesListPage extends Component {
 			pins2,
 			gmapVisible,
 			showMapView,
-
+			rows,
+			columns,
 		} = this.state;
 
-		let rows = []
-		let columns = []
-		switch (step) {
-			case 0:
-				rows = [
-					{ Number: 712025, Name: "MICHAEL A. WHITEHEAD", OfferDate: "06/12/2018", Response: "Accepted", User: "BUDDY NGUYEN", ResponseDate: "06/15/2018", Result: "", OfferSent: "" },
-					{ Number: 712025, Name: "ANA E. BURIANO", OfferDate: "06/12/2018", Response: "Declined", User: "WILLIAM E. JACKSON", ResponseDate: "06/15/2018", Result: "", OfferSent: "" },
-					{ Number: 712025, Name: "SHANE DEUBELL", OfferDate: "06/12/2018", Response: "Expired", User: "AWA AVINO, INC.", ResponseDate: "06/15/2018", Result: "", OfferSent: "" },
-				]
-				columns = [...account_offering_columns]
-				break;
-			case 1:
-				rows = [...this.state.data]
-				columns = [...account_offering_franchisee_columns]
-				break;
-			case 2:
-				break;
-			default:
-				break;
-		}
-
-
-		console.log("activeRow", rows)
-		console.log("columns", columns)
 		return (
 			<Fragment>
-				<div className={classNames("mb-12 w-full")}>
-					{
-						step === 0 && (
-							<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-								<Button
-									variant="contained"
-									color="primary"
-									className={classNames(classes.button, "pr-24 pl-24")}
-									onClick={() => {
-										this.offerThisAccount();
-									}}
-								> Offer this account... </Button>
-							</div>
-						)}
+				<div className={classNames(classes.layoutTable, "flex flex-col h-full")}>
 
-					{
-						step === 1 && (
-							<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-								<div>
-									<IconButton onClick={this.backToAccountOfferingHome}>
-										<Icon>arrow_back</Icon>
-									</IconButton>
-									Back
-								</div>
-								<div>
-									<Tooltip title="Location Filter">
-										<IconButton onClick={this.toggleSideBar}>
-											<Icon>menu</Icon>
-										</IconButton>
-									</Tooltip>
-									<Tooltip title={showMapView ? "Grid View" : "Map view"}>
-										<IconButton
-											// className={classNames(classes.summaryPanelButton, "mr-12")}
-											className={classNames(classes.button, "mr-12")}
-											// aria-label="Add an alarm"
-											onClick={this.toggleMapView}
-										>
-											{/* <Icon>{this.props.mapViewState ? 'list' : 'location_on'}</Icon> */}
-											<Icon>location_on</Icon>
-										</IconButton>
-									</Tooltip>
-								</div>
-							</div>
-						)}
-
-					{step === 2 && (
+					<div className={classNames("mb-12 w-full")}>
 						<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-							<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-								<IconButton onClick={this.backToFranchiseeList}>
+							<div>
+								<IconButton onClick={this.backToAccountOfferingHome}>
 									<Icon>arrow_back</Icon>
 								</IconButton>
 								Back
+								</div>
+							<div>
+								<Tooltip title="Location Filter">
+									<IconButton onClick={this.toggleSideBar}>
+										<Icon>menu</Icon>
+									</IconButton>
+								</Tooltip>
+								<Tooltip title={showMapView ? "Grid View" : "Map view"}>
+									<IconButton
+										// className={classNames(classes.summaryPanelButton, "mr-12")}
+										className={classNames(classes.button, "mr-12")}
+										// aria-label="Add an alarm"
+										onClick={this.toggleMapView}
+									>
+										{/* <Icon>{this.props.mapViewState ? 'list' : 'location_on'}</Icon> */}
+										<Icon>location_on</Icon>
+									</IconButton>
+								</Tooltip>
+								<Button
+									variant="contained"
+									color="primary"
+									className={classNames(classes.button, "pr-24 pl-24 mb-6")}
+									onClick={this.onClickAssign}
+								> Assign </Button>
 							</div>
-							<Button
-								variant="contained"
-								color="primary"
-								className={classNames(classes.button, "pr-36 pl-36")}
-								onClick={() => {
-									this.backToAccountOfferingHome();
-								}}
-							> Send </Button>
 						</div>
-					)}
-				</div>
+					</div>
 
-				{(step === 0 || step === 1) && (
 					<GridContainer style={{ alignItems: 'center' }} className={classNames("flex flex-col", showMapView ? "h-full" : "")} style={{ backgroundColor: "" }}>
 						<GridItem xs={12} sm={12} md={12} className="flex flex-row" style={{ backgroundColor: "" }}>
-							{(step === 1 && this.state.openSideBar) && (
+							{this.state.openSideBar && (
 								<Paper className={classNames("flex flex-col h-full pl-24 pr-12 mr-12")} style={{ backgroundColor: "", height: "auto", minWidth: 250 }}>
 									<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
 										<GridItem xs={12} sm={12} md={12} className="flex flex-col">
@@ -960,8 +866,8 @@ class FranchieesListPage extends Component {
 							)}
 							<Paper className={classNames("flex flex-col h-full p-6 w-full")} style={{ height: "auto", overflowX: "scroll" }}>
 
-								{showMapView ? (
-									<div className="w-full h-full">
+								{showMapView ?
+									(<div className="w-full h-full">
 										{/* map area */}
 										{gmapVisible && (<MapWithAMarkerClusterer
 											markers={pins}
@@ -973,735 +879,57 @@ class FranchieesListPage extends Component {
 											center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
 										/>)}
 									</div>
-								) : (
-										<div>
-											{/* grid area */}
-											<Grid rows={rows} columns={columns}>
-												{step === 1 && (
-													<SearchState value={searchValue} onValueChange={this.changeSearchValue} />
-												)}
-												{step === 1 && (
-													<IntegratedFiltering />
-												)}
+									) :
+									(<div className="w-full h-full">
+										{/* grid area */}
+										<Grid rows={rows} columns={columns}>
+											<SearchState value={searchValue} onValueChange={this.changeSearchValue} />
+											<IntegratedFiltering />
+											<SelectionState selection={selection} onSelectionChange={this.changeSelection} />
+											<PagingState defaultCurrentPage={0} defaultPageSize={10} />
+											<PagingPanel pageSizes={pageSizes} />
+											<IntegratedSelection />
+											<SortingState sorting={sorting} onSortingChange={this.changeSorting} columnExtensions={columns} />
+											<IntegratedSorting />
+											<IntegratedPaging />
+											<EditingState
+												// columnExtensions={editingColumnExtensions}
+												onCommitChanges={this.commitChanges} />
+											<Table />
+											{/* <VirtualTable height="auto" /> */}
 
-												{step === 1 && (
-													<SelectionState selection={selection} onSelectionChange={this.changeSelection} />
-												)}
-												{step === 1 && (
-													<PagingState defaultCurrentPage={0} defaultPageSize={10} />
-												)}
-												{step === 1 && (
-													<PagingPanel pageSizes={pageSizes} />
-												)}
+											{/* <TableColumnResizing defaultColumnWidths={columns} /> */}
 
-												{step === 1 && (
-													<IntegratedSelection />
-												)}
-												<SortingState sorting={sorting} onSortingChange={this.changeSorting} columnExtensions={columns} />
-												<IntegratedSorting />
-												{step === 1 && (
-													<IntegratedPaging />
-												)}
-												{step === 1 && (
-													<EditingState
-														// columnExtensions={editingColumnExtensions}
-														onCommitChanges={this.commitChanges} />
-												)}
-												<Table />
-												{/* <VirtualTable height="auto" /> */}
+											<TableSelection showSelectAll selectByRowClick highlightRow />
+											<TableHeaderRow showSortingControls />
+											{/* <TableEditRow /> */}
+											<TableEditColumn width={60} cellComponent={this.EditingCellComponent} headerCellComponent={EditingHeaderCellComponent}
+											// showAddCommand
+											// showEditCommand
+											// showDeleteCommand
+											// commandComponent={Command}
+											/>
+											<Toolbar rootComponent={this.ToolbarRoot} />
+											<SearchPanel />
+											<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
+										</Grid>
 
-												{/* <TableColumnResizing defaultColumnWidths={columns} /> */}
+										<div className={classNames(classes.layoutTable, "flex flex-row")} style={{ justifyContent: "space-between" }}>
+											<span className={"p-6"}>
+												Rows Selected: <strong>{selection.length}</strong>
+											</span>
 
-												<TableHeaderRow showSortingControls />
-												{step === 1 && (
-													<TableEditRow />
-												)}
-												{step === 1 && (
-													<TableEditColumn width={60} cellComponent={this.EditingCellComponent} headerCellComponent={EditingHeaderCellComponent}
-													// showAddCommand
-													// showEditCommand
-													// showDeleteCommand
-													// commandComponent={Command}
-													/>
-												)}
-
-												{step === 1 && (
-													<TableSelection showSelectAll selectByRowClick highlightRow />
-												)}
-
-												{step === 1 && (
-													<Toolbar rootComponent={this.ToolbarRoot} />
-												)}
-												{step === 1 && (
-													<SearchPanel />
-												)}
-
-											</Grid>
-
-											{(step === 1) && (
-												<div className={classNames(classes.layoutTable, "flex flex-row")} style={{ justifyContent: "space-between" }}>
-													<span className={"p-6"}>
-														Rows Selected: <strong>{selection.length}</strong>
-													</span>
-
-													<span className={"p-6"}>
-														Total Rows: <strong>{rows.length}</strong>
-													</span>
-												</div>
-											)}
+											<span className={"p-6"}>
+												Total Rows: <strong>{rows.length}</strong>
+											</span>
 										</div>
+									</div>
 									)}
-
-
-
 							</Paper>
 						</GridItem>
 					</GridContainer>
-				)}
 
-				{(step === 2) && (
-					<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-							<Paper className={classNames(classes.layoutTable, "flex flex-col p-24 mr-6 w-full")}>
-								<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											type="text"
-											id="FranchiseeNumber"
-											label="Franchisee No."
-											className={classNames(classes.textField, "mr-6")}
-											InputProps={{
-												readOnly: true,
-											}}
-											value={this.state.activeRow.Number || ""}
-											onChange={this.handleChange('FranchiseeNumber')}
-											margin="dense"
-											fullWidth
-										// variant="outlined"
-										// style={{ width: '60%' }}
-										/>
-
-										<TextField
-											type="text"
-											id="FranchiseePhone"
-											label="Phone"
-											className={classNames(classes.textField, "ml-6")}
-											InputProps={{
-												readOnly: true,
-											}}
-											value={this.state.activeRow.Phone || ""}
-											onChange={this.handleChange('FranchiseePhone')}
-											margin="dense"
-											fullWidth
-										// variant="outlined"
-										// style={{ width: '60%' }}
-										/>
-									</GridItem>
-								</GridContainer>
-
-								<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-
-										<TextField
-											type="text"
-											id="FranchiseeName"
-											label="Franchisee Name"
-											className={classNames(classes.textField, "mr-6")}
-											InputProps={{
-												readOnly: true,
-											}}
-											value={this.state.activeRow.Name || ""}
-											onChange={this.handleChange('FranchiseeName')}
-											margin="dense"
-											fullWidth
-										// variant="outlined"
-										// style={{ width: '60%' }}
-										/>
-										<TextField
-											type="text"
-											id="FranchiseeEmail"
-											label="Email"
-											className={classNames(classes.textField, "ml-6")}
-											InputProps={{
-												readOnly: true,
-											}}
-											value={this.state.FranchiseeEmail}
-											onChange={this.handleChange('FranchiseeEmail')}
-											margin="dense"
-											fullWidth
-										// variant="outlined"
-										// style={{ width: '60%' }}
-										/>
-									</GridItem>
-								</GridContainer>
-
-								<TextField
-									type="text"
-									id="Address1"
-									label="Address 1"
-									className={classes.textField}
-									InputProps={{
-										readOnly: true,
-									}}
-									value={this.state.activeRow.Address || ""}
-									onChange={this.handleChange('Address1')}
-									margin="dense"
-								// variant="outlined"
-								// style={{ width: '60%' }}
-								/>
-								<TextField
-									type="text"
-									id="Address2"
-									label="Address 2"
-									className={classes.textField}
-									InputProps={{
-										readOnly: true,
-									}}
-									value={this.state.Address2}
-									onChange={this.handleChange('Address2')}
-									margin="dense"
-								// variant="outlined"
-								// style={{ width: '60%' }}
-								/>
-								<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											type="text"
-											id="City"
-											label="City"
-											className={classNames(classes.textField, "mr-6")}
-											InputProps={{
-												readOnly: true,
-											}}
-											value={this.state.activeRow.City || ""}
-											onChange={this.handleChange('City')}
-											margin="dense"
-											fullWidth
-										// variant="outlined"
-										// style={{ width: '60%' }}
-										/>
-										<TextField
-											type="text"
-											id="State"
-											label="State"
-											className={classNames(classes.textField, "mr-6 ml-6")}
-											InputProps={{
-												readOnly: true,
-											}}
-											value={this.state.State}
-											onChange={this.handleChange('State')}
-											margin="dense"
-											fullWidth
-										// variant="outlined"
-										// style={{ width: '60%' }}
-										/>
-										<TextField
-											type="text"
-											id="Zip"
-											label="Zip"
-											className={classNames(classes.textField, "ml-6")}
-											InputProps={{
-												readOnly: true,
-											}}
-											value={this.state.activeRow.PostalCode || ""}
-											onChange={this.handleChange('Zip')}
-											margin="dense"
-											fullWidth
-										// variant="outlined"
-										// style={{ width: '60%' }}
-										/>
-									</GridItem></GridContainer>
-
-							</Paper>
-
-							<Paper className={classNames(classes.layoutTable, "flex flex-col p-24 ml-6 w-full")}>
-								<TextField
-									type="text"
-									id="CustomerNumber"
-									label="Customer No."
-									className={classes.textField}
-									InputProps={{
-										readOnly: true,
-									}}
-									value={this.state.CustomerNumber}
-									onChange={this.handleChange('CustomerNumber')}
-									margin="dense"
-								// variant="outlined"
-								// style={{ width: '60%' }}
-								/>
-								<TextField
-									type="text"
-									id="CustomerName"
-									label="Customer Name"
-									className={classes.textField}
-									InputProps={{
-										readOnly: true,
-									}}
-									value={this.state.CustomerName}
-									onChange={this.handleChange('CustomerName')}
-									margin="dense"
-								// variant="outlined"
-								// style={{ width: '60%' }}
-								/>
-								<TextField
-									type="text"
-									id="Address1"
-									label="Address 1"
-									className={classes.textField}
-									InputProps={{
-										readOnly: true,
-									}}
-									value={this.state.Address1}
-									onChange={this.handleChange('Address1')}
-									margin="dense"
-								// variant="outlined"
-								// style={{ width: '60%' }}
-								/>
-								<TextField
-									type="text"
-									id="Address2"
-									label="Address 2"
-									className={classes.textField}
-									InputProps={{
-										readOnly: true,
-									}}
-									value={this.state.Address2}
-									onChange={this.handleChange('Address2')}
-									margin="dense"
-								// variant="outlined"
-								// style={{ width: '60%' }}
-								/>
-								<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											type="text"
-											id="City"
-											label="City"
-											className={classNames(classes.textField, "mr-6")}
-											InputProps={{
-												readOnly: true,
-											}}
-											value={this.state.City}
-											onChange={this.handleChange('City')}
-											margin="dense"
-										// variant="outlined"
-										// style={{ width: '60%' }}
-										/>
-										<TextField
-											type="text"
-											id="State"
-											label="State"
-											className={classNames(classes.textField, "mr-6 ml-6")}
-											InputProps={{
-												readOnly: true,
-											}}
-											value={this.state.State}
-											onChange={this.handleChange('State')}
-											margin="dense"
-										// variant="outlined"
-										// style={{ width: '60%' }}
-										/>
-										<TextField
-											type="text"
-											id="Zip"
-											label="Zip"
-											className={classNames(classes.textField, "ml-6")}
-											InputProps={{
-												readOnly: true,
-											}}
-											value={this.state.Zip}
-											onChange={this.handleChange('Zip')}
-											margin="dense"
-										// variant="outlined"
-										// style={{ width: '60%' }}
-										/>
-									</GridItem>
-								</GridContainer>
-								<TextField
-									type="text"
-									id="AccountType"
-									label="Account Type"
-									className={classes.textField}
-									InputProps={{
-										readOnly: true,
-									}}
-									value={this.state.AccountType}
-									onChange={this.handleChange('AccountType')}
-									margin="dense"
-								// variant="outlined"
-								// style={{ width: '60%' }}
-								/>
-
-								<TextField
-									type="text"
-									id="MonthlyBussinessAmount"
-									label="Monthly Bussiness Amount"
-									className={classes.textField}
-									InputProps={{
-										readOnly: true,
-									}}
-									value={this.state.MonthlyBussinessAmount}
-									onChange={this.handleChange('MonthlyBussinessAmount')}
-									margin="dense"
-								// variant="outlined"
-								// style={{ width: '60%' }}
-								/>
-
-
-								<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="ServiceType"
-											label="Service Type *"
-											select
-											InputLabelProps={{
-												shrink: true
-											}}
-											className={classNames(classes.textField, "mr-6")}
-											InputProps={{
-												readOnly: true,
-											}}
-											value={this.state.ServiceType === undefined ? "" : this.state.ServiceType}
-											onChange={this.handleChange('ServiceType')}
-											margin="dense"
-											// variant="outlined"
-											// style={{ minWidth: "100px", width: "30%" }}
-											fullWidth
-										>
-											{[{ value: 0, label: "Select" }].map(option => (
-												<MenuItem key={option.value} value={option.value}>
-													{option.label}
-												</MenuItem>
-											))}
-										</TextField>
-
-										<TextField
-											type="number"
-											inputProps={{ min: "0", max: "999999", step: "1" }}
-											id="SquareFootage"
-											label="Square Footage"
-											className={classNames(classes.textField, "ml-6")}
-											InputProps={{
-												readOnly: true,
-											}}
-											value={this.state.SquareFootage}
-											onChange={this.handleChange('SquareFootage')}
-											margin="dense"
-											// variant="outlined"
-											fullWidth
-										// style={{ minWidth: "100px", width: "30%" }}
-										/>
-									</GridItem>
-
-
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											type="time"
-											id="StartTime"
-											label="Start Time *"
-											className={classNames(classes.textField, "mr-6")}
-											InputProps={{
-												readOnly: true,
-											}}
-											InputLabelProps={{
-												shrink: true
-											}}
-											value={this.state.StartTime}
-											onChange={this.handleChange('StartTime')}
-											margin="dense"
-											// variant="outlined"
-											style={{ width: '100%' }}
-										/>
-										<TextField
-											type="time"
-											id="EndTime"
-											label="End Time *"
-											className={classNames(classes.textField, "ml-6")}
-											InputProps={{
-												readOnly: true,
-											}}
-											InputLabelProps={{
-												shrink: true
-											}}
-											value={this.state.EndTime}
-											onChange={this.handleChange('EndTime')}
-											margin="dense"
-											// variant="outlined"
-											style={{ width: '100%' }}
-										/>
-									</GridItem>
-
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											type="number"
-											id="Amount"
-											label="Amount *"
-											className={classes.textField}
-											InputProps={{
-												readOnly: true,
-											}}
-											InputLabelProps={{
-												shrink: true
-											}}
-											value={this.state.Amount}
-											onChange={this.handleChange('Amount')}
-											margin="dense"
-											// variant="outlined"
-											style={{ minWidth: "100px", width: "30%" }}
-											InputProps={{
-												startAdornment: <InputAdornment position="start">$</InputAdornment>
-											}}
-										/>
-									</GridItem>
-
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											type="number"
-											id="CleanTimes"
-											label="Clean Times *"
-											className={classNames(classes.textField, "mr-6")}
-											InputProps={{
-												readOnly: true,
-											}}
-											value={this.state.CleanTimes}
-											onChange={this.handleChange('CleanTimes')}
-											margin="dense"
-											// variant="outlined"
-											style={{ width: '100%' }}
-										/>
-
-										<TextField
-											select
-
-											id="CleanFrequency"
-											label="Clean Frequency *"
-											className={classNames(classes.textField, "ml-6")}
-											InputProps={{
-												readOnly: true,
-											}}
-											InputLabelProps={{
-												shrink: true
-											}}
-											value={this.state.CleanFrequency === undefined ? "" : this.state.CleanFrequency}
-											onChange={this.handleChange('CleanFrequency')}
-											margin="dense"
-											// variant="outlined"
-											style={{ width: '100%' }}
-										>
-											{[{ value: 0, label: "Monthly" }].map(option => (
-												<MenuItem key={option.value} value={option.value}>
-													{option.label}
-												</MenuItem>
-											))}
-										</TextField>
-									</GridItem>
-
-									{/* <GridItem xs={12} sm={12} md={12} className="flex flex-row justify-start">
-										<FormControlLabel
-											control={
-												<Checkbox onChange={this.handleChange('weekdays')} />
-											}
-											label="Mon"
-											className="mr-36"
-
-										/>
-										<FormControlLabel
-											control={
-												<Checkbox onChange={this.handleChange('weekdays')} />
-											}
-											label="Tue"
-											className="mr-36"
-
-										/>
-										<FormControlLabel
-											control={
-												<Checkbox onChange={this.handleChange('weekdays')} />
-											}
-											label="Wed"
-											className="mr-36"
-
-										/>
-										<FormControlLabel
-											control={
-												<Checkbox onChange={this.handleChange('weekdays')} />
-											}
-											label="Thu"
-											className="mr-36"
-
-										/>
-										<FormControlLabel
-											control={
-												<Checkbox onChange={this.handleChange('weekdays')} />
-											}
-											label="Fri"
-											className="mr-36"
-
-										/>
-										<FormControlLabel
-											control={
-												<Checkbox onChange={this.handleChange('weekdays')} />
-											}
-											label="Sat"
-											className="mr-36"
-
-										/>
-										<FormControlLabel
-											control={
-												<Checkbox onChange={this.handleChange('weekdays')} />
-											}
-											label="Sun"
-											className="mr-36"
-										/>
-										<FormControlLabel
-											control={
-												<Checkbox onChange={this.handleChange('weekdays')} />
-											}
-											label="Weekends"
-
-										/>
-									</GridItem> */}
-
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<FormControlLabel
-											control={
-												<Checkbox onChange={this.handleChange('weekdays')} />
-											}
-											label="CPI Increase"
-											style={{ marginRight: "30px" }}
-
-										/>
-										<FormControlLabel
-											control={
-												<Checkbox onChange={this.handleChange('weekdays')} />
-											}
-											label="Separate Invoice"
-											style={{ marginRight: "30px" }}
-
-										/>
-									</GridItem>
-
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="Description"
-											label="Description"
-											multiline
-											rows="2"
-											rowsMax="2"
-											className={classes.textField}
-											InputProps={{
-												readOnly: true,
-											}}
-											value={this.state.Description}
-											onChange={this.handleChange('Description')}
-											margin="dense"
-											variant="outlined"
-											style={{ width: '100%' }}
-										/>
-									</GridItem>
-								</GridContainer>
-
-							</Paper>
-
-						</GridItem>
-
-						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-							< Paper
-								className={classNames(classes.layoutTable, "flex flex-col h-full w-full p-24 mt-12")}
-							>
-
-								<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-
-										<TextField
-											type="Date"
-											id="StartDate"
-											label="Start Date"
-											InputLabelProps={{
-												shrink: true
-											}}
-											className={classNames(classes.textField, "mr-6")}
-											value={this.state.StartDate}
-											onChange={this.handleChange('StartDate')}
-											margin="dense"
-											fullWidth
-											variant="outlined"
-										// style={{ width: '60%' }}
-										/>
-										<TextField
-											type="text"
-											id="MonthlyContactBilling"
-											label="Monthly Contact Billing"
-											className={classNames(classes.textField, "ml-6")}
-											value={this.state.MonthlyContactBilling}
-											onChange={this.handleChange('MonthlyContactBilling')}
-											margin="dense"
-											fullWidth
-											variant="outlined"
-										// style={{ width: '60%' }}
-										/>
-									</GridItem>
-
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											type="text"
-											id="To"
-											label="To"
-											className={classNames(classes.textField, "")}
-											value={this.state.To}
-											onChange={this.handleChange('To')}
-											margin="dense"
-											fullWidth
-											variant="outlined"
-										// style={{ width: '60%' }}
-										/>
-									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											type="text"
-											id="Subject"
-											label="Subject"
-											className={classNames(classes.textField, "")}
-											value={this.state.Subject}
-											onChange={this.handleChange('Subject')}
-											margin="dense"
-											fullWidth
-											variant="outlined"
-										// style={{ width: '60%' }}
-										/>
-									</GridItem>
-
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											type="text"
-											id="Content"
-											label="Content"
-											multiline
-											rows="7"
-											rowsMax="7"
-											className={classNames(classes.textField, "")}
-											value={this.state.Content}
-											onChange={this.handleChange('Content')}
-											margin="dense"
-											fullWidth
-											variant="outlined"
-										// style={{ width: '60%' }}
-										/>
-									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row" style={{ justifyContent: "flex-start" }}>
-										<Button
-											variant="contained"
-											color="primary"
-											className={classNames(classes.button, "pr-36 pl-36 mt-6")}
-											onClick={() => {
-												this.backToAccountOfferingHome();
-											}}
-										> Send </Button>
-									</GridItem>
-								</GridContainer>
-							</Paper>
-						</GridItem>
-					</GridContainer>
-				)}
+				</div>
 			</Fragment>
 		)
 
@@ -1711,6 +939,9 @@ class FranchieesListPage extends Component {
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
 		getFranchisees: Actions.getFranchisees,
+
+		showFranchieesAssignModalForm: Actions.showFranchieesAssignModalForm,
+		setFranchieesesToOffer: Actions.setFranchieesesToOffer,
 	}, dispatch);
 }
 

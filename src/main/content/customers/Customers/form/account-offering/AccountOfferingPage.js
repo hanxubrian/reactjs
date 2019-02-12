@@ -72,6 +72,7 @@ import { compose, withProps, withHandlers, lifecycle } from "recompose";
 import FranchieesSubmitOfferPage from './FranchieesSubmitOfferPage';
 import FranchieesListPage from './FranchieesListPage';
 import FranchieesOfferedListPage from './FranchieesOfferedListPage';
+import FranchieesAssignModal from './FranchieesAssignModal';
 
 
 const hexToRgb = (hex) => {
@@ -769,40 +770,15 @@ class AccountOfferingPage extends Component {
 			activeRow,
 		} = this.state;
 
-		let rows = []
-		let columns = []
-		switch (step) {
-			case 0:
-				rows = [
-					{ Number: 712025, Name: "MICHAEL A. WHITEHEAD", OfferDate: "06/12/2018", Response: "Accepted", User: "BUDDY NGUYEN", ResponseDate: "06/15/2018", Result: "", OfferSent: "" },
-					{ Number: 712025, Name: "ANA E. BURIANO", OfferDate: "06/12/2018", Response: "Declined", User: "WILLIAM E. JACKSON", ResponseDate: "06/15/2018", Result: "", OfferSent: "" },
-					{ Number: 712025, Name: "SHANE DEUBELL", OfferDate: "06/12/2018", Response: "Expired", User: "AWA AVINO, INC.", ResponseDate: "06/15/2018", Result: "", OfferSent: "" },
-				]
-				columns = [...account_offering_columns]
-				break;
-			case 1:
-				rows = [...this.state.data]
-				columns = [...account_offering_franchisee_columns]
-				break;
-			case 2:
-				break;
-			default:
-				break;
-		}
-
-
-		console.log("activeRow", rows)
-		console.log("columns", columns)
 		return (
-
-
-			<Fragment>
-				{step === 0 && <FranchieesListPage setStep={this.setStep} setActiveRow={this.setActiveRow} />}
-				{step === 1 && <FranchieesOfferedListPage setStep={this.setStep} setActiveRow={this.setActiveRow} />}
+			<div className={classNames("flex flex-col")}>
+				{step === 0 && <FranchieesOfferedListPage setStep={this.setStep} setActiveRow={this.setActiveRow} />}
+				{step === 1 && <FranchieesListPage setStep={this.setStep} setActiveRow={this.setActiveRow} />}
 				{step === 2 && <FranchieesSubmitOfferPage setStep={this.setStep} setActiveRow={this.setActiveRow} activeRow={activeRow} />}
-			</Fragment >
-		)
 
+				<FranchieesAssignModal />
+			</div>
+		)
 	}
 }
 

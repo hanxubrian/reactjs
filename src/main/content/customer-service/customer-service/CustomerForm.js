@@ -425,7 +425,7 @@ class CustomerForm extends Component {
 		labelWidth: 0,
 		selectedWork: "",
 
-		activeStep: 1,
+		activeStep: 3,
 		completed: new Set(),
 		skipped: new Set(),
 

@@ -94,6 +94,87 @@ class CustomersService {
 				})
 		});
 	}
+	getLogCallCustomerServiceTypes() {
+		return new Promise((resolve, reject) => {
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/reasons?type=customer_service`)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
+	customerServiceCreate(regionId, data) {
+		// const data = {
+		// 	"_id": "sample string 1",
+		// 	"call_com": "sample string 2",
+		// 	"sys_cust": "sample string 3",
+		// 	"cust_no": "sample string 4",
+		// 	"call_date": "sample string 5",
+		// 	"call_time": "sample string 6",
+		// 	"call_stat": "sample string 7",
+		// 	"stat_otr": "sample string 8",
+		// 	"spoke_with": "sample string 9",
+		// 	"call_back": "sample string 10",
+		// 	"call_btime": "sample string 11",
+		// 	"action": "sample string 12",
+		// 	"action_otr": "sample string 13",
+		// 	"init_call": "sample string 14",
+		// 	"area": "sample string 15"
+		// }
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/Service/Create`, data)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
+	customerCollectionCreate(regionId, data) {
+		// const data = {
+		// 	"_id": "sample string 1",
+		// 	"cust_name": "sample string 2",
+		// 	"call_com": "sample string 3",
+		// 	"sys_cust": 4,
+		// 	"cust_no": "sample string 5",
+		// 	"call_date": "sample string 6",
+		// 	"call_time": "sample string 7",
+		// 	"call_stat": 8,
+		// 	"stat_otr": "sample string 9",
+		// 	"spoke_with": "sample string 10",
+		// 	"call_back": "sample string 11",
+		// 	"call_btime": "sample string 12",
+		// 	"action": 13,
+		// 	"action_otr": "sample string 14"
+		// }
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/Collection/Create`, data)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
 	createCustomer(regionId, param) {
 		return new Promise((resolve, reject) => {
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/Customer/create/${regionId}`, param)

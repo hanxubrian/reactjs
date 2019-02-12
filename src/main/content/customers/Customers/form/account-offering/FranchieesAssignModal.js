@@ -236,7 +236,7 @@ const BlueDialogTitle = withStyles(theme => ({
 	);
 });
 
-class LogCallModalForm extends React.Component {
+class FranchieesAssignModal extends React.Component {
 
 	constructor(props) {
 		super(props)
@@ -420,6 +420,8 @@ class LogCallModalForm extends React.Component {
 				paymentType: "Check",
 				paymentAmount: 0
 			},
+			step: 0,
+
 		}
 		// this.commitChanges = this.commitChanges.bind(this);
 		this.props.getLogCallCustomerServiceTypes()
@@ -466,6 +468,12 @@ class LogCallModalForm extends React.Component {
 		}
 	}
 
+	handleStep = () => {
+		this.setState({
+			step: this.state.step === 0 ? 1 : 0
+		})
+
+	}
 	handleClose = () => {
 		// this.setState({
 		// 	PaymentType: "Check",
@@ -485,7 +493,7 @@ class LogCallModalForm extends React.Component {
 		// 	paymentAmount: 0,
 		// })
 
-		this.props.showLogCallModalForm(false)
+		this.props.showFranchieesAssignModalForm(false)
 
 	};
 
@@ -769,13 +777,106 @@ class LogCallModalForm extends React.Component {
 		this.setState({ EmailNotesTo: value });
 	};
 
+	getFranchiseeAssignmentForm() {
+		const { classes } = this.props;
+
+		const franHeaders = [
+			{ width: 12, title: 'Number', field: 'Number' },
+			{ width: 22, title: 'Name', field: 'Name' },
+			{ width: 15, title: 'Billing', field: '' },
+			{ width: 15, title: 'Service', field: '' },
+			{ width: 25, title: 'Description', field: '' },
+			{ width: 10, title: 'Amount', field: '' },
+		]
+
+		return (
+			<>
+				<div className={classNames("flex mt-12 justify-end")}>
+
+					<TextField margin="dense" id="Total Monthly Contract" label="Total Monthly Contract"
+						InputLabelProps={{ shrink: true }}
+						className={classNames(classes.textField, "pr-6")}
+						InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">attach_money</Icon></InputAdornment> }}
+					/>
+				</div>
+
+				<Typography className="mb-12" variant="title">Franchisees</Typography>
+
+				<div className={classNames("flex flex-col w-full")}>
+					<div className={classNames("flex w-full")}>
+						{franHeaders.map((f, findex) => (
+							<Typography key={findex} style={{ width: f.width + '%' }} variant="caption">{f.title}</Typography>
+						))}
+					</div>
+
+					<Divider variant="middle" style={{ marginTop: 10, width: '100%', alignSelf: 'center' }} />
+
+					{this.props.franchieesesToOffer.map((x, index) => (
+						<div className={classNames("flex w-full")} style={{ alignItems: 'bottom' }}>
+
+							<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="body2">{x.Number}</Typography>
+							<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="body2">{x.Name}</Typography>
+
+							<TextField style={{ width: franHeaders[2].width + '%' }}
+								margin="dense"
+								className="pl-6"
+								select
+							>
+								<MenuItem value={""}>Billing 1</MenuItem>
+								<MenuItem value={""}>Billing 2</MenuItem>
+							</TextField>
+
+							<TextField style={{ width: franHeaders[3].width + '%' }}
+								margin="dense"
+								className="pl-6"
+								select
+							>
+								<MenuItem value={""}>Service 1</MenuItem>
+								<MenuItem value={""}>Service 2</MenuItem>
+							</TextField>
+
+							<TextField style={{ width: franHeaders[4].width + '%' }}
+								margin="dense"
+								className="pr-6 pl-6"
+							/>
+							<TextField style={{ width: franHeaders[5].width + '%' }}
+								InputProps={{ startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">attach_money</Icon></InputAdornment> }}
+								margin="dense"
+								className="pl-6"
+							/>
+						</div>
+					))}
+				</div>
+			</>
+		)
+	}
+
+	getFindersFeesForm() {
+		const { classes } = this.props;
+		return (
+			<>
+				<div className="flex">
+					<Typography className="mb-12 pr-12" variant="title">Franchisees Number</Typography>
+					<Typography className="mb-12" variant="title">Franchisees Name</Typography>
+				</div>
+				<div className={classNames("flex mt-12 justify-start")}>
+					<TextField margin="dense" id="Monthly Billing Amount" label="Monthly Billing Amount"
+						InputLabelProps={{ shrink: true }}
+						className={classNames(classes.textField, "pr-6")}
+						InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">attach_money</Icon></InputAdornment> }}
+					/>
+				</div>
+			</>
+		)
+	}
 	render() {
 		const { classes } = this.props;
-		const { customerServiceTypes } = this.state;
+		const { customerServiceTypes, step } = this.state;
+
 		return (
 			<div>
 				<Dialog
-					open={this.props.logCallModalForm.open === true}
+					open={this.props.franchieesAssignModalForm.open === true}
 					fullWidth={true}
 					maxWidth="md"
 
@@ -785,193 +886,27 @@ class LogCallModalForm extends React.Component {
 					aria-labelledby="form-dialog-title"
 				>
 					<BlueDialogTitle id="form-dialog-title" onClose={this.handleClose}>
-						<h2 style={{ display: "flex", alignItems: "center", color: "white" }}>
-							<Icon>settings_phone</Icon>&nbsp;&nbsp;Log Call</h2>
+						{step === 0 && <h2 style={{ display: "flex", alignItems: "center", color: "white" }}><Icon>account_balance</Icon>&nbsp;&nbsp;Franchiee Assignment &amp; Distribution</h2>}
+						{step === 1 && <h2 style={{ display: "flex", alignItems: "center", color: "white" }}><Icon>account_balance</Icon>&nbsp;&nbsp;Finders Fees</h2>}
+
 					</BlueDialogTitle>
 					<DialogContent>
 						{/* <DialogContentText>Payment Description</DialogContentText> */}
+
+
 						<div className={classNames("flex flex-col")}>
-							<div className={classNames("flex flex-col")}>
-								{/* <div className={classNames("flex")} sm={12} >
-									<TextField sm={3} type="text" value={customerName} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">person_outline</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerName" label="CustomerName" />
-									<TextField sm={3} type="text" value={customerNumber} InputLabelProps={{ shrink: true }} InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">apps</Icon></InputAdornment> }} margin="dense" fullWidth className={classNames("pr-6")} id="CustomerNumber" label="CustomerNumber" />
-								</div> */}
-
-								<div className={classNames("flex mt-12")} sm={12}>
-
-									<TextField sm={3} select margin="dense" id="InitiatedBy" label="Initiated By"
-										InputLabelProps={{ shrink: true }}
-										className={classNames(classes.textField, "pr-6")}
-										value={this.state.InitiatedBy || ''}
-										onChange={this.handleChange('InitiatedBy')}
-										fullWidth
-										InputProps={{ readOnly: false }}
-									>
-										{[
-											"JK",
-											"Customer",
-											"Franchiees",
-										].map((x, index) => (
-											<MenuItem key={index} value={x}>{x}</MenuItem>
-										))}
-									</TextField>
-
-									<TextField sm={3} select margin="dense" id="Type" label="Type"
-										InputLabelProps={{ shrink: true }}
-										className={classNames(classes.textField, "pl-6 pr-6")}
-										value={this.state.Type || ''}
-										onChange={this.handleChange('Type')}
-										fullWidth
-										InputProps={{ readOnly: false }}
-									>
-										{customerServiceTypes.map((x, index) => (
-											<MenuItem key={index} value={x.ReasonNumber}>{x.name}</MenuItem>
-										))}
-
-
-									</TextField>
-
-									<TextField sm={3} select margin="dense" id="Status" label="Status By"
-										InputLabelProps={{ shrink: true }}
-										className={classNames(classes.textField, "pl-6")}
-										value={this.state.Status || ''}
-										onChange={this.handleChange('Status')}
-										fullWidth
-										InputProps={{ readOnly: false }}
-									>
-										<MenuItem value={"Contactd"}>Contactd</MenuItem>
-									</TextField>
-
-									{/* 
-									<TextField sm={3} margin="dense" id="ReferenceNo" label="Reference No." variant="outlined"
-										autoFocus
-										onChange={this.handleChange('ReferenceNo')}
-										value={this.state.ReferenceNo}
-										className={classNames(classes.textField, "pr-6")}
-										fullWidth
-									/>
-
-									<TextField sm={1}
-										type="date"
-										id="PaymentDate"
-										label="Payment Date"
-										className={classNames(classes.textField, "pr-6")}
-										InputLabelProps={{
-											shrink: true
-										}}
-										value={this.state.PaymentDate}
-										onChange={this.handleChange('PaymentDate')}
-										margin="dense"
-										variant="outlined"
-										fullWidth
-									/>
-
-									<TextField
-										type="number"
-										InputLabelProps={{ shrink: true }} InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
-										margin="dense"
-										variant="outlined"
-										fullWidth
-										required
-										className={classNames(classes.textField, "pr-6")}
-										id="PaymentAmount"
-										value={this.state.PaymentAmount}
-										InputProps={{
-											readOnly: this.props.paymentDlgPayloads.paymentAmount !== 0,
-										}}
-										inputProps={{ min: 0 }}
-										onChange={this.handleChange('PaymentAmount')}
-										label="Payment Amount" sm={2}
-									/> */}
-
-								</div>
-
-								<Divider variant="middle" style={{ margin: 10, width: '50%', alignSelf: 'center' }} />
-
-								<div className="flex">
-									<div className="flex flex-col w-full pr-6">
-										<TextField margin="dense" fullWidth id="SpokeWith" label="Spoke With"
-											InputLabelProps={{ shrink: true }}
-											value={this.state.SpokeWith || ''}
-											onChange={this.handleChange('SpokeWith')}
-										/>
-
-										<TextField margin="dense" fullWidth id="Action" label="Action"
-											InputLabelProps={{ shrink: true }}
-											value={this.state.Action || ''}
-											onChange={this.handleChange('Action')}
-										/>
-
-										<TextField margin="dense" fullWidth id="Area" label="Area"
-											select
-											InputLabelProps={{ shrink: true }}
-											value={this.state.Area || ''}
-											onChange={this.handleChange('Area')}>
-											<MenuItem value={""}></MenuItem>
-										</TextField>
-
-										<TextField margin="dense" fullWidth id="CallBack" label="Call Back"
-											type="date"
-											InputLabelProps={{ shrink: true }}
-											value={this.state.CallBack}
-											onChange={this.handleChange('CallBack')}
-										/>
-
-										<TextField margin="dense" fullWidth id="FollowUpBy" label="Follow Up By"
-											select
-											InputLabelProps={{ shrink: true }}
-											value={this.state.FollowUpBy || ''}
-											onChange={this.handleChange('FollowUpBy')}>
-											<MenuItem value={"Claudia Ulloa"}>Claudia Ulloa</MenuItem>
-										</TextField>
-									</div>
-									<div className="flex flex-col w-full pr-6 pl-6">
-										<TextField margin="dense" variant="outlined" fullWidth id="Comments" label="Comments" multiline rows="13" rowsMax="13"
-											InputLabelProps={{ shrink: true }}
-											value={this.state.Comments}
-											onChange={this.handleChange('Comments')}
-										/>
-									</div>
-									<div className="flex flex-col w-full pl-6" >
-										<Typography variant="caption">Notify Email Call Notes To:</Typography>
-										<List component="nav" style={{ height: 280, overflow: 'auto' }}>
-											{[
-												"Frank Lopez",
-												"Mark Hodges",
-												"Robert Griffin (RD)",
-												"Samuel Stanley",
-												"Stacey Jarvis",
-												"Frank Lopez",
-												"Mark Hodges",
-												"Robert Griffin (RD)",
-												"Samuel Stanley",
-												"Stacey Jarvis",
-											].map((x, index) =>
-												(
-													<ListItem
-														key={index}
-														button
-														selected={this.state.EmailNotesTo === x}
-														onClick={event => this.handleChangeEmailNotesTo(event, x)}
-													>
-														<ListItemText primary={x} />
-													</ListItem>
-												)
-											)}
-										</List>
-
-									</div>
-								</div>
-								<Divider variant="middle" style={{ marginTop: 10, width: '100%', alignSelf: 'center' }} />
-
-							</div>
+							{step === 0 && this.getFranchiseeAssignmentForm()}
+							{step === 1 && this.getFindersFeesForm()}
+							<Divider variant="middle" style={{ marginTop: 10, width: '100%', alignSelf: 'center' }} />
 						</div>
+
+
 					</DialogContent>
 
 					<DialogActions>
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Save</Button>
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Close</Button>
-
+						{step === 0 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Assign<Icon>keyboard_arrow_right</Icon></Button>}
+						{step === 1 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}><Icon>keyboard_arrow_left</Icon>Finders Fees</Button>}
+						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Cancel</Button>
 					</DialogActions>
 				</Dialog>
 			</div>
@@ -984,7 +919,7 @@ function mapDispatchToProps(dispatch) {
 		openPaymentDialog: Actions.openPaymentDialog,
 		createAccountReceivablePayment: Actions.createAccountReceivablePayment,
 
-		showLogCallModalForm: Actions.showLogCallModalForm,
+		showFranchieesAssignModalForm: Actions.showFranchieesAssignModalForm,
 
 		getLogCallCustomerServiceTypes: Actions.getLogCallCustomerServiceTypes,
 	}, dispatch);
@@ -1003,9 +938,10 @@ function mapStateToProps({ customers, accountReceivablePayments, auth }) {
 
 		paymentDlgPayloads: accountReceivablePayments.paymentDlgPayloads,
 
-		logCallModalForm: customers.logCallModalForm,
+		franchieesAssignModalForm: customers.franchieesAssignModalForm,
 		lists: customers.lists,
+		franchieesesToOffer: customers.franchieesesToOffer,
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(LogCallModalForm)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(FranchieesAssignModal)));

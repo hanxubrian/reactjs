@@ -59,6 +59,16 @@ export const SHOW_SEND_SMS_MODAL_FORM = "[CUSTOMERS-service APP] SHOW_SEND_SMS_M
 export const SHOW_SEND_PHONE_CALL_MODAL_FORM = "[CUSTOMERS-service APP] SHOW_SEND_PHONE_CALL_MODAL_FORM";
 export const SHOW_SEND_CHAT_MODAL_FORM = "[CUSTOMERS-service APP] SHOW_SEND_CHAT_MODAL_FORM";
 
+export const GET_LOG_CALL_CUSTOMER_SERVICE_TYPES = "[CUSTOMERS-service APP] GET_LOG_CALL_CUSTOMER_SERVICE_TYPES";
+
+export const CUSTOMER_SERVICE_CREATE = "[CUSTOMERS-service APP] CUSTOMER_SERVICE_CREATE";
+export const CUSTOMER_COLLECTION_CREATE = "[CUSTOMERS-service APP] CUSTOMER_COLLECTION_CREATE";
+export const CUSTOMER_SERVICE_CREATE_START = "[CUSTOMERS-service APP] CUSTOMER_SERVICE_CREATE_START";
+export const CUSTOMER_COLLECTION_CREATE_START = "[CUSTOMERS-service APP] CUSTOMER_COLLECTION_CREATE_START";
+
+export const SET_FRANCHIEESES_TO_OFFER = "[CUSTOMERS APP] SET_FRANCHIEESES_TO_OFFER";
+export const SHOW_FRANCHIEES_ASSIGN_MODAL_FORM = "[CUSTOMERS APP] SHOW_FRANCHIEES_ASSIGN_MODAL_FORM";
+
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	// return dispatch => {
 	// const request = axios.get("/api/customers/gets");
@@ -383,9 +393,6 @@ export function getCustomerBillingList(regionId, CustomerNo) {
 	}
 }
 
-
-
-
 export function setFindersFeesCalculationMethod(s) {
 	return {
 		type: SET_FINDERS_FEES_CALCULATION_METHOD,
@@ -459,3 +466,60 @@ export function updateCustomer(customer) {
 		);
 	};
 }
+
+export function getLogCallCustomerServiceTypes() {
+	return (dispatch) => {
+		(async () => {
+			let res = await customersService.getLogCallCustomerServiceTypes();
+			dispatch({
+				type: GET_LOG_CALL_CUSTOMER_SERVICE_TYPES,
+				payload: res.Data
+			});
+		})();
+	}
+}
+export function customerServiceCreate() {
+	return (dispatch) => {
+		dispatch({
+			type: CUSTOMER_SERVICE_CREATE_START,
+			payload: true
+		});
+		(async () => {
+			let res = await customersService.customerServiceCreate();
+			dispatch({
+				type: CUSTOMER_SERVICE_CREATE,
+				payload: res.Data
+			});
+		})();
+	}
+}
+export function customerCollectionCreate() {
+	return (dispatch) => {
+		dispatch({
+			type: CUSTOMER_COLLECTION_CREATE_START,
+			payload: true
+		});
+		(async () => {
+			let res = await customersService.customerCollectionCreate();
+			dispatch({
+				type: CUSTOMER_COLLECTION_CREATE,
+				payload: res.Data
+			});
+		})();
+	}
+}
+
+export function setFranchieesesToOffer(franchieesesToOffer) {
+	return {
+		type: SET_FRANCHIEESES_TO_OFFER,
+		payload: franchieesesToOffer
+	}
+}
+
+export function showFranchieesAssignModalForm(visible) {
+	return {
+		type: SHOW_FRANCHIEES_ASSIGN_MODAL_FORM,
+		payload: visible
+	}
+}
+

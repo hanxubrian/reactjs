@@ -69,7 +69,6 @@ import {
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 import { compose, withProps, withHandlers, lifecycle } from "recompose";
 
-
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 	return result ? {
@@ -183,147 +182,6 @@ const styles = theme => ({
 		// backgroundColor: "lightyellow"
 	}
 });
-
-const account_offering_columns = [
-	{
-		title: "No.",
-		name: "Number",
-		columnName: "Number",
-		width: 90,
-	},
-	{
-		title: "Franchisees Name",
-		name: "Name",
-		columnName: "Name",
-		width: 220,
-	},
-	{
-		title: "Offer Date",
-		name: "OfferDate",
-		columnName: "OfferDate",
-		width: 130,
-	},
-	{
-		title: "Response",
-		name: "Response",
-		columnName: "Response",
-		width: 100,
-	},
-	{
-		title: "User",
-		name: "User",
-		columnName: "User",
-		width: 120,
-	},
-	{
-		title: "Response Date",
-		name: "ResponseDate",
-		columnName: "ResponseDate",
-		width: 130,
-	},
-	{
-		title: "Result",
-		name: "Result",
-		columnName: "Result",
-		width: 100,
-	},
-	{
-		title: "Offer Sent",
-		name: "OfferSent",
-		columnName: "OfferSent",
-		width: 100,
-	},
-
-];
-
-const account_offering_franchisee_columns = [
-	{
-		title: "No.",
-		name: "Number",
-		columnName: "Number",
-		width: 90,
-	},
-	{
-		title: "Franchisees Name",
-		name: "Name",
-		columnName: "Name",
-		width: 220,
-	},
-	{
-		title: "Signed",
-		name: "Signed",
-		columnName: "Signed",
-		width: 90,
-	},
-	{
-		title: "Plan",
-		name: "Plan",
-		columnName: "Plan",
-		width: 80,
-	},
-	{
-		title: "Accounts",
-		name: "Accounts",
-		columnName: "Accounts",
-		width: 100,
-	},
-	{
-		title: "Billing",
-		name: "Billing",
-		columnName: "Billing",
-		width: 130,
-	},
-	{
-		title: "Cont Eval",
-		name: "ContEval",
-		columnName: "ContEval",
-		width: 100,
-	},
-	{
-		title: "Group1 Total",
-		name: "Group1Total",
-		columnName: "Group1Total",
-		width: 120,
-	},
-	{
-		title: "Compliant",
-		name: "Compliant",
-		columnName: "Compliant",
-		width: 100,
-	},
-	{
-		title: "Fail Insp",
-		name: "FailInsp",
-		columnName: "FailInsp",
-		width: 90,
-	},
-	{
-		title: "Cancel",
-		name: "Cancel",
-		columnName: "Cancel",
-		width: 80,
-	},
-	{
-		title: "Pend Cancel",
-		name: "PendCancel",
-		columnName: "PendCancel",
-		width: 110,
-	},
-	{
-		title: "Last Offered",
-		name: "LastOffered",
-		columnName: "LastOffered",
-		width: 110,
-	},
-	{
-		title: "Oblg",
-		name: "Oblg",
-		columnName: "Oblg",
-		width: 80,
-	},
-
-];
-
 //
 // table row edit command buttons
 //
@@ -531,6 +389,57 @@ class FranchieesOfferedListPage extends Component {
 		super(props)
 
 		this.state = {
+			columns: [
+				{
+					title: "No.",
+					name: "Number",
+					columnName: "Number",
+					width: 90,
+				},
+				{
+					title: "Franchisees Name",
+					name: "Name",
+					columnName: "Name",
+					width: 220,
+				},
+				{
+					title: "Offer Date",
+					name: "OfferDate",
+					columnName: "OfferDate",
+					width: 130,
+				},
+				{
+					title: "Response",
+					name: "Response",
+					columnName: "Response",
+					width: 100,
+				},
+				{
+					title: "User",
+					name: "User",
+					columnName: "User",
+					width: 120,
+				},
+				{
+					title: "Response Date",
+					name: "ResponseDate",
+					columnName: "ResponseDate",
+					width: 130,
+				},
+				{
+					title: "Result",
+					name: "Result",
+					columnName: "Result",
+					width: 100,
+				},
+				{
+					title: "Offer Sent",
+					name: "OfferSent",
+					columnName: "OfferSent",
+					width: 100,
+				},
+
+			],
 			openSideBar: false,
 			showMapView: false,
 
@@ -553,6 +462,7 @@ class FranchieesOfferedListPage extends Component {
 			],
 
 			step: 0,
+
 
 		};
 
@@ -632,21 +542,8 @@ class FranchieesOfferedListPage extends Component {
 		this.setState({ data: data });
 	};
 	offerThisAccount = () => {
-		this.setState({ step: 1 })
+		this.props.setStep(1)
 	}
-	backToAccountOfferingHome = () => {
-		this.setState({
-			step: 0,
-			showMapView: false
-		})
-
-		this.props.setStep(0)
-	}
-	backToFranchiseeList = () => {
-		this.setState({ step: 1 })
-	}
-
-
 	showDetails = row => {
 		this.props.setActiveRow(row)
 		this.props.setStep(2)
@@ -754,180 +651,39 @@ class FranchieesOfferedListPage extends Component {
 			pins2,
 			gmapVisible,
 			showMapView,
+			columns,
 
 		} = this.state;
 
-		let rows = []
-		let columns = []
-		switch (step) {
-			case 0:
-				rows = [
-					{ Number: 712025, Name: "MICHAEL A. WHITEHEAD", OfferDate: "06/12/2018", Response: "Accepted", User: "BUDDY NGUYEN", ResponseDate: "06/15/2018", Result: "", OfferSent: "" },
-					{ Number: 712025, Name: "ANA E. BURIANO", OfferDate: "06/12/2018", Response: "Declined", User: "WILLIAM E. JACKSON", ResponseDate: "06/15/2018", Result: "", OfferSent: "" },
-					{ Number: 712025, Name: "SHANE DEUBELL", OfferDate: "06/12/2018", Response: "Expired", User: "AWA AVINO, INC.", ResponseDate: "06/15/2018", Result: "", OfferSent: "" },
-				]
-				columns = [...account_offering_columns]
-				break;
-			case 1:
-				rows = [...this.state.data]
-				columns = [...account_offering_franchisee_columns]
-				break;
-			case 2:
-				break;
-			default:
-				break;
-		}
-
+		let rows = [
+			{ Number: 712025, Name: "MICHAEL A. WHITEHEAD", OfferDate: "06/12/2018", Response: "Accepted", User: "BUDDY NGUYEN", ResponseDate: "06/15/2018", Result: "", OfferSent: "" },
+			{ Number: 712025, Name: "ANA E. BURIANO", OfferDate: "06/12/2018", Response: "Declined", User: "WILLIAM E. JACKSON", ResponseDate: "06/15/2018", Result: "", OfferSent: "" },
+			{ Number: 712025, Name: "SHANE DEUBELL", OfferDate: "06/12/2018", Response: "Expired", User: "AWA AVINO, INC.", ResponseDate: "06/15/2018", Result: "", OfferSent: "" },
+		]
 
 		console.log("activeRow", rows)
 		console.log("columns", columns)
 		return (
 			<Fragment>
 				<div className={classNames("mb-12 w-full")}>
-					<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-						<div>
-							<IconButton onClick={this.backToAccountOfferingHome}>
-								<Icon>arrow_back</Icon>
-							</IconButton>
-							Back
-								</div>
-						<div>
-							<Tooltip title="Location Filter">
-								<IconButton onClick={this.toggleSideBar}>
-									<Icon>menu</Icon>
-								</IconButton>
-							</Tooltip>
-							<Tooltip title={showMapView ? "Grid View" : "Map view"}>
-								<IconButton
-									// className={classNames(classes.summaryPanelButton, "mr-12")}
-									className={classNames(classes.button, "mr-12")}
-									// aria-label="Add an alarm"
-									onClick={this.toggleMapView}
-								>
-									{/* <Icon>{this.props.mapViewState ? 'list' : 'location_on'}</Icon> */}
-									<Icon>location_on</Icon>
-								</IconButton>
-							</Tooltip>
-						</div>
+					<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+						<Button
+							variant="contained"
+							color="primary"
+							className={classNames(classes.button, "pr-24 pl-24")}
+							onClick={() => {
+								this.offerThisAccount();
+							}}
+						> Offer this account... </Button>
 					</div>
 
 				</div>
 				<GridContainer style={{ alignItems: 'center' }} className={classNames("flex flex-col", showMapView ? "h-full" : "")} style={{ backgroundColor: "" }}>
 					<GridItem xs={12} sm={12} md={12} className="flex flex-row" style={{ backgroundColor: "" }}>
-						{(step === 1 && this.state.openSideBar) && (
-							<Paper className={classNames("flex flex-col h-full pl-24 pr-12 mr-12")} style={{ backgroundColor: "", height: "auto", minWidth: 250 }}>
-								<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-col">
-										<h3 className={classNames("mt-24 mb-12")} >Location Filter</h3>
-										<RadioGroup
-											aria-label="Location"
-											name="Location"
-											className={classes.group}
-											// value={this.props.locationFilterValue && this.props.locationFilterValue.id || ""}
-											value={this.state.Location || ""}
-										>
-											<FormControlLabel value="locationAll" control={<Radio onChange={this.handleChange('Location')} />} label="All" />
-											<FormControlLabel value="locationNearResidingCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Near Residing Customer" />
-											{this.state.Location === "locationNearResidingCustomer" && (
-												<TextField
-													select
-
-													id="locationNearResidingCustomerRadius"
-													label="Radius"
-													className={classes.textField}
-													InputLabelProps={{
-														shrink: true
-													}}
-													value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
-													onChange={this.handleChange('locationNearResidingCustomerRadius')}
-													margin="dense"
-													variant="outlined"
-													fullWidth
-												>
-													{
-														Array.from({ length: 15 })
-															.map((val, index) => (
-																<MenuItem key={index} value={(index + 1) * 5}>
-																	{(index + 1) * 5} Miles
-													</MenuItem>
-															))
-													}
-												</TextField>)}
-
-											<FormControlLabel value="locationNearCleaningCustomer" control={<Radio onChange={this.handleChange('Location')} />} label="Near Cleaning Customer" />
-											{this.state.Location === "locationNearCleaningCustomer" && (
-												<TextField
-													select
-
-													id="locationNearCleaningCustomerRadius"
-													label="Radius"
-													className={classes.textField}
-													InputLabelProps={{
-														shrink: true
-													}}
-													value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
-													onChange={this.handleChange('locationNearCleaningCustomerRadius')}
-													margin="dense"
-													variant="outlined"
-													fullWidth
-												>
-													{
-														Array.from({ length: 15 })
-															.map((val, index) => (
-																<MenuItem key={index} value={(index + 1) * 5}>
-																	{(index + 1) * 5} Miles
-													</MenuItem>
-															))
-													}
-												</TextField>)}
-
-											<FormControlLabel value="locationNearSpecificAddress" control={<Radio onChange={this.handleChange('Location')} />} label="Near Specific Address" />
-											{this.state.Location === "locationNearSpecificAddress" && (
-												<Fragment>
-													<TextField
-														id="SpecificAddress"
-														label="Address"
-														className={classes.textField}
-														onChange={this.handleChange('SpecificAddress')}
-														margin="dense"
-														variant="outlined"
-														fullWidth
-													/>
-													<TextField
-														select
-
-														id="AddressZipcodeRadius"
-														label="Radius"
-														className={classes.textField}
-														InputLabelProps={{
-															shrink: true
-														}}
-														value={this.props.locationFilterValue && this.props.locationFilterValue.miles || ""}
-														onChange={this.handleChange('AddressZipcodeRadius')}
-														margin="dense"
-														variant="outlined"
-														fullWidth
-													>
-														{
-															Array.from({ length: 15 })
-																.map((val, index) => (
-																	<MenuItem key={index} value={(index + 1) * 5}>
-																		{(index + 1) * 5} Miles
-																</MenuItem>
-																))
-														}
-													</TextField>
-												</Fragment>
-											)}
-										</RadioGroup>
-									</GridItem>
-								</GridContainer>
-							</Paper>
-						)}
 						<Paper className={classNames("flex flex-col h-full p-6 w-full")} style={{ height: "auto", overflowX: "scroll" }}>
 
-							{showMapView ? (
-								<div className="w-full h-full">
+							{showMapView ?
+								(<div className="w-full h-full">
 									{/* map area */}
 									{gmapVisible && (<MapWithAMarkerClusterer
 										markers={pins}
@@ -939,83 +695,29 @@ class FranchieesOfferedListPage extends Component {
 										center={{ lat: this.state.addrLat, lng: this.state.addrLng }}
 									/>)}
 								</div>
-							) : (
-									<div>
-										{/* grid area */}
-										<Grid rows={rows} columns={columns}>
-											{step === 1 && (
-												<SearchState value={searchValue} onValueChange={this.changeSearchValue} />
-											)}
-											{step === 1 && (
-												<IntegratedFiltering />
-											)}
+								) :
+								(<div>
+									{/* grid area */}
+									<Grid rows={rows} columns={columns}>
+										<SearchState value={searchValue} onValueChange={this.changeSearchValue} />
+										<IntegratedFiltering />
+										<PagingState defaultCurrentPage={0} defaultPageSize={10} />
+										<PagingPanel pageSizes={pageSizes} />
+										<SortingState sorting={sorting} onSortingChange={this.changeSorting} columnExtensions={columns} />
+										<IntegratedSorting />
+										<IntegratedPaging />
+										<Table />
+										{/* <VirtualTable height="auto" /> */}
 
-											{step === 1 && (
-												<SelectionState selection={selection} onSelectionChange={this.changeSelection} />
-											)}
-											{step === 1 && (
-												<PagingState defaultCurrentPage={0} defaultPageSize={10} />
-											)}
-											{step === 1 && (
-												<PagingPanel pageSizes={pageSizes} />
-											)}
+										{/* <TableColumnResizing defaultColumnWidths={columns} /> */}
 
-											{step === 1 && (
-												<IntegratedSelection />
-											)}
-											<SortingState sorting={sorting} onSortingChange={this.changeSorting} columnExtensions={columns} />
-											<IntegratedSorting />
-											{step === 1 && (
-												<IntegratedPaging />
-											)}
-											{step === 1 && (
-												<EditingState
-													// columnExtensions={editingColumnExtensions}
-													onCommitChanges={this.commitChanges} />
-											)}
-											<Table />
-											{/* <VirtualTable height="auto" /> */}
+										<TableHeaderRow showSortingControls />
+										<Toolbar rootComponent={this.ToolbarRoot} />
+										<SearchPanel />
+									</Grid>
 
-											{/* <TableColumnResizing defaultColumnWidths={columns} /> */}
 
-											<TableHeaderRow showSortingControls />
-											{step === 1 && (
-												<TableEditRow />
-											)}
-											{step === 1 && (
-												<TableEditColumn width={60} cellComponent={this.EditingCellComponent} headerCellComponent={EditingHeaderCellComponent}
-												// showAddCommand
-												// showEditCommand
-												// showDeleteCommand
-												// commandComponent={Command}
-												/>
-											)}
-
-											{step === 1 && (
-												<TableSelection showSelectAll selectByRowClick highlightRow />
-											)}
-
-											{step === 1 && (
-												<Toolbar rootComponent={this.ToolbarRoot} />
-											)}
-											{step === 1 && (
-												<SearchPanel />
-											)}
-
-										</Grid>
-
-										{(step === 1) && (
-											<div className={classNames(classes.layoutTable, "flex flex-row")} style={{ justifyContent: "space-between" }}>
-												<span className={"p-6"}>
-													Rows Selected: <strong>{selection.length}</strong>
-												</span>
-
-												<span className={"p-6"}>
-													Total Rows: <strong>{rows.length}</strong>
-												</span>
-											</div>
-										)}
-									</div>
+								</div>
 								)}
 
 

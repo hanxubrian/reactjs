@@ -423,7 +423,7 @@ class CustomerForm extends Component {
 		labelWidth: 0,
 		selectedWork: "",
 
-		activeStep: 8,
+		activeStep: 4,
 		completed: new Set(),
 		skipped: new Set(),
 
@@ -1775,7 +1775,7 @@ class CustomerForm extends Component {
 
 
 				<div
-					className={classNames(classes.layoutTable, "p-24")}
+					className={classNames(classes.layoutTable, "p-24 w-full h-full")}
 					style={{
 						overflowY: 'scroll',
 						width: '100%',
@@ -1785,100 +1785,13 @@ class CustomerForm extends Component {
 					}}
 				>
 
-					{/* {activeStep === 4 ?
-						(<Fragment>
-							{account_offering_step === 0 &&
-							(<div style={{ display: 'flex', justifyContent: 'space-between' }}>
-								<h2>{steps[activeStep]}</h2>
-								<Button
-									variant="contained"
-									color="primary"
-									className={classes.button}
-									onClick={() => {
-										this.offerThisAccount();
-									}}
-								> Offer this account </Button>
-							</div>)
-							}
-							{account_offering_step === 1 &&
-							(<div style={{ display: 'flex', justifyContent: 'space-between' }}>
-								<h2>{steps[activeStep]}</h2>
-								<Button
-									variant="contained"
-									color="primary"
-									className={classes.button}
-									onClick={() => {
-										this.backToAccountOfferingHome();
-									}}
-								> Back </Button>
-							</div>)
-							}
-						</Fragment>)
-						: */}
-					{/* ( */}
 					<h2>{steps[activeStep]}</h2>
-					{/* ) */}
-					{/* } */}
-
 
 					<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
 
-					{/* <div> */}
 					{this.getStepContent(activeStep)}
-					{/* </div> */}
 				</div>
 
-
-				{/* <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-					{activeStep === 4 ? (<div></div>) : (<div style={{ display: 'flex' }}>
-						<FuseAnimate animation="transition.expandIn" delay={300} style={{ alignItems: 'justify-start' }}>
-							<Button
-								variant="contained"
-								color="primary"
-								className={classes.button}
-								onClick={() => {
-									this.closeComposeForm();
-								}}
-								disabled={!this.canBeSubmitted()}
-							> Submit for Approval </Button>
-						</FuseAnimate>
-					</div>)}
-
-					<div style={{ display: 'flex' }}>
-						<FuseAnimate animation="transition.expandIn" delay={300} style={{ alignItems: 'justify-end' }}>
-							<Button
-								variant="contained"
-								color="primary"
-								className={classNames(classes.button, "mr-12")}
-								onClick={() => { this.closeComposeForm(); }}
-								disabled={!this.canBeSubmitted()}
-							> Discard </Button>
-						</FuseAnimate>
-						<FuseAnimate animation="transition.expandIn" delay={300} style={{ alignItems: 'justify-end' }}>
-							<Button
-								variant="contained"
-								color="primary"
-								className={classNames(classes.button, "mr-12")}
-								onClick={() => { this.closeComposeForm(); }}
-								disabled={!this.canBeSubmitted()}
-							> Save </Button>
-						</FuseAnimate>
-						<FuseAnimate animation="transition.expandIn" delay={300} style={{ alignItems: 'justify-end' }}>
-							<Button
-								variant="contained"
-								color="primary"
-								className={classes.button}
-								onClick={() => {
-									this.closeComposeForm();
-								}}
-								disabled={!this.canBeSubmitted()}
-							> Close </Button>
-						</FuseAnimate>
-					</div>
-
-
-
-				</div> */}
 			</Fragment>
 		);
 	}

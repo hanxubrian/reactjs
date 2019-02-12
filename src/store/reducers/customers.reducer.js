@@ -93,129 +93,18 @@ const initialState = {
 		phoneCallModalForm: { open: false },
 		chatModalForm: { open: false },
 	},
-	activeCustomer: {
-		/*
-		"_id": "5c60d0e7a0cca52060539838",
-        "Latitude": 0,
-        "Longitude": 0,
-        "CPIBillingAppliedDate": null,
-        "lastModified": "0001-01-01T00:00:00Z",
-        "overpayment": 0,
-        "AssignedFranchisees": [
-            {
-                "FranchiseeNumber": "701ZZ9",
-                "Status": "Active",
-                "AssignedDate": "09/03/1996",
-                "MonthlyBilling": 1180.08,
-                "CreatedById": 0
-            }
-        ],
-        "AccountOfferings": [
-            {
-                "FranchiseeNumber": "701ZZ9",
-                "Type": "Offer",
-                "Response": "Accepted",
-                "OfferDate": "01/01/1950",
-                "ReplyDeadlineDateTime": null,
-                "ResponseDate": null,
-                "AssignedDate": "09/03/1996",
-                "MonthlyBillingOffered": 1180.08,
-                "CreatedById": 0
-            }
-        ],
-        "pmt_history": null,
-        "sys_cust": 1,
-        "company_no": "BUF701",
-        "dlr_code": "701ZZ9",
-        "cust_no": "ZZ9001",
-        "cus_name": "UNILAND DEVELOPMENT COMPANY",
-        "cus_addr": "100 CORPORATE PARKWAY",
-        "cus_city": "AMHERST",
-        "cus_county": "ERIE",
-        "cus_state": "NY",
-        "cus_zip": "14226",
-        "cus_phone": "7168345000",
-        "bill_name": "UNILAND DEVELOPMENT COMPANY",
-        "bill_addr": "100 CORPORATE PARKWAY",
-        "bill_city": "AMHERST",
-        "bill_state": "NY",
-        "bill_zip": "14226",
-        "bill_name2": "",
-        "bill_addr2": "",
-        "bill_phone": "7168345000",
-        "cus_name2": "",
-        "cus_addr2": "",
-        "class_type": "Gas Station",
-        "royalty": 10,
-        "sales_tax": 7,
-        "cont_1": "BOB KEIL",
-        "cont_2": "",
-        "cont_bill": 1180.08,
-        "date_sign": "09/03/1996",
-        "flag": "C",
-        "misc_info": "",
-        "misc_info2": "",
-        "po_1": "46320",
-        "slsmn_no": "",
-        "add_on": " ",
-        "cont_tax": "Y",
-        "exp_date": "09/03/1997",
-        "cleantimes": 5,
-        "cleanper": "W",
-        "firstfran": "",
-        "firstdate": "01/01/1950",
-        "secondfran": "",
-        "seconddate": "01/01/1950",
-        "crteinv": "N",
-        "prntpd": "Y",
-        "tax_exempt": "N",
-        "canc_date": "03/31/2000",
-        "canreason": "8",
-        "candescr": "DISPUTE W/ LANDLORD",
-        "callbdate": "01/01/1950",
-        "cscallbdat": "01/01/1950",
-        "ops_mgr": "",
-        "cus_fax": "",
-        "bill_fax": "",
-        "cs_rep": "",
-        "date_start": "01/01/1950",
-        "date_offer": "01/01/1950",
-        "mon": "F",
-        "tue": "F",
-        "wed": "F",
-        "thu": "F",
-        "fri": "F",
-        "sat": "F",
-        "sun": "F",
-        "email1": "",
-        "email2": "",
-        "ebill": " ",
-        "prntinv": "Y",
-        "atrisk": " ",
-        "canentdat": "01/01/1950",
-        "coll_rep": "",
-        "inv_msg": "",
-        "masteracct": "F",
-        "parent": 0,
-        "xregionid": 0,
-        "xsys_cust": 0,
-        "cpiadj": "F",
-        "resume_d": "01/01/1950",
-        "natacct": " ",
-        "cus_ext": "",
-        "bill_ext": "",
-        "sqr_ft": 0,
-        "agreeused": "",
-        "arstatus": "",
-        "arstatdate": "01/01/1950",
-        "notes": "",
-        "claimstat": " ",
-        "business": 6.75,
-        "add_pct": 3,
-        "ad_cur": 1,
-        "tech_pct": 0
-		*/
+	lists: {
+		customerServiceTypes: [],
 	},
+	activeCustomer: {
+	},
+	flags: {
+		isCustomerServiceCreate: false,
+		isCustomerCollectionCreate: false,
+	},
+	franchieesAssignModalForm: {
+		open: false,
+	}
 };
 
 
@@ -597,6 +486,15 @@ const customers = function (state = initialState, action) {
 					}
 				}
 			};
+		case Actions.GET_LOG_CALL_CUSTOMER_SERVICE_TYPES:
+			return {
+				...state,
+				lists: {
+					...state.lists,
+					customerServiceTypes: action.payload,
+
+				}
+			};
 
 
 		// case Actions.GET_FINDERS_FEES_BY_CUSTOMER_NO_START:
@@ -615,6 +513,52 @@ const customers = function (state = initialState, action) {
 		// 		};
 		// 	}
 
+		case Actions.CUSTOMER_SERVICE_CREATE:
+			return {
+				...state,
+				flags: {
+					...state.flags,
+					isCustomerServiceCreate: false
+				}
+			};
+		case Actions.CUSTOMER_SERVICE_CREATE_START:
+			return {
+				...state,
+				flags: {
+					...state.flags,
+					isCustomerServiceCreate: true
+				}
+			};
+
+		case Actions.CUSTOMER_COLLECTION_CREATE:
+			return {
+				...state,
+				flags: {
+					...state.flags,
+					isCustomerCollectionCreate: false
+				}
+			};
+		case Actions.CUSTOMER_COLLECTION_CREATE_START:
+			return {
+				...state,
+				flags: {
+					...state.flags,
+					isCustomerCollectionCreate: true
+				}
+			};
+		case Actions.SET_FRANCHIEESES_TO_OFFER:
+			return {
+				...state,
+				franchieesesToOffer: action.payload
+			};
+		case Actions.SHOW_FRANCHIEES_ASSIGN_MODAL_FORM:
+			return {
+				...state,
+				franchieesAssignModalForm: {
+					...state.franchieesAssignModalForm,
+					open: action.payload
+				}
+			};
 
 		default:
 			{
