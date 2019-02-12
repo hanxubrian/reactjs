@@ -3,7 +3,7 @@ import {withRouter} from 'react-router-dom';
 
 //Material UI core
 import {
-    Icon, Typography, Button
+    Icon, Typography, Button, CircularProgress
 } from '@material-ui/core';
 import {withStyles} from "@material-ui/core";
 
@@ -417,6 +417,11 @@ class VerificationsApp extends Component {
                     }}
                 >
                 </FusePageCustomSidebarScroll>
+                {this.props.bVerificationFetchStart && (
+                    <div className={classes.overlay}>
+                        <CircularProgress className={classes.progress} color="secondary"  />
+                    </div>
+                )}
             </React.Fragment>
         );
     }
@@ -424,6 +429,10 @@ class VerificationsApp extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
+        toggleFilterPanel: Actions.toggleVerificationFilterPanel,
+        toggleSummaryPanel: Actions.toggleVerificationSummaryPanel,
+        openNewVerificationForm: Actions.openNewVerificationForm,
+        closeNewVerificationForm: Actions.closeNewVerificationForm,
         getInvoiceTransactionPendingLists: Actions.getInvoiceTransactionPendingLists,
         openCloseReviseModal: Actions.openCloseReviseDialog,
         openVerificationDialog : Actions.openVerificationDialog ,
@@ -436,10 +445,20 @@ function mapStateToProps({verifications, auth, fuse, transactions}) {
     return {
         verifications: verifications.verificationsDB,
         bLoadedVerifications: verifications.bLoadedVerifications,
+        bVerificationFetchStart: verifications.bVerificationFetchStart,
         selectionLength: verifications.selectionLength,
         regionId: auth.login.defaultRegionId,
         nav: fuse.navigation,
         transactionTypeList: transactions.transactionTypeList,
+        transactionStatus: verifications.transactionStatus,
+        summaryState: verifications.bOpenedSummaryPanel,
+        filterState: verifications.bOpenedFilterPanel,
+        verificationForm: verifications.verificationForm,
+        statusId: verifications.statusId,
+        searchText: verifications.searchText,
+        verifiedModal: verifications.verifiedModal,
+        reviseModal: verifications.reviseModal,
+        rejectModal: verifications.rejectModal,
     }
 }
 
