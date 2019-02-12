@@ -81,8 +81,8 @@ const styles = theme => ({
         '& tr th': {
             color: 'white'
         },
-        '& tr th:nth-child(4)': {
-            // width: '100%'
+        '& tr th:nth-child(5)': {
+            width: '100%'
         }
     },
     filterPanelButton: {
@@ -114,22 +114,12 @@ const styles = theme => ({
         '& tbody tr:nth-of-type(even)': {
             backgroundColor: 'fade(' + theme.palette.primary.secondary + ', 0.03)',
         },
-        '& tbody tr td:nth-child(4)': {
-            // width: '100%'
+        '& tbody tr td:nth-child(5)': {
+            width: '100%'
+        },
+        '& colgroup col:nth-child(5)':{
+            width: '100%'
         }
-    },
-    overlay: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100vh',
-        backgroundColor: 'rgba(0,0,0, .9)',
-        zIndex: 1000,
-        alignItems: 'center',
-        justifyContent: 'center',
-        display: 'flex',
-        opacity: 0.5
     },
     iconButton: {
         padding: 0,
@@ -536,7 +526,7 @@ class VerificationListContent extends Component {
                             <VirtualTable height="auto"
                                           tableComponent={TableComponent}
                                           headComponent = {TableHeadComponent}
-                                          columnExtensions={columns}
+                                          columnExtensions={tableColumnExtensions}
                                           rowComponent={this.TableRow}
                                           cellComponent={this.getCell} />
 
