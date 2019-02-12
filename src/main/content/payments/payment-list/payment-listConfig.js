@@ -13,6 +13,12 @@ export const PaymentListConfig = {
             component: FuseLoadable({
                 loader: () => import('./payment-list')
             })
+        },
+        {
+            path     : '/checkbook-list',
+            component: FuseLoadable({
+                loader: () => import('./checkbookApp')
+            })
         }
     ]
 };

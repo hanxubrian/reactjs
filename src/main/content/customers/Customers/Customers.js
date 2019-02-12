@@ -585,21 +585,6 @@ class Customers extends Component {
 											<IconButton className={classes.button} aria-label="print" onClick={() => alert('ok')}>
 												<Icon>print</Icon>
 											</IconButton>
-
-											{/* <Fab
-												color="secondary"
-												aria-label="add"
-												className={classNames(classes.sideButton, "mr-12")}
-												onClick={openNewCustomerForm}>
-												<Icon>add</Icon>
-											</Fab>
-											<Fab color="secondary" aria-label="add"
-												className={classNames(classes.sideButton, "mr-12")} onClick={() => this.props.history.push('/apps/mail/inbox')}>
-												<Icon>mail_outline</Icon>
-											</Fab>
-											<Fab color="secondary" aria-label="add" className={classes.sideButton} onClick={() => alert('ok')}>
-												<Icon>print</Icon>
-											</Fab> */}
 										</div>
 									</div>
 
@@ -610,7 +595,7 @@ class Customers extends Component {
 									<div className="flex flex-row flex-1 justify-between">
 										{/* <div className="flex flex-shrink items-center">
 											<div className="flex items-center">
-												
+
 											</div>
 										</div> */}
 										{/* <div className="flex flex-shrink" style={{ justifyContent: "space-between" }}> */}
@@ -686,20 +671,7 @@ class Customers extends Component {
 												</IconButton>
 											</Tooltip>
 										</div>
-										{/* <IconButton className={classes.button} aria-label="Add an alarm" onClick={toggleFilterPanel}>
-												<Icon>person_outline</Icon>
-											</IconButton> */}
-
-										{/* <IconButton className={classes.button} aria-label="Add an alarm" onClick={toggleSummaryPanel}>
-												<Icon>check_circle</Icon>
-											</IconButton> */}
-
-
-
-
-										{/* </div> */}
 									</div>
-
 								</div>
 							)}
 						</div>
@@ -709,7 +681,7 @@ class Customers extends Component {
 							<div className={classNames("flex flex-col h-full")}>
 								<DialogEmailToCustomer />
 
-								{/* 
+								{/*
 							Confirm Dialog for submitting
 							 */}
 								<Dialog
