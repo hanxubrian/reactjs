@@ -248,35 +248,10 @@ class VerificationListContent extends Component {
         };
 
         this.changeSorting = sorting => this.setState({ sorting });
-        this.commitChanges = this.commitChanges.bind(this);
         this.changeSearchValue = value => this.setState({ searchValue: value });
         this.changeGrouping = grouping => this.setState({ grouping });
     }
-    //
-    // to edit table cell
-    //
-    commitChanges({ added, changed, deleted }) {
-        console.log("commitChanges");
-        let { rows } = this.state;
-        if (added) {
-            const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
-            rows = [
-                ...rows,
-                ...added.map((row, index) => ({
-                    id: startingAddedId + index,
-                    ...row,
-                })),
-            ];
-        }
-        if (changed) {
-            rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
-        }
-        if (deleted) {
-            const deletedSet = new Set(deleted);
-            rows = rows.filter(row => !deletedSet.has(row.id));
-        }
-        this.setState({ rows });
-    }
+
 
     onChange = (event, { newValue, method }) => {
 
