@@ -80,8 +80,8 @@ class MainNavbar extends Component{
         let region_name = '';
         if(this.props.login.IsSuccess){
             this.props.login.all_regions.forEach(region=>{
-                if(parseInt(this.props.login.defaultRegionId) === region.regionid) {
-                    region_name = region.regionname;
+                if(parseInt(this.props.login.defaultRegionId) === region.RegionId) {
+                    region_name = region.Name;
                     return false;
                 }
             })

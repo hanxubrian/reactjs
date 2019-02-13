@@ -597,6 +597,7 @@ class MainToolbar extends Component {
                                     open={this.state.open}
                                     onClose={this.handleClose}
                                     onOpen={this.handleOpen}
+                                    defaultValue={this.props.login.DefaultRegionId}
                                     value={parseInt(this.state.region)}
                                     onChange={this.handleChange}
                                     inputProps={{
@@ -606,7 +607,7 @@ class MainToolbar extends Component {
                                 >
                                     {this.props.login.all_regions.map((region, index)=>{
                                         return (
-                                            <MenuItem key={index} style={{paddingLeft: '10px'}} value={region.regionid}>{region.regionname}</MenuItem>
+                                            <MenuItem key={index} style={{paddingLeft: '10px'}} value={region.RegionId}>{region.Name}</MenuItem>
                                         );
                                     })}
                                 </Select>
