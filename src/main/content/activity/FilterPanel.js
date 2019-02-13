@@ -55,6 +55,7 @@ class FilterPanel extends Component {
     componentDidMount() {
         this.setState({FromDate: this.props.fromDate});
         this.setState({ToDate: this.props.toDate});
+        this.setState({verifyOption: this.props.verifyOption});
     }
 
     componentDidUpdate(prevProps, prevState, snapshot)
@@ -156,6 +157,7 @@ function mapStateToProps({ verifications, auth }) {
         regionId: auth.login.defaultRegionId,
         fromDate: verifications.fromDate,
         toDate: verifications.toDate,
+        verifyOption: verifications.verifyOption,
     }
 }
 

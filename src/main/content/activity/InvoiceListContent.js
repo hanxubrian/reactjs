@@ -83,7 +83,7 @@ const styles = theme => ({
         '& tr th': {
             color: 'white'
         },
-        '& tr th:nth-child(5)': {
+        '& tr th:nth-child(4)': {
             width: '100%'
         },
         '& svg': {
@@ -120,10 +120,10 @@ const styles = theme => ({
         '& tbody tr:nth-of-type(even)': {
             backgroundColor: 'fade(' + theme.palette.primary.secondary + ', 0.03)',
         },
-        '& tbody tr td:nth-child(5)': {
+        '& tbody tr td:nth-child(4)': {
             width: '100%'
         },
-        '& colgroup col:nth-child(5)':{
+        '& colgroup col:nth-child(4)':{
             width: '100%'
         }
     },
@@ -423,9 +423,6 @@ class InvoiceLists extends Component {
         } = this.state;
 
         let data = this.state.data.map(d=>{
-            let type = this.props.transactionTypeList.filter(t=>t._id===d.TrxType);
-            if(type.length>0)
-                d.Type = type[0].Name;
             d.InvoiceDate = moment(d.InvoiceDate).format('MM/DD/YYYY');
             d.DueDate = moment(d.DueDate).format('MM/DD/YYYY');
             return d;
@@ -445,7 +442,7 @@ class InvoiceLists extends Component {
 
         let  tableColumnExtensions = [
             { columnName: "RegionName", wordWrapEnabled: true, width: 80},
-            { columnName: "Description",    width: -1 },
+            { columnName: "InvoiceDescription",    width: -1 },
             { columnName: "InvoiceAmount",  width: 100, align: 'right'},
             { columnName: "InvoiceTax",     width: 100, align: 'right'},
             { columnName: "InvoiceTotal",   width: 100, align: 'right'},

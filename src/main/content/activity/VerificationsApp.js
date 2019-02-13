@@ -254,6 +254,7 @@ class VerificationsApp extends Component {
             isSubmittingForApproval: false,
             selectionLength: [],
             openDialog: false,
+            verifyOption: this.props.verifyOption
         };
 
         if (!props.bLoadedVerifications) {
@@ -288,6 +289,9 @@ class VerificationsApp extends Component {
         if (this.props.selectionLength !== prevProps.selectionLength) {
             this.setState({"selectionLength": this.props.selectionLength});
         }
+        if (this.props.verifyOption !== prevProps.verifyOption) {
+            this.setState({verifyOption: this.props.verifyOption});
+        }
     }
 
     componentWillMount() {
@@ -313,6 +317,7 @@ class VerificationsApp extends Component {
 
 
     componentDidMount() {
+        this.setState({verifyOption: this.props.verifyOption});
     }
 
     componentWillUnmount() {
@@ -377,7 +382,7 @@ class VerificationsApp extends Component {
                         <div className="flex-1 flex-col absolute w-full h-full">
                             {this.state.temp && (
                                 <Fragment>
-                                    {this.props.verifyOption==='transaction' ? (
+                                    {this.state.verifyOption==='transaction' ? (
                                             <TransactionListContent/>
                                         ) :
                                         (
