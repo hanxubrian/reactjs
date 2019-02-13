@@ -36,16 +36,12 @@ import FuseUtils from '@fuse/FuseUtils';
 
 const styles = theme => ({
     layoutTable: {
-        '& table th:first-child span': {
-            paddingLeft: '8px!important'
-        }
     },
     tableTheadRow: {
         '& tr': {
             height: 32
         },
         '& tr th': {
-            padding: '0 8px',
             borderBottom: `2px solid ${theme.palette.text.primary}`,
             borderTop: `2px solid ${theme.palette.text.primary}`,
         },
@@ -86,7 +82,10 @@ const styles = theme => ({
         '& td:nth-child(5)>div': {
             display: 'flex',
             justifyContent: 'flex-end'
-        }
+        },
+        '& td:nth-child(5)': {
+            paddingRight: 0,
+        },
     }
 });
 
@@ -232,7 +231,7 @@ class FindersFeeTransactions extends Component {
         ];
 
         return (
-            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
+            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-12")}>
                 <h2>Finder Fees</h2>
                 <Grid rows={data} columns={columns}>
                     <CurrencyTypeProvider

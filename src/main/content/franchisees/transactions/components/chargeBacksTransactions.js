@@ -75,6 +75,7 @@ const styles = theme => ({
         height: 42,
         '& td': {
             borderBottom: `1px solid ${theme.palette.text.primary}`,
+            paddingRight: 0
         },
         '& td:nth-child(2)': {
             width: '100%',
@@ -212,7 +213,7 @@ class ChargeBacksTransactions extends Component {
             {name: "DESCR", title: "Description"},
             {name: "TRX_AMT", title: "Amount"},
             // {name: "TRX_TAX", title: "Tax"},
-            {name: "TRX_TOT", title: "Total"},
+            // {name: "TRX_TOT", title: "Total"},
         ];
 
         let  tableColumnExtensions = [
@@ -230,8 +231,8 @@ class ChargeBacksTransactions extends Component {
         ];
 
         return (
-            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
-                <h2>Charge Backs Transactions</h2>
+            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-12")}>
+                <h2>Charge Back Transactions</h2>
                 <Grid rows={data} columns={columns}>
                     <PagingState
                         currentPage={this.state.currentPage}

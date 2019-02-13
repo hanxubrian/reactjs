@@ -36,9 +36,6 @@ import NumberFormat from 'react-number-format';
 
 const styles = theme => ({
     layoutTable: {
-        '& table th:first-child span': {
-            paddingLeft: '8px!important'
-        }
     },
     tableTheadRow: {
         '& tr': {
@@ -77,8 +74,23 @@ const styles = theme => ({
         '& tbody tr:last-child td': {
             borderBottom: `2px solid ${theme.palette.text.primary}`,
         },
+        '& tr.subHeading td:nth-child(1)': {
+            fontWeight: 700,
+            fontSize: 14
+        },
+        '& tr.subHeading td:nth-child(2)': {
+            display: 'none'
+        },
         '& tr.subHeading td:nth-child(4)': {
             display: 'none'
+        },
+        '& tr.subTotal td:nth-child(2), & tr.subTotal td:nth-child(3)':{
+            display: 'none'
+        },
+        '& tr.subTotal td:nth-child(4)':{
+            display: 'flex',
+            justifyContent: 'space-between',
+            height: 36,
         }
     },
     tableFootRow: {
@@ -88,6 +100,9 @@ const styles = theme => ({
         },
         '& td:nth-child(1)': {
             width: '100%',
+        },
+        '& td:nth-child(4)': {
+            paddingRight: 0,
         },
         '& td:nth-child(4)>div': {
             display: 'flex',
@@ -162,7 +177,7 @@ const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
                 {...restProps}
                 colSpan={1}
                 className={classes.tableSummaryCell}>
-                {CurrencyFormatter({value: restProps.children.props.children[0].props.params.value})}
+                {CurrencyFormatter({value: restProps.children.props.children[0].props.params.value/2})}
             </Table.Cell>
         );
 
@@ -205,12 +220,49 @@ class CustomerAccountTotals extends Component {
 
     TableRow = ({ row, ...restProps }) => {
         let rowClass='';
-        if(row.SUB)
+        if(row.SUB===0)
             rowClass = 'subHeading';
+        else if(row.SUB===2)
+            rowClass = 'subTotal';
 
         return (
             <Table.Row className = {classNames(rowClass)}
                        {...restProps}
+            />
+        )
+    };
+
+    TableCell = ({classes, ...restProps })=>{
+        if(restProps.column.name==='type' && restProps.row.SUB===2){
+            return  (
+                <Table.Cell
+                    {...restProps}
+                    colSpan={3}
+                />
+            )
+        }
+        else if(restProps.column.name==='type' && restProps.row.SUB===0){
+            return  (
+                <Table.Cell
+                    {...restProps}
+                    colSpan={2}
+                />
+            )
+        }
+        else if(restProps.column.name==='CUS_TAX' && restProps.row.SUB===2){
+            return (
+            <Table.Cell
+                {...restProps}
+                colSpan={1}
+            >
+                <strong>Sub Total: </strong>{CurrencyFormatter({value: restProps.value})}
+            </Table.Cell>
+            )
+        }
+        else
+        return (
+            <Table.Cell
+                {...restProps}
             />
         )
     };
@@ -230,7 +282,7 @@ class CustomerAccountTotals extends Component {
             line.CUS_NO = '';
             line.CUS_NAME = '';
             line.CUS_TAX = 0;
-            line.SUB = true;
+            line.SUB = 0;//sub section
             data.push(line);
             if(type.Customers !==null && type.Customers.length){
                 type.Customers.forEach(c=>{
@@ -239,17 +291,17 @@ class CustomerAccountTotals extends Component {
                     line_c.CUS_NO = c.CUST_NO;
                     line_c.CUS_NAME = c.CUS_NAME;
                     line_c.CUS_TAX = c.TRX_AMT;
-                    line_c.SUB = false;
+                    line_c.SUB = 1;//item
 
                     data.push(line_c);
                 })
             }
             let line_sub = {};
-            line_sub.type = 'Sub Total';
+            line_sub.type = '';
             line_sub.CUS_NO = '';
             line_sub.CUS_NAME = '';
             line_sub.CUS_TAX = type.Amount;
-            line_sub.SUB = false;
+            line_sub.SUB = 2;  //Subtotal
             data.push(line_sub);
         });
 
@@ -262,9 +314,9 @@ class CustomerAccountTotals extends Component {
 
         let  tableColumnExtensions = [
             { columnName: 'type', width: 160, },
-            { columnName: 'CUS_NO', width: 120, },
+            { columnName: 'CUS_NO', width: 80, },
             { columnName: 'CUS_NAME', width: -1, },
-            { columnName: 'CUS_TAX', width: 160, align: 'right', wordWrapEnabled: true},
+            { columnName: 'CUS_TAX', width: 140, align: 'right', wordWrapEnabled: true},
         ];
 
         let totalSummaryItems = [
@@ -272,7 +324,7 @@ class CustomerAccountTotals extends Component {
         ];
 
         return (
-            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
+            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-12")}>
                 <h2>Total Revenue by Customer</h2>
                 <Grid rows={data} columns={columns}>
                     <PagingState
@@ -296,6 +348,7 @@ class CustomerAccountTotals extends Component {
                                   headComponent = {TableHeadComponent}
                                   columnExtensions={tableColumnExtensions}
                                   rowComponent = {this.TableRow}
+                                  cellComponent = {this.TableCell}
                     />
                     <TableHeaderRow />
                     {data.length>0 && (

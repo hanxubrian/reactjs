@@ -74,10 +74,14 @@ const styles = theme => ({
     tableFootRow: {
         height: 42,
         '& td': {
+            paddingRight: 0,
             borderBottom: `1px solid ${theme.palette.text.primary}`,
         },
         '& td:nth-child(2)': {
             width: '100%',
+        },
+        '& td:nth-child(5)': {
+            paddingRight: 0,
         },
     }
 });
@@ -195,7 +199,7 @@ class SpecialMiscTransactons extends Component {
     render() {
         const {classes, franchiseeReport} = this.props;
         if((franchiseeReport===null) || (franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].SPEC_MISC===null))
-            return (<div/>);
+            return (<div />);
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].SPEC_MISC.map(d=>{
             let type = this.props.transactionTypeList.filter(t=>t._id===d.TYPE);
@@ -220,9 +224,9 @@ class SpecialMiscTransactons extends Component {
         let  tableColumnExtensions = [
             { columnName: 'DESCR', width: -1, },
             { columnName: 'TYPE', width: 180},
-            { columnName: 'TRX_AMT', width: 140,  align: 'right'},
-            { columnName: 'TRX_TAX', width: 140,  align: 'right'},
-            { columnName: 'TRX_TOT', width: 140,  align: 'right'},
+            { columnName: 'TRX_AMT', width: 90,  align: 'right'},
+            { columnName: 'TRX_TAX', width: 90,  align: 'right'},
+            { columnName: 'TRX_TOT', width: 90,  align: 'right'},
         ];
 
         let totalSummaryItems = [
@@ -232,7 +236,7 @@ class SpecialMiscTransactons extends Component {
         ];
 
         return (
-            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
+            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-12")}>
                 <h2>Special Misc. Transactions</h2>
                 <Grid rows={data} columns={columns}>
                     <PagingState

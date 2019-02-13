@@ -318,7 +318,7 @@ class VerificationListContent extends Component {
 
     processData = ()=> {
         if(this.props.verifications!==null) {
-            let temp = [...this.props.verifications.Data.FranchiseeTransactions];
+            let temp = [...this.props.verifications.Data.FranTransactions];
             temp.forEach(x => {
                 x.Franchisee = `${x.FranchiseeName} - ${x.FranchiseeNo}`
             });

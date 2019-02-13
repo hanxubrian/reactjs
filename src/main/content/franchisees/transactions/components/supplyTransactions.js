@@ -37,9 +37,6 @@ import NumberFormat from 'react-number-format';
 
 const styles = theme => ({
     layoutTable: {
-        '& table th:first-child span': {
-            paddingLeft: '8px!important'
-        },
         '& table th:last-child span': {
             paddingRight: '8px!important'
         }
@@ -49,11 +46,10 @@ const styles = theme => ({
             height: 32
         },
         '& tr th': {
-            padding: '0 8px',
             borderBottom: `2px solid ${theme.palette.text.primary}`,
             borderTop: `2px solid ${theme.palette.text.primary}`,
         },
-        '& tr th:nth-child(1)': {
+        '& tr th:nth-child(2)': {
             width: '100%'
         }
     },
@@ -69,7 +65,7 @@ const styles = theme => ({
             paddingLeft: 4,
             paddingRight: 4
         },
-        '& tbody tr td:nth-child(1)': {
+        '& tbody tr td:nth-child(2)': {
             width: '100%',
         },
         '& tbody tr:last-child td': {
@@ -79,10 +75,14 @@ const styles = theme => ({
     tableFootRow: {
         height: 42,
         '& td': {
+            paddingRight: 0,
             borderBottom: `1px solid ${theme.palette.text.primary}`,
         },
-        '& td:nth-child(1)': {
+        '& td:nth-child(2)': {
             width: '100%',
+        },
+        '& td:nth-child(4)': {
+            paddingRight: 0,
         },
     }
 });
@@ -189,14 +189,21 @@ class SupplyTransactons extends Component {
             return (<div/>);
 
         let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].SUPPLY_TRXS.map(d=>{
+            let type = this.props.transactionTypeList.filter(t=>t._id===d.TYPE);
+
             d.DESCR = FuseUtils.capital_letter(d.DESCR);
-            d.TRX_AMT = parseFloat(d.EXTENDED);
-            d.TRX_TAX = parseFloat(d.TRX_TAX);
+            // d.TRX_AMT = parseFloat(d.TRX_TOT)-parseFloat(d.TRX_TAX);
+            d.TRX_TAX = d.TRX_RESELL ? 0 : parseFloat(d.TRX_TAX);
             d.TRX_TOT = parseFloat(d.TRX_TOT);
+
+            if(type.length>0)
+                d.TYPE = type[0].Name;
+
             return d;
         });
 
         const columns = [
+            {name: "TYPE", title: "Type"},
             {name: "DESCR", title: "Description"},
             {name: "TRX_AMT", title: "SubTotal"},
             {name: "TRX_TAX", title: "Tax"},
@@ -204,6 +211,7 @@ class SupplyTransactons extends Component {
         ];
 
         let  tableColumnExtensions = [
+            { columnName: 'TYPE', width: 140, },
             { columnName: 'DESCR', width: -1, },
             { columnName: 'TRX_AMT', width: 100,  align: 'right'},
             { columnName: 'TRX_TAX', width: 100,  align: 'right'},
@@ -217,7 +225,7 @@ class SupplyTransactons extends Component {
         ];
 
         return (
-            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-24")}>
+            <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-12")}>
                 <h2>Supply Transactions</h2>
                 <Grid rows={data} columns={columns}>
                     <PagingState
