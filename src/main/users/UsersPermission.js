@@ -198,9 +198,9 @@ class UsersPermission extends React.Component {
             }
         });
         
-        let newAppList = {...this.state.AppList}
+        let newAppList = [...this.state.AppList];
         newAppList[index].Menus[pIndex].Children[cIndex][actionName] = checked;
-
+        console.log("newAPPlist",newAppList);
         this.updateUserFormPayload("Apps",newAppList);
         
     };
