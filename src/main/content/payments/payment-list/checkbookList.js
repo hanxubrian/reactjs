@@ -37,15 +37,6 @@ import {
 
 } from '@devexpress/dx-react-grid-material-ui';
 
-const hexToRgb = (hex) => {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-    } : null;
-};
-
 const styles = theme => ({
     layoutTable: {
         flexDirection: 'row',
@@ -220,8 +211,6 @@ class CheckbookList extends Component {
     }
 
     onChange = (event, { newValue, method }) => {
-        console.log("onChange");
-
         this.setState({
             value: newValue.toString()
         });
@@ -299,8 +288,6 @@ class CheckbookList extends Component {
     };
 
     render() {
-        console.log('rows=', this.state.rows);
-
         const {
             rows,
             selection,
