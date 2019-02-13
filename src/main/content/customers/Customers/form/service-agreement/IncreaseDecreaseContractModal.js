@@ -811,7 +811,7 @@ class IncreaseDecreaseContractModal extends React.Component {
 					<TextField margin="dense" id="Current Contract Amount" label="Current Contract Amount"
 						InputLabelProps={{ shrink: true }}
 						className={classNames(classes.textField, "pr-6")}
-						InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">attach_money</Icon></InputAdornment> }}
+						InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
 					/>
 				</div>
 
@@ -819,7 +819,7 @@ class IncreaseDecreaseContractModal extends React.Component {
 					<TextField margin="dense" id="New Amount" label="New Amount"
 						InputLabelProps={{ shrink: true }}
 						className={classNames(classes.textField, "pr-6")}
-						InputProps={{ readOnly: false, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">attach_money</Icon></InputAdornment> }}
+						InputProps={{ readOnly: false, startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
 					/>
 
 					<TextField margin="dense" id="Reason" label="Reason"
@@ -887,9 +887,25 @@ class IncreaseDecreaseContractModal extends React.Component {
 					</DialogContent>
 
 					<DialogActions>
-						{step === 0 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Next (Franchisee Distribution)<Icon>keyboard_arrow_right</Icon></Button>}
-						{step === 1 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>}
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Cancel</Button>
+						<div className="flex w-full justify-between mb-12">
+							<div className="flex w-full" style={{ alignItems: 'center' }}>
+								<TextField
+									type="date"
+									id="EffectiveDate"
+									label="Effective Date"
+									className={classNames(classes.textField, 'ml-24')}
+									InputLabelProps={{ shrink: true }}
+									value={this.state.EffectiveDate}
+									onChange={this.handleChange('EffectiveDate')}
+									margin="dense"
+								/>
+							</div>
+							<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+								{step === 0 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Next (Franchisee Distribution)<Icon>keyboard_arrow_right</Icon></Button>}
+								{step === 1 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>}
+								<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
+							</div>
+						</div>
 					</DialogActions>
 				</Dialog>
 			</div>
