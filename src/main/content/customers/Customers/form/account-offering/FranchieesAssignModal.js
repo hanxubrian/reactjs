@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import { Icon, IconButton, Tooltip, Slide, RadioGroup, Radio, FormControlLabel, Paper, Typography, InputAdornment, FormControl, InputLabel, Select, MenuItem, Divider, ListItem, List, ListItemText, ListItemLink } from '@material-ui/core';
+import { Icon, IconButton, Tooltip, Slide, RadioGroup, Radio, FormControlLabel, Paper, Typography, InputAdornment, FormControl, InputLabel, Select, MenuItem, Divider, ListItem, List, ListItemText, ListItemLink, Checkbox } from '@material-ui/core';
 
 // for store
 import { bindActionCreators } from "redux";
@@ -797,26 +797,30 @@ class FranchieesAssignModal extends React.Component {
 		} = this.state
 
 		const franHeaders = [
-			{ width: 12, title: 'Number', field: 'Number' },
-			{ width: 22, title: 'Name', field: 'Name' },
-			{ width: 15, title: 'Billing', field: '' },
-			{ width: 15, title: 'Service', field: '' },
-			{ width: 25, title: 'Description', field: '' },
-			{ width: 10, title: 'Amount', field: '' },
+			{ width: 7, title: 'Number', field: 'Number' },
+			{ width: 16, title: 'Name', field: 'Name' },
+			{ width: 5, title: 'Escrow', field: '' },
+			{ width: 12, title: 'Billing Frequency', field: '' },
+			{ width: 12, title: 'Billing', field: '' },
+			{ width: 12, title: 'Service', field: '' },
+			{ width: 24, title: 'Description', field: '' },
+			{ width: 8, title: 'Amount', field: '' },
+			{ width: 3, title: '', field: '' },
 		]
-
+		// { width: 7, title: 'Percent (%)', field: '' },
 		return (
 			<>
-				<div className={classNames("flex mt-12 justify-end")}>
+				<div className={classNames("flex pt-12 justify-end")} style={{ alignItems: 'center' }}>
+					<Button variant="contained" color="primary" className={classNames("pl-24 pr-24 mr-12")}>Calculate Distribution</Button>
 
 					<TextField margin="dense" id="Total Monthly Contract" label="Total Monthly Contract"
 						InputLabelProps={{ shrink: true }}
 						className={classNames(classes.textField, "pr-6")}
-						InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">attach_money</Icon></InputAdornment> }}
+						InputProps={{ readOnly: true, startAdornment: <InputAdornment position="end" className="mr-4">$</InputAdornment> }}
 					/>
 				</div>
 
-				<Typography className="mb-12" variant="title">Franchisees</Typography>
+				<Typography className="mb-12" variant="subtitle1">Franchisees</Typography>
 
 				<div className={classNames("flex flex-col w-full")}>
 					<div className={classNames("flex w-full")}>
@@ -833,31 +837,57 @@ class FranchieesAssignModal extends React.Component {
 							<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="body2">{x.Number}</Typography>
 							<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="body2">{x.Name}</Typography>
 
-							<TextField style={{ width: franHeaders[2].width + '%' }}
-								margin="dense"
-								className="pl-6"
-								select
-							>
-								{franchiseeBillingTypes.map((x, index) => (<MenuItem key={index} value={x.Name}>{x.Name}</MenuItem>))}
-							</TextField>
+							<Checkbox style={{ width: franHeaders[2].width + '%', alignSelf: 'center' }} />
 
 							<TextField style={{ width: franHeaders[3].width + '%' }}
 								margin="dense"
 								className="pl-6"
+								value="Regular"
+								select
+							// InputProps={{ readOnly: true }}
+							>
+								{['Variable', 'Regular'].map((x, index) => (<MenuItem key={index} value={x}>{x}</MenuItem>))}
+							</TextField>
+
+							<TextField style={{ width: franHeaders[4].width + '%' }}
+								margin="dense"
+								className="pl-6"
+								value="Regular Billing"
+								select
+								InputProps={{ readOnly: true }}
+							>
+								{franchiseeBillingTypes.map((x, index) => (<MenuItem key={index} value={x.Name}>{x.Name}</MenuItem>))}
+							</TextField>
+
+							<TextField style={{ width: franHeaders[5].width + '%' }}
+								margin="dense"
+								className="pl-6"
+								value=""
 								select
 							>
 								{franchiseeServiceTypes.map((x, index) => (<MenuItem key={index} value={x.Name}>{x.Name}</MenuItem>))}
 							</TextField>
 
-							<TextField style={{ width: franHeaders[4].width + '%' }}
-								margin="dense"
-								className="pr-6 pl-6"
-							/>
-							<TextField style={{ width: franHeaders[5].width + '%' }}
-								InputProps={{ startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">attach_money</Icon></InputAdornment> }}
+							<TextField style={{ width: franHeaders[6].width + '%' }}
 								margin="dense"
 								className="pl-6"
 							/>
+							{/* <TextField style={{ width: franHeaders[7].width + '%' }}
+								type='number'
+								InputProps={{ endAdornment: <InputAdornment position="start" className="ml-4">%</InputAdornment> }}
+								margin="dense"
+								className="pl-6"
+							/> */}
+							<TextField style={{ width: franHeaders[7].width + '%' }}
+								type='number'
+								InputProps={{ startAdornment: <InputAdornment position="end" className="mr-4">$</InputAdornment> }}
+								margin="dense"
+								className="pl-6"
+							/>
+							<div style={{ width: franHeaders[8].width + '%' }}>
+								<IconButton><Icon>filter_none</Icon></IconButton>
+							</div>
+
 						</div>
 					))}
 				</div>
@@ -892,7 +922,7 @@ class FranchieesAssignModal extends React.Component {
 				<Dialog
 					open={this.props.franchieesAssignModalForm.open === true}
 					fullWidth={true}
-					maxWidth="md"
+					maxWidth="lg"
 
 					onClose={this.handleClose}
 					scroll="paper"
@@ -918,7 +948,7 @@ class FranchieesAssignModal extends React.Component {
 					</DialogContent>
 
 					<DialogActions>
-						{step === 0 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Assign<Icon>keyboard_arrow_right</Icon></Button>}
+						{step === 0 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Setup Finders Fees<Icon>keyboard_arrow_right</Icon></Button>}
 						{step === 1 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}><Icon>keyboard_arrow_left</Icon>Finders Fees</Button>}
 						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Cancel</Button>
 					</DialogActions>
