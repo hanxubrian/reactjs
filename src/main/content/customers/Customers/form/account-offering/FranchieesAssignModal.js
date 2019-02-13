@@ -948,7 +948,9 @@ class FranchieesAssignModal extends React.Component {
 					</DialogContent>
 
 					<DialogActions>
+						{step === 0 && <Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}><Icon>save</Icon>&nbsp;&nbsp;Save</Button>}
 						{step === 0 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Setup Finders Fees<Icon>keyboard_arrow_right</Icon></Button>}
+
 						{step === 1 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}><Icon>keyboard_arrow_left</Icon>Finders Fees</Button>}
 						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Cancel</Button>
 					</DialogActions>

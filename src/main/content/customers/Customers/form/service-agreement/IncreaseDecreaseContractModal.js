@@ -870,7 +870,7 @@ class IncreaseDecreaseContractModal extends React.Component {
 				>
 					<BlueDialogTitle id="form-dialog-title" onClose={this.handleClose}>
 						{step === 0 && <h2 style={{ display: "flex", alignItems: "center", color: "white" }}><Icon>account_balance</Icon>&nbsp;&nbsp;Increase / Decrease Contract Amount</h2>}
-						{step === 1 && <h2 style={{ display: "flex", alignItems: "center", color: "white" }}><Icon>account_balance</Icon>&nbsp;&nbsp;Finders Fees</h2>}
+						{step === 1 && <h2 style={{ display: "flex", alignItems: "center", color: "white" }}><Icon>account_balance</Icon>&nbsp;&nbsp;Increase / Decrease Contract Amount</h2>}
 
 					</BlueDialogTitle>
 					<DialogContent>

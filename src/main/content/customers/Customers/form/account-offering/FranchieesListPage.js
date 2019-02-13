@@ -506,12 +506,20 @@ class FranchieesListPage extends Component {
 			props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
 		}
 
-		this.changeSelection = selection => this.setState({ selection });
 		this.changeSorting = sorting => this.setState({ sorting });
 		this.changeSearchValue = value => this.setState({ searchValue: value });
 	}
 
+	changeSelection = selection => {
+		this.setState({ selection });
 
+		const { rows } = this.state
+		const franchieesesToOffer = selection.map(x => (rows[x]))
+
+		console.log(selection, franchieesesToOffer)
+
+		this.props.setFranchieesesToOffer(franchieesesToOffer)
+	}
 
 
 
@@ -680,15 +688,11 @@ class FranchieesListPage extends Component {
 			);
 		}
 	}
+
 	onClickAssign = () => {
-		const { selection, rows } = this.state
-		const franchieesesToOffer = selection.map(x => (rows[x]))
-
-		console.log(selection, franchieesesToOffer)
-
 		this.props.showFranchieesAssignModalForm(true)
-		this.props.setFranchieesesToOffer(franchieesesToOffer)
 	}
+
 	render() {
 		const {
 			classes,

@@ -475,6 +475,7 @@ class CustomerForm extends Component {
 			// addCustomer,
 			// updateCustomer,
 			// removeCustomer
+			customerForm,
 		} = this.props;
 		// const {
 		// 	value,
@@ -524,12 +525,12 @@ class CustomerForm extends Component {
 										startAdornment: <InputAdornment position="start">$</InputAdornment>
 									}}
 								/>
-								<Button
+								{customerForm.props.open && customerForm.type === "edit" && <Button
 									variant="contained"
 									color="primary"
 									className={classNames(classes.button, "pr-24 pl-24")}
 									onClick={this.IncreaseDecreaseContract}
-								>Increase/Decrease Contract</Button>
+								>Increase/Decrease Contract</Button>}
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
@@ -1825,7 +1826,7 @@ function mapStateToProps({ customers, franchisees, auth }) {
 		customers: customers.customersDB,
 		bLoadedFranchisees: franchisees.bLoadedFranchisees,
 		regionId: auth.login.defaultRegionId,
-		// CustomerForm: customers.CustomerForm,
+		customerForm: customers.customerForm,
 		documents: customers.customersDocuments,
 
 		statusId: franchisees.statusId,
