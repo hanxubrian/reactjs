@@ -198,7 +198,7 @@ class SummaryTransactons extends Component {
 
         return (
             <div className={classNames(classes.layoutTable, "flex flex-col mt-4 mb-12 w-full")}>
-                <h2 >FRANCHISEE REVENUES:</h2>
+                <h2 >FRANCHISEE REVENUE:</h2>
 
                 <table style={{width:'63%'}}>
                     <tbody>
@@ -377,7 +377,7 @@ class SummaryTransactons extends Component {
                     )}
                     </tbody>
                 </table>
-                <table style={{width:'90%'}}>
+                <table>
                     <tbody>
                     { aDeductions6.map((b, index)=>{
                             if(SUMMARY_PAGE[0][b]===null)
@@ -390,7 +390,7 @@ class SummaryTransactons extends Component {
                                                 {SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( SUMMARY_PAGE[0][b][0].LABEL) }
                                             </Typography>
                                         </td>
-                                        <td className="text-right">
+                                        <td style={{width:'15.4%'}}>
                                             { SUMMARY_PAGE[0][b] !=null && SUMMARY_PAGE[0][b][0] !=null && ( CurrencyFormatter({value: SUMMARY_PAGE[0][b][0].AMOUNT}))}
                                         </td>
                                     </tr>
@@ -436,6 +436,18 @@ class SummaryTransactons extends Component {
                     <tr >
                         <td width="350">
                             <Typography variant="subtitle1">Tax Levy</Typography>
+                        </td>
+                        <td width ="" className="text-right">
+                            $0.00
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table style={{width:'63%'}}>
+                    <tbody>
+                    <tr >
+                        <td width="350">
+                            <Typography variant="subtitle1">Garnishment</Typography>
                         </td>
                         <td width ="" className="text-right">
                             $0.00

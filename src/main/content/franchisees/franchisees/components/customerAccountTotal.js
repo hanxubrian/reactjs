@@ -177,7 +177,7 @@ const TableSummaryCellComponentBase = ({ classes, ...restProps }) => {
                 {...restProps}
                 colSpan={1}
                 className={classes.tableSummaryCell}>
-                {CurrencyFormatter({value: restProps.children.props.children[0].props.params.value})}
+                {CurrencyFormatter({value: restProps.children.props.children[0].props.params.value/2})}
             </Table.Cell>
         );
 

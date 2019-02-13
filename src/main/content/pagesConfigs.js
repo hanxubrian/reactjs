@@ -1,5 +1,6 @@
 import {VerificationsAppConfig} from "./activity/VerificationsAppConfig";
 import {SigninPageConfig} from './auth/signin/SigninPageConfig';
+import {FranchiseeProfilePageConfig} from './profile/FranchiseeProfilePageConfig';
 import {ProfilePageConfig} from './profile/ProfilePageConfig';
 import {RegionsConfig} from "./regions/regions/regionsConfig";
 import {TerritoriesConfig} from "./regions/territories/territoriesConfig";
@@ -39,6 +40,7 @@ import {AdminImportConfig} from "./admin/imports/adminImportConfig";
 export const pagesConfigs = [
     VerificationsAppConfig,
     SigninPageConfig,
+    FranchiseeProfilePageConfig,
     ProfilePageConfig,
     RegionsConfig,
     TerritoriesConfig,
