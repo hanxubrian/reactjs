@@ -53,41 +53,11 @@ const styles = theme => ({
         '& .-pageSizeOptions': {
             display: 'none'
         },
-        '& .ReactTable .rt-noData': {
-            top: '250px',
-            border: '1px solid coral'
-        },
-        '& .ReactTable .rt-thead.-headerGroups': {
-            paddingLeft: '0!important',
-            paddingRight: '0!important',
-            minWidth: 'inherit!important'
-        },
-        '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
-            background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
-            color: 'white!important'
-        },
         '& .openFilter': {
             width: 'inherit'
         },
         '& .openSummary': {
             width: 300
-        },
-        '& .ReactTable .rt-tbody': {
-            overflowY: 'scroll',
-            overflowX: 'hidden'
-        },
-        '& .ReactTable .rt-tr-group': {
-            flex: '0 0 auto'
-        },
-        '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
-            justifyContent: 'center'
-        },
-        '& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
-            width: 'inherit!important',
-            minWidth: 'inherit!important',
-        },
-        '& .ReactTable .rt-thead .rt-th:last-child': {
-            justifyContent: 'flex-end'
         },
         '& .p-12-impor': {
             paddingLeft: '1.2rem!important',
@@ -256,12 +226,12 @@ class VerificationsApp extends Component {
             openDialog: false,
             verifyOption: this.props.verifyOption
         };
+        if(props.transactionTypeList===null)
+            props.getFranchiseeTransactionTypeLists(props.regionId);
 
         if (!props.bLoadedVerifications) {
-            this.props.getInvoiceTransactionPendingLists(props.regionId);
+            this.props.getInvoiceTransactionPendingLists(props.regionId, props.fromDate, props.toDate);
         }
-        if(props.transactionTypeList===null)
-            props.getFranchiseeTransactionTypeLists(props.regionId, props.fromDate, props.toDate);
     }
 
     closeComposeForm = () => {
@@ -273,7 +243,6 @@ class VerificationsApp extends Component {
     };
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        let bChanged = false;
 
         if (this.props.regionId !== prevProps.regionId ||
             this.props.statusId !== prevProps.statusId) {
@@ -281,10 +250,7 @@ class VerificationsApp extends Component {
                 regionId: this.props.regionId,
                 statusId: this.props.statusId
             });
-
-            // this.setState({ loading: true });
-            this.props.getInvoiceTransactionPendingLists(this.props.regionId);
-            bChanged = true;
+            this.props.getInvoiceTransactionPendingLists(this.props.regionId, this.props.fromDate, this.props.toDate);
         }
         if (this.props.selectionLength !== prevProps.selectionLength) {
             this.setState({"selectionLength": this.props.selectionLength});
@@ -296,7 +262,7 @@ class VerificationsApp extends Component {
 
     componentWillMount() {
         if (this.props.verifications === null) {
-            this.props.getInvoiceTransactionPendingLists(this.props.regionId);
+            this.props.getInvoiceTransactionPendingLists(this.props.regionId, this.props.fromDate, this.props.toDate);
         }
         this.setState({"selectionLength": this.props.selectionLength});
         this.setState({openDialog: this.props.verifiedModal});
@@ -372,6 +338,11 @@ class VerificationsApp extends Component {
                                             Request Changes
                                             <Icon className={classes.rightIcon}>rotate_90_degrees_ccw</Icon>
                                         </Button>
+                                        <Button variant="contained" color="primary"
+                                                className={classNames(classes.button, classes.btntop)} onClick={()=>this.props.getInvoiceTransactionPendingLists(this.props.regionId, this.props.fromDate, this.props.toDate)}>
+                                            Refresh
+                                            <Icon className={classes.rightIcon}>refresh</Icon>
+                                        </Button>
                                     </div>
                                 </div>
 
@@ -446,12 +417,12 @@ function mapDispatchToProps(dispatch) {
         toggleSummaryPanel: Actions.toggleVerificationSummaryPanel,
         openNewVerificationForm: Actions.openNewVerificationForm,
         closeNewVerificationForm: Actions.closeNewVerificationForm,
-        getInvoiceTransactionPendingLists: Actions.getInvoiceTransactionPendingLists,
         openCloseReviseModal: Actions.openCloseReviseDialog,
         openVerificationDialog : Actions.openVerificationDialog ,
         openCloseRejectModal: Actions.openCloseRejectDialog,
-        // getFranchiseeTransactionTypeLists : Actions.getFranchiseeTransactionTypeLists,
-        getFranchiseeTransactionTypeLists : Actions.getInvoiceTransactionPendingLists1,
+        getFranchiseeTransactionTypeLists : Actions.getFranchiseeTransactionTypeLists,
+        // getInvoiceTransactionPendingLists: Actions.getInvoiceTransactionPendingLists,
+        getInvoiceTransactionPendingLists : Actions.getInvoiceTransactionPendingLists1,
     }, dispatch);
 }
 
@@ -476,7 +447,6 @@ function mapStateToProps({verifications, auth, fuse, transactions}) {
         fromDate: verifications.fromDate,
         toDate: verifications.toDate,
         verifyOption: verifications.verifyOption,
-
     }
 }
 

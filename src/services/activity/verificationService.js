@@ -33,7 +33,6 @@ class verificationService {
     };
 
     getInvoiceTransactionPendingList1 =  (regionId, fromDate, toDate) => {
-        console.log('input=', regionId, fromDate, toDate)
         return new Promise((resolve, reject) => {
             axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Verification/List`,  {regionId,fromDate, toDate})
                 .then( res => {

@@ -264,11 +264,6 @@ class VerificationTransactionListContent extends Component {
         });
     };
 
-    shouldComponentUpdate(nextProps, nextState) {
-        return true;
-    }
-
-
     search(val) {
         val = val.toLowerCase();
         if (val === '') {
@@ -297,7 +292,7 @@ class VerificationTransactionListContent extends Component {
 
     processData = ()=> {
         if(this.props.verifications!==null) {
-            let temp = [...this.props.verifications.Data.FranchiseeTransactions];
+            let temp = [...this.props.verifications.Data.FranTransactions];
             temp.forEach(x => {
                 x.Franchisee = `${x.FranchiseeName} - ${x.FranchiseeNo}`
             });
@@ -429,6 +424,7 @@ class VerificationTransactionListContent extends Component {
             let type = this.props.transactionTypeList.filter(t=>t._id===d.TrxType);
             if(type.length>0)
                 d.Type = type[0].Name;
+                // d.Type = d.TrxType;
             d.TrxDate = moment(d.TrxDate).format('MM/DD/YYYY');
             return d;
         });
