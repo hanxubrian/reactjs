@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { withStyles} from '@material-ui/core';
+
 //Material UI core
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { FormControlLabel, RadioGroup, Radio, FormControl, Grid   } from '@material-ui/core';
+import 'date-fns'
+import MomentUtils from '@date-io/moment';
+
+import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+
 
 //Store
 import * as Actions from 'store/actions';
@@ -13,175 +18,122 @@ import { connect } from 'react-redux';
 //Third Party
 import classNames from 'classnames';
 
-import GridContainer from "Commons/Grid/GridContainer";
-import GridItem from "Commons/Grid/GridItem";
-
 import { SelectionPanel } from "./CustomizedDxGridSelectionPanel";
+import _ from "lodash";
+import {
+    UPDATE_FROM_DATE_VERIFICATION,
+    UPDATE_TO_DATE_VERIFICATION
+} from "../../../store/actions";
+import moment from "moment";
 
 
 const styles = theme => ({
     root: {
-      width: "250px",
-      overflow: "hidden",
-      padding: "5%"
+        width: "250px",
+        overflow: "hidden",
+        padding: "5%"
     },
     filterContainer: {
         padding: "3%"
-    }
+    },
+    formControl: {
+        margin: theme.spacing.unit * 1,
+    },
+    group: {
+        margin: `${theme.spacing.unit}px 0`,
+    },
 });
-
-const stateNames = [
-    { Value: "AL", Text: "Alabama" },
-    { Value: "AK", Text: "Alaska" },
-    { Value: "AZ", Text: "Arizona" },
-    { Value: "AR", Text: "Arkansas" },
-    { Value: "CA", Text: "California" },
-    { Value: "CO", Text: "Colorado" },
-    { Value: "CT", Text: "Connecticut" },
-    { Value: "DE", Text: "Delaware" },
-    { Value: "FL", Text: "Florida" },
-    { Value: "GA", Text: "Georgia" },
-    { Value: "HI", Text: "Hawaii" },
-    { Value: "ID", Text: "Idaho" },
-    { Value: "IL", Text: "Illinois" },
-    { Value: "IN", Text: "Indiana" },
-    { Value: "IA", Text: "Iowa" },
-    { Value: "KS", Text: "Kansas" },
-    { Value: "KY", Text: "Kentucky" },
-    { Value: "LA", Text: "Louisiana" },
-    { Value: "ME", Text: "Maine" },
-    { Value: "MD", Text: "Maryland" },
-    { Value: "MA", Text: "Massachusetts" },
-    { Value: "MI", Text: "Michigan" },
-    { Value: "MN", Text: "Minnesota" },
-    { Value: "MS", Text: "Mississippi" },
-    { Value: "MO", Text: "Missouri" },
-    { Value: "MT", Text: "Montana" },
-    { Value: "NE", Text: "Nebraska" },
-    { Value: "NV", Text: "Nevada" },
-    { Value: "NH", Text: "New Hampshire" },
-    { Value: "NJ", Text: "New Jersey" },
-    { Value: "NM", Text: "New Mexico" },
-    { Value: "NY", Text: "New York" },
-    { Value: "NC", Text: "North Carolina" },
-    { Value: "ND", Text: "North Dakota" },
-    { Value: "OH", Text: "Ohio" },
-    { Value: "OK", Text: "Oklahoma" },
-    { Value: "OR", Text: "Oregon" },
-    { Value: "PA", Text: "Pennsylvania" },
-    { Value: "RI", Text: "Rhode Island" },
-    { Value: "SC", Text: "South Carolina" },
-    { Value: "SD", Text: "South Dakota" },
-    { Value: "TN", Text: "Tennessee" },
-    { Value: "TX", Text: "Texas" },
-    { Value: "UT", Text: "Utah" },
-    { Value: "VT", Text: "Vermont" },
-    { Value: "VA", Text: "Virginia" },
-    { Value: "WA", Text: "Washington" },
-    { Value: "DC", Text: "Washington D.C." },
-    { Value: "WV", Text: "West Virginia" },
-    { Value: "WI", Text: "Wisconsin" },
-    { Value: "WY", Text: "Wyoming" }
-];
 
 class FilterPanel extends Component {
 
     state = {
-        checkedInvoices: true,
-        checkedCustomers: true,
-        checkedPayments: false,
-        checkedFranchisee: true,
-        checkedTransactions: false,
-        checkedTransfers: false
+        verifyOption: 'transaction',
+        FromDate: undefined,
+        ToDate: undefined,
+    };
+
+    componentDidMount() {
+        this.setState({FromDate: this.props.fromDate});
+        this.setState({ToDate: this.props.toDate});
     }
 
-    componentWillMount() {
-
+    componentDidUpdate(prevProps, prevState, snapshot)
+    {
+        if(prevProps.fromDate!==this.props.fromDate){
+            this.setState({FromDate: this.props.fromDate})
+        }
+        if(prevProps.toDate!==this.props.toDate){
+            this.setState({ToDate: this.props.toDate})
+        }
     }
 
-    handleChange = name => event => {
-        this.setState({ [name]: event.target.checked });
+    handleChange = (event) => {
+        this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
+        this.props.updateVerifyOption(event.target.value);
+    };
+
+    handleFromDateChange = date => {
+        this.setState({FromDate: date});
+        this.props.updateVerifyPeriod(UPDATE_FROM_DATE_VERIFICATION, moment(date).format("MM/DD/YYYY"));
+    };
+
+    handleToDateChange = date => {
+        this.setState({ ToDate: date });
+        this.props.updateVerifyPeriod(UPDATE_TO_DATE_VERIFICATION, moment(date).format("MM/DD/YYYY"));
     };
 
     render() {
         const { classes } = this.props;
         return (
             <div className={classNames(classes.root, "flex flex-col")}>
-                    <GridContainer  className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <FormControlLabel
-                            control={
-                                <Switch
-                                    checked={this.state.checkedInvoices}
-                                    onChange={this.handleChange('checkedInvoices')}
-                                    value="checkedInvoices"
-                                    color="primary"
+                <Grid container  className={classNames(classes.formControl)}>
+                    <Grid item xs={12} sm={12} md={12} className="flex flex-col">
+                        <MuiPickersUtilsProvider utils={MomentUtils}>
+                            <div className="flex flex-col mt-20">
+                                <h3 className="mb-20">Choose a Period</h3>
+                                <DatePicker
+                                    margin="none"
+                                    label="From Date"
+                                    name="FromDate"
+                                    variant="outlined"
+                                    format="MM/DD/YYYY"
+                                    value={this.state.FromDate}
+                                    onChange={this.handleFromDateChange}
+                                    fullWidth
+                                    required
+                                    color="secondary"
                                 />
-                            }
-                             label="Invoices"
-                            />
-                        </GridItem>
-                    </GridContainer>
-                    <GridContainer  className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={this.state.checkedCustomers}
-                                        onChange={this.handleChange('checkedCustomers')}
-                                        value="checkedCustomers"
-                                        color="primary"
-                                    />
-                                }
-                                label="Customers"
-                            />
-                        </GridItem>
-                    </GridContainer>
-                    <GridContainer  className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={this.state.checkedFranchisee}
-                                        onChange={this.handleChange('checkedFranchisee')}
-                                        value="checkedFranchisee"
-                                        color="primary"
-                                    />
-                                }
-                                label="Franchisees"
-                            />
-                        </GridItem>
-                    </GridContainer>
-                    <GridContainer  className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={this.state.checkedTransactions}
-                                        onChange={this.handleChange('checkedTransactions')}
-                                        value="checkedTransactions"
-                                        color="primary"
-                                    />
-                                }
-                                label="Transactions"
-                            />
-                        </GridItem>
-                    </GridContainer>
-                    <GridContainer  className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={this.state.checkedTransfers}
-                                        onChange={this.handleChange('checkedTransfers')}
-                                        value="checkedTransfers"
-                                        color="primary"
-                                    />
-                                }
-                                label="Transfers"
-                            />
-                        </GridItem>
-                    </GridContainer>
+                                <br></br>
+                                <DatePicker
+                                    margin="none"
+                                    label="To Date"
+                                    name="ToDate"
+                                    variant="outlined"
+                                    format="MM/DD/YYYY"
+                                    value={this.state.ToDate}
+                                    onChange={this.handleToDateChange}
+                                    fullWidth
+                                    required
+                                    color="secondary"
+                                    style={{marginTop: '30px!important'}}
+                                />
+                            </div>
+                        </MuiPickersUtilsProvider>
+                        <FormControl component="fieldset" className={classNames(classes.formControl, "mt-36")}>
+                            <h3>Verification Options</h3>
+                            <RadioGroup
+                                aria-label="Verification Option"
+                                name="verifyOption"
+                                className={classes.group}
+                                value={this.state.verifyOption}
+                                onChange={this.handleChange}
+                            >
+                                <FormControlLabel value="transaction" control={<Radio />} label="Transaction" />
+                                <FormControlLabel value="invoice" control={<Radio />} label="Invoice" />
+                            </RadioGroup>
+                        </FormControl>
+                    </Grid>
+                </Grid>
             </div >
         );
     }
@@ -189,7 +141,9 @@ class FilterPanel extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        toggleStatus: Actions.toggleVerificationStatus
+        toggleStatus: Actions.toggleVerificationStatus,
+        updateVerifyPeriod: Actions.updateVerifyPeriod,
+        updateVerifyOption: Actions.updateVerifyOption
     }, dispatch);
 }
 
@@ -200,6 +154,8 @@ function mapStateToProps({ verifications, auth }) {
         verifications: verifications.verificationsDB,
         verificationForm: verifications.verificationForm,
         regionId: auth.login.defaultRegionId,
+        fromDate: verifications.fromDate,
+        toDate: verifications.toDate,
     }
 }
 

@@ -85,6 +85,10 @@ const styles = theme => ({
         },
         '& tr th:nth-child(5)': {
             width: '100%'
+        },
+        '& svg': {
+            // color: theme.palette.text.primary,
+            color: 'white',
         }
     },
     filterPanelButton: {
@@ -209,7 +213,7 @@ AmountEditorBase.propTypes = {
 AmountEditorBase.defaultProps = { value: undefined, };
 
 
-class VerificationListContent extends Component {
+class InvoiceLists extends Component {
 
     constructor(props) {
         super(props);
@@ -227,11 +231,9 @@ class VerificationListContent extends Component {
 
             ],
             currencyColumns: [
-                'ExtendedPrice', 'TotalTrxAmount', 'Tax'
+                "InvoiceAmount", "InvoiceTax", "InvoiceTotal"
             ],
-            phoneNumberColumns: [
-                'Phone'
-            ],
+
             dateColumns: ['saleDate'],
             grouping: [
                 // { columnName: 'AccountTypeListName' },
@@ -293,12 +295,12 @@ class VerificationListContent extends Component {
 
     processData = ()=> {
         if(this.props.verifications!==null) {
-            let temp = [...this.props.verifications.Data.FranchiseeTransactions];
+            let temp = [...this.props.verifications.Data.Invoices];
             temp.forEach(x => {
-                x.Franchisee = `${x.FranchiseeName} - ${x.FranchiseeNo}`
+                x.Customer = `${x.CustomerName} - ${x.CustomerNo}`
             });
 
-            let expandedGroups = [...new Set(temp.map(d => d.Franchisee))];
+            let expandedGroups = [...new Set(temp.map(d => d.Customer))];
             this.setState({data: temp});
             this.setState({expandedGroups: expandedGroups});
         }
@@ -416,45 +418,42 @@ class VerificationListContent extends Component {
         const {
             selection,
             sorting,
-            editingColumnExtensions,
             currencyColumns,
             pageSizes,
-            searchValue,
         } = this.state;
 
         let data = this.state.data.map(d=>{
             let type = this.props.transactionTypeList.filter(t=>t._id===d.TrxType);
             if(type.length>0)
                 d.Type = type[0].Name;
-            d.TrxDate = moment(d.TrxDate).format('MM/DD/YYYY');
+            d.InvoiceDate = moment(d.InvoiceDate).format('MM/DD/YYYY');
+            d.DueDate = moment(d.DueDate).format('MM/DD/YYYY');
             return d;
         });
         let  columns= [
-            { title: "Region",      name: "Region"},
-            { title: "Type",        name: "Type"},
-            { title: "Description", name: "Description"},
-            { title: "Franchisee",  name: "Franchisee"},
-            { title: "Sub total",   name: "ExtendedPrice"},
-            { title: "Tax",         name: "Tax"},
-            { title: "Total",       name: "TotalTrxAmount"},
-            { title: "Charge Type", name: "TrxChargeType"},
-            { title: "Class",       name: "TrxClass"},
-            { title: "Date",        name: "TrxDate"},
+            { title: "Region",      name: "RegionName"},
+            { title: "Description", name: "InvoiceDescription"},
+            { title: "Customer",    name: "Customer"},
+            { title: "Sub total",   name: "InvoiceAmount"},
+            { title: "Tax",         name: "InvoiceTax"},
+            { title: "Total",       name: "InvoiceTotal"},
+            { title: "Due Date",    name: "DueDate"},
+            { title: "Inv. Date",   name: "InvoiceDate"},
+            { title: "Trx. Date",   name: "TrxDate"},
             { title: "Action",      name: "Action"}
         ];
 
         let  tableColumnExtensions = [
-                { columnName: "Region", wordWrapEnabled: true, width: 80},
-                { columnName: "Type",           width: 220},
-                { columnName: "Description",    width: -1 },
-                { columnName: "ExtendedPrice",  width: 100, align: 'right'},
-                { columnName: "Tax",            width: 100, align: 'right'},
-                { columnName: "TotalTrxAmount", width: 100, align: 'right'},
-                { columnName: "TrxChargeType",  width: 140,  align: 'center'},
-                { columnName: "TrxClass",       width: 100,  align: 'center'},
-                { columnName: "TrxDate",        width: 100, align: 'center'},
-                { columnName: "Action",         width: 180, align: 'center'}
-                ];
+            { columnName: "RegionName", wordWrapEnabled: true, width: 80},
+            { columnName: "Description",    width: -1 },
+            { columnName: "InvoiceAmount",  width: 100, align: 'right'},
+            { columnName: "InvoiceTax",     width: 100, align: 'right'},
+            { columnName: "InvoiceTotal",   width: 100, align: 'right'},
+            { columnName: "DueDate",        width: 100, align: 'center'},
+            { columnName: "InvoiceDate",    width: 100, align: 'center'},
+            { columnName: "TrxDate",        width: 100, align: 'center'},
+            { columnName: "Action",         width: 180, align: 'center'}
+        ];
 
 
         return (
@@ -489,7 +488,7 @@ class VerificationListContent extends Component {
                             />
                             <GroupingState
                                 grouping={[
-                                    {columnName: 'Franchisee'},
+                                    {columnName: 'Customer'},
                                 ]}
                                 expandedGroups={this.state.expandedGroups}
                                 onExpandedGroupsChange={this.expandedGroupsChange}
@@ -513,7 +512,7 @@ class VerificationListContent extends Component {
                                 showColumnsWhenGrouped contentComponent={this.GroupCellContent}
                             />
                             <TableColumnVisibility
-                                hiddenColumnNames={['Franchisee']}
+                                hiddenColumnNames={['Customer']}
                                 emptyMessageComponent={this.emptyMessageContent} />
                             <Template
                                 name="tableRow"
@@ -570,5 +569,5 @@ function mapStateToProps({ customers, auth, verifications, transactions }) {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(VerificationListContent)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceLists)));
 

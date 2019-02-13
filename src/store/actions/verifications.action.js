@@ -17,6 +17,10 @@ export const OPEN_CLOSE_REJECT_DIALOG = "[VERIFICATIONS APP] OPEN/CLOSE REJECT D
 // for Add/Edit
 export const OPEN_NEW_VERIFICATION_FORM = '[VERIFICATIONS APP] OPEN NEW CUSTOMER FORM';
 export const CLOSE_NEW_VERIFICATION_FORM = '[VERIFICATIONS APP] CLOSE NEW CUSTOMER FORM';
+export const UPDATE_FROM_DATE_VERIFICATION = '[VERIFICATIONS APP] UPDATE FROM DATE';
+export const UPDATE_TO_DATE_VERIFICATION = '[VERIFICATIONS APP] UPDATE TO DATE';
+export const UPDATE_VERIFY_OPTION = '[VERIFICATIONS APP] VERIFICATION OPTION';
+
 
 export function getInvoiceTransactionPendingLists(regionId) {
     return (dispatch) => {
@@ -130,3 +134,18 @@ export function openCloseRejectDialog(flag){
         payload : flag
     }
 }
+
+export function updateVerifyPeriod(key, date) {
+    return {
+        type: key,
+        payload: date
+    }
+}
+
+export function updateVerifyOption(option) {
+    return {
+        type: UPDATE_VERIFY_OPTION,
+        payload: option
+    }
+}
+

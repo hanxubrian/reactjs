@@ -3,6 +3,7 @@ import * as UserActions from "../../auth/store/actions";
 import moment from 'moment'
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import {UPDATE_VERIFY_OPTION} from "../actions";
 
 
 const initialState = {
@@ -27,6 +28,7 @@ const initialState = {
     rejectModal: false,
     fromDate:moment().date(1).format("MM/DD/YYYY"),
     toDate: moment().add(1,'months').endOf('month').format("MM/DD/YYYY"),
+    verifyOption: 'transaction'
 };
 
 
@@ -141,6 +143,24 @@ const verifications = function (state = initialState, action) {
             return{
                 ...state,
                 rejectModal: action.payload,
+            }
+        }
+        case Actions.UPDATE_FROM_DATE_VERIFICATION:
+        {
+            return {
+                ...state, fromDate: action.payload
+            }
+        }
+        case Actions.UPDATE_TO_DATE_VERIFICATION:
+        {
+            return {
+                ...state, toDate: action.payload
+            }
+        }
+        case Actions.UPDATE_VERIFY_OPTION:
+        {
+            return {
+                ...state, verifyOption: action.payload
             }
         }
         default:

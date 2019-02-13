@@ -21,7 +21,8 @@ import classNames from 'classnames';
 
 
 //Child Components
-import VerificationTransactionListContent from './VerificationTransactionListContent';
+import TransactionListContent from './TransactionListContent';
+import InvoiceListContent from './InvoiceListContent';
 import VerifiedDialogForm from "./VerifiedDialogForm";
 import ReviseDialogForm from "./ReviseDialogForms";
 import RejectDialogForm from "./RejectDialogForm";
@@ -376,11 +377,18 @@ class VerificationsApp extends Component {
                         <div className="flex-1 flex-col absolute w-full h-full">
                             {this.state.temp && (
                                 <Fragment>
-                                   <VerificationTransactionListContent/>
+                                    {this.props.verifyOption==='transaction' ? (
+                                            <TransactionListContent/>
+                                        ) :
+                                        (
+                                            <InvoiceListContent/>
+                                        )
+                                    }
+
                                 </Fragment>
                             )}
                             <Fragment>
-                               <VerifiedDialogForm />
+                                <VerifiedDialogForm />
                             </Fragment>
                             <Fragment>
                                 <ReviseDialogForm />
@@ -394,8 +402,8 @@ class VerificationsApp extends Component {
                     leftSidebarHeader={
                         <Fragment>
                             <div
-                               className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
-                               <h2 style={{marginBlockStart: '1em'}}>Filters</h2>
+                                className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
+                                <h2 style={{marginBlockStart: '1em'}}>Filters</h2>
                             </div>
                         </Fragment>
                     }
@@ -462,6 +470,7 @@ function mapStateToProps({verifications, auth, fuse, transactions}) {
         rejectModal: verifications.rejectModal,
         fromDate: verifications.fromDate,
         toDate: verifications.toDate,
+        verifyOption: verifications.verifyOption,
 
     }
 }
