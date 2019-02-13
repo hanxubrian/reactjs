@@ -22,8 +22,9 @@ export function submitSignIn(email, password, url)  {
         });
         (async () => {
             let res = await authService.authSignin(email, password);
+            console.log("res",res);
             if (res.IsSuccess) {
-                let regions = await authService.getRegions(res.id);
+                let regions = await authService.getRegions(res.Data.UserId);
                 res.Regions = regions;
                 let navigations = await menuService.loadAccountMenu(url);
                 dispatch({

@@ -66,6 +66,7 @@ class SigninPage extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log("login",nextProps.login);
         if(nextProps.login.IsSuccess){
             this.props.history.push('/profile');
         }

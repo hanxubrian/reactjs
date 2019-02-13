@@ -19,7 +19,7 @@ class authService {
             'password': password
         };
         return new Promise((resolve, reject) => {
-            axios_instance.post(`${BASE_API_URL}/api/authentication/login`, loginData)
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/authentication/login`, loginData)
                 .then( res => {
                     if(res.status===200) {
                         // this.setSession(res.data);

@@ -28,19 +28,20 @@ const login = function (state = initialState, action) {
             return {...state, bLoginStart: action.payload};
         case Actions.LOGIN_SUCCESS:
         {
-            const userState = {IsSuccess: action.payload.IsSuccess,
-                UserId: action.payload.id,
-                apiKey: action.payload.ApiKey,
-                token: action.payload.Token,
-                all_regions: action.payload.Regions,
-                defaultRegionId: action.payload.DefaultRegionId,
+            const userState = {
+                IsSuccess: action.payload.IsSuccess,
+                UserId: action.payload.Data.UserId,
+                apiKey: "",
+                token: "",
+                all_regions: action.payload.Data.Regions,
+                defaultRegionId: action.payload.Data.DefaultRegionId,
                 bLoginStart: false,
-                firstName: action.payload.FirstName,
-                lastName: action.payload.LastName,
-                role: action.payload.Roles[0].RoleName,
-                Username: action.payload.Username,
-                Phone: action.payload.Phone,
-                profilePhoto: action.payload.ProfilePhoto,
+                firstName: action.payload.Data.FirstName,
+                lastName: action.payload.Data.LastName,
+                role: action.payload.Data.Roles[0].RoleName,
+                Username: action.payload.Data.Username,
+                Phone: action.payload.Data.Phone,
+                profilePhoto: action.payload.Data.ProfilePhoto,
                 url: window.location.host.split(':')[0]
             };
             return {
