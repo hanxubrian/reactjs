@@ -227,6 +227,9 @@ const styles = theme => ({
     },
     TrxClass: {
         maxWidth: 150
+    },
+    hidden: {
+        display: 'none'
     }
 });
 
@@ -1162,8 +1165,10 @@ class TransactionEditForm extends Component {
                                 required
                             />
                             <FormControlLabel
+                                style={{display: 'none'}}
                                 control={
                                     <Checkbox
+                                        classes={{root: classes.hidden}}
                                         checked={this.state.reSell}
                                         onChange={this.handleChange}
                                         value="resell"
