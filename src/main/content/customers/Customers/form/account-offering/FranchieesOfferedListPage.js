@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-
+import _ from 'lodash';
 import { Icon, IconButton, Input, Paper, Button, Tooltip, TextField, MenuItem, InputAdornment, FormControlLabel, Checkbox, RadioGroup, Radio, Typography } from '@material-ui/core';
 import classNames from 'classnames';
 
@@ -392,8 +392,8 @@ class FranchieesOfferedListPage extends Component {
 			columns: [
 				{
 					title: "No.",
-					name: "Number",
-					columnName: "Number",
+					name: "FranchiseeNumber",
+					columnName: "FranchiseeNumber",
 					width: 90,
 				},
 				{
@@ -406,6 +406,12 @@ class FranchieesOfferedListPage extends Component {
 					title: "Offer Date",
 					name: "OfferDate",
 					columnName: "OfferDate",
+					width: 130,
+				},
+				{
+					title: "Assigned Date",
+					name: "AssignedDate",
+					columnName: "AssignedDate",
 					width: 130,
 				},
 				{
@@ -436,6 +442,12 @@ class FranchieesOfferedListPage extends Component {
 					title: "Offer Sent",
 					name: "OfferSent",
 					columnName: "OfferSent",
+					width: 100,
+				},
+				{
+					title: "MonthlyBillingOffered",
+					name: "MonthlyBillingOffered",
+					columnName: "MonthlyBillingOffered",
 					width: 100,
 				},
 
@@ -501,46 +513,27 @@ class FranchieesOfferedListPage extends Component {
 		}
 		this.setState({ addressRows: rows });
 	}
+
 	componentWillMount() {
-		this.props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
-
-		this.getFranchiseesFromStatus();
-
-		this.getLocation();
+		this.setRowsByRaw()
 	}
+
 	componentDidMount() {
 		console.log("componentDidMount");
 	}
 
 	componentWillReceiveProps(nextProps) {
-		console.log("this.props.franchisees")
-		console.log(this.props.franchisees)
-		if (this.props.franchisees === null && nextProps.franchisees !== null)
-			this.getFranchiseesFromStatus(nextProps.franchisees);
-		if (this.props.franchisees !== nextProps.franchisees)
-			this.getFranchiseesFromStatus(nextProps.franchisees);
-	}
-	getFranchiseesFromStatus = (rawData = this.props.franchisees) => {
-		console.log("rawData-getFranchiseesFromStatus", rawData);
-
-		let data = [];
-		let tempData = [];
-		if (rawData === undefined || rawData === null) return;
-
-		if (rawData.Data.Region.length === 0) {
-			data = [];
-			this.setState({ temp: data });
-			this.setState({ data: data });
-			return;
-		} else {
-			for (let i = 0; i < rawData.Data.Region.length; i++) {
-				tempData = rawData.Data.Region[i].Franchisees;
-				data = data.concat(tempData);
-			}
+		if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
+			this.setRowsByRaw(nextProps.activeCustomer.Data)
 		}
-		this.setState({ temp: data });
-		this.setState({ data: data });
-	};
+	}
+
+	setRowsByRaw = (raw = this.props.activeCustomer.Data) => {
+		this.setState({
+			rows: this.props.activeCustomer.Data.AccountOfferings
+		})
+	}
+
 	offerThisAccount = () => {
 		this.props.setStep(1)
 	}
@@ -596,41 +589,6 @@ class FranchieesOfferedListPage extends Component {
 	);
 	ToolbarRoot = withStyles(styles)(this.ToolbarRootBase);
 
-	getLocation() {
-		console.log("getLocation");
-
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(
-				(position) => {
-					console.log(position.coords);
-					this.setState({
-						current_lat: position.coords.latitude,
-						current_long: position.coords.longitude
-					})
-
-					// this.setState({
-					// 	current_lat: 42.910772,
-					// 	current_long: -78.74557
-					// })
-
-					if (this.state.addrLat == undefined) {
-						this.setState({
-							addrLat: position.coords.latitude,
-							addrLng: position.coords.longitude
-						})
-						// this.setState({
-						// 	addrLat: 42.910772,
-						// 	addrLng: -78.74557
-						// })
-					}
-					if (this.props.locationFilterValue) {
-						this.initRowsFromRawJson();
-					}
-				}
-			);
-		}
-	}
-
 	render() {
 		const {
 			classes,
@@ -652,14 +610,14 @@ class FranchieesOfferedListPage extends Component {
 			gmapVisible,
 			showMapView,
 			columns,
-
+			rows,
 		} = this.state;
 
-		let rows = [
-			{ Number: 712025, Name: "MICHAEL A. WHITEHEAD", OfferDate: "06/12/2018", Response: "Accepted", User: "BUDDY NGUYEN", ResponseDate: "06/15/2018", Result: "", OfferSent: "" },
-			{ Number: 712025, Name: "ANA E. BURIANO", OfferDate: "06/12/2018", Response: "Declined", User: "WILLIAM E. JACKSON", ResponseDate: "06/15/2018", Result: "", OfferSent: "" },
-			{ Number: 712025, Name: "SHANE DEUBELL", OfferDate: "06/12/2018", Response: "Expired", User: "AWA AVINO, INC.", ResponseDate: "06/15/2018", Result: "", OfferSent: "" },
-		]
+		// let rows = [
+		// 	{ Number: 712025, Name: "MICHAEL A. WHITEHEAD", OfferDate: "06/12/2018", Response: "Accepted", User: "BUDDY NGUYEN", ResponseDate: "06/15/2018", Result: "", OfferSent: "" },
+		// 	{ Number: 712025, Name: "ANA E. BURIANO", OfferDate: "06/12/2018", Response: "Declined", User: "WILLIAM E. JACKSON", ResponseDate: "06/15/2018", Result: "", OfferSent: "" },
+		// 	{ Number: 712025, Name: "SHANE DEUBELL", OfferDate: "06/12/2018", Response: "Expired", User: "AWA AVINO, INC.", ResponseDate: "06/15/2018", Result: "", OfferSent: "" },
+		// ]
 
 		console.log("activeRow", rows)
 		console.log("columns", columns)
@@ -750,6 +708,8 @@ function mapStateToProps({ customers, franchisees, auth }) {
 		Latitude: franchisees.Latitude,
 		Location: franchisees.Location,
 		SearchText: franchisees.SearchText,
+
+		activeCustomer: customers.activeCustomer,
 	}
 }
 

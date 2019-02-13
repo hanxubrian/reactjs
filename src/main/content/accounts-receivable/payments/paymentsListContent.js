@@ -597,7 +597,7 @@ class PaymentsListContent extends Component {
 
 		this.changeSorting = sorting => this.setState({ sorting });
 		this.commitChanges = this.commitChanges.bind(this);
-		this.changeSearchValue = value => this.setState({ searchValue: value });
+		// this.changeSearchValue = value => this.setState({ searchValue: value });
 		this.changeGrouping = grouping => this.setState({ grouping });
 		console.log("constructor");
 
@@ -611,6 +611,9 @@ class PaymentsListContent extends Component {
 			);
 		}
 	}
+	changeSearchValue = value => {
+		this.setState({ searchValue: value })
+	};
 	//
 	// to edit table cell
 	//
@@ -719,7 +722,8 @@ class PaymentsListContent extends Component {
 
 		if (nextProps.searchText !== this.props.searchText) {
 			console.log("------search text changed-------", nextProps.searchText)
-			this.search(nextProps.searchText);
+			// this.search(nextProps.searchText);
+			this.changeSearchValue(nextProps.searchText)
 		}
 
 		if (nextProps.isCustomerNameNoGrouping !== this.props.isCustomerNameNoGrouping) {
