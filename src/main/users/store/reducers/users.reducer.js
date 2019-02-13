@@ -1,8 +1,5 @@
 import * as Actions from '../actions';
 import * as UserActions from "../../../../auth/store/actions";
-import {GET_USER_FORM_PERMISSION_LIST} from "../actions";
-import {GET_USER_FORM_DEPARTMENT_LIST} from "../actions";
-import {GET_USER_FORM_STATE_LIST} from "../actions";
 const initialState = {
     openUsersFormStatus: false,
     selectedRows: [],
@@ -13,208 +10,37 @@ const initialState = {
     userStateList: [],
     userDepartmentList: [],
     userPermissionList: [],
-    userDetail: null,
+    userDetail: [],
+    usersList: [],
     payload:{
-        PasswordHash: "sample string 1",
-        IsFirstTimeLogin: "sample string 2",
-        Salt: "sample string 3",
-        OutlookPassword: "sample string 4",
-        Apps: [
-          {
-            _id: "sample string 1",
-            MenuOptions: [
-              {
-                Children: [
-                  {
-                    AppId: 1.1,
-                    Icon: "sample string 2",
-                    IconMobile: "sample string 3",
-                    IframeUrl: "sample string 4",
-                    MenuId: 5.1,
-                    MenuLevel: 6.1,
-                    MenuOrder: 7.1,
-                    ParentId: 8.1,
-                    Slug: "sample string 9",
-                    TabName: "sample string 10",
-                    Title: "sample string 11",
-                    Type: "sample string 12"
-                  },
-                  {
-                    AppId: 1.1,
-                    Icon: "sample string 2",
-                    IconMobile: "sample string 3",
-                    IframeUrl: "sample string 4",
-                    MenuId: 5.1,
-                    MenuLevel: 6.1,
-                    MenuOrder: 7.1,
-                    ParentId: 8.1,
-                    Slug: "sample string 9",
-                    TabName: "sample string 10",
-                    Title: "sample string 11",
-                    Type: "sample string 12"
-                  }
-                ],
-                Icon: "sample string 1",
-                IconMobile: "sample string 2",
-                IframeUrl: "sample string 3",
-                MenuId: 4.1,
-                Level: 5.1,
-                Slug: "sample string 6",
-                TabName: "sample string 7",
-                Title: "sample string 8",
-                Type: "sample string 9"
-              },
-              {
-                Children: [
-                  {
-                    AppId: 1.1,
-                    Icon: "sample string 2",
-                    IconMobile: "sample string 3",
-                    IframeUrl: "sample string 4",
-                    MenuId: 5.1,
-                    MenuLevel: 6.1,
-                    MenuOrder: 7.1,
-                    ParentId: 8.1,
-                    Slug: "sample string 9",
-                    TabName: "sample string 10",
-                    Title: "sample string 11",
-                    Type: "sample string 12"
-                  },
-                  {
-                    AppId: 1.1,
-                    Icon: "sample string 2",
-                    IconMobile: "sample string 3",
-                    IframeUrl: "sample string 4",
-                    MenuId: 5.1,
-                    MenuLevel: 6.1,
-                    MenuOrder: 7.1,
-                    ParentId: 8.1,
-                    Slug: "sample string 9",
-                    TabName: "sample string 10",
-                    Title: "sample string 11",
-                    Type: "sample string 12"
-                  }
-                ],
-                Icon: "sample string 1",
-                IconMobile: "sample string 2",
-                IframeUrl: "sample string 3",
-                MenuId: 4.1,
-                Level: 5.1,
-                Slug: "sample string 6",
-                TabName: "sample string 7",
-                Title: "sample string 8",
-                Type: "sample string 9"
-              }
-            ]
-          },
-          {
-            _id: "sample string 1",
-            MenuOptions: [
-              {
-                Children: [
-                  {
-                    AppId: 1.1,
-                    Icon: "sample string 2",
-                    IconMobile: "sample string 3",
-                    IframeUrl: "sample string 4",
-                    MenuId: 5.1,
-                    MenuLevel: 6.1,
-                    MenuOrder: 7.1,
-                    ParentId: 8.1,
-                    Slug: "sample string 9",
-                    TabName: "sample string 10",
-                    Title: "sample string 11",
-                    Type: "sample string 12"
-                  },
-                  {
-                    AppId: 1.1,
-                    Icon: "sample string 2",
-                    IconMobile: "sample string 3",
-                    IframeUrl: "sample string 4",
-                    MenuId: 5.1,
-                    MenuLevel: 6.1,
-                    MenuOrder: 7.1,
-                    ParentId: 8.1,
-                    Slug: "sample string 9",
-                    TabName: "sample string 10",
-                    Title: "sample string 11",
-                    Type: "sample string 12"
-                  }
-                ],
-                Icon: "sample string 1",
-                IconMobile: "sample string 2",
-                IframeUrl: "sample string 3",
-                MenuId: 4.1,
-                Level: 5.1,
-                Slug: "sample string 6",
-                TabName: "sample string 7",
-                Title: "sample string 8",
-                Type: "sample string 9"
-              },
-              {
-                Children: [
-                  {
-                    AppId: 1.1,
-                    Icon: "sample string 2",
-                    IconMobile: "sample string 3",
-                    IframeUrl: "sample string 4",
-                    MenuId: 5.1,
-                    MenuLevel: 6.1,
-                    MenuOrder: 7.1,
-                    ParentId: 8.1,
-                    Slug: "sample string 9",
-                    TabName: "sample string 10",
-                    Title: "sample string 11",
-                    Type: "sample string 12"
-                  },
-                  {
-                    AppId: 1.1,
-                    Icon: "sample string 2",
-                    IconMobile: "sample string 3",
-                    IframeUrl: "sample string 4",
-                    MenuId: 5.1,
-                    MenuLevel: 6.1,
-                    MenuOrder: 7.1,
-                    ParentId: 8.1,
-                    Slug: "sample string 9",
-                    TabName: "sample string 10",
-                    Title: "sample string 11",
-                    Type: "sample string 12"
-                  }
-                ],
-                Icon: "sample string 1",
-                IconMobile: "sample string 2",
-                IframeUrl: "sample string 3",
-                MenuId: 4.1,
-                Level: 5.1,
-                Slug: "sample string 6",
-                TabName: "sample string 7",
-                Title: "sample string 8",
-                Type: "sample string 9"
-              }
-            ]
-          }
-        ],
-        UserId: 6,
-        UserName: "sample string 7",
-        FirstName: "sample string 8",
-        LastName: "sample string 9",
-        Email: "sample string 10",
-        Phone: "sample string 11",
-        Address: "sample string 12",
-        City: "sample string 13",
-        State: "sample string 14",
-        Zipcode: "sample string 15",
-        DepartmentId: "sample string 16",
-        Title: "sample string 17",
-        OutlookUsername: "sample string 18",
-        DefaultRegionId: 19,
-        ProfilePhoto: "sample string 20",
-        UserType: "sample string 21",
-        Roles: [1,2],
-        Groups: [1,2],
-        Regions: [1,2]
-      }
+      PasswordHash: "",
+      IsFirstTimeLogin: "",
+      Salt: "",
+      OutlookPassword: "",
+      Apps: [],
+      Groups: [],
+      _id: "",
+      UserId: 6,
+      UserName: "",
+      FirstName: "",
+      LastName: "",
+      Email: "",
+      Phone: "",
+      Address1: "",
+      Address2: "",
+      City: "",
+      State: "Alabama",
+      Zipcode: "",
+      DepartmentId: "Department 1",
+      Title: "",
+      OutlookUsername: "",
+      DefaultRegionId: 2,
+      ProfilePhoto: "",
+      UserType: "",
+      UserTypeValue: "",
+      Roles: [],
+      Regions: []
+    }
 }
 
 const usersReducer = function (state = initialState, action) {
@@ -227,8 +53,14 @@ const usersReducer = function (state = initialState, action) {
                 fpStatus: false,
             }
         }
+        case Actions.GET_USERS_LIST: {
+          return {
+              ...state,
+              usersList: action.payload
+          }
+        }
         case Actions.UPDATE_USER_SELECT_ROWS:{
-            return{
+            return {
                 ...state,
                 selectedRows: action.payload
             }

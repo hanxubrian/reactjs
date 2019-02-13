@@ -13,11 +13,39 @@ class UserService {
      * @param data
      *
      */
+    getUsersList = (regionId,groups,roles,searchText) => {
+        const data = {
+            regionId: regionId,
+            Groups: groups,
+            Roles: roles,
+            searchText: searchText
+        }
+        return new Promise((resolve, reject) => {
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/account/users`,data)
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    };
+    /**
+     * @method POST
+     * @param data
+     *
+     */
     createUser = (data) => {
         return new Promise((resolve, reject) => {
             axios_instance.post(`${BASE_MONGO_API_URL}/v1/account/createuser`,data)
                 .then( res => {
                     if(res.status===200) {
+                        console.log("createdResult",res.data);
                         resolve(res.data);
                     }
                     else if(res.status!==200){

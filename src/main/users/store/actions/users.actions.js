@@ -12,10 +12,30 @@ export const GET_USER_FORM_DEPARTMENT_LIST = '[USERS APP] GET USER FORM DEPARTME
 export const GET_USER_FORM_PERMISSION_LIST = '[USERS APP] GET USER FORM PERMISSION LIST';
 export const GET_USER_FORM_VARIABLE = '[USERS APP] UPDATE USER FORM VARIABLE';
 
+export const GET_USERS_LIST = '[USERS APP] GET USERS LIST';
 export const CREATE_USER = '[USERS APP] CREATE USER';
 export const GET_USER_DETAIL = '[USERS APP] GET USER DETAIL';
 export const UPDATE_USER = '[USERS APP] UPDATE USER';
 export const DELETE_USER = '[USERS APP] DELETE USER';
+
+// GET USERS LIST
+
+export function getUsersList(regionId,groups,roles,searchText) {
+
+    return (dispatch) => {
+        (async () => {
+            let res = await userService.getUsersList(regionId,groups,roles,searchText);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: GET_USERS_LIST,
+                    payload: res.Data
+                });
+            } else {
+
+            }
+        })();
+    };
+}
 
 
 // GET USER FORM GROUP LIST

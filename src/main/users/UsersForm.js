@@ -239,235 +239,167 @@ class UsersForm extends React.Component {
     state = {
         FirstName: '',
         LastName : '',
-        title : '',
+        Title : '',
         Email : '',
-        DepartmentId: 'DepartMent1',
+        DepartmentId: 'Department 1',
         Phone : '',
-        Address: '',
-        State: 'Buffalo',
+        Address1: '',
+        Address2: '',
+        State: 'Alabama',
         City : '',
         Zipcode : '',
         UserName: '',
         PasswordHash: '',
         Regions: [],
         Groups: [],
-        defaultRegion: '',
+        DefaultRegionId: 2,
         checked: [1],
         Roles: [],
-        userType: '',
-        userTypeFranchisee: '',
-        userTypeCustomer: '',
-        userTypeVendor: '',
-        userTypeEmployee: '',
-        userTypeThirdParty: '',
-        userTypeContractor: '',
+        UserType: '',
+        UserTypeValue:'',
         single: '',
         suggestions: [],
         TypeList:[],
         MultiRegion: [],
-        DefaultRegion: [],
+        DefaultRegions: [],
+        StateList: [],
         UserPermission: [],
         DepartmentList: [],
         payload:{
-            PasswordHash: "sample string 1",
-            IsFirstTimeLogin: "sample string 2",
-            Salt: "sample string 3",
-            OutlookPassword: "sample string 4",
+            PasswordHash: "",
+            IsFirstTimeLogin: "",
+            Salt: "",
+            OutlookPassword: "",
             Apps: [
-              {
-                _id: "sample string 1",
-                MenuOptions: [
+            {
+                _id: "",
+                AppId: 2,
+                Menus: [
+                    {
+                        MenuId: 1,
+                        Title: "",
+                        Children: [
+                            {
+                                MenuId: 1,
+                                View: false,
+                                Create: false,
+                                Delete: false,
+                                Edit: false,
+                                Execute: false
+                            },
+                            {
+                                MenuId: 1,
+                                View: false,
+                                Create: false,
+                                Delete: false,
+                                Edit: false,
+                                Execute: false
+                            }
+                        ]
+                    },
+                    {
+                        MenuId: 1,
+                        Title: "",
+                        Children: [
+                        {
+                            MenuId: 1,
+                            View: false,
+                            Create: false,
+                            Delete: false,
+                            Edit: false,
+                            Execute: false
+                        },
+                        {
+                            MenuId: 1,
+                            View: false,
+                            Create: false,
+                            Delete: false,
+                            Edit: false,
+                            Execute: false
+                        }
+                        ]
+                    }
+                ]
+            },
+            {
+                _id: "",
+                AppId: 2,
+                Menus: [
                   {
+                    MenuId: 1,
+                    Title: "",
                     Children: [
                       {
-                        AppId: 1.1,
-                        Icon: "sample string 2",
-                        IconMobile: "sample string 3",
-                        IframeUrl: "sample string 4",
-                        MenuId: 5.1,
-                        MenuLevel: 6.1,
-                        MenuOrder: 7.1,
-                        ParentId: 8.1,
-                        Slug: "sample string 9",
-                        TabName: "sample string 10",
-                        Title: "sample string 11",
-                        Type: "sample string 12"
+                        MenuId: 1,
+                        View: false,
+                        Create: false,
+                        Delete: false,
+                        Edit: false,
+                        Execute: false
                       },
                       {
-                        AppId: 1.1,
-                        Icon: "sample string 2",
-                        IconMobile: "sample string 3",
-                        IframeUrl: "sample string 4",
-                        MenuId: 5.1,
-                        MenuLevel: 6.1,
-                        MenuOrder: 7.1,
-                        ParentId: 8.1,
-                        Slug: "sample string 9",
-                        TabName: "sample string 10",
-                        Title: "sample string 11",
-                        Type: "sample string 12"
+                        MenuId: 1,
+                        View: false,
+                        Create: false,
+                        Delete: false,
+                        Edit: false,
+                        Execute: false
                       }
-                    ],
-                    Icon: "sample string 1",
-                    IconMobile: "sample string 2",
-                    IframeUrl: "sample string 3",
-                    MenuId: 4.1,
-                    Level: 5.1,
-                    Slug: "sample string 6",
-                    TabName: "sample string 7",
-                    Title: "sample string 8",
-                    Type: "sample string 9"
+                    ]
                   },
                   {
+                    MenuId: 1,
+                    Title: "",
                     Children: [
                       {
-                        AppId: 1.1,
-                        Icon: "sample string 2",
-                        IconMobile: "sample string 3",
-                        IframeUrl: "sample string 4",
-                        MenuId: 5.1,
-                        MenuLevel: 6.1,
-                        MenuOrder: 7.1,
-                        ParentId: 8.1,
-                        Slug: "sample string 9",
-                        TabName: "sample string 10",
-                        Title: "sample string 11",
-                        Type: "sample string 12"
+                        MenuId: 1,
+                        View: false,
+                        Create: false,
+                        Delete: false,
+                        Edit: false,
+                        Execute: false
                       },
                       {
-                        AppId: 1.1,
-                        Icon: "sample string 2",
-                        IconMobile: "sample string 3",
-                        IframeUrl: "sample string 4",
-                        MenuId: 5.1,
-                        MenuLevel: 6.1,
-                        MenuOrder: 7.1,
-                        ParentId: 8.1,
-                        Slug: "sample string 9",
-                        TabName: "sample string 10",
-                        Title: "sample string 11",
-                        Type: "sample string 12"
+                        MenuId: 1,
+                        View: false,
+                        Create: false,
+                        Delete: false,
+                        Edit: false,
+                        Execute: false
                       }
-                    ],
-                    Icon: "sample string 1",
-                    IconMobile: "sample string 2",
-                    IframeUrl: "sample string 3",
-                    MenuId: 4.1,
-                    Level: 5.1,
-                    Slug: "sample string 6",
-                    TabName: "sample string 7",
-                    Title: "sample string 8",
-                    Type: "sample string 9"
+                    ]
                   }
                 ]
-              },
-              {
-                _id: "sample string 1",
-                MenuOptions: [
-                  {
-                    Children: [
-                      {
-                        AppId: 1.1,
-                        Icon: "sample string 2",
-                        IconMobile: "sample string 3",
-                        IframeUrl: "sample string 4",
-                        MenuId: 5.1,
-                        MenuLevel: 6.1,
-                        MenuOrder: 7.1,
-                        ParentId: 8.1,
-                        Slug: "sample string 9",
-                        TabName: "sample string 10",
-                        Title: "sample string 11",
-                        Type: "sample string 12"
-                      },
-                      {
-                        AppId: 1.1,
-                        Icon: "sample string 2",
-                        IconMobile: "sample string 3",
-                        IframeUrl: "sample string 4",
-                        MenuId: 5.1,
-                        MenuLevel: 6.1,
-                        MenuOrder: 7.1,
-                        ParentId: 8.1,
-                        Slug: "sample string 9",
-                        TabName: "sample string 10",
-                        Title: "sample string 11",
-                        Type: "sample string 12"
-                      }
-                    ],
-                    Icon: "sample string 1",
-                    IconMobile: "sample string 2",
-                    IframeUrl: "sample string 3",
-                    MenuId: 4.1,
-                    Level: 5.1,
-                    Slug: "sample string 6",
-                    TabName: "sample string 7",
-                    Title: "sample string 8",
-                    Type: "sample string 9"
-                  },
-                  {
-                    Children: [
-                      {
-                        AppId: 1.1,
-                        Icon: "sample string 2",
-                        IconMobile: "sample string 3",
-                        IframeUrl: "sample string 4",
-                        MenuId: 5.1,
-                        MenuLevel: 6.1,
-                        MenuOrder: 7.1,
-                        ParentId: 8.1,
-                        Slug: "sample string 9",
-                        TabName: "sample string 10",
-                        Title: "sample string 11",
-                        Type: "sample string 12"
-                      },
-                      {
-                        AppId: 1.1,
-                        Icon: "sample string 2",
-                        IconMobile: "sample string 3",
-                        IframeUrl: "sample string 4",
-                        MenuId: 5.1,
-                        MenuLevel: 6.1,
-                        MenuOrder: 7.1,
-                        ParentId: 8.1,
-                        Slug: "sample string 9",
-                        TabName: "sample string 10",
-                        Title: "sample string 11",
-                        Type: "sample string 12"
-                      }
-                    ],
-                    Icon: "sample string 1",
-                    IconMobile: "sample string 2",
-                    IframeUrl: "sample string 3",
-                    MenuId: 4.1,
-                    Level: 5.1,
-                    Slug: "sample string 6",
-                    TabName: "sample string 7",
-                    Title: "sample string 8",
-                    Type: "sample string 9"
-                  }
-                ]
-              }
+            }
             ],
+            Groups: [],
             UserId: 6,
-            UserName: "sample string 7",
-            FirstName: "sample string 8",
-            LastName: "sample string 9",
-            Email: "sample string 10",
-            Phone: "sample string 11",
-            Address: "sample string 12",
-            City: "sample string 13",
-            State: "sample string 14",
-            Zipcode: "sample string 15",
-            DepartmentId: "sample string 16",
-            Title: "sample string 17",
-            OutlookUsername: "sample string 18",
-            DefaultRegionId: 19,
-            ProfilePhoto: "sample string 20",
-            UserType: "sample string 21",
-            Roles: [1,2],
-            Groups: [1,2],
-            Regions: [1,2]
+            UserName: "",
+            FirstName: "",
+            LastName: "",
+            Email: "",
+            Phone: "",
+            Address1: "",
+            Address2: "",
+            City: "",
+            State: "",
+            Zipcode: "",
+            DepartmentId: "",
+            Title: "",
+            OutlookUsername: "",
+            DefaultRegionId: 2,
+            ProfilePhoto: "",
+            UserType: "",
+            UserTypeValue: "",
+            Roles: [],
+            Regions: [
+              {
+                RegionId: 2,
+                Arcrym: "",
+                Name: "",
+                DisplayName: ""
+              }
+            ]
         }
     }
 
@@ -485,8 +417,16 @@ class UsersForm extends React.Component {
         if(this.props.payload.UserId !== this.props.userId){
             this.updateUserFormPayload("UserId", this.props.userId);
         }
-        if(this.props.payload.DefaultRegionId !== this.props.regionId){
-            this.updateUserFormPayload("DefaultRegionId",this.props.regionId);
+        if(this.props.regions !== null){
+            this.props.regions.map(x=>{
+                this.state.MultiRegion.push(x.regionname);
+                this.state.DefaultRegions.push({
+                    "RegionId": x.regionid,
+                    "Name":x.regionname,
+                    "Arcrym":"",
+                    "DisplayName":""
+                });
+            })
         }
     }
 
@@ -507,7 +447,9 @@ class UsersForm extends React.Component {
             {
                 RoleList = [];
                 nextProps.userRoleList.map(x=>{
-                    RoleList.push(x.name);
+                    RoleList.push(
+                        x.name
+                    );
                 });
             }
         }
@@ -524,10 +466,7 @@ class UsersForm extends React.Component {
         {
             if(nextProps.userStateList !== null)
             {
-                nextProps.userStateList.map(x=>{
-                    this.state.MultiRegion.push(x.name);
-                });
-                this.state.DefaultRegion = nextProps.userStateList;
+                this.state.StateList = nextProps.userStateList;
             }
         }
         if ( nextProps.userDepartmentList !== this.props.userDepartmentList )
@@ -553,13 +492,14 @@ class UsersForm extends React.Component {
                         franchiseeSuggestions.push({franchiseeName: y.Name});
                     });
                 });
-                console.log("CustomerList",franchiseeSuggestions);
             }
         }
     }
 
     handleChange = name => event => {
+
         this.setState({[name]: event.target.value});
+
         if(name === "Groups" || name === "Regions" || name ==="Roles"){
             if(name === "Groups"){
                 let temp = event.target.value;
@@ -577,22 +517,32 @@ class UsersForm extends React.Component {
                 let temp = event.target.value;
                 let changedRegions = [];
                 temp.map(x=>{
-                    this.props.userStateList.map(y=>{
-                        if(x === y.name){
-                            changedRegions.push(y.abbreviation);
+                    this.props.regions.map(y=>{
+                        if(x === y.regionname){
+                            changedRegions.push({
+                                "RegionId": y.regionid,
+                                "Name":y.regionname,
+                                "Arcrym":"",
+                                "DisplayName":""
+                            });
                         }
                     })
                 })
-                //console.log("roles",changedRegions);
+                console.log("regions",changedRegions);
                 this.updateUserFormPayload(name,changedRegions);
             }     
             if(name === "Roles") {
                 let temp = event.target.value;
                 let changedRoles = [];
                 temp.map(x=>{
-                    this.props.userRoleList.map(y=>{
+                    this.props.userRoleList.map((y,index)=>{
                         if(x === y.name){
-                            changedRoles.push(y._id);
+                            changedRoles.push(
+                                {
+                                  "RoleId": y.role_id,
+                                  "RoleName": y.name
+                                }
+                            );
                         }
                     })
                 })
@@ -629,7 +579,7 @@ class UsersForm extends React.Component {
 
     updateUserFormPayload = (name,value) => {
         
-        let insertPayload = this.state.payload;
+        let insertPayload = this.state.payload
         insertPayload[name] = value;
         this.props.updateUserFormPayload(insertPayload);
     }
@@ -642,9 +592,8 @@ class UsersForm extends React.Component {
             TypeList,
             DepartmentList,
             MultiRegion,
-            DefaultRegion,
-            UserPermission,
-            CustomerName
+            DefaultRegions,
+            StateList
         } = this.state;
 
         const autosuggestProps = {
@@ -694,12 +643,9 @@ class UsersForm extends React.Component {
                                     <TextField
                                         id="title"
                                         label="Title"
-                                        onChange={this.handleChange("Title")}
-                                        value={this.state.Title}
                                         variant="outlined"
-                                        inputProps={{
-                                            maxLength:60
-                                        }}
+                                        value={this.state.Title}
+                                        onChange={this.handleChange("Title")}
                                         className={classes.textField}
                                         style={{marginLeft:'1%'}}
                                         margin="dense"
@@ -759,62 +705,24 @@ class UsersForm extends React.Component {
                                 </GridItem>
                                 <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                                     <TextField
-                                        id="address"
-                                        label="Address"
+                                        id="address1"
+                                        label="Address 1"
                                         variant="outlined"
                                         className={classes.textField}
-                                        value={this.state.Address}
-                                        onChange={this.handleChange("Address")}
+                                        value={this.state.Address1}
+                                        onChange={this.handleChange("Address1")}
                                         style={{marginRight:'1%'}}
                                         margin="dense"
                                         fullWidth
                                         required
                                     />
                                     <TextField
-                                        id="city"
-                                        label="City"
+                                        id="address2"
+                                        label="Address 2"
                                         variant="outlined"
                                         className={classes.textField}
-                                        value={this.state.City}
-                                        onChange={this.handleChange("City")}
-                                        style={{marginRight:'1%', marginLeft: '1%'}}
-                                        margin="dense"
-                                        fullWidth
-                                        required
-                                    />
-                                    <TextField
-                                        id="state"
-                                        select
-                                        variant={"outlined"}
-                                        label={"State"}
-                                        className={classes.textField}
-                                        style={{marginRight:'1%', marginLeft: '1%'}}
-                                        value={this.state.State}
-                                        onChange={this.handleChange('State')}
-                                        SelectProps={{
-                                            MenuProps: {
-                                                className: classes.menu,
-                                            },
-                                        }}
-                                        margin="dense"
-                                        fullWidth
-                                    >
-                                        {DefaultRegion.map(option => (
-                                            <MenuItem key={option._id} value={option.abbreviation}>
-                                                {option.name}
-                                            </MenuItem>
-                                        ))}
-                                    </TextField>
-                                    <TextField
-                                        id="zip"
-                                        label="Zip"
-                                        onChange={this.handleChange("Zipcode")}
-                                        value={this.state.Zipcode}
-                                        variant="outlined"
-                                        inputProps={{
-                                            maxLength:60
-                                        }}
-                                        className={classes.textField}
+                                        value={this.state.Address2}
+                                        onChange={this.handleChange("Address2")}
                                         style={{marginLeft:'1%'}}
                                         margin="dense"
                                         fullWidth
@@ -822,6 +730,62 @@ class UsersForm extends React.Component {
                                     />
                                 </GridItem>
                             </GridContainer>
+                        </GridItem>
+                    </GridContainer>
+                </div>
+                <div className={classNames(classes.userFormSection,"w-full")}>
+                    <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <TextField
+                                id="city"
+                                label="City"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={this.state.City}
+                                onChange={this.handleChange("City")}
+                                style={{marginRight:'1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
+                            />
+                            <TextField
+                                id="state"
+                                select
+                                variant={"outlined"}
+                                label={"State"}
+                                className={classes.textField}
+                                style={{marginRight:'1%', marginLeft: '1%'}}
+                                value={this.state.State}
+                                onChange={this.handleChange('State')}
+                                SelectProps={{
+                                    MenuProps: {
+                                      className: classes.menu,
+                                    },
+                                }}
+                                margin="dense"
+                                fullWidth
+                            >
+                                {StateList.map(option => (
+                                    <MenuItem key={option.name} value={option.name}>
+                                        {option.name}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                            <TextField
+                                 id="zip"
+                                 label="Zip"
+                                 onChange={this.handleChange("Zipcode")}
+                                 value={this.state.Zipcode}
+                                 variant="outlined"
+                                 inputProps={{
+                                      maxLength:60
+                                 }}
+                                 className={classes.textField}
+                                 style={{marginLeft:'1%'}}
+                                 margin="dense"
+                                 fullWidth
+                                 required
+                            />
                         </GridItem>
                     </GridContainer>
                 </div>
@@ -842,12 +806,12 @@ class UsersForm extends React.Component {
                                 required
                             />
                             <TextField
-                                id="accPassword"
+                                id="PasswordHash"
                                 label="Password"
                                 variant="outlined"
                                 className={classes.textField}
-                                value={this.state.accPassword}
-                                onChange={this.handleChange("accPassword")}
+                                value={this.state.PasswordHash}
+                                onChange={this.handleChange("PasswordHash")}
                                 style={{marginLeft: '1%'}}
                                 margin="dense"
                                 fullWidth
@@ -897,14 +861,14 @@ class UsersForm extends React.Component {
                                 </Select>
                             </FormControl>
                             <TextField
-                                id="defaultRegion"
+                                id="DefaultRegionId"
                                 label={"Default Region"}
                                 select
                                 variant={"outlined"}
                                 className={classes.textField}
-                                value={this.state.defaultRegion}
+                                value={this.state.DefaultRegionId}
                                 style={{marginLeft: "1%"}}
-                                onChange={this.handleChange('defaultRegion')}
+                                onChange={this.handleChange('DefaultRegionId')}
                                 SelectProps={{
                                     MenuProps: {
                                         className: classes.menu,
@@ -913,9 +877,9 @@ class UsersForm extends React.Component {
                                 margin="dense"
                                 fullWidth
                             >
-                                {DefaultRegion.map(option => (
-                                    <MenuItem key={option._id} value={option.abbreviation}>
-                                        {option.name}
+                                {DefaultRegions.map(option => (
+                                    <MenuItem key={option.RegionId} value={option.RegionId}>
+                                        {option.Name}
                                     </MenuItem>
                                 ))}
                             </TextField>
@@ -952,14 +916,14 @@ class UsersForm extends React.Component {
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <TextField
-                                id="userType"
+                                id="UserType"
                                 label={"User Type"}
                                 select
                                 variant={"outlined"}
                                 className={classes.textField}
-                                value={this.state.userType}
+                                value={this.state.UserType}
                                 style={{marginRight: "1%"}}
-                                onChange={this.handleChange('userType')}
+                                onChange={this.handleChange('UserType')}
                                 SelectProps={{
                                     MenuProps: {
                                         className: classes.menu,
@@ -974,110 +938,18 @@ class UsersForm extends React.Component {
                                     </MenuItem>
                                 ))}
                             </TextField>
-                            {this.state.userType === 'Employee' && (
-                                <TextField
-                                    id="userTypeEmployee"
-                                    label="Employee"
+                            <TextField
+                                    id="UserTypeValue"
+                                    label="Name"
                                     variant="outlined"
                                     className={classes.textField}
-                                    value={this.state.userTypeEmployee}
-                                    onChange={this.handleChange("userTypeEmployee")}
+                                    value={this.state.UserTypeValue}
+                                    onChange={this.handleChange("UserTypeValue")}
                                     style={{marginLeft:'1%'}}
                                     margin="dense"
                                     fullWidth
                                     required
-                                />
-                            )}
-                            {this.state.userType === 'Franchisee' && (
-                                <TextField
-                                    id="userTypeFranchisee"
-                                    label="Franchisee"
-                                    variant="outlined"
-                                    className={classes.textField}
-                                    value={this.state.userTypeFranchisee}
-                                    onChange={this.handleChange("userTypeFranchisee")}
-                                    style={{marginLeft:'1%'}}
-                                    margin="dense"
-                                    fullWidth
-                                    required
-                                />
-                            )}
-                            {this.state.userType === 'Customer' && (
-                                <Autosuggest
-                                    {...autosuggestProps}
-                                    inputProps={{
-                                        classes,
-                                        label: 'Customer',
-                                        placeholder: 'Enter Customer Name',
-                                        value: this.state.userTypeCustomer,
-                                        autoComplete: 'off',
-                                        onChange: this.handleAutoChange('userTypeCustomer'),
-                                        inputRef: node => {
-                                            this.popperNode = node;
-                                        },
-                                        InputLabelProps: {
-                                            shrink: true,
-                                        },
-                                    }}
-                                    theme={{
-                                        container: classNames(classes.container),
-                                        suggestionsContainerOpen: classes.suggestionsContainerOpen,
-                                        suggestionsList: classes.suggestionsList,
-                                        suggestion: classes.suggestion,
-                                    }}
-                                    renderSuggestionsContainer={options => (
-                                            <Paper
-                                                square
-                                                {...options.containerProps}
-                                                style={{ width: this.popperNode ? this.popperNode.clientWidth : null }}
-                                            >
-                                                {options.children}
-                                            </Paper>
-                                    )}
-                                />
-                            )}
-                            {this.state.userType === 'Vendor' && (
-                                <TextField
-                                    id="userTypeVendor"
-                                    label="Vendor"
-                                    variant="outlined"
-                                    className={classes.textField}
-                                    value={this.state.userTypeVendor}
-                                    onChange={this.handleChange("userTypeVendor")}
-                                    style={{marginLeft:'1%'}}
-                                    margin="dense"
-                                    fullWidth
-                                    required
-                                />
-                            )}
-                            {this.state.userType === 'ThirdParty' && (
-                                <TextField
-                                    id="userTypeThirdParty"
-                                    label="Thirty-Party"
-                                    variant="outlined"
-                                    className={classes.textField}
-                                    value={this.state.userTypeThirdParty}
-                                    onChange={this.handleChange("userTypeThirdParty")}
-                                    style={{marginLeft:'1%'}}
-                                    margin="dense"
-                                    fullWidth
-                                    required
-                                />
-                            )}
-                            {this.state.userType === 'Contractor' && (
-                                <TextField
-                                    id="userTypeContractor"
-                                    label="Contractor"
-                                    variant="outlined"
-                                    className={classes.textField}
-                                    value={this.state.userTypeContractor}
-                                    onChange={this.handleChange("userTypeContractor")}
-                                    style={{marginLeft:'1%'}}
-                                    margin="dense"
-                                    fullWidth
-                                    required
-                                />
-                            )}
+                            />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
 
@@ -1125,7 +997,8 @@ function mapStateToProps({usersApp, fuse ,auth,customers, franchisees})
         regionId: auth.login.defaultRegionId,
         franchisees: franchisees.franchiseesDB,
         payload: usersApp.users.payload,
-        userId: auth.login.UserId
+        userId: auth.login.UserId,
+        regions: auth.login.all_regions
     }
 }
 

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { withStyles} from "@material-ui/core";
+import { withStyles,CircularProgress} from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from "redux";
 import * as Actions from './store/actions';
@@ -8,7 +8,7 @@ import classNames from 'classnames';
 
 
 import {
-    Template, TemplateConnector
+    Template, TemplateConnector,
 } from '@devexpress/dx-react-core';
 import {
     SelectionState,
@@ -466,10 +466,9 @@ class UsersList extends Component {
 
     componentWillMount() {
         this.props.getContacts();
+        this.props.getUsersList(this.props.regionId,[1,2],[1,2],"");
     }
-    componentWillUnmount() {
-        console.log("componentWillUnmount");
-    }
+    
 
     componentWillReceiveProps(nextProps, nextContext) {
         if(nextProps.contacts !== this.props.contacts){
@@ -477,6 +476,9 @@ class UsersList extends Component {
             this.setState({
                 rows: Object.values(obj)
             });
+        }
+        if(nextProps.usersList !== this.props.usersList){
+            console.log(nextProps.usersList);
         }
     }
 
@@ -610,7 +612,7 @@ class UsersList extends Component {
                                 <DragDropProvider />
                                 <PagingState
                                     defaultCurrentPage={0}
-                                    defaultPageSize={10}
+                                    defaultPageSize={100}
                                 />
 
                                 <PagingPanel pageSizes={pageSizes} />
@@ -686,6 +688,11 @@ class UsersList extends Component {
                 {this.props.openUsersFormStatus && (
                     <UsersForm/>
                 )}
+                {/* {(this.props.contacts) && (
+                    <div className={classes.overlay}>
+                        <CircularProgress className={classes.progress} color="secondary"/>
+                    </div>
+                )} */}
             </Fragment>
         )
     }
@@ -695,6 +702,7 @@ class UsersList extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
+        getUsersList: Actions.getUsersList,
         getContacts             : Actions.getContacts,
         updateSelectRows: Actions.updateSelectRows
 
@@ -707,6 +715,7 @@ function mapStateToProps({usersApp})
         contacts                   : usersApp.contacts.entities,
         selectedRows               : usersApp.users.selectedRows,
         openUsersFormStatus  : usersApp.users.openUsersFormStatus,
+        usersList: usersApp.users.usersList
     }
 }
 

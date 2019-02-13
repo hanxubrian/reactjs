@@ -1,5 +1,5 @@
 import React from "react";
-import Avatar from 'react-avatar-edit'
+import Avatar from 'react-avatar-edit';
 import ReactDOM from 'react-dom'
 import {withStyles} from '@material-ui/core/styles';
 import {bindActionCreators} from "redux";
@@ -67,7 +67,7 @@ class UserAvatar extends React.Component {
         const {classes} = this.props;
         return (
             <div className={"flex justify-between"}>
-                <div style={{margin: "auto", position:'relative' , textAlign: "center", marginTop: 20,marginBottom: 30, padding: 5}}>
+                <div style={{margin: "auto", position:'relative' , textAlign: "center", marginTop: 20,marginBottom: 5, padding: 5}}>
                     {this.state.imageChoosed === false && (
                         <Avatar
                             width={180}
