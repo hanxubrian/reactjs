@@ -21,7 +21,7 @@ import classNames from 'classnames';
 
 
 //Child Components
-import VerificationListContent from './VerificationListContent';
+import VerificationTransactionListContent from './VerificationTransactionListContent';
 import VerifiedDialogForm from "./VerifiedDialogForm";
 import ReviseDialogForm from "./ReviseDialogForms";
 import RejectDialogForm from "./RejectDialogForm";
@@ -259,7 +259,7 @@ class VerificationsApp extends Component {
             this.props.getInvoiceTransactionPendingLists(props.regionId);
         }
         if(props.transactionTypeList===null)
-            props.getFranchiseeTransactionTypeLists(props.regionId);
+            props.getFranchiseeTransactionTypeLists(props.regionId, props.fromDate, props.toDate);
     }
 
     closeComposeForm = () => {
@@ -279,7 +279,7 @@ class VerificationsApp extends Component {
                 regionId: this.props.regionId,
                 statusId: this.props.statusId
             });
-            console.log("----------START FETCHING----------")
+
             // this.setState({ loading: true });
             this.props.getInvoiceTransactionPendingLists(this.props.regionId);
             bChanged = true;
@@ -376,7 +376,7 @@ class VerificationsApp extends Component {
                         <div className="flex-1 flex-col absolute w-full h-full">
                             {this.state.temp && (
                                 <Fragment>
-                                   <VerificationListContent/>
+                                   <VerificationTransactionListContent/>
                                 </Fragment>
                             )}
                             <Fragment>
@@ -437,7 +437,8 @@ function mapDispatchToProps(dispatch) {
         openCloseReviseModal: Actions.openCloseReviseDialog,
         openVerificationDialog : Actions.openVerificationDialog ,
         openCloseRejectModal: Actions.openCloseRejectDialog,
-        getFranchiseeTransactionTypeLists : Actions.getFranchiseeTransactionTypeLists,
+        // getFranchiseeTransactionTypeLists : Actions.getFranchiseeTransactionTypeLists,
+        getFranchiseeTransactionTypeLists : Actions.getInvoiceTransactionPendingLists1,
     }, dispatch);
 }
 
@@ -459,6 +460,9 @@ function mapStateToProps({verifications, auth, fuse, transactions}) {
         verifiedModal: verifications.verifiedModal,
         reviseModal: verifications.reviseModal,
         rejectModal: verifications.rejectModal,
+        fromDate: verifications.fromDate,
+        toDate: verifications.toDate,
+
     }
 }
 

@@ -1,5 +1,6 @@
 import * as Actions from "../actions";
 import * as UserActions from "../../auth/store/actions";
+import moment from 'moment'
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 
@@ -24,6 +25,8 @@ const initialState = {
     verifiedModal: false,
     reviseModal: false,
     rejectModal: false,
+    fromDate:moment().date(1).format("MM/DD/YYYY"),
+    toDate: moment().add(1,'months').endOf('month').format("MM/DD/YYYY"),
 };
 
 

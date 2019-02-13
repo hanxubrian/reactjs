@@ -42,6 +42,29 @@ export function getInvoiceTransactionPendingLists(regionId) {
 }
 
 
+export function getInvoiceTransactionPendingLists1(regionId, fromDate, toDate) {
+    return (dispatch) => {
+        dispatch({
+            type: GET_STARTED_FETCHING_PENDING_LISTS
+        });
+
+        (async () => {
+            let res = await verificationService.getInvoiceTransactionPendingList1(regionId, fromDate, toDate);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: GET_ALL_PENDING_LISTS,
+                    payload: res
+                });
+            }  else {
+                dispatch({
+                    type: GET_ALL_PENDING_LISTS_ERROR,
+                    payload: res.message
+                });
+            }
+        })();
+    }
+}
+
 export function toggleVerificationFilterPanel() {
     return {
         type: TOGGLE_VERIFICATION_FILTER_PANEL
