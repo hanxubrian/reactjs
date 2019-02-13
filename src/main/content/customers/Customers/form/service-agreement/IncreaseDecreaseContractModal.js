@@ -850,9 +850,9 @@ class IncreaseDecreaseContractModal extends React.Component {
 		const { classes } = this.props;
 		return (
 			<>
-				<div className="flex">
-					<Typography className="mb-12 pr-12" variant="title">123456789</Typography>
-					<Typography className="mb-12" variant="title">OOOOOOOOOOOO</Typography>
+				<div className="flex mt-12">
+					<Typography className="mb-12 pr-12" variant="subtitle1">123456789</Typography>
+					<Typography className="mb-12" variant="subtitle1">OOOOOOOOOOOO</Typography>
 				</div>
 				<div className={classNames("flex mt-12 justify-start")}>
 					<TextField margin="dense" id="Monthly Billing Amount" label="Monthly Billing Amount"

@@ -2,7 +2,7 @@ import * as Actions from "../actions/";
 import * as UserActions from "../../auth/store/actions";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
-
+import moment from "moment"
 
 const initialState = {
 	ACC_payments: [],
@@ -31,8 +31,8 @@ const initialState = {
 			"Check", "CreditCard", "EFT", "Lockbox", "CreditFromOverpayment", "ManualCreditCard"
 		],
 		searchText: "",
-		fromDate: "01/22/2019",
-		toDate: "01/22/2019",
+		fromDate: moment().subtract(6, 'months').format("MM/DD/YYYY"),
+		toDate: moment().format("MM/DD/YYYY"),
 	},
 	viewMode: "Invoice",
 	isCustomerNameNoGrouping: true,

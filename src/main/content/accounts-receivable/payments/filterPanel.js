@@ -145,8 +145,8 @@ class FilterPanel extends Component {
 		});
 
 		this.setState({ invoiceStatus: this.props.invoiceStatus });
-		this.setState({ FromDate: this.props.FromDate });
-		this.setState({ ToDate: this.props.ToDate });
+		this.setState({ FromDate: this.props.filterParam.fromDate });
+		this.setState({ ToDate: this.props.filterParam.toDate });
 		this.setState({ invoiceDateOption: this.props.invoiceDateOption });
 
 		console.log("this.props.filterParam", this.props.filterParam)
@@ -161,11 +161,11 @@ class FilterPanel extends Component {
 		if (prevProps.invoiceStatus !== this.props.invoiceStatus) {
 			this.setState({ invoiceStatus: this.props.invoiceStatus })
 		}
-		if (prevProps.FromDate !== this.props.FromDate) {
-			this.setState({ FromDate: this.props.FromDate })
+		if (prevProps.filterParam.fromDate !== this.props.filterParam.fromDate) {
+			this.setState({ FromDate: this.props.filterParam.fromDate })
 		}
-		if (prevProps.ToDate !== this.props.ToDate) {
-			this.setState({ ToDate: this.props.ToDate })
+		if (prevProps.filterParam.toDate !== this.props.filterParam.toDate) {
+			this.setState({ ToDate: this.props.filterParam.toDate })
 		}
 
 		if (prevProps.invoiceDateOption !== this.props.invoiceDateOption) {
