@@ -510,14 +510,12 @@ class CustomerForm extends Component {
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between">
 								<TextField
 									type="number"
-									id="Amount"
+									id="SA_Amount"
 									label="Amount *"
 									className={classes.textField}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.Amount}
-									onChange={this.handleChange('Amount')}
+									InputLabelProps={{ shrink: true }}
+									value={this.state.SA_Amount}
+									onChange={this.handleChange('SA_Amount')}
 									margin="dense"
 									variant="outlined"
 									style={{ minWidth: "100px", width: "30%" }}
@@ -1557,16 +1555,26 @@ class CustomerForm extends Component {
 
 	componentWillMount() {
 		// this.getFranchiseesFromStatus();
+		this.initCustomerInfo()
 	}
 
-	// componentWillReceiveProps(nextProps) {
-	// 	console.log("this.props.franchisees")
-	// 	console.log(this.props.franchisees)
-	// 	if (this.props.franchisees === null && nextProps.franchisees !== null)
-	// 		this.getFranchiseesFromStatus(nextProps.franchisees);
-	// 	if (this.props.franchisees !== nextProps.franchisees)
-	// 		this.getFranchiseesFromStatus(nextProps.franchisees);
-	// }
+	componentWillReceiveProps(nextProps) {
+		// console.log("this.props.franchisees")
+		// console.log(this.props.franchisees)
+		// if (this.props.franchisees === null && nextProps.franchisees !== null)
+		// 	this.getFranchiseesFromStatus(nextProps.franchisees);
+		// if (this.props.franchisees !== nextProps.franchisees)
+		// 	this.getFranchiseesFromStatus(nextProps.franchisees);
+		if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
+			this.initCustomerInfo(nextProps.activeCustomer.Data)
+		}
+	}
+
+	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer.Data) => {
+		this.setState({
+			SA_Amount: activeCustomerInfo.cont_bill,
+		})
+	}
 
 
 	// getFranchiseesFromStatus = (rawData = this.props.franchisees) => {
@@ -1836,6 +1844,7 @@ function mapStateToProps({ customers, franchisees, auth }) {
 		SearchText: franchisees.SearchText,
 
 		accountExecutiveList: customers.accountExecutiveList,
+		activeCustomer: customers.activeCustomer,
 	}
 }
 

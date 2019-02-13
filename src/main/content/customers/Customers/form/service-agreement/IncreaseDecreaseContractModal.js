@@ -424,6 +424,8 @@ class IncreaseDecreaseContractModal extends React.Component {
 			franchiseeServiceTypes: [],
 			franchiseeBillingTypes: [],
 
+			EffectiveDate: new Date().toISOString().substr(0, 10),
+
 		}
 		// this.commitChanges = this.commitChanges.bind(this);
 		this.props.getLogCallCustomerServiceTypes()
@@ -444,6 +446,8 @@ class IncreaseDecreaseContractModal extends React.Component {
 
 	}
 	componentDidMount() {
+		this.initCustomerInfo()
+
 		this.setState({
 			paymentDlgPayloads: this.props.paymentDlgPayloads,
 			PaymentAmount: this.props.paymentDlgPayloads.paymentAmount,
@@ -478,6 +482,14 @@ class IncreaseDecreaseContractModal extends React.Component {
 			this.props.getFranchiseeServiceTypes(nextProps.regionId)
 			this.props.getFranchiseeBillingTypes(nextProps.regionId)
 		}
+		if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
+			this.initCustomerInfo(nextProps.activeCustomer.Data)
+		}
+	}
+	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer.Data) => {
+		this.setState({
+			SA_Amount: activeCustomerInfo.cont_bill,
+		})
 	}
 
 	handleStep = () => {
@@ -808,7 +820,7 @@ class IncreaseDecreaseContractModal extends React.Component {
 		return (
 			<>
 				<div className={classNames("flex mt-12 justify-start")}>
-					<TextField margin="dense" id="Current Contract Amount" label="Current Contract Amount"
+					<TextField margin="dense" id="SA_Amount" label="Current Contract Amount" value={this.state.SA_Amount}
 						InputLabelProps={{ shrink: true }}
 						className={classNames(classes.textField, "pr-6")}
 						InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
@@ -892,6 +904,7 @@ class IncreaseDecreaseContractModal extends React.Component {
 								<TextField
 									type="date"
 									id="EffectiveDate"
+									value={this.state.EffectiveDate}
 									label="Effective Date"
 									className={classNames(classes.textField, 'ml-24')}
 									InputLabelProps={{ shrink: true }}
@@ -943,6 +956,7 @@ function mapStateToProps({ customers, accountReceivablePayments, auth }) {
 		increaseDecreaseContractModalForm: customers.increaseDecreaseContractModalForm,
 		lists: customers.lists,
 		franchieesesToOffer: customers.franchieesesToOffer,
+		activeCustomer: customers.activeCustomer,
 	}
 }
 
