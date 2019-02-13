@@ -392,7 +392,7 @@ class InvoiceListContent extends Component {
                                 {
                                     Header: "Customer Name",
                                     accessor: "CustomerName",
-                                    width: 220,
+                                    width: 240,
                                     className: classNames("flex items-center  justify-start pl-12-impor")
                                 },
                                 {

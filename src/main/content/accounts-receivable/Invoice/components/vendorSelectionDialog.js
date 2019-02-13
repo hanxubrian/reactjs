@@ -154,7 +154,6 @@ class VendorDialogBox extends Component {
         this.setState({ [name]: event.target.value });
     };
 
-
     render()
     {
         let vendors = [];
