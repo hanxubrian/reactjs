@@ -170,6 +170,15 @@ const verifications = function (state = initialState, action) {
                 ...state, verifyOption: action.payload
             }
         }
+        case Actions.VERIFY_BULK_IDS:
+        {
+            return {
+                ...state,
+                verifiedModal: false,
+                aTransactionSelections: [],
+                aInvoiceSelections: []
+            }
+        }
         default:
         {
             return state;

@@ -328,12 +328,12 @@ class VerificationsApp extends Component {
                                         </div>
                                     </div>
                                     <div className="flex flex-shrink items-center">
-                                        <Button variant="contained" color="primary" disabled={aTransactionSelections.length === 0}
+                                        <Button variant="contained" color="primary" disabled={(this.props.verifyOption==='transaction' && aTransactionSelections.length === 0) || (this.props.verifyOption!=='transaction' && this.props.aInvoiceSelections.length === 0)}
                                                 className={classNames(classes.button, classes.btntop) } onClick={this.openVerificationDialog}>
                                             Verify
                                             <Icon className={classes.rightIcon}>verified_user</Icon>
                                         </Button>
-                                        <Button variant="contained" color="primary" disabled={aTransactionSelections.length === 0}
+                                        <Button variant="contained" color="primary" disabled={(this.props.verifyOption==='transaction' && aTransactionSelections.length === 0) || (this.props.verifyOption!=='transaction' && this.props.aInvoiceSelections.length === 0)}
                                                 className={classNames(classes.button, classes.btntop)} onClick={this.openReviseDialog}>
                                             Request Changes
                                             <Icon className={classes.rightIcon}>rotate_90_degrees_ccw</Icon>
@@ -432,6 +432,7 @@ function mapStateToProps({verifications, auth, fuse, transactions}) {
         bLoadedVerifications: verifications.bLoadedVerifications,
         bVerificationFetchStart: verifications.bVerificationFetchStart,
         aTransactionSelections: verifications.aTransactionSelections,
+        aInvoiceSelections: verifications.aInvoiceSelections,
         regionId: auth.login.defaultRegionId,
         nav: fuse.navigation,
         transactionTypeList: transactions.transactionTypeList,

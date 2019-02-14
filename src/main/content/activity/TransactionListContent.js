@@ -270,18 +270,18 @@ class VerificationTransactionListContent extends Component {
             this.setState({ rows: [...this.state.data] });
             return;
         }
-        const temp = this.state.data.filter(d => {
-            return (d.CustomerNo && d.CustomerNo.toString().toLowerCase().indexOf(val) !== -1) ||
-                (d.CustomerName && d.CustomerName.toString().toLowerCase().indexOf(val) !== -1) ||
-                (d.Address && d.Address.toString().toLowerCase().indexOf(val) !== -1) ||
-                (d.City && d.City.toString().toLowerCase().indexOf(val) !== -1) ||
-                (d.StateName && d.StateName.toString().toLowerCase().indexOf(val) !== -1) ||
-                (d.PostalCode && d.PostalCode.toString().toLowerCase().indexOf(val) !== -1) ||
-                (d.Phone && d.Phone.toString().toLowerCase().indexOf(val) !== -1) ||
-                (d.AccountTypeListName && d.AccountTypeListName.toString().toLowerCase().indexOf(val) !== -1) ||
-                (d.Amount && d.Amount.toString().toLowerCase().indexOf(val) !== -1)
-        });
-        this.setState({ rows: [...temp] });
+        // const temp = this.state.data.filter(d => {
+        //     return (d.CustomerNo && d.CustomerNo.toString().toLowerCase().indexOf(val) !== -1) ||
+        //         (d.CustomerName && d.CustomerName.toString().toLowerCase().indexOf(val) !== -1) ||
+        //         (d.Address && d.Address.toString().toLowerCase().indexOf(val) !== -1) ||
+        //         (d.City && d.City.toString().toLowerCase().indexOf(val) !== -1) ||
+        //         (d.StateName && d.StateName.toString().toLowerCase().indexOf(val) !== -1) ||
+        //         (d.PostalCode && d.PostalCode.toString().toLowerCase().indexOf(val) !== -1) ||
+        //         (d.Phone && d.Phone.toString().toLowerCase().indexOf(val) !== -1) ||
+        //         (d.AccountTypeListName && d.AccountTypeListName.toString().toLowerCase().indexOf(val) !== -1) ||
+        //         (d.Amount && d.Amount.toString().toLowerCase().indexOf(val) !== -1)
+        // });
+        // this.setState({ rows: [...temp] });
     }
 
     componentDidMount() {
@@ -331,7 +331,7 @@ class VerificationTransactionListContent extends Component {
                 });
                 return (
                     <Table.Cell style={{textAlign: 'center'}}>
-                        <IconButton className={classes.iconButton} onClick={this.openVerificationDialog} aria-label="Verify">
+                        <IconButton className={classes.iconButton} onClick={()=>this.openVerificationDialog(props.row.EntityObject_id)} aria-label="Verify">
                             <Icon>verified_user</Icon>
                         </IconButton>
                         <IconButton className={classes.iconButton} onClick={this.openRejectDialog} aria-label="Reject">
@@ -379,7 +379,15 @@ class VerificationTransactionListContent extends Component {
         );
     };
 
-    openVerificationDialog = () => {
+    openVerificationDialog = (obj_id) => {
+        let objects=[];
+        this.state.data.forEach((x, index)=> {
+                if (x.EntityObject_id === obj_id)
+                    objects.push(index);
+            }
+        );
+        this.props.updateSelectedRowsLength(objects);
+
         this.props.openVerificationDialog(true);
     };
     openReviseDialog = () => {

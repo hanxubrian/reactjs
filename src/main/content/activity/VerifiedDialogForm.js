@@ -120,10 +120,7 @@ class VerifiedDialogForm extends React.Component {
     };
 
     handleVerify = ()=> {
-        // user: auth.login,
-        //     verifyOption: verifications.verifyOption,
-        //     aInvoiceSelections: verifications.aInvoiceSelections,
-        //     aTransactionSelections: verifications.aTransactionSelections,
+
       let option = this.props.verifyOption;
       let action = 'verify';
 
@@ -145,7 +142,7 @@ class VerifiedDialogForm extends React.Component {
 
       console.log('submit=',this.props.regionId, userId, action, ids);
 
-        // this.props.verifyBulkUpdate(this.props.regionId, userId, action, ids);
+      this.props.verifyBulkUpdate(this.props.regionId, userId, action, ids);
     };
 
     handleChangeForm = (name) => event => {
