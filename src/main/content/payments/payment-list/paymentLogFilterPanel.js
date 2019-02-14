@@ -73,7 +73,8 @@ class FilterPanel extends Component {
 
     handleLogDateChange = date => {
         this.setState({logDate: date});
-        this.props.updateLogDate(moment(date).format("MM/DD/YYYY"));
+        let logDate = moment(date).format("MM/DD/YYYY");
+        this.props.updateLogDate(logDate);
     };
 
     render()
