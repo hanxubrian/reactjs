@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-
+import _ from "lodash";
 import { Icon, IconButton, Input, Paper, Button, Tooltip, TextField, MenuItem, InputAdornment, FormControlLabel, Checkbox, RadioGroup, Radio, Typography } from '@material-ui/core';
 import classNames from 'classnames';
 
@@ -556,12 +556,9 @@ class FranchieesListPage extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		console.log("this.props.franchisees")
-		console.log(this.props.franchisees)
-		if (this.props.franchisees === null && nextProps.franchisees !== null)
+		if (!_.isEqual(this.props.franchisees, nextProps.franchisees)) {
 			this.getFranchiseesFromStatus(nextProps.franchisees);
-		if (this.props.franchisees !== nextProps.franchisees)
-			this.getFranchiseesFromStatus(nextProps.franchisees);
+		}
 	}
 	getFranchiseesFromStatus = (rawData = this.props.franchisees) => {
 		console.log("rawData-getFranchiseesFromStatus", rawData);

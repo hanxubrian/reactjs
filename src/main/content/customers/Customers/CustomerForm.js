@@ -129,7 +129,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 
 import AccountOfferingPage from './form/account-offering/AccountOfferingPage';
 import FinderFeePage from './form/finders-fees/FinderFeePage'
-import IncreaseDecreaseContractModal from './form/service-agreement/IncreaseDecreaseContractModal'
+import ServiceAgreementPage from './form/service-agreement/ServiceAgreementPage'
 
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -466,9 +466,7 @@ class CustomerForm extends Component {
 		}
 		this.setState({ rows });
 	}
-	IncreaseDecreaseContract = () => {
-		this.props.showIncreaseDecreaseContractModalForm(true)
-	}
+	
 	getStepContent(step) {
 		const { classes,
 			// CustomerForm,
@@ -505,186 +503,7 @@ class CustomerForm extends Component {
 			case 1:
 				// return 'Step 2: What is an ad group anyways?';
 				return (
-					<Fragment>
-						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between">
-								<TextField
-									type="number"
-									id="SA_Amount"
-									label="Amount *"
-									className={classes.textField}
-									InputLabelProps={{ shrink: true }}
-									value={this.state.SA_Amount}
-									onChange={this.handleChange('SA_Amount')}
-									margin="dense"
-									variant="outlined"
-									style={{ minWidth: "100px", width: "30%" }}
-									InputProps={{
-										startAdornment: <InputAdornment position="start">$</InputAdornment>
-									}}
-								/>
-								{customerForm.props.open && customerForm.type === "edit" && <Button
-									variant="contained"
-									color="primary"
-									className={classNames(classes.button, "pr-24 pl-24")}
-									onClick={this.IncreaseDecreaseContract}
-								>Increase/Decrease Contract</Button>}
-							</GridItem>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="Description"
-									label="Description"
-									multiline
-									rows="2"
-									rowsMax="2"
-									className={classes.textField}
-									value={this.state.Description}
-									onChange={this.handleChange('Description')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: '100%' }}
-								/>
-							</GridItem>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="ContractType"
-									label="Contract Type *"
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classNames(classes.textField, "mr-6")}
-									value={this.state.ContractType === undefined ? 0 : this.state.ContractType}
-									onChange={this.handleChange('ContractType')}
-									margin="dense"
-									variant="outlined"
-									style={{ minWidth: "100px", width: "30%" }}
-								>
-									{[{ value: 0, label: "Recurring" }
-										, { value: 1, label: "One-Time" }
-										, { value: 2, label: "Variable" }].map(option => (
-											<MenuItem key={option.value} value={option.value}>
-												{option.label}
-											</MenuItem>
-										))}
-								</TextField>
-
-								<TextField
-									type="number"
-									inputProps={{ min: "0", max: "99", step: "1" }}
-									id="TermMonths"
-									label="Term Months *"
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classNames(classes.textField, "ml-6")}
-									value={this.state.TermMonths}
-									onChange={this.handleChange('TermMonths')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: '10%', minWidth: '110px' }}
-								/>
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="AgreementType"
-									label="Agreement Type *"
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classNames(classes.textField, "mr-6")}
-									value={this.state.AgreementType === undefined ? 1 : this.state.AgreementType}
-									onChange={this.handleChange('AgreementType')}
-									margin="dense"
-									variant="outlined"
-									fullWidth
-								>
-									{[{ value: 0, label: "Customer" }
-										, { value: 1, label: "Jani-King" }
-										, { value: 2, label: "General" }
-									].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-
-								<TextField
-									id="AcctExec"
-									label="Acct Exec"
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classNames(classes.textField, "ml-6")}
-									value={this.state.AcctExec === undefined ? 0 : this.state.AcctExec}
-									onChange={this.handleChange('AcctExec')}
-									margin="dense"
-									variant="outlined"
-									fullWidth
-								>
-									{
-										execTitles.map((x, index) => {
-											return (<MenuItem key={index} value={index}>{x}</MenuItem>)
-										})
-									}
-								</TextField>
-							</GridItem>
-
-
-
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									type="date"
-									id="SignDate"
-									label="Sign Date *"
-									className={classNames(classes.textField, "mr-6")}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.SignDate}
-									onChange={this.handleChange('SignDate')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: "20%", minWidth: "180px" }}
-								/>
-								<TextField
-									type="date"
-									id="StartDate"
-									label="Start Date *"
-									className={classNames(classes.textField, "mr-6 ml-6")}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.StartDate}
-									onChange={this.handleChange('StartDate')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: "20%", minWidth: "180px" }}
-								/>
-
-								<TextField
-									type="date"
-									id="ExpirationDate"
-									label="Expiration Date *"
-									className={classNames(classes.textField, "ml-6")}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.ExpirationDate}
-									onChange={this.handleChange('ExpirationDate')}
-									margin="dense"
-									variant="outlined"
-									style={{ width: "20%", minWidth: "180px" }}
-								/>
-							</GridItem>
-						</GridContainer>
-
-						<IncreaseDecreaseContractModal />
-					</Fragment>
+					<ServiceAgreementPage />
 				);
 			case 2:
 				return (
@@ -900,7 +719,6 @@ class CustomerForm extends Component {
 								/>
 							</GridItem>
 						</GridContainer>
-
 					</Fragment>
 				);
 			case 3:
@@ -1825,7 +1643,6 @@ function mapDispatchToProps(dispatch) {
 		openEditCustomerForm: Actions.openEditCustomerForm,
 		closeEditCustomerForm: Actions.closeEditCustomerForm,
 		getDocuments: Actions.getDocuments,
-		showIncreaseDecreaseContractModalForm: Actions.showIncreaseDecreaseContractModalForm
 	}, dispatch);
 }
 
