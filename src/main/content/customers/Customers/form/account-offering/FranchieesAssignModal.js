@@ -424,6 +424,8 @@ class FranchieesAssignModal extends React.Component {
 			franchiseeServiceTypes: [],
 			franchiseeBillingTypes: [],
 
+			franchieesesToOffer: [],
+
 		}
 		// this.commitChanges = this.commitChanges.bind(this);
 		this.props.getLogCallCustomerServiceTypes()
@@ -440,7 +442,10 @@ class FranchieesAssignModal extends React.Component {
 			customerServiceTypes: this.props.lists.customerServiceTypes,
 			franchiseeServiceTypes: this.props.lists.franchiseeServiceTypes,
 			franchiseeBillingTypes: this.props.lists.franchiseeBillingTypes,
+			franchieesesToOffer: this.props.franchieesesToOffer,
 		})
+
+
 
 	}
 	componentDidMount() {
@@ -477,6 +482,9 @@ class FranchieesAssignModal extends React.Component {
 		if (nextProps.regionId !== this.props.regionId) {
 			this.props.getFranchiseeServiceTypes(nextProps.regionId)
 			this.props.getFranchiseeBillingTypes(nextProps.regionId)
+		}
+		if (!_.isEqual(nextProps.franchieesesToOffer !== this.props.franchieesesToOffer)) {
+			this.setState({ franchieesesToOffer: this.props.franchieesesToOffer, })
 		}
 	}
 
@@ -791,7 +799,7 @@ class FranchieesAssignModal extends React.Component {
 
 	getFranchiseeAssignmentForm() {
 		const { classes } = this.props;
-		const { franchieesesToOffer } = this.props.franchieesesToOffer;
+		const { franchieesesToOffer } = this.state;
 		const {
 			franchiseeBillingTypes,
 			franchiseeServiceTypes
