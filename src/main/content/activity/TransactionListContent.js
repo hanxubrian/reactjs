@@ -222,7 +222,7 @@ class VerificationTransactionListContent extends Component {
             temp: [],
             data: [],
             selectAll: false,
-            selection: [...this.props.selections],
+            selection: [...this.props.aTransactionSelections],
             //rows: [],
             sorting: [
                 { columnName: 'Franchisee', direction: 'asc' }
@@ -558,7 +558,7 @@ function mapStateToProps({ customers, auth, verifications, transactions }) {
         regionId: auth.login.defaultRegionId,
         verificationForm: verifications.verificationForm,
         searchText: verifications.searchText,
-        selections: verifications.selections,
+        aTransactionSelections: verifications.aTransactionSelections,
         verifiedModal: verifications.verifiedModal,
         reviseModal: verifications.reviseModal,
         rejectModal: verifications.rejectModal,

@@ -21,7 +21,7 @@ const initialState = {
     statusId: 1,
     searchText: "",
     bVerificationFetchStart: false,
-    selections: [],
+    aTransactionSelections: [],
     aInvoiceSelections: [],
     verifiedModal: false,
     reviseModal: false,
@@ -113,7 +113,7 @@ const verifications = function (state = initialState, action) {
         {
             return{
                 ...state,
-                selections: action.payload
+                aTransactionSelections: action.payload
             }
         }
         case Actions.UPDATE_INVOICE_SELECTIONS:

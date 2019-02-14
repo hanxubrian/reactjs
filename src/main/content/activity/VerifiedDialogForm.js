@@ -206,7 +206,10 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps({ verifications, auth}) {
     return {
         verifiedModal: verifications.verifiedModal,
-        user: auth.login
+        user: auth.login,
+        verifyOption: verifications.verifyOption,
+        aInvoiceSelections: verifications.aInvoiceSelections,
+        verifyOption: verifications.verifyOption,
     }
 }
 
