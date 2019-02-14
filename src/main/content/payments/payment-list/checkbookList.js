@@ -233,18 +233,6 @@ class CheckbookList extends Component {
             this.setState({ rows: [...this.state.data] });
             return;
         }
-        const temp = this.state.data.filter(d => {
-            return (d.CustomerNo && d.CustomerNo.toString().toLowerCase().indexOf(val) !== -1) ||
-                (d.CustomerName && d.CustomerName.toString().toLowerCase().indexOf(val) !== -1) ||
-                (d.Address && d.Address.toString().toLowerCase().indexOf(val) !== -1) ||
-                (d.City && d.City.toString().toLowerCase().indexOf(val) !== -1) ||
-                (d.StateName && d.StateName.toString().toLowerCase().indexOf(val) !== -1) ||
-                (d.PostalCode && d.PostalCode.toString().toLowerCase().indexOf(val) !== -1) ||
-                (d.Phone && d.Phone.toString().toLowerCase().indexOf(val) !== -1) ||
-                (d.AccountTypeListName && d.AccountTypeListName.toString().toLowerCase().indexOf(val) !== -1) ||
-                (d.Amount && d.Amount.toString().toLowerCase().indexOf(val) !== -1)
-        });
-        this.setState({ rows: [...temp] });
     }
 
     componentDidMount() {

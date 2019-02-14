@@ -6,7 +6,8 @@ import classNames from 'classnames';
 import moment from 'moment';
 
 // core components
-import {Card, CardContent, Grid, Typography} from '@material-ui/core';
+import {Card, CardContent, Typography} from '@material-ui/core';
+import Grid1 from '@material-ui/core/Grid';
 import {withStyles} from '@material-ui/core/styles/index';
 
 //Theme component
@@ -15,6 +16,27 @@ import html2canvas from 'html2canvas';
 //Store
 import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
+
+import {
+    PagingState,
+    IntegratedPaging,
+    DataTypeProvider,
+    GroupingState,SelectionState,
+    IntegratedGrouping, TableColumnVisibility,
+    SortingState,
+    IntegratedSorting,
+} from '@devexpress/dx-react-grid';
+
+import {
+    Grid,
+    Table,
+    VirtualTable,
+    TableHeaderRow,
+    TableGroupRow,
+    PagingPanel
+} from '@devexpress/dx-react-grid-material-ui';
+import NumberFormat from "react-number-format";
+
 
 //Child components
 
@@ -124,8 +146,39 @@ let HTML_Width                      = 0;
 let HTML_Height                     = 0;
 let top_left_margin                 = 0;
 
-class PaymentLogDetail extends Component {
+const CurrencyFormatter = ({value}) => (
+    <NumberFormat value={value}
+                  displayType={'text'}
+                  fixedDecimalScale={true}
+                  thousandSeparator
+                  decimalScale={2}
+                  prefix="$" renderText={value => <div>{value}</div>}/>
+);
 
+const CurrencyTypeProvider = props => (
+    <DataTypeProvider
+        formatterComponent={CurrencyFormatter}
+        {...props}
+    />
+);
+
+const TableComponentBase = ({ classes, ...restProps }) => (
+    <Table.Table
+        {...restProps}
+        className={classes.tableStriped}
+    />
+);
+
+const TableHeadComponentBase = ({ classes, ...restProps }) => (
+    <Table.TableHead
+        {...restProps}
+        className={classes.tableTheadRow}
+    />
+);
+export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
+export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
+
+class PaymentLogDetail extends Component {
 
     componentDidMount()
     {
@@ -135,6 +188,14 @@ class PaymentLogDetail extends Component {
 
         this.props.onRef(undefined);
     }
+
+    TableRow = ({ tableRow, selected, onToggle, ...restProps }) => {
+        return (
+            <Table.Row
+                {...restProps}
+            />
+        );
+    };
 
     getDataUri=(url, cb)=>
     {
@@ -189,37 +250,71 @@ class PaymentLogDetail extends Component {
 
     renderHeader = ()=>{
         return (
-            <Grid container className="flex flex-row items-center report-header">
-                <Grid item sm={3} className="text-left" >
-                    <Typography color="inherit" variant={"p"}>{moment().format('MM/DD/YYYY')}</Typography>
-                    <Typography color="inherit" variant={"p"}>{moment().format('HH:mm:ss')}</Typography>
-                    <Typography className="mt-16" color="inherit" variant={"p"}>* <i>Indicates invoice applied</i></Typography>
-                    <Typography color="inherit" variant={"p"}><i>to non-default franchisee.</i></Typography>
-                </Grid>
-                <Grid item sm={7} className="text-center">
+            <Grid1 container className="flex flex-row items-center report-header">
+                <Grid1 item sm={3} className="text-left" >
+                    <Typography color="inherit" >{moment().format('MM/DD/YYYY')}</Typography>
+                    <Typography color="inherit" >{moment().format('HH:mm:ss')}</Typography>
+                    <Typography className="mt-16" color="inherit" >* <i>Indicates invoice applied</i></Typography>
+                    <Typography color="inherit" ><i>to non-default franchisee.</i></Typography>
+                </Grid1>
+                <Grid1 item sm={7} className="text-center">
                     <Typography variant={"h1"} color="inherit">Janiking of Bufflo, Inc.</Typography>
                     <Typography color="inherit" variant={"h2"}>
                         Accounts Receivable Log
                     </Typography>
                     <Typography color="inherit" variant={"h3"}>Deposit Date: {moment(this.props.logDate).format('MM/DD/YYYY')} </Typography>
-                </Grid>
-                <Grid item sm={2} className="text-right" width='200' align>
+                </Grid1>
+                <Grid1 item sm={2} className="text-right" width='200'>
                     <Typography color="inherit">
                         <img src="https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png" alt=""/>
                     </Typography>
-                </Grid>
-            </Grid>
+                </Grid1>
+            </Grid1>
         )
     };
     render()
     {
         const { classes} = this.props;
+        const columns = [
+            {name: "Customer", title: "Customer",},
+            {name: "CustomerNo", title: "Cust. #"},
+            {name: "ReferenceNo", title: "Check #/Descr."},
+            {name: "Description", title: "Description"},
+            {name: "FranchiseeNo", title: "Fran. #"},
+            {name: "InvoiceNo", title: "Invoice #"},
+            {name: "Amount", title: "Amount"},
+        ];
+        let  tableColumnExtensions = [
+            { columnName: 'Customer', width: -1, },
+            { columnName: 'CustomerNo', width: 100},
+            { columnName: 'ReferenceNo', width: 150,},
+            { columnName: 'Description', width: 120,},
+            { columnName: 'FranchiseeNo', width: 120},
+            { columnName: 'Amount', width: 120,  align: 'right'},
+        ];
 
         return (
             <div className={classNames(classes.root, "p-0 sm:p-64  whole print:p-0")} id ="wholediv">
                 <div id ="testdiv" className="cardname">
-                    <div className="w-full">
+                    <div className="w-full" style={{borderBottom: '4px double'}}>
                         {this.renderHeader()}
+                    </div>
+                    <div className={classNames("flex flex-col")}>
+                        <Grid
+                            rows={this.props.paymentLogList}
+                            columns={columns}
+                        >
+                            <CurrencyTypeProvider
+                                for={['Amount']}
+                            />
+
+                            <VirtualTable height="auto"
+                                          tableComponent={TableComponent}
+                                          headComponent = {TableHeadComponent}
+                                          columnExtensions={tableColumnExtensions}
+                            />
+                            <TableHeaderRow/>
+                        </Grid>
                     </div>
                 </div>
 
