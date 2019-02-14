@@ -17,6 +17,8 @@ export const CREATE_USER = '[USERS APP] CREATE USER';
 export const GET_USER_DETAIL = '[USERS APP] GET USER DETAIL';
 export const UPDATE_USER = '[USERS APP] UPDATE USER';
 export const DELETE_USER = '[USERS APP] DELETE USER';
+export const UPDATE_NEW_USER_AVATAR = '[USERS APP] UPDATE NEW USER AVATAR';
+export const SET_NEW_USER_AVATAR_URL = '[USERS APP] SET NEW USER AVATAR URL';
 
 // GET USERS LIST
 
@@ -67,7 +69,7 @@ export function createUser(data) {
                     type: CREATE_USER,
                     payload: res
                 });
-            } 
+            }
         })();
     };
 }
@@ -83,7 +85,7 @@ export function updateUser(id,data) {
                     type: UPDATE_USER,
                     payload: res
                 });
-            } 
+            }
         })();
     };
 }
@@ -99,7 +101,7 @@ export function deleteUser(id) {
                     type: DELETE_USER,
                     payload: res
                 });
-            } 
+            }
         })();
     };
 }
@@ -115,7 +117,7 @@ export function getUserDetail(id) {
                     type: GET_USER_DETAIL,
                     payload: res
                 });
-            } 
+            }
         })();
     };
 }
@@ -257,5 +259,20 @@ export function updateUserFormVariable(newPayload) {
     return{
         type: GET_USER_FORM_VARIABLE,
         payload: newPayload
+    }
+}
+
+
+export function updateNewUserAvatar(file) {
+    return{
+        type: UPDATE_NEW_USER_AVATAR,
+        payload: file
+    }
+}
+
+export function setNewUserAvatarURL(url) {
+    return{
+        type: SET_NEW_USER_AVATAR_URL,
+        payload: url
     }
 }

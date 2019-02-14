@@ -40,8 +40,11 @@ const styles = theme => ({
         marginBottom : '10px'
     },
     multiSelectControl: {
-    margin: theme.spacing.unit,
-    marginLeft: 0
+        margin: theme.spacing.unit,
+        marginLeft: 0,
+        '& label': {
+            transform: 'translate(14px, 18px) scale(1)'
+        },
     },
     container: {
         position: 'relative',
@@ -67,7 +70,8 @@ const styles = theme => ({
     },
     divider: {
         height: theme.spacing.unit * 2,
-    }
+    },
+
 });
 
 // Define suggestion Array()
@@ -271,106 +275,106 @@ class UsersForm extends React.Component {
             Salt: "",
             OutlookPassword: "",
             Apps: [
-            {
-                _id: "",
-                AppId: 2,
-                Menus: [
-                    {
-                        MenuId: 1,
-                        Title: "",
-                        Children: [
-                            {
-                                MenuId: 1,
-                                View: false,
-                                Create: false,
-                                Delete: false,
-                                Edit: false,
-                                Execute: false
-                            },
-                            {
-                                MenuId: 1,
-                                View: false,
-                                Create: false,
-                                Delete: false,
-                                Edit: false,
-                                Execute: false
-                            }
-                        ]
-                    },
-                    {
-                        MenuId: 1,
-                        Title: "",
-                        Children: [
+                {
+                    _id: "",
+                    AppId: 2,
+                    Menus: [
                         {
                             MenuId: 1,
-                            View: false,
-                            Create: false,
-                            Delete: false,
-                            Edit: false,
-                            Execute: false
+                            Title: "",
+                            Children: [
+                                {
+                                    MenuId: 1,
+                                    View: false,
+                                    Create: false,
+                                    Delete: false,
+                                    Edit: false,
+                                    Execute: false
+                                },
+                                {
+                                    MenuId: 1,
+                                    View: false,
+                                    Create: false,
+                                    Delete: false,
+                                    Edit: false,
+                                    Execute: false
+                                }
+                            ]
                         },
                         {
                             MenuId: 1,
-                            View: false,
-                            Create: false,
-                            Delete: false,
-                            Edit: false,
-                            Execute: false
+                            Title: "",
+                            Children: [
+                                {
+                                    MenuId: 1,
+                                    View: false,
+                                    Create: false,
+                                    Delete: false,
+                                    Edit: false,
+                                    Execute: false
+                                },
+                                {
+                                    MenuId: 1,
+                                    View: false,
+                                    Create: false,
+                                    Delete: false,
+                                    Edit: false,
+                                    Execute: false
+                                }
+                            ]
                         }
-                        ]
-                    }
-                ]
-            },
-            {
-                _id: "",
-                AppId: 2,
-                Menus: [
-                  {
-                    MenuId: 1,
-                    Title: "",
-                    Children: [
-                      {
-                        MenuId: 1,
-                        View: false,
-                        Create: false,
-                        Delete: false,
-                        Edit: false,
-                        Execute: false
-                      },
-                      {
-                        MenuId: 1,
-                        View: false,
-                        Create: false,
-                        Delete: false,
-                        Edit: false,
-                        Execute: false
-                      }
                     ]
-                  },
-                  {
-                    MenuId: 1,
-                    Title: "",
-                    Children: [
-                      {
-                        MenuId: 1,
-                        View: false,
-                        Create: false,
-                        Delete: false,
-                        Edit: false,
-                        Execute: false
-                      },
-                      {
-                        MenuId: 1,
-                        View: false,
-                        Create: false,
-                        Delete: false,
-                        Edit: false,
-                        Execute: false
-                      }
+                },
+                {
+                    _id: "",
+                    AppId: 2,
+                    Menus: [
+                        {
+                            MenuId: 1,
+                            Title: "",
+                            Children: [
+                                {
+                                    MenuId: 1,
+                                    View: false,
+                                    Create: false,
+                                    Delete: false,
+                                    Edit: false,
+                                    Execute: false
+                                },
+                                {
+                                    MenuId: 1,
+                                    View: false,
+                                    Create: false,
+                                    Delete: false,
+                                    Edit: false,
+                                    Execute: false
+                                }
+                            ]
+                        },
+                        {
+                            MenuId: 1,
+                            Title: "",
+                            Children: [
+                                {
+                                    MenuId: 1,
+                                    View: false,
+                                    Create: false,
+                                    Delete: false,
+                                    Edit: false,
+                                    Execute: false
+                                },
+                                {
+                                    MenuId: 1,
+                                    View: false,
+                                    Create: false,
+                                    Delete: false,
+                                    Edit: false,
+                                    Execute: false
+                                }
+                            ]
+                        }
                     ]
-                  }
-                ]
-            }
+                }
             ],
             Groups: [],
             UserId: 6,
@@ -393,12 +397,12 @@ class UsersForm extends React.Component {
             UserTypeValue: "",
             Roles: [],
             Regions: [
-              {
-                RegionId: 2,
-                Arcrym: "",
-                Name: "",
-                DisplayName: ""
-              }
+                {
+                    RegionId: 2,
+                    Arcrym: "",
+                    Name: "",
+                    DisplayName: ""
+                }
             ]
         }
     }
@@ -419,10 +423,10 @@ class UsersForm extends React.Component {
         }
         if(this.props.regions !== null){
             this.props.regions.map(x=>{
-                this.state.MultiRegion.push(x.regionname);
+                this.state.MultiRegion.push(x.Name);
                 this.state.DefaultRegions.push({
-                    "RegionId": x.regionid,
-                    "Name":x.regionname,
+                    "RegionId": x.RegionId,
+                    "Name":x.Name,
                     "Arcrym":"",
                     "DisplayName":""
                 });
@@ -434,7 +438,7 @@ class UsersForm extends React.Component {
         if ( nextProps.userGroupList !== this.props.userGroupList )
         {
             if(nextProps.userGroupList !== null)
-            {   
+            {
                 GroupList = [];
                 nextProps.userGroupList.map(x=>{
                     GroupList.push(x.name);
@@ -507,7 +511,7 @@ class UsersForm extends React.Component {
                 temp.map(x=>{
                     this.props.userGroupList.map(y=>{
                         if(x === y.name){
-                          changedGroups.push(y.group_id);
+                            changedGroups.push(y.group_id);
                         }
                     })
                 })
@@ -530,7 +534,7 @@ class UsersForm extends React.Component {
                 })
                 console.log("regions",changedRegions);
                 this.updateUserFormPayload(name,changedRegions);
-            }     
+            }
             if(name === "Roles") {
                 let temp = event.target.value;
                 let changedRoles = [];
@@ -539,8 +543,8 @@ class UsersForm extends React.Component {
                         if(x === y.name){
                             changedRoles.push(
                                 {
-                                  "RoleId": y.role_id,
-                                  "RoleName": y.name
+                                    "RoleId": y.role_id,
+                                    "RoleName": y.name
                                 }
                             );
                         }
@@ -548,10 +552,10 @@ class UsersForm extends React.Component {
                 })
                 console.log("roles",changedRoles);
                 this.updateUserFormPayload(name,changedRoles);
-            }        
+            }
         }else{
             this.updateUserFormPayload(name,event.target.value);
-        }        
+        }
     };
 
 
@@ -578,11 +582,11 @@ class UsersForm extends React.Component {
 
 
     updateUserFormPayload = (name,value) => {
-        
+
         let insertPayload = this.state.payload
         insertPayload[name] = value;
         this.props.updateUserFormPayload(insertPayload);
-    }
+    };
 
 
     render()
@@ -605,13 +609,15 @@ class UsersForm extends React.Component {
             renderSuggestion,
         };
 
+        console.log('avatar=', this.avatar);
+
         return (
             <div className={classes.root}>
                 <div className={classNames(classes.userFormSection,"w-full")}>
                     <h2>User Profile</h2>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
                         <GridItem sm={2} className="flex flex-row">
-                            <UserAvatar/>
+                            <UserAvatar onRef={ref=>this.avatar = ref}/>
                         </GridItem>
                         <GridItem sm={10} className="flex">
                             <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl,"flex justify-between")}>
@@ -693,6 +699,10 @@ class UsersForm extends React.Component {
                                                 className: classes.menu,
                                             },
                                         }}
+                                        InputLabelProps = {{
+                                            shrink: true,
+                                            classes: {outlined: classes.label}
+                                        }}
                                         margin="dense"
                                         fullWidth
                                     >
@@ -759,7 +769,7 @@ class UsersForm extends React.Component {
                                 onChange={this.handleChange('State')}
                                 SelectProps={{
                                     MenuProps: {
-                                      className: classes.menu,
+                                        className: classes.menu,
                                     },
                                 }}
                                 margin="dense"
@@ -772,19 +782,19 @@ class UsersForm extends React.Component {
                                 ))}
                             </TextField>
                             <TextField
-                                 id="zip"
-                                 label="Zip"
-                                 onChange={this.handleChange("Zipcode")}
-                                 value={this.state.Zipcode}
-                                 variant="outlined"
-                                 inputProps={{
-                                      maxLength:60
-                                 }}
-                                 className={classes.textField}
-                                 style={{marginLeft:'1%'}}
-                                 margin="dense"
-                                 fullWidth
-                                 required
+                                id="zip"
+                                label="Zip"
+                                onChange={this.handleChange("Zipcode")}
+                                value={this.state.Zipcode}
+                                variant="outlined"
+                                inputProps={{
+                                    maxLength:60
+                                }}
+                                className={classes.textField}
+                                style={{marginLeft:'1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
                             />
                         </GridItem>
                     </GridContainer>
@@ -939,16 +949,16 @@ class UsersForm extends React.Component {
                                 ))}
                             </TextField>
                             <TextField
-                                    id="UserTypeValue"
-                                    label="Name"
-                                    variant="outlined"
-                                    className={classes.textField}
-                                    value={this.state.UserTypeValue}
-                                    onChange={this.handleChange("UserTypeValue")}
-                                    style={{marginLeft:'1%'}}
-                                    margin="dense"
-                                    fullWidth
-                                    required
+                                id="UserTypeValue"
+                                label="Name"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={this.state.UserTypeValue}
+                                onChange={this.handleChange("UserTypeValue")}
+                                style={{marginLeft:'1%'}}
+                                margin="dense"
+                                fullWidth
+                                required
                             />
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">

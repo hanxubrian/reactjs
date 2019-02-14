@@ -40,8 +40,9 @@ const initialState = {
       UserTypeValue: "",
       Roles: [],
       Regions: []
-    }
-}
+    },
+    newUserAvatar: null,
+};
 
 const usersReducer = function (state = initialState, action) {
     switch ( action.type )
@@ -136,6 +137,18 @@ const usersReducer = function (state = initialState, action) {
             return{
                 ...state,
                 payload: action.payload
+            }
+        }
+        case Actions.UPDATE_NEW_USER_AVATAR: {
+            return{
+                ...state,
+                newUserAvatar: action.payload
+            }
+        }
+        case Actions.SET_NEW_USER_AVATAR_URL: {
+            return{
+                ...state,
+                payload:{...state.payload, ProfilePhoto: action.payload}
             }
         }
         case UserActions.USER_LOGGED_OUT:

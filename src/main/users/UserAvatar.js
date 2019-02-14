@@ -1,11 +1,11 @@
 import React from "react";
 import Avatar from 'react-avatar-edit';
-import ReactDOM from 'react-dom'
+
 import {withStyles} from '@material-ui/core/styles';
 import {bindActionCreators} from "redux";
+import * as Actions from './store/actions';
+
 import connect from "react-redux/es/connect/connect";
-import Button from "@material-ui/core/Button/Button";
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Fab from '@material-ui/core/Fab';
 import CheckIcon from '@material-ui/icons/Check';
 import EditIcon from '@material-ui/icons/Edit';
@@ -30,20 +30,36 @@ const styles = theme => ({
 
 
 class UserAvatar extends React.Component {
-
-    componentWillMount() {
-        console.log("----------------- Hellow-------------------");
-    }
     state = {
         preview: null,
         src: "",
         image: null,
-        imageChoosed: false
-    }
+        imageChoosed: false,
+        file: null
+    };
+
     constructor(props) {
-        super(props)
-        this.onCrop = this.onCrop.bind(this)
-        this.onClose = this.onClose.bind(this)
+        super(props);
+        this.onCrop = this.onCrop.bind(this);
+        this.onClose = this.onClose.bind(this);
+        this.onBeforeFileLoad = this.onBeforeFileLoad.bind(this);
+    }
+
+    onBeforeFileLoad(elem) {
+        this.setState({file:  elem.target.files[0]});
+        this.props.updateNewUserAvatar(elem.target.files[0]);
+    }
+
+    componentWillMount() {
+    }
+
+    componentDidMount(){
+        this.props.onRef(this);
+    }
+
+    componentWillUnmount() {
+
+        this.props.onRef(undefined);
     }
 
     onClose() {
@@ -56,12 +72,11 @@ class UserAvatar extends React.Component {
     }
     onChoosed = (e) => {
         this.setState({imageChoosed: true});
-    }
+    };
     onPhotoChange = (e) => {
         this.setState({preview: null});
         this.setState({imageChoosed: false});
-        console.log(this.state.src);
-    }
+    };
 
     render () {
         const {classes} = this.props;
@@ -73,12 +88,12 @@ class UserAvatar extends React.Component {
                             width={180}
                             height={180}
                             imageWidth={180}
-                            imageHeight={180}
                             onCrop={this.onCrop}
                             onClose={this.onClose}
                             label = {"Choose User Photo"}
                             backgroundColor={"primary"}
                             src={this.state.src ? "" : this.state.src}
+                            onBeforeFileLoad={this.onBeforeFileLoad}
                         />
                     )}
                     {this.state.preview && this.state.imageChoosed === false &&(
@@ -120,7 +135,7 @@ class UserAvatar extends React.Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        // openUsersForm : Actions.openUsersForm
+        updateNewUserAvatar : Actions.updateNewUserAvatar
     }, dispatch);
 }
 

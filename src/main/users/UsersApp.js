@@ -1,16 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import {
     Icon,
-    IconButton,
-    Fab,
     Typography,
-    Toolbar,
-    CircularProgress,
-    Menu,
-    MenuItem,
-    Checkbox,
-    FormControlLabel,
-    Tooltip,
     Button
 } from '@material-ui/core';
 import {FusePageCustomSidebarScroll, FuseAnimate} from '@fuse';
@@ -32,6 +23,11 @@ import UsersSidebarContent from "./UsersSidebarContent";
 import UsersForm from "./UsersForm";
 import FusePageUsersCustom from "../../@fuse/components/FusePageLayouts/FusePageUsersCustom";
 
+
+import axios from 'axios';
+
+const axios_instance = axios.create({
+    headers: {'Content-Type': 'multipart/form-data'}});
 
 const headerHeight = 80;
 
@@ -57,41 +53,11 @@ const styles = theme => ({
         '& .-pageSizeOptions': {
             display: 'none'
         },
-        '& .ReactTable .rt-noData': {
-            top: '250px',
-            border: '1px solid coral'
-        },
-        '& .ReactTable .rt-thead.-headerGroups': {
-            paddingLeft: '0!important',
-            paddingRight: '0!important',
-            minWidth: 'inherit!important'
-        },
-        '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
-            background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
-            color: 'white!important'
-        },
         '& .openFilter': {
             width: 'inherit'
         },
         '& .openSummary': {
             width: 300
-        },
-        '& .ReactTable .rt-tbody': {
-            overflowY: 'scroll',
-            overflowX: 'hidden'
-        },
-        '& .ReactTable .rt-tr-group': {
-            flex: '0 0 auto'
-        },
-        '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
-            justifyContent: 'center'
-        },
-        '& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
-            width: 'inherit!important',
-            minWidth: 'inherit!important',
-        },
-        '& .ReactTable .rt-thead .rt-th:last-child': {
-            justifyContent: 'flex-end'
         },
         '& .p-12-impor': {
             paddingLeft: '1.2rem!important',
@@ -241,13 +207,13 @@ class UsersApp extends Component {
 
 
     state = {
-       openUsersFormStatus: false,
+        openUsersFormStatus: false,
         HeaderIcon : null
     };
 
     componentWillMount() {
         this.setState({
-           "openUsersFormStatus": this.props.openUsersFormStatus
+            "openUsersFormStatus": this.props.openUsersFormStatus
         });
         this.props.nav.map(item=>{
             if(item.TabName==="Settings"){
@@ -270,14 +236,38 @@ class UsersApp extends Component {
         this.setState({
             "openUsersFormStatus": param
         })
-    }
+    };
+
+    uploadAvatar = () => {
+        const formData = new FormData();
+        formData.append('file',this.props.newUserAvatar);
+        formData.append('upload_preset','mjsn2xvg');
+        formData.append('source','uw');
+
+        axios_instance.post('https://api.cloudinary.com/v1_1/janiking/upload',
+            formData
+        )
+            .then(response=> {
+                if(response.status===200) {
+                    console.log('url=', response.data.url);
+                    this.props.setNewUserAvatarURL(response.data.url);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    };
 
     save =  () => async (ev)=>{
-        //console.log("Saved...")
-       await this.props.createUser(this.props.insertPayload);
-       await this.setState({"openUsersFormStatus": false});
-       await this.props.openUsersForm(false);
-    }
+        if(this.props.newUserAvatar!==null)
+            await this.uploadAvatar();
+
+        console.log('result=', this.props.insertPayload);
+
+        await this.props.createUser(this.props.insertPayload);
+        await this.setState({"openUsersFormStatus": false});
+        await this.props.openUsersForm(false);
+    };
 
     render() {
 
@@ -309,32 +299,32 @@ class UsersApp extends Component {
                                             )}
                                             {openUsersFormStatus && (
                                                 <Typography variant="h6" className="hidden sm:flex">Settings |
-                                                   Add New User</Typography>
+                                                    Add New User</Typography>
                                             )}
                                         </div>
                                     </div>
                                     <div className="flex flex-shrink items-center">
-                                           {! openUsersFormStatus && (
-                                                <Button variant="contained" color="primary"
-                                                className={classNames(classes.button, classes.btntop) } onClick={this.toggleForm(true)}>
+                                        {! openUsersFormStatus && (
+                                            <Button variant="contained" color="primary"
+                                                    className={classNames(classes.button, classes.btntop) } onClick={this.toggleForm(true)}>
                                                 Add New User
                                                 <Icon className={classes.rightIcon}>add</Icon>
+                                            </Button>
+                                        )}
+                                        { openUsersFormStatus && (
+                                            <div>
+                                                <Button variant="contained" color="primary"
+                                                        className={classNames(classes.button, classes.btntop) } onClick={this.save()}>
+                                                    Save
+                                                    <Icon className={classes.rightIcon}>save</Icon>
                                                 </Button>
-                                            )}
-                                            { openUsersFormStatus && (
-                                                <div>
-                                                    <Button variant="contained" color="primary"
-                                                            className={classNames(classes.button, classes.btntop) } onClick={this.save()}>
-                                                        Save
-                                                        <Icon className={classes.rightIcon}>save</Icon>
-                                                    </Button>
-                                                    <Button variant="contained" color="primary"
-                                                            className={classNames(classes.button, classes.btntop) } onClick={this.toggleForm(false)}>
-                                                        Close
-                                                        <Icon className={classes.rightIcon}>close</Icon>
-                                                    </Button>
-                                                </div>
-                                            )}
+                                                <Button variant="contained" color="primary"
+                                                        className={classNames(classes.button, classes.btntop) } onClick={this.toggleForm(false)}>
+                                                    Close
+                                                    <Icon className={classes.rightIcon}>close</Icon>
+                                                </Button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
@@ -343,9 +333,9 @@ class UsersApp extends Component {
                     }
                     content={
                         <div className="flex-1 flex-col absolute w-full h-full">
-                          <Fragment>
-                            <UsersList/>
-                          </Fragment>
+                            <Fragment>
+                                <UsersList/>
+                            </Fragment>
                         </div>
                     }
                     leftSidebarHeader={
@@ -373,8 +363,9 @@ class UsersApp extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        openUsersForm       : Actions.openUsersForm,
-        createUser: Actions.createUser
+        openUsersForm: Actions.openUsersForm,
+        createUser: Actions.createUser,
+        setNewUserAvatarURL: Actions.setNewUserAvatarURL,
     }, dispatch);
 }
 
@@ -384,7 +375,8 @@ function mapStateToProps({ usersApp,fuse})
         openUsersFormStatus  : usersApp.users.openUsersFormStatus,
         filterState: usersApp.users.fpStatus,
         nav: fuse.navigation,
-        insertPayload: usersApp.users.payload
+        insertPayload: usersApp.users.payload,
+        newUserAvatar: usersApp.users.newUserAvatar,
     }
 }
 
