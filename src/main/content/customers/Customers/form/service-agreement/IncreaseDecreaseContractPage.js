@@ -1018,7 +1018,7 @@ class IncreaseDecreaseContractPage extends React.Component {
 								x.MonthlyBilling.map((m, mIndex) => (
 									<div key={mIndex} className={classNames("flex w-full")} style={{ alignItems: 'bottom' }}>
 
-										<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="body2">{x.FranchiseeNumber}</Typography>
+										<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption">{x.FranchiseeNumber}</Typography>
 										<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption">{x.Name}</Typography>
 
 

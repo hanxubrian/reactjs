@@ -1003,7 +1003,6 @@ class FilterPanel extends Component {
 			}).sort();
 		}
 
-
 		return (
 			<div className={classNames(classes.root, "flex flex-col")}>
 				{/* <div className={classNames("flex flex-col")}> */}
@@ -1292,7 +1291,7 @@ class FilterPanel extends Component {
 														<TextField
 															id="MonthlyBilling"
 															label="Monthly Billing"
-															value={x.MonthlyBilling}
+															value={x.MonthlyBilling && x.MonthlyBilling.length > 0 ? x.MonthlyBilling.map(x => x.MonthlyBilling).reduce((a, b) => a + b, 0) : ''}
 															className="pl-6"
 															InputLabelProps={{ shrink: true }}
 															InputProps={{ readOnly: true }}

@@ -769,6 +769,26 @@ class LogCallModalForm extends React.Component {
 		this.setState({ EmailNotesTo: value });
 	};
 
+	handleCreateCustomerCollection = () => {
+		const data = {
+			"_id": "sample string 1",
+			"cust_name": "sample string 2",
+			"call_com": "sample string 3",
+			"sys_cust": 4,
+			"cust_no": "sample string 5",
+			"call_date": "sample string 6",
+			"call_time": "sample string 7",
+			"call_stat": 8,
+			"stat_otr": "sample string 9",
+			"spoke_with": "sample string 10",
+			"call_back": "sample string 11",
+			"call_btime": "sample string 12",
+			"action": 13,
+			"action_otr": "sample string 14"
+		}
+		this.props.customerCollectionCreate(this.props.regionId, data)
+	}
+
 	render() {
 		const { classes } = this.props;
 		const { customerServiceTypes } = this.state;
@@ -969,7 +989,7 @@ class LogCallModalForm extends React.Component {
 					</DialogContent>
 
 					<DialogActions>
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Save</Button>
+						<Button variant="contained" onClick={this.handleCreateCustomerCollection} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-12")}>Save</Button>
 						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mb-12 mr-24")}>Close</Button>
 
 					</DialogActions>
@@ -987,6 +1007,8 @@ function mapDispatchToProps(dispatch) {
 		showLogCallModalForm: Actions.showLogCallModalForm,
 
 		getLogCallCustomerServiceTypes: Actions.getLogCallCustomerServiceTypes,
+
+		customerCollectionCreate: Actions.customerCollectionCreate,
 	}, dispatch);
 }
 
