@@ -307,7 +307,7 @@ class PaymentLogDetail extends Component {
         return (
             <div className={classNames(classes.root, "p-0 sm:p-64  whole print:p-0")} id ="wholediv">
                 <div id ="testdiv" className="cardname">
-                    <div className="w-full mt-16" style={{borderBottom: '4px double'}}>
+                    <div className="w-full pb-16" style={{borderBottom: '4px double'}}>
                         {this.renderHeader()}
                     </div>
                     <div className={classNames("flex flex-col")}>
