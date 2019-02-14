@@ -274,108 +274,7 @@ class UsersForm extends React.Component {
             IsFirstTimeLogin: "",
             Salt: "",
             OutlookPassword: "",
-            Apps: [
-                {
-                    _id: "",
-                    AppId: 2,
-                    Menus: [
-                        {
-                            MenuId: 1,
-                            Title: "",
-                            Children: [
-                                {
-                                    MenuId: 1,
-                                    View: false,
-                                    Create: false,
-                                    Delete: false,
-                                    Edit: false,
-                                    Execute: false
-                                },
-                                {
-                                    MenuId: 1,
-                                    View: false,
-                                    Create: false,
-                                    Delete: false,
-                                    Edit: false,
-                                    Execute: false
-                                }
-                            ]
-                        },
-                        {
-                            MenuId: 1,
-                            Title: "",
-                            Children: [
-                                {
-                                    MenuId: 1,
-                                    View: false,
-                                    Create: false,
-                                    Delete: false,
-                                    Edit: false,
-                                    Execute: false
-                                },
-                                {
-                                    MenuId: 1,
-                                    View: false,
-                                    Create: false,
-                                    Delete: false,
-                                    Edit: false,
-                                    Execute: false
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    _id: "",
-                    AppId: 2,
-                    Menus: [
-                        {
-                            MenuId: 1,
-                            Title: "",
-                            Children: [
-                                {
-                                    MenuId: 1,
-                                    View: false,
-                                    Create: false,
-                                    Delete: false,
-                                    Edit: false,
-                                    Execute: false
-                                },
-                                {
-                                    MenuId: 1,
-                                    View: false,
-                                    Create: false,
-                                    Delete: false,
-                                    Edit: false,
-                                    Execute: false
-                                }
-                            ]
-                        },
-                        {
-                            MenuId: 1,
-                            Title: "",
-                            Children: [
-                                {
-                                    MenuId: 1,
-                                    View: false,
-                                    Create: false,
-                                    Delete: false,
-                                    Edit: false,
-                                    Execute: false
-                                },
-                                {
-                                    MenuId: 1,
-                                    View: false,
-                                    Create: false,
-                                    Delete: false,
-                                    Edit: false,
-                                    Execute: false
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ],
+            Apps: [],
             Groups: [],
             UserId: 6,
             UserName: "",
@@ -421,12 +320,17 @@ class UsersForm extends React.Component {
         if(this.props.payload.UserId !== this.props.userId){
             this.updateUserFormPayload("UserId", this.props.userId);
         }
+        
+    }
+
+    componentDidMount(){
         if(this.props.regions !== null){
+            console.log("Regions",this.props.regions);
             this.props.regions.map(x=>{
-                this.state.MultiRegion.push(x.Name);
+                this.state.MultiRegion.push(x.regionname);
                 this.state.DefaultRegions.push({
-                    "RegionId": x.RegionId,
-                    "Name":x.Name,
+                    "RegionId": x.regionid,
+                    "Name":x.regionname,
                     "Arcrym":"",
                     "DisplayName":""
                 });
@@ -498,6 +402,11 @@ class UsersForm extends React.Component {
                 });
             }
         }
+        if ( nextProps.payload !== this.props.payload){
+            this.setState({
+                payload: nextProps.payload
+            });
+        }
     }
 
     handleChange = name => event => {
@@ -506,9 +415,8 @@ class UsersForm extends React.Component {
 
         if(name === "Groups" || name === "Regions" || name ==="Roles"){
             if(name === "Groups"){
-                let temp = event.target.value;
                 let changedGroups = [];
-                temp.map(x=>{
+                event.target.value.map(x=>{
                     this.props.userGroupList.map(y=>{
                         if(x === y.name){
                             changedGroups.push(y.group_id);
@@ -518,9 +426,9 @@ class UsersForm extends React.Component {
                 this.updateUserFormPayload(name,changedGroups);
             }
             if(name === "Regions") {
-                let temp = event.target.value;
+                
                 let changedRegions = [];
-                temp.map(x=>{
+                event.target.value.map(x=>{
                     this.props.regions.map(y=>{
                         if(x === y.regionname){
                             changedRegions.push({
@@ -532,13 +440,11 @@ class UsersForm extends React.Component {
                         }
                     })
                 })
-                console.log("regions",changedRegions);
                 this.updateUserFormPayload(name,changedRegions);
             }
             if(name === "Roles") {
-                let temp = event.target.value;
                 let changedRoles = [];
-                temp.map(x=>{
+                event.target.value.map(x=>{
                     this.props.userRoleList.map((y,index)=>{
                         if(x === y.name){
                             changedRoles.push(

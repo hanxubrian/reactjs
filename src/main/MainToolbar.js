@@ -607,7 +607,7 @@ class MainToolbar extends Component {
                                 >
                                     {this.props.login.all_regions.map((region, index)=>{
                                         return (
-                                            <MenuItem key={index} style={{paddingLeft: '10px'}} value={region.RegionId}>{region.Name}</MenuItem>
+                                            <MenuItem key={index} style={{paddingLeft: '10px'}} value={region.regionid}>{region.regionname}</MenuItem>
                                         );
                                     })}
                                 </Select>

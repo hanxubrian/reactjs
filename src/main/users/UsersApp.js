@@ -238,13 +238,13 @@ class UsersApp extends Component {
         })
     };
 
-    uploadAvatar = () => {
+    uploadAvatar = async () => {
         const formData = new FormData();
         formData.append('file',this.props.newUserAvatar);
         formData.append('upload_preset','mjsn2xvg');
         formData.append('source','uw');
 
-        axios_instance.post('https://api.cloudinary.com/v1_1/janiking/upload',
+        await axios_instance.post('https://api.cloudinary.com/v1_1/janiking/upload',
             formData
         )
             .then(response=> {

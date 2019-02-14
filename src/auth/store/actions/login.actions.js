@@ -25,7 +25,7 @@ export function submitSignIn(email, password, url)  {
             console.log("res",res);
             if (res.IsSuccess) {
                 let regions = await authService.getRegions(res.Data.UserId);
-                res.Regions = regions;
+                res.Data.Regions = regions;
                 let navigations = await menuService.loadAccountMenu(url,res.Data.UserId);
                 dispatch({
                     type: LOGIN_SUCCESS,
@@ -38,7 +38,7 @@ export function submitSignIn(email, password, url)  {
             } else {
                 dispatch({
                     type: LOGIN_ERROR,
-                    payload: res.response.data.Message
+                    payload: res.Message
                 })
             }
         })();
