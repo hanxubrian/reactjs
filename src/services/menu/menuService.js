@@ -34,7 +34,7 @@ class menuService {
               break
             case "itdept.local":
                 return new Promise((resolve, reject) => {
-                    axios_instance.get(`${BASE_MONGO_API_URL}/v1/menu/get/?appid=${urlObj["itdept.local"]}&userId=${userId}`)
+                    axios_instance.get(`${BASE_MONGO_API_URL}/v1/apps/menuoption?appid=${urlObj["itdept.local"]}&userId=${userId}`)
                         .then( res => {
                             if(res.status===200) {
                                 resolve(res.data);
@@ -47,7 +47,7 @@ class menuService {
               break
             case "franport.local":
               return new Promise((resolve, reject) => {
-                  axios_instance.get(`${BASE_MONGO_API_URL}/v1/menu/get/?appid=${urlObj["franport.local"]}&userId=${userId}`)
+                  axios_instance.get(`${BASE_MONGO_API_URL}/v1/apps/menuoption?appid=${urlObj["franport.local"]}&userId=${userId}`)
                       .then( res => {
                           if(res.status===200) {
                               resolve(res.data);
@@ -60,7 +60,7 @@ class menuService {
             break
 			default:
 				return new Promise((resolve, reject) => {
-					axios_instance.get(`${BASE_MONGO_API_URL}/v1/menu/get/?appid=2&userId=${userId}`)
+					axios_instance.get(`${BASE_MONGO_API_URL}/v1/apps/menuoption?appid=2&userId=${userId}`)
 						.then(res => {
 							if (res.status === 200) {
 								resolve(res.data);
