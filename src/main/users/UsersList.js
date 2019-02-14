@@ -33,7 +33,8 @@ import {
     TableSelection,
     PagingPanel,
     TableFilterRow,
-    DragDropProvider
+    DragDropProvider,
+    TableColumnResizing,
 
 } from '@devexpress/dx-react-grid-material-ui';
 
@@ -324,9 +325,9 @@ class UsersList extends Component {
             tableColumnExtensions: [
                 {
                     title: "First Name",
-                    name: "firstName",
-                    columnName: "firstName",
-                    // width: 100,
+                    name: "FirstName",
+                    columnName: "FirstName",
+                    width: 150,
                     wordWrapEnabled: true,
                     sortingEnabled: true,
                     filteringEnabled: true,
@@ -334,27 +335,54 @@ class UsersList extends Component {
                 },
                 {
                     title: "Last Name",
-                    name: "lastName",
-                    columnName: "lastName",
-                    // width: 150,
+                    name: "LastName",
+                    columnName: "LastName",
+                    width: 150,
                     sortingEnabled: true,
                     filteringEnabled: true,
                     groupingEnabled: false,
                 },
                 {
                     title: "Email",
-                    name: "email",
-                    columnName: "email",
-                    // width: 250,
+                    name: "Email",
+                    columnName: "Email",
+                    width: 200,
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                },
+                {
+                    title: "Phone",
+                    name: "Phone",
+                    columnName: "Phone",
+                    width: 200,
                     sortingEnabled: true,
                     filteringEnabled: true,
                     groupingEnabled: false,
                 },
                 {
                     title: "Address",
-                    name: "address",
-                    columnName: "address",
-                    // width: 120,
+                    name: "Address1",
+                    columnName: "Address1",
+                    width: 400,
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                },
+                {
+                    title: "User Type",
+                    name: "UserType",
+                    columnName: "UserType",
+                    width: 200,
+                    sortingEnabled: true,
+                    filteringEnabled: true,
+                    groupingEnabled: false,
+                },
+                {
+                    title: "Action",
+                    name: "Action",
+                    columnName: "Action",
+                    width: 200,
                     sortingEnabled: true,
                     filteringEnabled: true,
                     groupingEnabled: false,
@@ -396,7 +424,7 @@ class UsersList extends Component {
         this.changeSearchValue = value => this.setState({ searchValue: value });
         this.changeGrouping = grouping => this.setState({ grouping });
         console.log("constructor");
-        props.getContacts();
+        props.getUsersList(props.regionId,[],[],"");
     }
     //
     // to edit table cell
@@ -465,20 +493,19 @@ class UsersList extends Component {
 
 
     componentWillMount() {
-        this.props.getContacts();
-        this.props.getUsersList(this.props.regionId,[1,2],[1,2],"");
+        this.props.getUsersList(this.props.regionId,[],[],"");
     }
     
 
     componentWillReceiveProps(nextProps, nextContext) {
-        if(nextProps.contacts !== this.props.contacts){
-            let obj = nextProps.contacts;
+        if(nextProps.usersList !== this.props.usersList){
+            let obj = nextProps.usersList;
             this.setState({
                 rows: Object.values(obj)
             });
         }
         if(nextProps.usersList !== this.props.usersList){
-            console.log(nextProps.usersList);
+            console.log("usersList",nextProps.usersList);
         }
     }
 
@@ -520,14 +547,11 @@ class UsersList extends Component {
                 });
                 return (
                     <Table.Cell>
-                        <IconButton className={classes.iconButton} onClick={this.openVerificationDialog} aria-label="Verify">
-                            <Icon>verified_user</Icon>
+                        <IconButton className={classes.iconButton}  aria-label="Verify">
+                            <Icon>edit</Icon>
                         </IconButton>
-                        <IconButton className={classes.iconButton} onClick={this.openRejectDialog} aria-label="Reject">
-                            <Icon>close</Icon>
-                        </IconButton>
-                        <IconButton className={classes.iconButton} onClick={this.openReviseDialog} aria-label="Request Changes">
-                            <Icon>rotate_90_degrees_ccw</Icon>
+                        <IconButton className={classes.iconButton} aria-label="Reject">
+                            <Icon>delete</Icon>
                         </IconButton>
                     </Table.Cell>
                 )
@@ -657,7 +681,7 @@ class UsersList extends Component {
                                 {/*/>*/}
                                 <Table rowComponent={this.TableRow} cellComponent={this.getCell} />
 
-                                {/*<TableColumnResizing defaultColumnWidths={tableColumnExtensions} />*/}
+                                <TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
 
                                 <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
 
@@ -703,19 +727,18 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         getUsersList: Actions.getUsersList,
-        getContacts             : Actions.getContacts,
         updateSelectRows: Actions.updateSelectRows
 
     }, dispatch);
 }
 
-function mapStateToProps({usersApp})
+function mapStateToProps({usersApp,auth})
 {
     return {
-        contacts                   : usersApp.contacts.entities,
         selectedRows               : usersApp.users.selectedRows,
         openUsersFormStatus  : usersApp.users.openUsersFormStatus,
-        usersList: usersApp.users.usersList
+        usersList: usersApp.users.usersList,
+        regionId : auth.login.defaultRegionId,
     }
 }
 
