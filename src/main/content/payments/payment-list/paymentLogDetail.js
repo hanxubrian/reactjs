@@ -179,6 +179,9 @@ export const TableComponent = withStyles(styles, { name: 'TableComponent' })(Tab
 export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
 
 class PaymentLogDetail extends Component {
+    state={
+        data: []
+    };
 
     componentDidMount()
     {
@@ -188,6 +191,12 @@ class PaymentLogDetail extends Component {
 
         this.props.onRef(undefined);
     }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.paymentLogList !== prevProps.paymentLogList)
+            this.setState({data: this.props.paymentLogList})
+    }
+
 
     TableRow = ({ tableRow, selected, onToggle, ...restProps }) => {
         return (
@@ -292,16 +301,18 @@ class PaymentLogDetail extends Component {
             { columnName: 'FranchiseeNo', width: 120},
             { columnName: 'Amount', width: 120,  align: 'right'},
         ];
+        if(this.props.paymentLogList===null)
+            return (<div/>)
 
         return (
             <div className={classNames(classes.root, "p-0 sm:p-64  whole print:p-0")} id ="wholediv">
                 <div id ="testdiv" className="cardname">
-                    <div className="w-full" style={{borderBottom: '4px double'}}>
+                    <div className="w-full mt-16" style={{borderBottom: '4px double'}}>
                         {this.renderHeader()}
                     </div>
                     <div className={classNames("flex flex-col")}>
                         <Grid
-                            rows={this.props.paymentLogList}
+                            rows={this.state.data}
                             columns={columns}
                         >
                             <CurrencyTypeProvider
