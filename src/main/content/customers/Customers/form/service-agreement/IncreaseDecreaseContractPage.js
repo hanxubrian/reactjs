@@ -844,12 +844,20 @@ class IncreaseDecreaseContractPage extends React.Component {
 
 		return (
 			<>
-				<div className={classNames("flex mt-12 justify-start")}>
+				<div className={classNames("flex mt-12 justify-between")}>
+
 					<TextField margin="dense" id="SA_Amount" label="Current Contract Amount" value={this.state.SA_Amount}
 						InputLabelProps={{ shrink: true }}
 						className={classNames(classes.textField, "pr-6")}
+						style={{ minWidth: 200 }}
 						InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
 					/>
+
+					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+						<Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Franchisee Distribution<Icon>keyboard_arrow_right</Icon></Button>
+						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
+					</div>
+
 				</div>
 
 				<div className={classNames("flex mt-12 justify-start")}>
@@ -912,6 +920,7 @@ class IncreaseDecreaseContractPage extends React.Component {
 			franchiseeServiceTypes,
 
 			franchieesesToOffer,
+			step,
 		} = this.state
 
 
@@ -929,7 +938,7 @@ class IncreaseDecreaseContractPage extends React.Component {
 
 		return (
 			<>
-				<div className={classNames("flex mt-12 justify-start")}>
+				<div className={classNames("flex mt-12 justify-between")}>
 					<TextField margin="dense" id="Monthly Billing Amount" label="Monthly Billing Amount"
 						InputLabelProps={{ shrink: true }}
 						className={classNames(classes.textField, "pr-6")}
@@ -937,8 +946,14 @@ class IncreaseDecreaseContractPage extends React.Component {
 						value={this.state.NewAmount || ''}
 						onChange={this.handleChange("NewAmount")}
 					/>
+
+					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+						{step === 1 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>}
+						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
+					</div>
 				</div>
-				<Typography className="mb-12" variant="subtitle1"><strong>Assigned Franchisees</strong></Typography>
+
+				<Typography className="mb-12 mt-12" variant="subtitle1"><strong>Assigned Franchisees</strong></Typography>
 				<div className={classNames("flex flex-col w-full")}>
 					<div className={classNames("flex w-full")}>
 						{franHeaders.map((f, findex) => (
@@ -1119,11 +1134,6 @@ class IncreaseDecreaseContractPage extends React.Component {
 			<>
 				{/* {step === 0 && <h2 style={{ display: "flex", alignItems: "center", color: "white" }}><Icon>account_balance</Icon>&nbsp;&nbsp;Increase / Decrease Contract Amount</h2>} */}
 				{/* {step === 1 && <h2 style={{ display: "flex", alignItems: "center", color: "white" }}><Icon>account_balance</Icon>&nbsp;&nbsp;Increase / Decrease Contract Amount</h2>} */}
-				<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-					{step === 0 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Franchisee Distribution<Icon>keyboard_arrow_right</Icon></Button>}
-					{step === 1 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>}
-					<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
-				</div>
 
 				{/* <Divider variant="middle" style={{ marginTop: 10, marginBottom: 10, width: '50%', alignSelf: 'center', marginLeft: 'auto', marginRight: 'auto' }} /> */}
 
