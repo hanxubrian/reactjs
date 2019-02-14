@@ -949,6 +949,7 @@ class IncreaseDecreaseContractPage extends React.Component {
 
 					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
 						{step === 1 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>}
+						<Button variant="contained" color="primary" className={classNames("pl-24 pr-24 mr-12")}>Finders Fees</Button>
 						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
 					</div>
 				</div>
@@ -1103,7 +1104,7 @@ class IncreaseDecreaseContractPage extends React.Component {
 						<Table />
 						{/* <VirtualTable height="auto" /> */}
 
-						{/* <TableColumnResizing defaultColumnWidths={columns} /> */}
+						<TableColumnResizing defaultColumnWidths={columns} />
 
 						<TableSelection showSelectAll selectByRowClick highlightRow />
 						<TableHeaderRow showSortingControls />
