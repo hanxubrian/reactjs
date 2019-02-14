@@ -499,6 +499,15 @@ class InvoiceApp extends Component {
                                                     <Icon className={classes.rightIcon}>add</Icon>
                                                 </Button>
                                             </FuseAnimate>
+                                            <FuseAnimate animation="transition.expandIn" delay={300}>
+                                                <Button variant="contained" color="primary"
+                                                        className={classNames(classes.btntop, classes.btntop)}
+                                                        onClick={()=>this.props.getInvoices([this.props.regionId] ,this.props.StatusId, this.props.FromDate, this.props.ToDate,
+                                                            this.props.PeriodId,this.props.OpenOrClosed, this.props.InvoiceTypeId, this.props.ToPrintOrToEmail, this.props.SearchText)}>
+                                                    Refresh
+                                                    <Icon className={classes.rightIcon}>refresh</Icon>
+                                                </Button>
+                                            </FuseAnimate>
                                         </div>
                                     </div>
                                 </div>
