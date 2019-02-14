@@ -257,16 +257,16 @@ class PaymentLogDetail extends Component {
                     <Typography className="mt-16" color="inherit" >* <i>Indicates invoice applied</i></Typography>
                     <Typography color="inherit" ><i>to non-default franchisee.</i></Typography>
                 </Grid1>
-                <Grid1 item sm={7} className="text-center">
+                <Grid1 item sm={6} className="text-center">
                     <Typography variant={"h1"} color="inherit">Janiking of Bufflo, Inc.</Typography>
                     <Typography color="inherit" variant={"h2"}>
                         Accounts Receivable Log
                     </Typography>
                     <Typography color="inherit" variant={"h3"}>Deposit Date: {moment(this.props.logDate).format('MM/DD/YYYY')} </Typography>
                 </Grid1>
-                <Grid1 item sm={2} className="text-right" width='200'>
+                <Grid1 item sm={3} className="text-right" width='200'>
                     <Typography color="inherit">
-                        <img src="https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png" alt=""/>
+                        {/*<img src="https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png" alt=""/>*/}
                     </Typography>
                 </Grid1>
             </Grid1>

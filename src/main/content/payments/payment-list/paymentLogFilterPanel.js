@@ -44,7 +44,7 @@ class FilterPanel extends Component {
 
     componentDidMount()
     {
-        this.setState({logDate: this.props.logDate});
+        this.setState({logDate: moment(this.props.logDate).format("MM/DD/YYYY")});
     }
 
     componentWillMount(){
