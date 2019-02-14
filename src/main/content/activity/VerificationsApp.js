@@ -245,6 +245,8 @@ class VerificationsApp extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
 
         if (this.props.regionId !== prevProps.regionId ||
+            this.props.fromDate !== prevProps.fromDate ||
+            this.props.toDate !== prevProps.toDate ||
             this.props.statusId !== prevProps.statusId) {
             this.setState({
                 regionId: this.props.regionId,

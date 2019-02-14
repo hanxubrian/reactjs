@@ -574,4 +574,3 @@ function mapStateToProps({ customers, auth, verifications, transactions }) {
 }
 
 export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceLists)));
-
