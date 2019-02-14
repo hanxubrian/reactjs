@@ -331,7 +331,7 @@ class VerificationTransactionListContent extends Component {
                 });
                 return (
                     <Table.Cell style={{textAlign: 'center'}}>
-                        <IconButton className={classes.iconButton} onClick={()=>this.openVerificationDialog(props.row.EntityObject_id)} aria-label="Verify">
+                        <IconButton className={classes.iconButton} onClick={()=>this.openVerificationDialog(props.row._id)} aria-label="Verify">
                             <Icon>verified_user</Icon>
                         </IconButton>
                         <IconButton className={classes.iconButton} onClick={this.openRejectDialog} aria-label="Reject">
@@ -382,7 +382,7 @@ class VerificationTransactionListContent extends Component {
     openVerificationDialog = (obj_id) => {
         let objects=[];
         this.state.data.forEach((x, index)=> {
-                if (x.EntityObject_id === obj_id)
+                if (x._id === obj_id)
                     objects.push(index);
             }
         );

@@ -137,10 +137,8 @@ class VerifiedDialogForm extends React.Component {
 
       let ids = [];
       objects.forEach(obj=>{
-          ids.push(obj.EntityObject_id);
+          ids.push(obj._id);
       });
-
-      console.log('submit=',this.props.regionId, userId, action, ids);
 
       this.props.verifyBulkUpdate(this.props.regionId, userId, action, ids);
     };
