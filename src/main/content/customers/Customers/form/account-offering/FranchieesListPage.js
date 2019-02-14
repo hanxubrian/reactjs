@@ -899,7 +899,7 @@ class FranchieesListPage extends Component {
 											<Table />
 											{/* <VirtualTable height="auto" /> */}
 
-											{/* <TableColumnResizing defaultColumnWidths={columns} /> */}
+											<TableColumnResizing defaultColumnWidths={columns} />
 
 											<TableSelection showSelectAll selectByRowClick highlightRow />
 											<TableHeaderRow showSortingControls />
@@ -914,16 +914,6 @@ class FranchieesListPage extends Component {
 											<SearchPanel />
 											<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
 										</Grid>
-
-										<div className={classNames(classes.layoutTable, "flex flex-row")} style={{ justifyContent: "space-between" }}>
-											<span className={"p-6"}>
-												Rows Selected: <strong>{selection.length}</strong>
-											</span>
-
-											<span className={"p-6"}>
-												Total Rows: <strong>{rows.length}</strong>
-											</span>
-										</div>
 									</div>
 									)}
 							</Paper>
