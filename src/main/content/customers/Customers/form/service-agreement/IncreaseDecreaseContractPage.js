@@ -869,18 +869,32 @@ class IncreaseDecreaseContractPage extends React.Component {
 					/>
 				</div>
 
+				<div className="flex w-full" style={{ alignItems: 'center' }}>
+					<TextField
+						type="date"
+						id="EffectiveDate"
+						value={this.state.EffectiveDate}
+						label="Effective Date"
+						className={classNames(classes.textField, 'ml-24')}
+						InputLabelProps={{ shrink: true }}
+						value={this.state.EffectiveDate}
+						onChange={this.handleChange('EffectiveDate')}
+						margin="dense"
+					/>
+				</div>
+
 			</>
 		)
 	}
 	ToolbarRootBase = ({ children, classes, className, ...restProps }) => (
 		<Toolbar.Root
 			className={classNames(className, classes.franchiseeGridToolbar)}
+			style={{ flexDirection: "row-reverse" }}
 			{...restProps}
 
 		>
-			{/* <IconButton onClick={this.toggleSideBar}>
-				<Icon>menu</Icon>
-			</IconButton> */}
+			<Button variant="contained" color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>add</Icon>Add</Button>
+
 			{children}
 		</Toolbar.Root>
 	);
@@ -910,8 +924,7 @@ class IncreaseDecreaseContractPage extends React.Component {
 			{ width: 12, title: 'Billing', field: '' },
 			{ width: 12, title: 'Service', field: '' },
 			{ width: 24, title: 'Description', field: '' },
-			{ width: 8, title: 'Amount', field: '' },
-			{ width: 3, title: '', field: '' },
+			{ width: 11, title: 'Amount', field: '' },
 		]
 
 		return (
@@ -925,7 +938,7 @@ class IncreaseDecreaseContractPage extends React.Component {
 						onChange={this.handleChange("NewAmount")}
 					/>
 				</div>
-				<Typography className="mb-12" variant="subtitle1">Franchisees</Typography>
+				<Typography className="mb-12" variant="subtitle1"><strong>Assigned Franchisees</strong></Typography>
 				<div className={classNames("flex flex-col w-full")}>
 					<div className={classNames("flex w-full")}>
 						{franHeaders.map((f, findex) => (
@@ -954,7 +967,12 @@ class IncreaseDecreaseContractPage extends React.Component {
 											className="pl-6"
 											value={m.BillingFrequency}
 											select
-										// InputProps={{ readOnly: true }}
+											InputProps={{
+												readOnly: false,
+												classes: {
+													input: classes.descriptionText,
+												},
+											}}
 										>
 											{[
 												{ label: 'Variable', value: 'V' },
@@ -967,7 +985,12 @@ class IncreaseDecreaseContractPage extends React.Component {
 											className="pl-6"
 											value="Regular Billing"
 											select
-											InputProps={{ readOnly: true }}
+											InputProps={{
+												readOnly: true,
+												classes: {
+													input: classes.descriptionText,
+												},
+											}}
 										>
 											{franchiseeBillingTypes.map((x, index) => (<MenuItem key={index} value={x.Name}>{x.Name}</MenuItem>))}
 										</TextField>
@@ -975,8 +998,15 @@ class IncreaseDecreaseContractPage extends React.Component {
 										<TextField style={{ width: franHeaders[5].width + '%' }}
 											margin="dense"
 											className="pl-6"
-											value=""
+											value={this.state[`ServiceTypeStates${index}-${mIndex}`] || ''}
 											select
+											InputProps={{
+												readOnly: false,
+												classes: {
+													input: classes.descriptionText,
+												},
+											}}
+											onChange={this.handleChange(`ServiceTypeStates${index}-${mIndex}`)}
 										>
 											{franchiseeServiceTypes.map((x, index) => (<MenuItem key={index} value={x.Name}>{x.Name}</MenuItem>))}
 										</TextField>
@@ -998,15 +1028,19 @@ class IncreaseDecreaseContractPage extends React.Component {
 								className="pl-6"
 							/> */}
 										<TextField style={{ width: franHeaders[7].width + '%' }}
-											type='number'
-											InputProps={{ startAdornment: <InputAdornment position="end" className="mr-4">$</InputAdornment> }}
+											// type='number'
+											InputProps={{
+												readOnly: false,
+												classes: {
+													input: classes.descriptionText,
+												},
+												startAdornment: <InputAdornment position="end" className="mr-4">$</InputAdornment>
+											}}
 											margin="dense"
 											className="pl-6"
-											value={m.MonthlyBilling}
+											value={this.state[`MonthlyBilling${index}-${mIndex}`] || m.MonthlyBilling}
+											onChange={this.handleChange(`MonthlyBilling${index}-${mIndex}`)}
 										/>
-										<div style={{ width: franHeaders[8].width + '%' }}>
-											<IconButton><Icon>filter_none</Icon></IconButton>
-										</div>
 
 									</div>
 								))
@@ -1083,20 +1117,22 @@ class IncreaseDecreaseContractPage extends React.Component {
 
 		return (
 			<>
-				{step === 0 && <h2 style={{ display: "flex", alignItems: "center", color: "white" }}><Icon>account_balance</Icon>&nbsp;&nbsp;Increase / Decrease Contract Amount</h2>}
-				{step === 1 && <h2 style={{ display: "flex", alignItems: "center", color: "white" }}><Icon>account_balance</Icon>&nbsp;&nbsp;Increase / Decrease Contract Amount</h2>}
+				{/* {step === 0 && <h2 style={{ display: "flex", alignItems: "center", color: "white" }}><Icon>account_balance</Icon>&nbsp;&nbsp;Increase / Decrease Contract Amount</h2>} */}
+				{/* {step === 1 && <h2 style={{ display: "flex", alignItems: "center", color: "white" }}><Icon>account_balance</Icon>&nbsp;&nbsp;Increase / Decrease Contract Amount</h2>} */}
+				<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+					{step === 0 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Franchisee Distribution<Icon>keyboard_arrow_right</Icon></Button>}
+					{step === 1 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>}
+					<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
+				</div>
+
+				{/* <Divider variant="middle" style={{ marginTop: 10, marginBottom: 10, width: '50%', alignSelf: 'center', marginLeft: 'auto', marginRight: 'auto' }} /> */}
 
 				<div className={classNames("flex flex-col")}>
 					{step === 0 && this.getFranchiseeAssignmentForm()}
 					{step === 1 && this.getFindersFeesForm()}
-					<Divider variant="middle" style={{ marginTop: 10, width: '100%', alignSelf: 'center' }} />
 				</div>
 
-
-				{/* </DialogContent>
-
-					<DialogActions> */}
-				<div className="flex w-full justify-between mb-12">
+				{/* <div className="flex w-full justify-between mb-12">
 					<div className="flex w-full" style={{ alignItems: 'center' }}>
 						<TextField
 							type="date"
@@ -1110,15 +1146,11 @@ class IncreaseDecreaseContractPage extends React.Component {
 							margin="dense"
 						/>
 					</div>
-					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-						{step === 0 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Next (Franchisee Distribution)<Icon>keyboard_arrow_right</Icon></Button>}
-						{step === 1 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>}
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
-					</div>
-				</div>
+				</div> */}
 
 				{step === 1 &&
 					<div className={classNames("flex flex-col")}>
+						<Divider variant="middle" style={{ marginTop: 10, marginBottom: 10, width: '50%', alignSelf: 'center' }} />
 						{this.getFranchiseesList()}
 					</div>
 				}
