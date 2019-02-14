@@ -119,6 +119,35 @@ class VerifiedDialogForm extends React.Component {
         this.props.openVerificationDialog(false);
     };
 
+    handleVerify = ()=> {
+        // user: auth.login,
+        //     verifyOption: verifications.verifyOption,
+        //     aInvoiceSelections: verifications.aInvoiceSelections,
+        //     aTransactionSelections: verifications.aTransactionSelections,
+      let option = this.props.verifyOption;
+      let action = 'verify';
+
+      let selections = this.props.aInvoiceSelections;
+      let data = this.props.verifications.Data.Invoices;
+      let userId = this.props.user.UserId;
+
+      if(option==='transaction') {
+          data = this.props.verifications.Data.FranTransactions;
+          selections = this.props.aTransactionSelections;
+      }
+
+      let objects = selections.map(x=>data[x]);
+
+      let ids = [];
+      objects.forEach(obj=>{
+          ids.push(obj.EntityObject_id);
+      });
+
+      console.log('submit=',this.props.regionId, userId, action, ids);
+
+        // this.props.verifyBulkUpdate(this.props.regionId, userId, action, ids);
+    };
+
     handleChangeForm = (name) => event => {
         const dialogForm = this.state.dialogForm;
         if(name === "Subject"){
@@ -131,7 +160,7 @@ class VerifiedDialogForm extends React.Component {
             dialogForm.Message = event.target.value;
         }
         this.setState({dialogForm: dialogForm});
-    }
+    };
 
     render() {
         const { classes } = this.props;
@@ -145,7 +174,7 @@ class VerifiedDialogForm extends React.Component {
                     maxWidth={"sm"}
                     fullWidth
                 >
-                    <form action="/" method={"POST"} onSubmit={(e) => {e.preventDefault();this.handleAddOwner();}}>
+                    <form action="/" method={"POST"} onSubmit={(e) => {e.preventDefault();this.handleVerify();}}>
                         <DialogTitle  id="form-dialog-title" onClose={this.handleClose }>
                             <h2 className={classes.dialogH2}>
                                 <VerifiedUser  className={classNames(classes.leftIcon)} />
@@ -209,7 +238,9 @@ function mapStateToProps({ verifications, auth}) {
         user: auth.login,
         verifyOption: verifications.verifyOption,
         aInvoiceSelections: verifications.aInvoiceSelections,
-        verifyOption: verifications.verifyOption,
+        aTransactionSelections: verifications.aTransactionSelections,
+        regionId: auth.login.defaultRegionId,
+        verifications: verifications.verificationsDB,
     }
 }
 

@@ -180,6 +180,6 @@ const verifications = function (state = initialState, action) {
 const persistConfig = {
     key: 'verifications',
     storage: storage,
-    blacklist: ['verificationsDB']
+    blacklist: ['verificationsDB', 'verificationForm', 'verifiedModal', 'reviseModal', 'rejectModal']
 };
 export default persistReducer(persistConfig, verifications);

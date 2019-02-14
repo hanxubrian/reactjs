@@ -136,12 +136,10 @@ class VerificationSearchBar extends Component {
             }
     }
     componentDidMount() {
-        console.log("componentDidMount");
         document.addEventListener("keydown", this.handleKeyDown, false);
     }
 
     handleKeyDown = (event) => {
-        console.log("escFunction");
 
         if (event.keyCode === ENTER_KEY) {
             clearTimeout(this.timer)
@@ -154,9 +152,6 @@ class VerificationSearchBar extends Component {
     }
 
     handleChange = prop => event => {
-        console.log("handleChange");
-
-
         this.setState({ [prop]: event.target.value });
 
         if (prop === 's') {
@@ -167,16 +162,13 @@ class VerificationSearchBar extends Component {
 
     triggerChange = (s = this.state.s) => {
 
-        console.log("start to search", s)
-
-        //this.props.applySearchText(s);
-    }
+    };
 
     clearSearch = () => {
-        clearTimeout(this.timer)
+        clearTimeout(this.timer);
         this.setState({ s: '' });
         this.triggerChange('')
-    }
+    };
 
     render() {
         const {

@@ -451,8 +451,6 @@ class VerificationTransactionListContent extends Component {
             { columnName: "Action",         width: 180, align: 'center'}
         ];
 
-
-        console.log('selection=', this.state.selection, data);
         return (
             <Fragment>
                 <div className={classNames(classes.layoutTable, "flex flex-col")}>

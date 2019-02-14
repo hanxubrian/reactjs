@@ -303,7 +303,7 @@ class FranchiseesOwnerTable extends React.Component {
         this.handleUpdateOwnerInsertPayload(this.state.dialogForm , "add");
 		this.handleResetDialog();
         this.setState({openDialog: false});
-	}
+	};
 
     handleRemoveOwner = (index) => {
         const payloadData = this.state.insertPayload.Owners;
