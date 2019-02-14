@@ -424,7 +424,7 @@ class CustomerForm extends Component {
 		labelWidth: 0,
 		selectedWork: "",
 
-		activeStep: 4,
+		activeStep: 0,
 		completed: new Set(),
 		skipped: new Set(),
 
@@ -1572,7 +1572,7 @@ class CustomerForm extends Component {
 
 	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer.Data) => {
 		this.setState({
-			SA_Amount: activeCustomerInfo.cont_bill,
+			SA_Amount: activeCustomerInfo ? activeCustomerInfo.cont_bill : "",
 		})
 	}
 

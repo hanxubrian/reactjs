@@ -791,6 +791,7 @@ class FranchieesAssignModal extends React.Component {
 
 	getFranchiseeAssignmentForm() {
 		const { classes } = this.props;
+		const { franchieesesToOffer } = this.props.franchieesesToOffer;
 		const {
 			franchiseeBillingTypes,
 			franchiseeServiceTypes
@@ -831,7 +832,7 @@ class FranchieesAssignModal extends React.Component {
 
 					<Divider variant="middle" style={{ marginTop: 10, width: '100%', alignSelf: 'center' }} />
 
-					{this.props.franchieesesToOffer.map((x, index) => (
+					{franchieesesToOffer.map((x, index) => (
 						<div key={index} className={classNames("flex w-full")} style={{ alignItems: 'bottom' }}>
 
 							<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="body2">{x.Number}</Typography>

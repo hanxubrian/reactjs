@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import { Icon, IconButton, Tooltip, Slide, RadioGroup, Radio, FormControlLabel, Paper, Typography, InputAdornment, FormControl, InputLabel, Select, MenuItem, Divider, ListItem, List, ListItemText, ListItemLink } from '@material-ui/core';
+import { Icon, IconButton, Tooltip, Slide, RadioGroup, Radio, FormControlLabel, Paper, Typography, InputAdornment, FormControl, InputLabel, Select, MenuItem, Divider, ListItem, List, ListItemText, ListItemLink, Checkbox } from '@material-ui/core';
 
 // for store
 import { bindActionCreators } from "redux";
@@ -489,6 +489,7 @@ class IncreaseDecreaseContractModal extends React.Component {
 	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer.Data) => {
 		this.setState({
 			SA_Amount: activeCustomerInfo.cont_bill,
+			franchieesesToOffer : activeCustomerInfo.AssignedFranchisees,
 		})
 	}
 
@@ -848,6 +849,26 @@ class IncreaseDecreaseContractModal extends React.Component {
 
 	getFindersFeesForm() {
 		const { classes } = this.props;
+
+		const {
+			franchiseeBillingTypes,
+			franchiseeServiceTypes,
+
+			franchieesesToOffer,
+		} = this.state
+
+		const franHeaders = [
+			{ width: 7, title: 'Number', field: 'Number' },
+			{ width: 16, title: 'Name', field: 'Name' },
+			{ width: 5, title: 'Escrow', field: '' },
+			{ width: 12, title: 'Billing Frequency', field: '' },
+			{ width: 12, title: 'Billing', field: '' },
+			{ width: 12, title: 'Service', field: '' },
+			{ width: 24, title: 'Description', field: '' },
+			{ width: 8, title: 'Amount', field: '' },
+			{ width: 3, title: '', field: '' },
+		]
+
 		return (
 			<>
 				<div className="flex mt-12">
@@ -860,6 +881,79 @@ class IncreaseDecreaseContractModal extends React.Component {
 						className={classNames(classes.textField, "pr-6")}
 						InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">attach_money</Icon></InputAdornment> }}
 					/>
+				</div>
+
+
+				<Typography className="mb-12" variant="subtitle1">Franchisees</Typography>
+
+				<div className={classNames("flex flex-col w-full")}>
+					<div className={classNames("flex w-full")}>
+						{franHeaders.map((f, findex) => (
+							<Typography key={findex} style={{ width: f.width + '%' }} variant="caption">{f.title}</Typography>
+						))}
+					</div>
+
+					<Divider variant="middle" style={{ marginTop: 10, width: '100%', alignSelf: 'center' }} />
+
+					{franchieesesToOffer.map((x, index) => (
+						<div key={index} className={classNames("flex w-full")} style={{ alignItems: 'bottom' }}>
+
+							<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="body2">{x.FranchiseeNumber}</Typography>
+							<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="body2">{x.Name}</Typography>
+
+							<Checkbox style={{ width: franHeaders[2].width + '%', alignSelf: 'center' }} />
+
+							<TextField style={{ width: franHeaders[3].width + '%' }}
+								margin="dense"
+								className="pl-6"
+								value="Regular"
+								select
+							// InputProps={{ readOnly: true }}
+							>
+								{['Variable', 'Regular'].map((x, index) => (<MenuItem key={index} value={x}>{x}</MenuItem>))}
+							</TextField>
+
+							<TextField style={{ width: franHeaders[4].width + '%' }}
+								margin="dense"
+								className="pl-6"
+								value="Regular Billing"
+								select
+								InputProps={{ readOnly: true }}
+							>
+								{franchiseeBillingTypes.map((x, index) => (<MenuItem key={index} value={x.Name}>{x.Name}</MenuItem>))}
+							</TextField>
+
+							<TextField style={{ width: franHeaders[5].width + '%' }}
+								margin="dense"
+								className="pl-6"
+								value=""
+								select
+							>
+								{franchiseeServiceTypes.map((x, index) => (<MenuItem key={index} value={x.Name}>{x.Name}</MenuItem>))}
+							</TextField>
+
+							<TextField style={{ width: franHeaders[6].width + '%' }}
+								margin="dense"
+								className="pl-6"
+							/>
+							{/* <TextField style={{ width: franHeaders[7].width + '%' }}
+								type='number'
+								InputProps={{ endAdornment: <InputAdornment position="start" className="ml-4">%</InputAdornment> }}
+								margin="dense"
+								className="pl-6"
+							/> */}
+							<TextField style={{ width: franHeaders[7].width + '%' }}
+								type='number'
+								InputProps={{ startAdornment: <InputAdornment position="end" className="mr-4">$</InputAdornment> }}
+								margin="dense"
+								className="pl-6"
+							/>
+							<div style={{ width: franHeaders[8].width + '%' }}>
+								<IconButton><Icon>filter_none</Icon></IconButton>
+							</div>
+
+						</div>
+					))}
 				</div>
 			</>
 		)

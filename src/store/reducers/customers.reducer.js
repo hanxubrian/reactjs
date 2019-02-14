@@ -272,7 +272,8 @@ const customers = function (state = initialState, action) {
 							open: true
 						},
 						data: null
-					}
+					},
+					activeCustomerInfo: null,
 				};
 			}
 		case Actions.CLOSE_NEW_CUSTOMER_FORM:
