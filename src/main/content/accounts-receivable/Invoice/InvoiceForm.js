@@ -709,6 +709,7 @@ class InvoiceForm extends Component {
                 SysCust: this.state.selectedCustomer.SysCust,
                 Fees: this.state.selectedCustomer.Fees,
                 TrxType: 'I',
+                TaxAmount: this.state.tax,
                 Items: items
             };
             console.log('result=', JSON.stringify(result));
