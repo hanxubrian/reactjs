@@ -867,6 +867,7 @@ class IncreaseDecreaseContractPage extends React.Component {
 						InputProps={{ readOnly: false, startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
 						value={this.state.NewAmount || ''}
 						onChange={this.handleChange("NewAmount")}
+						autoFocus
 					/>
 
 					<TextField margin="dense" id="Reason" label="Reason"
@@ -901,12 +902,59 @@ class IncreaseDecreaseContractPage extends React.Component {
 			{...restProps}
 
 		>
-			<Button variant="contained" color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>add</Icon>Add</Button>
+			<Button variant="contained" onClick={this.addFranchiseeToCustomer} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>add</Icon>Add</Button>
 
 			{children}
 		</Toolbar.Root>
 	);
 	ToolbarRoot = withStyles(styles)(this.ToolbarRootBase);
+
+	addFranchiseeToCustomer = () => {
+		const { selection, rows } = this.state
+		/*
+			AssignedDate: "05/31/2012"
+			CreatedById: 0
+			FranchiseeNumber: "701011"
+			MonthlyBilling: Array(1)
+			0:
+			BillingFrequency: "R"
+			BillingTypeId: "5c41e517d2963319d486a19b"
+			BillingTypeServiceId: "5c537995d723510cd898f3e0"
+			Description: "MONTHLY CLEANING SERVICE"
+			EscrowBilling: true
+			MonthlyBilling: 28671.77
+			Status: "Active"
+			__proto__: Object
+			length: 1
+			__proto__: Array(0)
+			Status: "Active"		
+		*/
+		let selectedFranchisees = selection.map(x => rows[x])
+		selectedFranchisees.forEach(x => {
+
+			x.AssignedDate = "05/31/2012"
+			x.CreatedById = 0
+			x.FranchiseeNumber = x.Number
+			x.MonthlyBilling = [{
+				BillingFrequency: "R",
+				BillingTypeId: "",
+				BillingTypeServiceId: "",
+				Description: "",
+				EscrowBilling: true,
+				MonthlyBilling: 0,
+				Status: "Active",
+			}]
+			x.Status = "Active"
+		})
+
+		this.setState({
+			franchieesesToOffer: [
+				...this.state.franchieesesToOffer,
+				...selectedFranchisees
+			]
+		})
+
+	}
 
 	changeSelection = selection => {
 		this.setState({ selection });
@@ -971,7 +1019,7 @@ class IncreaseDecreaseContractPage extends React.Component {
 									<div key={mIndex} className={classNames("flex w-full")} style={{ alignItems: 'bottom' }}>
 
 										<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="body2">{x.FranchiseeNumber}</Typography>
-										<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="body2">{x.Name}</Typography>
+										<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption">{x.Name}</Typography>
 
 
 										<Checkbox style={{ width: franHeaders[2].width + '%', alignSelf: 'center' }}

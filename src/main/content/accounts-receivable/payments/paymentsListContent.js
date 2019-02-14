@@ -1053,7 +1053,7 @@ class PaymentsListContent extends Component {
 	//
 	// table cell invoice number button formatter
 	//
-	InvoiceNoButtonFormatter = ({ value }) => (<Button style={{ background: '#505050' }} onClick={(ev) => this.onClickInvoiceNo(ev, value)}>{value}</Button>);
+	InvoiceNoButtonFormatter = ({ value }) => (<Button onClick={(ev) => this.onClickInvoiceNo(ev, value)}>{value}</Button>);
 	InvoiceNoButtonTypeProvider = props => (
 		<DataTypeProvider
 			formatterComponent={this.InvoiceNoButtonFormatter}
@@ -1065,7 +1065,15 @@ class PaymentsListContent extends Component {
 		const { rows } = this.state
 		const targetRows = rows.filter(x => x.InvoiceNo === InvoiceNo)
 		if (targetRows && targetRows.length > 0) {
-			this.invoiceReport(targetRows[0].InvoiceId, this.props.regionId)
+			if (targetRows[0].InvoiceId === "") {
+				this.props.showErrorDialog({
+					show: true,
+					title: "Warning",
+					message: "The Invoice ID is empty",
+				})
+			} else {
+				this.invoiceReport(targetRows[0].InvoiceId, this.props.regionId)
+			}
 		}
 
 	}

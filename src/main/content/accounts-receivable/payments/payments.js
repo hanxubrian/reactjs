@@ -689,6 +689,8 @@ class Payments extends Component {
 						<div className="flex-1 flex-col absolute w-full h-full">
 							<div className={classNames("flex flex-col h-full")}>
 								<Dialog
+									fullWidth={true}
+									maxWidth="sm"
 									open={this.state.showAlertDialog}
 									onClose={this.handleCloseAlertDialog}
 									aria-labelledby="alert-dialog-title"

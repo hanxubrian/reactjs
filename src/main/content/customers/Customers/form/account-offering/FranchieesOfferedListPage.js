@@ -667,7 +667,7 @@ class FranchieesOfferedListPage extends Component {
 										<Table />
 										{/* <VirtualTable height="auto" /> */}
 
-										{/* <TableColumnResizing defaultColumnWidths={columns} /> */}
+										<TableColumnResizing defaultColumnWidths={columns} />
 
 										<TableHeaderRow showSortingControls />
 										<Toolbar rootComponent={this.ToolbarRoot} />
