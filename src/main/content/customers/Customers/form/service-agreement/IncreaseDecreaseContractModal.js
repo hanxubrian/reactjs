@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -86,6 +86,9 @@ const styles = theme => ({
 	button: {
 		margin: theme.spacing.unit,
 	},
+	descriptionText: {
+		fontSize: 13
+	}
 })
 function Transition(props) {
 	return <Slide direction="up" {...props} />;
@@ -489,7 +492,7 @@ class IncreaseDecreaseContractModal extends React.Component {
 	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer.Data) => {
 		this.setState({
 			SA_Amount: activeCustomerInfo.cont_bill,
-			franchieesesToOffer : activeCustomerInfo.AssignedFranchisees,
+			franchieesesToOffer: activeCustomerInfo.AssignedFranchisees,
 		})
 	}
 
@@ -829,10 +832,12 @@ class IncreaseDecreaseContractModal extends React.Component {
 				</div>
 
 				<div className={classNames("flex mt-12 justify-start")}>
-					<TextField margin="dense" id="New Amount" label="New Amount"
+					<TextField margin="dense" id="NewAmount" label="New Amount"
 						InputLabelProps={{ shrink: true }}
 						className={classNames(classes.textField, "pr-6")}
 						InputProps={{ readOnly: false, startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
+						value={this.state.NewAmount || ''}
+						onChange={this.handleChange("NewAmount")}
 					/>
 
 					<TextField margin="dense" id="Reason" label="Reason"
@@ -871,15 +876,13 @@ class IncreaseDecreaseContractModal extends React.Component {
 
 		return (
 			<>
-				<div className="flex mt-12">
-					<Typography className="mb-12 pr-12" variant="subtitle1">123456789</Typography>
-					<Typography className="mb-12" variant="subtitle1">OOOOOOOOOOOO</Typography>
-				</div>
 				<div className={classNames("flex mt-12 justify-start")}>
 					<TextField margin="dense" id="Monthly Billing Amount" label="Monthly Billing Amount"
 						InputLabelProps={{ shrink: true }}
 						className={classNames(classes.textField, "pr-6")}
-						InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start"><Icon fontSize={"small"} className="mr-4">attach_money</Icon></InputAdornment> }}
+						InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
+						value={this.state.NewAmount || ''}
+						onChange={this.handleChange("NewAmount")}
 					/>
 				</div>
 
@@ -896,63 +899,83 @@ class IncreaseDecreaseContractModal extends React.Component {
 					<Divider variant="middle" style={{ marginTop: 10, width: '100%', alignSelf: 'center' }} />
 
 					{franchieesesToOffer.map((x, index) => (
-						<div key={index} className={classNames("flex w-full")} style={{ alignItems: 'bottom' }}>
+						<React.Fragment key={index}>
+							{
+								x.MonthlyBilling.map((m, mIndex) => (
+									<div key={mIndex} className={classNames("flex w-full")} style={{ alignItems: 'bottom' }}>
 
-							<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="body2">{x.FranchiseeNumber}</Typography>
-							<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="body2">{x.Name}</Typography>
+										<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="body2">{x.FranchiseeNumber}</Typography>
+										<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="body2">{x.Name}</Typography>
 
-							<Checkbox style={{ width: franHeaders[2].width + '%', alignSelf: 'center' }} />
 
-							<TextField style={{ width: franHeaders[3].width + '%' }}
-								margin="dense"
-								className="pl-6"
-								value="Regular"
-								select
-							// InputProps={{ readOnly: true }}
-							>
-								{['Variable', 'Regular'].map((x, index) => (<MenuItem key={index} value={x}>{x}</MenuItem>))}
-							</TextField>
+										<Checkbox style={{ width: franHeaders[2].width + '%', alignSelf: 'center' }}
+											checked={m.EscrowBilling}
+										/>
 
-							<TextField style={{ width: franHeaders[4].width + '%' }}
-								margin="dense"
-								className="pl-6"
-								value="Regular Billing"
-								select
-								InputProps={{ readOnly: true }}
-							>
-								{franchiseeBillingTypes.map((x, index) => (<MenuItem key={index} value={x.Name}>{x.Name}</MenuItem>))}
-							</TextField>
+										<TextField style={{ width: franHeaders[3].width + '%' }}
+											margin="dense"
+											className="pl-6"
+											value={m.BillingFrequency}
+											select
+										// InputProps={{ readOnly: true }}
+										>
+											{[
+												{ label: 'Variable', value: 'V' },
+												{ label: 'Regular', value: 'R' },
+											].map((x, index) => (<MenuItem key={index} value={x.value}>{x.label}</MenuItem>))}
+										</TextField>
 
-							<TextField style={{ width: franHeaders[5].width + '%' }}
-								margin="dense"
-								className="pl-6"
-								value=""
-								select
-							>
-								{franchiseeServiceTypes.map((x, index) => (<MenuItem key={index} value={x.Name}>{x.Name}</MenuItem>))}
-							</TextField>
+										<TextField style={{ width: franHeaders[4].width + '%' }}
+											margin="dense"
+											className="pl-6"
+											value="Regular Billing"
+											select
+											InputProps={{ readOnly: true }}
+										>
+											{franchiseeBillingTypes.map((x, index) => (<MenuItem key={index} value={x.Name}>{x.Name}</MenuItem>))}
+										</TextField>
 
-							<TextField style={{ width: franHeaders[6].width + '%' }}
-								margin="dense"
-								className="pl-6"
-							/>
-							{/* <TextField style={{ width: franHeaders[7].width + '%' }}
+										<TextField style={{ width: franHeaders[5].width + '%' }}
+											margin="dense"
+											className="pl-6"
+											value=""
+											select
+										>
+											{franchiseeServiceTypes.map((x, index) => (<MenuItem key={index} value={x.Name}>{x.Name}</MenuItem>))}
+										</TextField>
+
+										<TextField style={{ width: franHeaders[6].width + '%' }}
+											margin="dense"
+											className="pl-6"
+											value={m.Description}
+											InputProps={{
+												classes: {
+													input: classes.descriptionText,
+												},
+											}}
+										/>
+										{/* <TextField style={{ width: franHeaders[7].width + '%' }}
 								type='number'
 								InputProps={{ endAdornment: <InputAdornment position="start" className="ml-4">%</InputAdornment> }}
 								margin="dense"
 								className="pl-6"
 							/> */}
-							<TextField style={{ width: franHeaders[7].width + '%' }}
-								type='number'
-								InputProps={{ startAdornment: <InputAdornment position="end" className="mr-4">$</InputAdornment> }}
-								margin="dense"
-								className="pl-6"
-							/>
-							<div style={{ width: franHeaders[8].width + '%' }}>
-								<IconButton><Icon>filter_none</Icon></IconButton>
-							</div>
+										<TextField style={{ width: franHeaders[7].width + '%' }}
+											type='number'
+											InputProps={{ startAdornment: <InputAdornment position="end" className="mr-4">$</InputAdornment> }}
+											margin="dense"
+											className="pl-6"
+											value={m.MonthlyBilling}
+										/>
+										<div style={{ width: franHeaders[8].width + '%' }}>
+											<IconButton><Icon>filter_none</Icon></IconButton>
+										</div>
 
-						</div>
+									</div>
+								))
+							}
+						</React.Fragment>
+
 					))}
 				</div>
 			</>
