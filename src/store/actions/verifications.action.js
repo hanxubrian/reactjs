@@ -110,10 +110,10 @@ export function updateSelectedRowsLength(length) {
         payload: length
     }
 }
-export function updateInvoiceSelections(length) {
+export function updateInvoiceSelections(selection) {
     return {
         type: UPDATE_INVOICE_SELECTIONS,
-        payload: length
+        payload: selection
     }
 }
 
