@@ -198,7 +198,8 @@ class VerifiedDialogForm extends React.Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        openVerificationDialog: Actions.openVerificationDialog
+        openVerificationDialog: Actions.openVerificationDialog,
+        verifyBulkUpdate: Actions.verifyBulkUpdate,
     }, dispatch);
 }
 

@@ -8,6 +8,7 @@ export const TOGGLE_VERIFICATION_SUMMARY_PANEL = "[VERIFICATIONS APP] TOGGLE SUM
 export const TOGGLE_VERIFICATION_FILTER_STATUS = "[VERIFICATIONS APP] TOGGLE VERIFICATION FILTER STATUS";
 export const TOGGLE_VERIFICATION_FILTER_PANEL = "[VERIFICATIONS APP] TOGGLE VERIFICATION FILTER PANEL";
 export const UPDATE_SELECTION_ROW_LENGTH = "[VERIFICATIONS APP] UPDATE VERIFICATION SELECTION ROWS LENGTH";
+export const UPDATE_INVOICE_SELECTIONS = "[VERIFICATIONS APP] UPDATE INVOICE SELECTIONS";
 export const OPEN_VERIFICATION_DIALOG = "[VERIFICATIONS APP] OPEN VERIFICATION DIALOG ";
 export const CLOSE_VERIFICATION_DIALOG = "[VERIFICATIONS APP] CLOSE VERIFICATION DIALOG ";
 
@@ -20,6 +21,8 @@ export const CLOSE_NEW_VERIFICATION_FORM = '[VERIFICATIONS APP] CLOSE NEW CUSTOM
 export const UPDATE_FROM_DATE_VERIFICATION = '[VERIFICATIONS APP] UPDATE FROM DATE';
 export const UPDATE_TO_DATE_VERIFICATION = '[VERIFICATIONS APP] UPDATE TO DATE';
 export const UPDATE_VERIFY_OPTION = '[VERIFICATIONS APP] VERIFICATION OPTION';
+export const VERIFY_BULK_IDS = '[VERIFICATIONS APP] VERIFY BULK IDS';
+export const VERIFY_BULK_IDS_ERROR = '[VERIFICATIONS APP] VERIFY BULK IDS ERROR';
 
 
 export function getInvoiceTransactionPendingLists(regionId) {
@@ -107,6 +110,12 @@ export function updateSelectedRowsLength(length) {
         payload: length
     }
 }
+export function updateInvoiceSelections(length) {
+    return {
+        type: UPDATE_INVOICE_SELECTIONS,
+        payload: length
+    }
+}
 
 export function openVerificationDialog(flag){
     if(flag){
@@ -149,3 +158,21 @@ export function updateVerifyOption(option) {
     }
 }
 
+export function verifyBulkUpdate(regionId, UserId, Action, ids) {
+    return (dispatch) => {
+        (async () => {
+            let res = await verificationService.verifyBulkUpdate(regionId, UserId, Action, ids);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: VERIFY_BULK_IDS,
+                    payload: res
+                });
+            } else {
+                dispatch({
+                    type: VERIFY_BULK_IDS_ERROR,
+                    payload: res.message
+                });
+            }
+        })();
+    }
+}

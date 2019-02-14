@@ -3,7 +3,6 @@ import * as UserActions from "../../auth/store/actions";
 import moment from 'moment'
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
-import {UPDATE_VERIFY_OPTION} from "../actions";
 
 
 const initialState = {
@@ -22,7 +21,8 @@ const initialState = {
     statusId: 1,
     searchText: "",
     bVerificationFetchStart: false,
-    selectionLength: [],
+    selections: [],
+    aInvoiceSelections: [],
     verifiedModal: false,
     reviseModal: false,
     rejectModal: false,
@@ -113,7 +113,14 @@ const verifications = function (state = initialState, action) {
         {
             return{
                 ...state,
-                selectionLength: action.payload
+                selections: action.payload
+            }
+        }
+        case Actions.UPDATE_INVOICE_SELECTIONS:
+        {
+            return{
+                ...state,
+                aInvoiceSelections: action.payload
             }
         }
         case Actions.OPEN_VERIFICATION_DIALOG:

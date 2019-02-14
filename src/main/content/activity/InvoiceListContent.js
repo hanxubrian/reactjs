@@ -222,7 +222,7 @@ class InvoiceLists extends Component {
             temp: [],
             data: [],
             selectAll: false,
-            selection: [...this.props.selectionLength],
+            selection: [...this.props.aInvoiceSelections],
             //rows: [],
             sorting: [
                 { columnName: 'Franchisee', direction: 'asc' }
@@ -246,7 +246,7 @@ class InvoiceLists extends Component {
 
         this.changeSelection = selection =>{
             this.setState({ selection });
-            this.props.updateSelectedRowsLength(selection);
+            this.props.updateInvoiceSelections(selection);
         };
 
         this.changeSorting = sorting => this.setState({ sorting });
@@ -541,7 +541,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         toggleFilterPanel: Actions.toggleVerificationFilterPanel,
         toggleSummaryPanel: Actions.toggleVerificationSummaryPanel,
-        updateSelectedRowsLength: Actions.updateSelectedRowsLength,
+        updateInvoiceSelections: Actions.updateInvoiceSelections,
         openCloseReviseDialog: Actions.openCloseReviseDialog,
         openVerificationDialog: Actions.openVerificationDialog,
         openCloseRejectDialog: Actions.openCloseRejectDialog
@@ -558,7 +558,7 @@ function mapStateToProps({ customers, auth, verifications, transactions }) {
         regionId: auth.login.defaultRegionId,
         verificationForm: verifications.verificationForm,
         searchText: verifications.searchText,
-        selectionLength: verifications.selectionLength,
+        aInvoiceSelections: verifications.aInvoiceSelections,
         verifiedModal: verifications.verifiedModal,
         reviseModal: verifications.reviseModal,
         rejectModal: verifications.rejectModal,

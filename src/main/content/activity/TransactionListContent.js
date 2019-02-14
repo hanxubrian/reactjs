@@ -222,7 +222,7 @@ class VerificationTransactionListContent extends Component {
             temp: [],
             data: [],
             selectAll: false,
-            selection: [...this.props.selectionLength],
+            selection: [...this.props.selections],
             //rows: [],
             sorting: [
                 { columnName: 'Franchisee', direction: 'asc' }
@@ -319,7 +319,6 @@ class VerificationTransactionListContent extends Component {
     };
 
     getCell = (props) => {
-
         const { classes }= this.props;
 
         if(this.state.data.length) {
@@ -350,9 +349,6 @@ class VerificationTransactionListContent extends Component {
 
     };
 
-    //
-    // row click
-    //
     TableRow = ({ tableRow, selected, onToggle, ...restProps }) => {
         let timer = 0;
         let delay = 200;
@@ -424,7 +420,7 @@ class VerificationTransactionListContent extends Component {
             let type = this.props.transactionTypeList.filter(t=>t._id===d.TrxType);
             if(type.length>0)
                 d.Type = type[0].Name;
-                // d.Type = d.TrxType;
+            // d.Type = d.TrxType;
             d.TrxDate = moment(d.TrxDate).format('MM/DD/YYYY');
             return d;
         });
@@ -443,19 +439,20 @@ class VerificationTransactionListContent extends Component {
         ];
 
         let  tableColumnExtensions = [
-                { columnName: "Region", wordWrapEnabled: true, width: 80},
-                { columnName: "Type",           width: 220},
-                { columnName: "Description",    width: -1 },
-                { columnName: "ExtendedPrice",  width: 100, align: 'right'},
-                { columnName: "Tax",            width: 100, align: 'right'},
-                { columnName: "TotalTrxAmount", width: 100, align: 'right'},
-                { columnName: "TrxChargeType",  width: 140,  align: 'center'},
-                { columnName: "TrxClass",       width: 100,  align: 'center'},
-                { columnName: "TrxDate",        width: 100, align: 'center'},
-                { columnName: "Action",         width: 180, align: 'center'}
-                ];
+            { columnName: "Region", wordWrapEnabled: true, width: 80},
+            { columnName: "Type",           width: 220},
+            { columnName: "Description",    width: -1 },
+            { columnName: "ExtendedPrice",  width: 100, align: 'right'},
+            { columnName: "Tax",            width: 100, align: 'right'},
+            { columnName: "TotalTrxAmount", width: 100, align: 'right'},
+            { columnName: "TrxChargeType",  width: 140,  align: 'center'},
+            { columnName: "TrxClass",       width: 100,  align: 'center'},
+            { columnName: "TrxDate",        width: 100, align: 'center'},
+            { columnName: "Action",         width: 180, align: 'center'}
+        ];
 
 
+        console.log('selection=', this.state.selection, data);
         return (
             <Fragment>
                 <div className={classNames(classes.layoutTable, "flex flex-col")}>
@@ -561,7 +558,7 @@ function mapStateToProps({ customers, auth, verifications, transactions }) {
         regionId: auth.login.defaultRegionId,
         verificationForm: verifications.verificationForm,
         searchText: verifications.searchText,
-        selectionLength: verifications.selectionLength,
+        selections: verifications.selections,
         verifiedModal: verifications.verifiedModal,
         reviseModal: verifications.reviseModal,
         rejectModal: verifications.rejectModal,

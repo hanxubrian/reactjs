@@ -49,6 +49,14 @@ class verificationService {
         });
     };
 
+    /**
+     *
+     * @param regionId
+     * @param UserId
+     * @param Action = "verify" or "reject"
+     * @param ids
+     * @returns {Promise<any>}
+     */
     verifyBulkUpdate = (regionId, UserId, Action, ids)=> {
         return new Promise((resolve, reject) => {
             axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Verification/BulkUpdate`,  {regionId,UserId, Action, ids})

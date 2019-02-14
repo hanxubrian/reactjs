@@ -222,7 +222,7 @@ class VerificationsApp extends Component {
             location: this.props.location,
             searchText: this.props.searchText,
             isSubmittingForApproval: false,
-            selectionLength: [],
+            selections: [],
             openDialog: false,
             verifyOption: this.props.verifyOption
         };
@@ -252,8 +252,8 @@ class VerificationsApp extends Component {
             });
             this.props.getInvoiceTransactionPendingLists(this.props.regionId, this.props.fromDate, this.props.toDate);
         }
-        if (this.props.selectionLength !== prevProps.selectionLength) {
-            this.setState({"selectionLength": this.props.selectionLength});
+        if (this.props.selections !== prevProps.selections) {
+            this.setState({"selections": this.props.selections});
         }
         if (this.props.verifyOption !== prevProps.verifyOption) {
             this.setState({verifyOption: this.props.verifyOption});
@@ -264,7 +264,7 @@ class VerificationsApp extends Component {
         if (this.props.verifications === null) {
             this.props.getInvoiceTransactionPendingLists(this.props.regionId, this.props.fromDate, this.props.toDate);
         }
-        this.setState({"selectionLength": this.props.selectionLength});
+        this.setState({"selections": this.props.selections});
         this.setState({openDialog: this.props.verifiedModal});
 
         this.props.nav.map(item=>{
@@ -275,9 +275,9 @@ class VerificationsApp extends Component {
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        if(nextProps.selectionLength !== this.props.selectionLength) {
-            if(JSON.stringify(this.state.selection) !== JSON.stringify(nextProps.selectionLength))
-                this.setState({ selection: [...nextProps.selectionLength] });
+        if(nextProps.selections !== this.props.selections) {
+            if(JSON.stringify(this.state.selection) !== JSON.stringify(nextProps.selections))
+                this.setState({ selection: [...nextProps.selections] });
         }
     }
 
@@ -303,7 +303,7 @@ class VerificationsApp extends Component {
 
     render() {
         const {classes, filterState, summaryState} = this.props;
-        const {selectionLength, HeaderIcon} = this.state;
+        const {selections, HeaderIcon} = this.state;
 
         return (
             <React.Fragment>
@@ -328,12 +328,12 @@ class VerificationsApp extends Component {
                                         </div>
                                     </div>
                                     <div className="flex flex-shrink items-center">
-                                        <Button variant="contained" color="primary" disabled={selectionLength.length === 0}
+                                        <Button variant="contained" color="primary" disabled={selections.length === 0}
                                                 className={classNames(classes.button, classes.btntop) } onClick={this.openVerificationDialog}>
                                             Verify
                                             <Icon className={classes.rightIcon}>verified_user</Icon>
                                         </Button>
-                                        <Button variant="contained" color="primary" disabled={selectionLength.length === 0}
+                                        <Button variant="contained" color="primary" disabled={selections.length === 0}
                                                 className={classNames(classes.button, classes.btntop)} onClick={this.openReviseDialog}>
                                             Request Changes
                                             <Icon className={classes.rightIcon}>rotate_90_degrees_ccw</Icon>
@@ -431,7 +431,7 @@ function mapStateToProps({verifications, auth, fuse, transactions}) {
         verifications: verifications.verificationsDB,
         bLoadedVerifications: verifications.bLoadedVerifications,
         bVerificationFetchStart: verifications.bVerificationFetchStart,
-        selectionLength: verifications.selectionLength,
+        selections: verifications.selections,
         regionId: auth.login.defaultRegionId,
         nav: fuse.navigation,
         transactionTypeList: transactions.transactionTypeList,
