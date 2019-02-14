@@ -15,8 +15,8 @@ import * as Actions from 'store/actions';
 import "react-table/react-table.css";
 import classNames from 'classnames';
 
-import PaymentLogDetail from './paymentLogDetail';
-import FilterPanel from "./paymentLogFilterPanel";
+import ArLogDetail from './arLogDetail';
+import FilterPanel from "./arFilterPanel";
 
 const headerHeight = 80;
 
@@ -286,7 +286,7 @@ class PaymentLogLayout extends Component {
                         <div className="flex-1 flex-col absolute w-full h-full">
                             <Fragment>
                                 <div id ="payment-log-print">
-                                    <PaymentLogDetail onRef={ref => (this.child = ref)}/>
+                                    <ArLogDetail onRef={ref => (this.child = ref)}/>
                                 </div>
                             </Fragment>
                         </div>

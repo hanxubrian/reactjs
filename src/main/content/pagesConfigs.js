@@ -25,6 +25,7 @@ import {AccountsReceivableConfig} from "./accounts-receivable/accounts-receivabl
 import {PaymentsConfig} from "./accounts-receivable/payments/paymentsConfig";
 import {BillRunConfig} from "./accounts-receivable/bill-run/bill-runConfig";
 import {InvoiceConfig} from "./accounts-receivable/Invoice/invoiceConfig";
+import {ArLogConfig} from "./accounts-receivable/arlog/arLogConfig";
 import {ReportsConfig} from "./franchisees/reports/reportsConfig";
 import {FindersFeesConfig} from "./franchisees/findersfees/findersFeesConfig";
 import {PaymentListConfig} from "./payments/payment-list/payment-listConfig";
@@ -63,6 +64,7 @@ export const pagesConfigs = [
     ComissionsConfig,
     InvoiceConfig,
     PaymentsConfig,
+    ArLogConfig,
     BillRunConfig,
     AccountsReceivableConfig,
     ReportsConfig,
