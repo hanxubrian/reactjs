@@ -91,7 +91,7 @@ class FilterPanel extends Component {
                     <Grid item xs={12} sm={12} md={12} className="flex flex-col">
                         <MuiPickersUtilsProvider utils={MomentUtils}>
                             <div className="flex flex-col mt-20">
-                                <h3 className="mb-20">Choose a Period</h3>
+                                <h3 className="mb-20">Filter </h3>
                                 <DatePicker
                                     margin="none"
                                     label="From Date"

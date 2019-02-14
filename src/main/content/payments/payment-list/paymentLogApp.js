@@ -202,6 +202,10 @@ class PaymentLogLayout extends Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
+        if(this.props.regionId!== prevProps.regionId ||
+        this.props.logDate!==prevProps.logDate){
+            this.props.getPaymentLogList(this.props.regionId, this.props.logDate);
+        }
     }
 
     componentWillMount() {
@@ -289,7 +293,7 @@ class PaymentLogLayout extends Component {
                     }
                     leftSidebarHeader={
                         <div className={classNames("flex flex-row w-full h-full justify-between p-12 items-center pr-0", {'filteropen': bPaymentLogFilterPanelOpen})}>
-                            <h4 className={classes.elementCenter}>Choose a date</h4>
+                            <h4 className={classes.elementCenter}>Filter</h4>
                         </div>
                     }
                     leftSidebarContent={

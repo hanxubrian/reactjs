@@ -7,7 +7,7 @@ import moment from 'moment'
 const initialState = {
     paymentLogList: null,
     logDate: moment().format('MM/DD/YYYY'),
-    bFilterPanelOpen: false
+    bFilterPanelOpen: true
 };
 
 
@@ -44,6 +44,6 @@ const paymentLog = function(state = initialState, action) {
 const persistConfig = {
     key: 'paymentLog',
     storage: storage,
-    blacklist: ['paymentLogList']
+    blacklist: ['paymentLogList', 'bFilterPanelOpen']
 };
 export default persistReducer(persistConfig, paymentLog);
