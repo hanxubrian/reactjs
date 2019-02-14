@@ -33,7 +33,7 @@ const navigation = function (state = initialState, action) {
         {
             console.log('pass3');
             return [
-                ...initialState, ...action.payload
+                ...initialState, ...action.payload.Data
             ];
         }
         default:

@@ -9,9 +9,10 @@ const userId = localStorage.getItem('jk_user_id');
 console.log('userId',userId);
 
 const BASE_API_URL='https://apifmsplus_c.jkdev.com';
+const BASE_MONGO_API_URL = 'https://apifmsplusplus_mongo.jkdev.com';
 
 class menuService {
-    loadAccountMenu =  (url) => {
+    loadAccountMenu =  (url,userId) => {
         const urlObj = {
             "localhost": 2,
             "itdept.local": 8,
@@ -20,7 +21,7 @@ class menuService {
         switch(url) {
             case "localhost":
                 return new Promise((resolve, reject) => {
-                    axios_instance.get(`${BASE_API_URL}/v1/menu/get/?appid=${urlObj["localhost"]}`)
+                    axios_instance.get(`${BASE_MONGO_API_URL}/v1/apps/menuoption?appId=${urlObj["localhost"]}&userId=${userId}`)
                         .then( res => {
                             if(res.status===200) {
                                 resolve(res.data);
@@ -33,7 +34,7 @@ class menuService {
               break
             case "itdept.local":
                 return new Promise((resolve, reject) => {
-                    axios_instance.get(`${BASE_API_URL}/v1/menu/get/?appid=${urlObj["itdept.local"]}`)
+                    axios_instance.get(`${BASE_MONGO_API_URL}/v1/menu/get/?appid=${urlObj["itdept.local"]}&userId=${userId}`)
                         .then( res => {
                             if(res.status===200) {
                                 resolve(res.data);
@@ -46,7 +47,7 @@ class menuService {
               break
             case "franport.local":
               return new Promise((resolve, reject) => {
-                  axios_instance.get(`${BASE_API_URL}/v1/menu/get/?appid=${urlObj["franport.local"]}`)
+                  axios_instance.get(`${BASE_MONGO_API_URL}/v1/menu/get/?appid=${urlObj["franport.local"]}&userId=${userId}`)
                       .then( res => {
                           if(res.status===200) {
                               resolve(res.data);
@@ -59,7 +60,7 @@ class menuService {
             break
 			default:
 				return new Promise((resolve, reject) => {
-					axios_instance.get(`${BASE_API_URL}/v1/menu/get/?appid=2`)
+					axios_instance.get(`${BASE_MONGO_API_URL}/v1/menu/get/?appid=2&userId=${userId}`)
 						.then(res => {
 							if (res.status === 200) {
 								resolve(res.data);

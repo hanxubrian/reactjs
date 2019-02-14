@@ -26,7 +26,7 @@ export function submitSignIn(email, password, url)  {
             if (res.IsSuccess) {
                 let regions = await authService.getRegions(res.Data.UserId);
                 res.Regions = regions;
-                let navigations = await menuService.loadAccountMenu(url);
+                let navigations = await menuService.loadAccountMenu(url,res.Data.UserId);
                 dispatch({
                     type: LOGIN_SUCCESS,
                     payload: res
