@@ -48,6 +48,23 @@ class verificationService {
                 })
         });
     };
+
+    verifyBulkUpdate = (regionId, UserId, Action, ids)=> {
+        return new Promise((resolve, reject) => {
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Verification/BulkUpdate`,  {regionId,UserId, Action, ids})
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                    resolve(error);
+                })
+        });
+    }
 }
 
 const instance = new verificationService();

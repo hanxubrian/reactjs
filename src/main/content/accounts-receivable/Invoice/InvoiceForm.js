@@ -499,7 +499,6 @@ class InvoiceForm extends Component {
         }
         //in time of Saving
         if(this.props.newInvoice!==null && JSON.stringify(this.props.newInvoice)!==JSON.stringify(prevProps.newInvoice)){
-            console.log('xxxxxxxxx=',this.state.buttonOption );
             if(this.state.buttonOption===0){
                 this.setState({snackMessage1: 'Saved!'});
                 this.setState({openSnack1: true});
@@ -712,7 +711,7 @@ class InvoiceForm extends Component {
                 TaxAmount: this.state.tax,
                 Items: items
             };
-            console.log('result=', JSON.stringify(result));
+            console.log('create result=', JSON.stringify(result));
             this.props.addInvoice(this.props.regionId, result);
         }
         else {
@@ -833,7 +832,6 @@ class InvoiceForm extends Component {
     };
 
     onSaveInvoice = (buttonOption) => {
-        console.log('button=', buttonOption);
         if(this.validateNewInvoice()){
             this.setState({buttonOption: buttonOption});
             this.addNewInvoice();
