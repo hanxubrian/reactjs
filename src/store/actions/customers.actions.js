@@ -498,14 +498,14 @@ export function customerServiceCreate() {
 		})();
 	}
 }
-export function customerCollectionCreate() {
+export function customerCollectionCreate(regionId, data) {
 	return (dispatch) => {
 		dispatch({
 			type: CUSTOMER_COLLECTION_CREATE_START,
 			payload: true
 		});
 		(async () => {
-			let res = await customersService.customerCollectionCreate();
+			let res = await customersService.customerCollectionCreate(regionId, data);
 			dispatch({
 				type: CUSTOMER_COLLECTION_CREATE,
 				payload: res.Data

@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from "moment"
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -770,21 +771,22 @@ class LogCallModalForm extends React.Component {
 	};
 
 	handleCreateCustomerCollection = () => {
+		const { activeCustomer } = this.props
+		const { SpokeWith, Comments, CallBack, ActionValue, StatusBy } = this.state
 		const data = {
-			"_id": "sample string 1",
-			"cust_name": "sample string 2",
-			"call_com": "sample string 3",
-			"sys_cust": 4,
-			"cust_no": "sample string 5",
-			"call_date": "sample string 6",
-			"call_time": "sample string 7",
-			"call_stat": 8,
-			"stat_otr": "sample string 9",
-			"spoke_with": "sample string 10",
-			"call_back": "sample string 11",
-			"call_btime": "sample string 12",
-			"action": 13,
-			"action_otr": "sample string 14"
+			"cust_name": activeCustomer.Data.cus_name,
+			"call_com": Comments,
+			"sys_cust": 0,
+			"cust_no": activeCustomer.Data.cust_no,
+			"call_date": moment().format("MM/DD/YYYY"),
+			"call_time": moment().format("HH:mm:ss"),
+			"call_stat": 0,
+			"stat_otr": StatusBy,
+			"spoke_with": SpokeWith,
+			"call_back": CallBack,
+			"call_btime": moment().format("HH:mm:ss"),
+			"action": 0,
+			"action_otr": ActionValue
 		}
 		this.props.customerCollectionCreate(this.props.regionId, data)
 	}
@@ -851,11 +853,11 @@ class LogCallModalForm extends React.Component {
 
 									</TextField>
 
-									<TextField sm={3} select margin="dense" id="Status" label="Status By"
+									<TextField sm={3} select margin="dense" id="StatusBy" label="Status By"
 										InputLabelProps={{ shrink: true }}
 										className={classNames(classes.textField, "pl-6")}
-										value={this.state.Status || ''}
-										onChange={this.handleChange('Status')}
+										value={this.state.StatusBy || ''}
+										onChange={this.handleChange('StatusBy')}
 										fullWidth
 										InputProps={{ readOnly: false }}
 									>
@@ -916,10 +918,10 @@ class LogCallModalForm extends React.Component {
 											onChange={this.handleChange('SpokeWith')}
 										/>
 
-										<TextField margin="dense" fullWidth id="Action" label="Action"
+										<TextField margin="dense" fullWidth id="ActionValue" label="Action"
 											InputLabelProps={{ shrink: true }}
-											value={this.state.Action || ''}
-											onChange={this.handleChange('Action')}
+											value={this.state.ActionValue || ''}
+											onChange={this.handleChange('ActionValue')}
 										/>
 
 										<TextField margin="dense" fullWidth id="Area" label="Area"
@@ -933,7 +935,7 @@ class LogCallModalForm extends React.Component {
 										<TextField margin="dense" fullWidth id="CallBack" label="Call Back"
 											type="date"
 											InputLabelProps={{ shrink: true }}
-											value={this.state.CallBack}
+											value={this.state.CallBack || ''}
 											onChange={this.handleChange('CallBack')}
 										/>
 
@@ -948,7 +950,7 @@ class LogCallModalForm extends React.Component {
 									<div className="flex flex-col w-full pr-6 pl-6">
 										<TextField margin="dense" variant="outlined" fullWidth id="Comments" label="Comments" multiline rows="13" rowsMax="13"
 											InputLabelProps={{ shrink: true }}
-											value={this.state.Comments}
+											value={this.state.Comments || ''}
 											onChange={this.handleChange('Comments')}
 										/>
 									</div>
@@ -1027,6 +1029,7 @@ function mapStateToProps({ customers, accountReceivablePayments, auth }) {
 
 		logCallModalForm: customers.logCallModalForm,
 		lists: customers.lists,
+		activeCustomer: customers.activeCustomer,
 	}
 }
 

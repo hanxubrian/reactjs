@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from "moment"
 
 const axios_instance = axios.create({
 	headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
@@ -160,6 +161,7 @@ class CustomersService {
 		// 	"action": 13,
 		// 	"action_otr": "sample string 14"
 		// }
+		console.log("customerCollectionCreate-data", data)
 		return new Promise((resolve, reject) => {
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/Collection/Create`, data)
 				.then(res => {
@@ -351,8 +353,8 @@ fullbill: 0
 	getCustomerCollectionList(regionId, CustomerNo, fromDate, toDate) {
 		const data = {
 			CustomerNo: [CustomerNo],
-			fromDate: "2017-02-08T06:16:30.3466692-06:00",
-			toDate: "2019-02-08T06:16:30.3466692-06:00"
+			fromDate: moment().subtract(6, 'months').format("MM/DD/YYYY"),
+			toDate: moment().format("MM/DD/YYYY")
 		}
 
 		return new Promise((resolve, reject) => {

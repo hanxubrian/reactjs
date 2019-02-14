@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 // import ReactDOM from 'react-dom';
 import _ from "lodash";
 // core components
-import { Icon, IconButton, Input, Paper, Button, Zoom } from '@material-ui/core';
+import { Icon, IconButton, Input, Paper, Button, Zoom, CircularProgress, Typography } from '@material-ui/core';
 
 //Janiking
 import JanikingPagination from 'Commons/JanikingPagination';
@@ -796,8 +796,12 @@ class CollectionsPage extends Component {
 			this.props.getCustomerCollectionList(nextProps.regionId, this.props.customerForm.cus_no, this.props.filterParam.fromDate, this.props.filterParam.toDate)
 		}
 
-		if (nextProps.customerServiceForm.collectionList.data, this.props.customerServiceForm.collectionList.data) {
+		if (!_.isEqual(nextProps.customerServiceForm.collectionList.data, this.props.customerServiceForm.collectionList.data)) {
 			this.initRowsFromRawJson(nextProps.customerServiceForm.collectionList.data)
+		}
+		// once customer collection created
+		if (nextProps.flags.isCustomerCollectionCreate !== this.props.flags.isCustomerCollectionCreate && nextProps.flags.isCustomerCollectionCreate === false) {
+			this.props.getCustomerCollectionList(this.props.regionId, this.props.customerForm.data.Data.cust_no, this.props.filterParam.fromDate, this.props.filterParam.toDate)
 		}
 	} // deprecate 
 
@@ -1166,6 +1170,13 @@ class CollectionsPage extends Component {
 
 					</Grid>
 				</div>
+
+				{(this.props.flags.isCustomerCollectionCreate) && (
+					<div className={classNames(classes.overlay, "flex-col")}>
+						<CircularProgress className={classes.progress} color="secondary" />
+						<Typography variant="body2" color="primary">Fetching customer collection...</Typography>
+					</div>
+				)}
 			</Fragment>
 		)
 	}
@@ -1206,6 +1217,7 @@ function mapStateToProps({ customers, auth }) {
 
 		customerServiceForm: customers.customerServiceForm,
 		filterParam: customers.filterParam,
+		flags: customers.flags,
 	}
 }
 
