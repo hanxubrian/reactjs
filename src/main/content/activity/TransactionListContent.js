@@ -231,7 +231,7 @@ class VerificationTransactionListContent extends Component {
 
             ],
             currencyColumns: [
-                'ExtendedPrice', 'TotalTrxAmount', 'Tax'
+                'Amount', 'TotalTrxAmount', 'Tax'
             ],
             phoneNumberColumns: [
                 'Phone'
@@ -331,7 +331,7 @@ class VerificationTransactionListContent extends Component {
                 });
                 return (
                     <Table.Cell style={{textAlign: 'center'}}>
-                        <IconButton className={classes.iconButton} onClick={()=>this.openVerificationDialog(props.row._id)} aria-label="Verify">
+                        <IconButton className={classes.iconButton} onClick={()=>this.openVerificationDialog(props.row.Vf_Id)} aria-label="Verify">
                             <Icon>verified_user</Icon>
                         </IconButton>
                         <IconButton className={classes.iconButton} onClick={this.openRejectDialog} aria-label="Reject">
@@ -382,7 +382,7 @@ class VerificationTransactionListContent extends Component {
     openVerificationDialog = (obj_id) => {
         let objects=[];
         this.state.data.forEach((x, index)=> {
-                if (x._id === obj_id)
+                if (x.Vf_Id === obj_id)
                     objects.push(index);
             }
         );
@@ -425,9 +425,9 @@ class VerificationTransactionListContent extends Component {
         } = this.state;
 
         let data = this.state.data.map(d=>{
-            let type = this.props.transactionTypeList.filter(t=>t._id===d.TrxType);
-            if(type.length>0)
-                d.Type = type[0].Name;
+            // let type = this.props.transactionTypeList.filter(t=>t._id===d.TrxType);
+            // if(type.length>0)
+                d.Type = d.TrxLabel;
             // d.Type = d.TrxType;
             d.TrxDate = moment(d.TrxDate).format('MM/DD/YYYY');
             return d;
@@ -437,7 +437,7 @@ class VerificationTransactionListContent extends Component {
             { title: "Type",        name: "Type"},
             { title: "Description", name: "Description"},
             { title: "Franchisee",  name: "Franchisee"},
-            { title: "Sub total",   name: "ExtendedPrice"},
+            { title: "Sub total",   name: "Amount"},
             { title: "Tax",         name: "Tax"},
             { title: "Total",       name: "TotalTrxAmount"},
             { title: "Charge Type", name: "TrxChargeType"},

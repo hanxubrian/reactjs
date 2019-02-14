@@ -231,7 +231,7 @@ class InvoiceLists extends Component {
 
             ],
             currencyColumns: [
-                "InvoiceAmount", "InvoiceTax", "InvoiceTotal"
+                "Amount", "Tax", "InvoiceTotal"
             ],
 
             dateColumns: ['saleDate'],
@@ -335,7 +335,7 @@ class InvoiceLists extends Component {
                 });
                 return (
                     <Table.Cell style={{textAlign: 'center'}}>
-                        <IconButton className={classes.iconButton} onClick={()=>this.openVerificationDialog(props.row._id)} aria-label="Verify">
+                        <IconButton className={classes.iconButton} onClick={()=>this.openVerificationDialog(props.row.Vf_Id)} aria-label="Verify">
                             <Icon>verified_user</Icon>
                         </IconButton>
                         <IconButton className={classes.iconButton} onClick={this.openRejectDialog} aria-label="Reject">
@@ -389,7 +389,7 @@ class InvoiceLists extends Component {
     openVerificationDialog = (obj_id) => {
         let objects=[];
         this.state.data.forEach((x, index)=> {
-                if (x._id === obj_id)
+                if (x.Vf_Id === obj_id)
                     objects.push(index);
             }
         );
@@ -438,8 +438,8 @@ class InvoiceLists extends Component {
             { title: "Region",      name: "RegionName"},
             { title: "Description", name: "InvoiceDescription"},
             { title: "Customer",    name: "Customer"},
-            { title: "Sub total",   name: "InvoiceAmount"},
-            { title: "Tax",         name: "InvoiceTax"},
+            { title: "Sub total",   name: "Amount"},
+            { title: "Tax",         name: "Tax"},
             { title: "Total",       name: "InvoiceTotal"},
             { title: "Due Date",    name: "DueDate"},
             { title: "Inv. Date",   name: "InvoiceDate"},
