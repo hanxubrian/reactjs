@@ -1,12 +1,4 @@
-import axios from "axios";
-import {
-    GET_ALL_SUGGEST_CUSTOMERS, GET_ALL_SUGGEST_CUSTOMERS_ERROR,
-    GET_INVOICE_DETAIL,
-    GET_INVOICES_FETCH_START,
-    OPEN_EDIT_INVOICE_FORM
-} from "./invoice.actions";
 import {paymentlockboxservice} from "../../services";
-
 
 export const PAYMENT_LOCKBOX_GET_ALL_DATA_START         = "[PAYMENT LOCKBOX] GET ALL DATA START";
 export const PAYMENT_LOCKBOX_GET_ALL_DATA_SUCCESS       = "[PAYMENT LOCKBOX] GET ALL DATA SUCCESS";
@@ -47,7 +39,6 @@ export function paymentlockboxfileupload(file) {
         });
         (async () => {
             let res = await paymentlockboxservice.fileupload(file);
-            console.log("------res----",res);
             if(res.uploadingnow && res.progress>0){
                 console.log("res.progress",res.progress);
             }

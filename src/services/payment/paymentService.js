@@ -40,7 +40,7 @@ class PaymentListService {
 					resolve(error);
 				})
 		});
-	}
+	};
 
 	createAccountReceivablePayment = (RegionId, customerNumber, PaymentType, ReferenceNo, PaymentDate, PaymentNote, overpayment, PaymentAmount, PayItems, ) => {
 		const data = {
@@ -77,7 +77,7 @@ class PaymentListService {
 		// toDate = "12/31/2019"
 		return new Promise((resolve, reject) => {
 			const data = {
-				regionId, 
+				regionId,
 				fromDate,
 				toDate,
 				PaymentTypes: paymentTypes
@@ -98,6 +98,24 @@ class PaymentListService {
 				})
 		});
 	}
+
+    getPaymentLogList = (regionId, LogDate) => {
+        const data = {regionId, LogDate};
+
+        return new Promise((resolve, reject) => {
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/Payment/PaymentLog`, data)
+                .then(res => {
+                    if (res.status === 200) {
+                        resolve(res.data);
+                    } else if (res.status !== 200) {
+                        reject(res.data);
+                    }
+                })
+                .catch(error => {
+                    resolve(error);
+                })
+        });
+    };
 }
 
 const instance = new PaymentListService();

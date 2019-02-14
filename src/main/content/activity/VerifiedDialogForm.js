@@ -119,7 +119,7 @@ class VerifiedDialogForm extends React.Component {
         this.props.openVerificationDialog(false);
     };
 
-    handleVerify = ()=> {
+    handleVerify = async()=> {
 
         let option = this.props.verifyOption;
         let action = 'verify';
@@ -137,14 +137,14 @@ class VerifiedDialogForm extends React.Component {
 
         let ids = [];
         objects.forEach(obj=>{
-            ids.push(obj._id);
+            ids.push(obj.Vf_Id);
         });
 
         this.props.verifyBulkUpdate(this.props.regionId, userId, action, ids);
         if(option==='transaction')
-            this.props.updateSelectedRowsLength([]);
+            await this.props.updateSelectedRowsLength([]);
         else
-            this.props.updateInvoiceSelections([]);
+            await this.props.updateInvoiceSelections([]);
 
         this.props.getInvoiceTransactionPendingLists(this.props.regionId, this.props.fromDate, this.props.toDate);
     };
