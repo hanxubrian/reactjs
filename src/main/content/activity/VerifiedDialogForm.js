@@ -35,7 +35,7 @@ const styles = theme => ({
         color: "white"
     },
     iconSmall: {
-      fontSize: 20
+        fontSize: 20
     }
 });
 
@@ -103,7 +103,7 @@ class VerifiedDialogForm extends React.Component {
     }
 
     componentWillMount() {
-       this.setState({openDialog:this.props.verifiedModal});
+        this.setState({openDialog:this.props.verifiedModal});
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
@@ -121,26 +121,32 @@ class VerifiedDialogForm extends React.Component {
 
     handleVerify = ()=> {
 
-      let option = this.props.verifyOption;
-      let action = 'verify';
+        let option = this.props.verifyOption;
+        let action = 'verify';
 
-      let selections = this.props.aInvoiceSelections;
-      let data = this.props.verifications.Data.Invoices;
-      let userId = this.props.user.UserId;
+        let selections = this.props.aInvoiceSelections;
+        let data = this.props.verifications.Data.Invoices;
+        let userId = this.props.user.UserId;
 
-      if(option==='transaction') {
-          data = this.props.verifications.Data.FranTransactions;
-          selections = this.props.aTransactionSelections;
-      }
+        if(option==='transaction') {
+            data = this.props.verifications.Data.FranTransactions;
+            selections = this.props.aTransactionSelections;
+        }
 
-      let objects = selections.map(x=>data[x]);
+        let objects = selections.map(x=>data[x]);
 
-      let ids = [];
-      objects.forEach(obj=>{
-          ids.push(obj._id);
-      });
+        let ids = [];
+        objects.forEach(obj=>{
+            ids.push(obj._id);
+        });
 
-      this.props.verifyBulkUpdate(this.props.regionId, userId, action, ids);
+        this.props.verifyBulkUpdate(this.props.regionId, userId, action, ids);
+        if(option==='transaction')
+            this.props.updateSelectedRowsLength([]);
+        else
+            this.props.updateInvoiceSelections([]);
+
+        this.props.getInvoiceTransactionPendingLists(this.props.regionId, this.props.fromDate, this.props.toDate);
     };
 
     handleChangeForm = (name) => event => {
@@ -224,6 +230,9 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         openVerificationDialog: Actions.openVerificationDialog,
         verifyBulkUpdate: Actions.verifyBulkUpdate,
+        updateSelectedRowsLength: Actions.updateSelectedRowsLength,
+        updateInvoiceSelections: Actions.updateInvoiceSelections,
+        getInvoiceTransactionPendingLists: Actions.getInvoiceTransactionPendingLists1,
     }, dispatch);
 }
 
@@ -236,6 +245,8 @@ function mapStateToProps({ verifications, auth}) {
         aTransactionSelections: verifications.aTransactionSelections,
         regionId: auth.login.defaultRegionId,
         verifications: verifications.verificationsDB,
+        fromDate: verifications.fromDate,
+        toDate: verifications.toDate,
     }
 }
 
