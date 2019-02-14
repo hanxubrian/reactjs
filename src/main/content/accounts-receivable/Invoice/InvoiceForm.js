@@ -735,6 +735,7 @@ class InvoiceForm extends Component {
                 SubTotal: this.state.subTotal,
                 MarkupAmountTotal :this.state.markup,
                 TaxTotal: this.state.tax,
+                TaxAmount: this.state.tax,
                 GrandTotal: this.state.total,
                 TransactionStatusListId: 2,
                 Status: 2,
