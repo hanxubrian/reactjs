@@ -99,65 +99,6 @@ function Transition(props) {
 	return <Slide direction="up" {...props} />;
 }
 
-//
-// table row edit command buttons
-//
-const AddButton = ({ onExecute }) => (
-	<div style={{ textAlign: 'center' }}>
-		{/* <Button
-			color="primary"
-			onClick={onExecute}
-			title="New Address"
-		>
-			New
-	  </Button> */}
-		<IconButton onClick={onExecute} title="Add New">
-			<NewIcon />
-		</IconButton>
-	</div>
-);
-
-const EditButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Edit Payment Amount">
-		<EditIcon />
-	</IconButton>
-);
-
-const DeleteButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Delete">
-		<DeleteIcon />
-	</IconButton>
-);
-
-const CommitButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Save">
-		<SaveIcon />
-	</IconButton>
-);
-
-const CancelButton = ({ onExecute }) => (
-	<IconButton color="secondary" onClick={onExecute} title="Cancel">
-		<CancelIcon />
-	</IconButton>
-);
-
-const commandComponents = {
-	// add: AddButton,
-	edit: EditButton,
-	// delete: DeleteButton,
-	commit: CommitButton,
-	cancel: CancelButton,
-};
-
-const Command = ({ id, onExecute }) => {
-	const CommandButton = commandComponents[id];
-	return (
-		<CommandButton
-			onExecute={onExecute}
-		/>
-	);
-};
-
 const editing_cell_styles = theme => ({
 	cell: {
 		background: "#989898",
@@ -714,7 +655,8 @@ class ServiceAgreementPage extends React.Component {
 				</>}
 				{/* <IncreaseDecreaseContractModal /> */}
 				{this.props.increaseDecreaseContractModalForm.open &&
-					<IncreaseDecreaseContractPage />}
+					<IncreaseDecreaseContractPage />
+				}
 			</Fragment>
 		);
 	}

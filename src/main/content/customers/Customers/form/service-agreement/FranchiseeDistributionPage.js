@@ -60,12 +60,6 @@ import {
 
 } from '@devexpress/dx-react-grid-material-ui';
 
-import NewIcon from '@material-ui/icons/PersonAdd';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import SaveIcon from '@material-ui/icons/Save';
-import CancelIcon from '@material-ui/icons/Cancel';
-
 import ReactDataGrid from "react-data-grid";
 import { CustomizedDxGridSelectionPanel } from "./../../../../common/CustomizedDxGridSelectionPanel";
 
@@ -91,158 +85,17 @@ const styles = theme => ({
     },
     descriptionText: {
         fontSize: 13
-    }
-})
-function Transition(props) {
-    return <Slide direction="up" {...props} />;
-}
+    },
+    menu: {
 
-//
-// table row edit command buttons
-//
-const AddButton = ({ onExecute }) => (
-    <div style={{ textAlign: 'center' }}>
-        {/* <Button
-			color="primary"
-			onClick={onExecute}
-			title="New Address"
-		>
-			New
-	  </Button> */}
-        <IconButton onClick={onExecute} title="Add New">
-            <NewIcon />
-        </IconButton>
-    </div>
-);
-
-const EditButton = ({ onExecute }) => (
-    <IconButton onClick={onExecute} title="Edit Payment Amount">
-        <EditIcon />
-    </IconButton>
-);
-
-const DeleteButton = ({ onExecute }) => (
-    <IconButton onClick={onExecute} title="Delete">
-        <DeleteIcon />
-    </IconButton>
-);
-
-const CommitButton = ({ onExecute }) => (
-    <IconButton onClick={onExecute} title="Save">
-        <SaveIcon />
-    </IconButton>
-);
-
-const CancelButton = ({ onExecute }) => (
-    <IconButton color="secondary" onClick={onExecute} title="Cancel">
-        <CancelIcon />
-    </IconButton>
-);
-
-const commandComponents = {
-    // add: AddButton,
-    edit: EditButton,
-    // delete: DeleteButton,
-    commit: CommitButton,
-    cancel: CancelButton,
-};
-
-const Command = ({ id, onExecute }) => {
-    const CommandButton = commandComponents[id];
-    return (
-        <CommandButton
-            onExecute={onExecute}
-        />
-    );
-};
-
-const editing_cell_styles = theme => ({
-    cell: {
-        background: "#989898",
-        color: "white",
-        padding: 0,
     }
 });
-const EditingHeaderCellComponentBase = props => {
-    return (<TableEditColumn.Cell {...props}
-
-    />);
-};
-
-const EditingHeaderCellComponent = withStyles(editing_cell_styles, { name: "EditingCell" })(
-    EditingHeaderCellComponentBase
-);
-
-const EditingCellComponentBase = props => {
-    return (<TableEditColumn.Cell {...props}>
-        {React.Children.toArray(props.children)
-            .filter((child) => {
-                if (child.props.id === 'delete') {
-                    // if (props.tableRow.row.id < 2) {
-                    // return true;
-                    // }
-                    return false;
-                }
-                return true;
-            })}
-    </TableEditColumn.Cell>)
-};
-
-//
-// header cell style
-//
-const header_cell_styles = theme => ({
-    cell: {
-        background: "#989898",
-        color: "white",
-    }
-});
-const tableHeaderCellComponentBase = props => {
-    return (<TableHeaderRow.Cell {...props}
-
-    />);
-};
-const tableHeaderCellComponent = withStyles(header_cell_styles)(
-    tableHeaderCellComponentBase
-);
-
-
-const EditingCellComponent = withStyles(editing_cell_styles, { name: "EditingCell" })(
-    EditingCellComponentBase
-);
-const getRowId = row => row.id;
 
 const CurrencyFormatter = ({ value }) => (<span>$ {parseFloat(`0${value}`).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
 const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/, '$2/$3/$1');
 
-const BlueDialogTitle = withStyles(theme => ({
-    root: {
-        borderBottom: `1px solid ${theme.palette.divider}`,
-        backgroundColor: "#3c93ec",
-        margin: 0,
-        padding: theme.spacing.unit * 2,
-    },
-    closeButton: {
-        position: 'absolute',
-        right: theme.spacing.unit,
-        top: theme.spacing.unit,
-        color: "white",
-    },
-}))(props => {
-    const { children, classes, onClose } = props;
-    return (
-        <DialogTitle disableTypography className={classes.root}>
-            {children}
-            {onClose ? (
-                <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
-                    <Icon>close</Icon>
-                </IconButton>
-            ) : null}
-        </DialogTitle>
-    );
-});
 
-class IncreaseDecreaseContractPage extends React.Component {
+class FranchiseeDistributionPage extends React.Component {
 
     constructor(props) {
         super(props);
@@ -420,7 +273,7 @@ class IncreaseDecreaseContractPage extends React.Component {
                 paymentType: "Check",
                 paymentAmount: 0
             },
-            step: 0,
+            step: 1,
             franchiseeServiceTypes: [],
             franchiseeBillingTypes: [],
 
@@ -430,7 +283,7 @@ class IncreaseDecreaseContractPage extends React.Component {
             increaseReasons: null,
             decreaseReasons: null,
             bReasonForHigh: false,
-			reason: '',
+            reason: '',
             NewAmount:''
         };
         // this.commitChanges = this.commitChanges.bind(this);
@@ -450,6 +303,7 @@ class IncreaseDecreaseContractPage extends React.Component {
         this.getFranchiseesFromStatus();
 
         this.setRowData(this.props.payments)
+        this.initCustomerInfo();
 
         this.setState({
             customerServiceTypes: this.props.lists.customerServiceTypes,
@@ -474,18 +328,13 @@ class IncreaseDecreaseContractPage extends React.Component {
             PaymentAmount: this.props.paymentDlgPayloads.paymentAmount,
             PaymentType: this.props.paymentDlgPayloads.paymentType
         })
-
-        // if (this.props.bOpenPaymentDialog === true) {
-        // 	this.checkValidations()
-        // }
     }
+
     UNSAFE_componentWillReceiveProps(nextProps) {
         if (nextProps.payments !== this.props.payments) {
-            console.log("componentWillReceiveProps payments")
             this.setRowData(nextProps.payments)
         }
         if (!_.isEqual(nextProps.activePaymentRows, this.props.activePaymentRows)) {
-            console.log("componentWillReceiveProps activePaymentRows", nextProps.activePaymentRows, this.props.activePaymentRows)
             this.setRowData(this.props.payments, nextProps.activePaymentRows)
         }
         if (!_.isEqual(nextProps.paymentDlgPayloads, this.props.paymentDlgPayloads)) {
@@ -494,10 +343,6 @@ class IncreaseDecreaseContractPage extends React.Component {
                 PaymentAmount: nextProps.paymentDlgPayloads.paymentAmount,
                 PaymentType: nextProps.paymentDlgPayloads.paymentType
             })
-
-            // if (nextProps.bOpenPaymentDialog === true) {
-            // 	this.checkValidations()
-            // }
         }
         if (nextProps.regionId !== this.props.regionId) {
             this.props.getFranchiseeServiceTypes(nextProps.regionId)
@@ -510,8 +355,9 @@ class IncreaseDecreaseContractPage extends React.Component {
             this.getFranchiseesFromStatus(nextProps.franchisees);
         }
     }
+
     initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer.Data) => {
-    	console.log('rows=', this.state.rows);
+        console.log('initCustomerInfo=', this.state.rows);
         this.setState({
             SA_Amount: activeCustomerInfo.cont_bill,
             franchieesesToOffer: activeCustomerInfo.AssignedFranchisees,
@@ -519,24 +365,6 @@ class IncreaseDecreaseContractPage extends React.Component {
     };
 
     handleClose = () => {
-        // this.setState({
-        // 	PaymentType: "Check",
-        // 	ReferenceNo: "",
-        // 	PaymentDate: new Date().toISOString().substr(0, 10),
-        // 	PaymentNote: "",
-        // 	PaymentAmount: 0,
-        // 	overpayment: 0,
-        // 	errorMsg: "",
-        // })
-
-        // this.clearDistribute()
-
-        // this.props.openPaymentDialog({
-        // 	open: false,
-        // 	paymentType: "Check",
-        // 	paymentAmount: 0,
-        // })
-
         this.props.showIncreaseDecreaseContractModalForm(false)
 
     };
@@ -586,15 +414,6 @@ class IncreaseDecreaseContractPage extends React.Component {
     }
 
     setRowData(payments, activePaymentRows = this.props.activePaymentRows) {
-        console.log("----------------------------------------", activePaymentRows, payments)
-        // const temp_rows = [
-        // 	{ id: 0, InvoiceNo: 1, InvoiceAmount: 1351.51, InvoiceBalance: 216.36, PaymentAmount: 0 },
-        // 	{ id: 1, InvoiceNo: 2, InvoiceAmount: 56.30, InvoiceBalance: 548.24, PaymentAmount: 0 },
-        // 	{ id: 2, InvoiceNo: 3, InvoiceAmount: 215.28, InvoiceBalance: 1654.36, PaymentAmount: 0 },
-
-        // ];
-        // this.setState({ rows: temp_rows })
-
         if (!payments || payments.Regions === undefined || payments.Regions.length < 1)
             return [];
         let res = [...payments.Regions[0].Payments]
@@ -622,24 +441,8 @@ class IncreaseDecreaseContractPage extends React.Component {
             for (let i = fromRow; i <= toRow; i++) {
                 rows[i] = { ...rows[i], ...updated };
             }
-            //
-            // overpayment
-            //
-            // let totalPaymentAmount = 0, floatPaymentAmount = 0
-            // rows.forEach(x => {
-            // 	totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
-            // })
-            // floatPaymentAmount = parseFloat(`0${this.state.PaymentAmount}`)
-            // this.checkValidations('', '', rows)
-
-            // this.setState({
-            // 	overpayment: this.getOverpaymentAmount(rows)
-            // })
-
             return {
                 rows,
-                // overpayment: floatPaymentAmount - totalPaymentAmount,
-                // errorMsg: this.isNonEmptyPayment(rows) ? (this.state.errorMsg === "Neither of payments amount is settled" ? "" : this.state.errorMsg) : "Neither of payments amount is settled"
             };
         });
     };
@@ -661,16 +464,12 @@ class IncreaseDecreaseContractPage extends React.Component {
                     floatPaymentAmount = 0
                 }
             }
-            // this.checkValidations('', '', rows)
-
             return {
                 rows: rows,
                 overpayment: this.getOverpaymentAmount(rows),
-                // overpayment: floatPaymentAmount,
-                // errorMsg: this.isNonEmptyPayment(rows) ? (this.state.errorMsg === "Neither of payments amount is settled" ? "" : this.state.errorMsg) : "Neither of payments amount is settled"
             }
         })
-    }
+    };
 
     clearDistribute = () => {
         this.setState(state => {
@@ -856,24 +655,6 @@ class IncreaseDecreaseContractPage extends React.Component {
 
     addFranchiseeToCustomer = () => {
         const { selection, rows } = this.state;
-        /*
-            AssignedDate: "05/31/2012"
-            CreatedById: 0
-            FranchiseeNumber: "701011"
-            MonthlyBilling: Array(1)
-            0:
-            BillingFrequency: "R"
-            BillingTypeId: "5c41e517d2963319d486a19b"
-            BillingTypeServiceId: "5c537995d723510cd898f3e0"
-            Description: "MONTHLY CLEANING SERVICE"
-            EscrowBilling: true
-            MonthlyBilling: 28671.77
-            Status: "Active"
-            __proto__: Object
-            length: 1
-            __proto__: Array(0)
-            Status: "Active"
-        */
         let selectedFranchisees = selection.map(x => rows[x])
         selectedFranchisees.forEach(x => {
 
@@ -911,13 +692,12 @@ class IncreaseDecreaseContractPage extends React.Component {
         })
     }
     handleStepNewAmountForm = () => {
-        this.handleStep(0)
+
     }
 
     handleStepFranchiseeDistribution = () => {
-        console.log('saved');
-        // this.handleStep(1)
-    };
+        this.handleStep(1)
+    }
 
     handleStepFindersFeesForm = () => {
         this.handleStep(2)
@@ -929,12 +709,14 @@ class IncreaseDecreaseContractPage extends React.Component {
         if(this.state.bReasonForHigh)
             items = this.state.increaseReasons;
 
+        console.log('items=', items);
+
         return (
             <TextField margin="dense" id="Reason" label="Reason" name="reason"
                        select
                        InputLabelProps={{ shrink: true }}
-					   value={this.state.reason}
-					   onChange={this.handleChange1}
+                       value={this.state.reason}
+                       onChange={this.handleChange1}
                        className={classNames(classes.textField, "pl-6 flex-1")}
                        InputProps={{ readOnly: false }}
                        SelectProps={{
@@ -942,13 +724,13 @@ class IncreaseDecreaseContractPage extends React.Component {
                                className: classes.menu,
                            },
                        }}
-			>
-				{items.map(item=>(
-                    <MenuItem key={item.ReasonNumber} value={item.ReasonNumber}>
-                        {item.name}
-                    </MenuItem>
-					)
-				)}
+            >
+                {items.map(item=> (
+                        <MenuItem key={item.ReasonNumber} value={item.ReasonNumber}>
+                            {item.name}
+                        </MenuItem>
+                    )
+                )}
             </TextField>
         )
     };
@@ -967,10 +749,10 @@ class IncreaseDecreaseContractPage extends React.Component {
             { width: 15, title: 'Service', field: '' },
             { width: 25, title: 'Description', field: '' },
             { width: 10, title: 'Amount', field: '' },
-        ]
+        ];
 
         return (
-			<>
+            <>
                 <div className={classNames("flex mt-12 justify-between")}>
 
                     <TextField margin="dense" id="SA_Amount" label="Current Contract Amount" value={this.state.SA_Amount}
@@ -984,7 +766,7 @@ class IncreaseDecreaseContractPage extends React.Component {
                     <div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
                         <Button variant="contained" onClick={this.handleStepFranchiseeDistribution}
                                 disabled={this.state.NewAmount === ''}
-                                color="primary" className={classNames("pl-24 pr-24 mr-12")}>Save</Button>
+                                color="primary" className={classNames("pl-24 pr-24 mr-12")}>Franchisee Distribution<Icon>keyboard_arrow_right</Icon></Button>
                         <Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
                     </div>
 
@@ -1002,8 +784,9 @@ class IncreaseDecreaseContractPage extends React.Component {
                                onChange={this.handleChange("NewAmount")}
                                autoFocus
                     />
-                    {this.state.decreaseReasons!==null && this.state.increaseReasons!==null && (
-                        this.renderReasons())}
+                        {this.state.decreaseReasons!==null && this.state.increaseReasons!==null && (
+                            this.renderReasons())}
+
                     <TextField
                         type="date"
                         id="EffectiveDate"
@@ -1040,7 +823,7 @@ class IncreaseDecreaseContractPage extends React.Component {
                         rows={3}
                     />
                 </div>
-			</>
+            </>
         )
     }
 
@@ -1060,8 +843,6 @@ class IncreaseDecreaseContractPage extends React.Component {
             step,
         } = this.state;
 
-
-
         const franHeaders = [
             { width: 7, title: 'Number', field: 'Number' },
             { width: 19, title: 'Name', field: 'Name' },
@@ -1074,7 +855,7 @@ class IncreaseDecreaseContractPage extends React.Component {
         ];
 
         return (
-			<>
+            <>
                 <div className={classNames("flex mt-12 justify-between")}>
                     <TextField margin="dense" id="Monthly Billing Amount" label="New Monthly Billing Amount"
                                InputLabelProps={{ shrink: true }}
@@ -1088,9 +869,8 @@ class IncreaseDecreaseContractPage extends React.Component {
                     />
 
                     <div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-                        {step === 1 && <Button variant="contained" onClick={this.handleStepNewAmountForm} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>}
-                        <Button variant="contained" color="primary" onClick={this.handleStepFindersFeesForm} className={classNames("pl-24 pr-24 mr-12")}>Finders Fees<Icon>keyboard_arrow_right</Icon></Button>
-                        <Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
+                        {step === 1 && <Button variant="contained" onClick={this.handleStepNewAmountForm} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Save</Button>}
+                        {/*<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>*/}
                     </div>
                 </div>
 
@@ -1146,7 +926,7 @@ class IncreaseDecreaseContractPage extends React.Component {
 
                                         <TextField style={{ width: franHeaders[4].width + '%' }}
                                                    margin="dense"
-												   name='BillingTypeId'
+                                                   name='BillingTypeId'
                                                    className="pl-6 hidden"
                                                    value={m.BillingTypeId}
                                                    select
@@ -1195,7 +975,7 @@ class IncreaseDecreaseContractPage extends React.Component {
 								className="pl-6"
 							/> */}
                                         <TextField style={{ width: franHeaders[7].width + '%' }}
-											// type='number'
+                                            // type='number'
                                                    InputProps={{
                                                        readOnly: false,
                                                        classes: {
@@ -1207,7 +987,7 @@ class IncreaseDecreaseContractPage extends React.Component {
                                                    margin="dense"
                                                    className="pl-6"
                                                    value={m.MonthlyBilling}
-                                                   // onChange={this.handleChange(`MonthlyBilling${index}-${mIndex}`)}
+                                            // onChange={this.handleChange(`MonthlyBilling${index}-${mIndex}`)}
                                                    onChange={(v)=>this.handleMonthlyBilling(v, m, 'MonthlyBilling')}
 
                                         />
@@ -1219,7 +999,7 @@ class IncreaseDecreaseContractPage extends React.Component {
 
                     ))}
                 </div>
-			</>
+            </>
         )
     }
 
@@ -1248,7 +1028,7 @@ class IncreaseDecreaseContractPage extends React.Component {
                         <IntegratedSorting />
                         <IntegratedPaging />
                         <EditingState
-							// columnExtensions={editingColumnExtensions}
+                            // columnExtensions={editingColumnExtensions}
                             onCommitChanges={this.commitChanges} />
                         <Table />
                         {/* <VirtualTable height="auto" /> */}
@@ -1280,7 +1060,7 @@ class IncreaseDecreaseContractPage extends React.Component {
     getFindersFeesForm() {
         const { classes } = this.props
         return (
-			<>
+            <>
                 <div className={classNames("flex mt-12 justify-between")}>
 
                     <TextField select margin="dense" id="CalculationMethod" label="Calculation Method"
@@ -1445,50 +1225,28 @@ class IncreaseDecreaseContractPage extends React.Component {
                     />
 
                 </div>
-			</>
+            </>
         )
     }
 
     render() {
         const { classes } = this.props;
         const { customerServiceTypes, step } = this.state;
+        console.log('step=', step);
 
         return (
-			<>
-                {/* {step === 0 && <h2 style={{ display: "flex", alignItems: "center", color: "white" }}><Icon>account_balance</Icon>&nbsp;&nbsp;Increase / Decrease Contract Amount</h2>} */}
-                {/* {step === 1 && <h2 style={{ display: "flex", alignItems: "center", color: "white" }}><Icon>account_balance</Icon>&nbsp;&nbsp;Increase / Decrease Contract Amount</h2>} */}
-
-                {/* <Divider variant="middle" style={{ marginTop: 10, marginBottom: 10, width: '50%', alignSelf: 'center', marginLeft: 'auto', marginRight: 'auto' }} /> */}
-
+            <>
                 <div className={classNames("flex flex-col")}>
-                    {step === 0 && this.getNewAmountInputForm()}
-                    {step === 1 && this.getFranchiseeAssignmentForm()}
-                    {step === 2 && this.getFindersFeesForm()}
+                    {/*{step === 0 && this.getNewAmountInputForm()}*/}
+                    { this.getFranchiseeAssignmentForm()}
+                    {/*{step === 2 && this.getFindersFeesForm()}*/}
                 </div>
 
-                {/* <div className="flex w-full justify-between mb-12">
-					<div className="flex w-full" style={{ alignItems: 'center' }}>
-						<TextField
-							type="date"
-							id="EffectiveDate"
-							value={this.state.EffectiveDate}
-							label="Effective Date"
-							className={classNames(classes.textField, 'ml-24')}
-							InputLabelProps={{ shrink: true }}
-							value={this.state.EffectiveDate}
-							onChange={this.handleChange('EffectiveDate')}
-							margin="dense"
-						/>
-					</div>
-				</div> */}
-
-                {step === 1 &&
                 <div className={classNames("flex flex-col")}>
                     <Divider variant="middle" style={{ marginTop: 10, marginBottom: 10, width: '50%', alignSelf: 'center' }} />
                     {this.getFranchiseesList()}
                 </div>
-                }
-			</>
+            </>
         );
     }
 }
@@ -1538,4 +1296,4 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
     }
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(IncreaseDecreaseContractPage)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(FranchiseeDistributionPage)));

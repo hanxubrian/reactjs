@@ -3,34 +3,11 @@ import ReactDOM from 'react-dom';
 
 // core components
 import {
-	Paper,
-	TextField,
-	Button,
-	Typography,
-	MenuItem,
-	// FormControl,
-	// InputLabel,
-	// Select,
-	// OutlinedInput,
-	// Card,
-	// CardHeader,
-	// CardContent,
-	Divider,
-	// Radio,
-	// RadioGroup,
-	FormControlLabel,
-	IconButton,
-	Icon
-	// GridList
-} from '@material-ui/core';
-
+	TextField, Button, MenuItem, Divider, FormControlLabel,
+	AppBar, Checkbox, Tabs, Tab, Switch, InputAdornment } from '@material-ui/core';
 
 // theme components
-import {
-	// FusePageCustom,
-	FuseAnimate,
-	// FuseSearch
-} from '@fuse';
+import { FuseAnimate} from '@fuse';
 
 import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
@@ -47,89 +24,14 @@ import * as Actions from 'store/actions';
 // third party
 import "react-table/react-table.css";
 import _ from 'lodash';
-// import Autosuggest from 'react-autosuggest';
 import classNames from 'classnames';
-// import match from "autosuggest-highlight/match";
-// import parse from "autosuggest-highlight/parse";
-
-
-
-// import PropTypes from 'prop-types';
-// import { withStyles } from '@material-ui/core/styles';
-// import Stepper from '@material-ui/core/Stepper';
-// import Step from '@material-ui/core/Step';
-// import StepButton from '@material-ui/core/StepButton';
-// import Button from '@material-ui/core/Button';
-// import Typography from '@material-ui/core/Typography';
-
-import FormLabel from '@material-ui/core/FormLabel';
-// import FormControl from '@material-ui/core/FormControl';
-// import FormGroup from '@material-ui/core/FormGroup';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import FormHelperText from '@material-ui/core/FormHelperText';
-import Checkbox from '@material-ui/core/Checkbox';
-// import Input from '@material-ui/core/Input';
-import InputAdornment from '@material-ui/core/InputAdornment';
-
-
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-
-import Switch from '@material-ui/core/Switch';
-
-import ReactTable from "react-table";
-import JanikingPagination from 'Commons/JanikingPagination';
 
 import CustomersDocumentUploadTable from "./documentUploadTable";
-
-import {
-	SelectionState,
-	PagingState,
-	IntegratedPaging,
-	IntegratedSelection,
-	SortingState,
-	IntegratedSorting,
-	EditingState,
-	GroupingState,
-	IntegratedGrouping,
-	DataTypeProvider,
-	FilteringState,
-	IntegratedFiltering,
-	SearchState,
-} from '@devexpress/dx-react-grid';
-
-import {
-	Grid,
-	Table,
-	TableHeaderRow,
-	TableSelection,
-	PagingPanel,
-	TableEditRow,
-	TableEditColumn,
-	GroupingPanel,
-	Toolbar,
-	TableGroupRow,
-	TableFilterRow,
-	SearchPanel,
-	DragDropProvider,
-	TableColumnReordering,
-	TableColumnResizing,
-	ColumnChooser,
-	TableColumnVisibility,
-	TableFixedColumns,
-	VirtualTable,
-
-} from '@devexpress/dx-react-grid-material-ui';
-
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import SaveIcon from '@material-ui/icons/Save';
-import CancelIcon from '@material-ui/icons/Cancel';
 
 import AccountOfferingPage from './form/account-offering/AccountOfferingPage';
 import FinderFeePage from './form/finders-fees/FinderFeePage'
 import ServiceAgreementPage from './form/service-agreement/ServiceAgreementPage'
+import FranchiseeDistributionPage from './form/service-agreement/FranchiseeDistributionPage'
 
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -260,68 +162,15 @@ const newCustomerState = {
 	"Service": ""
 };
 
-// function renderInputComponent(inputProps) {
-// 	const { classes, inputRef = () => { }, ref, ...other } = inputProps;
-
-// 	return (
-// 		<TextField
-// 			fullWidth
-// 			variant="outlined"
-// 			label="Customer For:"
-// 			InputProps={{
-// 				inputRef: node => {
-// 					ref(node);
-// 					inputRef(node);
-// 				},
-// 				classes: {
-// 					input: classes.input,
-// 				},
-// 			}}
-// 			{...other}
-// 		/>
-// 	);
-// }
-
-// function renderSuggestion(suggestion, { query, isHighlighted }) {
-// 	const matches = match(suggestion.CustomerName, query);
-// 	const parts = parse(suggestion.CustomerName, matches);
-
-// 	return (
-// 		<MenuItem selected={isHighlighted} component="div">
-// 			<div>
-// 				{parts.map((part, index) => {
-// 					return part.highlight ? (
-// 						<span key={String(index)} style={{ fontWeight: 700 }}>
-// 							{part.text}
-// 						</span>
-// 					) : (
-// 							<strong key={String(index)} style={{ fontWeight: 300 }}>
-// 								{part.text}
-// 							</strong>
-// 						);
-// 				})}
-// 			</div>
-// 		</MenuItem>
-// 	);
-// }
-
 function escapeRegexCharacters(str) {
 	return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-
-
 function getSteps() {
-	return ['Service Agreement', 'Billing', 'Cleaning Schedule', "Walk-Thru", "Account Offering", "Documents", "Marketing", "Account History", "Finders Fees"];
+	return ['Service Agreement', 'Franchisee Distribution', 'Billing', 'Cleaning Schedule', "Walk-Thru", "Account Offering", "Documents", "Marketing", "Account History", "Finders Fees"];
 }
 
 const Upload_Document_headers = [
-	// {
-	// 	id: 'doc_type',
-	// 	numeric: false,
-	// 	disablePadding: false,
-	// 	label: 'Doc Type'
-	// },
 	{
 		id: 'documentName',
 		numeric: false,
@@ -340,76 +189,8 @@ const Upload_Document_headers = [
 		disablePadding: false,
 		label: 'Browse'
 	},
-	// {
-	// 	id: 'fileSize',
-	// 	numeric: false,
-	// 	disablePadding: false,
-	// 	label: 'File Size'
-	// },
-	// {
-	// 	id: 'view',
-	// 	numeric: false,
-	// 	disablePadding: false,
-	// 	label: 'View'
-	// }
 ];
 
-
-//
-// table row edit command buttons
-//
-const AddButton = ({ onExecute }) => (
-	<div style={{ textAlign: 'center' }}>
-		<Button
-			color="primary"
-			onClick={onExecute}
-			title="Create new row"
-		>
-			New
-	  </Button>
-	</div>
-);
-
-const EditButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Edit row">
-		<EditIcon />
-	</IconButton>
-);
-
-const DeleteButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Delete row">
-		<DeleteIcon />
-	</IconButton>
-);
-
-const CommitButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Save changes">
-		<SaveIcon />
-	</IconButton>
-);
-
-const CancelButton = ({ onExecute }) => (
-	<IconButton color="secondary" onClick={onExecute} title="Cancel changes">
-		<CancelIcon />
-	</IconButton>
-);
-
-const commandComponents = {
-	add: AddButton,
-	edit: EditButton,
-	delete: DeleteButton,
-	commit: CommitButton,
-	cancel: CancelButton,
-};
-
-const Command = ({ id, onExecute }) => {
-	const CommandButton = commandComponents[id];
-	return (
-		<CommandButton
-			onExecute={onExecute}
-		/>
-	);
-};
 // const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 class CustomerForm extends Component {
 	state = {
@@ -466,28 +247,9 @@ class CustomerForm extends Component {
 		}
 		this.setState({ rows });
 	}
-	
-	getStepContent(step) {
-		const { classes,
-			// CustomerForm,
-			// addCustomer,
-			// updateCustomer,
-			// removeCustomer
-			customerForm,
-		} = this.props;
-		// const {
-		// 	value,
-		// 	suggestions
-		// } = customerForm.state;
 
-		// const autosuggestProps = {
-		// 	renderInputComponent,
-		// 	suggestions: suggestions,
-		// 	onSuggestionsFetchRequested: customerForm.onSuggestionsFetchRequested,
-		// 	onSuggestionsClearRequested: customerForm.onSuggestionsClearRequested,
-		// 	getSuggestionValue: customerForm.getSuggestionValue,
-		// 	renderSuggestion,
-		// };
+	getStepContent(step) {
+		const { classes} = this.props;
 
 		let execTitles = []
 		if (this.props.accountExecutiveList !== null && this.props.accountExecutiveList.Data !== undefined) {
@@ -501,11 +263,14 @@ class CustomerForm extends Component {
 
 		switch (step + 1) {
 			case 1:
-				// return 'Step 2: What is an ad group anyways?';
 				return (
 					<ServiceAgreementPage />
 				);
-			case 2:
+				case 2:
+				return (
+					<FranchiseeDistributionPage />
+				);
+			case 3:
 				return (
 					<Fragment>
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
@@ -721,7 +486,7 @@ class CustomerForm extends Component {
 						</GridContainer>
 					</Fragment>
 				);
-			case 3:
+			case 4:
 				// return 'Step 3: This is the bit I really care about!';
 				return (
 					<Fragment>
@@ -955,7 +720,7 @@ class CustomerForm extends Component {
 
 					</Fragment>
 				);
-			case 4:
+			case 5:
 				return (
 					<Fragment>
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
@@ -1262,21 +1027,15 @@ class CustomerForm extends Component {
 									style={{ width: '100%' }}
 								/>
 							</GridItem>
-							{/* <GridItem>
-								<img className="mr-12" alt="" src="assets/images/customers/walk-through.jpg" style={{ width: '100%', height: 'auto' }} />
-							</GridItem> */}
-
-
-
 						</GridContainer>
 
 					</Fragment>
 				);
-			case 5:
+			case 6:
 				const { account_offering_step } = this.state
 
 				return (<AccountOfferingPage step={account_offering_step} />)
-			case 6:
+			case 7:
 				return (
 					<Fragment>
 						<div style={{ marginTop: '30px' }}></div>
@@ -1285,11 +1044,11 @@ class CustomerForm extends Component {
 						</div>
 					</Fragment>
 				)
-			case 7:
-				return (<Fragment></Fragment>)
 			case 8:
 				return (<Fragment></Fragment>)
 			case 9:
+				return (<Fragment></Fragment>)
+			case 10:
 				return (<FinderFeePage />)
 			default:
 				return 'Unknown step';
@@ -1329,60 +1088,27 @@ class CustomerForm extends Component {
 	};
 
 	closeComposeForm = () => {
-		//this.props.this.type === 'create' ? this.props.closeEditCustomerForm() : this.props.closeNewCustomerForm();
 		this.type === 'create' ? this.props.closeEditCustomerForm() : this.props.closeNewCustomerForm();
 	};
-	// constructor(props) {
-	// 	super(props);
-	// }
+
 	constructor(props) {
 		super(props);
-
-		// if (!props.bLoadedFranchisees) {
-		// 	props.getFranchisees();
-		// }
 		if (!props.documents) {
 			props.getDocuments();
 		}
-		this.fetchData = this.fetchData.bind(this);
-		// this.escFunction = this.escFunction.bind(this);
-
-		// if (!props.bLoadedFranchisees) {
-		// 	props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
-		// }
-
 		this.changeSelection = selection => this.setState({ selection });
 		this.changeSorting = sorting => this.setState({ sorting });
 		this.changeSearchValue = value => this.setState({ searchValue: value });
 	}
-	fetchData(state, instance) {
-		this.setState({
-			pageSize: state.pageSize,
-			page: state.page,
-		});
-	}
-	// escFunction(event) {
-	// 	if (event.keyCode === 27) {
-	// 		this.setState({ s: '' });
-	// 		this.getFranchiseesFromStatus();
-	// 	}
-	// }
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
 	}
 
 	componentWillMount() {
-		// this.getFranchiseesFromStatus();
 		this.initCustomerInfo()
 	}
 
 	componentWillReceiveProps(nextProps) {
-		// console.log("this.props.franchisees")
-		// console.log(this.props.franchisees)
-		// if (this.props.franchisees === null && nextProps.franchisees !== null)
-		// 	this.getFranchiseesFromStatus(nextProps.franchisees);
-		// if (this.props.franchisees !== nextProps.franchisees)
-		// 	this.getFranchiseesFromStatus(nextProps.franchisees);
 		if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
 			this.initCustomerInfo(nextProps.activeCustomer.Data)
 		}
@@ -1392,28 +1118,7 @@ class CustomerForm extends Component {
 		this.setState({
 			SA_Amount: activeCustomerInfo ? activeCustomerInfo.cont_bill : "",
 		})
-	}
-
-
-	// getFranchiseesFromStatus = (rawData = this.props.franchisees) => {
-	// 	let data = [];
-	// 	let tempData = [];
-	// 	if (rawData === null) return;
-
-	// 	if (rawData.Data.Region.length === 0) {
-	// 		data = [];
-	// 		this.setState({ temp: data });
-	// 		this.setState({ data: data });
-	// 		return;
-	// 	} else {
-	// 		for (let i = 0; i < rawData.Data.Region.length; i++) {
-	// 			tempData = rawData.Data.Region[i].FranchiseeList;
-	// 			data = data.concat(tempData);
-	// 		}
-	// 	}
-	// 	this.setState({ temp: data });
-	// 	this.setState({ data: data });
-	// };
+	};
 
 	componentDidMount() {
 		// this.getDocuments()
@@ -1425,7 +1130,6 @@ class CustomerForm extends Component {
 	}
 
 	getDocuments = (rawData = this.props.documents) => {
-		console.log("DOCUMENTS" + "" + rawData)
 		let all_docs = [];
 		if (rawData === null || rawData === undefined) return;
 		let documents = rawData.Data.filter(x => x);
@@ -1436,10 +1140,6 @@ class CustomerForm extends Component {
 		});
 	};
 
-	handleChange = (event) => {
-		this.setState(_.set({ ...this.state }, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
-	};
-
 	handleChange = name => event => {
 		this.setState({
 			[name]: event.target.value
@@ -1448,39 +1148,11 @@ class CustomerForm extends Component {
 
 	canBeSubmitted() {
 		return true;
-		// const { name } = this.state;
-		// return (
-		// 	name.length > 0
-		// );
 	}
-
 
 	//////////////////////
 	totalSteps = () => {
 		return getSteps().length;
-	};
-
-	isStepOptional = step => {
-		// return step === 1;
-		return false;
-	};
-
-	handleSkip = () => {
-		const { activeStep } = this.state;
-		if (!this.isStepOptional(activeStep)) {
-			// You probably want to guard against something like this
-			// it should never occur unless someone's actively trying to break something.
-			throw new Error("You can't skip a step that isn't optional.");
-		}
-
-		this.setState(state => {
-			const skipped = new Set(state.skipped.values());
-			skipped.add(activeStep);
-			return {
-				activeStep: state.activeStep + 1,
-				skipped
-			};
-		});
 	};
 
 	handleNext = () => {
@@ -1500,36 +1172,6 @@ class CustomerForm extends Component {
 		});
 	};
 
-	handleBack = () => {
-		this.setState(state => ({
-			activeStep: state.activeStep - 1
-		}));
-	};
-
-	handleStep = step => () => {
-		this.setState({
-			activeStep: step
-		});
-	};
-
-	handleComplete = () => {
-		// eslint-disable-next-line react/no-access-state-in-setstate
-		const completed = new Set(this.state.completed);
-		completed.add(this.state.activeStep);
-		this.setState({
-			completed
-		});
-
-		/**
-		 * Sigh... it would be much nicer to replace the following if conditional with
-		 * `if (!this.allStepsComplete())` however state is not set when we do this,
-		 * thus we have to resort to not being very DRY.
-		 */
-		if (completed.size !== this.totalSteps() - this.skippedSteps()) {
-			this.handleNext();
-		}
-	};
-
 	handleReset = () => {
 		this.setState({
 			activeStep: 0,
@@ -1540,14 +1182,6 @@ class CustomerForm extends Component {
 
 	skippedSteps() {
 		return this.state.skipped.size;
-	}
-
-	isStepSkipped(step) {
-		return this.state.skipped.has(step);
-	}
-
-	isStepComplete(step) {
-		return this.state.completed.has(step);
 	}
 
 	completedSteps() {
@@ -1567,30 +1201,9 @@ class CustomerForm extends Component {
 	};
 	//////////////////////
 	render() {
-		console.log(this.props)
-		const { classes,
-			// addCustomer,
-			// updateCustomer,
-			// removeCustomer
-		} = this.props;
-		// const { value, suggestions } = this.state;
-
-		// const autosuggestProps = {
-		// 	renderInputComponent,
-		// 	suggestions: suggestions,
-		// 	onSuggestionsFetchRequested: this.onSuggestionsFetchRequested,
-		// 	onSuggestionsClearRequested: this.onSuggestionsClearRequested,
-		// 	getSuggestionValue: this.getSuggestionValue,
-		// 	renderSuggestion,
-		// };
-		console.log('customers', this.props.customers);
-		console.log("this.props.franchisees", this.props.franchisees);
-		console.log("this.props.documents", this.props.documents);
-
-		// const {classes} = this.props;
+		const { classes} = this.props;
 		const steps = getSteps();
-		const { activeStep, account_offering_step
-		} = this.state;
+		const { activeStep} = this.state;
 
 
 

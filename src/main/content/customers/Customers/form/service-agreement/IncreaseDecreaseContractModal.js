@@ -1008,7 +1008,7 @@ class IncreaseDecreaseContractModal extends React.Component {
 
 						<div className={classNames("flex flex-col")}>
 							{step === 0 && this.getFranchiseeAssignmentForm()}
-							{step === 1 && this.getFindersFeesForm()}
+							{/*{step === 1 && this.getFindersFeesForm()}*/}
 							<Divider variant="middle" style={{ marginTop: 10, width: '100%', alignSelf: 'center' }} />
 						</div>
 

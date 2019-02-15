@@ -356,61 +356,7 @@ const Upload_Document_headers = [
 ];
 
 
-//
-// table row edit command buttons
-//
-const AddButton = ({ onExecute }) => (
-	<div style={{ textAlign: 'center' }}>
-		<Button
-			color="primary"
-			onClick={onExecute}
-			title="Create new row"
-		>
-			New
-	  </Button>
-	</div>
-);
 
-const EditButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Edit row">
-		<EditIcon />
-	</IconButton>
-);
-
-const DeleteButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Delete row">
-		<DeleteIcon />
-	</IconButton>
-);
-
-const CommitButton = ({ onExecute }) => (
-	<IconButton onClick={onExecute} title="Save changes">
-		<SaveIcon />
-	</IconButton>
-);
-
-const CancelButton = ({ onExecute }) => (
-	<IconButton color="secondary" onClick={onExecute} title="Cancel changes">
-		<CancelIcon />
-	</IconButton>
-);
-
-const commandComponents = {
-	add: AddButton,
-	edit: EditButton,
-	delete: DeleteButton,
-	commit: CommitButton,
-	cancel: CancelButton,
-};
-
-const Command = ({ id, onExecute }) => {
-	const CommandButton = commandComponents[id];
-	return (
-		<CommandButton
-			onExecute={onExecute}
-		/>
-	);
-};
 // const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 class CustomerForm extends Component {
 	state = {
@@ -628,36 +574,6 @@ class CustomerForm extends Component {
 	componentWillMount() {
 		// this.getFranchiseesFromStatus();
 	}
-
-	// componentWillReceiveProps(nextProps) {
-	// 	console.log("this.props.franchisees")
-	// 	console.log(this.props.franchisees)
-	// 	if (this.props.franchisees === null && nextProps.franchisees !== null)
-	// 		this.getFranchiseesFromStatus(nextProps.franchisees);
-	// 	if (this.props.franchisees !== nextProps.franchisees)
-	// 		this.getFranchiseesFromStatus(nextProps.franchisees);
-	// }
-
-
-	// getFranchiseesFromStatus = (rawData = this.props.franchisees) => {
-	// 	let data = [];
-	// 	let tempData = [];
-	// 	if (rawData === null) return;
-
-	// 	if (rawData.Data.Region.length === 0) {
-	// 		data = [];
-	// 		this.setState({ temp: data });
-	// 		this.setState({ data: data });
-	// 		return;
-	// 	} else {
-	// 		for (let i = 0; i < rawData.Data.Region.length) {
-	// 			tempData = rawData.Data.Region[i].FranchiseeList;
-	// 			data = data.concat(tempData);
-	// 		}
-	// 	}
-	// 	this.setState({ temp: data });
-	// 	this.setState({ data: data });
-	// };
 
 	componentDidMount() {
 		// this.getDocuments()
@@ -921,57 +837,6 @@ class CustomerForm extends Component {
 					{/* </div> */}
 				</div>
 
-
-				{/* <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-					{activeStep === 4 ? (<div></div>) : (<div style={{ display: 'flex' }}>
-						<FuseAnimate animation="transition.expandIn" delay={300} style={{ alignItems: 'justify-start' }}>
-							<Button
-								variant="contained"
-								color="primary"
-								className={classes.button}
-								onClick={() => {
-									this.closeComposeForm();
-								}}
-								disabled={!this.canBeSubmitted()}
-							> Submit for Approval </Button>
-						</FuseAnimate>
-					</div>)}
-
-					<div style={{ display: 'flex' }}>
-						<FuseAnimate animation="transition.expandIn" delay={300} style={{ alignItems: 'justify-end' }}>
-							<Button
-								variant="contained"
-								color="primary"
-								className={classNames(classes.button, "mr-12")}
-								onClick={() => { this.closeComposeForm(); }}
-								disabled={!this.canBeSubmitted()}
-							> Discard </Button>
-						</FuseAnimate>
-						<FuseAnimate animation="transition.expandIn" delay={300} style={{ alignItems: 'justify-end' }}>
-							<Button
-								variant="contained"
-								color="primary"
-								className={classNames(classes.button, "mr-12")}
-								onClick={() => { this.closeComposeForm(); }}
-								disabled={!this.canBeSubmitted()}
-							> Save </Button>
-						</FuseAnimate>
-						<FuseAnimate animation="transition.expandIn" delay={300} style={{ alignItems: 'justify-end' }}>
-							<Button
-								variant="contained"
-								color="primary"
-								className={classes.button}
-								onClick={() => {
-									this.closeComposeForm();
-								}}
-								disabled={!this.canBeSubmitted()}
-							> Close </Button>
-						</FuseAnimate>
-					</div>
-
-
-
-				</div> */}
 			</Fragment>
 		);
 	}
