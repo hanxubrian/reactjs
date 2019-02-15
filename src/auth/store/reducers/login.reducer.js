@@ -41,7 +41,7 @@ const login = function (state = initialState, action) {
                 firstName: action.payload.Data.FirstName,
                 lastName: action.payload.Data.LastName,
                 role: action.payload.Data.Roles[0].RoleName,
-                Username: action.payload.Data.Username,
+                Username: action.payload.Data.UserName,
                 Phone: action.payload.Data.Phone,
                 profilePhoto: action.payload.Data.ProfilePhoto,
                 url: window.location.host.split(':')[0]
