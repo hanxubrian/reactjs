@@ -21,10 +21,10 @@ import {
     PagingState,
     IntegratedPaging,
     DataTypeProvider,
-    GroupingState,SelectionState,
+    GroupingState, SelectionState,
     IntegratedGrouping, TableColumnVisibility,
     SortingState,
-    IntegratedSorting,
+    IntegratedSorting, SummaryState, IntegratedSummary,
 } from '@devexpress/dx-react-grid';
 
 import {
@@ -33,9 +33,13 @@ import {
     VirtualTable,
     TableHeaderRow,
     TableGroupRow,
-    PagingPanel
+    PagingPanel, TableSummaryRow
 } from '@devexpress/dx-react-grid-material-ui';
 import NumberFormat from "react-number-format";
+import {
+    TableSummaryCellComponent,
+    TableSummaryComponent
+} from "../../franchisees/franchisees/components/customerAccountTotal";
 
 
 //Child components
@@ -301,8 +305,14 @@ class PaymentLogDetail extends Component {
             { columnName: 'FranchiseeNo', width: 120},
             { columnName: 'Amount', width: 120,  align: 'right'},
         ];
-        if(this.props.paymentLogList===null)
-            return (<div/>)
+        console.log('data=', this.state.data);
+        // if(!this.state.data.length)
+        //     return (<div/>);
+
+        let totalSummaryItems = [
+            { columnName: 'Amount', type: 'sum'},
+        ];
+
 
         return (
             <div className={classNames(classes.root, "p-0 sm:p-64  whole print:p-0")} id ="wholediv">
@@ -315,9 +325,17 @@ class PaymentLogDetail extends Component {
                             rows={this.state.data}
                             columns={columns}
                         >
+                            {this.state.data.length>0 && (
                             <CurrencyTypeProvider
                                 for={['Amount']}
                             />
+                            )}
+
+                            {this.state.data.length>0 && (
+                                <SummaryState totalItems={totalSummaryItems} />
+                            )}
+                            {this.state.data.length>0 && (<IntegratedSummary /> )}
+
 
                             <VirtualTable height="auto"
                                           tableComponent={TableComponent}
@@ -325,6 +343,9 @@ class PaymentLogDetail extends Component {
                                           columnExtensions={tableColumnExtensions}
                             />
                             <TableHeaderRow/>
+                            {this.state.data.length>0 && (
+                                <TableSummaryRow />
+                            )}
                         </Grid>
                     </div>
                 </div>
