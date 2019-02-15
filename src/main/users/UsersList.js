@@ -417,20 +417,17 @@ class UsersList extends Component {
         this.changeSelection = selection =>{
             this.setState({ selection });
             this.props.updateSelectRows(selection);
-            console.log('selectionLength',selection);
-        }
+        };
         this.changeSorting = sorting => this.setState({ sorting });
         this.commitChanges = this.commitChanges.bind(this);
         this.changeSearchValue = value => this.setState({ searchValue: value });
         this.changeGrouping = grouping => this.setState({ grouping });
-        console.log("constructor");
         props.getUsersList(props.regionId,[],[],"");
     }
     //
     // to edit table cell
     //
     commitChanges({ added, changed, deleted }) {
-        console.log("commitChanges");
         let { rows } = this.state;
         if (added) {
             const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
@@ -453,8 +450,6 @@ class UsersList extends Component {
     }
 
     onChange = (event, { newValue, method }) => {
-        console.log("onChange");
-
         this.setState({
             value: newValue.toString()
         });
@@ -462,7 +457,6 @@ class UsersList extends Component {
 
 
     search(val) {
-        console.log("---------search---------", val);
         val = val.toLowerCase();
         if (val === '') {
             this.setState({ rows: [...this.state.data] });
@@ -483,7 +477,6 @@ class UsersList extends Component {
     }
 
     componentDidMount() {
-        console.log("componentDidMount");
     }
 
     openUserEditForm = async (user_objId, userId) => {
@@ -512,20 +505,18 @@ class UsersList extends Component {
             });
         }
         if(nextProps.usersList !== this.props.usersList){
-            console.log("usersList",nextProps.usersList);
+
         }
     }
 
     handleChange = prop => event => {
-        console.log("handleChange");
+
         this.setState({ [prop]: event.target.value });
     };
 
 
 
     fetchData(state, instance) {
-        console.log("fetchData");
-
         this.setState({
             pageSize: state.pageSize,
             page: state.page,
@@ -533,12 +524,8 @@ class UsersList extends Component {
     }
 
     generateRows() {
-        console.log("generateRows");
-
-        console.log(this.props.data.slice(0, 15));
         return this.props.data;
     }
-
 
     getCell = (props) => {
 
@@ -588,7 +575,6 @@ class UsersList extends Component {
         const handleDoubleClick = () => {
             clearTimeout(timer);
             prevent = true;
-            console.log(restProps);
             //this.props.openEditCustomerForm(this.props.regionId, tableRow.row.CustomerId);
         }
         return (

@@ -14,7 +14,6 @@ import UsersPermission from "./UsersPermission";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Select from "@material-ui/core/Select/Select";
-import Input from "@material-ui/core/Input/Input";
 import OutlinedInput from "@material-ui/core/OutlinedInput/OutlinedInput";
 
 // Auto Suggest
@@ -157,11 +156,7 @@ function renderFranchiseeSuggestion(franchiseeSuggestions, { query, isHighlighte
     );
 }
 
-
-
-
 // getSuggestions
-
 
 function getSuggestions(value) {
     const inputValue = deburr(value.trim()).toLowerCase();
@@ -212,10 +207,6 @@ function getFranchiseeSuggestionValue(franchiseeSuggestion) {
     return franchiseeSuggestion.franchiseeName;
 }
 
-
-
-
-
 let GroupList = [];
 let RoleList = [];
 
@@ -229,10 +220,6 @@ const MenuProps = {
         },
     },
 };
-
-const InitaialState = {
-
-}
 
 class UsersForm extends React.Component {
 
@@ -304,7 +291,7 @@ class UsersForm extends React.Component {
                 }
             ]
         }
-    }
+    };
 
 
     componentWillMount() {
@@ -342,7 +329,6 @@ class UsersForm extends React.Component {
 
             this.setState({Regions: regions});
         }
-
     }
 
     componentDidMount(){
@@ -948,7 +934,8 @@ function mapStateToProps({usersApp, fuse ,auth,customers, franchisees})
         payload: usersApp.users.payload,
         userId: auth.login.UserId,
         regions: auth.login.all_regions,
-        userDetail: usersApp.users.userDetail
+        userDetail: usersApp.users.userDetail,
+        bNewForm: usersApp.users.bNewForm,
     }
 }
 

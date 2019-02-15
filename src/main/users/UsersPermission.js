@@ -109,6 +109,10 @@ class UsersPermission extends React.Component {
         })
     }
 
+    componentDidMount() {
+
+    }
+
 
     componentWillReceiveProps(nextProps, nextContext) {
 
@@ -120,8 +124,8 @@ class UsersPermission extends React.Component {
             {
                 let tempAppList = [];
 
-                this.state.UserPermission = nextProps.userPermissionList;                 
-               
+                this.state.UserPermission = nextProps.userPermissionList;
+
                 nextProps.userPermissionList.forEach((x, xIndex) => {
 
                     tempAppList.push({
@@ -153,9 +157,7 @@ class UsersPermission extends React.Component {
                         })
                     })
 
-                })
-
-                //console.log("tempAppList",tempAppList);
+                });
 
                 this.setState({checkedStatus});
                 this.setState({
@@ -170,6 +172,13 @@ class UsersPermission extends React.Component {
                 payload: nextProps.payload
             });
         }
+
+        if(this.props.userPermissionList.length>0 && (!this.props.bNewForm && nextProps.userDetail!==null && nextProps.userDetail.menuOptions)){
+            let localMenu = this.props.userPermissionList.filter(menu=>menu.AppId===2);
+            // localMenu.
+            console.log('fired menu', localMenu);
+
+        }
     }
 
     handleClick = () => {
@@ -181,11 +190,11 @@ class UsersPermission extends React.Component {
     };
 
     updateUserFormPayload = (name,value) => {
-        
-        let insertPayload = {...this.state.payload}
+
+        let insertPayload = {...this.state.payload};
         insertPayload[name] = value;
         this.props.updateUserFormPayload(insertPayload);
-    }
+    };
 
     handleCheckToggle = (name,actionName,index,pIndex,cIndex) => event => {
 
@@ -197,17 +206,19 @@ class UsersPermission extends React.Component {
                 [name] : checked
             }
         });
-        
+
         let newAppList = [...this.state.AppList];
         newAppList[index].Menus[pIndex].Children[cIndex][actionName] = checked;
         console.log("newAPPlist",newAppList);
         this.updateUserFormPayload("Apps",newAppList);
-        
+
     };
 
     render() {
         const {classes} = this.props;
         const {step, checkedStatus,UserPermission} = this.state;
+
+        console.log('checkedStatus=', JSON.stringify(checkedStatus));
 
         return (
             <NoSsr>
@@ -304,6 +315,7 @@ function mapStateToProps({usersApp})
     return {
         userPermissionList: usersApp.users.userPermissionList,
         payload: usersApp.users.payload,
+        userDetail: usersApp.users.userDetail
     }
 }
 

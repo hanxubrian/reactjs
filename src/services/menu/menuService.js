@@ -75,7 +75,6 @@ class menuService {
     };
 
     getUserMenuOptions = (appId, userId) => {
-        console.log('menu===', appId, userId);
         return new Promise((resolve, reject) => {
             axios_instance.get(`${BASE_MONGO_API_URL}/v1/apps/menuoption?appId=${appId}&userId=${userId}`
             )
