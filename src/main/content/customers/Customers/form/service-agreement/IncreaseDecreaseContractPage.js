@@ -429,7 +429,8 @@ class IncreaseDecreaseContractPage extends React.Component {
             increaseReasons: null,
             decreaseReasons: null,
             bReasonForHigh: false,
-			reason: ''
+			reason: '',
+            NewAmount:''
         };
         // this.commitChanges = this.commitChanges.bind(this);
         if (!props.bLoadedFranchisees) {
@@ -979,7 +980,9 @@ class IncreaseDecreaseContractPage extends React.Component {
                     />
 
                     <div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <Button variant="contained" onClick={this.handleStepFranchiseeDistribution} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Franchisee Distribution<Icon>keyboard_arrow_right</Icon></Button>
+                        <Button variant="contained" onClick={this.handleStepFranchiseeDistribution}
+                                disabled={this.state.NewAmount === ''}
+                                color="primary" className={classNames("pl-24 pr-24 mr-12")}>Franchisee Distribution<Icon>keyboard_arrow_right</Icon></Button>
                         <Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
                     </div>
 
@@ -996,10 +999,10 @@ class IncreaseDecreaseContractPage extends React.Component {
                                value={this.state.NewAmount || ''}
                                onChange={this.handleChange("NewAmount")}
                                autoFocus
-                    />
+                    >
                     {this.state.decreaseReasons!==null && this.state.increaseReasons!==null && (
                         this.renderReasons())}
-                    />
+                    </TextField>
                     <TextField
                         type="date"
                         id="EffectiveDate"
@@ -1041,7 +1044,7 @@ class IncreaseDecreaseContractPage extends React.Component {
     }
 
     handleMonthlyBilling = (ev, row, name)=>{
-        row[name] = ev.target.value;
+        row[name] = name ==='EscrowBilling' ? ev.target.checked : ev.target.value;
         this.setState({data: this.state.data})
     };
 
@@ -1060,12 +1063,12 @@ class IncreaseDecreaseContractPage extends React.Component {
 
         const franHeaders = [
             { width: 7, title: 'Number', field: 'Number' },
-            { width: 16, title: 'Name', field: 'Name' },
+            { width: 19, title: 'Name', field: 'Name' },
             { width: 5, title: 'Escrow', field: '' },
             { width: 12, title: 'Billing Frequency', field: '' },
-            { width: 12, title: 'Billing', field: '' },
-            { width: 12, title: 'Service', field: '' },
-            { width: 24, title: 'Description', field: '' },
+            { width: 0, title: 'Billing', field: '' },
+            { width: 15, title: 'Service', field: '' },
+            { width: 30, title: 'Description', field: '' },
             { width: 11, title: 'Amount', field: '' },
         ];
 
@@ -1093,9 +1096,13 @@ class IncreaseDecreaseContractPage extends React.Component {
                 <Typography className="mb-12 mt-12" variant="subtitle1"><strong>Franchisee Revenue Distributions</strong></Typography>
                 <div className={classNames("flex flex-col w-full")}>
                     <div className={classNames("flex w-full")}>
-                        {franHeaders.map((f, findex) => (
-                            <Typography key={findex} style={{ width: f.width + '%' }} variant="caption">{f.title}</Typography>
-                        ))}
+                        {franHeaders.map((f, findex) => {
+                            if (findex === 4) return false;
+                            return (
+                                <Typography key={findex} style={{width: f.width + '%'}}
+                                            variant="caption">{f.title}</Typography>
+                            )
+                        })}
                     </div>
 
                     <Divider variant="middle" style={{ marginTop: 10, width: '100%', alignSelf: 'center' }} />
@@ -1111,7 +1118,9 @@ class IncreaseDecreaseContractPage extends React.Component {
 
 
                                         <Checkbox style={{ width: franHeaders[2].width + '%', alignSelf: 'center' }}
+                                                  name="EscrowBilling"
                                                   checked={m.EscrowBilling}
+                                                  onChange={(v)=>this.handleMonthlyBilling(v, m, 'EscrowBilling')}
                                         />
 
                                         <TextField style={{ width: franHeaders[3].width + '%' }}
@@ -1136,11 +1145,11 @@ class IncreaseDecreaseContractPage extends React.Component {
 
                                         <TextField style={{ width: franHeaders[4].width + '%' }}
                                                    margin="dense"
-												   name='billing'
-                                                   className="pl-6"
+												   name='BillingTypeId'
+                                                   className="pl-6 hidden"
                                                    value={m.BillingTypeId}
                                                    select
-												   onChange={this.handleChange1}
+                                                   onChange={(v)=>this.handleMonthlyBilling(v, m, 'BillingTypeId')}
                                                    InputProps={{
                                                        readOnly: true,
                                                        classes: {
@@ -1171,6 +1180,7 @@ class IncreaseDecreaseContractPage extends React.Component {
                                                    margin="dense"
                                                    className="pl-6"
                                                    value={m.Description}
+                                                   onChange={(v)=>this.handleMonthlyBilling(v, m, 'Description')}
                                                    InputProps={{
                                                        classes: {
                                                            input: classes.descriptionText,
@@ -1195,8 +1205,10 @@ class IncreaseDecreaseContractPage extends React.Component {
                                                    }}
                                                    margin="dense"
                                                    className="pl-6"
-                                                   value={this.state[`MonthlyBilling${index}-${mIndex}`] || m.MonthlyBilling}
-                                                   onChange={this.handleChange(`MonthlyBilling${index}-${mIndex}`)}
+                                                   value={m.MonthlyBilling}
+                                                   // onChange={this.handleChange(`MonthlyBilling${index}-${mIndex}`)}
+                                                   onChange={(v)=>this.handleMonthlyBilling(v, m, 'MonthlyBilling')}
+
                                         />
 
                                     </div>

@@ -89,6 +89,7 @@ export function getInvoiceDetail(InvoiceId,RegionId) {
         });
        (async () => {
             let res = await invoiceService.getInvoiceDetailList(InvoiceId,RegionId);
+            console.log('res===', res);
             if (res.success ) {
                 dispatch({
                     type: GET_INVOICE_DETAIL,
