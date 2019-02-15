@@ -1067,7 +1067,7 @@ class IncreaseDecreaseContractPage extends React.Component {
             { width: 12, title: 'Service', field: '' },
             { width: 24, title: 'Description', field: '' },
             { width: 11, title: 'Amount', field: '' },
-        ]
+        ];
 
         return (
 			<>

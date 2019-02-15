@@ -271,6 +271,7 @@ class BillRunDialog extends Component {
                 });
             }
             if(checkflag && this.state.isMounted && userid != null && regionid && regionid != null && year && year != null && month && month !=null ){
+                this.props.createbillrun(this.props.regionId, year, month, user, userid, this.state.message, this.state.description);
 
                 this.createbillrunmesssage();
                 let buggyObject = setTimeout(
@@ -428,6 +429,7 @@ function mapStateToProps({invoices, auth,billruns})
         loading         : billruns.loadingstatus,
         auth            : auth.login,
         billstatus      : billruns.billrunstatus,
+        regionId: auth.login.defaultRegionId,
     }
 }
 
