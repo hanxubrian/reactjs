@@ -57,26 +57,34 @@ class UserAvatar extends React.Component {
     componentWillReceiveProps(nextProps){
     }
 
-    getBase64 =(file, cb) =>{
-        console.log('file=', file);
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-            cb(reader.result)
+    getDataUri=(url, cb)=>
+    {
+        var image = new Image();
+        var log_url = 'https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
+        image.setAttribute('crossOrigin', 'anonymous');
+        image.onload = function () {
+            var canvas = document.createElement('canvas');
+            canvas.width = this.naturalWidth;
+            canvas.height = this.naturalHeight;
+            var ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#fff';  /// set white fill style
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            canvas.getContext('2d').drawImage(this, 0, 0);
+            cb(canvas.toDataURL('image/png'));
         };
-        reader.onerror = function (error) {
-            console.log('Error: ', error);
-        };
+        image.src = url;
     };
 
     componentDidMount(){
         this.props.onRef(this);
         if(!this.props.bNewForm && this.props.userDetail!==null && this.props.userDetail.details){
             this.setState({avatar: this.props.userDetail.details.ProfilePhoto});
-            this.setState({preview: this.props.userDetail.details.ProfilePhoto});
-            // this.getBase64(this.props.userDetail.details.ProfilePhoto, result=>{
-            //     console.log('base64=', result);
-            // }
+            let img = null;
+            this.getDataUri(this.props.userDetail.details.ProfilePhoto, dataUri => {
+                img = dataUri;
+                this.setState({preview: img});
+                this.setState({imageChoosed: true});
+            });
         }
     }
 
@@ -134,7 +142,7 @@ class UserAvatar extends React.Component {
                           <CheckIcon />
                         </Fab>
                     )}
-                    {this.state.imageChoosed && (
+                    {(this.state.imageChoosed) && (
                         <div style={{width:180, height: 180}}>
                             <img src={this.state.preview} alt="Preview" />
                             <Fab

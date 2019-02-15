@@ -23,6 +23,7 @@ import Paper from "@material-ui/core/Paper/Paper";
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import deburr from 'lodash/deburr';
+import _ from "lodash";
 
 const styles = theme => ({
     root     : {
@@ -201,10 +202,6 @@ function getFranchiseeSuggestions(value) {
 }
 
 
-
-
-
-
 // getSuggestionValue
 
 function getSuggestionValue(suggestion) {
@@ -350,7 +347,6 @@ class UsersForm extends React.Component {
 
     componentDidMount(){
         if(this.props.regions !== null){
-            console.log("Regions",this.props.regions);
             this.props.regions.map(x=>{
                 this.state.MultiRegion.push(x.regionname);
                 this.state.DefaultRegions.push({
@@ -362,7 +358,19 @@ class UsersForm extends React.Component {
             })
         }
         if(!this.props.bNewForm && this.props.userDetail!==null && this.props.userDetail.details){
-            this.setState({...this.props.userDetail.details})
+            let details = _.cloneDeep(this.props.userDetail.details);
+            details.Roles = details.Roles.map(x=>{
+                RoleList.push(
+                    x.RoleName
+                );
+            });
+            details.Regions = details.Regions.map(x=>{
+                RoleList.push(
+                    x.Name
+                );
+            });
+
+            this.setState({...details})
         }
     }
 
@@ -484,7 +492,6 @@ class UsersForm extends React.Component {
                         }
                     })
                 })
-                console.log("roles",changedRoles);
                 this.updateUserFormPayload(name,changedRoles);
             }
         }else{
@@ -543,7 +550,6 @@ class UsersForm extends React.Component {
             renderSuggestion,
         };
 
-        console.log('user edit form=', this.state);
         return (
             <div className={classes.root}>
                 <div className={classNames(classes.userFormSection,"w-full")}>

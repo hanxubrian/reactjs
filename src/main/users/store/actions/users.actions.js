@@ -206,7 +206,6 @@ export function getUserPermissionList() {
 // OPEN USER FORM STATUS
 
 export function openUsersForm(openForm, bNewForm=true) {
-    console.log("open-Form", openForm);
     return {
         type: OPEN_USERS_FORM,
         payload: {openForm, bNewForm}
