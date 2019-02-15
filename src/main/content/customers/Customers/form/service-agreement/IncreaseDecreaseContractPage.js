@@ -509,11 +509,12 @@ class IncreaseDecreaseContractPage extends React.Component {
         }
     }
     initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer.Data) => {
+    	console.log('rows=', this.state.rows);
         this.setState({
             SA_Amount: activeCustomerInfo.cont_bill,
             franchieesesToOffer: activeCustomerInfo.AssignedFranchisees,
         })
-    }
+    };
 
     handleClose = () => {
         // this.setState({
@@ -852,7 +853,7 @@ class IncreaseDecreaseContractPage extends React.Component {
     ToolbarRoot = withStyles(styles)(this.ToolbarRootBase);
 
     addFranchiseeToCustomer = () => {
-        const { selection, rows } = this.state
+        const { selection, rows } = this.state;
         /*
             AssignedDate: "05/31/2012"
             CreatedById: 0
@@ -874,9 +875,9 @@ class IncreaseDecreaseContractPage extends React.Component {
         let selectedFranchisees = selection.map(x => rows[x])
         selectedFranchisees.forEach(x => {
 
-            x.AssignedDate = "05/31/2012"
-            x.CreatedById = 0
-            x.FranchiseeNumber = x.Number
+            x.AssignedDate = "05/31/2012";
+            x.CreatedById = 0;
+            x.FranchiseeNumber = x.Number;
             x.MonthlyBilling = [{
                 BillingFrequency: "R",
                 BillingTypeId: "",
@@ -887,7 +888,7 @@ class IncreaseDecreaseContractPage extends React.Component {
                 Status: "Active",
             }];
             x.Status = "Active"
-        })
+        });
 
         this.setState({
             franchieesesToOffer: [
@@ -896,11 +897,12 @@ class IncreaseDecreaseContractPage extends React.Component {
             ]
         })
 
-    }
+    };
 
     changeSelection = selection => {
         this.setState({ selection });
-    }
+    };
+
     handleStep = (step) => {
         this.setState({
             step
@@ -1038,6 +1040,11 @@ class IncreaseDecreaseContractPage extends React.Component {
         )
     }
 
+    handleMonthlyBilling = (ev, row, name)=>{
+        row[name] = ev.target.value;
+        this.setState({data: this.state.data})
+    };
+
     getFranchiseeAssignmentForm() {
         const { classes } = this.props;
 
@@ -1047,7 +1054,7 @@ class IncreaseDecreaseContractPage extends React.Component {
 
             franchieesesToOffer,
             step,
-        } = this.state
+        } = this.state;
 
 
 
@@ -1083,7 +1090,7 @@ class IncreaseDecreaseContractPage extends React.Component {
                     </div>
                 </div>
 
-                <Typography className="mb-12 mt-12" variant="subtitle1"><strong>Assigned Franchisees</strong></Typography>
+                <Typography className="mb-12 mt-12" variant="subtitle1"><strong>Franchisee Revenue Distributions</strong></Typography>
                 <div className={classNames("flex flex-col w-full")}>
                     <div className={classNames("flex w-full")}>
                         {franHeaders.map((f, findex) => (
@@ -1111,6 +1118,7 @@ class IncreaseDecreaseContractPage extends React.Component {
                                                    margin="dense"
                                                    className="pl-6"
                                                    value={m.BillingFrequency}
+                                                   name="BillingFrequency"
                                                    select
                                                    InputProps={{
                                                        readOnly: false,
@@ -1118,6 +1126,7 @@ class IncreaseDecreaseContractPage extends React.Component {
                                                            input: classes.descriptionText,
                                                        },
                                                    }}
+                                                   onChange={(v)=>this.handleMonthlyBilling(v, m, 'BillingFrequency')}
                                         >
                                             {[
                                                 { label: 'Variable', value: 'V' },
@@ -1127,9 +1136,11 @@ class IncreaseDecreaseContractPage extends React.Component {
 
                                         <TextField style={{ width: franHeaders[4].width + '%' }}
                                                    margin="dense"
+												   name='billing'
                                                    className="pl-6"
-                                                   value="Regular Billing"
+                                                   value={m.BillingTypeId}
                                                    select
+												   onChange={this.handleChange1}
                                                    InputProps={{
                                                        readOnly: true,
                                                        classes: {
@@ -1137,7 +1148,7 @@ class IncreaseDecreaseContractPage extends React.Component {
                                                        },
                                                    }}
                                         >
-                                            {franchiseeBillingTypes.map((x, index) => (<MenuItem key={index} value={x.Name}>{x.Name}</MenuItem>))}
+                                            {franchiseeBillingTypes.map((x, index) => (<MenuItem key={index} value={x._id}>{x.Name}</MenuItem>))}
                                         </TextField>
 
                                         <TextField style={{ width: franHeaders[5].width + '%' }}
@@ -1206,12 +1217,6 @@ class IncreaseDecreaseContractPage extends React.Component {
             pageSizes,
             sorting,
             selection,
-            step,
-
-            pins,
-            pins2,
-            gmapVisible,
-            showMapView,
             rows,
             columns,
         } = this.state;
@@ -1435,6 +1440,7 @@ class IncreaseDecreaseContractPage extends React.Component {
         const { classes } = this.props;
         const { customerServiceTypes, step } = this.state;
         console.log('xxx', this.state.decreaseReasons, this.state.increaseReasons);
+        console.log('xxxx=', this.state.franchieesesToOffer);
 
         return (
 			<>
