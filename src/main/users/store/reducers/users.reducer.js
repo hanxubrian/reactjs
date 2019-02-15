@@ -1,7 +1,9 @@
+import _ from 'lodash';
 import * as Actions from '../actions';
 import * as UserActions from "../../../../auth/store/actions";
 const initialState = {
     openUsersFormStatus: false,
+    bNewForm: true,//true for new, false for edit
     selectedRows: [],
     fpStatus: false,
     userGroupList: [],
@@ -10,7 +12,7 @@ const initialState = {
     userStateList: [],
     userDepartmentList: [],
     userPermissionList: [],
-    userDetail: [],
+    userDetail: null,
     usersList: [],
     payload:{
       PasswordHash: "",
@@ -48,10 +50,12 @@ const usersReducer = function (state = initialState, action) {
     switch ( action.type )
     {
         case Actions.OPEN_USERS_FORM: {
+            let userDetail = state.userDetail;
+            if(!action.payload.openForm) userDetail = null;
             return {
                 ...state,
-                openUsersFormStatus: action.payload,
-                fpStatus: false,
+                openUsersFormStatus: action.payload.openForm, bNewForm: action.payload.bNewForm,
+                fpStatus: false, userDetail: userDetail
             }
         }
         case Actions.GET_USERS_LIST: {
@@ -128,9 +132,10 @@ const usersReducer = function (state = initialState, action) {
         }
         case Actions.GET_USER_DETAIL:
         {
+            const data = _.cloneDeep(action.payload);
             return{
                 ...state,
-                userDetail: action.payload
+                userDetail: {...state.userDetail, details: data}
             }
         }
         case Actions.GET_USER_FORM_VARIABLE: {
@@ -149,6 +154,12 @@ const usersReducer = function (state = initialState, action) {
             return{
                 ...state,
                 payload:{...state.payload, ProfilePhoto: action.payload}
+            }
+        }
+        case Actions.GET_USER_MENU_OPTIONS:
+        {
+            return {
+                ...state, userDetail: {...state.userDetail, menuOptions: action.payload}
             }
         }
         case UserActions.USER_LOGGED_OUT:

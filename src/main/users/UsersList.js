@@ -460,11 +460,6 @@ class UsersList extends Component {
         });
     };
 
-    shouldComponentUpdate(nextProps, nextState) {
-        console.log("shouldComponentUpdate", this.state !== nextState);
-        return true;
-    }
-
 
     search(val) {
         console.log("---------search---------", val);
@@ -491,11 +486,23 @@ class UsersList extends Component {
         console.log("componentDidMount");
     }
 
+    openUserEditForm = async (user_objId, userId) => {
+        let app_id = 2;
+        await this.props.getUserDetail(user_objId);
+        await this.props.getUserMenuOptions(app_id, userId);
+
+    };
+
+    componentDidUpdate(prevProps, prevState, snapshot){
+        if(this.props.userDetail!==null){
+            this.props.openUsersForm(true, false);
+        }
+    }
 
     componentWillMount() {
         this.props.getUsersList(this.props.regionId,[],[],"");
     }
-    
+
 
     componentWillReceiveProps(nextProps, nextContext) {
         if(nextProps.usersList !== this.props.usersList){
@@ -547,7 +554,7 @@ class UsersList extends Component {
                 });
                 return (
                     <Table.Cell>
-                        <IconButton className={classes.iconButton}  aria-label="Verify">
+                        <IconButton className={classes.iconButton}  aria-label="Verify" onClick={()=>this.openUserEditForm(props.row._id, props.row.UserId)}>
                             <Icon>edit</Icon>
                         </IconButton>
                         <IconButton className={classes.iconButton} aria-label="Reject">
@@ -676,9 +683,9 @@ class UsersList extends Component {
                                     for={currencyColumns}
                                 />
 
-                                {/*<PhoneNumberTypeProvider*/}
-                                {/*for={phoneNumberColumns}*/}
-                                {/*/>*/}
+                                <PhoneNumberTypeProvider
+                                for={phoneNumberColumns}
+                            />
                                 <Table rowComponent={this.TableRow} cellComponent={this.getCell} />
 
                                 <TableColumnResizing defaultColumnWidths={tableColumnExtensions} />
@@ -727,7 +734,10 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         getUsersList: Actions.getUsersList,
-        updateSelectRows: Actions.updateSelectRows
+        getUserDetail: Actions.getUserDetail,
+        updateSelectRows: Actions.updateSelectRows,
+        openUsersForm: Actions.openUsersForm,
+        getUserMenuOptions: Actions.getUserMenuOptions,
 
     }, dispatch);
 }
@@ -735,8 +745,9 @@ function mapDispatchToProps(dispatch)
 function mapStateToProps({usersApp,auth})
 {
     return {
-        selectedRows               : usersApp.users.selectedRows,
+        selectedRows         : usersApp.users.selectedRows,
         openUsersFormStatus  : usersApp.users.openUsersFormStatus,
+        userDetail: usersApp.users.userDetail,
         usersList: usersApp.users.usersList,
         regionId : auth.login.defaultRegionId,
     }

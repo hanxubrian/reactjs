@@ -1,6 +1,7 @@
 import * as Actions from '../actions';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import {ADD_AUTH_NAVIGATION} from "../../../store/actions/fuse";
 
 export const initialState = {
     IsSuccess: false,
@@ -18,7 +19,8 @@ export const initialState = {
     role: [],
     Username: '',
     Phone: '',
-    url: ''
+    url: '',
+    menuObj: null
 };
 
 const login = function (state = initialState, action) {
@@ -69,6 +71,11 @@ const login = function (state = initialState, action) {
             return {
                 ...state,
                 defaultRegionId: action.payload
+            };
+            case ADD_AUTH_NAVIGATION:
+            return {
+                ...state,
+                menuObj: action.payload
             };
 
         case Actions.LOGIN_ERROR:

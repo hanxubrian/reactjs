@@ -233,6 +233,9 @@ const MenuProps = {
     },
 };
 
+const InitaialState = {
+
+}
 
 class UsersForm extends React.Component {
 
@@ -320,7 +323,29 @@ class UsersForm extends React.Component {
         if(this.props.payload.UserId !== this.props.userId){
             this.updateUserFormPayload("UserId", this.props.userId);
         }
-        
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot){
+        if(!this.props.bNewForm && this.props.userRoleList.length>0 && (this.props.userRoleList!==prevProps.userRoleList) && (this.props.userDetail!==null && this.props.userDetail.details)){
+            RoleList = [];
+            this.props.userDetail.details.Roles.map(x=>{
+                RoleList.push(
+                    x.RoleName
+                );
+            });
+
+            this.setState({Roles: RoleList});
+
+            let regions = [];
+            this.props.userDetail.details.Regions.map(x=>{
+                regions.push(
+                    x.Name
+                );
+            });
+
+            this.setState({Regions: regions});
+        }
+
     }
 
     componentDidMount(){
@@ -335,6 +360,9 @@ class UsersForm extends React.Component {
                     "DisplayName":""
                 });
             })
+        }
+        if(!this.props.bNewForm && this.props.userDetail!==null && this.props.userDetail.details){
+            this.setState({...this.props.userDetail.details})
         }
     }
 
@@ -426,7 +454,7 @@ class UsersForm extends React.Component {
                 this.updateUserFormPayload(name,changedGroups);
             }
             if(name === "Regions") {
-                
+
                 let changedRegions = [];
                 event.target.value.map(x=>{
                     this.props.regions.map(y=>{
@@ -515,8 +543,7 @@ class UsersForm extends React.Component {
             renderSuggestion,
         };
 
-        console.log('avatar=', this.avatar);
-
+        console.log('user edit form=', this.state);
         return (
             <div className={classes.root}>
                 <div className={classNames(classes.userFormSection,"w-full")}>
@@ -914,7 +941,8 @@ function mapStateToProps({usersApp, fuse ,auth,customers, franchisees})
         franchisees: franchisees.franchiseesDB,
         payload: usersApp.users.payload,
         userId: auth.login.UserId,
-        regions: auth.login.all_regions
+        regions: auth.login.all_regions,
+        userDetail: usersApp.users.userDetail
     }
 }
 

@@ -224,14 +224,15 @@ class UsersApp extends Component {
 
     componentDidUpdate(prevProps, prevState)
     {
-        if(this.props.openUsersFormStatus !== prevProps.openUsersFormStatus){
-            this.setState({
-                "openUsersFormStatus": this.props.openUsersFormStatus
-            })
-        }
+        // if(this.props.openUsersFormStatus !== prevProps.openUsersFormStatus){
+        //     this.setState({
+        //         "openUsersFormStatus": this.props.openUsersFormStatus
+        //     })
+        // }
     }
 
     toggleForm = (param) =>(event) => {
+        console.log('toggleForm=', param);
         this.props.openUsersForm(param);
         this.setState({
             "openUsersFormStatus": param
@@ -262,8 +263,6 @@ class UsersApp extends Component {
         if(this.props.newUserAvatar!==null)
             await this.uploadAvatar();
 
-        console.log('result=', this.props.insertPayload);
-
         await this.props.createUser(this.props.insertPayload);
         await this.setState({"openUsersFormStatus": false});
         await this.props.openUsersForm(false);
@@ -293,25 +292,25 @@ class UsersApp extends Component {
                                     <div className="flex flex-shrink items-center">
                                         <div className="flex items-center">
                                             <Icon className="text-32 mr-12">{HeaderIcon}</Icon>
-                                            {! openUsersFormStatus && (
+                                            {! this.props.openUsersFormStatus && (
                                                 <Typography variant="h6" className="hidden sm:flex">Settings |
                                                     Users</Typography>
                                             )}
-                                            {openUsersFormStatus && (
+                                            {this.props.openUsersFormStatus && (
                                                 <Typography variant="h6" className="hidden sm:flex">Settings |
                                                     Add New User</Typography>
                                             )}
                                         </div>
                                     </div>
                                     <div className="flex flex-shrink items-center">
-                                        {! openUsersFormStatus && (
+                                        {! this.props.openUsersFormStatus && (
                                             <Button variant="contained" color="primary"
                                                     className={classNames(classes.button, classes.btntop) } onClick={this.toggleForm(true)}>
                                                 Add New User
                                                 <Icon className={classes.rightIcon}>add</Icon>
                                             </Button>
                                         )}
-                                        { openUsersFormStatus && (
+                                        { this.props.openUsersFormStatus && (
                                             <div>
                                                 <Button variant="contained" color="primary"
                                                         className={classNames(classes.button, classes.btntop) } onClick={this.save()}>

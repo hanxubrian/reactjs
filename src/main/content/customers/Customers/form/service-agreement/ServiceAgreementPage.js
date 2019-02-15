@@ -725,8 +725,6 @@ function mapDispatchToProps(dispatch) {
 		openPaymentDialog: Actions.openPaymentDialog,
 		createAccountReceivablePayment: Actions.createAccountReceivablePayment,
 
-		showIncreaseDecreaseContractModalForm: Actions.showIncreaseDecreaseContractModalForm,
-
 		getLogCallCustomerServiceTypes: Actions.getLogCallCustomerServiceTypes,
 
 		getFranchiseeServiceTypes: Actions.getFranchiseeServiceTypes,

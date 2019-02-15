@@ -35,7 +35,8 @@ class UserAvatar extends React.Component {
         src: "",
         image: null,
         imageChoosed: false,
-        file: null
+        file: null,
+        avatar: null,
     };
 
     constructor(props) {
@@ -53,8 +54,34 @@ class UserAvatar extends React.Component {
     componentWillMount() {
     }
 
+    componentWillReceiveProps(nextProps){
+    }
+
+    getBase64 =(file, cb) =>{
+        console.log('file=', file);
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            cb(reader.result)
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    };
+
     componentDidMount(){
         this.props.onRef(this);
+        if(!this.props.bNewForm && this.props.userDetail!==null && this.props.userDetail.details){
+            this.setState({avatar: this.props.userDetail.details.ProfilePhoto});
+            this.setState({preview: this.props.userDetail.details.ProfilePhoto});
+            // this.getBase64(this.props.userDetail.details.ProfilePhoto, result=>{
+            //     console.log('base64=', result);
+            // }
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot){
+
     }
 
     componentWillUnmount() {
@@ -142,9 +169,11 @@ function mapDispatchToProps(dispatch)
 function mapStateToProps({usersApp})
 {
     return {
+        userDetail: usersApp.users.userDetail,
+        bNewForm: usersApp.users.bNewForm,
         // openUsersFormStatus: usersApp.users.openUsersFormStatus
     }
 }
 
 export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(UserAvatar));
-//ReactDom.render(<App />, document.getElementById("content"));
+

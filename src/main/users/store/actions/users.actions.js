@@ -1,5 +1,4 @@
-import axios from 'axios/index';
-import {userService} from "../../../../services/index";
+import {userService, menuService} from "../../../../services/index";
 
 export const OPEN_USERS_FORM = '[USERS APP] OPEN USERS FORM';
 export const UPDATE_USER_SELECT_ROWS = '[USERS APP] UPDATE USER SELECT ROWS';
@@ -19,6 +18,7 @@ export const UPDATE_USER = '[USERS APP] UPDATE USER';
 export const DELETE_USER = '[USERS APP] DELETE USER';
 export const UPDATE_NEW_USER_AVATAR = '[USERS APP] UPDATE NEW USER AVATAR';
 export const SET_NEW_USER_AVATAR_URL = '[USERS APP] SET NEW USER AVATAR URL';
+export const GET_USER_MENU_OPTIONS = '[USERS APP] GET USER MENU OPTIONS';
 
 // GET USERS LIST
 
@@ -99,22 +99,6 @@ export function deleteUser(id) {
             if (res.IsSuccess) {
                 dispatch({
                     type: DELETE_USER,
-                    payload: res
-                });
-            }
-        })();
-    };
-}
-
-// GET USER DETAIL
-
-export function getUserDetail(id) {
-    return (dispatch) => {
-        (async () => {
-            let res = await userService.getUserDetail(id);
-            if (res.IsSuccess) {
-                dispatch({
-                    type: GET_USER_DETAIL,
                     payload: res
                 });
             }
@@ -221,15 +205,13 @@ export function getUserPermissionList() {
 
 // OPEN USER FORM STATUS
 
-export function openUsersForm(openForm) {
+export function openUsersForm(openForm, bNewForm=true) {
     console.log("open-Form", openForm);
     return {
         type: OPEN_USERS_FORM,
-        payload: openForm
+        payload: {openForm, bNewForm}
     }
 }
-
-
 
 // UPDATE SELECT ROWS
 
@@ -240,8 +222,6 @@ export function updateSelectRows (row){
         payload: row
     }
 }
-
-
 
 
 // TOGGLE USERS FILTER PANEL
@@ -275,4 +255,41 @@ export function setNewUserAvatarURL(url) {
         type: SET_NEW_USER_AVATAR_URL,
         payload: url
     }
+}
+
+/**
+ * get User detail from id
+ * @param userId
+ * @returns {Function}
+ */
+export function getUserDetail(userId) {
+    return (dispatch) => {
+        (async () => {
+            let res = await userService.getUserDetail(userId);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: GET_USER_DETAIL,
+                    payload: res.Data
+                });
+            } else {
+
+            }
+        })();
+    };
+}
+
+export function getUserMenuOptions(appId, userId) {
+    return (dispatch) => {
+        (async () => {
+            let res = await menuService.getUserMenuOptions(appId, userId);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: GET_USER_MENU_OPTIONS,
+                    payload: res.Data
+                });
+            } else {
+
+            }
+        })();
+    };
 }
