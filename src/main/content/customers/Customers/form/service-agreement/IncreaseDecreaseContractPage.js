@@ -7,9 +7,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {NumberFormatCustomNoPrefix, NumberFormatCustom2} from '../../../../../../services/utils'
+import {NumberFormatCustomNoPrefix, } from '../../../../../../services/utils'
 
-import { Icon, IconButton, Tooltip, Slide, RadioGroup, Radio, FormControlLabel, Paper, Typography, InputAdornment, FormControl, InputLabel, Select, MenuItem, Divider, ListItem, List, ListItemText, ListItemLink, Checkbox, Switch } from '@material-ui/core';
+import { Icon, IconButton, Slide, FormControlLabel, Paper, Typography, InputAdornment, MenuItem, Divider,
+    ListItemLink, Checkbox, Switch, Tabs, Tab, AppBar } from '@material-ui/core';
 
 // for store
 import { bindActionCreators } from "redux";
@@ -430,7 +431,8 @@ class IncreaseDecreaseContractPage extends React.Component {
             decreaseReasons: null,
             bReasonForHigh: false,
 			reason: '',
-            NewAmount:''
+            NewAmount:'',
+            tabValue: 0
         };
         // this.commitChanges = this.commitChanges.bind(this);
         if (!props.bLoadedFranchisees) {
@@ -1048,6 +1050,11 @@ class IncreaseDecreaseContractPage extends React.Component {
         this.setState({data: this.state.data})
     };
 
+    handleChangeTab = (event, newValue) =>{
+        this.setState({tabValue: newValue})
+    }
+
+
     getFranchiseeAssignmentForm() {
         const { classes } = this.props;
 
@@ -1074,149 +1081,164 @@ class IncreaseDecreaseContractPage extends React.Component {
 
         return (
 			<>
-                <div className={classNames("flex mt-12 justify-between")}>
-                    <TextField margin="dense" id="Monthly Billing Amount" label="New Monthly Billing Amount"
-                               InputLabelProps={{ shrink: true }}
-                               style={{minWidth: 220}}
-                               className={classNames(classes.textField, "pr-6")}
-                               InputProps={{ readOnly: true,
-                                   startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-                                   inputComponent: NumberFormatCustomNoPrefix }}
-                               value={this.state.NewAmount || ''}
-                               onChange={this.handleChange("NewAmount")}
-                    />
+                <div className={classes.root}>
+                    <AppBar position="static">
+                        <Tabs value={this.state.tabValue} name="tabValue" onChange={this.handleChangeTab}>
+                            <Tab label="Franchisee Distibutions" />
+                            <Tab label="Finder Fees" />
+                        </Tabs>
+                    </AppBar>
+                    {this.state.tabValue === 0 &&
+                    <div>
+                        <div className={classNames("flex mt-12 justify-between")}>
+                            <TextField margin="dense" id="Monthly Billing Amount" label="New Monthly Billing Amount"
+                                       InputLabelProps={{ shrink: true }}
+                                       style={{minWidth: 220}}
+                                       className={classNames(classes.textField, "pr-6")}
+                                       InputProps={{ readOnly: true,
+                                           startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
+                                           inputComponent: NumberFormatCustomNoPrefix }}
+                                       value={this.state.NewAmount || ''}
+                                       onChange={this.handleChange("NewAmount")}
+                            />
 
-                    <div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-                        {step === 1 && <Button variant="contained" onClick={this.handleStepNewAmountForm} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>}
-                        <Button variant="contained" color="primary" onClick={this.handleStepFindersFeesForm} className={classNames("pl-24 pr-24 mr-12")}>Finders Fees<Icon>keyboard_arrow_right</Icon></Button>
-                        <Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
-                    </div>
-                </div>
+                            <div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+                                {step === 1 && <Button variant="contained" onClick={this.handleStepNewAmountForm} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>}
+                                {/*<Button variant="contained" color="primary" onClick={this.handleStepFindersFeesForm} className={classNames("pl-24 pr-24 mr-12")}>Finders Fees<Icon>keyboard_arrow_right</Icon></Button>*/}
+                                <Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
+                            </div>
+                        </div>
+                        <Typography className="mb-12 mt-12" variant="subtitle1"><strong>Franchisee Revenue Distributions</strong></Typography>
+                        <div className={classNames("flex flex-col w-full")}>
+                            <div className={classNames("flex w-full")}>
+                                {franHeaders.map((f, findex) => {
+                                    if (findex === 4) return false;
+                                    return (
+                                        <Typography key={findex} style={{width: f.width + '%'}}
+                                                    variant="caption">{f.title}</Typography>
+                                    )
+                                })}
+                            </div>
 
-                <Typography className="mb-12 mt-12" variant="subtitle1"><strong>Franchisee Revenue Distributions</strong></Typography>
-                <div className={classNames("flex flex-col w-full")}>
-                    <div className={classNames("flex w-full")}>
-                        {franHeaders.map((f, findex) => {
-                            if (findex === 4) return false;
-                            return (
-                                <Typography key={findex} style={{width: f.width + '%'}}
-                                            variant="caption">{f.title}</Typography>
-                            )
-                        })}
-                    </div>
+                            <Divider variant="middle" style={{ marginTop: 10, width: '100%', alignSelf: 'center' }} />
 
-                    <Divider variant="middle" style={{ marginTop: 10, width: '100%', alignSelf: 'center' }} />
+                            {franchieesesToOffer.map((x, index) => (
+                                <React.Fragment key={index}>
+                                    {
+                                        x.MonthlyBilling.map((m, mIndex) => (
+                                            <div key={mIndex} className={classNames("flex w-full")} style={{ alignItems: 'bottom' }}>
 
-                    {franchieesesToOffer.map((x, index) => (
-                        <React.Fragment key={index}>
-                            {
-                                x.MonthlyBilling.map((m, mIndex) => (
-                                    <div key={mIndex} className={classNames("flex w-full")} style={{ alignItems: 'bottom' }}>
-
-                                        <Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption">{x.FranchiseeNumber}</Typography>
-                                        <Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption">{x.Name}</Typography>
+                                                <Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption">{x.FranchiseeNumber}</Typography>
+                                                <Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption">{x.Name}</Typography>
 
 
-                                        <Checkbox style={{ width: franHeaders[2].width + '%', alignSelf: 'center' }}
-                                                  name="EscrowBilling"
-                                                  checked={m.EscrowBilling}
-                                                  onChange={(v)=>this.handleMonthlyBilling(v, m, 'EscrowBilling')}
-                                        />
+                                                <Checkbox style={{ width: franHeaders[2].width + '%', alignSelf: 'center' }}
+                                                          name="EscrowBilling"
+                                                          checked={m.EscrowBilling}
+                                                          onChange={(v)=>this.handleMonthlyBilling(v, m, 'EscrowBilling')}
+                                                />
 
-                                        <TextField style={{ width: franHeaders[3].width + '%' }}
-                                                   margin="dense"
-                                                   className="pl-6"
-                                                   value={m.BillingFrequency}
-                                                   name="BillingFrequency"
-                                                   select
-                                                   InputProps={{
-                                                       readOnly: false,
-                                                       classes: {
-                                                           input: classes.descriptionText,
-                                                       },
-                                                   }}
-                                                   onChange={(v)=>this.handleMonthlyBilling(v, m, 'BillingFrequency')}
-                                        >
-                                            {[
-                                                { label: 'Variable', value: 'V' },
-                                                { label: 'Regular', value: 'R' },
-                                            ].map((x, index) => (<MenuItem key={index} value={x.value}>{x.label}</MenuItem>))}
-                                        </TextField>
+                                                <TextField style={{ width: franHeaders[3].width + '%' }}
+                                                           margin="dense"
+                                                           className="pl-6"
+                                                           value={m.BillingFrequency}
+                                                           name="BillingFrequency"
+                                                           select
+                                                           InputProps={{
+                                                               readOnly: false,
+                                                               classes: {
+                                                                   input: classes.descriptionText,
+                                                               },
+                                                           }}
+                                                           onChange={(v)=>this.handleMonthlyBilling(v, m, 'BillingFrequency')}
+                                                >
+                                                    {[
+                                                        { label: 'Variable', value: 'V' },
+                                                        { label: 'Regular', value: 'R' },
+                                                    ].map((x, index) => (<MenuItem key={index} value={x.value}>{x.label}</MenuItem>))}
+                                                </TextField>
 
-                                        <TextField style={{ width: franHeaders[4].width + '%' }}
-                                                   margin="dense"
-												   name='BillingTypeId'
-                                                   className="pl-6 hidden"
-                                                   value={m.BillingTypeId}
-                                                   select
-                                                   onChange={(v)=>this.handleMonthlyBilling(v, m, 'BillingTypeId')}
-                                                   InputProps={{
-                                                       readOnly: true,
-                                                       classes: {
-                                                           input: classes.descriptionText,
-                                                       },
-                                                   }}
-                                        >
-                                            {franchiseeBillingTypes.map((x, index) => (<MenuItem key={index} value={x._id}>{x.Name}</MenuItem>))}
-                                        </TextField>
+                                                <TextField style={{ width: franHeaders[4].width + '%' }}
+                                                           margin="dense"
+                                                           name='BillingTypeId'
+                                                           className="pl-6 hidden"
+                                                           value={m.BillingTypeId}
+                                                           select
+                                                           onChange={(v)=>this.handleMonthlyBilling(v, m, 'BillingTypeId')}
+                                                           InputProps={{
+                                                               readOnly: true,
+                                                               classes: {
+                                                                   input: classes.descriptionText,
+                                                               },
+                                                           }}
+                                                >
+                                                    {franchiseeBillingTypes.map((x, index) => (<MenuItem key={index} value={x._id}>{x.Name}</MenuItem>))}
+                                                </TextField>
 
-                                        <TextField style={{ width: franHeaders[5].width + '%' }}
-                                                   margin="dense"
-                                                   className="pl-6"
-                                                   value={this.state[`ServiceTypeStates${index}-${mIndex}`] || ''}
-                                                   select
-                                                   InputProps={{
-                                                       readOnly: false,
-                                                       classes: {
-                                                           input: classes.descriptionText,
-                                                       },
-                                                   }}
-                                                   onChange={this.handleChange(`ServiceTypeStates${index}-${mIndex}`)}
-                                        >
-                                            {franchiseeServiceTypes.map((x, index) => (<MenuItem key={index} value={x.Name}>{x.Name}</MenuItem>))}
-                                        </TextField>
+                                                <TextField style={{ width: franHeaders[5].width + '%' }}
+                                                           margin="dense"
+                                                           className="pl-6"
+                                                           value={this.state[`ServiceTypeStates${index}-${mIndex}`] || ''}
+                                                           select
+                                                           InputProps={{
+                                                               readOnly: false,
+                                                               classes: {
+                                                                   input: classes.descriptionText,
+                                                               },
+                                                           }}
+                                                           onChange={this.handleChange(`ServiceTypeStates${index}-${mIndex}`)}
+                                                >
+                                                    {franchiseeServiceTypes.map((x, index) => (<MenuItem key={index} value={x.Name}>{x.Name}</MenuItem>))}
+                                                </TextField>
 
-                                        <TextField style={{ width: franHeaders[6].width + '%' }}
-                                                   margin="dense"
-                                                   className="pl-6"
-                                                   value={m.Description}
-                                                   onChange={(v)=>this.handleMonthlyBilling(v, m, 'Description')}
-                                                   InputProps={{
-                                                       classes: {
-                                                           input: classes.descriptionText,
-                                                       },
-                                                   }}
-                                        />
-                                        {/* <TextField style={{ width: franHeaders[7].width + '%' }}
+                                                <TextField style={{ width: franHeaders[6].width + '%' }}
+                                                           margin="dense"
+                                                           className="pl-6"
+                                                           value={m.Description}
+                                                           onChange={(v)=>this.handleMonthlyBilling(v, m, 'Description')}
+                                                           InputProps={{
+                                                               classes: {
+                                                                   input: classes.descriptionText,
+                                                               },
+                                                           }}
+                                                />
+                                                {/* <TextField style={{ width: franHeaders[7].width + '%' }}
 								type='number'
 								InputProps={{ endAdornment: <InputAdornment position="start" className="ml-4">%</InputAdornment> }}
 								margin="dense"
 								className="pl-6"
 							/> */}
-                                        <TextField style={{ width: franHeaders[7].width + '%' }}
-											// type='number'
-                                                   InputProps={{
-                                                       readOnly: false,
-                                                       classes: {
-                                                           input: classes.descriptionText,
-                                                       },
-                                                       startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-                                                       inputComponent: NumberFormatCustomNoPrefix
-                                                   }}
-                                                   margin="dense"
-                                                   className="pl-6"
-                                                   value={m.MonthlyBilling}
-                                                   // onChange={this.handleChange(`MonthlyBilling${index}-${mIndex}`)}
-                                                   onChange={(v)=>this.handleMonthlyBilling(v, m, 'MonthlyBilling')}
+                                                <TextField style={{ width: franHeaders[7].width + '%' }}
+                                                    // type='number'
+                                                           InputProps={{
+                                                               readOnly: false,
+                                                               classes: {
+                                                                   input: classes.descriptionText,
+                                                               },
+                                                               startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
+                                                               inputComponent: NumberFormatCustomNoPrefix
+                                                           }}
+                                                           margin="dense"
+                                                           className="pl-6"
+                                                           value={m.MonthlyBilling}
+                                                    // onChange={this.handleChange(`MonthlyBilling${index}-${mIndex}`)}
+                                                           onChange={(v)=>this.handleMonthlyBilling(v, m, 'MonthlyBilling')}
 
-                                        />
+                                                />
 
-                                    </div>
-                                ))
-                            }
-                        </React.Fragment>
+                                            </div>
+                                        ))
+                                    }
+                                </React.Fragment>
 
-                    ))}
+                            ))}
+                        </div>
+                    </div>}
+                    {this.state.tabValue === 1 &&
+                    <div>
+                        {this.getFindersFeesForm()}
+                    </div>
+                    }
                 </div>
 			</>
         )
@@ -1308,7 +1330,7 @@ class IncreaseDecreaseContractPage extends React.Component {
                     />
 
                     <div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <Button variant="contained" onClick={this.handleStepFranchiseeDistribution} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>
+                        <Button variant="contained" onClick={this.handleStepNewAmountForm} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>
                         <Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Done</Button>
                         <Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
                     </div>
@@ -1451,8 +1473,6 @@ class IncreaseDecreaseContractPage extends React.Component {
     render() {
         const { classes } = this.props;
         const { customerServiceTypes, step } = this.state;
-        console.log('xxx', this.state.decreaseReasons, this.state.increaseReasons);
-        console.log('xxxx=', this.state.franchieesesToOffer);
 
         return (
 			<>
@@ -1464,7 +1484,7 @@ class IncreaseDecreaseContractPage extends React.Component {
                 <div className={classNames("flex flex-col")}>
                     {step === 0 && this.getNewAmountInputForm()}
                     {step === 1 && this.getFranchiseeAssignmentForm()}
-                    {step === 2 && this.getFindersFeesForm()}
+                    {/*{step === 2 && this.getFindersFeesForm()}*/}
                 </div>
 
                 {/* <div className="flex w-full justify-between mb-12">
