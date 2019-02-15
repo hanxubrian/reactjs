@@ -8,7 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import { Icon, IconButton, Tooltip, Slide, RadioGroup, Radio, FormControlLabel, Paper, Typography, InputAdornment, FormControl, InputLabel, Select, MenuItem, Divider, ListItem, List, ListItemText, ListItemLink, Checkbox } from '@material-ui/core';
+import { Icon, IconButton, Tooltip, Slide, RadioGroup, Radio, FormControlLabel, Paper, Typography, InputAdornment, FormControl, InputLabel, Select, MenuItem, Divider, ListItem, List, ListItemText, ListItemLink, Checkbox, Switch } from '@material-ui/core';
 
 // for store
 import { bindActionCreators } from "redux";
@@ -502,12 +502,6 @@ class IncreaseDecreaseContractPage extends React.Component {
 		})
 	}
 
-	handleStep = () => {
-		this.setState({
-			step: this.state.step === 0 ? 1 : 0
-		})
-
-	}
 	handleClose = () => {
 		// this.setState({
 		// 	PaymentType: "Check",
@@ -826,75 +820,6 @@ class IncreaseDecreaseContractPage extends React.Component {
 		// this.setState({ data: data });
 	};
 
-	getFranchiseeAssignmentForm() {
-		const { classes } = this.props;
-		const {
-			franchiseeBillingTypes,
-			franchiseeServiceTypes
-		} = this.state
-
-		const franHeaders = [
-			{ width: 12, title: 'Number', field: 'Number' },
-			{ width: 22, title: 'Name', field: 'Name' },
-			{ width: 15, title: 'Billing', field: '' },
-			{ width: 15, title: 'Service', field: '' },
-			{ width: 25, title: 'Description', field: '' },
-			{ width: 10, title: 'Amount', field: '' },
-		]
-
-		return (
-			<>
-				<div className={classNames("flex mt-12 justify-between")}>
-
-					<TextField margin="dense" id="SA_Amount" label="Current Contract Amount" value={this.state.SA_Amount}
-						InputLabelProps={{ shrink: true }}
-						className={classNames(classes.textField, "pr-6")}
-						style={{ minWidth: 200 }}
-						InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
-					/>
-
-					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-						<Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Franchisee Distribution<Icon>keyboard_arrow_right</Icon></Button>
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
-					</div>
-
-				</div>
-
-				<div className={classNames("flex mt-12 justify-start")}>
-					<TextField margin="dense" id="NewAmount" label="New Amount"
-						InputLabelProps={{ shrink: true }}
-						className={classNames(classes.textField, "pr-6")}
-						InputProps={{ readOnly: false, startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
-						value={this.state.NewAmount || ''}
-						onChange={this.handleChange("NewAmount")}
-						autoFocus
-					/>
-
-					<TextField margin="dense" id="Reason" label="Reason"
-						InputLabelProps={{ shrink: true }}
-						className={classNames(classes.textField, "pl-6 flex-1")}
-						InputProps={{ readOnly: false }}
-
-					/>
-				</div>
-
-				<div className="flex w-full" style={{ alignItems: 'center' }}>
-					<TextField
-						type="date"
-						id="EffectiveDate"
-						value={this.state.EffectiveDate}
-						label="Effective Date"
-						className={classNames(classes.textField, 'ml-24')}
-						InputLabelProps={{ shrink: true }}
-						value={this.state.EffectiveDate}
-						onChange={this.handleChange('EffectiveDate')}
-						margin="dense"
-					/>
-				</div>
-
-			</>
-		)
-	}
 	ToolbarRootBase = ({ children, classes, className, ...restProps }) => (
 		<Toolbar.Root
 			className={classNames(className, classes.franchiseeGridToolbar)}
@@ -959,8 +884,94 @@ class IncreaseDecreaseContractPage extends React.Component {
 	changeSelection = selection => {
 		this.setState({ selection });
 	}
+	handleStep = (step) => {
+		this.setState({
+			step
+		})
+	}
+	handleStepNewAmountForm = () => {
+		this.handleStep(0)
+	}
 
-	getFindersFeesForm() {
+	handleStepFranchiseeDistribution = () => {
+		this.handleStep(1)
+	}
+
+	handleStepFindersFeesForm = () => {
+		this.handleStep(2)
+	}
+
+	getNewAmountInputForm() {
+		const { classes } = this.props;
+		const {
+			franchiseeBillingTypes,
+			franchiseeServiceTypes
+		} = this.state
+
+		const franHeaders = [
+			{ width: 12, title: 'Number', field: 'Number' },
+			{ width: 22, title: 'Name', field: 'Name' },
+			{ width: 15, title: 'Billing', field: '' },
+			{ width: 15, title: 'Service', field: '' },
+			{ width: 25, title: 'Description', field: '' },
+			{ width: 10, title: 'Amount', field: '' },
+		]
+
+		return (
+			<>
+				<div className={classNames("flex mt-12 justify-between")}>
+
+					<TextField margin="dense" id="SA_Amount" label="Current Contract Amount" value={this.state.SA_Amount}
+						InputLabelProps={{ shrink: true }}
+						className={classNames(classes.textField, "pr-6")}
+						style={{ minWidth: 200 }}
+						InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
+					/>
+
+					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+						<Button variant="contained" onClick={this.handleStepFranchiseeDistribution} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Franchisee Distribution<Icon>keyboard_arrow_right</Icon></Button>
+						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
+					</div>
+
+				</div>
+
+				<div className={classNames("flex mt-12 justify-start")}>
+					<TextField margin="dense" id="NewAmount" label="New Amount"
+						InputLabelProps={{ shrink: true }}
+						className={classNames(classes.textField, "pr-6")}
+						InputProps={{ readOnly: false, startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
+						value={this.state.NewAmount || ''}
+						onChange={this.handleChange("NewAmount")}
+						autoFocus
+					/>
+
+					<TextField margin="dense" id="Reason" label="Reason"
+						InputLabelProps={{ shrink: true }}
+						className={classNames(classes.textField, "pl-6 flex-1")}
+						InputProps={{ readOnly: false }}
+
+					/>
+				</div>
+
+				<div className="flex w-full" style={{ alignItems: 'center' }}>
+					<TextField
+						type="date"
+						id="EffectiveDate"
+						value={this.state.EffectiveDate}
+						label="Effective Date"
+						className={classNames(classes.textField, 'ml-24')}
+						InputLabelProps={{ shrink: true }}
+						value={this.state.EffectiveDate}
+						onChange={this.handleChange('EffectiveDate')}
+						margin="dense"
+					/>
+				</div>
+
+			</>
+		)
+	}
+
+	getFranchiseeAssignmentForm() {
 		const { classes } = this.props;
 
 		const {
@@ -996,8 +1007,8 @@ class IncreaseDecreaseContractPage extends React.Component {
 					/>
 
 					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-						{step === 1 && <Button variant="contained" onClick={this.handleStep} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>}
-						<Button variant="contained" color="primary" className={classNames("pl-24 pr-24 mr-12")}>Finders Fees</Button>
+						{step === 1 && <Button variant="contained" onClick={this.handleStepNewAmountForm} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>}
+						<Button variant="contained" color="primary" onClick={this.handleStepFindersFeesForm} className={classNames("pl-24 pr-24 mr-12")}>Finders Fees<Icon>keyboard_arrow_right</Icon></Button>
 						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
 					</div>
 				</div>
@@ -1116,6 +1127,7 @@ class IncreaseDecreaseContractPage extends React.Component {
 			</>
 		)
 	}
+
 	getFranchiseesList() {
 		const { classes } = this.props;
 		const {
@@ -1175,6 +1187,171 @@ class IncreaseDecreaseContractPage extends React.Component {
 
 		)
 	}
+
+	getFindersFeesForm() {
+		const { classes } = this.props
+		return (
+			<>
+				<div className={classNames("flex mt-12 justify-between")}>
+
+					<TextField select margin="dense" id="CalculationMethod" label="Calculation Method"
+						InputLabelProps={{ shrink: true }}
+						className={classNames(classes.textField)}
+						value={this.state.CalculationMethod || ''}
+						onChange={this.handleChange('CalculationMethod')}
+						style={{ minWidth: 250 }}
+						InputProps={{ readOnly: false }}
+					>
+						{[
+							"---",
+							"***",
+							"+++",
+						].map((x, index) => (
+							<MenuItem key={index} value={x}>{x}</MenuItem>
+						))}
+					</TextField>
+
+					<TextField margin="dense" id="CalculationMethodNameDescription" label="Name / Description"
+						InputLabelProps={{ shrink: true }}
+						className={classNames(classes.textField, "ml-12")}
+						value={this.state.NewAmount || ''}
+						onChange={this.handleChange("NewAmount")}
+						fullWidth
+					/>
+
+					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+						<Button variant="contained" onClick={this.handleStepFranchiseeDistribution} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>
+						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Done</Button>
+						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
+					</div>
+
+				</div>
+
+				<div className={classNames("flex mt-12")}>
+					<TextField margin="dense" id="MonthlyBillingAmount" label="Monthly Billing Amount"
+						InputLabelProps={{ shrink: true }}
+						sm={4}
+						className={classNames(classes.textField, "pr-6")}
+						InputProps={{ startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
+						value={this.state.NewAmount || ''}
+						onChange={this.handleChange("MonthlyBillingAmount")}
+					/>
+				</div>
+				<div className={classNames("flex mt-12")}>
+					<TextField margin="dense" id="FindersFeeCreditAmount" label="Finders Fee Credit Amount"
+						InputLabelProps={{ shrink: true }}
+						className={classNames(classes.textField, "pr-6")}
+						InputProps={{ startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
+						value={this.state.NewAmount || ''}
+						onChange={this.handleChange("FindersFeeCreditAmount")}
+						sm={4}
+					/>
+				</div>
+				<div className={classNames("flex mt-12")}>
+					<TextField margin="dense" id="InitialBusinessCredit" label="Initial Business Credit"
+						InputLabelProps={{ shrink: true }}
+						className={classNames(classes.textField, "pr-6")}
+						InputProps={{ startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
+						value={this.state.NewAmount || ''}
+						onChange={this.handleChange("InitialBusinessCredit")}
+						sm={4}
+					/>
+				</div>
+
+				<div className={classNames("flex mt-12 justify-between items-center")}>
+					<TextField margin="dense" id="MonthlyPayment" label="Monthly Payment"
+						InputLabelProps={{ shrink: true }}
+						className={classNames(classes.textField, "pr-6")}
+						InputProps={{ startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
+						value={this.state.MonthlyPayment || ''}
+						onChange={this.handleChange("MonthlyPayment")}
+						sm={2}
+					/>
+
+					<Typography className="mr-6 ml-6" variant="subtitle1"><strong>x</strong></Typography>
+
+					<TextField margin="dense" id="NumberOfPayments" label="# Of Payments"
+						InputLabelProps={{ shrink: true }}
+						className={classNames(classes.textField, "pr-6")}
+						value={this.state.NumberOfPayments || ''}
+						onChange={this.handleChange("NumberOfPayments")}
+						sm={2}
+					/>
+
+					<Typography className="mr-6 ml-6" variant="subtitle1"><strong>=</strong></Typography>
+
+					<TextField margin="dense" id="AmountFinanced" label="Amount Financed"
+						InputLabelProps={{ shrink: true }}
+						className={classNames(classes.textField, "pr-6")}
+						InputProps={{ startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
+						value={this.state.AmountFinanced || ''}
+						onChange={this.handleChange("AmountFinanced")}
+						sm={2}
+					/>
+
+					<Typography className="mr-6 ml-6" variant="subtitle1"><strong>+</strong></Typography>
+
+					<TextField margin="dense" id="DownPayment" label="DownPayment"
+						InputLabelProps={{ shrink: true }}
+						className={classNames(classes.textField, "pr-6")}
+						InputProps={{ startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
+						value={this.state.DownPayment || ''}
+						onChange={this.handleChange("DownPayment")}
+						sm={2}
+					/>
+
+					<Typography className="mr-6 ml-6" variant="subtitle1"><strong>=</strong></Typography>
+
+					<TextField margin="dense" id="ResultAmountFinanced" label="Amount Financed"
+						InputLabelProps={{ shrink: true }}
+						className={classNames(classes.textField, "pr-6")}
+						InputProps={{ startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
+						value={this.state.ResultAmountFinanced || ''}
+						onChange={this.handleChange("ResultAmountFinanced")}
+						sm={2}
+					/>
+				</div>
+
+				<div className={classNames("flex mt-12")}>
+					<FormControlLabel
+						control={
+							<Switch
+								checked={this.state.DownPaymentPaid}
+								onChange={this.handleChange('DownPaymentPaid')}
+								value="DownPaymentPaid"
+							/>
+						}
+						label="Down Payment Paid?"
+					/>
+					<FormControlLabel
+						control={
+							<Switch
+								checked={this.state.IncludeDpWith1stPayment}
+								onChange={this.handleChange('IncludeDpWith1stPayment')}
+								value="IncludeDpWith1stPayment"
+							/>
+						}
+						label="Include DP With 1st Payment?"
+					/>
+				</div>
+
+				<div className={classNames("flex mt-12 flex-end")}>
+					{/* <Button variant="contained" color="primary" className={classNames("pl-24 pr-24 mr-12")}>Multi-Tenant 100% Occuaoncy Input</Button> */}
+
+					<TextField margin="dense" id="MultiTenant100OccuaoncyInput" label="Multi-Tenant 100% Occuaoncy Input"
+						InputLabelProps={{ shrink: true }}
+						className={classNames(classes.textField, "pr-6")}
+						value={this.state.MultiTenant100OccuaoncyInput || ''}
+						onChange={this.handleChange("MultiTenant100OccuaoncyInput")}
+						fullWidth
+						style={{ maxWidth: 300 }}
+					/>
+
+				</div>
+			</>
+		)
+	}
+
 	render() {
 		const { classes } = this.props;
 		const { customerServiceTypes, step } = this.state;
@@ -1187,8 +1364,9 @@ class IncreaseDecreaseContractPage extends React.Component {
 				{/* <Divider variant="middle" style={{ marginTop: 10, marginBottom: 10, width: '50%', alignSelf: 'center', marginLeft: 'auto', marginRight: 'auto' }} /> */}
 
 				<div className={classNames("flex flex-col")}>
-					{step === 0 && this.getFranchiseeAssignmentForm()}
-					{step === 1 && this.getFindersFeesForm()}
+					{step === 0 && this.getNewAmountInputForm()}
+					{step === 1 && this.getFranchiseeAssignmentForm()}
+					{step === 2 && this.getFindersFeesForm()}
 				</div>
 
 				{/* <div className="flex w-full justify-between mb-12">
