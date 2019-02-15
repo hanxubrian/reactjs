@@ -1085,7 +1085,7 @@ class IncreaseDecreaseContractPage extends React.Component {
                     <AppBar position="static">
                         <Tabs value={this.state.tabValue} name="tabValue" onChange={this.handleChangeTab}>
                             <Tab label="Franchisee Distibutions" />
-                            <Tab label="Finder Fees" />
+                            <Tab label="Finders Fee" />
                         </Tabs>
                     </AppBar>
                     {this.state.tabValue === 0 &&
