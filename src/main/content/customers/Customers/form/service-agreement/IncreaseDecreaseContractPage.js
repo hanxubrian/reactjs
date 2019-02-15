@@ -7,6 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import {NumberFormatCustomNoPrefix, NumberFormatCustom2} from '../../../../../../services/utils'
 
 import { Icon, IconButton, Tooltip, Slide, RadioGroup, Radio, FormControlLabel, Paper, Typography, InputAdornment, FormControl, InputLabel, Select, MenuItem, Divider, ListItem, List, ListItemText, ListItemLink, Checkbox, Switch } from '@material-ui/core';
 
@@ -852,7 +853,7 @@ class IncreaseDecreaseContractPage extends React.Component {
 			__proto__: Object
 			length: 1
 			__proto__: Array(0)
-			Status: "Active"		
+			Status: "Active"
 		*/
 		let selectedFranchisees = selection.map(x => rows[x])
 		selectedFranchisees.forEach(x => {
@@ -925,7 +926,8 @@ class IncreaseDecreaseContractPage extends React.Component {
 						InputLabelProps={{ shrink: true }}
 						className={classNames(classes.textField, "pr-6")}
 						style={{ minWidth: 200 }}
-						InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
+						InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
+                            inputComponent: NumberFormatCustomNoPrefix}}
 					/>
 
 					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -939,7 +941,10 @@ class IncreaseDecreaseContractPage extends React.Component {
 					<TextField margin="dense" id="NewAmount" label="New Amount"
 						InputLabelProps={{ shrink: true }}
 						className={classNames(classes.textField, "pr-6")}
-						InputProps={{ readOnly: false, startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
+						InputProps={{ readOnly: false,
+							startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
+                            inputComponent: NumberFormatCustomNoPrefix
+						}}
 						value={this.state.NewAmount || ''}
 						onChange={this.handleChange("NewAmount")}
 						autoFocus
@@ -949,24 +954,19 @@ class IncreaseDecreaseContractPage extends React.Component {
 						InputLabelProps={{ shrink: true }}
 						className={classNames(classes.textField, "pl-6 flex-1")}
 						InputProps={{ readOnly: false }}
-
 					/>
+                    <TextField
+                        type="date"
+                        id="EffectiveDate"
+                        value={this.state.EffectiveDate}
+                        label="Effective Date"
+                        className={classNames(classes.textField, 'ml-24')}
+                        InputLabelProps={{ shrink: true }}
+                        value={this.state.EffectiveDate}
+                        onChange={this.handleChange('EffectiveDate')}
+                        margin="dense"
+                    />
 				</div>
-
-				<div className="flex w-full" style={{ alignItems: 'center' }}>
-					<TextField
-						type="date"
-						id="EffectiveDate"
-						value={this.state.EffectiveDate}
-						label="Effective Date"
-						className={classNames(classes.textField, 'ml-24')}
-						InputLabelProps={{ shrink: true }}
-						value={this.state.EffectiveDate}
-						onChange={this.handleChange('EffectiveDate')}
-						margin="dense"
-					/>
-				</div>
-
 			</>
 		)
 	}
@@ -1001,7 +1001,9 @@ class IncreaseDecreaseContractPage extends React.Component {
 					<TextField margin="dense" id="Monthly Billing Amount" label="Monthly Billing Amount"
 						InputLabelProps={{ shrink: true }}
 						className={classNames(classes.textField, "pr-6")}
-						InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment> }}
+						InputProps={{ readOnly: true,
+                            startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
+                            inputComponent: NumberFormatCustomNoPrefix }}
 						value={this.state.NewAmount || ''}
 						onChange={this.handleChange("NewAmount")}
 					/>
@@ -1109,7 +1111,8 @@ class IncreaseDecreaseContractPage extends React.Component {
 												classes: {
 													input: classes.descriptionText,
 												},
-												startAdornment: <InputAdornment position="end" className="mr-4">$</InputAdornment>
+                                                startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
+                                                inputComponent: NumberFormatCustomNoPrefix
 											}}
 											margin="dense"
 											className="pl-6"

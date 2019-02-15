@@ -93,6 +93,26 @@ export function NumberFormatCustom2(props) {
         />
     );
 }
+export function NumberFormatCustomNoPrefix(props) {
+    const { inputRef, onChange, ...other } = props;
+
+    return (
+        <NumberFormat
+            {...other}
+            getInputRef={inputRef}
+            onValueChange={values => {
+                onChange({
+                    target: {
+                        value: values.value,
+                    },
+                });
+            }}
+            thousandSeparator
+            fixedDecimalScale={true}
+            decimalScale={2}
+        />
+    );
+}
 
 export function NumberFormatCustomDeduction(props) {
     const { inputRef, onChange, ...other } = props;
