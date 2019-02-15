@@ -262,6 +262,8 @@ class PaymentLogDetail extends Component {
     };
 
     renderHeader = ()=>{
+        let region = this.props.all_regions.filter(r=>r.regionid===this.props.regionId);
+
         return (
             <Grid1 container className="flex flex-row items-center report-header">
                 <Grid1 item sm={3} className="text-left" >
@@ -271,7 +273,7 @@ class PaymentLogDetail extends Component {
                     <Typography color="inherit" ><i>to non-default franchisee.</i></Typography>
                 </Grid1>
                 <Grid1 item sm={6} className="text-center">
-                    <Typography variant={"h1"} color="inherit">Janiking of Bufflo, Inc.</Typography>
+                    <Typography variant={"h1"} color="inherit">Janiking of {region[0].regionname}, Inc.</Typography>
                     <Typography color="inherit" variant={"h2"}>
                         Accounts Receivable Log
                     </Typography>
@@ -367,6 +369,7 @@ function mapStateToProps({auth, paymentLog})
         paymentLogList: paymentLog.paymentLogList,
         regionId: auth.login.defaultRegionId,
         logDate: paymentLog.logDate,
+        all_regions: auth.login.all_regions,
     }
 }
 
