@@ -8,7 +8,24 @@ export function getContacts()
 {
     return  (dispatch, getState) => {
         const userId = getState().auth.login.Username;
+        const regionId = getState().auth.login.defaultRegionId;
+        const data = {
+            regionId: regionId,
+            Groups: [],
+            Roles: [],
+            searchText: ""
+        };
         (async () => {
+            // let contacts = await chatService.getUserListforcontacts(data);
+            // console.log("contacts.actons==",contacts);
+            // if (contacts.IsSuccess)
+            // {
+            //     dispatch({
+            //         type   : GET_CONTACTS,
+            //         payload: contacts.Data
+            //     });
+            // }
+
             let contacts = await chatService.getContactList(userId);
             if (contacts)
             {

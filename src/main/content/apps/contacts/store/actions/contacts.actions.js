@@ -28,9 +28,16 @@ export function getContacts(routeParams)
   
         return  (dispatch, getState) => {
             const userId = getState().auth.login.Username;
+            const regionId = getState().auth.login.defaultRegionId;
+            const data = {
+                regionId: regionId,
+                Groups: [],
+                Roles: [],
+                searchText: ""
+            };
             (async () => {
-                let response = await contactService.getRegisteredGroupUserList();
-
+                // let response = await contactService.getRegisteredGroupUserList();
+                let response = await chatService.getUserListforcontacts(data);
                 let contacts = [];
                 response.Data.map((item)=>{
                     contacts= [...contacts,
@@ -45,15 +52,15 @@ export function getContacts(routeParams)
                             jobTitle: item.RoleName,
                             email : item.Email,
                             phone: item.Phone,
-                            address : item.Addres +' '+ item.City+ ' ' + item.Zipcode,
+                            address : item.Address1 +' '+ item.Address2,
                             birthday: undefined,
                             notes: ''
+
 
                         } ]
                     
 
                 });
-
                 dispatch({
                     type   : GET_CONTACTS,
                     payload: contacts
@@ -199,7 +206,8 @@ export function openChat(contactId)
 
         const contact = getState().contactsApp.contacts.entities[contactId];
         const id = getState().auth.login.Username;
-       
+        // const id = getState().auth.login.UserId;
+
         (async () => {
                 chatService.openChat(id, contact.name, contact.lastName, contact.avatar).then(()=>{
                     dispatch(getChatUserData())}).then(()=>{dispatch(getChatContacts())})

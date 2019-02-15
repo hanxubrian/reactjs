@@ -10,11 +10,27 @@ const BASE_MONGO_API_URL='https://apifmsplusplus_mongo.jkdev.com';
 const LOCALHOST_URL = "http://localhost:12217/";
 
 class chatService {
+    getUserListforcontacts=(data)=>{
+        return new Promise((resolve, reject) => {
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/account/users`,data)
+                .then( res => {
+                    if(res.status===200) {
+                        resolve(res.data);
+                    }
+                    else if(res.status!==200){
+                        reject(res.data);
+                    }
+                })
+                .catch(error=>{
+                })
+        });
+    }
     getContactList =  (userId) => {
         
              return new Promise((resolve, reject) => {
              axios_instance.get(`${BASE_MONGO_API_URL}/api/chat/contacts?id=${userId}`)
                 .then( res => {
+                    console.log("contact -list",res);
                     if(res.status===200) {
                         resolve(res.data);
                     }

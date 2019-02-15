@@ -163,18 +163,24 @@ class ContactsList extends Component {
             });
             let msg      = this.state.chatDetail.messages;
             let chatlist = this.state.chatUser.chatList;
-            console.log("chatId",chatlist);
-            if(chatlist  && chatlist != null){
-                chatlist.map((item)=>{
-                    if(item['contactId']==userId){
-                        this.setState({
-                            chatId : item['chatId'],
-                        });
-
-
-                    }
+            console.log("userId",userId);
+            console.log("userInfo",userInfo);
+            if(userId && userId !== null){
+                this.setState({
+                    chatId : userId,
                 });
             }
+            // if(chatlist  && chatlist != null){
+            //     chatlist.map((item)=>{
+            //         if(item['contactId']==userId){
+            //             this.setState({
+            //                 chatId : item['chatId'],
+            //             });
+            //
+            //
+            //         }
+            //     });
+            // }
 
         }
     }
@@ -182,6 +188,8 @@ class ContactsList extends Component {
     {
         const {classes, contacts, user, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred,state, openChat} = this.props;
         const data = this.getFilteredArray(contacts, searchText);
+        console.log("contacts=============",contacts);
+        console.log("searchText===========",searchText);
         const {selectedContactsMenu} = this.state;
         // console.log("chatDetal====",this.state.chatDetail);
         if ( !data && data.length === 0 )
@@ -309,7 +317,7 @@ class ContactsList extends Component {
                         },
                         {
                             Header    : "First Name",
-                            accessor  : "name",
+                            accessor  : "firstName",
                             filterable: true,
                             className : "font-bold",
                             width    : 200,
