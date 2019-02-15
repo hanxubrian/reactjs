@@ -1233,7 +1233,8 @@ class IncreaseDecreaseContractPage extends React.Component {
 
                             ))}
                         </div>
-                    </div>}
+                    </div>
+                    }
                     {this.state.tabValue === 1 &&
                     <div>
                         {this.getFindersFeesForm()}
@@ -1503,7 +1504,7 @@ class IncreaseDecreaseContractPage extends React.Component {
 					</div>
 				</div> */}
 
-                {step === 1 &&
+                {(step === 1 && this.state.tabValue===0) &&
                 <div className={classNames("flex flex-col")}>
                     <Divider variant="middle" style={{ marginTop: 10, marginBottom: 10, width: '50%', alignSelf: 'center' }} />
                     {this.getFranchiseesList()}
