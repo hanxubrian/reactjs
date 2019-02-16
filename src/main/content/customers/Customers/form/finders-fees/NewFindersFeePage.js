@@ -51,34 +51,15 @@ class NewFindersFeePage extends React.Component {
             PaymentAmount: 0,
             overpayment: 0,
             errorMsg: "",
-
-            paymentDlgPayloads: {
-                open: false,
-                paymentType: "Check",
-                paymentAmount: 0
-            },
-
         };
     }
 
     componentWillMount() {
-        this.setState({
-            customerServiceTypes: this.props.lists.customerServiceTypes,
-            franchiseeServiceTypes: this.props.lists.franchiseeServiceTypes,
-            franchiseeBillingTypes: this.props.lists.franchiseeBillingTypes,
-        })
-
     }
     componentDidUpdate(prevProps, prevState, snapshot){
     }
 
     componentDidMount() {
-
-        this.setState({
-            paymentDlgPayloads: this.props.paymentDlgPayloads,
-            PaymentAmount: this.props.paymentDlgPayloads.paymentAmount,
-            PaymentType: this.props.paymentDlgPayloads.paymentType
-        })
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
@@ -94,13 +75,18 @@ class NewFindersFeePage extends React.Component {
             [name]: event.target.value,
             errorMsg: ""
         });
+    };
 
-        if (name === "PaymentAmount") {
-        }
+    handleGotoDistibutionPage = () => {
+        this.props.updateCustomersParameter('activeStep', 1);
+    };
+
+    handleSaveFindersFee = () => {
+        console.log('saved');
     };
 
     getFindersFeesForm() {
-        const { classes } = this.props
+        const { classes } = this.props;
         return (
             <>
                 <div className={classNames("flex mt-12 justify-between")}>
@@ -129,6 +115,10 @@ class NewFindersFeePage extends React.Component {
                                onChange={this.handleChange("NewAmount")}
                                fullWidth
                     />
+                    <div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+                        <Button variant="contained" onClick={this.handleGotoDistibutionPage} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>
+                        <Button variant="contained" onClick={this.handleSaveFindersFee} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Save</Button>
+                    </div>
 
                 </div>
 
@@ -276,48 +266,13 @@ class NewFindersFeePage extends React.Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        openPaymentDialog: Actions.openPaymentDialog,
-        createAccountReceivablePayment: Actions.createAccountReceivablePayment,
-
-        showIncreaseDecreaseContractModalForm: Actions.showIncreaseDecreaseContractModalForm,
-
-        getLogCallCustomerServiceTypes: Actions.getLogCallCustomerServiceTypes,
-
-        getFranchiseeServiceTypes: Actions.getFranchiseeServiceTypes,
-        getFranchiseeBillingTypes: Actions.getFranchiseeBillingTypes,
-        getFranchisees: Actions.getFranchisees,
         updateCustomersParameter: Actions.updateCustomersParameter,
     }, dispatch);
 }
 
-function mapStateToProps({ customers, accountReceivablePayments, auth, franchisees }) {
+function mapStateToProps({ customers}) {
     return {
-        regionId: auth.login.defaultRegionId,
-
-        statusId: franchisees.statusId,
-        Longitude: franchisees.Longitude,
-        Latitude: franchisees.Latitude,
-        Location: franchisees.Location,
-        SearchText: franchisees.SearchText,
-        bLoadedFranchisees: franchisees.bLoadedFranchisees,
-
-        bOpenPaymentDialog: accountReceivablePayments.bOpenPaymentDialog,
-        activePaymentRows: accountReceivablePayments.activePaymentRows,
-
-        payments: accountReceivablePayments.ACC_payments,
-
-        filterParam: accountReceivablePayments.filterParam,
-        searchText: accountReceivablePayments.searchText,
-
-        paymentDlgPayloads: accountReceivablePayments.paymentDlgPayloads,
-
-        increaseDecreaseContractModalForm: customers.increaseDecreaseContractModalForm,
-        lists: customers.lists,
-        franchieesesToOffer: customers.franchieesesToOffer,
-        activeCustomer: customers.activeCustomer,
-
-        franchisees: franchisees.franchiseesDB,
-        NewAmount: customers.NewAmount
+        activeStep: customers.activeStep,
     }
 }
 
