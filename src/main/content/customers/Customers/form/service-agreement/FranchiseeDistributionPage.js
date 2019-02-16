@@ -284,7 +284,7 @@ class FranchiseeDistributionPage extends React.Component {
             decreaseReasons: null,
             bReasonForHigh: false,
             reason: '',
-            NewAmount:''
+            NewAmount:this.props.NewAmount
         };
         // this.commitChanges = this.commitChanges.bind(this);
         if (!props.bLoadedFranchisees) {
@@ -311,6 +311,10 @@ class FranchiseeDistributionPage extends React.Component {
             franchiseeBillingTypes: this.props.lists.franchiseeBillingTypes,
         })
 
+    }
+    componentDidUpdate(prevProps, prevState, snapshot){
+        if(this.props.NewAmount!==this.props.NewAmount)
+            this.setState({NewAmount: this.props.NewAmount});
     }
     componentDidMount() {
         this.initCustomerInfo();
@@ -1293,6 +1297,7 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
         activeCustomer: customers.activeCustomer,
 
         franchisees: franchisees.franchiseesDB,
+        NewAmount: customers.NewAmount
     }
 }
 

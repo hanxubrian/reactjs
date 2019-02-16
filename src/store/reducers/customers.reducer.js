@@ -2,6 +2,7 @@ import * as Actions from "../actions";
 import * as UserActions from "../../auth/store/actions";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import {UPDATE_CUSTOMERS_PARAMETERS} from "../actions";
 
 const initialState = {
 	customersDB: null,
@@ -111,6 +112,7 @@ const initialState = {
 	increaseDecreaseContractModalForm: {
 		open: false,
 	},
+	NewAmount: ''
 };
 
 
@@ -130,6 +132,13 @@ const customers = function (state = initialState, action) {
 				return {
 					...state,
 					accountTypeList: action.payload
+				}
+			}
+		case Actions.UPDATE_CUSTOMERS_PARAMETERS:
+			{
+				return {
+					...state,
+                    [action.payload.name]: action.payload.value
 				}
 			}
 		case Actions.GET_CUSTOMER_STATUS_LIST:

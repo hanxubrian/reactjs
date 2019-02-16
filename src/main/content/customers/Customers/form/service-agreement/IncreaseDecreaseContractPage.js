@@ -431,7 +431,7 @@ class IncreaseDecreaseContractPage extends React.Component {
             decreaseReasons: null,
             bReasonForHigh: false,
 			reason: '',
-            NewAmount:''
+            NewAmount:this.props.NewAmount,
         };
         // this.commitChanges = this.commitChanges.bind(this);
         if (!props.bLoadedFranchisees) {
@@ -557,6 +557,11 @@ class IncreaseDecreaseContractPage extends React.Component {
             // })
         }
         // this.checkValidations(name, event.target.value)
+    };
+
+    handleUpdateParameter = (name) => {
+        this.props.updateCustomersParameter(name, this.state[name]);
+
     };
 
     handleChange1 = (event) => {
@@ -1000,6 +1005,7 @@ class IncreaseDecreaseContractPage extends React.Component {
                                }}
                                value={this.state.NewAmount || ''}
                                onChange={this.handleChange("NewAmount")}
+                               onBlur={this.handleUpdateParameter('NewAmount')}
                                autoFocus
                     />
                     {this.state.decreaseReasons!==null && this.state.increaseReasons!==null && (
@@ -1505,6 +1511,7 @@ function mapDispatchToProps(dispatch) {
         getFranchiseeServiceTypes: Actions.getFranchiseeServiceTypes,
         getFranchiseeBillingTypes: Actions.getFranchiseeBillingTypes,
         getFranchisees: Actions.getFranchisees,
+        updateCustomersParameter: Actions.updateCustomersParameter,
     }, dispatch);
 }
 
@@ -1535,6 +1542,7 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
         activeCustomer: customers.activeCustomer,
 
         franchisees: franchisees.franchiseesDB,
+        NewAmount: customers.NewAmount
     }
 }
 

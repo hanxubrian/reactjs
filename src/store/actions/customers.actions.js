@@ -71,6 +71,7 @@ export const SHOW_FRANCHIEES_ASSIGN_MODAL_FORM = "[CUSTOMERS APP] SHOW_FRANCHIEE
 
 export const GET_FRANCHISEE_SERVICE_TYPES = "[CUSTOMERS APP] GET_FRANCHISEE_SERVICE_TYPES";
 export const GET_FRANCHISEE_BILLING_TYPES = "[CUSTOMERS APP] GET_FRANCHISEE_BILLING_TYPES";
+export const UPDATE_CUSTOMERS_PARAMETERS = "[CUSTOMERS APP] UPDATE PARAMETERS";
 
 export const SHOW_INCREASE_DECREASE_CONTRACT_MODAL_FORM = "[CUSTOMERS APP] SHOW_INCREASE_DECREASE_CONTRACT_MODAL_FORM";
 
@@ -555,4 +556,11 @@ export function getFranchiseeBillingTypes(regionId) {
 			});
 		})();
 	}
+}
+
+export function updateCustomersParameter(name, value) {
+    return {
+        type: UPDATE_CUSTOMERS_PARAMETERS,
+        payload: {name, value}
+    }
 }
