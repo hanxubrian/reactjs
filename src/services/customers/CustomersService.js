@@ -424,6 +424,24 @@ fullbill: 0
 				})
 		});
 	}
+
+	getIncreaseDecrease(regionId, params) {
+		console.log('params=', params);
+        return new Promise((resolve, reject) => {
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/IncreaseDecrease`, params)
+                .then(res => {
+                    if (res.status === 200) {
+                        resolve(res.data);
+                    }
+                    else if (res.status !== 200) {
+                        reject(res.data);
+                    }
+                })
+                .catch(error => {
+                    resolve(error);
+                })
+        });
+	}
 }
 
 

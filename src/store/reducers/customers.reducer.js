@@ -114,7 +114,8 @@ const initialState = {
 	},
 	NewAmount: '',
     activeStep: 0,
-	serviceAgreementStep: 0
+	serviceAgreementStep: 0,
+	increase_decrease: null
 };
 
 
@@ -606,6 +607,11 @@ const customers = function (state = initialState, action) {
 					...state.increaseDecreaseContractModalForm,
 					open: action.payload,
 				}
+			};
+			case Actions.GET_INCREASE_DECREASE:
+			return {
+				...state,
+                increase_decrease: action.payload
 			};
 		default:
 			{

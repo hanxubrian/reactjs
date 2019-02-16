@@ -2,12 +2,9 @@ import React, { Fragment } from 'react';
 import _ from "lodash";
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {NumberFormatCustomNoPrefix, } from '../../../../../../services/utils'
+import moment from 'moment';
 
 import { Icon, IconButton, Slide, FormControlLabel, Paper, Typography, InputAdornment, MenuItem, Divider,
     ListItemLink, Checkbox, Switch } from '@material-ui/core';
@@ -97,65 +94,6 @@ function Transition(props) {
     return <Slide direction="up" {...props} />;
 }
 
-//
-// table row edit command buttons
-//
-const AddButton = ({ onExecute }) => (
-    <div style={{ textAlign: 'center' }}>
-        {/* <Button
-			color="primary"
-			onClick={onExecute}
-			title="New Address"
-		>
-			New
-	  </Button> */}
-        <IconButton onClick={onExecute} title="Add New">
-            <NewIcon />
-        </IconButton>
-    </div>
-);
-
-const EditButton = ({ onExecute }) => (
-    <IconButton onClick={onExecute} title="Edit Payment Amount">
-        <EditIcon />
-    </IconButton>
-);
-
-const DeleteButton = ({ onExecute }) => (
-    <IconButton onClick={onExecute} title="Delete">
-        <DeleteIcon />
-    </IconButton>
-);
-
-const CommitButton = ({ onExecute }) => (
-    <IconButton onClick={onExecute} title="Save">
-        <SaveIcon />
-    </IconButton>
-);
-
-const CancelButton = ({ onExecute }) => (
-    <IconButton color="secondary" onClick={onExecute} title="Cancel">
-        <CancelIcon />
-    </IconButton>
-);
-
-const commandComponents = {
-    // add: AddButton,
-    edit: EditButton,
-    // delete: DeleteButton,
-    commit: CommitButton,
-    cancel: CancelButton,
-};
-
-const Command = ({ id, onExecute }) => {
-    const CommandButton = commandComponents[id];
-    return (
-        <CommandButton
-            onExecute={onExecute}
-        />
-    );
-};
-
 const editing_cell_styles = theme => ({
     cell: {
         background: "#989898",
@@ -163,16 +101,6 @@ const editing_cell_styles = theme => ({
         padding: 0,
     }
 });
-const EditingHeaderCellComponentBase = props => {
-    return (<TableEditColumn.Cell {...props}
-
-    />);
-};
-
-const EditingHeaderCellComponent = withStyles(editing_cell_styles, { name: "EditingCell" })(
-    EditingHeaderCellComponentBase
-);
-
 const EditingCellComponentBase = props => {
     return (<TableEditColumn.Cell {...props}>
         {React.Children.toArray(props.children)
@@ -202,45 +130,10 @@ const tableHeaderCellComponentBase = props => {
 
     />);
 };
-const tableHeaderCellComponent = withStyles(header_cell_styles)(
-    tableHeaderCellComponentBase
-);
 
-
-const EditingCellComponent = withStyles(editing_cell_styles, { name: "EditingCell" })(
-    EditingCellComponentBase
-);
-const getRowId = row => row.id;
 
 const CurrencyFormatter = ({ value }) => (<span>$ {parseFloat(`0${value}`).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
 const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/, '$2/$3/$1');
-
-const BlueDialogTitle = withStyles(theme => ({
-    root: {
-        borderBottom: `1px solid ${theme.palette.divider}`,
-        backgroundColor: "#3c93ec",
-        margin: 0,
-        padding: theme.spacing.unit * 2,
-    },
-    closeButton: {
-        position: 'absolute',
-        right: theme.spacing.unit,
-        top: theme.spacing.unit,
-        color: "white",
-    },
-}))(props => {
-    const { children, classes, onClose } = props;
-    return (
-        <DialogTitle disableTypography className={classes.root}>
-            {children}
-            {onClose ? (
-                <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
-                    <Icon>close</Icon>
-                </IconButton>
-            ) : null}
-        </DialogTitle>
-    );
-});
 
 class IncreaseDecreaseContractPage extends React.Component {
 
@@ -919,9 +812,13 @@ class IncreaseDecreaseContractPage extends React.Component {
         this.handleStep(0)
     }
 
-    handleStepFranchiseeDistribution = () => {
-        console.log('saved');
-        // this.handleStep(1)
+    saveIncreaseDecrease = () => {
+        let CustomerNo = this.props.activeCustomer.Data.cust_no;
+        let NewMonthlyContractAmount = parseFloat(this.state.NewAmount);
+        let Note = this.state.notes;
+        let EffectiveDate = moment(this.state.EffectiveDate).format('MM/DD/YYYY');
+        console.log('qqq=',CustomerNo, NewMonthlyContractAmount, Note, EffectiveDate);
+        this.props.getIncreaseDecrease(this.props.regionId, {CustomerNo, NewMonthlyContractAmount, Note, EffectiveDate});
     };
 
     handleStepFindersFeesForm = () => {
@@ -987,7 +884,7 @@ class IncreaseDecreaseContractPage extends React.Component {
                     />
 
                     <div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <Button variant="contained" onClick={this.handleStepFranchiseeDistribution}
+                        <Button variant="contained" onClick={this.saveIncreaseDecrease}
                                 disabled={this.state.NewAmount === ''}
                                 color="primary" className={classNames("pl-24 pr-24 mr-12")}>Save</Button>
                         <Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
@@ -998,6 +895,7 @@ class IncreaseDecreaseContractPage extends React.Component {
                 <div className={classNames("flex mt-12 justify-start")}>
                     <TextField margin="dense" id="NewAmount" label="New Amount"
                                InputLabelProps={{ shrink: true }}
+                               required
                                className={classNames(classes.textField, "pr-6")}
                                InputProps={{ readOnly: false,
                                    startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
@@ -1512,6 +1410,7 @@ function mapDispatchToProps(dispatch) {
         getFranchiseeBillingTypes: Actions.getFranchiseeBillingTypes,
         getFranchisees: Actions.getFranchisees,
         updateCustomersParameter: Actions.updateCustomersParameter,
+        getIncreaseDecrease: Actions.getIncreaseDecrease,
     }, dispatch);
 }
 
@@ -1542,7 +1441,8 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
         activeCustomer: customers.activeCustomer,
 
         franchisees: franchisees.franchiseesDB,
-        NewAmount: customers.NewAmount
+        NewAmount: customers.NewAmount,
+        increase_decrease: customers.increase_decrease,
     }
 }
 

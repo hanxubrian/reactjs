@@ -1,5 +1,5 @@
 import axios from "axios";
-import { customersService } from "services";
+import { customersService } from "../../services";
 
 export const GET_ALL_CUSTOMERS = "[CUSTOMERS] GETS ALL";
 export const GET_ALL_DOCUMENTS = "[CUSTOMERS] DOCUMENTS GETS ALL";
@@ -72,6 +72,7 @@ export const SHOW_FRANCHIEES_ASSIGN_MODAL_FORM = "[CUSTOMERS APP] SHOW_FRANCHIEE
 export const GET_FRANCHISEE_SERVICE_TYPES = "[CUSTOMERS APP] GET_FRANCHISEE_SERVICE_TYPES";
 export const GET_FRANCHISEE_BILLING_TYPES = "[CUSTOMERS APP] GET_FRANCHISEE_BILLING_TYPES";
 export const UPDATE_CUSTOMERS_PARAMETERS = "[CUSTOMERS APP] UPDATE PARAMETERS";
+export const GET_INCREASE_DECREASE = "[CUSTOMERS APP] GET INCREASE DECREASE";
 
 export const SHOW_INCREASE_DECREASE_CONTRACT_MODAL_FORM = "[CUSTOMERS APP] SHOW_INCREASE_DECREASE_CONTRACT_MODAL_FORM";
 
@@ -562,5 +563,18 @@ export function updateCustomersParameter(name, value) {
     return {
         type: UPDATE_CUSTOMERS_PARAMETERS,
         payload: {name, value}
+    }
+}
+
+
+export function getIncreaseDecrease(regionId, params) {
+    return (dispatch) => {
+        (async () => {
+            let res = await customersService.getIncreaseDecrease(regionId, params);
+            dispatch({
+                type: GET_INCREASE_DECREASE,
+                payload: res.Data
+            });
+        })();
     }
 }
