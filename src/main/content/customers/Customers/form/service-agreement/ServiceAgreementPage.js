@@ -376,8 +376,8 @@ class ServiceAgreementPage extends React.Component {
 			EffectiveDate: new Date().toISOString().substr(0, 10),
 
 			execTitles: [],
-
-		}
+		    note: ''
+		};
 		// this.commitChanges = this.commitChanges.bind(this);
 		this.props.getLogCallCustomerServiceTypes()
 
@@ -486,7 +486,8 @@ class ServiceAgreementPage extends React.Component {
 							<TextField
 								type="number"
 								id="SA_Amount"
-								label="Amount *"
+								label="Monthly Contract Amount"
+								required
 								className={classes.textField}
 								InputLabelProps={{ shrink: true }}
 								value={this.state.SA_Amount}
@@ -494,43 +495,42 @@ class ServiceAgreementPage extends React.Component {
 								margin="dense"
 								variant="outlined"
 								style={{ minWidth: "100px", width: "30%" }}
+
 								InputProps={{
-									startAdornment: <InputAdornment position="start">$</InputAdornment>
+									startAdornment: <InputAdornment position="start">$</InputAdornment>,
+									readOnly: true
 								}}
 							/>
-							{customerForm.props.open && customerForm.type === "edit" && <Button
+							{customerForm.props.open && customerForm.type === "edit" &&
+							<div>
+							<Button
 								variant="contained"
 								color="primary"
-								className={classNames(classes.button, "pr-24 pl-24")}
+								className={classNames(classes.button, "pr-24 pl-24 mr-12")}
 								onClick={this.IncreaseDecreaseContract}
-							>Increase/Decrease Contract<Icon>keyboard_arrow_right</Icon></Button>}
+							>Update Contract Amount<Icon>keyboard_arrow_right</Icon>
+							</Button>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={this.IncreaseDecreaseContract}
+                                className={classNames(classes.button, "pr-24 pl-24")}
+                                >Cancel Contract
+                                </Button>
+							</div>}
 						</GridItem>
 						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 							<TextField
-								id="Description"
-								label="Description"
-								multiline
-								rows="2"
-								rowsMax="2"
-								className={classes.textField}
-								value={this.state.Description}
-								onChange={this.handleChange('Description')}
-								margin="dense"
-								variant="outlined"
-								style={{ width: '100%' }}
-							/>
-						</GridItem>
-						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-							<TextField
-								id="ContractType"
-								label="Contract Type *"
+								id="length"
+								label="Length"
+								required
 								select
 								InputLabelProps={{
 									shrink: true
 								}}
 								className={classNames(classes.textField, "mr-6")}
-								value={this.state.ContractType === undefined ? 0 : this.state.ContractType}
-								onChange={this.handleChange('ContractType')}
+								value={this.state.length === undefined ? 0 : this.state.length}
+								onChange={this.handleChange('length')}
 								margin="dense"
 								variant="outlined"
 								style={{ minWidth: "100px", width: "30%" }}
@@ -651,6 +651,21 @@ class ServiceAgreementPage extends React.Component {
 								style={{ width: "20%", minWidth: "180px" }}
 							/>
 						</GridItem>
+                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                            <TextField
+                                id="note"
+                                label="Note"
+                                multiline
+                                rows="2"
+                                rowsMax="2"
+                                className={classes.textField}
+                                value={this.state.note}
+                                onChange={this.handleChange('note')}
+                                margin="dense"
+                                variant="outlined"
+                                style={{ width: '100%' }}
+                            />
+                        </GridItem>
 					</GridContainer>
 				</>}
 				{/* <IncreaseDecreaseContractModal /> */}
