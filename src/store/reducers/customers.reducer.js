@@ -36,7 +36,7 @@ const initialState = {
 	accountTypeList: [],
 	accountExecutiveList: [],
 	customerStatusList: [],
-	accountTypesGroups: [],
+	accountTypesGroups: null,
 
 	bOpenEmailToCustomerDialog: false,
 

@@ -998,13 +998,8 @@ class FilterPanel extends Component {
 			}).sort();
 		}
 
-		let accountTypesGroups = this.props.accountTypesGroups.Data;
-
-
 		return (
 			<div className={classNames(classes.root, "flex flex-col")}>
-				{/* <div className={classNames("flex flex-col")}> */}
-
 				<Paper className="flex flex-1 flex-col min-h-px p-20">
 					{customerForm && customerForm.props.open
 						? (
@@ -1164,6 +1159,7 @@ class FilterPanel extends Component {
 									</GridItem>
 
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+										{this.props.accountTypesGroups!==null && (
                                             <TextField
                                                 id="AccountTypeGroup"
                                                 label="Account Type Group"
@@ -1177,12 +1173,13 @@ class FilterPanel extends Component {
 												// style={{ minWidth: "100px", width: "30%" }}
                                             >
                                                 {
-                                                    accountTypesGroups.map((x, index) => (
+                                                    this.props.accountTypesGroups.Data.map((x, index) => (
                                                         <MenuItem key={index} value={x._id}>{x.name}</MenuItem>
                                                     ))
                                                 }
 
                                             </TextField>
+										)}
 										<TextField
 											id="AccountType"
 											label="Account Type *"
@@ -1481,25 +1478,28 @@ class FilterPanel extends Component {
 
 								<div className="mt-0 flex flex-col" style={{ width: '200px' }}>
 									<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
-									<TextField
-										select
-
-										id="AccountTypeGroup"
-										label="Account Type Group"
-										className={classes.textField}
-										InputLabelProps={{
-											shrink: true
-										}}
-										value={this.state.AccountTypeGroup || 0}
-										onChange={this.handleChange('AccountTypeGroup')}
-										margin="dense"
-										variant="outlined"
-										fullWidth
-									>
-										{accountTypesGroups.map((x, index) => (
-											<MenuItem key={index} value={index}>{x}</MenuItem>
-										))}
-									</TextField>
+									{this.props.accountTypesGroups!==null && (
+                                        <TextField
+                                            select
+                                            id="AccountTypeGroup"
+                                            label="Account Type Group"
+                                            className={classes.textField}
+                                            InputLabelProps={{
+                                                shrink: true
+                                            }}
+                                            value={this.state.AccountTypeGroup || 0}
+                                            onChange={this.handleChange('AccountTypeGroup')}
+                                            margin="dense"
+                                            variant="outlined"
+                                            fullWidth
+                                        >
+                                            {
+                                                this.props.accountTypesGroups.Data.map((x, index) => (
+                                                    <MenuItem key={index} value={x._id}>{x.name}</MenuItem>
+                                                ))
+                                            }
+                                        </TextField>
+									)}
 									<TextField
 										select
 
@@ -1515,9 +1515,10 @@ class FilterPanel extends Component {
 										variant="outlined"
 										fullWidth
 									>
-										{accountTypeTexts.map((x, index) => (
-											<MenuItem key={index} value={index}>{x}</MenuItem>
-										))}
+                                        <MenuItem value="1">TBD</MenuItem>
+										{/*{accountTypeTexts.map((x, index) => (*/}
+											{/*<MenuItem key={index} value={index}>{x}</MenuItem>*/}
+										{/*))}*/}
 									</TextField>
 
 									<TextField
