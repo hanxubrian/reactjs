@@ -855,15 +855,15 @@ class FranchiseeDistributionPage extends React.Component {
         } = this.state;
 
         const franHeaders = [
-            { width: 7, title: 'Number', field: 'Number' },
-            { width: 18, title: 'Name', field: 'Name' },
-            { width: 5, title: 'Escrow', field: '' },
-            { width: 12, title: 'Billing Frequency', field: '' },
-            { width: 0, title: 'Billing', field: '' },
-            { width: 15, title: 'Service', field: '' },
-            { width: 24, title: 'Description', field: '' },
-            { width: 8, title: 'Amount', field: '' },
-            { width: 8, title: 'Action', field: '' },
+            { width: 7, title: 'Number', align:'',field: 'Number' },
+            { width: 18, title: 'Name', align:'',field: 'Name' },
+            { width: 5, title: 'Escrow', align:'',field: '' },
+            { width: 12, title: 'Billing Frequency', align:'',field: '' },
+            { width: 0, title: 'Billing', align:'',field: '' },
+            { width: 15, title: 'Service', align:'',field: '' },
+            { width: 24, title: 'Description', align:'',field: '' },
+            { width: 9, title: 'Amount', align:'',field: '' },
+            { width: 11, title: 'Action', align:'center', field: '' },
         ];
 
         return (
@@ -892,7 +892,7 @@ class FranchiseeDistributionPage extends React.Component {
                         {franHeaders.map((f, findex) => {
                             if (findex === 4) return false;
                             return (
-                                <Typography key={findex} style={{width: f.width + '%'}}
+                                <Typography key={findex} style={{width: f.width + '%', textAlign: f.align}}
                                             variant="caption">{f.title}</Typography>
                             )
                         })}
@@ -1003,7 +1003,9 @@ class FranchiseeDistributionPage extends React.Component {
                                                    onChange={(v)=>this.handleMonthlyBilling(v, m, 'MonthlyBilling')}
 
                                         />
+                                        <div className=" text-center" style={{width: franHeaders[8].width + '%'}}>
                                         <Button variant="contained" onClick={this.gotoFindersFee} color="primary" className={classNames(classes.ffBtn, "pl-24 pr-24 ml-12 mr-12")}>FF</Button>
+                                        </div>
                                     </div>
                                 ))
                             }
