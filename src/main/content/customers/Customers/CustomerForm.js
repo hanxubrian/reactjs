@@ -29,7 +29,7 @@ import classNames from 'classnames';
 import CustomersDocumentUploadTable from "./documentUploadTable";
 
 import AccountOfferingPage from './form/account-offering/AccountOfferingPage';
-import FinderFeePage from './form/finders-fees/FinderFeePage'
+import FinderFeePage from './form/finders-fees/NewFindersFeePage'
 import ServiceAgreementPage from './form/service-agreement/ServiceAgreementPage'
 import FranchiseeDistributionPage from './form/service-agreement/FranchiseeDistributionPage'
 

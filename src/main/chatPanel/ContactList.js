@@ -121,8 +121,6 @@ class ContactList extends Component {
     };
 
     handleContactClick = (chatId, contactId) => {
-        console.log ("chatId",chatId);
-        console.log ("contactId",contactId);
         this.props.openChatPanel();
         this.props.getChat(chatId, contactId);
         this.scrollToTop();
@@ -135,7 +133,6 @@ class ContactList extends Component {
     render()
     {
         const {classes, chat, contacts, user, selectedContactId} = this.props;
-        console.log("user.contacts",contacts);
         const ContactButton = ({chat, contact}) => {
             return (
                 <Tooltip title={contact.name} placement="left">

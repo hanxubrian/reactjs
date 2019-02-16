@@ -809,7 +809,7 @@ class FinderFeePanel extends Component {
 		if (nextProps.searchText !== this.props.searchText) {
 			this.search(nextProps.searchText);
 		}
-	} // deprecate 
+	} // deprecate
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		console.log("componentDidUpdate", "CustomerListContent.js", this.props.locationFilterValue, this.props.customers);
@@ -1174,40 +1174,13 @@ class FinderFeePanel extends Component {
 	render() {
 		const {
 			classes,
-			toggleFilterPanel,
-			toggleSummaryPanel,
-			mapViewState,
-			toggleMapView,
-			filterState,
 			locationFilterValue,
 		} = this.props;
 
 		const {
 			pins,
-			// locationFilterValue,
 			pins2,
-			gmapVisible,
-			// mapViewState,
-			rows,
-			columns,
-			selection,
-			tableColumnExtensions,
-			sorting,
-			editingColumnExtensions,
-			currencyColumns,
-			phoneNumberColumns,
-			pageSize,
-			pageSizes,
-			amountFilterOperations,
-			// groupingColumns,
-			// booleanColumns,
-			searchValue,
-			grouping,
-			// leftColumns,
-			// rightColumns,
 		} = this.state;
-
-		console.log("-------render-------", locationFilterValue, pins, pins2)
 
 		return (
 			<Fragment>
