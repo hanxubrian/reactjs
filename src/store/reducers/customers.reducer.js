@@ -113,7 +113,8 @@ const initialState = {
 		open: false,
 	},
 	NewAmount: '',
-    activeStep: 0
+    activeStep: 0,
+	serviceAgreementStep: 0
 };
 
 

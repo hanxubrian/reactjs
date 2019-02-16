@@ -472,6 +472,9 @@ class ServiceAgreementPage extends React.Component {
 			[name]: event.target.value,
 			errorMsg: ""
 		});
+		if(name==='length' && event.target.value===1) {
+			this.setState({TermMonths: 0});
+		}
 	};
 
 	render() {
@@ -548,7 +551,8 @@ class ServiceAgreementPage extends React.Component {
 								type="number"
 								inputProps={{ min: "0", max: "99", step: "1" }}
 								id="TermMonths"
-								label="Term Months *"
+								label="Term Months"
+								required
 								InputLabelProps={{
 									shrink: true
 								}}
@@ -558,6 +562,7 @@ class ServiceAgreementPage extends React.Component {
 								margin="dense"
 								variant="outlined"
 								style={{ width: '10%', minWidth: '110px' }}
+								disabled={this.state.length===1}
 							/>
 						</GridItem>
 						<GridItem xs={12} sm={12} md={12} className="flex flex-row">
