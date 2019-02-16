@@ -1102,6 +1102,8 @@ class CustomerForm extends Component {
 	}
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
+		if(this.props.activeStep!==prevProps.activeStep)
+			this.setState({activeStep: this.props.activeStep});
 	}
 
 	componentWillMount() {
@@ -1198,6 +1200,7 @@ class CustomerForm extends Component {
 
 	handleTab = (event, activeStep) => {
 		this.setState({ activeStep });
+		this.props.updateCustomersParameter('activeStep', activeStep);
 	};
 	//////////////////////
 	render() {
@@ -1236,9 +1239,9 @@ class CustomerForm extends Component {
 					}}
 				>
 
-					<h2>{steps[activeStep]}</h2>
+					<h2>{activeStep===1 ? 'Franchisee Revenue Distribution' : steps[activeStep]}</h2>
 
-					<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
+					<Divider variant="middle" style={{ marginTop: 12, marginBottom: 12 }} />
 
 					{this.getStepContent(activeStep)}
 				</div>
@@ -1256,6 +1259,7 @@ function mapDispatchToProps(dispatch) {
 		openEditCustomerForm: Actions.openEditCustomerForm,
 		closeEditCustomerForm: Actions.closeEditCustomerForm,
 		getDocuments: Actions.getDocuments,
+        updateCustomersParameter: Actions.updateCustomersParameter,
 	}, dispatch);
 }
 
@@ -1275,6 +1279,8 @@ function mapStateToProps({ customers, franchisees, auth }) {
 
 		accountExecutiveList: customers.accountExecutiveList,
 		activeCustomer: customers.activeCustomer,
+        activeStep: customers.activeStep,
+
 	}
 }
 

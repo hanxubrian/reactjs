@@ -88,6 +88,10 @@ const styles = theme => ({
     },
     menu: {
 
+    },
+    ffBtn: {
+        height: 32,
+        minHeight: 32
     }
 });
 
@@ -770,7 +774,7 @@ class FranchiseeDistributionPage extends React.Component {
                     <div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
                         <Button variant="contained" onClick={this.handleStepFranchiseeDistribution}
                                 disabled={this.state.NewAmount === ''}
-                                color="primary" className={classNames("pl-24 pr-24 mr-12")}>Franchisee Distribution<Icon>keyboard_arrow_right</Icon></Button>
+                                color="primary" className={classNames("pl-24 pr-24 mr-12")}>Franchisee Revenue Distributions<Icon>keyboard_arrow_right</Icon></Button>
                         <Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
                     </div>
 
@@ -794,7 +798,6 @@ class FranchiseeDistributionPage extends React.Component {
                     <TextField
                         type="date"
                         id="EffectiveDate"
-                        value={this.state.EffectiveDate}
                         label="Effective Date"
                         className={classNames(classes.textField, 'ml-24')}
                         InputLabelProps={{ shrink: true }}
@@ -836,6 +839,10 @@ class FranchiseeDistributionPage extends React.Component {
         this.setState({data: this.state.data})
     };
 
+    gotoFindersFee =() =>{
+        this.props.updateCustomersParameter('activeStep', 9);
+    };
+
     getFranchiseeAssignmentForm() {
         const { classes } = this.props;
 
@@ -849,13 +856,14 @@ class FranchiseeDistributionPage extends React.Component {
 
         const franHeaders = [
             { width: 7, title: 'Number', field: 'Number' },
-            { width: 19, title: 'Name', field: 'Name' },
+            { width: 18, title: 'Name', field: 'Name' },
             { width: 5, title: 'Escrow', field: '' },
             { width: 12, title: 'Billing Frequency', field: '' },
             { width: 0, title: 'Billing', field: '' },
             { width: 15, title: 'Service', field: '' },
-            { width: 30, title: 'Description', field: '' },
-            { width: 11, title: 'Amount', field: '' },
+            { width: 24, title: 'Description', field: '' },
+            { width: 8, title: 'Amount', field: '' },
+            { width: 8, title: 'Action', field: '' },
         ];
 
         return (
@@ -878,7 +886,7 @@ class FranchiseeDistributionPage extends React.Component {
                     </div>
                 </div>
 
-                <Typography className="mb-12 mt-12" variant="subtitle1"><strong>Franchisee Revenue Distributions</strong></Typography>
+                <Typography className="mb-12 mt-12 hidden" variant="subtitle1"><strong>Franchisee Revenue Distributions</strong></Typography>
                 <div className={classNames("flex flex-col w-full")}>
                     <div className={classNames("flex w-full")}>
                         {franHeaders.map((f, findex) => {
@@ -896,7 +904,7 @@ class FranchiseeDistributionPage extends React.Component {
                         <React.Fragment key={index}>
                             {
                                 x.MonthlyBilling.map((m, mIndex) => (
-                                    <div key={mIndex} className={classNames("flex w-full")} style={{ alignItems: 'bottom' }}>
+                                    <div key={mIndex} className={classNames("flex w-full items-center")} style={{ alignItems: 'bottom' }}>
 
                                         <Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption">{x.FranchiseeNumber}</Typography>
                                         <Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption">{x.Name}</Typography>
@@ -995,7 +1003,7 @@ class FranchiseeDistributionPage extends React.Component {
                                                    onChange={(v)=>this.handleMonthlyBilling(v, m, 'MonthlyBilling')}
 
                                         />
-
+                                        <Button variant="contained" onClick={this.gotoFindersFee} color="primary" className={classNames(classes.ffBtn, "pl-24 pr-24 ml-12 mr-12")}>FF</Button>
                                     </div>
                                 ))
                             }
@@ -1267,6 +1275,7 @@ function mapDispatchToProps(dispatch) {
         getFranchiseeServiceTypes: Actions.getFranchiseeServiceTypes,
         getFranchiseeBillingTypes: Actions.getFranchiseeBillingTypes,
         getFranchisees: Actions.getFranchisees,
+        updateCustomersParameter: Actions.updateCustomersParameter,
     }, dispatch);
 }
 

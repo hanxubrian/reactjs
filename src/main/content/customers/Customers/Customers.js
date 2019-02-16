@@ -819,19 +819,10 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		location: customers.location,
 		searchText: customers.searchText,
 		bCustomerFetchStart: customers.bCustomerFetchStart,
-
-		// accountTypeList: customers.accountTypeList,
-		// accountExecutiveList: customers.accountExecutiveList,
-		// customerStatusList: customers.customerStatusList,
-
-		bCreateCustomerStart: customers.bCreateCustomerStart,
 		createCustomerResponse: customers.createCustomerResponse,
 		bCreateCustomerStart: customers.bCreateCustomerStart,
-
 		bGetCustomerStart: customers.bGetCustomerStart,
-
 		filters: customers.filters,
-		// isStartedFindersFeesFetching: customers.isStartedFindersFeesFetching,
 	}
 }
 

@@ -112,7 +112,8 @@ const initialState = {
 	increaseDecreaseContractModalForm: {
 		open: false,
 	},
-	NewAmount: ''
+	NewAmount: '',
+    activeStep: 0
 };
 
 
@@ -283,6 +284,7 @@ const customers = function (state = initialState, action) {
 						data: null
 					},
 					activeCustomerInfo: null,
+                    activeStep: 0
 				};
 			}
 		case Actions.CLOSE_NEW_CUSTOMER_FORM:
