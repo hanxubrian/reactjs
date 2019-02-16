@@ -998,15 +998,7 @@ class FilterPanel extends Component {
 			}).sort();
 		}
 
-		let accountTypesGroups = []
-		if (this.props.accountTypesGroups !== null && this.props.accountTypesGroups.Data !== undefined) {
-			accountTypesGroups = this.props.accountTypesGroups.Data.filter(x => {
-				if (x.Name === null) return false
-				return true
-			}).map(x => {
-				return x.Name
-			}).sort();
-		}
+		let accountTypesGroups = this.props.accountTypesGroups.Data;
 
 
 		return (
@@ -1172,26 +1164,25 @@ class FilterPanel extends Component {
 									</GridItem>
 
 									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="AccountTypeGroup"
-											label="Account Type Group"
-											select
-											className={classNames(classes.textField, 'mr-6')}
-											value={this.state.AccountTypeGroup === undefined ? 0 : this.state.AccountTypeGroup}
-											onChange={this.handleChange('AccountTypeGroup')}
-											margin="dense"
-											variant="outlined"
-											fullWidth
-										// style={{ minWidth: "100px", width: "30%" }}
-										>
-											{
-												accountTypesGroups.map((x, index) => (
-													<MenuItem key={index} value={index}>{x}</MenuItem>
-												))
-											}
+                                            <TextField
+                                                id="AccountTypeGroup"
+                                                label="Account Type Group"
+                                                select
+                                                className={classNames(classes.textField, 'mr-6')}
+                                                value={this.state.AccountTypeGroup === undefined ? 0 : this.state.AccountTypeGroup}
+                                                onChange={this.handleChange('AccountTypeGroup')}
+                                                margin="dense"
+                                                variant="outlined"
+                                                fullWidth
+												// style={{ minWidth: "100px", width: "30%" }}
+                                            >
+                                                {
+                                                    accountTypesGroups.map((x, index) => (
+                                                        <MenuItem key={index} value={x._id}>{x.name}</MenuItem>
+                                                    ))
+                                                }
 
-										</TextField>
-
+                                            </TextField>
 										<TextField
 											id="AccountType"
 											label="Account Type *"
@@ -1202,13 +1193,13 @@ class FilterPanel extends Component {
 											margin="dense"
 											variant="outlined"
 											fullWidth
-										// style={{ minWidth: "100px", width: "30%" }}
 										>
-											{
-												accountTypeTexts.map((x, index) => (
-													<MenuItem key={index} value={index}>{x}</MenuItem>
-												))
-											}
+                                            <MenuItem value="1">TBD</MenuItem>
+											{/*{*/}
+												{/*accountTypeTexts.map((x, index) => (*/}
+													{/*<MenuItem key={index} value={index}>{x}</MenuItem>*/}
+												{/*))*/}
+											{/*}*/}
 
 										</TextField>
 									</GridItem>
