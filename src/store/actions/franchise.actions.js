@@ -1,5 +1,5 @@
 import axios from "axios";
-import {franchiseesService} from "services";
+import {franchiseesService} from "../../services";
 
 export const GET_ALL_FRANCHISEES = "[FRANCHISEES] GETS ALL";
 export const DELETE_SELECTED_FRANCHISEES = "[FRANCHISEES] DELETE SELECTED";
@@ -116,10 +116,14 @@ export function getStatusFilterList(regionId) {
     return (dispatch) => {
         (async () => {
             let filterList = await franchiseesService.getStatusFilterList(regionId);
-            dispatch({
-                type: GET_FILTER_LIST,
-                payload: filterList.Data
-            });
+            if (filterList.IsSuccess) {
+                dispatch({
+                    type: GET_FILTER_LIST,
+                    payload: filterList.Data
+                });
+            } else {
+
+            }
         })();
     }
 }

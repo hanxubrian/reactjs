@@ -256,16 +256,6 @@ const franchisees = function(state = initialState, action) {
         }
         case Actions.GET_FRANCHISEE_FEE:
         {
-            let franchiseeFee = action.payload;
-            if(action.payload.FranchiseeFees.length>0) {
-                franchiseeFee = action.payload.FranchiseeFees.map(iv => {
-                    return {
-                        ["Deduct"+iv.FranchiseeFeeList.FranchiseeFeeListId]: true,
-                        ...iv
-                    }
-                });
-                action.payload.FranchiseeFees = franchiseeFee;
-            }
           return{
               ...state,
               franchiseeFees: action.payload

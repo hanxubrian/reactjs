@@ -123,7 +123,8 @@ class franchiseesService {
      */
     getFranchiseeFeeMaintenance = (RegionId) => {
         return new Promise((resolve, reject) => {
-            axios_instance.get(`${BASE_API_URL}/v1/regions/fees/get/?RegionId=${RegionId}`)
+            // axios_instance.get(`${BASE_MONGO_API_URL}/v1/regions/fees/get/?RegionId=${RegionId}`)
+            axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/GetFeeStructure/?RegionId=${RegionId}`)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);
@@ -216,20 +217,20 @@ class franchiseesService {
         });
     };
 
-    
+
     /**
      * @method GET
-     * 
+     *
      * @param  regionId
      * @param id
      * @param data
-     * 
+     *
      * @returns {Promise<any>}
-     * 
-    */ 
+     *
+    */
 
    getFranchiseesDetail =  (id,regionId) => {
-        
+
     return new Promise((resolve, reject) => {
         axios_instance.get(`${BASE_MONGO_API_URL}/v1/Franchisee/${id}?regionId=${regionId}`)
             .then( res => {
