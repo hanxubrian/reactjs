@@ -868,14 +868,18 @@ class FranchiseeDistributionPage extends React.Component {
 
         return (
             <>
-                <div className={classNames("flex mt-12 justify-between")}>
+                <div className={classNames("flex mt-12 justify-between ")}>
                     <TextField margin="dense" id="Monthly Billing Amount" label="New Monthly Billing Amount"
                                InputLabelProps={{ shrink: true }}
                                style={{minWidth: 220}}
                                className={classNames(classes.textField, "pr-6")}
                                InputProps={{ readOnly: true,
                                    startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-                                   inputComponent: NumberFormatCustomNoPrefix }}
+                                   inputComponent: NumberFormatCustomNoPrefix,
+                                   classes: {
+                                    input: classNames('text-right')
+                                    }
+                               }}
                                value={this.state.NewAmount || ''}
                                onChange={this.handleChange("NewAmount")}
                     />

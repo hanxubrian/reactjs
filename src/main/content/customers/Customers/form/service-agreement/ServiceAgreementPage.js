@@ -497,7 +497,7 @@ class ServiceAgreementPage extends React.Component {
                                 onChange={this.handleChange('SA_Amount')}
                                 margin="dense"
                                 variant="outlined"
-                                style={{ minWidth: "100px", width: "30%" }}
+                                style={{ width: 250 }}
 
                                 InputProps={{
                                     startAdornment: <InputAdornment position="start">$</InputAdornment>,
@@ -511,7 +511,7 @@ class ServiceAgreementPage extends React.Component {
                                     color="primary"
                                     className={classNames(classes.button, "pr-24 pl-24 mr-12")}
                                     onClick={this.IncreaseDecreaseContract}
-                                >Update Contract Amount<Icon>keyboard_arrow_right</Icon>
+                                >Increase/Decrease<Icon>keyboard_arrow_right</Icon>
                                 </Button>
                                 <Button
                                     variant="contained"

@@ -404,7 +404,6 @@ class IncreaseDecreaseContractPage extends React.Component {
         }
     }
     initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer.Data) => {
-    	console.log('rows=', this.state.rows);
         this.setState({
             SA_Amount: activeCustomerInfo.cont_bill,
             franchieesesToOffer: activeCustomerInfo.AssignedFranchisees,
@@ -822,7 +821,9 @@ class IncreaseDecreaseContractPage extends React.Component {
         let Note = this.state.notes;
         let EffectiveDate = moment(this.state.EffectiveDate).format('MM/DD/YYYY');
         this.props.getIncreaseDecrease(this.props.regionId, {CustomerNo, NewMonthlyContractAmount, Note, EffectiveDate});
-        this.setState({notes: '', NewAmount: '', EffectiveDate: moment().format('MM/DD/YYYY')})
+        this.props.updateCustomersParameter('NewAmount', 0);
+        this.setState({reason: '', notes: '', NewAmount: '', EffectiveDate: moment().format('yyyy-MM-dd')});
+        this.props.getCustomer(this.props.regionId,this.props.activeCustomer.Data._id);
     };
 
     handleStepFindersFeesForm = () => {
@@ -1415,6 +1416,7 @@ function mapDispatchToProps(dispatch) {
         getFranchisees: Actions.getFranchisees,
         updateCustomersParameter: Actions.updateCustomersParameter,
         getIncreaseDecrease: Actions.getIncreaseDecrease,
+        getCustomer: Actions.getCustomer,
     }, dispatch);
 }
 
