@@ -317,7 +317,7 @@ class IncreaseDecreaseContractPage extends React.Component {
             franchiseeServiceTypes: [],
             franchiseeBillingTypes: [],
 
-            EffectiveDate: new Date().toISOString().substr(0, 10),
+            EffectiveDate: moment().format('YYYY-MM-DD'),
             SA_Amount: '',
             notes: '',
             increaseReasons: null,
@@ -819,10 +819,10 @@ class IncreaseDecreaseContractPage extends React.Component {
         let CustomerNo = this.props.activeCustomer.Data.cust_no;
         let NewMonthlyContractAmount = parseFloat(this.state.NewAmount);
         let Note = this.state.notes;
-        let EffectiveDate = moment(this.state.EffectiveDate).format('MM/DD/YYYY');
+        let EffectiveDate = moment(this.state.EffectiveDate).format('YYYY-MM-DD');
         this.props.getIncreaseDecrease(this.props.regionId, {CustomerNo, NewMonthlyContractAmount, Note, EffectiveDate});
         this.props.updateCustomersParameter('NewAmount', 0);
-        this.setState({reason: '', notes: '', NewAmount: '', EffectiveDate: moment().format('yyyy-MM-dd')});
+        this.setState({reason: '', notes: '', NewAmount: '', EffectiveDate: moment().format('YYYY-MM-DD')});
         this.props.getCustomer(this.props.regionId,this.props.activeCustomer.Data._id);
     };
 

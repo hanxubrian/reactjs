@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import _ from "lodash";
+import moment from 'moment';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -376,7 +377,10 @@ class ServiceAgreementPage extends React.Component {
             EffectiveDate: new Date().toISOString().substr(0, 10),
 
             execTitles: [],
-            note: ''
+            note: '',
+            SignDate: moment().format('YYYY-MM-DD'),
+            StartDate: moment().format('YYYY-MM-DD'),
+            ExpirationDate: moment().format('YYYY-MM-DD'),
         };
         // this.commitChanges = this.commitChanges.bind(this);
         this.props.getLogCallCustomerServiceTypes()
