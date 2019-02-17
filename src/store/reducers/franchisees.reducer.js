@@ -23,7 +23,6 @@ const initialState = {
     documentsList: [],
     franchiseeFees: [],
     Location: "all",
-    StateList: [],
     detailPayload: null,
     eidtPayload: null,
     createPayload: null,
@@ -145,6 +144,244 @@ const initialState = {
         Documents: [],
     },
     reportPeriod: "01/2017" ,
+    stateList: [
+        {
+            "Text": "Alabama",
+            "Value": "AL"
+        },
+        {
+            "Text": "Alaska",
+            "Value": "AK"
+        },
+        {
+            "Text": "American Samoa",
+            "Value": "AS"
+        },
+        {
+            "Text": "Arizona",
+            "Value": "AZ"
+        },
+        {
+            "Text": "Arkansas",
+            "Value": "AR"
+        },
+        {
+            "Text": "California",
+            "Value": "CA"
+        },
+        {
+            "Text": "Colorado",
+            "Value": "CO"
+        },
+        {
+            "Text": "Connecticut",
+            "Value": "CT"
+        },
+        {
+            "Text": "Delaware",
+            "Value": "DE"
+        },
+        {
+            "Text": "District Of Columbia",
+            "Value": "DC"
+        },
+        {
+            "Text": "Federated States Of Micronesia",
+            "Value": "FM"
+        },
+        {
+            "Text": "Florida",
+            "Value": "FL"
+        },
+        {
+            "Text": "Georgia",
+            "Value": "GA"
+        },
+        {
+            "Text": "Guam",
+            "Value": "GU"
+        },
+        {
+            "Text": "Hawaii",
+            "Value": "HI"
+        },
+        {
+            "Text": "Idaho",
+            "Value": "ID"
+        },
+        {
+            "Text": "Illinois",
+            "Value": "IL"
+        },
+        {
+            "Text": "Indiana",
+            "Value": "IN"
+        },
+        {
+            "Text": "Iowa",
+            "Value": "IA"
+        },
+        {
+            "Text": "Kansas",
+            "Value": "KS"
+        },
+        {
+            "Text": "Kentucky",
+            "Value": "KY"
+        },
+        {
+            "Text": "Louisiana",
+            "Value": "LA"
+        },
+        {
+            "Text": "Maine",
+            "Value": "ME"
+        },
+        {
+            "Text": "Marshall Islands",
+            "Value": "MH"
+        },
+        {
+            "Text": "Maryland",
+            "Value": "MD"
+        },
+        {
+            "Text": "Massachusetts",
+            "Value": "MA"
+        },
+        {
+            "Text": "Michigan",
+            "Value": "MI"
+        },
+        {
+            "Text": "Minnesota",
+            "Value": "MN"
+        },
+        {
+            "Text": "Mississippi",
+            "Value": "MS"
+        },
+        {
+            "Text": "Missouri",
+            "Value": "MO"
+        },
+        {
+            "Text": "Montana",
+            "Value": "MT"
+        },
+        {
+            "Text": "Nebraska",
+            "Value": "NE"
+        },
+        {
+            "Text": "Nevada",
+            "Value": "NV"
+        },
+        {
+            "Text": "New Hampshire",
+            "Value": "NH"
+        },
+        {
+            "Text": "New Jersey",
+            "Value": "NJ"
+        },
+        {
+            "Text": "New Mexico",
+            "Value": "NM"
+        },
+        {
+            "Text": "New York",
+            "Value": "NY"
+        },
+        {
+            "Text": "North Carolina",
+            "Value": "NC"
+        },
+        {
+            "Text": "North Dakota",
+            "Value": "ND"
+        },
+        {
+            "Text": "Northern Mariana Islands",
+            "Value": "MP"
+        },
+        {
+            "Text": "Ohio",
+            "Value": "OH"
+        },
+        {
+            "Text": "Oklahoma",
+            "Value": "OK"
+        },
+        {
+            "Text": "Oregon",
+            "Value": "OR"
+        },
+        {
+            "Text": "Palau",
+            "Value": "PW"
+        },
+        {
+            "Text": "Pennsylvania",
+            "Value": "PA"
+        },
+        {
+            "Text": "Puerto Rico",
+            "Value": "PR"
+        },
+        {
+            "Text": "Rhode Island",
+            "Value": "RI"
+        },
+        {
+            "Text": "South Carolina",
+            "Value": "SC"
+        },
+        {
+            "Text": "South Dakota",
+            "Value": "SD"
+        },
+        {
+            "Text": "Tennessee",
+            "Value": "TN"
+        },
+        {
+            "Text": "Texas",
+            "Value": "TX"
+        },
+        {
+            "Text": "Utah",
+            "Value": "UT"
+        },
+        {
+            "Text": "Vermont",
+            "Value": "VT"
+        },
+        {
+            "Text": "Virgin Islands",
+            "Value": "VI"
+        },
+        {
+            "Text": "Virginia",
+            "Value": "VA"
+        },
+        {
+            "Text": "Washington",
+            "Value": "WA"
+        },
+        {
+            "Text": "West Virginia",
+            "Value": "WV"
+        },
+        {
+            "Text": "Wisconsin",
+            "Value": "WI"
+        },
+        {
+            "Text": "Wyoming",
+            "Value": "WY"
+        }
+    ]
 
 };
 
@@ -413,7 +650,7 @@ const franchisees = function(state = initialState, action) {
         case Actions.GET_FRANCHISEE_STATE_LIST: {
             return{
                 ...state,
-                StateList: action.payload
+                stateList: action.payload
             }
         }
         case Actions.UPDATE_REPORT_PERIOD: {

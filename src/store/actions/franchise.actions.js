@@ -91,10 +91,12 @@ export function getFranchiseeDetail(id,regionId) {
     return (dispatch) => {
         (async () => {
             let franchiseesList = await franchiseesService.getFranchiseesDetail(id,regionId);
-            dispatch({
-                type: GET_FRANCHISEE_DETAIL,
-                payload: franchiseesList
-            });
+            if (franchiseesList.IsSuccess) {
+                dispatch({
+                    type: GET_FRANCHISEE_DETAIL,
+                    payload: franchiseesList
+                });
+            }
         })();
     }
 }
@@ -132,10 +134,12 @@ export function getFranchiseeStateList(regionId) {
     return (dispatch) => {
         (async () => {
             let stateList = await franchiseesService.getFranchiseeStateList(regionId);
-            dispatch({
-                type: GET_FRANCHISEE_STATE_LIST,
-                payload: stateList.Data
-            });
+            if (stateList.IsSuccess) {
+                dispatch({
+                    type: GET_FRANCHISEE_STATE_LIST,
+                    payload: stateList.Data
+                });
+            }
         })();
     }
 }
@@ -155,10 +159,12 @@ export function getFranchiseeDocumentsList(regionId) {
     return (dispatch) => {
         (async () => {
             let documentsList = await franchiseesService.getFranchiseeDocumentsList(regionId);
-            dispatch({
-                type: GET_FRANCHISEE_DOCUMENTS_LIST,
-                payload:  documentsList.Data
-            });
+            if (documentsList.IsSuccess) {
+                dispatch({
+                    type: GET_FRANCHISEE_DOCUMENTS_LIST,
+                    payload: documentsList.Data
+                });
+            }
         })();
     }
 }

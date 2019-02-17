@@ -72,6 +72,7 @@ function getSteps() {
 function getStepContent(franchiseeForm, step) {
     const { classes} = franchiseeForm.props;
 
+    console.log('state=',franchiseeForm);
     const Owner_headers = [
         {
                 id: 'firstName',
@@ -98,7 +99,7 @@ function getStepContent(franchiseeForm, step) {
                 label: 'Title'
         }
 	];
-	
+
 
     switch (step) {
         case 0:
@@ -350,7 +351,7 @@ function getStepContent(franchiseeForm, step) {
                             </TextField>
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                            
+
                                 <TextField
                                     id="planAmount"
                                     label="Plan Amount"
@@ -372,7 +373,7 @@ function getStepContent(franchiseeForm, step) {
                                     style={{ marginRight: '1%'}}
                                     required
                                 />
-                            
+
                                 <TextField
                                     id="termYrs"
                                     label="Term(Yrs)"
@@ -391,10 +392,10 @@ function getStepContent(franchiseeForm, step) {
                                     required
                                     style={{marginLeft: '1%'}}
                                 />
-                           
+
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                        
+
                             <TextField
                                 id="ibAmount"
                                 label="IB Amount"
@@ -418,8 +419,8 @@ function getStepContent(franchiseeForm, step) {
                                 style={{marginRight: '1%'}}
                                 required
                             />
-                        
-                        
+
+
                             <TextField
                                 id="daysToFullFill"
                                 label="Days To Fullfill"
@@ -440,10 +441,10 @@ function getStepContent(franchiseeForm, step) {
                                 margin="dense"
                                 required
                             />
-                        
+
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-                        
+
                             <TextField
                                 id="downPayment"
                                 label="Down Payment"
@@ -464,7 +465,7 @@ function getStepContent(franchiseeForm, step) {
                                 style={{marginRight: '1%'}}
                                 required
                             />
-                        
+
                             <TextField
                                 id="interest"
                                 label="Interest"
@@ -485,7 +486,7 @@ function getStepContent(franchiseeForm, step) {
                                 margin="dense"
                                 required
                             />
-                        
+
                             <TextField
                                 id="paymentAmount"
                                 label="Payment Amount"
@@ -506,7 +507,7 @@ function getStepContent(franchiseeForm, step) {
                                 style={{marginLeft: '1%', marginRight: '1%'}}
                                 required
                             />
-                        
+
                             <TextField
                                 id="noOfPayments"
                                 label="No Of Payments"
@@ -527,7 +528,7 @@ function getStepContent(franchiseeForm, step) {
                                 style={{marginLeft: '1%'}}
                                 required
                             />
-                        
+
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
                             <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -614,7 +615,7 @@ function getStepContent(franchiseeForm, step) {
                         )}
                         {franchiseeForm.props.insertPayload.Fees === null && (
                             <p style={{marginTop:20,marginLeft:10}}>Fees Empty!</p>
-                        )}                    
+                        )}
                     </Fragment>
                 </Fragment>
             );
@@ -729,7 +730,7 @@ class FranchiseesCreateForm extends Component {
 
     constructor (props){
         super(props);
-        props.getFranchiseeFormPlanType(props.regionId);        
+        props.getFranchiseeFormPlanType(props.regionId);
     }
 
     onChange = (event, { newValue, method }) => {
@@ -756,7 +757,7 @@ class FranchiseesCreateForm extends Component {
     };
 
     componentWillMount(){
-        
+
         this.setState({
             documentsList: this.props.getFranchiseeDocumentsList(this.props.regionId),
             LegalId: this.props.insertPayload.LegalId,
@@ -767,7 +768,7 @@ class FranchiseesCreateForm extends Component {
             LegalCounty: this.props.insertPayload.LegalCounty,
             LegalState: this.props.insertPayload.LegalState,
             LegalZip: this.props.insertPayload.LegalZip,
-            LegalIdNum: this.props.insertPayload.LegalIdNum, 
+            LegalIdNum: this.props.insertPayload.LegalIdNum,
             NameOn1099: this.props.insertPayload.NameOn1099,
             defaultPlanType: this.props.insertPayload.AgreementPlanTypeId,
             planAmount: this.props.insertPayload.AgreementPlanAmount,
@@ -777,7 +778,7 @@ class FranchiseesCreateForm extends Component {
             downPayment: this.props.insertPayload.AgreementDownPayment,
             ibAmount: this.props.insertPayload.AgreementInitialBusinessAmount
         });
-        
+
         if(this.props.insertPayload.Print1099 === "Y"){
             this.setState({ Print1099: true });
         }else{
@@ -813,7 +814,7 @@ class FranchiseesCreateForm extends Component {
     }
 
     componentWillReceiveProps(nextProps){
-       
+
     }
 
 
@@ -1065,11 +1066,11 @@ function mapStateToProps({ franchisees, auth }) {
         user: auth.login,
         documentsList: franchisees.documentsList,
         franchiseeFees: franchisees.franchiseeFees,
-        stateList: franchisees.StateList,
+        stateList: franchisees.stateList,
         selectedSignDate: franchisees.selectedSignDate,
         selectedExpDate: franchisees.selectedExpDate,
         selectedRenewDate: franchisees.selectedRenewDate,
-        insertPayload: franchisees.insertPayload
+        insertPayload: franchisees.insertPayload,
     }
 }
 
