@@ -153,7 +153,7 @@ class FilterPanel extends Component {
         if(!props.bLoadedFilterList) {
             props.getStatusFilterList(this.props.regionId);
             if(props.stateList.length === 0){
-                props.getFranchiseeStateList(this.props.regionId);
+                props.getFranchiseeStateList();
             }
         }
     }
@@ -162,11 +162,12 @@ class FilterPanel extends Component {
     }
 
     componentWillMount(){
+        console.log('this.props.insertPayload=', this.props.insertPayload);
         this.setState({
            franchiseeStatus: this.props.franchiseeStatus,
            stateList: this.props.stateList,
-           AddressLine1: this.props.insertPayload.AddressLine1,
-           AddressLine2: this.props.insertPayload.AddressLine2,
+           AddressLine1: this.props.insertPayload.AddressLine1===null ? '': this.props.insertPayload.AddressLine1,
+           AddressLine2: this.props.insertPayload.AddressLine2===null ? '': this.props.insertPayload.AddressLine2,
            Name: this.props.insertPayload.Name,
            Phone1: this.props.insertPayload.Phone1,
            Phone2: this.props.insertPayload.Phone2,
@@ -541,8 +542,8 @@ class FilterPanel extends Component {
                                                         fullWidth
                                                     >
                                                         {this.props.stateList.map(option => (
-                                                            <MenuItem key={option.Value} value={option.Value}>
-                                                                {option.Text}
+                                                            <MenuItem key={option.abbreviation} value={option.abbreviation}>
+                                                                {option.name}
                                                             </MenuItem>
                                                         ))}
                                                     </TextField>

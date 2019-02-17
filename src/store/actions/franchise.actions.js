@@ -130,10 +130,10 @@ export function getStatusFilterList(regionId) {
     }
 }
 
-export function getFranchiseeStateList(regionId) {
+export function getFranchiseeStateList() {
     return (dispatch) => {
         (async () => {
-            let stateList = await franchiseesService.getFranchiseeStateList(regionId);
+            let stateList = await franchiseesService.getFranchiseeStateList();
             if (stateList.IsSuccess) {
                 dispatch({
                     type: GET_FRANCHISEE_STATE_LIST,

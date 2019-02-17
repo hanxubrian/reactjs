@@ -233,8 +233,8 @@ function getStepContent(franchiseeForm, step) {
                                 required
                             >
                                 {franchiseeForm.props.stateList.map(option => (
-                                    <MenuItem key={option.Value} value={option.Value}>
-                                        {option.Text}
+                                    <MenuItem key={option.abbreviation} value={option.abbreviation}>
+                                        {option.name}
                                     </MenuItem>
                                 ))}
                             </TextField>
@@ -761,14 +761,14 @@ class FranchiseesCreateForm extends Component {
         this.setState({
             documentsList: this.props.getFranchiseeDocumentsList(this.props.regionId),
             LegalId: this.props.insertPayload.LegalId,
-            LegalName: this.props.insertPayload.LegalName,
-            LegalAddressLine1: this.props.insertPayload.LegalAddressLine1,
-            LegalAddressLine2: this.props.insertPayload.LegalAddressLine2,
-            LegalCity: this.props.insertPayload.LegalCity,
-            LegalCounty: this.props.insertPayload.LegalCounty,
-            LegalState: this.props.insertPayload.LegalState,
-            LegalZip: this.props.insertPayload.LegalZip,
-            LegalIdNum: this.props.insertPayload.LegalIdNum,
+            LegalName: this.props.insertPayload.LegalName===null ? '':this.props.insertPayload.LegalName,
+            LegalAddressLine1: this.props.insertPayload.LegalAddressLine1===null ? '': this.props.insertPayload.LegalAddressLine1,
+            LegalAddressLine2: this.props.insertPayload.LegalAddressLine2===null ? '': this.props.insertPayload.LegalAddressLine2,
+            LegalCity: this.props.insertPayload.LegalCity===null ? '': this.props.insertPayload.LegalCity,
+            LegalCounty: this.props.insertPayload.LegalCounty===null ? '': this.props.insertPayload.LegalCounty,
+            LegalState: this.props.insertPayload.LegalState===null ? '': this.props.insertPayload.LegalState,
+            LegalZip: this.props.insertPayload.LegalZip===null ? '': this.props.insertPayload.LegalZip,
+            LegalIdNum: this.props.insertPayload.LegalIdNum===null ? '':this.props.insertPayload.LegalIdNum,
             NameOn1099: this.props.insertPayload.NameOn1099,
             defaultPlanType: this.props.insertPayload.AgreementPlanTypeId,
             planAmount: this.props.insertPayload.AgreementPlanAmount,
@@ -810,7 +810,7 @@ class FranchiseesCreateForm extends Component {
         }
 
         this.props.getFranchiseeFeeMaintenance(this.props.regionId);
-        this.props.getFranchiseeStateList(this.props.regionId);
+        this.props.getFranchiseeStateList();
     }
 
     componentWillReceiveProps(nextProps){
