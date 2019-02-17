@@ -5,13 +5,11 @@ import {
     Hidden,
     Icon,
     IconButton,
-    Fab,
     Input,
     Paper,
     Button,
     Typography,
     Toolbar,
-    Tooltip,
     CircularProgress, Menu, MenuItem, FormControlLabel
 } from '@material-ui/core';
 
@@ -35,14 +33,13 @@ import FilterPanel from './filterPanel';
 import classNames from 'classnames';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import _ from 'lodash';
 
 import CreateFranchiseesPage from "./franchiseesForms/createForm"
 import FusePageCustomSidebarScroll from "../../../../@fuse/components/FusePageLayouts/FusePageCustomSidebarScroll";
 
 import {withScriptjs, withGoogleMap, GoogleMap, Marker,} from "react-google-maps";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
-import { compose, withProps, withHandlers, lifecycle } from "recompose";
+import { compose, withProps, withHandlers } from "recompose";
 
 
 const headerHeight = 80;
@@ -558,7 +555,7 @@ class Franchisees extends Component {
                         current_long: position.coords.longitude
                     })
 
-                    if (this.state.addrLat == undefined) {
+                    if (this.state.addrLat === undefined) {
                         this.setState({
                             addrLat: position.coords.latitude,
                             addrLng: position.coords.longitude

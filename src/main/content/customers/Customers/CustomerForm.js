@@ -1233,9 +1233,7 @@ class CustomerForm extends Component {
 					style={{
 						overflowY: 'scroll',
 						width: '100%',
-						// height: 'calc(100% - 110px)'
 						height: 'calc(100% - 50px)'
-						// flex: '1 1 auto'
 					}}
 				>
 

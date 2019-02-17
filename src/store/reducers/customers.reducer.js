@@ -188,14 +188,6 @@ const customers = function (state = initialState, action) {
 					bCreateCustomerStart: true,
 				}
 			}
-		case Actions.GET_CUSTOMER:
-			{
-				return {
-					...state,
-					getCustomerResponse: action.payload,
-					bGetCustomerStart: false,
-				}
-			}
 		case Actions.GET_CUSTOMER_START:
 			{
 				return {
@@ -319,6 +311,20 @@ const customers = function (state = initialState, action) {
 						findersFeesConfig: action.payload.findersFeesConfig,
 					},
 					activeCustomer: action.payload.customer,
+				};
+			}
+			case Actions.GET_CUSTOMER:
+			{
+				return {
+					...state,
+					bOpenedFilterPanel: true,
+					bOpenedSummaryPanel: false,
+					bGetCustomerStart: false,
+					customerForm: {
+						...state.customerForm,
+						data: action.payload,
+					},
+					activeCustomer: action.payload,
 				};
 			}
 		case Actions.CLOSE_EDIT_CUSTOMER_FORM:

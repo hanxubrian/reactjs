@@ -23,7 +23,6 @@ const initialState = {
     documentsList: [],
     franchiseeFees: [],
     Location: "all",
-    StateList: [],
     detailPayload: null,
     eidtPayload: null,
     createPayload: null,
@@ -145,6 +144,7 @@ const initialState = {
         Documents: [],
     },
     reportPeriod: "01/2017" ,
+    stateList: []
 
 };
 
@@ -256,16 +256,6 @@ const franchisees = function(state = initialState, action) {
         }
         case Actions.GET_FRANCHISEE_FEE:
         {
-            let franchiseeFee = action.payload;
-            if(action.payload.FranchiseeFees.length>0) {
-                franchiseeFee = action.payload.FranchiseeFees.map(iv => {
-                    return {
-                        ["Deduct"+iv.FranchiseeFeeList.FranchiseeFeeListId]: true,
-                        ...iv
-                    }
-                });
-                action.payload.FranchiseeFees = franchiseeFee;
-            }
           return{
               ...state,
               franchiseeFees: action.payload
@@ -423,7 +413,7 @@ const franchisees = function(state = initialState, action) {
         case Actions.GET_FRANCHISEE_STATE_LIST: {
             return{
                 ...state,
-                StateList: action.payload
+                stateList: action.payload
             }
         }
         case Actions.UPDATE_REPORT_PERIOD: {

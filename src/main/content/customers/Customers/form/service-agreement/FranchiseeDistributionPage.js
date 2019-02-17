@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import _ from "lodash";
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -9,8 +8,10 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {NumberFormatCustomNoPrefix, } from '../../../../../../services/utils'
 
-import { Icon, IconButton, Slide, FormControlLabel, Paper, Typography, InputAdornment, MenuItem, Divider,
-    ListItemLink, Checkbox, Switch } from '@material-ui/core';
+import {
+    Icon, Tooltip , Button, TextField, FormControlLabel, Paper, Typography, InputAdornment, MenuItem, Divider,
+    ListItemLink, Checkbox, Switch, Fab
+} from '@material-ui/core';
 
 // for store
 import { bindActionCreators } from "redux";
@@ -91,6 +92,7 @@ const styles = theme => ({
     },
     ffBtn: {
         height: 32,
+        width: 32,
         minHeight: 32
     }
 });
@@ -862,20 +864,24 @@ class FranchiseeDistributionPage extends React.Component {
             { width: 0, title: 'Billing', align:'',field: '' },
             { width: 15, title: 'Service', align:'',field: '' },
             { width: 24, title: 'Description', align:'',field: '' },
-            { width: 9, title: 'Amount', align:'',field: '' },
-            { width: 11, title: 'Action', align:'center', field: '' },
+            { width: 11, title: 'Amount', align:'right',field: '' },
+            { width: 9, title: 'Action', align:'center', field: '' },
         ];
 
         return (
             <>
-                <div className={classNames("flex mt-12 justify-between")}>
+                <div className={classNames("flex mt-12 justify-between ")}>
                     <TextField margin="dense" id="Monthly Billing Amount" label="New Monthly Billing Amount"
                                InputLabelProps={{ shrink: true }}
                                style={{minWidth: 220}}
                                className={classNames(classes.textField, "pr-6")}
                                InputProps={{ readOnly: true,
                                    startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-                                   inputComponent: NumberFormatCustomNoPrefix }}
+                                   inputComponent: NumberFormatCustomNoPrefix,
+                                   classes: {
+                                    input: classNames('text-right')
+                                    }
+                               }}
                                value={this.state.NewAmount || ''}
                                onChange={this.handleChange("NewAmount")}
                     />
@@ -991,7 +997,7 @@ class FranchiseeDistributionPage extends React.Component {
                                                    InputProps={{
                                                        readOnly: false,
                                                        classes: {
-                                                           input: classes.descriptionText,
+                                                           input: classNames(classes.descriptionText, 'text-right')
                                                        },
                                                        startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
                                                        inputComponent: NumberFormatCustomNoPrefix
@@ -1004,7 +1010,12 @@ class FranchiseeDistributionPage extends React.Component {
 
                                         />
                                         <div className=" text-center" style={{width: franHeaders[8].width + '%'}}>
-                                        <Button variant="contained" onClick={this.gotoFindersFee} color="primary" className={classNames(classes.ffBtn, "pl-24 pr-24 ml-12 mr-12")}>FF</Button>
+                                            <Tooltip title="Go to Finders Fee" aria-label="Go to Finders Fee">
+                                            <Fab aria-label="remove"
+                                             onClick={this.gotoFindersFee} color="primary" className={classNames(classes.ffBtn)}>
+                                                <Icon>arrow_forward</Icon>
+                                            </Fab>
+                                            </Tooltip>
                                         </div>
                                     </div>
                                 ))

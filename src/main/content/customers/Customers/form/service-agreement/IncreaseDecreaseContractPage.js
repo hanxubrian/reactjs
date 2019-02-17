@@ -317,7 +317,7 @@ class IncreaseDecreaseContractPage extends React.Component {
             franchiseeServiceTypes: [],
             franchiseeBillingTypes: [],
 
-            EffectiveDate: new Date().toISOString().substr(0, 10),
+            EffectiveDate: moment().format('YYYY-MM-DD'),
             SA_Amount: '',
             notes: '',
             increaseReasons: null,
@@ -404,7 +404,6 @@ class IncreaseDecreaseContractPage extends React.Component {
         }
     }
     initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer.Data) => {
-    	console.log('rows=', this.state.rows);
         this.setState({
             SA_Amount: activeCustomerInfo.cont_bill,
             franchieesesToOffer: activeCustomerInfo.AssignedFranchisees,
@@ -454,6 +453,10 @@ class IncreaseDecreaseContractPage extends React.Component {
 
     handleUpdateParameter = (name) => {
         this.props.updateCustomersParameter(name, this.state[name]);
+        if(this.state.NewAmount>this.state.SA_Amount)
+            this.setState({bReasonForHigh: true});
+        else
+            this.setState({bReasonForHigh: false});
 
     };
 
@@ -816,9 +819,11 @@ class IncreaseDecreaseContractPage extends React.Component {
         let CustomerNo = this.props.activeCustomer.Data.cust_no;
         let NewMonthlyContractAmount = parseFloat(this.state.NewAmount);
         let Note = this.state.notes;
-        let EffectiveDate = moment(this.state.EffectiveDate).format('MM/DD/YYYY');
-        console.log('qqq=',CustomerNo, NewMonthlyContractAmount, Note, EffectiveDate);
+        let EffectiveDate = moment(this.state.EffectiveDate).format('YYYY-MM-DD');
         this.props.getIncreaseDecrease(this.props.regionId, {CustomerNo, NewMonthlyContractAmount, Note, EffectiveDate});
+        this.props.updateCustomersParameter('NewAmount', 0);
+        this.setState({reason: '', notes: '', NewAmount: '', EffectiveDate: moment().format('YYYY-MM-DD')});
+        this.props.getCustomer(this.props.regionId,this.props.activeCustomer.Data._id);
     };
 
     handleStepFindersFeesForm = () => {
@@ -903,7 +908,7 @@ class IncreaseDecreaseContractPage extends React.Component {
                                }}
                                value={this.state.NewAmount || ''}
                                onChange={this.handleChange("NewAmount")}
-                               onBlur={this.handleUpdateParameter('NewAmount')}
+                               onBlur={()=>this.handleUpdateParameter('NewAmount')}
                                autoFocus
                     />
                     {this.state.decreaseReasons!==null && this.state.increaseReasons!==null && (
@@ -1411,6 +1416,7 @@ function mapDispatchToProps(dispatch) {
         getFranchisees: Actions.getFranchisees,
         updateCustomersParameter: Actions.updateCustomersParameter,
         getIncreaseDecrease: Actions.getIncreaseDecrease,
+        getCustomer: Actions.getCustomer,
     }, dispatch);
 }
 

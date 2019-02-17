@@ -19,6 +19,7 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction/L
 import Checkbox from "@material-ui/core/Checkbox/Checkbox";
 import Icon from "@material-ui/core/es/Icon/Icon";
 
+import FuseUtils from '@fuse/FuseUtils';
 
 function TabContainer(props) {
     return (
@@ -47,8 +48,13 @@ const styles = theme => ({
         paddingLeft: theme.spacing.unit * 4,
     },
     textSpan: {
-        marginLeft: "5px",
-        marginRight: "5px"
+        marginLeft: 0,
+        marginRight: 0,
+        flexDirection: 'column',
+        display: 'flex',
+    },
+    checkBoxRoot: {
+        padding: '0px 12px'
     },
     tabRoot: {
         flexGrow: 1,
@@ -99,7 +105,13 @@ class UsersPermission extends React.Component {
                 DisplayName: ""
               }
             ]
-        }
+        },
+        checkedSectionStatus: [
+            {view: false, create: false, edit: false, delete: false, execute:false},
+            {view: false, create: false, edit: false, delete: false, execute:false},
+            {view: false, create: false, edit: false, delete: false, execute:false},
+            {view: false, create: false, edit: false, delete: false, execute:false},
+        ]
     };
 
     componentWillMount() {
@@ -196,6 +208,33 @@ class UsersPermission extends React.Component {
         this.props.updateUserFormPayload(insertPayload);
     };
 
+    handleSectionCheckToggle = (name, index) => event => {
+        console.log('name=', name, index);
+        let checkedSectionStatus = this.state.checkedSectionStatus;
+        checkedSectionStatus[index][name] = event.target.checked;
+        this.setState({checkedSectionStatus: checkedSectionStatus});
+
+        let checkedStatus = this.state.checkedStatus;
+        let all_keys = Object.keys(this.state.checkedStatus);
+        let selected = all_keys.filter(key=>key.indexOf(`${name}_${index}`)!==-1);
+
+        selected.map(s=>checkedStatus[s]=event.target.checked);
+
+        let newAppList = [...this.state.AppList];
+        let menus = newAppList[index].Menus;
+
+        let actionName = FuseUtils.capital_letter(name);
+         menus.map(menu=>{
+             if(menu.Children.length===0) return;
+             menu.Children.map(child=>child[actionName] = event.target.checked)
+         });
+
+        console.log('menu = ', menus);
+
+        this.updateUserFormPayload("Apps",newAppList);
+
+    };
+
     handleCheckToggle = (name,actionName,index,pIndex,cIndex) => event => {
 
         const checked = event.target.checked;
@@ -218,8 +257,6 @@ class UsersPermission extends React.Component {
         const {classes} = this.props;
         const {step, checkedStatus,UserPermission} = this.state;
 
-        console.log('checkedStatus=', JSON.stringify(checkedStatus));
-
         return (
             <NoSsr>
                 <div className={classes.tabRoot}>
@@ -241,12 +278,39 @@ class UsersPermission extends React.Component {
                             <ListItem button onClick={this.handleClick}
                             style={{borderBottom: "1px solid lightgray"}}>
                                 <ListItemText primary="Navigation Options"/>
-                                    <ListItemSecondaryAction>
-                                        <span className={classes.textSpan}>View</span>
-                                        <span className={classes.textSpan}>Create</span>
-                                        <span className={classes.textSpan}>Edit</span>
-                                        <span className={classes.textSpan}>Delete</span>
-                                        <span className={classes.textSpan}>Execute</span>
+                                    <ListItemSecondaryAction className="flex">
+                                        <div className={classes.textSpan}>
+                                            <span>View</span>
+                                         <Checkbox
+                                             classes={{root: classes.checkBoxRoot}}
+                                             onChange={this.handleSectionCheckToggle('view', index)}
+                                             checked={this.state.checkedSectionStatus[index].view}
+                                         />
+                                        </div>
+                                        <div className={classes.textSpan}><span>Create</span>
+                                         <Checkbox  classes={{root: classes.checkBoxRoot}}
+                                                    onChange={this.handleSectionCheckToggle('create', index)}
+                                                    checked={this.state.checkedSectionStatus[index].create}
+                                         />
+                                        </div>
+                                        <div className={classes.textSpan}><span>Edit</span>
+                                             <Checkbox  classes={{root: classes.checkBoxRoot}}
+                                                        onChange={this.handleSectionCheckToggle('edit', index)}
+                                                        checked={this.state.checkedSectionStatus[index].edit}
+                                             />
+                                        </div>
+                                        <div className={classes.textSpan}><span>Delete</span>
+                                         <Checkbox  classes={{root: classes.checkBoxRoot}}
+                                                    onChange={this.handleSectionCheckToggle('delete', index)}
+                                                    checked={this.state.checkedSectionStatus[index].delete}
+                                         />
+                                        </div>
+                                        <div className={classes.textSpan}><span>Execute</span>
+                                         <Checkbox  classes={{root: classes.checkBoxRoot}}
+                                                    onChange={this.handleSectionCheckToggle('execute', index)}
+                                                    checked={this.state.checkedSectionStatus[index].execute}
+                                         />
+                                        </div>
                                     </ListItemSecondaryAction>
                             </ListItem>
                             {x.menuOptions.map((x, pIndex) => (
