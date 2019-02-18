@@ -56,6 +56,14 @@ class NewFindersFeePage extends React.Component {
             MonthlyPayment: '',
             CalculationMethod: 'Method 1',
             InitialBusinessCredit: '',
+            description: '',
+            MultiTenant100OccuaoncyInput: '',
+            MonthlyBillingAmount: '',
+            AmountFinanced: '',
+            DownPayment: '',
+            ResultAmountFinanced: '',
+            IncludeDpWith1stPayment: false,
+            DownPaymentPaid: false,
         };
     }
 
@@ -79,8 +87,16 @@ class NewFindersFeePage extends React.Component {
     handleChange = name => event => {
         this.setState({
             [name]: event.target.value,
-            errorMsg: ""
         });
+    };
+    handleChangeChecked = name => event => {
+        this.setState({
+            [name]: event.target.checked,
+        });
+    };
+
+    handleChangeParamsOnBlur = name => event => {
+        this.props.updateFindersFeeParams({[name]: event.target.value})
     };
 
     handleGotoDistibutionPage = () => {
@@ -117,8 +133,8 @@ class NewFindersFeePage extends React.Component {
                     <TextField margin="dense" id="CalculationMethodNameDescription" label="Name / Description"
                                InputLabelProps={{ shrink: true }}
                                className={classNames(classes.textField, "ml-12")}
-                               value={this.state.NewAmount || ''}
-                               onChange={this.handleChange("NewAmount")}
+                               value={this.state.description || ''}
+                               onChange={this.handleChange("description")}
                                fullWidth
                     />
                     <div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -133,19 +149,21 @@ class NewFindersFeePage extends React.Component {
                                InputLabelProps={{ shrink: true }}
                                className={classNames(classes.textField, "pr-6 mr-12")}
                                InputProps={{
-                                   startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
+                                   startAdornment: <InputAdornment position="start" className="mr-4">%</InputAdornment>,
                                    inputComponent: NumberFormatCustomNoPrefix }}
                                value={this.state.DownPaymentPercent || ''}
                                onChange={this.handleChange("DownPaymentPercent")}
+                               onBlur={this.handleChangeParamsOnBlur('DownPaymentPercent')}
                     />
                     <TextField margin="dense" id="MonthlyPaymentPercent" label="Monthly Payment Percent"
                                InputLabelProps={{ shrink: true }}
                                className={classNames(classes.textField, "pr-6 mr-12")}
                                InputProps={{
-                                   startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
+                                   startAdornment: <InputAdornment position="start" className="mr-4">%</InputAdornment>,
                                    inputComponent: NumberFormatCustomNoPrefix }}
                                value={this.state.MonthlyPaymentPercent || ''}
                                onChange={this.handleChange("MonthlyPaymentPercent")}
+                               onBlur={this.handleChangeParamsOnBlur('MonthlyPaymentPercent')}
                     />
                     <TextField margin="dense" id="MonthlyBillingAmount" label="Monthly Billing Amount"
                                InputLabelProps={{ shrink: true }}
@@ -155,6 +173,7 @@ class NewFindersFeePage extends React.Component {
                                    inputComponent: NumberFormatCustomNoPrefix }}
                                value={this.state.MonthlyBillingAmount || ''}
                                onChange={this.handleChange("MonthlyBillingAmount")}
+                               onBlur={this.handleChangeParamsOnBlur('MonthlyBillingAmount')}
                     />
                 </div>
                 <div className={classNames("flex mt-12")}>
@@ -183,6 +202,7 @@ class NewFindersFeePage extends React.Component {
                                    inputComponent: NumberFormatCustomNoPrefix }}
                                value={this.state.MonthlyPayment || ''}
                                onChange={this.handleChange("MonthlyPayment")}
+                               onBlur={this.handleChangeParamsOnBlur('MonthlyPaymentAmount')}
                                sm={2}
                     />
 
@@ -193,7 +213,7 @@ class NewFindersFeePage extends React.Component {
                                className={classNames(classes.textField, "pr-6")}
                                value={this.state.NumberOfPayments || ''}
                                onChange={this.handleChange("NumberOfPayments")}
-                               sm={2}
+                               onBlur={this.handleChangeParamsOnBlur('NumberOfPayments')}
                     />
 
                     <Typography className="mr-6 ml-6" variant="subtitle1"><strong>=</strong></Typography>
@@ -205,7 +225,7 @@ class NewFindersFeePage extends React.Component {
                                    inputComponent: NumberFormatCustomNoPrefix}}
                                value={this.state.AmountFinanced || ''}
                                onChange={this.handleChange("AmountFinanced")}
-                               sm={2}
+                               onBlur={this.handleChangeParamsOnBlur('AmountFinanced')}
                     />
 
                     <Typography className="mr-6 ml-6" variant="subtitle1"><strong>+</strong></Typography>
@@ -217,7 +237,7 @@ class NewFindersFeePage extends React.Component {
                                    inputComponent: NumberFormatCustomNoPrefix }}
                                value={this.state.DownPayment || ''}
                                onChange={this.handleChange("DownPayment")}
-                               sm={2}
+                               onBlur={this.handleChangeParamsOnBlur('DownPaymentAmount')}
                     />
 
                     <Typography className="mr-6 ml-6" variant="subtitle1"><strong>=</strong></Typography>
@@ -229,6 +249,7 @@ class NewFindersFeePage extends React.Component {
                                    inputComponent: NumberFormatCustomNoPrefix }}
                                value={this.state.ResultAmountFinanced || ''}
                                onChange={this.handleChange("ResultAmountFinanced")}
+                               onBlur={this.handleChangeParamsOnBlur('FinderFeeTotal')}
                                sm={2}
                     />
                 </div>
@@ -238,7 +259,7 @@ class NewFindersFeePage extends React.Component {
                         control={
                             <Switch
                                 checked={this.state.DownPaymentPaid}
-                                onChange={this.handleChange('DownPaymentPaid')}
+                                onChange={this.handleChangeChecked('DownPaymentPaid')}
                                 value="DownPaymentPaid"
                             />
                         }
@@ -248,7 +269,7 @@ class NewFindersFeePage extends React.Component {
                         control={
                             <Switch
                                 checked={this.state.IncludeDpWith1stPayment}
-                                onChange={this.handleChange('IncludeDpWith1stPayment')}
+                                onChange={this.handleChangeChecked('IncludeDpWith1stPayment')}
                                 value="IncludeDpWith1stPayment"
                             />
                         }
@@ -264,6 +285,7 @@ class NewFindersFeePage extends React.Component {
                                className={classNames(classes.textField, "pr-6")}
                                value={this.state.MultiTenant100OccuaoncyInput || ''}
                                onChange={this.handleChange("MultiTenant100OccuaoncyInput")}
+                               onBlur={this.handleChangeParamsOnBlur('MultiTenantOccupancy')}
                                fullWidth
                                style={{ maxWidth: 300 }}
                     />
@@ -286,6 +308,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         updateCustomersParameter: Actions.updateCustomersParameter,
         getComputedFinderFee: Actions.getComputedFinderFee,
+        updateFindersFeeParams: Actions.updateFindersFeeParams,
     }, dispatch);
 }
 
