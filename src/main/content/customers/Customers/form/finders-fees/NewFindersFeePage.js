@@ -150,7 +150,9 @@ class NewFindersFeePage extends React.Component {
                                className={classNames(classes.textField, "pr-6 mr-12")}
                                InputProps={{
                                    startAdornment: <InputAdornment position="start" className="mr-4">%</InputAdornment>,
-                                   inputComponent: NumberFormatCustomNoPrefix }}
+                                   inputComponent: NumberFormatCustomNoPrefix,
+                                   readOnly: true
+                               }}
                                value={this.state.DownPaymentPercent || ''}
                                onChange={this.handleChange("DownPaymentPercent")}
                                onBlur={this.handleChangeParamsOnBlur('DownPaymentPercent')}
@@ -160,7 +162,9 @@ class NewFindersFeePage extends React.Component {
                                className={classNames(classes.textField, "pr-6 mr-12")}
                                InputProps={{
                                    startAdornment: <InputAdornment position="start" className="mr-4">%</InputAdornment>,
-                                   inputComponent: NumberFormatCustomNoPrefix }}
+                                   inputComponent: NumberFormatCustomNoPrefix,
+                                   readOnly: true
+                               }}
                                value={this.state.MonthlyPaymentPercent || ''}
                                onChange={this.handleChange("MonthlyPaymentPercent")}
                                onBlur={this.handleChangeParamsOnBlur('MonthlyPaymentPercent')}
@@ -170,7 +174,8 @@ class NewFindersFeePage extends React.Component {
                                className={classNames(classes.textField, "pr-6 mr-12")}
                                InputProps={{
                                    startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-                                   inputComponent: NumberFormatCustomNoPrefix }}
+                                   inputComponent: NumberFormatCustomNoPrefix,
+                                   readOnly: true }}
                                value={this.state.MonthlyBillingAmount || ''}
                                onChange={this.handleChange("MonthlyBillingAmount")}
                                onBlur={this.handleChangeParamsOnBlur('MonthlyBillingAmount')}
