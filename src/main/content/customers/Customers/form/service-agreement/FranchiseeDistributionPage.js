@@ -304,7 +304,6 @@ class FranchiseeDistributionPage extends React.Component {
     }
 
     componentWillMount() {
-        console.log("componentWillMount")
         this.props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
         this.getFranchiseesFromStatus();
 
@@ -367,7 +366,6 @@ class FranchiseeDistributionPage extends React.Component {
     }
 
     initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer.Data) => {
-        console.log('initCustomerInfo=', this.state.rows);
         this.setState({
             SA_Amount: activeCustomerInfo.cont_bill,
             franchieesesToOffer: activeCustomerInfo.AssignedFranchisees,
@@ -437,7 +435,6 @@ class FranchiseeDistributionPage extends React.Component {
         res = res.filter(x => {
             return activePaymentRows.indexOf(x.id) > -1
         })
-        console.log("setRowData", res);
         if (res.length > 0) {
             this.setState({
                 customerName: res[0].CustomerName,
@@ -537,7 +534,6 @@ class FranchiseeDistributionPage extends React.Component {
             this.state.rows.forEach(x => {
                 totalPaymentAmount += parseFloat(`0${x.PaymentAmount}`)
             })
-            console.log("floatPaymentAmount", "totalPaymentAmount", floatPaymentAmount, totalPaymentAmount)
             if (floatPaymentAmount < totalPaymentAmount) {
                 this.setState({
                     errorMsg: "Total payment is greater than payment to apply",
@@ -550,7 +546,6 @@ class FranchiseeDistributionPage extends React.Component {
             }
 
             const isNonEmptyPayment = this.isNonEmptyPayment(rows)
-            console.log("isNonEmptyPayment", isNonEmptyPayment)
             if (isNonEmptyPayment) {
                 this.setState({ errorMsg: isNonEmptyPayment })
             }
@@ -721,8 +716,6 @@ class FranchiseeDistributionPage extends React.Component {
         if(this.state.bReasonForHigh)
             items = this.state.increaseReasons;
 
-        console.log('items=', items);
-
         return (
             <TextField margin="dense" id="Reason" label="Reason" name="reason"
                        select
@@ -870,8 +863,6 @@ class FranchiseeDistributionPage extends React.Component {
             { width: 11, title: 'Amount', align:'right',field: '' },
             { width: 9, title: 'Action', align:'center', field: '' },
         ];
-
-        console.log('franchieesesToOffer=', franchieesesToOffer);
 
         return (
             <>
@@ -1262,7 +1253,6 @@ class FranchiseeDistributionPage extends React.Component {
     render() {
         const { classes } = this.props;
         const { customerServiceTypes, step } = this.state;
-        console.log('step=', step);
 
         return (
             <>
