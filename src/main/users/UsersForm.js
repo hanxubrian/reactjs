@@ -300,13 +300,23 @@ class UsersForm extends React.Component {
         this.props.getUserFormUserTypeList();
         this.props.getUserStateList();
         this.props.getUserDepartmentList(this.props.regionId);
-        this.props.getFranchisees(this.props.regionId);
-        this.setState({
-            payload: this.props.payload
-        });
+        this.props.getFranchisees(this.props.regionId);        
         if(this.props.payload.UserId !== this.props.userId){
             this.updateUserFormPayload("UserId", this.props.userId);
         }
+
+        if(this.props.bNewForm){
+            this.setState({ payload: this.props.payload} );
+        }
+
+        if(!this.props.bNewForm && this.props.userDetail.details !== null){
+            this.setState({ 
+                payload: {
+                  ...this.state.payload,
+                  ...this.props.userDetail.details
+                }
+            });
+        }        
     }
 
     componentDidUpdate(prevProps, prevState, snapshot){
@@ -328,6 +338,20 @@ class UsersForm extends React.Component {
             });
 
             this.setState({Regions: regions});
+        }
+
+        if(!this.props.bNewForm && this.props.userGroupList.length>0 && (this.props.userGroupList!==prevProps.userGroupList) && (this.props.userDetail!==null && this.props.userDetail.details)){
+            GroupList = [];
+            this.props.userDetail.details.Groups.map(x=>{
+                this.props.userGroupList.map(y=>{
+                    if(y.group_id === x ){
+                        GroupList.push(y.name);
+                    }
+                });
+            });
+            this.setState({
+                Groups: GroupList
+            });
         }
     }
 
@@ -510,7 +534,8 @@ class UsersForm extends React.Component {
 
     updateUserFormPayload = (name,value) => {
 
-        let insertPayload = this.state.payload
+        let insertPayload = this.state.payload;
+        console.log("InsertPayload", insertPayload);
         insertPayload[name] = value;
         this.props.updateUserFormPayload(insertPayload);
     };

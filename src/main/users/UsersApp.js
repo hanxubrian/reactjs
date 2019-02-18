@@ -275,6 +275,7 @@ class UsersApp extends Component {
             await this.props.updateUser(this.props.userId,this.props.insertPayload);
             await this.setState({"openUsersFormStatus": false});
             await this.props.openUsersForm(false);
+            await this.props.getUsersList(this.props.regionId,[],[],"");
         }
     };
 
@@ -375,7 +376,8 @@ function mapDispatchToProps(dispatch)
         openUsersForm: Actions.openUsersForm,
         createUser: Actions.createUser,
         setNewUserAvatarURL: Actions.setNewUserAvatarURL,
-        updateUser: Actions.updateUser
+        updateUser: Actions.updateUser,
+        getUsersList: Actions.getUsersList
     }, dispatch);
 }
 
@@ -388,7 +390,8 @@ function mapStateToProps({ usersApp,fuse, auth})
         insertPayload: usersApp.users.payload,
         newUserAvatar: usersApp.users.newUserAvatar,
         bNewForm: usersApp.users.bNewForm,
-        userId: auth.login.UserId
+        userId: auth.login.UserId,
+        regionId: auth.login.defaultRegionId
     }
 }
 
