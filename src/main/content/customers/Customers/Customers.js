@@ -306,7 +306,7 @@ class Customers extends Component {
 		}
 
 		this.props.getAccountTypeList();
-		this.props.getAccountExecutiveList();
+		this.props.getAccountExecutiveList(this.props.regionId);
 		this.props.getCustomerStatusList();
 		this.props.getAccountTypesGroups();
 	}
@@ -401,7 +401,7 @@ class Customers extends Component {
 			this.props.getAccountTypeList();
 		}
 		if (this.props.accountExecutiveList === null) {
-			this.props.getAccountExecutiveList();
+			this.props.getAccountExecutiveList(this.props.regionId);
 		}
 		if (this.props.customerStatusList === null) {
 			this.props.getCustomerStatusList();

@@ -48,7 +48,7 @@ class CustomersService {
 	};
 	getCustomerStatusList() {
 		return new Promise((resolve, reject) => {
-			axios_instance.get(`${BASE_API_URL}/v1/lists/getcustomerstatuslist?RegionId=99999`)
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/GetCustomerStatus`)
 				.then(res => {
 					if (res.status === 200) {
 						resolve(res.data);
@@ -79,9 +79,9 @@ class CustomersService {
 				})
 		});
 	}
-	getAccountExecutiveList() {
+	getAccountExecutiveList(RegionId) {
 		return new Promise((resolve, reject) => {
-			axios_instance.get(`${BASE_API_URL}/v1/lists/GetAccountExecutivesList?RegionId=2`)
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/account/executives?RegionId=${RegionId}`)
 				.then(res => {
 					if (res.status === 200) {
 						resolve(res.data);

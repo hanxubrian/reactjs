@@ -139,11 +139,11 @@ export function getAccountTypeList() {
 		})();
 	}
 }
-export function getAccountExecutiveList() {
+export function getAccountExecutiveList(regionId) {
 	return (dispatch) => {
 
 		(async () => {
-			let response = await customersService.getAccountExecutiveList();
+			let response = await customersService.getAccountExecutiveList(regionId);
 			dispatch({
 				type: GET_ACCOUNT_EXCUTIVE_LIST,
 				payload: response
