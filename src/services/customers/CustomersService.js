@@ -442,6 +442,31 @@ fullbill: 0
                 })
         });
 	}
+
+    /**
+	 * get computed finders fee
+     * @param regionId
+     * @param params
+     * @returns {Promise<any>}
+     * @constructor
+     */
+    GetComputedFinderFee(regionId, params) {
+        console.log('params=', params);
+        return new Promise((resolve, reject) => {
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/FinderFee/GetComputedFinderFee`, params)
+                .then(res => {
+                    if (res.status === 200) {
+                        resolve(res.data);
+                    }
+                    else if (res.status !== 200) {
+                        reject(res.data);
+                    }
+                })
+                .catch(error => {
+                    resolve(error);
+                })
+        });
+    }
 }
 
 
