@@ -54,6 +54,8 @@ class NewFindersFeePage extends React.Component {
             MonthlyPaymentPercent: '',
             FindersFeeCreditAmount: '',
             MonthlyPayment: '',
+            CalculationMethod: 'Method 1',
+            InitialBusinessCredit: '',
         };
     }
 
@@ -104,9 +106,9 @@ class NewFindersFeePage extends React.Component {
                                InputProps={{ readOnly: false }}
                     >
                         {[
-                            "---",
-                            "***",
-                            "+++",
+                            "Method 1",
+                            "Method 2",
+                            "Method 3",
                         ].map((x, index) => (
                             <MenuItem key={index} value={x}>{x}</MenuItem>
                         ))}
@@ -169,7 +171,7 @@ class NewFindersFeePage extends React.Component {
                                className={classNames(classes.textField, "pr-6")}
                                InputProps={{startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
                                    inputComponent: NumberFormatCustomNoPrefix }}
-                               value={this.state.NewAmount || ''}
+                               value={this.state.InitialBusinessCredit || ''}
                                onChange={this.handleChange("InitialBusinessCredit")}
                     />
                 </div>
