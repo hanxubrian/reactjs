@@ -72,6 +72,7 @@ import IncreaseDecreaseContractPage from './IncreaseDecreaseContractPage'
 import GridContainer from "Commons/Grid/GridContainer";
 import GridItem from "Commons/Grid/GridItem";
 import CancelContractPage from './CancelContractPage';
+import SuspendContractPage from './SuspendContractPage';
 
 const styles = theme => ({
 	root: {
@@ -466,6 +467,9 @@ class ServiceAgreementPage extends React.Component {
 	showCancelContractPage = () => {
 		this.props.showCancelContractPage(true)
 	}
+	showSuspendContractPage = () => {
+		this.props.showSuspendContractPage(true)
+	}
 
 	handleChangeChecked = name => event => {
 		this.setState({ [name]: event.target.checked });
@@ -487,7 +491,7 @@ class ServiceAgreementPage extends React.Component {
 
 		return (
 			<Fragment>
-				{!this.props.increaseDecreaseContractModalForm.open && !this.props.cancelContractPage.open &&
+				{!this.props.increaseDecreaseContractModalForm.open && !this.props.cancelContractPage.open && !this.props.suspendContractPage.open &&
 					<>
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between items-center">
@@ -528,7 +532,7 @@ class ServiceAgreementPage extends React.Component {
 										<Button
 											variant="contained"
 											color="primary"
-											onClick={this.IncreaseDecreaseContract}
+											onClick={this.showSuspendContractPage}
 											className={classNames(classes.button, "pr-24 pl-24")}
 										>Suspend Account
                                 </Button>
@@ -693,6 +697,9 @@ class ServiceAgreementPage extends React.Component {
 				{this.props.cancelContractPage.open &&
 					<CancelContractPage />
 				}
+				{this.props.suspendContractPage.open &&
+					<SuspendContractPage />
+				}
 			</Fragment>
 		);
 	}
@@ -709,6 +716,7 @@ function mapDispatchToProps(dispatch) {
 		getFranchiseeBillingTypes: Actions.getFranchiseeBillingTypes,
 		showIncreaseDecreaseContractModalForm: Actions.showIncreaseDecreaseContractModalForm,
 		showCancelContractPage: Actions.showCancelContractPage,
+		showSuspendContractPage: Actions.showSuspendContractPage,
 	}, dispatch);
 }
 
@@ -727,6 +735,8 @@ function mapStateToProps({ customers, accountReceivablePayments, auth }) {
 
 		increaseDecreaseContractModalForm: customers.increaseDecreaseContractModalForm,
 		cancelContractPage: customers.cancelContractPage,
+		suspendContractPage: customers.suspendContractPage,
+
 		lists: customers.lists,
 		franchieesesToOffer: customers.franchieesesToOffer,
 		activeCustomer: customers.activeCustomer,

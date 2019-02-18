@@ -76,6 +76,7 @@ export const GET_INCREASE_DECREASE = "[CUSTOMERS APP] GET INCREASE DECREASE";
 
 export const SHOW_INCREASE_DECREASE_CONTRACT_MODAL_FORM = "[CUSTOMERS APP] SHOW_INCREASE_DECREASE_CONTRACT_MODAL_FORM";
 export const SHOW_CANCEL_CONTRACT_PAGE = "[CUSTOMERS APP] SHOW_CANCEL_CONTRACT_PAGE";
+export const SHOW_SUSPEND_CONTRACT_PAGE = "[CUSTOMERS APP] SHOW_SUSPEND_CONTRACT_PAGE";
 
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	// return dispatch => {
@@ -539,6 +540,12 @@ export function showIncreaseDecreaseContractModalForm(visible) {
 export function showCancelContractPage(visible) {
 	return {
 		type: SHOW_CANCEL_CONTRACT_PAGE,
+		payload: visible
+	}
+}
+export function showSuspendContractPage(visible) {
+	return {
+		type: SHOW_SUSPEND_CONTRACT_PAGE,
 		payload: visible
 	}
 }

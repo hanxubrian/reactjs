@@ -137,7 +137,7 @@ const tableHeaderCellComponentBase = props => {
 const CurrencyFormatter = ({ value }) => (<span>$ {parseFloat(`0${value}`).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
 const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/, '$2/$3/$1');
 
-class CancelContractPage extends React.Component {
+class showSuspendContractPage extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -324,7 +324,8 @@ class CancelContractPage extends React.Component {
 			notes: '',
 			increaseReasons: null,
 			decreaseReasons: null,
-			cancelationReasons: null,
+
+			suspensionReasons: null,
 
 			bReasonForHigh: false,
 			reason: '',
@@ -358,9 +359,9 @@ class CancelContractPage extends React.Component {
 	componentDidMount() {
 		this.initCustomerInfo();
 
-		fetch(`https://apifmsplusplus_mongo.jkdev.com/v1/Lists/reasons?type=account_cancellation`)
+		fetch(`https://apifmsplusplus_mongo.jkdev.com/v1/Lists/reasons?type=account_suspension`)
 			.then(response => response.json())
-			.then(data => this.setState({ cancelationReasons: data.Data }));
+			.then(data => this.setState({ suspensionReasons: data.Data }));
 
 		this.setState({
 			paymentDlgPayloads: this.props.paymentDlgPayloads,
@@ -429,7 +430,7 @@ class CancelContractPage extends React.Component {
 		// 	paymentAmount: 0,
 		// })
 
-		this.props.showCancelContractPage(false)
+		this.props.showSuspendContractPage(false)
 
 	};
 
@@ -832,7 +833,7 @@ class CancelContractPage extends React.Component {
 
 	renderReasons = () => {
 		const { classes } = this.props;
-		let items = this.state.cancelationReasons;
+		let items = this.state.suspensionReasons;
 		// if (this.state.bReasonForHigh)
 		// 	items = this.state.increaseReasons;
 
@@ -880,7 +881,7 @@ class CancelContractPage extends React.Component {
 			<>
 				<div className={classNames("flex mt-12 justify-between")}>
 
-					<Typography variant="h6">Cancelation</Typography>
+					<Typography variant="h6">Suspension</Typography>
 
 					<div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
 						<Button variant="contained" onClick={this.saveIncreaseDecrease}
@@ -928,7 +929,7 @@ class CancelContractPage extends React.Component {
 						margin="dense"
 					/>
 
-					{this.state.cancelationReasons && 
+					{this.state.suspensionReasons &&
 						this.renderReasons()
 					}
 
@@ -1430,7 +1431,7 @@ function mapDispatchToProps(dispatch) {
 		openPaymentDialog: Actions.openPaymentDialog,
 		createAccountReceivablePayment: Actions.createAccountReceivablePayment,
 
-		showCancelContractPage: Actions.showCancelContractPage,
+		showSuspendContractPage: Actions.showSuspendContractPage,
 
 		getLogCallCustomerServiceTypes: Actions.getLogCallCustomerServiceTypes,
 
@@ -1474,4 +1475,4 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(CancelContractPage)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(showSuspendContractPage)));

@@ -115,6 +115,9 @@ const initialState = {
 	cancelContractPage: {
 		open: false,
 	},
+	suspendContractPage: {
+		open: false,
+	},
 	NewAmount: '',
 	activeStep: 0,
 	serviceAgreementStep: 0,
@@ -622,6 +625,14 @@ const customers = function (state = initialState, action) {
 				...state,
 				cancelContractPage: {
 					...state.cancelContractPage,
+					open: action.payload,
+				}
+			};
+		case Actions.SHOW_SUSPEND_CONTRACT_PAGE:
+			return {
+				...state,
+				suspendContractPage: {
+					...state.suspendContractPage,
 					open: action.payload,
 				}
 			};
