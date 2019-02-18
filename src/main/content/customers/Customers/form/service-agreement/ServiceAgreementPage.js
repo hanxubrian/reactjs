@@ -505,7 +505,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.SA_Amount}
 									onChange={this.handleChange('SA_Amount')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ width: 250 }}
 
 									InputProps={{
@@ -551,7 +551,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.length === undefined ? 0 : this.state.length}
 									onChange={this.handleChange('length')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ minWidth: "100px", width: "30%" }}
 								>
 									{[{ value: 0, label: "Recurring" }
@@ -576,7 +576,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.TermMonths}
 									onChange={this.handleChange('TermMonths')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ width: '10%', minWidth: '110px' }}
 									disabled={this.state.length === 1}
 								/>
@@ -593,7 +593,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.AgreementType === undefined ? 1 : this.state.AgreementType}
 									onChange={this.handleChange('AgreementType')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									fullWidth
 								>
 									{[{ value: 0, label: "Customer" }
@@ -617,7 +617,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.AcctExec === undefined ? 0 : this.state.AcctExec}
 									onChange={this.handleChange('AcctExec')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									fullWidth
 								>
 									{
@@ -639,7 +639,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.SignDate}
 									onChange={this.handleChange('SignDate')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ width: "20%", minWidth: "180px" }}
 								/>
 								<TextField
@@ -653,7 +653,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.StartDate}
 									onChange={this.handleChange('StartDate')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ width: "20%", minWidth: "180px" }}
 								/>
 
@@ -668,7 +668,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.ExpirationDate}
 									onChange={this.handleChange('ExpirationDate')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ width: "20%", minWidth: "180px" }}
 								/>
 							</GridItem>
@@ -683,7 +683,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.note}
 									onChange={this.handleChange('note')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ width: '100%' }}
 								/>
 							</GridItem>
