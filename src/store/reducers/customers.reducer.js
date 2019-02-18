@@ -2,7 +2,6 @@ import * as Actions from "../actions";
 import * as UserActions from "../../auth/store/actions";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
-import { UPDATE_CUSTOMERS_PARAMETERS } from "../actions";
 
 const initialState = {
 	customersDB: null,
@@ -122,7 +121,8 @@ const initialState = {
 	activeStep: 0,
 	serviceAgreementStep: 0,
 	increase_decrease: null,
-    findersFeeComputed: null
+    findersFeeComputed: null,
+	findersFeeParams: null,
 };
 
 
@@ -646,6 +646,11 @@ const customers = function (state = initialState, action) {
 			return {
 				...state,
                 findersFeeComputed: action.payload
+			};
+		case Actions.UPDATE_FINDERS_FEE_PARAMS_FOR_COMPUTED:
+			return {
+				...state,
+                findersFeeParams: {...state.findersFeeParams, ...action.payload}
 			};
 		default:
 			{

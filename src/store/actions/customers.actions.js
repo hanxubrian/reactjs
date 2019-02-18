@@ -78,6 +78,7 @@ export const SHOW_INCREASE_DECREASE_CONTRACT_MODAL_FORM = "[CUSTOMERS APP] SHOW_
 export const SHOW_CANCEL_CONTRACT_PAGE = "[CUSTOMERS APP] SHOW_CANCEL_CONTRACT_PAGE";
 export const SHOW_SUSPEND_CONTRACT_PAGE = "[CUSTOMERS APP] SHOW_SUSPEND_CONTRACT_PAGE";
 export const GET_COMPUTED_FINDERS_FEE = "[CUSTOMERS APP] GET COMPUTED FINDERS FEE";
+export const UPDATE_FINDERS_FEE_PARAMS_FOR_COMPUTED = "[CUSTOMERS APP] UPDATE FINDERS FEE PARAMS FOR COMPUTED";
 
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	// return dispatch => {
@@ -578,6 +579,18 @@ export function updateCustomersParameter(name, value) {
     return {
         type: UPDATE_CUSTOMERS_PARAMETERS,
         payload: {name, value}
+    }
+}
+
+/**
+ *
+ * @param params, JSON object
+ * @returns {{type: string, payload: *}}
+ */
+export function updateFindersFeeParams(params) {
+    return {
+        type: UPDATE_FINDERS_FEE_PARAMS_FOR_COMPUTED,
+        payload: params
     }
 }
 

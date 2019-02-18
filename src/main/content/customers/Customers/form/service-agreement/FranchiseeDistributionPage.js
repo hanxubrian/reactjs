@@ -371,7 +371,9 @@ class FranchiseeDistributionPage extends React.Component {
         this.setState({
             SA_Amount: activeCustomerInfo.cont_bill,
             franchieesesToOffer: activeCustomerInfo.AssignedFranchisees,
-        })
+        });
+        this.props.updateFindersFeeParams({FranchiseeId: activeCustomerInfo.AssignedFranchisees[0].FranchiseeId,
+            CustomerId: activeCustomerInfo._id, RegionId: this.props.regionId});
     };
 
     handleClose = () => {
@@ -841,7 +843,8 @@ class FranchiseeDistributionPage extends React.Component {
         this.setState({data: this.state.data})
     };
 
-    gotoFindersFee =() =>{
+    gotoFindersFee =async (franchiseeId) =>{
+        await this.props.updateFindersFeeParams({FranchiseeId: franchiseeId});
         this.props.updateCustomersParameter('activeStep', 9);
     };
 
@@ -867,6 +870,8 @@ class FranchiseeDistributionPage extends React.Component {
             { width: 11, title: 'Amount', align:'right',field: '' },
             { width: 9, title: 'Action', align:'center', field: '' },
         ];
+
+        console.log('franchieesesToOffer=', franchieesesToOffer);
 
         return (
             <>
@@ -1012,7 +1017,7 @@ class FranchiseeDistributionPage extends React.Component {
                                         <div className=" text-center" style={{width: franHeaders[8].width + '%'}}>
                                             <Tooltip title="Go to Finders Fee" aria-label="Go to Finders Fee">
                                             <Fab aria-label="remove"
-                                             onClick={this.gotoFindersFee} color="primary" className={classNames(classes.ffBtn)}>
+                                             onClick={()=>this.gotoFindersFee(x.Id)} color="primary" className={classNames(classes.ffBtn)}>
                                                 <Icon>arrow_forward</Icon>
                                             </Fab>
                                             </Tooltip>
@@ -1289,6 +1294,7 @@ function mapDispatchToProps(dispatch) {
         getFranchiseeBillingTypes: Actions.getFranchiseeBillingTypes,
         getFranchisees: Actions.getFranchisees,
         updateCustomersParameter: Actions.updateCustomersParameter,
+        updateFindersFeeParams: Actions.updateFindersFeeParams,
     }, dispatch);
 }
 

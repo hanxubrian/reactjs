@@ -60,6 +60,7 @@ class NewFindersFeePage extends React.Component {
     }
 
     componentDidMount() {
+
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
@@ -267,12 +268,15 @@ class NewFindersFeePage extends React.Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         updateCustomersParameter: Actions.updateCustomersParameter,
+        getComputedFinderFee: Actions.getComputedFinderFee,
     }, dispatch);
 }
 
-function mapStateToProps({ customers}) {
+function mapStateToProps({ customers, auth}) {
     return {
         activeStep: customers.activeStep,
+        regionId: auth.login.defaultRegionId,
+        findersFeeParams: auth.login.findersFeeParams,
     }
 }
 
