@@ -77,6 +77,7 @@ export const GET_INCREASE_DECREASE = "[CUSTOMERS APP] GET INCREASE DECREASE";
 export const SHOW_INCREASE_DECREASE_CONTRACT_MODAL_FORM = "[CUSTOMERS APP] SHOW_INCREASE_DECREASE_CONTRACT_MODAL_FORM";
 export const SHOW_CANCEL_CONTRACT_PAGE = "[CUSTOMERS APP] SHOW_CANCEL_CONTRACT_PAGE";
 export const SHOW_SUSPEND_CONTRACT_PAGE = "[CUSTOMERS APP] SHOW_SUSPEND_CONTRACT_PAGE";
+export const GET_COMPUTED_FINDERS_FEE = "[CUSTOMERS APP] GET COMPUTED FINDERS FEE";
 
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	// return dispatch => {
@@ -587,6 +588,24 @@ export function getIncreaseDecrease(regionId, params) {
             let res = await customersService.getIncreaseDecrease(regionId, params);
             dispatch({
                 type: GET_INCREASE_DECREASE,
+                payload: res.Data
+            });
+        })();
+    }
+}
+
+/**
+ * get computed finders fee
+ * @param params, JSON object
+ * @returns {Function}
+ * @constructor
+ */
+export function getComputedFinderFee(params) {
+    return (dispatch) => {
+        (async () => {
+            let res = await customersService.getComputedFinderFee(params);
+            dispatch({
+                type: GET_COMPUTED_FINDERS_FEE,
                 payload: res.Data
             });
         })();

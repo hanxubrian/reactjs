@@ -450,7 +450,7 @@ fullbill: 0
      * @returns {Promise<any>}
      * @constructor
      */
-    GetComputedFinderFee(regionId, params) {
+    getComputedFinderFee(regionId, params) {
         console.log('params=', params);
         return new Promise((resolve, reject) => {
             axios_instance.post(`${BASE_MONGO_API_URL}/v1/FinderFee/GetComputedFinderFee`, params)
