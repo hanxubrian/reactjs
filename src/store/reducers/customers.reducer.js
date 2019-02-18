@@ -2,7 +2,7 @@ import * as Actions from "../actions";
 import * as UserActions from "../../auth/store/actions";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
-import {UPDATE_CUSTOMERS_PARAMETERS} from "../actions";
+import { UPDATE_CUSTOMERS_PARAMETERS } from "../actions";
 
 const initialState = {
 	customersDB: null,
@@ -112,8 +112,11 @@ const initialState = {
 	increaseDecreaseContractModalForm: {
 		open: false,
 	},
+	cancelContractPage: {
+		open: false,
+	},
 	NewAmount: '',
-    activeStep: 0,
+	activeStep: 0,
 	serviceAgreementStep: 0,
 	increase_decrease: null
 };
@@ -141,7 +144,7 @@ const customers = function (state = initialState, action) {
 			{
 				return {
 					...state,
-                    [action.payload.name]: action.payload.value
+					[action.payload.name]: action.payload.value
 				}
 			}
 		case Actions.GET_CUSTOMER_STATUS_LIST:
@@ -278,7 +281,7 @@ const customers = function (state = initialState, action) {
 						data: null
 					},
 					activeCustomerInfo: null,
-                    activeStep: 0
+					activeStep: 0
 				};
 			}
 		case Actions.CLOSE_NEW_CUSTOMER_FORM:
@@ -313,7 +316,7 @@ const customers = function (state = initialState, action) {
 					activeCustomer: action.payload.customer,
 				};
 			}
-			case Actions.GET_CUSTOMER:
+		case Actions.GET_CUSTOMER:
 			{
 				return {
 					...state,
@@ -614,10 +617,18 @@ const customers = function (state = initialState, action) {
 					open: action.payload,
 				}
 			};
-			case Actions.GET_INCREASE_DECREASE:
+		case Actions.SHOW_CANCEL_CONTRACT_PAGE:
 			return {
 				...state,
-                increase_decrease: action.payload
+				cancelContractPage: {
+					...state.cancelContractPage,
+					open: action.payload,
+				}
+			};
+		case Actions.GET_INCREASE_DECREASE:
+			return {
+				...state,
+				increase_decrease: action.payload
 			};
 		default:
 			{

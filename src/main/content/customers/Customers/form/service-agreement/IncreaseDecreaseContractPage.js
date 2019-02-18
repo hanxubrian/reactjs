@@ -880,6 +880,18 @@ class IncreaseDecreaseContractPage extends React.Component {
 			<>
                 <div className={classNames("flex mt-12 justify-between")}>
 
+                    <Typography variant="h6">Increase / Decrease</Typography>
+
+                    <div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+                        <Button variant="contained" onClick={this.saveIncreaseDecrease}
+                                disabled={this.state.NewAmount === ''}
+                                color="primary" className={classNames("pl-24 pr-24 mr-12")}>Save</Button>
+                        <Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
+                    </div>
+
+                </div>
+
+				<div className={classNames("flex mt-12")}>
                     <TextField margin="dense" id="SA_Amount" label="Current Contract Amount" value={this.state.SA_Amount}
                                InputLabelProps={{ shrink: true }}
                                className={classNames(classes.textField, "pr-6")}
@@ -887,14 +899,6 @@ class IncreaseDecreaseContractPage extends React.Component {
                                InputProps={{ readOnly: true, startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
                                    inputComponent: NumberFormatCustomNoPrefix}}
                     />
-
-                    <div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <Button variant="contained" onClick={this.saveIncreaseDecrease}
-                                disabled={this.state.NewAmount === ''}
-                                color="primary" className={classNames("pl-24 pr-24 mr-12")}>Save</Button>
-                        <Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
-                    </div>
-
                 </div>
 
                 <div className={classNames("flex mt-12 justify-start")}>
