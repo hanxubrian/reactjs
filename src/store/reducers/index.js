@@ -14,6 +14,7 @@ import transactions from'./franchisee.transaction.reducer';
 import franchiseeReports from'./franchisee.reports.reducer';
 import customers from './customers.reducer';
 import leases from './leases.reducer';
+import chargebacks from './chargebacks.reducer';
 import leads from './leads.reducer';
 import findersFees from './findersfees.reducer';
 import payments from './payment.reducer';
@@ -49,7 +50,8 @@ const createReducer =
         mailApp,
         chatPanel,
         contactsApp,
-		franchisees,
+        franchisees,
+        chargebacks,
         leases,
         transactions,
 		customers,

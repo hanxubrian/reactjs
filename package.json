@@ -65,6 +65,7 @@
         "react-scripts": "2.1.1",
         "react-select": "^2.3.0",
         "react-spinner-material": "^1.0.19",
+        "react-star-ratings": "^2.3.0",
         "react-swipeable-views": "0.13.0",
         "react-table": "6.8.6",
         "react-text-mask": "^5.4.3",

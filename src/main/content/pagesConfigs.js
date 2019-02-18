@@ -5,6 +5,7 @@ import {ProfilePageConfig} from './profile/ProfilePageConfig';
 import {RegionsConfig} from "./regions/regions/regionsConfig";
 import {TerritoriesConfig} from "./regions/territories/territoriesConfig";
 import {FranchiseesConfig} from "./franchisees/franchisees/franchiseesConfig";
+import {ChargebacksConfig} from "./franchisees/chargebacks/chargebacksConfig";
 import {LeasesConfig} from "./franchisees/leases/leasesConfig";
 import {EndofmonthConfig} from "./franchisees/endofmonth/endofmonthConfig";
 import {DistributionsConfig} from "./franchisees/distributions/distributionsConfig";
@@ -46,6 +47,7 @@ export const pagesConfigs = [
     RegionsConfig,
     TerritoriesConfig,
     FranchiseesConfig,
+    ChargebacksConfig,
     LeasesConfig,
     EndofmonthConfig,
     DistributionsConfig,

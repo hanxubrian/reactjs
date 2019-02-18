@@ -331,8 +331,8 @@ fullbill: 0
 	getCustomerServiceList(regionId, CustomerNo, fromDate, toDate) {
 		const data = {
 			CustomerNo: [CustomerNo],
-			fromDate: "2017-02-08T06:16:30.3466692-06:00",
-			toDate: "2019-02-08T06:16:30.3466692-06:00"
+			fromDate: "01/01/2000",
+			toDate: "12/30/2019"
 		}
 		console.log("getCustomerServiceList", data)
 		return new Promise((resolve, reject) => {
