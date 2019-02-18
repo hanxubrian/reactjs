@@ -79,7 +79,7 @@ export function createUser(data) {
 export function updateUser(id,data) {
     return (dispatch) => {
         (async () => {
-            let res = await userService.createUser(id,data);
+            let res = await userService.updateUser(id,data);
             if (res.IsSuccess) {
                 dispatch({
                     type: UPDATE_USER,

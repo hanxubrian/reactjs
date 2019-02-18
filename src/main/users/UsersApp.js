@@ -260,12 +260,22 @@ class UsersApp extends Component {
     };
 
     save =  () => async (ev)=>{
-        if(this.props.newUserAvatar!==null)
-            await this.uploadAvatar();
 
-        await this.props.createUser(this.props.insertPayload);
-        await this.setState({"openUsersFormStatus": false});
-        await this.props.openUsersForm(false);
+        if(this.props.bNewForm){
+            if(this.props.newUserAvatar!==null)
+                await this.uploadAvatar();
+
+            await this.props.createUser(this.props.insertPayload);
+            await this.setState({"openUsersFormStatus": false});
+            await this.props.openUsersForm(false);
+        }else{
+            if(this.props.newUserAvatar!==null)
+                await this.uploadAvatar();
+
+            await this.props.updateUser(this.props.userId,this.props.insertPayload);
+            await this.setState({"openUsersFormStatus": false});
+            await this.props.openUsersForm(false);
+        }
     };
 
     render() {
@@ -365,10 +375,11 @@ function mapDispatchToProps(dispatch)
         openUsersForm: Actions.openUsersForm,
         createUser: Actions.createUser,
         setNewUserAvatarURL: Actions.setNewUserAvatarURL,
+        updateUser: Actions.updateUser
     }, dispatch);
 }
 
-function mapStateToProps({ usersApp,fuse})
+function mapStateToProps({ usersApp,fuse, auth})
 {
     return {
         openUsersFormStatus  : usersApp.users.openUsersFormStatus,
@@ -376,6 +387,8 @@ function mapStateToProps({ usersApp,fuse})
         nav: fuse.navigation,
         insertPayload: usersApp.users.payload,
         newUserAvatar: usersApp.users.newUserAvatar,
+        bNewForm: usersApp.users.bNewForm,
+        userId: auth.login.UserId
     }
 }
 
