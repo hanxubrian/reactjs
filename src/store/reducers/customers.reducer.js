@@ -121,7 +121,8 @@ const initialState = {
 	NewAmount: '',
 	activeStep: 0,
 	serviceAgreementStep: 0,
-	increase_decrease: null
+	increase_decrease: null,
+    findersFeeComputed: null
 };
 
 
@@ -640,6 +641,11 @@ const customers = function (state = initialState, action) {
 			return {
 				...state,
 				increase_decrease: action.payload
+			};
+		case Actions.GET_COMPUTED_FINDERS_FEE:
+			return {
+				...state,
+                findersFeeComputed: action.payload
 			};
 		default:
 			{
