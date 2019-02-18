@@ -130,7 +130,7 @@ class UsersPermission extends React.Component {
 
         let checkedStatus = {};
 
-        if ( nextProps.userPermissionList !== this.props.userPermissionList )
+        if ( nextProps.userPermissionList !== this.props.userPermissionList)
         {
             if(nextProps.userPermissionList !== null)
             {
@@ -170,8 +170,9 @@ class UsersPermission extends React.Component {
                     })
 
                 });
-
-                this.setState({checkedStatus});
+                if(this.props.bNewForm){
+                    this.setState({checkedStatus});
+                }                
                 this.setState({
                     AppList: tempAppList
                 });
@@ -190,6 +191,32 @@ class UsersPermission extends React.Component {
             // localMenu.
             console.log('fired menu', localMenu);
 
+        }
+        if(this.props.userDetail !== nextProps.userDetail && this.props.bNewForm === false){
+
+            if(nextProps.userDetail !== null){
+                
+                if(nextProps.userDetail.details.Apps !== null)  {
+                    //console.log("nextProps.userDetail.details.Apps",nextProps.userDetail.details.Apps);
+                    checkedStatus = {};
+                    nextProps.userDetail.details.Apps.forEach((x, xIndex) => {
+
+                        x.Menus.forEach((y,yIndex)=>{
+                           
+                            y.Children.forEach((z, zIndex) => {
+    
+                                checkedStatus[`view_${xIndex}_${yIndex}_${zIndex}`] = z.View;
+                                checkedStatus[`create_${xIndex}_${yIndex}_${zIndex}`] = z.Create;
+                                checkedStatus[`edit_${xIndex}_${yIndex}_${zIndex}`] = z.Edit;
+                                checkedStatus[`delete_${xIndex}_${yIndex}_${zIndex}`] = z.Delete;
+                                checkedStatus[`execute_${xIndex}_${yIndex}_${zIndex}`] = z.Execute;
+                            })
+                        })
+    
+                    });
+                    this.setState({checkedStatus});
+                }                
+            }
         }
     }
 
@@ -379,7 +406,8 @@ function mapStateToProps({usersApp})
     return {
         userPermissionList: usersApp.users.userPermissionList,
         payload: usersApp.users.payload,
-        userDetail: usersApp.users.userDetail
+        userDetail: usersApp.users.userDetail,
+        bNewForm: usersApp.users.bNewForm
     }
 }
 
