@@ -780,7 +780,7 @@ class ServiceAgreementPage extends React.Component {
 		return (
 			<TextField
 				fullWidth
-				variant="outlined"
+				// variant="outlined"
 				label="Customer Name"
 				InputProps={{
 					inputRef: node => {
@@ -1033,7 +1033,7 @@ class ServiceAgreementPage extends React.Component {
 										value={this.state.EffectiveDate}
 										onChange={this.handleChange('EffectiveDate')}
 										margin="dense"
-										variant="outlined"
+										// variant="outlined"
 										style={{ width: "20%", minWidth: "180px" }}
 
 									/>
@@ -1046,7 +1046,7 @@ class ServiceAgreementPage extends React.Component {
 										value={this.state.PONumer}
 										onChange={this.handleChange('PONumer')}
 										margin="dense"
-										variant="outlined"
+										// variant="outlined"
 										style={{ width: "20%", minWidth: "180px" }}
 									/>
 								</div>
@@ -1090,7 +1090,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.InvoiceDate === undefined ? "" : this.state.InvoiceDate}
 									onChange={this.handleChange('InvoiceDate')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ width: "100%" }}
 								>
 									{[{ value: 0, label: "BOM" },
@@ -1112,7 +1112,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.BillingFrequency === undefined ? "" : this.state.BillingFrequency}
 									onChange={this.handleChange('BillingFrequency')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ width: "100%" }}
 								>
 									{[{ value: 0, label: "Monthly" }].map(option => (
@@ -1145,7 +1145,7 @@ class ServiceAgreementPage extends React.Component {
 										value={this.state.Email}
 										onChange={this.handleChange('Email')}
 										margin="dense"
-										variant="outlined"
+										// variant="outlined"
 										style={{ width: '60%' }}
 									/>
 								</div>
@@ -1162,7 +1162,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.Term === undefined ? "" : this.state.Term}
 									onChange={this.handleChange('Term')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ width: '100%' }}
 								>
 									{[{ value: 0, label: "Due Upon Receipt" },
@@ -1188,7 +1188,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.ARStatus === undefined ? "" : this.state.ARStatus}
 									onChange={this.handleChange('ARStatus')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ width: '100%' }}
 								>
 									{[{ value: 0, label: "Select" },
@@ -1218,7 +1218,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.Notes}
 									onChange={this.handleChange('Notes')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ width: '100%' }}
 								/>
 							</GridItem>
@@ -1279,7 +1279,7 @@ class ServiceAgreementPage extends React.Component {
 											className={classes.textField}
 											onChange={this.handleChange('StoreNumber')}
 											margin="dense"
-											variant="outlined"
+											// variant="outlined"
 											fullWidth />
 									</div>
 								)}
@@ -1393,7 +1393,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.ServiceType === undefined ? "" : this.state.ServiceType}
 									onChange={this.handleChange('ServiceType')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ minWidth: "100px", width: "30%" }}
 								>
 									{[{ value: 0, label: "Select" }].map(option => (
@@ -1414,7 +1414,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.SquareFootage}
 									onChange={this.handleChange('SquareFootage')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ minWidth: "100px", width: "30%" }}
 								/>
 
@@ -1432,7 +1432,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.StartTime}
 									onChange={this.handleChange('StartTime')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ width: '100%' }}
 								/>
 								<TextField
@@ -1446,7 +1446,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.EndTime}
 									onChange={this.handleChange('EndTime')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ width: '100%' }}
 								/>
 							</GridItem>
@@ -1463,7 +1463,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.Amount}
 									onChange={this.handleChange('Amount')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ minWidth: "100px", width: "30%" }}
 									InputProps={{
 										startAdornment: <InputAdornment position="start">$</InputAdornment>
@@ -1480,7 +1480,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.CleanTimes}
 									onChange={this.handleChange('CleanTimes')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ width: '100%' }}
 								/>
 
@@ -1496,7 +1496,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.CleanFrequency === undefined ? "" : this.state.CleanFrequency}
 									onChange={this.handleChange('CleanFrequency')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ width: '100%' }}
 								>
 									{[{ value: 0, label: "Monthly" }].map(option => (
@@ -1602,7 +1602,7 @@ class ServiceAgreementPage extends React.Component {
 									value={this.state.Description}
 									onChange={this.handleChange('Description')}
 									margin="dense"
-									variant="outlined"
+									// variant="outlined"
 									style={{ width: '100%' }}
 								/>
 							</GridItem>
