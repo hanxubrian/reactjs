@@ -2,7 +2,6 @@ import * as Actions from "../actions";
 import * as UserActions from "../../auth/store/actions";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
-import {GET_FINDERS_FEE_TYPES} from "../actions";
 
 const initialState = {
 	customersDB: null,
@@ -675,6 +674,6 @@ const customers = function (state = initialState, action) {
 const persistConfig = {
 	key: 'customers',
 	storage: storage,
-	blacklist: ['customersDB']
+	blacklist: ['customersDB, activeCustomer']
 };
 export default persistReducer(persistConfig, customers);

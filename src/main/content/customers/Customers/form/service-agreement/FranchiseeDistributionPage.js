@@ -990,13 +990,7 @@ class FranchiseeDistributionPage extends React.Component {
 												},
 											}}
 										/>
-										{/* <TextField style={{ width: franHeaders[7].width + '%' }}
-								type='number'
-								InputProps={{ endAdornment: <InputAdornment position="start" className="ml-4">%</InputAdornment> }}
-								margin="dense"
-								className="pl-6"
-							/> */}
-										<TextField style={{ width: franHeaders[7].width + '%' }}
+											<TextField style={{ width: franHeaders[7].width + '%' }}
 											// type='number'
 											InputProps={{
 												readOnly: false,
@@ -1009,7 +1003,6 @@ class FranchiseeDistributionPage extends React.Component {
 											margin="dense"
 											className="pl-6"
 											value={m.MonthlyBilling}
-											// onChange={this.handleChange(`MonthlyBilling${index}-${mIndex}`)}
 											onChange={(v) => this.handleMonthlyBilling(v, m, 'MonthlyBilling')}
 
 										/>
@@ -1066,14 +1059,6 @@ class FranchiseeDistributionPage extends React.Component {
 
 						<TableSelection showSelectAll selectByRowClick highlightRow />
 						<TableHeaderRow showSortingControls />
-						{/* <TableEditRow /> */}
-
-						{/* <TableEditColumn width={60} cellComponent={this.EditingCellComponent} headerCellComponent={EditingHeaderCellComponent}
-							// showAddCommand
-							// showEditCommand
-							// showDeleteCommand
-							// commandComponent={Command}
-							/> */}
 
 						<Toolbar rootComponent={this.ToolbarRoot} />
 						<SearchPanel />
@@ -1306,6 +1291,7 @@ function mapDispatchToProps(dispatch) {
 		getFranchisees: Actions.getFranchisees,
 		updateCustomersParameter: Actions.updateCustomersParameter,
 		updateFindersFeeParams: Actions.updateFindersFeeParams,
+        updateAssignedFranchisee: Actions.updateAssignedFranchisee,
 	}, dispatch);
 }
 
@@ -1336,7 +1322,8 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 		activeCustomer: customers.activeCustomer,
 
 		franchisees: franchisees.franchiseesDB,
-		NewAmount: customers.NewAmount
+		NewAmount: customers.NewAmount,
+        assignedFranchisees: customers.assignedFranchisees,
 	}
 }
 
