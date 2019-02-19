@@ -800,6 +800,16 @@ class ServiceAgreementPage extends React.Component {
 			/>
 		);
 	};
+	handleChangeCustomerInfoProps = name => event => {
+		const value = event.target.value
+		this.setState({ [name]: value })
+		this.props.updateNewCustomerParam(name, value)
+	}
+	handleChangeCheckedCustomerInfoProps = name => event => {
+		const checked = event.target.checked
+		this.setState({ [name]: checked })
+		this.props.updateNewCustomerParam(name, checked)
+	}
 	render() {
 		const { classes, customerForm } = this.props;
 		const { execTitles,
@@ -825,13 +835,13 @@ class ServiceAgreementPage extends React.Component {
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between items-center">
 								<TextField
 									type="number"
-									id="SA_Amount"
+									id="cont_bill"
 									label="Monthly Contract Amount"
 									required
 									className={classes.textField}
 									InputLabelProps={{ shrink: true }}
-									value={this.state.SA_Amount}
-									onChange={this.handleChange('SA_Amount')}
+									value={this.state.cont_bill || ''}
+									onChange={this.handleChangeCustomerInfoProps('cont_bill')}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: 250 }}
@@ -1600,6 +1610,8 @@ function mapDispatchToProps(dispatch) {
 		showIncreaseDecreaseContractModalForm: Actions.showIncreaseDecreaseContractModalForm,
 		showCancelContractPage: Actions.showCancelContractPage,
 		showSuspendContractPage: Actions.showSuspendContractPage,
+
+		updateNewCustomerParam: Actions.updateNewCustomerParam,
 	}, dispatch);
 }
 
