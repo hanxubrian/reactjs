@@ -640,7 +640,18 @@ class Customers extends Component {
 											</Tooltip> */}
 										</div>
 										<div className="flex items-center">
-											<Tooltip title="Contact">
+											<Button variant="contained" color="primary"
+												aria-label="Add an alarm"
+												aria-owns={anchorContactMenu ? 'title-bar-contact-menu' : undefined}
+												aria-haspopup="true"
+												onClick={this.showContactMenu}
+												className="mr-12"
+											>
+												Contact
+												<Icon className={classNames(classes.rightIcon, 'ml-6')}>sms</Icon>
+											</Button>
+
+											{/* <Tooltip title="Contact">
 												<IconButton
 													className={classNames(classes.button)}
 													aria-label="Add an alarm"
@@ -650,7 +661,7 @@ class Customers extends Component {
 												>
 													<Icon>sms</Icon>
 												</IconButton>
-											</Tooltip>
+											</Tooltip> */}
 											<Menu
 												id="title-bar-contact-menu"
 												anchorEl={anchorContactMenu}
@@ -662,15 +673,23 @@ class Customers extends Component {
 												<MenuItem onClick={this.closeContactMenu}>SMS to Customer</MenuItem>
 												<MenuItem onClick={this.onClickEmailToCustomer}>Email to Customer</MenuItem>
 											</Menu>
-											<Button variant="contained" color="primary" onClick={this.trySubmitForApproval}>
+											<Button variant="contained" color="primary" onClick={this.trySubmitForApproval}
+												className="mr-12"
+											>
 												Save
-												<Icon className={classes.rightIcon}>save</Icon>
+												<Icon className={classNames(classes.rightIcon, 'ml-6')}>save</Icon>
 											</Button>
-											<Tooltip title="Discard">
+											<Button variant="contained" color="primary" onClick={this.closeComposeForm}
+												className="mr-12"
+											>
+												Discard
+												<Icon className={classNames(classes.rightIcon, 'ml-6')}>delete</Icon>
+											</Button>
+											{/* <Tooltip title="Discard">
 												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
 													<Icon>delete</Icon>
 												</IconButton>
-											</Tooltip>
+											</Tooltip> */}
 											<Tooltip title="Close">
 												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
 													<Icon>close</Icon>
