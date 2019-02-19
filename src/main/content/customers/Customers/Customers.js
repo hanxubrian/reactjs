@@ -334,255 +334,13 @@ class Customers extends Component {
 			isSubmittingForApproval: false
 		})
 
-		let payload = {
-			CustomerId: "vaaa4v5432v34b235", agreeused: "sample string 5", arstatdate: "sample string 6", arstatus: "sample string 7", atrisk: "sample string 8", bill_addr: "sample string 9", bill_addr2: "sample string 10", bill_city: "sample string 11", bill_ext: "sample string 12", bill_fax: "sample string 13", bill_name: "sample string 14", bill_name2: "sample string 15", bill_phone: "sample string 16", bill_state: "sample string 17", bill_zip: "sample string 18", business: "sample string 19", callbdate: "sample string 20", canc_date: "sample string 21", candescr: "sample string 22", canentdat: "sample string 23", canreason: "sample string 24", claimstat: "sample string 25", class_type: "sample string 26", coll_rep: "sample string 27", company_no: "sample string 28", cleantimes: "sample string 29", cleanper: "sample string 30", cont_1: "sample string 31", cont_2: "sample string 32", cont_bill: "sample string 33", cont_tax: "sample string 34", cpiadj: "sample string 35", crteinv: "sample string 36", cs_rep: "sample string 37", cscallbdat: "sample string 38", cus_addr: "sample string 39", cus_addr2: "sample string 40", cus_city: "sample string 41", cus_county: "sample string 42", cus_ext: "sample string 43", cus_fax: "sample string 44", cus_name: "sample string 45", cus_name2: "sample string 46", cus_phone: "sample string 47", cus_state: "sample string 48", cus_zip: "sample string 49", CustomerNo: "sample string 50", date_offer: "sample string 51", date_sign: "2019-01-18T03:12:26.1440384-06:00", date_start: "2019-01-18T03:12:26.1440384-06:00", dlr_code: "sample string 54", Ebilling: "sample string 55", email1: "sample string 56", email2: "sample string 57", exp_date: "2019-01-18T03:12:26.1450367-06:00", firstdate: "2019-01-18T03:12:26.1450367-06:00", firstfran: "sample string 60", flag: "sample string 61", fri: "sample string 62", inv_msg: "sample string 63", masteracct: "sample string 64", misc_info: "sample string 65", misc_info2: "sample string 66", mon: "sample string 67", natacct: "sample string 68", notes: "sample string 69", ops_mgr: "sample string 70", parent: "sample string 71", po_1: "sample string 72", prntinv: "sample string 73", prntpd: "sample string 74", resume_d: "sample string 75", royalty: "sample string 76", sales_tax: "sample string 77", sat: "sample string 78", seconddate: "sample string 79", secondfran: "sample string 80", slsmn_no: "sample string 81", SquareFootage: "sample string 82", sun: "sample string 83", sys_cust: "sample string 84", tax_exempt: "sample string 85", tech_pct: "sample string 86", thu: "sample string 87", tue: "sample string 88", wed: "sample string 89", xregionid: "sample string 90", xsys_cust: "sample string 91",
-			Addresses: [
-				{ Type: "sample string 1", AttentionTo: "sample string 2", AddressLine1: "sample string 3", AddressLine2: "sample string 4", City: "sample string 5", State: "sample string 6", Zip: "sample string 7", Country: "sample string 8", Latitude: 9.1, Longitude: 10.1, IsServiceLocation: 11 },
-				{ Type: "sample string 1", AttentionTo: "sample string 2", AddressLine1: "sample string 3", AddressLine2: "sample string 4", City: "sample string 5", State: "sample string 6", Zip: "sample string 7", Country: "sample string 8", Latitude: 9.1, Longitude: 10.1, IsServiceLocation: 11 }
-			],
-			Contacts: [
-				{ FirstName: "sample string 1", LastName: "sample string 2", Phone: "sample string 3", MobilePhone: "sample string 4", Email: "sample string 5" },
-				{ FirstName: "sample string 1", LastName: "sample string 2", Phone: "sample string 3", MobilePhone: "sample string 4", Email: "sample string 5" }
-			],
-			Agreement: [
-				{ Amount: 1.1, Description: "sample string 2", ContractType: "sample string 3", AgreementType: "sample string 4", AccountExecutiveUserId: "sample string 5", SignDate: "sample string 6", StartDate: "sample string 7", Term: "sample string 8", ExpirationDate: "sample string 9" },
-				{ Amount: 1.1, Description: "sample string 2", ContractType: "sample string 3", AgreementType: "sample string 4", AccountExecutiveUserId: "sample string 5", SignDate: "sample string 6", StartDate: "sample string 7", Term: "sample string 8", ExpirationDate: "sample string 9" }
-			]
-		}
-
-		payload = {
-			"Latitude": 2.1,
-			"Longitude": 3.1,
-			"CPIBillingAppliedDate": "sample string 4",
-			"lastModified": "2019-02-19T06:26:35.2382002-06:00",
-			"cleaning_start_time": "2019-02-19T06:26:35.2382002-06:00",
-			"cleaning_instructions": "sample string 7",
-			"overpayment": 8.1,
-			"billing_term": 9,
-			"contract_lenght": 10,
-			"AssignedFranchisees": [
-				{
-					"FranchiseeNumber": "sample string 1",
-					"FranchiseName": "sample string 2",
-					"Id": "sample string 3",
-					"FinderFeeId": "sample string 4",
-					"Status": "sample string 5",
-					"AssignedDate": "sample string 6",
-					"MonthlyBilling": [
-						{
-							"EscrowBilling": true,
-							"Status": "sample string 2",
-							"BillingFrequency": "sample string 3",
-							"BillingTypeServiceId": "sample string 4",
-							"BillingTypeId": "sample string 5",
-							"Description": "sample string 6",
-							"MonthlyBilling": 7.1
-						},
-						{
-							"EscrowBilling": true,
-							"Status": "sample string 2",
-							"BillingFrequency": "sample string 3",
-							"BillingTypeServiceId": "sample string 4",
-							"BillingTypeId": "sample string 5",
-							"Description": "sample string 6",
-							"MonthlyBilling": 7.1
-						}
-					],
-					"CreatedById": 7
-				},
-				{
-					"FranchiseeNumber": "sample string 1",
-					"FranchiseName": "sample string 2",
-					"Id": "sample string 3",
-					"FinderFeeId": "sample string 4",
-					"Status": "sample string 5",
-					"AssignedDate": "sample string 6",
-					"MonthlyBilling": [
-						{
-							"EscrowBilling": true,
-							"Status": "sample string 2",
-							"BillingFrequency": "sample string 3",
-							"BillingTypeServiceId": "sample string 4",
-							"BillingTypeId": "sample string 5",
-							"Description": "sample string 6",
-							"MonthlyBilling": 7.1
-						},
-						{
-							"EscrowBilling": true,
-							"Status": "sample string 2",
-							"BillingFrequency": "sample string 3",
-							"BillingTypeServiceId": "sample string 4",
-							"BillingTypeId": "sample string 5",
-							"Description": "sample string 6",
-							"MonthlyBilling": 7.1
-						}
-					],
-					"CreatedById": 7
-				}
-			],
-			"AccountOfferings": [
-				{
-					"FranchiseeNumber": "sample string 1",
-					"FranchiseeName": "sample string 2",
-					"Type": "sample string 3",
-					"Response": "sample string 4",
-					"OfferDate": "sample string 5",
-					"ReplyDeadlineDateTime": "sample string 6",
-					"ResponseDate": "sample string 7",
-					"AssignedDate": "sample string 8",
-					"MonthlyBillingOffered": 9.1,
-					"CreatedById": 10
-				},
-				{
-					"FranchiseeNumber": "sample string 1",
-					"FranchiseeName": "sample string 2",
-					"Type": "sample string 3",
-					"Response": "sample string 4",
-					"OfferDate": "sample string 5",
-					"ReplyDeadlineDateTime": "sample string 6",
-					"ResponseDate": "sample string 7",
-					"AssignedDate": "sample string 8",
-					"MonthlyBillingOffered": 9.1,
-					"CreatedById": 10
-				}
-			],
-			"pmt_history": [
-				{
-					"PaymentType": "sample string 1",
-					"ReferenceNo": "sample string 2",
-					"PaymentDate": "2019-02-19T06:26:35.2452011-06:00",
-					"Note": "sample string 4",
-					"Amount": 5.1,
-					"AmountApplied": 6.1,
-					"PayItems": [
-						{
-							"InvoiceNo": "sample string 1",
-							"Amount": 2.1
-						},
-						{
-							"InvoiceNo": "sample string 1",
-							"Amount": 2.1
-						}
-					]
-				},
-				{
-					"PaymentType": "sample string 1",
-					"ReferenceNo": "sample string 2",
-					"PaymentDate": "2019-02-19T06:26:35.2452011-06:00",
-					"Note": "sample string 4",
-					"Amount": 5.1,
-					"AmountApplied": 6.1,
-					"PayItems": [
-						{
-							"InvoiceNo": "sample string 1",
-							"Amount": 2.1
-						},
-						{
-							"InvoiceNo": "sample string 1",
-							"Amount": 2.1
-						}
-					]
-				}
-			],
-			"sys_cust": 11,
-			"company_no": "sample string 12",
-			"dlr_code": "sample string 13",
-			"cust_no": "sample string 14",
-			"cus_name": "--------------------",
-			"cus_addr": "--------------------",
-			"cus_city": "--------------------",
-			"cus_county": "sample string 18",
-			"cus_state": "--------------------",
-			"cus_zip": "--------------------",
-			"cus_phone": "--------------------",
-			"bill_name": "sample string 22",
-			"bill_addr": "sample string 23",
-			"bill_city": "sample string 24",
-			"bill_state": "sample string 25",
-			"bill_zip": "sample string 26",
-			"bill_name2": "sample string 27",
-			"bill_addr2": "sample string 28",
-			"bill_phone": "sample string 29",
-			"cus_name2": "sample string 30",
-			"cus_addr2": "sample string 31",
-			"class_type": "sample string 32",
-			"royalty": 33.1,
-			"sales_tax": 34.1,
-			"cont_1": "sample string 35",
-			"cont_2": "sample string 36",
-			"cont_bill": 37.1,
-			"date_sign": "sample string 38",
-			"flag": "sample string 39",
-			"misc_info": "sample string 40",
-			"misc_info2": "sample string 41",
-			"po_1": "sample string 42",
-			"slsmn_no": "sample string 43",
-			"add_on": "sample string 44",
-			"cont_tax": "sample string 45",
-			"exp_date": "sample string 46",
-			"cleantimes": 47,
-			"cleanper": "sample string 48",
-			"firstfran": "sample string 49",
-			"firstdate": "sample string 50",
-			"secondfran": "sample string 51",
-			"seconddate": "sample string 52",
-			"crteinv": "sample string 53",
-			"prntpd": "sample string 54",
-			"tax_exempt": "sample string 55",
-			"canc_date": "sample string 56",
-			"canreason": "sample string 57",
-			"candescr": "sample string 58",
-			"callbdate": "sample string 59",
-			"cscallbdat": "sample string 60",
-			"ops_mgr": "sample string 61",
-			"cus_fax": "sample string 62",
-			"bill_fax": "sample string 63",
-			"cs_rep": "sample string 64",
-			"date_start": "sample string 65",
-			"date_offer": "sample string 66",
-			"mon": "sample string 67",
-			"tue": "sample string 68",
-			"wed": "sample string 69",
-			"thu": "sample string 70",
-			"fri": "sample string 71",
-			"sat": "sample string 72",
-			"sun": "sample string 73",
-			"email1": "sample string 74",
-			"email2": "sample string 75",
-			"ebill": "sample string 76",
-			"prntinv": "sample string 77",
-			"atrisk": "sample string 78",
-			"canentdat": "sample string 79",
-			"coll_rep": "sample string 80",
-			"inv_msg": "sample string 81",
-			"masteracct": "sample string 82",
-			"parent": 83,
-			"xregionid": 84,
-			"xsys_cust": 85,
-			"cpiadj": "sample string 86",
-			"resume_d": "sample string 87",
-			"natacct": "sample string 88",
-			"cus_ext": "sample string 89",
-			"bill_ext": "sample string 90",
-			"sqr_ft": 91,
-			"agreeused": "sample string 92",
-			"arstatus": "sample string 93",
-			"arstatdate": "sample string 94",
-			"notes": "sample string 95",
-			"claimstat": "sample string 96",
-			"business": 97.1,
-			"add_pct": 98.1,
-			"ad_cur": 99.1,
-			"tech_pct": 100.1
-		}
-
 		switch (this.props.customerForm.type) {
 			case "new":
-				this.props.createCustomer(this.props.regionId, payload)
+				this.props.createCustomer(this.props.regionId, this.props.newCustomerParam)
 				break;
-			case "edit":
-				this.props.createCustomer(this.props.regionId, payload)
-				break;
+			// case "edit":
+			// 	this.props.createCustomer(this.props.regionId, payload)
+			// 	break;
 		}
 	}
 
@@ -656,6 +414,18 @@ class Customers extends Component {
 				nextProps.latitude,
 				nextProps.longitude,
 				nextProps.searchText);
+		}
+
+		if (nextProps.bCreateCustomerStart !== this.props.bCreateCustomerStart && nextProps.bCreateCustomerStart === false) {
+			this.props.getCustomers(
+				this.props.regionId,
+				this.props.statusId,
+				this.props.filters.StatusNames,
+				this.props.filters.AccountTypeListName,
+				this.props.location,
+				this.props.latitude,
+				this.props.longitude,
+				this.props.searchText);
 		}
 	}
 
@@ -824,14 +594,14 @@ class Customers extends Component {
 							)}
 							{(this.state.temp && customerForm.props.open) && (
 								<div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
-									<div className="flex flex-row flex-1 justify-between">
+									<div className="flex flex-row flex-1 justify-between items-center">
 										{/* <div className="flex flex-shrink items-center">
 											<div className="flex items-center">
 
 											</div>
 										</div> */}
 										{/* <div className="flex flex-shrink" style={{ justifyContent: "space-between" }}> */}
-										<div className="flex">
+										<div className="flex items-center">
 											<IconButton
 												// className={classNames(classes.button, classes.validationMenu)}
 												className={classNames(classes.button, classes.invalidationMenu)}
@@ -858,7 +628,7 @@ class Customers extends Component {
 												<MenuItem><FormControlLabel control={<Checkbox checked={true} style={{ color: '#07df07' }} />} label="Service Location Info" /></MenuItem>
 												<MenuItem><FormControlLabel control={<Checkbox checked={true} style={{ color: '#07df07' }} />} label="Verified &amp; Approved" /></MenuItem>
 											</Menu>
-											<Tooltip title="Save">
+											{/* <Tooltip title="Save">
 												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
 													<Icon>save</Icon>
 												</IconButton>
@@ -867,9 +637,9 @@ class Customers extends Component {
 												<IconButton className={classes.button} aria-label="Add an alarm" onClick={this.trySubmitForApproval}>
 													<Icon>cloud_upload</Icon>
 												</IconButton>
-											</Tooltip>
+											</Tooltip> */}
 										</div>
-										<div className="flex">
+										<div className="flex items-center">
 											<Tooltip title="Contact">
 												<IconButton
 													className={classNames(classes.button)}
@@ -892,6 +662,10 @@ class Customers extends Component {
 												<MenuItem onClick={this.closeContactMenu}>SMS to Customer</MenuItem>
 												<MenuItem onClick={this.onClickEmailToCustomer}>Email to Customer</MenuItem>
 											</Menu>
+											<Button variant="contained" color="primary" onClick={this.trySubmitForApproval}>
+												Save
+												<Icon className={classes.rightIcon}>save</Icon>
+											</Button>
 											<Tooltip title="Discard">
 												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
 													<Icon>delete</Icon>
@@ -1055,6 +829,7 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		bCreateCustomerStart: customers.bCreateCustomerStart,
 		bGetCustomerStart: customers.bGetCustomerStart,
 		filters: customers.filters,
+		newCustomerParam: customers.newCustomerParam,
 	}
 }
 

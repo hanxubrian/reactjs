@@ -145,6 +145,7 @@ const findersFees = function (state = initialState, action) {
 
 const persistConfig = {
 	key: 'findersFees',
+	blacklist: ['findersFeesDB'],
 	storage: storage,
 };
 export default persistReducer(persistConfig, findersFees);

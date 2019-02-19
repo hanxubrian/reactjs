@@ -225,7 +225,7 @@ class FindersFees extends Component {
 		super(props);
 
 		if (!props.bLoadedFindersFees) {
-			props.getFindersFees(this.props.year, this.props.month);
+			props.getFindersFees([this.props.regionId],[],"");
 		}
 		this.fetchData = this.fetchData.bind(this);
 		this.escFunction = this.escFunction.bind(this);
@@ -388,22 +388,20 @@ class FindersFees extends Component {
 
 
 	getFindersFeesFromStatus = (rawData = this.props.findersFees) => {
-		// let temp = [];
         let all_temp = [];
-        let filteredValues = [];
-		// let temp1 = [];
-		// const statusStrings = ['paid', 'paid partial', 'open', 'completed'];
-		// const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
-		if (rawData === null) return;
-		let regions = rawData.Data.filter(x => x);
-        filteredValues = regions.filter(x => x.FF_TOT && x.FF_DWNAMT && x.FF_BALANCE && x.FF_PYAMT !== null)
-		all_temp = [...all_temp, ...filteredValues]
-
-		// regions.map(x => {
-		// 	all_temp = [...all_temp, ...x.Customers];
-		// 	return;
-		// });
-
+			
+		if(rawData.Data.length > 0 && rawData !== null){
+		   rawData.Data.map(x=>{
+			  if(x.FinderFeeList !== null){
+				x.FinderFeeList.map(y=>{
+					all_temp.push(y);
+				})
+			  }              
+		   });
+		}else{
+			return;
+		}		
+		console.log("all_temp",all_temp);
 		this.setState({ temp: all_temp });
 		this.setState({ data: all_temp });
 	};

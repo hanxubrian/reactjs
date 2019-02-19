@@ -83,6 +83,8 @@ export const GET_FINDERS_FEE_TYPES = "[CUSTOMERS APP] GET FINDERS FEE TYPES";
 export const UPDATE_ASSIGNED_FRANCHISEE = "[CUSTOMERS APP] UPDATE ASSIGNED FRANCHISEE";
 export const UPDATE_ACTIVE_CUSTOMER_ASSIGNED_FRANCHISEES = "[CUSTOMERS APP] UPDATE ACTIVE CUSTOMER ASSIGNED FRANCHISEES";
 
+export const UPDATE_NEW_CUSTOMER_PARAM = "[CUSTOMERS APP] UPDATE_NEW_CUSTOMER_PARAM";
+
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	return (dispatch) => {
 
@@ -653,4 +655,11 @@ export function updateActiveCustomerAssignedFranchisees(params) {
             payload: params
         });
     }
+}
+
+export function updateNewCustomerParam(name, value) {
+	return {
+		type: UPDATE_NEW_CUSTOMER_PARAM,
+		payload: { name, value }
+	}
 }

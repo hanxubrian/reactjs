@@ -666,14 +666,16 @@ class CustomerForm extends Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
-			this.initCustomerInfo(nextProps.activeCustomer.Data)
+			this.initCustomerInfo(nextProps.activeCustomer)
 		}
 	}
 
-	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer.Data) => {
-		this.setState({
-			SA_Amount: activeCustomerInfo ? activeCustomerInfo.cont_bill : "",
-		})
+	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer) => {
+		if (activeCustomerInfo && activeCustomerInfo.Data) {
+			this.setState({
+				SA_Amount: activeCustomerInfo.Data.cont_bill,
+			})
+		}
 	};
 
 	componentDidMount() {

@@ -804,7 +804,16 @@ class FilterPanel extends Component {
 		this.props.selectLocationFilter(payload)
 	}
 
-
+	handleChangeCustomerInfoProps = name => event => {
+		const value = event.target.value
+		this.setState({ [name]: value })
+		this.props.updateNewCustomerParam(name, value)
+	}
+	handleChangeCheckedCustomerInfoProps = name => event => {
+		const checked = event.target.checked
+		this.setState({ [name]: checked })
+		this.props.updateNewCustomerParam(name, checked)
+	}
 	//
 	// customer name suggestion
 	//
@@ -1005,16 +1014,16 @@ class FilterPanel extends Component {
 				{customerForm && customerForm.props.open
 					? (
 						<GridContainer style={{ alignItems: 'center', width: 500 }} className={classNames(classes.formControl)}>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							{/* <GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<h3 className="mt-24">Customer Information</h3>
-							</GridItem>
+							</GridItem> */}
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
-									id="Name"
+									id="cus_name"
 									label="Name *"
 									className={classes.textField}
-									value={this.state.customerName}
-									onChange={this.handleChange('customerName')}
+									value={this.state.cus_name || ''}
+									onChange={this.handleChangeCustomerInfoProps('cus_name')}
 									margin="dense"
 									// variant="outlined"
 									autoFocus
@@ -1023,33 +1032,33 @@ class FilterPanel extends Component {
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
-									id="outlined-name"
+									id="bill_addr"
 									label="Address *"
 									className={classes.textField}
-									value={this.state.customerAddress}
-									onChange={this.handleChange('customerAddress')}
+									value={this.state.bill_addr || ''}
+									onChange={this.handleChangeCustomerInfoProps('bill_addr')}
 									margin="dense"
 									// variant="outlined"
 									fullWidth />
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
-									id="outlined-name"
+									id="bill_addr2"
 									label="Address2"
 									className={classes.textField}
-									// value={customerForm.state.name}
-									onChange={this.handleChange('Address2')}
+									value={this.state.bill_addr2 || ''}
+									onChange={this.handleChange('bill_addr2')}
 									margin="dense"
 									// variant="outlined"
 									fullWidth />
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
-									id="outlined-name"
+									id="bill_city"
 									label="City *"
 									className={classNames(classes.textField, 'mr-6')}
-									value={this.state.customerCity}
-									onChange={this.handleChange('customerCity')}
+									value={this.state.bill_city || ''}
+									onChange={this.handleChange('bill_city')}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '55%' }}
@@ -1057,12 +1066,12 @@ class FilterPanel extends Component {
 
 
 								<TextField
-									id="outlined-name"
+									id="bill_state"
 									label="State *"
 									select
 									className={classNames(classes.textField, 'mr-6 ml-6')}
-									value={this.state.customerState}
-									onChange={this.handleChange('customerState')}
+									value={this.state.bill_state || ''}
+									onChange={this.handleChange('bill_state')}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '20%' }}
@@ -1075,11 +1084,11 @@ class FilterPanel extends Component {
 								</TextField>
 
 								<TextField
-									id="outlined-name"
+									id="bill_zip"
 									label="Zip *"
 									className={classNames(classes.textField, 'ml-6')}
-									value={this.state.customerZip}
-									onChange={this.handleChange('customerZip')}
+									value={this.state.bill_zip || ''}
+									onChange={this.handleChange('bill_zip')}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '25%' }}
@@ -1089,7 +1098,7 @@ class FilterPanel extends Component {
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<FormControl className={classNames(classes.formControl, 'mr-6')} style={{ flex: 1 }}>
 									<TextField
-										id="Phone"
+										id="bill_phone"
 										label="Phone"
 										className={classes.textField}
 										// onChange={this.handleChange('customerPhone')}
@@ -1100,8 +1109,8 @@ class FilterPanel extends Component {
 										InputProps={{
 											inputComponent: TextMaskPhone,
 											maxLength: 40,
-											value: this.state.customerPhone,
-											onChange: this.handleChange('customerPhone')
+											value: this.state.bill_phone || '',
+											onChange: this.handleChange('bill_phone')
 										}}
 										// variant="outlined"
 										fullWidth
@@ -1158,7 +1167,7 @@ class FilterPanel extends Component {
 								/>
 							</GridItem>
 
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row mt-24">
 								{this.props.accountTypesGroups !== null && (
 									<TextField
 										id="AccountTypeGroup"
@@ -1560,6 +1569,8 @@ function mapDispatchToProps(dispatch) {
 		selectLocationFilter: Actions.selectLocationFilter,
 		setFilterCustomerStatuses: Actions.setFilterCustomerStatuses,
 		getCustomers: Actions.getCustomers,
+
+		updateNewCustomerParam: Actions.updateNewCustomerParam,
 	}, dispatch);
 }
 

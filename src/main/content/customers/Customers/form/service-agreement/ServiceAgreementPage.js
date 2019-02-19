@@ -669,14 +669,14 @@ class ServiceAgreementPage extends React.Component {
 			this.props.getFranchiseeBillingTypes(nextProps.regionId)
 		}
 		if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
-			this.initCustomerInfo(nextProps.activeCustomer.Data)
+			this.initCustomerInfo(nextProps.activeCustomer)
 		}
 	}
-	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer.Data) => {
-		if (activeCustomerInfo) {
+	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer) => {
+		if (activeCustomerInfo && activeCustomerInfo.Data) {
 			this.setState({
-				SA_Amount: activeCustomerInfo.cont_bill,
-				franchieesesToOffer: activeCustomerInfo.AssignedFranchisees,
+				SA_Amount: activeCustomerInfo.Data.cont_bill,
+				franchieesesToOffer: activeCustomerInfo.Data.AssignedFranchisees,
 			})
 		}
 	}
@@ -800,6 +800,16 @@ class ServiceAgreementPage extends React.Component {
 			/>
 		);
 	};
+	handleChangeCustomerInfoProps = name => event => {
+		const value = event.target.value
+		this.setState({ [name]: value })
+		this.props.updateNewCustomerParam(name, value)
+	}
+	handleChangeCheckedCustomerInfoProps = name => event => {
+		const checked = event.target.checked
+		this.setState({ [name]: checked })
+		this.props.updateNewCustomerParam(name, checked)
+	}
 	render() {
 		const { classes, customerForm } = this.props;
 		const { execTitles,
@@ -825,20 +835,20 @@ class ServiceAgreementPage extends React.Component {
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between items-center">
 								<TextField
 									type="number"
-									id="SA_Amount"
+									id="cont_bill"
 									label="Monthly Contract Amount"
 									required
 									className={classes.textField}
 									InputLabelProps={{ shrink: true }}
-									value={this.state.SA_Amount}
-									onChange={this.handleChange('SA_Amount')}
+									value={this.state.cont_bill || ''}
+									onChange={this.handleChangeCustomerInfoProps('cont_bill')}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: 250 }}
 
 									InputProps={{
 										startAdornment: <InputAdornment position="start">$</InputAdornment>,
-										readOnly: true
+										// readOnly: true
 									}}
 								/>
 								{customerForm.props.open && customerForm.type === "edit" &&
@@ -1309,19 +1319,15 @@ class ServiceAgreementPage extends React.Component {
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-col">
 								<h3 className="mt-24 mb-12">Addresses</h3>
-								{/* <CustomerLineTable tableType="ADDRESS" headers={address_headers} /> */}
 								<Paper>
 									<Grid
 										rows={addressRows}
 										columns={addressColumns}
 										getRowId={getRowId}
 									>
-
 										<EditingState
-											// columnExtensions={editingColumnExtensions}
 											onCommitChanges={this.commitChangesAddresses}
 										/>
-
 										<Table />
 										<TableHeaderRow />
 										<TableEditRow />
@@ -1334,38 +1340,75 @@ class ServiceAgreementPage extends React.Component {
 											showDeleteCommand
 											commandComponent={Command}
 										/>
-										{/* <Getter
-													name="tableColumns"
-													computed={({ tableColumns }) => {
-														// debugger
-														const result = [
-															...tableColumns.filter(c => c.type !== TableEditColumn.COLUMN_TYPE),
-															{ key: 'editCommand', type: TableEditColumn.COLUMN_TYPE, width: 100 }
-														];
-														return result;
-													}
-													}
-												/> */}
-
-
 									</Grid>
 								</Paper>
-
+								<div className='flex w-full'>
+									<TextField
+										id="BillingCompanyName"
+										label="BillingCompanyName"
+										className={classes.textField}
+										value={this.state.BillingCompanyName || ''}
+										onChange={this.handleChange('BillingCompanyName')}
+										margin="dense"
+										// variant="outlined"
+										sm={2} />
+									<TextField
+										id="BillingCompanyName"
+										label="BillingCompanyName"
+										className={classes.textField}
+										value={this.state.BillingCompanyName || ''}
+										onChange={this.handleChange('BillingCompanyName')}
+										margin="dense"
+										// variant="outlined"
+										sm={2} />
+									<TextField
+										id="BillingCompanyName"
+										label="BillingCompanyName"
+										className={classes.textField}
+										value={this.state.BillingCompanyName || ''}
+										onChange={this.handleChange('BillingCompanyName')}
+										margin="dense"
+										// variant="outlined"
+										sm={2} />
+									<TextField
+										id="BillingCompanyName"
+										label="BillingCompanyName"
+										className={classes.textField}
+										value={this.state.BillingCompanyName || ''}
+										onChange={this.handleChange('BillingCompanyName')}
+										margin="dense"
+										// variant="outlined"
+										sm={2} />
+									<TextField
+										id="BillingCompanyName"
+										label="BillingCompanyName"
+										className={classes.textField}
+										value={this.state.BillingCompanyName || ''}
+										onChange={this.handleChange('BillingCompanyName')}
+										margin="dense"
+										// variant="outlined"
+										sm={2} />
+									<TextField
+										id="BillingCompanyName"
+										label="BillingCompanyName"
+										className={classes.textField}
+										value={this.state.BillingCompanyName || ''}
+										onChange={this.handleChange('BillingCompanyName')}
+										margin="dense"
+										// variant="outlined"
+										sm={2} />
+								</div>
 
 								<h3 className="mt-24 mb-12">Contacts</h3>
-								{/* <CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} /> */}
 								<Paper>
 									<Grid
 										rows={contactsRows}
 										columns={contactsColumns}
 										getRowId={getRowId}
 									>
-
 										<EditingState
-											// columnExtensions={editingColumnExtensions}
 											onCommitChanges={this.commitChangesContacts}
 										/>
-
 										<Table />
 										<TableHeaderRow />
 										<TableEditRow />
@@ -1378,20 +1421,6 @@ class ServiceAgreementPage extends React.Component {
 											showDeleteCommand
 											commandComponent={Command}
 										/>
-										{/* <Getter
-													name="tableColumns"
-													computed={({ tableColumns }) => {
-														// debugger
-														const result = [
-															...tableColumns.filter(c => c.type !== TableEditColumn.COLUMN_TYPE),
-															{ key: 'editCommand', type: TableEditColumn.COLUMN_TYPE, width: 100 }
-														];
-														return result;
-													}
-													}
-												/> */}
-
-
 									</Grid>
 								</Paper>
 							</GridItem>
@@ -1637,6 +1666,8 @@ function mapDispatchToProps(dispatch) {
 		showIncreaseDecreaseContractModalForm: Actions.showIncreaseDecreaseContractModalForm,
 		showCancelContractPage: Actions.showCancelContractPage,
 		showSuspendContractPage: Actions.showSuspendContractPage,
+
+		updateNewCustomerParam: Actions.updateNewCustomerParam,
 	}, dispatch);
 }
 
