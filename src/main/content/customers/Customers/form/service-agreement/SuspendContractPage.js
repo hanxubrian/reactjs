@@ -885,7 +885,7 @@ class showSuspendContractPage extends React.Component {
 
 					<div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
 						<Button variant="contained" onClick={this.saveIncreaseDecrease}
-							disabled={this.state.NewAmount === ''}
+							// disabled={this.state.NewAmount === ''}
 							color="primary" className={classNames("pl-24 pr-24 mr-12")}>Save</Button>
 						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
 					</div>

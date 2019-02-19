@@ -575,6 +575,7 @@ class Chargebacks extends Component {
 
 
 		console.log('props=', this.props);
+
         return (
             <React.Fragment >
 				<FusePageCustom
@@ -614,7 +615,7 @@ class Chargebacks extends Component {
                                                 <Button variant="contained" color="primary"
                                                         className={classNames(classes.btntop) } onClick={()=>this.onNewChargebacks()}>
                                                     Process Chargebacks
-													{ this.state.isOpen && <ProcessModalForm />}
+													<ProcessModalForm />
                                                     <Icon className={classes.rightIcon}>add</Icon>
                                                 </Button>
                                             </FuseAnimate>
