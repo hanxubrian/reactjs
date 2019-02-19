@@ -985,7 +985,8 @@ class FranchiseeDistributionPage extends React.Component {
     };
 
     removeFranchisee = async (franchiseeId) => {
-        console.log('removed');
+        console.log('removed=',franchiseeId);
+        // this.setState({openSnack: true});
     };
 
     getFranchiseeAssignmentForm() {
@@ -1408,7 +1409,7 @@ class FranchiseeDistributionPage extends React.Component {
         const { customerServiceTypes, step } = this.state;
 
         return (
-			<>
+            <>
                 <div className={classNames("flex flex-col")}>
                     {/*{step === 0 && this.getNewAmountInputForm()}*/}
                     {this.getFranchiseeAssignmentForm()}
@@ -1421,7 +1422,7 @@ class FranchiseeDistributionPage extends React.Component {
                 </div>
                 <Snackbar
                     anchorOrigin={{
-                        vertical: 'top',
+                        vertical: 'bottom',
                         horizontal: 'center',
                     }}
                     open={this.state.openSnack}

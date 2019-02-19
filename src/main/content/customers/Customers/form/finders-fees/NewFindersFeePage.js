@@ -122,13 +122,11 @@ class NewFindersFeePage extends React.Component {
                                style={{ minWidth: 250 }}
                                InputProps={{ readOnly: false }}
                     >
-                        {[
-                            "Method 1",
-                            "Method 2",
-                            "Method 3",
-                        ].map((x, index) => (
-                            <MenuItem key={index} value={x}>{x}</MenuItem>
-                        ))}
+                        {this.props.findersFeeTypes!==null &&
+                        this.props.findersFeeTypes.map((x) => {
+                            return (<MenuItem key={x.code} value={x.code}>{x.name}</MenuItem>)
+                        })
+                        }
                     </TextField>
 
                     <TextField margin="dense" id="CalculationMethodNameDescription" label="Name / Description"
@@ -203,7 +201,7 @@ class NewFindersFeePage extends React.Component {
                                select
                                InputLabelProps={{ shrink: true }}
                                style={{minWidth: 220}}
-                               className={classNames(classes.textField, "pr-6")}
+                               className={classNames(classes.textField, "pr-6 hidden")}
                                InputProps={{
 
                                }}
