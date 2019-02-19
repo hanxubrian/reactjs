@@ -331,14 +331,6 @@ class FindersFeeListContent extends Component {
 			classes,
 			toggleFilterPanel,
 			toggleSummaryPanel,
-			// filterState,
-			// summaryState,
-			// deleteCustomersAction,
-			// data,
-			// openNewCustomerForm,
-			// closeNewCustomerForm,
-			// CustomerForm,
-			// toggleMapView
 		} = this.props;
 		const { toggleSelection, toggleAll, isSelected } = this;
 
@@ -394,10 +386,6 @@ class FindersFeeListContent extends Component {
 						}
 					}}
 					getTdProps={(state, rowInfo, column, instance) => {
-						// let tdClass = 'flex items-center justify-center';
-						// if (column.id === 'CustomerNo' || column.id === 'CustomerNo' || column.id === 'CustomerBalanceAmount' ||
-						// 	column.id === 'CustomerDate' || column.id === 'TransactionStatus') tdClass = classNames(classes.tableTdEven, "flex items-center  justify-center");
-
 						return {
 							style: {
 								textAlign: 'center',
@@ -413,7 +401,6 @@ class FindersFeeListContent extends Component {
 							onClick: (e, handleOriginal) => {
 								if (rowInfo) {
 									alert('ok');
-									// openEditContactDialog(rowInfo.original);
 								}
 							}
 						}
@@ -426,32 +413,10 @@ class FindersFeeListContent extends Component {
 										onClick={(ev) => toggleFilterPanel()}
 										aria-label="toggle filter panel"
 										color="secondary"
-										// disabled={filterState ? true : false}
 										className={classNames(classes.filterPanelButton)}
 									>
 										<img className={classes.imageIcon} alt="" src="assets/images/invoices/filter.png" />
 									</Button>
-
-									{/* <Hidden smDown>
-										<Button
-											onClick={(ev) => toggleFilterPanel()}
-											aria-label="toggle filter panel"
-											color="secondary"
-											disabled={filterState ? true : false}
-											className={classNames(classes.filterPanelButton)}
-										>
-											<img className={classes.imageIcon} src="assets/images/invoices/filter.png" />
-										</Button>
-									</Hidden>
-									<Hidden smUp>
-										<Button
-											onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
-											aria-label="toggle filter panel"
-											className={classNames(classes.filterPanelButton)}
-										>
-											<img className={classes.imageIcon} src="assets/images/invoices/filter.png" />
-										</Button>
-									</Hidden> */}
 								</div>
 							),
 							columns: [
@@ -464,7 +429,6 @@ class FindersFeeListContent extends Component {
 											onChange={(event) => toggleAll(instance)}
 											checked={this.state.selectAll}
 											style={{ color: 'white' }}
-										// indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
 										/>
 									),
 									accessor: "",
@@ -492,7 +456,6 @@ class FindersFeeListContent extends Component {
 										<Input
 											placeholder="Search..."
 											className={classNames(classes.search, 'pl-16')}
-											// className="pl-16"
 											disableUnderline
 											fullWidth
 											value={this.state.s}
@@ -506,113 +469,57 @@ class FindersFeeListContent extends Component {
 								</div>
 							),
 							columns: [
-								// {
-								// 	Header: "Region",
-								// 	accessor: "RegionName",
-								// 	filterAll: true,
-								// 	width: 80,
-								// 	className: classNames("flex items-center  justify-center") //classes.tableTdEven
-								// },
 								{
-									Header: "Franchisee No.",
-									accessor: "DLR_CODE",
-									width: 200,
+									Header: "Franchisee No",
+									accessor: "FranchiseeNo",
+									width: 150,
 									className: classNames("flex items-center  justify-center p-12-impor")
 								},
 								{
 									Header: "Franchisee Name",
-									// accessor: "Address",
-									// id: "Address",
-                                    // accessor: d => (this.capital_letter(d.Address)),
-                                    accessor: "FF_DESC",
+                                    accessor: "FranchiseeName",
 									className: classNames("flex items-center  justify-start"),
 									width: 350
 								},
 								{
 									Header: "Total FinderFee",
-									// accessor: "City",
-                                    id: "FF_TOT",
-                                    accessor: d => '$' + d.FF_TOT.toLocaleString(undefined, { minimumFractionDigits: 2 }),
+                                    id: "TotalFinderFee",
+                                    accessor: d => '$' + d.TotalFinderFee.toLocaleString(undefined, { minimumFractionDigits: 2 }),
                                     className: classNames("flex items-center  justify-end"),
                                     headerClassName: "wordwrap",
-                                    width: 100
+                                    width: 200
 								},
 								{
                                     Header: "Total Down Payment",
-                                    id: "FF_DWNAMT",
-                                    accessor: d => '$' + d.FF_DWNAMT.toLocaleString(undefined, { minimumFractionDigits: 2 }),
-                                    // accessor: TotalMonthlyPaymentAmount,
+                                    id: "TotalDownPayment",
+                                    accessor: d => '$' + d.TotalDownPayment.toLocaleString(undefined, { minimumFractionDigits: 2 }),
                                     className: classNames("flex items-center  justify-end"),
                                     headerClassName: "wordwrap",
 									width: 200
 								},
 								{
                                     Header: "Total Monthly Payment",
-                                    id:  "FF_PYAMT",
-                                    accessor: d => '$' + d.FF_PYAMT.toLocaleString(undefined, { minimumFractionDigits: 2 }),
-									// accessor:  "TotalPaidAmount",
+                                    id:  "TotalMonthlyPaymentAmount",
+                                    accessor: d => '$' + d.TotalMonthlyPaymentAmount.toLocaleString(undefined, { minimumFractionDigits: 2 }),
 									className: classNames("flex items-center  justify-end"),
 									headerClassName: "wordwrap",
 									width: 200
 								},
-								{
-                                    Header: "Total Paid",
-                                    id:  "FF_TOT",
-                                    accessor: d => '$' + d.FF_TOT.toLocaleString(undefined, { minimumFractionDigits: 2 }),
-									width: 200,
-									className: classNames("flex items-center justify-end")
-                                },
                                 {
                                     Header: "Balance",
-                                    id:  "FF_BALANCE",
-                                    accessor: d => '$' + d.FF_BALANCE.toLocaleString(undefined, { minimumFractionDigits: 2 }),
-									// accessor: "TotalBalance",
+                                    id:  "TotalBalance",
+                                    accessor: d => '$' + d.TotalBalance.toLocaleString(undefined, { minimumFractionDigits: 2 }),
+									
 									width: 200,
 									className: classNames("flex items-center justify-end")
 								},
-								// {
-								// 	Header: "Account Type",
-								// 	accessor: "AccountTypeListName",
-								// 	// Cell: row => {
-								// 	// 	return '$' + parseFloat(row.original.CustomerBalanceAmount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-								// 	// },
-								// 	className: classNames("flex items-center  justify-center p-12-impor"),
-								// 	width: 150
-								// },
 								{
 									Header: "Status",
-									// Cell: row => {
-									// 	return '$' + parseFloat(row.original.CustomerTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-                                    // },
-                                    id: "Status",
-                                    // accessor: "Status",
-                                    accessor: d => 'Active',
+                                    id: "StatusName",
+                                    accessor: "StatusName",
 									className: classNames("flex items-center  justify-center p-12-impor"),
 									width: 150
 								},
-								// {
-								// 	Header: "Contract Amount",
-								// 	id: "Amount",
-								// 	// accessor: d => ('$' + Number(d.Amount).toFixed(2)),
-								// 	accessor: d => '$' + d.Amount.toLocaleString(undefined, { minimumFractionDigits: 2 }),
-								// 	// accessor: "Amount",
-								// 	className: classNames("flex items-center  justify-end p-12-impor"),
-								// 	headerClassName: "wordwrap",
-								// 	width: 80
-								// },
-								// {
-								// 	Header: "Due Date",
-								// 	id: "DueDate",
-								// 	accessor: d => moment(d.DueDate).format('MM/DD/YYYY'),
-								// 	className: classNames("flex items-center  justify-center"),
-								// 	width: 120
-								// },
-								// {
-								// 	Header: "Status",
-								// 	accessor: "TransactionStatus",
-								// 	className: classNames(classes.tableTdEven, "flex items-center  justify-center"),
-								// 	width: 120
-								// },
 								{
 									Header: "Actions",
 									width: 128,
@@ -636,7 +543,6 @@ class FindersFeeListContent extends Component {
 											<IconButton
 												onClick={(ev) => {
 													ev.stopPropagation();
-													// removeContact(row.original.id);
 												}}
 											>
 												<Icon>edit</Icon>
