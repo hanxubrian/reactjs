@@ -348,7 +348,7 @@ function mapStateToProps({ customers, auth}) {
     return {
         activeStep: customers.activeStep,
         regionId: auth.login.defaultRegionId,
-        findersFeeParams: auth.login.findersFeeParams,
+        findersFeeParams: customers.findersFeeParams,
         findersFeeTypes: customers.findersFeeTypes,
     }
 }
