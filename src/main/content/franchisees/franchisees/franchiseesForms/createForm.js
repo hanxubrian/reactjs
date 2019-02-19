@@ -386,7 +386,7 @@ function getStepContent(franchiseeForm, step) {
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
-                                    value={franchiseeForm.state.AgreementTerm }
+                                    value={franchiseeForm.state.AgreementTerm}
                                     onChange={franchiseeForm.handleFormChange('AgreementTerm')}
                                     className={classes.textField}
                                     required
@@ -403,7 +403,8 @@ function getStepContent(franchiseeForm, step) {
                                 margin="dense"                                
                                 inputProps={{
                                     readOnly: true,
-                                    value: franchiseeForm.state.ibAmount===null ? " ": franchiseeForm.state.ibAmount
+                                    type: "number",
+                                    value: franchiseeForm.state.ibAmount === NaN ? 0 : franchiseeForm.state.ibAmount 
                                 }}
                                 InputLabelProps={{
                                     shrink: true,
@@ -506,12 +507,12 @@ function getStepContent(franchiseeForm, step) {
                             <TextField
                                 id="noOfPayments"
                                 label="No Of Payments"
-                                className={classes.textField}
-                                value={franchiseeForm.state.noOfPayments}
+                                className={classes.textField}                                
                                 variant="outlined"
                                 margin="dense"
                                 inputProps={{
                                     readOnly: true,
+                                    value: franchiseeForm.state.noOfPayments===null ? "" : franchiseeForm.state.noOfPayments
                                 }}
                                 InputProps={{
                                     startAdornment: <InputAdornment position="start">$</InputAdornment>
@@ -647,7 +648,7 @@ class FranchiseesCreateForm extends Component {
         accountRebate: false,
         generateReport: false,
         StateValue: '',
-        defaultPlanType: 0,
+        defaultPlanType: "5c6856c5a0cca92188d842c4",
         selectedSignDate: new Date(),
         selectedRenewDate: new Date(),
         selectedExpDate: new Date(),
@@ -691,7 +692,7 @@ class FranchiseesCreateForm extends Component {
             accountRebate: false,
             generateReport: false,
             StateValue: '',
-            defaultPlanType: 0,
+            defaultPlanType: "5c6856c5a0cca92188d842c4",
             selectedSignDate: new Date(),
             selectedRenewDate: new Date(),
             selectedExpDate: new Date(),
@@ -815,20 +816,23 @@ class FranchiseesCreateForm extends Component {
 
     handleFormChange = (name) => event => {
 
-        if(name === 'State'){
+
+
+        if(name === 'State' || name === 'AgreementTerm'){
+       
             this.setState({
                 [name]: event.target.value,
-            });
+            }); 
+
         }
         const iStatus = this.props.insertPayload;
-        console.log('insertPayload = ',iStatus);
-        iStatus[name] = event.target.value;
+        iStatus[name] = (name === "AgreementTerm") ? parseInt(event.target.value) : event.target.value;
+        console.log("iStatus",iStatus);
         this.props.franchiseeUpdateInsertPayload(iStatus)
     };
 
     handleInitialUpdate (name , value){
         const iStatus = this.props.insertPayload;
-        console.log('insertPayload = ',iStatus);
         iStatus[name] = value;
         this.props.franchiseeUpdateInsertPayload(iStatus)
     }

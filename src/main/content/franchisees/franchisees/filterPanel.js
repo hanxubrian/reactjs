@@ -495,10 +495,10 @@ class FilterPanel extends Component {
                                                     id="lf_address2"
                                                     label="Address2"
                                                     className={classes.textField}
-                                                    value = {this.state.AddressLine2}
                                                     onChange={this.handleFormChange('AddressLine2')}
                                                     inputProps={{
-                                                        maxLength:100
+                                                        maxLength:100,
+                                                        value: this.state.AddressLine2 === null ? " " : this.state.AddressLine2
                                                     }}
                                                     margin="dense"
                                                     InputLabelProps={{
