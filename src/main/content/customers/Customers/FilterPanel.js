@@ -634,7 +634,8 @@ class FilterPanel extends Component {
 				let newStatusNames = [...this.state.filters.StatusNames]
 				if (checked) {
 					if (value === "All") {
-						newStatusNames = CUSTOMER_STATUS_LIST
+						// newStatusNames = CUSTOMER_STATUS_LIST
+						newStatusNames = []
 					} else {
 						newStatusNames = [...new Set([...newStatusNames, value])]
 					}
@@ -1519,7 +1520,8 @@ class FilterPanel extends Component {
 								<FormControlLabel
 									control={
 										<Switch
-											checked={this.state.filters.StatusNames.length >= customerStatusListTexts.length}
+											// checked={this.state.filters.StatusNames.length >= customerStatusListTexts.length}
+											checked={this.state.filters.StatusNames.length === 0}
 											onChange={this.handleChange('filters.StatusNames')}
 											value="All"
 										/>
@@ -1532,7 +1534,7 @@ class FilterPanel extends Component {
 											<FormControlLabel key={index}
 												control={
 													<Switch
-														checked={this.state.filters.StatusNames.indexOf(x) > -1}
+														checked={this.state.filters.StatusNames.indexOf(x) > -1 || this.state.filters.StatusNames.length === 0}
 														onChange={this.handleChange('filters.StatusNames')}
 														value={x}
 													/>
