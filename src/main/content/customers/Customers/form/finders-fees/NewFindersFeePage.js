@@ -204,7 +204,8 @@ class NewFindersFeePage extends React.Component {
                                InputLabelProps={{ shrink: true }}
                                className={classNames(classes.textField, "pr-6")}
                                InputProps={{startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-                                   inputComponent: NumberFormatCustomNoPrefix }}
+                                   inputComponent: NumberFormatCustomNoPrefix,
+                                   readOnly: true }}
                                value={this.state.MonthlyPayment || ''}
                                onChange={this.handleChange("MonthlyPayment")}
                                onBlur={this.handleChangeParamsOnBlur('MonthlyPaymentAmount')}
@@ -217,6 +218,7 @@ class NewFindersFeePage extends React.Component {
                                InputLabelProps={{ shrink: true }}
                                className={classNames(classes.textField, "pr-6")}
                                value={this.state.NumberOfPayments || ''}
+                               InputProps={{readOnly: true }}
                                onChange={this.handleChange("NumberOfPayments")}
                                onBlur={this.handleChangeParamsOnBlur('NumberOfPayments')}
                     />
@@ -227,7 +229,8 @@ class NewFindersFeePage extends React.Component {
                                InputLabelProps={{ shrink: true }}
                                className={classNames(classes.textField, "pr-6")}
                                InputProps={{startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-                                   inputComponent: NumberFormatCustomNoPrefix}}
+                                   inputComponent: NumberFormatCustomNoPrefix,
+                                   readOnly: true}}
                                value={this.state.AmountFinanced || ''}
                                onChange={this.handleChange("AmountFinanced")}
                                onBlur={this.handleChangeParamsOnBlur('AmountFinanced')}
@@ -239,7 +242,8 @@ class NewFindersFeePage extends React.Component {
                                InputLabelProps={{ shrink: true }}
                                className={classNames(classes.textField, "pr-6")}
                                InputProps={{ startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-                                   inputComponent: NumberFormatCustomNoPrefix }}
+                                   inputComponent: NumberFormatCustomNoPrefix,
+                                   readOnly: true }}
                                value={this.state.DownPayment || ''}
                                onChange={this.handleChange("DownPayment")}
                                onBlur={this.handleChangeParamsOnBlur('DownPaymentAmount')}
@@ -251,7 +255,8 @@ class NewFindersFeePage extends React.Component {
                                InputLabelProps={{ shrink: true }}
                                className={classNames(classes.textField, "pr-6")}
                                InputProps={{ startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-                                   inputComponent: NumberFormatCustomNoPrefix }}
+                                   inputComponent: NumberFormatCustomNoPrefix,
+                                   readOnly: true }}
                                value={this.state.ResultAmountFinanced || ''}
                                onChange={this.handleChange("ResultAmountFinanced")}
                                onBlur={this.handleChangeParamsOnBlur('FinderFeeTotal')}
@@ -291,6 +296,9 @@ class NewFindersFeePage extends React.Component {
                                value={this.state.MultiTenant100OccuaoncyInput || ''}
                                onChange={this.handleChange("MultiTenant100OccuaoncyInput")}
                                onBlur={this.handleChangeParamsOnBlur('MultiTenantOccupancy')}
+                               InputProps={{startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
+                                   inputComponent: NumberFormatCustomNoPrefix,
+                                   readOnly: true }}
                                fullWidth
                                style={{ maxWidth: 300 }}
                     />

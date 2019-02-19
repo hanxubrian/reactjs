@@ -396,12 +396,7 @@ class ServiceAgreementPage extends React.Component {
 
 		let execTitles = []
 		if (this.props.accountExecutiveList !== null && this.props.accountExecutiveList.Data !== undefined) {
-			execTitles = this.props.accountExecutiveList.Data.filter(x => {
-				if (x.Title === null) return false
-				return true
-			}).map(x => {
-				return x.FirstName + " " + x.LastName
-			}).sort();
+			execTitles = this.props.accountExecutiveList.Data.sort();
 		}
 
 		this.setState({
@@ -622,7 +617,7 @@ class ServiceAgreementPage extends React.Component {
 								>
 									{
 										execTitles.map((x, index) => {
-											return (<MenuItem key={index} value={index}>{x}</MenuItem>)
+											return (<MenuItem key={index} value={x.UserId}>{x.FullName}</MenuItem>)
 										})
 									}
 								</TextField>
