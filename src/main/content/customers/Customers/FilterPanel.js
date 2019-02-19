@@ -999,215 +999,215 @@ class FilterPanel extends Component {
 		}
 
 		return (
-			<div className={classNames(classes.root, "flex flex-col")}>
-				<Paper className="flex flex-1 flex-col min-h-px p-20">
-					{customerForm && customerForm.props.open
-						? (
-							<div>
-								<GridContainer style={{ alignItems: 'center', width: 500 }} className={classNames(classes.formControl)}>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<h3 className="mt-24">Customer Information</h3>
-									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="Name"
-											label="Name *"
-											className={classes.textField}
-											value={this.state.customerName}
-											onChange={this.handleChange('customerName')}
-											margin="dense"
-											variant="outlined"
-											autoFocus
-											fullWidth />
+			<div className={classNames(classes.root, "flex flex-1 flex-col p-20")}>
+				{/* <Paper className="flex flex-1 flex-col min-h-px p-20"> */}
+				{customerForm && customerForm.props.open
+					? (
+						<GridContainer style={{ alignItems: 'center', width: 500 }} className={classNames(classes.formControl)}>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<h3 className="mt-24">Customer Information</h3>
+							</GridItem>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									id="Name"
+									label="Name *"
+									className={classes.textField}
+									value={this.state.customerName}
+									onChange={this.handleChange('customerName')}
+									margin="dense"
+									variant="outlined"
+									autoFocus
+									fullWidth />
 
-									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="outlined-name"
-											label="Address *"
-											className={classes.textField}
-											value={this.state.customerAddress}
-											onChange={this.handleChange('customerAddress')}
-											margin="dense"
-											variant="outlined"
-											fullWidth />
-									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="outlined-name"
-											label="Address2"
-											className={classes.textField}
-											// value={customerForm.state.name}
-											onChange={this.handleChange('Address2')}
-											margin="dense"
-											variant="outlined"
-											fullWidth />
-									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="outlined-name"
-											label="City *"
-											className={classNames(classes.textField, 'mr-6')}
-											value={this.state.customerCity}
-											onChange={this.handleChange('customerCity')}
-											margin="dense"
-											variant="outlined"
-											style={{ width: '55%' }}
-										/>
+							</GridItem>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									id="outlined-name"
+									label="Address *"
+									className={classes.textField}
+									value={this.state.customerAddress}
+									onChange={this.handleChange('customerAddress')}
+									margin="dense"
+									variant="outlined"
+									fullWidth />
+							</GridItem>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									id="outlined-name"
+									label="Address2"
+									className={classes.textField}
+									// value={customerForm.state.name}
+									onChange={this.handleChange('Address2')}
+									margin="dense"
+									variant="outlined"
+									fullWidth />
+							</GridItem>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									id="outlined-name"
+									label="City *"
+									className={classNames(classes.textField, 'mr-6')}
+									value={this.state.customerCity}
+									onChange={this.handleChange('customerCity')}
+									margin="dense"
+									variant="outlined"
+									style={{ width: '55%' }}
+								/>
 
 
-										<TextField
-											id="outlined-name"
-											label="State *"
-											select
-											className={classNames(classes.textField, 'mr-6 ml-6')}
-											value={this.state.customerState}
-											onChange={this.handleChange('customerState')}
-											margin="dense"
-											variant="outlined"
-											style={{ width: '20%' }}
-										>
-											{stateNames.map((option, index) => (
-												<MenuItem key={index} value={option.Value}>
-													{option.Value}
-												</MenuItem>
-											))}
-										</TextField>
+								<TextField
+									id="outlined-name"
+									label="State *"
+									select
+									className={classNames(classes.textField, 'mr-6 ml-6')}
+									value={this.state.customerState}
+									onChange={this.handleChange('customerState')}
+									margin="dense"
+									variant="outlined"
+									style={{ width: '20%' }}
+								>
+									{stateNames.map((option, index) => (
+										<MenuItem key={index} value={option.Value}>
+											{option.Value}
+										</MenuItem>
+									))}
+								</TextField>
 
-										<TextField
-											id="outlined-name"
-											label="Zip *"
-											className={classNames(classes.textField, 'ml-6')}
-											value={this.state.customerZip}
-											onChange={this.handleChange('customerZip')}
-											margin="dense"
-											variant="outlined"
-											style={{ width: '25%' }}
-										/>
-									</GridItem>
+								<TextField
+									id="outlined-name"
+									label="Zip *"
+									className={classNames(classes.textField, 'ml-6')}
+									value={this.state.customerZip}
+									onChange={this.handleChange('customerZip')}
+									margin="dense"
+									variant="outlined"
+									style={{ width: '25%' }}
+								/>
+							</GridItem>
 
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<FormControl className={classNames(classes.formControl, 'mr-6')} style={{ flex: 1 }}>
-											<TextField
-												id="Phone"
-												label="Phone"
-												className={classes.textField}
-												// onChange={this.handleChange('customerPhone')}
-												margin="dense"
-												InputLabelProps={{
-													shrink: true
-												}}
-												InputProps={{
-													inputComponent: TextMaskPhone,
-													maxLength: 40,
-													value: this.state.customerPhone,
-													onChange: this.handleChange('customerPhone')
-												}}
-												variant="outlined"
-												fullWidth
-												required
-											/>
-										</FormControl>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<FormControl className={classNames(classes.formControl, 'mr-6')} style={{ flex: 1 }}>
+									<TextField
+										id="Phone"
+										label="Phone"
+										className={classes.textField}
+										// onChange={this.handleChange('customerPhone')}
+										margin="dense"
+										InputLabelProps={{
+											shrink: true
+										}}
+										InputProps={{
+											inputComponent: TextMaskPhone,
+											maxLength: 40,
+											value: this.state.customerPhone,
+											onChange: this.handleChange('customerPhone')
+										}}
+										variant="outlined"
+										fullWidth
+										required
+									/>
+								</FormControl>
 
-										<FormControl className={classNames(classes.formControl, 'ml-6')} style={{ flex: 1 }}>
-											<TextField
-												id="Fax"
-												label="Fax"
-												className={classes.textField}
-												// onChange={this.handleChange('customerFax')}
-												margin="dense"
-												InputLabelProps={{
-													shrink: true
-												}}
-												InputProps={{
-													inputComponent: TextMaskPhone,
-													maxLength: 40,
-													value: this.state.customerFax,
-													onChange: this.handleChange('customerFax')
-												}}
-												variant="outlined"
-												fullWidth
-												required
-											/>
-										</FormControl>
+								<FormControl className={classNames(classes.formControl, 'ml-6')} style={{ flex: 1 }}>
+									<TextField
+										id="Fax"
+										label="Fax"
+										className={classes.textField}
+										// onChange={this.handleChange('customerFax')}
+										margin="dense"
+										InputLabelProps={{
+											shrink: true
+										}}
+										InputProps={{
+											inputComponent: TextMaskPhone,
+											maxLength: 40,
+											value: this.state.customerFax,
+											onChange: this.handleChange('customerFax')
+										}}
+										variant="outlined"
+										fullWidth
+										required
+									/>
+								</FormControl>
 
-									</GridItem>
+							</GridItem>
 
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										<TextField
-											id="outlined-name"
-											label="Email"
-											type="email"
-											className={classNames(classes.textField, 'mr-6')}
-											value={this.state.customerEmail}
-											onChange={this.handleChange('customerEmail')}
-											margin="dense"
-											variant="outlined"
-											style={{ width: '100%' }}
-										/>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									id="outlined-name"
+									label="Email"
+									type="email"
+									className={classNames(classes.textField, 'mr-6')}
+									value={this.state.customerEmail}
+									onChange={this.handleChange('customerEmail')}
+									margin="dense"
+									variant="outlined"
+									style={{ width: '100%' }}
+								/>
 
-										<TextField
-											id="outlined-name"
-											label="Website"
-											className={classNames(classes.textField, 'ml-6')}
-											value={this.state.customerWebsite}
-											onChange={this.handleChange('customerWebsite')}
-											margin="dense"
-											variant="outlined"
-											style={{ width: '100%' }}
-										/>
-									</GridItem>
+								<TextField
+									id="outlined-name"
+									label="Website"
+									className={classNames(classes.textField, 'ml-6')}
+									value={this.state.customerWebsite}
+									onChange={this.handleChange('customerWebsite')}
+									margin="dense"
+									variant="outlined"
+									style={{ width: '100%' }}
+								/>
+							</GridItem>
 
-									<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-										{this.props.accountTypesGroups!==null && (
-                                            <TextField
-                                                id="AccountTypeGroup"
-                                                label="Account Type Group"
-                                                select
-                                                className={classNames(classes.textField, 'mr-6')}
-                                                value={this.state.AccountTypeGroup === undefined ? 0 : this.state.AccountTypeGroup}
-                                                onChange={this.handleChange('AccountTypeGroup')}
-                                                margin="dense"
-                                                variant="outlined"
-                                                fullWidth
-												// style={{ minWidth: "100px", width: "30%" }}
-                                            >
-                                                {
-                                                    this.props.accountTypesGroups.Data.map((x, index) => (
-                                                        <MenuItem key={index} value={x._id}>{x.name}</MenuItem>
-                                                    ))
-                                                }
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								{this.props.accountTypesGroups !== null && (
+									<TextField
+										id="AccountTypeGroup"
+										label="Account Type Group"
+										select
+										className={classNames(classes.textField, 'mr-6')}
+										value={this.state.AccountTypeGroup === undefined ? 0 : this.state.AccountTypeGroup}
+										onChange={this.handleChange('AccountTypeGroup')}
+										margin="dense"
+										variant="outlined"
+										fullWidth
+									// style={{ minWidth: "100px", width: "30%" }}
+									>
+										{
+											this.props.accountTypesGroups.Data.map((x, index) => (
+												<MenuItem key={index} value={x._id}>{x.name}</MenuItem>
+											))
+										}
 
-                                            </TextField>
-										)}
-										<TextField
-											id="AccountType"
-											label="Account Type *"
-											select
-											className={classNames(classes.textField, 'ml-6')}
-											value={this.state.AccountType === undefined ? 0 : this.state.AccountType}
-											onChange={this.handleChange('AccountType')}
-											margin="dense"
-											variant="outlined"
-											fullWidth
-										>
-                                            <MenuItem value="1">TBD</MenuItem>
-											{/*{*/}
-												{/*accountTypeTexts.map((x, index) => (*/}
-													{/*<MenuItem key={index} value={index}>{x}</MenuItem>*/}
-												{/*))*/}
-											{/*}*/}
+									</TextField>
+								)}
+								<TextField
+									id="AccountType"
+									label="Account Type *"
+									select
+									className={classNames(classes.textField, 'ml-6')}
+									value={this.state.AccountType === undefined ? 0 : this.state.AccountType}
+									onChange={this.handleChange('AccountType')}
+									margin="dense"
+									variant="outlined"
+									fullWidth
+								>
+									<MenuItem value="1">TBD</MenuItem>
+									{/*{*/}
+									{/*accountTypeTexts.map((x, index) => (*/}
+									{/*<MenuItem key={index} value={index}>{x}</MenuItem>*/}
+									{/*))*/}
+									{/*}*/}
 
-										</TextField>
-									</GridItem>
-									<GridItem xs={12} sm={12} md={12} className="flex flex-col">
+								</TextField>
+							</GridItem>
+
+							{/* <GridItem xs={12} sm={12} md={12} className="flex flex-col">
 										<div className="flex justify-around">
 											<FormControlLabel
 												control={
 													<Checkbox
 														checked={this.state.NationalAccount}
-														// onChange={this.handleChangeChecked('NationalAccount')}
-														// value="NationalAccount"
+													// onChange={this.handleChangeChecked('NationalAccount')}
+													// value="NationalAccount"
 													/>
 												}
 												label="National Account"
@@ -1260,24 +1260,18 @@ class FilterPanel extends Component {
 													fullWidth />
 											</div>
 										)}
+									</GridItem> */}
 
-
-									</GridItem>
-
-									<GridItem xs={12} sm={12} md={12} className="flex flex-col">
+							{/* <GridItem xs={12} sm={12} md={12} className="flex flex-col">
 										<h3 className="mt-24 mb-12">Addresses</h3>
-										{/* <CustomerLineTable tableType="ADDRESS" headers={address_headers} /> */}
 										<Paper>
 											<Grid
 												rows={addressRows}
 												columns={addressColumns}
 											>
-
 												<EditingState
-													// columnExtensions={editingColumnExtensions}
 													onCommitChanges={this.commitChanges}
 												/>
-
 												<Table />
 												<TableHeaderRow />
 												<TableEditRow />
@@ -1290,37 +1284,18 @@ class FilterPanel extends Component {
 													showDeleteCommand
 													commandComponent={Command}
 												/>
-												{/* <Getter
-													name="tableColumns"
-													computed={({ tableColumns }) => {
-														// debugger
-														const result = [
-															...tableColumns.filter(c => c.type !== TableEditColumn.COLUMN_TYPE),
-															{ key: 'editCommand', type: TableEditColumn.COLUMN_TYPE, width: 100 }
-														];
-														return result;
-													}
-													}
-												/> */}
-
-
 											</Grid>
 										</Paper>
 
-
 										<h3 className="mt-24 mb-12">Contacts</h3>
-										{/* <CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} /> */}
 										<Paper>
 											<Grid
 												rows={contactsRows}
 												columns={contactsColumns}
 											>
-
 												<EditingState
-													// columnExtensions={editingColumnExtensions}
 													onCommitChanges={this.commitChanges}
 												/>
-
 												<Table />
 												<TableHeaderRow />
 												<TableEditRow />
@@ -1333,54 +1308,76 @@ class FilterPanel extends Component {
 													showDeleteCommand
 													commandComponent={Command}
 												/>
-												{/* <Getter
-													name="tableColumns"
-													computed={({ tableColumns }) => {
-														// debugger
-														const result = [
-															...tableColumns.filter(c => c.type !== TableEditColumn.COLUMN_TYPE),
-															{ key: 'editCommand', type: TableEditColumn.COLUMN_TYPE, width: 100 }
-														];
-														return result;
-													}
-													}
-												/> */}
-
-
 											</Grid>
 										</Paper>
-									</GridItem>
+									</GridItem> */}
 
 
-								</GridContainer>
-							</div>
-						) :
-						(
-							<div>
-								{/* <RadioGroup */}
-								<div className="mt-0 flex flex-col" style={{ width: '200px' }}>
-									<h3 className="mb-12">Location</h3>
-									<RadioGroup
-										aria-label="Location"
-										name="Location"
-										className={classes.group}
-										value={this.props.locationFilterValue.id}
-									>
+						</GridContainer>
+					) :
+					(
+						<div>
+							{/* <RadioGroup */}
+							<div className="mt-0 flex flex-col" style={{ width: '200px' }}>
+								<h3 className="mb-12">Location</h3>
+								<RadioGroup
+									aria-label="Location"
+									name="Location"
+									className={classes.group}
+									value={this.props.locationFilterValue.id}
+								>
 
-										<FormControlLabel value="locationAll" control={<Radio onChange={this.handleChange('Location')} />} label="All" />
-										<FormControlLabel value="locationNearBy" control={<Radio onChange={this.handleChange('Location')} />} label="NearBy" />
-										{this.state.Location === "locationNearBy" && (
+									<FormControlLabel value="locationAll" control={<Radio onChange={this.handleChange('Location')} />} label="All" />
+									<FormControlLabel value="locationNearBy" control={<Radio onChange={this.handleChange('Location')} />} label="NearBy" />
+									{this.state.Location === "locationNearBy" && (
+										<TextField
+											select
+
+											id="NearbyRadius"
+											label="Radius"
+											className={classes.textField}
+											InputLabelProps={{
+												shrink: true
+											}}
+											value={this.props.locationFilterValue.miles}
+											onChange={this.handleChange('NearbyRadius')}
+											margin="dense"
+											variant="outlined"
+											fullWidth
+										>
+											{
+												Array.from({ length: 15 })
+													.map((val, index) => (
+														<MenuItem key={index} value={(index + 1) * 5}>
+															{(index + 1) * 5} Miles
+													</MenuItem>
+													))
+											}
+										</TextField>)}
+
+									<FormControlLabel value="locationNearSpecificAddress" control={<Radio onChange={this.handleChange('Location')} />} label="Near Specific Address" />
+									{this.state.Location === "locationNearSpecificAddress" && (
+										<Fragment>
+											<TextField
+												id="SpecificAddress"
+												label="Address"
+												className={classes.textField}
+												onChange={this.handleChange('SpecificAddress')}
+												margin="dense"
+												variant="outlined"
+												fullWidth
+											/>
 											<TextField
 												select
 
-												id="NearbyRadius"
+												id="AddressZipcodeRadius"
 												label="Radius"
 												className={classes.textField}
 												InputLabelProps={{
 													shrink: true
 												}}
 												value={this.props.locationFilterValue.miles}
-												onChange={this.handleChange('NearbyRadius')}
+												onChange={this.handleChange('AddressZipcodeRadius')}
 												margin="dense"
 												variant="outlined"
 												fullWidth
@@ -1390,153 +1387,115 @@ class FilterPanel extends Component {
 														.map((val, index) => (
 															<MenuItem key={index} value={(index + 1) * 5}>
 																{(index + 1) * 5} Miles
-													</MenuItem>
+																</MenuItem>
 														))
 												}
-											</TextField>)}
-
-										<FormControlLabel value="locationNearSpecificAddress" control={<Radio onChange={this.handleChange('Location')} />} label="Near Specific Address" />
-										{this.state.Location === "locationNearSpecificAddress" && (
-											<Fragment>
-												<TextField
-													id="SpecificAddress"
-													label="Address"
-													className={classes.textField}
-													onChange={this.handleChange('SpecificAddress')}
-													margin="dense"
-													variant="outlined"
-													fullWidth
-												/>
-												<TextField
-													select
-
-													id="AddressZipcodeRadius"
-													label="Radius"
-													className={classes.textField}
-													InputLabelProps={{
-														shrink: true
-													}}
-													value={this.props.locationFilterValue.miles}
-													onChange={this.handleChange('AddressZipcodeRadius')}
-													margin="dense"
-													variant="outlined"
-													fullWidth
-												>
-													{
-														Array.from({ length: 15 })
-															.map((val, index) => (
-																<MenuItem key={index} value={(index + 1) * 5}>
-																	{(index + 1) * 5} Miles
-																</MenuItem>
-															))
-													}
-												</TextField>
-											</Fragment>
-										)}
-									</RadioGroup>
-
-
-								</div>
-
-								<div className="mt-36 flex flex-col" style={{ width: '200px' }}>
-									<h3 className="mb-12">Billing Amount</h3>
-									<div className="flex flex-row" >
-										<TextField
-											type="number"
-											id="BillingAmountFrom"
-											label="From"
-											value={this.state.BillingAmountFrom}
-											className={classNames(classes.textField, "mr-6")}
-											onChange={this.handleChange('BillingAmountFrom')}
-											margin="dense"
-											variant="outlined"
-											InputProps={{
-												startAdornment: <InputAdornment position="start">$</InputAdornment>,
-											}}
-											inputProps={{ min: "0", precision: "2", step: "1" }}
-											fullWidth
-										/>
-										<TextField
-											type="number"
-											id="BillingAmountTo"
-											value={this.state.BillingAmountTo}
-											label="To"
-											className={classNames(classes.textField, "ml-6")}
-											onChange={this.handleChange('BillingAmountTo')}
-											margin="dense"
-											variant="outlined"
-											InputProps={{
-												startAdornment: <InputAdornment position="start">$</InputAdornment>,
-												min: "0",
-											}}
-											inputProps={{ min: "0", precision: "2" }}
-											fullWidth
-										/>
-									</div>
-								</div>
-
-
-								<div className="mt-0 flex flex-col" style={{ width: '200px' }}>
-									<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
-									{this.props.accountTypesGroups!==null && (
-                                        <TextField
-                                            select
-                                            id="AccountTypeGroup"
-                                            label="Account Type Group"
-                                            className={classes.textField}
-                                            InputLabelProps={{
-                                                shrink: true
-                                            }}
-                                            value={this.state.AccountTypeGroup || 0}
-                                            onChange={this.handleChange('AccountTypeGroup')}
-                                            margin="dense"
-                                            variant="outlined"
-                                            fullWidth
-                                        >
-                                            {
-                                                this.props.accountTypesGroups.Data.map((x, index) => (
-                                                    <MenuItem key={index} value={x._id}>{x.name}</MenuItem>
-                                                ))
-                                            }
-                                        </TextField>
+											</TextField>
+										</Fragment>
 									)}
+								</RadioGroup>
+
+
+							</div>
+
+							<div className="mt-36 flex flex-col" style={{ width: '200px' }}>
+								<h3 className="mb-12">Billing Amount</h3>
+								<div className="flex flex-row" >
+									<TextField
+										type="number"
+										id="BillingAmountFrom"
+										label="From"
+										value={this.state.BillingAmountFrom}
+										className={classNames(classes.textField, "mr-6")}
+										onChange={this.handleChange('BillingAmountFrom')}
+										margin="dense"
+										variant="outlined"
+										InputProps={{
+											startAdornment: <InputAdornment position="start">$</InputAdornment>,
+										}}
+										inputProps={{ min: "0", precision: "2", step: "1" }}
+										fullWidth
+									/>
+									<TextField
+										type="number"
+										id="BillingAmountTo"
+										value={this.state.BillingAmountTo}
+										label="To"
+										className={classNames(classes.textField, "ml-6")}
+										onChange={this.handleChange('BillingAmountTo')}
+										margin="dense"
+										variant="outlined"
+										InputProps={{
+											startAdornment: <InputAdornment position="start">$</InputAdornment>,
+											min: "0",
+										}}
+										inputProps={{ min: "0", precision: "2" }}
+										fullWidth
+									/>
+								</div>
+							</div>
+
+							<div className="mt-0 flex flex-col" style={{ width: '200px' }}>
+								<Divider variant="middle" style={{ marginTop: 24, marginBottom: 24 }} />
+								{this.props.accountTypesGroups !== null && (
 									<TextField
 										select
-
-										id="AccountType"
-										label="Account Type"
+										id="AccountTypeGroup"
+										label="Account Type Group"
 										className={classes.textField}
 										InputLabelProps={{
 											shrink: true
 										}}
-										value={this.state.AccountType === undefined ? 0 : this.state.AccountType}
-										onChange={this.handleChange('AccountType')}
+										value={this.state.AccountTypeGroup || 0}
+										onChange={this.handleChange('AccountTypeGroup')}
 										margin="dense"
 										variant="outlined"
 										fullWidth
 									>
-                                        <MenuItem value="1">TBD</MenuItem>
-										{/*{accountTypeTexts.map((x, index) => (*/}
-											{/*<MenuItem key={index} value={index}>{x}</MenuItem>*/}
-										{/*))}*/}
+										{
+											this.props.accountTypesGroups.Data.map((x, index) => (
+												<MenuItem key={index} value={x._id}>{x.name}</MenuItem>
+											))
+										}
 									</TextField>
+								)}
+								<TextField
+									select
 
-									<TextField
-										select
+									id="AccountType"
+									label="Account Type"
+									className={classes.textField}
+									InputLabelProps={{
+										shrink: true
+									}}
+									value={this.state.AccountType === undefined ? 0 : this.state.AccountType}
+									onChange={this.handleChange('AccountType')}
+									margin="dense"
+									variant="outlined"
+									fullWidth
+								>
+									<MenuItem value="1">TBD</MenuItem>
+									{/*{accountTypeTexts.map((x, index) => (*/}
+									{/*<MenuItem key={index} value={index}>{x}</MenuItem>*/}
+									{/*))}*/}
+								</TextField>
 
-										id="AccountExecutive"
-										label="Account Executive"
-										className={classes.textField}
-										InputLabelProps={{
-											shrink: true
-										}}
-										value={this.state.AccountExecutive === undefined ? 0 : this.state.AccountExecutive}
-										onChange={this.handleChange('AccountExecutive')}
-										margin="dense"
-										variant="outlined"
-										fullWidth
-									>
-										{/* {[{
+								<TextField
+									select
+
+									id="AccountExecutive"
+									label="Account Executive"
+									className={classes.textField}
+									InputLabelProps={{
+										shrink: true
+									}}
+									value={this.state.AccountExecutive === undefined ? 0 : this.state.AccountExecutive}
+									onChange={this.handleChange('AccountExecutive')}
+									margin="dense"
+									variant="outlined"
+									fullWidth
+								>
+									{/* {[{
 											value: 0, label: "All"
 										}, {
 											value: 1, label: "None"
@@ -1545,48 +1504,48 @@ class FilterPanel extends Component {
 												{option.label}
 											</MenuItem>
 										))} */}
-										{
-											execTitles.map((x, index) => {
-												return (<MenuItem key={index} value={index}>{x}</MenuItem>)
-											})
-										}
-
-									</TextField>
-
-								</div>
-
-								<div className="mt-36 flex flex-col" style={{ width: '200px' }}>
-									<h3 className="mb-12">Customer Status</h3>
-									<FormControlLabel
-										control={
-											<Switch
-												checked={this.state.filters.StatusNames.length >= customerStatusListTexts.length}
-												onChange={this.handleChange('filters.StatusNames')}
-												value="All"
-											/>
-										}
-										label="All"
-									/>
 									{
-										customerStatusListTexts
-											.map((x, index) => (
-												<FormControlLabel key={index}
-													control={
-														<Switch
-															checked={this.state.filters.StatusNames.indexOf(x) > -1}
-															onChange={this.handleChange('filters.StatusNames')}
-															value={x}
-														/>
-													}
-													label={x}
-												/>
-											))
+										execTitles.map((x, index) => {
+											return (<MenuItem key={index} value={index}>{x}</MenuItem>)
+										})
 									}
-								</div>
+
+								</TextField>
+
 							</div>
-						)
-					}
-				</Paper>
+
+							<div className="mt-36 flex flex-col" style={{ width: '200px' }}>
+								<h3 className="mb-12">Customer Status</h3>
+								<FormControlLabel
+									control={
+										<Switch
+											checked={this.state.filters.StatusNames.length >= customerStatusListTexts.length}
+											onChange={this.handleChange('filters.StatusNames')}
+											value="All"
+										/>
+									}
+									label="All"
+								/>
+								{
+									customerStatusListTexts
+										.map((x, index) => (
+											<FormControlLabel key={index}
+												control={
+													<Switch
+														checked={this.state.filters.StatusNames.indexOf(x) > -1}
+														onChange={this.handleChange('filters.StatusNames')}
+														value={x}
+													/>
+												}
+												label={x}
+											/>
+										))
+								}
+							</div>
+						</div>
+					)
+				}
+				{/* </Paper> */}
 				{/* </div> */}
 			</div >
 		);

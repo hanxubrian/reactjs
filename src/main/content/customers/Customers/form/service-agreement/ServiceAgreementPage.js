@@ -9,7 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import { Icon, IconButton, Tooltip, Slide, RadioGroup, Radio, FormControlLabel, Paper, Typography, InputAdornment, FormControl, InputLabel, Select, MenuItem, Divider, ListItem, List, ListItemText, ListItemLink, Checkbox } from '@material-ui/core';
+import { Icon, IconButton, Tooltip, Slide, RadioGroup, Radio, FormControlLabel, Paper, Typography, InputAdornment, FormControl, InputLabel, Select, MenuItem, Divider, ListItem, List, ListItemText, ListItemLink, Checkbox, Switch } from '@material-ui/core';
 
 // for store
 import { bindActionCreators } from "redux";
@@ -74,6 +74,13 @@ import GridItem from "Commons/Grid/GridItem";
 import CancelContractPage from './CancelContractPage';
 import SuspendContractPage from './SuspendContractPage';
 
+
+import Autosuggest from "react-autosuggest"
+import AutosuggestHighlightMatch from 'autosuggest-highlight/match'
+import AutosuggestHighlightParse from 'autosuggest-highlight/parse'
+
+import FuseUtils from '@fuse/FuseUtils';
+
 const styles = theme => ({
 	root: {
 		'& .react-grid-Cell': {
@@ -96,16 +103,102 @@ const styles = theme => ({
 	},
 	descriptionText: {
 		fontSize: 13
-	}
+	},
+
+	
+	// suggestionsContainerOpen: {
+	// 	position: 'absolute',
+	// 	zIndex: 10,
+	// 	marginTop: theme.spacing.unit,
+	// 	left: 0,
+	// 	right: 0,
+	// 	maxHeight: 200,
+	// 	overflowY: 'scroll'
+	// },
+	// suggestion: {
+	// 	display: 'block',
+	// },
+	suggestionsList: {
+		margin: 0,
+		padding: 0,
+		listStyleType: 'none',
+	},
+	container: {
+		position: 'relative',
+		width: '100%'
+	},
+	input: {
+		padding: '12px 14px'
+	},
+	label: {
+		transform: 'translate(14px, 14px) scale(1)'
+	},
 })
 function Transition(props) {
 	return <Slide direction="up" {...props} />;
 }
+//
+// table row edit command buttons
+//
+const AddButton = ({ onExecute }) => (
+	<div style={{ textAlign: 'center' }}>
+		{/* <Button
+			color="primary"
+			onClick={onExecute}
+			title="New Address"
+		>
+			New
+	  </Button> */}
+		<IconButton onClick={onExecute} title="Add New">
+			<NewIcon />
+		</IconButton>
+	</div>
+);
 
+const EditButton = ({ onExecute }) => (
+	<IconButton onClick={onExecute} title="Edit">
+		<EditIcon />
+	</IconButton>
+);
+
+const DeleteButton = ({ onExecute }) => (
+	<IconButton onClick={onExecute} title="Delete">
+		<DeleteIcon />
+	</IconButton>
+);
+
+const CommitButton = ({ onExecute }) => (
+	<IconButton onClick={onExecute} title="Save">
+		<SaveIcon />
+	</IconButton>
+);
+
+const CancelButton = ({ onExecute }) => (
+	<IconButton color="secondary" onClick={onExecute} title="Cancel">
+		<CancelIcon />
+	</IconButton>
+);
+
+const commandComponents = {
+	add: AddButton,
+	edit: EditButton,
+	delete: DeleteButton,
+	commit: CommitButton,
+	cancel: CancelButton,
+};
+
+const Command = ({ id, onExecute }) => {
+	const CommandButton = commandComponents[id];
+	return (
+		<CommandButton
+			onExecute={onExecute}
+		/>
+	);
+};
 const editing_cell_styles = theme => ({
 	cell: {
-		background: "#989898",
-		color: "white",
+		// background: "#989898",
+		// color: "white",
 		padding: 0,
 	}
 });
@@ -121,7 +214,7 @@ const EditingHeaderCellComponent = withStyles(editing_cell_styles, { name: "Edit
 
 const EditingCellComponentBase = props => {
 	return (<TableEditColumn.Cell {...props}>
-		{React.Children.toArray(props.children)
+		{/* {React.Children.toArray(props.children)
 			.filter((child) => {
 				if (child.props.id === 'delete') {
 					// if (props.tableRow.row.id < 2) {
@@ -130,7 +223,7 @@ const EditingCellComponentBase = props => {
 					return false;
 				}
 				return true;
-			})}
+			})} */}
 	</TableEditColumn.Cell>)
 };
 
@@ -383,6 +476,89 @@ class ServiceAgreementPage extends React.Component {
 			SignDate: moment().format('YYYY-MM-DD'),
 			StartDate: moment().format('YYYY-MM-DD'),
 			ExpirationDate: moment().format('YYYY-MM-DD'),
+
+
+			addressColumns: [
+				{
+					title: "Type",
+					name: "Type",
+					columnName: "Type",
+					width: 50,
+				},
+				{
+					title: "Address",
+					name: "Address",
+					columnName: "Address",
+					width: 80,
+				},
+				{
+					title: "City",
+					name: "City",
+					columnName: "City",
+					width: 80,
+				},
+				{
+					title: "State",
+					name: "State",
+					columnName: "State",
+					width: 50,
+				},
+				{
+					title: "Zip / Postal",
+					name: "ZipPostal",
+					columnName: "ZipPostal",
+					width: 80,
+				},
+			],
+			addressRows: [{
+				Type: "Sample Type",
+				Address: "Sample Address",
+				City: "Sample City",
+				State: "Sample State",
+				ZipPostal: "Sample ZipPostal",
+			}],
+
+			contactsColumns: [
+				{
+					title: "First",
+					name: "First",
+					columnName: "First",
+					width: 80,
+				},
+				{
+					title: "Last",
+					name: "Last",
+					columnName: "Last",
+					width: 80,
+				},
+				{
+					title: "Office Phone",
+					name: "OfficePhone",
+					columnName: "OfficePhone",
+					width: 80,
+				},
+				{
+					title: "Mobile Phone",
+					name: "MobilePhone",
+					columnName: "MobilePhone",
+					width: 80,
+				},
+				{
+					title: "Email",
+					name: "Email",
+					columnName: "Email",
+					width: 80,
+				},
+			],
+			contactsRows: [{
+				First: "Sample First",
+				Last: "Sample Last",
+				OfficePhone: "Sample OfficePhone",
+				MobilePhone: "Sample MobilePhone",
+				Email: "Sample Email",
+			}],
+			childCustomerName: "",
+			suggestions: [],
 		};
 		// this.commitChanges = this.commitChanges.bind(this);
 		this.props.getLogCallCustomerServiceTypes()
@@ -391,6 +567,48 @@ class ServiceAgreementPage extends React.Component {
 		this.props.getFranchiseeBillingTypes(this.props.regionId)
 	}
 
+	commitChangesAddresses = ({ added, changed, deleted }) => {
+		let rows = this.state.addressRows;
+		if (added) {
+			const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
+			rows = [
+				...rows,
+				...added.map((row, index) => ({
+					id: startingAddedId + index,
+					...row,
+				})),
+			];
+		}
+		if (changed) {
+			rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+		}
+		if (deleted) {
+			const deletedSet = new Set(deleted);
+			rows = rows.filter(row => !deletedSet.has(row.id));
+		}
+		this.setState({ addressRows: rows });
+	}
+	commitChangesContacts = ({ added, changed, deleted }) => {
+		let rows = this.state.contactsRows;
+		if (added) {
+			const startingAddedId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 0;
+			rows = [
+				...rows,
+				...added.map((row, index) => ({
+					id: startingAddedId + index,
+					...row,
+				})),
+			];
+		}
+		if (changed) {
+			rows = rows.map(row => (changed[row.id] ? { ...row, ...changed[row.id] } : row));
+		}
+		if (deleted) {
+			const deletedSet = new Set(deleted);
+			rows = rows.filter(row => !deletedSet.has(row.id));
+		}
+		this.setState({ contactsRows: rows });
+	}
 	componentWillMount() {
 		console.log("componentWillMount")
 
@@ -418,6 +636,11 @@ class ServiceAgreementPage extends React.Component {
 		if (nextProps.payments !== this.props.payments) {
 			console.log("componentWillReceiveProps payments")
 			this.setRowData(nextProps.payments)
+		}
+		if (nextProps.customers !== this.props.customers) {
+			this.setState({
+				customers: FuseUtils.getCustomerListFromDb(nextProps.customers),
+			});
 		}
 		if (!_.isEqual(nextProps.activePaymentRows, this.props.activePaymentRows)) {
 			console.log("componentWillReceiveProps activePaymentRows", nextProps.activePaymentRows, this.props.activePaymentRows)
@@ -480,9 +703,110 @@ class ServiceAgreementPage extends React.Component {
 		}
 	};
 
+	//
+	// customer name suggestion
+	//
+	escapeRegexCharacters(str) {
+		return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+	}
+
+	getSuggestions(value) {
+		const escapedValue = this.escapeRegexCharacters(value.trim());
+
+		if (escapedValue === '') {
+			return [];
+		}
+
+		const regex = new RegExp('^' + escapedValue, 'i');
+		const { customers } = this.state
+		if (customers == undefined) return [];
+		return customers.filter(x => regex.test(x.CustomerName));
+	}
+
+	getSuggestionValue(suggestion) {
+		return suggestion.CustomerName;
+	}
+	renderSuggestion(suggestion, { query, isHighlighted }) {
+		const matches = AutosuggestHighlightMatch(suggestion.CustomerName, query);
+		const parts = AutosuggestHighlightParse(suggestion.CustomerName, matches);
+
+		return (
+			<MenuItem selected={isHighlighted} component="div">
+				<div>
+					{parts.map((part, index) => {
+						return part.highlight ? (
+							<span key={String(index)} style={{ fontWeight: 700 }}>
+								{part.text}
+							</span>
+						) : (
+								<strong key={String(index)} style={{ fontWeight: 300 }}>
+									{part.text}
+								</strong>
+							);
+					})}
+				</div>
+			</MenuItem>
+		);
+	}
+	onChange = (event, { newValue, method }) => {
+		this.setState({
+			childCustomerName: newValue
+		});
+	};
+
+	onSuggestionsFetchRequested = ({ value }) => {
+		this.setState({
+			suggestions: this.getSuggestions(value)
+		});
+	};
+
+	onSuggestionsClearRequested = () => {
+		this.setState({
+			suggestions: []
+		});
+	};
+	renderInputComponent = (inputProps) => {
+		const { classes, inputRef = () => { }, ref, ...other } = inputProps;
+
+		return (
+			<TextField
+				fullWidth
+				variant="outlined"
+				label="Customer Name"
+				InputProps={{
+					inputRef: node => {
+						ref(node);
+						inputRef(node);
+					},
+					classes: {
+						input: classes.input,
+					},
+				}}
+				InputLabelProps={{
+					classes: { outlined: classes.label }
+				}}
+				required
+				{...other}
+				autoFocus={true}
+			/>
+		);
+	};
 	render() {
 		const { classes, customerForm } = this.props;
-		const { execTitles } = this.state;
+		const { execTitles,
+			addressRows,
+			addressColumns,
+			contactsRows,
+			contactsColumns,
+		} = this.state;
+
+		const { childCustomerName, suggestions } = this.state;
+		const inputProps = {
+			classes,
+			placeholder: 'Type a customer name...',
+			value: childCustomerName,
+			onChange: this.onChange
+		};
 
 		return (
 			<Fragment>
@@ -589,7 +913,7 @@ class ServiceAgreementPage extends React.Component {
 									onChange={this.handleChange('AgreementType')}
 									margin="dense"
 									// variant="outlined"
-									fullWidth
+									style={{ width: '30%', minWidth: 200 }}
 								>
 									{[{ value: 0, label: "Customer" }
 										, { value: 1, label: "Jani-King" }
@@ -613,7 +937,7 @@ class ServiceAgreementPage extends React.Component {
 									onChange={this.handleChange('AcctExec')}
 									margin="dense"
 									// variant="outlined"
-									fullWidth
+									style={{ width: '30%', minWidth: 200 }}
 								>
 									{
 										execTitles.map((x, index) => {
@@ -683,6 +1007,595 @@ class ServiceAgreementPage extends React.Component {
 								/>
 							</GridItem>
 						</GridContainer>
+
+						<Typography variant="h6" className="mt-24 mb-12">Billing</Typography>
+
+						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between">
+								<div className="flex flex-col">
+									<TextField
+										type="date"
+										id="EffectiveDate"
+										label="Effective Date"
+										className={classNames(classes.textField)}
+										InputLabelProps={{
+											shrink: true
+										}}
+										value={this.state.EffectiveDate}
+										onChange={this.handleChange('EffectiveDate')}
+										margin="dense"
+										variant="outlined"
+										style={{ width: "20%", minWidth: "180px" }}
+
+									/>
+
+									<TextField
+										id="PONumer"
+										type="number"
+										label="PO Numer"
+										className={classes.textField}
+										value={this.state.PONumer}
+										onChange={this.handleChange('PONumer')}
+										margin="dense"
+										variant="outlined"
+										style={{ width: "20%", minWidth: "180px" }}
+									/>
+								</div>
+								<div className="flex flex-col justify-between">
+									<FormControlLabel
+										control={
+											<Checkbox onChange={this.handleChange('weekdays')} />
+										}
+										label="Print Past Due"
+										className="mr-36"
+
+									/>
+									<FormControlLabel
+										control={
+											<Checkbox onChange={this.handleChange('weekdays')} />
+										}
+										label="Tax Exempt"
+										className="mr-36"
+
+									/>
+									<FormControlLabel
+										control={
+											<Checkbox onChange={this.handleChange('weekdays')} />
+										}
+										label="Consolidated Invoice"
+										className=""
+
+									/>
+								</div>
+
+							</GridItem>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									id="InvoiceDate"
+									label="Invoice Date"
+									className={classNames(classes.textField, "mr-6")}
+									select
+									InputLabelProps={{
+										shrink: true
+									}}
+									value={this.state.InvoiceDate === undefined ? "" : this.state.InvoiceDate}
+									onChange={this.handleChange('InvoiceDate')}
+									margin="dense"
+									variant="outlined"
+									style={{ width: "100%" }}
+								>
+									{[{ value: 0, label: "BOM" },
+									{ value: 1, label: "EOM" }].map(option => (
+										<MenuItem key={option.value} value={option.value}>
+											{option.label}
+										</MenuItem>
+									))}
+								</TextField>
+
+								<TextField
+									id="BillingFrequency"
+									label="Billing Frequency"
+									select
+									InputLabelProps={{
+										shrink: true
+									}}
+									className={classNames(classes.textField, "ml-6")}
+									value={this.state.BillingFrequency === undefined ? "" : this.state.BillingFrequency}
+									onChange={this.handleChange('BillingFrequency')}
+									margin="dense"
+									variant="outlined"
+									style={{ width: "100%" }}
+								>
+									{[{ value: 0, label: "Monthly" }].map(option => (
+										<MenuItem key={option.value} value={option.value}>
+											{option.label}
+										</MenuItem>
+									))}
+								</TextField>
+
+							</GridItem>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<div style={{ display: 'flex', flexDirection: 'row', minWidth: "100px", width: "50%" }}>
+									<FormControlLabel
+										control={
+											<Switch
+												checked={this.state.checkedA}
+												onChange={this.handleChange('checkedA')}
+												value={this.state.checkedA}
+											/>
+										}
+										label="E-Billing"
+									// style={{ width: '40%' }}
+									/>
+
+									<TextField
+										type="email"
+										id="Email"
+										label="Email"
+										className={classes.textField}
+										value={this.state.Email}
+										onChange={this.handleChange('Email')}
+										margin="dense"
+										variant="outlined"
+										style={{ width: '60%' }}
+									/>
+								</div>
+							</GridItem>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									id="Term"
+									label="Term"
+									select
+									InputLabelProps={{
+										shrink: true
+									}}
+									className={classNames(classes.textField, "mr-6")}
+									value={this.state.Term === undefined ? "" : this.state.Term}
+									onChange={this.handleChange('Term')}
+									margin="dense"
+									variant="outlined"
+									style={{ width: '100%' }}
+								>
+									{[{ value: 0, label: "Due Upon Receipt" },
+									{ value: 1, label: "EOM" },
+									{ value: 2, label: "Net 30" },
+									{ value: 3, label: "Net 40" },
+									{ value: 4, label: "Net 45" },
+									{ value: 5, label: "Net 60" },].map(option => (
+										<MenuItem key={option.value} value={option.value}>
+											{option.label}
+										</MenuItem>
+									))}
+								</TextField>
+
+								<TextField
+									id="ARStatus"
+									label="AR Status"
+									select
+									className={classNames(classes.textField, "ml-6")}
+									InputLabelProps={{
+										shrink: true
+									}}
+									value={this.state.ARStatus === undefined ? "" : this.state.ARStatus}
+									onChange={this.handleChange('ARStatus')}
+									margin="dense"
+									variant="outlined"
+									style={{ width: '100%' }}
+								>
+									{[{ value: 0, label: "Select" },
+									{ value: 1, label: "Bankruptcy" },
+									{ value: 2, label: "In Litigation" },
+									{ value: 3, label: "Normal" },
+									{ value: 4, label: "Referred to Collections" },
+									{ value: 5, label: "Slow Pay" },
+									{ value: 6, label: "Uncollectable" },
+									{ value: 7, label: "National Accoints" },
+									{ value: 8, label: "AutoPay" },
+									{ value: 9, label: "TEST" },].map(option => (
+										<MenuItem key={option.value} value={option.value}>
+											{option.label}
+										</MenuItem>
+									))}
+								</TextField>
+							</GridItem>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									id="Notes"
+									label="Notes"
+									multiline
+									rows="2"
+									rowsMax="2"
+									className={classes.textField}
+									value={this.state.Notes}
+									onChange={this.handleChange('Notes')}
+									margin="dense"
+									variant="outlined"
+									style={{ width: '100%' }}
+								/>
+							</GridItem>
+
+							<GridItem xs={12} sm={12} md={12} className="flex flex-col">
+								<div className="flex justify-around">
+									<FormControlLabel
+										control={
+											<Checkbox
+												checked={this.state.NationalAccount}
+												onChange={this.handleChangeChecked('NationalAccount')}
+												value="NationalAccount"
+											/>
+										}
+										label="National Account"
+									/>
+									<FormControlLabel
+										control={
+											<Checkbox
+												checked={this.state.ChildAccount}
+												onChange={this.handleChangeChecked('ChildAccount')}
+												value="ChildAccount"
+											/>
+										}
+										label="Child Account"
+									/>
+								</div>
+
+								{this.state.ChildAccount && (
+									<div className="flex flex-col">
+										<Autosuggest
+											className={classNames(classes.textfield)}
+											theme={{
+												container: classNames(classes.container),
+												suggestionsContainerOpen: classes.suggestionsContainerOpen,
+												suggestionsList: classes.suggestionsList,
+												suggestion: classes.suggestion,
+											}}
+											renderSuggestionsContainer={options => (
+												<Paper {...options.containerProps} square>
+													{options.children}
+												</Paper>
+											)}
+											renderInputComponent={this.renderInputComponent}
+
+											suggestions={suggestions}
+											onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+											onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+											getSuggestionValue={this.getSuggestionValue}
+											renderSuggestion={this.renderSuggestion}
+											inputProps={inputProps}
+											fullWidth
+										/>
+
+										<TextField
+											id="StoreNumber"
+											label="Store Number"
+											className={classes.textField}
+											onChange={this.handleChange('StoreNumber')}
+											margin="dense"
+											variant="outlined"
+											fullWidth />
+									</div>
+								)}
+
+
+							</GridItem>
+
+							<GridItem xs={12} sm={12} md={12} className="flex flex-col">
+								<h3 className="mt-24 mb-12">Addresses</h3>
+								{/* <CustomerLineTable tableType="ADDRESS" headers={address_headers} /> */}
+								<Paper>
+									<Grid
+										rows={addressRows}
+										columns={addressColumns}
+									>
+
+										<EditingState
+											// columnExtensions={editingColumnExtensions}
+											onCommitChanges={this.commitChangesAddresses}
+										/>
+
+										<Table />
+										<TableHeaderRow />
+										<TableEditRow />
+										<TableEditColumn
+											width={110}
+											cellComponent={EditingCellComponent}
+											headerCellComponent={EditingHeaderCellComponent}
+											showAddCommand
+											showEditCommand
+											showDeleteCommand
+											commandComponent={Command}
+										/>
+										{/* <Getter
+													name="tableColumns"
+													computed={({ tableColumns }) => {
+														// debugger
+														const result = [
+															...tableColumns.filter(c => c.type !== TableEditColumn.COLUMN_TYPE),
+															{ key: 'editCommand', type: TableEditColumn.COLUMN_TYPE, width: 100 }
+														];
+														return result;
+													}
+													}
+												/> */}
+
+
+									</Grid>
+								</Paper>
+
+
+								<h3 className="mt-24 mb-12">Contacts</h3>
+								{/* <CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} /> */}
+								<Paper>
+									<Grid
+										rows={contactsRows}
+										columns={contactsColumns}
+									>
+
+										<EditingState
+											// columnExtensions={editingColumnExtensions}
+											onCommitChanges={this.commitChangesContacts}
+										/>
+
+										<Table />
+										<TableHeaderRow />
+										<TableEditRow />
+										<TableEditColumn
+											width={110}
+											cellComponent={EditingCellComponent}
+											headerCellComponent={EditingHeaderCellComponent}
+											showAddCommand
+											showEditCommand
+											showDeleteCommand
+											commandComponent={Command}
+										/>
+										{/* <Getter
+													name="tableColumns"
+													computed={({ tableColumns }) => {
+														// debugger
+														const result = [
+															...tableColumns.filter(c => c.type !== TableEditColumn.COLUMN_TYPE),
+															{ key: 'editCommand', type: TableEditColumn.COLUMN_TYPE, width: 100 }
+														];
+														return result;
+													}
+													}
+												/> */}
+
+
+									</Grid>
+								</Paper>
+							</GridItem>
+
+						</GridContainer>
+
+						<Typography variant="h6" className="mt-24 mb-12">Cleaning Schedule</Typography>
+
+						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									id="ServiceType"
+									label="Service Type *"
+									select
+									InputLabelProps={{
+										shrink: true
+									}}
+									className={classes.textField}
+									value={this.state.ServiceType === undefined ? "" : this.state.ServiceType}
+									onChange={this.handleChange('ServiceType')}
+									margin="dense"
+									variant="outlined"
+									style={{ minWidth: "100px", width: "30%" }}
+								>
+									{[{ value: 0, label: "Select" }].map(option => (
+										<MenuItem key={option.value} value={option.value}>
+											{option.label}
+										</MenuItem>
+									))}
+								</TextField>
+							</GridItem>
+
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									type="number"
+									inputProps={{ min: "0", max: "999999", step: "1" }}
+									id="SquareFootage"
+									label="Square Footage"
+									className={classes.textField}
+									value={this.state.SquareFootage}
+									onChange={this.handleChange('SquareFootage')}
+									margin="dense"
+									variant="outlined"
+									style={{ minWidth: "100px", width: "30%" }}
+								/>
+
+							</GridItem>
+
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									type="time"
+									id="StartTime"
+									label="Start Time *"
+									className={classNames(classes.textField, "mr-6")}
+									InputLabelProps={{
+										shrink: true
+									}}
+									value={this.state.StartTime}
+									onChange={this.handleChange('StartTime')}
+									margin="dense"
+									variant="outlined"
+									style={{ width: '100%' }}
+								/>
+								<TextField
+									type="time"
+									id="EndTime"
+									label="End Time *"
+									className={classNames(classes.textField, "ml-6")}
+									InputLabelProps={{
+										shrink: true
+									}}
+									value={this.state.EndTime}
+									onChange={this.handleChange('EndTime')}
+									margin="dense"
+									variant="outlined"
+									style={{ width: '100%' }}
+								/>
+							</GridItem>
+
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									type="number"
+									id="Amount"
+									label="Amount *"
+									className={classes.textField}
+									InputLabelProps={{
+										shrink: true
+									}}
+									value={this.state.Amount}
+									onChange={this.handleChange('Amount')}
+									margin="dense"
+									variant="outlined"
+									style={{ minWidth: "100px", width: "30%" }}
+									InputProps={{
+										startAdornment: <InputAdornment position="start">$</InputAdornment>
+									}}
+								/>
+							</GridItem>
+
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									type="number"
+									id="CleanTimes"
+									label="Clean Times *"
+									className={classNames(classes.textField, "mr-6")}
+									value={this.state.CleanTimes}
+									onChange={this.handleChange('CleanTimes')}
+									margin="dense"
+									variant="outlined"
+									style={{ width: '100%' }}
+								/>
+
+								<TextField
+									select
+
+									id="CleanFrequency"
+									label="Clean Frequency *"
+									className={classNames(classes.textField, "ml-6")}
+									InputLabelProps={{
+										shrink: true
+									}}
+									value={this.state.CleanFrequency === undefined ? "" : this.state.CleanFrequency}
+									onChange={this.handleChange('CleanFrequency')}
+									margin="dense"
+									variant="outlined"
+									style={{ width: '100%' }}
+								>
+									{[{ value: 0, label: "Monthly" }].map(option => (
+										<MenuItem key={option.value} value={option.value}>
+											{option.label}
+										</MenuItem>
+									))}
+								</TextField>
+							</GridItem>
+
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-start">
+								<FormControlLabel
+									control={
+										<Checkbox onChange={this.handleChange('weekdays')} />
+									}
+									label="Mon"
+									className="mr-36"
+
+								/>
+								<FormControlLabel
+									control={
+										<Checkbox onChange={this.handleChange('weekdays')} />
+									}
+									label="Tue"
+									className="mr-36"
+
+								/>
+								<FormControlLabel
+									control={
+										<Checkbox onChange={this.handleChange('weekdays')} />
+									}
+									label="Wed"
+									className="mr-36"
+
+								/>
+								<FormControlLabel
+									control={
+										<Checkbox onChange={this.handleChange('weekdays')} />
+									}
+									label="Thu"
+									className="mr-36"
+
+								/>
+								<FormControlLabel
+									control={
+										<Checkbox onChange={this.handleChange('weekdays')} />
+									}
+									label="Fri"
+									className="mr-36"
+
+								/>
+								<FormControlLabel
+									control={
+										<Checkbox onChange={this.handleChange('weekdays')} />
+									}
+									label="Sat"
+									className="mr-36"
+
+								/>
+								<FormControlLabel
+									control={
+										<Checkbox onChange={this.handleChange('weekdays')} />
+									}
+									label="Sun"
+									className="mr-36"
+								/>
+								<FormControlLabel
+									control={
+										<Checkbox onChange={this.handleChange('weekdays')} />
+									}
+									label="Weekends"
+
+								/>
+							</GridItem>
+
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<FormControlLabel
+									control={
+										<Checkbox onChange={this.handleChange('weekdays')} />
+									}
+									label="CPI Increase"
+									style={{ marginRight: "30px" }}
+
+								/>
+								<FormControlLabel
+									control={
+										<Checkbox onChange={this.handleChange('weekdays')} />
+									}
+									label="Separate Invoice"
+									style={{ marginRight: "30px" }}
+
+								/>
+							</GridItem>
+
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									id="Description"
+									label="Description"
+									multiline
+									rows="2"
+									rowsMax="2"
+									className={classes.textField}
+									value={this.state.Description}
+									onChange={this.handleChange('Description')}
+									margin="dense"
+									variant="outlined"
+									style={{ width: '100%' }}
+								/>
+							</GridItem>
+						</GridContainer>
 					</>
 				}
 				{/* <IncreaseDecreaseContractModal /> */}
@@ -737,6 +1650,8 @@ function mapStateToProps({ customers, accountReceivablePayments, auth }) {
 		activeCustomer: customers.activeCustomer,
 		customerForm: customers.customerForm,
 		accountExecutiveList: customers.accountExecutiveList,
+
+		customers: customers.customersDB,
 
 	}
 }
