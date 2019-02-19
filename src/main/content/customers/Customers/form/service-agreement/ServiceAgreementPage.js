@@ -1207,6 +1207,26 @@ class ServiceAgreementPage extends React.Component {
 									))}
 								</TextField>
 							</GridItem>
+
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<FormControlLabel
+									control={
+										<Checkbox onChange={this.handleChange('weekdays')} />
+									}
+									label="CPI Increase"
+									style={{ marginRight: "30px" }}
+
+								/>
+								<FormControlLabel
+									control={
+										<Checkbox onChange={this.handleChange('weekdays')} />
+									}
+									label="Separate Invoice"
+									style={{ marginRight: "30px" }}
+
+								/>
+							</GridItem>
+
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
 									id="Notes"
@@ -1451,7 +1471,7 @@ class ServiceAgreementPage extends React.Component {
 								/>
 							</GridItem>
 
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							{/* <GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
 									type="number"
 									id="Amount"
@@ -1469,7 +1489,7 @@ class ServiceAgreementPage extends React.Component {
 										startAdornment: <InputAdornment position="start">$</InputAdornment>
 									}}
 								/>
-							</GridItem>
+							</GridItem> */}
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
@@ -1573,34 +1593,15 @@ class ServiceAgreementPage extends React.Component {
 							</GridItem>
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
-									label="CPI Increase"
-									style={{ marginRight: "30px" }}
-
-								/>
-								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
-									label="Separate Invoice"
-									style={{ marginRight: "30px" }}
-
-								/>
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
-									id="Description"
-									label="Description"
+									id="DetailedCleaningInstructions"
+									label="Detailed Cleaning Instructions"
 									multiline
-									rows="2"
-									rowsMax="2"
+									rows="3"
+									rowsMax="3"
 									className={classes.textField}
-									value={this.state.Description}
-									onChange={this.handleChange('Description')}
+									value={this.state.DetailedCleaningInstructions}
+									onChange={this.handleChange('DetailedCleaningInstructions')}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '100%' }}
