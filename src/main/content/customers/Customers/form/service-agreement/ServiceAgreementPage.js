@@ -629,6 +629,7 @@ class ServiceAgreementPage extends React.Component {
 			franchiseeServiceTypes: this.props.lists.franchiseeServiceTypes,
 			franchiseeBillingTypes: this.props.lists.franchiseeBillingTypes,
 			execTitles: execTitles,
+			cont_bill: this.props.activeCustomer && this.props.activeCustomer.Data ? this.props.activeCustomer.Data.cont_bill : "",
 		})
 
 		this.initCustomerInfo()
