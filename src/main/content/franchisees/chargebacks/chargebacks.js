@@ -40,7 +40,7 @@ import classNames from 'classnames';
 // import ChargebacksForm from './ChargebacksForm';
 import ChargebackListContent from './ChargebackListContent';
 import ChargeBackSearchBar from "./ChargeBackSearchBar"
-
+import ProcessModalForm from './ProcessModalForm';
 // import GoogleMap from 'google-map-react';
 
 // function Marker({ text }) {
@@ -258,7 +258,8 @@ class Chargebacks extends Component {
 		selectedChargebacks: null,
 		current_lat: 0,
 		current_long: 0,
-		franchisees: null
+		franchisees: null,
+		isOpen: false
 	};
 
 	constructor(props) {
@@ -517,7 +518,12 @@ class Chargebacks extends Component {
     //     if(this.props.filterState) this.props.toggleFilterPanel();
 
     //     this.props.openNewChargebacksForm();
-    // };
+	// };
+
+	onNewChargebacks = () => {
+		this.props.showProcessModalForm(true)
+		this.setState({isOpen: !this.state.isOpen})
+	}
 
 	handleChange = prop => event => {
 		this.setState({ [prop]: event.target.value });
@@ -568,7 +574,7 @@ class Chargebacks extends Component {
         const { selection } = this.state;
 
 
-        console.log('props=', this.props);
+		console.log('props=', this.props);
         return (
             <React.Fragment >
 				<FusePageCustom
@@ -607,7 +613,8 @@ class Chargebacks extends Component {
                                             <FuseAnimate animation="transition.expandIn" delay={300}>
                                                 <Button variant="contained" color="primary"
                                                         className={classNames(classes.btntop) } onClick={()=>this.onNewChargebacks()}>
-                                                    New Chargebacks
+                                                    Process Chargebacks
+													{ this.state.isOpen && <ProcessModalForm />}
                                                     <Icon className={classes.rightIcon}>add</Icon>
                                                 </Button>
                                             </FuseAnimate>
@@ -875,6 +882,7 @@ function mapDispatchToProps(dispatch) {
 		toggleFilterPanel: Actions.toggleFilterPanel,
 		toggleSummaryPanel: Actions.toggleSummaryPanel,
 		toggleMapView: Actions.toggleMapView,
+		showProcessModalForm: Actions.showProcessModalForm,
 		// deleteChargebacksAction: Actions.deleteChargebacks,
 		// removeChargebacksAction: Actions.removeChargebacks,
 		// openNewChargebacksForm: Actions.openNewChargebacksForm,
@@ -902,6 +910,8 @@ function mapStateToProps({ chargebacks, auth, franchisees }) {
         bChargebacksUpdated: chargebacks.bChargebacksUpdated,
 
 		removedId: chargebacks.removedId,
+
+		processModalForm: chargebacks.processModalForm,
 
 		bLoadedFranchisees: franchisees.bLoadedFranchisees,
         franchisees: franchisees.franchiseesDB,

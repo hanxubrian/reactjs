@@ -16,6 +16,7 @@ export const STARTING_SAVE_CHARGEBACK_FORM_DATA = "[CHARGEBACKS] STARTING SAVE C
 export const SELECT_TRANSACTION_FRANCHISEE = '[FRANCHISEE-TRANSACTION] SELECT TRANSACTION FRANCHISEE';
 export const UPDATE_A_CHARGEBACK = "[CHARGEBACKS] GET A CHARGEBACK";
 export const APPLY_SEARCH_TEXT_ARP = "[ARP] APPLY_SEARCH_TEXT_ARP";
+export const SHOW_PROCESS_MODAL_FORM = "[CHARGEBACKS APP] SHOW_PROCESS_MODAL_FORM";
 
 // for Add/Edit
 export const OPEN_NEW_CHARGEBACK_FORM = '[CHARGEBACKS APP] OPEN NEW CHARGEBACK FORM';
@@ -119,6 +120,13 @@ export function getChargebackStatus(RegionId) {
             }
         })();
     };
+}
+
+export function showProcessModalForm(visible) {
+	return {
+		type: SHOW_PROCESS_MODAL_FORM,
+		payload: visible
+	}
 }
 
 

@@ -273,7 +273,7 @@ class FilterPanel extends Component {
                 <div className={classNames("flex flex-col")}>
                     <Paper className="flex flex-1 flex-col min-h-px p-20">
                         <FormControl className={classes.formControl} style={{width: 200}}>
-                            <h3 className="mb-20">dChargeback Date</h3>
+                            <h3 className="mb-20">Chargeback Date</h3>
                             <Select
                                 value={this.state.chargebackDateOption}
                                 onChange={this.handleChange1}
@@ -372,7 +372,7 @@ class FilterPanel extends Component {
                         )}
 
                         <div style={{marginTop: 20, display: 'flex', flexDirection: 'column'}}>
-                            <h3>dChargeback Status</h3>
+                            <h3>Chargeback Status</h3>
                             {/* {this.state.chargebackStatus.length>0 && this.state.chargebackStatus.map((iv, index)=> {
                                 return (
                                     <FormControlLabel

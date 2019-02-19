@@ -42,7 +42,7 @@ import {
 	Getter, Template, TemplateConnector
   } from '@devexpress/dx-react-core';
 
-// import { CustomizedDxGridSelectionPanel } from "./CustomizedDxGridSelectionPanel";
+import { CustomizedDxGridSelectionPanel } from "./../../common/CustomizedDxGridSelectionPanel";
 
 import {
 	SelectionState,
@@ -139,36 +139,36 @@ const styles = theme => ({
 			paddingLeft: '1.2rem!important',
 			paddingRight: '1.2rem!important',
 		},
-		// '& .ReactTable .rt-noData': {
-		// 	top: '250px',
-		// 	border: '1px solid coral'
-		// },
-		// '& .ReactTable .rt-thead.-headerGroups': {
-		// 	paddingLeft: '0!important',
-		// 	paddingRight: '0!important',
-		// 	minWidth: 'inherit!important'
-		// },
-		// '& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
-		// 	background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
-		// 	color: 'white!important'
-		// },
-		// '& .ReactTable .rt-tbody': {
-		// 	overflowY: 'scroll',
-		// 	overflowX: 'hidden'
-		// },
-		// '& .ReactTable .rt-tr-group': {
-		// 	flex: '0 0 auto'
-		// },
-		// '& .ReactTable .rt-thead .rt-th:nth-child(1)': {
-		// 	justifyContent: 'center'
-		// },
-		// '& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
-		// 	width: 'inherit!important',
-		// 	minWidth: 'inherit!important',
-		// },
-		// '& .ReactTable .rt-thead .rt-th:last-child': {
-		// 	justifyContent: 'flex-end'
-		// },
+		'& .ReactTable .rt-noData': {
+			top: '250px',
+			border: '1px solid coral'
+		},
+		'& .ReactTable .rt-thead.-headerGroups': {
+			paddingLeft: '0!important',
+			paddingRight: '0!important',
+			minWidth: 'inherit!important'
+		},
+		'& .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover': {
+			background: 'rgba(' + hexToRgb(theme.palette.secondary.main).r + ',' + hexToRgb(theme.palette.secondary.main).g + ',' + hexToRgb(theme.palette.secondary.main).b + ', .8)',
+			color: 'white!important'
+		},
+		'& .ReactTable .rt-tbody': {
+			overflowY: 'scroll',
+			overflowX: 'hidden'
+		},
+		'& .ReactTable .rt-tr-group': {
+			flex: '0 0 auto'
+		},
+		'& .ReactTable .rt-thead .rt-th:nth-child(1)': {
+			justifyContent: 'center'
+		},
+		'& .ReactTable .rt-thead.-headerGroups .rt-th:nth-child(2)': {
+			width: 'inherit!important',
+			minWidth: 'inherit!important',
+		},
+		'& .ReactTable .rt-thead .rt-th:last-child': {
+			justifyContent: 'flex-end'
+		},
 	},
 	content: {
 		position: 'relative'
@@ -541,6 +541,18 @@ class ChargebackListContent extends Component {
 			rows: [],
 			tableColumnExtensions: [
 				{
+					title: "Name",
+					name: "FranchiseeNameNo",
+					columnName: "FranchiseeNameNo",
+					width: 350,
+					wordWrapEnabled: true,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: true,
+					togglingEnabled: true,
+					showWhenGrouped: true
+				},
+				{
 					title: "Cust No",
 					name: "cust_no",
 					columnName: "cust_no",
@@ -593,18 +605,18 @@ class ChargebackListContent extends Component {
 					groupingEnabled: true,
 					showWhenGrouped: true
 				},
-				{
-					title: "CB Date",
-					name: "CBDate",
-					columnName: "CBDate",
-					width: 150,
-					align: 'right',
-					wordWrapEnabled: true,
-					sortingEnabled: false,
-					filteringEnabled: true,
-					groupingEnabled: true,
-					showWhenGrouped: true
-				},
+				// {
+				// 	title: "CB Date",
+				// 	name: "CBDate",
+				// 	columnName: "CBDate",
+				// 	width: 150,
+				// 	align: 'right',
+				// 	wordWrapEnabled: true,
+				// 	sortingEnabled: false,
+				// 	filteringEnabled: true,
+				// 	groupingEnabled: true,
+				// 	showWhenGrouped: true
+				// },
 				// {
 				// 	title: "Total Amount Paid",
 				// 	name: "TotalPaidAmount",
@@ -634,18 +646,18 @@ class ChargebackListContent extends Component {
 				// 	filteringEnabled: true,
 				// 	groupingEnabled: true,
 				// },
-				{
-					title: "Period to Charge Back",
-					name: "CBPeriod",
-					columnName: 'CBPeriod',
-					width: 200,
-					align: 'center',
-					wordWrapEnabled: true,
-					sortingEnabled: true,
-					filteringEnabled: true,
-					groupingEnabled: true,
-					showWhenGrouped: true
-				},
+				// {
+				// 	title: "Period to Charge Back",
+				// 	name: "CBPeriod",
+				// 	columnName: 'CBPeriod',
+				// 	width: 200,
+				// 	align: 'center',
+				// 	wordWrapEnabled: true,
+				// 	sortingEnabled: true,
+				// 	filteringEnabled: true,
+				// 	groupingEnabled: true,
+				// 	showWhenGrouped: true
+				// },
 				// {
 				// 	title: "Balance",
 				// 	name: "TotalBalance",
@@ -688,7 +700,7 @@ class ChargebackListContent extends Component {
 			// 	{ columnName: 'FranchiseeNameNo' }
 
 			// ],
-			expandedGroups: ['ChargebackNo'],
+			expandedGroups: ['FranchiseeNameNo'],
 			sorting: [
 				{ columnName: 'ChargebackNo', direction: 'asc' }
 			],
@@ -875,7 +887,7 @@ class ChargebackListContent extends Component {
 	processData(data) {
         let temp = [...data];
         temp.forEach(x => {
-            x.FranchiseeNameNo = `${x.FranchiseeName} - ${x.FranchiseeNo}`
+            x.FranchiseeNameNo = `${x.dlr_name} - ${x.dlr_code}`
         });
 
 
@@ -893,10 +905,10 @@ class ChargebackListContent extends Component {
 		} else {
 			let res = [...chargebacks.Data]
 
-			// res.forEach(x=>{
-			// 	x.FranchiseeNameNo = `${x.FranchiseeName} - ${x.FranchiseeNo}`;
-			// })
-			// console.log("getRowData", res);
+			res.forEach(x=>{
+				x.FranchiseeNameNo = `${x.dlr_name} - ${x.dlr_code}`;
+			})
+			console.log("getRowData", res);
 
 			return res;
 			}
@@ -1069,7 +1081,7 @@ class ChargebackListContent extends Component {
 			data: all_temp,
 			// "chargebacksParam": this.props.getChargebacksParam,
 			"rows": this.getRowData(this.props.chargebacks),
-			// expandedGroups: [...new Set(this.getRowData(this.props.chargebacks).map(x => x.FranchiseeName))]
+			expandedGroups: [...new Set(this.getRowData(this.props.chargebacks).map(x => x.FranchiseeNameNo))]
 		});
 
 	};
@@ -1354,7 +1366,7 @@ class ChargebackListContent extends Component {
 					{/* Gridview */}
 					{!mapViewState &&
 						(
-							<div className={classNames("flex flex-col")}
+							<div className={classNames("flex flex-col")} 
 								// className={classNames(classes.layoutTable, "flex flex-col h-full")}
 							// style={{ flex: '1', }}
 							>
@@ -1386,7 +1398,7 @@ class ChargebackListContent extends Component {
 									<SortingState
 										sorting={sorting}
 										onSortingChange={this.changeSorting}
-										// columnExtensions={tableColumnExtensions}
+										columnExtensions={tableColumnExtensions}
 									/>
 									<IntegratedSorting />
 
@@ -1398,7 +1410,7 @@ class ChargebackListContent extends Component {
 
 									<FilteringState
 										defaultFilters={[]}
-										// columnExtensions={tableColumnExtensions}
+										columnExtensions={tableColumnExtensions}
 									/>
 									<IntegratedFiltering />
 
@@ -1408,11 +1420,11 @@ class ChargebackListContent extends Component {
 									/>
 
 									<GroupingState
-										// grouping={[
-										// 	{columnName: 'FranchiseeNameNo'}
-										// ]}
-										// expandedGroups={expandedGroups}
-										// onExpandedGroupsChange={this.expandedGroupsChange}
+										grouping={[
+											{columnName: 'FranchiseeNameNo'}
+										]}
+										expandedGroups={expandedGroups}
+										onExpandedGroupsChange={this.expandedGroupsChange}
 									/>
 									<IntegratedGrouping />
 									<VirtualTable
@@ -1424,7 +1436,7 @@ class ChargebackListContent extends Component {
 									/>
 
 									{/* <TableColumnResizing defaultColumnWidths={tableColumnExtensions} /> */}
-									<TableHeaderRow />
+									<TableHeaderRow showSortingControls />
 									<DataTypeProvider for={grouping}/>
 									<TableGroupRow
 										  showColumnsWhenGrouped contentComponent={this.GroupCellContent}
@@ -1465,16 +1477,16 @@ class ChargebackListContent extends Component {
 									rightColumns={rightColumns}
 								/> */}
 
-									{/* <TableSelection showSelectAll selectByRowClick highlightRow  rowComponent={this.TableRow}/> */}
+									<TableSelection showSelectAll highlightRow  rowComponent={this.TableRow}/>
 
 									<TableEditRow />
-									<TableEditColumn
+									{/* <TableEditColumn
 										// showAddCommand
 										showEditCommand
 										showDeleteCommand
 										commandComponent={Command}
-									/>
-									<Getter
+									/> */}
+									{/* <Getter
 										name="tableColumns"
 										computed={({ tableColumns }) => {
 											// debugger
@@ -1485,7 +1497,7 @@ class ChargebackListContent extends Component {
 											return result;
 										}
 										}
-									/>
+									/> */}
 									{/* <TableColumnReordering
 										defaultOrder={tableColumnExtensions.map(x => x.columnName)}
 									/> */}
@@ -1515,7 +1527,7 @@ class ChargebackListContent extends Component {
 										name="tableRow"
 										predicate={({ tableRow }) => tableRow.type === 'data'}
 									>
-										{/* {params => (
+										{params => (
 											<TemplateConnector>
 												{({ selection }, { toggleSelection }) => (
 													<this.TableRow
@@ -1525,10 +1537,10 @@ class ChargebackListContent extends Component {
 													/>
 												)}
 											</TemplateConnector>
-										)} */}
+										)}
 									</Template>
 
-									{/* <CustomizedDxGridSelectionPanel selection={selection} /> */}
+									<CustomizedDxGridSelectionPanel selection={selection} rows={rows}/>
 										{/* <TableColumnVisibility
                         				hiddenColumnNames={['FranchiseeNameNo']}
                         				emptyMessageComponent={this.emptyMessageContent} /> */}

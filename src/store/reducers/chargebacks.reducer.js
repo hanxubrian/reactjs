@@ -42,6 +42,9 @@ const initialState = {
 	getChargebacksParam: {
 		searchText: ""
 	},
+	processModalForm: {
+		open: false,
+	},
 
 };
 
@@ -86,6 +89,16 @@ const chargebacks = function (state = initialState, action) {
 					...state,
 					// bChargebacksFetchStart: true
 					bChargebackStart: true
+				};
+			}
+		case Actions.SHOW_PROCESS_MODAL_FORM:
+			{
+				return {
+					...state,
+					processModalForm: {
+						...state.processModalForm,
+						open: action.payload,
+					}
 				};
 			}
 		case Actions.APPLY_SEARCH_TEXT_ARP: {
