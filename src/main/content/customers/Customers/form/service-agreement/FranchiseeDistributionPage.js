@@ -108,7 +108,26 @@ const styles = theme => ({
         '& .material-icons':{
             fontSize: 16
         }
-    }
+    },
+    lineCancelButton:{
+        width: 24,
+        height: 24,
+        minHeight: 24,
+        backgroundColor: '#ff4850',
+        color: 'white',
+        '&:hover':{
+            backgroundColor: '#ff2a32',
+        },
+        [theme.breakpoints.down('sm')]: {
+            width: 24,
+            height: 24,
+            minHeight: 24,
+            padding: 0
+        },
+        '& .material-icons':{
+            fontSize: 16
+        }
+    },
 });
 
 const CurrencyFormatter = ({ value }) => (<span>$ {parseFloat(`0${value}`).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
@@ -808,7 +827,6 @@ class FranchiseeDistributionPage extends React.Component {
         })
     }
     saveAssignedFranchiseeDistributions = () => {
-        console.log('fired save franchisee', this.props.regionId, this.props.activeCustomer.Data.cust_no, this.state.franchieesesToOffer);
         this.props.updateAssignedFranchisee(this.props.regionId, this.props.activeCustomer.Data.cust_no, this.state.franchieesesToOffer)
         this.setState({openSnack: true});
 
@@ -966,6 +984,10 @@ class FranchiseeDistributionPage extends React.Component {
         this.props.updateCustomersParameter('activeStep', 7);
     };
 
+    removeFranchisee = async (franchiseeId) => {
+        console.log('removed');
+    };
+
     getFranchiseeAssignmentForm() {
         const { classes } = this.props;
 
@@ -1004,7 +1026,7 @@ class FranchiseeDistributionPage extends React.Component {
                                        input: classNames('text-right')
                                    }
                                }}
-                               value={this.state.NewAmount || ''}
+                               value={ this.props.activeCustomer && this.props.activeCustomer.Data ? this.props.activeCustomer.Data.cont_bill : ""}
                                onChange={this.handleChange("NewAmount")}
                     />
 
@@ -1128,8 +1150,14 @@ class FranchiseeDistributionPage extends React.Component {
                                         <div className=" text-center" style={{ width: franHeaders[8].width + '%' }}>
                                             <Tooltip title="Go to Finders Fee" aria-label="Go to Finders Fee">
                                                 <Fab aria-label="remove"
-                                                     onClick={() => this.gotoFindersFee(x.Id)} color="primary" className={classNames(classes.ffBtn)}>
+                                                     onClick={() => this.gotoFindersFee(x.Id)} color="primary" className={classNames(classes.ffBtn, "mr-12")}>
                                                     <Icon>arrow_forward</Icon>
+                                                </Fab>
+                                            </Tooltip>
+                                            <Tooltip title="Remove this franchisee" aria-label="Remove Franchisee">
+                                                <Fab aria-label="remove"
+                                                     onClick={() => this.removeFranchisee(x.Id)} color="primary" className={classNames(classes.ffBtn,classes.lineCancelButton)}>
+                                                    <Icon>close</Icon>
                                                 </Fab>
                                             </Tooltip>
                                         </div>
@@ -1402,7 +1430,7 @@ class FranchiseeDistributionPage extends React.Component {
                 >
                     <MySnackbarContentWrapper
                         onClose={this.handleCloseSnackBar}
-                        variant="error"
+                        variant="success"
                         message={this.state.snackMessage}
                     />
                 </Snackbar>
