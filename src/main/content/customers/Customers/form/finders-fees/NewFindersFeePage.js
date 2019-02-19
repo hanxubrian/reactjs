@@ -146,7 +146,7 @@ class NewFindersFeePage extends React.Component {
 
                     <TextField select margin="dense" id="CalculationMethod" label="Calculation Method"
                                InputLabelProps={{ shrink: true }}
-                               className={classNames(classes.textField)}
+                               className={classNames(classes.textField,'mr-12')}
                                value={this.state.CalculationMethodCode || ''}
                                onChange={this.handleChange('CalculationMethodCode')}
                                style={{ minWidth: 250 }}
@@ -159,6 +159,46 @@ class NewFindersFeePage extends React.Component {
                         }
                     </TextField>
 
+                    <TextField margin="dense" id="AmountPayableOn" label="Monthly Billing Amount"
+                               InputLabelProps={{ shrink: true }}
+                               style={{ minWidth: 250 }}
+                               className={classNames(classes.textField, "pr-6 mr-12")}
+                               InputProps={{
+                                   startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
+                                   inputComponent: NumberFormatCustomNoPrefix,
+                                   readOnly: true,
+                                   classes: {
+                                       // input: classNames('text-right')
+                                   }
+                               }}
+                               value={this.state.AmountPayableOn}
+                    />
+
+                    <div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+                        <Button variant="contained" onClick={()=>this.handleGotoDistibutionPage()} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>
+                        <Button variant="contained" onClick={()=>this.handleSaveFindersFee()} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Save</Button>
+                    </div>
+
+                </div>
+                <div className={classNames("flex mt-12")}>
+                    <TextField margin="dense" id="FindersFeeCreditAmount" label="Finders Fee Credit Amount"
+                               InputLabelProps={{ shrink: true }}
+                               style={{ minWidth: 250 }}
+                               className={classNames(classes.textField, "pr-6 mr-12")}
+                               InputProps={{ startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
+                                   inputComponent: NumberFormatCustomNoPrefix }}
+                               value={this.state.FindersFeeCreditAmount}
+                               onChange={this.handleChange("FindersFeeCreditAmount")}
+                    />
+                    <TextField margin="dense" id="InitialBusinessCredit" label="Initial Business Credit"
+                               InputLabelProps={{ shrink: true }}
+                               style={{ minWidth: 250 }}
+                               className={classNames(classes.textField, "pr-6 mr-12")}
+                               InputProps={{startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
+                                   inputComponent: NumberFormatCustomNoPrefix }}
+                               value={this.state.InitialBusinessCredit}
+                               onChange={this.handleChange("InitialBusinessCredit")}
+                    />
                     <TextField margin="dense" id="CalculationMethodNameDescription" label="Name / Description"
                                InputLabelProps={{ shrink: true }}
                                className={classNames(classes.textField, "ml-12")}
@@ -166,13 +206,7 @@ class NewFindersFeePage extends React.Component {
                                onChange={this.handleChange("description")}
                                fullWidth
                     />
-                    <div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <Button variant="contained" onClick={()=>this.handleGotoDistibutionPage()} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>
-                        <Button variant="contained" onClick={()=>this.handleSaveFindersFee()} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Save</Button>
-                    </div>
-
                 </div>
-
                 <div className={classNames("flex mt-12")}>
                     <TextField margin="dense" id="DownPaymentPercent" label="Down Payment Percent"
                                InputLabelProps={{ shrink: true }}
@@ -196,34 +230,9 @@ class NewFindersFeePage extends React.Component {
                                onChange={this.handleChange("MonthlyPaymentPercent")}
                                onBlur={this.handleChangeParamsOnBlur('MonthlyPaymentPercent')}
                     />
-                    <TextField margin="dense" id="AmountPayableOn" label="Monthly Billing Amount"
-                               InputLabelProps={{ shrink: true }}
-                               className={classNames(classes.textField, "pr-6 mr-12")}
-                               InputProps={{
-                                   startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-                                   inputComponent: NumberFormatCustomNoPrefix,
-                                   readOnly: true }}
-                               value={this.state.AmountPayableOn}
-                    />
+
                 </div>
-                <div className={classNames("flex mt-12")}>
-                    <TextField margin="dense" id="FindersFeeCreditAmount" label="Finders Fee Credit Amount"
-                               InputLabelProps={{ shrink: true }}
-                               className={classNames(classes.textField, "pr-6 mr-12")}
-                               InputProps={{ startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-                                   inputComponent: NumberFormatCustomNoPrefix }}
-                               value={this.state.FindersFeeCreditAmount}
-                               onChange={this.handleChange("FindersFeeCreditAmount")}
-                    />
-                    <TextField margin="dense" id="InitialBusinessCredit" label="Initial Business Credit"
-                               InputLabelProps={{ shrink: true }}
-                               className={classNames(classes.textField, "pr-6 mr-12")}
-                               InputProps={{startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-                                   inputComponent: NumberFormatCustomNoPrefix }}
-                               value={this.state.InitialBusinessCredit}
-                               onChange={this.handleChange("InitialBusinessCredit")}
-                    />
-                </div>
+
                 <div className={classNames("flex mt-12 justify-between items-center")}>
                     <TextField margin="dense" id="MonthlyPaymentAmount" label="Monthly Payment"
                                InputLabelProps={{ shrink: true }}
