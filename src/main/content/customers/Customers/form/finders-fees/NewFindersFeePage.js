@@ -55,10 +55,10 @@ class NewFindersFeePage extends React.Component {
             errorMsg: "",
             DownPaymentPercent: '',
             MonthlyPaymentPercent: '',
-            FindersFeeCreditAmount: '',
+            FindersFeeCreditAmount: 0,
             MonthlyPaymentAmount: '',
             CalculationMethodCode: 'S',
-            InitialBusinessCredit: '',
+            InitialBusinessCredit: 0,
             description: '',
             MultiTenantOccupancy: '',
             AmountPayableOn: '',
@@ -69,6 +69,7 @@ class NewFindersFeePage extends React.Component {
             IncludeDpWith1stPayment: false,
             DownPaymentPaid: false,
             findersFeeType: false,
+            FinderFeePayableOn: '',
         };
     }
 
@@ -96,6 +97,7 @@ class NewFindersFeePage extends React.Component {
                 if(res.data.IsSuccess){
                     console.log('result1=',res.data.Data);
                     this.setState({...res.data.Data});
+                    this.setState({FinderFeePayableOn: res.data.Data.AmountPayableOn-this.state.FindersFeeCreditAmount-this.state.InitialBusinessCredit})
                 }
             })
             .catch(error=> {
@@ -107,19 +109,22 @@ class NewFindersFeePage extends React.Component {
     }
 
 
-    handleChangeChecked = name => event => {
-        this.setState({ [name]: event.target.checked });
-    };
-
     handleChange = name => event => {
         this.setState({
-            [name]: event.target.value,
+            [name]: parseFloat(event.target.value),
         });
         if(name==="CalculationMethodCode") {
             this.props.updateFindersFeeParams({CalculationMethodCode: event.target.value})
-
         }
     };
+
+    handleBlurPayable = (name) =>event=> {
+        if(name==='FindersFeeCreditAmount' || name==='InitialBusinessCredit') {
+            let value = parseFloat(this.state.FindersFeeCreditAmount)+parseFloat(this.state.InitialBusinessCredit);
+            this.setState({FinderFeePayableOn: this.state.AmountPayableOn - value})
+        }
+    };
+
     handleChangeChecked = name => event => {
         this.setState({
             [name]: event.target.checked,
@@ -159,10 +164,17 @@ class NewFindersFeePage extends React.Component {
                         }
                     </TextField>
 
+                    <div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+                        <Button variant="contained" onClick={()=>this.handleGotoDistibutionPage()} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>
+                        <Button variant="contained" onClick={()=>this.handleSaveFindersFee()} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Save</Button>
+                    </div>
+
+                </div>
+                <div className={classNames("flex mt-12 items-center")}>
                     <TextField margin="dense" id="AmountPayableOn" label="Monthly Billing Amount"
                                InputLabelProps={{ shrink: true }}
                                style={{ minWidth: 250 }}
-                               className={classNames(classes.textField, "pr-6 mr-12")}
+                               className={classNames(classes.textField, "pr-6 mr-6")}
                                InputProps={{
                                    startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
                                    inputComponent: NumberFormatCustomNoPrefix,
@@ -173,38 +185,36 @@ class NewFindersFeePage extends React.Component {
                                }}
                                value={this.state.AmountPayableOn}
                     />
-
-                    <div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <Button variant="contained" onClick={()=>this.handleGotoDistibutionPage()} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>
-                        <Button variant="contained" onClick={()=>this.handleSaveFindersFee()} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Save</Button>
-                    </div>
-
-                </div>
-                <div className={classNames("flex mt-12")}>
+                    <Typography className="ml-6 mr-12" variant="subtitle1"><strong>-</strong></Typography>
                     <TextField margin="dense" id="FindersFeeCreditAmount" label="Finders Fee Credit Amount"
                                InputLabelProps={{ shrink: true }}
-                               style={{ minWidth: 250 }}
-                               className={classNames(classes.textField, "pr-6 mr-12")}
+                               style={{ minWidth: 220 }}
+                               className={classNames(classes.textField, "pr-6 mr-6")}
                                InputProps={{ startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
                                    inputComponent: NumberFormatCustomNoPrefix }}
                                value={this.state.FindersFeeCreditAmount}
                                onChange={this.handleChange("FindersFeeCreditAmount")}
+                               onBlur={this.handleBlurPayable("FindersFeeCreditAmount")}
                     />
+                    <Typography className="mr-12 ml-6" variant="subtitle1"><strong>-</strong></Typography>
                     <TextField margin="dense" id="InitialBusinessCredit" label="Initial Business Credit"
                                InputLabelProps={{ shrink: true }}
-                               style={{ minWidth: 250 }}
-                               className={classNames(classes.textField, "pr-6 mr-12")}
+                               style={{ minWidth: 220 }}
+                               className={classNames(classes.textField, "pr-6 mr-6")}
                                InputProps={{startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
                                    inputComponent: NumberFormatCustomNoPrefix }}
                                value={this.state.InitialBusinessCredit}
                                onChange={this.handleChange("InitialBusinessCredit")}
+                               onBlur={this.handleBlurPayable("InitialBusinessCredit")}
                     />
-                    <TextField margin="dense" id="CalculationMethodNameDescription" label="Name / Description"
+                    <Typography className="mr-12 ml-6" variant="subtitle1"><strong>=</strong></Typography>
+                    <TextField margin="dense" id="FinderFeePayableOn" label="Finder Fee Payable On"
                                InputLabelProps={{ shrink: true }}
+                               style={{ minWidth: 220 }}
+                               InputProps={{startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
+                                   inputComponent: NumberFormatCustomNoPrefix,readOnly: true}}
                                className={classNames(classes.textField, "ml-12")}
-                               value={this.state.description || ''}
-                               onChange={this.handleChange("description")}
-                               fullWidth
+                               value={this.state.FinderFeePayableOn}
                     />
                 </div>
                 <div className={classNames("flex mt-12")}>
