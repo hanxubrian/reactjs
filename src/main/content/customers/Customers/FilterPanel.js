@@ -532,17 +532,17 @@ class FilterPanel extends Component {
 			if (nextProps.customerForm.data !== null) {
 				console.log("nextProps.customerForm.data.Data.cus_phone", nextProps.customerForm.data.Data.cus_phone)
 				this.setState({
-					customerName: nextProps.customerForm.data.Data.cus_name,
-					customerAddress: nextProps.customerForm.data.Data.cus_addr,
-					customerCity: nextProps.customerForm.data.Data.cus_city,
-					customerState: nextProps.customerForm.data.Data.cus_state,
-					customerZip: nextProps.customerForm.data.Data.cus_zip,
+					cus_name: nextProps.customerForm.data.Data.cus_name,
+					cus_addr: nextProps.customerForm.data.Data.cus_addr,
+					cus_city: nextProps.customerForm.data.Data.cus_city,
+					cus_state: nextProps.customerForm.data.Data.cus_state,
+					cus_zip: nextProps.customerForm.data.Data.cus_zip,
 
-					customerPhone: "+1" + nextProps.customerForm.data.Data.cus_phone,
-					customerFax: "+1" + nextProps.customerForm.data.Data.cus_fax,
+					cus_phone: "+1" + nextProps.customerForm.data.Data.cus_phone,
+					cus_fax: "+1" + nextProps.customerForm.data.Data.cus_fax,
 
-					customerEmail: nextProps.customerForm.data.Data.email1,
-					customerWeb: nextProps.customerForm.data.Data.cus_zip,
+					email1: nextProps.customerForm.data.Data.email1,
+					cus_zip: nextProps.customerForm.data.Data.cus_zip,
 
 				});
 			}
@@ -1144,12 +1144,12 @@ class FilterPanel extends Component {
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
-									id="outlined-name"
+									id="email1"
 									label="Email"
 									type="email"
 									className={classNames(classes.textField, 'mr-6')}
-									value={this.state.customerEmail}
-									onChange={this.handleChange('customerEmail')}
+									value={this.state.email1}
+									onChange={this.handleChange('email1')}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '100%' }}
