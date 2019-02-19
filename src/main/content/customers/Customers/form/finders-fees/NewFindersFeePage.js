@@ -256,7 +256,7 @@ class NewFindersFeePage extends React.Component {
 
                     <Typography className="mr-6 ml-6" variant="subtitle1"><strong>+</strong></Typography>
 
-                    <TextField margin="dense" id="DownPaymentAmount" label="DownPaymentAmount"
+                    <TextField margin="dense" id="DownPaymentAmount" label="Down Payment Amount"
                                InputLabelProps={{ shrink: true }}
                                className={classNames(classes.textField, "pr-6")}
                                InputProps={{ startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
