@@ -594,14 +594,14 @@ class Customers extends Component {
 							)}
 							{(this.state.temp && customerForm.props.open) && (
 								<div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
-									<div className="flex flex-row flex-1 justify-between">
+									<div className="flex flex-row flex-1 justify-between items-center">
 										{/* <div className="flex flex-shrink items-center">
 											<div className="flex items-center">
 
 											</div>
 										</div> */}
 										{/* <div className="flex flex-shrink" style={{ justifyContent: "space-between" }}> */}
-										<div className="flex">
+										<div className="flex items-center">
 											<IconButton
 												// className={classNames(classes.button, classes.validationMenu)}
 												className={classNames(classes.button, classes.invalidationMenu)}
@@ -628,7 +628,7 @@ class Customers extends Component {
 												<MenuItem><FormControlLabel control={<Checkbox checked={true} style={{ color: '#07df07' }} />} label="Service Location Info" /></MenuItem>
 												<MenuItem><FormControlLabel control={<Checkbox checked={true} style={{ color: '#07df07' }} />} label="Verified &amp; Approved" /></MenuItem>
 											</Menu>
-											<Tooltip title="Save">
+											{/* <Tooltip title="Save">
 												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
 													<Icon>save</Icon>
 												</IconButton>
@@ -637,9 +637,9 @@ class Customers extends Component {
 												<IconButton className={classes.button} aria-label="Add an alarm" onClick={this.trySubmitForApproval}>
 													<Icon>cloud_upload</Icon>
 												</IconButton>
-											</Tooltip>
+											</Tooltip> */}
 										</div>
-										<div className="flex">
+										<div className="flex items-center">
 											<Tooltip title="Contact">
 												<IconButton
 													className={classNames(classes.button)}
@@ -662,6 +662,10 @@ class Customers extends Component {
 												<MenuItem onClick={this.closeContactMenu}>SMS to Customer</MenuItem>
 												<MenuItem onClick={this.onClickEmailToCustomer}>Email to Customer</MenuItem>
 											</Menu>
+											<Button variant="contained" color="primary" onClick={this.trySubmitForApproval}>
+												Save
+												<Icon className={classes.rightIcon}>save</Icon>
+											</Button>
 											<Tooltip title="Discard">
 												<IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
 													<Icon>delete</Icon>

@@ -1342,6 +1342,62 @@ class ServiceAgreementPage extends React.Component {
 										/>
 									</Grid>
 								</Paper>
+								<div className='flex w-full'>
+									<TextField
+										id="BillingCompanyName"
+										label="BillingCompanyName"
+										className={classes.textField}
+										value={this.state.BillingCompanyName || ''}
+										onChange={this.handleChange('BillingCompanyName')}
+										margin="dense"
+										// variant="outlined"
+										sm={2} />
+									<TextField
+										id="BillingCompanyName"
+										label="BillingCompanyName"
+										className={classes.textField}
+										value={this.state.BillingCompanyName || ''}
+										onChange={this.handleChange('BillingCompanyName')}
+										margin="dense"
+										// variant="outlined"
+										sm={2} />
+									<TextField
+										id="BillingCompanyName"
+										label="BillingCompanyName"
+										className={classes.textField}
+										value={this.state.BillingCompanyName || ''}
+										onChange={this.handleChange('BillingCompanyName')}
+										margin="dense"
+										// variant="outlined"
+										sm={2} />
+									<TextField
+										id="BillingCompanyName"
+										label="BillingCompanyName"
+										className={classes.textField}
+										value={this.state.BillingCompanyName || ''}
+										onChange={this.handleChange('BillingCompanyName')}
+										margin="dense"
+										// variant="outlined"
+										sm={2} />
+									<TextField
+										id="BillingCompanyName"
+										label="BillingCompanyName"
+										className={classes.textField}
+										value={this.state.BillingCompanyName || ''}
+										onChange={this.handleChange('BillingCompanyName')}
+										margin="dense"
+										// variant="outlined"
+										sm={2} />
+									<TextField
+										id="BillingCompanyName"
+										label="BillingCompanyName"
+										className={classes.textField}
+										value={this.state.BillingCompanyName || ''}
+										onChange={this.handleChange('BillingCompanyName')}
+										margin="dense"
+										// variant="outlined"
+										sm={2} />
+								</div>
 
 								<h3 className="mt-24 mb-12">Contacts</h3>
 								<Paper>
