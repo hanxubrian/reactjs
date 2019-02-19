@@ -106,18 +106,18 @@ const styles = theme => ({
 	},
 
 	
-	// suggestionsContainerOpen: {
-	// 	position: 'absolute',
-	// 	zIndex: 10,
-	// 	marginTop: theme.spacing.unit,
-	// 	left: 0,
-	// 	right: 0,
-	// 	maxHeight: 200,
-	// 	overflowY: 'scroll'
-	// },
-	// suggestion: {
-	// 	display: 'block',
-	// },
+	suggestionsContainerOpen: {
+		// position: 'absolute',
+		// zIndex: 10,
+		// marginTop: theme.spacing.unit,
+		// left: 0,
+		// right: 0,
+		maxHeight: 200,
+		overflowY: 'scroll'
+	},
+	suggestion: {
+		display: 'block',
+	},
 	suggestionsList: {
 		margin: 0,
 		padding: 0,
@@ -480,15 +480,21 @@ class ServiceAgreementPage extends React.Component {
 
 			addressColumns: [
 				{
-					title: "Type",
-					name: "Type",
-					columnName: "Type",
+					title: "Company Name",
+					name: "CompanyName",
+					columnName: "CompanyName",
 					width: 50,
 				},
 				{
-					title: "Address",
-					name: "Address",
-					columnName: "Address",
+					title: "Address 1",
+					name: "Address1",
+					columnName: "Address1",
+					width: 80,
+				},
+				{
+					title: "Address 2",
+					name: "Address2",
+					columnName: "Address2",
 					width: 80,
 				},
 				{
@@ -511,11 +517,12 @@ class ServiceAgreementPage extends React.Component {
 				},
 			],
 			addressRows: [{
-				Type: "Sample Type",
-				Address: "Sample Address",
-				City: "Sample City",
-				State: "Sample State",
-				ZipPostal: "Sample ZipPostal",
+				CompanyName: "",
+				Address1: "",
+				Address2: "",
+				City: "",
+				State: "",
+				ZipPostal: "",
 			}],
 
 			contactsColumns: [
@@ -1285,6 +1292,7 @@ class ServiceAgreementPage extends React.Component {
 									<Grid
 										rows={addressRows}
 										columns={addressColumns}
+										getRowId={getRowId}
 									>
 
 										<EditingState
@@ -1328,6 +1336,7 @@ class ServiceAgreementPage extends React.Component {
 									<Grid
 										rows={contactsRows}
 										columns={contactsColumns}
+										getRowId={getRowId}
 									>
 
 										<EditingState
