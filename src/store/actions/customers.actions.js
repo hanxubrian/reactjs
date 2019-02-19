@@ -81,6 +81,7 @@ export const GET_COMPUTED_FINDERS_FEE = "[CUSTOMERS APP] GET COMPUTED FINDERS FE
 export const UPDATE_FINDERS_FEE_PARAMS_FOR_COMPUTED = "[CUSTOMERS APP] UPDATE FINDERS FEE PARAMS FOR COMPUTED";
 export const GET_FINDERS_FEE_TYPES = "[CUSTOMERS APP] GET FINDERS FEE TYPES";
 export const UPDATE_ASSIGNED_FRANCHISEE = "[CUSTOMERS APP] UPDATE ASSIGNED FRANCHISEE";
+export const UPDATE_ACTIVE_CUSTOMER_ASSIGNED_FRANCHISEES = "[CUSTOMERS APP] UPDATE ACTIVE CUSTOMER ASSIGNED FRANCHISEES";
 
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	return (dispatch) => {
@@ -637,5 +638,19 @@ export function updateAssignedFranchisee(regionId, customerNo, params) {
                 payload: res.Data
             });
         })();
+    }
+}
+
+/**
+ *
+ * @param params, JSON object array
+ * @returns {Function}
+ */
+export function updateActiveCustomerAssignedFranchisees(params) {
+    return (dispatch) => {
+        dispatch({
+            type: UPDATE_ACTIVE_CUSTOMER_ASSIGNED_FRANCHISEES,
+            payload: params
+        });
     }
 }

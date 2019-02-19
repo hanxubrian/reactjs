@@ -2,6 +2,7 @@ import * as Actions from "../actions";
 import * as UserActions from "../../auth/store/actions";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import _ from 'lodash'
 
 const initialState = {
 	customersDB: null,
@@ -125,6 +126,7 @@ const initialState = {
 	findersFeeParams: null,
     findersFeeTypes: null,
     assignedFranchisees: null,
+    activeCustomerFranchisees: null,
 };
 
 
@@ -663,6 +665,13 @@ const customers = function (state = initialState, action) {
 			return {
 				...state,
                 assignedFranchisees: action.payload
+			};
+		case Actions.UPDATE_ACTIVE_CUSTOMER_ASSIGNED_FRANCHISEES:
+			let data =_.cloneDeep(state.activeCustomer);
+            data.Data.AssignedFranchisees = action.payload;
+			return {
+				...state,
+                activeCustomer: data
 			};
 		default:
 			{
