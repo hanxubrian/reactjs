@@ -669,14 +669,14 @@ class ServiceAgreementPage extends React.Component {
 			this.props.getFranchiseeBillingTypes(nextProps.regionId)
 		}
 		if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
-			this.initCustomerInfo(nextProps.activeCustomer.Data)
+			this.initCustomerInfo(nextProps.activeCustomer)
 		}
 	}
-	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer.Data) => {
-		if (activeCustomerInfo) {
+	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer) => {
+		if (activeCustomerInfo && activeCustomerInfo.Data) {
 			this.setState({
-				SA_Amount: activeCustomerInfo.cont_bill,
-				franchieesesToOffer: activeCustomerInfo.AssignedFranchisees,
+				SA_Amount: activeCustomerInfo.Data.cont_bill,
+				franchieesesToOffer: activeCustomerInfo.Data.AssignedFranchisees,
 			})
 		}
 	}
@@ -1309,19 +1309,15 @@ class ServiceAgreementPage extends React.Component {
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-col">
 								<h3 className="mt-24 mb-12">Addresses</h3>
-								{/* <CustomerLineTable tableType="ADDRESS" headers={address_headers} /> */}
 								<Paper>
 									<Grid
 										rows={addressRows}
 										columns={addressColumns}
 										getRowId={getRowId}
 									>
-
 										<EditingState
-											// columnExtensions={editingColumnExtensions}
 											onCommitChanges={this.commitChangesAddresses}
 										/>
-
 										<Table />
 										<TableHeaderRow />
 										<TableEditRow />
@@ -1334,38 +1330,19 @@ class ServiceAgreementPage extends React.Component {
 											showDeleteCommand
 											commandComponent={Command}
 										/>
-										{/* <Getter
-													name="tableColumns"
-													computed={({ tableColumns }) => {
-														// debugger
-														const result = [
-															...tableColumns.filter(c => c.type !== TableEditColumn.COLUMN_TYPE),
-															{ key: 'editCommand', type: TableEditColumn.COLUMN_TYPE, width: 100 }
-														];
-														return result;
-													}
-													}
-												/> */}
-
-
 									</Grid>
 								</Paper>
 
-
 								<h3 className="mt-24 mb-12">Contacts</h3>
-								{/* <CustomerLineTable tableType="BILLING_SETTING" headers={billing_headers} /> */}
 								<Paper>
 									<Grid
 										rows={contactsRows}
 										columns={contactsColumns}
 										getRowId={getRowId}
 									>
-
 										<EditingState
-											// columnExtensions={editingColumnExtensions}
 											onCommitChanges={this.commitChangesContacts}
 										/>
-
 										<Table />
 										<TableHeaderRow />
 										<TableEditRow />
@@ -1378,20 +1355,6 @@ class ServiceAgreementPage extends React.Component {
 											showDeleteCommand
 											commandComponent={Command}
 										/>
-										{/* <Getter
-													name="tableColumns"
-													computed={({ tableColumns }) => {
-														// debugger
-														const result = [
-															...tableColumns.filter(c => c.type !== TableEditColumn.COLUMN_TYPE),
-															{ key: 'editCommand', type: TableEditColumn.COLUMN_TYPE, width: 100 }
-														];
-														return result;
-													}
-													}
-												/> */}
-
-
 									</Grid>
 								</Paper>
 							</GridItem>

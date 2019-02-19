@@ -804,7 +804,16 @@ class FilterPanel extends Component {
 		this.props.selectLocationFilter(payload)
 	}
 
-
+	handleChangeCustomerInfoProps = name => event => {
+		const value = event.target.value
+		this.setState({ name, value })
+		this.props.updateNewCustomerParam(name, value)
+	}
+	handleChangeCheckedCustomerInfoProps = name => event => {
+		const checked = event.target.checked
+		this.setState({ name, checked })
+		this.props.updateNewCustomerParam(name, checked)
+	}
 	//
 	// customer name suggestion
 	//
@@ -1014,7 +1023,7 @@ class FilterPanel extends Component {
 									label="Name *"
 									className={classes.textField}
 									value={this.state.customerName}
-									onChange={this.handleChange('customerName')}
+									onChange={this.handleChangeCustomerInfoProps('customerName')}
 									margin="dense"
 									// variant="outlined"
 									autoFocus
@@ -1027,7 +1036,7 @@ class FilterPanel extends Component {
 									label="Address *"
 									className={classes.textField}
 									value={this.state.customerAddress}
-									onChange={this.handleChange('customerAddress')}
+									onChange={this.handleChangeCustomerInfoProps('customerAddress')}
 									margin="dense"
 									// variant="outlined"
 									fullWidth />
@@ -1560,6 +1569,8 @@ function mapDispatchToProps(dispatch) {
 		selectLocationFilter: Actions.selectLocationFilter,
 		setFilterCustomerStatuses: Actions.setFilterCustomerStatuses,
 		getCustomers: Actions.getCustomers,
+
+		updateNewCustomerParam: Actions.updateNewCustomerParam,
 	}, dispatch);
 }
 
