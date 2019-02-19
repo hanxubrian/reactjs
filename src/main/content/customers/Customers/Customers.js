@@ -415,6 +415,18 @@ class Customers extends Component {
 				nextProps.longitude,
 				nextProps.searchText);
 		}
+
+		if (nextProps.bCreateCustomerStart !== this.props.bCreateCustomerStart && nextProps.bCreateCustomerStart === false) {
+			this.props.getCustomers(
+				this.props.regionId,
+				this.props.statusId,
+				this.props.filters.StatusNames,
+				this.props.filters.AccountTypeListName,
+				this.props.location,
+				this.props.latitude,
+				this.props.longitude,
+				this.props.searchText);
+		}
 	}
 
 

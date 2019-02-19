@@ -1019,11 +1019,11 @@ class FilterPanel extends Component {
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
-									id="Name"
+									id="cus_name"
 									label="Name *"
 									className={classes.textField}
-									value={this.state.customerName}
-									onChange={this.handleChangeCustomerInfoProps('customerName')}
+									value={this.state.cus_name || ''}
+									onChange={this.handleChangeCustomerInfoProps('cus_name')}
 									margin="dense"
 									// variant="outlined"
 									autoFocus
@@ -1032,11 +1032,11 @@ class FilterPanel extends Component {
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
-									id="outlined-name"
+									id="cus_addr"
 									label="Address *"
 									className={classes.textField}
-									value={this.state.customerAddress}
-									onChange={this.handleChangeCustomerInfoProps('customerAddress')}
+									value={this.state.cus_addr || ''}
+									onChange={this.handleChangeCustomerInfoProps('cus_addr')}
 									margin="dense"
 									// variant="outlined"
 									fullWidth />
