@@ -484,6 +484,31 @@ fullbill: 0
                 })
         });
     }
+
+    /**
+     *
+     * @param regionId
+     * @param customerNo
+     * @param parmas, JSON object
+     * @returns {Promise<any>}
+     * @constructor
+     */
+    UpdateAssignedFranchisee(regionId, customerNo, parmas) {
+        return new Promise((resolve, reject) => {
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/${{regionId}}/Customer/UpdateAssignedFranchisee?CustomerNo=${customerNo}`, params)
+                .then(res => {
+                    if (res.status === 200) {
+                        resolve(res.data);
+                    }
+                    else if (res.status !== 200) {
+                        reject(res.data);
+                    }
+                })
+                .catch(error => {
+                    resolve(error);
+                })
+        });
+    }
 }
 
 
