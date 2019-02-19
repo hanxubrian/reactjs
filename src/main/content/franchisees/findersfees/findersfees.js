@@ -223,10 +223,7 @@ const styles = theme => ({
 class FindersFees extends Component {
 	constructor(props) {
 		super(props);
-
-		if (!props.bLoadedFindersFees) {
-			props.getFindersFees([this.props.regionId],[],"");
-		}
+		props.getFindersFees([this.props.regionId],[],"");		
 		this.fetchData = this.fetchData.bind(this);
 		this.escFunction = this.escFunction.bind(this);
 
@@ -241,7 +238,6 @@ class FindersFees extends Component {
 			selection: [],
 			selectAll: false,
             regionId: 0,
-
             year: 2018,
             month: 12,
 			current_lat: 0,
@@ -374,7 +370,8 @@ class FindersFees extends Component {
 		this.setState({ checkedComplete: this.props.transactionStatus.checkedComplete });
 		this.setState({ checkedOpen: this.props.transactionStatus.checkedOpen });
 
-		this.getFindersFeesFromStatus()
+		this.getFindersFeesFromStatus();
+		//this.props.getFindersFees([this.props.regionId],[],"");
 
 
 	}
@@ -390,7 +387,7 @@ class FindersFees extends Component {
 	getFindersFeesFromStatus = (rawData = this.props.findersFees) => {
         let all_temp = [];
 			
-		if(rawData.Data.length > 0 && rawData.Data !== null){
+		if(rawData.Data.length > 0 && rawData !== null){
 		   rawData.Data.map(x=>{
 			  if(x.FinderFeeList !== null){
 				x.FinderFeeList.map(y=>{
@@ -411,6 +408,7 @@ class FindersFees extends Component {
 		this.getLocation();
 	}
 
+	
 	componentWillUnmount() {
 		document.removeEventListener("keydown", this.escFunction, false);
 	}
