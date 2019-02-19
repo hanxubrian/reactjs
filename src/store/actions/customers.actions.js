@@ -79,19 +79,9 @@ export const SHOW_CANCEL_CONTRACT_PAGE = "[CUSTOMERS APP] SHOW_CANCEL_CONTRACT_P
 export const SHOW_SUSPEND_CONTRACT_PAGE = "[CUSTOMERS APP] SHOW_SUSPEND_CONTRACT_PAGE";
 export const GET_COMPUTED_FINDERS_FEE = "[CUSTOMERS APP] GET COMPUTED FINDERS FEE";
 export const UPDATE_FINDERS_FEE_PARAMS_FOR_COMPUTED = "[CUSTOMERS APP] UPDATE FINDERS FEE PARAMS FOR COMPUTED";
+export const GET_FINDERS_FEE_TYPES = "[CUSTOMERS APP] GET FINDERS FEE TYPES";
 
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
-	// return dispatch => {
-	// const request = axios.get("/api/customers/gets");
-
-	// return request.then(response => {
-	//     return dispatch({
-	//         type: GET_ALL_CUSTOMERS,
-	//         payload: response.data
-	//     });
-	// });
-
-	// };
 	return (dispatch) => {
 
 		dispatch({
@@ -619,6 +609,18 @@ export function getComputedFinderFee(params) {
             let res = await customersService.getComputedFinderFee(params);
             dispatch({
                 type: GET_COMPUTED_FINDERS_FEE,
+                payload: res.Data
+            });
+        })();
+    }
+}
+
+export function getFinderFeeTypes() {
+    return (dispatch) => {
+        (async () => {
+            let res = await customersService.getFinderFeeTypes();
+            dispatch({
+                type: GET_FINDERS_FEE_TYPES,
                 payload: res.Data
             });
         })();

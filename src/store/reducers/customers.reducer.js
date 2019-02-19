@@ -2,6 +2,7 @@ import * as Actions from "../actions";
 import * as UserActions from "../../auth/store/actions";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import {GET_FINDERS_FEE_TYPES} from "../actions";
 
 const initialState = {
 	customersDB: null,
@@ -123,6 +124,7 @@ const initialState = {
 	increase_decrease: null,
     findersFeeComputed: null,
 	findersFeeParams: null,
+    findersFeeTypes: null,
 };
 
 
@@ -651,6 +653,11 @@ const customers = function (state = initialState, action) {
 			return {
 				...state,
                 findersFeeParams: {...state.findersFeeParams, ...action.payload}
+			};
+		case Actions.GET_FINDERS_FEE_TYPES:
+			return {
+				...state,
+                findersFeeTypes: action.payload
 			};
 		default:
 			{
