@@ -105,7 +105,7 @@ const styles = theme => ({
 		fontSize: 13
 	},
 
-	
+
 	suggestionsContainerOpen: {
 		// position: 'absolute',
 		// zIndex: 10,
@@ -673,10 +673,12 @@ class ServiceAgreementPage extends React.Component {
 		}
 	}
 	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer.Data) => {
-		this.setState({
-			SA_Amount: activeCustomerInfo.cont_bill,
-			franchieesesToOffer: activeCustomerInfo.AssignedFranchisees,
-		})
+		if (activeCustomerInfo) {
+			this.setState({
+				SA_Amount: activeCustomerInfo.cont_bill,
+				franchieesesToOffer: activeCustomerInfo.AssignedFranchisees,
+			})
+		}
 	}
 
 	handleStep = () => {
