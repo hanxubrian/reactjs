@@ -128,12 +128,11 @@ class UsersPermission extends React.Component {
 
     componentWillReceiveProps(nextProps, nextContext) {
 
-        let checkedStatus = {};
-
+        
+    
         if ( nextProps.userPermissionList !== this.props.userPermissionList && nextProps.userPermissionList !== null )
         {
- 
-                let tempAppList = [];
+                
 
                 //console.log("UserPermissionList",nextProps.userPermissionList);
 
@@ -141,23 +140,116 @@ class UsersPermission extends React.Component {
                     UserPermission: nextProps.userPermissionList
                 });
 
+
+                if(this.props.bNewForm === false && this.props.userDetail !== null){
+
+                        if(this.props.userDetail.details.Apps !== null)  {
+                            let checkedStatus = {};
+                            let tempAppList = [];
+        
+                            console.log("userPermissionList",nextProps.userPermissionList);
+                            console.log("userDetail",this.props.userDetail.details.Apps);
+        
+                            this.props.userDetail.details.Apps.forEach((x, xIndex) => {
+        
+                                tempAppList.push({
+                                    _id: x._id,
+                                    AppId: x.AppId,
+                                    menuOptions: []
+                                });
+        
+                                x.menuOptions.forEach((y,yIndex)=>{
+        
+                                    tempAppList[xIndex].menuOptions.push({
+                                        MenuId: y.MenuId,
+                                        Title: y.Title,
+                                        Children: []
+                                    });
+                                
+                                    y.Children.forEach((z, zIndex) => {
+        
+                                        tempAppList[xIndex].menuOptions[yIndex].Children.push({
+                                            MenuId: z.MenuId,
+                                            View: z.View,
+                                            Create: z.Create,
+                                            Delete: z.Edit,
+                                            Edit: z.Delete,
+                                            Execute: z.Execute
+                                        });
+            
+                                        checkedStatus[`view_${xIndex}_${yIndex}_${zIndex}`] = z.View;
+                                        checkedStatus[`create_${xIndex}_${yIndex}_${zIndex}`] = z.Create;
+                                        checkedStatus[`edit_${xIndex}_${yIndex}_${zIndex}`] = z.Edit;
+                                        checkedStatus[`delete_${xIndex}_${yIndex}_${zIndex}`] = z.Delete;
+                                        checkedStatus[`execute_${xIndex}_${yIndex}_${zIndex}`] = z.Execute;
+                                    })
+                                })
+            
+                            });
+                            nextProps.userPermissionList.forEach((x, xIndex) => {
+                                if(tempAppList[xIndex] === undefined){
+                                    tempAppList.push({
+                                        _id: x._id,
+                                        AppId: x.AppId,
+                                        menuOptions: []
+                                    });
+                                }
+                                x.menuOptions.forEach((y,yIndex)=>{
+                                    if(tempAppList[xIndex].menuOptions[yIndex]===undefined){
+                                        tempAppList[xIndex].menuOptions.push({
+                                            MenuId: y.MenuId,
+                                            Title: y.Title,
+                                            Children: []
+                                        });
+                                    }
+                                    y.Children.forEach((z, zIndex) => {
+                                        if(tempAppList[xIndex].menuOptions[yIndex].Children[zIndex]===undefined){
+                                            tempAppList[xIndex].menuOptions[yIndex].Children.push({
+                                                MenuId: z.MenuId,
+                                                View: false,
+                                                Create: false,
+                                                Delete: false,
+                                                Edit: false,
+                                                Execute: false
+                                            });
+                                            checkedStatus[`view_${xIndex}_${yIndex}_${zIndex}`] = false;
+                                            checkedStatus[`create_${xIndex}_${yIndex}_${zIndex}`] = false;
+                                            checkedStatus[`edit_${xIndex}_${yIndex}_${zIndex}`] = false;
+                                            checkedStatus[`delete_${xIndex}_${yIndex}_${zIndex}`] = false;
+                                            checkedStatus[`execute_${xIndex}_${yIndex}_${zIndex}`] = false;
+                                        }                                        
+                                    })
+                                })
+            
+                            });
+                            this.setState({checkedStatus});
+                            this.setState({
+                                AppList: tempAppList
+                            });
+                            console.log("tempAppList",tempAppList);
+                            this.updateUserFormPayload("Apps",tempAppList);
+                    }                
+                }
+
                 if(this.props.bNewForm){
+                    let checkedStatus = {};
+                    let tempAppList = [];
                     nextProps.userPermissionList.forEach((x, xIndex) => {
 
                         tempAppList.push({
                             _id: x._id,
                             AppId: x.AppId,
-                            Menus: []
+                            menuOptions: []
                         });
     
                         x.menuOptions.forEach((y,yIndex)=>{
-                            tempAppList[xIndex].Menus.push({
+                            tempAppList[xIndex].menuOptions.push({
                                 MenuId: y.MenuId,
                                 Title: y.Title,
                                 Children: []
                             });
                             y.Children.forEach((z, zIndex) => {
-                                tempAppList[xIndex].Menus[yIndex].Children.push({
+                                tempAppList[xIndex].menuOptions[yIndex].Children.push({
                                     MenuId: z.MenuId,
                                     View: false,
                                     Create: false,
@@ -180,6 +272,7 @@ class UsersPermission extends React.Component {
                     this.setState({
                         AppList: tempAppList
                     });
+                    
                     this.updateUserFormPayload("Apps",tempAppList);
                 }                
         }
@@ -195,55 +288,6 @@ class UsersPermission extends React.Component {
             // localMenu.
             console.log('fired menu', localMenu);
 
-        }
-        if(this.props.userDetail !== nextProps.userDetail && this.props.bNewForm === false && nextProps.userDetail !== null){
-
-                if(nextProps.userDetail.details.Apps !== null)  {
-                    checkedStatus = {};
-                    let tempAppList = [];
-
-                    nextProps.userDetail.details.Apps.forEach((x, xIndex) => {
-
-                        tempAppList.push({
-                            _id: x._id,
-                            AppId: x.AppId,
-                            Menus: []
-                        });
-
-                        x.menuOptions.forEach((y,yIndex)=>{
-
-                            tempAppList[xIndex].Menus.push({
-                                MenuId: y.MenuId,
-                                Title: y.Title,
-                                Children: []
-                            });
-                           
-                            y.Children.forEach((z, zIndex) => {
-
-                                tempAppList[xIndex].Menus[yIndex].Children.push({
-                                    MenuId: z.MenuId,
-                                    View: z.View,
-                                    Create: z.Create,
-                                    Delete: z.Edit,
-                                    Edit: z.Delete,
-                                    Execute: z.Execute
-                                });
-    
-                                checkedStatus[`view_${xIndex}_${yIndex}_${zIndex}`] = z.View;
-                                checkedStatus[`create_${xIndex}_${yIndex}_${zIndex}`] = z.Create;
-                                checkedStatus[`edit_${xIndex}_${yIndex}_${zIndex}`] = z.Edit;
-                                checkedStatus[`delete_${xIndex}_${yIndex}_${zIndex}`] = z.Delete;
-                                checkedStatus[`execute_${xIndex}_${yIndex}_${zIndex}`] = z.Execute;
-                            })
-                        })
-    
-                    });
-                    this.setState({checkedStatus});
-                    this.setState({
-                        AppList: tempAppList
-                    });
-                    this.updateUserFormPayload("Apps",tempAppList);
-            }                
         }
     }
 
@@ -275,7 +319,7 @@ class UsersPermission extends React.Component {
         selected.map(s=>checkedStatus[s]=event.target.checked);
 
         let newAppList = [...this.state.AppList];
-        let menus = newAppList[index].Menus;
+        let menus = newAppList[index].menuOptions;
 
         let actionName = FuseUtils.capital_letter(name);
          menus.map(menu=>{
@@ -301,7 +345,7 @@ class UsersPermission extends React.Component {
         });
 
         let newAppList = [...this.state.AppList];
-        newAppList[index].Menus[pIndex].Children[cIndex][actionName] = checked;
+        newAppList[index].menuOptions[pIndex].Children[cIndex][actionName] = checked;
         console.log("newAPPlist",newAppList);
         this.updateUserFormPayload("Apps",newAppList);
 

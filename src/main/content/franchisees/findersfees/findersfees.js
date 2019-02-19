@@ -390,7 +390,7 @@ class FindersFees extends Component {
 	getFindersFeesFromStatus = (rawData = this.props.findersFees) => {
         let all_temp = [];
 			
-		if(rawData.Data.length > 0 && rawData !== null){
+		if(rawData.Data.length > 0 && rawData.Data !== null){
 		   rawData.Data.map(x=>{
 			  if(x.FinderFeeList !== null){
 				x.FinderFeeList.map(y=>{
