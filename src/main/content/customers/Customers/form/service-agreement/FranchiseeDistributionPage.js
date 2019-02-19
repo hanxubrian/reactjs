@@ -358,22 +358,22 @@ class FranchiseeDistributionPage extends React.Component {
 			this.props.getFranchiseeBillingTypes(nextProps.regionId)
 		}
 		if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
-			this.initCustomerInfo(nextProps.activeCustomer.Data)
+			this.initCustomerInfo(nextProps.activeCustomer)
 		}
 		if (!_.isEqual(this.props.franchisees, nextProps.franchisees)) {
 			this.getFranchiseesFromStatus(nextProps.franchisees);
 		}
 	}
 
-	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer.Data) => {
-		if (activeCustomerInfo) {
+	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer) => {
+		if (activeCustomerInfo && activeCustomerInfo.Data) {
 			this.setState({
-				SA_Amount: activeCustomerInfo.cont_bill,
-				franchieesesToOffer: activeCustomerInfo.AssignedFranchisees,
+				SA_Amount: activeCustomerInfo.Data.cont_bill,
+				franchieesesToOffer: activeCustomerInfo.Data.AssignedFranchisees,
 			});
 			this.props.updateFindersFeeParams({
-				FranchiseeId: activeCustomerInfo.AssignedFranchisees[0].FranchiseeId,
-				CustomerId: activeCustomerInfo._id, RegionId: this.props.regionId
+				FranchiseeId: activeCustomerInfo.Data.AssignedFranchisees[0].FranchiseeId,
+				CustomerId: activeCustomerInfo.Data._id, RegionId: this.props.regionId
 			});
 		}
 	};
@@ -990,7 +990,7 @@ class FranchiseeDistributionPage extends React.Component {
 												},
 											}}
 										/>
-											<TextField style={{ width: franHeaders[7].width + '%' }}
+										<TextField style={{ width: franHeaders[7].width + '%' }}
 											// type='number'
 											InputProps={{
 												readOnly: false,
@@ -1291,7 +1291,7 @@ function mapDispatchToProps(dispatch) {
 		getFranchisees: Actions.getFranchisees,
 		updateCustomersParameter: Actions.updateCustomersParameter,
 		updateFindersFeeParams: Actions.updateFindersFeeParams,
-        updateAssignedFranchisee: Actions.updateAssignedFranchisee,
+		updateAssignedFranchisee: Actions.updateAssignedFranchisee,
 	}, dispatch);
 }
 
@@ -1323,7 +1323,7 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 
 		franchisees: franchisees.franchiseesDB,
 		NewAmount: customers.NewAmount,
-        assignedFranchisees: customers.assignedFranchisees,
+		assignedFranchisees: customers.assignedFranchisees,
 	}
 }
 
