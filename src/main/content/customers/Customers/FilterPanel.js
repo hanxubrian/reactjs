@@ -1014,9 +1014,9 @@ class FilterPanel extends Component {
 				{customerForm && customerForm.props.open
 					? (
 						<GridContainer style={{ alignItems: 'center', width: 500 }} className={classNames(classes.formControl)}>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							{/* <GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<h3 className="mt-24">Customer Information</h3>
-							</GridItem>
+							</GridItem> */}
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
 									id="cus_name"
@@ -1167,7 +1167,7 @@ class FilterPanel extends Component {
 								/>
 							</GridItem>
 
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row mt-24">
 								{this.props.accountTypesGroups !== null && (
 									<TextField
 										id="AccountTypeGroup"

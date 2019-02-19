@@ -848,7 +848,7 @@ class ServiceAgreementPage extends React.Component {
 
 									InputProps={{
 										startAdornment: <InputAdornment position="start">$</InputAdornment>,
-										readOnly: true
+										// readOnly: true
 									}}
 								/>
 								{customerForm.props.open && customerForm.type === "edit" &&
