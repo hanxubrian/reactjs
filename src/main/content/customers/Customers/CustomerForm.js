@@ -1099,6 +1099,8 @@ class CustomerForm extends Component {
 		this.changeSelection = selection => this.setState({ selection });
 		this.changeSorting = sorting => this.setState({ sorting });
 		this.changeSearchValue = value => this.setState({ searchValue: value });
+		if(props.findersFeeTypes===null)
+			props.getFinderFeeTypes();
 	}
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
@@ -1258,6 +1260,7 @@ function mapDispatchToProps(dispatch) {
 		closeEditCustomerForm: Actions.closeEditCustomerForm,
 		getDocuments: Actions.getDocuments,
         updateCustomersParameter: Actions.updateCustomersParameter,
+        getFinderFeeTypes: Actions.getFinderFeeTypes,
 	}, dispatch);
 }
 
@@ -1278,6 +1281,7 @@ function mapStateToProps({ customers, franchisees, auth }) {
 		accountExecutiveList: customers.accountExecutiveList,
 		activeCustomer: customers.activeCustomer,
         activeStep: customers.activeStep,
+        findersFeeTypes: customers.findersFeeTypes,
 
 	}
 }

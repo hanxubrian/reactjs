@@ -64,6 +64,7 @@ class NewFindersFeePage extends React.Component {
             ResultAmountFinanced: '',
             IncludeDpWith1stPayment: false,
             DownPaymentPaid: false,
+            findersFeeType: false,
         };
     }
 
@@ -192,12 +193,30 @@ class NewFindersFeePage extends React.Component {
                     />
                     <TextField margin="dense" id="InitialBusinessCredit" label="Initial Business Credit"
                                InputLabelProps={{ shrink: true }}
-                               className={classNames(classes.textField, "pr-6")}
+                               className={classNames(classes.textField, "pr-6 mr-12")}
                                InputProps={{startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
                                    inputComponent: NumberFormatCustomNoPrefix }}
                                value={this.state.InitialBusinessCredit || ''}
                                onChange={this.handleChange("InitialBusinessCredit")}
                     />
+                    <TextField margin="dense" id="findersFeeType" label="Finders Fee Type"
+                               select
+                               InputLabelProps={{ shrink: true }}
+                               style={{minWidth: 220}}
+                               className={classNames(classes.textField, "pr-6")}
+                               InputProps={{
+
+                               }}
+                               value={this.state.findersFeeType || ''}
+                               onChange={this.handleChange("findersFeeType")}
+                               onBlur={this.handleChangeParamsOnBlur('findersFeeType')}
+                    >
+                        {this.props.findersFeeTypes!==null &&
+                            this.props.findersFeeTypes.map((x) => {
+                                return (<MenuItem key={x.code} value={x.code}>{x.name}</MenuItem>)
+                            })
+                        }
+                    </TextField>
                 </div>
                 <div className={classNames("flex mt-12 justify-between items-center")}>
                     <TextField margin="dense" id="MonthlyPayment" label="Monthly Payment"
@@ -330,6 +349,7 @@ function mapStateToProps({ customers, auth}) {
         activeStep: customers.activeStep,
         regionId: auth.login.defaultRegionId,
         findersFeeParams: auth.login.findersFeeParams,
+        findersFeeTypes: customers.findersFeeTypes,
     }
 }
 
