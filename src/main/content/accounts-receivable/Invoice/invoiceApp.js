@@ -594,7 +594,7 @@ class InvoiceApp extends Component {
                                                     onClick={(ev) => toggleFilterPanel()}
                                                     aria-label="toggle filter panel"
                                                     color="secondary"
-                                                    disabled={filterState ? true : false}
+                                                    // disabled={filterState ? true : false}
                                                     className={classNames(classes.filterPanelButton)}
                                                 >
                                                     <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
@@ -699,15 +699,15 @@ class InvoiceApp extends Component {
                     leftSidebarHeader={
                         <div className={classNames("flex flex-row w-full h-full justify-between p-12 align-middle pr-0", {'filteropen': filterState})}>
                             <h4 style={{marginBlockStart: '1em'}}>Filter Panel</h4>
-                            <FuseAnimate animation="transition.expandIn" delay={200}>
-                                <div>
-                                    <Hidden xsDown>
-                                        <IconButton onClick={(ev)=>toggleFilterPanel()}>
-                                            <Icon>close</Icon>
-                                        </IconButton>
-                                    </Hidden>
-                                </div>
-                            </FuseAnimate>
+                            {/*<FuseAnimate animation="transition.expandIn" delay={200}>*/}
+                                {/*<div>*/}
+                                    {/*<Hidden xsDown>*/}
+                                        {/*<IconButton onClick={(ev)=>toggleFilterPanel()}>*/}
+                                            {/*<Icon>close</Icon>*/}
+                                        {/*</IconButton>*/}
+                                    {/*</Hidden>*/}
+                                {/*</div>*/}
+                            {/*</FuseAnimate>*/}
                         </div>
                     }
                     leftSidebarContent={
