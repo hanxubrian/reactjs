@@ -946,7 +946,7 @@ class ContactHistoryPage extends Component {
 		return (
 			<div className="flex flex-col">
 				<div className="flex justify-start">
-					{row.comment}
+					{row.call_com}
 				</div>
 			</div>
 		)
