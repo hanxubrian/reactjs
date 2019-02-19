@@ -25,8 +25,8 @@ const initialState = {
 	regionId: 1,
     // statusId: [21, 24],
     // searchText: "",
-    month: 1,
-    year: 2019,
+    month: 12,
+    year: 2018,
 	transactionStatus: { checkedPaid: true, checkedPP: true, checkedComplete: true, checkedOpen: true },
 	chargebackForm: {
 		type: 'new',
@@ -59,7 +59,7 @@ const chargebacks = function (state = initialState, action) {
 					bChargebacksUpdated: false
 				};
 			}
-			case Actions.GET_LEASE_STATUS:
+			case Actions.GET_CHARGEBACK_STATUS:
 			{
 				let chargebackStatus = action.payload;
 				if(action.payload.length>0) {
@@ -71,7 +71,7 @@ const chargebacks = function (state = initialState, action) {
 					...state, chargebackStatus: chargebackStatus
 				}
 			}
-			case Actions.GET_LEASE_DETAIL:
+			case Actions.GET_CHARGEBACK_DETAIL:
 			{
 				return {
 					...state,
@@ -121,7 +121,7 @@ const chargebacks = function (state = initialState, action) {
 				return { ...state, chargebacksDB: action.payload }
 
 			}
-		case Actions.REMOVE_SELECTED_LEASE:
+		case Actions.REMOVE_SELECTED_CHARGEBACK:
 			{
 				return { ...state, removedId: action.payload }
 
@@ -132,7 +132,7 @@ const chargebacks = function (state = initialState, action) {
 					...initialState
 				}
 			}
-		case Actions.OPEN_NEW_LEASE_FORM:
+		case Actions.OPEN_NEW_CHARGEBACK_FORM:
 			{
 				return {
 					...state,
@@ -146,7 +146,7 @@ const chargebacks = function (state = initialState, action) {
 					}
 				};
 			}
-		case Actions.CLOSE_NEW_LEASE_FORM:
+		case Actions.CLOSE_NEW_CHARGEBACK_FORM:
 			{
 				return {
 					...state,
@@ -162,7 +162,7 @@ const chargebacks = function (state = initialState, action) {
                 	chargebackDetail: null
 				};
 			}
-		case Actions.OPEN_EDIT_LEASE_FORM:
+		case Actions.OPEN_EDIT_CHARGEBACK_FORM:
 			{
 				return {
 					...state,
@@ -177,7 +177,7 @@ const chargebacks = function (state = initialState, action) {
 					bChargebackStart: false
 				};
 			}
-		case Actions.CLOSE_EDIT_LEASE_FORM:
+		case Actions.CLOSE_EDIT_CHARGEBACK_FORM:
 			{
 				return {
 					...state,
@@ -193,14 +193,14 @@ const chargebacks = function (state = initialState, action) {
 					chargebackDetail: null
 				};
 			}
-		case Actions.STARTING_SAVE_LEASE_FORM_DATA:
+		case Actions.STARTING_SAVE_CHARGEBACK_FORM_DATA:
 			{
 				return {
 					...state,
 					bStartingSaveFormData: true
 				}
 			}
-		case Actions.RESET_LEASE_FORM:
+		case Actions.RESET_CHARGEBACK_FORM:
 			{
 				return {
 					...state,
@@ -216,15 +216,15 @@ const chargebacks = function (state = initialState, action) {
                 chargebackForm: {...state.chargebackForm, franchisee: action.payload}
             }
         }
-		case Actions.UPDATE_LEASE_DATE_OPTION:
+		case Actions.UPDATE_CHARGEBACK_DATE_OPTION:
 			{
 				return {
 					...state,
 					chargebackDateOption: action.payload
 				}
 			}
-		case Actions.ADD_LEASE:
-		case Actions.UPDATE_A_LEASE:
+		case Actions.ADD_CHARGEBACK:
+		case Actions.UPDATE_A_CHARGEBACK:
         	{
             return {...state, newChargeback: action.payload}
         	}

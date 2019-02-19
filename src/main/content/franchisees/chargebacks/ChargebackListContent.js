@@ -1416,7 +1416,7 @@ class ChargebackListContent extends Component {
 									/>
 									<IntegratedGrouping />
 									<VirtualTable
-										height="530"
+										// height="530"
 										tableComponent={TableComponent}
 										headComponent = {TableHeadComponent}
 										columnExtensions={tableColumnExtensions}
