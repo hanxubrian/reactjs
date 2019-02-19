@@ -489,11 +489,11 @@ fullbill: 0
      *
      * @param regionId
      * @param customerNo
-     * @param parmas, JSON object
+     * @param params, JSON object
      * @returns {Promise<any>}
      * @constructor
      */
-    UpdateAssignedFranchisee(regionId, customerNo, parmas) {
+    updateAssignedFranchisee(regionId, customerNo, params) {
         return new Promise((resolve, reject) => {
             axios_instance.post(`${BASE_MONGO_API_URL}/v1/${{regionId}}/Customer/UpdateAssignedFranchisee?CustomerNo=${customerNo}`, params)
                 .then(res => {

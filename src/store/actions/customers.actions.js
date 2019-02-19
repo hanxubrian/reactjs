@@ -80,6 +80,7 @@ export const SHOW_SUSPEND_CONTRACT_PAGE = "[CUSTOMERS APP] SHOW_SUSPEND_CONTRACT
 export const GET_COMPUTED_FINDERS_FEE = "[CUSTOMERS APP] GET COMPUTED FINDERS FEE";
 export const UPDATE_FINDERS_FEE_PARAMS_FOR_COMPUTED = "[CUSTOMERS APP] UPDATE FINDERS FEE PARAMS FOR COMPUTED";
 export const GET_FINDERS_FEE_TYPES = "[CUSTOMERS APP] GET FINDERS FEE TYPES";
+export const UPDATE_ASSIGNED_FRANCHISEE = "[CUSTOMERS APP] UPDATE ASSIGNED FRANCHISEE";
 
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	return (dispatch) => {
@@ -621,6 +622,18 @@ export function getFinderFeeTypes() {
             let res = await customersService.getFinderFeeTypes();
             dispatch({
                 type: GET_FINDERS_FEE_TYPES,
+                payload: res.Data
+            });
+        })();
+    }
+}
+
+export function updateAssignedFranchisee(regionId, customerNo, params) {
+    return (dispatch) => {
+        (async () => {
+            let res = await customersService.updateAssignedFranchisee(regionId, customerNo, params);
+            dispatch({
+                type: UPDATE_ASSIGNED_FRANCHISEE,
                 payload: res.Data
             });
         })();

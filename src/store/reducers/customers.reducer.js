@@ -125,6 +125,7 @@ const initialState = {
     findersFeeComputed: null,
 	findersFeeParams: null,
     findersFeeTypes: null,
+    assignedFranchisees: null,
 };
 
 
@@ -658,6 +659,11 @@ const customers = function (state = initialState, action) {
 			return {
 				...state,
                 findersFeeTypes: action.payload
+			};
+		case Actions.UPDATE_ASSIGNED_FRANCHISEE:
+			return {
+				...state,
+                assignedFranchisees: action.payload
 			};
 		default:
 			{
