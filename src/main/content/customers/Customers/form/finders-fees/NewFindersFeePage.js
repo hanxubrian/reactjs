@@ -14,6 +14,9 @@ import { withStyles } from "@material-ui/core";
 import { withRouter } from 'react-router-dom';
 import * as Actions from 'store/actions';
 
+// 3rd parth
+import axios from "axios";
+
 import classNames from 'classnames';
 
 const styles = theme => ({
@@ -53,15 +56,15 @@ class NewFindersFeePage extends React.Component {
             DownPaymentPercent: '',
             MonthlyPaymentPercent: '',
             FindersFeeCreditAmount: '',
-            MonthlyPayment: '',
-            CalculationMethod: 'Method 1',
+            MonthlyPaymentAmount: '',
+            CalculationMethodCode: 'S',
             InitialBusinessCredit: '',
             description: '',
-            MultiTenant100OccuaoncyInput: '',
-            MonthlyBillingAmount: '',
+            MultiTenantOccupancy: '',
+            AmountPayableOn: '',
             AmountFinanced: '',
-            DownPayment: '',
-            ResultAmountFinanced: '',
+            DownPaymentAmount: '',
+            FinderFeeTotal: '',
             IncludeDpWith1stPayment: false,
             DownPaymentPaid: false,
             findersFeeType: false,
@@ -70,11 +73,33 @@ class NewFindersFeePage extends React.Component {
 
     componentWillMount() {
     }
+
     componentDidUpdate(prevProps, prevState, snapshot){
+        if(this.state.CalculationMethodCode!==prevState.CalculationMethodCode){
+            axios.post('https://apifmsplusplus.jkdev.com/v1/FinderFee/GetComputedFinderFee', this.props.findersFeeParams)
+                .then(res=> {
+                    if(res.data.IsSuccess){
+                        console.log('result=',res.data.Data);
+                        this.setState({...res.data.Data});
+                    }
+                })
+                .catch(error=> {
+                    console.log(error);
+                });
+        }
     }
 
     componentDidMount() {
-
+        axios.post('https://apifmsplusplus.jkdev.com/v1/FinderFee/GetComputedFinderFee', this.props.findersFeeParams)
+            .then(res=> {
+                if(res.data.IsSuccess){
+                    console.log('result1=',res.data.Data);
+                    this.setState({...res.data.Data});
+                }
+            })
+            .catch(error=> {
+                console.log(error);
+            });
     }
 
     UNSAFE_componentWillReceiveProps(nextProps) {
@@ -89,6 +114,10 @@ class NewFindersFeePage extends React.Component {
         this.setState({
             [name]: event.target.value,
         });
+        if(name==="CalculationMethodCode") {
+            this.props.updateFindersFeeParams({CalculationMethodCode: event.target.value})
+
+        }
     };
     handleChangeChecked = name => event => {
         this.setState({
@@ -117,8 +146,8 @@ class NewFindersFeePage extends React.Component {
                     <TextField select margin="dense" id="CalculationMethod" label="Calculation Method"
                                InputLabelProps={{ shrink: true }}
                                className={classNames(classes.textField)}
-                               value={this.state.CalculationMethod || ''}
-                               onChange={this.handleChange('CalculationMethod')}
+                               value={this.state.CalculationMethodCode || ''}
+                               onChange={this.handleChange('CalculationMethodCode')}
                                style={{ minWidth: 250 }}
                                InputProps={{ readOnly: false }}
                     >
@@ -150,7 +179,6 @@ class NewFindersFeePage extends React.Component {
                                InputProps={{
                                    startAdornment: <InputAdornment position="start" className="mr-4">%</InputAdornment>,
                                    inputComponent: NumberFormatCustomNoPrefix,
-                                   readOnly: true
                                }}
                                value={this.state.DownPaymentPercent || ''}
                                onChange={this.handleChange("DownPaymentPercent")}
@@ -162,22 +190,19 @@ class NewFindersFeePage extends React.Component {
                                InputProps={{
                                    startAdornment: <InputAdornment position="start" className="mr-4">%</InputAdornment>,
                                    inputComponent: NumberFormatCustomNoPrefix,
-                                   readOnly: true
                                }}
-                               value={this.state.MonthlyPaymentPercent || ''}
+                               value={this.state.MonthlyPaymentPercent}
                                onChange={this.handleChange("MonthlyPaymentPercent")}
                                onBlur={this.handleChangeParamsOnBlur('MonthlyPaymentPercent')}
                     />
-                    <TextField margin="dense" id="MonthlyBillingAmount" label="Monthly Billing Amount"
+                    <TextField margin="dense" id="AmountPayableOn" label="Monthly Billing Amount"
                                InputLabelProps={{ shrink: true }}
                                className={classNames(classes.textField, "pr-6 mr-12")}
                                InputProps={{
                                    startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
                                    inputComponent: NumberFormatCustomNoPrefix,
                                    readOnly: true }}
-                               value={this.state.MonthlyBillingAmount || ''}
-                               onChange={this.handleChange("MonthlyBillingAmount")}
-                               onBlur={this.handleChangeParamsOnBlur('MonthlyBillingAmount')}
+                               value={this.state.AmountPayableOn}
                     />
                 </div>
                 <div className={classNames("flex mt-12")}>
@@ -186,7 +211,7 @@ class NewFindersFeePage extends React.Component {
                                className={classNames(classes.textField, "pr-6 mr-12")}
                                InputProps={{ startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
                                    inputComponent: NumberFormatCustomNoPrefix }}
-                               value={this.state.FindersFeeCreditAmount || ''}
+                               value={this.state.FindersFeeCreditAmount}
                                onChange={this.handleChange("FindersFeeCreditAmount")}
                     />
                     <TextField margin="dense" id="InitialBusinessCredit" label="Initial Business Credit"
@@ -194,39 +219,20 @@ class NewFindersFeePage extends React.Component {
                                className={classNames(classes.textField, "pr-6 mr-12")}
                                InputProps={{startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
                                    inputComponent: NumberFormatCustomNoPrefix }}
-                               value={this.state.InitialBusinessCredit || ''}
+                               value={this.state.InitialBusinessCredit}
                                onChange={this.handleChange("InitialBusinessCredit")}
                     />
-                    <TextField margin="dense" id="findersFeeType" label="Finders Fee Type"
-                               select
-                               InputLabelProps={{ shrink: true }}
-                               style={{minWidth: 220}}
-                               className={classNames(classes.textField, "pr-6 hidden")}
-                               InputProps={{
-
-                               }}
-                               value={this.state.findersFeeType || ''}
-                               onChange={this.handleChange("findersFeeType")}
-                               onBlur={this.handleChangeParamsOnBlur('findersFeeType')}
-                    >
-                        {this.props.findersFeeTypes!==null &&
-                            this.props.findersFeeTypes.map((x) => {
-                                return (<MenuItem key={x.code} value={x.code}>{x.name}</MenuItem>)
-                            })
-                        }
-                    </TextField>
                 </div>
                 <div className={classNames("flex mt-12 justify-between items-center")}>
-                    <TextField margin="dense" id="MonthlyPayment" label="Monthly Payment"
+                    <TextField margin="dense" id="MonthlyPaymentAmount" label="Monthly Payment"
                                InputLabelProps={{ shrink: true }}
                                className={classNames(classes.textField, "pr-6")}
                                InputProps={{startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
                                    inputComponent: NumberFormatCustomNoPrefix,
                                    readOnly: true }}
-                               value={this.state.MonthlyPayment || ''}
-                               onChange={this.handleChange("MonthlyPayment")}
-                               onBlur={this.handleChangeParamsOnBlur('MonthlyPaymentAmount')}
-                               sm={2}
+                               value={this.state.MonthlyPaymentAmount}
+                               // onChange={this.handleChange("MonthlyPaymentAmount")}
+                               // onBlur={this.handleChangeParamsOnBlur('MonthlyPaymentAmount')}
                     />
 
                     <Typography className="mr-6 ml-6" variant="subtitle1"><strong>x</strong></Typography>
@@ -234,10 +240,8 @@ class NewFindersFeePage extends React.Component {
                     <TextField margin="dense" id="NumberOfPayments" label="# Of Payments"
                                InputLabelProps={{ shrink: true }}
                                className={classNames(classes.textField, "pr-6")}
-                               value={this.state.NumberOfPayments || ''}
+                               value={this.state.NumberOfPayments}
                                InputProps={{readOnly: true }}
-                               onChange={this.handleChange("NumberOfPayments")}
-                               onBlur={this.handleChangeParamsOnBlur('NumberOfPayments')}
                     />
 
                     <Typography className="mr-6 ml-6" variant="subtitle1"><strong>=</strong></Typography>
@@ -248,36 +252,31 @@ class NewFindersFeePage extends React.Component {
                                InputProps={{startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
                                    inputComponent: NumberFormatCustomNoPrefix,
                                    readOnly: true}}
-                               value={this.state.AmountFinanced || ''}
-                               onChange={this.handleChange("AmountFinanced")}
-                               onBlur={this.handleChangeParamsOnBlur('AmountFinanced')}
+                               value={this.state.AmountFinanced}
                     />
 
                     <Typography className="mr-6 ml-6" variant="subtitle1"><strong>+</strong></Typography>
 
-                    <TextField margin="dense" id="DownPayment" label="DownPayment"
+                    <TextField margin="dense" id="DownPaymentAmount" label="DownPaymentAmount"
                                InputLabelProps={{ shrink: true }}
                                className={classNames(classes.textField, "pr-6")}
                                InputProps={{ startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
                                    inputComponent: NumberFormatCustomNoPrefix,
                                    readOnly: true }}
-                               value={this.state.DownPayment || ''}
-                               onChange={this.handleChange("DownPayment")}
-                               onBlur={this.handleChangeParamsOnBlur('DownPaymentAmount')}
+                               value={this.state.DownPaymentAmount}
                     />
 
                     <Typography className="mr-6 ml-6" variant="subtitle1"><strong>=</strong></Typography>
 
-                    <TextField margin="dense" id="ResultAmountFinanced" label="Amount Financed"
+                    <TextField margin="dense" id="FinderFeeTotal" label="Finder Fee Total"
                                InputLabelProps={{ shrink: true }}
                                className={classNames(classes.textField, "pr-6")}
                                InputProps={{ startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
                                    inputComponent: NumberFormatCustomNoPrefix,
                                    readOnly: true }}
-                               value={this.state.ResultAmountFinanced || ''}
-                               onChange={this.handleChange("ResultAmountFinanced")}
+                               value={this.state.FinderFeeTotal}
+                               onChange={this.handleChange("FinderFeeTotal")}
                                onBlur={this.handleChangeParamsOnBlur('FinderFeeTotal')}
-                               sm={2}
                     />
                 </div>
 
@@ -307,11 +306,11 @@ class NewFindersFeePage extends React.Component {
                 <div className={classNames("flex mt-12 flex-end")}>
                     {/* <Button variant="contained" color="primary" className={classNames("pl-24 pr-24 mr-12")}>Multi-Tenant 100% Occuaoncy Input</Button> */}
 
-                    <TextField margin="dense" id="MultiTenant100OccuaoncyInput" label="Multi-Tenant 100% Occuaoncy Input"
+                    <TextField margin="dense" id="MultiTenantOccupancy" label="Multi-Tenant 100% Occuaoncy Input"
                                InputLabelProps={{ shrink: true }}
                                className={classNames(classes.textField, "pr-6")}
-                               value={this.state.MultiTenant100OccuaoncyInput || ''}
-                               onChange={this.handleChange("MultiTenant100OccuaoncyInput")}
+                               value={this.state.MultiTenantOccupancy}
+                               onChange={this.handleChange("MultiTenantOccupancy")}
                                onBlur={this.handleChangeParamsOnBlur('MultiTenantOccupancy')}
                                InputProps={{startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
                                    inputComponent: NumberFormatCustomNoPrefix,

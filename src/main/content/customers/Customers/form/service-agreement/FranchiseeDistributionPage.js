@@ -481,8 +481,8 @@ class FranchiseeDistributionPage extends React.Component {
 				franchieesesToOffer: activeCustomerInfo.Data.AssignedFranchisees,
 			});
 			this.props.updateFindersFeeParams({
-				FranchiseeId: activeCustomerInfo.Data.AssignedFranchisees[0].FranchiseeId,
-				CustomerId: activeCustomerInfo.Data._id, RegionId: this.props.regionId
+                FranchiseeNum: activeCustomerInfo.Data.AssignedFranchisees[0].FranchiseeNumber,
+                CustomerNum: activeCustomerInfo.Data.cust_no, RegionId: this.props.regionId, CalculationMethodCode: 'S'
 			});
 		}
 	};
@@ -979,8 +979,8 @@ class FranchiseeDistributionPage extends React.Component {
         this.props.updateActiveCustomerAssignedFranchisees(this.state.franchieesesToOffer);
     };
 
-    gotoFindersFee = async (franchiseeId) => {
-        await this.props.updateFindersFeeParams({ FranchiseeId: franchiseeId });
+    gotoFindersFee = async (FranchiseeNum, AmountPayableOn) => {
+        await this.props.updateFindersFeeParams({ FranchiseeNum, AmountPayableOn: parseFloat(AmountPayableOn)});
         this.props.updateCustomersParameter('activeStep', 7);
     };
 
@@ -1151,7 +1151,7 @@ class FranchiseeDistributionPage extends React.Component {
                                         <div className=" text-center" style={{ width: franHeaders[8].width + '%' }}>
                                             <Tooltip title="Go to Finders Fee" aria-label="Go to Finders Fee">
                                                 <Fab aria-label="remove"
-                                                     onClick={() => this.gotoFindersFee(x.Id)} color="primary" className={classNames(classes.ffBtn, "mr-12")}>
+                                                     onClick={() => this.gotoFindersFee(x.FranchiseeNumber, m.MonthlyBilling)} color="primary" className={classNames(classes.ffBtn, "mr-12")}>
                                                     <Icon>arrow_forward</Icon>
                                                 </Fab>
                                             </Tooltip>
