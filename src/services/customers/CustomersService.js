@@ -495,7 +495,7 @@ fullbill: 0
      */
     updateAssignedFranchisee(regionId, customerNo, params) {
         return new Promise((resolve, reject) => {
-            axios_instance.post(`${BASE_MONGO_API_URL}/v1/${{regionId}}/Customer/AssignedFranchisee?CustomerNo=${customerNo}`, params)
+            axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/AssignedFranchisee?CustomerNo=${customerNo}`, params)
                 .then(res => {
                     if (res.status === 200) {
                         resolve(res.data);

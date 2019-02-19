@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import _ from "lodash";
+import moment from 'moment';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -61,7 +62,6 @@ import {
 
 } from '@devexpress/dx-react-grid-material-ui';
 
-import ReactDataGrid from "react-data-grid";
 import { CustomizedDxGridSelectionPanel } from "./../../../../common/CustomizedDxGridSelectionPanel";
 
 const styles = theme => ({
@@ -91,9 +91,12 @@ const styles = theme => ({
 
 	},
 	ffBtn: {
-		height: 32,
-		width: 32,
-		minHeight: 32
+		height: 24,
+		width: 24,
+		minHeight: 24,
+		'& .material-icons':{
+			fontSize: 16
+		}
 	}
 });
 
@@ -667,12 +670,14 @@ class FranchiseeDistributionPage extends React.Component {
 	addFranchiseeToCustomer = () => {
 		const { selection, rows } = this.state;
 		let selectedFranchisees = selection.map(x => rows[x])
-		selectedFranchisees.forEach(x => {
-
-			x.AssignedDate = "05/31/2012";
-			x.CreatedById = 0;
-			x.FranchiseeNumber = x.Number;
-			x.MonthlyBilling = [{
+		let newFranchisees = selectedFranchisees.map(x => {
+			let temp = {};
+            temp.AssignedDate = moment().format('MM/DD/YYYY');
+            temp.CreatedById = this.props.userId;
+            temp.FranchiseeNumber = x.Number;
+            temp.FranchiseeName = x.Name;
+            temp.Id = x.Id;
+            temp.MonthlyBilling = [{
 				BillingFrequency: "R",
 				BillingTypeId: "",
 				BillingTypeServiceId: "",
@@ -681,16 +686,21 @@ class FranchiseeDistributionPage extends React.Component {
 				MonthlyBilling: 0,
 				Status: "Active",
 			}];
-			x.Status = "Active"
+            temp.Status = "Active";
+            return temp;
 		});
 
 		this.setState({
 			franchieesesToOffer: [
 				...this.state.franchieesesToOffer,
-				...selectedFranchisees
+				...newFranchisees
 			]
-		})
-
+		});
+		//
+		this.props.updateActiveCustomerAssignedFranchisees([
+			...this.state.franchieesesToOffer,
+            ...newFranchisees
+		])
 	};
 
 	changeSelection = selection => {
@@ -702,13 +712,15 @@ class FranchiseeDistributionPage extends React.Component {
 			step
 		})
 	}
-	handleStepNewAmountForm = () => {
+	saveAssignedFranchiseeDistributions = () => {
+		console.log('fired save franchisee', this.props.regionId, this.props.activeCustomer.Data.cust_no, this.state.franchieesesToOffer);
+		this.props.updateAssignedFranchisee(this.props.regionId, this.props.activeCustomer.Data.cust_no, this.state.franchieesesToOffer)
 
-	}
+    };
 
 	handleStepFranchiseeDistribution = () => {
 		this.handleStep(1)
-	}
+	};
 
 	handleStepFindersFeesForm = () => {
 		this.handleStep(2)
@@ -838,9 +850,19 @@ class FranchiseeDistributionPage extends React.Component {
 		)
 	}
 
-	handleMonthlyBilling = (ev, row, name) => {
-		row[name] = name === 'EscrowBilling' ? ev.target.checked : ev.target.value;
-		this.setState({ data: this.state.data })
+	handleMonthlyBilling = (id, row, name) =>event => {
+		row[name] = name === 'EscrowBilling' ? event.target.checked : event.target.value;
+
+		let data = this.state.franchieesesToOffer;
+		let record = data.filter(f=>f.Id===id);
+
+		record[0].MonthlyBilling[0][name] = row[name];
+
+		this.setState({ franchieesesToOffer: this.state.franchieesesToOffer })
+	};
+
+	handleUpdateAssignedFranchisees = () => {
+        this.props.updateActiveCustomerAssignedFranchisees(this.state.franchieesesToOffer);
 	};
 
 	gotoFindersFee = async (franchiseeId) => {
@@ -891,7 +913,7 @@ class FranchiseeDistributionPage extends React.Component {
 					/>
 
 					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-						{step === 1 && <Button variant="contained" onClick={this.handleStepNewAmountForm} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Save</Button>}
+						<Button variant="contained" onClick={()=>this.saveAssignedFranchiseeDistributions()} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Save</Button>
 						{/*<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>*/}
 					</div>
 				</div>
@@ -917,13 +939,14 @@ class FranchiseeDistributionPage extends React.Component {
 									<div key={mIndex} className={classNames("flex w-full items-center")} style={{ alignItems: 'bottom' }}>
 
 										<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption">{x.FranchiseeNumber}</Typography>
-										<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption">{x.Name}</Typography>
+										<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption">{x.FranchiseeName}</Typography>
 
 
 										<Checkbox style={{ width: franHeaders[2].width + '%', alignSelf: 'center' }}
 											name="EscrowBilling"
 											checked={m.EscrowBilling}
-											onChange={(v) => this.handleMonthlyBilling(v, m, 'EscrowBilling')}
+											onChange={this.handleMonthlyBilling(x.Id, m, 'EscrowBilling')}
+											onBlur={() => this.handleUpdateAssignedFranchisees()}
 										/>
 
 										<TextField style={{ width: franHeaders[3].width + '%' }}
@@ -938,7 +961,7 @@ class FranchiseeDistributionPage extends React.Component {
 													input: classes.descriptionText,
 												},
 											}}
-											onChange={(v) => this.handleMonthlyBilling(v, m, 'BillingFrequency')}
+											onChange={this.handleMonthlyBilling(x.Id, m, 'BillingFrequency')}
 										>
 											{[
 												{ label: 'Variable', value: 'V' },
@@ -952,7 +975,7 @@ class FranchiseeDistributionPage extends React.Component {
 											className="pl-6 hidden"
 											value={m.BillingTypeId}
 											select
-											onChange={(v) => this.handleMonthlyBilling(v, m, 'BillingTypeId')}
+											onChange={this.handleMonthlyBilling(x.Id, m, 'BillingTypeId')}
 											InputProps={{
 												readOnly: true,
 												classes: {
@@ -966,7 +989,7 @@ class FranchiseeDistributionPage extends React.Component {
 										<TextField style={{ width: franHeaders[5].width + '%' }}
 											margin="dense"
 											className="pl-6"
-											value={this.state[`ServiceTypeStates${index}-${mIndex}`] || ''}
+											value={m.BillingTypeServiceId}
 											select
 											InputProps={{
 												readOnly: false,
@@ -974,16 +997,16 @@ class FranchiseeDistributionPage extends React.Component {
 													input: classes.descriptionText,
 												},
 											}}
-											onChange={this.handleChange(`ServiceTypeStates${index}-${mIndex}`)}
+											onChange={this.handleMonthlyBilling(x.Id, m, 'BillingTypeServiceId')}
 										>
-											{franchiseeServiceTypes.map((x, index) => (<MenuItem key={index} value={x.Name}>{x.Name}</MenuItem>))}
+											{franchiseeServiceTypes.map((x, index) => (<MenuItem key={index} value={x._id}>{x.Name}</MenuItem>))}
 										</TextField>
 
 										<TextField style={{ width: franHeaders[6].width + '%' }}
 											margin="dense"
 											className="pl-6"
 											value={m.Description}
-											onChange={(v) => this.handleMonthlyBilling(v, m, 'Description')}
+											onChange={this.handleMonthlyBilling(x.Id, m, 'Description')}
 											InputProps={{
 												classes: {
 													input: classes.descriptionText,
@@ -1003,7 +1026,7 @@ class FranchiseeDistributionPage extends React.Component {
 											margin="dense"
 											className="pl-6"
 											value={m.MonthlyBilling}
-											onChange={(v) => this.handleMonthlyBilling(v, m, 'MonthlyBilling')}
+											onChange={this.handleMonthlyBilling(x.Id, m, 'MonthlyBilling')}
 
 										/>
 										<div className=" text-center" style={{ width: franHeaders[8].width + '%' }}>
@@ -1292,12 +1315,14 @@ function mapDispatchToProps(dispatch) {
 		updateCustomersParameter: Actions.updateCustomersParameter,
 		updateFindersFeeParams: Actions.updateFindersFeeParams,
         updateAssignedFranchisee: Actions.updateAssignedFranchisee,
+        updateActiveCustomerAssignedFranchisees: Actions.updateActiveCustomerAssignedFranchisees,
 	}, dispatch);
 }
 
 function mapStateToProps({ customers, accountReceivablePayments, auth, franchisees }) {
 	return {
 		regionId: auth.login.defaultRegionId,
+		userId: auth.login.UserId,
 
 		statusId: franchisees.statusId,
 		Longitude: franchisees.Longitude,
