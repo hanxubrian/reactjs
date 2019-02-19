@@ -65,6 +65,7 @@ class NewFindersFeePage extends React.Component {
             AmountFinanced: '',
             DownPaymentAmount: '',
             FinderFeeTotal: '',
+            NumberOfPayments:'',
             IncludeDpWith1stPayment: false,
             DownPaymentPaid: false,
             findersFeeType: false,
@@ -231,8 +232,6 @@ class NewFindersFeePage extends React.Component {
                                    inputComponent: NumberFormatCustomNoPrefix,
                                    readOnly: true }}
                                value={this.state.MonthlyPaymentAmount}
-                               // onChange={this.handleChange("MonthlyPaymentAmount")}
-                               // onBlur={this.handleChangeParamsOnBlur('MonthlyPaymentAmount')}
                     />
 
                     <Typography className="mr-6 ml-6" variant="subtitle1"><strong>x</strong></Typography>
@@ -275,8 +274,6 @@ class NewFindersFeePage extends React.Component {
                                    inputComponent: NumberFormatCustomNoPrefix,
                                    readOnly: true }}
                                value={this.state.FinderFeeTotal}
-                               onChange={this.handleChange("FinderFeeTotal")}
-                               onBlur={this.handleChangeParamsOnBlur('FinderFeeTotal')}
                     />
                 </div>
 
@@ -314,7 +311,7 @@ class NewFindersFeePage extends React.Component {
                                onBlur={this.handleChangeParamsOnBlur('MultiTenantOccupancy')}
                                InputProps={{startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
                                    inputComponent: NumberFormatCustomNoPrefix,
-                                   readOnly: true }}
+                                   }}
                                fullWidth
                                style={{ maxWidth: 300 }}
                     />
