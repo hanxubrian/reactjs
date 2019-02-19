@@ -769,6 +769,7 @@ class UsersForm extends React.Component {
                                 id="PasswordHash"
                                 label="Password"
                                 variant="outlined"
+                                type="password"
                                 className={classes.textField}
                                 value={this.state.PasswordHash}
                                 onChange={this.handleChange("PasswordHash")}

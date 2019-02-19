@@ -319,7 +319,7 @@ function getStepContent(franchiseeForm, step) {
             return (
                 <Fragment>
                     <div style={{ marginTop: '30px' }}></div>
-                    <h3>Contract</h3>
+                    
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
 
                         <GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -400,11 +400,10 @@ function getStepContent(franchiseeForm, step) {
                                 id="ibAmount"
                                 label="IB Amount"
                                 className={classes.textField}
-                                margin="dense"
-                                value={franchiseeForm.state.ibAmount}
+                                margin="dense"                                
                                 inputProps={{
-                                    maxLength:60,
                                     readOnly: true,
+                                    value: franchiseeForm.state.ibAmount===null ? " ": franchiseeForm.state.ibAmount
                                 }}
                                 InputLabelProps={{
                                     shrink: true,
@@ -412,12 +411,8 @@ function getStepContent(franchiseeForm, step) {
                                 InputProps={{
                                     startAdornment: <InputAdornment position="start">$</InputAdornment>
                                 }}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
                                 variant="outlined"
                                 style={{marginRight: '1%'}}
-                                required
                             />
 
 
@@ -516,7 +511,6 @@ function getStepContent(franchiseeForm, step) {
                                 variant="outlined"
                                 margin="dense"
                                 inputProps={{
-                                    maxLength: 60,
                                     readOnly: true,
                                 }}
                                 InputProps={{
@@ -653,7 +647,7 @@ class FranchiseesCreateForm extends Component {
         accountRebate: false,
         generateReport: false,
         StateValue: '',
-        defaultPlanType: "A",
+        defaultPlanType: 0,
         selectedSignDate: new Date(),
         selectedRenewDate: new Date(),
         selectedExpDate: new Date(),
