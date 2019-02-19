@@ -796,12 +796,17 @@ class Customers extends Component {
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
-											<Tooltip title="Refresh">
-												<IconButton variant="contained" onClick={this.forceFetch}>
-													<Icon>refresh</Icon>
-												</IconButton>
-											</Tooltip>
-											<Tooltip title="Add new customer">
+											<Button variant="contained" color="primary" onClick={this.forceFetch}>
+												Refresh
+												<Icon className={classes.rightIcon}>refresh</Icon>
+											</Button>
+
+											<Button variant="contained" color="primary" onClick={openNewCustomerForm} className="ml-6">
+												New
+												<Icon className={classes.rightIcon}>add</Icon>
+											</Button>
+
+											{/* <Tooltip title="Add new customer">
 												<IconButton className={classes.button} aria-label="add" onClick={openNewCustomerForm}>
 													<Icon>add</Icon>
 												</IconButton>
@@ -811,7 +816,7 @@ class Customers extends Component {
 											</IconButton>
 											<IconButton className={classes.button} aria-label="print" onClick={() => alert('ok')}>
 												<Icon>print</Icon>
-											</IconButton>
+											</IconButton> */}
 										</div>
 									</div>
 
