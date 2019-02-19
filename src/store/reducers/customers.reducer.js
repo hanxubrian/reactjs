@@ -129,7 +129,6 @@ const initialState = {
 	activeCustomerFranchisees: null,
 
 	newCustomerParam: {
-		"_id": "sample string 1",
 		"Latitude": 2.1,
 		"Longitude": 3.1,
 		"CPIBillingAppliedDate": "sample string 4",

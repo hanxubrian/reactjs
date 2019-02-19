@@ -806,12 +806,12 @@ class FilterPanel extends Component {
 
 	handleChangeCustomerInfoProps = name => event => {
 		const value = event.target.value
-		this.setState({ name, value })
+		this.setState({ [name]: value })
 		this.props.updateNewCustomerParam(name, value)
 	}
 	handleChangeCheckedCustomerInfoProps = name => event => {
 		const checked = event.target.checked
-		this.setState({ name, checked })
+		this.setState({ [name]: checked })
 		this.props.updateNewCustomerParam(name, checked)
 	}
 	//
