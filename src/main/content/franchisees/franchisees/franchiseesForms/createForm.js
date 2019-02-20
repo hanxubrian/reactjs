@@ -790,7 +790,11 @@ class FranchiseesCreateForm extends Component {
     }
 
     componentWillReceiveProps(nextProps){
+    //    if(this.props.insertPayload !== nextProps.insertPayload){
+    //        if(nextProps.insertPayload.franchiseeFees===null){
 
+    //        }
+    //    }
     }
 
 

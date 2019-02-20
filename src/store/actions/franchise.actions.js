@@ -92,6 +92,12 @@ export function getFranchiseeDetail(id,regionId) {
         (async () => {
             let franchiseesList = await franchiseesService.getFranchiseesDetail(id,regionId);
             if (franchiseesList.IsSuccess) {
+                if(franchiseesList.Data.Fees === null){
+                    franchiseesList.Data.Fees = [];
+                }
+                if(franchiseesList.Data.Documents === null){
+                    franchiseesList.Data.Documents = [];
+                }
                 dispatch({
                     type: GET_FRANCHISEE_DETAIL,
                     payload: franchiseesList

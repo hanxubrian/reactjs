@@ -16,6 +16,11 @@ import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Select from "@material-ui/core/Select/Select";
 import OutlinedInput from "@material-ui/core/OutlinedInput/OutlinedInput";
 
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+
 // Auto Suggest
 import Autosuggest from 'react-autosuggest';
 import Paper from "@material-ui/core/Paper/Paper";
@@ -256,6 +261,7 @@ class UsersForm extends React.Component {
         StateList: [],
         UserPermission: [],
         DepartmentList: [],
+        showPassword: false,
         payload:{
             PasswordHash: "",
             IsFirstTimeLogin: "",
@@ -540,6 +546,9 @@ class UsersForm extends React.Component {
         this.props.updateUserFormPayload(insertPayload);
     };
 
+    handleClickShowPassword = () => {
+        this.setState(state => ({ showPassword: !state.showPassword }));
+    };
 
     render()
     {
@@ -756,10 +765,22 @@ class UsersForm extends React.Component {
                             <TextField
                                 id="PasswordHash"
                                 label="Password"
-                                type="password"
+                                type={this.state.showPassword ? 'text' : 'password'}
                                 className={classes.textField}
                                 value={this.state.PasswordHash}
                                 onChange={this.handleChange("PasswordHash")}
+                                InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          aria-label="Toggle password visibility"
+                                          onClick={this.handleClickShowPassword}
+                                        >
+                                          {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                }}
                                 style={{marginLeft: '1%'}}
                                 margin="dense"
                                 fullWidth

@@ -308,8 +308,9 @@ class UsersApp extends Component {
                                                     Users</Typography>
                                             )}
                                             {this.props.openUsersFormStatus && (
-                                                <Typography variant="h6" className="hidden sm:flex">Settings |
-                                                    Add New User</Typography>
+                                                <Typography variant="h6" className="hidden sm:flex">Settings | 
+                                                  {!this.props.bNewForm &&(<span>&nbsp;Edit&nbsp;</span>)}
+                                                  {this.props.bNewForm &&(<span>&nbsp;Add New&nbsp;</span>)} User</Typography>
                                             )}
                                         </div>
                                     </div>
