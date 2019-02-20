@@ -575,7 +575,6 @@ class UsersForm extends React.Component {
                                     <TextField
                                         id="firstName"
                                         label="First Name"
-                                        variant="outlined"
                                         className={classes.textField}
                                         value={this.state.FirstName}
                                         onChange={this.handleChange("FirstName")}
@@ -587,7 +586,6 @@ class UsersForm extends React.Component {
                                     <TextField
                                         id="lastName"
                                         label="Last Name"
-                                        variant="outlined"
                                         className={classes.textField}
                                         value={this.state.LastName}
                                         onChange={this.handleChange("LastName")}
@@ -599,7 +597,6 @@ class UsersForm extends React.Component {
                                     <TextField
                                         id="title"
                                         label="Title"
-                                        variant="outlined"
                                         value={this.state.Title}
                                         onChange={this.handleChange("Title")}
                                         className={classes.textField}
@@ -613,7 +610,6 @@ class UsersForm extends React.Component {
                                     <TextField
                                         id="phone"
                                         label="Phone"
-                                        variant="outlined"
                                         className={classes.textField}
                                         value={this.state.Phone}
                                         onChange={this.handleChange("Phone")}
@@ -625,7 +621,6 @@ class UsersForm extends React.Component {
                                     <TextField
                                         id="email"
                                         label="E Mail"
-                                        variant="outlined"
                                         className={classes.textField}
                                         value={this.state.Email}
                                         onChange={this.handleChange("Email")}
@@ -638,7 +633,6 @@ class UsersForm extends React.Component {
                                     <TextField
                                         id="department"
                                         select
-                                        variant={"outlined"}
                                         className={classes.textField}
                                         style={{marginLeft:'1%'}}
                                         value={this.state.DepartmentId}
@@ -667,7 +661,6 @@ class UsersForm extends React.Component {
                                     <TextField
                                         id="address1"
                                         label="Address 1"
-                                        variant="outlined"
                                         className={classes.textField}
                                         value={this.state.Address1}
                                         onChange={this.handleChange("Address1")}
@@ -679,7 +672,6 @@ class UsersForm extends React.Component {
                                     <TextField
                                         id="address2"
                                         label="Address 2"
-                                        variant="outlined"
                                         className={classes.textField}
                                         value={this.state.Address2}
                                         onChange={this.handleChange("Address2")}
@@ -699,7 +691,6 @@ class UsersForm extends React.Component {
                             <TextField
                                 id="city"
                                 label="City"
-                                variant="outlined"
                                 className={classes.textField}
                                 value={this.state.City}
                                 onChange={this.handleChange("City")}
@@ -711,7 +702,6 @@ class UsersForm extends React.Component {
                             <TextField
                                 id="state"
                                 select
-                                variant={"outlined"}
                                 label={"State"}
                                 className={classes.textField}
                                 style={{marginRight:'1%', marginLeft: '1%'}}
@@ -736,7 +726,6 @@ class UsersForm extends React.Component {
                                 label="Zip"
                                 onChange={this.handleChange("Zipcode")}
                                 value={this.state.Zipcode}
-                                variant="outlined"
                                 inputProps={{
                                     maxLength:60
                                 }}
@@ -756,7 +745,6 @@ class UsersForm extends React.Component {
                             <TextField
                                 id="userName"
                                 label="User Name"
-                                variant="outlined"
                                 className={classes.textField}
                                 value={this.state.UserName}
                                 onChange={this.handleChange("UserName")}
@@ -768,7 +756,6 @@ class UsersForm extends React.Component {
                             <TextField
                                 id="PasswordHash"
                                 label="Password"
-                                variant="outlined"
                                 type="password"
                                 className={classes.textField}
                                 value={this.state.PasswordHash}
@@ -792,7 +779,6 @@ class UsersForm extends React.Component {
                                     value={this.state.Groups}
                                     className={classes.textField}
                                     onChange={this.handleChange('Groups')}
-                                    input={<OutlinedInput id="select-Groups" labelWidth={80}/>}
                                     margin="dense"
                                     MenuProps={MenuProps}
                                 >
@@ -810,7 +796,6 @@ class UsersForm extends React.Component {
                                     value={this.state.Regions}
                                     className={classes.textField}
                                     onChange={this.handleChange('Regions')}
-                                    input={<OutlinedInput id="select-Regions" labelWidth={100}/>}
                                     margin="dense"
                                     MenuProps={MenuProps}
                                 >
@@ -825,7 +810,6 @@ class UsersForm extends React.Component {
                                 id="DefaultRegionId"
                                 label={"Default Region"}
                                 select
-                                variant={"outlined"}
                                 className={classes.textField}
                                 value={this.state.DefaultRegionId}
                                 style={{marginLeft: "1%"}}
@@ -858,7 +842,6 @@ class UsersForm extends React.Component {
                                     value={this.state.Roles}
                                     className={classes.textField}
                                     onChange={this.handleChange('Roles')}
-                                    input={<OutlinedInput id="select-roles" labelWidth={80}/>}
                                     margin="dense"
                                     MenuProps={MenuProps}
                                 >
@@ -880,7 +863,6 @@ class UsersForm extends React.Component {
                                 id="UserType"
                                 label={"User Type"}
                                 select
-                                variant={"outlined"}
                                 className={classes.textField}
                                 value={this.state.UserType}
                                 style={{marginRight: "1%"}}
@@ -902,7 +884,6 @@ class UsersForm extends React.Component {
                             <TextField
                                 id="UserTypeValue"
                                 label="Name"
-                                variant="outlined"
                                 className={classes.textField}
                                 value={this.state.UserTypeValue}
                                 onChange={this.handleChange("UserTypeValue")}
