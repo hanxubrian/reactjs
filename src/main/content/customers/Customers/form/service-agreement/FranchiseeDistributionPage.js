@@ -846,7 +846,9 @@ class FranchiseeDistributionPage extends React.Component {
 		})
 	}
 	saveAssignedFranchiseeDistributions = () => {
-		this.props.updateAssignedFranchisee(this.props.regionId, this.props.activeCustomer.Data.cust_no, this.state.franchieesesToOffer)
+		const { activeCustomer } = this.props
+
+		this.props.updateAssignedFranchisee(this.props.regionId, activeCustomer && activeCustomer.Data ? activeCustomer.Data.cust_no : "Pending", this.state.franchieesesToOffer)
 		this.setState({ openSnack: true });
 
 	};
