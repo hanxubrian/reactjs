@@ -520,18 +520,31 @@ class FilterPanel extends Component {
 		})
 
 		if (this.props.activeCustomer && this.props.activeCustomer.Data) {
+			const { cus_name, cus_addr, cus_city, cus_state, cus_zip, cus_phone, cus_fax, email1 } = this.props.activeCustomer.Data
 			this.setState({
-				cus_name: this.props.activeCustomer.Data.cus_name,
-				cus_addr: this.props.activeCustomer.Data.cus_addr,
-				cus_city: this.props.activeCustomer.Data.cus_city,
-				cus_state: this.props.activeCustomer.Data.cus_state,
-				cus_zip: this.props.activeCustomer.Data.cus_zip,
+				cus_name,
+				cus_addr,
+				cus_city,
+				cus_state,
+				cus_zip,
 
-				cus_phone: "+1" + this.props.activeCustomer.Data.cus_phone,
-				cus_fax: "+1" + this.props.activeCustomer.Data.cus_fax,
+				cus_phone: "+1" + cus_phone,
+				cus_fax: "+1" + cus_fax,
 
-				email1: this.props.activeCustomer.Data.email1,
-				cus_zip: this.props.activeCustomer.Data.cus_zip,
+				email1,
+			});
+		} else {
+			this.setState({
+				cus_name: '',
+				cus_addr: '',
+				cus_city: '',
+				cus_state: '',
+				cus_zip: '',
+
+				cus_phone: '',
+				cus_fax: '',
+
+				email1: '',
 			});
 		}
 	}
@@ -543,20 +556,35 @@ class FilterPanel extends Component {
 			});
 		}
 
-		if (nextProps.activeCustomer !== this.props.activeCustomer && nextProps.activeCustomer && nextProps.activeCustomer.Data) {
-			this.setState({
-				cus_name: nextProps.activeCustomer.Data.cus_name,
-				cus_addr: nextProps.activeCustomer.Data.cus_addr,
-				cus_city: nextProps.activeCustomer.Data.cus_city,
-				cus_state: nextProps.activeCustomer.Data.cus_state,
-				cus_zip: nextProps.activeCustomer.Data.cus_zip,
+		if (nextProps.activeCustomer !== this.props.activeCustomer) {
+			if (nextProps.activeCustomer && nextProps.activeCustomer.Data) {
+				const { cus_name, cus_addr, cus_city, cus_state, cus_zip, cus_phone, cus_fax, email1 } = nextProps.activeCustomer.Data
+				this.setState({
+					cus_name,
+					cus_addr,
+					cus_city,
+					cus_state,
+					cus_zip,
 
-				cus_phone: "+1" + nextProps.activeCustomer.Data.cus_phone,
-				cus_fax: "+1" + nextProps.activeCustomer.Data.cus_fax,
+					cus_phone: "+1" + cus_phone,
+					cus_fax: "+1" + cus_fax,
 
-				email1: nextProps.activeCustomer.Data.email1,
-				cus_zip: nextProps.activeCustomer.Data.cus_zip,
-			});
+					email1,
+				})
+			} else {
+				this.setState({
+					cus_name: '',
+					cus_addr: '',
+					cus_city: '',
+					cus_state: '',
+					cus_zip: '',
+
+					cus_phone: '',
+					cus_fax: '',
+
+					email1: '',
+				});
+			}
 		}
 
 		if (!_.isEqual(nextProps.filters, this.props.filters)) {
