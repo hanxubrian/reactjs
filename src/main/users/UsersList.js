@@ -504,10 +504,7 @@ class UsersList extends Component {
             this.setState({
                 rows: Object.values(obj)
             });
-        }
-        if((nextProps.bLoadedUserList !== this.props.bLoadedUserList) && nextProps.bLoadedUserList===true){
-             this.setState({bLoadedUserList: true});
-             console.log("True");
+            this.setState({bLoadedUserList: true});
         }
     }
 
@@ -739,7 +736,6 @@ function mapStateToProps({usersApp,auth})
         userDetail: usersApp.users.userDetail,
         usersList: usersApp.users.usersList,
         regionId : auth.login.defaultRegionId,
-        bLoadedUserList: usersApp.users.bLoadedUserList
     }
 }
 

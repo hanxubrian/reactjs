@@ -14,7 +14,6 @@ const initialState = {
     userPermissionList: [],
     userDetail: null,
     usersList: [],
-    bLoadedUserList: false,
     payload:{
       PasswordHash: "",
       IsFirstTimeLogin: "",
@@ -73,8 +72,7 @@ const usersReducer = function (state = initialState, action) {
         case Actions.GET_USERS_LIST: {
           return {
               ...state,
-              usersList: action.payload,
-              bLoadedUserList: true
+              usersList: action.payload
           }
         }
         case Actions.UPDATE_USER: {
