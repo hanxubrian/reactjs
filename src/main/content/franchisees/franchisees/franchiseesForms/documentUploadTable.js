@@ -304,9 +304,9 @@ class FranchiseesDocumentUploadTable extends React.Component {
         const tempInsertPayload = this.props.insertPayload;
         tempInsertPayload.Documents = list;
         this.props.franchiseeUpdateInsertPayload(tempInsertPayload);
-        this.setState({
-            documentsList: null
-        });
+        // this.setState({
+        //     documentsList: []
+        // });
     }
 
 
@@ -365,22 +365,22 @@ class FranchiseesDocumentUploadTable extends React.Component {
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((n,index) => {
                                             return (
-                                                <TableRow hover key={n.FileTypeListId} >
+                                                <TableRow hover key={n.document_id} >
                                                     <TableCell component="td" scope="row" >
-                                                        {n.Name}
+                                                        {n.name}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {documentsList[index]["Type"]}
+                                                        {n.type}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {documentsList[index]["Status"]}
+                                                        {n.status}
                                                     </TableCell>
                                                     <TableCell>
                                                         <TextField
-                                                            id={"value" + n.FileTypeListId}
+                                                            id={"value" + n.document_id}
                                                             type="file"
                                                             multiple
-                                                            onChange={ (e) => this.handleChange(e.target.files,n.FileTypeListId)}
+                                                            onChange={ (e) => this.handleChange(e.target.files,n.document_id)}
                                                             margin="dense"
                                                             className={classes.textField}
                                                             variant="outlined"

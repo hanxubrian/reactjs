@@ -151,7 +151,7 @@ class FilterPanel extends Component {
     constructor(props){
         super(props);
         if(!props.bLoadedFilterList) {
-            props.getStatusFilterList(this.props.regionId);
+           // props.getStatusFilterList(this.props.regionId);
             if(props.stateList.length === 0){
                 props.getFranchiseeStateList();
             }
