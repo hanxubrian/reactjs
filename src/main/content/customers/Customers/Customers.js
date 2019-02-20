@@ -675,7 +675,7 @@ class Customers extends Component {
 												<MenuItem onClick={this.closeContactMenu}>SMS to Customer</MenuItem>
 												<MenuItem onClick={this.onClickEmailToCustomer}>Email to Customer</MenuItem>
 											</Menu>
-											<Button variant="contained" color="primary" onClick={this.trySubmitForApproval}
+											<Button variant="contained" color="primary" onClick={this.submitForApproval}
 												className="mr-12"
 											>
 												Save
