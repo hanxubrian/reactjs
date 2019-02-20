@@ -134,6 +134,59 @@ const styles = theme => ({
 		transform: 'translate(14px, 14px) scale(1)'
 	},
 })
+const stateNames = [
+	{ Value: "AL", Text: "Alabama" },
+	{ Value: "AK", Text: "Alaska" },
+	{ Value: "AZ", Text: "Arizona" },
+	{ Value: "AR", Text: "Arkansas" },
+	{ Value: "CA", Text: "California" },
+	{ Value: "CO", Text: "Colorado" },
+	{ Value: "CT", Text: "Connecticut" },
+	{ Value: "DE", Text: "Delaware" },
+	{ Value: "FL", Text: "Florida" },
+	{ Value: "GA", Text: "Georgia" },
+	{ Value: "HI", Text: "Hawaii" },
+	{ Value: "ID", Text: "Idaho" },
+	{ Value: "IL", Text: "Illinois" },
+	{ Value: "IN", Text: "Indiana" },
+	{ Value: "IA", Text: "Iowa" },
+	{ Value: "KS", Text: "Kansas" },
+	{ Value: "KY", Text: "Kentucky" },
+	{ Value: "LA", Text: "Louisiana" },
+	{ Value: "ME", Text: "Maine" },
+	{ Value: "MD", Text: "Maryland" },
+	{ Value: "MA", Text: "Massachusetts" },
+	{ Value: "MI", Text: "Michigan" },
+	{ Value: "MN", Text: "Minnesota" },
+	{ Value: "MS", Text: "Mississippi" },
+	{ Value: "MO", Text: "Missouri" },
+	{ Value: "MT", Text: "Montana" },
+	{ Value: "NE", Text: "Nebraska" },
+	{ Value: "NV", Text: "Nevada" },
+	{ Value: "NH", Text: "New Hampshire" },
+	{ Value: "NJ", Text: "New Jersey" },
+	{ Value: "NM", Text: "New Mexico" },
+	{ Value: "NY", Text: "New York" },
+	{ Value: "NC", Text: "North Carolina" },
+	{ Value: "ND", Text: "North Dakota" },
+	{ Value: "OH", Text: "Ohio" },
+	{ Value: "OK", Text: "Oklahoma" },
+	{ Value: "OR", Text: "Oregon" },
+	{ Value: "PA", Text: "Pennsylvania" },
+	{ Value: "RI", Text: "Rhode Island" },
+	{ Value: "SC", Text: "South Carolina" },
+	{ Value: "SD", Text: "South Dakota" },
+	{ Value: "TN", Text: "Tennessee" },
+	{ Value: "TX", Text: "Texas" },
+	{ Value: "UT", Text: "Utah" },
+	{ Value: "VT", Text: "Vermont" },
+	{ Value: "VA", Text: "Virginia" },
+	{ Value: "WA", Text: "Washington" },
+	{ Value: "DC", Text: "Washington D.C." },
+	{ Value: "WV", Text: "West Virginia" },
+	{ Value: "WI", Text: "Wisconsin" },
+	{ Value: "WY", Text: "Wyoming" }
+];
 function Transition(props) {
 	return <Slide direction="up" {...props} />;
 }
@@ -1319,8 +1372,8 @@ class ServiceAgreementPage extends React.Component {
 							</GridItem>
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-col">
-								<h3 className="mt-24 mb-12">Addresses</h3>
-								<Paper>
+								<h3 className="mt-24 mb-12">Billing Address</h3>
+								{/* <Paper>
 									<Grid
 										rows={addressRows}
 										columns={addressColumns}
@@ -1342,66 +1395,79 @@ class ServiceAgreementPage extends React.Component {
 											commandComponent={Command}
 										/>
 									</Grid>
-								</Paper>
+								</Paper> */}
 								<div className='flex w-full'>
 									<TextField
-										id="BillingCompanyName"
-										label="BillingCompanyName"
-										className={classes.textField}
-										value={this.state.BillingCompanyName || ''}
-										onChange={this.handleChange('BillingCompanyName')}
+										id="bill_name"
+										label="Name"
+										className={classNames(classes.textField, 'pr-12')}
+										value={this.state.bill_name || ''}
+										onChange={this.handleChangeCustomerInfoProps('bill_name')}
 										margin="dense"
 										// variant="outlined"
-										sm={2} />
+										InputLabelProps={{ shrink: true }}
+										style={{ width: '20%' }} />
 									<TextField
-										id="BillingCompanyName"
-										label="BillingCompanyName"
-										className={classes.textField}
-										value={this.state.BillingCompanyName || ''}
-										onChange={this.handleChange('BillingCompanyName')}
+										id="bill_addr"
+										label="Address"
+										className={classNames(classes.textField, 'pr-12')}
+										value={this.state.bill_addr || ''}
+										onChange={this.handleChangeCustomerInfoProps('bill_addr')}
 										margin="dense"
 										// variant="outlined"
-										sm={2} />
+										InputLabelProps={{ shrink: true }}
+										style={{ width: '20%' }} />
 									<TextField
-										id="BillingCompanyName"
-										label="BillingCompanyName"
-										className={classes.textField}
-										value={this.state.BillingCompanyName || ''}
-										onChange={this.handleChange('BillingCompanyName')}
+										id="bill_addr2"
+										label="Address2"
+										className={classNames(classes.textField, 'pr-12')}
+										value={this.state.bill_addr2 || ''}
+										onChange={this.handleChangeCustomerInfoProps('bill_addr2')}
 										margin="dense"
 										// variant="outlined"
-										sm={2} />
+										InputLabelProps={{ shrink: true }}
+										style={{ width: '20%' }} />
 									<TextField
-										id="BillingCompanyName"
-										label="BillingCompanyName"
-										className={classes.textField}
-										value={this.state.BillingCompanyName || ''}
-										onChange={this.handleChange('BillingCompanyName')}
+										id="bill_city"
+										label="City"
+										className={classNames(classes.textField, 'pr-12')}
+										value={this.state.bill_city || ''}
+										onChange={this.handleChangeCustomerInfoProps('bill_city')}
 										margin="dense"
 										// variant="outlined"
-										sm={2} />
+										InputLabelProps={{ shrink: true }}
+										style={{ width: '20%' }} />
 									<TextField
-										id="BillingCompanyName"
-										label="BillingCompanyName"
-										className={classes.textField}
-										value={this.state.BillingCompanyName || ''}
-										onChange={this.handleChange('BillingCompanyName')}
+										id="bill_state"
+										select
+										label="State"
+										className={classNames(classes.textField, 'pr-12')}
+										value={this.state.bill_state || ''}
+										onChange={this.handleChangeCustomerInfoProps('bill_state')}
 										margin="dense"
 										// variant="outlined"
-										sm={2} />
+										InputLabelProps={{ shrink: true }}
+										style={{ width: '7%' }} >
+										{stateNames.map((option, index) => (
+											<MenuItem key={index} value={option.Value}>
+												{option.Value}
+											</MenuItem>
+										))}
+									</TextField>
 									<TextField
-										id="BillingCompanyName"
-										label="BillingCompanyName"
+										id="bill_zip"
+										label="Zip/Postal"
 										className={classes.textField}
-										value={this.state.BillingCompanyName || ''}
-										onChange={this.handleChange('BillingCompanyName')}
+										value={this.state.bill_zip || ''}
+										onChange={this.handleChangeCustomerInfoProps('bill_zip')}
 										margin="dense"
 										// variant="outlined"
-										sm={2} />
+										InputLabelProps={{ shrink: true }}
+										style={{ width: '13%' }} />
 								</div>
 
 								<h3 className="mt-24 mb-12">Contacts</h3>
-								<Paper>
+								{/* <Paper>
 									<Grid
 										rows={contactsRows}
 										columns={contactsColumns}
@@ -1423,7 +1489,60 @@ class ServiceAgreementPage extends React.Component {
 											commandComponent={Command}
 										/>
 									</Grid>
-								</Paper>
+								</Paper> */}
+								<div className='flex w-full'>
+									<TextField
+										id="First"
+										label="First"
+										className={classNames(classes.textField, 'pr-12')}
+										value={this.state.First || ''}
+										onChange={this.handleChangeCustomerInfoProps('First')}
+										margin="dense"
+										// variant="outlined"
+										InputLabelProps={{ shrink: true }}
+										style={{ width: '20%' }} />
+									<TextField
+										id="Last"
+										label="Last"
+										className={classNames(classes.textField, 'pr-12')}
+										value={this.state.Last || ''}
+										onChange={this.handleChangeCustomerInfoProps('Last')}
+										margin="dense"
+										// variant="outlined"
+										InputLabelProps={{ shrink: true }}
+										style={{ width: '20%' }} />
+									<TextField
+										id="OfficePhone"
+										label="Office Phone"
+										className={classNames(classes.textField, 'pr-12')}
+										value={this.state.OfficePhone || ''}
+										onChange={this.handleChangeCustomerInfoProps('OfficePhone')}
+										margin="dense"
+										// variant="outlined"
+										InputLabelProps={{ shrink: true }}
+										style={{ width: '20%' }} />
+									<TextField
+										id="MobilePhone"
+										label="Mobile Phone"
+										className={classNames(classes.textField, 'pr-12')}
+										value={this.state.MobilePhone || ''}
+										onChange={this.handleChangeCustomerInfoProps('MobilePhone')}
+										margin="dense"
+										// variant="outlined"
+										InputLabelProps={{ shrink: true }}
+										style={{ width: '20%' }} />
+									<TextField
+										id="Email"
+										label="Email"
+										className={classes.textField}
+										value={this.state.Email || ''}
+										onChange={this.handleChangeCustomerInfoProps('Email')}
+										margin="dense"
+										// variant="outlined"
+										InputLabelProps={{ shrink: true }}
+										style={{ width: '20%' }} />
+								</div>
+
 							</GridItem>
 
 						</GridContainer>
