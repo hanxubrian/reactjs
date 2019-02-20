@@ -184,7 +184,7 @@ class NewFindersFeePage extends React.Component {
 
 					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
 						<Button variant="contained" onClick={() => this.handleGotoDistibutionPage()} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>
-						<Button variant="contained" onClick={() => this.handleSaveFindersFee()} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Save</Button>
+						{this.props.customerForm.type === "edit" && <Button variant="contained" onClick={() => this.handleSaveFindersFee()} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Update</Button>}
 					</div>
 
 				</div>
@@ -396,6 +396,7 @@ function mapStateToProps({ customers, auth }) {
 		regionId: auth.login.defaultRegionId,
 		findersFeeParams: customers.findersFeeParams,
 		findersFeeTypes: customers.findersFeeTypes,
+		customerForm: customers.customerForm,
 	}
 }
 
