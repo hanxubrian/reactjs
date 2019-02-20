@@ -1037,7 +1037,7 @@ class FranchiseeDistributionPage extends React.Component {
 					<TextField margin="dense" id="Monthly Billing Amount" label="New Monthly Billing Amount"
 						InputLabelProps={{ shrink: true }}
 						style={{ minWidth: 220 }}
-						className={classNames(classes.textField, "pr-6")}
+						className={classNames(classes.textField, "pr-6 mb-24")}
 						InputProps={{
 							readOnly: true,
 							startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
@@ -1046,8 +1046,9 @@ class FranchiseeDistributionPage extends React.Component {
 								input: classNames('text-right')
 							}
 						}}
-						value={this.props.activeCustomer && this.props.activeCustomer.Data ? this.props.activeCustomer.Data.cont_bill : ""}
-						onChange={this.handleChange("NewAmount")}
+						// value={this.props.activeCustomer && this.props.activeCustomer.Data ? this.props.activeCustomer.Data.cont_bill : ""}
+						// onChange={this.handleChange("NewAmount")}
+						value={this.props.newCustomerParam.cont_bill || ''}
 					/>
 
 					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -1509,6 +1510,7 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 		franchisees: franchisees.franchiseesDB,
 		NewAmount: customers.NewAmount,
 		assignedFranchisees: customers.assignedFranchisees,
+		newCustomerParam: customers.newCustomerParam,
 	}
 }
 
