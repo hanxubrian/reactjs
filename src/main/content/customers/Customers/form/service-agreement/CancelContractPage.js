@@ -397,17 +397,18 @@ class CancelContractPage extends React.Component {
 			this.props.getFranchiseeBillingTypes(nextProps.regionId)
 		}
 		if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
-			this.initCustomerInfo(nextProps.activeCustomer.Data)
+			this.initCustomerInfo(nextProps.activeCustomer)
 		}
 		if (!_.isEqual(this.props.franchisees, nextProps.franchisees)) {
 			this.getFranchiseesFromStatus(nextProps.franchisees);
 		}
 	}
-	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer.Data) => {
-		this.setState({
-			SA_Amount: activeCustomerInfo.cont_bill,
-			franchieesesToOffer: activeCustomerInfo.AssignedFranchisees,
-		})
+	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer) => {
+		if (activeCustomerInfo && activeCustomerInfo.Data)
+			this.setState({
+				SA_Amount: activeCustomerInfo.Data.cont_bill,
+				franchieesesToOffer: activeCustomerInfo.Data.AssignedFranchisees,
+			})
 	};
 
 	handleClose = () => {
@@ -928,7 +929,7 @@ class CancelContractPage extends React.Component {
 						margin="dense"
 					/>
 
-					{this.state.cancelationReasons && 
+					{this.state.cancelationReasons &&
 						this.renderReasons()
 					}
 
