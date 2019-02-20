@@ -640,16 +640,18 @@ class Customers extends Component {
 											</Tooltip> */}
 										</div>
 										<div className="flex items-center">
-											<Button variant="contained" color="primary"
-												aria-label="Add an alarm"
-												aria-owns={anchorContactMenu ? 'title-bar-contact-menu' : undefined}
-												aria-haspopup="true"
-												onClick={this.showContactMenu}
-												className="mr-12"
-											>
-												Contact
+											{
+												customerForm.type === "edit" && <Button variant="contained" color="primary"
+													aria-label="Add an alarm"
+													aria-owns={anchorContactMenu ? 'title-bar-contact-menu' : undefined}
+													aria-haspopup="true"
+													onClick={this.showContactMenu}
+													className="mr-12"
+												>
+													Contact
 												<Icon className={classNames(classes.rightIcon, 'ml-6')}>sms</Icon>
-											</Button>
+												</Button>
+											}
 
 											{/* <Tooltip title="Contact">
 												<IconButton

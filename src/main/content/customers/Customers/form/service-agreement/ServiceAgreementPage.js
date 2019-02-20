@@ -1119,26 +1119,50 @@ class ServiceAgreementPage extends React.Component {
 										control={
 											<Checkbox onChange={this.handleChange('weekdays')} />
 										}
+										label="CPI Increase"
+										style={{ marginRight: "30px" }}
+
+									/>
+								</div>
+								<div className="flex flex-col justify-between">
+									<FormControlLabel
+										control={
+											<Checkbox onChange={this.handleChange('PrintPastDue')} />
+										}
 										label="Print Past Due"
+										value={this.state.PrintPastDue}
 										className="mr-36"
 
 									/>
 									<FormControlLabel
 										control={
-											<Checkbox onChange={this.handleChange('weekdays')} />
+											<Checkbox onChange={this.handleChange('TaxExempt')} />
 										}
 										label="Tax Exempt"
 										className="mr-36"
-
+										value={this.state.TaxExempt}
 									/>
-									<FormControlLabel
-										control={
-											<Checkbox onChange={this.handleChange('weekdays')} />
-										}
-										label="Consolidated Invoice"
-										className=""
-
-									/>
+									<RadioGroup
+										aria-label="Location"
+										name="Location"
+										className={classes.group}
+										value={this.state.InvoiceType}
+									>
+										<FormControlLabel
+											control={
+												<Radio onChange={this.handleChange('InvoiceType')} />
+											}
+											value="Consolidated Invoice"
+											label="Consolidated Invoice"
+										/>
+										<FormControlLabel
+											control={
+												<Radio onChange={this.handleChange('InvoiceType')} />
+											}
+											value="Separate Invoice"
+											label="Separate Invoice"
+										/>
+									</RadioGroup>
 								</div>
 
 							</GridItem>
@@ -1270,25 +1294,6 @@ class ServiceAgreementPage extends React.Component {
 										</MenuItem>
 									))}
 								</TextField>
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
-									label="CPI Increase"
-									style={{ marginRight: "30px" }}
-
-								/>
-								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
-									label="Separate Invoice"
-									style={{ marginRight: "30px" }}
-
-								/>
 							</GridItem>
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
