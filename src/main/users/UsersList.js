@@ -322,6 +322,7 @@ class UsersList extends Component {
             selectAll: false,
             selection: [],
             rows: [],
+            bLoadedUserList: false,
             tableColumnExtensions: [
                 {
                     title: "First Name",
@@ -504,8 +505,9 @@ class UsersList extends Component {
                 rows: Object.values(obj)
             });
         }
-        if(nextProps.usersList !== this.props.usersList){
-
+        if((nextProps.bLoadedUserList !== this.props.bLoadedUserList) && nextProps.bLoadedUserList===true){
+             this.setState({bLoadedUserList: true});
+             console.log("True");
         }
     }
 
@@ -611,6 +613,7 @@ class UsersList extends Component {
             phoneNumberColumns,
             pageSizes,
             searchValue,
+            bLoadedUserList
         } = this.state;
 
 
@@ -705,11 +708,11 @@ class UsersList extends Component {
                 {this.props.openUsersFormStatus && (
                     <UsersForm/>
                 )}
-                {/* {(this.props.contacts) && (
+                {!bLoadedUserList && (
                     <div className={classes.overlay}>
                         <CircularProgress className={classes.progress} color="secondary"/>
                     </div>
-                )} */}
+                )}
             </Fragment>
         )
     }
@@ -736,6 +739,7 @@ function mapStateToProps({usersApp,auth})
         userDetail: usersApp.users.userDetail,
         usersList: usersApp.users.usersList,
         regionId : auth.login.defaultRegionId,
+        bLoadedUserList: usersApp.users.bLoadedUserList
     }
 }
 
