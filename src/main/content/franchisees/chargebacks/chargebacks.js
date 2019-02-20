@@ -382,33 +382,33 @@ class Chargebacks extends Component {
 			bChanged = true;
 		}
 
-		if(regionId !== prevProps.regionId){
-            this.props.getFranchisees(regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText);
-		}
+		// if(regionId !== prevProps.regionId){
+        //     this.props.getFranchisees(regionId, fstatusId, fLocation, fLongitude, fLatitude, fSearchText);
+		// }
 
-		if(regionId !== prevProps.regionId ||
-            month !== prevProps.month ||
-            year !== prevProps.year
-        ) {
-            this.props.getChargebacks(regionId, month, year);
-		}
+		// if(regionId !== prevProps.regionId ||
+        //     month !== prevProps.month ||
+        //     year !== prevProps.year
+        // ) {
+        //     this.props.getChargebacks(regionId, month, year);
+		// }
 
-		if(this.props.bChargebacksUpdated && this.props.bChargebacksUpdated!==prevProps.bChargebacksUpdated)
-			this.props.getChargebacks(regionId, month, year);
+		// if(this.props.bChargebacksUpdated && this.props.bChargebacksUpdated!==prevProps.bChargebacksUpdated)
+		// 	this.props.getChargebacks(regionId, month, year);
 
-		if (prevState.s !== this.state.s) {
-			this.search(this.state.s);
-		}
+		// if (prevState.s !== this.state.s) {
+		// 	this.search(this.state.s);
+		// }
 
-		if (bChanged)
-			this.getChargebacksFromStatus();
+		// if (bChanged)
+		// 	this.getChargebacksFromStatus();
 
-		if (prevProps.chargebacks === null && this.props.chargebacks !== null) {
-			this.getChargebacksFromStatus();
-		}
+		// if (prevProps.chargebacks === null && this.props.chargebacks !== null) {
+		// 	this.getChargebacksFromStatus();
+		// }
 
-		if(this.props.removedId!==undefined && this.props.removedId!==prevProps.removedId)
-			this.props.getChargebacks(regionId, month, year);
+		// if(this.props.removedId!==undefined && this.props.removedId!==prevProps.removedId)
+		// 	this.props.getChargebacks(regionId, month, year);
 	}
 
 	componentWillMount() {
@@ -439,6 +439,7 @@ class Chargebacks extends Component {
 		if(nextProps.franchisees!==null && this.props.franchisees!==nextProps.franchisees){
 			this.setState({franchisees: nextProps.franchisees.Data.Region[0].FranchiseeList});
 		}
+
 	}
 
 
@@ -522,7 +523,7 @@ class Chargebacks extends Component {
 
 	onNewChargebacks = () => {
 		this.props.showProcessModalForm(true)
-		this.setState({isOpen: !this.state.isOpen})
+		// this.setState({isOpen: !this.state.isOpen})
 	}
 
 	handleChange = prop => event => {
@@ -612,14 +613,19 @@ class Chargebacks extends Component {
                                         </div> */}
 										<div className="flex flex-shrink items-center">
                                             <FuseAnimate animation="transition.expandIn" delay={300}>
-                                                <Button variant="contained" color="primary"
-                                                        className={classNames(classes.btntop) } onClick={()=>this.onNewChargebacks()}>
+												<Button 
+													variant="contained" 
+													color="primary"
+													className={classNames(classes.btntop) } 
+													onClick={this.onNewChargebacks}
+												>
                                                     Process Chargebacks
-													<ProcessModalForm />
+													 {/* {this.props.processModalForm.open && <ProcessModalForm />} */}
                                                     <Icon className={classes.rightIcon}>add</Icon>
                                                 </Button>
                                             </FuseAnimate>
                                         </div>
+										{this.props.processModalForm.open && <ProcessModalForm />}
 									</div>
 									{/* <div className="flex flex-none items-end" style={{ display: 'none' }}>
 										<FuseAnimate animation="transition.expandIn" delay={600}>

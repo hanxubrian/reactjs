@@ -529,7 +529,6 @@ class ProcessModalForm extends React.Component {
 		// })
 
 		this.props.showProcessModalForm(false)
-
 	};
 
 	handleChangeChecked = name => event => {
@@ -835,11 +834,12 @@ class ProcessModalForm extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		const { customerServiceTypes } = this.state;
+        const { customerServiceTypes } = this.state;
+
 		return (
 			<div>
 				<Dialog
-					open={this.props.logCallModalForm.open === true}
+					open={this.props.processModalForm.open === true}
 					fullWidth={true}
 					maxWidth="md"
 
@@ -848,6 +848,7 @@ class ProcessModalForm extends React.Component {
 					// TransitionComponent={Transition}
 					aria-labelledby="form-dialog-title"
 				>
+
 					<BlueDialogTitle id="form-dialog-title" onClose={this.handleClose}>
 						<h2 style={{ display: "flex", alignItems: "center", color: "white" }}>
 							<Icon>attach_money</Icon>&nbsp;&nbsp;Process Chargebacks</h2>
