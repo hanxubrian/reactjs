@@ -1000,7 +1000,7 @@ class FranchiseeDistributionPage extends React.Component {
 
 	gotoFindersFee = async (FranchiseeNum, AmountPayableOn) => {
 		await this.props.updateFindersFeeParams({ FranchiseeNum, AmountPayableOn: parseFloat(AmountPayableOn) });
-		this.props.updateCustomersParameter('activeStep', 7);
+		this.props.updateCustomersParameter('activeStep', this.props.customerForm.type === "edit" ? 7 : 3);
 	};
 
 	removeFranchisee = async (franchiseeId) => {
@@ -1506,6 +1506,7 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 		lists: customers.lists,
 		franchieesesToOffer: customers.franchieesesToOffer,
 		activeCustomer: customers.activeCustomer,
+		customerForm: customers.customerForm,
 
 		franchisees: franchisees.franchiseesDB,
 		NewAmount: customers.NewAmount,
