@@ -80,6 +80,7 @@ import AutosuggestHighlightMatch from 'autosuggest-highlight/match'
 import AutosuggestHighlightParse from 'autosuggest-highlight/parse'
 
 import FuseUtils from '@fuse/FuseUtils';
+import { NumberFormatCustomNoPrefix, } from '../../../../../../services/utils'
 
 const styles = theme => ({
 	root: {
@@ -682,7 +683,7 @@ class ServiceAgreementPage extends React.Component {
 			franchiseeServiceTypes: this.props.lists.franchiseeServiceTypes,
 			franchiseeBillingTypes: this.props.lists.franchiseeBillingTypes,
 			execTitles: execTitles,
-			cont_bill: this.props.activeCustomer && this.props.activeCustomer.Data ? this.props.activeCustomer.Data.cont_bill : "",
+			cont_bill: this.props.activeCustomer && this.props.activeCustomer.Data ? this.props.activeCustomer.Data.cont_bill : this.props.newCustomerParam.cont_bill,
 		})
 
 		this.initCustomerInfo()
@@ -901,8 +902,12 @@ class ServiceAgreementPage extends React.Component {
 									style={{ width: 250 }}
 
 									InputProps={{
-										startAdornment: <InputAdornment position="start">$</InputAdornment>,
-										// readOnly: true
+										readOnly: false,
+										startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
+										// inputComponent: NumberFormatCustomNoPrefix,
+										classes: {
+											input: classNames('text-right')
+										}
 									}}
 								/>
 								{customerForm.props.open && customerForm.type === "edit" &&
@@ -1820,6 +1825,7 @@ function mapStateToProps({ customers, accountReceivablePayments, auth }) {
 		accountExecutiveList: customers.accountExecutiveList,
 
 		customers: customers.customersDB,
+		newCustomerParam: customers.newCustomerParam,
 
 	}
 }
