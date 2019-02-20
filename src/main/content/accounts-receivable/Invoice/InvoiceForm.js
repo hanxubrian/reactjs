@@ -540,12 +540,8 @@ class InvoiceForm extends Component {
                 this.setState({PO_number: nextProps.invoiceForm.customer.CustomerNo});
                 this.setState({InvoiceDescription: nextProps.invoices.invoiceDetail.Data.Description});
                 this.setState({notes: nextProps.invoices.invoiceDetail.Data.Notes===null ? '' : nextProps.invoices.invoiceDetail.Data.Notes});
-                let year = moment().year();
-                let month = moment().month();
-                let invoiceDate = moment();
-                let dueDate = moment().year(year).month(month).endOf('month');
-                this.setState({InvoiceDate: invoiceDate.format('YYYY-MM-DD')});
-                this.setState({DueDate: dueDate.format('YYYY-MM-DD')});
+                this.setState({InvoiceDate: moment(nextProps.invoices.invoiceDetail.Data.InvoiceDate).format('YYYY-MM-DD')});
+                this.setState({DueDate: moment(nextProps.invoices.invoiceDetail.Data.DueDate).format('YYYY-MM-DD')});
                 this.setState({ bShowInvoiceCloseBox: false });
 
                 let trxDetail = nextProps.invoices.invoiceDetail.Data;
