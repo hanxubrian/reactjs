@@ -862,7 +862,7 @@ class CustomerListContent extends Component {
 		if (this.props.locationFilterValue !== nextProps.locationFilterValue) {
 			this.setState({ locationFilterValue: nextProps.locationFilterValue })
 			console.log("componentWillReceiveProps", "locationFilterValue", nextProps.locationFilterValue, this.props.customers)
-			this.initRowsFromRawJson(this.props.customers, nextProps.locationFilterValue);
+			this.initRowsFromRawJson(nextProps.customers, nextProps.locationFilterValue);
 		}
 
 		// if (this.props.pins !== nextProps.pins) {
@@ -944,18 +944,18 @@ class CustomerListContent extends Component {
 		// }
 	};
 
-	removeCustomers = () => {
-		console.log("removeCustomers");
+	// removeCustomers = () => {
+	// 	console.log("removeCustomers");
 
-		if (this.state.selection.length === 0) {
-			alert("Please choose customer(s) to delete");
-			return;
-		}
-		if (window.confirm("Do you really want to remove the selected customer(s)")) {
-			this.props.deleteCustomersAction(this.state.selection, this.props.customers);
-			this.setState({ selection: [], selectAll: false })
-		}
-	};
+	// 	if (this.state.selection.length === 0) {
+	// 		alert("Please choose customer(s) to delete");
+	// 		return;
+	// 	}
+	// 	if (window.confirm("Do you really want to remove the selected customer(s)")) {
+	// 		this.props.deleteCustomersAction(this.state.selection, this.props.customers);
+	// 		this.setState({ selection: [], selectAll: false })
+	// 	}
+	// };
 
 	fetchData(state, instance) {
 		console.log("fetchData");
@@ -1218,7 +1218,7 @@ class CustomerListContent extends Component {
 			prevent = true;
 			// alert(JSON.stringify(tableRow.row));
 			console.log(restProps);
-			this.props.openEditCustomerForm(this.props.regionId, tableRow.row.CustomerId);
+			this.props.openEditCustomerServiceForm(this.props.regionId, tableRow.row.CustomerId);
 		}
 		return (
 			<Table.Row
@@ -1514,12 +1514,11 @@ function mapDispatchToProps(dispatch) {
 		toggleFilterPanel: Actions.toggleFilterPanel,
 		toggleMapView: Actions.toggleMapView,
 		toggleSummaryPanel: Actions.toggleSummaryPanel,
-		deleteCustomersAction: Actions.deleteCustomers,
-		removeCustomerAction: Actions.removeCustomer,
-		openEditCustomerForm: Actions.openEditCustomerForm,
-		closeEditCustomerForm: Actions.closeEditCustomerForm,
-
-		openNewCustomerForm: Actions.openNewCustomerForm,
+		// deleteCustomersAction: Actions.deleteCustomers,
+		// removeCustomerAction: Actions.removeCustomer,
+		openEditCustomerServiceForm: Actions.openEditCustomerServiceForm,
+		// closeEditCustomerForm: Actions.closeEditCustomerForm,
+		// openNewCustomerForm: Actions.openNewCustomerForm,
 
 		getCustomer: Actions.getCustomer,
 	}, dispatch);
@@ -1533,7 +1532,7 @@ function mapStateToProps({ customers, auth }) {
 		filterState: customers.bOpenedFilterPanel,
 		summaryState: customers.bOpenedSummaryPanel,
 		regionId: auth.login.defaultRegionId,
-		CustomerForm: customers.CustomerForm,
+		// customerForm: customers.customerForm,
 		mapViewState: customers.bOpenedMapView,
 		locationFilterValue: customers.locationFilterValue,
 		searchText: customers.searchText,

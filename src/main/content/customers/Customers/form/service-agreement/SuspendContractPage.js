@@ -320,6 +320,7 @@ class showSuspendContractPage extends React.Component {
 			franchiseeBillingTypes: [],
 
 			EffectiveDate: moment().format('YYYY-MM-DD'),
+			ReactivationDate: moment().format('YYYY-MM-DD'),
 			SA_Amount: '',
 			notes: '',
 			increaseReasons: null,
@@ -354,20 +355,19 @@ class showSuspendContractPage extends React.Component {
 			franchiseeServiceTypes: this.props.lists.franchiseeServiceTypes,
 			franchiseeBillingTypes: this.props.lists.franchiseeBillingTypes,
 		})
-
 	}
+
 	componentDidMount() {
 		this.initCustomerInfo();
 
 		fetch(`https://apifmsplusplus_mongo.jkdev.com/v1/Lists/reasons?type=account_suspension`)
 			.then(response => response.json())
 			.then(data => this.setState({ suspensionReasons: data.Data }));
-
-		this.setState({
-			paymentDlgPayloads: this.props.paymentDlgPayloads,
-			PaymentAmount: this.props.paymentDlgPayloads.paymentAmount,
-			PaymentType: this.props.paymentDlgPayloads.paymentType
-		})
+		// this.setState({
+		// 	paymentDlgPayloads: this.props.paymentDlgPayloads,
+		// 	PaymentAmount: this.props.paymentDlgPayloads.paymentAmount,
+		// 	PaymentType: this.props.paymentDlgPayloads.paymentType
+		// })
 
 		// if (this.props.bOpenPaymentDialog === true) {
 		// 	this.checkValidations()
@@ -398,17 +398,18 @@ class showSuspendContractPage extends React.Component {
 			this.props.getFranchiseeBillingTypes(nextProps.regionId)
 		}
 		if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
-			this.initCustomerInfo(nextProps.activeCustomer.Data)
+			this.initCustomerInfo(nextProps.activeCustomer)
 		}
 		if (!_.isEqual(this.props.franchisees, nextProps.franchisees)) {
 			this.getFranchiseesFromStatus(nextProps.franchisees);
 		}
 	}
-	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer.Data) => {
-		this.setState({
-			SA_Amount: activeCustomerInfo.cont_bill,
-			franchieesesToOffer: activeCustomerInfo.AssignedFranchisees,
-		})
+	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer) => {
+		if (activeCustomerInfo && activeCustomerInfo.Data)
+			this.setState({
+				SA_Amount: activeCustomerInfo.Data.cont_bill,
+				franchieesesToOffer: activeCustomerInfo.Data.AssignedFranchisees,
+			})
 	};
 
 	handleClose = () => {
@@ -922,10 +923,20 @@ class showSuspendContractPage extends React.Component {
 						id="EffectiveDate"
 						value={this.state.EffectiveDate}
 						label="Effective Date"
-						className={classNames(classes.textField, 'ml-24')}
+						className={classNames(classes.textField, 'mr-24')}
 						InputLabelProps={{ shrink: true }}
 						value={this.state.EffectiveDate}
 						onChange={this.handleChange('EffectiveDate')}
+						margin="dense"
+					/>
+					<TextField
+						type="date"
+						id="ReactivationDate"
+						label="Reactivation Date"
+						value={this.state.ReactivationDate}
+						onChange={this.handleChange('ReactivationDate')}
+						className={classNames(classes.textField, 'mr-24')}
+						InputLabelProps={{ shrink: true }}
 						margin="dense"
 					/>
 

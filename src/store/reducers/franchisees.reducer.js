@@ -49,7 +49,7 @@ const initialState = {
         Latitude: "",
         Longitude: "",
         Phone2: "+1(  )    -    ",
-        AgreementPlanTypeId: "5c59d4bda0cca31804871c0e",
+        AgreementPlanTypeId: "5c6856c5a0cca92188d842c4",
         LegalName: "",
         LegalAddressLine1: "",
         LegalAddressLine2: "",

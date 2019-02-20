@@ -101,7 +101,7 @@ class franchiseesService {
      */
     getFranchiseeDocumentsList = (RegionId) => {
         return new Promise((resolve, reject) => {
-            axios_instance.get(`${BASE_API_URL}/v1/lists/GetFranchiseeDocumentsList?RegionId=${RegionId}`)
+            axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/GetFranchiseeDocuments`)
                 .then( res => {
                     if(res.status===200) {
                         resolve(res.data);

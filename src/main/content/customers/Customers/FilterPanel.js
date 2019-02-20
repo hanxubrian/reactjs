@@ -519,6 +519,34 @@ class FilterPanel extends Component {
 			filters: { ...this.props.filters }
 		})
 
+		if (this.props.activeCustomer && this.props.activeCustomer.Data) {
+			const { cus_name, cus_addr, cus_city, cus_state, cus_zip, cus_phone, cus_fax, email1 } = this.props.activeCustomer.Data
+			this.setState({
+				cus_name,
+				cus_addr,
+				cus_city,
+				cus_state,
+				cus_zip,
+
+				cus_phone: "+1" + cus_phone,
+				cus_fax: "+1" + cus_fax,
+
+				email1,
+			});
+		} else {
+			this.setState({
+				cus_name: '',
+				cus_addr: '',
+				cus_city: '',
+				cus_state: '',
+				cus_zip: '',
+
+				cus_phone: '',
+				cus_fax: '',
+
+				email1: '',
+			});
+		}
 	}
 	componentWillReceiveProps(nextProps) {
 		const { customers, customerForm } = this.props;
@@ -528,25 +556,35 @@ class FilterPanel extends Component {
 			});
 		}
 
-		if (nextProps.customerForm !== customerForm) {
-			if (nextProps.customerForm.data !== null) {
-				console.log("nextProps.customerForm.data.Data.cus_phone", nextProps.customerForm.data.Data.cus_phone)
+		if (nextProps.activeCustomer !== this.props.activeCustomer) {
+			if (nextProps.activeCustomer && nextProps.activeCustomer.Data) {
+				const { cus_name, cus_addr, cus_city, cus_state, cus_zip, cus_phone, cus_fax, email1 } = nextProps.activeCustomer.Data
 				this.setState({
-					cus_name: nextProps.customerForm.data.Data.cus_name,
-					cus_addr: nextProps.customerForm.data.Data.cus_addr,
-					cus_city: nextProps.customerForm.data.Data.cus_city,
-					cus_state: nextProps.customerForm.data.Data.cus_state,
-					cus_zip: nextProps.customerForm.data.Data.cus_zip,
+					cus_name,
+					cus_addr,
+					cus_city,
+					cus_state,
+					cus_zip,
 
-					cus_phone: "+1" + nextProps.customerForm.data.Data.cus_phone,
-					cus_fax: "+1" + nextProps.customerForm.data.Data.cus_fax,
+					cus_phone: "+1" + cus_phone,
+					cus_fax: "+1" + cus_fax,
 
-					email1: nextProps.customerForm.data.Data.email1,
-					cus_zip: nextProps.customerForm.data.Data.cus_zip,
+					email1,
+				})
+			} else {
+				this.setState({
+					cus_name: '',
+					cus_addr: '',
+					cus_city: '',
+					cus_state: '',
+					cus_zip: '',
 
+					cus_phone: '',
+					cus_fax: '',
+
+					email1: '',
 				});
 			}
-
 		}
 
 		if (!_.isEqual(nextProps.filters, this.props.filters)) {
@@ -1032,33 +1070,33 @@ class FilterPanel extends Component {
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
-									id="bill_addr"
+									id="cus_addr"
 									label="Address *"
 									className={classes.textField}
-									value={this.state.bill_addr || ''}
-									onChange={this.handleChangeCustomerInfoProps('bill_addr')}
+									value={this.state.cus_addr || ''}
+									onChange={this.handleChangeCustomerInfoProps('cus_addr')}
 									margin="dense"
 									// variant="outlined"
 									fullWidth />
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
-									id="bill_addr2"
+									id="cus_addr2"
 									label="Address2"
 									className={classes.textField}
-									value={this.state.bill_addr2 || ''}
-									onChange={this.handleChange('bill_addr2')}
+									value={this.state.cus_addr2 || ''}
+									onChange={this.handleChangeCustomerInfoProps('cus_addr2')}
 									margin="dense"
 									// variant="outlined"
 									fullWidth />
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
-									id="bill_city"
+									id="cus_city"
 									label="City *"
 									className={classNames(classes.textField, 'mr-6')}
-									value={this.state.bill_city || ''}
-									onChange={this.handleChange('bill_city')}
+									value={this.state.cus_city || ''}
+									onChange={this.handleChangeCustomerInfoProps('cus_city')}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '55%' }}
@@ -1066,12 +1104,12 @@ class FilterPanel extends Component {
 
 
 								<TextField
-									id="bill_state"
+									id="cus_state"
 									label="State *"
 									select
 									className={classNames(classes.textField, 'mr-6 ml-6')}
-									value={this.state.bill_state || ''}
-									onChange={this.handleChange('bill_state')}
+									value={this.state.cus_state || ''}
+									onChange={this.handleChangeCustomerInfoProps('cus_state')}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '20%' }}
@@ -1084,11 +1122,11 @@ class FilterPanel extends Component {
 								</TextField>
 
 								<TextField
-									id="bill_zip"
+									id="cus_zip"
 									label="Zip *"
 									className={classNames(classes.textField, 'ml-6')}
-									value={this.state.bill_zip || ''}
-									onChange={this.handleChange('bill_zip')}
+									value={this.state.cus_zip || ''}
+									onChange={this.handleChangeCustomerInfoProps('cus_zip')}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '25%' }}
@@ -1098,7 +1136,7 @@ class FilterPanel extends Component {
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<FormControl className={classNames(classes.formControl, 'mr-6')} style={{ flex: 1 }}>
 									<TextField
-										id="bill_phone"
+										id="cus_phone"
 										label="Phone"
 										className={classes.textField}
 										// onChange={this.handleChange('customerPhone')}
@@ -1109,8 +1147,8 @@ class FilterPanel extends Component {
 										InputProps={{
 											inputComponent: TextMaskPhone,
 											maxLength: 40,
-											value: this.state.bill_phone || '',
-											onChange: this.handleChange('bill_phone')
+											value: this.state.cus_phone || '',
+											onChange: this.handleChangeCustomerInfoProps('cus_phone')
 										}}
 										// variant="outlined"
 										fullWidth
@@ -1120,7 +1158,7 @@ class FilterPanel extends Component {
 
 								<FormControl className={classNames(classes.formControl, 'ml-6')} style={{ flex: 1 }}>
 									<TextField
-										id="Fax"
+										id="cus_fax"
 										label="Fax"
 										className={classes.textField}
 										// onChange={this.handleChange('customerFax')}
@@ -1131,8 +1169,8 @@ class FilterPanel extends Component {
 										InputProps={{
 											inputComponent: TextMaskPhone,
 											maxLength: 40,
-											value: this.state.customerFax,
-											onChange: this.handleChange('customerFax')
+											value: this.state.cus_fax || '',
+											onChange: this.handleChangeCustomerInfoProps('cus_fax')
 										}}
 										// variant="outlined"
 										fullWidth
@@ -1148,8 +1186,8 @@ class FilterPanel extends Component {
 									label="Email"
 									type="email"
 									className={classNames(classes.textField, 'mr-6')}
-									value={this.state.email1}
-									onChange={this.handleChange('email1')}
+									value={this.state.email1 || ''}
+									onChange={this.handleChangeCustomerInfoProps('email1')}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '100%' }}
@@ -1159,8 +1197,8 @@ class FilterPanel extends Component {
 									id="outlined-name"
 									label="Website"
 									className={classNames(classes.textField, 'ml-6')}
-									value={this.state.customerWebsite}
-									onChange={this.handleChange('customerWebsite')}
+									value={this.state.customerWebsite || ''}
+									onChange={this.handleChangeCustomerInfoProps('customerWebsite')}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '100%' }}
@@ -1588,6 +1626,7 @@ function mapStateToProps({ customers, auth }) {
 		customerStatusList: customers.customerStatusList,
 		accountTypesGroups: customers.accountTypesGroups,
 		filters: customers.filters,
+		activeCustomer: customers.activeCustomer,
 	}
 }
 

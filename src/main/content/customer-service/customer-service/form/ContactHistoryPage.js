@@ -681,8 +681,8 @@ class ContactHistoryPage extends Component {
 		console.log("constructor");
 
 		console.log("constructor", this.props.customerForm)
-		if (this.props.customerForm.data && this.props.customerForm.data.Data) {
-			this.props.getCustomerServiceList(this.props.regionId, this.props.customerForm.data.Data.cust_no, this.props.filterParam.fromDate, this.props.filterParam.toDate)
+		if (this.props.customerServiceForm.activeCustomer && this.props.customerServiceForm.activeCustomer.Data) {
+			this.props.getCustomerServiceList(this.props.regionId, this.props.customerServiceForm.activeCustomer.Data.cust_no, this.props.filterParam.fromDate, this.props.filterParam.toDate)
 		}
 	}
 	//
@@ -796,10 +796,10 @@ class ContactHistoryPage extends Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.regionId !== this.props.regionId) {
-			this.props.getCustomerServiceList(nextProps.regionId, this.props.customerForm.cus_no, this.props.filterParam.fromDate, this.props.filterParam.toDate)
+			this.props.getCustomerServiceList(nextProps.regionId, this.props.customerServiceForm.activeCustomer.Data.cus_no, this.props.filterParam.fromDate, this.props.filterParam.toDate)
 		}
 
-		if (nextProps.customerServiceForm.serviceList.data, this.props.customerServiceForm.serviceList.data) {
+		if (!_.isEqual(nextProps.customerServiceForm.serviceList.data, this.props.customerServiceForm.serviceList.data)) {
 			this.initRowsFromRawJson(nextProps.customerServiceForm.serviceList.data)
 		}
 	} // deprecate 
@@ -1210,7 +1210,7 @@ function mapStateToProps({ customers, auth }) {
 		filterState: customers.bOpenedFilterPanel,
 		summaryState: customers.bOpenedSummaryPanel,
 		regionId: auth.login.defaultRegionId,
-		customerForm: customers.customerForm,
+		// customerForm: customers.customerForm,
 		mapViewState: customers.bOpenedMapView,
 		locationFilterValue: customers.locationFilterValue,
 		searchText: customers.searchText,

@@ -667,8 +667,8 @@ class BillingsPage extends Component {
 		console.log("constructor");
 
 		console.log("constructor", this.props.customerForm)
-		if (this.props.customerForm.data && this.props.customerForm.data.Data) {
-			this.props.getCustomerBillingList(this.props.regionId, this.props.customerForm.data.Data.cust_no)
+		if (this.props.customerServiceForm.activeCustomer && this.props.customerServiceForm.activeCustomer.Data) {
+			this.props.getCustomerBillingList(this.props.regionId, this.props.customerServiceForm.activeCustomer.Data.cust_no)
 		}
 	}
 	//
@@ -782,7 +782,7 @@ class BillingsPage extends Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.regionId !== this.props.regionId) {
-			this.props.getCustomerBillingList(nextProps.regionId, this.props.customerForm.cus_no)
+			this.props.getCustomerBillingList(nextProps.regionId, this.props.customerServiceForm.activeCustomer.Data.cus_no)
 		}
 
 		if (nextProps.customerServiceForm.billingList.data, this.props.customerServiceForm.billingList.data) {
@@ -1216,7 +1216,7 @@ function mapStateToProps({ customers, auth }) {
 		filterState: customers.bOpenedFilterPanel,
 		summaryState: customers.bOpenedSummaryPanel,
 		regionId: auth.login.defaultRegionId,
-		customerForm: customers.customerForm,
+		// customerForm: customers.customerForm,
 		mapViewState: customers.bOpenedMapView,
 		locationFilterValue: customers.locationFilterValue,
 		searchText: customers.searchText,
