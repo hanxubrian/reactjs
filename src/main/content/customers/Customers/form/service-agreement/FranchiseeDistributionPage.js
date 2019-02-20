@@ -1048,7 +1048,7 @@ class FranchiseeDistributionPage extends React.Component {
 						}}
 						// value={this.props.activeCustomer && this.props.activeCustomer.Data ? this.props.activeCustomer.Data.cont_bill : ""}
 						// onChange={this.handleChange("NewAmount")}
-						value={this.props.newCustomerParam.cont_bill || ''}
+						value={this.props.customerForm.type === "new" ? (this.props.newCustomerParam.cont_bill || '') : (this.props.activeCustomer && this.props.activeCustomer.Data ? this.props.activeCustomer.Data.cont_bill : "")}
 					/>
 
 					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
