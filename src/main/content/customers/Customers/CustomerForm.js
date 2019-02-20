@@ -167,11 +167,6 @@ function escapeRegexCharacters(str) {
 	return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function getSteps() {
-	// return ['Service Agreement', 'Franchisee Distribution', 'Billing', 'Cleaning Schedule', "Walk-Thru", "Account Offering", "Documents", "Marketing", "Account History", "Finders Fees"];
-	return ['Service Agreement', 'Franchisee Distribution', "Walk-Thru", "Account Offering", "Documents", "Marketing", "Account History", "Finders Fees"];
-}
-
 const Upload_Document_headers = [
 	{
 		id: 'documentName',
@@ -223,7 +218,14 @@ class CustomerForm extends Component {
 		account_offering_step: 0,
 
 	};
-
+	getSteps() {
+		// return ['Service Agreement', 'Franchisee Distribution', 'Billing', 'Cleaning Schedule', "Walk-Thru", "Account Offering", "Documents", "Marketing", "Account History", "Finders Fees"];
+		if (this.props.customerForm.type === "new") {
+			return ['Service Agreement', 'Franchisee Distribution', "Account Offering"];
+		}
+		return ['Service Agreement', 'Franchisee Distribution', "Walk-Thru", "Account Offering", "Documents", "Marketing", "Account History", "Finders Fees"];
+	}
+	
 	//
 	// to edit table cell
 	//
@@ -252,7 +254,7 @@ class CustomerForm extends Component {
 
 	getStepContent(step) {
 		const { classes } = this.props;
-
+		const steps = this.getSteps();
 		let execTitles = []
 		if (this.props.accountExecutiveList !== null && this.props.accountExecutiveList.Data !== undefined) {
 			execTitles = this.props.accountExecutiveList.Data.filter(x => {
@@ -263,16 +265,16 @@ class CustomerForm extends Component {
 			}).sort();
 		}
 
-		switch (step) {
-			case 0:
+		switch (steps[step]) {
+			case 'Service Agreement':
 				return (
 					<ServiceAgreementPage />
 				);
-			case 1:
+			case 'Franchisee Distribution':
 				return (
 					<FranchiseeDistributionPage />
 				);
-			case 2:
+			case 'Walk-Thru':
 				return (
 					<Fragment>
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
@@ -583,11 +585,11 @@ class CustomerForm extends Component {
 
 					</Fragment>
 				);
-			case 3:
+			case 'Account Offering':
 				const { account_offering_step } = this.state
 
 				return (<AccountOfferingPage step={account_offering_step} />)
-			case 4:
+			case 'Documents':
 				return (
 					<Fragment>
 						<div style={{ marginTop: '30px' }}></div>
@@ -596,11 +598,11 @@ class CustomerForm extends Component {
 						</div>
 					</Fragment>
 				)
-			case 5:
+			case 'Marketing':
 				return (<Fragment></Fragment>)
-			case 6:
+			case 'Account History':
 				return (<Fragment></Fragment>)
-			case 7:
+			case 'Finders Fees':
 				return (<FinderFeePage />)
 			default:
 				return 'Unknown step';
@@ -710,7 +712,7 @@ class CustomerForm extends Component {
 
 	//////////////////////
 	totalSteps = () => {
-		return getSteps().length;
+		return this.getSteps().length;
 	};
 
 	handleNext = () => {
@@ -719,7 +721,7 @@ class CustomerForm extends Component {
 		if (this.isLastStep() && !this.allStepsCompleted()) {
 			// It's the last step, but not all steps have been completed
 			// find the first step that has been completed
-			const steps = getSteps();
+			const steps = this.getSteps();
 			activeStep = steps.findIndex((step, i) => !this.state.completed.has(i));
 		}
 		else {
@@ -761,7 +763,7 @@ class CustomerForm extends Component {
 	//////////////////////
 	render() {
 		const { classes } = this.props;
-		const steps = getSteps();
+		const steps = this.getSteps();
 		const { activeStep } = this.state;
 
 
