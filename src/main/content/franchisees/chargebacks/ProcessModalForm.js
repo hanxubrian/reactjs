@@ -87,6 +87,16 @@ const styles = theme => ({
 	button: {
 		margin: theme.spacing.unit,
 	},
+	dropdownMenu: {
+        '& li': {
+            fontSize: 12,
+            height: 12,
+        }
+    },
+	inputMenu1: {
+        padding: '10px 16px',
+        width: 125
+    },
 })
 function Transition(props) {
 	return <Slide direction="up" {...props} />;
@@ -417,6 +427,8 @@ class ProcessModalForm extends React.Component {
             errorMsg: "",
             period: moment().format('MM/YYYY'),
             periods: null,
+			labelWidth: 0,
+			Notes: null,
 
 			paymentDlgPayloads: {
 				open: false,
@@ -863,6 +875,31 @@ class ProcessModalForm extends React.Component {
 								</div> */}
 
 								<div className={classNames("flex mt-12")} sm={12}>
+										<Select
+											classes={{
+												selectMenu: classNames(classes.inputMenu1),
+											}}
+											label="Period"
+											name="period"
+											variant="outlined"
+											value={this.state.period}
+											onChange={this.handleChange}
+											input={
+												<OutlinedInput
+													labelWidth={this.state.labelWidth}
+													name="period"
+													id="period"
+												/>
+											}
+											className={classes.textField}
+											MenuProps = {{
+												classes:{paper: classes.dropdownMenu},
+											}}
+										>
+											{/* {this.state.periods.map((p, index)=>{
+												return (<MenuItem key={index} value={p}>{p}</MenuItem>)
+											})} */}
+										</Select>
                                         <TextField
                                                 margin="none"
                                                 label="Month"
@@ -904,7 +941,7 @@ class ProcessModalForm extends React.Component {
                                                     classes: {outlined: classes.label}
                                                 }}
                                             />
-									<TextField sm={3} select margin="dense" id="InitiatedBy" label="Initiated By"
+									{/* <TextField sm={3} select margin="dense" id="InitiatedBy" label="Initiated By"
 										InputLabelProps={{ shrink: true }}
 										className={classNames(classes.textField, "pr-6")}
 										value={this.state.InitiatedBy || ''}
@@ -945,9 +982,9 @@ class ProcessModalForm extends React.Component {
 										InputProps={{ readOnly: false }}
 									>
 										<MenuItem value={"Contactd"}>Contactd</MenuItem>
-									</TextField>
+									</TextField> */}
 
-									{/* 
+									{/*
 									<TextField sm={3} margin="dense" id="ReferenceNo" label="Reference No." variant="outlined"
 										autoFocus
 										onChange={this.handleChange('ReferenceNo')}
@@ -991,8 +1028,16 @@ class ProcessModalForm extends React.Component {
 
 								</div>
 
-								<Divider variant="middle" style={{ margin: 10, width: '50%', alignSelf: 'center' }} />
+								 <Divider variant="middle" style={{ margin: 10, width: '50%', alignSelf: 'center' }} />
 
+								 <div className="flex flex-col w-full pr-6 pl-6">
+										<TextField margin="dense" variant="outlined" fullWidth id="Notes" label="Notes" multiline rows="9" rowsMax="9"
+											InputLabelProps={{ shrink: true }}
+											value={this.state.Notes || ''}
+											onChange={this.handleChange('Notes')}
+										/>
+									</div>
+								{/*
 								<div className="flex">
 									<div className="flex flex-col w-full pr-6">
 										<TextField margin="dense" fullWidth id="SpokeWith" label="Spoke With"
@@ -1067,7 +1112,7 @@ class ProcessModalForm extends React.Component {
 
 									</div>
 								</div>
-								<Divider variant="middle" style={{ marginTop: 10, width: '100%', alignSelf: 'center' }} />
+								<Divider variant="middle" style={{ marginTop: 10, width: '100%', alignSelf: 'center' }} /> */}
 
 							</div>
 						</div>

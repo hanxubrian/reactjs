@@ -625,8 +625,9 @@ class Chargebacks extends Component {
                                                 </Button>
                                             </FuseAnimate>
                                         </div>
-										{this.props.processModalForm.open && <ProcessModalForm />}
+										{/* {this.props.processModalForm.open && <ProcessModalForm />} */}
 									</div>
+									{this.props.processModalForm.open && <ProcessModalForm />}
 									{/* <div className="flex flex-none items-end" style={{ display: 'none' }}>
 										<FuseAnimate animation="transition.expandIn" delay={600}>
 											<Fab color="secondary" aria-label="add" className={classes.addButton} onClick={() => openNewChargebacksForm}>

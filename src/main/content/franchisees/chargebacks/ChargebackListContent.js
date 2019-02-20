@@ -181,7 +181,8 @@ const styles = theme => ({
 	},
 	tableTheadRow: {
 		// backgroundColor: 'rgba(' + hexToRgb(theme.palette.primary.main).r + ',' + hexToRgb(theme.palette.primary.main).g + ',' + hexToRgb(theme.palette.primary.main).b +', .2)'
-		backgroundColor: theme.palette.primary.main,
+		// backgroundColor: 'rgb(' + hexToRgb('#b8c2cc').r + ',' + hexToRgb('#b8c2cc').g + ',' + hexToRgb('#b8c2cc').b + ')',
+		backgroundColor: '#606f7b',
 		'& tr': {
             height: 48
         },
@@ -544,7 +545,7 @@ class ChargebackListContent extends Component {
 					title: "Name",
 					name: "FranchiseeNameNo",
 					columnName: "FranchiseeNameNo",
-					width: 350,
+					width: 250,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -556,7 +557,7 @@ class ChargebackListContent extends Component {
 					title: "Cust No",
 					name: "cust_no",
 					columnName: "cust_no",
-					width: 200,
+					width: 150,
 					wordWrapEnabled: true,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -578,7 +579,7 @@ class ChargebackListContent extends Component {
 					title: "Customer Name",
 					name: "cust_name",
 					columnName: "cust_name",
-					width: 350,
+					width: 300,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: true,
@@ -588,7 +589,7 @@ class ChargebackListContent extends Component {
 					title: "Invoice No",
 					name: "inv_no",
 					columnName: "inv_no",
-					width: 200,
+					width: 150,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: true,
@@ -885,7 +886,7 @@ class ChargebackListContent extends Component {
 	}
 
 	processData(data) {
-        let temp = [...data];
+		let temp = [...data];
         temp.forEach(x => {
             x.FranchiseeNameNo = `${x.dlr_name} - ${x.dlr_code}`
         });
@@ -904,12 +905,10 @@ class ChargebackListContent extends Component {
 			return res;
 		} else {
 			let res = [...chargebacks.Data]
-
 			res.forEach(x=>{
 				x.FranchiseeNameNo = `${x.dlr_name} - ${x.dlr_code}`;
 			})
 			console.log("getRowData", res);
-
 			return res;
 			}
 	}
