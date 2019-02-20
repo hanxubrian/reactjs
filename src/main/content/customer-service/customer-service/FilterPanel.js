@@ -530,19 +530,19 @@ class FilterPanel extends Component {
 	componentWillMount() {
 		this.setState({
 			filters: { ...this.props.filters },
-			activeCustomer: this.props.activeCustomer ? this.props.activeCustomer.Data : null,
+			activeCustomer: this.props.customerServiceForm.activeCustomer ? this.props.customerServiceForm.activeCustomer.Data : null,
 		})
 	}
 	componentWillReceiveProps(nextProps) {
-		const { customers, customerForm } = this.props;
-		if (nextProps.customers !== customers) {
-			this.setState({
-				rows: FuseUtils.getCustomerListFromDb(nextProps.customers),
-			});
-		}
+		// const { customers, customerForm } = this.props;
+		// if (nextProps.customers !== customers) {
+		// 	this.setState({
+		// 		rows: FuseUtils.getCustomerListFromDb(nextProps.customers),
+		// 	});
+		// }
 
-		if (nextProps.activeCustomer !== this.props.activeCustomer) {
-			this.setState({ activeCustomer: nextProps.activeCustomer ? nextProps.activeCustomer.Data : null })
+		if (nextProps.customerServiceForm.activeCustomer !== this.props.customerServiceForm.activeCustomer) {
+			this.setState({ activeCustomer: nextProps.customerServiceForm.activeCustomer ? nextProps.customerServiceForm.activeCustomer.Data : null })
 		}
 		if (!_.isEqual(nextProps.filters, this.props.filters)) {
 			this.setState({
@@ -933,7 +933,7 @@ class FilterPanel extends Component {
 	}
 
 	render() {
-		const { classes, customerForm, customers } = this.props;
+		const { classes, customerServiceForm, customers } = this.props;
 
 		const { addressRows, addressColumns, contactsRows, contactsColumns } = this.state;
 
@@ -1008,7 +1008,7 @@ class FilterPanel extends Component {
 				{/* <div className={classNames("flex flex-col")}> */}
 
 				<Paper className="flex flex-1 flex-col min-h-px p-20">
-					{customerForm && customerForm.props.open
+					{customerServiceForm && customerServiceForm.open
 						? (
 							<div>
 								<GridContainer style={{ alignItems: 'center', width: 500 }} className={classNames(classes.formControl, "mb-0")}>
@@ -1990,7 +1990,8 @@ function mapStateToProps({ customers, auth }) {
 		filterState: customers.bOpenedFilterPanel,
 		transactionStatus: customers.transactionStatus,
 		customers: customers.customersDB,
-		customerForm: customers.customerForm,
+		// customerForm: customers.customerForm,
+		customerServiceForm: customers.customerServiceForm,
 		regionId: auth.login.defaultRegionId,
 		locationFilterValue: customers.locationFilterValue,
 

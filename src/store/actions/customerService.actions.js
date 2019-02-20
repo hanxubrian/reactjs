@@ -85,9 +85,6 @@ export const UPDATE_ACTIVE_CUSTOMER_ASSIGNED_FRANCHISEES = "[CUSTOMERS APP] UPDA
 
 export const UPDATE_NEW_CUSTOMER_PARAM = "[CUSTOMERS APP] UPDATE_NEW_CUSTOMER_PARAM";
 
-export const OPEN_EDIT_CUSTOMER_SERVICE_FORM = "[CUSTOMERS-service APP] OPEN_EDIT_CUSTOMER_SERVICE_FORM";
-export const CLOSE_CUSTOMER_SERVICE_FORM = "[CUSTOMERS-service APP] CLOSE_CUSTOMER_SERVICE_FORM";
-
 export function getCustomers(regionId, statusId, StatusNames, AccountTypeListName, location = "all", latitude = "", longitude = "", searchText = "") {
 	return (dispatch) => {
 
@@ -329,30 +326,6 @@ export function openEditCustomerForm(regionId, customerId, customerNo) {
 				payload: { customer, findersFees, findersFeesConfig }
 			});
 		})();
-	}
-}
-export function openEditCustomerServiceForm(regionId, customerId, customerNo) {
-	return (dispatch) => {
-		dispatch({
-			type: GET_CUSTOMER_START,
-			payload: true
-		});
-
-		(async () => {
-			let customer = await customersService.getCustomer(regionId, customerId);
-			// let findersFees = await customersService.getFindersFeesByCustomerNo(regionId, customerNo);
-			// let findersFeesConfig = await customersService.findersfeeConfigs();
-			dispatch({
-				type: OPEN_EDIT_CUSTOMER_SERVICE_FORM,
-				// payload: { customer, findersFees, findersFeesConfig }
-				payload: { customer }
-			});
-		})();
-	}
-}
-export function closeCustomerServiceForm() {
-	return {
-		type: CLOSE_CUSTOMER_SERVICE_FORM
 	}
 }
 export function findersfeeConfigs() {
@@ -597,10 +570,10 @@ export function getFranchiseeBillingTypes(regionId) {
 }
 
 export function updateCustomersParameter(name, value) {
-	return {
-		type: UPDATE_CUSTOMERS_PARAMETERS,
-		payload: { name, value }
-	}
+    return {
+        type: UPDATE_CUSTOMERS_PARAMETERS,
+        payload: {name, value}
+    }
 }
 
 /**
@@ -609,23 +582,23 @@ export function updateCustomersParameter(name, value) {
  * @returns {{type: string, payload: *}}
  */
 export function updateFindersFeeParams(params) {
-	return {
-		type: UPDATE_FINDERS_FEE_PARAMS_FOR_COMPUTED,
-		payload: params
-	}
+    return {
+        type: UPDATE_FINDERS_FEE_PARAMS_FOR_COMPUTED,
+        payload: params
+    }
 }
 
 
 export function getIncreaseDecrease(regionId, params) {
-	return (dispatch) => {
-		(async () => {
-			let res = await customersService.getIncreaseDecrease(regionId, params);
-			dispatch({
-				type: GET_INCREASE_DECREASE,
-				payload: res.Data
-			});
-		})();
-	}
+    return (dispatch) => {
+        (async () => {
+            let res = await customersService.getIncreaseDecrease(regionId, params);
+            dispatch({
+                type: GET_INCREASE_DECREASE,
+                payload: res.Data
+            });
+        })();
+    }
 }
 
 /**
@@ -635,39 +608,39 @@ export function getIncreaseDecrease(regionId, params) {
  * @constructor
  */
 export function getComputedFinderFee(params) {
-	return (dispatch) => {
-		(async () => {
-			let res = await customersService.getComputedFinderFee(params);
-			dispatch({
-				type: GET_COMPUTED_FINDERS_FEE,
-				payload: res.Data
-			});
-		})();
-	}
+    return (dispatch) => {
+        (async () => {
+            let res = await customersService.getComputedFinderFee(params);
+            dispatch({
+                type: GET_COMPUTED_FINDERS_FEE,
+                payload: res.Data
+            });
+        })();
+    }
 }
 
 export function getFinderFeeTypes() {
-	return (dispatch) => {
-		(async () => {
-			let res = await customersService.getFinderFeeTypes();
-			dispatch({
-				type: GET_FINDERS_FEE_TYPES,
-				payload: res.Data
-			});
-		})();
-	}
+    return (dispatch) => {
+        (async () => {
+            let res = await customersService.getFinderFeeTypes();
+            dispatch({
+                type: GET_FINDERS_FEE_TYPES,
+                payload: res.Data
+            });
+        })();
+    }
 }
 
 export function updateAssignedFranchisee(regionId, customerNo, params) {
-	return (dispatch) => {
-		(async () => {
-			let res = await customersService.updateAssignedFranchisee(regionId, customerNo, params);
-			dispatch({
-				type: UPDATE_ASSIGNED_FRANCHISEE,
-				payload: res.Data
-			});
-		})();
-	}
+    return (dispatch) => {
+        (async () => {
+            let res = await customersService.updateAssignedFranchisee(regionId, customerNo, params);
+            dispatch({
+                type: UPDATE_ASSIGNED_FRANCHISEE,
+                payload: res.Data
+            });
+        })();
+    }
 }
 
 /**
@@ -676,12 +649,12 @@ export function updateAssignedFranchisee(regionId, customerNo, params) {
  * @returns {Function}
  */
 export function updateActiveCustomerAssignedFranchisees(params) {
-	return (dispatch) => {
-		dispatch({
-			type: UPDATE_ACTIVE_CUSTOMER_ASSIGNED_FRANCHISEES,
-			payload: params
-		});
-	}
+    return (dispatch) => {
+        dispatch({
+            type: UPDATE_ACTIVE_CUSTOMER_ASSIGNED_FRANCHISEES,
+            payload: params
+        });
+    }
 }
 
 export function updateNewCustomerParam(name, value) {

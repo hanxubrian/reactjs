@@ -67,10 +67,6 @@ const initialState = {
 	},
 
 	customerServiceForm: {
-		isOpenFilterPanel: false,
-		isOpenSummaryPanel: false,
-		open: false,
-		
 		serviceList: {
 			data: [],
 			isFetching: false,
@@ -360,7 +356,7 @@ const initialState = {
 };
 
 
-const customers = function (state = initialState, action) {
+const customerService = function (state = initialState, action) {
 	switch (action.type) {
 		case Actions.GET_ALL_CUSTOMERS:
 			{
@@ -427,6 +423,13 @@ const customers = function (state = initialState, action) {
 				return {
 					...state,
 					bCreateCustomerStart: true,
+				}
+			}
+		case Actions.GET_CUSTOMER_START:
+			{
+				return {
+					...state,
+					bGetCustomerStart: true,
 				}
 			}
 		case Actions.GET_ALL_DOCUMENTS:
@@ -547,37 +550,6 @@ const customers = function (state = initialState, action) {
 					activeCustomer: action.payload.customer,
 				};
 			}
-		case Actions.OPEN_EDIT_CUSTOMER_SERVICE_FORM:
-			return {
-				...state,
-				customerServiceForm: {
-					...state.customerServiceForm,
-					open: true,
-					isOpenFilterPanel: true,
-					isOpenSummaryPanel: false,
-					activeCustomer: action.payload.customer,
-				},
-				bGetCustomerStart: false,
-			};
-		case Actions.CLOSE_CUSTOMER_SERVICE_FORM:
-			{
-				return {
-					...state,
-					customerServiceForm: {
-						...state.customerServiceForm,
-						open: false,
-						activeCustomer: null,
-					},
-				};
-			}
-		case Actions.GET_CUSTOMER_START:
-			{
-				return {
-					...state,
-					bGetCustomerStart: true,
-				}
-			}
-
 		case Actions.GET_CUSTOMER:
 			{
 				return {
@@ -943,8 +915,8 @@ const customers = function (state = initialState, action) {
 };
 
 const persistConfig = {
-	key: 'customers',
+	key: 'customerService',
 	storage: storage,
 	blacklist: ['customersDB, activeCustomer']
 };
-export default persistReducer(persistConfig, customers);
+export default persistReducer(persistConfig, customerService);

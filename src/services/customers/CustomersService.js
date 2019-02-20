@@ -194,6 +194,7 @@ class CustomersService {
 		});
 	}
 	getCustomer(regionId, customerId) {
+		console.log("getCustomer",customerId)
 		return new Promise((resolve, reject) => {
 			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Customer/${customerId}?RegionId=${regionId}`)
 				.then(res => {

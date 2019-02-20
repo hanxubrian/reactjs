@@ -287,22 +287,18 @@ class CustomerServices extends Component {
 				this.props.longitude,
 				this.props.searchText);
 		}
-
-		this.props.getAccountTypeList();
-		this.props.getAccountExecutiveList();
-		this.props.getCustomerStatusList();
-		this.props.getAccountTypesGroups();
 	}
 
 	closeComposeForm = () => {
-		switch (this.props.customerForm.type) {
-			case "new":
-				this.props.closeNewCustomerForm()
-				break;
-			case "edit":
-				this.props.closeEditCustomerForm()
-				break;
-		}
+		// switch (this.props.customerForm.type) {
+		// 	case "new":
+		// 		this.props.closeNewCustomerForm()
+		// 		break;
+		// 	case "edit":
+		// 		this.props.closeEditCustomerForm()
+		// 		break;
+		// }
+		this.props.closeCustomerServiceForm()
 	};
 
 	trySubmitForApproval = () => {
@@ -332,14 +328,14 @@ class CustomerServices extends Component {
 				{ Amount: 1.1, Description: "sample string 2", ContractType: "sample string 3", AgreementType: "sample string 4", AccountExecutiveUserId: "sample string 5", SignDate: "sample string 6", StartDate: "sample string 7", Term: "sample string 8", ExpirationDate: "sample string 9" }
 			]
 		}
-		switch (this.props.customerForm.type) {
-			case "new":
-				this.props.createCustomer(this.props.regionId, payload)
-				break;
-			case "edit":
-				this.props.createCustomer(this.props.regionId, payload)
-				break;
-		}
+		// switch (this.props.customerForm.type) {
+		// 	case "new":
+		// 		this.props.createCustomer(this.props.regionId, payload)
+		// 		break;
+		// 	case "edit":
+		// 		this.props.createCustomer(this.props.regionId, payload)
+		// 		break;
+		// }
 	}
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
@@ -376,7 +372,7 @@ class CustomerServices extends Component {
 			this.props.getAccountTypeList();
 		}
 		if (this.props.accountExecutiveList === null) {
-			this.props.getAccountExecutiveList();
+			this.props.getAccountExecutiveList(this.props.regionId);
 		}
 		if (this.props.customerStatusList === null) {
 			this.props.getCustomerStatusList();
@@ -486,7 +482,7 @@ class CustomerServices extends Component {
 	}
 
 	render() {
-		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, openNewCustomerForm, customerForm, mapViewState, toggleMapView } = this.props;
+		const { classes, toggleFilterPanel, toggleSummaryPanel, filterState, summaryState, openNewCustomerForm, customerServiceForm, mapViewState, toggleMapView } = this.props;
 		const { selection, anchorEl, anchorContactMenu } = this.state;
 
 		console.log('props=', this.props);
@@ -495,15 +491,15 @@ class CustomerServices extends Component {
 				<FusePageCustomSidebarScroll
 					classes={{
 						root: classNames(classes.layoutRoot, 'test123'),
-						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': !customerForm.props.open && summaryState || customerForm.props.open && this.state.showRightSidePanel }),
-						leftSidebar: classNames(classes.layoutLeftSidebar, { 'openFilter': filterState }),
+						rightSidebar: classNames(classes.layoutRightSidebar, { 'openSummary': !customerServiceForm.open && customerServiceForm.isOpenSummaryPanel || customerServiceForm.open && this.state.showRightSidePanel }),
+						leftSidebar: classNames(classes.layoutLeftSidebar, { 'openFilter': customerServiceForm.isOpenFilterPanel }),
 						sidebarHeader: classes.layoutSidebarHeader,
 						header: classes.layoutHeader,
 						content: classes.content
 					}}
 					header={
 						<div className="flex w-full items-center">
-							{(this.state.temp && !customerForm.props.open) && (
+							{(this.state.temp && !customerServiceForm.open) && (
 								<div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
 									<div className="flex flex-row flex-1 justify-between">
 										<div className="flex flex-shrink items-center">
@@ -564,7 +560,7 @@ class CustomerServices extends Component {
 
 								</div>
 							)}
-							{(this.state.temp && customerForm.props.open) && (
+							{(this.state.temp && customerServiceForm.open) && (
 								<div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
 									<div className="flex flex-row flex-1 justify-between">
 										{/* <div className="flex flex-shrink items-center">
@@ -684,9 +680,9 @@ class CustomerServices extends Component {
 									</DialogActions>
 								</Dialog>
 
-								{customerForm.props.open && <CustomerForm />}
-								{!customerForm.props.open && <CustomerSearchBar />}
-								{!customerForm.props.open && <CustomerListContent />}
+								{customerServiceForm.open && <CustomerForm />}
+								{!customerServiceForm.open && <CustomerSearchBar />}
+								{!customerServiceForm.open && <CustomerListContent />}
 								<LogCallModalForm />
 
 								<EmailModalForm />
@@ -700,7 +696,8 @@ class CustomerServices extends Component {
 					leftSidebarHeader={
 						<Fragment>
 							<div className={classNames("flex flex-row w-full h-full justify-between p-6 align-middle pl-24")}>
-								<h2 style={{ marginBlockStart: '1em' }}>{customerForm.props.open ? (this.props.customerForm.data && this.props.customerForm.data.Data ? this.props.customerForm.data.Data.cus_name : "") : "Filters"}</h2>
+								<h2 style={{ marginBlockStart: '1em' }}>{
+									customerServiceForm.open ? (customerServiceForm.activeCustomer && customerServiceForm.activeCustomer.Data ? customerServiceForm.activeCustomer.Data.cus_name : "") : "Filters"}</h2>
 							</div>
 						</Fragment>
 					}
@@ -754,12 +751,12 @@ function mapDispatchToProps(dispatch) {
 		toggleFilterPanel: Actions.toggleFilterPanel,
 		toggleSummaryPanel: Actions.toggleSummaryPanel,
 		toggleMapView: Actions.toggleMapView,
-		deleteCustomersAction: Actions.deleteCustomers,
-		removeCustomerAction: Actions.removeCustomer,
-		openNewCustomerForm: Actions.openNewCustomerForm,
-		openEditCustomerForm: Actions.openEditCustomerForm,
-		closeEditCustomerForm: Actions.closeEditCustomerForm,
-		closeNewCustomerForm: Actions.closeNewCustomerForm,
+		// deleteCustomersAction: Actions.deleteCustomers,
+		// removeCustomerAction: Actions.removeCustomer,
+		// openNewCustomerForm: Actions.openNewCustomerForm,
+		// closeEditCustomerForm: Actions.closeEditCustomerForm,
+		// closeNewCustomerForm: Actions.closeNewCustomerForm,
+		closeCustomerServiceForm: Actions.closeCustomerServiceForm,
 
 		getAccountTypeList: Actions.getAccountTypeList,
 		getAccountExecutiveList: Actions.getAccountExecutiveList,
@@ -790,7 +787,8 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		summaryState: customers.bOpenedSummaryPanel,
 		mapViewState: customers.bOpenedMapView,
 		regionId: auth.login.defaultRegionId,
-		customerForm: customers.customerForm,
+		// customerForm: customers.customerForm,
+		customerServiceForm: customers.customerServiceForm,
 
 		statusId: customers.statusId,
 		longitude: customers.longitude,

@@ -530,7 +530,8 @@ class CustomerForm extends Component {
 
 	closeComposeForm = () => {
 		//this.props.this.type === 'create' ? this.props.closeEditCustomerForm() : this.props.closeNewCustomerForm();
-		this.type === 'create' ? this.props.closeEditCustomerForm() : this.props.closeNewCustomerForm();
+		// this.type === 'create' ? this.props.closeEditCustomerForm() : this.props.closeNewCustomerForm();
+		this.props.closeCustomerServiceForm()
 	};
 	// constructor(props) {
 	// 	super(props);
@@ -845,10 +846,11 @@ class CustomerForm extends Component {
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
 		getFranchisees: Actions.getFranchisees,
-		openNewCustomerForm: Actions.openNewCustomerForm,
-		closeNewCustomerForm: Actions.closeNewCustomerForm,
-		openEditCustomerForm: Actions.openEditCustomerForm,
-		closeEditCustomerForm: Actions.closeEditCustomerForm,
+		// openNewCustomerForm: Actions.openNewCustomerForm,
+		// closeNewCustomerForm: Actions.closeNewCustomerForm,
+		closeCustomerServiceForm: Actions.closeCustomerServiceForm,
+		// openEditCustomerForm: Actions.openEditCustomerForm,
+		// closeEditCustomerForm: Actions.closeEditCustomerForm,
 		getDocuments: Actions.getDocuments,
 		showLogCallModalForm: Actions.showLogCallModalForm
 	}, dispatch);

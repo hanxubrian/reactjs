@@ -426,39 +426,39 @@ class PhoneCallModalForm extends React.Component {
 
 	componentWillMount() {
 		console.log("componentWillMount")
-		this.setRowData(this.props.payments)
+		// this.setRowData(this.props.payments)
 	}
 	componentDidMount() {
-		this.setState({
-			paymentDlgPayloads: this.props.paymentDlgPayloads,
-			PaymentAmount: this.props.paymentDlgPayloads.paymentAmount,
-			PaymentType: this.props.paymentDlgPayloads.paymentType
-		})
+		// this.setState({
+		// 	paymentDlgPayloads: this.props.paymentDlgPayloads,
+		// 	PaymentAmount: this.props.paymentDlgPayloads.paymentAmount,
+		// 	PaymentType: this.props.paymentDlgPayloads.paymentType
+		// })
 
 		// if (this.props.bOpenPaymentDialog === true) {
 		// 	this.checkValidations()
 		// }
 	}
 	UNSAFE_componentWillReceiveProps(nextProps) {
-		if (nextProps.payments !== this.props.payments) {
-			console.log("componentWillReceiveProps payments")
-			this.setRowData(nextProps.payments)
-		}
-		if (!_.isEqual(nextProps.activePaymentRows, this.props.activePaymentRows)) {
-			console.log("componentWillReceiveProps activePaymentRows", nextProps.activePaymentRows, this.props.activePaymentRows)
-			this.setRowData(this.props.payments, nextProps.activePaymentRows)
-		}
-		if (!_.isEqual(nextProps.paymentDlgPayloads, this.props.paymentDlgPayloads)) {
-			this.setState({
-				paymentDlgPayloads: nextProps.paymentDlgPayloads,
-				PaymentAmount: nextProps.paymentDlgPayloads.paymentAmount,
-				PaymentType: nextProps.paymentDlgPayloads.paymentType
-			})
+		// if (nextProps.payments !== this.props.payments) {
+		// 	console.log("componentWillReceiveProps payments")
+		// 	this.setRowData(nextProps.payments)
+		// }
+		// if (!_.isEqual(nextProps.activePaymentRows, this.props.activePaymentRows)) {
+		// 	console.log("componentWillReceiveProps activePaymentRows", nextProps.activePaymentRows, this.props.activePaymentRows)
+		// 	this.setRowData(this.props.payments, nextProps.activePaymentRows)
+		// }
+		// if (!_.isEqual(nextProps.paymentDlgPayloads, this.props.paymentDlgPayloads)) {
+		// 	this.setState({
+		// 		paymentDlgPayloads: nextProps.paymentDlgPayloads,
+		// 		PaymentAmount: nextProps.paymentDlgPayloads.paymentAmount,
+		// 		PaymentType: nextProps.paymentDlgPayloads.paymentType
+		// 	})
 
-			// if (nextProps.bOpenPaymentDialog === true) {
-			// 	this.checkValidations()
-			// }
-		}
+		// 	// if (nextProps.bOpenPaymentDialog === true) {
+		// 	// 	this.checkValidations()
+		// 	// }
+		// }
 	}
 
 	handleClose = () => {
@@ -524,36 +524,36 @@ class PhoneCallModalForm extends React.Component {
 		this.setState({ rows });
 	}
 
-	setRowData(payments, activePaymentRows = this.props.activePaymentRows) {
-		console.log("----------------------------------------", activePaymentRows, payments)
-		// const temp_rows = [
-		// 	{ id: 0, InvoiceNo: 1, InvoiceAmount: 1351.51, InvoiceBalance: 216.36, PaymentAmount: 0 },
-		// 	{ id: 1, InvoiceNo: 2, InvoiceAmount: 56.30, InvoiceBalance: 548.24, PaymentAmount: 0 },
-		// 	{ id: 2, InvoiceNo: 3, InvoiceAmount: 215.28, InvoiceBalance: 1654.36, PaymentAmount: 0 },
+	// setRowData(payments, activePaymentRows = this.props.activePaymentRows) {
+	// 	console.log("----------------------------------------", activePaymentRows, payments)
+	// 	// const temp_rows = [
+	// 	// 	{ id: 0, InvoiceNo: 1, InvoiceAmount: 1351.51, InvoiceBalance: 216.36, PaymentAmount: 0 },
+	// 	// 	{ id: 1, InvoiceNo: 2, InvoiceAmount: 56.30, InvoiceBalance: 548.24, PaymentAmount: 0 },
+	// 	// 	{ id: 2, InvoiceNo: 3, InvoiceAmount: 215.28, InvoiceBalance: 1654.36, PaymentAmount: 0 },
 
-		// ];
-		// this.setState({ rows: temp_rows })
+	// 	// ];
+	// 	// this.setState({ rows: temp_rows })
 
-		if (!payments || payments.Regions === undefined || payments.Regions.length < 1)
-			return [];
-		let res = [...payments.Regions[0].Payments]
+	// 	if (!payments || payments.Regions === undefined || payments.Regions.length < 1)
+	// 		return [];
+	// 	let res = [...payments.Regions[0].Payments]
 
-		res.forEach((x, index) => {
-			x.CustomerNameNo = `${x.CustomerName} - ${x.CustomerNo}`;
-			x.id = index
-		})
-		res = res.filter(x => {
-			return activePaymentRows.indexOf(x.id) > -1
-		})
-		console.log("setRowData", res);
-		if (res.length > 0) {
-			this.setState({
-				customerName: res[0].CustomerName,
-				customerNumber: res[0].CustomerNo,
-			})
-		}
-		this.setState({ rows: res })
-	}
+	// 	res.forEach((x, index) => {
+	// 		x.CustomerNameNo = `${x.CustomerName} - ${x.CustomerNo}`;
+	// 		x.id = index
+	// 	})
+	// 	res = res.filter(x => {
+	// 		return activePaymentRows.indexOf(x.id) > -1
+	// 	})
+	// 	console.log("setRowData", res);
+	// 	if (res.length > 0) {
+	// 		this.setState({
+	// 			customerName: res[0].CustomerName,
+	// 			customerNumber: res[0].CustomerNo,
+	// 		})
+	// 	}
+	// 	this.setState({ rows: res })
+	// }
 
 	onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
 		this.setState(state => {
@@ -839,15 +839,15 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps({ customers, accountReceivablePayments, auth }) {
 	return {
 		regionId: auth.login.defaultRegionId,
-		bOpenPaymentDialog: accountReceivablePayments.bOpenPaymentDialog,
-		activePaymentRows: accountReceivablePayments.activePaymentRows,
+		// bOpenPaymentDialog: accountReceivablePayments.bOpenPaymentDialog,
+		// activePaymentRows: accountReceivablePayments.activePaymentRows,
 
-		payments: accountReceivablePayments.ACC_payments,
+		// payments: accountReceivablePayments.ACC_payments,
 
-		filterParam: accountReceivablePayments.filterParam,
-		searchText: accountReceivablePayments.searchText,
+		// filterParam: accountReceivablePayments.filterParam,
+		// searchText: accountReceivablePayments.searchText,
 
-		paymentDlgPayloads: accountReceivablePayments.paymentDlgPayloads,
+		// paymentDlgPayloads: accountReceivablePayments.paymentDlgPayloads,
 
 
 		contactForms: customers.contactForms,
