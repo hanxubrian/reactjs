@@ -8,7 +8,7 @@ export const PrintChecksConfig = {
     },
     routes  : [
         {
-            path     : '/operations/printChecks',
+            path     : '/accounts-payable/printChecks',
             component: FuseLoadable({
                 loader: () => import('./printChecksApp')
             })

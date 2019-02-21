@@ -270,8 +270,7 @@ class PrintChecksLayout extends Component {
                                     <div className="flex flex-shrink items-center">
                                         <div className="flex items-center">
                                             <Icon className="text-32 mr-12">list_alt</Icon>
-                                            <Typography variant="h6" className="hidden sm:flex">Checks Lists |
-                                                Print</Typography>
+                                            <Typography variant="h6" className="hidden sm:flex">Check Printing</Typography>
                                         </div>
 
                                     </div>
