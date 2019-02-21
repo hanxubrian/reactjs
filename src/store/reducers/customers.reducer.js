@@ -197,7 +197,7 @@ const initialState = {
 		"sys_cust": "",
 		"company_no": "",
 		"dlr_code": "",
-		"cust_no": "",
+		"cust_no": null,
 		"cus_name": "",
 		"cus_addr": "",
 		"cus_city": "",
@@ -283,7 +283,9 @@ const initialState = {
 		"business": "",
 		"add_pct": "",
 		"ad_cur": "",
-		"tech_pct": ""
+		"tech_pct": "",
+		"last_action": "",
+		"needs_distribution_update": "",
 	}
 };
 
