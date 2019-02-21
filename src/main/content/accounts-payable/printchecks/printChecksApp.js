@@ -1,8 +1,8 @@
 import React, {Component, Fragment} from 'react';
 
 //Material-UI core
-import { Icon, Typography, Button, CircularProgress, Hidden, Paper, Input, TextField,
-    Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText
+import { Icon, Typography, Button, CircularProgress, Hidden, Paper, Input,
+    Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, LinearProgress
 } from '@material-ui/core';
 
 import {FusePageCustomSidebarScroll, FuseAnimate} from '@fuse';
@@ -275,6 +275,10 @@ class PrintChecksLayout extends Component {
         this.setState({checkdate: date});
     };
 
+    toggleFilterPanel = ()=>{
+
+    };
+
     render() {
         const {classes, bPaymentLogFilterPanelOpen, summaryState} = this.props;
         let menuItem = null;
@@ -333,10 +337,9 @@ class PrintChecksLayout extends Component {
                                     <div className="flex justify-start items-center">
                                         <Hidden smDown>
                                             <Button
-                                                // onClick={(ev) => toggleFilterPanel()}
+                                                onClick={(ev) => this.props.toggleFilterPanel()}
                                                 aria-label="toggle filter panel"
                                                 color="secondary"
-                                                disabled={this.props.bSettingPanel ? true : false}
                                                 className={classNames(classes.filterPanelButton)}
                                             >
                                                 <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
@@ -433,6 +436,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getCheckDetailByType: Actions.getCheckDetailByType,
         updateSelections: Actions.updateSelections,
+        toggleFilterPanel: Actions.toggleFilterPanel_pc
     }, dispatch);
 }
 

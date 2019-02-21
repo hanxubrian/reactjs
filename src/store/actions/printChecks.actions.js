@@ -6,6 +6,7 @@ export const START_FETCH_PRINT_CHECKS_LIST = "[PRINT CHECKS]  START FETCH PRINT 
 export const GET_PRINT_CHECKS_DETAIL = "[PRINT CHECKS] GETS DETAIL";
 export const GET_PRINT_CHECKS_DETAIL_ERROR = "[PRINT CHECKS] GETS DETAIL_ERROR";
 export const UPDATE_CHECK_SELECTIONS = "[PRINT CHECKS] UPDATE CHECK SELECTIONS";
+export const TOGGLE_FILTER_PANEL_CHECK_PRINTING = "[PRINT CHECKS] TOGGLE FILTER PANEL";
 
 
 export function getCheckDetailByType(regionId, ChecktypeId, EntityTypeId, Month, Year, PaymentDate, CheckDate) {
@@ -37,6 +38,14 @@ export function updateSelections(selections) {
         dispatch({
             type: UPDATE_CHECK_SELECTIONS,
             payload: selections
+        });
+    }
+}
+
+export function toggleFilterPanel_pc() {
+    return (dispatch) => {
+        dispatch({
+            type: TOGGLE_FILTER_PANEL_CHECK_PRINTING,
         });
     }
 }

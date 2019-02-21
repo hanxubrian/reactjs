@@ -44,6 +44,11 @@ const printChecks = function(state = initialState, action) {
                 ...state, selections: action.payload
             };
         }
+        case Actions.TOGGLE_FILTER_PANEL_CHECK_PRINTING: {
+            return {
+                ...state, bSettingPanel: !state.bSettingPanel
+            };
+        }
         case UserActions.USER_LOGGED_OUT:{
             return {
                 ...initialState
