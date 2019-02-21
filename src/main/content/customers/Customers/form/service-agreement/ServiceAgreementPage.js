@@ -1197,7 +1197,7 @@ class ServiceAgreementPage extends React.Component {
 							</GridItem>
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between">
-								<div className="flex flex-col">
+								<div className="flex flex-col justify-around">
 									{/* <TextField
 										type="date"
 										id="EffectiveDate"
@@ -1223,10 +1223,45 @@ class ServiceAgreementPage extends React.Component {
 										InputLabelProps={{ shrink: true }}
 										margin="dense"
 										// variant="outlined"
-										style={{ width: "20%", minWidth: "180px" }}
+										style={{ width: "100%", minWidth: "180px" }}
 									/>
+									<TextField
+										id="InvoiceDate"
+										label="Invoice Date"
+										className={classNames(classes.textField, "")}
+										select
+										InputLabelProps={{ shrink: true }}
+										value={this.state.invoice_date_default || 'BOM'}
+										onChange={this.handleChangeCustomerInfoProps('invoice_date_default')}
+										margin="dense"
+										// variant="outlined"
+										style={{ width: "100%" }}
+									>
+										{["BOM", "EOM"].map((x, index) => (
+											<MenuItem key={index} value={x}>{x}</MenuItem>
+										))}
+									</TextField>
+
+									<TextField
+										id="BillingFrequency"
+										label="Billing Frequency"
+										select
+										InputLabelProps={{
+											shrink: true
+										}}
+										className={classNames(classes.textField, "")}
+										value={this.state.BillingFrequency || ''}
+										onChange={this.handleChange('BillingFrequency')}
+										margin="dense"
+										// variant="outlined"
+										style={{ width: "100%" }}
+									>
+										{["Monthly"].map((x, index) => (
+											<MenuItem key={index} value={x}>{x}</MenuItem>
+										))}
+									</TextField>
 								</div>
-								<div className="flex flex-col justify-between">
+								<div className="flex flex-col justify-around">
 									<FormControlLabel
 										control={
 											<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('cpiadj')} checked={this.state.cpiadj || false} />
@@ -1235,6 +1270,73 @@ class ServiceAgreementPage extends React.Component {
 										style={{ marginRight: "30px" }}
 
 									/>
+
+
+									<div className="flex">
+										<FormControlLabel
+											control={
+												<Switch
+													checked={this.state.ebill || false}
+													onChange={this.handleChangeCustomerInfoPropsChecked('ebill')}
+													value="ebill"
+												/>
+											}
+											label="E-Billing"
+										// style={{ width: '40%' }}
+										/>
+
+										<TextField
+											type="email"
+											id="Email"
+											label="Email"
+											className={classes.textField}
+											value={this.state.ebill_email || ''}
+											onChange={this.handleChangeCustomerInfoProps('ebill_email')}
+											InputLabelProps={{ shrink: true }}
+											margin="dense"
+										// variant="outlined"
+										// style={{ width: '60%' }}
+										/>
+									</div>
+
+									<TextField
+										id="Term"
+										label="Term"
+										select
+										InputLabelProps={{
+											shrink: true
+										}}
+										className={classNames(classes.textField, "mr-6")}
+										value={this.state.billing_term || ''}
+										onChange={this.handleChangeCustomerInfoProps('billing_term')}
+										margin="dense"
+										// variant="outlined"
+										style={{ width: '100%' }}
+									>
+										{["Due Upon Receipt", "EOM", "Net 30", "Net 40", "Net 45", "Net 60"].map((x, index) => (
+											<MenuItem key={index} value={x}>{x}</MenuItem>
+										))}
+									</TextField>
+
+									{this.props.customerForm.type === "edit" &&
+										<TextField
+											id="ARStatus"
+											label="AR Status"
+											select
+											className={classNames(classes.textField, "ml-6")}
+											InputLabelProps={{ shrink: true }}
+											value={this.state.ARStatus || 'Normal'}
+											onChange={this.handleChange('ARStatus')}
+											margin="dense"
+											// variant="outlined"
+											style={{ width: '100%' }}
+										>
+											{["Bankruptcy", "In Litigation", "Normal", "Referred to Collections", "Slow Pay", "Uncollectable", "National Accoints", "AutoPay", "TEST"].map((x, index) => (
+												<MenuItem key={index} value={x}>{x}</MenuItem>
+											))}
+										</TextField>}
+
+
 								</div>
 								<div className="flex flex-col justify-between">
 									<FormControlLabel
@@ -1282,45 +1384,8 @@ class ServiceAgreementPage extends React.Component {
 								</div>
 
 							</GridItem>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="InvoiceDate"
-									label="Invoice Date"
-									className={classNames(classes.textField, "mr-6")}
-									select
-									InputLabelProps={{ shrink: true }}
-									value={this.state.invoice_date_default || 'BOM'}
-									onChange={this.handleChangeCustomerInfoProps('invoice_date_default')}
-									margin="dense"
-									// variant="outlined"
-									style={{ width: "100%" }}
-								>
-									{["BOM", "EOM"].map((x, index) => (
-										<MenuItem key={index} value={x}>{x}</MenuItem>
-									))}
-								</TextField>
 
-								<TextField
-									id="BillingFrequency"
-									label="Billing Frequency"
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classNames(classes.textField, "ml-6")}
-									value={this.state.BillingFrequency || ''}
-									onChange={this.handleChange('BillingFrequency')}
-									margin="dense"
-									// variant="outlined"
-									style={{ width: "100%" }}
-								>
-									{["Monthly"].map((x, index) => (
-										<MenuItem key={index} value={x}>{x}</MenuItem>
-									))}
-								</TextField>
-
-							</GridItem>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							{/* <GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<div style={{ display: 'flex', flexDirection: 'row', minWidth: "100px", width: "50%" }}>
 									<FormControlLabel
 										control={
@@ -1386,7 +1451,7 @@ class ServiceAgreementPage extends React.Component {
 										))}
 									</TextField>}
 
-							</GridItem>
+							</GridItem> */}
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
