@@ -860,7 +860,7 @@ class ServiceAgreementPage extends React.Component {
 		this.setState({ [name]: value })
 		this.props.updateNewCustomerParam(name, value)
 	}
-	handleChangeCheckedCustomerInfoProps = name => event => {
+	handleChangeCustomerInfoPropsChecked = name => event => {
 		const checked = event.target.checked
 		this.setState({ [name]: checked })
 		this.props.updateNewCustomerParam(name, checked)
@@ -937,16 +937,16 @@ class ServiceAgreementPage extends React.Component {
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
-									id="length"
-									label="Length"
+									id="Frequency"
+									label="Frequency"
 									required
 									select
 									InputLabelProps={{
 										shrink: true
 									}}
 									className={classNames(classes.textField, "mr-6")}
-									value={this.state.length === undefined ? 0 : this.state.length}
-									onChange={this.handleChange('length')}
+									value={this.state.contract_lenght || ''}
+									onChange={this.handleChangeCustomerInfoProps('contract_lenght')}
 									margin="dense"
 									// variant="outlined"
 									style={{ minWidth: "100px", width: "30%" }}
@@ -979,7 +979,7 @@ class ServiceAgreementPage extends React.Component {
 								/>
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
+								{/* <TextField
 									id="AgreementType"
 									label="Agreement Type *"
 									select
@@ -1001,7 +1001,7 @@ class ServiceAgreementPage extends React.Component {
 											{option.label}
 										</MenuItem>
 									))}
-								</TextField>
+								</TextField> */}
 
 								<TextField
 									id="AcctExec"
@@ -1010,9 +1010,9 @@ class ServiceAgreementPage extends React.Component {
 									InputLabelProps={{
 										shrink: true
 									}}
-									className={classNames(classes.textField, "ml-6")}
-									value={this.state.AcctExec === undefined ? 0 : this.state.AcctExec}
-									onChange={this.handleChange('AcctExec')}
+									className={classNames(classes.textField, "")}
+									value={this.state.slsmn_no || ''}
+									onChange={this.handleChangeCustomerInfoProps('slsmn_no')}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '30%', minWidth: 200 }}
@@ -1033,8 +1033,8 @@ class ServiceAgreementPage extends React.Component {
 									InputLabelProps={{
 										shrink: true
 									}}
-									value={this.state.SignDate}
-									onChange={this.handleChange('SignDate')}
+									value={this.state.date_sign || ''}
+									onChange={this.handleChangeCustomerInfoProps('date_sign')}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: "20%", minWidth: "180px" }}
@@ -1047,8 +1047,8 @@ class ServiceAgreementPage extends React.Component {
 									InputLabelProps={{
 										shrink: true
 									}}
-									value={this.state.StartDate}
-									onChange={this.handleChange('StartDate')}
+									value={this.state.date_start || ''}
+									onChange={this.handleChangeCustomerInfoProps('date_start')}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: "20%", minWidth: "180px" }}
@@ -1062,14 +1062,14 @@ class ServiceAgreementPage extends React.Component {
 									InputLabelProps={{
 										shrink: true
 									}}
-									value={this.state.ExpirationDate}
-									onChange={this.handleChange('ExpirationDate')}
+									value={this.state.exp_date || ''}
+									onChange={this.handleChangeCustomerInfoProps('exp_date')}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: "20%", minWidth: "180px" }}
 								/>
 							</GridItem>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+							{/* <GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
 									id="note"
 									label="Note"
@@ -1083,303 +1083,12 @@ class ServiceAgreementPage extends React.Component {
 									// variant="outlined"
 									style={{ width: '100%' }}
 								/>
-							</GridItem>
+							</GridItem> */}
 						</GridContainer>
 
 						<Typography variant="h6" className="mt-24 mb-12">Billing</Typography>
 
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between">
-								<div className="flex flex-col">
-									<TextField
-										type="date"
-										id="EffectiveDate"
-										label="Effective Date"
-										className={classNames(classes.textField)}
-										InputLabelProps={{
-											shrink: true
-										}}
-										value={this.state.EffectiveDate}
-										onChange={this.handleChange('EffectiveDate')}
-										margin="dense"
-										// variant="outlined"
-										style={{ width: "20%", minWidth: "180px" }}
-
-									/>
-
-									<TextField
-										id="PONumer"
-										type="number"
-										label="PO Numer"
-										className={classes.textField}
-										value={this.state.PONumer}
-										onChange={this.handleChange('PONumer')}
-										margin="dense"
-										// variant="outlined"
-										style={{ width: "20%", minWidth: "180px" }}
-									/>
-								</div>
-								<div className="flex flex-col justify-between">
-									<FormControlLabel
-										control={
-											<Checkbox onChange={this.handleChange('weekdays')} />
-										}
-										label="CPI Increase"
-										style={{ marginRight: "30px" }}
-
-									/>
-								</div>
-								<div className="flex flex-col justify-between">
-									<FormControlLabel
-										control={
-											<Checkbox onChange={this.handleChange('PrintPastDue')} />
-										}
-										label="Print Past Due"
-										value={this.state.PrintPastDue}
-										className="mr-36"
-
-									/>
-									<FormControlLabel
-										control={
-											<Checkbox onChange={this.handleChange('TaxExempt')} />
-										}
-										label="Tax Exempt"
-										className="mr-36"
-										value={this.state.TaxExempt}
-									/>
-									<RadioGroup
-										aria-label="Location"
-										name="Location"
-										className={classes.group}
-										value={this.state.InvoiceType}
-									>
-										<FormControlLabel
-											control={
-												<Radio onChange={this.handleChange('InvoiceType')} />
-											}
-											value="Consolidated Invoice"
-											label="Consolidated Invoice"
-										/>
-										<FormControlLabel
-											control={
-												<Radio onChange={this.handleChange('InvoiceType')} />
-											}
-											value="Separate Invoice"
-											label="Separate Invoice"
-										/>
-									</RadioGroup>
-								</div>
-
-							</GridItem>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="InvoiceDate"
-									label="Invoice Date"
-									className={classNames(classes.textField, "mr-6")}
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.InvoiceDate === undefined ? "" : this.state.InvoiceDate}
-									onChange={this.handleChange('InvoiceDate')}
-									margin="dense"
-									// variant="outlined"
-									style={{ width: "100%" }}
-								>
-									{[{ value: 0, label: "BOM" },
-									{ value: 1, label: "EOM" }].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-
-								<TextField
-									id="BillingFrequency"
-									label="Billing Frequency"
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classNames(classes.textField, "ml-6")}
-									value={this.state.BillingFrequency === undefined ? "" : this.state.BillingFrequency}
-									onChange={this.handleChange('BillingFrequency')}
-									margin="dense"
-									// variant="outlined"
-									style={{ width: "100%" }}
-								>
-									{[{ value: 0, label: "Monthly" }].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-
-							</GridItem>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<div style={{ display: 'flex', flexDirection: 'row', minWidth: "100px", width: "50%" }}>
-									<FormControlLabel
-										control={
-											<Switch
-												checked={this.state.checkedA}
-												onChange={this.handleChange('checkedA')}
-												value={this.state.checkedA}
-											/>
-										}
-										label="E-Billing"
-									// style={{ width: '40%' }}
-									/>
-
-									<TextField
-										type="email"
-										id="Email"
-										label="Email"
-										className={classes.textField}
-										value={this.state.Email}
-										onChange={this.handleChange('Email')}
-										margin="dense"
-										// variant="outlined"
-										style={{ width: '60%' }}
-									/>
-								</div>
-							</GridItem>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="Term"
-									label="Term"
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classNames(classes.textField, "mr-6")}
-									value={this.state.Term === undefined ? "" : this.state.Term}
-									onChange={this.handleChange('Term')}
-									margin="dense"
-									// variant="outlined"
-									style={{ width: '100%' }}
-								>
-									{[{ value: 0, label: "Due Upon Receipt" },
-									{ value: 1, label: "EOM" },
-									{ value: 2, label: "Net 30" },
-									{ value: 3, label: "Net 40" },
-									{ value: 4, label: "Net 45" },
-									{ value: 5, label: "Net 60" },].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-
-								<TextField
-									id="ARStatus"
-									label="AR Status"
-									select
-									className={classNames(classes.textField, "ml-6")}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.ARStatus === undefined ? "" : this.state.ARStatus}
-									onChange={this.handleChange('ARStatus')}
-									margin="dense"
-									// variant="outlined"
-									style={{ width: '100%' }}
-								>
-									{[{ value: 0, label: "Select" },
-									{ value: 1, label: "Bankruptcy" },
-									{ value: 2, label: "In Litigation" },
-									{ value: 3, label: "Normal" },
-									{ value: 4, label: "Referred to Collections" },
-									{ value: 5, label: "Slow Pay" },
-									{ value: 6, label: "Uncollectable" },
-									{ value: 7, label: "National Accoints" },
-									{ value: 8, label: "AutoPay" },
-									{ value: 9, label: "TEST" },].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
-									id="Notes"
-									label="Notes"
-									multiline
-									rows="2"
-									rowsMax="2"
-									className={classes.textField}
-									value={this.state.Notes}
-									onChange={this.handleChange('Notes')}
-									margin="dense"
-									// variant="outlined"
-									style={{ width: '100%' }}
-								/>
-							</GridItem>
-
-							<GridItem xs={12} sm={12} md={12} className="flex flex-col">
-								<div className="flex justify-around">
-									<FormControlLabel
-										control={
-											<Checkbox
-												checked={this.state.NationalAccount}
-												onChange={this.handleChangeChecked('NationalAccount')}
-												value="NationalAccount"
-											/>
-										}
-										label="National Account"
-									/>
-									<FormControlLabel
-										control={
-											<Checkbox
-												checked={this.state.ChildAccount}
-												onChange={this.handleChangeChecked('ChildAccount')}
-												value="ChildAccount"
-											/>
-										}
-										label="Child Account"
-									/>
-								</div>
-
-								{this.state.ChildAccount && (
-									<div className="flex flex-col">
-										<Autosuggest
-											className={classNames(classes.textfield)}
-											theme={{
-												container: classNames(classes.container),
-												suggestionsContainerOpen: classes.suggestionsContainerOpen,
-												suggestionsList: classes.suggestionsList,
-												suggestion: classes.suggestion,
-											}}
-											renderSuggestionsContainer={options => (
-												<Paper {...options.containerProps} square>
-													{options.children}
-												</Paper>
-											)}
-											renderInputComponent={this.renderInputComponent}
-
-											suggestions={suggestions}
-											onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-											onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-											getSuggestionValue={this.getSuggestionValue}
-											renderSuggestion={this.renderSuggestion}
-											inputProps={inputProps}
-											fullWidth
-										/>
-
-										<TextField
-											id="StoreNumber"
-											label="Store Number"
-											className={classes.textField}
-											onChange={this.handleChange('StoreNumber')}
-											margin="dense"
-											// variant="outlined"
-											fullWidth />
-									</div>
-								)}
-
-
-							</GridItem>
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-col">
 								<h3 className="mt-24 mb-12">Billing Address</h3>
@@ -1475,9 +1184,307 @@ class ServiceAgreementPage extends React.Component {
 										InputLabelProps={{ shrink: true }}
 										style={{ width: '13%' }} />
 								</div>
+							</GridItem>
 
-								<h3 className="mt-24 mb-12">Contacts</h3>
-								{/* <Paper>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between">
+								<div className="flex flex-col">
+									{/* <TextField
+										type="date"
+										id="EffectiveDate"
+										label="Effective Date"
+										className={classNames(classes.textField)}
+										InputLabelProps={{
+											shrink: true
+										}}
+										value={this.state.EffectiveDate}
+										onChange={this.handleChange('EffectiveDate')}
+										margin="dense"
+										// variant="outlined"
+										style={{ width: "20%", minWidth: "180px" }}
+									/> */}
+
+									<TextField
+										id="PONumer"
+										type="number"
+										label="PO Numer"
+										className={classes.textField}
+										value={this.state.po_1 || ''}
+										onChange={this.handleChangeCustomerInfoProps('po_1')}
+										InputLabelProps={{ shrink: true }}
+										margin="dense"
+										// variant="outlined"
+										style={{ width: "20%", minWidth: "180px" }}
+									/>
+								</div>
+								<div className="flex flex-col justify-between">
+									<FormControlLabel
+										control={
+											<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('cpiadj')} checked={this.state.cpiadj || false} />
+										}
+										label="CPI Increase"
+										style={{ marginRight: "30px" }}
+
+									/>
+								</div>
+								<div className="flex flex-col justify-between">
+									<FormControlLabel
+										control={
+											<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('crteinv')} checked={this.state.crteinv || false} />
+										}
+										label="Create Invoice"
+										className="mr-36"
+									/>
+									<FormControlLabel
+										control={
+											<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('prntpd')} checked={this.state.prntpd || false} />
+										}
+										label="Print Past Due"
+										className="mr-36"
+									/>
+									<FormControlLabel
+										control={
+											<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('tax_exempt')} checked={this.state.tax_exempt || false} />
+										}
+										label="Tax Exempt"
+										className="mr-36"
+									/>
+									<RadioGroup
+										aria-label="Location"
+										name="Location"
+										className={classes.group}
+										value={this.state.InvoiceType}
+									>
+										<FormControlLabel
+											control={
+												<Radio onChange={this.handleChange('InvoiceType')} />
+											}
+											label="Consolidated Invoice"
+											value="Consolidated Invoice"
+										/>
+										<FormControlLabel
+											control={
+												<Radio onChange={this.handleChange('InvoiceType')} />
+											}
+											label="Separate Invoice"
+											value="Separate Invoice"
+										/>
+									</RadioGroup>
+								</div>
+
+							</GridItem>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									id="InvoiceDate"
+									label="Invoice Date"
+									className={classNames(classes.textField, "mr-6")}
+									select
+									InputLabelProps={{ shrink: true }}
+									value={this.state.invoice_date_default || 'BOM'}
+									onChange={this.handleChangeCustomerInfoProps('invoice_date_default')}
+									margin="dense"
+									// variant="outlined"
+									style={{ width: "100%" }}
+								>
+									{[{ value: 0, label: "BOM" },
+									{ value: 1, label: "EOM" }].map(option => (
+										<MenuItem key={option.value} value={option.value}>
+											{option.label}
+										</MenuItem>
+									))}
+								</TextField>
+
+								<TextField
+									id="BillingFrequency"
+									label="Billing Frequency"
+									select
+									InputLabelProps={{
+										shrink: true
+									}}
+									className={classNames(classes.textField, "ml-6")}
+									value={this.state.BillingFrequency === undefined ? "" : this.state.BillingFrequency}
+									onChange={this.handleChange('BillingFrequency')}
+									margin="dense"
+									// variant="outlined"
+									style={{ width: "100%" }}
+								>
+									{[{ value: 0, label: "Monthly" }].map(option => (
+										<MenuItem key={option.value} value={option.value}>
+											{option.label}
+										</MenuItem>
+									))}
+								</TextField>
+
+							</GridItem>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<div style={{ display: 'flex', flexDirection: 'row', minWidth: "100px", width: "50%" }}>
+									<FormControlLabel
+										control={
+											<Switch
+												checked={this.state.ebill || false}
+												onChange={this.handleChangeCustomerInfoPropsChecked('ebill')}
+												value="ebill"
+											/>
+										}
+										label="E-Billing"
+									// style={{ width: '40%' }}
+									/>
+
+									<TextField
+										type="email"
+										id="Email"
+										label="Email"
+										className={classes.textField}
+										value={this.state.ebill_email || ''}
+										onChange={this.handleChangeCustomerInfoProps('ebill_email')}
+										InputLabelProps={{ shrink: true }}
+										margin="dense"
+										// variant="outlined"
+										style={{ width: '60%' }}
+									/>
+								</div>
+							</GridItem>
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									id="Term"
+									label="Term"
+									select
+									InputLabelProps={{
+										shrink: true
+									}}
+									className={classNames(classes.textField, "mr-6")}
+									value={this.state.billing_term || ''}
+									onChange={this.handleChangeCustomerInfoProps('billing_term')}
+									margin="dense"
+									// variant="outlined"
+									style={{ width: '100%' }}
+								>
+									{[{ value: 0, label: "Due Upon Receipt" },
+									{ value: 1, label: "EOM" },
+									{ value: 2, label: "Net 30" },
+									{ value: 3, label: "Net 40" },
+									{ value: 4, label: "Net 45" },
+									{ value: 5, label: "Net 60" },].map(option => (
+										<MenuItem key={option.value} value={option.value}>
+											{option.label}
+										</MenuItem>
+									))}
+								</TextField>
+
+								{this.props.customerForm.type === "edit" &&
+									<TextField
+										id="ARStatus"
+										label="AR Status"
+										select
+										className={classNames(classes.textField, "ml-6")}
+										InputLabelProps={{ shrink: true }}
+										value={this.state.ARStatus || 'Normal'}
+										onChange={this.handleChange('ARStatus')}
+										margin="dense"
+										// variant="outlined"
+										style={{ width: '100%' }}
+									>
+										{[{ value: 0, label: "Select" },
+										{ value: 1, label: "Bankruptcy" },
+										{ value: 2, label: "In Litigation" },
+										{ value: 3, label: "Normal" },
+										{ value: 4, label: "Referred to Collections" },
+										{ value: 5, label: "Slow Pay" },
+										{ value: 6, label: "Uncollectable" },
+										{ value: 7, label: "National Accoints" },
+										{ value: 8, label: "AutoPay" },
+										{ value: 9, label: "TEST" },].map(option => (
+											<MenuItem key={option.value} value={option.value}>
+												{option.label}
+											</MenuItem>
+										))}
+									</TextField>}
+
+							</GridItem>
+
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								<TextField
+									id="Notes"
+									label="Notes"
+									multiline
+									rows="2"
+									rowsMax="2"
+									className={classes.textField}
+									value={this.state.inv_msg || ''}
+									onChange={this.handleChangeCustomerInfoProps('inv_msg')}
+									InputLabelProps={{ shrink: true }}
+									margin="dense"
+									// variant="outlined"
+									style={{ width: '100%' }}
+								/>
+							</GridItem>
+
+							<GridItem xs={12} sm={12} md={12} className="flex flex-col">
+								<div className="flex justify-around">
+									<FormControlLabel
+										control={
+											<Checkbox
+												checked={this.state.natacct || false}
+												onChange={this.handleChangeCustomerInfoPropsChecked('natacct')}
+												value="natacct"
+											/>
+										}
+										label="National Account"
+									/>
+									<FormControlLabel
+										control={
+											<Checkbox
+												checked={this.state.parent || false}
+												onChange={this.handleChangeCustomerInfoPropsChecked('parent')}
+												value="parent"
+											/>
+										}
+										label="Child Account"
+									/>
+								</div>
+
+								{this.state.ChildAccount && (
+									<div className="flex flex-col">
+										<Autosuggest
+											className={classNames(classes.textfield)}
+											theme={{
+												container: classNames(classes.container),
+												suggestionsContainerOpen: classes.suggestionsContainerOpen,
+												suggestionsList: classes.suggestionsList,
+												suggestion: classes.suggestion,
+											}}
+											renderSuggestionsContainer={options => (
+												<Paper {...options.containerProps} square>
+													{options.children}
+												</Paper>
+											)}
+											renderInputComponent={this.renderInputComponent}
+
+											suggestions={suggestions}
+											onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+											onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+											getSuggestionValue={this.getSuggestionValue}
+											renderSuggestion={this.renderSuggestion}
+											inputProps={inputProps}
+											fullWidth
+										/>
+
+										<TextField
+											id="StoreNumber"
+											label="Store Number"
+											className={classes.textField}
+											onChange={this.handleChange('StoreNumber')}
+											margin="dense"
+											// variant="outlined"
+											fullWidth />
+									</div>
+								)}
+
+
+							</GridItem>
+
+							{/* <GridItem xs={12} sm={12} md={12} className="flex flex-col">
+								<h3 className="mt-24 mb-12">Contacts</h3> */}
+							{/* <Paper>
 									<Grid
 										rows={contactsRows}
 										columns={contactsColumns}
@@ -1500,7 +1507,8 @@ class ServiceAgreementPage extends React.Component {
 										/>
 									</Grid>
 								</Paper> */}
-								<div className='flex w-full'>
+
+							{/* <div className='flex w-full'>
 									<TextField
 										id="First"
 										label="First"
@@ -1551,9 +1559,9 @@ class ServiceAgreementPage extends React.Component {
 										// variant="outlined"
 										InputLabelProps={{ shrink: true }}
 										style={{ width: '20%' }} />
-								</div>
+								</div> */}
 
-							</GridItem>
+							{/* </GridItem> */}
 
 						</GridContainer>
 
@@ -1565,9 +1573,7 @@ class ServiceAgreementPage extends React.Component {
 									id="ServiceType"
 									label="Service Type *"
 									select
-									InputLabelProps={{
-										shrink: true
-									}}
+									InputLabelProps={{ shrink: true }}
 									className={classes.textField}
 									value={this.state.ServiceType === undefined ? "" : this.state.ServiceType}
 									onChange={this.handleChange('ServiceType')}
@@ -1590,8 +1596,9 @@ class ServiceAgreementPage extends React.Component {
 									id="SquareFootage"
 									label="Square Footage"
 									className={classes.textField}
-									value={this.state.SquareFootage}
-									onChange={this.handleChange('SquareFootage')}
+									value={this.state.sqr_ft || ''}
+									onChange={this.handleChangeCustomerInfoProps('sqr_ft')}
+									InputLabelProps={{ shrink: true }}
 									margin="dense"
 									// variant="outlined"
 									style={{ minWidth: "100px", width: "30%" }}
@@ -1605,9 +1612,7 @@ class ServiceAgreementPage extends React.Component {
 									id="StartTime"
 									label="Start Time *"
 									className={classNames(classes.textField, "mr-6")}
-									InputLabelProps={{
-										shrink: true
-									}}
+									InputLabelProps={{ shrink: true }}
 									value={this.state.StartTime}
 									onChange={this.handleChange('StartTime')}
 									margin="dense"
@@ -1619,9 +1624,7 @@ class ServiceAgreementPage extends React.Component {
 									id="EndTime"
 									label="End Time *"
 									className={classNames(classes.textField, "ml-6")}
-									InputLabelProps={{
-										shrink: true
-									}}
+									InputLabelProps={{ shrink: true }}
 									value={this.state.EndTime}
 									onChange={this.handleChange('EndTime')}
 									margin="dense"
@@ -1656,8 +1659,9 @@ class ServiceAgreementPage extends React.Component {
 									id="CleanTimes"
 									label="Clean Times *"
 									className={classNames(classes.textField, "mr-6")}
-									value={this.state.CleanTimes}
-									onChange={this.handleChange('CleanTimes')}
+									value={this.state.cleantimes || ''}
+									onChange={this.handleChangeCustomerInfoProps('cleantimes')}
+									InputLabelProps={{ shrink: true }}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '100%' }}
@@ -1669,11 +1673,9 @@ class ServiceAgreementPage extends React.Component {
 									id="CleanFrequency"
 									label="Clean Frequency *"
 									className={classNames(classes.textField, "ml-6")}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.CleanFrequency === undefined ? "" : this.state.CleanFrequency}
-									onChange={this.handleChange('CleanFrequency')}
+									InputLabelProps={{ shrink: true }}
+									value={this.state.cleanper || ''}
+									onChange={this.handleChangeCustomerInfoProps('cleanper')}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '100%' }}
@@ -1688,66 +1690,49 @@ class ServiceAgreementPage extends React.Component {
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-start">
 								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
+									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('mon')} checked={this.state.mon || false} />}
 									label="Mon"
 									className="mr-36"
 
 								/>
 								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
+									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('tue')} checked={this.state.tue || false} />}
 									label="Tue"
 									className="mr-36"
 
 								/>
 								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
+									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('wed')} checked={this.state.wed || false} />}
 									label="Wed"
 									className="mr-36"
 
 								/>
 								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
+									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('thu')} checked={this.state.thu || false} />}
 									label="Thu"
 									className="mr-36"
 
 								/>
 								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
+									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('fri')} checked={this.state.fri || false} />}
 									label="Fri"
 									className="mr-36"
 
 								/>
 								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
+									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('sat')} checked={this.state.sat || false} />}
 									label="Sat"
 									className="mr-36"
 
 								/>
 								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
+									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('sun')} checked={this.state.sun || false} />}
 									label="Sun"
 									className="mr-36"
 								/>
 								<FormControlLabel
-									control={
-										<Checkbox onChange={this.handleChange('weekdays')} />
-									}
+									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('wknd')} checked={this.state.wknd || false} />}
 									label="Weekends"
-
 								/>
 							</GridItem>
 
@@ -1761,6 +1746,7 @@ class ServiceAgreementPage extends React.Component {
 									className={classes.textField}
 									value={this.state.DetailedCleaningInstructions}
 									onChange={this.handleChange('DetailedCleaningInstructions')}
+									InputLabelProps={{ shrink: true }}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '100%' }}

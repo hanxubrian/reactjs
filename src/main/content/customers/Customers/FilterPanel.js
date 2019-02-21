@@ -847,7 +847,7 @@ class FilterPanel extends Component {
 		this.setState({ [name]: value })
 		this.props.updateNewCustomerParam(name, value)
 	}
-	handleChangeCheckedCustomerInfoProps = name => event => {
+	handleChangeCustomerInfoPropsChecked = name => event => {
 		const checked = event.target.checked
 		this.setState({ [name]: checked })
 		this.props.updateNewCustomerParam(name, checked)
@@ -1062,6 +1062,7 @@ class FilterPanel extends Component {
 									className={classes.textField}
 									value={this.state.cus_name || ''}
 									onChange={this.handleChangeCustomerInfoProps('cus_name')}
+									InputLabelProps={{ shrink: true }}
 									margin="dense"
 									// variant="outlined"
 									autoFocus
@@ -1075,6 +1076,7 @@ class FilterPanel extends Component {
 									className={classes.textField}
 									value={this.state.cus_addr || ''}
 									onChange={this.handleChangeCustomerInfoProps('cus_addr')}
+									InputLabelProps={{ shrink: true }}
 									margin="dense"
 									// variant="outlined"
 									fullWidth />
@@ -1086,6 +1088,7 @@ class FilterPanel extends Component {
 									className={classes.textField}
 									value={this.state.cus_addr2 || ''}
 									onChange={this.handleChangeCustomerInfoProps('cus_addr2')}
+									InputLabelProps={{ shrink: true }}
 									margin="dense"
 									// variant="outlined"
 									fullWidth />
@@ -1097,6 +1100,7 @@ class FilterPanel extends Component {
 									className={classNames(classes.textField, 'mr-6')}
 									value={this.state.cus_city || ''}
 									onChange={this.handleChangeCustomerInfoProps('cus_city')}
+									InputLabelProps={{ shrink: true }}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '55%' }}
@@ -1110,6 +1114,7 @@ class FilterPanel extends Component {
 									className={classNames(classes.textField, 'mr-6 ml-6')}
 									value={this.state.cus_state || ''}
 									onChange={this.handleChangeCustomerInfoProps('cus_state')}
+									InputLabelProps={{ shrink: true }}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '20%' }}
@@ -1127,6 +1132,7 @@ class FilterPanel extends Component {
 									className={classNames(classes.textField, 'ml-6')}
 									value={this.state.cus_zip || ''}
 									onChange={this.handleChangeCustomerInfoProps('cus_zip')}
+									InputLabelProps={{ shrink: true }}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '25%' }}
@@ -1188,6 +1194,7 @@ class FilterPanel extends Component {
 									className={classNames(classes.textField, 'mr-6')}
 									value={this.state.email1 || ''}
 									onChange={this.handleChangeCustomerInfoProps('email1')}
+									InputLabelProps={{ shrink: true }}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '100%' }}
@@ -1199,6 +1206,7 @@ class FilterPanel extends Component {
 									className={classNames(classes.textField, 'ml-6')}
 									value={this.state.customerWebsite || ''}
 									onChange={this.handleChangeCustomerInfoProps('customerWebsite')}
+									InputLabelProps={{ shrink: true }}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '100%' }}
@@ -1359,7 +1367,53 @@ class FilterPanel extends Component {
 											</Grid>
 										</Paper>
 									</GridItem> */}
-
+							<GridItem xs={12} sm={12} md={12} className="flex flex-col">
+								<h3 className="mt-24 mb-12">Contacts</h3>
+								<div className='flex w-full'>
+									<TextField
+										id="First"
+										label="Contact"
+										className={classNames(classes.textField, 'pr-12')}
+										value={this.state.cont_1 || ''}
+										onChange={this.handleChangeCustomerInfoProps('cont_1')}
+										margin="dense"
+										// variant="outlined"
+										InputLabelProps={{ shrink: true }}
+										style={{ width: '100%' }} />
+									<TextField
+										id="Last"
+										label="Email"
+										className={classNames(classes.textField, 'pr-12')}
+										value={this.state.email_1 || ''}
+										onChange={this.handleChangeCustomerInfoProps('email_1')}
+										margin="dense"
+										// variant="outlined"
+										InputLabelProps={{ shrink: true }}
+										style={{ width: '100%' }} />
+								</div>
+								<div className='flex w-full'>
+									<TextField
+										id="OfficePhone"
+										label="Contact 2"
+										className={classNames(classes.textField, 'pr-12')}
+										value={this.state.cont_2 || ''}
+										onChange={this.handleChangeCustomerInfoProps('cont_2')}
+										margin="dense"
+										// variant="outlined"
+										InputLabelProps={{ shrink: true }}
+										style={{ width: '100%' }} />
+									<TextField
+										id="MobilePhone"
+										label="Email 2"
+										className={classNames(classes.textField, 'pr-12')}
+										value={this.state.email_2 || ''}
+										onChange={this.handleChangeCustomerInfoProps('email_2')}
+										margin="dense"
+										// variant="outlined"
+										InputLabelProps={{ shrink: true }}
+										style={{ width: '100%' }} />
+								</div>
+							</GridItem>
 
 						</GridContainer>
 					) :
