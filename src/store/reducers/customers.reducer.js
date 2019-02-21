@@ -764,8 +764,9 @@ const customers = function (state = initialState, action) {
 			return {
 				...state,
 				activeCustomer: {
+					...state.activeCustomer,
 					Data: {
-						...this.state.activeCustomer.Data,
+						...state.activeCustomer.Data,
 						[action.payload.name]: action.payload.value
 					}
 				}

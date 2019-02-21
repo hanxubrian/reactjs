@@ -1162,13 +1162,15 @@ class FranchiseeDistributionPage extends React.Component {
 
 										/>
 										<div className=" text-center" style={{ width: franHeaders[8].width + '%' }}>
-											<Tooltip title="Go to Finders Fee" aria-label="Go to Finders Fee">
-												<Fab aria-label="remove"
-													disabled={m.MonthlyBilling <= 0}
-													onClick={() => this.gotoFindersFee(x.FranchiseeNumber, m.MonthlyBilling)} color="primary" className={classNames(classes.ffBtn, "mr-12")}>
-													<Icon>arrow_forward</Icon>
-												</Fab>
-											</Tooltip>
+											{
+												m.MonthlyBilling > 0 && <Tooltip title="Go to Finders Fee" aria-label="Go to Finders Fee">
+													<Fab aria-label="remove"
+														// disabled={m.MonthlyBilling <= 0}
+														onClick={() => this.gotoFindersFee(x.FranchiseeNumber, m.MonthlyBilling)} color="primary" className={classNames(classes.ffBtn, "mr-12")}>
+														<Icon>arrow_forward</Icon>
+													</Fab>
+												</Tooltip>
+											}
 											<Tooltip title="Remove this franchisee" aria-label="Remove Franchisee">
 												<Fab aria-label="remove"
 													onClick={() => this.removeFranchisee(x.Id)} color="primary" className={classNames(classes.ffBtn, classes.lineCancelButton)}>

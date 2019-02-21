@@ -1,7 +1,7 @@
 export * from './fuse';
 export * from './invoice.actions';
 export * from './customers.actions'; //rcc 2018-12-17
-export * from './customerService.actions';
+// export * from './customerService.actions';
 export * from './billrun.action';
 export * from './franchise.actions';
 export * from './chargebacks.actions'

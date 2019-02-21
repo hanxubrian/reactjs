@@ -13,7 +13,7 @@ import franchisees from './franchisees.reducer';
 import transactions from './franchisee.transaction.reducer';
 import franchiseeReports from './franchisee.reports.reducer';
 import customers from './customers.reducer';
-import customerService from './customerService.reducer';
+// import customerService from './customerService.reducer';
 import leases from './leases.reducer';
 import chargebacks from './chargebacks.reducer';
 import leads from './leads.reducer';
@@ -56,7 +56,7 @@ const createReducer =
 				leases,
 				transactions,
 				customers,
-				customerService,
+				// customerService,
 				franchiseeReports,
 				leads,
 				findersFees,
