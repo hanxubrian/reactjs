@@ -241,11 +241,7 @@ class FranchiseesDocumentUploadTable extends React.Component {
         fileSize: [],
         view: []
     };
-    constructor(props)
-    {
-        super(props);
-        this.handleChange = this.handleChange.bind(this);
-    }
+    
     handleRequestSort = (event, property) => {
         const orderBy = property;
         let order = 'desc';
@@ -275,41 +271,7 @@ class FranchiseesDocumentUploadTable extends React.Component {
 
     }
 
-    handleChange(selectorFiles,id)
-    {
-        let today = new Date();
-        let month = "";
-        let day = "";
-        if((today.getMonth()+1)<10){
-            month = '0'+(today.getMonth()+1)
-        }else{
-            month = (today.getMonth()+1)
-        }
-        if(today.getDate()<10){
-            day = '0'+(today.getDate())
-        }else{
-            day = (today.getDate())
-        }
-        let date = today.getFullYear()+'-'+month+'-'+day;
-        const list = this.props.documentsList;
-        list.map(x=>{
-            if(id === x.FileTypeListId){
-                x.UploadDocuments=selectorFiles;
-                x["documentDateTime"] = date;
-                x["documentFileSize"] = selectorFiles[0].size+" bytes";
-                return x;
-            }
-        });
-
-        const tempInsertPayload = this.props.insertPayload;
-        tempInsertPayload.Documents = list;
-        this.props.franchiseeUpdateInsertPayload(tempInsertPayload);
-        // this.setState({
-        //     documentsList: []
-        // });
-    }
-
-
+    
     render() {
         const { classes } = this.props;
         const { documentsList, order, orderBy, selected, rowsPerPage, page } = this.state;
@@ -328,16 +290,22 @@ class FranchiseesDocumentUploadTable extends React.Component {
                 label: 'Type'
             },
             {
+                id: 'signDate',
+                numeric: false,
+                disablePadding: false,
+                label: 'Sign Date'
+            },
+            {
+                id: 'sentVia',
+                numeric: false,
+                disablePadding: false,
+                label: 'Sent Via'
+            },
+            {
                 id: 'status',
                 numeric: false,
                 disablePadding: false,
                 label: 'Status'
-            },
-            {
-                id: 'browse',
-                numeric: false,
-                disablePadding: false,
-                label: 'Browse'
             },
             {
                 id: 'action',
@@ -373,20 +341,14 @@ class FranchiseesDocumentUploadTable extends React.Component {
                                                         {n.type}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {n.status}
+                                                        02/21/2019
                                                     </TableCell>
                                                     <TableCell>
-                                                        <TextField
-                                                            id={"value" + n.document_id}
-                                                            type="file"
-                                                            multiple
-                                                            onChange={ (e) => this.handleChange(e.target.files,n.document_id)}
-                                                            margin="dense"
-                                                            className={classes.textField}
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
+                                                        DocuSign
                                                     </TableCell>
+                                                    <TableCell>
+                                                        {n.status}
+                                                    </TableCell>                                                    
                                                     <TableCell>
                                                         <IconButton
                                                             className={classNames(classes.summaryPanelButton, "mr-12")}
