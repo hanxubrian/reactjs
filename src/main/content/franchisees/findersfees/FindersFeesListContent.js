@@ -220,7 +220,6 @@ class FindersFeeListContent extends Component {
 		// const keys = ['checkedPaid', 'checkedPP', 'checkedOpen', 'checkedComplete'];
 
 		if (rawData === null) return;
-
 		let regions = rawData.Data.Region.filter(x => {
 			return this.props.regionId === 0 || x.Id === this.props.regionId;
 		});
