@@ -1053,7 +1053,12 @@ class ServiceAgreementPage extends React.Component {
 		this.props.updateNewCustomerParam(name, value)
 	}
 	handleChangeCustomerInfoPropsChecked = name => event => {
-		const checked = event.target.checked
+		let checked = event.target.checked
+		switch (name) {
+			case "parent":
+				checked = checked ? 1 : 0
+				break
+		}
 		this.setState({ [name]: checked })
 		this.props.updateNewCustomerParam(name, checked)
 	}
@@ -1675,9 +1680,9 @@ class ServiceAgreementPage extends React.Component {
 									<FormControlLabel
 										control={
 											<Checkbox
-												checked={this.state.parent || 0}
-												onChange={this.handleChangeCustomerInfoProps('parent')}
-												value="1"
+												checked={this.state.parent || false}
+												onChange={this.handleChangeCustomerInfoPropsChecked('parent')}
+												value="parent"
 											/>
 										}
 										label="Child Account"
