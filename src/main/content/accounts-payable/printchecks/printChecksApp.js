@@ -240,9 +240,10 @@ class PrintChecksLayout extends Component {
 
     print = () => {
         let imgUrl ='https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
-        const input = document.getElementById('wholediv');
-        this.child.downloadPDF(input, imgUrl);
+        // const input = document.getElementById('wholediv');
+        // this.child.downloadPDF(input, imgUrl);
     };
+
     email = () => {
         alert("Email");
     };
@@ -294,11 +295,11 @@ class PrintChecksLayout extends Component {
                                             Print
                                             <Icon className={classes.rightIcon}>print</Icon>
                                         </Button>
-                                        <Button variant="contained" color="primary"
-                                                className={classNames( classes.btntop)} onClick={this.email}>
-                                            Email
-                                            <Icon className={classes.rightIcon}>email</Icon>
-                                        </Button>
+                                        {/*<Button variant="contained" color="primary"*/}
+                                                {/*className={classNames( classes.btntop)} onClick={this.email}>*/}
+                                            {/*Email*/}
+                                            {/*<Icon className={classes.rightIcon}>email</Icon>*/}
+                                        {/*</Button>*/}
                                     </div>
                                 </div>
 
