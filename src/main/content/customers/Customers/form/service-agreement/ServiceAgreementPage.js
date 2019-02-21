@@ -1125,7 +1125,9 @@ class ServiceAgreementPage extends React.Component {
 										margin="dense"
 										// variant="outlined"
 										InputLabelProps={{ shrink: true }}
-										style={{ width: '20%' }} />
+										style={{ width: '50%' }} />
+								</div>
+								<div className='flex w-full'>
 									<TextField
 										id="bill_addr"
 										label="Address"
@@ -1135,7 +1137,7 @@ class ServiceAgreementPage extends React.Component {
 										margin="dense"
 										// variant="outlined"
 										InputLabelProps={{ shrink: true }}
-										style={{ width: '20%' }} />
+										style={{ width: '30%' }} />
 									<TextField
 										id="bill_addr2"
 										label="Address2"
@@ -1145,7 +1147,7 @@ class ServiceAgreementPage extends React.Component {
 										margin="dense"
 										// variant="outlined"
 										InputLabelProps={{ shrink: true }}
-										style={{ width: '20%' }} />
+										style={{ width: '30%' }} />
 									<TextField
 										id="bill_city"
 										label="City"
