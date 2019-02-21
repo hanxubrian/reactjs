@@ -230,7 +230,7 @@ class PrintChecksLayout extends Component {
         selection: [],
         openPrintModal: false,
         checkdate: moment().format('MM/DD/YYYY'),
-        completed: 10,
+        completed: 0,
         bPrint: false
     };
 
@@ -289,12 +289,12 @@ class PrintChecksLayout extends Component {
         this.setState({openPrintModal: false})
     };
 
-    handlePrint = ()=>{
-        this.setState({openPrintModal: false});
-        this.setState({bPrint: true});
-        this.setState({completed: 10});
-        this.child.resetSelection();
-        timer = setInterval(this.progress, 500);
+    handlePrint = async ()=>{
+        await this.setState({openPrintModal: false});
+        await this.setState({bPrint: true});
+        await this.setState({completed: 0});
+        await this.child.resetSelection();
+        timer = setInterval(this.progress, 1000);
     };
 
     handleCheckDateDateChange = date => {
@@ -303,7 +303,7 @@ class PrintChecksLayout extends Component {
 
     progress = async () =>{
         if (this.state.completed > 100) {
-            await clearImmediate(timer);
+            await clearInterval(timer);
             await this.setState({bPrint: false});
             await this.setState({completed: 0});
         } else {
