@@ -28,7 +28,7 @@ class CustomersService {
 			Location,
 			Latitude,
 			Longitude,
-			SearchText
+			SearchText: ""
 		};
 		console.log("getCustomersList-data", data)
 		return new Promise((resolve, reject) => {
@@ -195,7 +195,7 @@ class CustomersService {
 		});
 	}
 	getCustomer(regionId, customerId) {
-		console.log("getCustomer",customerId)
+		console.log("getCustomer", customerId)
 		return new Promise((resolve, reject) => {
 			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Customer/${customerId}?RegionId=${regionId}`)
 				.then(res => {
@@ -429,20 +429,20 @@ fullbill: 0
 
 	getIncreaseDecrease(regionId, params) {
 		console.log('params=', params);
-        return new Promise((resolve, reject) => {
-            axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/IncreaseDecrease`, params)
-                .then(res => {
-                    if (res.status === 200) {
-                        resolve(res.data);
-                    }
-                    else if (res.status !== 200) {
-                        reject(res.data);
-                    }
-                })
-                .catch(error => {
-                    resolve(error);
-                })
-        });
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/IncreaseDecrease`, params)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
 	}
 
     /**
@@ -452,40 +452,40 @@ fullbill: 0
      * @returns {Promise<any>}
      * @constructor
      */
-    getComputedFinderFee(regionId, params) {
-        console.log('params=', params);
-        return new Promise((resolve, reject) => {
-            axios_instance.post(`${BASE_MONGO_API_URL}/v1/FinderFee/GetComputedFinderFee`, params)
-                .then(res => {
-                    if (res.status === 200) {
-                        resolve(res.data);
-                    }
-                    else if (res.status !== 200) {
-                        reject(res.data);
-                    }
-                })
-                .catch(error => {
-                    resolve(error);
-                })
-        });
-    }
+	getComputedFinderFee(regionId, params) {
+		console.log('params=', params);
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/FinderFee/GetComputedFinderFee`, params)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
 
-    getFinderFeeTypes() {
-        return new Promise((resolve, reject) => {
-            axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/GetFinderFeeTypes`)
-                .then(res => {
-                    if (res.status === 200) {
-                        resolve(res.data);
-                    }
-                    else if (res.status !== 200) {
-                        reject(res.data);
-                    }
-                })
-                .catch(error => {
-                    resolve(error);
-                })
-        });
-    }
+	getFinderFeeTypes() {
+		return new Promise((resolve, reject) => {
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/GetFinderFeeTypes`)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
 
     /**
      *
@@ -495,22 +495,22 @@ fullbill: 0
      * @returns {Promise<any>}
      * @constructor
      */
-    updateAssignedFranchisee(regionId, customerNo, params) {
-        return new Promise((resolve, reject) => {
-            axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/AssignedFranchisee?CustomerNo=${customerNo}`, params)
-                .then(res => {
-                    if (res.status === 200) {
-                        resolve(res.data);
-                    }
-                    else if (res.status !== 200) {
-                        reject(res.data);
-                    }
-                })
-                .catch(error => {
-                    resolve(error);
-                })
-        });
-    }
+	updateAssignedFranchisee(regionId, customerNo, params) {
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/AssignedFranchisee?CustomerNo=${customerNo}`, params)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
 }
 
 

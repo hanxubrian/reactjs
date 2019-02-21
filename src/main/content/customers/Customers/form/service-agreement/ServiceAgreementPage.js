@@ -1144,7 +1144,7 @@ class ServiceAgreementPage extends React.Component {
 									style={{ minWidth: "100px", width: "30%" }}
 								>
 									{["Recurring", "One-Time", "Variable"].map((x, index) => (
-										<MenuItem key={index} value={x}>{x}</MenuItem>
+										<MenuItem key={index} value={index + 1}>{x}</MenuItem>
 									))}
 								</TextField>
 
@@ -1406,7 +1406,6 @@ class ServiceAgreementPage extends React.Component {
 
 									<TextField
 										id="PONumer"
-										type="number"
 										label="PO Numer"
 										className={classes.textField}
 										value={this.state.po_1 || ''}
