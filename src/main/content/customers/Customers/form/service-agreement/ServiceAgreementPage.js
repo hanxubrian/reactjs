@@ -9,7 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import { Icon, IconButton, Tooltip, Slide, RadioGroup, Radio, FormControlLabel, Paper, Typography, InputAdornment, FormControl, InputLabel, Select, MenuItem, Divider, ListItem, List, ListItemText, ListItemLink, Checkbox, Switch } from '@material-ui/core';
+import { NativeSelect, Icon, IconButton, Tooltip, Slide, RadioGroup, Radio, FormControlLabel, Paper, Typography, InputAdornment, FormControl, InputLabel, Select, MenuItem, Divider, ListItem, List, ListItemText, ListItemLink, Checkbox, Switch } from '@material-ui/core';
 
 // for store
 import { bindActionCreators } from "redux";
@@ -960,7 +960,7 @@ class ServiceAgreementPage extends React.Component {
 										))}
 								</TextField>
 
-								<TextField
+								{/* <TextField
 									type="number"
 									inputProps={{ min: "0", max: "99", step: "1" }}
 									id="TermMonths"
@@ -976,7 +976,7 @@ class ServiceAgreementPage extends React.Component {
 									// variant="outlined"
 									style={{ width: '10%', minWidth: '110px' }}
 									disabled={this.state.length === 1}
-								/>
+								/> */}
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								{/* <TextField
@@ -1147,7 +1147,7 @@ class ServiceAgreementPage extends React.Component {
 										margin="dense"
 										// variant="outlined"
 										InputLabelProps={{ shrink: true }}
-										style={{ width: '30%' }} />
+										style={{ width: '27%' }} />
 									<TextField
 										id="bill_city"
 										label="City"
@@ -1158,7 +1158,7 @@ class ServiceAgreementPage extends React.Component {
 										// variant="outlined"
 										InputLabelProps={{ shrink: true }}
 										style={{ width: '20%' }} />
-									<TextField
+									{/* <TextField
 										id="bill_state"
 										select
 										label="State"
@@ -1174,7 +1174,28 @@ class ServiceAgreementPage extends React.Component {
 												{option.Value}
 											</MenuItem>
 										))}
-									</TextField>
+									</TextField> */}
+
+									<FormControl className={classes.formControl}>
+										<InputLabel htmlFor="bill_state">State</InputLabel>
+										<Select
+											native
+											value={this.state.bill_state}
+											onChange={this.handleChangeCustomerInfoProps('bill_state')}
+											InputLabelProps={{ shrink: true }}
+											inputProps={{
+												name: 'bill_state',
+												id: 'bill_state',
+											}}
+										>
+											{stateNames.map((option, index) => (
+												<option key={index} value={option.Value}>
+													{option.Value}
+												</option>
+											))}
+										</Select>
+									</FormControl>
+
 									<TextField
 										id="bill_zip"
 										label="Zip/Postal"
