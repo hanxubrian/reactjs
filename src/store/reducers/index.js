@@ -13,6 +13,7 @@ import franchisees from './franchisees.reducer';
 import transactions from './franchisee.transaction.reducer';
 import franchiseeReports from './franchisee.reports.reducer';
 import customers from './customers.reducer';
+import printChecks from './printChecks.reducer';
 // import customerService from './customerService.reducer';
 import leases from './leases.reducer';
 import chargebacks from './chargebacks.reducer';
@@ -70,6 +71,7 @@ const createReducer =
 				paymentLog,
 				notification,
 				territories,
+                printChecks,
 				franchiseeReportDatalist,
 				admin,
 				...asyncReducers

@@ -12,6 +12,7 @@ import _chatService from './chat/ChatService';
 import _paymentService from './payment/paymentService';
 import _dashboardService from './dashboard/dashboardService';
 import _verificationService from './activity/verificationService';
+import _printChecksService from './printchecks/printChecksService';
 // import _invoicePaymentService from './invoice/paymentsService'
 import _homepageService from './home/HomepageService';
 import _billrunService from './billrun/BillrunService';
@@ -45,3 +46,4 @@ export const franchiseeReportService = _franchiseeReportService;
 export const userService = _userService;
 export const adminImportNotificationService = _adminImportNotificationService;
 export const verificationService = _verificationService;
+export const printChecksService = _printChecksService;

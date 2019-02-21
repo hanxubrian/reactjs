@@ -21,3 +21,4 @@ export * from './regions.territories.action'
 export * from './franchiseeReport.actions';
 export * from './admin.actions';
 export * from './payment.log.actions';
+export * from './printChecks.actions';
