@@ -1504,7 +1504,7 @@ class ServiceAgreementPage extends React.Component {
 										style={{ width: '100%' }}
 									>
 										{["Due Upon Receipt", "EOM", "Net 30", "Net 40", "Net 45", "Net 60"].map((x, index) => (
-											<MenuItem key={index} value={x}>{x}</MenuItem>
+											<MenuItem key={index} value={index + 1}>{x}</MenuItem>
 										))}
 									</TextField>
 
