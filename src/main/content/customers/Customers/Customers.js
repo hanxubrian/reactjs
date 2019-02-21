@@ -336,7 +336,7 @@ class Customers extends Component {
 
 		switch (this.props.customerForm.type) {
 			case "new":
-				this.props.createCustomer(this.props.regionId, this.props.newCustomerParam)
+				this.props.createCustomer(this.props.regionId, this.props.activeCustomer.Data)
 				break;
 			// case "edit":
 			// 	this.props.createCustomer(this.props.regionId, payload)
@@ -850,7 +850,7 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		bCreateCustomerStart: customers.bCreateCustomerStart,
 		bGetCustomerStart: customers.bGetCustomerStart,
 		filters: customers.filters,
-		newCustomerParam: customers.newCustomerParam,
+		activeCustomer: customers.activeCustomer,
 	}
 }
 

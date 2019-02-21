@@ -683,7 +683,7 @@ class ServiceAgreementPage extends React.Component {
 			franchiseeServiceTypes: this.props.lists.franchiseeServiceTypes,
 			franchiseeBillingTypes: this.props.lists.franchiseeBillingTypes,
 			execTitles: execTitles,
-			cont_bill: this.props.activeCustomer && this.props.activeCustomer.Data ? this.props.activeCustomer.Data.cont_bill : this.props.newCustomerParam.cont_bill,
+			cont_bill: this.props.activeCustomer.Data.cont_bill,
 		})
 
 		this.initCustomerInfo()
@@ -695,30 +695,30 @@ class ServiceAgreementPage extends React.Component {
 		// }
 	}
 	UNSAFE_componentWillReceiveProps(nextProps) {
-		if (nextProps.payments !== this.props.payments) {
-			console.log("componentWillReceiveProps payments")
-			this.setRowData(nextProps.payments)
-		}
+		// if (nextProps.payments !== this.props.payments) {
+		// 	console.log("componentWillReceiveProps payments")
+		// 	this.setRowData(nextProps.payments)
+		// }
 		if (nextProps.customers !== this.props.customers) {
 			this.setState({
 				customers: FuseUtils.getCustomerListFromDb(nextProps.customers),
 			});
 		}
-		if (!_.isEqual(nextProps.activePaymentRows, this.props.activePaymentRows)) {
-			console.log("componentWillReceiveProps activePaymentRows", nextProps.activePaymentRows, this.props.activePaymentRows)
-			this.setRowData(this.props.payments, nextProps.activePaymentRows)
-		}
-		if (!_.isEqual(nextProps.paymentDlgPayloads, this.props.paymentDlgPayloads)) {
-			this.setState({
-				paymentDlgPayloads: nextProps.paymentDlgPayloads,
-				PaymentAmount: nextProps.paymentDlgPayloads.paymentAmount,
-				PaymentType: nextProps.paymentDlgPayloads.paymentType
-			})
+		// if (!_.isEqual(nextProps.activePaymentRows, this.props.activePaymentRows)) {
+		// 	console.log("componentWillReceiveProps activePaymentRows", nextProps.activePaymentRows, this.props.activePaymentRows)
+		// 	this.setRowData(this.props.payments, nextProps.activePaymentRows)
+		// }
+		// if (!_.isEqual(nextProps.paymentDlgPayloads, this.props.paymentDlgPayloads)) {
+		// 	this.setState({
+		// 		paymentDlgPayloads: nextProps.paymentDlgPayloads,
+		// 		PaymentAmount: nextProps.paymentDlgPayloads.paymentAmount,
+		// 		PaymentType: nextProps.paymentDlgPayloads.paymentType
+		// 	})
 
-			// if (nextProps.bOpenPaymentDialog === true) {
-			// 	this.checkValidations()
-			// }
-		}
+		// 	// if (nextProps.bOpenPaymentDialog === true) {
+		// 	// 	this.checkValidations()
+		// 	// }
+		// }
 		if (nextProps.regionId !== this.props.regionId) {
 			this.props.getFranchiseeServiceTypes(nextProps.regionId)
 			this.props.getFranchiseeBillingTypes(nextProps.regionId)
@@ -1804,15 +1804,15 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps({ customers, accountReceivablePayments, auth }) {
 	return {
 		regionId: auth.login.defaultRegionId,
-		bOpenPaymentDialog: accountReceivablePayments.bOpenPaymentDialog,
-		activePaymentRows: accountReceivablePayments.activePaymentRows,
+		// bOpenPaymentDialog: accountReceivablePayments.bOpenPaymentDialog,
+		// activePaymentRows: accountReceivablePayments.activePaymentRows,
 
-		payments: accountReceivablePayments.ACC_payments,
+		// payments: accountReceivablePayments.ACC_payments,
 
-		filterParam: accountReceivablePayments.filterParam,
-		searchText: accountReceivablePayments.searchText,
+		// filterParam: accountReceivablePayments.filterParam,
+		// searchText: accountReceivablePayments.searchText,
 
-		paymentDlgPayloads: accountReceivablePayments.paymentDlgPayloads,
+		// paymentDlgPayloads: accountReceivablePayments.paymentDlgPayloads,
 
 		increaseDecreaseContractModalForm: customers.increaseDecreaseContractModalForm,
 		cancelContractPage: customers.cancelContractPage,
@@ -1825,8 +1825,6 @@ function mapStateToProps({ customers, accountReceivablePayments, auth }) {
 		accountExecutiveList: customers.accountExecutiveList,
 
 		customers: customers.customersDB,
-		newCustomerParam: customers.newCustomerParam,
-
 	}
 }
 

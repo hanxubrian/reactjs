@@ -474,17 +474,15 @@ class FranchiseeDistributionPage extends React.Component {
 		}
 	}
 
-	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer) => {
-		if (activeCustomerInfo && activeCustomerInfo.Data) {
-			this.setState({
-				SA_Amount: activeCustomerInfo.Data.cont_bill,
-				franchieesesToOffer: activeCustomerInfo.Data.AssignedFranchisees,
-			});
-			this.props.updateFindersFeeParams({
-				FranchiseeNum: activeCustomerInfo.Data.AssignedFranchisees[0].FranchiseeNumber,
-				CustomerNum: activeCustomerInfo.Data.cust_no, RegionId: this.props.regionId, CalculationMethodCode: 'S'
-			});
-		}
+	initCustomerInfo = (activeCustomer = this.props.activeCustomer) => {
+		this.setState({
+			SA_Amount: activeCustomer.Data.cont_bill,
+			franchieesesToOffer: activeCustomer.Data.AssignedFranchisees,
+		});
+		this.props.updateFindersFeeParams({
+			FranchiseeNum: activeCustomer.Data.AssignedFranchisees.length > 0 ? activeCustomer.Data.AssignedFranchisees[0].FranchiseeNumber : '',
+			CustomerNum: activeCustomer.Data.cust_no, RegionId: this.props.regionId, CalculationMethodCode: 'S'
+		});
 	};
 
 	handleClose = () => {
@@ -804,36 +802,29 @@ class FranchiseeDistributionPage extends React.Component {
 			return temp;
 		});
 
-		if (this.props.activeCustomer) {
-			this.setState({
-				franchieesesToOffer: [
-					...this.state.franchieesesToOffer,
-					...newFranchisees
-				]
-			});
+		const franchieesesToOffer = [...this.state.franchieesesToOffer, ...newFranchisees]
+		// if (this.props.activeCustomer) {
+		this.setState({ franchieesesToOffer });
 
-			//
-			this.props.updateActiveCustomerAssignedFranchisees([
-				...this.state.franchieesesToOffer,
-				...newFranchisees
-			])
-		} else {
-			if (this.state.franchieesesToOffer) {
-				this.setState({
-					franchieesesToOffer: [
-						...this.state.franchieesesToOffer,
-						...newFranchisees
-					]
-				});
-			}
-			else {
-				this.setState({
-					franchieesesToOffer: [
-						...newFranchisees
-					]
-				});
-			}
-		}
+		//
+		this.props.updateActiveCustomerAssignedFranchisees(franchieesesToOffer)
+		// } else {
+		// 	if (this.state.franchieesesToOffer) {
+		// 		this.setState({
+		// 			franchieesesToOffer: [
+		// 				...this.state.franchieesesToOffer,
+		// 				...newFranchisees
+		// 			]
+		// 		});
+		// 	}
+		// 	else {
+		// 		this.setState({
+		// 			franchieesesToOffer: [
+		// 				...newFranchisees
+		// 			]
+		// 		});
+		// 	}
+		// }
 	};
 
 	changeSelection = selection => {
@@ -848,7 +839,7 @@ class FranchiseeDistributionPage extends React.Component {
 	saveAssignedFranchiseeDistributions = () => {
 		const { activeCustomer } = this.props
 
-		this.props.updateAssignedFranchisee(this.props.regionId, activeCustomer && activeCustomer.Data ? activeCustomer.Data.cust_no : "Pending", this.state.franchieesesToOffer)
+		this.props.updateAssignedFranchisee(this.props.regionId, activeCustomer.Data.cust_no, this.state.franchieesesToOffer)
 		this.setState({ openSnack: true });
 
 	};
@@ -1050,7 +1041,7 @@ class FranchiseeDistributionPage extends React.Component {
 						}}
 						// value={this.props.activeCustomer && this.props.activeCustomer.Data ? this.props.activeCustomer.Data.cont_bill : ""}
 						// onChange={this.handleChange("NewAmount")}
-						value={this.props.customerForm.type === "new" ? (this.props.newCustomerParam.cont_bill || '') : (this.props.activeCustomer && this.props.activeCustomer.Data ? this.props.activeCustomer.Data.cont_bill : "")}
+						value={this.props.activeCustomer.Data.cont_bill}
 					/>
 
 					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -1513,7 +1504,6 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 		franchisees: franchisees.franchiseesDB,
 		NewAmount: customers.NewAmount,
 		assignedFranchisees: customers.assignedFranchisees,
-		newCustomerParam: customers.newCustomerParam,
 	}
 }
 
