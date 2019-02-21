@@ -136,6 +136,10 @@ class VerifiedDialogForm extends React.Component {
             data = this.props.verifications.Data.Invoices;
             selections =  this.props.aInvoiceSelections;
         }
+        else if(option==='customer') {
+            data = this.props.verifications.Data.Customers;
+            selections =  this.props.aCustomerSelections;
+        }
 
         let objects = selections.map(x=>data[x]);
 
@@ -150,6 +154,8 @@ class VerifiedDialogForm extends React.Component {
             await this.props.updateSelectedRowsLength([]);
         else if(option==='invoice')
             await this.props.updateInvoiceSelections([]);
+        else if(option==='customer')
+            await this.props.updateCustomerSelections([]);
 
         this.props.getInvoiceTransactionPendingLists(this.props.regionId, this.props.fromDate, this.props.toDate);
     };
@@ -237,6 +243,7 @@ function mapDispatchToProps(dispatch) {
         verifyBulkUpdate: Actions.verifyBulkUpdate,
         updateSelectedRowsLength: Actions.updateSelectedRowsLength,
         updateInvoiceSelections: Actions.updateInvoiceSelections,
+        updateCustomerSelections: Actions.updateCustomerSelections,
         getInvoiceTransactionPendingLists: Actions.getInvoiceTransactionPendingLists1,
     }, dispatch);
 }
@@ -248,6 +255,7 @@ function mapStateToProps({ verifications, auth}) {
         verifyOption: verifications.verifyOption,
         aInvoiceSelections: verifications.aInvoiceSelections,
         aTransactionSelections: verifications.aTransactionSelections,
+        aCustomerSelections: verifications.aCustomerSelections,
         regionId: auth.login.defaultRegionId,
         verifications: verifications.verificationsDB,
         fromDate: verifications.fromDate,
