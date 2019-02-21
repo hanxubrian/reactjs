@@ -85,6 +85,9 @@ export const UPDATE_ACTIVE_CUSTOMER_ASSIGNED_FRANCHISEES = "[CUSTOMERS APP] UPDA
 
 export const UPDATE_NEW_CUSTOMER_PARAM = "[CUSTOMERS APP] UPDATE_NEW_CUSTOMER_PARAM";
 
+export const SAVE_CANCEL_CONTRACT = "[CUSTOMERS APP] SAVE_CANCEL_CONTRACT";
+export const SAVE_SUSPEND_CONTRACT = "[CUSTOMERS APP] SAVE_SUSPEND_CONTRACT";
+
 export const OPEN_EDIT_CUSTOMER_SERVICE_FORM = "[CUSTOMERS-service APP] OPEN_EDIT_CUSTOMER_SERVICE_FORM";
 export const CLOSE_CUSTOMER_SERVICE_FORM = "[CUSTOMERS-service APP] CLOSE_CUSTOMER_SERVICE_FORM";
 
@@ -688,5 +691,28 @@ export function updateNewCustomerParam(name, value) {
 	return {
 		type: UPDATE_NEW_CUSTOMER_PARAM,
 		payload: { name, value }
+	}
+}
+
+export function saveCancelContract(regionId, cust_no, reason_id, reason_note, cancel_date) {
+	return (dispatch) => {
+		(async () => {
+			let response = await customersService.saveCancelContract(regionId, cust_no, reason_id, reason_note, cancel_date);
+			dispatch({
+				type: SAVE_CANCEL_CONTRACT,
+				payload: response
+			});
+		})();
+	}
+}
+export function saveSuspendContract(regionId, customerNo, reason_id, resume_date) {
+	return (dispatch) => {
+		(async () => {
+			let response = await customersService.saveSuspendContract(regionId, customerNo, reason_id, resume_date);
+			dispatch({
+				type: SAVE_SUSPEND_CONTRACT,
+				payload: response
+			});
+		})();
 	}
 }

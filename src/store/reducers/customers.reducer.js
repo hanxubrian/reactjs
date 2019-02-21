@@ -117,8 +117,8 @@ const CUSTOMER_CREATION_PAYLOAD = {
 		"add_pct": 0.0,
 		"ad_cur": 0.0,
 		"tech_pct": 0.0
-	  }
-	  
+	}
+
 }
 const initialState = {
 	customersDB: null,
@@ -885,6 +885,14 @@ const customers = function (state = initialState, action) {
 						[action.payload.name]: action.payload.value
 					}
 				}
+			};
+		case Actions.SAVE_CANCEL_CONTRACT:
+			return {
+				...state,
+			};
+		case Actions.SAVE_SUSPEND_CONTRACT:
+			return {
+				...state,
 			};
 		default:
 			{

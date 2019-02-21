@@ -511,6 +511,45 @@ fullbill: 0
 				})
 		});
 	}
+	saveCancelContract(regionId, cust_no, reason_id, reason_note, cancel_date) {
+		console.log("saveCancelContract", `${BASE_MONGO_API_URL}/v1/${regionId}/Customer/Cancel?cust_no=${cust_no}&reason_id=${reason_id}&reason_note=${reason_note}&cancel_date=${cancel_date}`)
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/Cancel?cust_no=${cust_no}&reason_id=${reason_id}&reason_note=${reason_note}&cancel_date=${cancel_date}`)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
+	saveSuspendContract(regionId, id, reason_id, resume_date) {
+		const params = {
+			id,
+			reason_id,
+			resume_date,
+		}
+		console.log("saveSuspendContract", `${BASE_MONGO_API_URL}/v1/${regionId}/Customer/Suspend?id=${id}&reason_id=${reason_id}&resume_date=${resume_date}`)
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/Suspend?id=${id}&reason_id=${reason_id}&resume_date=${resume_date}`)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
 }
 
 

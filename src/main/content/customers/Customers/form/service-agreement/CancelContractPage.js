@@ -321,38 +321,38 @@ class CancelContractPage extends React.Component {
 
 			EffectiveDate: moment().format('YYYY-MM-DD'),
 			SA_Amount: '',
-			notes: '',
+			note: '',
 			increaseReasons: null,
 			decreaseReasons: null,
 			cancelationReasons: null,
 
 			bReasonForHigh: false,
-			reason: '',
+			reason: 0,
 			NewAmount: this.props.NewAmount,
 		};
 		// this.commitChanges = this.commitChanges.bind(this);
-		if (!props.bLoadedFranchisees) {
-			props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
-		}
+		// if (!props.bLoadedFranchisees) {
+		// 	props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
+		// }
 
-		this.props.getLogCallCustomerServiceTypes()
+		// this.props.getLogCallCustomerServiceTypes()
 
-		this.props.getFranchiseeServiceTypes(this.props.regionId)
-		this.props.getFranchiseeBillingTypes(this.props.regionId)
+		// this.props.getFranchiseeServiceTypes(this.props.regionId)
+		// this.props.getFranchiseeBillingTypes(this.props.regionId)
 	}
 
 	componentWillMount() {
 		console.log("componentWillMount")
-		this.props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
-		this.getFranchiseesFromStatus();
+		// this.props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
+		// this.getFranchiseesFromStatus();
 
-		this.setRowData(this.props.payments)
+		// this.setRowData(this.props.payments)
 
-		this.setState({
-			customerServiceTypes: this.props.lists.customerServiceTypes,
-			franchiseeServiceTypes: this.props.lists.franchiseeServiceTypes,
-			franchiseeBillingTypes: this.props.lists.franchiseeBillingTypes,
-		})
+		// this.setState({
+		// 	customerServiceTypes: this.props.lists.customerServiceTypes,
+		// 	franchiseeServiceTypes: this.props.lists.franchiseeServiceTypes,
+		// 	franchiseeBillingTypes: this.props.lists.franchiseeBillingTypes,
+		// })
 
 	}
 	componentDidMount() {
@@ -362,46 +362,46 @@ class CancelContractPage extends React.Component {
 			.then(response => response.json())
 			.then(data => this.setState({ cancelationReasons: data.Data }));
 
-		this.setState({
-			paymentDlgPayloads: this.props.paymentDlgPayloads,
-			PaymentAmount: this.props.paymentDlgPayloads.paymentAmount,
-			PaymentType: this.props.paymentDlgPayloads.paymentType
-		})
+		// this.setState({
+		// 	paymentDlgPayloads: this.props.paymentDlgPayloads,
+		// 	PaymentAmount: this.props.paymentDlgPayloads.paymentAmount,
+		// 	PaymentType: this.props.paymentDlgPayloads.paymentType
+		// })
 
 		// if (this.props.bOpenPaymentDialog === true) {
 		// 	this.checkValidations()
 		// }
 	}
 	UNSAFE_componentWillReceiveProps(nextProps) {
-		if (nextProps.payments !== this.props.payments) {
-			console.log("componentWillReceiveProps payments")
-			this.setRowData(nextProps.payments)
-		}
-		if (!_.isEqual(nextProps.activePaymentRows, this.props.activePaymentRows)) {
-			console.log("componentWillReceiveProps activePaymentRows", nextProps.activePaymentRows, this.props.activePaymentRows)
-			this.setRowData(this.props.payments, nextProps.activePaymentRows)
-		}
-		if (!_.isEqual(nextProps.paymentDlgPayloads, this.props.paymentDlgPayloads)) {
-			this.setState({
-				paymentDlgPayloads: nextProps.paymentDlgPayloads,
-				PaymentAmount: nextProps.paymentDlgPayloads.paymentAmount,
-				PaymentType: nextProps.paymentDlgPayloads.paymentType
-			})
+		// if (nextProps.payments !== this.props.payments) {
+		// 	console.log("componentWillReceiveProps payments")
+		// 	this.setRowData(nextProps.payments)
+		// }
+		// if (!_.isEqual(nextProps.activePaymentRows, this.props.activePaymentRows)) {
+		// 	console.log("componentWillReceiveProps activePaymentRows", nextProps.activePaymentRows, this.props.activePaymentRows)
+		// 	this.setRowData(this.props.payments, nextProps.activePaymentRows)
+		// }
+		// if (!_.isEqual(nextProps.paymentDlgPayloads, this.props.paymentDlgPayloads)) {
+		// 	this.setState({
+		// 		paymentDlgPayloads: nextProps.paymentDlgPayloads,
+		// 		PaymentAmount: nextProps.paymentDlgPayloads.paymentAmount,
+		// 		PaymentType: nextProps.paymentDlgPayloads.paymentType
+		// 	})
 
-			// if (nextProps.bOpenPaymentDialog === true) {
-			// 	this.checkValidations()
-			// }
-		}
-		if (nextProps.regionId !== this.props.regionId) {
-			this.props.getFranchiseeServiceTypes(nextProps.regionId)
-			this.props.getFranchiseeBillingTypes(nextProps.regionId)
-		}
-		if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
-			this.initCustomerInfo(nextProps.activeCustomer)
-		}
-		if (!_.isEqual(this.props.franchisees, nextProps.franchisees)) {
-			this.getFranchiseesFromStatus(nextProps.franchisees);
-		}
+		// 	// if (nextProps.bOpenPaymentDialog === true) {
+		// 	// 	this.checkValidations()
+		// 	// }
+		// }
+		// if (nextProps.regionId !== this.props.regionId) {
+		// 	this.props.getFranchiseeServiceTypes(nextProps.regionId)
+		// 	this.props.getFranchiseeBillingTypes(nextProps.regionId)
+		// }
+		// if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
+		// 	this.initCustomerInfo(nextProps.activeCustomer)
+		// }
+		// if (!_.isEqual(this.props.franchisees, nextProps.franchisees)) {
+		// 	this.getFranchiseesFromStatus(nextProps.franchisees);
+		// }
 	}
 	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer) => {
 		if (activeCustomerInfo && activeCustomerInfo.Data)
@@ -816,33 +816,35 @@ class CancelContractPage extends React.Component {
 		this.handleStep(0)
 	}
 
-	saveIncreaseDecrease = () => {
+	saveCancelContract = () => {
 		let CustomerNo = this.props.activeCustomer.Data.cust_no;
-		let NewMonthlyContractAmount = parseFloat(this.state.NewAmount);
-		let Note = this.state.notes;
-		let EffectiveDate = moment(this.state.EffectiveDate).format('YYYY-MM-DD');
-		this.props.getIncreaseDecrease(this.props.regionId, { CustomerNo, NewMonthlyContractAmount, Note, EffectiveDate });
-		this.props.updateCustomersParameter('NewAmount', 0);
-		this.setState({ reason: '', notes: '', NewAmount: '', EffectiveDate: moment().format('YYYY-MM-DD') });
-		this.props.getCustomer(this.props.regionId, this.props.activeCustomer.Data._id);
+		const { reason, note } = this.state
+		let EffectiveDate = moment(this.state.EffectiveDate).format('mm/dd/yyyy');
+
+		this.props.saveCancelContract(this.props.regionId, CustomerNo, reason, note, EffectiveDate);
+		// this.props.updateCustomersParameter('NewAmount', 0);
+		// this.setState({ reason: '', notes: '', NewAmount: '', EffectiveDate: moment().format('YYYY-MM-DD') });
+		// this.props.getCustomer(this.props.regionId, this.props.activeCustomer.Data._id);
+		this.handleClose()
+
 	};
 
 	handleStepFindersFeesForm = () => {
 		this.handleStep(2)
 	};
 
-	renderReasons = () => {
+	renderReasons() {
 		const { classes } = this.props;
 		let items = this.state.cancelationReasons;
 		// if (this.state.bReasonForHigh)
 		// 	items = this.state.increaseReasons;
-
+		console.log("cancelationReasons", items)
 		return (
 			<TextField margin="dense" id="Reason" label="Reason" name="reason"
 				select
 				InputLabelProps={{ shrink: true }}
-				value={this.state.reason}
-				onChange={this.handleChange1}
+				value={this.state.reason || 0}
+				onChange={this.handleChange('reason')}
 				className={classNames(classes.textField, "pl-6 flex-1")}
 				InputProps={{ readOnly: false }}
 				SelectProps={{
@@ -851,11 +853,8 @@ class CancelContractPage extends React.Component {
 					},
 				}}
 			>
-				{items.map(item => (
-					<MenuItem key={item.ReasonNumber} value={item.ReasonNumber}>
-						{item.name}
-					</MenuItem>
-				)
+				{items.map((x, index) => (
+					<MenuItem key={index} value={x.ReasonNumber}>{x.name}</MenuItem>)
 				)}
 			</TextField>
 		)
@@ -883,11 +882,9 @@ class CancelContractPage extends React.Component {
 
 					<Typography variant="h6">Cancelation</Typography>
 
-					<div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-						<Button variant="contained" onClick={this.saveIncreaseDecrease}
-							// disabled={this.state.NewAmount === ''}
-							color="primary" className={classNames("pl-24 pr-24 mr-12")}>Save</Button>
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
+					<div className="flex items-center">
+						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")} style={{ backgroud: '#ec3c3c' }}><Icon>keyboard_arrow_left</Icon>Back</Button>
+						<Button variant="contained" onClick={this.saveCancelContract} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
 					</div>
 
 				</div>
@@ -920,11 +917,10 @@ class CancelContractPage extends React.Component {
 					<TextField
 						type="date"
 						id="EffectiveDate"
-						value={this.state.EffectiveDate}
 						label="Effective Date"
 						className={classNames(classes.textField, 'ml-24')}
 						InputLabelProps={{ shrink: true }}
-						value={this.state.EffectiveDate}
+						value={this.state.EffectiveDate || ''}
 						onChange={this.handleChange('EffectiveDate')}
 						margin="dense"
 					/>
@@ -936,12 +932,12 @@ class CancelContractPage extends React.Component {
 				</div>
 				<div className={classNames("flex mt-12 justify-start w-full")}>
 					<TextField
-						id="notes"
-						name="notes"
+						id="note"
+						name="note"
 						label="Note"
 						className={classes.textField}
-						value={this.state.notes}
-						onChange={this.handleChange1}
+						value={this.state.note || ''}
+						onChange={this.handleChange('note')}
 						margin="dense"
 						variant="outlined"
 						fullWidth
@@ -1428,19 +1424,22 @@ class CancelContractPage extends React.Component {
 
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
-		openPaymentDialog: Actions.openPaymentDialog,
-		createAccountReceivablePayment: Actions.createAccountReceivablePayment,
+		// openPaymentDialog: Actions.openPaymentDialog,
+		// createAccountReceivablePayment: Actions.createAccountReceivablePayment,
 
 		showCancelContractPage: Actions.showCancelContractPage,
 
-		getLogCallCustomerServiceTypes: Actions.getLogCallCustomerServiceTypes,
+		// getLogCallCustomerServiceTypes: Actions.getLogCallCustomerServiceTypes,
 
 		getFranchiseeServiceTypes: Actions.getFranchiseeServiceTypes,
 		getFranchiseeBillingTypes: Actions.getFranchiseeBillingTypes,
 		getFranchisees: Actions.getFranchisees,
 		updateCustomersParameter: Actions.updateCustomersParameter,
-		getIncreaseDecrease: Actions.getIncreaseDecrease,
+		// getIncreaseDecrease: Actions.getIncreaseDecrease,
 		getCustomer: Actions.getCustomer,
+
+		saveCancelContract: Actions.saveCancelContract,
+
 	}, dispatch);
 }
 
@@ -1455,15 +1454,15 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 		SearchText: franchisees.SearchText,
 		bLoadedFranchisees: franchisees.bLoadedFranchisees,
 
-		bOpenPaymentDialog: accountReceivablePayments.bOpenPaymentDialog,
-		activePaymentRows: accountReceivablePayments.activePaymentRows,
+		// bOpenPaymentDialog: accountReceivablePayments.bOpenPaymentDialog,
+		// activePaymentRows: accountReceivablePayments.activePaymentRows,
 
-		payments: accountReceivablePayments.ACC_payments,
+		// payments: accountReceivablePayments.ACC_payments,
 
-		filterParam: accountReceivablePayments.filterParam,
-		searchText: accountReceivablePayments.searchText,
+		// filterParam: accountReceivablePayments.filterParam,
+		// searchText: accountReceivablePayments.searchText,
 
-		paymentDlgPayloads: accountReceivablePayments.paymentDlgPayloads,
+		// paymentDlgPayloads: accountReceivablePayments.paymentDlgPayloads,
 
 		lists: customers.lists,
 		franchieesesToOffer: customers.franchieesesToOffer,
@@ -1471,7 +1470,7 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 
 		franchisees: franchisees.franchiseesDB,
 		NewAmount: customers.NewAmount,
-		increase_decrease: customers.increase_decrease,
+		// increase_decrease: customers.increase_decrease,
 	}
 }
 
