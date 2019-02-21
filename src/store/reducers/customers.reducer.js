@@ -70,7 +70,7 @@ const initialState = {
 		isOpenFilterPanel: false,
 		isOpenSummaryPanel: false,
 		open: false,
-		
+
 		serviceList: {
 			data: [],
 			isFetching: false,
@@ -133,140 +133,68 @@ const initialState = {
 	activeCustomerFranchisees: null,
 
 	newCustomerParam: {
-		"Latitude": 2.1,
-		"Longitude": 3.1,
+		"Latitude": "",
+		"Longitude": "",
 		"CPIBillingAppliedDate": "",
-		"lastModified": "2019-02-19T09:08:43.8991538-06:00",
-		"cleaning_start_time": "2019-02-19T09:08:43.8991538-06:00",
+		"lastModified": "",
+		"cleaning_start_time": "",
 		"cleaning_instructions": "",
-		"overpayment": 8.1,
-		"billing_term": 9,
-		"contract_lenght": 10,
+		"overpayment": "",
+		"billing_term": "",
+		"contract_lenght": "",
 		"AssignedFranchisees": [
-			{
-				"FranchiseeNumber": "",
-				"FranchiseeName": "",
-				"Id": "",
-				"FinderFeeId": "",
-				"Status": "",
-				"AssignedDate": "",
-				"MonthlyBilling": [
-					{
-						"EscrowBilling": true,
-						"Status": "",
-						"BillingFrequency": "",
-						"BillingTypeServiceId": "",
-						"BillingTypeId": "",
-						"Description": "",
-						"MonthlyBilling": 7.1
-					},
-					{
-						"EscrowBilling": true,
-						"Status": "",
-						"BillingFrequency": "",
-						"BillingTypeServiceId": "",
-						"BillingTypeId": "",
-						"Description": "",
-						"MonthlyBilling": 7.1
-					}
-				],
-				"CreatedById": 7
-			},
-			{
-				"FranchiseeNumber": "",
-				"FranchiseeName": "",
-				"Id": "",
-				"FinderFeeId": "",
-				"Status": "",
-				"AssignedDate": "",
-				"MonthlyBilling": [
-					{
-						"EscrowBilling": true,
-						"Status": "",
-						"BillingFrequency": "",
-						"BillingTypeServiceId": "",
-						"BillingTypeId": "",
-						"Description": "",
-						"MonthlyBilling": 7.1
-					},
-					{
-						"EscrowBilling": true,
-						"Status": "",
-						"BillingFrequency": "",
-						"BillingTypeServiceId": "",
-						"BillingTypeId": "",
-						"Description": "",
-						"MonthlyBilling": 7.1
-					}
-				],
-				"CreatedById": 7
-			}
+			// {
+			// 	"FranchiseeNumber": "",
+			// 	"FranchiseeName": "",
+			// 	"Id": "",
+			// 	"FinderFeeId": "",
+			// 	"Status": "",
+			// 	"AssignedDate": "",
+			// 	"MonthlyBilling": [
+			// 		{
+			// 			"EscrowBilling": "",
+			// 			"Status": "",
+			// 			"BillingFrequency": "",
+			// 			"BillingTypeServiceId": "",
+			// 			"BillingTypeId": "",
+			// 			"Description": "",
+			// 			"MonthlyBilling": ""
+			// 		},
+			// 	],
+			// 	"CreatedById": ""
+			// },
 		],
 		"AccountOfferings": [
-			{
-				"FranchiseeNumber": "",
-				"FranchiseeName": "",
-				"Type": "",
-				"Response": "",
-				"OfferDate": "",
-				"ReplyDeadlineDateTime": "",
-				"ResponseDate": "",
-				"AssignedDate": "",
-				"MonthlyBillingOffered": 9.1,
-				"CreatedById": 10
-			},
-			{
-				"FranchiseeNumber": "",
-				"FranchiseeName": "",
-				"Type": "",
-				"Response": "",
-				"OfferDate": "",
-				"ReplyDeadlineDateTime": "",
-				"ResponseDate": "",
-				"AssignedDate": "",
-				"MonthlyBillingOffered": 9.1,
-				"CreatedById": 10
-			}
+			// {
+			// 	"FranchiseeNumber": "",
+			// 	"FranchiseeName": "",
+			// 	"Type": "",
+			// 	"Response": "",
+			// 	"OfferDate": "",
+			// 	"ReplyDeadlineDateTime": "",
+			// 	"ResponseDate": "",
+			// 	"AssignedDate": "",
+			// 	"MonthlyBillingOffered": "",
+			// 	"CreatedById": ""
+			// },
 		],
 		"pmt_history": [
-			{
-				"PaymentType": "",
-				"ReferenceNo": "",
-				"PaymentDate": "2019-02-19T09:08:43.8991538-06:00",
-				"Note": "",
-				"Amount": 5.1,
-				"AmountApplied": 6.1,
-				"PayItems": [
-					{
-						"InvoiceNo": "",
-						"Amount": 2.1
-					},
-					{
-						"InvoiceNo": "",
-						"Amount": 2.1
-					}
-				]
-			},
-			{
-				"PaymentType": "",
-				"ReferenceNo": "",
-				"PaymentDate": "2019-02-19T09:08:43.8991538-06:00",
-				"Note": "",
-				"Amount": 5.1,
-				"AmountApplied": 6.1,
-				"PayItems": [
-					{
-						"InvoiceNo": "",
-						"Amount": 2.1
-					},
-					{
-						"InvoiceNo": "",
-						"Amount": 2.1
-					}
-				]
-			}
+			// {
+			// 	"PaymentType": "",
+			// 	"ReferenceNo": "",
+			// 	"PaymentDate": "",
+			// 	"Note": "",
+			// 	"Amount": "",
+			// 	"AmountApplied": "",
+			// 	"PayItems": [
+			// 		{
+			// 			"InvoiceNo": "",
+			// 			"Amount": ""
+			// 		},
+			// 	]
+			// },
 		],
-		"sys_cust": 11,
+		"sys_cust": "",
 		"company_no": "",
 		"dlr_code": "",
 		"cust_no": "",
@@ -338,24 +266,24 @@ const initialState = {
 		"coll_rep": "",
 		"inv_msg": "",
 		"masteracct": "",
-		"parent": 83,
-		"xregionid": 84,
-		"xsys_cust": 85,
+		"parent": "",
+		"xregionid": "",
+		"xsys_cust": "",
 		"cpiadj": "",
 		"resume_d": "",
 		"natacct": "",
 		"cus_ext": "",
 		"bill_ext": "",
-		"sqr_ft": 91,
+		"sqr_ft": "",
 		"agreeused": "",
 		"arstatus": "",
 		"arstatdate": "",
 		"notes": "",
 		"claimstat": "",
-		"business": 97.1,
-		"add_pct": 98.1,
-		"ad_cur": 99.1,
-		"tech_pct": 100.1
+		"business": "",
+		"add_pct": "",
+		"ad_cur": "",
+		"tech_pct": ""
 	}
 };
 
