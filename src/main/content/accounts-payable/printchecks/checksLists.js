@@ -132,6 +132,11 @@ class PrintChecksLists extends Component {
         this.props.updateSelections(selection);
     };
 
+    resetSelection = ()=> {
+        this.setState({ selection: [] });
+        this.props.updateSelections([]);
+    };
+
 
     componentDidMount()
     {

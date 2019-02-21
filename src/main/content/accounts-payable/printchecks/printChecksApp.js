@@ -1,23 +1,30 @@
 import React, {Component, Fragment} from 'react';
-import {
-    Icon,
-    Typography,
-    Button, CircularProgress, Hidden, Paper, Input
+
+//Material-UI core
+import { Icon, Typography, Button, CircularProgress, Hidden, Paper, Input, TextField,
+    Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText
 } from '@material-ui/core';
+
 import {FusePageCustomSidebarScroll, FuseAnimate} from '@fuse';
 import {bindActionCreators} from "redux";
 import {withStyles} from "@material-ui/core";
 import {withRouter} from 'react-router-dom';
+
 // for store
 import connect from "react-redux/es/connect/connect";
 import * as Actions from 'store/actions';
 
+//3rd party
 import "react-table/react-table.css";
 import classNames from 'classnames';
+import _ from "lodash";
 
 import ChecksLists from './checksLists';
 import FilterPanel from "./printChecksFilterPanel";
-import _ from "lodash";
+import 'date-fns'
+import MomentUtils from '@date-io/moment';
+import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
+import moment from "moment";
 
 const headerHeight = 80;
 
@@ -199,7 +206,9 @@ const styles = theme => ({
 class PrintChecksLayout extends Component {
     state={
         s: '',
-        selection: []
+        selection: [],
+        openPrintModal: false,
+        checkdate: moment().format('MM/DD/YYYY')
     };
 
     constructor(props) {
@@ -239,6 +248,7 @@ class PrintChecksLayout extends Component {
     }
 
     print = () => {
+        this.setState({openPrintModal: true});
         let imgUrl ='https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
         // const input = document.getElementById('wholediv');
         // this.child.downloadPDF(input, imgUrl);
@@ -250,9 +260,19 @@ class PrintChecksLayout extends Component {
 
     handleChange = prop => event => {
         this.setState({ [prop]: event.target.value });
-        if(this.child!==undefined) {
-            console.log('this.child.state=', this.child.state);
-        }
+    };
+
+    handleClose = ()=>{
+        this.setState({openPrintModal: false})
+    };
+
+    handlePrint = ()=>{
+        this.setState({openPrintModal: false});
+        this.child.resetSelection();
+    };
+
+    handleCheckDateDateChange = date => {
+        this.setState({checkdate: date});
     };
 
     render() {
@@ -352,6 +372,38 @@ class PrintChecksLayout extends Component {
                                 </div>
                                 <ChecksLists onRef={ref => (this.child = ref)}/>
                             </div>
+                            <Dialog open={this.state.openPrintModal} onClose={this.handleClose} aria-labelledby="form-dialog-title" fullWidth maxWidth={'sm'}>
+                                <DialogTitle id="form-dialog-title">Setup CheckDate</DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText className="mb-16">
+                                        To print selected checks, please click Print Button
+                                    </DialogContentText>
+                                    <MuiPickersUtilsProvider utils={MomentUtils}>
+                                        <div className="flex flex-col">
+                                            <DatePicker
+                                                margin="none"
+                                                label="Check Date"
+                                                name="checkdate"
+                                                variant="outlined"
+                                                format="MM/DD/YYYY"
+                                                value={this.state.checkdate}
+                                                onChange={this.handleCheckDateDateChange}
+                                                fullWidth
+                                                required
+                                                color="secondary"
+                                            />
+                                        </div>
+                                    </MuiPickersUtilsProvider>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={this.handleClose} color="primary">
+                                        Cancel
+                                    </Button>
+                                    <Button onClick={this.handlePrint} color="primary">
+                                        Print
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
                         </div>
                     }
                     leftSidebarHeader={
@@ -380,6 +432,7 @@ class PrintChecksLayout extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getCheckDetailByType: Actions.getCheckDetailByType,
+        updateSelections: Actions.updateSelections,
     }, dispatch);
 }
 

@@ -59,6 +59,6 @@ const printChecks = function(state = initialState, action) {
 const persistConfig = {
     key: 'printChecks',
     storage: storage,
-    blacklist: ['printChecksDB', 'printChecksDetail']
+    blacklist: ['printChecksDB', 'printChecksDetail', 'selections']
 };
 export default persistReducer(persistConfig, printChecks);
