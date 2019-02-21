@@ -201,10 +201,11 @@ const styles = theme => ({
         width: '100%',
         height: '100vh',
         zIndex: 1000,
+        backgroundColor: 'rgba(0,0,0, .9)',
         alignItems: 'center',
         justifyContent: 'center',
         display: 'flex',
-        opacity: 1
+        opacity: 0.8
     },
     validationMenu: {
         color: "#07DF07",
@@ -229,7 +230,7 @@ class PrintChecksLayout extends Component {
         selection: [],
         openPrintModal: false,
         checkdate: moment().format('MM/DD/YYYY'),
-        completed: 0,
+        completed: 10,
         bPrint: false
     };
 
@@ -291,7 +292,7 @@ class PrintChecksLayout extends Component {
     handlePrint = ()=>{
         this.setState({openPrintModal: false});
         this.setState({bPrint: true});
-        this.setState({completed: 0});
+        this.setState({completed: 10});
         this.child.resetSelection();
         timer = setInterval(this.progress, 500);
     };
@@ -455,14 +456,14 @@ class PrintChecksLayout extends Component {
                 >
                 </FusePageCustomSidebarScroll>
                 {(this.props.bStartFetchList_pc) && (
-                    <div className={classes.overlay1}>
+                    <div className={classes.overlay}>
                         <CircularProgress className={classes.progress} color="secondary"  />
                     </div>
                 )}
                 {this.state.bPrint && (
-                    <div className={classNames(classes.overlay, classes.wrapProgress, "flex flex-col items-center")}>
+                    <div className={classNames(classes.overlay1, classes.wrapProgress, "flex flex-col items-center")}>
                         <LinearProgress variant="determinate" value={this.state.completed} />
-                        <Typography variant={"h3"}>Pringting</Typography>
+                        <Typography variant={"h5"}>Pringting</Typography>
                     </div>
                 )}
             </React.Fragment>
