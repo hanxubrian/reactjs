@@ -15,19 +15,19 @@ const initialState = {
 
 const printChecks = function(state = initialState, action) {
     switch ( action.type ) {
-        case Actions.GET_PRINT_CHECKS_DETAIL: {
+        case Actions.GET_ALL_PRINT_CHECKS_LIST: {
             return {
-                ...state, printChecksDetail: action.payload, bLoadedPrintChecksDetail: true, bStartFetchDetail_pc: false,
+                ...state, printChecksDB: action.payload, bLoadedPrintChecksDetail: true, bStartFetchDetail_pc: false,
             };
         }
-        case Actions.GET_PRINT_CHECKS_DETAIL_ERROR: {
+        case Actions.GET_ALL_PRINT_CHECKS_LIST_ERROR: {
             return {
-                ...state, printChecksDetail: null, bLoadedPrintChecksDetail: true, bStartFetchDetail_pc: false
+                ...state, printChecksDB: null, bLoadedPrintChecksDetail: true, bStartFetchDetail_pc: false
             };
         }
-        case Actions.START_FETCH_PRINT_CHECKS_DETAIL: {
+        case Actions.START_FETCH_PRINT_CHECKS_LIST: {
             return {
-                ...state, printChecksDetail: null, bStartFetchDetail_pc: true
+                ...state, printChecksDB: null, bStartFetchDetail_pc: true
             };
         }
         case UserActions.USER_LOGGED_OUT:{
