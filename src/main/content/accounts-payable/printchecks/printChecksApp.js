@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import {
     Icon,
     Typography,
-    Button, CircularProgress
+    Button, CircularProgress, Hidden, Paper, Input
 } from '@material-ui/core';
 import {FusePageCustomSidebarScroll, FuseAnimate} from '@fuse';
 import {bindActionCreators} from "redux";
@@ -18,6 +18,7 @@ import classNames from 'classnames';
 import ChecksLists from './checksLists';
 import FilterPanel from "./printChecksFilterPanel";
 import moment from "moment";
+import _ from "lodash";
 
 const headerHeight = 80;
 
@@ -197,13 +198,16 @@ const styles = theme => ({
 });
 
 class PrintChecksLayout extends Component {
+    state={
+        s: ''
+    };
+
     constructor(props) {
         super(props);
         if(props.printChecksDB===null) {
             const {regionId, paymentDate, checkDate, checktypeId, entityTypeId, year, month} = props;
             props.getCheckDetailByType(regionId, checktypeId, entityTypeId, month, year, paymentDate, checkDate);
         }
-
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -250,6 +254,12 @@ class PrintChecksLayout extends Component {
     render() {
 
         const {classes, bPaymentLogFilterPanelOpen, summaryState} = this.props;
+        let menuItem = null;
+
+        if(this.props.navigation.length>0){
+            let menu = _.filter(this.props.navigation, n=>n.Slug==='accounts-payable');
+            if(menu.length>0) menuItem = menu[0];
+        }
 
         return (
             <React.Fragment>
@@ -269,7 +279,7 @@ class PrintChecksLayout extends Component {
 
                                     <div className="flex flex-shrink items-center">
                                         <div className="flex items-center">
-                                            <Icon className="text-32 mr-12">list_alt</Icon>
+                                            <Icon className="text-32 mr-12">{menuItem!==null ? menuItem.Icon : 'list_alt'}</Icon>
                                             <Typography variant="h6" className="hidden sm:flex">Check Printing</Typography>
                                         </div>
 
@@ -295,9 +305,48 @@ class PrintChecksLayout extends Component {
                     content={
                         <div className="flex flex-1 flex-col absolute w-full h-full">
                             <div className={classNames("flex flex-col h-full")}>
-                                <Fragment>
-                                    <ChecksLists onRef={ref => (this.child = ref)}/>
-                                </Fragment>
+                                <div className="flex flex-row items-center p-12">
+                                    <div className="flex justify-start items-center">
+                                        <Hidden smDown>
+                                            <Button
+                                                // onClick={(ev) => toggleFilterPanel()}
+                                                aria-label="toggle filter panel"
+                                                color="secondary"
+                                                disabled={this.props.bSettingPanel ? true : false}
+                                                className={classNames(classes.filterPanelButton)}
+                                            >
+                                                <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
+                                            </Button>
+                                        </Hidden>
+                                        <Hidden smUp>
+                                            <Button
+                                                onClick={(ev) => this.pageLayout.toggleLeftSidebar()}
+                                                aria-label="toggle filter panel"
+                                                className={classNames(classes.filterPanelButton)}
+                                            >
+                                                <img className={classes.imageIcon} src="assets/images/invoices/filter.png" alt="filter"/>
+                                            </Button>
+                                        </Hidden>
+                                    </div>
+                                    <div className="flex items-center w-full h-44 mr-12 ml-12">
+                                        <Paper className={"flex items-center h-44 w-full lg:mr-12 xs:mr-0"} elevation={1}>
+                                            <Input
+                                                placeholder="Search..."
+                                                className={classNames(classes.search, 'pl-16')}
+                                                // className="pl-16"
+                                                disableUnderline
+                                                fullWidth
+                                                value={this.state.s}
+                                                // onChange={this.handleChange('s')}
+                                                inputProps={{
+                                                    'aria-label': 'Search'
+                                                }}
+                                            />
+                                            <Icon color="action" className="mr-16">search</Icon>
+                                        </Paper>
+                                    </div>
+                                </div>
+                                <ChecksLists onRef={ref => (this.child = ref)}/>
                             </div>
                         </div>
                     }
@@ -330,10 +379,9 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-function mapStateToProps({auth, printChecks}) {
+function mapStateToProps({auth, printChecks, fuse}) {
     return {
         regionId: auth.login.defaultRegionId,
-        bPrintCheckSettingPanel: printChecks.bSettingPanel,
         bStartFetchList_pc: printChecks.bStartFetchList_pc,
         checkDate: printChecks.checkDate,
         paymentDate: printChecks.paymentDate,
@@ -343,6 +391,7 @@ function mapStateToProps({auth, printChecks}) {
         year: printChecks.year,
         month: printChecks.month,
         bSettingPanel: printChecks.bSettingPanel,
+        navigation: fuse.navigation
     }
 }
 
