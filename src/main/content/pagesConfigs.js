@@ -14,6 +14,7 @@ import {ContractsConfig} from "./customers/Contracts/contractsConfig";
 import {CustomersConfig} from "./customers/Customers/customersConfig";
 import {InspectionsConfig} from "./operations/inspections/inspectionsConfig";
 import {OperationsConfig} from "./operations/operations/operationsConfig";
+import {PrintChecksConfig} from "./operations/printchecks/printChecksAppConfig";
 import {SalesConfig} from "./sales/sales/salesConfig";
 import {CallListConfig} from "./sales/call-list/call-listConfig";
 import {LeadsConfig} from "./sales/leads/leadsConfig";
@@ -67,6 +68,7 @@ export const pagesConfigs = [
     InvoiceConfig,
     PaymentsConfig,
     ArLogConfig,
+    PrintChecksConfig,
     BillRunConfig,
     AccountsReceivableConfig,
     ReportsConfig,
