@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 import _ from 'lodash'
 
+const CUSTOMER_CREATION_PAYLOAD = { Data: { "Latitude": "", "Longitude": "", "CPIBillingAppliedDate": "", "lastModified": "", "cleaning_start_time": "", "cleaning_instructions": "", "overpayment": "", "billing_term": "", "contract_lenght": "", "AssignedFranchisees": [], "AccountOfferings": [], "pmt_history": [], "sys_cust": "", "company_no": "", "dlr_code": "", "cust_no": null, "cus_name": "", "cus_addr": "", "cus_city": "", "cus_county": "", "cus_state": "", "cus_zip": "", "cus_phone": "", "bill_name": "", "bill_addr": "", "bill_city": "", "bill_state": "", "bill_zip": "", "bill_name2": "", "bill_addr2": "", "bill_phone": "", "cus_name2": "", "cus_addr2": "", "class_type": "", "royalty": "", "sales_tax": "", "cont_1": "", "cont_2": "", "cont_bill": "", "date_sign": "", "flag": "", "misc_info": "", "misc_info2": "", "po_1": "", "slsmn_no": "", "add_on": "", "cont_tax": "", "exp_date": "", "cleantimes": "", "cleanper": "", "firstfran": "", "firstdate": "", "secondfran": "", "seconddate": "", "crteinv": "", "prntpd": "", "tax_exempt": "", "canc_date": "", "canreason": "", "candescr": "", "callbdate": "", "cscallbdat": "", "ops_mgr": "", "cus_fax": "", "bill_fax": "", "cs_rep": "", "date_start": "", "date_offer": "", "mon": "", "tue": "", "wed": "", "thu": "", "fri": "", "sat": "", "sun": "", "email1": "", "email2": "", "ebill": "", "prntinv": "", "atrisk": "", "canentdat": "", "coll_rep": "", "inv_msg": "", "masteracct": "", "parent": "", "xregionid": "", "xsys_cust": "", "cpiadj": "", "resume_d": "", "natacct": "", "cus_ext": "", "bill_ext": "", "sqr_ft": "", "agreeused": "", "arstatus": "", "arstatdate": "", "notes": "", "claimstat": "", "business": "", "add_pct": "", "ad_cur": "", "tech_pct": "", "last_action": "", "needs_distribution_update": "" } }
 const initialState = {
 	customersDB: null,
 	customersDocuments: null,
@@ -104,6 +105,7 @@ const initialState = {
 		franchiseeServiceTypes: [],
 	},
 	activeCustomer: {
+		Data: {}
 	},
 	flags: {
 		isCustomerServiceCreate: false,
@@ -133,15 +135,7 @@ const initialState = {
 	activeCustomerFranchisees: null,
 
 	newCustomerParam: {
-		"Latitude": "",
-		"Longitude": "",
-		"CPIBillingAppliedDate": "",
-		"lastModified": "",
-		"cleaning_start_time": "",
-		"cleaning_instructions": "",
-		"overpayment": "",
-		"billing_term": "",
-		"contract_lenght": "",
+		"Latitude": "", "Longitude": "", "CPIBillingAppliedDate": "", "lastModified": "", "cleaning_start_time": "", "cleaning_instructions": "", "overpayment": "", "billing_term": "", "contract_lenght": "",
 		"AssignedFranchisees": [
 			// {
 			// 	"FranchiseeNumber": "",
@@ -194,98 +188,7 @@ const initialState = {
 			// 	]
 			// },
 		],
-		"sys_cust": "",
-		"company_no": "",
-		"dlr_code": "",
-		"cust_no": null,
-		"cus_name": "",
-		"cus_addr": "",
-		"cus_city": "",
-		"cus_county": "",
-		"cus_state": "",
-		"cus_zip": "",
-		"cus_phone": "",
-		"bill_name": "",
-		"bill_addr": "",
-		"bill_city": "",
-		"bill_state": "",
-		"bill_zip": "",
-		"bill_name2": "",
-		"bill_addr2": "",
-		"bill_phone": "",
-		"cus_name2": "",
-		"cus_addr2": "",
-		"class_type": "",
-		"royalty": "",
-		"sales_tax": "",
-		"cont_1": "",
-		"cont_2": "",
-		"cont_bill": "",
-		"date_sign": "",
-		"flag": "",
-		"misc_info": "",
-		"misc_info2": "",
-		"po_1": "",
-		"slsmn_no": "",
-		"add_on": "",
-		"cont_tax": "",
-		"exp_date": "",
-		"cleantimes": "",
-		"cleanper": "",
-		"firstfran": "",
-		"firstdate": "",
-		"secondfran": "",
-		"seconddate": "",
-		"crteinv": "",
-		"prntpd": "",
-		"tax_exempt": "",
-		"canc_date": "",
-		"canreason": "",
-		"candescr": "",
-		"callbdate": "",
-		"cscallbdat": "",
-		"ops_mgr": "",
-		"cus_fax": "",
-		"bill_fax": "",
-		"cs_rep": "",
-		"date_start": "",
-		"date_offer": "",
-		"mon": "",
-		"tue": "",
-		"wed": "",
-		"thu": "",
-		"fri": "",
-		"sat": "",
-		"sun": "",
-		"email1": "",
-		"email2": "",
-		"ebill": "",
-		"prntinv": "",
-		"atrisk": "",
-		"canentdat": "",
-		"coll_rep": "",
-		"inv_msg": "",
-		"masteracct": "",
-		"parent": "",
-		"xregionid": "",
-		"xsys_cust": "",
-		"cpiadj": "",
-		"resume_d": "",
-		"natacct": "",
-		"cus_ext": "",
-		"bill_ext": "",
-		"sqr_ft": "",
-		"agreeused": "",
-		"arstatus": "",
-		"arstatdate": "",
-		"notes": "",
-		"claimstat": "",
-		"business": "",
-		"add_pct": "",
-		"ad_cur": "",
-		"tech_pct": "",
-		"last_action": "",
-		"needs_distribution_update": "",
+		"sys_cust": "", "company_no": "", "dlr_code": "", "cust_no": null, "cus_name": "", "cus_addr": "", "cus_city": "", "cus_county": "", "cus_state": "", "cus_zip": "", "cus_phone": "", "bill_name": "", "bill_addr": "", "bill_city": "", "bill_state": "", "bill_zip": "", "bill_name2": "", "bill_addr2": "", "bill_phone": "", "cus_name2": "", "cus_addr2": "", "class_type": "", "royalty": "", "sales_tax": "", "cont_1": "", "cont_2": "", "cont_bill": "", "date_sign": "", "flag": "", "misc_info": "", "misc_info2": "", "po_1": "", "slsmn_no": "", "add_on": "", "cont_tax": "", "exp_date": "", "cleantimes": "", "cleanper": "", "firstfran": "", "firstdate": "", "secondfran": "", "seconddate": "", "crteinv": "", "prntpd": "", "tax_exempt": "", "canc_date": "", "canreason": "", "candescr": "", "callbdate": "", "cscallbdat": "", "ops_mgr": "", "cus_fax": "", "bill_fax": "", "cs_rep": "", "date_start": "", "date_offer": "", "mon": "", "tue": "", "wed": "", "thu": "", "fri": "", "sat": "", "sun": "", "email1": "", "email2": "", "ebill": "", "prntinv": "", "atrisk": "", "canentdat": "", "coll_rep": "", "inv_msg": "", "masteracct": "", "parent": "", "xregionid": "", "xsys_cust": "", "cpiadj": "", "resume_d": "", "natacct": "", "cus_ext": "", "bill_ext": "", "sqr_ft": "", "agreeused": "", "arstatus": "", "arstatdate": "", "notes": "", "claimstat": "", "business": "", "add_pct": "", "ad_cur": "", "tech_pct": "", "last_action": "", "needs_distribution_update": "",
 	}
 };
 
@@ -441,7 +344,7 @@ const customers = function (state = initialState, action) {
 						},
 						data: null
 					},
-					activeCustomer: null,
+					activeCustomer: CUSTOMER_CREATION_PAYLOAD,
 					activeStep: 0
 				};
 			}
@@ -860,9 +763,11 @@ const customers = function (state = initialState, action) {
 		case Actions.UPDATE_NEW_CUSTOMER_PARAM:
 			return {
 				...state,
-				newCustomerParam: {
-					...state.newCustomerParam,
-					[action.payload.name]: action.payload.value
+				activeCustomer: {
+					Data: {
+						...this.state.activeCustomer.Data,
+						[action.payload.name]: action.payload.value
+					}
 				}
 			};
 		default:
