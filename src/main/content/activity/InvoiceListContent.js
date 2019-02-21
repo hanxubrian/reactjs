@@ -231,7 +231,7 @@ class InvoiceLists extends Component {
 
             ],
             currencyColumns: [
-                "Amount", "Tax", "InvoiceTotal"
+                "Amount", "Tax", "Total"
             ],
 
             dateColumns: ['saleDate'],
@@ -438,12 +438,11 @@ class InvoiceLists extends Component {
             { title: "Region",      name: "RegionName"},
             { title: "Description", name: "InvoiceDescription"},
             { title: "Customer",    name: "Customer"},
-            { title: "Sub total",   name: "Amount"},
+            { title: "Sub Total",   name: "Amount"},
             { title: "Tax",         name: "Tax"},
-            { title: "Total",       name: "InvoiceTotal"},
+            { title: "Total",       name: "Total"},
             { title: "Due Date",    name: "DueDate"},
             { title: "Inv. Date",   name: "InvoiceDate"},
-            { title: "Trx. Date",   name: "TrxDate"},
             { title: "Action",      name: "Action"}
         ];
 
@@ -455,7 +454,6 @@ class InvoiceLists extends Component {
             { columnName: "InvoiceTotal",   width: 100, align: 'right'},
             { columnName: "DueDate",        width: 100, align: 'center'},
             { columnName: "InvoiceDate",    width: 100, align: 'center'},
-            { columnName: "TrxDate",        width: 100, align: 'center'},
             { columnName: "Action",         width: 180, align: 'center'}
         ];
 
