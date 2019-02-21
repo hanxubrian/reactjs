@@ -678,12 +678,92 @@ class ServiceAgreementPage extends React.Component {
 			execTitles = this.props.accountExecutiveList.Data.sort();
 		}
 
+		const {
+			cont_bill,
+
+			flag,
+			arstatus,
+
+			contract_lenght,
+			slsmn_no,
+			date_sign,
+			date_start,
+			exp_date,
+
+			po_1,
+			cpiadj,
+			crteinv,
+			prntpd,
+			tax_exempt,
+
+			invoice_date,
+			ebill,
+			ebill_email,
+			billing_term,
+			inv_msg,
+			natacct,
+			parent,
+
+			bill_name,
+			bill_addr,
+			bill_addr2,
+			bill_city,
+			bill_state,
+			bill_zip,
+
+			sqr_ft,
+			cleantimes,
+			cleanper,
+
+			mon, tue, wed, thu, fri, sat, sun, wknd,
+			detailed_cleaning_instructions,
+		} = this.props.activeCustomer.Data
+
 		this.setState({
 			customerServiceTypes: this.props.lists.customerServiceTypes,
 			franchiseeServiceTypes: this.props.lists.franchiseeServiceTypes,
 			franchiseeBillingTypes: this.props.lists.franchiseeBillingTypes,
 			execTitles: execTitles,
-			cont_bill: this.props.activeCustomer.Data.cont_bill,
+
+
+			cont_bill,
+			flag,
+			arstatus,
+
+			contract_lenght,
+			slsmn_no,
+			date_sign,
+			date_start,
+			exp_date,
+
+			po_1,
+			cpiadj,
+			crteinv,
+			prntpd,
+			tax_exempt,
+
+			invoice_date,
+			ebill,
+			ebill_email,
+			billing_term,
+			inv_msg,
+			natacct,
+			parent,
+
+			bill_name,
+			bill_addr,
+			bill_addr2,
+			bill_city,
+			bill_state,
+			bill_zip,
+
+			sqr_ft,
+			cleantimes,
+			cleanper,
+
+			mon, tue, wed, thu, fri, sat, sun, wknd,
+			detailed_cleaning_instructions,
+
 		})
 
 		this.initCustomerInfo()
@@ -1231,8 +1311,8 @@ class ServiceAgreementPage extends React.Component {
 										className={classNames(classes.textField, "")}
 										select
 										InputLabelProps={{ shrink: true }}
-										value={this.state.invoice_date_default || 'BOM'}
-										onChange={this.handleChangeCustomerInfoProps('invoice_date_default')}
+										value={this.state.invoice_date || 'BOM'}
+										onChange={this.handleChangeCustomerInfoProps('invoice_date')}
 										margin="dense"
 										// variant="outlined"
 										style={{ width: "100%" }}
@@ -1792,8 +1872,8 @@ class ServiceAgreementPage extends React.Component {
 									rows="3"
 									rowsMax="3"
 									className={classes.textField}
-									value={this.state.DetailedCleaningInstructions}
-									onChange={this.handleChange('DetailedCleaningInstructions')}
+									value={this.state.detailed_cleaning_instructions}
+									onChange={this.handleChangeCustomerInfoProps('detailed_cleaning_instructions')}
 									InputLabelProps={{ shrink: true }}
 									margin="dense"
 									// variant="outlined"

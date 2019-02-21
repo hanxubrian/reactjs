@@ -519,34 +519,26 @@ class FilterPanel extends Component {
 			filters: { ...this.props.filters }
 		})
 
-		if (this.props.activeCustomer && this.props.activeCustomer.Data) {
-			const { cus_name, cus_addr, cus_city, cus_state, cus_zip, cus_phone, cus_fax, email1 } = this.props.activeCustomer.Data
-			this.setState({
-				cus_name,
-				cus_addr,
-				cus_city,
-				cus_state,
-				cus_zip,
+		const {
+			cus_name, cus_addr, cus_city, cus_state, cus_zip,
+			cus_phone,
+			cus_fax,
 
-				cus_phone: "+1" + cus_phone,
-				cus_fax: "+1" + cus_fax,
+			cont_1, cont_2,
+			email1,
+			email2,
+		} = this.props.activeCustomer.Data
 
-				email1,
-			});
-		} else {
-			this.setState({
-				cus_name: '',
-				cus_addr: '',
-				cus_city: '',
-				cus_state: '',
-				cus_zip: '',
+		this.setState({
+			cus_name, cus_addr, cus_city, cus_state, cus_zip,
+			cus_phone: "+1" + cus_phone,
+			cus_fax: "+1" + cus_fax,
 
-				cus_phone: '',
-				cus_fax: '',
+			cont_1, cont_2,
+			email1,
+			email2,
+		});
 
-				email1: '',
-			});
-		}
 	}
 	componentWillReceiveProps(nextProps) {
 		const { customers, customerForm } = this.props;
@@ -1384,8 +1376,8 @@ class FilterPanel extends Component {
 										id="Last"
 										label="Email"
 										className={classNames(classes.textField, 'pr-12')}
-										value={this.state.email_1 || ''}
-										onChange={this.handleChangeCustomerInfoProps('email_1')}
+										value={this.state.email1 || ''}
+										onChange={this.handleChangeCustomerInfoProps('email1')}
 										margin="dense"
 										// variant="outlined"
 										InputLabelProps={{ shrink: true }}
@@ -1406,8 +1398,8 @@ class FilterPanel extends Component {
 										id="MobilePhone"
 										label="Email 2"
 										className={classNames(classes.textField, 'pr-12')}
-										value={this.state.email_2 || ''}
-										onChange={this.handleChangeCustomerInfoProps('email_2')}
+										value={this.state.email2 || ''}
+										onChange={this.handleChangeCustomerInfoProps('email2')}
 										margin="dense"
 										// variant="outlined"
 										InputLabelProps={{ shrink: true }}
