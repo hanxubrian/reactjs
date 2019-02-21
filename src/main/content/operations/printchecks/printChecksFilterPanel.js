@@ -54,16 +54,6 @@ class FilterPanel extends Component {
     {
         if(prevState.logDate!==this.state.logDate) {
             this.props.updateLogDate(this.state.logDate);
-            // this.props.nullifyFranchiseeNewReport();
-            //
-            // let period = this.state.reportPeriod.split('/');
-            //
-            // this.props.createReport({
-            //     regionId: this.props.regionId,
-            //     year: parseInt(period[1]),
-            //     month: parseInt(period[0]),
-            //     franchiseenumber: this.props.franchiNo
-            // });
         }
     }
 
@@ -113,13 +103,12 @@ class FilterPanel extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        createReport: Actions.createReport,
         updateLogDate: Actions.updateLogDate,
         nullifyFranchiseeNewReport: Actions.nullifyFranchiseeNewReport,
     }, dispatch);
 }
 
-function mapStateToProps({franchisees, auth})
+function mapStateToProps({auth})
 {
     return {
         regionId: auth.login.defaultRegionId,

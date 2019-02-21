@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import {
     Icon,
     Typography,
-    Button
+    Button, CircularProgress
 } from '@material-ui/core';
 import {FusePageCustomSidebarScroll, FuseAnimate} from '@fuse';
 import {bindActionCreators} from "redux";
@@ -15,8 +15,9 @@ import * as Actions from 'store/actions';
 import "react-table/react-table.css";
 import classNames from 'classnames';
 
-import ChecksDetail from './checksDetail';
+import ChecksLists from './checksLists';
 import FilterPanel from "./printChecksFilterPanel";
+import moment from "moment";
 
 const headerHeight = 80;
 
@@ -198,13 +199,23 @@ const styles = theme => ({
 class PrintChecksLayout extends Component {
     constructor(props) {
         super(props);
-        props.getPaymentLogList(props.regionId, props.logDate);
+        if(props.printChecksDB===null) {
+            const {regionId, paymentDate, checkDate, checktypeId, entityTypeId, year, month} = props;
+            props.getCheckDetailByType(regionId, checktypeId, entityTypeId, month, year, paymentDate, checkDate);
+        }
+
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if(this.props.regionId!== prevProps.regionId ||
-        this.props.logDate!==prevProps.logDate){
-            this.props.getPaymentLogList(this.props.regionId, this.props.logDate);
+        this.props.paymentDate!==prevProps.paymentDate ||
+        this.props.checkDate!==prevProps.checkDate ||
+        this.props.checktypeId!==prevProps.checktypeId ||
+        this.props.entityTypeId!==prevProps.entityTypeId ||
+        this.props.year!==prevProps.year ||
+        this.props.month!==prevProps.month){
+            const {regionId, paymentDate, checkDate, checktypeId, entityTypeId, year, month} = this.props;
+            this.props.getCheckDetailByType(regionId, checktypeId, entityTypeId, month, year, paymentDate, checkDate);
         }
     }
 
@@ -246,7 +257,7 @@ class PrintChecksLayout extends Component {
                     classes={{
                         root: classNames(classes.layoutRoot),
                         rightSidebar: classNames(classes.layoutRightSidebar, {'openSummary': summaryState}),
-                        leftSidebar: classNames(classes.layoutLeftSidebar, classes.filterPanel, {"opened": bPaymentLogFilterPanelOpen}),
+                        leftSidebar: classNames(classes.layoutLeftSidebar, classes.filterPanel, {"opened": this.props.bSettingPanel}),
                         sidebarHeader: classes.layoutSidebarHeader,
                         header: classes.layoutHeader,
                         content: classes.content
@@ -259,8 +270,8 @@ class PrintChecksLayout extends Component {
                                     <div className="flex flex-shrink items-center">
                                         <div className="flex items-center">
                                             <Icon className="text-32 mr-12">list_alt</Icon>
-                                            <Typography variant="h6" className="hidden sm:flex">Payment Log |
-                                                Detail</Typography>
+                                            <Typography variant="h6" className="hidden sm:flex">Checks Lists |
+                                                Print</Typography>
                                         </div>
 
                                     </div>
@@ -285,8 +296,8 @@ class PrintChecksLayout extends Component {
                     content={
                         <div className="flex-1 flex-col absolute w-full h-full">
                             <Fragment>
-                                <div id ="payment-log-print">
-                                    <ChecksDetail onRef={ref => (this.child = ref)}/>
+                                <div id ="checks-lists-print">
+                                    <ChecksLists onRef={ref => (this.child = ref)}/>
                                 </div>
                             </Fragment>
                         </div>
@@ -304,6 +315,11 @@ class PrintChecksLayout extends Component {
                     }}
                 >
                 </FusePageCustomSidebarScroll>
+                {(this.props.bStartFetchList_pc) && (
+                    <div className={classes.overlay}>
+                        <CircularProgress className={classes.progress} color="secondary"  />
+                    </div>
+                )}
             </React.Fragment>
         );
     }
@@ -311,15 +327,23 @@ class PrintChecksLayout extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getPaymentLogList: Actions.getPaymentLogList,
+        getCheckDetailByType: Actions.getCheckDetailByType,
     }, dispatch);
 }
 
-function mapStateToProps({auth, paymentLog}) {
+function mapStateToProps({auth, printChecks}) {
     return {
         regionId: auth.login.defaultRegionId,
-        logDate: paymentLog.logDate,
-        bPaymentLogFilterPanelOpen: paymentLog.bFilterPanelOpen,
+        bPrintCheckSettingPanel: printChecks.bSettingPanel,
+        bStartFetchList_pc: printChecks.bStartFetchList_pc,
+        checkDate: printChecks.checkDate,
+        paymentDate: printChecks.paymentDate,
+        checktypeId: printChecks.checktypeId,
+        entityTypeId: printChecks.entityTypeId,
+        printChecksDB: printChecks.printChecksDB,
+        year: printChecks.year,
+        month: printChecks.month,
+        bSettingPanel: printChecks.bSettingPanel,
     }
 }
 

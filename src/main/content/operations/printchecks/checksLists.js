@@ -182,7 +182,7 @@ const TableHeadComponentBase = ({ classes, ...restProps }) => (
 export const TableComponent = withStyles(styles, { name: 'TableComponent' })(TableComponentBase);
 export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent' })(TableHeadComponentBase);
 
-class PaymentLogDetail extends Component {
+class PrintChecksLists extends Component {
     state={
         data: []
     };
@@ -190,6 +190,9 @@ class PaymentLogDetail extends Component {
     componentDidMount()
     {
         this.props.onRef(this);
+        if (this.props.printChecksDB!==null) {
+            this.setState({data: this.props.printChecksDB})
+        }
     }
     componentWillUnmount() {
 
@@ -197,8 +200,10 @@ class PaymentLogDetail extends Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.paymentLogList !== prevProps.paymentLogList)
-            this.setState({data: this.props.paymentLogList})
+        if (this.props.printChecksDB!==null && this.props.printChecksDB !== prevProps.printChecksDB) {
+            console.log('fired');
+             this.setState({data: this.props.printChecksDB})
+        }
     }
 
 
@@ -291,13 +296,14 @@ class PaymentLogDetail extends Component {
     {
         const { classes} = this.props;
         const columns = [
-            {name: "Customer", title: "Customer",},
-            {name: "CustomerNo", title: "Cust. #"},
-            {name: "ReferenceNo", title: "Check #/Descr."},
-            {name: "Description", title: "Description"},
-            {name: "FranchiseeNo", title: "Fran. #"},
-            {name: "InvoiceNo", title: "Invoice #"},
-            {name: "Amount", title: "Amount"},
+            {name: "PayeeName", title: "Payee Name",},
+            {name: "PayeeNumber", title: "Payee #"},
+            {name: "PayeeAddress1", title: "Address"},
+            {name: "checkAmounttext", title: "Amount Text"},
+            {name: "checkamountnumber", title: "Amount"},
+            {name: "bankname", title: "Bank Name"},
+            {name: "bankaddress1", title: "Bank Address"},
+            {name: "checkdate", title: "checkdate"},
         ];
         let  tableColumnExtensions = [
             { columnName: 'Customer', width: -1, },
@@ -307,7 +313,7 @@ class PaymentLogDetail extends Component {
             { columnName: 'FranchiseeNo', width: 120},
             { columnName: 'Amount', width: 120,  align: 'right'},
         ];
-        console.log('data=', this.state.data);
+        console.log('data=', this.state.data, this.props.printChecksDB);
         // if(!this.state.data.length)
         //     return (<div/>);
 
@@ -316,6 +322,7 @@ class PaymentLogDetail extends Component {
         ];
 
 
+        console.log('data=', this.state.data);
         return (
             <div className={classNames(classes.root, "p-0 sm:p-64  whole print:p-0")} id ="wholediv">
                 <div id ="testdiv" className="cardname">
@@ -329,7 +336,7 @@ class PaymentLogDetail extends Component {
                         >
                             {this.state.data.length>0 && (
                             <CurrencyTypeProvider
-                                for={['Amount']}
+                                for={['checkamountnumber']}
                             />
                             )}
 
@@ -359,18 +366,18 @@ class PaymentLogDetail extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        createReport: Actions.createReport,
     }, dispatch);
 }
 
-function mapStateToProps({auth, paymentLog})
+function mapStateToProps({auth, printChecks, paymentLog})
 {
     return {
         paymentLogList: paymentLog.paymentLogList,
+        printChecksDB: printChecks.printChecksDB,
         regionId: auth.login.defaultRegionId,
         logDate: paymentLog.logDate,
         all_regions: auth.login.all_regions,
     }
 }
 
-export default  withStyles(styles)(withRouter(connect(mapStateToProps, mapDispatchToProps)(PaymentLogDetail)));
+export default  withStyles(styles)(withRouter(connect(mapStateToProps, mapDispatchToProps)(PrintChecksLists)));
