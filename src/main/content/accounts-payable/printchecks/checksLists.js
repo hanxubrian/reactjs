@@ -24,7 +24,7 @@ import {
     GroupingState, SelectionState,
     IntegratedGrouping, TableColumnVisibility,
     SortingState,
-    IntegratedSorting, SummaryState, IntegratedSummary,
+    IntegratedSorting, SummaryState, IntegratedSummary, IntegratedSelection,
 } from '@devexpress/dx-react-grid';
 
 import {
@@ -33,13 +33,9 @@ import {
     VirtualTable,
     TableHeaderRow,
     TableGroupRow,
-    PagingPanel, TableSummaryRow
+    PagingPanel, TableSummaryRow, TableSelection
 } from '@devexpress/dx-react-grid-material-ui';
 import NumberFormat from "react-number-format";
-import {
-    TableSummaryCellComponent,
-    TableSummaryComponent
-} from "../../franchisees/franchisees/components/customerAccountTotal";
 
 
 //Child components
@@ -184,9 +180,11 @@ export const TableHeadComponent = withStyles(styles, { name: 'TableHeadComponent
 
 class PrintChecksLists extends Component {
     state={
-        data: []
+        data: [],
+        selection: [],
     };
 
+    changeSelection = selection => this.setState({ selection });
     componentDidMount()
     {
         this.props.onRef(this);
@@ -266,32 +264,6 @@ class PrintChecksLists extends Component {
         top_left_margin = 15;
     };
 
-    renderHeader = ()=>{
-        let region = this.props.all_regions.filter(r=>r.regionid===this.props.regionId);
-
-        return (
-            <Grid1 container className="flex flex-row items-center report-header">
-                <Grid1 item sm={3} className="text-left" >
-                    <Typography color="inherit" >{moment().format('MM/DD/YYYY')}</Typography>
-                    <Typography color="inherit" >{moment().format('HH:mm:ss')}</Typography>
-                    <Typography className="mt-16" color="inherit" >* <i>Indicates invoice applied</i></Typography>
-                    <Typography color="inherit" ><i>to non-default franchisee.</i></Typography>
-                </Grid1>
-                <Grid1 item sm={6} className="text-center">
-                    <Typography variant={"h1"} color="inherit">Janiking of {region[0].regionname}, Inc.</Typography>
-                    <Typography color="inherit" variant={"h2"}>
-                        Accounts Receivable Log
-                    </Typography>
-                    <Typography color="inherit" variant={"h3"}>Deposit Date: {moment(this.props.logDate).format('MM/DD/YYYY')} </Typography>
-                </Grid1>
-                <Grid1 item sm={3} className="text-right" width='200'>
-                    <Typography color="inherit">
-                        {/*<img src="https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png" alt=""/>*/}
-                    </Typography>
-                </Grid1>
-            </Grid1>
-        )
-    };
     render()
     {
         const { classes} = this.props;
@@ -321,14 +293,8 @@ class PrintChecksLists extends Component {
             { columnName: 'Amount', type: 'sum'},
         ];
 
-
-        console.log('data=', this.state.data);
         return (
-            <div className={classNames(classes.root, "p-0 sm:p-64  whole print:p-0")} id ="wholediv">
-                <div id ="testdiv" className="cardname">
-                    <div className="w-full pb-16" style={{borderBottom: '4px double'}}>
-                        {this.renderHeader()}
-                    </div>
+            <div className={classNames(classes.root, "flex flex-col h-full whole print:p-0")} id ="wholediv">
                     <div className={classNames("flex flex-col")}>
                         <Grid
                             rows={this.state.data}
@@ -339,26 +305,29 @@ class PrintChecksLists extends Component {
                                 for={['checkamountnumber']}
                             />
                             )}
+                            <PagingState
+                                defaultCurrentPage={0}
+                                defaultPageSize={50}
+                            />
 
-                            {this.state.data.length>0 && (
-                                <SummaryState totalItems={totalSummaryItems} />
-                            )}
-                            {this.state.data.length>0 && (<IntegratedSummary /> )}
+                            <PagingPanel pageSizes={[10, 20, 25, 50, 100]} />
+                            <SelectionState
+                                selection={this.state.selection}
+                                onSelectionChange={this.changeSelection}
+                            />
+                            {/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
+                            <IntegratedSelection />
 
-
+                            <IntegratedPaging />
                             <VirtualTable height="auto"
                                           tableComponent={TableComponent}
                                           headComponent = {TableHeadComponent}
                                           columnExtensions={tableColumnExtensions}
                             />
+                            <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
                             <TableHeaderRow/>
-                            {this.state.data.length>0 && (
-                                <TableSummaryRow />
-                            )}
                         </Grid>
                     </div>
-                </div>
-
             </div>
         )
     }

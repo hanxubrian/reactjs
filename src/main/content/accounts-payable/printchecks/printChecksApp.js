@@ -293,12 +293,12 @@ class PrintChecksLayout extends Component {
                         </div>
                     }
                     content={
-                        <div className="flex-1 flex-col absolute w-full h-full">
-                            <Fragment>
-                                <div id ="checks-lists-print">
+                        <div className="flex flex-1 flex-col absolute w-full h-full">
+                            <div className={classNames("flex flex-col h-full")}>
+                                <Fragment>
                                     <ChecksLists onRef={ref => (this.child = ref)}/>
-                                </div>
-                            </Fragment>
+                                </Fragment>
+                            </div>
                         </div>
                     }
                     leftSidebarHeader={
