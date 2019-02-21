@@ -6,8 +6,17 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { NumberFormatCustomNoPrefix, } from '../../../../../../services/utils'
 import moment from 'moment';
 
+import green from '@material-ui/core/colors/green';
+import amber from '@material-ui/core/colors/amber';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
+import InfoIcon from '@material-ui/icons/Info';
+import CloseIcon from '@material-ui/icons/Close';
+import WarningIcon from '@material-ui/icons/Warning';
+import PropTypes from 'prop-types';
+
 import {
-	Icon, IconButton, Slide, FormControlLabel, Paper, Typography, InputAdornment, MenuItem, Divider,
+	Icon, IconButton, Slide, FormControlLabel, Paper, Typography, InputAdornment, MenuItem, Divider, Snackbar, SnackbarContent,
 	ListItemLink, Checkbox, Switch
 } from '@material-ui/core';
 
@@ -68,6 +77,14 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import ReactDataGrid from "react-data-grid";
 import { CustomizedDxGridSelectionPanel } from "./../../../../common/CustomizedDxGridSelectionPanel";
 
+//Snackbar
+const variantIcon = {
+    success: CheckCircleIcon,
+    warning: WarningIcon,
+    error: ErrorIcon,
+    info: InfoIcon,
+};
+
 const styles = theme => ({
 	root: {
 		'& .react-grid-Cell': {
@@ -92,6 +109,73 @@ const styles = theme => ({
 		fontSize: 13
 	}
 })
+
+const styles1 = theme => ({
+    success: {
+        backgroundColor: green[600],
+    },
+    error: {
+        backgroundColor: theme.palette.error.dark,
+    },
+    info: {
+        backgroundColor: theme.palette.primary.dark,
+    },
+    warning: {
+        backgroundColor: amber[700],
+    },
+    icon: {
+        fontSize: 20,
+    },
+    iconVariant: {
+        opacity: 0.9,
+        marginRight: theme.spacing.unit,
+    },
+    message: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+});
+
+function MySnackbarContent(props) {
+    const { classes, className, message, onClose, variant, ...other } = props;
+    const Icon = variantIcon[variant];
+
+    return (
+        <SnackbarContent
+            className={classNames(classes[variant], className)}
+            aria-describedby="client-snackbar"
+            message={
+                <span id="client-snackbar" className={classes.message}>
+          <Icon className={classNames(classes.icon, classes.iconVariant)} />
+                    {message}
+        </span>
+            }
+            action={[
+                <IconButton
+                    key="close"
+                    aria-label="Close"
+                    color="inherit"
+                    className={classes.close}
+                    onClick={onClose}
+                >
+                    <CloseIcon className={classes.icon} />
+                </IconButton>,
+            ]}
+            {...other}
+        />
+    );
+}
+
+MySnackbarContent.propTypes = {
+    classes: PropTypes.object.isRequired,
+    className: PropTypes.string,
+    message: PropTypes.node,
+    onClose: PropTypes.func,
+    variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
+};
+
+const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
+
 function Transition(props) {
 	return <Slide direction="up" {...props} />;
 }
@@ -411,6 +495,16 @@ class showSuspendContractPage extends React.Component {
 				franchieesesToOffer: activeCustomerInfo.Data.AssignedFranchisees,
 			})
 	};
+
+	validateSuspension = () => {
+        if(true){
+            this.setState({snackMessage: 'Processed Suspension'});
+            this.setState({openSnack: true});
+            return true;
+        }
+
+        return true;
+    };
 
 	handleClose = () => {
 		// this.setState({
@@ -816,11 +910,10 @@ class showSuspendContractPage extends React.Component {
 		let resume_date = moment(this.state.ReactivationDate).format('YYYY-MM-DD');
 
 		this.props.saveSuspendContract(this.props.regionId, CustomerNo, reason, resume_date);
+		this.validateSuspension();
 		// this.props.updateCustomersParameter('NewAmount', 0);
 		// this.setState({ reason: '', notes: '', NewAmount: '', EffectiveDate: moment().format('YYYY-MM-DD') });
 		// this.props.getCustomer(this.props.regionId, this.props.activeCustomer.Data._id);
-
-
 
 
 	};
@@ -882,9 +975,24 @@ class showSuspendContractPage extends React.Component {
 					<Typography variant="h6">Suspension</Typography>
 
 					<div className="flex items-center">
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Back</Button>
-						<Button variant="contained" onClick={this.saveSuspendContract} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Suspend</Button>
+						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Previous</Button>
+						<Button variant="contained" onClick={this.saveSuspendContract} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Process Suspension</Button>
 					</div>
+					<Snackbar
+                        anchorOrigin={{
+                            vertical: 'right',
+                            horizontal: 'top',
+                        }}
+                        open={this.state.openSnack}
+                        autoHideDuration={3000}
+                        onClose={this.handleClose}
+                    >
+                        <MySnackbarContentWrapper
+                            onClose={this.handleClose}
+                            variant="success"
+                            message={this.state.snackMessage}
+                        />
+                    </Snackbar>
 
 				</div>
 
