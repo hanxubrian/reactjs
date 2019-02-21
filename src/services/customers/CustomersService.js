@@ -178,6 +178,7 @@ class CustomersService {
 		});
 	}
 	createCustomer(regionId, param) {
+		console.log("createCustomer-param", param)
 		return new Promise((resolve, reject) => {
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/Customer/create/${regionId}`, param)
 				.then(res => {

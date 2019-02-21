@@ -136,6 +136,7 @@ const styles = theme => ({
 	},
 })
 const stateNames = [
+	{ Value: "", Text: "" },
 	{ Value: "AL", Text: "Alabama" },
 	{ Value: "AK", Text: "Alaska" },
 	{ Value: "AZ", Text: "Arizona" },
@@ -697,6 +698,7 @@ class ServiceAgreementPage extends React.Component {
 			tax_exempt,
 
 			invoice_date,
+			billing_frequency,
 			ebill,
 			ebill_email,
 			billing_term,
@@ -715,7 +717,7 @@ class ServiceAgreementPage extends React.Component {
 			cleantimes,
 			cleanper,
 
-			mon, tue, wed, thu, fri, sat, sun, wknd,
+			mon, tue, wed, thu, fri, sat, sun, wkndTF,
 			detailed_cleaning_instructions,
 		} = this.props.activeCustomer.Data
 
@@ -743,6 +745,7 @@ class ServiceAgreementPage extends React.Component {
 			tax_exempt,
 
 			invoice_date,
+			billing_frequency,
 			ebill,
 			ebill_email,
 			billing_term,
@@ -761,7 +764,7 @@ class ServiceAgreementPage extends React.Component {
 			cleantimes,
 			cleanper,
 
-			mon, tue, wed, thu, fri, sat, sun, wknd,
+			mon, tue, wed, thu, fri, sat, sun, wkndTF,
 			detailed_cleaning_instructions,
 
 		})
@@ -805,6 +808,91 @@ class ServiceAgreementPage extends React.Component {
 		}
 		if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
 			this.initCustomerInfo(nextProps.activeCustomer)
+		}
+		if (!_.isEqual(nextProps.activeCustomer.Data, this.props.activeCustomer.Data)) {
+			const {
+				cont_bill,
+
+				flag,
+				arstatus,
+
+				contract_lenght,
+				slsmn_no,
+				date_sign,
+				date_start,
+				exp_date,
+
+				po_1,
+				cpiadj,
+				crteinv,
+				prntpd,
+				tax_exempt,
+
+				invoice_date,
+				billing_frequency,
+				ebill,
+				ebill_email,
+				billing_term,
+				inv_msg,
+				natacct,
+				parent,
+
+				bill_name,
+				bill_addr,
+				bill_addr2,
+				bill_city,
+				bill_state,
+				bill_zip,
+
+				sqr_ft,
+				cleantimes,
+				cleanper,
+
+				mon, tue, wed, thu, fri, sat, sun, wkndTF,
+				detailed_cleaning_instructions,
+			} = nextProps.activeCustomer.Data
+
+			this.setState({
+				cont_bill,
+				flag,
+				arstatus,
+
+				contract_lenght,
+				slsmn_no,
+				date_sign,
+				date_start,
+				exp_date,
+
+				po_1,
+				cpiadj,
+				crteinv,
+				prntpd,
+				tax_exempt,
+
+				invoice_date,
+				billing_frequency,
+				ebill,
+				ebill_email,
+				billing_term,
+				inv_msg,
+				natacct,
+				parent,
+
+				bill_name,
+				bill_addr,
+				bill_addr2,
+				bill_city,
+				bill_state,
+				bill_zip,
+
+				sqr_ft,
+				cleantimes,
+				cleanper,
+
+				mon, tue, wed, thu, fri, sat, sun, wkndTF,
+				detailed_cleaning_instructions,
+
+			})
 		}
 	}
 	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer) => {
@@ -936,7 +1024,31 @@ class ServiceAgreementPage extends React.Component {
 		);
 	};
 	handleChangeCustomerInfoProps = name => event => {
-		const value = event.target.value
+		let value = event.target.value
+		switch (name) {
+			case "Latitude":
+			case "Longitude":
+			case "overpayment":
+			case "royalty":
+			case "sales_tax":
+			case "cont_bill":
+			case "business":
+			case "add_pct":
+			case "ad_cur":
+			case "tech_pct":
+				value = parseFloat("0" + value)
+				break
+			case "billing_term":
+			case "contract_lenght":
+			case "sys_cust":
+			case "cleantimes":
+			case "parent":
+			case "xregionid":
+			case "xsys_cust":
+			case "sqr_ft":
+				value = parseInt("0" + value)
+				break
+		}
 		this.setState({ [name]: value })
 		this.props.updateNewCustomerParam(name, value)
 	}
@@ -1247,9 +1359,8 @@ class ServiceAgreementPage extends React.Component {
 										<InputLabel htmlFor="bill_state">State</InputLabel>
 										<Select
 											native
-											value={this.state.bill_state}
+											value={this.state.bill_state || ''}
 											onChange={this.handleChangeCustomerInfoProps('bill_state')}
-											InputLabelProps={{ shrink: true }}
 											inputProps={{
 												name: 'bill_state',
 												id: 'bill_state',
@@ -1330,8 +1441,8 @@ class ServiceAgreementPage extends React.Component {
 											shrink: true
 										}}
 										className={classNames(classes.textField, "")}
-										value={this.state.BillingFrequency || ''}
-										onChange={this.handleChange('BillingFrequency')}
+										value={this.state.billing_frequency || ''}
+										onChange={this.handleChangeCustomerInfoProps('billing_frequency')}
 										margin="dense"
 										// variant="outlined"
 										style={{ width: "100%" }}
@@ -1859,7 +1970,7 @@ class ServiceAgreementPage extends React.Component {
 									className="mr-36"
 								/>
 								<FormControlLabel
-									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('wknd')} checked={this.state.wknd || false} />}
+									control={<Checkbox onChange={this.handleChangeCustomerInfoPropsChecked('wkndTF')} checked={this.state.wkndTF || false} />}
 									label="Weekends"
 								/>
 							</GridItem>

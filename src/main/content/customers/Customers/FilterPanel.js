@@ -523,20 +523,28 @@ class FilterPanel extends Component {
 			cus_name, cus_addr, cus_city, cus_state, cus_zip,
 			cus_phone,
 			cus_fax,
+			website,
 
 			cont_1, cont_2,
 			email1,
 			email2,
+
+			accounttype_groupid,
+			account_typeid,
 		} = this.props.activeCustomer.Data
 
 		this.setState({
 			cus_name, cus_addr, cus_city, cus_state, cus_zip,
 			cus_phone: "+1" + cus_phone,
 			cus_fax: "+1" + cus_fax,
+			website,
 
 			cont_1, cont_2,
 			email1,
 			email2,
+
+			accounttype_groupid,
+			account_typeid,
 		});
 
 	}
@@ -546,37 +554,6 @@ class FilterPanel extends Component {
 			this.setState({
 				rows: FuseUtils.getCustomerListFromDb(nextProps.customers),
 			});
-		}
-
-		if (nextProps.activeCustomer !== this.props.activeCustomer) {
-			if (nextProps.activeCustomer && nextProps.activeCustomer.Data) {
-				const { cus_name, cus_addr, cus_city, cus_state, cus_zip, cus_phone, cus_fax, email1 } = nextProps.activeCustomer.Data
-				this.setState({
-					cus_name,
-					cus_addr,
-					cus_city,
-					cus_state,
-					cus_zip,
-
-					cus_phone: "+1" + cus_phone,
-					cus_fax: "+1" + cus_fax,
-
-					email1,
-				})
-			} else {
-				this.setState({
-					cus_name: '',
-					cus_addr: '',
-					cus_city: '',
-					cus_state: '',
-					cus_zip: '',
-
-					cus_phone: '',
-					cus_fax: '',
-
-					email1: '',
-				});
-			}
 		}
 
 		if (!_.isEqual(nextProps.filters, this.props.filters)) {
@@ -593,6 +570,35 @@ class FilterPanel extends Component {
 		// 	})
 		// this.onLocationFilter("Location", nextProps.locationFilterValue.id)
 		// }
+		if (!_.isEqual(nextProps.activeCustomer.Data, this.props.activeCustomer.Data)) {
+			const {
+				cus_name, cus_addr, cus_city, cus_state, cus_zip,
+				cus_phone,
+				cus_fax,
+				website,
+
+				cont_1, cont_2,
+				email1,
+				email2,
+
+				accounttype_groupid,
+				account_typeid,
+			} = nextProps.activeCustomer.Data
+
+			this.setState({
+				cus_name, cus_addr, cus_city, cus_state, cus_zip,
+				cus_phone: "+1" + cus_phone,
+				cus_fax: "+1" + cus_fax,
+				website,
+
+				cont_1, cont_2,
+				email1,
+				email2,
+
+				accounttype_groupid,
+				account_typeid,
+			});
+		}
 	}
 	componentDidUpdate(prevProps) {
 		if (this.props.state !== prevProps.state) {
@@ -1007,7 +1013,8 @@ class FilterPanel extends Component {
 		// return (<MenuItem key={index} value={index}>{x.Title}</MenuItem>)
 
 		let customerStatusListTexts = []
-		if (this.props.customerStatusList !== null && this.props.customerStatusList.Data !== undefined) {
+		console.log("this.props.customerStatusList", this.props.customerStatusList)
+		if (this.props.customerStatusList && this.props.customerStatusList.Data) {
 			customerStatusListTexts = this.props.customerStatusList.Data.filter(x => {
 				if (x.Text === null) return false
 				return true
@@ -1019,22 +1026,25 @@ class FilterPanel extends Component {
 
 
 		let accountTypeTexts = []
-		if (this.props.accountTypeList !== null && this.props.accountTypeList.Data !== undefined) {
+		if (this.props.accountTypeList && this.props.accountTypeList.Data) {
 			accountTypeTexts = this.props.accountTypeList.Data.filter(x => {
-				if (x.Text === null) return false
-				return true
-			}).map(x => {
-				return x.Text
-			}).sort();
+				return parseInt(x.GroupId) === parseInt(this.state.accounttype_groupid)
+			})
+			if (accountTypeTexts.length > 0) {
+				accountTypeTexts = accountTypeTexts[0].Types.sort()
+			}
 		}
+		console.log("this.props.accountTypeList", this.props.accountTypeList, this.state.accounttype_groupid, accountTypeTexts)
 
 		let execTitles = []
-		if (this.props.accountExecutiveList !== null && this.props.accountExecutiveList.Data !== undefined) {
+		console.log("this.props.accountExecutiveList", this.props.accountExecutiveList)
+		console.log("this.props.accountTypesGroups", this.props.accountTypesGroups)
+		if (this.props.accountExecutiveList && this.props.accountExecutiveList.Data) {
 			execTitles = this.props.accountExecutiveList.Data.filter(x => {
-				if (x.Title === null) return false
+				if (x.FullName === null) return false
 				return true
 			}).map(x => {
-				return x.FirstName + " " + x.LastName
+				return { title: x.FullName, value: x.UserId }
 			}).sort();
 		}
 
@@ -1179,7 +1189,7 @@ class FilterPanel extends Component {
 							</GridItem>
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
+								{/* <TextField
 									id="email1"
 									label="Email"
 									type="email"
@@ -1190,14 +1200,14 @@ class FilterPanel extends Component {
 									margin="dense"
 									// variant="outlined"
 									style={{ width: '100%' }}
-								/>
+								/> */}
 
 								<TextField
 									id="outlined-name"
 									label="Website"
 									className={classNames(classes.textField, 'ml-6')}
-									value={this.state.customerWebsite || ''}
-									onChange={this.handleChangeCustomerInfoProps('customerWebsite')}
+									value={this.state.website || ''}
+									onChange={this.handleChangeCustomerInfoProps('website')}
 									InputLabelProps={{ shrink: true }}
 									margin="dense"
 									// variant="outlined"
@@ -1212,19 +1222,16 @@ class FilterPanel extends Component {
 										label="Account Type Group"
 										select
 										className={classNames(classes.textField, 'mr-6')}
-										value={this.state.AccountTypeGroup === undefined ? 0 : this.state.AccountTypeGroup}
-										onChange={this.handleChange('AccountTypeGroup')}
+										value={this.state.accounttype_groupid || ''}
+										onChange={this.handleChangeCustomerInfoProps('accounttype_groupid')}
 										margin="dense"
 										// variant="outlined"
 										fullWidth
 									// style={{ minWidth: "100px", width: "30%" }}
 									>
-										{
-											this.props.accountTypesGroups.Data.map((x, index) => (
-												<MenuItem key={index} value={x._id}>{x.name}</MenuItem>
-											))
-										}
-
+										{this.props.accountTypesGroups.Data.map((x, index) => (
+											<MenuItem key={index} value={x.GroupId}>{x.name}</MenuItem>
+										))}
 									</TextField>
 								)}
 								<TextField
@@ -1232,18 +1239,17 @@ class FilterPanel extends Component {
 									label="Account Type *"
 									select
 									className={classNames(classes.textField, 'ml-6')}
-									value={this.state.AccountType === undefined ? 0 : this.state.AccountType}
-									onChange={this.handleChange('AccountType')}
+									value={this.state.account_typeid || ''}
+									onChange={this.handleChangeCustomerInfoProps('account_typeid')}
 									margin="dense"
 									// variant="outlined"
 									fullWidth
 								>
-									<MenuItem value="1">TBD</MenuItem>
-									{/*{*/}
-									{/*accountTypeTexts.map((x, index) => (*/}
-									{/*<MenuItem key={index} value={index}>{x}</MenuItem>*/}
-									{/*))*/}
-									{/*}*/}
+									{/* <MenuItem value="1">TBD</MenuItem> */}
+									{accountTypeTexts.map((x, index) => (
+										<MenuItem key={index} value={x.AccountTypeId}>{x.name}</MenuItem>
+									))}
+
 
 								</TextField>
 							</GridItem>
@@ -1548,7 +1554,7 @@ class FilterPanel extends Component {
 									>
 										{
 											this.props.accountTypesGroups.Data.map((x, index) => (
-												<MenuItem key={index} value={x._id}>{x.name}</MenuItem>
+												<MenuItem key={index} value={x.GroupId}>{x.name}</MenuItem>
 											))
 										}
 									</TextField>
@@ -1600,7 +1606,7 @@ class FilterPanel extends Component {
 										))} */}
 									{
 										execTitles.map((x, index) => {
-											return (<MenuItem key={index} value={index}>{x}</MenuItem>)
+											return (<MenuItem key={index} value={x.value}>{x.title}</MenuItem>)
 										})
 									}
 

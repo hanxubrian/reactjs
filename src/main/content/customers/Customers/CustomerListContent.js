@@ -728,7 +728,7 @@ class CustomerListContent extends Component {
 		this.commitChanges = this.commitChanges.bind(this);
 		// this.changeCurrentPage = currentPage => this.setState({ currentPage });
 		// this.changePageSize = pageSize => this.setState({ pageSize });
-		this.changeSearchValue = value => this.setState({ searchValue: value });
+		// this.changeSearchValue = value => this.setState({ searchValue: value });
 		this.changeGrouping = grouping => this.setState({ grouping });
 	}
 	//
@@ -852,7 +852,7 @@ class CustomerListContent extends Component {
 
 
 		if (nextProps.searchText !== this.props.searchText) {
-			this.search(nextProps.searchText);
+			this.changeSearchValue(nextProps.searchText);
 		}
 	} // deprecate
 
@@ -861,7 +861,11 @@ class CustomerListContent extends Component {
 		}
 	}
 
-	search(val) {
+	changeSearchValue = value => {
+		this.setState({ searchValue: value })
+	};
+
+	search_old(val) {
 		val = val.toLowerCase();
 		if (val === '') {
 			this.setState({ rows: [...this.state.data] });
@@ -1295,7 +1299,7 @@ class CustomerListContent extends Component {
 									/>
 									<IntegratedSorting />
 
-									<IntegratedPaging />
+
 
 									<SearchState
 										// defaultValue="Paris"
@@ -1308,6 +1312,8 @@ class CustomerListContent extends Component {
 										columnExtensions={tableColumnExtensions}
 									/>
 									<IntegratedFiltering />
+
+									<IntegratedPaging />
 
 									<EditingState
 										columnExtensions={editingColumnExtensions}

@@ -1177,7 +1177,7 @@ class PaymentsListContent extends Component {
 								<IntegratedGrouping />
 							}
 
-							<IntegratedPaging />
+						
 
 							<SearchState
 								value={searchValue}
@@ -1189,7 +1189,7 @@ class PaymentsListContent extends Component {
 								columnExtensions={tableColumnExtensions}
 							/>
 							<IntegratedFiltering />
-
+							<IntegratedPaging />
 							<EditingState
 								columnExtensions={editingColumnExtensions}
 								onCommitChanges={this.commitChanges}
