@@ -148,7 +148,7 @@ class VerifiedDialogForm extends React.Component {
             ids.push(obj.Vf_Id);
         });
 
-        this.props.verifyBulkUpdate(this.props.regionId, userId, action, ids);
+        await this.props.verifyBulkUpdate(this.props.regionId, userId, action, ids);
 
         if(option==='transaction')
             await this.props.updateSelectedRowsLength([]);
