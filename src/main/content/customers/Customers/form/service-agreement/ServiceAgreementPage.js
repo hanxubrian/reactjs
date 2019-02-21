@@ -951,13 +951,9 @@ class ServiceAgreementPage extends React.Component {
 									// variant="outlined"
 									style={{ minWidth: "100px", width: "30%" }}
 								>
-									{[{ value: 0, label: "Recurring" }
-										, { value: 1, label: "One-Time" }
-										, { value: 2, label: "Variable" }].map(option => (
-											<MenuItem key={option.value} value={option.value}>
-												{option.label}
-											</MenuItem>
-										))}
+									{["Recurring", "One-Time", "Variable"].map((x, index) => (
+										<MenuItem key={index} value={x}>{x}</MenuItem>
+									))}
 								</TextField>
 
 								{/* <TextField
@@ -993,13 +989,8 @@ class ServiceAgreementPage extends React.Component {
 									// variant="outlined"
 									style={{ width: '30%', minWidth: 200 }}
 								>
-									{[{ value: 0, label: "Customer" }
-										, { value: 1, label: "Jani-King" }
-										, { value: 2, label: "General" }
-									].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
+									{["Customer","Jani-King","General"].map((x,index) => (
+										<MenuItem key={index} value={x}>{x}</MenuItem>
 									))}
 								</TextField> */}
 
@@ -1007,9 +998,7 @@ class ServiceAgreementPage extends React.Component {
 									id="AcctExec"
 									label="Acct Exec"
 									select
-									InputLabelProps={{
-										shrink: true
-									}}
+									InputLabelProps={{ shrink: true }}
 									className={classNames(classes.textField, "")}
 									value={this.state.slsmn_no || ''}
 									onChange={this.handleChangeCustomerInfoProps('slsmn_no')}
@@ -1017,11 +1006,9 @@ class ServiceAgreementPage extends React.Component {
 									// variant="outlined"
 									style={{ width: '30%', minWidth: 200 }}
 								>
-									{
-										execTitles.map((x, index) => {
-											return (<MenuItem key={index} value={x.UserId}>{x.FullName}</MenuItem>)
-										})
-									}
+									{execTitles.map((x, index) =>
+										(<MenuItem key={index} value={x.UserId}>{x.FullName}</MenuItem>)
+									)}
 								</TextField>
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
@@ -1176,7 +1163,7 @@ class ServiceAgreementPage extends React.Component {
 										))}
 									</TextField> */}
 
-									<FormControl className={classes.formControl}>
+									<FormControl className={classNames(classes.formControl, 'pr-12')} style={{ marginTop: 5 }}>
 										<InputLabel htmlFor="bill_state">State</InputLabel>
 										<Select
 											native
@@ -1308,11 +1295,8 @@ class ServiceAgreementPage extends React.Component {
 									// variant="outlined"
 									style={{ width: "100%" }}
 								>
-									{[{ value: 0, label: "BOM" },
-									{ value: 1, label: "EOM" }].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
+									{["BOM", "EOM"].map((x, index) => (
+										<MenuItem key={index} value={x}>{x}</MenuItem>
 									))}
 								</TextField>
 
@@ -1324,16 +1308,14 @@ class ServiceAgreementPage extends React.Component {
 										shrink: true
 									}}
 									className={classNames(classes.textField, "ml-6")}
-									value={this.state.BillingFrequency === undefined ? "" : this.state.BillingFrequency}
+									value={this.state.BillingFrequency || ''}
 									onChange={this.handleChange('BillingFrequency')}
 									margin="dense"
 									// variant="outlined"
 									style={{ width: "100%" }}
 								>
-									{[{ value: 0, label: "Monthly" }].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
+									{["Monthly"].map((x, index) => (
+										<MenuItem key={index} value={x}>{x}</MenuItem>
 									))}
 								</TextField>
 
@@ -1381,15 +1363,8 @@ class ServiceAgreementPage extends React.Component {
 									// variant="outlined"
 									style={{ width: '100%' }}
 								>
-									{[{ value: 0, label: "Due Upon Receipt" },
-									{ value: 1, label: "EOM" },
-									{ value: 2, label: "Net 30" },
-									{ value: 3, label: "Net 40" },
-									{ value: 4, label: "Net 45" },
-									{ value: 5, label: "Net 60" },].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
+									{["Due Upon Receipt", "EOM", "Net 30", "Net 40", "Net 45", "Net 60"].map((x, index) => (
+										<MenuItem key={index} value={x}>{x}</MenuItem>
 									))}
 								</TextField>
 
@@ -1406,19 +1381,8 @@ class ServiceAgreementPage extends React.Component {
 										// variant="outlined"
 										style={{ width: '100%' }}
 									>
-										{[{ value: 0, label: "Select" },
-										{ value: 1, label: "Bankruptcy" },
-										{ value: 2, label: "In Litigation" },
-										{ value: 3, label: "Normal" },
-										{ value: 4, label: "Referred to Collections" },
-										{ value: 5, label: "Slow Pay" },
-										{ value: 6, label: "Uncollectable" },
-										{ value: 7, label: "National Accoints" },
-										{ value: 8, label: "AutoPay" },
-										{ value: 9, label: "TEST" },].map(option => (
-											<MenuItem key={option.value} value={option.value}>
-												{option.label}
-											</MenuItem>
+										{["Bankruptcy", "In Litigation", "Normal", "Referred to Collections", "Slow Pay", "Uncollectable", "National Accoints", "AutoPay", "TEST"].map((x, index) => (
+											<MenuItem key={index} value={x}>{x}</MenuItem>
 										))}
 									</TextField>}
 
@@ -1604,10 +1568,8 @@ class ServiceAgreementPage extends React.Component {
 									// variant="outlined"
 									style={{ minWidth: "100px", width: "30%" }}
 								>
-									{[{ value: 0, label: "Select" }].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
+									{[].map((x, index) => (
+										<MenuItem key={index} value={x}>{x}</MenuItem>
 									))}
 								</TextField>
 							</GridItem>
@@ -1703,10 +1665,8 @@ class ServiceAgreementPage extends React.Component {
 									// variant="outlined"
 									style={{ width: '100%' }}
 								>
-									{[{ value: 0, label: "Monthly" }].map(option => (
-										<MenuItem key={option.value} value={option.value}>
-											{option.label}
-										</MenuItem>
+									{["Month", "Week", "Event"].map((x, index) => (
+										<MenuItem key={index} value={x}>{x}</MenuItem>
 									))}
 								</TextField>
 							</GridItem>
