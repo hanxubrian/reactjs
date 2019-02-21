@@ -274,7 +274,7 @@ class FilterPanel extends Component {
                     <Paper className="flex flex-1 flex-col min-h-px p-20">
                         <FormControl className={classes.formControl} style={{width: 200}}>
                             <h3 className="mb-20">Chargeback Date</h3>
-                            <Select
+                            {/* <Select
                                 value={this.state.chargebackDateOption}
                                 onChange={this.handleChange1}
                                 inputProps={{
@@ -299,7 +299,7 @@ class FilterPanel extends Component {
                                 <MenuItem value={LAST_YEAR}>Last Year</MenuItem>
                                 <MenuItem value={CUSTOM_DATE}>Custom Date</MenuItem>
                                 <MenuItem value={PERIOD}>Period</MenuItem>
-                            </Select>
+                            </Select> */}
                         </FormControl>
                         <br></br>
 

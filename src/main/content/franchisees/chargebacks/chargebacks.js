@@ -12,7 +12,8 @@ import {
     Typography,
     Toolbar,
     CircularProgress,
-    Button,
+	Button,
+	Tooltip,
 } from '@material-ui/core';
 
 // theme components
@@ -236,7 +237,10 @@ const styles = theme => ({
         '& span': {
             textTransform: 'none'
         }
-    },
+	},
+	lastItem: {
+		marginLeft: 'auto',
+	},
 });
 // const defaultProps = {
 // 	trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
@@ -351,7 +355,14 @@ class Chargebacks extends Component {
 	};
 
 	closeComposeForm = () => {
-		this.props.chargebackForm.type === 'create' ? this.props.closeEditChargebacksForm() : this.props.closeNewChargebacksForm();
+		switch (this.props.chargebackForm.type) {
+			case "new":
+				this.props.closeNewChargebackForm()
+				break;
+			case "edit":
+				this.props.closeEditChargebackForm()
+				break;
+		}
 	};
 
 
@@ -667,11 +678,18 @@ class Chargebacks extends Component {
 												</FuseAnimate>
 
 												<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-													<Typography variant="h6" className="hidden sm:flex">Chargebacks | New Chargebacks</Typography>
+													<Typography variant="h6" className="hidden sm:flex">Chargebacks | Edit Chargebacks</Typography>
 												</FuseAnimate>
 											</div>
 										</div>
 										<div className="flex flex-shrink items-center">
+												<Tooltip title="Close">
+													<IconButton className={classes.btntop} aria-label="Add an alarm" onClick={(ev) => this.closeComposeForm()}>
+														<Icon>close</Icon>
+													</IconButton>
+												</Tooltip>
+												</div>
+										{/* <div className="flex flex-shrink items-center"> */}
 
 											{/* <IconButton className={classes.button} aria-label="Add an alarm" onClick={(ev) => toggleFilterPanel()}>
 												<Icon>person_outline</Icon>
@@ -720,7 +738,7 @@ class Chargebacks extends Component {
 											</FuseAnimate> */}
 
 
-										</div>
+										{/* </div> */}
 									</div>
 									<div className="flex flex-none items-end" style={{ display: 'none' }}>
 										<FuseAnimate animation="transition.expandIn" delay={600}>
@@ -895,8 +913,8 @@ function mapDispatchToProps(dispatch) {
 		// removeChargebacksAction: Actions.removeChargebacks,
 		// openNewChargebacksForm: Actions.openNewChargebacksForm,
 		// openEditChargebacksForm: Actions.openEditChargebacksForm,
-		// closeEditChargebacksForm: Actions.closeEditChargebacksForm,
-		// closeNewChargebacksForm: Actions.closeNewChargebacksForm,
+		closeEditChargebackForm: Actions.closeEditChargebackForm,
+		closeNewChargebackForm: Actions.closeNewChargebackForm,
 		getFranchisees: Actions.getFranchisees,
 		// getChargebacksDetail: Actions.getChargebacksDetail,
 	}, dispatch);

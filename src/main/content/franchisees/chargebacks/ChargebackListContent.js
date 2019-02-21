@@ -858,16 +858,17 @@ class ChargebackListContent extends Component {
 		return true;
 	}
 
-	componentWillReceiveProps(nextProps) {
+	UNSAFE_componentWillReceiveProps(nextProps) {
 		// this.setState({ mapViewState: nextProps.mapViewState });
 		console.log("componentWillReceiveProps", "ChargebackListContent.js", nextProps.locationFilterValue)
 
-		// if (nextProps.chargebacks !== this.props.chargebacks) {
-		// 	this.setState({
-		// 		rows: this.getRowData(nextProps.chargebacks),
-		// 		expandedGroups: [...new Set(this.getRowData(nextProps.chargebacks).map(x => x.FranchiseeNameNo))],
-		// 	})
-		// }
+		if (nextProps.chargebacks !== this.props.chargebacks) {
+			this.setState({
+				rows: this.getRowData(nextProps.chargebacks),
+				expandedGroups: [...new Set(this.getRowData(nextProps.chargebacks).map(x => x.FranchiseeNameNo))],
+			})
+		}
+
 		if (nextProps.searchText !== this.props.searchText) {
 			console.log("------search text changed-------", nextProps.searchText)
 			this.search(nextProps.searchText);
@@ -899,6 +900,7 @@ class ChargebackListContent extends Component {
     }
 
 	getRowData(chargebacks) {
+		
 		if (chargebacks.data !== undefined) {
             let res = ''
             res = chargebacks.Data
@@ -999,41 +1001,6 @@ class ChargebackListContent extends Component {
 
 		return str.join(" ");
 	}
-
-	// getLocation() {
-	// 	console.log("getLocation");
-
-	// 	if (navigator.geolocation) {
-	// 		navigator.geolocation.getCurrentPosition(
-	// 			(position) => {
-	// 				console.log(position.coords);
-	// 				this.setState({
-	// 					current_lat: position.coords.latitude,
-	// 					current_long: position.coords.longitude
-	// 				})
-
-					// this.setState({
-					// 	current_lat: 42.910772,
-					// 	current_long: -78.74557
-					// })
-
-					// if (this.state.addrLat == undefined) {
-					// 	this.setState({
-					// 		addrLat: position.coords.latitude,
-					// 		addrLng: position.coords.longitude
-					// 	})
-						// this.setState({
-						// 	addrLat: 42.910772,
-						// 	addrLng: -78.74557
-						// })
-					// }
-					// if (this.props.locationFilterValue) {
-					// 	this.initRowsFromRawJson();
-					// }
-	// 			}
-	// 		);
-	// 	}
-	// }
 
 	generateRows() {
 		console.log("generateRows");
