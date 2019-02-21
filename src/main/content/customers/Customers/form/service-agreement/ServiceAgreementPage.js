@@ -1086,7 +1086,6 @@ class ServiceAgreementPage extends React.Component {
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between items-center">
 								<TextField
-									type="number"
 									id="cont_bill"
 									label="Monthly Contract Amount"
 									required
@@ -1104,7 +1103,8 @@ class ServiceAgreementPage extends React.Component {
 										// inputComponent: NumberFormatCustomNoPrefix,
 										classes: {
 											input: classNames('text-right')
-										}
+										},
+										inputComponent: NumberFormatCustomNoPrefix
 									}}
 								/>
 								{customerForm.props.open && customerForm.type === "edit" &&
@@ -1670,7 +1670,7 @@ class ServiceAgreementPage extends React.Component {
 									<FormControlLabel
 										control={
 											<Checkbox
-												checked={this.state.natacct || false}
+												checked={this.state.natacct === true}
 												onChange={this.handleChangeCustomerInfoPropsChecked('natacct')}
 												value="natacct"
 											/>
