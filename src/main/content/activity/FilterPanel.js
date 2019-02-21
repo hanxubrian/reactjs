@@ -131,6 +131,8 @@ class FilterPanel extends Component {
                             >
                                 <FormControlLabel value="transaction" control={<Radio />} label="Transaction" />
                                 <FormControlLabel value="invoice" control={<Radio />} label="Invoice" />
+                                <FormControlLabel value="customer" control={<Radio />} label="Customer" />
+                                <FormControlLabel value="payment" control={<Radio />} label="Payment" />
                             </RadioGroup>
                         </FormControl>
                     </Grid>

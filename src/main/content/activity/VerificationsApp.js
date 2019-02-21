@@ -23,6 +23,7 @@ import classNames from 'classnames';
 //Child Components
 import TransactionListContent from './TransactionListContent';
 import InvoiceListContent from './InvoiceListContent';
+import CustomerListContent from './CustomerListContent';
 import VerifiedDialogForm from "./VerifiedDialogForm";
 import ReviseDialogForm from "./ReviseDialogForms";
 import RejectDialogForm from "./RejectDialogForm";
@@ -355,14 +356,9 @@ class VerificationsApp extends Component {
                         <div className="flex-1 flex-col absolute w-full h-full">
                             {this.state.temp && (
                                 <Fragment>
-                                    {this.state.verifyOption==='transaction' ? (
-                                            <TransactionListContent/>
-                                        ) :
-                                        (
-                                            <InvoiceListContent/>
-                                        )
-                                    }
-
+                                    {this.state.verifyOption==='transaction' && (<TransactionListContent/>)}
+                                    {this.state.verifyOption==='invoice' && (<InvoiceListContent/>)}
+                                    {this.state.verifyOption==='customer' && (<CustomerListContent/>)}
                                 </Fragment>
                             )}
                             <Fragment>
