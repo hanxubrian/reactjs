@@ -272,7 +272,8 @@ function TextMaskPhone(props) {
 			ref={ref => {
 				inputRef(ref ? ref.inputElement : null);
 			}}
-			mask={['+', '1', ' ', '(', /\d/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+			// mask={['+', '1', ' ', '(', /\d/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+			mask={['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
 			// placeholderChar={'\u2000'}
 			placeholderChar={'∗'}
 			showMask
@@ -535,8 +536,10 @@ class FilterPanel extends Component {
 
 		this.setState({
 			cus_name, cus_addr, cus_city, cus_state, cus_zip,
-			cus_phone: "+1" + cus_phone,
-			cus_fax: "+1" + cus_fax,
+			// cus_phone: "+1" + cus_phone,
+			// cus_fax: "+1" + cus_fax,
+			cus_phone,
+			cus_fax,
 			website,
 
 			cont_1, cont_2,
@@ -587,8 +590,10 @@ class FilterPanel extends Component {
 
 			this.setState({
 				cus_name, cus_addr, cus_city, cus_state, cus_zip,
-				cus_phone: "+1" + cus_phone,
-				cus_fax: "+1" + cus_fax,
+				// cus_phone: "+1" + cus_phone,
+				// cus_fax: "+1" + cus_fax,
+				cus_phone,
+				cus_fax,
 				website,
 
 				cont_1, cont_2,

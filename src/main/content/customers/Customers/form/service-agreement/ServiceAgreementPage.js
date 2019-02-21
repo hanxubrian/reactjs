@@ -1680,7 +1680,7 @@ class ServiceAgreementPage extends React.Component {
 									<FormControlLabel
 										control={
 											<Checkbox
-												checked={this.state.parent || false}
+												checked={this.state.parent === 1 || false}
 												onChange={this.handleChangeCustomerInfoPropsChecked('parent')}
 												value="parent"
 											/>
