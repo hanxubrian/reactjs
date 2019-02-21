@@ -33,6 +33,12 @@ const styles = theme => ({
         background: "url('/assets/images/backgrounds/signin-bg.jpg') no-repeat",
         backgroundSize: 'cover',
     },
+    wrapProgress: {
+        flexGrow: 1,
+        '&>div':{
+            width: '60%'
+        }
+    },
     filterPanel: {
         position                      : 'absolute',
         width                         : 0,
@@ -188,6 +194,18 @@ const styles = theme => ({
         display: 'flex',
         opacity: 0.5
     },
+    overlay1: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100vh',
+        zIndex: 1000,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
+        opacity: 1
+    },
     validationMenu: {
         color: "#07DF07",
     },
@@ -203,12 +221,16 @@ const styles = theme => ({
     },
 });
 
+let timer = null;
+
 class PrintChecksLayout extends Component {
     state={
         s: '',
         selection: [],
         openPrintModal: false,
-        checkdate: moment().format('MM/DD/YYYY')
+        checkdate: moment().format('MM/DD/YYYY'),
+        completed: 0,
+        bPrint: false
     };
 
     constructor(props) {
@@ -268,15 +290,25 @@ class PrintChecksLayout extends Component {
 
     handlePrint = ()=>{
         this.setState({openPrintModal: false});
+        this.setState({bPrint: true});
+        this.setState({completed: 0});
         this.child.resetSelection();
+        timer = setInterval(this.progress, 500);
     };
 
     handleCheckDateDateChange = date => {
         this.setState({checkdate: date});
     };
 
-    toggleFilterPanel = ()=>{
-
+    progress = async () =>{
+        if (this.state.completed > 100) {
+            await clearImmediate(timer);
+            await this.setState({bPrint: false});
+            await this.setState({completed: 0});
+        } else {
+            const diff =  this.state.completed + 10;
+            this.setState({completed: diff});
+        }
     };
 
     render() {
@@ -423,8 +455,14 @@ class PrintChecksLayout extends Component {
                 >
                 </FusePageCustomSidebarScroll>
                 {(this.props.bStartFetchList_pc) && (
-                    <div className={classes.overlay}>
+                    <div className={classes.overlay1}>
                         <CircularProgress className={classes.progress} color="secondary"  />
+                    </div>
+                )}
+                {this.state.bPrint && (
+                    <div className={classNames(classes.overlay, classes.wrapProgress, "flex flex-col items-center")}>
+                        <LinearProgress variant="determinate" value={this.state.completed} />
+                        <Typography variant={"h3"}>Pringting</Typography>
                     </div>
                 )}
             </React.Fragment>
