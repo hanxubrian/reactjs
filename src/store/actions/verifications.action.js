@@ -9,6 +9,7 @@ export const TOGGLE_VERIFICATION_FILTER_STATUS = "[VERIFICATIONS APP] TOGGLE VER
 export const TOGGLE_VERIFICATION_FILTER_PANEL = "[VERIFICATIONS APP] TOGGLE VERIFICATION FILTER PANEL";
 export const UPDATE_SELECTION_ROW_LENGTH = "[VERIFICATIONS APP] UPDATE VERIFICATION SELECTION ROWS LENGTH";
 export const UPDATE_INVOICE_SELECTIONS = "[VERIFICATIONS APP] UPDATE INVOICE SELECTIONS";
+export const UPDATE_CUSTOMER_SELECTIONS = "[VERIFICATIONS APP] UPDATE CUSTOMER SELECTIONS";
 export const OPEN_VERIFICATION_DIALOG = "[VERIFICATIONS APP] OPEN VERIFICATION DIALOG ";
 export const CLOSE_VERIFICATION_DIALOG = "[VERIFICATIONS APP] CLOSE VERIFICATION DIALOG ";
 
@@ -113,6 +114,12 @@ export function updateSelectedRowsLength(length) {
 export function updateInvoiceSelections(selection) {
     return {
         type: UPDATE_INVOICE_SELECTIONS,
+        payload: selection
+    }
+}
+export function updateCustomerSelections(selection) {
+    return {
+        type: UPDATE_CUSTOMER_SELECTIONS,
         payload: selection
     }
 }

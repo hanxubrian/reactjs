@@ -132,6 +132,10 @@ class VerifiedDialogForm extends React.Component {
             data = this.props.verifications.Data.FranTransactions;
             selections = this.props.aTransactionSelections;
         }
+        else if(option==='invoice') {
+            data = this.props.verifications.Data.Invoices;
+            selections =  this.props.aInvoiceSelections;
+        }
 
         let objects = selections.map(x=>data[x]);
 
@@ -141,9 +145,10 @@ class VerifiedDialogForm extends React.Component {
         });
 
         this.props.verifyBulkUpdate(this.props.regionId, userId, action, ids);
+
         if(option==='transaction')
             await this.props.updateSelectedRowsLength([]);
-        else
+        else if(option==='invoice')
             await this.props.updateInvoiceSelections([]);
 
         this.props.getInvoiceTransactionPendingLists(this.props.regionId, this.props.fromDate, this.props.toDate);

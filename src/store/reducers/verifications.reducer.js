@@ -23,6 +23,7 @@ const initialState = {
     bVerificationFetchStart: false,
     aTransactionSelections: [],
     aInvoiceSelections: [],
+    aCustomerSelections: [],
     verifiedModal: false,
     reviseModal: false,
     rejectModal: false,
@@ -121,6 +122,13 @@ const verifications = function (state = initialState, action) {
             return{
                 ...state,
                 aInvoiceSelections: action.payload
+            }
+        }
+        case Actions.UPDATE_CUSTOMER_SELECTIONS:
+        {
+            return{
+                ...state,
+                aCustomerSelections: action.payload
             }
         }
         case Actions.OPEN_VERIFICATION_DIALOG:

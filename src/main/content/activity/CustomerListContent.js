@@ -222,7 +222,7 @@ class CustomerLists extends Component {
             temp: [],
             data: [],
             selectAll: false,
-            selection: [...this.props.aInvoiceSelections],
+            selection: [...this.props.aCustomerSelections],
             //rows: [],
             sorting: [
                 { columnName: 'Franchisee', direction: 'asc' }
@@ -246,7 +246,7 @@ class CustomerLists extends Component {
 
         this.changeSelection = selection =>{
             this.setState({ selection });
-            this.props.updateInvoiceSelections(selection);
+            this.props.updateCustomerSelections(selection);
         };
 
         this.changeSorting = sorting => this.setState({ sorting });
@@ -376,7 +376,7 @@ class CustomerLists extends Component {
                     objects.push(index);
             }
         );
-        this.props.updateInvoiceSelections(objects);
+        this.props.updateCustomerSelections(objects);
         this.props.openVerificationDialog(true);
     };
     openReviseDialog = () => {
@@ -516,7 +516,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         toggleFilterPanel: Actions.toggleVerificationFilterPanel,
         toggleSummaryPanel: Actions.toggleVerificationSummaryPanel,
-        updateInvoiceSelections: Actions.updateInvoiceSelections,
+        updateCustomerSelections: Actions.updateCustomerSelections,
         openCloseReviseDialog: Actions.openCloseReviseDialog,
         openVerificationDialog: Actions.openVerificationDialog,
         openCloseRejectDialog: Actions.openCloseRejectDialog
@@ -533,7 +533,7 @@ function mapStateToProps({ customers, auth, verifications, transactions }) {
         regionId: auth.login.defaultRegionId,
         verificationForm: verifications.verificationForm,
         searchText: verifications.searchText,
-        aInvoiceSelections: verifications.aInvoiceSelections,
+        aCustomerSelections: verifications.aCustomerSelections,
         verifiedModal: verifications.verifiedModal,
         reviseModal: verifications.reviseModal,
         rejectModal: verifications.rejectModal,
