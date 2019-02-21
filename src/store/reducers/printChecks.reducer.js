@@ -18,7 +18,8 @@ const initialState = {
     checktypeId: '5c670724580ae04184e50a70',
     entityTypeId: '',
     year: moment().year(),
-    month: moment().month()+1
+    month: moment().month()+1,
+    selections: []
 };
 
 const printChecks = function(state = initialState, action) {
@@ -36,6 +37,11 @@ const printChecks = function(state = initialState, action) {
         case Actions.START_FETCH_PRINT_CHECKS_LIST: {
             return {
                 ...state, printChecksDB: null, bStartFetchList_pc: true
+            };
+        }
+        case Actions.UPDATE_CHECK_SELECTIONS: {
+            return {
+                ...state, selections: action.payload
             };
         }
         case UserActions.USER_LOGGED_OUT:{

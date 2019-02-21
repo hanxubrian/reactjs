@@ -17,7 +17,6 @@ import classNames from 'classnames';
 
 import ChecksLists from './checksLists';
 import FilterPanel from "./printChecksFilterPanel";
-import moment from "moment";
 import _ from "lodash";
 
 const headerHeight = 80;
@@ -146,7 +145,7 @@ const styles = theme => ({
     },
     search: {
         width: 360,
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.up('sm')]: {
             width: '100%'
         }
     },
@@ -199,7 +198,8 @@ const styles = theme => ({
 
 class PrintChecksLayout extends Component {
     state={
-        s: ''
+        s: '',
+        selection: []
     };
 
     constructor(props) {
@@ -247,12 +247,14 @@ class PrintChecksLayout extends Component {
         alert("Email");
     };
 
-    goBackList =()=>{
-        // this.props.nullifyFranchiseeNewReport();
-        // this.props.history.push('/franchisees/list');
+    handleChange = prop => event => {
+        this.setState({ [prop]: event.target.value });
+        if(this.child!==undefined) {
+            console.log('this.child.state=', this.child.state);
+        }
     };
-    render() {
 
+    render() {
         const {classes, bPaymentLogFilterPanelOpen, summaryState} = this.props;
         let menuItem = null;
 
@@ -287,6 +289,7 @@ class PrintChecksLayout extends Component {
 
                                     <div className="flex flex-shrink items-center">
                                         <Button variant="contained" color="primary"
+                                                disabled={(this.props.selections.length===0)}
                                                 className={classNames(classes.btntop) } onClick={this.print}>
                                             Print
                                             <Icon className={classes.rightIcon}>print</Icon>
@@ -337,7 +340,7 @@ class PrintChecksLayout extends Component {
                                                 disableUnderline
                                                 fullWidth
                                                 value={this.state.s}
-                                                // onChange={this.handleChange('s')}
+                                                onChange={this.handleChange('s')}
                                                 inputProps={{
                                                     'aria-label': 'Search'
                                                 }}
@@ -391,7 +394,8 @@ function mapStateToProps({auth, printChecks, fuse}) {
         year: printChecks.year,
         month: printChecks.month,
         bSettingPanel: printChecks.bSettingPanel,
-        navigation: fuse.navigation
+        selections: printChecks.selections,
+        navigation: fuse.navigation,
     }
 }
 

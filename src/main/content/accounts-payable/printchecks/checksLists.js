@@ -5,14 +5,13 @@ import connect from "react-redux/es/connect/connect";
 import classNames from 'classnames';
 import moment from 'moment';
 
-// core components
-import {Card, CardContent, Typography} from '@material-ui/core';
-import Grid1 from '@material-ui/core/Grid';
+
 import {withStyles} from '@material-ui/core/styles/index';
 
 //Theme component
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+
 //Store
 import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
@@ -21,10 +20,8 @@ import {
     PagingState,
     IntegratedPaging,
     DataTypeProvider,
-    GroupingState, SelectionState,
-    IntegratedGrouping, TableColumnVisibility,
-    SortingState,
-    IntegratedSorting, SummaryState, IntegratedSummary, IntegratedSelection,
+    SelectionState,
+    IntegratedSelection,
 } from '@devexpress/dx-react-grid';
 
 import {
@@ -32,8 +29,7 @@ import {
     Table,
     VirtualTable,
     TableHeaderRow,
-    TableGroupRow,
-    PagingPanel, TableSummaryRow, TableSelection
+    PagingPanel, TableSelection
 } from '@devexpress/dx-react-grid-material-ui';
 import NumberFormat from "react-number-format";
 
@@ -51,93 +47,34 @@ const styles = theme => ({
                 paddingRight: 0 + '!important'
             }
         },
-        '& .report-header h1':{
-            fontSize: 36,
-            fontWeight: 700,
-            lineHeight: 1.5,
-        },
-        '& .report-header h2':{
-            fontSize: 24,
-            fontWeight: 700,
-            lineHeight: 1.5,
-        },
-        '& .report-header h3':{
-            fontSize: 20,
-            fontWeight: 700,
-            lineHeight: 1.5,
-        },
-        '& .report-header td:nth-child(2), & .report-header td:nth-child(3)':{
-            verticalAlign: 'top',
-            paddingTop: 20
-        },
-        '& .report-header td:nth-child(3)':{
-            paddingLeft: 30
-        }
-
     },
     paper: {
         padding: theme.spacing.unit * 1,
         textAlign: 'center',
         color: theme.palette.text.secondary,
     },
-    card       : {
-        width         : 1020,
-        '@media print': {
-            width    : '100%!important',
-            boxShadow: 'none'
-        }
-    },
-    cardContent: {
-        '& .page': {
-            // borderBottom: `1px solid ${theme.palette.text.primary}`
+    tableTheadRow: {
+        '& tr': {
+            height: 32
         },
-        '& .page1': {
-            paddingTop: 12,
-            borderTop: `1px solid ${theme.palette.text.primary}`,
-            // borderBottom: `1px solid ${theme.palette.text.primary}`
+        '& tr th': {
+            padding: '0 8px'
+        },
+        '& tr th:first-child': {
+            paddingLeft: '0px!important',
+        },
+        '& tr th:nth-child(5)': {
+            width: '100%'
         }
     },
-    divider    : {
-        width          : 1,
-        backgroundColor: theme.palette.divider,
-        height         : 144
-    },
-    seller     : {
-        backgroundColor: theme.palette.primary.dark,
-        color          : theme.palette.getContrastText(theme.palette.primary.dark),
-        marginRight    : -88,
-        paddingRight   : 66,
-        width          : 480,
-        '& .divider'   : {
-            backgroundColor: theme.palette.getContrastText(theme.palette.primary.dark),
-            opacity        : .5
-        }
-    },
-    textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        width: 200
-    },
-    longerTextField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        width: 835
-    },
-    overlay: {
-        position: 'absolute',
-        top: -104,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        backgroundColor: 'rgba(0,0,0, .6)',
-        zIndex: 1000,
-        alignItems: 'center',
-        justifyContent: 'center',
-        display: 'flex'
-    },
-    progress: {
-        margin: theme.spacing.unit * 2,
-    },
+    tableStriped:{
+        '& tbody tr td:nth-child(5)': {
+            width: '100%',
+        },
+        '& colgroup col:nth-child(5)': {
+            width: '100%',
+        },
+    }
 });
 
 let pdf                             = 0;
@@ -184,7 +121,12 @@ class PrintChecksLists extends Component {
         selection: [],
     };
 
-    changeSelection = selection => this.setState({ selection });
+    changeSelection = selection => {
+        this.setState({ selection });
+        this.props.updateSelections(selection);
+    };
+
+
     componentDidMount()
     {
         this.props.onRef(this);
@@ -199,13 +141,13 @@ class PrintChecksLists extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.printChecksDB!==null && this.props.printChecksDB !== prevProps.printChecksDB) {
-            console.log('fired');
              this.setState({data: this.props.printChecksDB})
         }
     }
 
 
     TableRow = ({ tableRow, selected, onToggle, ...restProps }) => {
+        delete restProps.selectByRowClick
         return (
             <Table.Row
                 {...restProps}
@@ -264,6 +206,17 @@ class PrintChecksLists extends Component {
         top_left_margin = 15;
     };
 
+    CustomizeCell = (props)=> {
+        if (props.column.name.includes('checkdate')) {
+            return (
+                <Table.Cell>
+                    {moment(props.row.checkdate).format('MM/DD/YYYY')}
+                </Table.Cell>
+            )
+        }
+        return <Table.Cell {...props} />;
+    };
+
     render()
     {
         const { classes} = this.props;
@@ -278,19 +231,14 @@ class PrintChecksLists extends Component {
             {name: "checkdate", title: "checkdate"},
         ];
         let  tableColumnExtensions = [
-            { columnName: 'Customer', width: -1, },
-            { columnName: 'CustomerNo', width: 100},
-            { columnName: 'ReferenceNo', width: 150,},
-            { columnName: 'Description', width: 120,},
-            { columnName: 'FranchiseeNo', width: 120},
-            { columnName: 'Amount', width: 120,  align: 'right'},
-        ];
-        console.log('data=', this.state.data, this.props.printChecksDB);
-        // if(!this.state.data.length)
-        //     return (<div/>);
-
-        let totalSummaryItems = [
-            { columnName: 'Amount', type: 'sum'},
+            { columnName: 'checkAmounttext', width: -1, },
+            { columnName: 'PayeeName', width: 250},
+            { columnName: 'bankname', width: 100,},
+            { columnName: 'PayeeNumber', width: 100,},
+            { columnName: 'bankaddress1', width: 100,},
+            { columnName: 'PayeeAddress1', width: 200,},
+            { columnName: 'checkdate', width: 100},
+            { columnName: 'checkamountnumber', width: 120,  align: 'right'},
         ];
 
         return (
@@ -323,6 +271,7 @@ class PrintChecksLists extends Component {
                                           tableComponent={TableComponent}
                                           headComponent = {TableHeadComponent}
                                           columnExtensions={tableColumnExtensions}
+                                          cellComponent={this.CustomizeCell}
                             />
                             <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
                             <TableHeaderRow/>
@@ -335,6 +284,7 @@ class PrintChecksLists extends Component {
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
+        updateSelections: Actions.updateSelections
     }, dispatch);
 }
 
