@@ -79,10 +79,10 @@ import { CustomizedDxGridSelectionPanel } from "./../../../../common/CustomizedD
 
 //Snackbar
 const variantIcon = {
-    success: CheckCircleIcon,
-    warning: WarningIcon,
-    error: ErrorIcon,
-    info: InfoIcon,
+	success: CheckCircleIcon,
+	warning: WarningIcon,
+	error: ErrorIcon,
+	info: InfoIcon,
 };
 
 const styles = theme => ({
@@ -111,67 +111,67 @@ const styles = theme => ({
 })
 
 const styles1 = theme => ({
-    success: {
-        backgroundColor: green[600],
-    },
-    error: {
-        backgroundColor: theme.palette.error.dark,
-    },
-    info: {
-        backgroundColor: theme.palette.primary.dark,
-    },
-    warning: {
-        backgroundColor: amber[700],
-    },
-    icon: {
-        fontSize: 20,
-    },
-    iconVariant: {
-        opacity: 0.9,
-        marginRight: theme.spacing.unit,
-    },
-    message: {
-        display: 'flex',
-        alignItems: 'center',
-    },
+	success: {
+		backgroundColor: green[600],
+	},
+	error: {
+		backgroundColor: theme.palette.error.dark,
+	},
+	info: {
+		backgroundColor: theme.palette.primary.dark,
+	},
+	warning: {
+		backgroundColor: amber[700],
+	},
+	icon: {
+		fontSize: 20,
+	},
+	iconVariant: {
+		opacity: 0.9,
+		marginRight: theme.spacing.unit,
+	},
+	message: {
+		display: 'flex',
+		alignItems: 'center',
+	},
 });
 
 function MySnackbarContent(props) {
-    const { classes, className, message, onClose, variant, ...other } = props;
-    const Icon = variantIcon[variant];
+	const { classes, className, message, onClose, variant, ...other } = props;
+	const Icon = variantIcon[variant];
 
-    return (
-        <SnackbarContent
-            className={classNames(classes[variant], className)}
-            aria-describedby="client-snackbar"
-            message={
-                <span id="client-snackbar" className={classes.message}>
-          <Icon className={classNames(classes.icon, classes.iconVariant)} />
-                    {message}
-        </span>
-            }
-            action={[
-                <IconButton
-                    key="close"
-                    aria-label="Close"
-                    color="inherit"
-                    className={classes.close}
-                    onClick={onClose}
-                >
-                    <CloseIcon className={classes.icon} />
-                </IconButton>,
-            ]}
-            {...other}
-        />
-    );
+	return (
+		<SnackbarContent
+			className={classNames(classes[variant], className)}
+			aria-describedby="client-snackbar"
+			message={
+				<span id="client-snackbar" className={classes.message}>
+					<Icon className={classNames(classes.icon, classes.iconVariant)} />
+					{message}
+				</span>
+			}
+			action={[
+				<IconButton
+					key="close"
+					aria-label="Close"
+					color="inherit"
+					className={classes.close}
+					onClick={onClose}
+				>
+					<CloseIcon className={classes.icon} />
+				</IconButton>,
+			]}
+			{...other}
+		/>
+	);
 }
 
 MySnackbarContent.propTypes = {
-    classes: PropTypes.object.isRequired,
-    className: PropTypes.string,
-    message: PropTypes.node,
-    onClose: PropTypes.func,
-    variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
+	classes: PropTypes.object.isRequired,
+	className: PropTypes.string,
+	message: PropTypes.node,
+	onClose: PropTypes.func,
+	variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
 };
 
 const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
@@ -497,14 +497,16 @@ class showSuspendContractPage extends React.Component {
 	};
 
 	validateSuspension = () => {
-        if(true){
-            this.setState({snackMessage: 'Processed Suspension'});
-            this.setState({openSnack: true});
-            return true;
-        }
+		if (true) {
+			this.setState({
+				snackMessage: 'Processed Suspension',
+				openSnack: true
+			});
+			return true;
+		}
 
-        return true;
-    };
+		return true;
+	};
 
 	handleClose = () => {
 		// this.setState({
@@ -979,20 +981,20 @@ class showSuspendContractPage extends React.Component {
 						<Button variant="contained" onClick={this.saveSuspendContract} color="primary" className={classNames("pl-24 pr-24 mr-12")} style={{ background: '#ec3c3c' }}>Proceed</Button>
 					</div>
 					<Snackbar
-                        anchorOrigin={{
-                            vertical: 'right',
-                            horizontal: 'top',
-                        }}
-                        open={this.state.openSnack}
-                        autoHideDuration={3000}
-                        onClose={this.handleClose}
-                    >
-                        <MySnackbarContentWrapper
-                            onClose={this.handleClose}
-                            variant="success"
-                            message={this.state.snackMessage}
-                        />
-                    </Snackbar>
+						anchorOrigin={{
+							vertical: 'bottom',
+							horizontal: 'right',
+						}}
+						open={this.state.openSnack}
+						autoHideDuration={2000}
+						onClose={this.handleClose}
+					>
+						<MySnackbarContentWrapper
+							onClose={this.handleClose}
+							variant="success"
+							message={this.state.snackMessage}
+						/>
+					</Snackbar>
 
 				</div>
 

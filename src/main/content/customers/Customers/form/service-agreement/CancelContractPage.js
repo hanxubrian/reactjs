@@ -992,11 +992,11 @@ class CancelContractPage extends React.Component {
 					</div>
 					<Snackbar
 						anchorOrigin={{
-							vertical: 'right',
-							horizontal: 'top',
+							vertical: 'bottom',
+							horizontal: 'right',
 						}}
 						open={this.state.openSnack}
-						autoHideDuration={3000}
+						autoHideDuration={2000}
 						onClose={this.handleClose}
 					>
 						<MySnackbarContentWrapper
