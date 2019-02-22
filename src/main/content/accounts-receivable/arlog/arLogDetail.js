@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import moment from 'moment';
 
 // core components
-import {Card, CardContent, Typography} from '@material-ui/core';
+import {Typography} from '@material-ui/core';
 import Grid1 from '@material-ui/core/Grid';
 import {withStyles} from '@material-ui/core/styles/index';
 
@@ -18,13 +18,8 @@ import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
 
 import {
-    PagingState,
-    IntegratedPaging,
     DataTypeProvider,
-    GroupingState, SelectionState,
-    IntegratedGrouping, TableColumnVisibility,
-    SortingState,
-    IntegratedSorting, SummaryState, IntegratedSummary,
+    SummaryState, IntegratedSummary,
 } from '@devexpress/dx-react-grid';
 
 import {
@@ -32,14 +27,9 @@ import {
     Table,
     VirtualTable,
     TableHeaderRow,
-    TableGroupRow,
-    PagingPanel, TableSummaryRow
+    TableSummaryRow
 } from '@devexpress/dx-react-grid-material-ui';
 import NumberFormat from "react-number-format";
-import {
-    TableSummaryCellComponent,
-    TableSummaryComponent
-} from "../../franchisees/franchisees/components/customerAccountTotal";
 
 
 //Child components
