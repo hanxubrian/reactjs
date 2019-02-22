@@ -694,10 +694,10 @@ export function updateNewCustomerParam(name, value) {
 	}
 }
 
-export function saveCancelContract(regionId, cust_no, reason_id, reason_note, cancel_date) {
+export function saveCancelContract(regionId, cust_no, cancel_date, reason_id, reason_note, lastday_service, client_credit_amount, canc_fee, continue_findersfee) {
 	return (dispatch) => {
 		(async () => {
-			let response = await customersService.saveCancelContract(regionId, cust_no, reason_id, reason_note, cancel_date);
+			let response = await customersService.saveCancelContract(regionId, cust_no, cancel_date, reason_id, reason_note, lastday_service, client_credit_amount, canc_fee, continue_findersfee);
 			dispatch({
 				type: SAVE_CANCEL_CONTRACT,
 				payload: response

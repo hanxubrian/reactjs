@@ -974,9 +974,9 @@ class showSuspendContractPage extends React.Component {
 
 					<Typography variant="h6">Suspension</Typography>
 
-					<div className="flex items-center">
+					<div className="flex">
 						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Previous</Button>
-						<Button variant="contained" onClick={this.saveSuspendContract} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Process Suspension</Button>
+						<Button variant="contained" onClick={this.saveSuspendContract} color="primary" className={classNames("pl-24 pr-24 mr-12")} style={{ background: '#ec3c3c' }}>Proceed</Button>
 					</div>
 					<Snackbar
                         anchorOrigin={{

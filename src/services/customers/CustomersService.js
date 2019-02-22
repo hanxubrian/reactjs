@@ -511,10 +511,18 @@ fullbill: 0
 				})
 		});
 	}
-	saveCancelContract(regionId, cust_no, reason_id, reason_note, cancel_date) {
-		console.log("saveCancelContract", `${BASE_MONGO_API_URL}/v1/${regionId}/Customer/Cancel?cust_no=${cust_no}&reason_id=${reason_id}&reason_note=${reason_note}&cancel_date=${cancel_date}`)
+	saveCancelContract(regionId, cust_no, cancel_date, reason_id, reason_note, lastday_service, client_credit_amount, canc_fee, continue_findersfee) {
+		const data = {
+			cancel_date,
+			region_id: reason_id,
+			region_note: reason_note,
+			lastday_service,
+			client_credit_amount, //double
+			canc_fee,//double
+			continue_findersfee,//bool
+		}
 		return new Promise((resolve, reject) => {
-			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/Cancel?cust_no=${cust_no}&reason_id=${reason_id}&reason_note=${reason_note}&cancel_date=${cancel_date}`)
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/${regionId}/Customer/Cancel?cust_no=${cust_no}`, data)
 				.then(res => {
 					if (res.status === 200) {
 						resolve(res.data);
@@ -532,8 +540,8 @@ fullbill: 0
 		const params = {
 			cust_no,
 			reason_id,
-			notes, 
-			suspend_date, 
+			notes,
+			suspend_date,
 			restart_date
 		}
 		console.log("saveSuspendContract", `${BASE_MONGO_API_URL}/v1/${regionId}/Customer/Suspend?cust_no=${cust_no}&reason_id=${reason_id}&notes=${notes}&suspend_date=${suspend_date}&restart_date=${restart_date}`)

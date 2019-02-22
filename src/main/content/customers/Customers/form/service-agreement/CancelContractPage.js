@@ -79,10 +79,10 @@ import { CustomizedDxGridSelectionPanel } from "./../../../../common/CustomizedD
 
 //Snackbar
 const variantIcon = {
-    success: CheckCircleIcon,
-    warning: WarningIcon,
-    error: ErrorIcon,
-    info: InfoIcon,
+	success: CheckCircleIcon,
+	warning: WarningIcon,
+	error: ErrorIcon,
+	info: InfoIcon,
 };
 
 const styles = theme => ({
@@ -111,68 +111,68 @@ const styles = theme => ({
 })
 
 const styles1 = theme => ({
-    success: {
-        backgroundColor: green[600],
-    },
-    error: {
-        backgroundColor: theme.palette.error.dark,
-    },
-    info: {
-        backgroundColor: theme.palette.primary.dark,
-    },
-    warning: {
-        backgroundColor: amber[700],
-    },
-    icon: {
-        fontSize: 20,
-    },
-    iconVariant: {
-        opacity: 0.9,
-        marginRight: theme.spacing.unit,
-    },
-    message: {
-        display: 'flex',
-        alignItems: 'center',
-    },
+	success: {
+		backgroundColor: green[600],
+	},
+	error: {
+		backgroundColor: theme.palette.error.dark,
+	},
+	info: {
+		backgroundColor: theme.palette.primary.dark,
+	},
+	warning: {
+		backgroundColor: amber[700],
+	},
+	icon: {
+		fontSize: 20,
+	},
+	iconVariant: {
+		opacity: 0.9,
+		marginRight: theme.spacing.unit,
+	},
+	message: {
+		display: 'flex',
+		alignItems: 'center',
+	},
 });
 
 
 function MySnackbarContent(props) {
-    const { classes, className, message, onClose, variant, ...other } = props;
-    const Icon = variantIcon[variant];
+	const { classes, className, message, onClose, variant, ...other } = props;
+	const Icon = variantIcon[variant];
 
-    return (
-        <SnackbarContent
-            className={classNames(classes[variant], className)}
-            aria-describedby="client-snackbar"
-            message={
-                <span id="client-snackbar" className={classes.message}>
-          <Icon className={classNames(classes.icon, classes.iconVariant)} />
-                    {message}
-        </span>
-            }
-            action={[
-                <IconButton
-                    key="close"
-                    aria-label="Close"
-                    color="inherit"
-                    className={classes.close}
-                    onClick={onClose}
-                >
-                    <CloseIcon className={classes.icon} />
-                </IconButton>,
-            ]}
-            {...other}
-        />
-    );
+	return (
+		<SnackbarContent
+			className={classNames(classes[variant], className)}
+			aria-describedby="client-snackbar"
+			message={
+				<span id="client-snackbar" className={classes.message}>
+					<Icon className={classNames(classes.icon, classes.iconVariant)} />
+					{message}
+				</span>
+			}
+			action={[
+				<IconButton
+					key="close"
+					aria-label="Close"
+					color="inherit"
+					className={classes.close}
+					onClick={onClose}
+				>
+					<CloseIcon className={classes.icon} />
+				</IconButton>,
+			]}
+			{...other}
+		/>
+	);
 }
 
 MySnackbarContent.propTypes = {
-    classes: PropTypes.object.isRequired,
-    className: PropTypes.string,
-    message: PropTypes.node,
-    onClose: PropTypes.func,
-    variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
+	classes: PropTypes.object.isRequired,
+	className: PropTypes.string,
+	message: PropTypes.node,
+	onClose: PropTypes.func,
+	variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
 };
 
 const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
@@ -227,8 +227,6 @@ class CancelContractPage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			cancelationfeecheckbox: false,
-			stopfinderfee: false,
 			// bOpenPaymentDialog: props.bOpenPaymentDialog,
 			columns: [
 				{
@@ -418,10 +416,6 @@ class CancelContractPage extends React.Component {
 			NewAmount: this.props.NewAmount,
 			snackMessage: "",
 			openSnack: false,
-			cancelfindersfee:"",
-			cancelationfee:"$50",
-			clientcredit:"",
-			lastdayofservice:null,
 		};
 		// this.commitChanges = this.commitChanges.bind(this);
 		// if (!props.bLoadedFranchisees) {
@@ -505,14 +499,16 @@ class CancelContractPage extends React.Component {
 	};
 
 	validateCancellation = () => {
-        if(true){
-            this.setState({snackMessage: 'Processed Cancellation'});
-            this.setState({openSnack: true});
-            return true;
-        }
+		if (true) {
+			this.setState({
+				snackMessage: 'Processed Cancellation',
+				openSnack: true
+			});
+			return true;
+		}
 
-        return true;
-    };
+		return true;
+	};
 
 	handleClose = () => {
 		// this.setState({
@@ -922,24 +918,21 @@ class CancelContractPage extends React.Component {
 
 	saveCancelContract = () => {
 		let CustomerNo = this.props.activeCustomer.Data.cust_no;
-		const { reason, note } = this.state
-		let EffectiveDate = moment(this.state.EffectiveDate).format('mm/dd/yyyy');
+		const { reason, note, client_credit_amount, canc_fee, continue_findersfee } = this.state
 
-		this.props.saveCancelContract(this.props.regionId, CustomerNo, reason, note, EffectiveDate);
+		let EffectiveDate = moment(this.state.EffectiveDate).format('mm/dd/yyyy');
+		let lastday_service = moment(this.state.lastday_service).format('mm/dd/yyyy');
+
+		this.props.saveCancelContract(this.props.regionId, CustomerNo, EffectiveDate, reason, note, lastday_service, client_credit_amount, canc_fee, continue_findersfee);
+		// regionId, cust_no, cancel_date, reason_id, reason_note, lastday_service, client_credit_amount, canc_fee, continue_findersfee
+
 		// this.props.updateCustomersParameter('NewAmount', 0);
 		// this.setState({ reason: '', notes: '', NewAmount: '', EffectiveDate: moment().format('YYYY-MM-DD') });
 		// this.props.getCustomer(this.props.regionId, this.props.activeCustomer.Data._id);
 		this.validateCancellation()
 
 	};
-    stopfinderfeecheckbox=(event)=>{
-        event.preventDefault();
-        this.setState({stopfinderfee:!this.state.stopfinderfee});
-	}
-    cancelationcheckbox=(event)=>{
-        event.preventDefault();
-		this.setState({cancelationfeecheckbox:!this.state.cancelationfeecheckbox});
-	}
+
 	handleStepFindersFeesForm = () => {
 		this.handleStep(2)
 	};
@@ -970,15 +963,7 @@ class CancelContractPage extends React.Component {
 			</TextField>
 		)
 	};
-    lastdayofservicehandleChange=(event)=>{
-        this.setState({lastdayofservice:event.target.value});
-	}
-    clientcredithandleChange=(event)=>{
-        this.setState({clientcredit:event.target.value});
-	}
-    cancelataionfeehandleChange=(event)=>{
-        this.setState({cancelataionfee:event.target.value});
-	}
+
 	getNewAmountInputForm() {
 		const { classes } = this.props;
 		const {
@@ -1001,25 +986,25 @@ class CancelContractPage extends React.Component {
 
 					<Typography variant="h6">Cancellation</Typography>
 
-					<div className="flex items-center">
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")} style={{ backgroud: '#ec3c3c' }}><Icon>keyboard_arrow_left</Icon>Previous</Button>
-						<Button variant="contained" onClick={this.saveCancelContract} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Process Cancellation</Button>
+					<div className="flex">
+						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Previous</Button>
+						<Button variant="contained" onClick={this.saveCancelContract} color="primary" className={classNames("pl-24 pr-24 mr-12")} style={{ background: '#ec3c3c' }}>Proceed</Button>
 					</div>
 					<Snackbar
-                        anchorOrigin={{
-                            vertical: 'right',
-                            horizontal: 'top',
-                        }}
-                        open={this.state.openSnack}
-                        autoHideDuration={3000}
-                        onClose={this.handleClose}
-                    >
-                        <MySnackbarContentWrapper
-                            onClose={this.handleClose}
-                            variant="success"
-                            message={this.state.snackMessage}
-                        />
-                    </Snackbar>
+						anchorOrigin={{
+							vertical: 'right',
+							horizontal: 'top',
+						}}
+						open={this.state.openSnack}
+						autoHideDuration={3000}
+						onClose={this.handleClose}
+					>
+						<MySnackbarContentWrapper
+							onClose={this.handleClose}
+							variant="success"
+							message={this.state.snackMessage}
+						/>
+					</Snackbar>
 
 				</div>
 
@@ -1064,51 +1049,65 @@ class CancelContractPage extends React.Component {
 					}
 
 				</div>
-                <div className={classNames("flex mt-12 justify-start")}>
-                    <TextField
-                        type="date"
-                        id="lastdayofservice"
-                        label="Last Day of Service"
-                        className={classNames(classes.textField, 'ml-24')}
-                        value={this.state.EffectiveDate || ''}
-                        margin="dense"
-                        onChange={this.lastdayofservicehandleChange}
-                    />
-                    <TextField
-                        id="ClientCredit"
-                        label="Client Credit"
-                        placeholder="Amount"
-                        type="number"
-                        multiline
-                        className={classNames(classes.textField, 'ml-24 mr-24')}
-                        margin="dense"
-                        onChange={this.clientcredithandleChange}
-                    />
-                    <Checkbox checked={this.state.cancelationfeecheckbox}  onChange={this.cancelationcheckbox} style={{marginTop:14}} />
-                    <TextField
-                        disabled={!this.state.cancelationfeecheckbox}
-                        id="CancelataionFee"
-                        label="Cancelation Fee"
-                        placeholder="Amount Fee"
-                        type="number"
-						value={this.state.cancelationfeecheckbox?this.state.cancelationfee:''}
-                        onChange={this.cancelataionfeehandleChange}
-                        className={classNames(classes.textField, 'mr-24')}
-                        margin="dense"
-                    />
-                    <Checkbox checked={this.state.stopfinderfee}  onChange={this.stopfinderfeecheckbox} style={{marginTop:14}} />
-					<font style={{alignSelf:'center',marginTop:14}}>Stop Finders Fee</font>
-                    {/*<TextField*/}
-                        {/*id="cancelfindersfee"*/}
-                        {/*label="Stop Finders Fee"*/}
-                        {/*placeholder="Stop Finders Fee Amount"*/}
-                        {/*type="number"*/}
-                        {/*onChange={this.handleChange('cancelfindersfee')}*/}
-                        {/*className={classNames(classes.textField, 'mr-24')}*/}
-                        {/*margin="dense"*/}
-                    {/*/>*/}
+				<div className={classNames("flex mt-12 justify-start")}>
+					<TextField
+						type="date"
+						id="lastday_service"
+						label="Last Day of Service"
+						className={classNames(classes.textField, 'ml-24')}
+						value={this.state.lastday_service || ''}
+						margin="dense"
+						onChange={this.handleChange('lastday_service')}
+						InputLabelProps={{ shrink: true }}
+					/>
+					<TextField
+						id="client_credit_amount"
+						label="Client Credit"
+						placeholder="Amount"
+						type="number"
+						multiline
+						className={classNames(classes.textField, 'ml-24 mr-24')}
+						margin="dense"
+						value={this.state.client_credit_amount || ''}
+						onChange={this.handleChange('client_credit_amount')}
+						InputLabelProps={{ shrink: true }}
+					/>
 
-                </div>
+					<Checkbox
+						checked={this.state.enabled_cancelation_fee || false}
+						onChange={this.handleChangeChecked('enabled_cancelation_fee')}
+						style={{ marginTop: 14 }}
+					/>
+					<TextField
+						disabled={!this.state.enabled_cancelation_fee}
+						id="canc_fee"
+						label="Cancelation Fee"
+						placeholder="Amount Fee"
+						type="number"
+						value={this.state.enabled_cancelation_fee ? (this.state.canc_fee || '') : ''}
+						onChange={this.handleChange('canc_fee')}
+						className={classNames(classes.textField, 'mr-24')}
+						InputLabelProps={{ shrink: this.state.enabled_cancelation_fee }}
+						margin="dense"
+					/>
+					<Checkbox
+						checked={this.state.continue_findersfee || false}
+						onChange={this.handleChangeChecked('continue_findersfee')}
+						style={{ marginTop: 14 }} />
+					<font
+						style={{ alignSelf: 'center', marginTop: 14 }}>Stop Finders Fee
+					</font>
+					{/*<TextField*/}
+					{/*id="cancelfindersfee"*/}
+					{/*label="Stop Finders Fee"*/}
+					{/*placeholder="Stop Finders Fee Amount"*/}
+					{/*type="number"*/}
+					{/*onChange={this.handleChange('cancelfindersfee')}*/}
+					{/*className={classNames(classes.textField, 'mr-24')}*/}
+					{/*margin="dense"*/}
+					{/*/>*/}
+
+				</div>
 				<div className={classNames("flex mt-12 justify-start w-full")}>
 					<TextField
 						id="note"

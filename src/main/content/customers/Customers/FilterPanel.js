@@ -1227,7 +1227,7 @@ class FilterPanel extends Component {
 										label="Account Type Group"
 										select
 										className={classNames(classes.textField, 'mr-6')}
-										value={this.state.accounttype_groupid || ''}
+										value={this.state.accounttype_groupid || 0}
 										onChange={this.handleChangeCustomerInfoProps('accounttype_groupid')}
 										margin="dense"
 										// variant="outlined"
@@ -1548,20 +1548,16 @@ class FilterPanel extends Component {
 										id="AccountTypeGroup"
 										label="Account Type Group"
 										className={classes.textField}
-										InputLabelProps={{
-											shrink: true
-										}}
-										value={this.state.AccountTypeGroup || 0}
-										onChange={this.handleChange('AccountTypeGroup')}
+										InputLabelProps={{ shrink: true }}
+										value={this.state.accounttype_groupid || 0}
+										onChange={this.handleChange('accounttype_groupid')}
 										margin="dense"
 										// variant="outlined"
 										fullWidth
 									>
-										{
-											this.props.accountTypesGroups.Data.map((x, index) => (
-												<MenuItem key={index} value={x.GroupId}>{x.name}</MenuItem>
-											))
-										}
+										{this.props.accountTypesGroups.Data.map((x, index) => (
+											<MenuItem key={index} value={x.GroupId}>{x.name}</MenuItem>
+										))}
 									</TextField>
 								)}
 								<TextField
@@ -1570,19 +1566,16 @@ class FilterPanel extends Component {
 									id="AccountType"
 									label="Account Type"
 									className={classes.textField}
-									InputLabelProps={{
-										shrink: true
-									}}
-									value={this.state.AccountType === undefined ? 0 : this.state.AccountType}
-									onChange={this.handleChange('AccountType')}
+									InputLabelProps={{ shrink: true }}
+									value={this.state.account_typeid || 0}
+									onChange={this.handleChange('account_typeid')}
 									margin="dense"
 									// variant="outlined"
 									fullWidth
 								>
-									<MenuItem value="1">TBD</MenuItem>
-									{/*{accountTypeTexts.map((x, index) => (*/}
-									{/*<MenuItem key={index} value={index}>{x}</MenuItem>*/}
-									{/*))}*/}
+									{accountTypeTexts.map((x, index) => (
+										<MenuItem key={index} value={x.AccountTypeId}>{x.name}</MenuItem>
+									))}
 								</TextField>
 
 								<TextField
