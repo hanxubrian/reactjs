@@ -1047,6 +1047,7 @@ class showSuspendContractPage extends React.Component {
 					}
 
 				</div>
+
 				<div className={classNames("flex mt-12 justify-start w-full")}>
 					<TextField
 						id="note"

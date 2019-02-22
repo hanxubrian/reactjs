@@ -221,12 +221,14 @@ const tableHeaderCellComponentBase = props => {
 
 const CurrencyFormatter = ({ value }) => (<span>$ {parseFloat(`0${value}`).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
 const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/, '$2/$3/$1');
-
+let cancelationbox = false;
 class CancelContractPage extends React.Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
+			cancelationfeecheckbox: false,
+			stopfinderfee: false,
 			// bOpenPaymentDialog: props.bOpenPaymentDialog,
 			columns: [
 				{
@@ -416,6 +418,10 @@ class CancelContractPage extends React.Component {
 			NewAmount: this.props.NewAmount,
 			snackMessage: "",
 			openSnack: false,
+			cancelfindersfee:"",
+			cancelationfee:"$50",
+			clientcredit:"",
+			lastdayofservice:null,
 		};
 		// this.commitChanges = this.commitChanges.bind(this);
 		// if (!props.bLoadedFranchisees) {
@@ -541,6 +547,7 @@ class CancelContractPage extends React.Component {
 			errorMsg: ""
 		});
 
+		console.log(event.target.value);
 		if (name === "PaymentAmount") {
 			// this.setState({
 			// 	overpayment: this.getOverpaymentAmount(this.state.rows, event.target.value)
@@ -925,7 +932,14 @@ class CancelContractPage extends React.Component {
 		this.validateCancellation()
 
 	};
-
+    stopfinderfeecheckbox=(event)=>{
+        event.preventDefault();
+        this.setState({stopfinderfee:!this.state.stopfinderfee});
+	}
+    cancelationcheckbox=(event)=>{
+        event.preventDefault();
+		this.setState({cancelationfeecheckbox:!this.state.cancelationfeecheckbox});
+	}
 	handleStepFindersFeesForm = () => {
 		this.handleStep(2)
 	};
@@ -956,7 +970,15 @@ class CancelContractPage extends React.Component {
 			</TextField>
 		)
 	};
-
+    lastdayofservicehandleChange=(event)=>{
+        this.setState({lastdayofservice:event.target.value});
+	}
+    clientcredithandleChange=(event)=>{
+        this.setState({clientcredit:event.target.value});
+	}
+    cancelataionfeehandleChange=(event)=>{
+        this.setState({cancelataionfee:event.target.value});
+	}
 	getNewAmountInputForm() {
 		const { classes } = this.props;
 		const {
@@ -1042,6 +1064,51 @@ class CancelContractPage extends React.Component {
 					}
 
 				</div>
+                <div className={classNames("flex mt-12 justify-start")}>
+                    <TextField
+                        type="date"
+                        id="lastdayofservice"
+                        label="Last Day of Service"
+                        className={classNames(classes.textField, 'ml-24')}
+                        value={this.state.EffectiveDate || ''}
+                        margin="dense"
+                        onChange={this.lastdayofservicehandleChange}
+                    />
+                    <TextField
+                        id="ClientCredit"
+                        label="Client Credit"
+                        placeholder="Amount"
+                        type="number"
+                        multiline
+                        className={classNames(classes.textField, 'ml-24 mr-24')}
+                        margin="dense"
+                        onChange={this.clientcredithandleChange}
+                    />
+                    <Checkbox checked={this.state.cancelationfeecheckbox}  onChange={this.cancelationcheckbox} style={{marginTop:14}} />
+                    <TextField
+                        disabled={!this.state.cancelationfeecheckbox}
+                        id="CancelataionFee"
+                        label="Cancelation Fee"
+                        placeholder="Amount Fee"
+                        type="number"
+						value={this.state.cancelationfeecheckbox?this.state.cancelationfee:''}
+                        onChange={this.cancelataionfeehandleChange}
+                        className={classNames(classes.textField, 'mr-24')}
+                        margin="dense"
+                    />
+                    <Checkbox checked={this.state.stopfinderfee}  onChange={this.stopfinderfeecheckbox} style={{marginTop:14}} />
+					<font style={{alignSelf:'center',marginTop:14}}>Stop Finders Fee</font>
+                    {/*<TextField*/}
+                        {/*id="cancelfindersfee"*/}
+                        {/*label="Stop Finders Fee"*/}
+                        {/*placeholder="Stop Finders Fee Amount"*/}
+                        {/*type="number"*/}
+                        {/*onChange={this.handleChange('cancelfindersfee')}*/}
+                        {/*className={classNames(classes.textField, 'mr-24')}*/}
+                        {/*margin="dense"*/}
+                    {/*/>*/}
+
+                </div>
 				<div className={classNames("flex mt-12 justify-start w-full")}>
 					<TextField
 						id="note"
