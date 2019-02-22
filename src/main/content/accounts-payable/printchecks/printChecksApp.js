@@ -15,7 +15,7 @@ import {
     DialogTitle,
     DialogContentText,
     LinearProgress,
-    TextField,
+    TextField, MenuItem
 } from '@material-ui/core';
 
 import {FusePageCustomSidebarScroll, FuseAnimate} from '@fuse';
@@ -38,7 +38,6 @@ import 'date-fns'
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 import moment from "moment";
-import MenuItem from "../../franchisees/franchisees/filterPanel1";
 
 const headerHeight = 80;
 
@@ -370,9 +369,6 @@ class PrintChecksLayout extends Component {
         this.setState({ period: event.target.value });
     };
 
-    handleListItemClick = (email)=>{
-
-    };
 
     render() {
         const {classes, bPaymentLogFilterPanelOpen, summaryState} = this.props;

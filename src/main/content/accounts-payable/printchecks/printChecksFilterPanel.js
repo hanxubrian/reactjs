@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Paper, withStyles} from '@material-ui/core';
+import {Paper, TextField, withStyles, MenuItem} from '@material-ui/core';
 
 import * as Actions from 'store/actions';
 
@@ -7,12 +7,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import classNames from 'classnames';
 
-import 'date-fns'
-import MomentUtils from '@date-io/moment';
-import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
-
 import moment from "moment";
-
 
 const styles = theme => ({
     root : {
@@ -30,6 +25,10 @@ const styles = theme => ({
         padding: '10px 16px',
         width: 200
     },
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+    },
 });
 
 
@@ -39,6 +38,7 @@ class FilterPanel extends Component {
     state = {
         logDate: moment().format('MM/DD/YYYY'),
         labelWidth: 0,
+        period: 'USD'
     };
 
 
@@ -61,37 +61,19 @@ class FilterPanel extends Component {
     {
     }
 
-    handleLogDateChange = date => {
-        this.setState({logDate: date});
-        let logDate = moment(date).format("MM/DD/YYYY");
-        this.props.updateLogDate(logDate);
+    handleChangePeriod = (event) => {
+        this.setState({period: event.target.value});
     };
 
     render()
     {
+
         const {classes} = this.props;
         return (
             <div className={classNames(classes.root)}>
                 <div className={classNames("flex flex-col")} style={{}}>
                     <Paper className="flex flex-1 flex-col min-h-px p-20 w-full">
-                        <div style={{display: 'none', flexDirection: 'column'}}>
-                            <h3 className="mb-24">Choose a date </h3>
-                            <MuiPickersUtilsProvider utils={MomentUtils}>
-                                <div className="flex flex-col">
-                                    <DatePicker
-                                        margin="none"
-                                        label="Log Date"
-                                        name="FromDate"
-                                        variant="outlined"
-                                        format="MM/DD/YYYY"
-                                        value={this.state.logDate}
-                                        onChange={this.handleLogDateChange}
-                                        fullWidth
-                                        required
-                                        color="secondary"
-                                    />
-                                </div>
-                            </MuiPickersUtilsProvider>
+                        <div style={{display: 'flex', flexDirection: 'column'}}>
                         </div>
                     </Paper>
                 </div>
