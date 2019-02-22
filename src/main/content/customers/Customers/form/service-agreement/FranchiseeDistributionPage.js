@@ -1449,13 +1449,12 @@ class FranchiseeDistributionPage extends React.Component {
 		const { customerServiceTypes, step } = this.state;
 
 		return <>
-			{
-				step === 0 && <>
+			{step === 0 &&
+				<>
 					<div className={classNames("flex flex-col")}>
 						{/*{step === 0 && this.getNewAmountInputForm()}*/}
 						{this.getFranchiseeAssignmentForm()}
 						{/*{step === 2 && this.getFindersFeesForm()}*/}
-						{/* {this.getFindersFeesForm()} */}
 					</div>
 
 					<div className={classNames("flex flex-col")}>
@@ -1480,9 +1479,7 @@ class FranchiseeDistributionPage extends React.Component {
 					</Snackbar>
 				</>
 			}
-			{
-				step === 1 && this.getFindersFeesForm()
-			}
+			{step === 1 && this.getFindersFeesForm()}
 		</>
 
 	}
