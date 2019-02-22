@@ -18,6 +18,8 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import SendIcon from '@material-ui/icons/Send';
+import Button from '@material-ui/core/Button';
 import PDF from '../../../../../styles/document.pdf';
 
 const styles = theme => ({
@@ -141,6 +143,12 @@ class DocumentView extends React.Component {
                             <embed src={PDF} width="100%" height="800px" />
                             </GridContainer>
                         </DialogContent>
+                        <DialogActions style={{padding:"2%"}}>
+                            <Button type="submit" color={"primary"} variant="contained" size="small" className={classes.button}>
+                                <SendIcon  className={classNames(classes.leftIcon, classes.iconSmall)} />
+                                Send
+                            </Button>
+                        </DialogActions>
                 </Dialog>
             </div>
         );

@@ -356,13 +356,13 @@ class FranchiseesDocumentUploadTable extends React.Component {
                                                             onClick={(ev) => this.props.openCloseDocViewActionDialog(true)}>
                                                             <Icon>visibility</Icon>
                                                         </IconButton>
-                                                        <IconButton
+                                                        {/* <IconButton
                                                                 className={classNames(classes.summaryPanelButton, "mr-12")}
                                                                 aria-label="send-icon"
                                                                 onClick={(ev)=>this.props.openCloseDocSendActionDialog(true)}
                                                                 >
                                                                 <Icon>send</Icon>
-                                                        </IconButton>
+                                                        </IconButton> */}
                                                     </TableCell>
                                                 </TableRow>
                                             )
