@@ -5,12 +5,7 @@ import connect from "react-redux/es/connect/connect";
 import classNames from 'classnames';
 import moment from 'moment';
 
-
 import {withStyles} from '@material-ui/core/styles/index';
-
-//Theme component
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 
 //Store
 import {bindActionCreators} from "redux";
@@ -33,8 +28,6 @@ import {
 } from '@devexpress/dx-react-grid-material-ui';
 import NumberFormat from "react-number-format";
 
-
-//Child components
 
 const styles = theme => ({
     root: {
@@ -82,12 +75,6 @@ const styles = theme => ({
         },
     }
 });
-
-let pdf                             = 0;
-let page_section                    = 0;
-let HTML_Width                      = 0;
-let HTML_Height                     = 0;
-let top_left_margin                 = 0;
 
 const CurrencyFormatter = ({value}) => (
     <NumberFormat value={value}
@@ -166,57 +153,6 @@ class PrintChecksLists extends Component {
         );
     };
 
-    getDataUri=(url, cb)=>
-    {
-        let image = new Image();
-        let log_url = 'https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
-        image.setAttribute('crossOrigin', 'anonymous');
-        image.onload = function () {
-            let canvas = document.createElement('canvas');
-            canvas.width = this.naturalWidth;
-            canvas.height = 2500;
-            let ctx = canvas.getContext('2d');
-            ctx.fillStyle = '#fff';  /// set white fill style
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            canvas.getContext('2d').drawImage(this, 0, 0);
-            cb(canvas.toDataURL('image/png'));
-        };
-        image.src = log_url;
-    };
-
-    downloadPDF=(input, imgURL)=> {
-        console.log("document.getElementsByClassName length",document.getElementsByClassName("pdfcardcontent").length);
-        console.log('image=',imgURL,top_left_margin, top_left_margin, HTML_Width, HTML_Height);
-        let cardlen = document.getElementsByClassName("pdfcardcontent").length;
-        let img = null;
-
-        if (input != null && imgURL != null) {
-            this.getDataUri(imgURL, function (dataUri) {
-                img = dataUri;
-            });
-            html2canvas(input)
-                .then((canvas) => {
-
-                    const imgData = canvas.toDataURL('image/jpeg',1.0);
-                    this.calculatePDF_height_width("whole",0);
-
-                    pdf = new jsPDF('p', 'pt', [input.offsetWidth, input.offsetHeight]);
-                    pdf.addImage(imgData, 'jpeg', top_left_margin, top_left_margin, HTML_Width, HTML_Height);
-
-                    pdf.save("download.pdf");
-                })
-            ;
-        }
-    };
-
-    calculatePDF_height_width=(selector,index)=>{
-
-        page_section = document.getElementsByClassName(selector)[index];
-        HTML_Width = page_section.offsetWidth;
-        HTML_Height = page_section.offsetHeight ;
-        top_left_margin = 15;
-    };
-
     CustomizeCell = (props)=> {
         if (props.column.name.includes('checkdate')) {
             return (
@@ -236,8 +172,8 @@ class PrintChecksLists extends Component {
             {name: "PayeeNumber", title: "Payee #"},
             {name: "PayeeAddress1", title: "Address"},
             // {name: "checkAmounttext", title: "Amount Text"},
+            {name: "checktypename", title: "Check Type"},
             {name: "checkamountnumber", title: "Amount"},
-            {name: "bankname", title: "Bank Name"},
             // {name: "bankaddress1", title: "Bank Address"},
             {name: "checkdate", title: "checkdate"},
         ];
@@ -246,48 +182,48 @@ class PrintChecksLists extends Component {
             { columnName: 'PayeeName', width: 300},
             { columnName: 'bankname', width: 100,},
             { columnName: 'PayeeNumber', width: 100,},
-            // { columnName: 'bankaddress1', width: 100,},
+            { columnName: 'checktypename', width: 120,},
             { columnName: 'PayeeAddress1', width: 200,},
-            { columnName: 'checkdate', width: 100},
+            { columnName: 'checkdate', width: 120},
             { columnName: 'checkamountnumber', width: 120,  align: 'right'},
         ];
 
         return (
             <div className={classNames(classes.root, "flex flex-col h-full whole print:p-0")} id ="wholediv">
-                    <div className={classNames("flex flex-col")}>
-                        <Grid
-                            rows={this.state.data}
-                            columns={columns}
-                        >
-                            {this.state.data.length>0 && (
+                <div className={classNames("flex flex-col")}>
+                    <Grid
+                        rows={this.state.data}
+                        columns={columns}
+                    >
+                        {this.state.data.length>0 && (
                             <CurrencyTypeProvider
                                 for={['checkamountnumber']}
                             />
-                            )}
-                            <PagingState
-                                defaultCurrentPage={0}
-                                defaultPageSize={50}
-                            />
+                        )}
+                        <PagingState
+                            defaultCurrentPage={0}
+                            defaultPageSize={50}
+                        />
 
-                            <PagingPanel pageSizes={[10, 20, 25, 50, 100]} />
-                            <SelectionState
-                                selection={this.state.selection}
-                                onSelectionChange={this.changeSelection}
-                            />
-                            {/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
-                            <IntegratedSelection />
+                        <PagingPanel pageSizes={[10, 20, 25, 50, 100]} />
+                        <SelectionState
+                            selection={this.state.selection}
+                            onSelectionChange={this.changeSelection}
+                        />
+                        {/* The Select All checkbox selects/deselects all rows on a page or all pages depending on the IntegratedSelection and IntegratedPaging plugin’s order. */}
+                        <IntegratedSelection />
 
-                            <IntegratedPaging />
-                            <VirtualTable height="auto"
-                                          tableComponent={TableComponent}
-                                          headComponent = {TableHeadComponent}
-                                          columnExtensions={tableColumnExtensions}
-                                          cellComponent={this.CustomizeCell}
-                            />
-                            <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
-                            <TableHeaderRow/>
-                        </Grid>
-                    </div>
+                        <IntegratedPaging />
+                        <VirtualTable height="auto"
+                                      tableComponent={TableComponent}
+                                      headComponent = {TableHeadComponent}
+                                      columnExtensions={tableColumnExtensions}
+                                      cellComponent={this.CustomizeCell}
+                        />
+                        <TableSelection showSelectAll highlightRow rowComponent={this.TableRow} />
+                        <TableHeaderRow/>
+                    </Grid>
+                </div>
             </div>
         )
     }

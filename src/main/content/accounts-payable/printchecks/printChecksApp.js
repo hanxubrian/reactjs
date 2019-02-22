@@ -339,7 +339,8 @@ class PrintChecksLayout extends Component {
     };
 
     handleClose = ()=>{
-        this.setState({openPrintModal: false})
+        this.setState({openPrintModal: false});
+        this.child.resetSelection();
     };
 
     handlePrint = async ()=>{
