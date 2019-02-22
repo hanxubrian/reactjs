@@ -182,10 +182,10 @@ class NewFindersFeePage extends React.Component {
 						}
 					</TextField>
 
-					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+					{/* <div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
 						<Button variant="contained" onClick={() => this.handleGotoDistibutionPage()} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>
 						{this.props.customerForm.type === "edit" && <Button variant="contained" onClick={() => this.handleSaveFindersFee()} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Update</Button>}
-					</div>
+					</div> */}
 
 				</div>
 				<div className={classNames("flex mt-12 items-center")}>

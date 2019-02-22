@@ -75,6 +75,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import CloseIcon from '@material-ui/icons/Close';
 import WarningIcon from '@material-ui/icons/Warning';
 
+import NewFindersFeePage from '../finders-fees/NewFindersFeePage'
 const styles = theme => ({
 	root: {
 		'& .react-grid-Cell': {
@@ -386,7 +387,7 @@ class FranchiseeDistributionPage extends React.Component {
 				paymentType: "Check",
 				paymentAmount: 0
 			},
-			step: 1,
+			step: 0,
 			franchiseeServiceTypes: [],
 			franchiseeBillingTypes: [],
 
@@ -993,7 +994,9 @@ class FranchiseeDistributionPage extends React.Component {
 
 	gotoFindersFee = async (FranchiseeNum, AmountPayableOn) => {
 		await this.props.updateFindersFeeParams({ FranchiseeNum, AmountPayableOn: parseFloat(AmountPayableOn) });
-		this.props.updateCustomersParameter('activeStep', this.props.customerForm.type === "edit" ? 7 : 3);
+		// this.props.updateCustomersParameter('activeStep', this.props.customerForm.type === "edit" ? 7 : 3);
+		this.handleStep(1)
+
 	};
 
 	removeFranchisee = async (franchiseeId) => {
@@ -1235,7 +1238,28 @@ class FranchiseeDistributionPage extends React.Component {
 		)
 	}
 
+	handleSaveFindersFee = () => {
+		console.log('saved');
+	};
+
 	getFindersFeesForm() {
+		return (
+			<>
+				<div className={classNames("flex mt-12 justify-between")}>
+					<Typography variant="h6">Finders Fees</Typography>
+
+					<div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+						<Button variant="contained" onClick={() => this.handleStep(0)} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>
+						{this.props.customerForm.type === "edit" && <Button variant="contained" onClick={() => this.handleSaveFindersFee()} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Update</Button>}
+					</div>
+				</div>
+
+				<NewFindersFeePage />
+
+			</>
+		)
+	}
+	getFindersFeesForm_old() {
 		const { classes } = this.props
 		return (
 			<>
@@ -1424,35 +1448,43 @@ class FranchiseeDistributionPage extends React.Component {
 		const { classes } = this.props;
 		const { customerServiceTypes, step } = this.state;
 
-		return (
-			<>
-				<div className={classNames("flex flex-col")}>
-					{/*{step === 0 && this.getNewAmountInputForm()}*/}
-					{this.getFranchiseeAssignmentForm()}
-					{/*{step === 2 && this.getFindersFeesForm()}*/}
-				</div>
+		return <>
+			{
+				step === 0 && <>
+					<div className={classNames("flex flex-col")}>
+						{/*{step === 0 && this.getNewAmountInputForm()}*/}
+						{this.getFranchiseeAssignmentForm()}
+						{/*{step === 2 && this.getFindersFeesForm()}*/}
+						{/* {this.getFindersFeesForm()} */}
+					</div>
 
-				<div className={classNames("flex flex-col")}>
-					<Divider variant="middle" style={{ marginTop: 10, marginBottom: 10, width: '50%', alignSelf: 'center' }} />
-					{this.getFranchiseesList()}
-				</div>
-				<Snackbar
-					anchorOrigin={{
-						vertical: 'bottom',
-						horizontal: 'center',
-					}}
-					open={this.state.openSnack}
-					autoHideDuration={3000}
-					onClose={this.handleCloseSnackBar}
-				>
-					<MySnackbarContentWrapper
+					<div className={classNames("flex flex-col")}>
+						<Divider variant="middle" style={{ marginTop: 10, marginBottom: 10, width: '50%', alignSelf: 'center' }} />
+						{this.getFranchiseesList()}
+					</div>
+
+					<Snackbar
+						anchorOrigin={{
+							vertical: 'bottom',
+							horizontal: 'center',
+						}}
+						open={this.state.openSnack}
+						autoHideDuration={3000}
 						onClose={this.handleCloseSnackBar}
-						variant="success"
-						message={this.state.snackMessage}
-					/>
-				</Snackbar>
-			</>
-		);
+					>
+						<MySnackbarContentWrapper
+							onClose={this.handleCloseSnackBar}
+							variant="success"
+							message={this.state.snackMessage}
+						/>
+					</Snackbar>
+				</>
+			}
+			{
+				step === 1 && this.getFindersFeesForm()
+			}
+		</>
+
 	}
 }
 
