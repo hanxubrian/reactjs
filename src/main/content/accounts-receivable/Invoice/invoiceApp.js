@@ -321,16 +321,14 @@ class InvoiceApp extends Component {
 
     search(val) {
         const temp = this.state.data.filter( d => {
-            return d.InvoiceId.toString().indexOf(val) !== -1 || !val ||
-                d.InvoiceNo.indexOf(val) !== -1 ||
+            console.log('d=',d);
+            return d.InvoiceNo.indexOf(val) !== -1 ||
                 d.InvoiceAmount.toString().indexOf(val) !== -1 ||
                 d.InvoiceTotal.toString().indexOf(val) !== -1 ||
                 d.InvoiceTax.toString().indexOf(val) !== -1 ||
                 d.InvoiceDescription!==null && d.InvoiceDescription.toLowerCase().indexOf(val) !== -1 ||
-                d.CustomerName.toLowerCase().indexOf(val) !== -1 ||
-                d.CustomerId.toString().indexOf(val) !== -1 ||
-                d.CustomerNo.toString().indexOf(val) !== -1 ||
-                d.TransactionStatusListId.toString().indexOf(val) !== -1
+                d.CustomerName!==null && d.CustomerName.toLowerCase().indexOf(val) !== -1 ||
+                d.CustomerNo.toString().indexOf(val) !== -1
         });
 
         this.setState({temp: temp});
