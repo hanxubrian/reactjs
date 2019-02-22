@@ -1,8 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import _ from "lodash";
 // core components
-import { Icon, IconButton, Fab, Typography, Toolbar, CircularProgress, Menu, MenuItem, Checkbox, FormControlLabel, Tooltip, Button } from '@material-ui/core';
-import { green } from '@material-ui/core/colors';
+import { Icon, IconButton, Fab, Typography, Toolbar, CircularProgress, Menu, MenuItem, Checkbox, FormControlLabel, Tooltip, Button, Snackbar, SnackbarContent, } from '@material-ui/core';
 // theme components
 import { FusePageCustomSidebarScroll, FuseAnimate } from '@fuse';
 
@@ -44,6 +43,15 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 import CustomerSearchBar from './CustomerSearchBar';
+
+import green from "@material-ui/core/colors/green";
+import amber from "@material-ui/core/colors/amber";
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
+import InfoIcon from '@material-ui/icons/Info';
+import CloseIcon from '@material-ui/icons/Close';
+import WarningIcon from '@material-ui/icons/Warning';
+import PropTypes from 'prop-types';
 
 const headerHeight = 80;
 
@@ -243,7 +251,79 @@ const styles = theme => ({
 // const defaultProps = {
 // 	trigger: (<IconButton className="w-64 h-64"><Icon>search</Icon></IconButton>)
 // };
+//Snackbar
+const variantIcon = {
+	success: CheckCircleIcon,
+	warning: WarningIcon,
+	error: ErrorIcon,
+	info: InfoIcon,
+};
 
+const stylesSnackbar = theme => ({
+	success: {
+		backgroundColor: green[600],
+	},
+	error: {
+		backgroundColor: theme.palette.error.dark,
+	},
+	info: {
+		backgroundColor: theme.palette.primary.dark,
+	},
+	warning: {
+		backgroundColor: amber[700],
+	},
+	icon: {
+		fontSize: 20,
+	},
+	iconVariant: {
+		opacity: 0.9,
+		marginRight: theme.spacing.unit,
+	},
+	message: {
+		display: 'flex',
+		alignItems: 'center',
+	},
+});
+
+function MySnackbarContent(props) {
+	const { classes, className, message, onClose, variant, ...other } = props;
+	const Icon = variantIcon[variant];
+
+	return (
+		<SnackbarContent
+			className={classNames(classes[variant], className)}
+			aria-describedby="client-snackbar"
+			message={
+				<span id="client-snackbar" className={classes.message}>
+					<Icon className={classNames(classes.icon, classes.iconVariant)} />
+					{message}
+				</span>
+			}
+			action={[
+				<IconButton
+					key="close"
+					aria-label="Close"
+					color="inherit"
+					className={classes.close}
+					onClick={onClose}
+				>
+					<CloseIcon className={classes.icon} />
+				</IconButton>,
+			]}
+			{...other}
+		/>
+	);
+}
+
+MySnackbarContent.propTypes = {
+	classes: PropTypes.object.isRequired,
+	className: PropTypes.string,
+	message: PropTypes.node,
+	onClose: PropTypes.func,
+	variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
+};
+
+const MySnackbarContentWrapper = withStyles(stylesSnackbar)(MySnackbarContent);
 
 class Customers extends Component {
 	// state = {
@@ -269,7 +349,6 @@ class Customers extends Component {
 
 		this.state = {
 			s: '',
-			temp: [],
 			data: [],
 			// checkedPaid: true,
 			// checkedPP: true,
@@ -290,6 +369,10 @@ class Customers extends Component {
 			searchText: this.props.searchText,
 			// loading: false,
 			isSubmittingForApproval: false,
+
+			openSnack: false,
+			snackIcon: 'success',
+			snackMessage: 'Updated Franchisee Revenue Distributions',
 		};
 		console.log("constructor, Customer.js")
 
@@ -329,10 +412,31 @@ class Customers extends Component {
 
 	}
 
+	validation() {
+		if (!this.props.activeCustomer.Data.cus_name) {
+			return "Customer name is invalid"
+		}
+		if (!this.props.activeCustomer.Data.cus_addr) {
+			return "Customer address is invalid"
+		}
+		return ""
+	}
 	submitForApproval = () => {
 		this.setState({
 			isSubmittingForApproval: false
 		})
+
+		const valid = this.validation()
+		if (valid) {
+			this.setState({
+				openSnack: true,
+				snackMessage: valid,
+				snackIcon: 'error',
+			})
+			return
+		}
+
+
 
 		switch (this.props.customerForm.type) {
 			case "new":
@@ -529,6 +633,13 @@ class Customers extends Component {
 			this.props.longitude,
 			this.props.searchText);
 	}
+	handleCloseSnackBar = (event, reason) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+
+		this.setState({ openSnack: false });
+	};
 	render() {
 		console.log(this.props.documents)
 		console.log(this.props)
@@ -536,7 +647,6 @@ class Customers extends Component {
 
 		const { selection, anchorEl, anchorContactMenu } = this.state;
 
-		console.log('render temp =', this.state.temp);
 		console.log('customerForm.props.open =', customerForm.props.open);
 
 		return (
@@ -552,7 +662,7 @@ class Customers extends Component {
 					}}
 					header={
 						<div className="flex w-full items-center">
-							{(this.state.temp && !customerForm.props.open) && (
+							{(!customerForm.props.open) && (
 								<div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
 									<div className="flex flex-row flex-1 justify-between">
 										<div className="flex flex-shrink items-center">
@@ -592,7 +702,7 @@ class Customers extends Component {
 
 								</div>
 							)}
-							{(this.state.temp && customerForm.props.open) && (
+							{customerForm.props.open && (
 								<div className="flex row flex-1  p-8 sm:p-12 relative justify-between">
 									<div className="flex flex-row flex-1 justify-between items-center">
 										{/* <div className="flex flex-shrink items-center">
@@ -727,15 +837,30 @@ class Customers extends Component {
 									</DialogActions>
 								</Dialog>
 
+								{customerForm.props.open && <CustomerForm />}
+								{!customerForm.props.open &&
+									<>
+										<CustomerSearchBar />
+										<CustomerListContent />
+									</>
+								}
 
+								<Snackbar
+									anchorOrigin={{
+										vertical: 'bottom',
+										horizontal: 'center',
+									}}
+									open={this.state.openSnack}
+									autoHideDuration={3000}
+									onClose={this.handleCloseSnackBar}
+								>
+									<MySnackbarContentWrapper
+										onClose={this.handleCloseSnackBar}
+										variant={this.state.snackIcon}
+										message={this.state.snackMessage}
+									/>
+								</Snackbar>
 
-								{this.state.temp && (
-									<Fragment>
-										{customerForm.props.open && <CustomerForm />}
-										{!customerForm.props.open && <CustomerSearchBar />}
-										{!customerForm.props.open && <CustomerListContent />}
-									</Fragment>
-								)}
 							</div>
 						</div>
 					}

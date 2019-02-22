@@ -142,7 +142,7 @@ const variantIcon = {
 	info: InfoIcon,
 };
 
-const styles1 = theme => ({
+const stylesSnackbar = theme => ({
 	success: {
 		backgroundColor: green[600],
 	},
@@ -206,7 +206,7 @@ MySnackbarContent.propTypes = {
 	variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
 };
 
-const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
+const MySnackbarContentWrapper = withStyles(stylesSnackbar)(MySnackbarContent);
 
 
 class FranchiseeDistributionPage extends React.Component {
@@ -442,27 +442,27 @@ class FranchiseeDistributionPage extends React.Component {
 			.then(response => response.json())
 			.then(data => this.setState({ decreaseReasons: data.Data }));
 
-		this.setState({
-			paymentDlgPayloads: this.props.paymentDlgPayloads,
-			PaymentAmount: this.props.paymentDlgPayloads.paymentAmount,
-			PaymentType: this.props.paymentDlgPayloads.paymentType
-		})
+		// this.setState({
+		// 	paymentDlgPayloads: this.props.paymentDlgPayloads,
+		// 	PaymentAmount: this.props.paymentDlgPayloads.paymentAmount,
+		// 	PaymentType: this.props.paymentDlgPayloads.paymentType
+		// })
 	}
 
 	UNSAFE_componentWillReceiveProps(nextProps) {
-		if (nextProps.payments !== this.props.payments) {
-			this.setRowData(nextProps.payments)
-		}
-		if (!_.isEqual(nextProps.activePaymentRows, this.props.activePaymentRows)) {
-			this.setRowData(this.props.payments, nextProps.activePaymentRows)
-		}
-		if (!_.isEqual(nextProps.paymentDlgPayloads, this.props.paymentDlgPayloads)) {
-			this.setState({
-				paymentDlgPayloads: nextProps.paymentDlgPayloads,
-				PaymentAmount: nextProps.paymentDlgPayloads.paymentAmount,
-				PaymentType: nextProps.paymentDlgPayloads.paymentType
-			})
-		}
+		// if (nextProps.payments !== this.props.payments) {
+		// 	this.setRowData(nextProps.payments)
+		// }
+		// if (!_.isEqual(nextProps.activePaymentRows, this.props.activePaymentRows)) {
+		// 	this.setRowData(this.props.payments, nextProps.activePaymentRows)
+		// }
+		// if (!_.isEqual(nextProps.paymentDlgPayloads, this.props.paymentDlgPayloads)) {
+		// 	this.setState({
+		// 		paymentDlgPayloads: nextProps.paymentDlgPayloads,
+		// 		PaymentAmount: nextProps.paymentDlgPayloads.paymentAmount,
+		// 		PaymentType: nextProps.paymentDlgPayloads.paymentType
+		// 	})
+		// }
 		if (nextProps.regionId !== this.props.regionId) {
 			this.props.getFranchiseeServiceTypes(nextProps.regionId)
 			this.props.getFranchiseeBillingTypes(nextProps.regionId)
@@ -1516,15 +1516,15 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 		SearchText: franchisees.SearchText,
 		bLoadedFranchisees: franchisees.bLoadedFranchisees,
 
-		bOpenPaymentDialog: accountReceivablePayments.bOpenPaymentDialog,
-		activePaymentRows: accountReceivablePayments.activePaymentRows,
+		// bOpenPaymentDialog: accountReceivablePayments.bOpenPaymentDialog,
+		// activePaymentRows: accountReceivablePayments.activePaymentRows,
 
-		payments: accountReceivablePayments.ACC_payments,
+		// payments: accountReceivablePayments.ACC_payments,
 
-		filterParam: accountReceivablePayments.filterParam,
-		searchText: accountReceivablePayments.searchText,
+		// filterParam: accountReceivablePayments.filterParam,
+		// searchText: accountReceivablePayments.searchText,
 
-		paymentDlgPayloads: accountReceivablePayments.paymentDlgPayloads,
+		// paymentDlgPayloads: accountReceivablePayments.paymentDlgPayloads,
 
 		increaseDecreaseContractModalForm: customers.increaseDecreaseContractModalForm,
 		lists: customers.lists,

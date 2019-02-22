@@ -57,6 +57,7 @@ class PaymentListService {
 				"PayItems": PayItems
 			}
 		}
+		console.log("createAccountReceivablePayment", data)
 		return new Promise((resolve, reject) => {
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/payment/create`, data)
 				.then(res => {

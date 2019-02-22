@@ -255,7 +255,7 @@ const CurrencyTypeProvider = props => (
 // table cell phone number formatter
 //
 const PhoneNumberFormatter = ({ value }) => {
-	return value.replace(/(\d{3})(\d{3})(\d{4})/, '+1 ($1) $2 - $3')
+	return value ? value.replace(/(\d{3})(\d{3})(\d{4})/, '+1 ($1) $2 - $3') : ''
 };
 const PhoneNumberTypeProvider = props => (
 	<DataTypeProvider
@@ -266,7 +266,9 @@ const PhoneNumberTypeProvider = props => (
 //
 // table cell date formatter
 //
-const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1');
+const DateFormatter = ({ value }) => {
+	return value ? value.replace(/(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1') : ''
+};
 const DateTypeProvider = props => (
 	<DataTypeProvider
 		formatterComponent={DateFormatter}
