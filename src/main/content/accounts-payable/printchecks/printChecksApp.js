@@ -1,8 +1,21 @@
 import React, {Component, Fragment} from 'react';
 
 //Material-UI core
-import { Icon, Typography, Button, CircularProgress, Hidden, Paper, Input,
-    Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, LinearProgress
+import {
+    Icon,
+    Typography,
+    Button,
+    CircularProgress,
+    Hidden,
+    Paper,
+    Input,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    DialogContentText,
+    LinearProgress,
+    TextField,
 } from '@material-ui/core';
 
 import {FusePageCustomSidebarScroll, FuseAnimate} from '@fuse';
@@ -25,6 +38,7 @@ import 'date-fns'
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 import moment from "moment";
+import MenuItem from "../../franchisees/franchisees/filterPanel1";
 
 const headerHeight = 80;
 
@@ -220,6 +234,12 @@ const styles = theme => ({
         marginRight: 20,
         // backgroundColor: "#3c93ec",
     },
+    dropdownMenu: {
+        '& li': {
+            fontSize: 12,
+            height: 12,
+        }
+    },
 });
 
 let timer = null;
@@ -231,7 +251,11 @@ class PrintChecksLayout extends Component {
         openPrintModal: false,
         checkdate: moment().format('MM/DD/YYYY'),
         completed: 0,
-        bPrint: false
+        bPrint: false,
+        periods1: null,
+        period: moment().format('MM/YYYY'),
+        labelWidth: 0,
+        notes: '',
     };
 
     constructor(props) {
@@ -265,6 +289,36 @@ class PrintChecksLayout extends Component {
 
 
     componentDidMount() {
+        if(this.props.all_regions!==null && this.props.all_regions.length){
+            let all_regions = this.props.all_regions;
+            let region = all_regions.filter(r=>r.regionid===this.props.regionId);
+            if(region.length){
+                let periods = region[0].OpenPeriods;
+
+                let all_periods = [];
+
+                let period = periods.current.month.toString() + '/' + periods.current.year.toString();
+                if (periods.current.month < 10)
+                    period = '0' + period;
+                if(periods.current.status==='Open')
+                    all_periods.push(period);
+                // this.setState({period: period});
+
+
+                period = periods.next.month.toString() + '/' + periods.next.year.toString();
+                if (periods.next.month < 10)
+                    period = '0' + period;
+                if(periods.next.status==='Open')
+                    all_periods.push(period);
+                period = periods.previous.month.toString() + '/' + periods.previous.year.toString();
+                if (periods.previous.month < 10)
+                    period = '0' + period;
+                if(periods.previous.status==='Open')
+                    all_periods.push(period);
+
+                this.setState({periods1: all_periods});
+            }
+        }
     }
 
     componentWillUnmount() {
@@ -310,6 +364,14 @@ class PrintChecksLayout extends Component {
             const diff =  this.state.completed + 10;
             this.setState({completed: diff});
         }
+    };
+
+    handleChangePeriod = (event) => {
+        this.setState({ period: event.target.value });
+    };
+
+    handleListItemClick = (email)=>{
+
     };
 
     render() {
@@ -408,38 +470,6 @@ class PrintChecksLayout extends Component {
                                 </div>
                                 <ChecksLists onRef={ref => (this.child = ref)}/>
                             </div>
-                            <Dialog open={this.state.openPrintModal} onClose={this.handleClose} aria-labelledby="form-dialog-title" fullWidth maxWidth={'sm'}>
-                                <DialogTitle id="form-dialog-title">Setup CheckDate</DialogTitle>
-                                <DialogContent>
-                                    <DialogContentText className="mb-16">
-                                        To print selected checks, please click Print Button
-                                    </DialogContentText>
-                                    <MuiPickersUtilsProvider utils={MomentUtils}>
-                                        <div className="flex flex-col">
-                                            <DatePicker
-                                                margin="none"
-                                                label="Check Date"
-                                                name="checkdate"
-                                                variant="outlined"
-                                                format="MM/DD/YYYY"
-                                                value={this.state.checkdate}
-                                                onChange={this.handleCheckDateDateChange}
-                                                fullWidth
-                                                required
-                                                color="secondary"
-                                            />
-                                        </div>
-                                    </MuiPickersUtilsProvider>
-                                </DialogContent>
-                                <DialogActions>
-                                    <Button onClick={this.handleClose} color="primary">
-                                        Cancel
-                                    </Button>
-                                    <Button onClick={this.handlePrint} color="primary">
-                                        Print
-                                    </Button>
-                                </DialogActions>
-                            </Dialog>
                         </div>
                     }
                     leftSidebarHeader={
@@ -466,6 +496,81 @@ class PrintChecksLayout extends Component {
                         <Typography variant={"h5"}>Pringting</Typography>
                     </div>
                 )}
+                <Dialog open={this.state.openPrintModal} onClose={this.handleClose} aria-labelledby="form-dialog-title" fullWidth maxWidth={'sm'}>
+                    <DialogTitle id="form-dialog-title">Setup CheckDate</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText className="mb-16">
+                            To print selected checks, please click Print Button
+                        </DialogContentText>
+                        <MuiPickersUtilsProvider utils={MomentUtils}>
+                            <DatePicker
+                                margin="none"
+                                label="Check Date"
+                                name="checkdate"
+                                variant="outlined"
+                                format="MM/DD/YYYY"
+                                value={this.state.checkdate}
+                                onChange={this.handleCheckDateDateChange}
+                                fullWidth
+                                required
+                                color="secondary"
+                            />
+                        </MuiPickersUtilsProvider>
+                        {this.state.periods1!==null && (
+                            <TextField
+                                id="period"
+                                select
+                                label="Period"
+                                className={classes.textField}
+                                value={this.state.period}
+                                onChange={this.handleChangePeriod}
+                                SelectProps={{
+                                    MenuProps: {
+                                        className: classes.menu,
+                                    },
+                                }}
+                                margin="normal"
+                                fullWidth
+                                variant="outlined"
+                            >
+                                {this.state.periods1.map((period, index)=>
+                                    <MenuItem key={index} value={period}>{period}</MenuItem>
+                                )}
+                            </TextField>
+                        )}
+                        <TextField
+                            id="notes"
+                            name="notes"
+                            label="Note"
+                            className={classes.textField}
+                            style={{marginTop: 24}}
+                            value={this.state.notes}
+                            onChange={this.handleChange('notes')}
+                            margin="dense"
+                            variant="outlined"
+                            fullWidth
+                            multiline
+                            InputLabelProps = {{
+                                shrink: true,
+                                classes: {outlined: classes.label}
+                            }}
+                            InputProps={{
+                                classes: {
+                                    input: classes.input, multiline: classes.input
+                                },
+                            }}
+                            rows={2}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleClose} color="primary">
+                            Cancel
+                        </Button>
+                        <Button onClick={this.handlePrint} color="primary">
+                            Print
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </React.Fragment>
         );
     }
@@ -493,6 +598,7 @@ function mapStateToProps({auth, printChecks, fuse}) {
         bSettingPanel: printChecks.bSettingPanel,
         selections: printChecks.selections,
         navigation: fuse.navigation,
+        all_regions: auth.login.all_regions,
     }
 }
 

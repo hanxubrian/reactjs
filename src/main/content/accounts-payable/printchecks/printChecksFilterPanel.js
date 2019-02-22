@@ -72,9 +72,9 @@ class FilterPanel extends Component {
         const {classes} = this.props;
         return (
             <div className={classNames(classes.root)}>
-                <div className={classNames("flex flex-col")}>
+                <div className={classNames("flex flex-col")} style={{}}>
                     <Paper className="flex flex-1 flex-col min-h-px p-20 w-full">
-                        <div style={{display: 'flex', flexDirection: 'column'}}>
+                        <div style={{display: 'none', flexDirection: 'column'}}>
                             <h3 className="mb-24">Choose a date </h3>
                             <MuiPickersUtilsProvider utils={MomentUtils}>
                                 <div className="flex flex-col">
