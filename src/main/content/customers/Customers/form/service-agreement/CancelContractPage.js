@@ -417,6 +417,7 @@ class CancelContractPage extends React.Component {
 			snackMessage: "",
 			openSnack: false,
 		};
+		this._isMounted = false;
 		// this.commitChanges = this.commitChanges.bind(this);
 		// if (!props.bLoadedFranchisees) {
 		// 	props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
@@ -444,10 +445,12 @@ class CancelContractPage extends React.Component {
 	}
 	componentDidMount() {
 		this.initCustomerInfo();
-
+		this._isMounted = true;
 		fetch(`https://apifmsplusplus_mongo.jkdev.com/v1/Lists/reasons?type=account_cancellation`)
 			.then(response => response.json())
-			.then(data => this.setState({ cancelationReasons: data.Data }));
+			.then(data => {
+				this._isMounted && this.setState({ cancelationReasons: data.Data })
+			});
 
 		// this.setState({
 		// 	paymentDlgPayloads: this.props.paymentDlgPayloads,
@@ -458,6 +461,9 @@ class CancelContractPage extends React.Component {
 		// if (this.props.bOpenPaymentDialog === true) {
 		// 	this.checkValidations()
 		// }
+	}
+	componentWillUnmount() {
+		this._isMounted = false;
 	}
 	UNSAFE_componentWillReceiveProps(nextProps) {
 		// if (nextProps.payments !== this.props.payments) {

@@ -221,7 +221,7 @@ const tableHeaderCellComponentBase = props => {
 const CurrencyFormatter = ({ value }) => (<span>$ {parseFloat(`0${value}`).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
 const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/, '$2/$3/$1');
 
-class showSuspendContractPage extends React.Component {
+class SuspendContractPage extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -416,6 +416,7 @@ class showSuspendContractPage extends React.Component {
 			reason: 0,
 			NewAmount: this.props.NewAmount,
 		};
+		this._isMounted = false;
 		// this.commitChanges = this.commitChanges.bind(this);
 		// if (!props.bLoadedFranchisees) {
 		// props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
@@ -443,10 +444,12 @@ class showSuspendContractPage extends React.Component {
 
 	componentDidMount() {
 		this.initCustomerInfo();
-
+		this._isMounted = true;
 		fetch(`https://apifmsplusplus_mongo.jkdev.com/v1/Lists/reasons?type=account_suspension`)
 			.then(response => response.json())
-			.then(data => this.setState({ suspensionReasons: data.Data }));
+			.then(data => {
+				this._isMounted && this.setState({ suspensionReasons: data.Data })
+			});
 		// this.setState({
 		// 	paymentDlgPayloads: this.props.paymentDlgPayloads,
 		// 	PaymentAmount: this.props.paymentDlgPayloads.paymentAmount,
@@ -456,6 +459,9 @@ class showSuspendContractPage extends React.Component {
 		// if (this.props.bOpenPaymentDialog === true) {
 		// 	this.checkValidations()
 		// }
+	}
+	componentWillUnmount() {
+		this._isMounted = false;
 	}
 	UNSAFE_componentWillReceiveProps(nextProps) {
 		// if (nextProps.payments !== this.props.payments) {
@@ -1592,4 +1598,4 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(showSuspendContractPage)));
+export default withStyles(styles, { withTheme: true })(withRouter(connect(mapStateToProps, mapDispatchToProps)(SuspendContractPage)));
