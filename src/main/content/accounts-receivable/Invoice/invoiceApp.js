@@ -321,7 +321,6 @@ class InvoiceApp extends Component {
 
     search(val) {
         const temp = this.state.data.filter( d => {
-            console.log('d=',d);
             return d.InvoiceNo.indexOf(val) !== -1 ||
                 d.InvoiceAmount.toString().indexOf(val) !== -1 ||
                 d.InvoiceTotal.toString().indexOf(val) !== -1 ||
