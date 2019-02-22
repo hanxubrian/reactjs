@@ -446,8 +446,8 @@ class Customers extends Component {
 			case "new":
 				this.props.createCustomer(this.props.regionId, this.props.activeCustomer.Data)
 				break;
-			// case "edit":
-			// 	this.props.createCustomer(this.props.regionId, payload)
+			case "edit":
+			// this.props.updateCustomer(this.props.regionId, this.props.activeCustomer.Data)
 			// 	break;
 		}
 	}
@@ -792,7 +792,7 @@ class Customers extends Component {
 											<Button variant="contained" color="primary" onClick={this.submitForApproval}
 												className="mr-12"
 											>
-												Save
+												{customerForm.type === "edit" ? 'Update' : 'Save'}
 												<Icon className={classNames(classes.rightIcon, 'ml-6')}>save</Icon>
 											</Button>
 											<Button variant="contained" color="primary" onClick={this.closeComposeForm}
@@ -954,6 +954,7 @@ function mapDispatchToProps(dispatch) {
 		openEmailToCustomerDialog: Actions.openEmailToCustomerDialog,
 
 		createCustomer: Actions.createCustomer,
+		updateCustomer: Actions.updateCustomer,
 	}, dispatch);
 }
 
