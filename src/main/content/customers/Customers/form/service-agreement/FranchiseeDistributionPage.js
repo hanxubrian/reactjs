@@ -773,7 +773,7 @@ class FranchiseeDistributionPage extends React.Component {
 			{...restProps}
 
 		>
-			<Button variant="contained" onClick={this.addFranchiseeToCustomer} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>add</Icon>Add</Button>
+			<Button variant="contained" onClick={this.addFranchiseeToCustomer} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">add</Icon>Add</Button>
 
 			{children}
 		</Toolbar.Root>
@@ -916,7 +916,7 @@ class FranchiseeDistributionPage extends React.Component {
 					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
 						<Button variant="contained" onClick={this.handleStepFranchiseeDistribution}
 							disabled={this.state.NewAmount === ''}
-							color="primary" className={classNames("pl-24 pr-24 mr-12")}>Franchisee Revenue Distributions<Icon>keyboard_arrow_right</Icon></Button>
+							color="primary" className={classNames("pl-24 pr-24 mr-12")}>Franchisee Revenue Distributions<Icon fontSize="small">keyboard_arrow_right</Icon></Button>
 						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
 					</div>
 
@@ -1249,8 +1249,8 @@ class FranchiseeDistributionPage extends React.Component {
 					<Typography variant="h6">Finders Fees</Typography>
 
 					<div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-						<Button variant="contained" onClick={() => this.handleStep(0)} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>
-						{this.props.customerForm.type === "edit" && <Button variant="contained" onClick={() => this.handleSaveFindersFee()} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Update</Button>}
+						<Button variant="contained" onClick={() => this.handleStep(0)} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
+						<Button variant="contained" onClick={() => this.handleSaveFindersFee()} color="primary" className={classNames("pl-24 pr-24 mr-12")}>{this.props.customerForm.type === 'edit' ? 'Update' : 'Select This Plan'}</Button>
 					</div>
 				</div>
 
@@ -1291,7 +1291,7 @@ class FranchiseeDistributionPage extends React.Component {
 					/>
 
 					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-						<Button variant="contained" onClick={this.handleStepFranchiseeDistribution} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>keyboard_arrow_left</Icon>Prev</Button>
+						<Button variant="contained" onClick={this.handleStepFranchiseeDistribution} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
 						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Done</Button>
 						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
 					</div>

@@ -419,6 +419,10 @@ class Customers extends Component {
 		if (!this.props.activeCustomer.Data.cus_addr) {
 			return "Customer address is invalid"
 		}
+		if (this.props.activeCustomer.Data.contract_lenght === 1 && this.props.activeCustomer.Data.cont_bill <= 0) {
+			return "Monthly contract amount is invalid"
+		}
+
 		return ""
 	}
 	submitForApproval = () => {

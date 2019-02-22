@@ -887,10 +887,10 @@ class IncreaseDecreaseContractPage extends React.Component {
 					<Typography variant="h6">Increase / Decrease</Typography>
 
 					<div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+					<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>
 						<Button variant="contained" onClick={this.saveIncreaseDecrease}
 							disabled={this.state.NewAmount === ''}
 							color="primary" className={classNames("pl-24 pr-24 mr-12")}>Save</Button>
-						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
 					</div>
 
 				</div>

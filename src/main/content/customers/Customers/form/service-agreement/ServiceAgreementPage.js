@@ -1049,6 +1049,10 @@ class ServiceAgreementPage extends React.Component {
 				value = parseInt("0" + value)
 				break
 		}
+		if (name === "contract_lenght" && value !== 1) {
+			this.setState({ cont_bill: 0 })
+			this.props.updateNewCustomerParam("cont_bill", 0)
+		}
 		this.setState({ [name]: value })
 		this.props.updateNewCustomerParam(name, value)
 	}
@@ -1086,56 +1090,8 @@ class ServiceAgreementPage extends React.Component {
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between items-center">
 								<TextField
-									id="cont_bill"
-									label="Monthly Contract Amount"
-									required
-									className={classes.textField}
-									InputLabelProps={{ shrink: true }}
-									value={this.state.cont_bill || ''}
-									onChange={this.handleChangeCustomerInfoProps('cont_bill')}
-									margin="dense"
-									// variant="outlined"
-									style={{ width: 250 }}
-
-									InputProps={{
-										readOnly: false,
-										startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
-										// inputComponent: NumberFormatCustomNoPrefix,
-										classes: {
-											input: classNames('text-right')
-										},
-										inputComponent: NumberFormatCustomNoPrefix
-									}}
-								/>
-								{customerForm.props.open && customerForm.type === "edit" &&
-									<div>
-										<Button
-											variant="contained"
-											color="primary"
-											className={classNames(classes.button, "pr-24 pl-24 mr-12")}
-											onClick={this.IncreaseDecreaseContract}
-										>Increase/Decrease<Icon>keyboard_arrow_right</Icon>
-										</Button>
-										<Button
-											variant="contained"
-											color="primary"
-											onClick={this.showCancelContractPage}
-											className={classNames(classes.button, "pr-24 pl-24")}
-										>Cancel Contract
-                                </Button>
-										<Button
-											variant="contained"
-											color="primary"
-											onClick={this.showSuspendContractPage}
-											className={classNames(classes.button, "pr-24 pl-24")}
-										>Suspend Account
-                                </Button>
-									</div>}
-							</GridItem>
-							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								<TextField
 									id="Frequency"
-									label="Frequency"
+									label="Type"
 									required
 									select
 									InputLabelProps={{
@@ -1153,6 +1109,55 @@ class ServiceAgreementPage extends React.Component {
 									))}
 								</TextField>
 
+								{customerForm.props.open && customerForm.type === "edit" &&
+									<div>
+										<Button
+											variant="contained"
+											color="primary"
+											className={classNames(classes.button, "pr-24 pl-24 mr-12")}
+											onClick={this.IncreaseDecreaseContract}
+										>Increase/Decrease<Icon fontSize="small">keyboard_arrow_right</Icon>
+										</Button>
+										<Button
+											variant="contained"
+											color="primary"
+											onClick={this.showCancelContractPage}
+											className={classNames(classes.button, "pr-24 pl-24")}
+										>Cancel Contract<Icon fontSize="small">keyboard_arrow_right</Icon>
+                                </Button>
+										<Button
+											variant="contained"
+											color="primary"
+											onClick={this.showSuspendContractPage}
+											className={classNames(classes.button, "pr-24 pl-24")}
+										>Suspend Account<Icon fontSize="small">keyboard_arrow_right</Icon>
+                                </Button>
+									</div>}
+							</GridItem>
+
+							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
+								{this.state.contract_lenght === 1 && <TextField
+									id="cont_bill"
+									label="Monthly Contract Amount"
+									required
+									className={classes.textField}
+									InputLabelProps={{ shrink: true }}
+									value={this.state.cont_bill || ''}
+									onChange={this.handleChangeCustomerInfoProps('cont_bill')}
+									margin="dense"
+									// variant="outlined"
+									style={{ minWidth: "100px", width: "30%" }}
+
+									InputProps={{
+										readOnly: false,
+										startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
+										// inputComponent: NumberFormatCustomNoPrefix,
+										classes: {
+											input: classNames('text-right')
+										},
+										inputComponent: NumberFormatCustomNoPrefix
+									}}
+								/>}
 								{/* <TextField
 									type="number"
 									inputProps={{ min: "0", max: "99", step: "1" }}
