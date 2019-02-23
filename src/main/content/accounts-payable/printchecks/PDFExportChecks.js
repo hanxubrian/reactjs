@@ -29,17 +29,27 @@ class ExportChecks extends React.Component {
     pdfExportComponent;
     image;
 
+    onPrint = ()=> {
+        this.pdfExportComponent.save();
+    };
+    componentDidMount()
+    {
+        this.props.onRef(this);
+    }
+    componentWillUnmount() {
+        this.props.onRef(undefined);
+    }
+
     render() {
         const {classes} = this.props;
         const  log_url = 'https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
 
         let selections = this.props.selectionsChecks.map((index)=>this.props.printChecksDB[index]);
-        console.log('selections1=', selections);
 
         return (
             <div className={classNames("p-24")}>
                 <div className="example-config">
-                    <button className="k-button" onClick={() => { this.pdfExportComponent.save(); }}>
+                    <button className="k-button" onClick={this.onPrint}>
                         Export PDF
                     </button>
                 </div>
@@ -49,7 +59,7 @@ class ExportChecks extends React.Component {
                     margin="1cm"
                     forcePageBreak=".page-break"
                     ref={(component) => this.pdfExportComponent = component}
-                    scale={1}
+                    scale={0.9}
                 >
                     <div  style={{ width: "700px;", margin: '0 auto', maxWidth: 700}} className={classNames(classes.root)}>
                         {selections.map((check, index)=>{

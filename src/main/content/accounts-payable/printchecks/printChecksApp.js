@@ -39,6 +39,8 @@ import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
 import moment from "moment";
 
+import ExportChecks from './PDFExportChecks';
+
 const headerHeight = 80;
 
 const styles = theme => ({
@@ -325,9 +327,6 @@ class PrintChecksLayout extends Component {
 
     print = () => {
         this.setState({openPrintModal: true});
-        let imgUrl ='https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
-        // const input = document.getElementById('wholediv');
-        // this.child.downloadPDF(input, imgUrl);
     };
 
     email = () => {
@@ -344,6 +343,10 @@ class PrintChecksLayout extends Component {
     };
 
     handlePrint = async ()=>{
+        console.log('child1', this.child1);
+
+        this.child1.onPrint();
+        return;
         this.props.history.push('/accounts-payable/preview-checks');
         return;
         await this.setState({openPrintModal: false});
@@ -570,6 +573,7 @@ class PrintChecksLayout extends Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
+                <ExportChecks onRef={ref => (this.child1 = ref)}/>
             </React.Fragment>
         );
     }
