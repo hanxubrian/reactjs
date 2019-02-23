@@ -495,6 +495,13 @@ const customers = function (state = initialState, action) {
 					activeCustomer: action.payload.customer,
 				};
 			}
+		case Actions.UPDATE_CUSTOMER:
+			{
+				return {
+					...state,
+					activeCustomer: action.payload,
+				};
+			}
 		case Actions.OPEN_EDIT_CUSTOMER_SERVICE_FORM:
 			return {
 				...state,

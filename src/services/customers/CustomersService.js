@@ -194,6 +194,23 @@ class CustomersService {
 				})
 		});
 	}
+	updateCustomer(regionId, param) {
+		console.log("updateCustomer-param", param)
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/Customer/update/${param._id}?regionId=${regionId}`, param)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
 	getCustomer(regionId, customerId) {
 		console.log("getCustomer", customerId)
 		return new Promise((resolve, reject) => {

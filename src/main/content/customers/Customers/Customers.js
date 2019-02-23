@@ -447,8 +447,8 @@ class Customers extends Component {
 				this.props.createCustomer(this.props.regionId, this.props.activeCustomer.Data)
 				break;
 			case "edit":
-			// this.props.updateCustomer(this.props.regionId, this.props.activeCustomer.Data)
-			// 	break;
+				this.props.updateCustomer(this.props.regionId, this.props.activeCustomer.Data)
+				break;
 		}
 	}
 

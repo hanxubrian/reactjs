@@ -15,8 +15,8 @@ export const OPEN_NEW_CUSTOMER_FORM = '[CUSTOMERS APP] OPEN NEW CUSTOMER FORM';
 export const CLOSE_NEW_CUSTOMER_FORM = '[CUSTOMERS APP] CLOSE NEW CUSTOMER FORM';
 export const OPEN_EDIT_CUSTOMER_FORM = '[CUSTOMERS APP] OPEN EDIT CUSTOMER FORM';
 export const CLOSE_EDIT_CUSTOMER_FORM = '[CUSTOMERS APP] CLOSE EDIT CUSTOMER FORM';
-export const ADD_CUSTOMER = '[CUSTOMERS APP] ADD CUSTOMER';
-export const UPDATE_CUSTOMER = '[CUSTOMERS APP] UPDATE CUSTOMER';
+export const ADD_CUSTOMER_CONTACT = '[CUSTOMERS APP] ADD CUSTOMER_CONTACT';
+export const UPDATE_CUSTOMER_CONTACT = '[CUSTOMERS APP] UPDATE CUSTOMER_CONTACT';
 
 export const SELECT_LOCATION_FILTER = '[CUSTOMERS APP] SELECT LOCATION FILTER';
 export const APPLY_SEARCH_TEXT = '[CUSTOMERS APP] APPLY SEARCH TEXT';
@@ -32,6 +32,8 @@ export const OPEN_EMAIL_TO_CUSTOMER_DIALOG = "[CUSTOMERS APP] OPEN_EMAIL_TO_CUST
 
 export const CREATE_CUSTOMER = "[CUSTOMERS APP] CREATE_CUSTOMER";
 export const CREATE_CUSTOMER_START = "[CUSTOMERS APP] CREATE_CUSTOMER_START";
+export const UPDATE_CUSTOMER = "[CUSTOMERS APP] UPDATE_CUSTOMER";
+export const UPDATE_CUSTOMER_START = "[CUSTOMERS APP] UPDATE_CUSTOMER_START";
 
 export const GET_CUSTOMER = "[CUSTOMERS APP] GET_CUSTOMER";
 export const GET_CUSTOMER_START = "[CUSTOMERS APP] GET_CUSTOMER_START";
@@ -186,6 +188,22 @@ export function createCustomer(regionId, param) {
 			let response = await customersService.createCustomer(regionId, param);
 			dispatch({
 				type: CREATE_CUSTOMER,
+				payload: response
+			});
+		})();
+	}
+}
+export function updateCustomer(regionId, param) {
+	return (dispatch) => {
+		dispatch({
+			type: UPDATE_CUSTOMER_START,
+			payload: true
+		});
+
+		(async () => {
+			let response = await customersService.updateCustomer(regionId, param);
+			dispatch({
+				type: UPDATE_CUSTOMER,
 				payload: response
 			});
 		})();
@@ -462,7 +480,7 @@ export function setCustomerFormFindersFeesDialogPayload(payload) {
 	}
 }
 
-export function addCustomer(newCustomer) {
+export function addCustomerContact(newCustomer) {
 	return (dispatch, getState) => {
 
 		console.log('state', getState());
@@ -476,14 +494,14 @@ export function addCustomer(newCustomer) {
 		return request.then((response) =>
 			Promise.all([
 				dispatch({
-					type: ADD_CUSTOMER
+					type: ADD_CUSTOMER_CONTACT
 				})
 			]).then(() => dispatch(getCustomers()))
 		);
 	};
 }
 
-export function updateCustomer(customer) {
+export function updateCustomerContact(customer) {
 	return (dispatch, getState) => {
 
 		// const {routeParams} = getState().contactsApp.contacts;
@@ -495,7 +513,7 @@ export function updateCustomer(customer) {
 		return request.then((response) =>
 			Promise.all([
 				dispatch({
-					type: UPDATE_CUSTOMER
+					type: UPDATE_CUSTOMER_CONTACT
 				})
 			]).then(() => dispatch(getCustomers()))
 		);
