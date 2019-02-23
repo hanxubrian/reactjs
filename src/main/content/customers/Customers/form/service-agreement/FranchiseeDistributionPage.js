@@ -977,15 +977,15 @@ class FranchiseeDistributionPage extends React.Component {
 		)
 	}
 
-	handleMonthlyBilling = (id, row, name) => event => {
-		row[name] = name === 'EscrowBilling' ? event.target.checked : event.target.value;
+	handleMonthlyBilling = (fId, mId, name) => event => {
+		const value = name === 'EscrowBilling' ? event.target.checked : event.target.value
 
-		let data = this.state.franchieesesToOffer;
-		let record = data.filter(f => f.Id === id);
+		let newFranchieesesToOffer = _.clone(this.state.franchieesesToOffer)
+		newFranchieesesToOffer[fId].MonthlyBilling[mId][name] = value
 
-		record[0].MonthlyBilling[0][name] = row[name];
-
-		this.setState({ franchieesesToOffer: this.state.franchieesesToOffer })
+		this.setState({
+			franchieesesToOffer: newFranchieesesToOffer
+		})
 	};
 
 	handleUpdateAssignedFranchisees = () => {
@@ -999,9 +999,19 @@ class FranchiseeDistributionPage extends React.Component {
 
 	};
 
-	removeFranchisee = async (franchiseeId) => {
-		console.log('removed=', franchiseeId);
-		// this.setState({openSnack: true});
+	removeFranchiseeMonthly = async (fId, mId) => {
+		let newFranchieesesToOffer = _.clone(this.state.franchieesesToOffer)
+		newFranchieesesToOffer[fId].MonthlyBilling.splice(mId, 1)
+		//
+		// if monthly count is ZERO, remove the franchisee
+		//
+		if (newFranchieesesToOffer[fId].MonthlyBilling.length === 0) {
+			newFranchieesesToOffer.splice(fId, 1)
+		}
+
+		this.setState({
+			franchieesesToOffer: newFranchieesesToOffer
+		})
 	};
 
 	getFranchiseeAssignmentForm() {
@@ -1073,14 +1083,13 @@ class FranchiseeDistributionPage extends React.Component {
 								x.MonthlyBilling.map((m, mIndex) => (
 									<div key={mIndex} className={classNames("flex w-full items-center")} style={{ alignItems: 'bottom' }}>
 
-										<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption">{x.FranchiseeNumber}</Typography>
-										<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption">{x.FranchiseeName}</Typography>
-
+										<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption">{mIndex === 0 ? x.FranchiseeNumber : '---'}</Typography>
+										<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption">{mIndex === 0 ? x.FranchiseeName : '---'}</Typography>
 
 										<Checkbox style={{ width: franHeaders[2].width + '%', alignSelf: 'center' }}
 											name="EscrowBilling"
 											checked={m.EscrowBilling}
-											onChange={this.handleMonthlyBilling(x.Id, m, 'EscrowBilling')}
+											onChange={this.handleMonthlyBilling(index, mIndex, 'EscrowBilling')}
 											onBlur={() => this.handleUpdateAssignedFranchisees()}
 										/>
 
@@ -1096,7 +1105,7 @@ class FranchiseeDistributionPage extends React.Component {
 													input: classes.descriptionText,
 												},
 											}}
-											onChange={this.handleMonthlyBilling(x.Id, m, 'BillingFrequency')}
+											onChange={this.handleMonthlyBilling(index, mIndex, 'BillingFrequency')}
 										>
 											{[
 												{ label: 'Variable', value: 'V' },
@@ -1110,7 +1119,7 @@ class FranchiseeDistributionPage extends React.Component {
 											className="pl-6 hidden"
 											value={m.BillingTypeId}
 											select
-											onChange={this.handleMonthlyBilling(x.Id, m, 'BillingTypeId')}
+											onChange={this.handleMonthlyBilling(index, mIndex, 'BillingTypeId')}
 											InputProps={{
 												readOnly: true,
 												classes: {
@@ -1132,7 +1141,7 @@ class FranchiseeDistributionPage extends React.Component {
 													input: classes.descriptionText,
 												},
 											}}
-											onChange={this.handleMonthlyBilling(x.Id, m, 'BillingTypeServiceId')}
+											onChange={this.handleMonthlyBilling(index, mIndex, 'BillingTypeServiceId')}
 										>
 											{franchiseeServiceTypes.map((x, index) => (<MenuItem key={index} value={x._id}>{x.Name}</MenuItem>))}
 										</TextField>
@@ -1141,7 +1150,7 @@ class FranchiseeDistributionPage extends React.Component {
 											margin="dense"
 											className="pl-6"
 											value={m.Description}
-											onChange={this.handleMonthlyBilling(x.Id, m, 'Description')}
+											onChange={this.handleMonthlyBilling(index, mIndex, 'Description')}
 											InputProps={{
 												classes: {
 													input: classes.descriptionText,
@@ -1161,14 +1170,13 @@ class FranchiseeDistributionPage extends React.Component {
 											margin="dense"
 											className="pl-6"
 											value={m.MonthlyBilling}
-											onChange={this.handleMonthlyBilling(x.Id, m, 'MonthlyBilling')}
-
+											onChange={this.handleMonthlyBilling(index, mIndex, 'MonthlyBilling')}
 										/>
+
 										<div className=" text-center" style={{ width: franHeaders[8].width + '%' }}>
 											{
 												m.MonthlyBilling > 0 && <Tooltip title="Go to Finders Fee" aria-label="Go to Finders Fee">
 													<Fab aria-label="remove"
-														// disabled={m.MonthlyBilling <= 0}
 														onClick={() => this.gotoFindersFee(x.FranchiseeNumber, m.MonthlyBilling)} color="primary" className={classNames(classes.ffBtn, "mr-12")}>
 														<Icon>arrow_forward</Icon>
 													</Fab>
@@ -1176,7 +1184,7 @@ class FranchiseeDistributionPage extends React.Component {
 											}
 											<Tooltip title="Remove this franchisee" aria-label="Remove Franchisee">
 												<Fab aria-label="remove"
-													onClick={() => this.removeFranchisee(x.Id)} color="primary" className={classNames(classes.ffBtn, classes.lineCancelButton)}>
+													onClick={() => this.removeFranchiseeMonthly(index, mIndex)} color="primary" className={classNames(classes.ffBtn, classes.lineCancelButton)}>
 													<Icon>close</Icon>
 												</Fab>
 											</Tooltip>
