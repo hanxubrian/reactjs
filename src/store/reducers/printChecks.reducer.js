@@ -12,7 +12,7 @@ const initialState = {
     bLoadedPrintChecksDetail: false,
     bStartFetchDetail_pc: false,
     bStartFetchList_pc: false,
-    bSettingPanel: true,
+    bSettingPanel: false,
     checkDate: moment().format('MM/DD/YYYY'),
     paymentDate: moment().format('MM/DD/YYYY'),
     checktypeId: '5c670724580ae04184e50a70',
@@ -64,6 +64,6 @@ const printChecks = function(state = initialState, action) {
 const persistConfig = {
     key: 'printChecks',
     storage: storage,
-    blacklist: ['printChecksDB', 'printChecksDetail', 'selections']
+    blacklist: ['printChecksDB', 'printChecksDetail', 'selections', 'bSettingPanel']
 };
 export default persistReducer(persistConfig, printChecks);
