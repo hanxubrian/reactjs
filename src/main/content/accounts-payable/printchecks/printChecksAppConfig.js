@@ -12,6 +12,12 @@ export const PrintChecksConfig = {
             component: FuseLoadable({
                 loader: () => import('./printChecksApp')
             })
+        },
+        {
+            path     : '/accounts-payable/preview-checks',
+            component: FuseLoadable({
+                loader: () => import('./PDFExportChecks')
+            })
         }
     ]
 };

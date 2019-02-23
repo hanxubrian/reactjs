@@ -235,13 +235,11 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({auth, printChecks, paymentLog})
+function mapStateToProps({auth, printChecks})
 {
     return {
-        paymentLogList: paymentLog.paymentLogList,
         printChecksDB: printChecks.printChecksDB,
         regionId: auth.login.defaultRegionId,
-        logDate: paymentLog.logDate,
         all_regions: auth.login.all_regions,
     }
 }

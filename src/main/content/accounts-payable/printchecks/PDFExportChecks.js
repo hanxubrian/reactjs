@@ -2,22 +2,42 @@ import React from 'react';
 
 import { process } from '@progress/kendo-data-query';
 import { GridPDFExport, PDFExport, savePDF } from '@progress/kendo-react-pdf';
+import { Grid, GridColumn as Column } from '@progress/kendo-react-grid';
 
+import {Typography,} from '@material-ui/core'
+import GridM from '@material-ui/core/Grid'
 // for Store
 import {withStyles} from "@material-ui/core";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
 
-const styles = theme => ({
+//3rd parties
+import moment from 'moment';
+import classNames from 'classnames';
 
+const styles = theme => ({
+    root: {
+        fontSize: 11,
+        '& .small': {
+            fontSize: 11
+        }
+
+    }
 });
 class ExportChecks extends React.Component {
     pdfExportComponent;
+    image;
 
     render() {
+        const {classes} = this.props;
+        const  log_url = 'https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
+
+        let selections = this.props.selectionsChecks.map((index)=>this.props.printChecksDB[index]);
+        console.log('selections1=', selections);
+
         return (
-            <div>
+            <div className={classNames("p-24")}>
                 <div className="example-config">
                     <button className="k-button" onClick={() => { this.pdfExportComponent.save(); }}>
                         Export PDF
@@ -26,17 +46,58 @@ class ExportChecks extends React.Component {
 
                 <PDFExport
                     paperSize="A4"
-                    margin="1.5cm"
+                    margin="1cm"
                     forcePageBreak=".page-break"
                     ref={(component) => this.pdfExportComponent = component}
+                    scale={1}
                 >
-                    <div style={{ width: "500px;"}}>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer felis libero, lobortis ac rutrum quis, varius a velit. Donec lacus erat, cursus sed porta quis, adipiscing et ligula. Duis volutpat, sem pharetra accumsan pharetra, mi ligula cursus felis, ac aliquet leo diam eget risus. Integer facilisis, justo cursus venenatis vehicula, massa nisl tempor sem, in ullamcorper neque mauris in orci.
-                        </p>
-                        <p className="page-break">
-                            Ut orci ligula, varius ac consequat in, rhoncus in dolor. Mauris pulvinar molestie accumsan. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean velit ligula, pharetra quis aliquam sed, scelerisque sed sapien. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aliquam dui mi, vulputate vitae pulvinar ac, condimentum sed eros.
-                        </p>
+                    <div  style={{ width: "700px;", margin: '0 auto', maxWidth: 700}} className={classNames(classes.root)}>
+                        {selections.map((check, index)=>{
+                            return (
+                                <div key={index} className={classNames("flex flex-col",{'page-break': index>0})}>
+                                    <div className="flex flex-row relative justify-center mt-12">
+                                        <div className="absolute checks-date small" style={{left: 0}}>{moment().format('MM/DD/YYYY')}</div>
+                                        <Typography variant={"inherit"}>JaniKing | Franchise Management System</Typography>
+                                    </div>
+                                    <GridM container>
+                                        <GridM item sm={3}>
+                                            <img
+                                                src={log_url}
+                                            />
+                                        </GridM>
+                                        <GridM item sm={6}>
+                                            <Typography variant={"subtitle1"}><strong>Jani-King of Buffalo, Inc</strong></Typography>
+                                        </GridM>
+                                        <GridM item sm={3}>
+                                            <Typography variant={"inherit"}>Check Number: {check.checknumber}</Typography>
+                                            <Typography variant={"inherit"}>Check Date: {moment(check.checkdate).format('MM/DD/YYYY')}</Typography>
+                                        </GridM>
+
+                                    </GridM>
+                                    <GridM container>
+                                        <GridM item sm={3}>
+                                        </GridM>
+                                        <GridM item sm={3} >
+                                            <Typography variant={"inherit"}>Payee: {check.PayeeNumber}</Typography>
+                                        </GridM>
+                                        <GridM item sm={6}>
+                                            <Typography variant={"inherit"}>JACKSON 4 JACKSON, INC., an Authorized Franchisee</Typography>
+                                        </GridM>
+                                    </GridM>
+
+                                        <Grid
+                                            ref={(grid) => this.grid = grid}
+                                            data={check.turnArounddata}
+                                        >
+                                            <Column field="InvoiceNo" title="InvoiceNo" width="100px" />
+                                            <Column field="CustomerNumber" title="Customer No" width="100px" />
+                                            <Column field="CustomerName" title="Customer Name" width="240px"/>
+                                            <Column field="Amount" title="Invoice Payment Amt." />
+                                        </Grid>
+
+                                </div>
+                            )
+                        })}
                     </div>
                 </PDFExport>
             </div >
@@ -51,13 +112,12 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({auth, printChecks, paymentLog})
+function mapStateToProps({auth, printChecks})
 {
     return {
-        paymentLogList: paymentLog.paymentLogList,
         printChecksDB: printChecks.printChecksDB,
+        selectionsChecks: printChecks.selections,
         regionId: auth.login.defaultRegionId,
-        logDate: paymentLog.logDate,
         all_regions: auth.login.all_regions,
     }
 }

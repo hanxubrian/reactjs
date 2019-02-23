@@ -344,11 +344,13 @@ class PrintChecksLayout extends Component {
     };
 
     handlePrint = async ()=>{
+        this.props.history.push('/accounts-payable/preview-checks');
+        return;
         await this.setState({openPrintModal: false});
         await this.setState({bPrint: true});
         await this.setState({completed: 0});
         await this.child.resetSelection();
-        timer = setInterval(this.progress, 1000);
+        timer = setInterval(this.progress, 200);
     };
 
     handleCheckDateDateChange = date => {
