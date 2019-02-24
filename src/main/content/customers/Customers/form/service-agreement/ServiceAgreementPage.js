@@ -1112,6 +1112,7 @@ class ServiceAgreementPage extends React.Component {
 								{customerForm.props.open && customerForm.type === "edit" &&
 									<div>
 										<Button
+											disabled={this.props.activeCustomer.Data.flag === 'C'}
 											variant="contained"
 											color="primary"
 											className={classNames(classes.button, "pr-24 pl-24 mr-12")}
@@ -1119,19 +1120,20 @@ class ServiceAgreementPage extends React.Component {
 										>Increase/Decrease<Icon fontSize="small">keyboard_arrow_right</Icon>
 										</Button>
 										<Button
+											disabled={this.props.activeCustomer.Data.flag === 'C'}
 											variant="contained"
 											color="primary"
 											onClick={this.showCancelContractPage}
 											className={classNames(classes.button, "pr-24 pl-24")}
 										>Cancel Contract<Icon fontSize="small">keyboard_arrow_right</Icon>
-                                </Button>
+										</Button>
 										<Button
 											variant="contained"
 											color="primary"
 											onClick={this.showSuspendContractPage}
 											className={classNames(classes.button, "pr-24 pl-24")}
 										>Suspend Account<Icon fontSize="small">keyboard_arrow_right</Icon>
-                                </Button>
+										</Button>
 									</div>}
 							</GridItem>
 

@@ -249,6 +249,11 @@ const initialState = {
 	assignedFranchisees: null,
 	activeCustomerFranchisees: null,
 
+	loading: {
+		count: 0,
+		msg: ""
+	},
+
 	newCustomerParam: {
 		"Latitude": "", "Longitude": "", "CPIBillingAppliedDate": "", "lastModified": "", "cleaning_start_time": "", "cleaning_instructions": "", "overpayment": "", "billing_term": "", "contract_lenght": "",
 		"AssignedFranchisees": [
