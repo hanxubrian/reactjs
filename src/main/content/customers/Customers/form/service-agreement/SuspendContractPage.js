@@ -1094,15 +1094,15 @@ class SuspendContractPage extends React.Component {
 				<div className="w-full h-full">
 					{/* grid area */}
 					<Grid rows={rows} columns={columns}>
-						<SearchState value={searchValue} onValueChange={this.changeSearchValue} />
-						<IntegratedFiltering />
+						{/* <SearchState value={searchValue} onValueChange={this.changeSearchValue} /> */}
+						{/* <IntegratedFiltering /> */}
 						<SelectionState selection={selection} onSelectionChange={this.changeSelection} />
-						<PagingState defaultCurrentPage={0} defaultPageSize={10} />
-						<PagingPanel pageSizes={pageSizes} />
+						{/* <PagingState defaultCurrentPage={0} defaultPageSize={10} /> */}
+						{/* <PagingPanel pageSizes={pageSizes} /> */}
 						<IntegratedSelection />
 						<SortingState sorting={sorting} onSortingChange={this.changeSorting} columnExtensions={columns} />
 						<IntegratedSorting />
-						<IntegratedPaging />
+						{/* <IntegratedPaging /> */}
 						<EditingState
 							// columnExtensions={editingColumnExtensions}
 							onCommitChanges={this.commitChanges} />
@@ -1114,9 +1114,9 @@ class SuspendContractPage extends React.Component {
 						<TableSelection showSelectAll selectByRowClick highlightRow />
 						<TableHeaderRow showSortingControls />
 						<TableEditColumn width={60} cellComponent={this.EditingCellComponent} headerCellComponent={EditingHeaderCellComponent}></TableEditColumn>
-						<Toolbar rootComponent={this.ToolbarRoot} />
-						<SearchPanel />
-						<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
+						{/* <Toolbar rootComponent={this.ToolbarRoot} /> */}
+						{/* <SearchPanel /> */}
+						{/* <CustomizedDxGridSelectionPanel selection={selection} rows={rows} /> */}
 					</Grid>
 
 				</div>

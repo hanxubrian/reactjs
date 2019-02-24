@@ -1171,12 +1171,12 @@ class CancelContractPage extends React.Component {
 						{/* <SearchState value={searchValue} onValueChange={this.changeSearchValue} /> */}
 						{/* <IntegratedFiltering /> */}
 						<SelectionState selection={selection} onSelectionChange={this.changeSelection} />
-						<PagingState defaultCurrentPage={0} defaultPageSize={10} />
-						<PagingPanel pageSizes={pageSizes} />
+						{/* <PagingState defaultCurrentPage={0} defaultPageSize={10} /> */}
+						{/* <PagingPanel pageSizes={pageSizes} /> */}
 						<IntegratedSelection />
 						<SortingState sorting={sorting} onSortingChange={this.changeSorting} columnExtensions={columns} />
 						<IntegratedSorting />
-						<IntegratedPaging />
+						{/* <IntegratedPaging /> */}
 						<EditingState
 							// columnExtensions={editingColumnExtensions}
 							onCommitChanges={this.commitChanges} />
@@ -1188,9 +1188,9 @@ class CancelContractPage extends React.Component {
 						<TableSelection showSelectAll selectByRowClick highlightRow />
 						<TableHeaderRow showSortingControls />
 						<TableEditColumn width={60} cellComponent={this.EditingCellComponent} headerCellComponent={EditingHeaderCellComponent}></TableEditColumn>
-						<Toolbar rootComponent={this.ToolbarRoot} />
+						{/* <Toolbar rootComponent={this.ToolbarRoot} /> */}
 						{/* <SearchPanel /> */}
-						<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
+						{/* <CustomizedDxGridSelectionPanel selection={selection} rows={rows} /> */}
 					</Grid>
 
 				</div>
