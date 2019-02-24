@@ -957,6 +957,19 @@ class UsersForm extends React.Component {
                                 )}
                             />
                         )}
+                        {this.state.UserType !== 'Franchisee' && this.state.UserType !== 'Customer'&& (
+                            <TextField
+                                id="UserName"
+                                label={"Name"}
+                                className={classes.textField}
+                                value={this.state.UserTypeValue}
+                                style={{marginLeft: "1%"}}
+                                onChange={this.handleChange('UserTypeValue')}
+                                margin="dense"
+                                fullWidth
+                            >
+                            </TextField>
+                        )}
                             
                         </GridItem>
                     </GridContainer>
