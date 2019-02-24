@@ -7,6 +7,8 @@ export const GET_PRINT_CHECKS_DETAIL = "[PRINT CHECKS] GETS DETAIL";
 export const GET_PRINT_CHECKS_DETAIL_ERROR = "[PRINT CHECKS] GETS DETAIL_ERROR";
 export const UPDATE_CHECK_SELECTIONS = "[PRINT CHECKS] UPDATE CHECK SELECTIONS";
 export const TOGGLE_FILTER_PANEL_CHECK_PRINTING = "[PRINT CHECKS] TOGGLE FILTER PANEL";
+export const NULLIFY_CHECKS_OBJ = "[PRINT CHECKS] NULLIFY CHECKS OBJ";
+export const SET_CHECKS_OBJ = "[PRINT CHECKS] SET_CHECKS_OBJ";
 
 
 export function getCheckDetailByType(regionId, ChecktypeId, EntityTypeId, Month, Year, PaymentDate, CheckDate) {
@@ -46,6 +48,23 @@ export function toggleFilterPanel_pc() {
     return (dispatch) => {
         dispatch({
             type: TOGGLE_FILTER_PANEL_CHECK_PRINTING,
+        });
+    }
+}
+
+export function nullifyChecksObj() {
+    return (dispatch) => {
+        dispatch({
+            type: NULLIFY_CHECKS_OBJ,
+        });
+    }
+}
+
+export function setCheckObj(obj) {
+    return (dispatch) => {
+        dispatch({
+            type: SET_CHECKS_OBJ,
+            payload: obj
         });
     }
 }

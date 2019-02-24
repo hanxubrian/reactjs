@@ -343,15 +343,19 @@ class PrintChecksLayout extends Component {
     };
 
     handlePrint = async ()=>{
-        this.child1.onPrint();
-        return;
-        this.props.history.push('/accounts-payable/preview-checks');
-        return;
+        const {selections, printChecksDB} = this.props;
         await this.setState({openPrintModal: false});
-        await this.setState({bPrint: true});
         await this.setState({completed: 0});
+        await this.setState({bPrint: true});
+
+        selections.forEach(async index=>{
+            let checkObj = printChecksDB[index];
+            await this.props.setCheckObj(checkObj);
+            await this.child1.onPrint();
+            await this.progress();
+            await setTimeout(null, 200);
+        });
         await this.child.resetSelection();
-        timer = setInterval(this.progress, 200);
     };
 
     handleCheckDateDateChange = date => {
@@ -359,12 +363,13 @@ class PrintChecksLayout extends Component {
     };
 
     progress = async () =>{
+        let delta = 100/this.props.selections.length;
+        console.log('delta=', delta, this.props.selections);
         if (this.state.completed > 100) {
-            await clearInterval(timer);
             await this.setState({bPrint: false});
             await this.setState({completed: 0});
         } else {
-            const diff =  this.state.completed + 10;
+            const diff =  this.state.completed + delta;
             this.setState({completed: diff});
         }
     };
@@ -493,7 +498,7 @@ class PrintChecksLayout extends Component {
                 {this.state.bPrint && (
                     <div className={classNames(classes.overlay1, classes.wrapProgress, "flex flex-col items-center")}>
                         <LinearProgress variant="determinate" value={this.state.completed} />
-                        <Typography variant={"h5"}>Pringting</Typography>
+                        <Typography variant={"h5"}>Printing</Typography>
                     </div>
                 )}
                 <Dialog open={this.state.openPrintModal} onClose={this.handleClose} aria-labelledby="form-dialog-title" fullWidth maxWidth={'sm'}>
@@ -581,7 +586,9 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getCheckDetailByType: Actions.getCheckDetailByType,
         updateSelections: Actions.updateSelections,
-        toggleFilterPanel: Actions.toggleFilterPanel_pc
+        toggleFilterPanel: Actions.toggleFilterPanel_pc,
+        nullifyChecksObj: Actions.nullifyChecksObj,
+        setCheckObj: Actions.setCheckObj,
     }, dispatch);
 }
 

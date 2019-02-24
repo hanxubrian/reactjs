@@ -76,8 +76,8 @@ class ExportChecks extends React.Component {
     pdfExportComponent;
     image;
 
-    onPrint = ()=> {
-        this.pdfExportComponent.save();
+    onPrint = async ()=> {
+        await this.pdfExportComponent.save();
     };
     componentDidMount()
     {
@@ -92,7 +92,8 @@ class ExportChecks extends React.Component {
         const  log_url = 'https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
         // const  log_url = 'assets/images/logo-blank.png';
 
-        let selections = this.props.selectionsChecks.map((index)=>this.props.printChecksDB[index]);
+        // let selections = this.props.selectionsChecks.map((index)=>this.props.printChecksDB[index]);
+        let selections = [this.props.checksObj];
 
         return (
             <div className={classNames("p-24 ")} style={{ position: "absolute", left: "-2000px", top: 0 }}>
@@ -269,6 +270,7 @@ function mapStateToProps({auth, printChecks})
         selectionsChecks: printChecks.selections,
         regionId: auth.login.defaultRegionId,
         all_regions: auth.login.all_regions,
+        checksObj: printChecks.checksObj,
     }
 }
 

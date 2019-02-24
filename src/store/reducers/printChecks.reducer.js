@@ -19,7 +19,8 @@ const initialState = {
     entityTypeId: '',
     year: moment().year(),
     month: moment().month()+1,
-    selections: []
+    selections: [],
+    checksObj: null
 };
 
 const printChecks = function(state = initialState, action) {
@@ -47,6 +48,16 @@ const printChecks = function(state = initialState, action) {
         case Actions.TOGGLE_FILTER_PANEL_CHECK_PRINTING: {
             return {
                 ...state, bSettingPanel: !state.bSettingPanel
+            };
+        }
+        case Actions.NULLIFY_CHECKS_OBJ: {
+            return {
+                ...state, checksObj: null
+            };
+        }
+        case Actions.SET_CHECKS_OBJ: {
+            return {
+                ...state, checksObj: action.payload
             };
         }
         case UserActions.USER_LOGGED_OUT:{
