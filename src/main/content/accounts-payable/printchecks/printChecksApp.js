@@ -329,8 +329,9 @@ class PrintChecksLayout extends Component {
         this.setState({openPrintModal: true});
     };
 
-    email = () => {
-        alert("Email");
+    onRefresh = () => {
+        const {regionId, paymentDate, checkDate, checktypeId, entityTypeId, year, month} = this.props;
+        this.props.getCheckDetailByType(regionId, checktypeId, entityTypeId, month, year, paymentDate, checkDate);
     };
 
     handleChange = prop => event => {
@@ -419,11 +420,11 @@ class PrintChecksLayout extends Component {
                                             Print
                                             <Icon className={classes.rightIcon}>print</Icon>
                                         </Button>
-                                        {/*<Button variant="contained" color="primary"*/}
-                                                {/*className={classNames( classes.btntop)} onClick={this.email}>*/}
-                                            {/*Email*/}
-                                            {/*<Icon className={classes.rightIcon}>email</Icon>*/}
-                                        {/*</Button>*/}
+                                        <Button variant="contained" color="primary"
+                                                className={classNames( classes.btntop)} onClick={this.onRefresh}>
+                                            Refresh
+                                            <Icon className={classes.rightIcon}>refresh</Icon>
+                                        </Button>
                                     </div>
                                 </div>
 
