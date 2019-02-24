@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 // core components
 import {
 	TextField, Button, MenuItem, Divider, FormControlLabel,
-	AppBar, Checkbox, Tabs, Tab, Switch, InputAdornment
+	AppBar, Checkbox, Tabs, Tab, Switch, InputAdornment, SnackbarContent, Snackbar, IconButton, Icon
 } from '@material-ui/core';
 
 // theme components
@@ -33,6 +33,15 @@ import AccountOfferingPage from './form/account-offering/AccountOfferingPage';
 import FinderFeePage from './form/finders-fees/NewFindersFeePage'
 import ServiceAgreementPage from './form/service-agreement/ServiceAgreementPage'
 import FranchiseeDistributionPage from './form/service-agreement/FranchiseeDistributionPage'
+
+import green from "@material-ui/core/colors/green";
+import amber from "@material-ui/core/colors/amber";
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
+import InfoIcon from '@material-ui/icons/Info';
+import CloseIcon from '@material-ui/icons/Close';
+import WarningIcon from '@material-ui/icons/Warning';
+import PropTypes from 'prop-types';
 
 const hexToRgb = (hex) => {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -188,6 +197,80 @@ const Upload_Document_headers = [
 	},
 ];
 
+//Snackbar
+const variantIcon = {
+	success: CheckCircleIcon,
+	warning: WarningIcon,
+	error: ErrorIcon,
+	info: InfoIcon,
+};
+
+const stylesSnackbar = theme => ({
+	success: {
+		backgroundColor: green[600],
+	},
+	error: {
+		backgroundColor: theme.palette.error.dark,
+	},
+	info: {
+		backgroundColor: theme.palette.primary.dark,
+	},
+	warning: {
+		backgroundColor: amber[700],
+	},
+	icon: {
+		fontSize: 20,
+	},
+	iconVariant: {
+		opacity: 0.9,
+		marginRight: theme.spacing.unit,
+	},
+	message: {
+		display: 'flex',
+		alignItems: 'center',
+	},
+});
+
+function MySnackbarContent(props) {
+	const { classes, className, message, onClose, variant, ...other } = props;
+	const Icon = variantIcon[variant];
+
+	return (
+		<SnackbarContent
+			className={classNames(classes[variant], className)}
+			aria-describedby="client-snackbar"
+			message={
+				<span id="client-snackbar" className={classes.message}>
+					<Icon className={classNames(classes.icon, classes.iconVariant)} />
+					{message}
+				</span>
+			}
+			action={[
+				// <IconButton
+				// 	key="close"
+				// 	aria-label="Close"
+				// 	color="inherit"
+				// 	className={classes.close}
+				// 	onClick={onClose}
+				// >
+				// 	<CloseIcon className={classes.icon} />
+				// </IconButton>,
+			]}
+			{...other}
+		/>
+	);
+}
+
+MySnackbarContent.propTypes = {
+	classes: PropTypes.object.isRequired,
+	className: PropTypes.string,
+	message: PropTypes.node,
+	onClose: PropTypes.func,
+	variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
+};
+
+const MySnackbarContentWrapper = withStyles(stylesSnackbar)(MySnackbarContent);
+
 // const GridRootComponent = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 class CustomerForm extends Component {
 	state = {
@@ -223,9 +306,9 @@ class CustomerForm extends Component {
 		if (this.props.customerForm.type === "new") {
 			return ['Service Agreement', 'Franchisee Distribution', "Account Offering"];
 		}
-		return ['Service Agreement', 'Franchisee Distribution', "Walk-Thru", "Account Offering", "Documents", "Marketing", "Account History", "Finders Fees"];
+		return ['Service Agreement', 'Franchisee Distribution', "Walk-Thru", "Account Offering", "Account History"];
 	}
-	
+
 	//
 	// to edit table cell
 	//
@@ -766,6 +849,25 @@ class CustomerForm extends Component {
 		const steps = this.getSteps();
 		const { activeStep } = this.state;
 
+		let customerStatusMsg = "", customerStatus = ""
+		switch (this.props.activeCustomer.Data.flag) {
+			case "A":
+				customerStatus = "success"
+				customerStatusMsg = "Active Customer"
+				break
+			case "S":
+				customerStatus = "warning"
+				customerStatusMsg = "Suspended Customer"
+				break
+			case "C":
+				customerStatus = "error"
+				customerStatusMsg = "Canceled Customer"
+				break
+			default:
+				customerStatus = "info"
+				customerStatusMsg = `${this.props.activeCustomer.Data.flag} - Unknown Status`
+				break
+		}
 
 
 		return (
@@ -794,8 +896,19 @@ class CustomerForm extends Component {
 						height: 'calc(100% - 50px)'
 					}}
 				>
+					<div className="flex w-full justify-between align-items">
+						<h2 style={{ alignSelf: 'center' }} >{activeStep === 1 ? 'Franchisee Revenue Distribution' : steps[activeStep]}</h2>
+						<div className="flex align-items">
+							
+							<MySnackbarContentWrapper
+								variant={customerStatus}
+								className={classes.margin}
+								message={customerStatusMsg}
+							/>
+						</div>
+					</div>
 
-					<h2>{activeStep === 1 ? 'Franchisee Revenue Distribution' : steps[activeStep]}</h2>
+
 
 					<Divider variant="middle" style={{ marginTop: 12, marginBottom: 12 }} />
 

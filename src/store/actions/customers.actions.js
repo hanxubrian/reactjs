@@ -90,6 +90,9 @@ export const UPDATE_NEW_CUSTOMER_PARAM = "[CUSTOMERS APP] UPDATE_NEW_CUSTOMER_PA
 export const SAVE_CANCEL_CONTRACT = "[CUSTOMERS APP] SAVE_CANCEL_CONTRACT";
 export const SAVE_SUSPEND_CONTRACT = "[CUSTOMERS APP] SAVE_SUSPEND_CONTRACT";
 
+export const STOP_FINDERS_FEES = "[CUSTOMERS APP] STOP_FINDERS_FEES";
+export const STOP_FINDERS_FEES_START = "[CUSTOMERS APP] STOP_FINDERS_FEES_START";
+
 export const OPEN_EDIT_CUSTOMER_SERVICE_FORM = "[CUSTOMERS-service APP] OPEN_EDIT_CUSTOMER_SERVICE_FORM";
 export const CLOSE_CUSTOMER_SERVICE_FORM = "[CUSTOMERS-service APP] CLOSE_CUSTOMER_SERVICE_FORM";
 
@@ -348,6 +351,23 @@ export function openEditCustomerForm(regionId, customerId, customerNo) {
 			dispatch({
 				type: OPEN_EDIT_CUSTOMER_FORM,
 				payload: { customer, findersFees, findersFeesConfig }
+			});
+		})();
+	}
+}
+export function stopFindersfees(regionId, customerNo) {
+	return (dispatch) => {
+		dispatch({
+			type: STOP_FINDERS_FEES_START,
+			payload: true
+		});
+
+		(async () => {
+			let res = await customersService.stopFindersfees(regionId, customerNo);
+			let findersFees = await customersService.getFindersFeesByCustomerNo(regionId, customerNo);
+			dispatch({
+				type: STOP_FINDERS_FEES,
+				payload: findersFees
 			});
 		})();
 	}

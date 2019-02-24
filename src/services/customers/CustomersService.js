@@ -316,6 +316,23 @@ fullbill: 0
 				})
 		});
 	}
+
+	stopFindersfees(regionId, fran_id) {
+		return new Promise((resolve, reject) => {
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/FinderFee/Stop/${fran_id}?regionId=${regionId}`)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
 	findersfeeConfigs() {
 		/*
 		{

@@ -3,7 +3,7 @@ import _ from "lodash";
 import { withRouter } from 'react-router-dom';
 import Geocode from "react-geocode";
 
-import { Paper, withStyles, Checkbox, TextField, Divider, Button, IconButton } from '@material-ui/core';
+import { Paper, withStyles, Checkbox, TextField, Divider, Button, IconButton, Snackbar, SnackbarContent,  } from '@material-ui/core';
 
 import keycode from 'keycode';
 
@@ -1074,7 +1074,6 @@ class FilterPanel extends Component {
 									// variant="outlined"
 									autoFocus
 									fullWidth />
-
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField

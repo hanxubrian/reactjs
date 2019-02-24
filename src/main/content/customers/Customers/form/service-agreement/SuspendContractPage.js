@@ -182,8 +182,8 @@ function Transition(props) {
 
 const editing_cell_styles = theme => ({
 	cell: {
-		background: "#989898",
-		color: "white",
+		// background: "#989898",
+		// color: "white",
 		padding: 0,
 	}
 });
@@ -207,8 +207,8 @@ const EditingCellComponentBase = props => {
 //
 const header_cell_styles = theme => ({
 	cell: {
-		background: "#989898",
-		color: "white",
+		// background: "#989898",
+		// color: "white",
 	}
 });
 const tableHeaderCellComponentBase = props => {
@@ -216,7 +216,15 @@ const tableHeaderCellComponentBase = props => {
 
 	/>);
 };
+const EditingHeaderCellComponentBase = props => {
+	return (<TableEditColumn.Cell {...props}
 
+	/>);
+};
+
+const EditingHeaderCellComponent = withStyles(header_cell_styles, { name: "EditingCell" })(
+	EditingHeaderCellComponentBase
+);
 
 const CurrencyFormatter = ({ value }) => (<span>$ {parseFloat(`0${value}`).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>);
 const DateFormatter = ({ value }) => value.replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/, '$2/$3/$1');
@@ -230,8 +238,8 @@ class SuspendContractPage extends React.Component {
 			columns: [
 				{
 					title: "No.",
-					name: "Number",
-					columnName: "Number",
+					name: "cust_no",
+					columnName: "cust_no",
 					width: 90,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -240,8 +248,8 @@ class SuspendContractPage extends React.Component {
 				},
 				{
 					title: "Franchisees Name",
-					name: "Name",
-					columnName: "Name",
+					name: "company_no",
+					columnName: "company_no",
 					width: 220,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -249,9 +257,9 @@ class SuspendContractPage extends React.Component {
 					editingEnabled: false,
 				},
 				{
-					title: "Signed",
-					name: "Signed",
-					columnName: "Signed",
+					title: "ff_amtfin",
+					name: "ff_amtfin",
+					columnName: "ff_amtfin",
 					width: 90,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -259,9 +267,9 @@ class SuspendContractPage extends React.Component {
 					editingEnabled: false,
 				},
 				{
-					title: "Plan",
-					name: "Plan",
-					columnName: "Plan",
+					title: "ff_amtpaid",
+					name: "ff_amtpaid",
+					columnName: "ff_amtpaid",
 					width: 80,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -269,9 +277,9 @@ class SuspendContractPage extends React.Component {
 					editingEnabled: false,
 				},
 				{
-					title: "Accounts",
-					name: "Accounts",
-					columnName: "Accounts",
+					title: "ff_down",
+					name: "ff_down",
+					columnName: "ff_down",
 					width: 100,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -279,9 +287,9 @@ class SuspendContractPage extends React.Component {
 					editingEnabled: false,
 				},
 				{
-					title: "Billing",
-					name: "Billing",
-					columnName: "Billing",
+					title: "ff_dwnamt",
+					name: "ff_dwnamt",
+					columnName: "ff_dwnamt",
 					width: 130,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -289,9 +297,9 @@ class SuspendContractPage extends React.Component {
 					editingEnabled: false,
 				},
 				{
-					title: "Cont Eval",
-					name: "ContEval",
-					columnName: "ContEval",
+					title: "ff_factor",
+					name: "ff_factor",
+					columnName: "ff_factor",
 					width: 100,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -299,9 +307,9 @@ class SuspendContractPage extends React.Component {
 					editingEnabled: false,
 				},
 				{
-					title: "Group1 Total",
-					name: "Group1Total",
-					columnName: "Group1Total",
+					title: "ff_interes",
+					name: "ff_interes",
+					columnName: "ff_interes",
 					width: 120,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -309,9 +317,9 @@ class SuspendContractPage extends React.Component {
 					editingEnabled: false,
 				},
 				{
-					title: "Compliant",
-					name: "Compliant",
-					columnName: "Compliant",
+					title: "ff_pyamt",
+					name: "ff_pyamt",
+					columnName: "ff_pyamt",
 					width: 100,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -319,9 +327,9 @@ class SuspendContractPage extends React.Component {
 					editingEnabled: false,
 				},
 				{
-					title: "Fail Insp",
-					name: "FailInsp",
-					columnName: "FailInsp",
+					title: "ff_pybill",
+					name: "ff_pybill",
+					columnName: "ff_pybill",
 					width: 90,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -329,9 +337,9 @@ class SuspendContractPage extends React.Component {
 					editingEnabled: false,
 				},
 				{
-					title: "Cancel",
-					name: "Cancel",
-					columnName: "Cancel",
+					title: "ff_pytotl",
+					name: "ff_pytotl",
+					columnName: "ff_pytotl",
 					width: 80,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -339,29 +347,109 @@ class SuspendContractPage extends React.Component {
 					editingEnabled: false,
 				},
 				{
-					title: "Pend Cancel",
-					name: "PendCancel",
-					columnName: "PendCancel",
-					width: 110,
+					title: "ff_dwnpd",
+					name: "ff_dwnpd",
+					columnName: "ff_dwnpd",
+					width: 50,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
 					editingEnabled: false,
 				},
 				{
-					title: "Last Offered",
-					name: "LastOffered",
-					columnName: "LastOffered",
-					width: 110,
+					title: "dwn_take",
+					name: "dwn_take",
+					columnName: "dwn_take",
+					width: 50,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
 					editingEnabled: false,
 				},
 				{
-					title: "Oblg",
-					name: "Oblg",
-					columnName: "Oblg",
+					title: "add_on",
+					name: "add_on",
+					columnName: "add_on",
+					width: 80,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+					editingEnabled: false,
+				},
+				{
+					title: "calc_fact",
+					name: "calc_fact",
+					columnName: "calc_fact",
+					width: 80,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+					editingEnabled: false,
+				},
+				{
+					title: "ff_tot",
+					name: "ff_tot",
+					columnName: "ff_tot",
+					width: 80,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+					editingEnabled: false,
+				},
+				{
+					title: "ff_adjtot",
+					name: "ff_adjtot",
+					columnName: "ff_adjtot",
+					width: 80,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+					editingEnabled: false,
+				},
+				{
+					title: "ffcredit",
+					name: "ffcredit",
+					columnName: "ffcredit",
+					width: 80,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+					editingEnabled: false,
+				},
+				{
+					title: "ffduetot",
+					name: "ffduetot",
+					columnName: "ffduetot",
+					width: 80,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+					editingEnabled: false,
+				},
+				{
+					title: "ffcont",
+					name: "ffcont",
+					columnName: "ffcont",
+					width: 80,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+					editingEnabled: false,
+				},
+				{
+					title: "ff_balance",
+					name: "ff_balance",
+					columnName: "ff_balance",
+					width: 80,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+					editingEnabled: false,
+				},
+				{
+					title: "ff_hold",
+					name: "ff_hold",
+					columnName: "ff_hold",
 					width: 80,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -459,6 +547,7 @@ class SuspendContractPage extends React.Component {
 		// if (this.props.bOpenPaymentDialog === true) {
 		// 	this.checkValidations()
 		// }
+		this.initFindersFeesRow()
 	}
 	componentWillUnmount() {
 		this._isMounted = false;
@@ -493,6 +582,13 @@ class SuspendContractPage extends React.Component {
 		// if (!_.isEqual(this.props.franchisees, nextProps.franchisees)) {
 		// 	this.getFranchiseesFromStatus(nextProps.franchisees);
 		// }
+	}
+	initFindersFeesRow(raw = this.props.findersFees) {
+		if (!raw || !raw.Data) return
+
+		this.setState({
+			rows: raw.Data
+		})
 	}
 	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer) => {
 		if (activeCustomerInfo && activeCustomerInfo.Data)
@@ -844,7 +940,7 @@ class SuspendContractPage extends React.Component {
 			{...restProps}
 
 		>
-			<Button variant="contained" onClick={this.addFranchiseeToCustomer} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>add</Icon>Add</Button>
+			{/* <Button variant="contained" onClick={this.addFranchiseeToCustomer} color="primary" className={classNames("pl-24 pr-24 mr-12")}><Icon>add</Icon>Add</Button> */}
 
 			{children}
 		</Toolbar.Root>
@@ -947,6 +1043,73 @@ class SuspendContractPage extends React.Component {
 		)
 	};
 
+	EditingCellComponentBase = ({ children, row, ...restProps }) => {
+		return (<TableEditColumn.Cell row={row} {...restProps}>
+			{children}
+			<TableEditColumn.Command
+				id="custom"
+				text="Stop"
+				onExecute={() => {
+					this.stopFindersfees(row);
+				}} // action callback
+			/>
+		</TableEditColumn.Cell>);
+	};
+
+	EditingCellComponent = withStyles(editing_cell_styles, { name: "EditingCell" })(
+		this.EditingCellComponentBase
+	);
+
+	stopFindersfees(row) {
+		this.props.stopFindersfees(this.props.regionId, row._id)
+	}
+
+	getFindersFeesGrid() {
+		const { classes } = this.props;
+		const {
+			searchValue,
+			pageSizes,
+			sorting,
+			selection,
+			rows,
+			columns,
+		} = this.state;
+		return (
+			<Paper className={classNames("flex flex-col h-full p-6 w-full")} style={{ height: "auto", overflowX: "scroll" }}>
+				<div className="w-full h-full">
+					{/* grid area */}
+					<Grid rows={rows} columns={columns}>
+						<SearchState value={searchValue} onValueChange={this.changeSearchValue} />
+						<IntegratedFiltering />
+						<SelectionState selection={selection} onSelectionChange={this.changeSelection} />
+						<PagingState defaultCurrentPage={0} defaultPageSize={10} />
+						<PagingPanel pageSizes={pageSizes} />
+						<IntegratedSelection />
+						<SortingState sorting={sorting} onSortingChange={this.changeSorting} columnExtensions={columns} />
+						<IntegratedSorting />
+						<IntegratedPaging />
+						<EditingState
+							// columnExtensions={editingColumnExtensions}
+							onCommitChanges={this.commitChanges} />
+						<Table />
+						{/* <VirtualTable height="auto" /> */}
+
+						<TableColumnResizing defaultColumnWidths={columns} />
+
+						<TableSelection showSelectAll selectByRowClick highlightRow />
+						<TableHeaderRow showSortingControls />
+						<TableEditColumn width={60} cellComponent={this.EditingCellComponent} headerCellComponent={EditingHeaderCellComponent}></TableEditColumn>
+						<Toolbar rootComponent={this.ToolbarRoot} />
+						<SearchPanel />
+						<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
+					</Grid>
+
+				</div>
+			</Paper>
+
+		)
+	}
+
 	getNewAmountInputForm() {
 		const { classes } = this.props;
 		const {
@@ -964,7 +1127,7 @@ class SuspendContractPage extends React.Component {
 		]
 
 		return (
-			<>
+			<div className='flex flex-col w-full'>
 				<div className={classNames("flex mt-12 justify-between")}>
 
 					<Typography variant="h6">Suspension</Typography>
@@ -1067,7 +1230,13 @@ class SuspendContractPage extends React.Component {
 						rows={3}
 					/>
 				</div>
-			</>
+
+				<div className={classNames("flex flex-col")}>
+					<Divider variant="middle" style={{ marginTop: 10, marginBottom: 10, width: '50%', alignSelf: 'center' }} />
+					<Typography variant="subtitle1">Finders Fees</Typography>
+					{this.getFindersFeesGrid()}
+				</div>
+			</div>
 		)
 	}
 
@@ -1133,6 +1302,7 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 		lists: customers.lists,
 		franchieesesToOffer: customers.franchieesesToOffer,
 		activeCustomer: customers.activeCustomer,
+		findersFees: customers.findersFees,
 
 		franchisees: franchisees.franchiseesDB,
 		NewAmount: customers.NewAmount,

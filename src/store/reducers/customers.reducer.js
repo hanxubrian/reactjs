@@ -170,7 +170,7 @@ const initialState = {
 	customerFormFindersFeesDialogPayload: {
 		open: false,
 	},
-	// findersFees: [],
+	findersFees: [],
 	// isStartedFindersFeesFetching : false,
 
 	finderFeesConfigs: [],
@@ -498,6 +498,14 @@ const customers = function (state = initialState, action) {
 						findersFeesConfig: action.payload.findersFeesConfig,
 					},
 					activeCustomer: action.payload.customer,
+					findersFees: action.payload.findersFees,
+				};
+			}
+		case Actions.STOP_FINDERS_FEES:
+			{
+				return {
+					...state,
+					findersFees: action.payload,
 				};
 			}
 		case Actions.UPDATE_CUSTOMER:

@@ -1111,29 +1111,41 @@ class ServiceAgreementPage extends React.Component {
 
 								{customerForm.props.open && customerForm.type === "edit" &&
 									<div>
-										<Button
-											disabled={this.props.activeCustomer.Data.flag === 'C'}
-											variant="contained"
-											color="primary"
-											className={classNames(classes.button, "pr-24 pl-24 mr-12")}
-											onClick={this.IncreaseDecreaseContract}
-										>Increase/Decrease<Icon fontSize="small">keyboard_arrow_right</Icon>
-										</Button>
-										<Button
-											disabled={this.props.activeCustomer.Data.flag === 'C'}
-											variant="contained"
-											color="primary"
-											onClick={this.showCancelContractPage}
-											className={classNames(classes.button, "pr-24 pl-24")}
-										>Cancel Contract<Icon fontSize="small">keyboard_arrow_right</Icon>
-										</Button>
-										<Button
-											variant="contained"
-											color="primary"
-											onClick={this.showSuspendContractPage}
-											className={classNames(classes.button, "pr-24 pl-24")}
-										>Suspend Account<Icon fontSize="small">keyboard_arrow_right</Icon>
-										</Button>
+										{['C', 'S'].indexOf(this.props.activeCustomer.Data.flag) === -1 &&
+											<Button
+												variant="contained"
+												color="primary"
+												className={classNames(classes.button, "pr-12 pl-24 mr-12")}
+												onClick={this.IncreaseDecreaseContract}
+											>Increase/Decrease<Icon fontSize="small">keyboard_arrow_right</Icon>
+											</Button>}
+
+										{['C', 'S'].indexOf(this.props.activeCustomer.Data.flag) === -1 &&
+											<Button
+												variant="contained"
+												color="primary"
+												onClick={this.showSuspendContractPage}
+												className={classNames(classes.button, "pr-12 pl-24")}
+											>Suspend Account<Icon fontSize="small">keyboard_arrow_right</Icon>
+											</Button>}
+
+										{['C'].indexOf(this.props.activeCustomer.Data.flag) === -1 &&
+											<Button
+												variant="contained"
+												color="primary"
+												onClick={this.showCancelContractPage}
+												className={classNames(classes.button, "pr-12 pl-24")}
+											>Cancel Contract<Icon fontSize="small">keyboard_arrow_right</Icon>
+											</Button>}
+
+										{['C', 'S'].indexOf(this.props.activeCustomer.Data.flag) > -1 &&
+											<Button
+												variant="contained"
+												color="primary"
+												className={classNames("")}>
+												<Icon fontSize="small" className={classNames("mr-6")}>replay</Icon>
+												Activate
+											</Button>}
 									</div>}
 							</GridItem>
 
