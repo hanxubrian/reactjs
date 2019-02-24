@@ -196,8 +196,8 @@ class ExportChecks extends React.Component {
                                             <GridM container>
                                                 <GridM item sm={5} style={{paddingLeft: 12}}>
                                                     <Typography variant={"inherit"}><strong>Jani-King of {check.regionname}, Inc</strong></Typography>
-                                                    <Typography variant={"inherit"}>Special Trust</Typography>
-                                                    <Typography variant={"inherit"}>{check.PayeeAddress1}</Typography>
+                                                    <Typography variant={"inherit"}>{check.checktypename}</Typography>
+                                                    <Typography variant={"inherit"}>{check.RegionAddress1}</Typography>
                                                     <Typography variant={"inherit"}>{check.regioncity}, {check.regionstate} {check.PayeePostalCode}</Typography>
                                                 </GridM>
                                                 <GridM item sm={7} >
@@ -236,9 +236,10 @@ class ExportChecks extends React.Component {
                                             </div>
                                             <GridM container>
                                                 <GridM item sm={7} style={{paddingLeft: '1.2em'}} >
-                                                    <Typography variant={"inherit"}>KMBURNS, LLC, an Authorized Franchisee</Typography>
-                                                    <Typography variant={"inherit"}>58 SUMMERDALE ROAD</Typography>
-                                                    <Typography variant={"inherit"}>ANGOLA, NY 14006</Typography>
+                                                    <Typography variant={"inherit"}>{check.PayeeNumber}</Typography>
+                                                    <Typography variant={"inherit"}>{check.PayeeName}</Typography>
+                                                    <Typography variant={"inherit"}>{check.PayeeAddress1}</Typography>
+                                                    <Typography variant={"inherit"}>{check.PayeeCity}, {check.PayeeState||''} {check.PayeePostalCode}</Typography>
                                                 </GridM>
                                                 <GridM item sm={5} >
                                                     <Typography variant={"inherit"} style={{textAlign: 'center'}}><i>Void after 90 Days</i></Typography>
