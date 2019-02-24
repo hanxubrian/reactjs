@@ -485,6 +485,9 @@ class UsersForm extends React.Component {
             }
             if(name === "UserType") {
                 suggestions = [];
+                this.setState({
+                    UserTypeValue: ''
+                })
                 if(event.target.value === 'Franchisee'){
                     suggestions = franchiseeSuggestions;
                 }
