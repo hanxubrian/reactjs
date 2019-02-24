@@ -243,7 +243,6 @@ const styles = theme => ({
     },
 });
 
-let timer = null;
 
 class PrintChecksLayout extends Component {
     state={
@@ -356,7 +355,7 @@ class PrintChecksLayout extends Component {
             await this.progress();
             await setTimeout(null, 200);
         });
-        await this.child.resetSelection();
+
     };
 
     handleCheckDateDateChange = date => {
@@ -365,13 +364,18 @@ class PrintChecksLayout extends Component {
 
     progress = async () =>{
         let delta = 100/this.props.selections.length;
-        console.log('delta=', delta, this.props.selections);
-        if (this.state.completed > 100) {
+
+        if (this.state.completed >= 100) {
             await this.setState({bPrint: false});
             await this.setState({completed: 0});
         } else {
             const diff =  this.state.completed + delta;
-            this.setState({completed: diff});
+            await this.setState({completed: diff});
+            if(diff>=99.99) {
+                await this.child.resetSelection();
+                setTimeout(()=>{this.setState({bPrint: false});this.setState({completed: 0})},
+                    1500);
+            }
         }
     };
 
