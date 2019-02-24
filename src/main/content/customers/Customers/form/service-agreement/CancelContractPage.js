@@ -1189,7 +1189,7 @@ class CancelContractPage extends React.Component {
 						<TableHeaderRow showSortingControls />
 						<TableEditColumn width={60} cellComponent={this.EditingCellComponent} headerCellComponent={EditingHeaderCellComponent}></TableEditColumn>
 						<Toolbar rootComponent={this.ToolbarRoot} />
-						<SearchPanel />
+						{/* <SearchPanel /> */}
 						<CustomizedDxGridSelectionPanel selection={selection} rows={rows} />
 					</Grid>
 
