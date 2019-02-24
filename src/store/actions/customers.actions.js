@@ -732,24 +732,37 @@ export function updateNewCustomerParam(name, value) {
 	}
 }
 
-export function saveCancelContract(regionId, cust_no, cancel_date, reason_id, reason_note, lastday_service, client_credit_amount, canc_fee, continue_findersfee) {
+export function saveCancelContract(regionId, cust_no, cancel_date, reason_id, reason_note, lastday_service, client_credit_amount, canc_fee, continue_findersfee, customerId) {
 	return (dispatch) => {
+		dispatch({
+			type: GET_CUSTOMER_START,
+			payload: true
+		});
+
 		(async () => {
 			let response = await customersService.saveCancelContract(regionId, cust_no, cancel_date, reason_id, reason_note, lastday_service, client_credit_amount, canc_fee, continue_findersfee);
+			const activeCustomer = await customersService.getCustomer(regionId, customerId);
 			dispatch({
 				type: SAVE_CANCEL_CONTRACT,
-				payload: response
+				payload: activeCustomer
 			});
 		})();
 	}
 }
-export function saveSuspendContract(regionId, customerNo, reason_id, resume_date) {
+export function saveSuspendContract(regionId, cust_no, reason_id, notes, suspend_date, restart_date, customerId) {
+	console.log('saveSuspendContract', customerId)
 	return (dispatch) => {
+		dispatch({
+			type: GET_CUSTOMER_START,
+			payload: true
+		});
+
 		(async () => {
-			let response = await customersService.saveSuspendContract(regionId, customerNo, reason_id, resume_date);
+			let response = await customersService.saveSuspendContract(regionId, cust_no, reason_id, notes, suspend_date, restart_date);
+			const activeCustomer = await customersService.getCustomer(regionId, customerId);
 			dispatch({
 				type: SAVE_SUSPEND_CONTRACT,
-				payload: response
+				payload: activeCustomer
 			});
 		})();
 	}

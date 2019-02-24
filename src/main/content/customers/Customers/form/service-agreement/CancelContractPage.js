@@ -1078,12 +1078,14 @@ class CancelContractPage extends React.Component {
 
 	saveCancelContract = () => {
 		let CustomerNo = this.props.activeCustomer.Data.cust_no;
+		let customerId = this.props.activeCustomer.Data._id;
+
 		const { reason, note, client_credit_amount, canc_fee, continue_findersfee } = this.state
 
 		let EffectiveDate = moment(this.state.EffectiveDate).format('mm/dd/yyyy');
 		let lastday_service = moment(this.state.lastday_service).format('mm/dd/yyyy');
 
-		this.props.saveCancelContract(this.props.regionId, CustomerNo, EffectiveDate, reason, note, lastday_service, client_credit_amount, canc_fee, continue_findersfee);
+		this.props.saveCancelContract(this.props.regionId, CustomerNo, EffectiveDate, reason, note, lastday_service, client_credit_amount, canc_fee, continue_findersfee, customerId);
 		// regionId, cust_no, cancel_date, reason_id, reason_note, lastday_service, client_credit_amount, canc_fee, continue_findersfee
 
 		// this.props.updateCustomersParameter('NewAmount', 0);

@@ -1000,11 +1000,12 @@ class SuspendContractPage extends React.Component {
 
 	saveSuspendContract = () => {
 		let CustomerNo = this.props.activeCustomer.Data.cust_no;
+		let customerId = this.props.activeCustomer.Data._id;
 		const { reason, note } = this.state
 		let suspend_date = moment(this.state.EffectiveDate).format('YYYY-MM-DD');
 		let restart_date = moment(this.state.ReactivationDate).format('YYYY-MM-DD');
 
-		this.props.saveSuspendContract(this.props.regionId, CustomerNo, reason, note, suspend_date, restart_date);
+		this.props.saveSuspendContract(this.props.regionId, CustomerNo, reason, note, suspend_date, restart_date, customerId);
 		this.validateSuspension();
 		// this.props.updateCustomersParameter('NewAmount', 0);
 		// this.setState({ reason: '', notes: '', NewAmount: '', EffectiveDate: moment().format('YYYY-MM-DD') });

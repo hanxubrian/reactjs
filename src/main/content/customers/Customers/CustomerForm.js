@@ -731,7 +731,7 @@ class CustomerForm extends Component {
 	constructor(props) {
 		super(props);
 		if (!props.documents) {
-			props.getDocuments();
+			// props.getDocuments();
 		}
 		this.changeSelection = selection => this.setState({ selection });
 		this.changeSorting = sorting => this.setState({ sorting });
@@ -899,7 +899,7 @@ class CustomerForm extends Component {
 					<div className="flex w-full justify-between align-items">
 						<h2 style={{ alignSelf: 'center' }} >{activeStep === 1 ? 'Franchisee Revenue Distribution' : steps[activeStep]}</h2>
 						<div className="flex align-items">
-							
+
 							<MySnackbarContentWrapper
 								variant={customerStatus}
 								className={classes.margin}

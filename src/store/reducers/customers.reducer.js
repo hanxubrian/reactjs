@@ -909,10 +909,14 @@ const customers = function (state = initialState, action) {
 		case Actions.SAVE_CANCEL_CONTRACT:
 			return {
 				...state,
+				activeCustomer: action.payload,
+				bGetCustomerStart: false,
 			};
 		case Actions.SAVE_SUSPEND_CONTRACT:
 			return {
 				...state,
+				activeCustomer: action.payload,
+				bGetCustomerStart: false,
 			};
 		default:
 			{
