@@ -537,8 +537,9 @@ class Customers extends Component {
 		}
 
 		if (nextProps.activeCustomer && nextProps.activeCustomer.Data &&
-			this.props.activeCustomer && this.props.activeCustomer.Data &&
+			this.props.activeCustomer && this.props.activeCustomer.Data && this.props.activeCustomer.Data.flag &&
 			nextProps.activeCustomer.Data.flag !== this.props.activeCustomer.Data.flag) {
+			console.log('componentWillReceiveProps', nextProps.activeCustomer, this.props.activeCustomer.Data)
 			this.props.getCustomers(
 				nextProps.regionId,
 				nextProps.statusId,
@@ -936,6 +937,12 @@ class Customers extends Component {
 						<Typography variant="body2" color="primary">Fetching the customer data...</Typography>
 					</div>
 				)}
+				{(this.props.bFindersFeesStart) && (
+					<div className={classNames(classes.overlay, "flex-col")}>
+						<CircularProgress className={classes.progress} color="secondary" />
+						<Typography variant="body2" color="primary">Updating Finders Fee...</Typography>
+					</div>
+				)}
 				{/* {(this.props.isStartedFindersFeesFetching) && (
 					<div className={classNames(classes.overlay, "flex-col")}>
 						<CircularProgress className={classes.progress} color="secondary" />
@@ -995,6 +1002,7 @@ function mapStateToProps({ customers, auth, franchisees }) {
 		bGetCustomerStart: customers.bGetCustomerStart,
 		filters: customers.filters,
 		activeCustomer: customers.activeCustomer,
+		bFindersFeesStart: customers.bFindersFeesStart,
 	}
 }
 

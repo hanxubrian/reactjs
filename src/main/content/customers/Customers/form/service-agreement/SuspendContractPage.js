@@ -460,7 +460,7 @@ class SuspendContractPage extends React.Component {
 					title: "ff_desc",
 					name: "ff_desc",
 					columnName: "ff_desc",
-					width: 80,
+					width: 250,
 					sortingEnabled: true,
 					filteringEnabled: true,
 					groupingEnabled: false,
@@ -593,12 +593,15 @@ class SuspendContractPage extends React.Component {
 		// if (!_.isEqual(this.props.franchisees, nextProps.franchisees)) {
 		// 	this.getFranchiseesFromStatus(nextProps.franchisees);
 		// }
+		if (nextProps.findersFees !== this.props.findersFees) {
+			this.initFindersFeesRow(nextProps.findersFees)
+		}
 	}
 	initFindersFeesRow(raw = this.props.findersFees) {
 		if (!raw || !raw.Data) return
 
 		this.setState({
-			rows: raw.Data
+			rows: raw.Data.filter(x => { return x.Status !== 'S' })
 		})
 	}
 	initCustomerInfo = (activeCustomerInfo = this.props.activeCustomer) => {
@@ -1073,7 +1076,7 @@ class SuspendContractPage extends React.Component {
 	);
 
 	stopFindersfees(row) {
-		this.props.stopFindersfees(this.props.regionId, row._id)
+		this.props.stopFindersfees(this.props.regionId, row._id, row.cust_no)
 	}
 
 	getFindersFeesGrid() {

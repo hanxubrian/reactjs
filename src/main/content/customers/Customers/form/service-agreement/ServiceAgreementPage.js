@@ -678,97 +678,97 @@ class ServiceAgreementPage extends React.Component {
 		if (this.props.accountExecutiveList !== null && this.props.accountExecutiveList.Data !== undefined) {
 			execTitles = this.props.accountExecutiveList.Data.sort();
 		}
+		if (this.props.activeCustomer && this.props.activeCustomer.Data) {
+			const {
+				cont_bill,
 
-		const {
-			cont_bill,
+				flag,
+				arstatus,
 
-			flag,
-			arstatus,
+				contract_lenght,
+				slsmn_no,
+				date_sign,
+				date_start,
+				exp_date,
 
-			contract_lenght,
-			slsmn_no,
-			date_sign,
-			date_start,
-			exp_date,
+				po_1,
+				cpiadj,
+				crteinv,
+				prntpd,
+				tax_exempt,
 
-			po_1,
-			cpiadj,
-			crteinv,
-			prntpd,
-			tax_exempt,
+				invoice_date,
+				billing_frequency,
+				ebill,
+				ebill_email,
+				billing_term,
+				inv_msg,
+				natacct,
+				parent,
 
-			invoice_date,
-			billing_frequency,
-			ebill,
-			ebill_email,
-			billing_term,
-			inv_msg,
-			natacct,
-			parent,
+				bill_name,
+				bill_addr,
+				bill_addr2,
+				bill_city,
+				bill_state,
+				bill_zip,
 
-			bill_name,
-			bill_addr,
-			bill_addr2,
-			bill_city,
-			bill_state,
-			bill_zip,
+				sqr_ft,
+				cleantimes,
+				cleanper,
 
-			sqr_ft,
-			cleantimes,
-			cleanper,
+				mon, tue, wed, thu, fri, sat, sun, wkndTF,
+				detailed_cleaning_instructions,
+			} = this.props.activeCustomer.Data
 
-			mon, tue, wed, thu, fri, sat, sun, wkndTF,
-			detailed_cleaning_instructions,
-		} = this.props.activeCustomer.Data
-
-		this.setState({
-			customerServiceTypes: this.props.lists.customerServiceTypes,
-			franchiseeServiceTypes: this.props.lists.franchiseeServiceTypes,
-			franchiseeBillingTypes: this.props.lists.franchiseeBillingTypes,
-			execTitles: execTitles,
+			this.setState({
+				customerServiceTypes: this.props.lists.customerServiceTypes,
+				franchiseeServiceTypes: this.props.lists.franchiseeServiceTypes,
+				franchiseeBillingTypes: this.props.lists.franchiseeBillingTypes,
+				execTitles: execTitles,
 
 
-			cont_bill,
-			flag,
-			arstatus,
+				cont_bill,
+				flag,
+				arstatus,
 
-			contract_lenght,
-			slsmn_no,
-			date_sign,
-			date_start,
-			exp_date,
+				contract_lenght,
+				slsmn_no,
+				date_sign,
+				date_start,
+				exp_date,
 
-			po_1,
-			cpiadj,
-			crteinv,
-			prntpd,
-			tax_exempt,
+				po_1,
+				cpiadj,
+				crteinv,
+				prntpd,
+				tax_exempt,
 
-			invoice_date,
-			billing_frequency,
-			ebill,
-			ebill_email,
-			billing_term,
-			inv_msg,
-			natacct,
-			parent,
+				invoice_date,
+				billing_frequency,
+				ebill,
+				ebill_email,
+				billing_term,
+				inv_msg,
+				natacct,
+				parent,
 
-			bill_name,
-			bill_addr,
-			bill_addr2,
-			bill_city,
-			bill_state,
-			bill_zip,
+				bill_name,
+				bill_addr,
+				bill_addr2,
+				bill_city,
+				bill_state,
+				bill_zip,
 
-			sqr_ft,
-			cleantimes,
-			cleanper,
+				sqr_ft,
+				cleantimes,
+				cleanper,
 
-			mon, tue, wed, thu, fri, sat, sun, wkndTF,
-			detailed_cleaning_instructions,
+				mon, tue, wed, thu, fri, sat, sun, wkndTF,
+				detailed_cleaning_instructions,
 
-		})
-
+			})
+		}
 		this.initCustomerInfo()
 
 	}
@@ -1109,7 +1109,7 @@ class ServiceAgreementPage extends React.Component {
 									))}
 								</TextField>
 
-								{customerForm.props.open && customerForm.type === "edit" &&
+								{customerForm.props.open && customerForm.type === "edit" && (this.props.activeCustomer && this.props.activeCustomer.Data) &&
 									<div>
 										{['C', 'S'].indexOf(this.props.activeCustomer.Data.flag) === -1 &&
 											<Button

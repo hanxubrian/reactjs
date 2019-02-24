@@ -455,6 +455,14 @@ const customers = function (state = initialState, action) {
 				return {
 					...state,
 					findersFees: action.payload,
+					bFindersFeesStart: false,
+				};
+			}
+		case Actions.STOP_FINDERS_FEES_START:
+			{
+				return {
+					...state,
+					bFindersFeesStart: true,
 				};
 			}
 		case Actions.UPDATE_CUSTOMER:

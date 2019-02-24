@@ -863,38 +863,38 @@ class CustomerForm extends Component {
 		let customerStatusMsg = "", customerStatus = "", customerStatusMsg1 = '', customerStatusMsg2 = '', customerStatusMsg3 = ''
 
 
+		if (this.props.activeCustomer && this.props.activeCustomer.Data) {
+			switch (this.props.activeCustomer.Data.flag) {
+				case "A":
+					customerStatus = "success"
+					customerStatusMsg = "Active Customer"
+					break
+				case "S":
+					customerStatus = "warning"
+					customerStatusMsg = `Suspended: `
+					customerStatusMsg1 = this.props.activeCustomer.Data.susp_date
 
-		switch (this.props.activeCustomer.Data.flag) {
-			case "A":
-				customerStatus = "success"
-				customerStatusMsg = "Active Customer"
-				break
-			case "S":
-				customerStatus = "warning"
-				customerStatusMsg = `Suspended: `
-				customerStatusMsg1 = this.props.activeCustomer.Data.susp_date
+					const suspend_id = this.props.activeCustomer.Data.susp_reason_id
+					const suspend_reason = this.props.suspendReasons.Data.find(x => x.ReasonNumber === parseInt('0' + suspend_id))
+					customerStatusMsg2 = suspend_reason ? suspend_reason.name : `UNKNOWN (${suspend_id})`
+					break
+				case "C":
+					customerStatus = "error"
+					customerStatusMsg = `Canceled: `
+					customerStatusMsg1 = this.props.activeCustomer.Data.canc_date
 
-				const suspend_id = this.props.activeCustomer.Data.susp_reason_id
-				const suspend_reason = this.props.suspendReasons.Data.find(x => x.ReasonNumber === parseInt('0' + suspend_id))
-				customerStatusMsg2 = suspend_reason ? suspend_reason.name : `UNKNOWN (${suspend_id})`
-				break
-			case "C":
-				customerStatus = "error"
-				customerStatusMsg = `Canceled: `
-				customerStatusMsg1 = this.props.activeCustomer.Data.canc_date
+					const cancel_id = this.props.activeCustomer.Data.canreason
+					const cancel_reason = this.props.cancelReasons.Data.find(x => x.ReasonNumber === parseInt('0' + cancel_id))
+					customerStatusMsg2 = cancel_reason ? cancel_reason.name : `UNKNOWN (${cancel_id})`
 
-				const cancel_id = this.props.activeCustomer.Data.canreason
-				const cancel_reason = this.props.cancelReasons.Data.find(x => x.ReasonNumber === parseInt('0' + cancel_id))
-				customerStatusMsg2 = cancel_reason ? cancel_reason.name : `UNKNOWN (${cancel_id})`
-
-				customerStatusMsg3 = `${this.props.activeCustomer.Data.candescr}`
-				break
-			default:
-				customerStatus = "info"
-				customerStatusMsg = `${this.props.activeCustomer.Data.flag} - Unknown Status`
-				break
+					customerStatusMsg3 = `${this.props.activeCustomer.Data.candescr}`
+					break
+				default:
+					customerStatus = "info"
+					customerStatusMsg = `${this.props.activeCustomer.Data.flag} - Unknown Status`
+					break
+			}
 		}
-
 
 		return (
 			<Fragment>
@@ -926,7 +926,7 @@ class CustomerForm extends Component {
 						<h2 style={{ alignSelf: 'center' }} >{activeStep === 1 ? 'Franchisee Revenue Distribution' : steps[activeStep]}</h2>
 						<div className="flex align-items">
 
-							{this.props.customerForm.type === 'edit' &&
+							{this.props.customerForm.type === 'edit' && (this.props.activeCustomer && this.props.activeCustomer.Data) &&
 								<MySnackbarContentWrapper
 									variant={customerStatus}
 									className={classes.margin}

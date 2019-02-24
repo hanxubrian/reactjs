@@ -357,7 +357,7 @@ export function openEditCustomerForm(regionId, customerId, customerNo) {
 		})();
 	}
 }
-export function stopFindersfees(regionId, customerNo) {
+export function stopFindersfees(regionId, customerId, customerNo) {
 	return (dispatch) => {
 		dispatch({
 			type: STOP_FINDERS_FEES_START,
@@ -365,7 +365,7 @@ export function stopFindersfees(regionId, customerNo) {
 		});
 
 		(async () => {
-			let res = await customersService.stopFindersfees(regionId, customerNo);
+			let res = await customersService.stopFindersfees(regionId, customerId);
 			let findersFees = await customersService.getFindersFeesByCustomerNo(regionId, customerNo);
 			dispatch({
 				type: STOP_FINDERS_FEES,
