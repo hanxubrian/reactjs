@@ -301,8 +301,8 @@ class CancelContractPage extends React.Component {
 			columns: [
 				{
 					title: "No.",
-					name: "cust_no",
-					columnName: "cust_no",
+					name: "dlr_code",
+					columnName: "dlr_code",
 					width: 90,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -519,6 +519,16 @@ class CancelContractPage extends React.Component {
 					groupingEnabled: false,
 					editingEnabled: false,
 				},
+				{
+					title: "ff_desc",
+					name: "ff_desc",
+					columnName: "ff_desc",
+					width: 80,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+					editingEnabled: false,
+				},
 			],
 			columnsForReactDataGrid: [
 				{ key: "InvoiceNo", name: "Invoice No", editable: false },
@@ -559,7 +569,7 @@ class CancelContractPage extends React.Component {
 			note: '',
 			increaseReasons: null,
 			decreaseReasons: null,
-			cancelationReasons: null,
+			// cancelationReasons: null,
 
 			bReasonForHigh: false,
 			reason: 0,
@@ -567,7 +577,7 @@ class CancelContractPage extends React.Component {
 			snackMessage: "",
 			openSnack: false,
 		};
-		this._isMounted = false;
+		// this._isMounted = false;
 		// this.commitChanges = this.commitChanges.bind(this);
 		// if (!props.bLoadedFranchisees) {
 		// 	props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
@@ -596,12 +606,12 @@ class CancelContractPage extends React.Component {
 	}
 	componentDidMount() {
 		this.initCustomerInfo();
-		this._isMounted = true;
-		fetch(`https://apifmsplusplus_mongo.jkdev.com/v1/Lists/reasons?type=account_cancellation`)
-			.then(response => response.json())
-			.then(data => {
-				this._isMounted && this.setState({ cancelationReasons: data.Data })
-			});
+		// this._isMounted = true;
+		// fetch(`https://apifmsplusplus_mongo.jkdev.com/v1/Lists/reasons?type=account_cancellation`)
+		// 	.then(response => response.json())
+		// 	.then(data => {
+		// 		this._isMounted && this.setState({ cancelationReasons: data.Data })
+		// 	});
 
 		// this.setState({
 		// 	paymentDlgPayloads: this.props.paymentDlgPayloads,
@@ -614,7 +624,7 @@ class CancelContractPage extends React.Component {
 		// }
 	}
 	componentWillUnmount() {
-		this._isMounted = false;
+		// this._isMounted = false;
 	}
 	UNSAFE_componentWillReceiveProps(nextProps) {
 		// if (nextProps.payments !== this.props.payments) {
@@ -1097,10 +1107,10 @@ class CancelContractPage extends React.Component {
 
 	renderReasons() {
 		const { classes } = this.props;
-		let items = this.state.cancelationReasons;
+		let items = this.props.cancelReasons.Data;
 		// if (this.state.bReasonForHigh)
 		// 	items = this.state.increaseReasons;
-		console.log("cancelationReasons", items)
+		// console.log("cancelationReasons", items)
 		return (
 			<TextField margin="dense" id="Reason" label="Reason" name="reason"
 				select
@@ -1269,9 +1279,8 @@ class CancelContractPage extends React.Component {
 						margin="dense"
 					/>
 
-					{this.state.cancelationReasons &&
-						this.renderReasons()
-					}
+					{/* {this.state.cancelationReasons && this.renderReasons()} */}
+					{this.renderReasons()}
 
 				</div>
 				<div className={classNames("flex mt-12 justify-start")}>
@@ -1428,6 +1437,7 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 		franchieesesToOffer: customers.franchieesesToOffer,
 		activeCustomer: customers.activeCustomer,
 		findersFees: customers.findersFees,
+		cancelReasons: customers.cancelReasons,
 
 		franchisees: franchisees.franchiseesDB,
 		NewAmount: customers.NewAmount,

@@ -594,6 +594,38 @@ fullbill: 0
 				})
 		});
 	}
+	getCancelReason() {
+		return new Promise((resolve, reject) => {
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/reasons?type=account_cancellation`)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
+	getSuspendReason() {
+		return new Promise((resolve, reject) => {
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/reasons?type=account_suspension`)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
 }
 
 

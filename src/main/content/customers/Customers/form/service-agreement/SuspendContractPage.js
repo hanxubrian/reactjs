@@ -238,8 +238,8 @@ class SuspendContractPage extends React.Component {
 			columns: [
 				{
 					title: "No.",
-					name: "cust_no",
-					columnName: "cust_no",
+					name: "dlr_code",
+					columnName: "dlr_code",
 					width: 90,
 					sortingEnabled: true,
 					filteringEnabled: true,
@@ -456,6 +456,16 @@ class SuspendContractPage extends React.Component {
 					groupingEnabled: false,
 					editingEnabled: false,
 				},
+				{
+					title: "ff_desc",
+					name: "ff_desc",
+					columnName: "ff_desc",
+					width: 80,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+					editingEnabled: false,
+				},
 			],
 			columnsForReactDataGrid: [
 				{ key: "InvoiceNo", name: "Invoice No", editable: false },
@@ -498,13 +508,13 @@ class SuspendContractPage extends React.Component {
 			increaseReasons: null,
 			decreaseReasons: null,
 
-			suspensionReasons: null,
+			// suspensionReasons: null,
 
 			bReasonForHigh: false,
 			reason: 0,
 			NewAmount: this.props.NewAmount,
 		};
-		this._isMounted = false;
+		// this._isMounted = false;
 		// this.commitChanges = this.commitChanges.bind(this);
 		// if (!props.bLoadedFranchisees) {
 		// props.getFranchisees(this.props.regionId, this.props.statusId, this.props.Location, this.props.Latitude, this.props.Longitude, this.props.SearchText);
@@ -532,12 +542,13 @@ class SuspendContractPage extends React.Component {
 
 	componentDidMount() {
 		this.initCustomerInfo();
-		this._isMounted = true;
-		fetch(`https://apifmsplusplus_mongo.jkdev.com/v1/Lists/reasons?type=account_suspension`)
-			.then(response => response.json())
-			.then(data => {
-				this._isMounted && this.setState({ suspensionReasons: data.Data })
-			});
+		// this._isMounted = true;
+		// fetch(`https://apifmsplusplus_mongo.jkdev.com/v1/Lists/reasons?type=account_suspension`)
+		// 	.then(response => response.json())
+		// 	.then(data => {
+		// 		this._isMounted && this.setState({ suspensionReasons: data.Data })
+		// 	});
+
 		// this.setState({
 		// 	paymentDlgPayloads: this.props.paymentDlgPayloads,
 		// 	PaymentAmount: this.props.paymentDlgPayloads.paymentAmount,
@@ -550,7 +561,7 @@ class SuspendContractPage extends React.Component {
 		this.initFindersFeesRow()
 	}
 	componentWillUnmount() {
-		this._isMounted = false;
+		// this._isMounted = false;
 	}
 	UNSAFE_componentWillReceiveProps(nextProps) {
 		// if (nextProps.payments !== this.props.payments) {
@@ -1016,7 +1027,7 @@ class SuspendContractPage extends React.Component {
 
 	renderReasons = () => {
 		const { classes } = this.props;
-		let items = this.state.suspensionReasons;
+		let items = this.props.suspendReasons.Data;
 		// if (this.state.bReasonForHigh)
 		// 	items = this.state.increaseReasons;
 
@@ -1201,9 +1212,8 @@ class SuspendContractPage extends React.Component {
 						margin="dense"
 					/>
 
-					{this.state.suspensionReasons &&
-						this.renderReasons()
-					}
+					{/* {this.state.suspensionReasons && this.renderReasons()} */}
+					{this.renderReasons()}
 
 				</div>
 
@@ -1276,7 +1286,7 @@ function mapDispatchToProps(dispatch) {
 		// getIncreaseDecrease: Actions.getIncreaseDecrease,
 		saveSuspendContract: Actions.saveSuspendContract,
 		getCustomer: Actions.getCustomer,
-		
+
 		stopFindersfees: Actions.stopFindersfees,
 	}, dispatch);
 }
@@ -1306,6 +1316,7 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 		franchieesesToOffer: customers.franchieesesToOffer,
 		activeCustomer: customers.activeCustomer,
 		findersFees: customers.findersFees,
+		suspendReasons: customers.suspendReasons,
 
 		franchisees: franchisees.franchiseesDB,
 		NewAmount: customers.NewAmount,

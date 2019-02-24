@@ -604,10 +604,6 @@ class FranchieesListPage extends Component {
 		this.props.setStep(2)
 	};
 
-	stopFindersFee() {
-
-	}
-	
 	EditingCellComponentBase = ({ children, row, ...restProps }) => {
 		return (<TableEditColumn.Cell row={row} {...restProps}>
 			{children}
@@ -615,7 +611,7 @@ class FranchieesListPage extends Component {
 				id="custom"
 				text="Offer"
 				onExecute={() => {
-					this.stopFindersFee();
+					this.showDetails(row);
 				}} // action callback
 			/>
 		</TableEditColumn.Cell>);

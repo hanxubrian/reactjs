@@ -232,7 +232,7 @@ const stylesSnackbar = theme => ({
 });
 
 function MySnackbarContent(props) {
-	const { classes, className, message, onClose, variant, ...other } = props;
+	const { classes, className, message, message1, message2, message3, onClose, variant, ...other } = props;
 	const Icon = variantIcon[variant];
 
 	return (
@@ -240,9 +240,20 @@ function MySnackbarContent(props) {
 			className={classNames(classes[variant], className)}
 			aria-describedby="client-snackbar"
 			message={
-				<span id="client-snackbar" className={classes.message}>
+				<span id="client-snackbar" className={classNames(classes.message)}>
 					<Icon className={classNames(classes.icon, classes.iconVariant)} />
-					{message}
+					<div className='flex flex-col flex-1'>
+						<div id="client-snackbar" className={classNames(classes.message)}>
+							<span><strong>{message}</strong></span>&nbsp;&nbsp;&nbsp;
+							<span><small>{message1}</small></span>
+						</div>
+						{message2 && <div id="client-snackbar" className={classes.message}>
+							{message2}
+						</div>}
+						{message3 && <div id="client-snackbar" className={classes.message}>
+							<small>{message3}</small>
+						</div>}
+					</div>
 				</span>
 			}
 			action={[
@@ -263,7 +274,7 @@ function MySnackbarContent(props) {
 
 MySnackbarContent.propTypes = {
 	classes: PropTypes.object.isRequired,
-	className: PropTypes.string,
+	className: classNames(PropTypes.string),
 	message: PropTypes.node,
 	onClose: PropTypes.func,
 	variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
@@ -849,7 +860,10 @@ class CustomerForm extends Component {
 		const steps = this.getSteps();
 		const { activeStep } = this.state;
 
-		let customerStatusMsg = "", customerStatus = ""
+		let customerStatusMsg = "", customerStatus = "", customerStatusMsg1 = '', customerStatusMsg2 = '', customerStatusMsg3 = ''
+
+
+
 		switch (this.props.activeCustomer.Data.flag) {
 			case "A":
 				customerStatus = "success"
@@ -857,11 +871,23 @@ class CustomerForm extends Component {
 				break
 			case "S":
 				customerStatus = "warning"
-				customerStatusMsg = "Suspended Customer"
+				customerStatusMsg = `Suspended: `
+				customerStatusMsg1 = this.props.activeCustomer.Data.susp_date
+
+				const suspend_id = this.props.activeCustomer.Data.susp_reason_id
+				const suspend_reason = this.props.suspendReasons.Data.find(x => x.ReasonNumber === parseInt('0' + suspend_id))
+				customerStatusMsg2 = suspend_reason ? suspend_reason.name : `UNKNOWN (${suspend_id})`
 				break
 			case "C":
 				customerStatus = "error"
-				customerStatusMsg = "Canceled Customer"
+				customerStatusMsg = `Canceled: `
+				customerStatusMsg1 = this.props.activeCustomer.Data.canc_date
+
+				const cancel_id = this.props.activeCustomer.Data.canreason
+				const cancel_reason = this.props.cancelReasons.Data.find(x => x.ReasonNumber === parseInt('0' + cancel_id))
+				customerStatusMsg2 = cancel_reason ? cancel_reason.name : `UNKNOWN (${cancel_id})`
+
+				customerStatusMsg3 = `${this.props.activeCustomer.Data.candescr}`
 				break
 			default:
 				customerStatus = "info"
@@ -900,11 +926,16 @@ class CustomerForm extends Component {
 						<h2 style={{ alignSelf: 'center' }} >{activeStep === 1 ? 'Franchisee Revenue Distribution' : steps[activeStep]}</h2>
 						<div className="flex align-items">
 
-							<MySnackbarContentWrapper
-								variant={customerStatus}
-								className={classes.margin}
-								message={customerStatusMsg}
-							/>
+							{this.props.customerForm.type === 'edit' &&
+								<MySnackbarContentWrapper
+									variant={customerStatus}
+									className={classes.margin}
+									message={customerStatusMsg}
+									message1={customerStatusMsg1}
+									message2={customerStatusMsg2}
+									message3={customerStatusMsg3}
+								/>
+							}
 						</div>
 					</div>
 
@@ -951,6 +982,9 @@ function mapStateToProps({ customers, franchisees, auth }) {
 		activeCustomer: customers.activeCustomer,
 		activeStep: customers.activeStep,
 		findersFeeTypes: customers.findersFeeTypes,
+
+		cancelReasons: customers.cancelReasons,
+		suspendReasons: customers.suspendReasons,
 
 	}
 }

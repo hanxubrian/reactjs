@@ -1144,7 +1144,7 @@ class ServiceAgreementPage extends React.Component {
 												color="primary"
 												className={classNames("")}>
 												<Icon fontSize="small" className={classNames("mr-6")}>replay</Icon>
-												Activate
+												Restart
 											</Button>}
 									</div>}
 							</GridItem>
