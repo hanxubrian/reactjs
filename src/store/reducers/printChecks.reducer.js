@@ -15,7 +15,7 @@ const initialState = {
     bSettingPanel: false,
     checkDate: moment().format('MM/DD/YYYY'),
     paymentDate: moment().format('MM/DD/YYYY'),
-    checktypeId: '5c670724580ae04184e50a70',
+    checktypeId: '5c72be751475600f94de5b33',
     entityTypeId: '',
     year: moment().year(),
     month: moment().month()+1,

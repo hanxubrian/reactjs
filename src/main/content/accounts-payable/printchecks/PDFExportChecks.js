@@ -116,6 +116,7 @@ class ExportChecks extends React.Component {
                         {selections.map((check, index)=>{
                             let amountSum = 0;
                             let dueSum = 0;
+                            if( check.turnArounddata!==null)
                             check.turnArounddata.forEach(t=>{
                                 amountSum+=t.Amount;
                                 dueSum+=t.NegativeDueTotal;
@@ -153,17 +154,19 @@ class ExportChecks extends React.Component {
                                     </GridM>
                                     <br/>
                                     <br/>
+                                    {check.turnArounddata!==null && (
+                                        <Grid
+                                            ref={(grid) => this.grid = grid}
+                                            data={check.turnArounddata} style={{width: 700}}
+                                        >
+                                            <Column field="InvoiceNo" title="InvoiceNo" width="100px" />
+                                            <Column field="CustomerNumber" title="Customer No" width="100px" />
+                                            <Column field="CustomerName" title="Customer Name" />
+                                            <Column field="Amount" title="Invoice Payment Amt." width="240px"
+                                                    cell={(props) =>CurrencyFormatterTd({value: props.dataItem[props.field]})}/>
+                                        </Grid>
+                                    )}
 
-                                    <Grid
-                                        ref={(grid) => this.grid = grid}
-                                        data={check.turnArounddata} style={{width: 700}}
-                                    >
-                                        <Column field="InvoiceNo" title="InvoiceNo" width="100px" />
-                                        <Column field="CustomerNumber" title="Customer No" width="100px" />
-                                        <Column field="CustomerName" title="Customer Name" />
-                                        <Column field="Amount" title="Invoice Payment Amt." width="240px"
-                                                cell={(props) =>CurrencyFormatterTd({value: props.dataItem[props.field]})}/>
-                                    </Grid>
                                     <br/>
                                     <br/>
                                     <GridM container>
