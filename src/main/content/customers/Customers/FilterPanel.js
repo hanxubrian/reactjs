@@ -520,36 +520,37 @@ class FilterPanel extends Component {
 			filters: { ...this.props.filters }
 		})
 
-		const {
-			cus_name, cus_addr, cus_city, cus_state, cus_zip,
-			cus_phone,
-			cus_fax,
-			website,
+		if (this.props.activeCustomer && this.props.activeCustomer.Data) {
+			const {
+				cust_no, cus_name, cus_addr, cus_city, cus_state, cus_zip,
+				cus_phone,
+				cus_fax,
+				website,
 
-			cont_1, cont_2,
-			email1,
-			email2,
+				cont_1, cont_2,
+				email1,
+				email2,
 
-			accounttype_groupid,
-			account_typeid,
-		} = this.props.activeCustomer.Data
+				accounttype_groupid,
+				account_typeid,
+			} = this.props.activeCustomer.Data
 
-		this.setState({
-			cus_name, cus_addr, cus_city, cus_state, cus_zip,
-			// cus_phone: "+1" + cus_phone,
-			// cus_fax: "+1" + cus_fax,
-			cus_phone,
-			cus_fax,
-			website,
+			this.setState({
+				cust_no, cus_name, cus_addr, cus_city, cus_state, cus_zip,
+				// cus_phone: "+1" + cus_phone,
+				// cus_fax: "+1" + cus_fax,
+				cus_phone,
+				cus_fax,
+				website,
 
-			cont_1, cont_2,
-			email1,
-			email2,
+				cont_1, cont_2,
+				email1,
+				email2,
 
-			accounttype_groupid,
-			account_typeid,
-		});
-
+				accounttype_groupid,
+				account_typeid,
+			});
+		}
 	}
 	componentWillReceiveProps(nextProps) {
 		const { customers, customerForm } = this.props;
@@ -573,9 +574,11 @@ class FilterPanel extends Component {
 		// 	})
 		// this.onLocationFilter("Location", nextProps.locationFilterValue.id)
 		// }
-		if (!_.isEqual(nextProps.activeCustomer.Data, this.props.activeCustomer.Data)) {
+		if (nextProps.activeCustomer && nextProps.activeCustomer.Data &&
+			this.props.activeCustomer && this.props.activeCustomer.Data &&
+			!_.isEqual(nextProps.activeCustomer.Data, this.props.activeCustomer.Data)) {
 			const {
-				cus_name, cus_addr, cus_city, cus_state, cus_zip,
+				cust_no, cus_name, cus_addr, cus_city, cus_state, cus_zip,
 				cus_phone,
 				cus_fax,
 				website,
@@ -589,7 +592,7 @@ class FilterPanel extends Component {
 			} = nextProps.activeCustomer.Data
 
 			this.setState({
-				cus_name, cus_addr, cus_city, cus_state, cus_zip,
+				cust_no, cus_name, cus_addr, cus_city, cus_state, cus_zip,
 				// cus_phone: "+1" + cus_phone,
 				// cus_fax: "+1" + cus_fax,
 				cus_phone,
@@ -1076,7 +1079,7 @@ class FilterPanel extends Component {
 									style={{ width: '70%' }} />
 								<TextField
 									id="cust_no"
-									label="Name *"
+									label="#"
 									className={classes.textField}
 									value={this.state.cust_no || ''}
 									onChange={this.handleChangeCustomerInfoProps('cust_no')}

@@ -426,7 +426,8 @@ const customers = function (state = initialState, action) {
 							open: false
 						},
 						data: null
-					}
+					},
+					activeCustomer: null,
 				};
 			}
 		case Actions.OPEN_EDIT_CUSTOMER_FORM:
@@ -518,7 +519,8 @@ const customers = function (state = initialState, action) {
 							open: false
 						},
 						data: null
-					}
+					},
+					activeCustomer: null,
 				};
 			}
 		case Actions.SET_FILTER_CUSTOMER_STATUSES:
