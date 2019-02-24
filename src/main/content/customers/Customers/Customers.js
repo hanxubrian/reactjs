@@ -535,6 +535,20 @@ class Customers extends Component {
 				this.props.longitude,
 				this.props.searchText);
 		}
+
+		if (nextProps.activeCustomer && nextProps.activeCustomer.Data &&
+			this.props.activeCustomer && this.props.activeCustomer.Data &&
+			nextProps.activeCustomer.Data.flag !== this.props.activeCustomer.Data.flag) {
+			this.props.getCustomers(
+				nextProps.regionId,
+				nextProps.statusId,
+				nextProps.filters.StatusNames,
+				nextProps.filters.AccountTypeListName,
+				nextProps.location,
+				nextProps.latitude,
+				nextProps.longitude,
+				nextProps.searchText);
+		}
 	}
 
 
