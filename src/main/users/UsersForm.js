@@ -107,7 +107,9 @@ TextMaskCustom.propTypes = {
 };
 
 // Define suggestion Array()
-const suggestions = [];
+let franchiseeSuggestions = [];
+let customerSuggestions = [];
+let suggestions = [];
   
 
 // Define render input component function
@@ -200,8 +202,7 @@ const MenuProps = {
 class UsersForm extends React.Component {
 
     constructor(props) {
-        super(props);
-        //props.getCustomers(props.regionId);        
+        super(props);       
     }
 
     state = {
@@ -294,12 +295,6 @@ class UsersForm extends React.Component {
                   ...this.props.userDetail.details
                 }
             });
-        }
-        if(this.props.customers !== null) {
-           this.setState({
-              suggession: this.props.customers
-           });
-           console.log("suggession",this.props.customers);
         }
     }
 
@@ -418,7 +413,7 @@ class UsersForm extends React.Component {
             if(nextProps.customers !== null){
                 nextProps.customers.Data.Regions.map(x=>{
                     x.CustomerList.map(y=>{
-                        suggestions.push({customerName: y.CustomerName});
+                        customerSuggestions.push({label: y.CustomerName});
                     });
                 });
             }
@@ -427,7 +422,7 @@ class UsersForm extends React.Component {
             if(nextProps.franchisees !== null){
                 nextProps.franchisees.Data.Region.map(x=>{
                     x.Franchisees.map(y=>{
-                        suggestions.push({label: y.Name});
+                        franchiseeSuggestions.push({label: y.Name});
                     });
                 });
             }
@@ -443,7 +438,7 @@ class UsersForm extends React.Component {
 
         this.setState({[name]: event.target.value});
 
-        if(name === "Groups" || name === "Regions" || name ==="Roles"){
+        if(name === "Groups" || name === "Regions" || name ==="Roles" || name === "UserType"){
             if(name === "Groups"){
                 let changedGroups = [];
                 event.target.value.map(x=>{
@@ -487,6 +482,16 @@ class UsersForm extends React.Component {
                     })
                 })
                 this.updateUserFormPayload(name,changedRoles);
+            }
+            if(name === "UserType") {
+                suggestions = [];
+                if(event.target.value === 'Franchisee'){
+                    suggestions = franchiseeSuggestions;
+                }
+                if(event.target.value === 'Customer'){
+                    suggestions = customerSuggestions;
+                }
+                this.updateUserFormPayload(name,event.target.value);
             }
         }else{
             this.updateUserFormPayload(name,event.target.value);
@@ -908,7 +913,40 @@ class UsersForm extends React.Component {
                                     <Paper
                                         square
                                         {...options.containerProps}
-                                        style={{ width: '100%' }}
+                                        style={{ width: this.popperNode ? this.popperNode.clientWidth : null }}
+                                        className={classes.autoSuggest}
+                                    >
+                                        {options.children}
+                                    </Paper>                                   
+                                )}
+                            />
+                        )}
+                        {this.state.UserType === 'Customer' &&(
+                            <Autosuggest
+                                {...autosuggestProps}
+                                style={{marginLeft: "1%"}}
+                                inputProps={{
+                                    classes,
+                                    label: 'Customer Name',
+                                    placeholder: 'Customer Name',                                    
+                                    value: this.state.UserTypeValue,
+                                    onChange: this.handleAutoChange('UserTypeValue'),
+                                    inputRef: node => {
+                                      this.popperNode = node;
+                                    },
+                                    InputLabelProps: {
+                                       shrink: true,
+                                    },
+                                }}
+                                theme={{
+                                    suggestionsList: classes.suggestionsList,
+                                    suggestion: classes.suggestion,
+                                }}
+                                renderSuggestionsContainer={options => (                                   
+                                    <Paper
+                                        square
+                                        {...options.containerProps}
+                                        style={{ width: this.popperNode ? this.popperNode.clientWidth : null }}
                                         className={classes.autoSuggest}
                                     >
                                         {options.children}
