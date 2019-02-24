@@ -20,6 +20,8 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
+import MaskedInput from "react-text-mask";
+import * as PropTypes from "prop-types";
 
 // Auto Suggest
 import Autosuggest from 'react-autosuggest';
@@ -78,6 +80,25 @@ const styles = theme => ({
     },
 
 });
+
+
+const TextMaskCustom = (props) => {
+    const { inputRef, ...other } = props;
+
+    return (
+        <MaskedInput
+            {...other}
+            ref={inputRef}
+            mask={['+',/[1-9]/,'(',/\d/,/\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+            placeholderChar={'\u2000'}
+            showMask
+        />
+    );
+};
+
+TextMaskCustom.propTypes = {
+    inputRef: PropTypes.func.isRequired,
+};
 
 // Define suggestion Array()
 const suggestions = [];
@@ -238,7 +259,7 @@ class UsersForm extends React.Component {
         Title : '',
         Email : '',
         DepartmentId: 'Department 1',
-        Phone : '',
+        Phone : '+1(  )    -    ',
         Address1: '',
         Address2: '',
         State: 'Alabama',
@@ -274,7 +295,7 @@ class UsersForm extends React.Component {
             FirstName: "",
             LastName: "",
             Email: "",
-            Phone: "",
+            Phone: "+1(  )    -    ",
             Address1: "",
             Address2: "",
             City: "",
@@ -620,8 +641,11 @@ class UsersForm extends React.Component {
                                         id="phone"
                                         label="Phone"
                                         className={classes.textField}
-                                        value={this.state.Phone}
-                                        onChange={this.handleChange("Phone")}
+                                        InputProps={{
+                                            inputComponent: TextMaskCustom,
+                                            value:this.state.Phone,
+                                            onChange:this.handleChange("Phone")
+                                        }}
                                         style={{marginRight:'1%'}}
                                         margin="dense"
                                         fullWidth

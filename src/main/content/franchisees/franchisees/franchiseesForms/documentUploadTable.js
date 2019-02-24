@@ -334,7 +334,7 @@ class FranchiseesDocumentUploadTable extends React.Component {
                                 .map((n,index) => {
                                             return (
                                                 <TableRow hover key={n.document_id} >
-                                                    <TableCell component="td" scope="row" >
+                                                    <TableCell component="td" scope="row" style={{width:300}} >
                                                         {n.name}
                                                     </TableCell>
                                                     <TableCell>
