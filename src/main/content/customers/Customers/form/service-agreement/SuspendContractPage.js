@@ -1275,6 +1275,8 @@ function mapDispatchToProps(dispatch) {
 		// getIncreaseDecrease: Actions.getIncreaseDecrease,
 		saveSuspendContract: Actions.saveSuspendContract,
 		getCustomer: Actions.getCustomer,
+		
+		stopFindersfees: Actions.stopFindersfees,
 	}, dispatch);
 }
 

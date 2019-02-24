@@ -3,7 +3,7 @@ import _ from "lodash";
 import { withRouter } from 'react-router-dom';
 import Geocode from "react-geocode";
 
-import { Paper, withStyles, Checkbox, TextField, Divider, Button, IconButton, Snackbar, SnackbarContent,  } from '@material-ui/core';
+import { Paper, withStyles, Checkbox, TextField, Divider, Button, IconButton, Snackbar, SnackbarContent, } from '@material-ui/core';
 
 import keycode from 'keycode';
 
@@ -1066,14 +1066,26 @@ class FilterPanel extends Component {
 								<TextField
 									id="cus_name"
 									label="Name *"
-									className={classes.textField}
+									className={classNames(classes.textField, 'pr-12')}
 									value={this.state.cus_name || ''}
 									onChange={this.handleChangeCustomerInfoProps('cus_name')}
 									InputLabelProps={{ shrink: true }}
 									margin="dense"
 									// variant="outlined"
 									autoFocus
-									fullWidth />
+									style={{ width: '70%' }} />
+								<TextField
+									id="cust_no"
+									label="Name *"
+									className={classes.textField}
+									value={this.state.cust_no || ''}
+									onChange={this.handleChangeCustomerInfoProps('cust_no')}
+									InputLabelProps={{ shrink: true }}
+									InputProps={{ readOnly: true }}
+									margin="dense"
+									// variant="outlined"
+									autoFocus
+									style={{ width: '30%' }} />
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
