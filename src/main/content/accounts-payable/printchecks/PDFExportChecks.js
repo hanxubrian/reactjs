@@ -93,6 +93,8 @@ class ExportChecks extends React.Component {
         // const  log_url = 'assets/images/logo-blank.png';
 
         // let selections = this.props.selectionsChecks.map((index)=>this.props.printChecksDB[index]);
+        if(this.props.checksObj===null)
+            return (<div/>)
         let selections = [this.props.checksObj];
 
         return (
