@@ -4,7 +4,7 @@ import { process } from '@progress/kendo-data-query';
 import { GridPDFExport, PDFExport, savePDF } from '@progress/kendo-react-pdf';
 import { Grid, GridColumn as Column } from '@progress/kendo-react-grid';
 
-import {Typography,} from '@material-ui/core'
+import {Divider, Typography,} from '@material-ui/core'
 import GridM from '@material-ui/core/Grid'
 // for Store
 import {withStyles} from "@material-ui/core";
@@ -20,6 +20,10 @@ import NumberFormat from 'react-number-format';
 const styles = theme => ({
     root: {
         fontSize: 11,
+        '& .checkdate': {
+            borderBottom:"1px solid #333",
+            marginLeft: '2.4em',
+        },
         '& .k-grid-header': {
           paddingRight: '0!important',
             '& .k-grid-header-wrap':{
@@ -78,10 +82,10 @@ class ExportChecks extends React.Component {
     };
     componentDidMount()
     {
-        // this.props.onRef(this);
+        this.props.onRef(this);
     }
     componentWillUnmount() {
-        // this.props.onRef(undefined);
+        this.props.onRef(undefined);
     }
 
     render() {
@@ -127,7 +131,7 @@ class ExportChecks extends React.Component {
                                             />
                                         </GridM>
                                         <GridM item sm={6}>
-                                            <Typography variant={"subtitle1"}><strong>Jani-King of Buffalo, Inc</strong></Typography>
+                                            <Typography variant={"subtitle1"}><strong>Jani-King of {check.regionname}, Inc</strong></Typography>
                                         </GridM>
                                         <GridM item sm={3}>
                                             <Typography variant={"inherit"}>Check Number: {check.checknumber}</Typography>
@@ -175,7 +179,73 @@ class ExportChecks extends React.Component {
                                             <Typography style={{textAlign: 'right'}} variant={"inherit"}>{CurrencyFormatter({value: dueSum})}</Typography>
                                         </GridM>
                                     </GridM>
-
+                                    <br/>
+                                    <br/>
+                                    <div className={classNames("flex flex-col w-full")}>
+                                        <div className={classNames("flex flex-row w-full")}>
+                                            <div style={{width: '12%'}}>
+                                                <img style={{border: '1px solid black'}}
+                                                     src={log_url}
+                                                />
+                                            </div>
+                                            <GridM container>
+                                                <GridM item sm={5} style={{paddingLeft: 12}}>
+                                                    <Typography variant={"inherit"}><strong>Jani-King of {check.regionname}, Inc</strong></Typography>
+                                                    <Typography variant={"inherit"}>Special Trust</Typography>
+                                                    <Typography variant={"inherit"}>{check.PayeeAddress1}</Typography>
+                                                    <Typography variant={"inherit"}>{check.regioncity}, {check.regionstate} {check.PayeePostalCode}</Typography>
+                                                </GridM>
+                                                <GridM item sm={7} >
+                                                    <GridM container>
+                                                        <GridM item sm={6} >
+                                                            <Typography variant={"inherit"}><strong>Bank Name</strong></Typography>
+                                                            <Typography variant={"inherit"}>Bank Address</Typography>
+                                                            <Typography variant={"inherit"}>Bank Number</Typography>
+                                                            <Typography variant={"inherit"}>Bank Phone</Typography>
+                                                        </GridM>
+                                                        <GridM item sm={6} >
+                                                            <Typography style={{textAlign:'right'}} variant={"subtitle1"}><strong>{check.checknumber || 'Check Number'}</strong></Typography>
+                                                            <br/>
+                                                            <br/>
+                                                            <br/>
+                                                            <Typography style={{textAlign:'right'}} variant={"subtitle1"}><strong>Date <span className="checkdate">{moment(check.checkdate).format('MM/DD/YYYY')}</span></strong></Typography>
+                                                        </GridM>
+                                                    </GridM>
+                                                </GridM>
+                                            </GridM>
+                                        </div>
+                                        <div className={classNames("flex flex-row w-full items-center mt-4")}>
+                                            <div style={{width: '12%'}}>
+                                                <Typography variant={"subtitle1"}><strong>PAY</strong></Typography>
+                                            </div>
+                                            <div style={{width: '70%'}} className="flex flex-1 items-center">
+                                                <Typography variant={"inherit"}>{check.checkAmounttext}</Typography>
+                                            </div>
+                                            <div style={{width: '18%'}} className="text-right">
+                                                <Typography variant={"subtitle1"}><strong>{CurrencyFormatter({value: amountSum})}</strong></Typography>
+                                            </div>
+                                        </div>
+                                        <div className={classNames("flex flex-row w-full items-start mt-4")}>
+                                            <div style={{width: '12%'}}>
+                                                <Typography style={{lineHeight: 1.2}} variant={"subtitle1"}><strong>To The Order Of:</strong></Typography>
+                                            </div>
+                                            <GridM container>
+                                                <GridM item sm={7} >
+                                                    <Typography variant={"inherit"}>KMBURNS, LLC, an Authorized Franchisee</Typography>
+                                                    <Typography variant={"inherit"}>58 SUMMERDALE ROAD</Typography>
+                                                    <Typography variant={"inherit"}>ANGOLA, NY 14006</Typography>
+                                                </GridM>
+                                                <GridM item sm={5} >
+                                                    <Typography variant={"inherit"} style={{textAlign: 'center'}}><i>Void after 90 Days</i></Typography>
+                                                    <br/>
+                                                    <br/>
+                                                    <br/>
+                                                    <Divider classes={{}} style={{backgroundColor: 'black'}}/>
+                                                    <Typography variant={"inherit"} style={{textAlign: 'center'}}><i>Authorized Signature</i></Typography>
+                                                </GridM>
+                                            </GridM>
+                                        </div>
+                                    </div>
                                 </div>
                             )
                         })}
