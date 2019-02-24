@@ -343,8 +343,6 @@ class PrintChecksLayout extends Component {
     };
 
     handlePrint = async ()=>{
-        // console.log('child1', this.child1);
-        //
         this.child1.onPrint();
         return;
         this.props.history.push('/accounts-payable/preview-checks');
@@ -573,7 +571,7 @@ class PrintChecksLayout extends Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                <ExportChecks onRef={ref => (this.child1 = ref)}/>
+                <ExportChecks onRef={ref => (this.child1 = ref)} />
             </React.Fragment>
         );
     }

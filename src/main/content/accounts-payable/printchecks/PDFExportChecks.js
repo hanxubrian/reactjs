@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { process } from '@progress/kendo-data-query';
 import { GridPDFExport, PDFExport, savePDF } from '@progress/kendo-react-pdf';
 import { Grid, GridColumn as Column } from '@progress/kendo-react-grid';
 
@@ -90,13 +89,13 @@ class ExportChecks extends React.Component {
 
     render() {
         const {classes} = this.props;
-        // const  log_url = 'https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
-        const  log_url = 'assets/images/logo-blank.png';
+        const  log_url = 'https://res.cloudinary.com/janiking/image/upload/v1545837406/apps/web/appid2/logo-full.png';
+        // const  log_url = 'assets/images/logo-blank.png';
 
         let selections = this.props.selectionsChecks.map((index)=>this.props.printChecksDB[index]);
 
         return (
-            <div className={classNames("p-24")}>
+            <div className={classNames("p-24 ")} style={{ position: "absolute", left: "-2000px", top: 0 }}>
                 <div className="example-config">
                     <button className="k-button" onClick={this.onPrint}>
                         Export PDF
@@ -126,7 +125,7 @@ class ExportChecks extends React.Component {
                                     </div>
                                     <GridM container>
                                         <GridM item sm={3}>
-                                            <img style={{border: '1px solid black'}}
+                                            <img style={{border: '0px solid black'}}
                                                 src={log_url}
                                             />
                                         </GridM>
@@ -184,7 +183,7 @@ class ExportChecks extends React.Component {
                                     <div className={classNames("flex flex-col w-full")}>
                                         <div className={classNames("flex flex-row w-full")}>
                                             <div style={{width: '12%'}}>
-                                                <img style={{border: '1px solid black'}}
+                                                <img style={{border: '0px solid black'}}
                                                      src={log_url}
                                                 />
                                             </div>
@@ -230,7 +229,7 @@ class ExportChecks extends React.Component {
                                                 <Typography style={{lineHeight: 1.2}} variant={"subtitle1"}><strong>To The Order Of:</strong></Typography>
                                             </div>
                                             <GridM container>
-                                                <GridM item sm={7} >
+                                                <GridM item sm={7} style={{paddingLeft: '1.2em'}} >
                                                     <Typography variant={"inherit"}>KMBURNS, LLC, an Authorized Franchisee</Typography>
                                                     <Typography variant={"inherit"}>58 SUMMERDALE ROAD</Typography>
                                                     <Typography variant={"inherit"}>ANGOLA, NY 14006</Typography>
