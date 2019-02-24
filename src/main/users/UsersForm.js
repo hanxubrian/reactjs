@@ -63,21 +63,27 @@ const styles = theme => ({
         left: 0,
         right: 0,
         maxHeight: 200,
+        width: '100%',
         height: 200,
-        width: 300,
         overflowY: 'scroll'
     },
     suggestion: {
         display: 'block',
+        width: '100%'
     },
     suggestionsList: {
         margin: 0,
         padding: 0,
         listStyleType: 'none',
+        width: '100%'
     },
     divider: {
         height: theme.spacing.unit * 2,
     },
+    autoSuggest: {
+        position: 'absolute',
+        zIndex: 20,
+    }
 
 });
 
@@ -102,8 +108,7 @@ TextMaskCustom.propTypes = {
 
 // Define suggestion Array()
 const suggestions = [];
-const franchiseeSuggestions = [];
-
+  
 
 // Define render input component function
 function renderInputComponent(inputProps) {
@@ -112,7 +117,6 @@ function renderInputComponent(inputProps) {
     return (
         <TextField
             fullWidth
-            variant="outlined"
             className={classes.textField}
             margin="dense"
             InputProps={{
@@ -132,106 +136,52 @@ function renderInputComponent(inputProps) {
     );
 }
 
-
-
-// renderSuggestion functions
-
 function renderSuggestion(suggestion, { query, isHighlighted }) {
-    const matches = match(suggestion.customerName, query);
-    const parts = parse(suggestion.customerName, matches);
-
+    const matches = match(suggestion.label, query);
+    const parts = parse(suggestion.label, matches);
+  
     return (
-        <MenuItem selected={isHighlighted} component="div">
-            <div>
-                {parts.map((part, index) =>
-                        part.highlight ? (
-                            <span key={String(index)} style={{ fontWeight: 500 }}>
-              {part.text}
-            </span>
-                        ) : (
-                            <strong key={String(index)} style={{ fontWeight: 300 }}>
-                                {part.text}
-                            </strong>
-                        ),
-                )}
-            </div>
-        </MenuItem>
+      <MenuItem selected={isHighlighted} component="div">
+        <div>
+          {parts.map((part, index) =>
+            part.highlight ? (
+              <span key={String(index)} style={{ fontWeight: 500 }}>
+                {part.text}
+              </span>
+            ) : (
+              <strong key={String(index)} style={{ fontWeight: 300 }}>
+                {part.text}
+              </strong>
+            ),
+          )}
+        </div>
+      </MenuItem>
     );
-}
+  }
 
-function renderFranchiseeSuggestion(franchiseeSuggestions, { query, isHighlighted }) {
-    const matches = match(franchiseeSuggestions.franchiseeName, query);
-    const parts = parse(franchiseeSuggestions.franchiseeName, matches);
-
-    return (
-        <MenuItem selected={isHighlighted} component="div">
-            <div>
-                {parts.map((part, index) =>
-                        part.highlight ? (
-                            <span key={String(index)} style={{ fontWeight: 500 }}>
-              {part.text}
-            </span>
-                        ) : (
-                            <strong key={String(index)} style={{ fontWeight: 300 }}>
-                                {part.text}
-                            </strong>
-                        ),
-                )}
-            </div>
-        </MenuItem>
-    );
-}
-
-// getSuggestions
-
-function getSuggestions(value) {
+  function getSuggestions(value) {
     const inputValue = deburr(value.trim()).toLowerCase();
     const inputLength = inputValue.length;
     let count = 0;
-
+  
     return inputLength === 0
-        ? []
-        : suggestions.filter(suggestion => {
-            const keep =
-                count < 5 && suggestion.customerName.slice(0, inputLength).toLowerCase() === inputValue;
-
-            if (keep) {
-                count += 1;
-            }
-
-            return keep;
+      ? []
+      : suggestions.filter(suggestion => {
+          const keep =
+            count < 5 && suggestion.label.slice(0, inputLength).toLowerCase() === inputValue;
+  
+          if (keep) {
+            count += 1;
+          }
+  
+          return keep;
         });
-}
+  }
 
-function getFranchiseeSuggestions(value) {
-    const inputValue = deburr(value.trim()).toLowerCase();
-    const inputLength = inputValue.length;
-    let count = 0;
-
-    return inputLength === 0
-        ? []
-        : suggestions.filter(suggestion => {
-            const keep =
-                count < 5 && suggestion.franchiseeName.slice(0, inputLength).toLowerCase() === inputValue;
-
-            if (keep) {
-                count += 1;
-            }
-
-            return keep;
-        });
-}
-
-
-// getSuggestionValue
-
-function getSuggestionValue(suggestion) {
-    return suggestion.customerName;
-}
-
-function getFranchiseeSuggestionValue(franchiseeSuggestion) {
-    return franchiseeSuggestion.franchiseeName;
-}
+  function getSuggestionValue(suggestion) {
+    return suggestion.label;
+  }
+  
 
 let GroupList = [];
 let RoleList = [];
@@ -251,6 +201,7 @@ class UsersForm extends React.Component {
 
     constructor(props) {
         super(props);
+        //props.getCustomers(props.regionId);        
     }
 
     state = {
@@ -343,7 +294,13 @@ class UsersForm extends React.Component {
                   ...this.props.userDetail.details
                 }
             });
-        }        
+        }
+        if(this.props.customers !== null) {
+           this.setState({
+              suggession: this.props.customers
+           });
+           console.log("suggession",this.props.customers);
+        }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot){
@@ -470,7 +427,7 @@ class UsersForm extends React.Component {
             if(nextProps.franchisees !== null){
                 nextProps.franchisees.Data.Region.map(x=>{
                     x.Franchisees.map(y=>{
-                        franchiseeSuggestions.push({franchiseeName: y.Name});
+                        suggestions.push({label: y.Name});
                     });
                 });
             }
@@ -553,9 +510,7 @@ class UsersForm extends React.Component {
         this.setState({
             [name]: newValue,
         });
-        setTimeout(function() {
-            this.updateUserFormPayload(name,newValue);
-        }, 1500);
+        this.updateUserFormPayload(name,newValue);
     };
 
 
@@ -903,7 +858,7 @@ class UsersForm extends React.Component {
                 <div className={classNames(classes.userFormSection,"w-full relative")}>
                     <h4>User Type</h4>
                     <GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
+                        <GridItem xs={6} sm={6} md={6} >
                             <TextField
                                 id="UserType"
                                 label={"User Type"}
@@ -926,20 +881,42 @@ class UsersForm extends React.Component {
                                     </MenuItem>
                                 ))}
                             </TextField>
-                            <TextField
-                                id="UserTypeValue"
-                                label="Name"
-                                className={classes.textField}
-                                value={this.state.UserTypeValue}
-                                onChange={this.handleChange("UserTypeValue")}
-                                style={{marginLeft:'1%'}}
-                                margin="dense"
-                                fullWidth
-                                required
-                            />
                         </GridItem>
-                        <GridItem xs={12} sm={12} md={12} className="flex flex-row">
-
+                        <GridItem xs={6} sm={6} md={6}>
+                        {this.state.UserType === 'Franchisee' &&(
+                            <Autosuggest
+                                {...autosuggestProps}
+                                style={{marginLeft: "1%"}}
+                                inputProps={{
+                                    classes,
+                                    label: 'Franchisee Name',
+                                    placeholder: 'Franchisee Name',                                    
+                                    value: this.state.UserTypeValue,
+                                    onChange: this.handleAutoChange('UserTypeValue'),
+                                    inputRef: node => {
+                                      this.popperNode = node;
+                                    },
+                                    InputLabelProps: {
+                                       shrink: true,
+                                    },
+                                }}
+                                theme={{
+                                    suggestionsList: classes.suggestionsList,
+                                    suggestion: classes.suggestion,
+                                }}
+                                renderSuggestionsContainer={options => (                                   
+                                    <Paper
+                                        square
+                                        {...options.containerProps}
+                                        style={{ width: '100%' }}
+                                        className={classes.autoSuggest}
+                                    >
+                                        {options.children}
+                                    </Paper>                                   
+                                )}
+                            />
+                        )}
+                            
                         </GridItem>
                     </GridContainer>
                 </div>
