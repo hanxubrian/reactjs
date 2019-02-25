@@ -427,13 +427,18 @@ class PaymentFormModal extends React.Component {
 	componentWillMount() {
 		console.log("componentWillMount")
 		this.setRowData(this.props.payments)
-	}
-	componentDidMount() {
+
 		this.setState({
 			paymentDlgPayloads: this.props.paymentDlgPayloads,
 			PaymentAmount: this.props.paymentDlgPayloads.paymentAmount,
-			PaymentType: this.props.paymentDlgPayloads.paymentType
+			PaymentType: this.props.paymentDlgPayloads.paymentType,
+
+			ReferenceNo: this.props.paymentDlgPayloads.paymentType !== "Credit" ? '' : 'REF_NO',
 		})
+
+	}
+	componentDidMount() {
+
 
 		// if (this.props.bOpenPaymentDialog === true) {
 		// 	this.checkValidations()
@@ -682,7 +687,7 @@ class PaymentFormModal extends React.Component {
 
 		if (name === "PaymentType" && !value || name !== "PaymentType" && !this.state.PaymentType) {
 			this.setState({ errorMsg: "Payment type not selected" })
-		} else if (name === "ReferenceNo" && value <= 0 || name !== "ReferenceNo" && this.state.ReferenceNo <= 0) {
+		} else if (name === "ReferenceNo" && !value || name !== "ReferenceNo" && !this.state.ReferenceNo.toString().trim()) {
 			this.setState({ errorMsg: "ReferenceNo is invalid" })
 		} else if (name === "PaymentDate" && !value || name !== "PaymentDate" && !this.state.PaymentDate) {
 			this.setState({ errorMsg: "Payment date not selected" })
@@ -841,46 +846,57 @@ class PaymentFormModal extends React.Component {
 									<TextField sm={3} select margin="dense" id="PaymentType" label="Payment Type" variant="outlined"
 										// style={{ width: "30%" }}
 										className={classNames(classes.textField, "pr-6")}
-										value={this.state.PaymentType}
+										value={this.state.PaymentType || ''}
 										onChange={this.handleChange('PaymentType')}
 										fullWidth
 										InputProps={{
-											readOnly: this.props.paymentDlgPayloads.paymentAmount !== 0 && this.props.paymentDlgPayloads.paymentType === "CreditFromOverpayment"
+											readOnly: this.props.paymentDlgPayloads.paymentType === "Credit"
 										}}
 									>
-										<MenuItem value={"Check"}>Check</MenuItem>
+										{
+											this.props.paymentTypes.map((x, index) =>
+												<MenuItem key={index} value={x.type_name}>{x.type_name}</MenuItem>
+											)
+										}
+										{/* <MenuItem value={"Check"}>Check</MenuItem>
 										<MenuItem value={"CreditCard"}>Credit Card</MenuItem>
 										<MenuItem value={"EFT"}>EFT</MenuItem>
 										<MenuItem value={"Lockbox"}>Lockbox</MenuItem>
 										<MenuItem value={"CreditFromOverpayment"}>Credit from Overpayment</MenuItem>
-										<MenuItem value={"ManualCreditCard"}>Manual Credit Card</MenuItem>
+										<MenuItem value={"ManualCreditCard"}>Manual Credit Card</MenuItem> */}
 
 									</TextField>
 
-									<TextField sm={3} margin="dense" id="ReferenceNo" label="Reference No." variant="outlined"
-										autoFocus
-										onChange={this.handleChange('ReferenceNo')}
-										value={this.state.ReferenceNo}
-										className={classNames(classes.textField, "pr-6")}
-										fullWidth
-									/>
+									{this.props.paymentDlgPayloads.paymentType !== "Credit" &&
+										<TextField sm={3} margin="dense" id="ReferenceNo" label="Reference No." variant="outlined"
+											autoFocus
+											onChange={this.handleChange('ReferenceNo')}
+											value={this.state.ReferenceNo || ''}
+											InputProps={{
+												readOnly: this.props.paymentDlgPayloads.paymentType === "Credit"
+											}}
+											className={classNames(classes.textField, "pr-6")}
+											fullWidth
+										/>
+									}
 
-									<TextField sm={1}
-										type="date"
-										id="PaymentDate"
-										label="Payment Date"
-										className={classNames(classes.textField, "pr-6")}
-										InputLabelProps={{
-											shrink: true
-										}}
-										value={this.state.PaymentDate}
-										onChange={this.handleChange('PaymentDate')}
-										margin="dense"
-										variant="outlined"
-										fullWidth
-									// style={{ width: "20%", minWidth: "180px" }}
-									/>
-
+									{this.props.paymentDlgPayloads.paymentType !== "Credit" &&
+										<TextField sm={1}
+											type="date"
+											id="PaymentDate"
+											label="Payment Date"
+											className={classNames(classes.textField, "pr-6")}
+											InputLabelProps={{
+												shrink: true
+											}}
+											value={this.state.PaymentDate}
+											onChange={this.handleChange('PaymentDate')}
+											margin="dense"
+											variant="outlined"
+											fullWidth
+										// style={{ width: "20%", minWidth: "180px" }}
+										/>
+									}
 									<TextField
 										type="number"
 										InputLabelProps={{ shrink: true }} InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
@@ -1007,6 +1023,7 @@ function mapStateToProps({ accountReceivablePayments, auth }) {
 		searchText: accountReceivablePayments.searchText,
 
 		paymentDlgPayloads: accountReceivablePayments.paymentDlgPayloads,
+		paymentTypes: accountReceivablePayments.paymentTypes,
 	}
 }
 

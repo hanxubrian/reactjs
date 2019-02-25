@@ -54,7 +54,7 @@ class PaymentListService {
 				"OverPayment": overpayment,
 				"Amount": PaymentAmount,
 				"AmountApplied": PaymentAmount,
-				"PayItems": PayItems
+				"PayHistoryItems": PayItems
 			}
 		}
 		console.log("createAccountReceivablePayment", data)
@@ -85,7 +85,7 @@ class PaymentListService {
 			}
 			console.log("getPaymentHistory", data)
 			axios_instance.post(`${BASE_MONGO_API_URL}/v1/payment/gethistory`, data)
-			// axios_instance.get(`${BASE_MONGO_API_URL}/v1/payment/gethistory?regionId=${regionId}&fromDate=${fromDate}&toDate=${toDate}`)
+				// axios_instance.get(`${BASE_MONGO_API_URL}/v1/payment/gethistory?regionId=${regionId}&fromDate=${fromDate}&toDate=${toDate}`)
 				.then(res => {
 					console.log("getPaymentHistory service", res)
 					if (res.status === 200) {
@@ -100,23 +100,39 @@ class PaymentListService {
 		});
 	}
 
-    getPaymentLogList = (regionId, LogDate) => {
-        const data = {regionId, LogDate};
+	getPaymentLogList = (regionId, LogDate) => {
+		const data = { regionId, LogDate };
 
-        return new Promise((resolve, reject) => {
-            axios_instance.post(`${BASE_MONGO_API_URL}/v1/Payment/PaymentLog`, data)
-                .then(res => {
-                    if (res.status === 200) {
-                        resolve(res.data);
-                    } else if (res.status !== 200) {
-                        reject(res.data);
-                    }
-                })
-                .catch(error => {
-                    resolve(error);
-                })
-        });
-    };
+		return new Promise((resolve, reject) => {
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/Payment/PaymentLog`, data)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					} else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
+
+	getPaymentTypes = () => {
+		return new Promise((resolve, reject) => {
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/paymentTypes`)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					} else {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
 }
 
 const instance = new PaymentListService();

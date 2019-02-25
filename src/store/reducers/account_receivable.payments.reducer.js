@@ -1,4 +1,4 @@
-import * as Actions from "../actions/";
+import * as Actions from "../actions/account_receivable.payments.actions";
 import * as UserActions from "../../auth/store/actions";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
@@ -43,6 +43,7 @@ const initialState = {
 		paymentType: "Check",
 		paymentAmount: 0
 	},
+	paymentTypes: [],
 
 	startPaymentHistory: false,
 	bLoadedPaymentHistory: false,
@@ -226,6 +227,11 @@ const accountReceivablePayments = function (state = initialState, action) {
 		case UserActions.USER_LOGGED_OUT:
 			return {
 				...initialState
+			}
+		case Actions.GET_PAYMENT_TYPES:
+			return {
+				...state,
+				paymentTypes: action.payload
 			}
 		default:
 			return state;
