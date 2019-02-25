@@ -349,7 +349,7 @@ class FranchiseesDocumentUploadTable extends React.Component {
                                                     <TableCell>
                                                         {n.status}
                                                     </TableCell>                                                    
-                                                    <TableCell>
+                                                    <TableCell style={{width: 250}}>
                                                         <IconButton
                                                             className={classNames(classes.summaryPanelButton, "mr-12")}
                                                             aria-label="view-icon"
