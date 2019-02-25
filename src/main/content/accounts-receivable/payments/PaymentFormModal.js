@@ -400,6 +400,16 @@ class PaymentFormModal extends React.Component {
 				{ key: "InvoiceBalance", name: "Invoice Balance", editable: false, formatter: CurrencyFormatter },
 				{ key: "PaymentAmount", name: "Payment to Apply", editable: true, formatter: CurrencyFormatter }
 			],
+			columnsForReactDataGridCredit: [
+				{ key: "InvoiceNo", name: "Invoice No", editable: false },
+				{ key: "InvoiceDate", name: "Invoice Date", editable: false, formatter: DateFormatter },
+				{ key: "DueDate", name: "Due Date", editable: false, formatter: DateFormatter },
+				{ key: "DaysPastDue", name: "Days Past Due", editable: false, sortDescendingFirst: true },
+				{ key: "InvoiceAmount", name: "Invoice Amount", editable: false, formatter: CurrencyFormatter },
+				{ key: "InvoiceBalance", name: "Invoice Balance", editable: false, formatter: CurrencyFormatter },
+				{ key: "InvoiceTax", name: "Invoice Tax", editable: false, formatter: CurrencyFormatter },
+				{ key: "PaymentAmount", name: "Payment to Apply", editable: true, formatter: CurrencyFormatter }
+			],
 			rows: [],
 			currencyColumns: [
 				'InvoiceAmount', 'InvoiceBalance', 'PaymentAmount'
@@ -794,7 +804,7 @@ class PaymentFormModal extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		const { rows, columns, customerName, customerNumber, currencyColumns, columnsForReactDataGrid } = this.state;
+		const { rows, columns, customerName, customerNumber, currencyColumns, columnsForReactDataGrid, columnsForReactDataGridCredit } = this.state;
 		console.log("activeRows", rows)
 		return (
 			<div>
@@ -974,7 +984,7 @@ class PaymentFormModal extends React.Component {
 									</Grid> */}
 
 									<ReactDataGrid
-										columns={columnsForReactDataGrid}
+										columns={this.props.paymentDlgPayloads.paymentType === 'Credit' ? columnsForReactDataGridCredit : columnsForReactDataGrid}
 										rowGetter={i => rows[i]}
 										rowsCount={rows.length}
 										onGridRowsUpdated={this.onGridRowsUpdated}
