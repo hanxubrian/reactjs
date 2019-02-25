@@ -433,13 +433,10 @@ class PaymentFormModal extends React.Component {
 			PaymentAmount: this.props.paymentDlgPayloads.paymentAmount,
 			PaymentType: this.props.paymentDlgPayloads.paymentType,
 
-			ReferenceNo: this.props.paymentDlgPayloads.paymentType !== "Credit" ? '' : 'REF_NO',
 		})
 
 	}
 	componentDidMount() {
-
-
 		// if (this.props.bOpenPaymentDialog === true) {
 		// 	this.checkValidations()
 		// }
@@ -502,7 +499,7 @@ class PaymentFormModal extends React.Component {
 				this.state.customerNumber,
 
 				this.state.PaymentType,
-				this.state.ReferenceNo,
+				this.props.paymentDlgPayloads.paymentType !== "Credit" ? this.state.ReferenceNo : 'REF_NO',
 				this.state.PaymentDate,
 				this.state.PaymentNote,
 				this.getOverpaymentAmount(this.state.rows),
@@ -742,7 +739,7 @@ class PaymentFormModal extends React.Component {
 				errorMsg: "Payment type not selected",
 				overpayment: this.getOverpaymentAmount(rows, paymentAmount),
 			})
-		} else if (!this.state.ReferenceNo || !this.state.ReferenceNo.toString().trim()) {
+		} else if (this.props.paymentDlgPayloads.paymentType !== 'Credit' && (!this.state.ReferenceNo || !this.state.ReferenceNo.toString().trim())) {
 			this.setState({
 				errorMsg: "ReferenceNo is invalid",
 				overpayment: this.getOverpaymentAmount(rows, paymentAmount),
@@ -814,7 +811,7 @@ class PaymentFormModal extends React.Component {
 					<BlueDialogTitle id="form-dialog-title" onClose={this.handleClose}>
 						<h2 style={{ display: "flex", alignItems: "center", color: "white" }}>
 							<Icon>attach_money</Icon>
-							Payment
+							Payment ({this.props.paymentDlgPayloads.paymentType})
                             </h2>
 					</BlueDialogTitle>
 					<DialogContent>
