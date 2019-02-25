@@ -829,7 +829,7 @@ class paymentsHistoryListContent extends Component {
 				<span style={{ width: "10%" }}><strong>Amount: </strong></span>
 			</div>
 			{
-				row.PayItems.map((x, index) => (
+				row.PayHistoryItems && row.PayHistoryItems.map((x, index) => (
 					<div key={index} className="flex justify-end">
 						<span style={{ width: "10%", color: "#63b6ff" }}>{x.InvoiceNo}</span>
 						<span style={{ width: "10%", color: "#ffb26e" }}>$ {x.Amount}</span>
