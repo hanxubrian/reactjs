@@ -335,7 +335,7 @@ function getStepContent(franchiseeForm, step) {
                             >
                                 {franchiseeForm.props.planType &&(
                                     franchiseeForm.props.planType.Data.map(option => (
-                                        <MenuItem key={option._id} value={option._id}>
+                                        <MenuItem key={option.plantype} value={option.plantype}>
                                             {option.plantype}
                                         </MenuItem>
                                     ))
@@ -629,7 +629,7 @@ class FranchiseesCreateForm extends Component {
         accountRebate: false,
         generateReport: false,
         StateValue: '',
-        defaultPlanType: "5c6856c5a0cca92188d842c4",
+        defaultPlanType: "A",
         selectedSignDate: new Date(),
         selectedRenewDate: new Date(),
         selectedExpDate: new Date(),
@@ -673,7 +673,7 @@ class FranchiseesCreateForm extends Component {
             accountRebate: false,
             generateReport: false,
             StateValue: '',
-            defaultPlanType: "5c6856c5a0cca92188d842c4",
+            defaultPlanType: "A",
             selectedSignDate: new Date(),
             selectedRenewDate: new Date(),
             selectedExpDate: new Date(),
@@ -746,7 +746,7 @@ class FranchiseesCreateForm extends Component {
             LegalZip: this.props.insertPayload.LegalZip===null ? '': this.props.insertPayload.LegalZip,
             LegalIdNum: this.props.insertPayload.LegalIdNum===null ? '':this.props.insertPayload.LegalIdNum,
             NameOn1099: this.props.insertPayload.NameOn1099,
-            defaultPlanType: this.props.insertPayload.AgreementPlanTypeId,
+            defaultPlanType: ((typeof(this.props.insertPayload.AgreementPlanTypeId) !=="string" || this.props.insertPayload.AgreementPlanTypeId ==="" ) ? "A" : this.props.insertPayload.AgreementPlanTypeId),
             planAmount: this.props.insertPayload.AgreementPlanAmount,
             daysToFullfill: this.props.insertPayload.AgreementDaysToFulfill,
             noOfPayments: this.props.insertPayload.AgreementTotalPayment,
@@ -790,11 +790,7 @@ class FranchiseesCreateForm extends Component {
     }
 
     componentWillReceiveProps(nextProps){
-    //    if(this.props.insertPayload !== nextProps.insertPayload){
-    //        if(nextProps.insertPayload.franchiseeFees===null){
-
-    //        }
-    //    }
+  
     }
 
 
@@ -862,7 +858,7 @@ class FranchiseesCreateForm extends Component {
         if(name === 'defaultPlanType'){
             //console.log(this.props.planType.Data);
             this.props.planType.Data.map( (x)=> {
-                    if (val === x._id) {
+                    if (val === x.plantype) {
                         this.setState({
                             planAmount: x.fran_amt*1,
                             daysToFullfill: x.days2fill*1,
@@ -870,16 +866,16 @@ class FranchiseesCreateForm extends Component {
                             interest: x.interest*1,
                             downPayment: x.dwn_pymnt*1,
                             ibAmount: x.inittot*1,
-                            defaultPlanType: x._id
+                            defaultPlanType: x.plantype
                         });
                         this.handleInitialUpdate("AgreementPlanAmount",x.fran_amt*1);
                         this.handleInitialUpdate("AgreementDaysToFulfill",x.days2fill*1);
                         this.handleInitialUpdate("AgreementTotalPayment",x.pymnt_totl*1);
                         this.handleInitialUpdate("AgreementInterestRate",x.interest*1);
-                        this.handleInitialUpdate("AgreementPlanTypeId",x._id);
+                        this.handleInitialUpdate("AgreementPlanTypeId",x.plantype);
                         this.handleInitialUpdate("AgreementDownPayment",x.dwn_pymnt*1);
                         this.handleInitialUpdate("AgreementInitialBusinessAmount",x.BusinessAmount*1);
-                        this.handleInitialUpdate("AgreementPlanType",x.Name*1);
+                        this.handleInitialUpdate("AgreementPlanType",x.plantype);
                         this.handleInitialUpdate("AgreementMonthlyPayment",x.PaymentAmount*1);
                     }
                 }
