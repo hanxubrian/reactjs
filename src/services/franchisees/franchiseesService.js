@@ -279,36 +279,6 @@ class franchiseesService {
     /**
      * @method GET
      *
-     * @param  RegionId
-     * @param FranchiseeNo
-     *
-     * @returns {Promise<any>}
-     *
-    */
-
-   getFinderfeesByFranchiseeNo =  (RegionId,FranchiseeNo) => {
-
-    return new Promise((resolve, reject) => {
-        axios_instance.get(`${BASE_MONGO_API_URL}/v1/FinderFee/finderfeesByFranchiseeNo?RegionId=${RegionId}&FranchiseeNo=${FranchiseeNo}`)
-            .then( res => {
-                if(res.status===200) {
-                    resolve(res.data);
-                }
-                else if(res.status!==200){
-                    reject(res.data);
-                }
-            })
-            .catch(error=>{
-                resolve(error);
-            })
-        });
-    };
-
-
-
-    /**
-     * @method GET
-     *
      * @param regionId
      * @param year
      * @param month
