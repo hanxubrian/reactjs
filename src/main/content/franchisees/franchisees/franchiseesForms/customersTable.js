@@ -187,13 +187,15 @@ const styles = theme => ({
         '& thead tr th': {
             color: 'black!important',
             fontWeight: 700,
-            fontSize: 14,
-            padding: "4px 24px",
-            width: 180
+            fontSize: 13,
+            height: 40,
+            padding: "4px 12px",
+            width: 'auto'
         },
         '& tbody tr td': {
-            padding: "4px 24px",
-            width: 180
+            padding: "2px 12px",
+            width: 'auto',
+            fontSize: 12
         },
         documentuploadHeadRoot: {
             backgroundColor: 'lightgray',
@@ -203,10 +205,13 @@ const styles = theme => ({
         padding: "6px 24px 6px 12px!important"
     },
     table: {
-        minWidth: 1020
+        minWidth: 1020,
+        overflow: 'auto',
+        maxWidth: "100%",
+        width: "100%"
     },
     tableWrapper: {
-        overflowX: 'auto'
+        overflow: 'auto'
     },
     lineButton: {
         width: 32,
@@ -294,7 +299,19 @@ class CustomersTable extends React.Component {
                 id: 'cus_addr',
                 numeric: false,
                 disablePadding: false,
-                label: 'Customer Address'
+                label: 'Address'
+            },
+            {
+                id: 'cus_city',
+                numeric: false,
+                disablePadding: false,
+                label: 'City'
+            },
+            {
+                id: 'cus_zip',
+                numeric: false,
+                disablePadding: false,
+                label: 'Zip'
             },
             {
                 id: 'cont_bill',
@@ -329,16 +346,22 @@ class CustomersTable extends React.Component {
                                 .map((n,index) => {
                                             return (
                                                 <TableRow hover key={index} >
-                                                    <TableCell component="td" scope="row" style={{width:80}} >
+                                                    <TableCell style={{width: 150}}>
                                                         {n.cust_no}
-                                                    </TableCell >
-                                                    <TableCell style={{width:350}}>
+                                                    </TableCell>
+                                                    <TableCell style={{width: 450}}>
                                                         {n.cus_name}
                                                     </TableCell>
-                                                    <TableCell style={{width:350}}>
+                                                    <TableCell style={{width: 450}}>
                                                         {n.cus_addr}
                                                     </TableCell>
-                                                    <TableCell style={{width:200}}>
+                                                    <TableCell >
+                                                        {n.cus_city}
+                                                    </TableCell>
+                                                    <TableCell style={{width: 280}}>
+                                                        {n.cus_zip}
+                                                    </TableCell>
+                                                    <TableCell style={{width: 280}}>
                                                         {n.cont_bill}
                                                     </TableCell>                                               
                                                     <TableCell>
