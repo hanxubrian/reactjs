@@ -1147,7 +1147,7 @@ class ServiceAgreementPage extends React.Component {
 							</GridItem>
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								{this.state.contract_lenght === 0 && <TextField
+								{[0, 2].indexOf(this.state.contract_lenght) > -1 && <TextField
 									id="cont_bill"
 									label="Monthly Contract Amount"
 									required
