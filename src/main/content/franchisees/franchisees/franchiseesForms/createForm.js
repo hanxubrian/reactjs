@@ -66,7 +66,7 @@ const styles = theme => ({
 
 
 function getSteps() {
-    return ["Company Information", "Plan", "Document"];
+    return ["Company Information", "Plan", "Document","Customer"];
 }
 
 function getStepContent(franchiseeForm, step) {
@@ -609,6 +609,12 @@ function getStepContent(franchiseeForm, step) {
                     </div>
                 </Fragment>
             );
+        case 3:
+            return(
+                <Fragment>
+
+                </Fragment>
+            ); 
         default:
             return 'Unknown step';
     }
@@ -949,6 +955,7 @@ class FranchiseesCreateForm extends Component {
                         <Tab label="Company Information" />
                         <Tab label="Plan" />
                         <Tab label="Document" />
+                        <Tab label="Customer" />
                     </Tabs>
                 </AppBar>
                 <div
