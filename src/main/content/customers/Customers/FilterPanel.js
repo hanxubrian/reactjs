@@ -3,7 +3,7 @@ import _ from "lodash";
 import { withRouter } from 'react-router-dom';
 import Geocode from "react-geocode";
 
-import { Paper, withStyles, Checkbox, TextField, Divider, Button, IconButton, Snackbar, SnackbarContent, } from '@material-ui/core';
+import { Paper, withStyles, Checkbox, TextField, Divider, Button, IconButton, Snackbar, SnackbarContent, Select } from '@material-ui/core';
 
 import keycode from 'keycode';
 
@@ -574,9 +574,9 @@ class FilterPanel extends Component {
 		// 	})
 		// this.onLocationFilter("Location", nextProps.locationFilterValue.id)
 		// }
-		if (nextProps.activeCustomer && nextProps.activeCustomer.Data &&
-			this.props.activeCustomer && this.props.activeCustomer.Data &&
-			!_.isEqual(nextProps.activeCustomer.Data, this.props.activeCustomer.Data)) {
+		// if (nextProps.activeCustomer && nextProps.activeCustomer.Data && !_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
+		if (nextProps.activeCustomer && nextProps.activeCustomer.Data && nextProps.activeCustomer !== this.props.activeCustomer) {
+			console.log('componentWillReceiveProps-filterpanel', nextProps.activeCustomer, this.props.activeCustomer)
 			const {
 				cust_no, cus_name, cus_addr, cus_city, cus_state, cus_zip,
 				cus_phone,
@@ -1118,7 +1118,7 @@ class FilterPanel extends Component {
 								<TextField
 									id="cus_city"
 									label="City *"
-									className={classNames(classes.textField, 'mr-6')}
+									className={classNames(classes.textField, 'pr-12')}
 									value={this.state.cus_city || ''}
 									onChange={this.handleChangeCustomerInfoProps('cus_city')}
 									InputLabelProps={{ shrink: true }}
@@ -1126,31 +1126,28 @@ class FilterPanel extends Component {
 									// variant="outlined"
 									style={{ width: '55%' }}
 								/>
-
-
-								<TextField
-									id="cus_state"
-									label="State *"
-									select
-									className={classNames(classes.textField, 'mr-6 ml-6')}
-									value={this.state.cus_state || ''}
-									onChange={this.handleChangeCustomerInfoProps('cus_state')}
-									InputLabelProps={{ shrink: true }}
-									margin="dense"
-									// variant="outlined"
-									style={{ width: '20%' }}
-								>
-									{stateNames.map((option, index) => (
-										<MenuItem key={index} value={option.Value}>
-											{option.Value}
-										</MenuItem>
-									))}
-								</TextField>
-
+								<FormControl className={classNames(classes.formControl, 'pr-12')} style={{ marginTop: 5, width: '20%' }}>
+									<InputLabel shrink htmlFor="cus_state">State</InputLabel>
+									<Select
+										native
+										value={this.state.cus_state || ''}
+										onChange={this.handleChangeCustomerInfoProps('cus_state')}
+										inputProps={{
+											name: 'cus_state',
+											id: 'cus_state',
+										}}
+									>
+										{stateNames.map((option, index) => (
+											<option key={index} value={option.Value}>
+												{option.Value}
+											</option>
+										))}
+									</Select>
+								</FormControl>
 								<TextField
 									id="cus_zip"
 									label="Zip *"
-									className={classNames(classes.textField, 'ml-6')}
+									className={classNames(classes.textField)}
 									value={this.state.cus_zip || ''}
 									onChange={this.handleChangeCustomerInfoProps('cus_zip')}
 									InputLabelProps={{ shrink: true }}
@@ -1235,42 +1232,40 @@ class FilterPanel extends Component {
 							</GridItem>
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row mt-24">
-								{this.props.accountTypesGroups !== null && (
-									<TextField
-										id="AccountTypeGroup"
-										label="Account Type Group"
-										select
-										className={classNames(classes.textField, 'mr-6')}
-										value={this.state.accounttype_groupid || 0}
-										onChange={this.handleChangeCustomerInfoProps('accounttype_groupid')}
-										margin="dense"
-										// variant="outlined"
-										fullWidth
-									// style={{ minWidth: "100px", width: "30%" }}
+								{this.props.accountTypesGroups &&
+									<FormControl className={classNames(classes.formControl, 'pr-12')} style={{ marginTop: 5 }} fullWidth>
+										<InputLabel shrink htmlFor="accounttype_groupid">Account Type Group</InputLabel>
+										<Select
+											native
+											value={this.state.accounttype_groupid || ''}
+											onChange={this.handleChangeCustomerInfoProps('accounttype_groupid')}
+											inputProps={{
+												name: 'accounttype_groupid',
+												id: 'accounttype_groupid',
+											}}
+										>
+											{this.props.accountTypesGroups.Data.map((x, index) => (
+												<option key={index} value={x.GroupId}>{x.name}</option>
+											))}
+										</Select>
+									</FormControl>
+								}
+								<FormControl className={classNames(classes.formControl)} style={{ marginTop: 5 }} fullWidth>
+									<InputLabel shrink htmlFor="account_typeid">Account Type</InputLabel>
+									<Select
+										native
+										value={this.state.account_typeid || ''}
+										onChange={this.handleChangeCustomerInfoProps('account_typeid')}
+										inputProps={{
+											name: 'account_typeid',
+											id: 'account_typeid',
+										}}
 									>
-										{this.props.accountTypesGroups.Data.map((x, index) => (
-											<MenuItem key={index} value={x.GroupId}>{x.name}</MenuItem>
+										{accountTypeTexts.map((x, index) => (
+											<option key={index} value={x.AccountTypeId}>{x.name}</option>
 										))}
-									</TextField>
-								)}
-								<TextField
-									id="AccountType"
-									label="Account Type *"
-									select
-									className={classNames(classes.textField, 'ml-6')}
-									value={this.state.account_typeid || ''}
-									onChange={this.handleChangeCustomerInfoProps('account_typeid')}
-									margin="dense"
-									// variant="outlined"
-									fullWidth
-								>
-									{/* <MenuItem value="1">TBD</MenuItem> */}
-									{accountTypeTexts.map((x, index) => (
-										<MenuItem key={index} value={x.AccountTypeId}>{x.name}</MenuItem>
-									))}
-
-
-								</TextField>
+									</Select>
+								</FormControl>
 							</GridItem>
 
 							{/* <GridItem xs={12} sm={12} md={12} className="flex flex-col">

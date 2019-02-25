@@ -1089,25 +1089,22 @@ class ServiceAgreementPage extends React.Component {
 					<>
 						<GridContainer style={{ alignItems: 'center' }} className={classNames(classes.formControl)}>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row justify-between items-center">
-								<TextField
-									id="Frequency"
-									label="Type"
-									required
-									select
-									InputLabelProps={{
-										shrink: true
-									}}
-									className={classNames(classes.textField, "mr-6")}
-									value={this.state.contract_lenght || ''}
-									onChange={this.handleChangeCustomerInfoProps('contract_lenght')}
-									margin="dense"
-									// variant="outlined"
-									style={{ minWidth: "100px", width: "30%" }}
-								>
-									{["Recurring", "One-Time", "Variable"].map((x, index) => (
-										<MenuItem key={index} value={index + 1}>{x}</MenuItem>
-									))}
-								</TextField>
+								<FormControl className={classNames(classes.formControl)} style={{ marginTop: 5, minWidth: "100px", width: "30%" }}>
+									<InputLabel shrink htmlFor="contract_lenght">Type</InputLabel>
+									<Select
+										native
+										value={this.state.contract_lenght || ''}
+										onChange={this.handleChangeCustomerInfoProps('contract_lenght')}
+										inputProps={{
+											name: 'contract_lenght',
+											id: 'contract_lenght',
+										}}
+									>
+										{["Recurring", "One-Time", "Variable"].map((x, index) => (
+											<option key={index} value={index + 1}>{x}</option>
+										))}
+									</Select>
+								</FormControl>
 
 								{customerForm.props.open && customerForm.type === "edit" && (this.props.activeCustomer && this.props.activeCustomer.Data) &&
 									<div>
@@ -1210,7 +1207,7 @@ class ServiceAgreementPage extends React.Component {
 									))}
 								</TextField> */}
 
-								<TextField
+								{/* <TextField
 									id="AcctExec"
 									label="Acct Exec"
 									select
@@ -1225,7 +1222,23 @@ class ServiceAgreementPage extends React.Component {
 									{execTitles.map((x, index) =>
 										(<MenuItem key={index} value={x.UserId}>{x.FullName}</MenuItem>)
 									)}
-								</TextField>
+								</TextField> */}
+								<FormControl className={classNames(classes.formControl)} style={{ marginTop: 5, minWidth: 200, width: "30%" }}>
+									<InputLabel shrink htmlFor="slsmn_no">Account Executive</InputLabel>
+									<Select
+										native
+										value={this.state.slsmn_no || ''}
+										onChange={this.handleChangeCustomerInfoProps('slsmn_no')}
+										inputProps={{
+											name: 'slsmn_no',
+											id: 'slsmn_no',
+										}}
+									>
+										{execTitles.map((x, index) => (
+											<option key={index} value={x.UserId}>{x.FullName}</option>
+										))}
+									</Select>
+								</FormControl>
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
 								<TextField
@@ -1379,8 +1392,8 @@ class ServiceAgreementPage extends React.Component {
 										))}
 									</TextField> */}
 
-									<FormControl className={classNames(classes.formControl, 'pr-12')} style={{ marginTop: 5 }}>
-										<InputLabel htmlFor="bill_state">State</InputLabel>
+									<FormControl className={classNames(classes.formControl, 'pr-12')} style={{ marginTop: 5, width: '7%' }}>
+										<InputLabel shrink htmlFor="bill_state">State</InputLabel>
 										<Select
 											native
 											value={this.state.bill_state || ''}
@@ -1513,7 +1526,7 @@ class ServiceAgreementPage extends React.Component {
 										/>
 									</div>
 
-									<TextField
+									{/* <TextField
 										id="Term"
 										label="Term"
 										select
@@ -1530,25 +1543,59 @@ class ServiceAgreementPage extends React.Component {
 										{["Due Upon Receipt", "EOM", "Net 30", "Net 40", "Net 45", "Net 60"].map((x, index) => (
 											<MenuItem key={index} value={index + 1}>{x}</MenuItem>
 										))}
-									</TextField>
+									</TextField> */}
+
+									<FormControl className={classNames(classes.formControl)} style={{ marginTop: 5 }} fullWidth>
+										<InputLabel shrink htmlFor="billing_term">Term</InputLabel>
+										<Select
+											native
+											value={this.state.billing_term || ''}
+											onChange={this.handleChangeCustomerInfoProps('billing_term')}
+											inputProps={{
+												name: 'billing_term',
+												id: 'billing_term',
+											}}
+										>
+											{["Due Upon Receipt", "EOM", "Net 30", "Net 40", "Net 45", "Net 60"].map((x, index) => (
+												<option key={index} value={index + 1}>{x}</option>
+											))}
+										</Select>
+									</FormControl>
 
 									{this.props.customerForm.type === "edit" &&
-										<TextField
-											id="ARStatus"
-											label="AR Status"
-											select
-											className={classNames(classes.textField, "ml-6")}
-											InputLabelProps={{ shrink: true }}
-											value={this.state.ARStatus || 'Normal'}
-											onChange={this.handleChange('ARStatus')}
-											margin="dense"
-											// variant="outlined"
-											style={{ width: '100%' }}
-										>
-											{["Bankruptcy", "In Litigation", "Normal", "Referred to Collections", "Slow Pay", "Uncollectable", "National Accoints", "AutoPay", "TEST"].map((x, index) => (
-												<MenuItem key={index} value={x}>{x}</MenuItem>
-											))}
-										</TextField>}
+										// <TextField
+										// 	id="ARStatus"
+										// 	label="AR Status"
+										// 	select
+										// 	className={classNames(classes.textField, "ml-6")}
+										// 	InputLabelProps={{ shrink: true }}
+										// 	value={this.state.ARStatus || 'Normal'}
+										// 	onChange={this.handleChange('ARStatus')}
+										// 	margin="dense"
+										// 	// variant="outlined"
+										// 	style={{ width: '100%' }}
+										// >
+										// 	{["Bankruptcy", "In Litigation", "Normal", "Referred to Collections", "Slow Pay", "Uncollectable", "National Accoints", "AutoPay", "TEST"].map((x, index) => (
+										// 		<MenuItem key={index} value={x}>{x}</MenuItem>
+										// 	))}
+										// </TextField>
+										<FormControl className={classNames(classes.formControl)} style={{ marginTop: 5 }} fullWidth>
+											<InputLabel shrink htmlFor="arstatus">AR Status</InputLabel>
+											<Select
+												native
+												value={this.state.arstatus || 'Normal'}
+												onChange={this.handleChangeCustomerInfoProps('arstatus')}
+												inputProps={{
+													name: 'arstatus',
+													id: 'arstatus',
+												}}
+											>
+												{["Bankruptcy", "In Litigation", "Normal", "Referred to Collections", "Slow Pay", "Uncollectable", "National Accoints", "AutoPay", "TEST"].map((x, index) => (
+													<option key={index} value={x}>{x}</option>
+												))}
+											</Select>
+										</FormControl>
+									}
 
 
 								</div>
