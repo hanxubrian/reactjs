@@ -1135,7 +1135,7 @@ class ServiceAgreementPage extends React.Component {
 											>Cancel Contract<Icon fontSize="small">keyboard_arrow_right</Icon>
 											</Button>}
 
-										{['C', 'S'].indexOf(this.props.activeCustomer.Data.flag) > -1 &&
+										{['S'].indexOf(this.props.activeCustomer.Data.flag) > -1 &&
 											<Button
 												variant="contained"
 												color="primary"
