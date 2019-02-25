@@ -33,6 +33,7 @@ import moment from "moment";
 import FranchiseesMaintenanceTable from "./maintenanceTableLine";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import FranchiseesDocumentUploadTable from "./documentUploadTable";
+import CustomersTable from "./customersTable";
 import InputAdornment from '@material-ui/core/InputAdornment';
 
 
@@ -612,7 +613,7 @@ function getStepContent(franchiseeForm, step) {
         case 3:
             return(
                 <Fragment>
-
+                   <CustomersTable/>
                 </Fragment>
             ); 
         default:
