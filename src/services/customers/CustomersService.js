@@ -478,18 +478,9 @@ fullbill: 0
 				})
 		});
 	}
-
-    /**
-	 * get computed finders fee
-     * @param regionId
-     * @param params
-     * @returns {Promise<any>}
-     * @constructor
-     */
-	getComputedFinderFee(regionId, params) {
-		console.log('params=', params);
+	getFinderFeeTypes() {
 		return new Promise((resolve, reject) => {
-			axios_instance.post(`${BASE_MONGO_API_URL}/v1/FinderFee/GetComputedFinderFee`, params)
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/GetFinderFeeTypes`)
 				.then(res => {
 					if (res.status === 200) {
 						resolve(res.data);
@@ -503,10 +494,41 @@ fullbill: 0
 				})
 		});
 	}
-
-	getFinderFeeTypes() {
+	getComputedFinderFee(data) {
+		// const data = {
+		// 	"RegionId": 1,
+		// 	"CalculationMethodCode": "sample string 2",
+		// 	"FranchiseeNum": "sample string 3",
+		// 	"CustomerNum": "sample string 4",
+		// 	"AmountPayableOn": 5.1,
+		// 	"DownPaymentPercent": 6.1,
+		// 	"DownPaymentAmount": 7.1,
+		// 	"MonthlyPaymentPercent": 8.1,
+		// 	"MonthlyPaymentAmount": 9.1,
+		// 	"NumberOfPayments": 10,
+		// 	"AmountFinanced": 11.1,
+		// 	"FinderFeeTotal": 12.1,
+		// 	"Balance": 13.1,
+		// 	"MultiTenantOccupancy": 14.1
+		// }
 		return new Promise((resolve, reject) => {
-			axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/GetFinderFeeTypes`)
+			axios_instance.post(`${BASE_MONGO_API_URL}/v1/FinderFee/GetComputedFinderFee`, data)
+				.then(res => {
+					if (res.status === 200) {
+						resolve(res.data);
+					}
+					else if (res.status !== 200) {
+						reject(res.data);
+					}
+				})
+				.catch(error => {
+					resolve(error);
+				})
+		});
+	}
+	getFinderFee(RegionId, Id) {
+		return new Promise((resolve, reject) => {
+			axios_instance.get(`${BASE_MONGO_API_URL}/v1/FinderFee/${Id}?RegionId=${RegionId}`)
 				.then(res => {
 					if (res.status === 200) {
 						resolve(res.data);

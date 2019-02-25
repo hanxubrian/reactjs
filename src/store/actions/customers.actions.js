@@ -93,6 +93,9 @@ export const SAVE_SUSPEND_CONTRACT = "[CUSTOMERS APP] SAVE_SUSPEND_CONTRACT";
 export const STOP_FINDERS_FEES = "[CUSTOMERS APP] STOP_FINDERS_FEES";
 export const STOP_FINDERS_FEES_START = "[CUSTOMERS APP] STOP_FINDERS_FEES_START";
 
+export const GET_COMPUTED_FINDER_FEE = "[CUSTOMERS APP] GET_COMPUTED_FINDER_FEE";
+export const GET_FINDER_FEE = "[CUSTOMERS APP] GET_FINDER_FEE";
+
 export const OPEN_EDIT_CUSTOMER_SERVICE_FORM = "[CUSTOMERS-service APP] OPEN_EDIT_CUSTOMER_SERVICE_FORM";
 export const CLOSE_CUSTOMER_SERVICE_FORM = "[CUSTOMERS-service APP] CLOSE_CUSTOMER_SERVICE_FORM";
 
@@ -671,30 +674,34 @@ export function getIncreaseDecrease(regionId, params) {
 	}
 }
 
-/**
- * get computed finders fee
- * @param params, JSON object
- * @returns {Function}
- * @constructor
- */
-export function getComputedFinderFee(params) {
-	return (dispatch) => {
-		(async () => {
-			let res = await customersService.getComputedFinderFee(params);
-			dispatch({
-				type: GET_COMPUTED_FINDERS_FEE,
-				payload: res.Data
-			});
-		})();
-	}
-}
-
 export function getFinderFeeTypes() {
 	return (dispatch) => {
 		(async () => {
 			let res = await customersService.getFinderFeeTypes();
 			dispatch({
 				type: GET_FINDERS_FEE_TYPES,
+				payload: res.Data
+			});
+		})();
+	}
+}
+export function getComputedFinderFee(data) {
+	return (dispatch) => {
+		(async () => {
+			let res = await customersService.getComputedFinderFee(data);
+			dispatch({
+				type: GET_COMPUTED_FINDER_FEE,
+				payload: res.Data
+			});
+		})();
+	}
+}
+export function getFinderFee(RegionId, Id) {
+	return (dispatch) => {
+		(async () => {
+			let res = await customersService.getFinderFee(RegionId, Id);
+			dispatch({
+				type: GET_FINDER_FEE,
 				payload: res.Data
 			});
 		})();

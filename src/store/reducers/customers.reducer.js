@@ -244,7 +244,7 @@ const initialState = {
 	serviceAgreementStep: 0,
 	increase_decrease: null,
 	findersFeeComputed: null,
-	findersFeeParams: null,
+	findersFeeParams: {},
 	findersFeeTypes: null,
 	assignedFranchisees: null,
 	activeCustomerFranchisees: null,
@@ -256,6 +256,9 @@ const initialState = {
 
 	cancelReasons: [],
 	suspendReasons: [],
+
+	computedFinderFee: {},
+	finderFee: {},
 };
 
 
@@ -875,6 +878,22 @@ const customers = function (state = initialState, action) {
 				...state,
 				activeCustomer: action.payload,
 				bGetCustomerStart: false,
+			};
+		case Actions.GET_COMPUTED_FINDER_FEE:
+			return {
+				...state,
+				computedFinderFee: {
+					...state.computedFinderFee,
+					[action.payload.FranchiseeNum]: action.payload
+				}
+			};
+		case Actions.GET_FINDER_FEE:
+			return {
+				...state,
+				finderFee: {
+					...state.finderFee,
+					[action.payload._id]: action.payload
+				}
 			};
 		default:
 			{

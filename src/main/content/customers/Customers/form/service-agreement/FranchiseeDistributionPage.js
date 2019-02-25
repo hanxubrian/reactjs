@@ -432,15 +432,15 @@ class FranchiseeDistributionPage extends React.Component {
 			this.setState({ NewAmount: this.props.NewAmount });
 	}
 	componentDidMount() {
-		this.initCustomerInfo();
+		// this.initCustomerInfo();
 
-		fetch(`https://apifmsplusplus_mongo.jkdev.com/v1/Lists/reasons?type=increase`)
-			.then(response => response.json())
-			.then(data => this.setState({ increaseReasons: data.Data }));
+		// fetch(`https://apifmsplusplus_mongo.jkdev.com/v1/Lists/reasons?type=increase`)
+		// 	.then(response => response.json())
+		// 	.then(data => this.setState({ increaseReasons: data.Data }));
 
-		fetch(`https://apifmsplusplus_mongo.jkdev.com/v1/Lists/reasons?type=decrease`)
-			.then(response => response.json())
-			.then(data => this.setState({ decreaseReasons: data.Data }));
+		// fetch(`https://apifmsplusplus_mongo.jkdev.com/v1/Lists/reasons?type=decrease`)
+		// 	.then(response => response.json())
+		// 	.then(data => this.setState({ decreaseReasons: data.Data }));
 
 		// this.setState({
 		// 	paymentDlgPayloads: this.props.paymentDlgPayloads,
@@ -484,6 +484,13 @@ class FranchiseeDistributionPage extends React.Component {
 			FranchiseeNum: activeCustomer.Data.AssignedFranchisees.length > 0 ? activeCustomer.Data.AssignedFranchisees[0].FranchiseeNumber : '',
 			CustomerNum: activeCustomer.Data.cust_no, RegionId: this.props.regionId, CalculationMethodCode: 'S'
 		});
+
+		activeCustomer.Data.AssignedFranchisees.forEach((x, index) => {
+			if (x.FinderFeeId) {
+				this.props.getFinderFee(this.props.regionId, x.FinderFeeId)
+			}
+		})
+
 	};
 
 	handleClose = () => {
@@ -1192,6 +1199,18 @@ class FranchiseeDistributionPage extends React.Component {
 									</div>
 								))
 							}
+
+							<div className='flex'>
+								<Typography variant='body2'><strong>Finders Fee:</strong></Typography>
+
+								{this.props.finderFee[x.FinderFeeId] && <>
+									<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].calc_fact}</span>
+									<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_desc}</span>
+									<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_pybill}</span>
+									<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_tot}</span>
+									<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_balance}</span>
+								</>}
+							</div>
 						</React.Fragment>
 
 					))}
@@ -1212,6 +1231,7 @@ class FranchiseeDistributionPage extends React.Component {
 		} = this.state;
 		return (
 			<Paper className={classNames("flex flex-col h-full p-6 w-full")} style={{ height: "auto", overflowX: "scroll" }}>
+				<Typography variant='subtitle1'><strong>Franchisees</strong></Typography>
 				<div className="w-full h-full">
 					{/* grid area */}
 					<Grid rows={rows} columns={columns}>
@@ -1509,6 +1529,10 @@ function mapDispatchToProps(dispatch) {
 		updateFindersFeeParams: Actions.updateFindersFeeParams,
 		updateAssignedFranchisee: Actions.updateAssignedFranchisee,
 		updateActiveCustomerAssignedFranchisees: Actions.updateActiveCustomerAssignedFranchisees,
+
+		getComputedFinderFee: Actions.getComputedFinderFee,
+		getFinderFee: Actions.getFinderFee,
+
 	}, dispatch);
 }
 
@@ -1543,6 +1567,9 @@ function mapStateToProps({ customers, accountReceivablePayments, auth, franchise
 		franchisees: franchisees.franchiseesDB,
 		NewAmount: customers.NewAmount,
 		assignedFranchisees: customers.assignedFranchisees,
+		computedFinderFee: customers.computedFinderFee,
+		finderFee: customers.finderFee,
+
 	}
 }
 
