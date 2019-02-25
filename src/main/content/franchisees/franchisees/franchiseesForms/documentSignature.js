@@ -167,7 +167,7 @@ class DocumentSignatureDialog extends React.Component {
                         <DialogTitle id="form-dialog-title" onClose={this.handleClose }>
                             <h2 className={classes.dialogH2}>
                                 <AssignmentTurnedIn  className={classNames(classes.leftIcon)} />
-                                Signature Documents
+                                Document Signature
                             </h2>
                         </DialogTitle>
                         <DialogContent>
@@ -181,14 +181,17 @@ class DocumentSignatureDialog extends React.Component {
                                             onChange={this.handleRadioChange}
                                             row
                                         >
-                                            <FormControlLabel value="docuSign" labelPlacement="end" control={<Radio />} label="Document Sign" />
+                                            <FormControlLabel value="docuSign" labelPlacement="end" control={<Radio />} label="DocuSign" />
                                             <FormControlLabel labelPlacement="end" value="email" control={<Radio />} label="Email" />
                                     </RadioGroup>
                                 </GridItem>
                                 <GridItem xs={12} sm={12} md={12}  className="flex flex-row justify-between">
-                                    <Typography style={{fontSize:"16px"}} className="justify-start">From : {this.state.regionName} </Typography>   
+                                    <Typography style={{fontSize:"16px"}} className="justify-start">From : {this.props.Username}</Typography>   
                                 </GridItem>
-                                <GridItem xs={12} sm={12} md={12}  className="flex flex-row justify-between mt-16">
+                                <GridItem xs={12} sm={12} md={12}  className="flex flex-row justify-between mt-12">
+                                    <Typography style={{fontSize:"16px"}} className="justify-start">Department : {this.props.DepartmentId}</Typography>   
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={12}  className="flex flex-row justify-between mt-24">
                                     <TextField
                                         id="franchisee-email"
                                         label="Franchisee Email"
@@ -259,7 +262,9 @@ function mapStateToProps({franchisees, auth}) {
     return {
         docSendModal: franchisees.docSendModal,
         regionId: auth.login.defaultRegionId,
-        regions: auth.login.all_regions
+        regions: auth.login.all_regions,
+        Username: auth.login.Username,
+        DepartmentId: auth.login.DepartmentId
     }
 }
 
