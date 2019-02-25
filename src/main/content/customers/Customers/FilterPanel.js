@@ -1081,13 +1081,12 @@ class FilterPanel extends Component {
 									id="cust_no"
 									label="#"
 									className={classes.textField}
-									value={this.state.cust_no || ''}
+									value={this.props.customerForm.type === 'new' ? 'PENDING' : (this.state.cust_no || '')}
 									onChange={this.handleChangeCustomerInfoProps('cust_no')}
 									InputLabelProps={{ shrink: true }}
 									InputProps={{ readOnly: true }}
 									margin="dense"
 									// variant="outlined"
-									autoFocus
 									style={{ width: '30%' }} />
 							</GridItem>
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
