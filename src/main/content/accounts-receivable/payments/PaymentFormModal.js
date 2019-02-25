@@ -402,12 +402,11 @@ class PaymentFormModal extends React.Component {
 			],
 			columnsForReactDataGridCredit: [
 				{ key: "InvoiceNo", name: "Invoice No", editable: false },
-				{ key: "InvoiceDate", name: "Invoice Date", editable: false, formatter: DateFormatter },
 				{ key: "DueDate", name: "Due Date", editable: false, formatter: DateFormatter },
-				{ key: "DaysPastDue", name: "Days Past Due", editable: false, sortDescendingFirst: true },
-				{ key: "InvoiceAmount", name: "Invoice Amount", editable: false, formatter: CurrencyFormatter },
 				{ key: "InvoiceBalance", name: "Invoice Balance", editable: false, formatter: CurrencyFormatter },
+				{ key: "InvoiceAmount", name: "Invoice Amount", editable: false, formatter: CurrencyFormatter },
 				{ key: "InvoiceTax", name: "Invoice Tax", editable: false, formatter: CurrencyFormatter },
+				{ key: "InvoiceTotal", name: "Invoice Total", editable: false, formatter: CurrencyFormatter },
 				{ key: "PaymentAmount", name: "Payment to Apply", editable: true, formatter: CurrencyFormatter }
 			],
 			rows: [],
