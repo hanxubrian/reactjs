@@ -66,7 +66,7 @@ const styles = theme => ({
 
 
 function getSteps() {
-    return ["Company Information", "Plan", "Document","Customer"];
+    return ["Company Information", "Plan", "Documents and Customers","Customer"];
 }
 
 function getStepContent(franchiseeForm, step) {
@@ -954,7 +954,7 @@ class FranchiseesCreateForm extends Component {
                     >
                         <Tab label="Company Information" />
                         <Tab label="Plan" />
-                        <Tab label="Document" />
+                        <Tab label="Documents and Customers" />
                         <Tab label="Customer" />
                     </Tabs>
                 </AppBar>
