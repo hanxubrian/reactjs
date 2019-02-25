@@ -101,7 +101,7 @@ const chargebacks = function (state = initialState, action) {
 					}
 				};
 			}
-		case Actions.APPLY_SEARCH_TEXT_ARP: {
+		case Actions.APPLY_SEARCH_TEXT_CHARGEBACKS: {
 			return {
 				...state, searchText: action.payload
 			}
