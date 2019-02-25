@@ -399,6 +399,26 @@ class PaymentsListContent extends Component {
 					groupingEnabled: false,
 				},
 				{
+					title: "Invoice Tax",
+					name: "InvoiceTax",
+					columnName: "InvoiceTax",
+					align: 'right',
+					width: 150,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "Invoice Total",
+					name: "InvoiceTotal",
+					columnName: "InvoiceTotal",
+					align: 'right',
+					width: 150,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
 					title: "Invoice Balance",
 					name: "InvoiceBalance",
 					columnName: "InvoiceBalance",
@@ -408,16 +428,6 @@ class PaymentsListContent extends Component {
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
-				// {
-				// 	title: "OverPayment",
-				// 	name: "OverPayment",
-				// 	columnName: "OverPayment",
-				// 	align: 'right',
-				// 	width: 150,
-				// 	sortingEnabled: true,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: false,
-				// },
 				{
 					title: "Invoice Date",
 					name: "InvoiceDate",
@@ -503,6 +513,26 @@ class PaymentsListContent extends Component {
 					groupingEnabled: false,
 				},
 				{
+					title: "Invoice Tax",
+					name: "InvoiceTax",
+					columnName: "InvoiceTax",
+					align: 'right',
+					width: 150,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
+					title: "Invoice Total",
+					name: "InvoiceTotal",
+					columnName: "InvoiceTotal",
+					align: 'right',
+					width: 150,
+					sortingEnabled: true,
+					filteringEnabled: true,
+					groupingEnabled: false,
+				},
+				{
 					title: "Invoice Balance",
 					name: "InvoiceBalance",
 					columnName: "InvoiceBalance",
@@ -512,16 +542,6 @@ class PaymentsListContent extends Component {
 					filteringEnabled: true,
 					groupingEnabled: false,
 				},
-				// {
-				// 	title: "OverPayment",
-				// 	name: "OverPayment",
-				// 	columnName: "OverPayment",
-				// 	align: 'right',
-				// 	width: 150,
-				// 	sortingEnabled: true,
-				// 	filteringEnabled: true,
-				// 	groupingEnabled: false,
-				// },
 				{
 					title: "Invoice Date",
 					name: "InvoiceDate",
@@ -566,7 +586,9 @@ class PaymentsListContent extends Component {
 			],
 			currencyColumns: [
 				'InvoiceAmount',
+				'InvoiceTax',
 				'InvoiceBalance',
+				'InvoiceTotal',
 				// 'OverPayment',
 			],
 			phoneNumberColumns: [
@@ -1177,7 +1199,7 @@ class PaymentsListContent extends Component {
 								<IntegratedGrouping />
 							}
 
-						
+
 
 							<SearchState
 								value={searchValue}
