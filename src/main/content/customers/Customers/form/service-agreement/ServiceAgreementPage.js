@@ -1093,7 +1093,7 @@ class ServiceAgreementPage extends React.Component {
 									<InputLabel shrink htmlFor="contract_lenght">Type</InputLabel>
 									<Select
 										native
-										value={this.state.contract_lenght || ''}
+										value={(this.state.contract_lenght === undefined || this.state.contract_lenght === null) ? '' : this.state.contract_lenght}
 										onChange={this.handleChangeCustomerInfoProps('contract_lenght')}
 										inputProps={{
 											name: 'contract_lenght',
@@ -1101,7 +1101,7 @@ class ServiceAgreementPage extends React.Component {
 										}}
 									>
 										{["Recurring", "One-Time", "Variable"].map((x, index) => (
-											<option key={index} value={index + 1}>{x}</option>
+											<option key={index} value={index}>{x}</option>
 										))}
 									</Select>
 								</FormControl>
@@ -1147,7 +1147,7 @@ class ServiceAgreementPage extends React.Component {
 							</GridItem>
 
 							<GridItem xs={12} sm={12} md={12} className="flex flex-row">
-								{this.state.contract_lenght === 1 && <TextField
+								{this.state.contract_lenght === 0 && <TextField
 									id="cont_bill"
 									label="Monthly Contract Amount"
 									required
