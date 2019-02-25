@@ -343,6 +343,9 @@ class PrintChecksLayout extends Component {
     };
 
     handlePrint = async ()=>{
+        // this.props.history.push('/accounts-payable/preview-checks');
+        // return;
+
         const {selections, printChecksDB} = this.props;
         await this.setState({openPrintModal: false});
         await this.setState({completed: 0});

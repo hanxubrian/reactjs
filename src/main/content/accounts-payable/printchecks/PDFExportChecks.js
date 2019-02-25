@@ -112,7 +112,7 @@ class ExportChecks extends React.Component {
                     ref={(component) => this.pdfExportComponent = component}
                     scale={0.75}
                 >
-                    <div  style={{ width: "700px", margin: '0 auto', maxWidth: 700}} className={classNames(classes.root)}>
+                    <div  style={{ width: "700px", height: 1024, margin: '0 auto', maxWidth: 700}} className={classNames(classes.root)}>
                         {selections.map((check, index)=>{
                             let amountSum = 0;
                             let dueSum = 0;
@@ -122,7 +122,7 @@ class ExportChecks extends React.Component {
                                 dueSum+=t.NegativeDueTotal;
                             });
                             return (
-                                <div key={index} className={classNames("flex flex-col",{'page-break': index>0})}>
+                                <div key={index} className={classNames("flex flex-col h-full relative",{'page-break': index>0})}>
                                     <div className="flex flex-row relative justify-center mt-12">
                                         <div className="absolute checks-date small" style={{left: 0}}>{moment().format('MM/DD/YYYY')}</div>
                                         <Typography variant={"inherit"}>JaniKing | Franchise Management System</Typography>
@@ -186,7 +186,7 @@ class ExportChecks extends React.Component {
                                     </GridM>
                                     <br/>
                                     <br/>
-                                    <div className={classNames("flex flex-col w-full")}>
+                                    <div className={classNames("flex flex-col absolute checks")} style={{left: 0, bottom:0}}>
                                         <div className={classNames("flex flex-row w-full")}>
                                             <div style={{width: '12%'}}>
                                                 <img style={{border: '0px solid black'}}
