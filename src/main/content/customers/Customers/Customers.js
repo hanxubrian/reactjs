@@ -670,8 +670,9 @@ class Customers extends Component {
 		this.setState({ openSnack: false });
 	};
 	/////////// confirm submit & close /////////////
-	stayForOffering() {
+	handleStayForOffering = () => {
 		this.handleCloseConfirmDialog()
+		this.props.updateCustomersParameter('activeStep', 1);
 	}
 	processConfirming = () => {
 		if (this.state.tryingToSubmitWithoutOffering === true) {
@@ -871,12 +872,12 @@ class Customers extends Component {
 									aria-labelledby="alert-dialog-title"
 									aria-describedby="alert-dialog-description"
 								>
-									<DialogTitle id="alert-dialog-title">{"You are submitting customer data for approval."}</DialogTitle>
+									<DialogTitle id="alert-dialog-title">Confirm</DialogTitle>
 									<DialogContent>
 										<DialogContentText id="alert-dialog-description">Nothing offered. Are you sure to move on anyway?</DialogContentText>
 									</DialogContent>
 									<DialogActions>
-										<Button onClick={this.handleCloseConfirmDialog} color="primary" autoFocus>Stay for Offering</Button>
+										<Button onClick={this.handleStayForOffering} color="primary" autoFocus>Stay for Offering</Button>
 										<Button onClick={this.processConfirming} color="primary">Yes</Button>
 										<Button onClick={this.handleCloseConfirmDialog} color="primary">Cancel</Button>
 									</DialogActions>
@@ -1002,6 +1003,7 @@ function mapDispatchToProps(dispatch) {
 
 		createCustomer: Actions.createCustomer,
 		updateCustomer: Actions.updateCustomer,
+		updateCustomersParameter: Actions.updateCustomersParameter,
 	}, dispatch);
 }
 
