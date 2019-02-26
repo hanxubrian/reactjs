@@ -7,6 +7,7 @@ import {TerritoriesConfig} from "./regions/territories/territoriesConfig";
 import {FranchiseesConfig} from "./franchisees/franchisees/franchiseesConfig";
 import {ChargebacksConfig} from "./franchisees/chargebacks/chargebacksConfig";
 import {LeasesConfig} from "./franchisees/leases/leasesConfig";
+import {NegativeDueConfig} from "./franchisees/NegativeDues/NegativeDueConfig";
 import {EndofmonthConfig} from "./franchisees/endofmonth/endofmonthConfig";
 import {DistributionsConfig} from "./franchisees/distributions/distributionsConfig";
 import {TransactionsConfig} from "./franchisees/transactions/transactionsConfig";
@@ -48,7 +49,7 @@ export const pagesConfigs = [
     RegionsConfig,
     TerritoriesConfig,
     FranchiseesConfig,
-    ChargebacksConfig,
+    ChargebacksConfig,    
     LeasesConfig,
     EndofmonthConfig,
     DistributionsConfig,
@@ -81,5 +82,6 @@ export const pagesConfigs = [
     PaymentLockBoxReportConfig,
     SystemNotificationConfig,
     AdminConfig,
-    AdminImportConfig
+    AdminImportConfig,
+    NegativeDueConfig,
 ];
