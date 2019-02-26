@@ -1000,7 +1000,7 @@ class PaymentFormModal extends React.Component {
 									/>
 
 								</Paper>
-								{this.state.overpayment > 0 && this.state.overpayment < 0 &&
+								{(this.state.overpayment > 0 || this.state.overpayment < 0) &&
 									<span className="p-12" style={{ background: '#efad49', color: 'black', textAlign: 'right' }}><Icon fontSize={"small"} className="mr-4" style={{ verticalAlign: 'text-bottom' }}>error_outline</Icon><strong>Over Payment: $ {this.state.overpayment.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
 								}
 								{this.state.errorMsg &&
