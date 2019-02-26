@@ -595,6 +595,7 @@ class paymentsHistoryListContent extends Component {
 		this.setState({
 			isCustomerNameNoGrouping: this.props.isCustomerNameNoGrouping
 		})
+		this.changeSearchValue(this.props.searchText)
 		this.timer = null;
 	}
 	componentWillUnmount() {

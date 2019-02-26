@@ -693,6 +693,8 @@ class PaymentsListContent extends Component {
 			invoiceDetail: this.props.invoiceDetail,
 		});
 
+		this.changeSearchValue(this.props.searchText)
+
 		this.timer = null;
 	}
 
