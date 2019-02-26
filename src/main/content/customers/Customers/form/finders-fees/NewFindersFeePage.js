@@ -151,7 +151,7 @@ class NewFindersFeePage extends React.Component {
 			CalculationMethodCode,
 			FranchiseeNum,
 			CustomerNum,
-			AmountPayableOn,
+			AmountPayableOn: this.props.findersFeeParams.AmountPayableOn,
 			DownPaymentPercent,
 			DownPaymentAmount,
 			MonthlyPaymentPercent,
