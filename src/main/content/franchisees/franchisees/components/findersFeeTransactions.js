@@ -201,19 +201,22 @@ class FindersFeeTransactions extends Component {
 
     render() {
         const {classes, franchiseeReport} = this.props;
-        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].FINDER_FEES.length===0)
+        if(franchiseeReport===null || franchiseeReport!==null && franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].FinderFeePayments===null)
             return (<div/>);
 
-        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0].FINDER_FEES.map(d=>{
-            d.DESCRIPTION = FuseUtils.capital_letter(d.DESCRIPTION);
-            d.PYMNT_TOT = parseFloat(d.PYMNT_TOT);
+        let data = franchiseeReport.Data.PERIODS[0].FRANCHISEES[0].FinderFeePayments.map(d=>{
+            d.Description = FuseUtils.capital_letter(d.Description);
+            d.CUST_NO = parseFloat(d.CustomerNumber);
+            d.CUS_NAME = parseFloat(d.CustomerName);
+            d.PYMNT_NUM = parseFloat(d.PaymentNum);
+            d.PYMNT_TOT = parseFloat(d.PaymentTotal);
             return d;
         });
 
         const columns = [
             {name: "CUST_NO", title: "Customer",},
             {name: "CUS_NAME", title: "Cus. Name"},
-            {name: "DESCRIPTION", title: "Description"},
+            {name: "Description", title: "Description"},
             {name: "PYMNT_NUM", title: "Payment #"},
             {name: "PYMNT_TOT", title: "Payment Total"},
         ];
@@ -221,7 +224,7 @@ class FindersFeeTransactions extends Component {
         let  tableColumnExtensions = [
             { columnName: 'CUST_NO', width: 120, },
             { columnName: 'CUS_NAME', width: 150, },
-            { columnName: 'DESCRIPTION', width: -1, },
+            { columnName: 'Description', width: -1, },
             { columnName: 'PYMNT_NUM', width: 100},
             { columnName: 'PYMNT_TOT', width: 140,  align: 'right'},
         ];

@@ -13,6 +13,9 @@ import html2canvas from 'html2canvas';
 import {bindActionCreators} from "redux";
 import * as Actions from 'store/actions';
 
+//3rd parties
+import moment from 'moment';
+
 //Child components
 import SummaryTransactons from "./components/summaryTransactions";
 import CustomerTransactions from './components/customerTransactions'
@@ -226,8 +229,8 @@ class Report extends Component {
 
                 </td>
                 <td align="center">
-                    <Typography color="inherit">Date: 11/30/2018 </Typography>
-                    <Typography>Time: 11:58:57</Typography>
+                    <Typography color="inherit">Date: {moment().format('MM/DD/YYYY')} </Typography>
+                    <Typography>Time: {moment().format("HH:mm:ss")}</Typography>
                     <Typography><br/></Typography>
                 </td>
             </tr>
@@ -244,7 +247,7 @@ class Report extends Component {
                 </div>
             );
 
-        const {DLR_CODE, SUMMARY_PAGE}  = franchiseeReport.Data.PERIODS[0].FRANCHISEE[0];
+        const {FranchiseeNumber, SummaryPages}  = franchiseeReport.Data.PERIODS[0].FRANCHISEES[0];
 
         return (
             <div className={classNames(classes.root, "p-0 sm:p-64  whole print:p-0")} id ="wholediv">
@@ -275,7 +278,7 @@ class Report extends Component {
                                         </tr>
                                         <tr>
                                             <td className="pr-16">
-                                                <Typography color="inherit">{DLR_CODE}</Typography>
+                                                <Typography color="inherit">{FranchiseeNumber}</Typography>
                                                 <Typography color="inherit"><br/></Typography>
                                                 <Typography color="inherit"><br/></Typography>
                                             </td>
@@ -285,9 +288,9 @@ class Report extends Component {
                                                 <Typography color="inherit"><br/></Typography>
                                             </td>
                                             <td className="text-left">
-                                                <Typography color="inherit">{SUMMARY_PAGE[0].FRAN_NAME}</Typography>
-                                                <Typography color="inherit">{SUMMARY_PAGE[0].FRAN_ADDRESS}</Typography>
-                                                <Typography color="inherit">{SUMMARY_PAGE[0].FRAN_CITY} {SUMMARY_PAGE[0].FRAN_STATE},{SUMMARY_PAGE[0].FRAN_ZIP}</Typography>
+                                                <Typography color="inherit">{SummaryPages[0].FranName}</Typography>
+                                                <Typography color="inherit">{SummaryPages[0].FranAddress}</Typography>
+                                                <Typography color="inherit">{SummaryPages[0].FranCity} {SummaryPages[0].FranState},{SummaryPages[0].FranZip}</Typography>
                                             </td>
                                             <td className="text-left" width='200'>
                                                 <Typography color="inherit"><br/></Typography>
@@ -295,9 +298,9 @@ class Report extends Component {
                                                 <Typography color="inherit"><br/></Typography>
                                             </td>
                                             <td className="text-left">
-                                                <Typography color="inherit">Plan Type: {SUMMARY_PAGE[0].PLAN_TYPE}</Typography>
-                                                <Typography color="inherit">Sign Date: {SUMMARY_PAGE[0].DATE_SIGN}</Typography>
-                                                {/* <Typography color="inherit">Plan Type: {SUMMARY_PAGE[0].CONTACT}</Typography> */}
+                                                <Typography color="inherit">Plan Type: {SummaryPages[0].PlanType}</Typography>
+                                                <Typography color="inherit">Sign Date: {SummaryPages[0].DateSign}</Typography>
+                                                {/* <Typography color="inherit">Plan Type: {SummaryPages[0].CONTACT}</Typography> */}
                                             </td>
                                         </tr>
                                         </tbody>
@@ -341,7 +344,7 @@ class Report extends Component {
                                         <tr>
                                             <td className="pr-16">
                                                 <Typography color="inherit">
-                                                    {DLR_CODE}
+                                                    {FranchiseeNumber}
                                                 </Typography>
                                             </td>
                                             <td className="text-left" width='100'>
@@ -349,7 +352,7 @@ class Report extends Component {
                                             </td>
                                             <td>
                                                 <Typography color="inherit">
-                                                    {SUMMARY_PAGE[0].FRAN_NAME}
+                                                    {SummaryPages[0].FranName}
                                                 </Typography>
                                             </td>
                                         </tr>
@@ -394,7 +397,7 @@ class Report extends Component {
                                         <tr>
                                             <td className="pr-16">
                                                 <Typography color="inherit">
-                                                    {DLR_CODE}
+                                                    {FranchiseeNumber}
                                                 </Typography>
                                             </td>
                                             <td className="text-left" width='100'>
@@ -402,7 +405,7 @@ class Report extends Component {
                                             </td>
                                             <td>
                                                 <Typography color="inherit">
-                                                    {SUMMARY_PAGE[0].FRAN_NAME}
+                                                    {SummaryPages[0].FranName}
                                                 </Typography>
                                             </td>
                                         </tr>
@@ -447,7 +450,7 @@ class Report extends Component {
                                         <tr>
                                             <td className="pr-16">
                                                 <Typography color="inherit">
-                                                    {DLR_CODE}
+                                                    {FranchiseeNumber}
                                                 </Typography>
                                             </td>
                                             <td className="text-left" width='100'>
@@ -455,7 +458,7 @@ class Report extends Component {
                                             </td>
                                             <td>
                                                 <Typography color="inherit">
-                                                    {SUMMARY_PAGE[0].FRAN_NAME}
+                                                    {SummaryPages[0].FranName}
                                                 </Typography>
                                             </td>
                                         </tr>
@@ -500,7 +503,7 @@ class Report extends Component {
                                         <tr>
                                             <td className="pr-16">
                                                 <Typography color="inherit">
-                                                    {DLR_CODE}
+                                                    {FranchiseeNumber}
                                                 </Typography>
                                             </td>
                                             <td className="text-left" width='100'>
@@ -508,7 +511,7 @@ class Report extends Component {
                                             </td>
                                             <td>
                                                 <Typography color="inherit">
-                                                    {SUMMARY_PAGE[0].FRAN_NAME}
+                                                    {SummaryPages[0].FranName}
                                                 </Typography>
                                             </td>
                                         </tr>
@@ -553,7 +556,7 @@ class Report extends Component {
                                         <tr>
                                             <td className="pr-16">
                                                 <Typography color="inherit">
-                                                    {DLR_CODE}
+                                                    {FranchiseeNumber}
                                                 </Typography>
                                             </td>
                                             <td className="text-left" width='100'>
@@ -561,7 +564,7 @@ class Report extends Component {
                                             </td>
                                             <td>
                                                 <Typography color="inherit">
-                                                    {SUMMARY_PAGE[0].FRAN_NAME}
+                                                    {SummaryPages[0].FranName}
                                                 </Typography>
                                             </td>
                                         </tr>
@@ -606,7 +609,7 @@ class Report extends Component {
                                         <tr>
                                             <td className="pr-16">
                                                 <Typography color="inherit">
-                                                    {DLR_CODE}
+                                                    {FranchiseeNumber}
                                                 </Typography>
                                             </td>
                                             <td className="text-left" width='100'>
@@ -614,7 +617,7 @@ class Report extends Component {
                                             </td>
                                             <td>
                                                 <Typography color="inherit">
-                                                    {SUMMARY_PAGE[0].FRAN_NAME}
+                                                    {SummaryPages[0].FranName}
                                                 </Typography>
                                             </td>
                                         </tr>
@@ -659,7 +662,7 @@ class Report extends Component {
                                         <tr>
                                             <td className="pr-16">
                                                 <Typography color="inherit">
-                                                    {DLR_CODE}
+                                                    {FranchiseeNumber}
                                                 </Typography>
                                             </td>
                                             <td className="text-left" width='100'>
@@ -667,7 +670,7 @@ class Report extends Component {
                                             </td>
                                             <td>
                                                 <Typography color="inherit">
-                                                    {SUMMARY_PAGE[0].FRAN_NAME}
+                                                    {SummaryPages[0].FranName}
                                                 </Typography>
                                             </td>
                                         </tr>
