@@ -1034,8 +1034,8 @@ class FranchiseeDistributionPage extends React.Component {
 			step,
 		} = this.state;
 
-		const franchieesesListToOffer = this.props.activeStep === 1 ? this.props.franchieesesToOffer : this.state.franchieesesToOffer
-		console.log('franchieesesListToOffer', this.props.franchieesesToOffer, this.state.franchieesesToOffer, franchieesesListToOffer)
+		const franchieesesListToOffer = [...this.props.franchieesesToOffer, ...this.state.franchieesesToOffer]
+
 		const franHeaders = [
 			{ width: 7, title: 'Number', align: '', field: 'Number' },
 			{ width: 18, title: 'Name', align: '', field: 'Name' },
@@ -1055,7 +1055,7 @@ class FranchiseeDistributionPage extends React.Component {
 
 					<div className="flex" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
 						{this.props.activeStep === 1 && <Button variant="contained" onClick={this.backToFranchiseeList} className={classNames("pl-24 pr-24 mr-12")}><Icon fontSize="small">keyboard_arrow_left</Icon>Prev</Button>}
-						<Button variant="contained" color="primary" className={classNames("pl-24 pr-24 mr-12")}>{this.props.customerForm.type === 'edit' ? 'Update' : 'Save'}</Button>
+						<Button variant="contained" color="primary" onClick={this.saveAssignedFranchiseeDistributions} className={classNames("pl-24 pr-24 mr-12")}>{this.props.customerForm.type === 'edit' ? 'Update' : 'Save'}</Button>
 					</div>
 				</div>
 
@@ -1078,10 +1078,10 @@ class FranchiseeDistributionPage extends React.Component {
 						value={this.props.activeCustomer.Data.cont_bill}
 					/>
 
-					<div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+					{/* <div className="flex w-full" style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
 						{this.props.customerForm.type === "edit" && <Button variant="contained" onClick={() => this.saveAssignedFranchiseeDistributions()} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Update</Button>}
-						{/*<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>*/}
-					</div>
+						<Button variant="contained" onClick={this.handleClose} color="primary" className={classNames("pl-24 pr-24 mr-12")}>Cancel</Button>
+					</div> */}
 				</div>
 
 				<Typography className="mb-12 mt-12 hidden" variant="subtitle1"><strong>Franchisee Revenue Distributions</strong></Typography>
@@ -1102,8 +1102,8 @@ class FranchiseeDistributionPage extends React.Component {
 						// <React.Fragment key={index}>
 						<div key={index} className={classNames("flex flex-col w-full")} style={{ alignItems: 'bottom' }}>
 							<div className={classNames("flex w-full items-center")} style={{ alignItems: 'bottom' }}>
-								<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption">{x.Number}</Typography>
-								<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption">{x.Name}</Typography>
+								<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption">{x.Number || x.FranchiseeNumber}</Typography>
+								<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption">{x.Name || x.FranchiseeName}</Typography>
 
 								<div style={{ width: franHeaders[2].width + '%', alignSelf: 'center' }} />
 								<div style={{ width: franHeaders[3].width + '%', alignSelf: 'center' }} />
@@ -1134,8 +1134,8 @@ class FranchiseeDistributionPage extends React.Component {
 								x.MonthlyBilling && x.MonthlyBilling.map((m, mIndex) => (
 									<div key={mIndex} className={classNames("flex w-full items-center")} style={{ alignItems: 'bottom' }}>
 
-										<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption">{mIndex === 0 ? x.FranchiseeNumber : '---'}</Typography>
-										<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption">{mIndex === 0 ? x.FranchiseeName : '---'}</Typography>
+										<Typography style={{ width: franHeaders[0].width + '%', alignSelf: 'center' }} variant="caption">-</Typography>
+										<Typography style={{ width: franHeaders[1].width + '%', alignSelf: 'center' }} variant="caption">-</Typography>
 
 										<Checkbox style={{ width: franHeaders[2].width + '%', alignSelf: 'center' }}
 											name="EscrowBilling"

@@ -317,7 +317,7 @@ class CustomerForm extends Component {
 		if (this.props.customerForm.type === "new") {
 			return ['Service Agreement', 'Account Offering'];
 		}
-		return ['Service Agreement', 'Franchisee Distribution', "Walk-Thru", "Account Offering", "Account History"];
+		return ['Service Agreement', "Account Offering", 'Franchisee Distribution', "Walk-Thru", "Account History"];
 	}
 
 	//
