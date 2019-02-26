@@ -401,6 +401,8 @@ class FranchiseeDistributionPage extends React.Component {
 			NewAmount: this.props.NewAmount,
 			openSnack: false,
 			snackMessage: 'Updated Franchisee Revenue Distributions',
+
+			franchieesesToOffer: [],
 		};
 		// this.commitChanges = this.commitChanges.bind(this);
 		if (!props.bLoadedFranchisees) {
@@ -470,15 +472,18 @@ class FranchiseeDistributionPage extends React.Component {
 		if (!_.isEqual(nextProps.activeCustomer, this.props.activeCustomer)) {
 			this.initCustomerInfo(nextProps.activeCustomer)
 		}
+		if (!_.isEqual(nextProps.franchieesesToOffer, this.props.franchieesesToOffer)) {
+			this.initCustomerInfo(this.props.activeCustomer, nextProps.franchieesesToOffer)
+		}
 		if (!_.isEqual(this.props.franchisees, nextProps.franchisees)) {
 			this.getFranchiseesFromStatus(nextProps.franchisees);
 		}
 	}
 
-	initCustomerInfo = (activeCustomer = this.props.activeCustomer) => {
+	initCustomerInfo = (activeCustomer = this.props.activeCustomer, franchieesesToOffer = this.props.franchieesesToOffer) => {
 		this.setState({
 			SA_Amount: activeCustomer.Data.cont_bill,
-			franchieesesToOffer: activeCustomer.Data.AssignedFranchisees,
+			franchieesesToOffer: [...franchieesesToOffer, ...activeCustomer.Data.AssignedFranchisees],
 		});
 		this.props.updateFindersFeeParams({
 			FranchiseeNum: activeCustomer.Data.AssignedFranchisees.length > 0 ? activeCustomer.Data.AssignedFranchisees[0].FranchiseeNumber : '',
@@ -1012,16 +1017,48 @@ class FranchiseeDistributionPage extends React.Component {
 		//
 		// if monthly count is ZERO, remove the franchisee
 		//
-		if (newFranchieesesToOffer[fId].MonthlyBilling.length === 0) {
-			newFranchieesesToOffer.splice(fId, 1)
-		}
+		// if (newFranchieesesToOffer[fId].MonthlyBilling.length === 0) {
+		// 	newFranchieesesToOffer.splice(fId, 1)
+		// }
 
 		this.setState({
 			franchieesesToOffer: newFranchieesesToOffer
 		})
 	};
+	removeFranchisee = (fId) => {
+		let newFranchieesesToOffer = _.clone(this.state.franchieesesToOffer)
+		newFranchieesesToOffer.splice(fId, 1)
+		this.setState({
+			franchieesesToOffer: newFranchieesesToOffer
+		})
+	}
 	backToFranchiseeList = () => {
 		this.props.setStep(1)
+	}
+	addMonthlyBilling = (fIndex) => {
+		const { franchieesesToOffer } = this.state
+		let newMonthlyBilling = {
+			"EscrowBilling": true,
+			"Status": "sample string 2",
+			"BillingFrequency": "sample string 3",
+			"BillingTypeServiceId": "sample string 4",
+			"BillingTypeId": "sample string 5",
+			"Description": "sample string 6",
+			"MonthlyBilling": 7.1
+		}
+
+		let newFranchieesesToOffer = [...franchieesesToOffer]
+		let oldMonthlyBilling = newFranchieesesToOffer[fIndex].MonthlyBilling
+		if (oldMonthlyBilling && oldMonthlyBilling.length > 0) {
+			newFranchieesesToOffer[fIndex].MonthlyBilling = [...oldMonthlyBilling, newMonthlyBilling]
+		} else {
+			newFranchieesesToOffer[fIndex].MonthlyBilling = [newMonthlyBilling]
+		}
+
+		this.setState({
+			franchieesesToOffer: newFranchieesesToOffer
+		})
+
 	}
 	getFranchiseeAssignmentForm() {
 		const { classes } = this.props;
@@ -1033,8 +1070,6 @@ class FranchiseeDistributionPage extends React.Component {
 			franchieesesToOffer,
 			step,
 		} = this.state;
-
-		const franchieesesListToOffer = [...this.props.franchieesesToOffer, ...this.state.franchieesesToOffer]
 
 		const franHeaders = [
 			{ width: 7, title: 'Number', align: '', field: 'Number' },
@@ -1098,7 +1133,7 @@ class FranchiseeDistributionPage extends React.Component {
 
 					<Divider variant="middle" className='mb-12 w-full' style={{ alignSelf: 'center' }} />
 
-					{franchieesesListToOffer && franchieesesListToOffer.map((x, index) => (
+					{franchieesesToOffer && franchieesesToOffer.map((x, index) => (
 						// <React.Fragment key={index}>
 						<div key={index} className={classNames("flex flex-col w-full")} style={{ alignItems: 'bottom' }}>
 							<div className={classNames("flex w-full items-center")} style={{ alignItems: 'bottom' }}>
@@ -1115,15 +1150,24 @@ class FranchiseeDistributionPage extends React.Component {
 								<div className=" text-center" style={{ width: franHeaders[8].width + '%' }}>
 									{
 										// m.MonthlyBilling > 0 &&
-										<Tooltip title="Go to Finders Fee" aria-label="Go to Finders Fee">
-											<Fab aria-label="remove"
-												onClick={() => this.gotoFindersFee(x.Number, 123)} color="primary" className={classNames(classes.ffBtn, "mr-12")}>
-												<Icon>arrow_forward</Icon>
-											</Fab>
-										</Tooltip>
+										// <Tooltip title="Go to Finders Fee" aria-label="Go to Finders Fee">
+										// 	<Fab aria-label="remove"
+										// 		onClick={() => this.gotoFindersFee(x.Number, 123)} color="primary" className={classNames(classes.ffBtn, "mr-6")}>
+										// 		<Icon>arrow_forward</Icon>
+										// 	</Fab>
+										// </Tooltip>
 									}
+									<Tooltip title="Add monthly billing" aria-label="Add monthly billing">
+										<Fab aria-label="add"
+											color="primary" className={classNames(classes.ffBtn, "mr-6")}
+											onClick={() => this.addMonthlyBilling(index)} >
+											<Icon>add</Icon>
+										</Fab>
+									</Tooltip>
+
 									<Tooltip title="Remove this franchisee" aria-label="Remove Franchisee">
 										<Fab aria-label="remove"
+											onClick={() => this.removeFranchisee(index)}
 											color="primary" className={classNames(classes.ffBtn, classes.lineCancelButton)}>
 											<Icon>close</Icon>
 										</Fab>
@@ -1225,19 +1269,16 @@ class FranchiseeDistributionPage extends React.Component {
 										/>
 
 										<div className=" text-center" style={{ width: franHeaders[8].width + '%' }}>
-											{
-												// m.MonthlyBilling > 0 &&
-												<Tooltip title="Go to Finders Fee" aria-label="Go to Finders Fee">
-													<Fab aria-label="remove"
-														onClick={() => this.gotoFindersFee(x.FranchiseeNumber, m.MonthlyBilling)} color="primary" className={classNames(classes.ffBtn, "mr-12")}>
-														<Icon>arrow_forward</Icon>
-													</Fab>
-												</Tooltip>
-											}
+											{/* <Tooltip title="Go to Finders Fee" aria-label="Go to Finders Fee">
+												<Fab aria-label="remove"
+													onClick={() => this.gotoFindersFee(x.FranchiseeNumber, m.MonthlyBilling)} color="primary" className={classNames(classes.ffBtn, "mr-12")}>
+													<Icon>arrow_forward</Icon>
+												</Fab>
+											</Tooltip> */}
 											<Tooltip title="Remove this franchisee" aria-label="Remove Franchisee">
 												<Fab aria-label="remove"
 													onClick={() => this.removeFranchiseeMonthly(index, mIndex)} color="primary" className={classNames(classes.ffBtn, classes.lineCancelButton)}>
-													<Icon>close</Icon>
+													<Icon>remove</Icon>
 												</Fab>
 											</Tooltip>
 										</div>
@@ -1245,17 +1286,43 @@ class FranchiseeDistributionPage extends React.Component {
 								))
 							}
 
-							< div className='flex mt-12' >
-								<Typography variant='body2'><strong>Finders Fee:</strong></Typography>
-								{
-									this.props.finderFee[x.FinderFeeId] && <>
-										<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].calc_fact}</span>
-										<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_desc}</span>
-										<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_pybill}</span>
-										<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_tot}</span>
-										<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_balance}</span>
-									</>
-								}
+							< div className='flex mt-12 items-center' >
+								<Typography variant='body2' style={{ width: '15%' }}><strong>Finders Fee:</strong></Typography>
+								<div style={{ width: (100 - 15 - franHeaders[8].width - franHeaders[7].width) + '%' }}>
+									{
+										this.props.finderFee[x.FinderFeeId] && <>
+											<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].calc_fact}</span>
+											<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_desc}</span>
+											<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_pybill}</span>
+											<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_tot}</span>
+											<span className='pr-12'>{this.props.finderFee[x.FinderFeeId].ff_balance}</span>
+										</>
+									}
+								</div>
+								<TextField style={{ width: franHeaders[7].width + '%' }}
+									// type='number'
+									InputProps={{
+										readOnly: true,
+										classes: {
+											input: classNames(classes.descriptionText, 'text-right')
+										},
+										startAdornment: <InputAdornment position="start" className="mr-4">$</InputAdornment>,
+										inputComponent: NumberFormatCustomNoPrefix
+									}}
+									margin="dense"
+									className="pl-6"
+									value={x.MonthlyBilling && x.MonthlyBilling.length > 0 && x.MonthlyBilling.map(x => x.MonthlyBilling).reduce((sum, a) => sum + a) || 0}
+								// onChange={this.handleMonthlyBilling(index, mIndex, 'MonthlyBilling')}
+								/>
+								<div className=" text-center" style={{ width: franHeaders[8].width + '%' }}>
+									<Tooltip title="Go to Finders Fee" aria-label="Go to Finders Fee">
+										<Fab aria-label="remove"
+											onClick={() => this.gotoFindersFee(x.Number, x.MonthlyBilling && x.MonthlyBilling.length > 0 && x.MonthlyBilling.map(x => x.MonthlyBilling).reduce((sum, a) => sum + a) || 0)} color="primary" className={classNames(classes.ffBtn, "")}>
+											<Icon>arrow_forward</Icon>
+										</Fab>
+									</Tooltip>
+								</div>
+
 							</div>
 							<Divider variant="middle" className='mt-12 mb-12 w-full' style={{ alignSelf: 'center' }} />
 							{/* </React.Fragment> */}
