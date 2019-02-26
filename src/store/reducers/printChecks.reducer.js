@@ -5,8 +5,6 @@ import { persistReducer } from 'redux-persist';
 
 import moment from 'moment'
 import _ from "lodash"
-import {GET_PRINT_CHECKS_DETAIL} from "../actions/";
-import {GET_PRINT_CHECKS_DETAIL_ERROR} from "../actions/";
 
 const initialState = {
     printChecksDB: null,
@@ -18,6 +16,7 @@ const initialState = {
     entityTypeId: '',
     selections: [],
     checksObj: null,
+    checkTypes: null,
     filters: {
         checkDate: moment().format('MM/DD/YYYY'),
         paymentDate: moment().format('MM/DD/YYYY'),
@@ -29,6 +28,11 @@ const initialState = {
 
 const printChecks = function(state = initialState, action) {
     switch ( action.type ) {
+        case Actions.GET_ALL_PRINT_CHECKS_LIST: {
+            return {
+                ...state, checkTypes: action.payload,
+            };
+        }
         case Actions.GET_PRINT_CHECKS_DETAIL: {
             return {
                 ...state, printChecksDB: action.payload, bLoadedPrintChecksDetail: true, bStartFetchList_pc: false,

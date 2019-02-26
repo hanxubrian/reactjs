@@ -10,6 +10,7 @@ import classNames from 'classnames';
 import moment from "moment";
 import MomentUtils from "@date-io/moment";
 import {DatePicker, MuiPickersUtilsProvider} from "material-ui-pickers";
+import _ from "lodash";
 
 const styles = theme => ({
     root : {
@@ -22,6 +23,7 @@ class FilterPanel extends Component {
 
     state = {
         checkDate: this.props.filters.checkdate,
+        checktypeId: this.props.filters.checktypeId,
         labelWidth: 0,
         period: moment().format('MM/YYYY'),
         periods: null,
@@ -91,6 +93,11 @@ class FilterPanel extends Component {
         this.props.updateFilterParams({name: name, value: moment(date).format('MM/DD/YYYY')});
     };
 
+    handleChange = (event) => {
+        this.setState(_.set({...this.state}, event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value));
+        this.props.updateFilterParams({name: event.target.name, value: event.target.value});
+    };
+
 
     render()
     {
@@ -101,6 +108,29 @@ class FilterPanel extends Component {
                 <div className={classNames("flex flex-col")} style={{}}>
                     <Paper className="flex flex-1 flex-col min-h-px p-20 w-full">
                         <div className="flex flex-col">
+                            {this.props.checkTypes!==null && (
+                                <TextField
+                                    name="checktypeId"
+                                    label="Check Type"
+                                    variant="outlined"
+                                    select
+                                    value={this.state.checktypeId}
+                                    onChange={this.handleChange}
+                                    input={
+                                        <OutlinedInput
+                                            labelWidth={this.state.labelWidth}
+                                            name="period"
+                                            id="period"
+                                        />
+                                    }
+                                    fullWidth
+                                >
+                                    {this.props.checkTypes.map((type, index)=>{
+                                        return (<MenuItem key={index} value={type._id}>{type.name}</MenuItem>)
+                                    })}
+                                </TextField>
+                            )}
+                            <br/>
                             {this.state.periods!==null && (
                                 <TextField
                                     name="period"
@@ -175,6 +205,7 @@ function mapStateToProps({auth, printChecks})
         logDate: auth.login.logDate,
         filters: printChecks.filters,
         all_regions: auth.login.all_regions,
+        checkTypes: printChecks.checkTypes,
     }
 }
 
