@@ -38,7 +38,22 @@ class printChecksService {
                 })
         });
     };
-
+    getCheckTypes= () => {
+        return new Promise((resolve, reject) => {
+            axios_instance.get(`${BASE_MONGO_API_URL}/v1/Lists/GetCheckTypes`)
+                .then(res => {
+                    if (res.status === 200) {
+                        resolve(res.data);
+                    }
+                    else if (res.status !== 200) {
+                        reject(res.data);
+                    }
+                })
+                .catch(error => {
+                    resolve(error);
+                })
+        });
+    };
 }
 
 const instance = new printChecksService();

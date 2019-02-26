@@ -5,6 +5,8 @@ import { persistReducer } from 'redux-persist';
 
 import moment from 'moment'
 import _ from "lodash"
+import {GET_PRINT_CHECKS_DETAIL} from "../actions/";
+import {GET_PRINT_CHECKS_DETAIL_ERROR} from "../actions/";
 
 const initialState = {
     printChecksDB: null,
@@ -27,12 +29,12 @@ const initialState = {
 
 const printChecks = function(state = initialState, action) {
     switch ( action.type ) {
-        case Actions.GET_ALL_PRINT_CHECKS_LIST: {
+        case Actions.GET_PRINT_CHECKS_DETAIL: {
             return {
                 ...state, printChecksDB: action.payload, bLoadedPrintChecksDetail: true, bStartFetchList_pc: false,
             };
         }
-        case Actions.GET_ALL_PRINT_CHECKS_LIST_ERROR: {
+        case Actions.GET_PRINT_CHECKS_DETAIL_ERROR: {
             return {
                 ...state, printChecksDB: null, bLoadedPrintChecksDetail: true, bStartFetchList_pc: false
             };

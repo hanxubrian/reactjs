@@ -12,15 +12,10 @@ export const SET_CHECKS_OBJ = "[PRINT CHECKS] SET_CHECKS_OBJ";
 export const UPDATE_CHECKS_FILTER_PARAMETER = "[PRINT CHECKS] UPDATE CHECKS FILTER PARAMETER";
 
 
-export function getCheckDetailByType(regionId, ChecktypeId, EntityTypeId, Month, Year, PaymentDate, CheckDate) {
+export function getCheckTypes() {
     return (dispatch) => {
         (async () => {
-            dispatch({
-                type: START_FETCH_PRINT_CHECKS_LIST,
-                payload: true
-            });
-
-            let res = await printChecksService.getCheckByType(regionId, ChecktypeId, EntityTypeId, Month, Year, PaymentDate, CheckDate);
+            let res = await printChecksService.getCheckTypes();
             if (res.IsSuccess) {
                 dispatch({
                     type: GET_ALL_PRINT_CHECKS_LIST,
@@ -35,6 +30,32 @@ export function getCheckDetailByType(regionId, ChecktypeId, EntityTypeId, Month,
         })();
     }
 }
+
+export function getCheckDetailByType(regionId, ChecktypeId, EntityTypeId, Month, Year, PaymentDate, CheckDate) {
+    return (dispatch) => {
+        (async () => {
+            dispatch({
+                type: START_FETCH_PRINT_CHECKS_LIST,
+                payload: true
+            });
+
+            let res = await printChecksService.getCheckByType(regionId, ChecktypeId, EntityTypeId, Month, Year, PaymentDate, CheckDate);
+            if (res.IsSuccess) {
+                dispatch({
+                    type: GET_PRINT_CHECKS_DETAIL,
+                    payload: res.Data
+                });
+            } else {
+                dispatch({
+                    type: GET_PRINT_CHECKS_DETAIL_ERROR,
+                    payload: res.message
+                });
+            }
+        })();
+    }
+}
+
+
 export function updateSelections(selections) {
     return (dispatch) => {
         dispatch({
